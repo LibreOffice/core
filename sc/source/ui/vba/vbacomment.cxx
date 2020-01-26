@@ -51,7 +51,7 @@ ScVbaComment::ScVbaComment(
 {
     if  ( !xRange.is() )
         throw lang::IllegalArgumentException("range is not set ", uno::Reference< uno::XInterface >() , 1 );
-    uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
+    getAnnotation();
 }
 
 // private helper functions

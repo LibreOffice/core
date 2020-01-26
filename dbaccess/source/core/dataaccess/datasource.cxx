@@ -119,7 +119,7 @@ private:
 public:
     static void installAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
     {
-        Reference< XFlushListener > xAdapter( new FlushNotificationAdapter( _rxBroadcaster, _rxListener ) );
+        new FlushNotificationAdapter( _rxBroadcaster, _rxListener );
     }
 
 protected:

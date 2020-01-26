@@ -182,7 +182,7 @@ void HTMLFetchThread::handleTable(xmlNodePtr pTable)
 void HTMLFetchThread::execute()
 {
     OStringBuffer aBuffer(64000);
-    std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(maURL, aBuffer);
+    DataProvider::FetchStreamFromURL(maURL, aBuffer);
 
     if (aBuffer.isEmpty())
         return;

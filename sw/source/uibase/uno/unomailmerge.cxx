@@ -335,7 +335,7 @@ static bool DeleteTmpFile_Impl(
         {
             // somebody vetoed the closing, and took the ownership of the document
             // -> ensure that the temporary file is deleted later on
-            Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
+            new DelayedFileDeletion( rxModel, rTmpFileURL );
                 // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseded by
                 // a better solution
             bDelete = false;
@@ -348,7 +348,7 @@ static bool DeleteTmpFile_Impl(
         {
             if ( !SWUnoHelper::UCB_DeleteFile( rTmpFileURL ) )
             {
-                Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
+                new DelayedFileDeletion( rxModel, rTmpFileURL );
                     // same not as above: as soon as #106931#, ...
             }
         }
