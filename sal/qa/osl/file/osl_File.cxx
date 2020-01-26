@@ -1088,14 +1088,14 @@ namespace osl_FileBase
          void searchFileURL_002()
         {
             /* search file is passed by system filename */
-            OUString aRootSys = INetURLObject(aTempDirectoryURL).GetLastName();
-            nError1 = osl::FileBase::searchFileURL(aTempDirectorySys, aRootSys, aUStr);
+            OUString strRootSys = INetURLObject(aTempDirectoryURL).GetLastName();
+            nError1 = osl::FileBase::searchFileURL(aTempDirectorySys, strRootSys, aUStr);
             bool bOk1 = compareFileName(aUStr, aTempDirectoryURL);
             /* search file is passed by full qualified file URL */
-            nError2 = osl::FileBase::searchFileURL(aTempDirectoryURL, aRootSys, aUStr);
+            nError2 = osl::FileBase::searchFileURL(aTempDirectoryURL, strRootSys, aUStr);
             bool bOk2 = compareFileName(aUStr, aTempDirectoryURL);
             /* search file is passed by relative file path */
-            nError3 = osl::FileBase::searchFileURL(aRelURL5, aRootSys, aUStr);
+            nError3 = osl::FileBase::searchFileURL(aRelURL5, strRootSys, aUStr);
             bool bOk3 = compareFileName(aUStr, aTempDirectoryURL);
             /* search file is passed by an exist file */
             createTestFile(aCanURL1);
