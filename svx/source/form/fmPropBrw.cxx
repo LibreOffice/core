@@ -494,7 +494,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     {
         Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
         Reference< XObjectInspectorUI > xInspectorUI( xInspector->getInspectorUI() );
-        Reference< XInterface > xDefaultHelpProvider( DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI ) );
+        DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI );
     }
 }
 

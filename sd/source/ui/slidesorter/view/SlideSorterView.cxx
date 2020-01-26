@@ -224,8 +224,7 @@ void SlideSorterView::PostModelChange()
     // create new ones.
     ::osl::MutexGuard aGuard (mrModel.GetMutex());
 
-    model::PageEnumeration aPageEnumeration (
-        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
+    model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel);
 
     // The new page objects have to be scaled and positioned.
     RequestRearrange();

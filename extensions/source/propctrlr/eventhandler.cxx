@@ -762,7 +762,7 @@ namespace pcr
         LineDescriptor aDescriptor;
 
         aDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, true );
-        Reference< XEventListener > xControlExtender = new PropertyControlExtender( aDescriptor.Control );
+        new PropertyControlExtender( aDescriptor.Control );
 
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;

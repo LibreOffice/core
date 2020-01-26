@@ -418,7 +418,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
                 reinterpret_cast<char*>(pKeyPacket),
                 nKeyLen, false);
 
-            GpgME::ImportResult import_res=rCtx.importKeys(data_key);
+            rCtx.importKeys(data_key);
             xmlFree(pKeyPacket);
 
             // and re-run (rewind text and signature streams to position 0)

@@ -733,8 +733,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                 Reference<XPane> xPane (rEvent.ResourceObject,UNO_QUERY);
                 if (xPane.is())
                 {
-                    PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-                        mpPaneContainer->FindPaneId(xPane->getResourceId()));
+                    mpPaneContainer->FindPaneId(xPane->getResourceId());
                 }
             }
             else if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))

@@ -317,7 +317,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             if (sView.isEmpty())
                 sView = GetInitialViewShellType();
 
-            std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*this));
+            FrameworkHelper::Instance(*this);
 
             // Create the resource ids for the center pane and view.
             const Reference<drawing::framework::XResourceId> xCenterPaneId (
