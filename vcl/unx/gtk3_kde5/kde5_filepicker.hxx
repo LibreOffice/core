@@ -53,7 +53,7 @@ protected:
     //layout for extra custom controls
     QGridLayout* _layout;
 
-    sal_uIntPtr _winId;
+    sal_uInt64 _winId;
 
 public:
     explicit KDE5FilePicker(QObject* parent = nullptr);
@@ -92,7 +92,7 @@ public:
     //add a custom control widget to the file dialog
     void addCheckBox(sal_Int16 nControlId, const QString& label, bool hidden);
 
-    void setWinId(sal_uIntPtr winId);
+    void setWinId(sal_uInt64 winId);
 
 private:
     Q_DISABLE_COPY(KDE5FilePicker)
