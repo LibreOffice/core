@@ -143,7 +143,7 @@ class FontPrevWin_Impl
     bool mbDelPrinter;
 
     Reference <XBreakIterator> mxBreak;
-    std::vector<sal_uIntPtr> maTextWidth;
+    std::vector<long> maTextWidth;
     std::deque<sal_Int32> maScriptChg;
     std::vector<sal_uInt16> maScriptType;
     SvxFont maCJKFont;
@@ -327,7 +327,7 @@ Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDe
                                     ((nScript == css::i18n::ScriptType::COMPLEX) ?
                                         maCTLFont :
                                         rInFont);
-        sal_uIntPtr nWidth = rFont.GetTextSize(_pPrinter, maText, nStart, nEnd - nStart).Width();
+        long nWidth = rFont.GetTextSize(_pPrinter, maText, nStart, nEnd - nStart).Width();
         if (nIdx >= maTextWidth.size())
             break;
 
