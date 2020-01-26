@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
 #include <sfx2/objface.hxx>
@@ -527,7 +528,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
                 ++nEndPos;
             }
             // Only if the current position lies in the range or right behind.
-            if( bFound && !( nStartPos < static_cast<sal_uInt16>(aSelection.Max()) &&
+            if( bFound && !( nStartPos < o3tl::make_unsigned(aSelection.Max()) &&
                              static_cast<sal_uInt16>(aSelection.Max()) <= nEndPos + 1 ))
                 bFound = false;
         }
