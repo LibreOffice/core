@@ -417,6 +417,8 @@ class RelativeField;
 
 SVX_DLLPUBLIC void limitWidthForSidebar(weld::SpinButton& rSpinButton);
 SVX_DLLPUBLIC void limitWidthForSidebar(RelativeField& rMetricSpinButton);
+//tdf#130197 Give this toolbar a width as if it had 5 standard toolbutton entries
+SVX_DLLPUBLIC void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX
 

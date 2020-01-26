@@ -131,6 +131,12 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
     , m_aDistributeColumnsController(FN_TABLE_BALANCE_CELLS, *pBindings, *this)
     , m_aMergeCellsController(FN_TABLE_MERGE_CELLS, *pBindings, *this)
 {
+    // tdf#130197 Give this toolbar a width as if it had 5 entries (the parent
+    // grid has homogeneous width set so both columns will have the same
+    // width). This will align this TableEditPanel's columns with
+    // ParaPropertyPanel's columns
+    padWidthForSidebar(*m_xSplitMerge, rxFrame);
+
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
 }
