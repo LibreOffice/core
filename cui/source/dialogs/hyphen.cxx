@@ -26,7 +26,6 @@
 #include <svtools/langtab.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/debug.hxx>
 
 #define HYPH_POS_CHAR       '='
 
@@ -63,7 +62,7 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
         }
     }
 
-    DBG_ASSERT(m_nOldPos < nLen, "nOldPos out of range");
+    SAL_WARN_IF(m_nOldPos >= nLen, "cui.dialogs", "nOldPos out of range");
     if (m_nOldPos >= nLen)
         m_nOldPos = nLen - 1;
     m_xLeftBtn->set_sensitive(false);
@@ -107,10 +106,10 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
     // even if the user were to select one of them.
 
     OUString aTxt;
-    DBG_ASSERT(m_xPossHyph.is(), "missing possible hyphens");
+    SAL_WARN_IF(!m_xPossHyph.is(), "cui.dialogs", "missing possible hyphens");
     if (m_xPossHyph.is())
     {
-        DBG_ASSERT( m_aActWord == m_xPossHyph->getWord(), "word mismatch"  );
+        SAL_WARN_IF( m_aActWord != m_xPossHyph->getWord(), "cui.dialogs", "word mismatch" );
 
         aTxt = m_xPossHyph->getPossibleHyphens();
 
@@ -145,7 +144,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
                 }
             }
         }
-        DBG_ASSERT(nIdx != -1, "no usable hyphenation position");
+        SAL_WARN_IF(nIdx == -1, "cui.dialogs", "no usable hyphenation position");
 
         // 1) remove all not usable hyphenation positions from the end of the string
         nPos = nIdx == -1 ? 0 : nIdx + 1;
@@ -201,7 +200,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
     {
         if (nInsPos)
         {
-            DBG_ASSERT(nInsPos <= m_aEditWord.getLength() - 2, "wrong hyphen position");
+            SAL_WARN_IF(nInsPos > m_aEditWord.getLength() - 2, "cui.dialogs", "wrong hyphen position");
 
             sal_Int32 nIdxPos = -1;
             for (sal_Int32 i = 0; i <= nInsPos; ++i)
@@ -215,8 +214,8 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 
             uno::Sequence< sal_Int16 > aSeq = m_xPossHyph->getHyphenationPositions();
             sal_Int32 nLen = aSeq.getLength();
-            DBG_ASSERT(nLen, "empty sequence");
-            DBG_ASSERT(0 <= nIdxPos && nIdxPos < nLen, "index out of range");
+            SAL_WARN_IF(nLen == 0, "cui.dialogs", "empty sequence");
+            SAL_WARN_IF(0 > nIdxPos || nIdxPos >= nLen, "cui.dialogs", "index out of range");
             if (nLen && 0 <= nIdxPos && nIdxPos < nLen)
             {
                 nInsPos = aSeq.getConstArray()[ nIdxPos ];
@@ -254,13 +253,13 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 bool SvxHyphenWordDialog::SelLeft()
 {
     bool bRet = false;
-    DBG_ASSERT( m_nOldPos > 0, "invalid hyphenation position" );
+    SAL_WARN_IF( m_nOldPos <= 0, "cui.dialogs", "invalid hyphenation position" );
     if (m_nOldPos > 0)
     {
         OUString aTxt( m_aEditWord );
         for( sal_Int32 i = m_nOldPos - 1;  i > 0; --i )
         {
-            DBG_ASSERT(i <= aTxt.getLength(), "index out of range");
+            SAL_WARN_IF(i > aTxt.getLength(), "cui.dialogs", "index out of range");
             if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
             {
                 aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
@@ -429,11 +428,11 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
 
     uno::Reference< linguistic2::XHyphenatedWord >  xHyphWord( m_pHyphWrapper ?
             m_pHyphWrapper->GetLast() : nullptr, uno::UNO_QUERY );
-    DBG_ASSERT( xHyphWord.is(), "hyphenation result missing" );
+    SAL_WARN_IF( !xHyphWord.is(), "cui.dialogs", "hyphenation result missing" );
     if (xHyphWord.is())
     {
-        DBG_ASSERT( m_aActWord == xHyphWord->getWord(), "word mismatch" );
-        DBG_ASSERT( m_nActLanguage == LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "language mismatch" );
+        SAL_WARN_IF( m_aActWord != xHyphWord->getWord(), "cui.dialogs", "word mismatch" );
+        SAL_WARN_IF( m_nActLanguage != LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "cui.dialogs", "language mismatch" );
         m_nMaxHyphenationPos = xHyphWord->getHyphenationPos();
     }
 
