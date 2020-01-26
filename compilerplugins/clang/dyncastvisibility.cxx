@@ -33,9 +33,9 @@ Visibility getTypeVisibility(CXXRecordDecl const * decl) {
     {
         return *opt;
     }
-    auto const vis = decl->getVisibility();
-    return vis == DefaultVisibility && decl->isInAnonymousNamespace()
-        ? HiddenVisibility : vis;
+    auto const visi = decl->getVisibility();
+    return visi == DefaultVisibility && decl->isInAnonymousNamespace()
+        ? HiddenVisibility : visi;
 }
 
 // Check whether 'decl' is derived from 'base', gathering any 'bases' between
