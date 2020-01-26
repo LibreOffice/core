@@ -21,8 +21,8 @@ are the same.
 // So ultimately the 24+8 split should be dumped (preferably in all of LO,
 // not just the Skia-related code), but until all of LO works correctly
 // with 32bpp disabling this will avoid such breakages.
-#define SKIA_USE_BITMAP32 1
-//#define SKIA_USE_BITMAP32 0
+//#define SKIA_USE_BITMAP32 1
+#define SKIA_USE_BITMAP32 0
 
 
 /* TODO SKIA check all these */
