@@ -187,7 +187,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     if ( m_vHistoryUrls.empty() )
         return;
 
-    sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+    sal_uLong nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                             : ( !bBack && m_nCurPos < m_vHistoryUrls.size() - 1 )
                                             ? ++m_nCurPos
                                             : ULONG_MAX;

@@ -237,7 +237,7 @@ void KDE5FilePicker::initialize(bool saveDialog)
     }
 }
 
-void KDE5FilePicker::setWinId(sal_uIntPtr winId) { _winId = winId; }
+void KDE5FilePicker::setWinId(sal_uInt64 winId) { _winId = winId; }
 
 void KDE5FilePicker::setupCustomWidgets()
 {

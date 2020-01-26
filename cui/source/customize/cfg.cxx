@@ -1010,6 +1010,7 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
 
     rTreeView.connect_row_activated(LINK(this, SvxConfigPage, FunctionDoubleClickHdl));
     rTreeView.connect_changed(LINK(this, SvxConfigPage, SelectFunctionHdl));
+    m_xCategoryLabel->set_label("BenimKategori");
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectElementHdl, weld::ComboBox&, void)
@@ -1612,7 +1613,9 @@ IMPL_LINK_NOARG(SvxConfigPage, ImplUpdateDataHdl, Timer*, void)
 
 IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, weld::Entry&, void)
 {
-    m_aUpdateDataTimer.Start();
+    OUString aTempString = m_xSearchEdit->get_text();
+    m_xCategoryLabel->set_label(aTempString);
+    //m_aUpdateDataTimer.Start();
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, FocusOut_Impl, weld::Widget&, void)
