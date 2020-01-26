@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd561ba8_1dafb754",
+        "filename": "cui/source/dialogs/srchxtra.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-26T10:42:16Z",
+      "side": 1,
+      "message": "What is the rationale to use SAL_WARN_IF here?  Clearly, the next line requires pSh to be non-null, so it looks more reasonable to assume that the original DBG_ASSERT was meant to state an invariant.",
+      "revId": "3065a3203705e45105ec949e1e2133131335fca5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
