@@ -818,7 +818,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
                     SdrEscapeDirection nE2 = nA2==0 ? SdrEscapeDirection::RIGHT : nA2==9000 ? SdrEscapeDirection::TOP : nA2==18000 ? SdrEscapeDirection::LEFT : nA2==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
                     if ((nEsc1&nE1) && (nEsc2&nE2))
                     {
-                        sal_uIntPtr nQual=0;
+                        size_t nQual=0;
                         SdrEdgeInfoRec aInfo;
                         if (pInfo!=nullptr) aInfo=*pInfo;
                         XPolygon aXP(ImpCalcEdgeTrack(aPt1,nA1,aBoundRect1,aBewareRect1,aPt2,nA2,aBoundRect2,aBewareRect2,&nQual,&aInfo));
@@ -1329,8 +1329,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         cForm = 0;
     }
     if (pnQuality!=nullptr) {
-        sal_uIntPtr nQual=0;
-        sal_uIntPtr nQual0=nQual; // prevent overruns
+        size_t nQual=0;
+        size_t nQual0=nQual; // prevent overruns
         bool bOverflow = false;
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPointCount; nPntNum++) {
