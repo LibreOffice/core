@@ -207,7 +207,7 @@ void ChartController::executeDispatch_InsertLegend()
         m_xUndoManager );
 
     ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel());
-    Reference< chart2::XLegend > xLegend = LegendHelper::showLegend(rModel, m_xCC);
+    LegendHelper::showLegend(rModel, m_xCC);
     aUndoGuard.commit();
 }
 

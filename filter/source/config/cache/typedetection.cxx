@@ -552,7 +552,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
 
         CacheItem aType = cache.getItem(FilterCache::E_TYPE, sType);
         aType[PROPNAME_PREFERREDFILTER] >>= sFilter;
-        CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
+        cache.getItem(FilterCache::E_FILTER, sFilter);
 
         aLock.clear();
         // <- SAFE

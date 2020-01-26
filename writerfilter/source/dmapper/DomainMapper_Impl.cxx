@@ -4373,7 +4373,7 @@ void DomainMapper_Impl::handleToc
 
             // create header of the TOC with the TOC title inside
             const OUString aObjectType("com.sun.star.text.IndexHeaderSection");
-            uno::Reference<beans::XPropertySet> xIfc = createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, aObjectType, true);
+            createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, aObjectType, true);
         }
     }
 
@@ -5621,7 +5621,6 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     else
                     {
                         uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
-                        uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
                         OUString sContent;
                         bool bCanHaveContent = false;
                         try

@@ -844,8 +844,8 @@ void OptimizerDialog::InitPage4()
         Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );
 
-        Reference< XMultiPropertySet > xMultiPropertySet( insertControlModel( "com.sun.star.awt.UnoControlProgressBarModel",
-            "Progress", aNames, aValues ), UNO_QUERY );
+        insertControlModel( "com.sun.star.awt.UnoControlProgressBarModel",
+            "Progress", aNames, aValues );
     }
     Reference< XTextListener > xTextListener;
     Sequence< OUString > aItemList;

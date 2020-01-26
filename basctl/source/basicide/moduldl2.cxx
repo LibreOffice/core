@@ -1320,8 +1320,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             try
             {
                 // create module and dialog library
-                Reference< container::XNameContainer > xModLib( rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName ) );
-                Reference< container::XNameContainer > xDlgLib( rDocument.getOrCreateLibrary( E_DIALOGS, aLibName ) );
+                rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+                rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
                 if( pLibBox )
                 {

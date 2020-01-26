@@ -151,7 +151,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
                 {
                     uno::Reference< inspection::XObjectInspector > xInspector( m_xBrowserController, uno::UNO_SET_THROW );
                     uno::Reference< inspection::XObjectInspectorUI > xInspectorUI( xInspector->getInspectorUI() );
-                    uno::Reference< uno::XInterface > xDefaultHelpProvider( inspection::DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI ) );
+                    inspection::DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI );
                 }
             }
         }

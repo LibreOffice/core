@@ -861,8 +861,7 @@ void ExtensionManager::removeExtension(
                 new TmpRepositoryCommandEnv(xCmdEnv->getInteractionHandler()));
             if (xExtensionBackup.is())
             {
-                Reference<css::deployment::XPackage> xRestored =
-                    xPackageManager->importExtension(
+                xPackageManager->importExtension(
                         xExtensionBackup, Reference<task::XAbortChannel>(),
                         tmpCmdEnv);
                 activateExtension(

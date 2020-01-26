@@ -262,7 +262,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
             aBibDesc.sDataSource = aSources.getConstArray()[0];
     }
 
-    Reference< XForm > xForm = m_xDatMan->createDatabaseForm( aBibDesc );
+    m_xDatMan->createDatabaseForm( aBibDesc );
 
     Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
     VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(aWindow);
@@ -561,7 +561,6 @@ Type  BibliographyLoader::getElementType()
 
 sal_Bool BibliographyLoader::hasElements()
 {
-    Reference< XResultSet >  xCursor = GetDataCursor();
     Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && xColumns->getElementNames().hasElements();
 }
