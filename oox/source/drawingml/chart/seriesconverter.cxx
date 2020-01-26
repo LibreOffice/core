@@ -177,7 +177,8 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, false, bShowPercent );
 
         // data label text formatting (frame formatting not supported by Chart2)
-        convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
+        if( bDataSeriesLabel || (rDataLabel.mxTextProp.is() && !rDataLabel.mxTextProp->getParagraphs().empty()) )
+            convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         // Set the data label separator to "new line" if the value is shown as percentage with a category name,
