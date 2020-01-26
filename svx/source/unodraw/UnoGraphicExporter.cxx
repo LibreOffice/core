@@ -159,7 +159,7 @@ namespace {
         virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) override;
 
-        VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
+        VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, long nWidthPixel, long nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
@@ -381,7 +381,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
     @return the returned VirtualDevice is owned by the caller
 */
-VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const
+VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, long nWidthPixel, long nHeightPixel ) const
 {
     VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
     MapMode         aMM( MapUnit::Map100thMM );
@@ -390,9 +390,9 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
     Size aPageSize(pPage->GetSize());
 
     // use scaling?
-    if( nWidthPixel )
+    if( nWidthPixel != 0 )
     {
-        const Fraction aFrac( static_cast<long>(nWidthPixel), pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const Fraction aFrac( nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
 
         aMM.SetScaleX( aFrac );
 
@@ -400,9 +400,9 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
             aMM.SetScaleY( aFrac );
     }
 
-    if( nHeightPixel )
+    if( nHeightPixel != 0 )
     {
-        const Fraction aFrac( static_cast<long>(nHeightPixel), pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const Fraction aFrac( nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
 
         if( nWidthPixel == 0 )
             aMM.SetScaleX( aFrac );
