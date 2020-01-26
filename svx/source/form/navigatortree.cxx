@@ -656,7 +656,7 @@ namespace svxform
 
         // selection can be modified during deletion,
         // but because I disabled SelectionHandling, I have to do it later
-        sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
+        sal_uLong nExpectedSelectionCount = GetSelectionCount();
 
         GetModel()->Remove(pEntry);
 
