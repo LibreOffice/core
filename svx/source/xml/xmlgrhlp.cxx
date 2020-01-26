@@ -305,7 +305,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
 
             sal_uInt8    sFirstBytes[ 2 ];
 
-            sal_uIntPtr nStreamLen = mpOStm->TellEnd();
+            sal_uInt64 nStreamLen = mpOStm->TellEnd();
             mpOStm->Seek( 0 );
 
             if ( !nStreamLen )
@@ -332,7 +332,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
 
                     if (aZCodec.EndCompression())
                     {
-                        sal_uIntPtr nStreamLen_ = pDest->TellEnd();
+                        sal_uInt64 nStreamLen_ = pDest->TellEnd();
                         if (nStreamLen_)
                         {
                             pDest->Seek(0);
