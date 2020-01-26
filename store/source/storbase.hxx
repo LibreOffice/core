@@ -284,10 +284,11 @@ struct PageData
     public:
         template< class T > T * construct()
         {
-            void * page = nullptr; sal_uInt16 size = 0;
-            if (allocate (&page, &size))
+            void * page = nullptr;
+            sal_uInt16 nSize = 0;
+            if (allocate (&page, &nSize))
             {
-                return new(page) T(size);
+                return new(page) T(nSize);
             }
             return 0;
         }
