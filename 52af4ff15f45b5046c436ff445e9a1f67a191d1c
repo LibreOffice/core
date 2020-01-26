@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34df5a36_de3a97ff",
+        "filename": "vcl/inc/dbggui.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-26T19:13:47Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of the excess empt line here.",
+      "revId": "52af4ff15f45b5046c436ff445e9a1f67a191d1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
