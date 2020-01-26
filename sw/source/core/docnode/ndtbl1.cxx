@@ -48,6 +48,7 @@
 #include <calbck.hxx>
 #include <UndoTable.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/safeint.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1363,7 +1364,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         if ( nWidth && pCell->getFrameArea().Width() )
         {
             long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
-            if ( sal_uInt16(nTmp) > rToFill[i] )
+            if ( o3tl::make_unsigned(nTmp) > rToFill[i] )
                 rToFill[i] = sal_uInt16(nTmp);
         }
     }
