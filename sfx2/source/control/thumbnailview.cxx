@@ -21,6 +21,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -290,7 +291,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
-    else if ( mnFirstLine > static_cast<sal_uInt16>(mnLines-mnVisLines) )
+    else if ( mnFirstLine > o3tl::make_unsigned(mnLines-mnVisLines) )
         mnFirstLine = static_cast<sal_uInt16>(mnLines-mnVisLines);
 
     mbHasVisibleItems = true;
@@ -1007,7 +1008,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         {
             mnFirstLine = nNewLine;
         }
-        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
+        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
         }
@@ -1444,7 +1445,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
-    else if ( mnFirstLine > static_cast<sal_uInt16>(mnLines-mnVisLines) )
+    else if ( mnFirstLine > o3tl::make_unsigned(mnLines-mnVisLines) )
         mnFirstLine = static_cast<sal_uInt16>(mnLines-mnVisLines);
 
     mbHasVisibleItems = true;
@@ -2175,7 +2176,7 @@ void SfxThumbnailView::SelectItem( sal_uInt16 nItemId )
         {
             mnFirstLine = nNewLine;
         }
-        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
+        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
         }
