@@ -35,7 +35,7 @@ GalleryCodec::~GalleryCodec()
 
 bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
-    const sal_uIntPtr   nPos = rStm.Tell();
+    const sal_uInt64   nPos = rStm.Tell();
     bool        bRet;
     sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
