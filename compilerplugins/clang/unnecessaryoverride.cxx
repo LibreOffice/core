@@ -17,6 +17,7 @@
 
 #include <clang/AST/CXXInheritance.h>
 #include "plugin.hxx"
+#include "check.hxx"
 
 /**
 look for methods where all they do is call their superclass method
@@ -244,6 +245,11 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     {
         return true;
     }
+
+    auto fdc = loplugin::DeclCheck(methodDecl);
+    // Has code only in #ifdef.
+    if (fdc.Function("GetBackendCapabilities").Class("X11SalInstance").GlobalNamespace())
+        return true;
 
     // If overriding more than one base member function, or one base member
     // function that is available in multiple (non-virtual) base class
