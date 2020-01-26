@@ -226,7 +226,7 @@ public:
     }
 
 private:
-    sal_uLong nCurState;
+    sal_uInt64 nCurState;
 };
 
 EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
@@ -1119,7 +1119,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-OUString EditorWindow::GetActualSubName( sal_uLong nLine )
+OUString EditorWindow::GetActualSubName( sal_uInt64 nLine )
 {
     SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
     for( sal_uInt32 i=0; i < pMethods->Count32(); i++ )
@@ -1173,7 +1173,7 @@ void EditorWindow::InitScrollBars()
     }
 }
 
-void EditorWindow::ImpDoHighlight( sal_uLong nLine )
+void EditorWindow::ImpDoHighlight( sal_uInt64 nLine )
 {
     if ( bDoSyntaxHighlight )
     {
@@ -1237,7 +1237,7 @@ void EditorWindow::ImplSetFont()
     }
 }
 
-void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
+void EditorWindow::DoSyntaxHighlight( sal_uInt64 nPara )
 {
     // because of the DelayedSyntaxHighlight it's possible
     // that this line does not exist anymore!
@@ -1250,7 +1250,7 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
+void EditorWindow::DoDelayedSyntaxHighlight( sal_uInt64 nPara )
 {
     // line is only added to list, processed in TimerHdl
     // => don't manipulate breaks while EditEngine is formatting
@@ -1292,7 +1292,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Timer *, void)
     bHighlighting = false;
 }
 
-void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
+void EditorWindow::ParagraphInsertedDeleted( sal_uInt64 nPara, bool bInserted )
 {
     if ( pProgress )
         pProgress->StepProgress();
@@ -1400,7 +1400,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     aMarkerOff.setX( (aOutSz.Width() - aMarkerSz.Width()) / 2 );
     aMarkerOff.setY( (nLineHeight - aMarkerSz.Height()) / 2 );
 
-    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
+    sal_uInt64 nY = nMarkerPos * nLineHeight - nCurYOffset;
     Point aPos(0, nY);
     aPos += aMarkerOff;
 
@@ -1455,7 +1455,7 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             long nYPos = aMousePos.Y() + nCurYOffset;
             long nLine = nYPos / nLineHeight + 1;
-            rModulWindow.ToggleBreakPoint( static_cast<sal_uLong>(nLine) );
+            rModulWindow.ToggleBreakPoint( static_cast<sal_uInt64>(nLine) );
             Invalidate();
         }
     }

@@ -503,7 +503,7 @@ void ModulWindow::ImportDialog()
     implImportDialog(GetFrameWeld(), m_sCurPath, rDocument, aLibName);
 }
 
-void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
+void ModulWindow::ToggleBreakPoint( sal_uInt64 nLine )
 {
     DBG_ASSERT( XModule().is(), "No Module!" );
 
