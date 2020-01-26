@@ -34,7 +34,6 @@
 class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
-class SvxColorListBox;
 
 /************************************************************************/
 class ButtonBox
