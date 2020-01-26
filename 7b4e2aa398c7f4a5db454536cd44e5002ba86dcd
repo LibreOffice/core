@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "089c4497_229ed5b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-01-26T18:17:20Z",
+      "side": 1,
+      "message": "iAvoid \u003d\u003e Avoid?",
+      "revId": "7b4e2aa398c7f4a5db454536cd44e5002ba86dcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
