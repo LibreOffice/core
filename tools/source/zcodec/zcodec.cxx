@@ -287,9 +287,9 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize 
 void ZCodec::ImplWriteBack()
 {
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
-    sal_uIntPtr nAvail = mnOutBufSize - pStream->avail_out;
+    size_t nAvail = mnOutBufSize - pStream->avail_out;
 
-    if ( nAvail )
+    if ( nAvail > 0 )
     {
         pStream->next_out = mpOutBuf;
         mpOStm->WriteBytes( mpOutBuf, nAvail );
