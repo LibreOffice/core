@@ -20,6 +20,7 @@
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 
+#include <cassert>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
@@ -121,7 +122,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
     ResetPageImpl ();
 
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
+    assert( pData && "ID not known " );
 
     pData->xPage->Reset( *pSet );
 }
@@ -133,21 +134,19 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
 \**********************************************************************/
 void SvxHpLinkDlg::ActivatePageImpl()
 {
-    DBG_ASSERT( !maPageList.empty(), "no Pages registered" );
+    assert( !maPageList.empty() && "no Pages registered " );
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
-    if ( pData )
-    {
-        if ( pData->bRefresh )
-        {
-            pData->xPage->Reset( *pSet );
-            pData->bRefresh = false;
-        }
+    assert( pData && "ID not known " );
 
-        if ( pExampleSet )
-            pData->xPage->ActivatePage( *pExampleSet );
-        m_xDialog->set_help_id(pData->xPage->GetHelpId());
+    if ( pData->bRefresh )
+    {
+        pData->xPage->Reset( *pSet );
+        pData->bRefresh = false;
     }
+
+    if ( pExampleSet )
+        pData->xPage->ActivatePage( *pExampleSet );
+    m_xDialog->set_help_id(pData->xPage->GetHelpId());
 
     m_xResetBtn->show();
 }
@@ -216,7 +215,7 @@ void SvxHpLinkDlg::ResetPageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( msCurrentPageId );
 
-    DBG_ASSERT( pData, "ID not known" );
+    assert( pData && "ID not known " );
 
     pData->xPage->Reset( *pSet );
 }
