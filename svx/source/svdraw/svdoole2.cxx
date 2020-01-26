@@ -377,7 +377,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
         xParentFrame->setActiveFrame( xOwnFrame );
 
     OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
-    const sal_uIntPtr nCount = rObjCache.size();
+    const size_t nCount = rObjCache.size();
     for(sal_Int32 i = nCount-1 ; i >= 0;--i)
     {
         SdrOle2Obj* pObj = rObjCache[i];
