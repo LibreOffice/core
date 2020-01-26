@@ -554,7 +554,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     maStringPools.resize(mnColumnCount);
     std::vector<InitColumnData> aColData(mnColumnCount);
     maFields.reserve(mnColumnCount);
-    for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
+    for (SCCOL i = 0; i < mnColumnCount; ++i)
         maFields.push_back(std::make_unique<Field>());
 
     maLabelNames.reserve(mnColumnCount+1);
@@ -633,7 +633,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         maStringPools.resize(mnColumnCount);
         maFields.clear();
         maFields.reserve(mnColumnCount);
-        for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
+        for (SCCOL i = 0; i < mnColumnCount; ++i)
             maFields.push_back(std::make_unique<Field>());
 
         // Get column titles and types.
