@@ -30,6 +30,7 @@
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
 #include <svl/itemiter.hxx>
+#include <o3tl/vector_utils.hxx>
 
 namespace sw
 {
@@ -43,14 +44,6 @@ lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const&
     pIssue->m_aIssueText = rText;
     rIssueCollection.getIssues().push_back(pIssue);
     return pIssue;
-}
-
-template <typename T> void removeDuplicates(std::vector<T>& aVector)
-{
-    std::unordered_set<T> aSet;
-    auto end = std::copy_if(aVector.begin(), aVector.end(), aVector.begin(),
-                            [&aSet](T const& rElement) { return aSet.insert(rElement).second; });
-    aVector.erase(end, aVector.end());
 }
 
 class BaseCheck
@@ -518,7 +511,7 @@ public:
         }
         if (!aFormattings.empty())
         {
-            removeDuplicates(aFormattings);
+            o3tl::remove_duplicates(aFormattings);
             auto pIssue
                 = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
                               sfx::AccessibilityIssueID::TEXT_FORMATTING);
