@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -31,6 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
+#include <sal/log.hxx>
 
 using namespace css::uno;
 using namespace css::i18n;
@@ -43,7 +43,7 @@ using namespace css::util;
 void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 {
     // init the engine
-    DBG_ASSERT( m_pSearchEngine, "FmSearchDialog::initCommon: have no engine!" );
+    assert( m_pSearchEngine && "FmSearchDialog::initCommon: have no engine!" );
     m_pSearchEngine->SetProgressHandler(LINK(this, FmSearchDialog, OnSearchProgress));
 
     // some layout changes according to available CJK options
@@ -104,18 +104,18 @@ FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialTe
     m_plbForm->set_size_request(m_plbForm->get_approximate_digit_width() * 38, -1);
     m_sSearch = m_pbSearchAgain->get_label();
 
-    DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
+    assert(m_lnkContextSupplier.IsSet() && "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
 
     FmSearchContext fmscInitial;
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(fmscInitial);
-    DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
-    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == static_cast<sal_Int32>(fmscInitial.arrFields.size()),
+    assert(fmscInitial.xCursor.is() && "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
+    assert(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == static_cast<sal_Int32>(fmscInitial.arrFields.size()) &&
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     for (const Reference<XInterface> & arrField : fmscInitial.arrFields)
     {
-        DBG_ASSERT(arrField.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
+        assert(arrField.is() && "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
     }
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
@@ -144,7 +144,7 @@ FmSearchDialog::FmSearchDialog(weld::Window* pParent, const OUString& sInitialTe
 
     if ( !fmscInitial.sFieldDisplayNames.isEmpty() )
     {   // use the display names if supplied
-        DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';'),
+        assert(comphelper::string::getTokenCount(fmscInitial.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') &&
             "FmSearchDialog::FmSearchDialog : invalid initial context description !");
         Init(fmscInitial.sFieldDisplayNames, sInitialText);
     }
@@ -452,7 +452,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     fmscContext.nContext = nContext;
 
     sal_uInt32 nResult = m_lnkContextSupplier.Call(fmscContext);
-    DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
+    assert(nResult > 0 && "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
     // put the field names into the respective listbox
     m_plbField->clear();
@@ -460,7 +460,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     if (!fmscContext.sFieldDisplayNames.isEmpty())
     {
         // use the display names if supplied
-        DBG_ASSERT(comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'),
+        assert(comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscContext.strUsedFields, ';') &&
             "FmSearchDialog::InitContext : invalid context description supplied !");
         sal_Int32 nPos {0};
         do {
