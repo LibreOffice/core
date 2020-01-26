@@ -1010,6 +1010,8 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
 
     rTreeView.connect_row_activated(LINK(this, SvxConfigPage, FunctionDoubleClickHdl));
     rTreeView.connect_changed(LINK(this, SvxConfigPage, SelectFunctionHdl));
+
+    m_xCategoryLabel->set_label("Kategorilerrr");
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectElementHdl, weld::ComboBox&, void)

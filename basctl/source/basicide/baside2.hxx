@@ -95,7 +95,7 @@ private:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    void            ImpDoHighlight( sal_uLong nLineOff );
+    void            ImpDoHighlight( sal_uInt64 nLineOff );
     void            ImplSetFont();
 
     bool            bHighlighting;
@@ -105,7 +105,7 @@ private:
     virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) override;
     CodeCompleteDataCache aCodeCompleteCache;
     VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
-    OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
+    OUString GetActualSubName( sal_uInt64 nLine ); // gets the actual subroutine name according to line number
     void SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel );
     void HandleAutoCorrect();
     void HandleAutoCloseParen();
@@ -124,7 +124,7 @@ private:
     virtual void    LoseFocus() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
-    void            DoSyntaxHighlight( sal_uLong nPara );
+    void            DoSyntaxHighlight( sal_uInt64 nPara );
     OUString        GetWordAtCursor();
     bool            ImpCanModify();
 
@@ -139,8 +139,8 @@ public:
     void            CreateProgress( const OUString& rText, sal_uInt32 nRange );
     void            DestroyProgress();
 
-    void            ParagraphInsertedDeleted( sal_uLong nNewPara, bool bInserted );
-    void            DoDelayedSyntaxHighlight( sal_uLong nPara );
+    void            ParagraphInsertedDeleted( sal_uInt64 nNewPara, bool bInserted );
+    void            DoDelayedSyntaxHighlight( sal_uInt64 nPara );
 
     void            CreateEditEngine();
     void            SetScrollBarRanges();
@@ -360,7 +360,7 @@ public:
 
     void            EditMacro( const OUString& rMacroName );
 
-    void            ToggleBreakPoint( sal_uLong nLine );
+    void            ToggleBreakPoint( sal_uInt64 nLine );
 
     BasicStatus&    GetBasicStatus() { return m_aStatus; }
 

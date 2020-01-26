@@ -129,7 +129,7 @@ void OAccessibleMenuItemComponent::Click()
             // that the popup menus are executed synchronously.
             AllSettings aSettings = pWindow->GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-            sal_uLong nDelay = aMouseSettings.GetMenuDelay();
+            sal_uInt64 nDelay = aMouseSettings.GetMenuDelay();
             aMouseSettings.SetMenuDelay( 0 );
             aSettings.SetMouseSettings( aMouseSettings );
             pWindow->SetSettings( aSettings );
