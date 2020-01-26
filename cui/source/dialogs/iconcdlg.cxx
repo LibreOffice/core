@@ -20,6 +20,7 @@
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 
+#include <assert.h>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
@@ -121,7 +122,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
     ResetPageImpl ();
 
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
+    assert( pData && "ID not known " );
 
     pData->xPage->Reset( *pSet );
 }
@@ -133,9 +134,9 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
 \**********************************************************************/
 void SvxHpLinkDlg::ActivatePageImpl()
 {
-    DBG_ASSERT( !maPageList.empty(), "no Pages registered" );
+    assert( !maPageList.empty() && "no Pages registered " );
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
+    assert( pData && "ID not known " );
     if ( pData )
     {
         if ( pData->bRefresh )
@@ -216,7 +217,7 @@ void SvxHpLinkDlg::ResetPageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( msCurrentPageId );
 
-    DBG_ASSERT( pData, "ID not known" );
+    assert( pData && "ID not known " );
 
     pData->xPage->Reset( *pSet );
 }
