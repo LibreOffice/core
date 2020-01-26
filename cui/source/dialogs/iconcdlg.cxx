@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
     ResetPageImpl ();
 
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
+    SAL_WARN_IF( pData == nullptr, "cui.dialogs", "ID not known" );
 
     pData->xPage->Reset( *pSet );
 }
@@ -133,9 +133,9 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ResetHdl, weld::Button&, void)
 \**********************************************************************/
 void SvxHpLinkDlg::ActivatePageImpl()
 {
-    DBG_ASSERT( !maPageList.empty(), "no Pages registered" );
+    SAL_WARN_IF( maPageList.empty(), "cui.dialogs", "no Pages registered" );
     IconChoicePageData* pData = GetPageData ( msCurrentPageId );
-    DBG_ASSERT( pData, "ID not known" );
+    SAL_WARN_IF( pData == nullptr, "cui.dialogs", "ID not known" );
     if ( pData )
     {
         if ( pData->bRefresh )
@@ -216,7 +216,7 @@ void SvxHpLinkDlg::ResetPageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( msCurrentPageId );
 
-    DBG_ASSERT( pData, "ID not known" );
+    SAL_WARN_IF( pData == nullptr, "cui.dialogs", "ID not known" );
 
     pData->xPage->Reset( *pSet );
 }
