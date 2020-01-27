@@ -29,3 +29,6 @@ blacklist:
     - com/sun/star/connection/XConnection.hpp
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/uno/XInterface.hpp
+    binaryurp/source/unmarshal.cxx:
+    # Actually used
+    - vector
