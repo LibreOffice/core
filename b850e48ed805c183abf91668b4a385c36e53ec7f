@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9576003_798d8cfc",
+        "filename": "sfx2/source/doc/SfxRedactionHelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:26:29Z",
+      "side": 1,
+      "message": "Since we now have more than one if-block in this loop, moving this comment on top of the first if-block on line 434 might be a good idea.",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 430,
+        "endChar": 43
+      },
+      "revId": "b850e48ed805c183abf91668b4a385c36e53ec7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65cefabe_199c13f9",
+        "filename": "sfx2/source/doc/SfxRedactionHelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:26:29Z",
+      "side": 1,
+      "message": "Maybe add a one or two lines of a comment here explaining what is going on here and why?",
+      "range": {
+        "startLine": 455,
+        "startChar": 20,
+        "endLine": 456,
+        "endChar": 60
+      },
+      "revId": "b850e48ed805c183abf91668b4a385c36e53ec7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f29f5398_2df290ef",
+        "filename": "sfx2/source/doc/SfxRedactionHelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:26:29Z",
+      "side": 1,
+      "message": "Maybe directly call getHeight() just after GetFontSize(), and assign the returned value to aLastFontHeight instead of creating a temporary Size variable?",
+      "range": {
+        "startLine": 469,
+        "startChar": 12,
+        "endLine": 470,
+        "endChar": 52
+      },
+      "revId": "b850e48ed805c183abf91668b4a385c36e53ec7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
