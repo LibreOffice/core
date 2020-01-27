@@ -268,10 +268,10 @@ Service::createInstanceWithArguments(
 
 css::uno::Sequence< OUString > Service::getAvailableServiceNames()
 {
-    css::uno::Sequence< OUString > names(2);
-    names[0] = accessServiceName;
-    names[1] = updateAccessServiceName;
-    return names;
+    return css::uno::Sequence< OUString > {
+        accessServiceName,
+        updateAccessServiceName
+    };
 }
 
 void Service::refresh() {
