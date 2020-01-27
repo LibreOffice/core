@@ -72,6 +72,7 @@
 #include <swslots.hxx>
 #include <grfatr.hxx>
 #include <fldmgr.hxx>
+#include <flyfrm.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1007,6 +1008,26 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                          pSdrView->GetMarkedObjectCount() != 1 )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+                case FN_POSTIT:
+                {
+                    SwFlyFrame* pFly = rSh.GetSelectedFlyFrame();
+                    if (pFly)
+                    {
+                        SwFrameFormat* pFormat = pFly->GetFormat();
+                        if (pFormat)
+                        {
+                            RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
+                            // SwWrtShell::InsertPostIt() only works on as-char and at-char anchored
+                            // images.
+                            if (eAnchorId != RndStdIds::FLY_AS_CHAR && eAnchorId != RndStdIds::FLY_AT_CHAR)
+                            {
+                                rSet.DisableItem(nWhich);
+                            }
+                        }
                     }
                 }
                 break;
