@@ -24,7 +24,8 @@
 #include <tools/gen.hxx>
 #include <vector>
 #include <vcl/dllapi.h>
-#include <vcl/ctrl.hxx>
+
+class Control;
 
 namespace vcl
 {

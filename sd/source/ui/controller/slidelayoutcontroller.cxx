@@ -50,22 +50,29 @@ namespace sd
 
 namespace {
 
-class LayoutToolbarMenu : public svtools::ToolbarMenu
+class LayoutToolbarMenu : public WeldToolbarPopup
 {
 public:
-    LayoutToolbarMenu( SlideLayoutController& rController, vcl::Window* pParent, const bool bInsertPage );
-    virtual ~LayoutToolbarMenu() override;
-    virtual void dispose() override;
+    LayoutToolbarMenu(SlideLayoutController* pController, weld::Widget* pParent, const bool bInsertPage, const OUString& rCommand);
+    virtual void GrabFocus() override
+    {
+        mxLayoutSet1->GrabFocus();
+    }
 
 protected:
-    DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
-    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
-    void SelectHdl(void const *);
+    DECL_LINK(SelectToolbarMenuHdl, weld::Button&, void);
+    DECL_LINK(SelectValueSetHdl, SvtValueSet*, void);
+    void SelectHdl(AutoLayout eLayout);
 private:
-    SlideLayoutController& mrController;
+    rtl::Reference<SlideLayoutController> mxControl;
     bool const mbInsertPage;
-    VclPtr<ValueSet> mpLayoutSet1;
-    VclPtr<ValueSet> mpLayoutSet2;
+    std::unique_ptr<weld::Frame> mxFrame1;
+    std::unique_ptr<SvtValueSet> mxLayoutSet1;
+    std::unique_ptr<weld::CustomWeld> mxLayoutSetWin1;
+    std::unique_ptr<weld::Frame> mxFrame2;
+    std::unique_ptr<SvtValueSet> mxLayoutSet2;
+    std::unique_ptr<weld::CustomWeld> mxLayoutSetWin2;
+    std::unique_ptr<weld::Button> mxMoreButton;
 };
 
 struct snewfoil_value_info_layout
@@ -121,7 +128,7 @@ static const snewfoil_value_info_layout v_standard[] =
     {nullptr, nullptr, AUTOLAYOUT_NONE}
 };
 
-static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )
+static void fillLayoutValueSet( SvtValueSet* pValue, const snewfoil_value_info_layout* pInfo )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mpStrResId; pInfo++ )
@@ -134,23 +141,38 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layo
     }
 
     aLayoutItemSize = pValue->CalcItemSizePixel( aLayoutItemSize );
-    pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
+    Size aSize(pValue->CalcWindowSizePixel(aLayoutItemSize));
+
+    const sal_Int32 LAYOUT_BORDER_PIX = 7;
+
+    aSize.AdjustWidth((pValue->GetColCount() + 1) * LAYOUT_BORDER_PIX);
+    aSize.AdjustHeight((pValue->GetLineCount() +1) * LAYOUT_BORDER_PIX);
+
+    pValue->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
+    pValue->SetOutputSizePixel(aSize);
 }
 
-LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::Window* pParent, const bool bInsertPage )
-: svtools::ToolbarMenu( rController.getFrameInterface(), pParent, WB_CLIPCHILDREN )
-, mrController( rController )
-, mbInsertPage( bInsertPage )
-, mpLayoutSet1( nullptr )
-, mpLayoutSet2( nullptr )
+LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widget* pParent, const bool bInsertPage, const OUString& rCommand)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/simpress/ui/layoutwindow.ui", "LayoutWindow")
+    , mxControl(pControl)
+    , mbInsertPage(bInsertPage)
+    , mxFrame1(m_xBuilder->weld_frame("horiframe"))
+    , mxLayoutSet1(new SvtValueSet(nullptr))
+    , mxLayoutSetWin1(new weld::CustomWeld(*m_xBuilder, "valueset1", *mxLayoutSet1))
+    , mxFrame2(m_xBuilder->weld_frame("vertframe"))
+    , mxLayoutSet2(new SvtValueSet(nullptr))
+    , mxLayoutSetWin2(new weld::CustomWeld(*m_xBuilder, "valueset2", *mxLayoutSet2))
+    , mxMoreButton(m_xBuilder->weld_button("more"))
 {
+    mxLayoutSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
+    mxLayoutSet2->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
+
     DrawViewMode eMode = DrawViewMode_DRAW;
-    Reference< XFrame > xFrame( rController.getFrameInterface() );
 
     // find out which view is running
-    if( xFrame.is() ) try
+    if( mxFrame.is() ) try
     {
-        Reference< XPropertySet > xControllerSet( xFrame->getController(), UNO_QUERY_THROW );
+        Reference< XPropertySet > xControllerSet( mxFrame->getController(), UNO_QUERY_THROW );
         xControllerSet->getPropertyValue( "DrawViewMode" ) >>= eMode;
     }
     catch( Exception& )
@@ -158,18 +180,10 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
         OSL_ASSERT(false);
     }
 
-    const sal_Int32 LAYOUT_BORDER_PIX = 7;
-
-    OUString aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
-    OUString aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
-
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
-    SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectToolbarMenuHdl ) );
-
-    mpLayoutSet1 = createEmptyValueSetControl();
-    mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
+    mxLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
     const snewfoil_value_info_layout* pInfo = nullptr;
     sal_Int16 nColCount = 4;
@@ -181,108 +195,73 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
     default: assert(false); // can't happen, will crash later otherwise
     }
 
-    mpLayoutSet1->SetColCount( nColCount );
+    mxLayoutSet1->SetColCount( nColCount );
 
-    fillLayoutValueSet( mpLayoutSet1, pInfo );
+    fillLayoutValueSet( mxLayoutSet1.get(), pInfo );
 
-    Size aSize( mpLayoutSet1->GetOutputSizePixel() );
-    aSize.AdjustWidth((mpLayoutSet1->GetColCount() + 1) * LAYOUT_BORDER_PIX );
-    aSize.AdjustHeight((mpLayoutSet1->GetLineCount() +1) * LAYOUT_BORDER_PIX );
-    mpLayoutSet1->SetOutputSizePixel( aSize );
-
-    if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
-        appendEntry( -1, aTitle1 );
-    appendEntry( 0, mpLayoutSet1 );
-
-    if( bVerticalEnabled && (eMode == DrawViewMode_DRAW) )
+    bool bUseUILabel = (bVerticalEnabled && eMode == DrawViewMode_DRAW);
+    if (!bUseUILabel)
     {
-        mpLayoutSet2 = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, mxControl->getModuleName());
+        mxFrame1->set_label(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
+    }
 
-        mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
-        mpLayoutSet2->SetColCount( 4 );
-        mpLayoutSet2->EnableFullItemMode( false );
-        mpLayoutSet2->SetColor( GetControlBackground() );
+    if (bVerticalEnabled && eMode == DrawViewMode_DRAW)
+    {
+        mxLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
+        mxLayoutSet2->SetColCount( 4 );
+        mxLayoutSet2->EnableFullItemMode( false );
 
-        fillLayoutValueSet( mpLayoutSet2, &v_standard[0] );
+        fillLayoutValueSet( mxLayoutSet2.get(), &v_standard[0] );
 
-        aSize = mpLayoutSet2->GetOutputSizePixel();
-        aSize.AdjustWidth((mpLayoutSet2->GetColCount() + 1) * LAYOUT_BORDER_PIX );
-        aSize.AdjustHeight((mpLayoutSet2->GetLineCount() + 1) * LAYOUT_BORDER_PIX );
-        mpLayoutSet2->SetOutputSizePixel( aSize );
-
-        appendEntry( -1, aTitle2 );
-        appendEntry( 1, mpLayoutSet2 );
+        mxFrame2->show();
     }
 
     if( eMode == DrawViewMode_DRAW )
     {
-        appendSeparator();
-
-        OUString sSlotStr;
-        Image aSlotImage;
-        if( xFrame.is() )
+        if( mxFrame.is() )
         {
+            OUString sSlotStr;
+
             if( bInsertPage )
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, xFrame);
+
+            css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, mxFrame);
 
             OUString sSlotTitle;
             if( bInsertPage )
             {
-                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr, rController.getModuleName());
+                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr, mxControl->getModuleName());
                 sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
             }
             else
                 sSlotTitle = SdResId( STR_RESET_LAYOUT );
-            appendEntry( 2, sSlotTitle, aSlotImage);
+
+            mxMoreButton->set_label(sSlotTitle);
+            mxMoreButton->set_image(xSlotImage);
+            mxMoreButton->connect_clicked(LINK(this, LayoutToolbarMenu, SelectToolbarMenuHdl));
+            mxMoreButton->show();
         }
     }
-
-    SetOutputSizePixel( getMenuSize() );
 }
 
-LayoutToolbarMenu::~LayoutToolbarMenu()
+IMPL_LINK(LayoutToolbarMenu, SelectValueSetHdl, SvtValueSet*, pLayoutSet, void)
 {
-    disposeOnce();
+    SelectHdl(static_cast<AutoLayout>(pLayoutSet->GetSelectedItemId()-1));
 }
 
-void LayoutToolbarMenu::dispose()
+IMPL_LINK_NOARG(LayoutToolbarMenu, SelectToolbarMenuHdl, weld::Button&, void)
 {
-    mpLayoutSet1.clear();
-    mpLayoutSet2.clear();
-    svtools::ToolbarMenu::dispose();
+    SelectHdl(AUTOLAYOUT_END);
 }
 
-IMPL_LINK( LayoutToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
+void LayoutToolbarMenu::SelectHdl(AutoLayout eLayout)
 {
-    SelectHdl(pControl);
-}
-IMPL_LINK( LayoutToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl, void )
-{
-    SelectHdl(pControl);
-}
-
-void LayoutToolbarMenu::SelectHdl(void const * pControl)
-{
-    if ( IsInPopupMode() )
-        EndPopupMode();
-
     Sequence< PropertyValue > aArgs;
 
-    AutoLayout eLayout = AUTOLAYOUT_END;
-
-    OUString sCommandURL( mrController.getCommandURL() );
-
-    if( pControl == mpLayoutSet1 )
-    {
-        eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectedItemId()-1);
-    }
-    else if( pControl == mpLayoutSet2 )
-    {
-        eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectedItemId()-1);
-    }
+    OUString sCommandURL( mxControl->getCommandURL() );
 
     if( eLayout != AUTOLAYOUT_END )
     {
@@ -295,8 +274,11 @@ void LayoutToolbarMenu::SelectHdl(void const * pControl)
         sCommandURL = ".uno:DuplicatePage";
     }
 
-    mrController.dispatchCommand( sCommandURL, aArgs );
+    mxControl->dispatchCommand( sCommandURL, aArgs );
+
+    mxControl->EndPopupMode();
 }
+
 
 /// @throws css::uno::RuntimeException
 static OUString SlideLayoutController_getImplementationName()
@@ -324,10 +306,9 @@ static Sequence< OUString >  InsertSlideController_getSupportedServiceNames()
     return aSNS;
 }
 
-
-SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
-: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )
-, mbInsertPage( bInsertPage )
+SlideLayoutController::SlideLayoutController(const Reference< uno::XComponentContext >& rxContext, bool bInsertPage)
+    : svt::PopupWindowController(rxContext, nullptr, OUString())
+    , mbInsertPage(bInsertPage)
 {
 }
 
@@ -346,9 +327,19 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     }
 }
 
+std::unique_ptr<WeldToolbarPopup> SlideLayoutController::weldPopupWindow()
+{
+    return std::make_unique<sd::LayoutToolbarMenu>(this, m_pToolbar, mbInsertPage, m_aCommandURL);
+}
+
 VclPtr<vcl::Window> SlideLayoutController::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<sd::LayoutToolbarMenu>::Create( *this, pParent, mbInsertPage );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<sd::LayoutToolbarMenu>(this, pParent->GetFrameWeld(), mbInsertPage, m_aCommandURL));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 // XServiceInfo
@@ -371,19 +362,18 @@ Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  
 
 }
 
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_SlideLayoutController_get_implementation(css::uno::XComponentContext* context,
                                                               css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::SlideLayoutController(context, ".uno:AssignLayout", false));
+    return cppu::acquire(new sd::SlideLayoutController(context, false));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_InsertSlideController_get_implementation(css::uno::XComponentContext* context,
                                                               css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::SlideLayoutController(context, ".uno:InsertPage", true));
+    return cppu::acquire(new sd::SlideLayoutController(context, true));
 }
 
 

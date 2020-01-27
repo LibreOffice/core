@@ -514,7 +514,15 @@ public:
     void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );
+    sal_uInt16      GetColCount() const
+    {
+        return mnUserCols;
+    }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
+    sal_uInt16      GetLineCount() const
+    {
+        return mnUserVisLines;
+    }
     void           SetItemWidth( long nItemWidth );
     void           SetItemHeight( long nLineHeight );
 
