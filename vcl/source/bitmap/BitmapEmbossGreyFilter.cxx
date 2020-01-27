@@ -55,7 +55,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 const long nLz = FRound(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
                 const long nNzLz = ((6 * 255) / 4) * nLz;
-                const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, 0L, 255L));
+                const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, 0, 255L));
 
                 // fill mapping tables
                 pHMap[0] = 0;

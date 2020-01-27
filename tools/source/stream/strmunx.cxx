@@ -275,7 +275,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         if ( rc != osl_File_E_None )
         {
             SetError( SVSTREAM_SEEK_ERROR );
-            return 0L;
+            return 0;
         }
         if ( nPos != STREAM_SEEK_TO_END )
             return nPos;
@@ -283,7 +283,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         return nNewPos;
     }
     SetError( SVSTREAM_GENERALERROR );
-    return 0L;
+    return 0;
 }
 
 void SvFileStream::FlushData()

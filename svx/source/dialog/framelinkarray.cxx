@@ -246,10 +246,10 @@ ArrayImpl::ArrayImpl( size_t nWidth, size_t nHeight ) :
 {
     // default-construct all vectors
     maCells.resize( mnWidth * mnHeight );
-    maWidths.resize( mnWidth, 0L );
-    maHeights.resize( mnHeight, 0L );
-    maXCoords.resize( mnWidth + 1, 0L );
-    maYCoords.resize( mnHeight + 1, 0L );
+    maWidths.resize( mnWidth, 0 );
+    maHeights.resize( mnHeight, 0 );
+    maXCoords.resize( mnWidth + 1, 0 );
+    maYCoords.resize( mnHeight + 1, 0 );
 }
 
 const Cell& ArrayImpl::GetCell( size_t nCol, size_t nRow ) const

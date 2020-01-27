@@ -131,14 +131,14 @@ long SwView::SetHScrollMax( long lMax )
 
     // At negative values the document is completely visible.
     // In this case, no scrolling.
-    return std::max( std::min( lMax, lSize ), 0L );
+    return std::max( std::min( lMax, lSize ), 0 );
 }
 
 long SwView::SetVScrollMax( long lMax )
 {
     const long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     long lSize = GetDocSz().Height() + lBorder - m_aVisArea.GetHeight();
-    return std::max( std::min( lMax, lSize), 0L );        // see horizontal
+    return std::max( std::min( lMax, lSize), 0 );        // see horizontal
 }
 
 Point SwView::AlignToPixel(const Point &rPt) const
@@ -373,7 +373,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
         pPt->setX( rRect.Left() - (nRangeX != USHRT_MAX ? nRangeX : nXScroll) );
         pPt->setX( std::max( ::GetLeftMargin( *this ) + nLeftOfst, pPt->X() ) );
         pPt->setX( std::min( rRect.Left() - nScrollX, pPt->X() ) );
-        pPt->setX( std::max( 0L, pPt->X() ) );
+        pPt->setX( std::max( 0, pPt->X() ) );
     }
 }
 
@@ -570,7 +570,7 @@ bool SwView::PageUp()
 
     Point aPos(m_aVisArea.TopLeft());
     aPos.AdjustY( -(m_aVisArea.GetHeight() - (GetYScroll() / 2)) );
-    aPos.setY( std::max(0L, aPos.Y()) );
+    aPos.setY( std::max(0, aPos.Y()) );
     SetVisArea( aPos );
     return true;
 }
@@ -1199,7 +1199,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     if (pWData && CommandWheelMode::ZOOM == pWData->GetMode())
     {
         long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
-        if( 0L > pWData->GetDelta() )
+        if( 0 > pWData->GetDelta() )
             nFact = std::max( long(20), basegfx::zoomtools::zoomOut( nFact ));
         else
             nFact = std::min( long(600), basegfx::zoomtools::zoomIn( nFact ));

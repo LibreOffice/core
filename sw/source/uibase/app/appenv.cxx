@@ -339,13 +339,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         switch (rItem.m_eAlign)
         {
             case ENV_HOR_LEFT: break;
-            case ENV_HOR_CNTR: lLeft  += std::max(0L, long(aPaperSize.Width() - nPageW)) / 2;
+            case ENV_HOR_CNTR: lLeft  += std::max(0, long(aPaperSize.Width() - nPageW)) / 2;
                                break;
-            case ENV_HOR_RGHT: lLeft  += std::max(0L, long(aPaperSize.Width() - nPageW));
+            case ENV_HOR_RGHT: lLeft  += std::max(0, long(aPaperSize.Width() - nPageW));
                                break;
-            case ENV_VER_LEFT: lUpper += std::max(0L, long(aPaperSize.Width() - nPageH));
+            case ENV_VER_LEFT: lUpper += std::max(0, long(aPaperSize.Width() - nPageH));
                                break;
-            case ENV_VER_CNTR: lUpper += std::max(0L, long(aPaperSize.Width() - nPageH)) / 2;
+            case ENV_VER_CNTR: lUpper += std::max(0, long(aPaperSize.Width() - nPageH)) / 2;
                                break;
             case ENV_VER_RGHT: break;
         }

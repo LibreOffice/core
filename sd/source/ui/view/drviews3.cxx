@@ -565,8 +565,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
-                    long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                    long nLeft = std::max(0, rLRSpace.GetLeft() - aPagePos.X());
+                    long nRight = std::max(0, rLRSpace.GetRight() + aPagePos.X() +
                                           aPageSize.Width() - aViewSize.Width());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -631,8 +631,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
-                    long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                    long nUpper = std::max(0, rULSpace.GetUpper() - aPagePos.Y());
+                    long nLower = std::max(0, rULSpace.GetLower() + aPagePos.Y() +
                                           aPageSize.Height() - aViewSize.Height());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -841,7 +841,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     // like that.
                     const auto nAbsLSpace=aFormat.GetAbsLSpace();
                     const long  nTxtLeft=rItem.GetTextLeft();
-                    const long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
+                    const long  nLeftIndent=std::max(L,nTxtLeft - nAbsLSpace);
                     aLRSpaceItem.SetTextLeft(nLeftIndent);
                     // control for clipped left indent - remainder
                     // reduces number format first line indent

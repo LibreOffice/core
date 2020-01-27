@@ -72,7 +72,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     }
     else
     {
-        const OUString aPrefix( aName.copy( 0L, nPos ) );
+        const OUString aPrefix( aName.copy( 0, nPos ) );
         const OUString aLName( aName.copy( nPos+1 ) );
 
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
@@ -157,7 +157,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
         sal_Int32 nPos = aName.indexOf( ':' );
         if( nPos != -1 )
         {
-            const OUString aPrefix( aName.copy( 0L, nPos ));
+            const OUString aPrefix( aName.copy( 0, nPos ));
             const OUString aLName( aName.copy( nPos+1 ));
 
             if( pData->Namespace.isEmpty() )
@@ -198,7 +198,7 @@ void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const
     sal_Int32 nPos = aName.indexOf( ':' );
     if( nPos != -1 )
     {
-        const OUString aPrefix( aName.copy( 0L, nPos ));
+        const OUString aPrefix( aName.copy( 0, nPos ));
         const OUString aLName( aName.copy( nPos+1 ));
 
         if( pData->Namespace.isEmpty() )

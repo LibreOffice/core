@@ -171,7 +171,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
             // 64-Bit files are not supported
             nNewPos=SetFilePointer(pInstanceData->hFile,nPos,nullptr,FILE_BEGIN);
         else
-            nNewPos=SetFilePointer(pInstanceData->hFile,0L,nullptr,FILE_END);
+            nNewPos=SetFilePointer(pInstanceData->hFile,0,nullptr,FILE_END);
 
         if( nNewPos == 0xFFFFFFFF )
         {
@@ -200,7 +200,7 @@ bool SvFileStream::LockFile()
     {
         if( IsOpen() )
         {
-            bRetVal = ::LockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L );
+            bRetVal = ::LockFile(pInstanceData->hFile,0,0,LONG_MAX,0 );
             if( bRetVal )
             {
                 nLockCounter = 1;
@@ -225,7 +225,7 @@ void SvFileStream::UnlockFile()
         {
             if( IsOpen() )
             {
-                if( ::UnlockFile(pInstanceData->hFile,0L,0L,LONG_MAX,0L ) )
+                if( ::UnlockFile(pInstanceData->hFile,0,0,LONG_MAX,0 ) )
                 {
                     nLockCounter = 0;
                 }
@@ -395,7 +395,7 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
     {
         bool bError = false;
         HANDLE hFile = pInstanceData->hFile;
-        DWORD const nOld = SetFilePointer( hFile, 0L, nullptr, FILE_CURRENT );
+        DWORD const nOld = SetFilePointer( hFile, 0, nullptr, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {
             if( SetFilePointer(hFile,nSize,nullptr,FILE_BEGIN ) != 0xffffffff)
