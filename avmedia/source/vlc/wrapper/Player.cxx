@@ -36,10 +36,10 @@ namespace { extern "C" {
                                           const char *psz_filepath,
                                           unsigned int i_width,
                                           unsigned int i_height );
-#if defined UNX
-    void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
-#elif defined MACOSX
+#if defined MACOSX
     void ( *libvlc_media_player_set_nsobject ) ( libvlc_media_player_t *p_mi, void *drawable );
+#elif defined UNX
+    void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
 #elif defined _WIN32
     void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
 #else
@@ -79,10 +79,10 @@ namespace avmedia::vlc::wrapper
             SYM_MAP( libvlc_audio_set_mute ),
             SYM_MAP( libvlc_audio_get_mute ),
             SYM_MAP( libvlc_video_take_snapshot ),
-#if defined UNX
-            SYM_MAP( libvlc_media_player_set_xwindow ),
-#elif defined MACOSX
+#if defined MACOSX
             SYM_MAP( libvlc_media_player_set_nsobject ),
+#elif defined UNX
+            SYM_MAP( libvlc_media_player_set_xwindow ),
 #elif defined _WIN32
             SYM_MAP( libvlc_media_player_set_hwnd ),
 #endif
@@ -216,10 +216,10 @@ namespace avmedia::vlc::wrapper
 
     void Player::setWindow( intptr_t id )
     {
-#if defined UNX
-        libvlc_media_player_set_xwindow( mPlayer, static_cast<uint32_t>(id) );
-#elif defined MACOSX
+#if defined MACOSX
         libvlc_media_player_set_nsobject( mPlayer, reinterpret_cast<void*>( id ) );
+#elif defined UNX
+        libvlc_media_player_set_xwindow( mPlayer, static_cast<uint32_t>(id) );
 #elif defined _WIN32
         libvlc_media_player_set_hwnd( mPlayer, reinterpret_cast<void*>( id ) );
 #endif
