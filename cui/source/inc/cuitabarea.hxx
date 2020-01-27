@@ -51,6 +51,7 @@ class ButtonBox
             }
             mnCurrentButton = nPos;
             maButtonList[mnCurrentButton]->set_active(true);
+            maButtonList[mnCurrentButton]->grab_focus();
         };
     public:
         ButtonBox()
