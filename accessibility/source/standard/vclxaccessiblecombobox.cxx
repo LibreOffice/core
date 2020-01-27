@@ -47,8 +47,7 @@ OUString VCLXAccessibleComboBox::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleComboBox::getSupportedServiceNames()
 {
-    return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleComboBox"});
+    return {"com.sun.star.accessibility.AccessibleComboBox"};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
