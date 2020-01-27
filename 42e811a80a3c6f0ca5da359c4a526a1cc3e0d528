@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7b625fb7_1ba22ec2",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-27T17:53:16Z",
+      "side": 1,
+      "message": "Indeed; see \u003chttps://gerrit.libreoffice.org/c/core/+/87547\u003e \"Fix order of MACOSX vs. UNX checks\".  Thanks for spotting!",
+      "parentUuid": "4e038c84_8cf484ef",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52b17092_667edeb0",
         "filename": "avmedia/source/vlc/wrapper/Player.cxx",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cfdd4e93_d96f5535",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-27T17:53:16Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "52b17092_667edeb0",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d92372fb_66104c58",
         "filename": "avmedia/source/vlc/wrapper/Player.cxx",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d5849d_94e0b48e",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-27T17:53:16Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "d92372fb_66104c58",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 20
+      },
+      "revId": "42e811a80a3c6f0ca5da359c4a526a1cc3e0d528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
