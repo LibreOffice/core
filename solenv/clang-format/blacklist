@@ -1713,6 +1713,7 @@ compilerplugins/clang/sallogareas.cxx
 compilerplugins/clang/salunicodeliteral.cxx
 compilerplugins/clang/sfxpoolitem.cxx
 compilerplugins/clang/sharedvisitor/analyzer.cxx
+compilerplugins/clang/sharedvisitor/dummyplugin.hxx
 compilerplugins/clang/sharedvisitor/generator.cxx
 compilerplugins/clang/simplifybool.cxx
 compilerplugins/clang/singlevalfields.cxx
