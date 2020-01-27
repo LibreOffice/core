@@ -145,6 +145,7 @@ public:
     void testMultipleCategoryAxisLablesDOCX();
     void testTdf116163();
     void testTdf111824();
+    void test3DAreaChartZAxis();
     void testTdf119029();
     void testTdf108022();
     void testTdf121744();
@@ -260,6 +261,7 @@ public:
     CPPUNIT_TEST(testMultipleCategoryAxisLablesDOCX);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testTdf111824);
+    CPPUNIT_TEST(test3DAreaChartZAxis);
     CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST(testTdf121744);
@@ -2342,6 +2344,18 @@ void Chart2ExportTest::testTdf111824()
     OUString zAxisIdOf3DBarchart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:axId[3]", "val");
     // 3D barchart Z axis properties should be in a serAx OOXML tag instead of catAx
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:serAx/c:axId", "val", zAxisIdOf3DBarchart);
+}
+
+void Chart2ExportTest::test3DAreaChartZAxis()
+{
+    load("/chart2/qa/extras/data/xlsx/", "test3DAreaChartZAxis.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Collect 3D area chart Z axID
+    OUString zAxisIdOf3DAreachart = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:area3DChart/c:axId[3]", "val");
+    // 3D area chart z-axis properties should be in a serAx OOXML element instead of catAx
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:serAx/c:axId", "val", zAxisIdOf3DAreachart);
 }
 
 void Chart2ExportTest::testTdf119029()
