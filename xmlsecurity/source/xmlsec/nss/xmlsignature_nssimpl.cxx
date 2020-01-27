@@ -304,8 +304,7 @@ sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rService
 /* XServiceInfo */
 Sequence<OUString> SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames()
 {
-    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignature" };
-    return seqServiceNames;
+    return { "com.sun.star.xml.crypto.XMLSignature" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
