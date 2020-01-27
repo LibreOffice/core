@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <limits>
 #include <functional>
 
 #include "system.hxx"
@@ -30,6 +31,7 @@
 #include <sched.h>
 #endif
 #include <config_options.h>
+#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <rtl/textenc.h>
@@ -649,10 +651,19 @@ static oslThreadIdentifier insertThreadId (pthread_t hThread)
         pEntry->Handle = hThread;
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
-        long lin_tid = syscall(SYS_gettid);
-        if (SAL_MAX_UINT32 < static_cast<unsigned long>(lin_tid))
+#if defined __GLIBC__ && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 30))
+        // gettid returns a pid_t, which POSIX defines to be a signed integer type; assume that all
+        // valid pid_t values on Linux are positive (zero is filtered out in the generic code
+        // below):
+        pid_t const tid = gettid();
+        assert(tid >= 0);
+#else
+        long const tid = syscall(SYS_gettid);
+        if (tid < 0 || o3tl::make_unsigned(tid) > std::numeric_limits<sal_uInt32>::max()) {
             std::abort();
-        pEntry->Ident = static_cast<pid_t>(lin_tid);
+        }
+#endif
+        pEntry->Ident = tid;
 #elif defined MACOSX || defined IOS
         // currently the value of pthread_threadid_np is the same then
         // syscall(SYS_thread_selfid), which returns an int as the TID.
