@@ -74,12 +74,6 @@
 #define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_LEFT   "svx/res/lightfrombottomleft_22.png"
 #define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM        "svx/res/lightfrombottom_22.png"
 #define RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT  "svx/res/lightfrombottomright_22.png"
-#define RID_SVXBMP_DEPTH_0                          "svx/res/extrusion0inch_16.png"
-#define RID_SVXBMP_DEPTH_1                          "svx/res/extrusion05inch_16.png"
-#define RID_SVXBMP_DEPTH_2                          "svx/res/extrusion1inch_16.png"
-#define RID_SVXBMP_DEPTH_3                          "svx/res/extrusion2inch_16.png"
-#define RID_SVXBMP_DEPTH_4                          "svx/res/extrusion4inch_16.png"
-#define RID_SVXBMP_DEPTH_INFINITY                   "svx/res/extrusioninfinity_16.png"
 
 #define RID_SVXBMP_LAMP_ON                          "svx/res/lighton.png"
 #define RID_SVXBMP_LAMP_OFF                         "svx/res/light.png"

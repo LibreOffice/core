@@ -90,20 +90,31 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ExtrusionDepthWindow : public svtools::ToolbarMenu
+class ExtrusionDepthWindow final : public WeldToolbarPopup
 {
 private:
-    svt::ToolboxController& mrController;
+    rtl::Reference<svt::PopupWindowController> mxControl;
+    std::unique_ptr<weld::RadioButton> mxDepth0;
+    std::unique_ptr<weld::RadioButton> mxDepth1;
+    std::unique_ptr<weld::RadioButton> mxDepth2;
+    std::unique_ptr<weld::RadioButton> mxDepth3;
+    std::unique_ptr<weld::RadioButton> mxDepth4;
+    std::unique_ptr<weld::RadioButton> mxInfinity;
+    std::unique_ptr<weld::RadioButton> mxCustom;
+
     FieldUnit   meUnit;
     double      mfDepth;
+    bool        mbSettingValue;
 
-    DECL_LINK( SelectHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth );
 
 public:
-    ExtrusionDepthWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
+    ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
+    virtual void GrabFocus() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 };
@@ -113,6 +124,7 @@ class ExtrusionDepthController : public svt::PopupWindowController
 public:
     explicit ExtrusionDepthController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
