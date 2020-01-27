@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_dmapper, \
     writerfilter/qa/cppunittests/dmapper/DomainMapperTableHandler \
     writerfilter/qa/cppunittests/dmapper/DomainMapper_Impl \
     writerfilter/qa/cppunittests/dmapper/PropertyMap \
+    writerfilter/qa/cppunittests/dmapper/GraphicImport \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \
