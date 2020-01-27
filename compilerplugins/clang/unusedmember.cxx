@@ -15,8 +15,6 @@
 // all; the used heuristics were enough to not require any explicit [[maybe_unused]] decorations
 // across the existing code base.
 
-#ifndef LO_CLANG_SHARED_PLUGINS
-
 #include <cassert>
 #include <set>
 
@@ -450,7 +448,5 @@ private:
 
 loplugin::Plugin::Registration<UnusedMember> unusedmember("unusedmember");
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
