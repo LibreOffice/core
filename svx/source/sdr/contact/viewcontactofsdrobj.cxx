@@ -72,7 +72,7 @@ sal_uInt32 ViewContactOfSdrObj::GetObjectCount() const
         return GetSdrObject().GetSubList()->GetObjCount();
     }
 
-    return 0L;
+    return 0;
 }
 
 ViewContact& ViewContactOfSdrObj::GetViewContact(sal_uInt32 nIndex) const

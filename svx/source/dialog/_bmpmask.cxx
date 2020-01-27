@@ -676,7 +676,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         // Prepare Color comparison array
         for( i = 0; i < nCount; i++ )
         {
-            long nTol = ( pTols[i] * 255L ) / 100L;
+            long nTol = ( pTols[i] * 255 ) / 100;
 
             long nVal = static_cast<long>(pSrcCols[i].GetRed());
             pMinR[i] = std::max( nVal - nTol, 0L );

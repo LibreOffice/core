@@ -406,7 +406,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // _unscaled_ font height to be used, we use that to calculate the
     // bar height. Thus it is independent of the arguments height.
     // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
-    long nBarHeight = pNode->GetWidth( ) * 7L / 100L;
+    long nBarHeight = pNode->GetWidth( ) * 7 / 100;
     long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
     Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
     Point aBarPos( maPosition + aBarOffset );
