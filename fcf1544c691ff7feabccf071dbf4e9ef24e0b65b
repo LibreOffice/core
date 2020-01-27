@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed251e45_8eb44971",
+        "filename": "svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:07:51Z",
+      "side": 1,
+      "message": "The return type of deleteEntries is `int`, and input type of the 4th argument for the addEntry method is again `int`. So why not just use int also for nPos?",
+      "range": {
+        "startLine": 586,
+        "startChar": 16,
+        "endLine": 586,
+        "endChar": 68
+      },
+      "revId": "fcf1544c691ff7feabccf071dbf4e9ef24e0b65b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f98515b7_94856030",
+        "filename": "svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:07:51Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 590,
+        "startChar": 12,
+        "endLine": 590,
+        "endChar": 60
+      },
+      "revId": "fcf1544c691ff7feabccf071dbf4e9ef24e0b65b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
