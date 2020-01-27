@@ -339,52 +339,54 @@ double const aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 static const OUStringLiteral gsExtrusionDepth( ".uno:ExtrusionDepth" );
 static const OUStringLiteral gsMetricUnit(     ".uno:MetricUnit"     );
 
-ExtrusionDepthWindow::ExtrusionDepthWindow(
-    svt::ToolboxController& rController,
-    vcl::Window* pParentWindow
-)   : ToolbarMenu( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP )
-    , mrController( rController )
+ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")
+    , mxControl(pControl)
+    , mxDepth0(m_xBuilder->weld_radio_button("depth0"))
+    , mxDepth1(m_xBuilder->weld_radio_button("depth1"))
+    , mxDepth2(m_xBuilder->weld_radio_button("depth2"))
+    , mxDepth3(m_xBuilder->weld_radio_button("depth3"))
+    , mxDepth4(m_xBuilder->weld_radio_button("depth4"))
+    , mxInfinity(m_xBuilder->weld_radio_button("infinity"))
+    , mxCustom(m_xBuilder->weld_radio_button("custom"))
     , meUnit(FieldUnit::NONE)
     , mfDepth( -1.0 )
+    , mbSettingValue(false)
 {
-    SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
-
-    Image aImgDepth0(StockImage::Yes, RID_SVXBMP_DEPTH_0);
-    Image aImgDepth1(StockImage::Yes, RID_SVXBMP_DEPTH_1);
-    Image aImgDepth2(StockImage::Yes, RID_SVXBMP_DEPTH_2);
-    Image aImgDepth3(StockImage::Yes, RID_SVXBMP_DEPTH_3);
-    Image aImgDepth4(StockImage::Yes, RID_SVXBMP_DEPTH_4);
-    Image aImgDepthInfinity(StockImage::Yes, RID_SVXBMP_DEPTH_INFINITY);
-
-    appendEntry(0, "", aImgDepth0);
-    appendEntry(1, "", aImgDepth1);
-    appendEntry(2, "", aImgDepth2);
-    appendEntry(3, "", aImgDepth3);
-    appendEntry(4, "", aImgDepth4);
-    appendEntry(5, SvxResId(RID_SVXSTR_INFINITY), aImgDepthInfinity);
-    appendEntry(6, SvxResId(RID_SVXSTR_CUSTOM));
-
-    SetOutputSizePixel( getMenuSize() );
+    mxDepth0->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth1->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth2->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth3->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxDepth4->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxInfinity->connect_toggled(LINK(this, ExtrusionDepthWindow, SelectHdl));
+    mxCustom->connect_clicked(LINK(this, ExtrusionDepthWindow, ClickHdl));
 
     AddStatusListener( gsExtrusionDepth );
     AddStatusListener( gsMetricUnit );
 }
 
+void ExtrusionDepthWindow::GrabFocus()
+{
+    mxDepth0->grab_focus();
+}
+
 void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {
     mfDepth = fDepth;
-    int i;
-    for( i = 0; i < 7; i++ )
-    {
-        if( i == 5 )
-        {
-            checkEntry( i, fDepth >= 338666 );
-        }
-        else if( i != 6 )
-        {
-            checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) ) );
-        }
-    }
+
+    bool bSettingValue = mbSettingValue;
+    mbSettingValue = true;
+
+    mxCustom->set_active(true);
+    bool bIsMetric = IsMetric(meUnit);
+    mxDepth0->set_active(fDepth == (bIsMetric ? aDepthListMM[0] : aDepthListInch[0]));
+    mxDepth1->set_active(fDepth == (bIsMetric ? aDepthListMM[1] : aDepthListInch[1]));
+    mxDepth2->set_active(fDepth == (bIsMetric ? aDepthListMM[2] : aDepthListInch[2]));
+    mxDepth3->set_active(fDepth == (bIsMetric ? aDepthListMM[3] : aDepthListInch[3]));
+    mxDepth4->set_active(fDepth == (bIsMetric ? aDepthListMM[4] : aDepthListInch[4]));
+    mxInfinity->set_active(fDepth >= 338666);
+
+    mbSettingValue = bSettingValue;
 }
 
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
@@ -413,11 +415,11 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
     const char** pResource = IsMetric(eUnit) ? aDepths : aDepthsInch;
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDepths); ++i)
-    {
-        OUString aStr(SvxResId(pResource[i]));
-        setEntryText(i, aStr);
-    }
+    mxDepth0->set_label(SvxResId(pResource[0]));
+    mxDepth1->set_label(SvxResId(pResource[1]));
+    mxDepth2->set_label(SvxResId(pResource[2]));
+    mxDepth3->set_label(SvxResId(pResource[3]));
+    mxDepth4->set_label(SvxResId(pResource[4]));
 }
 
 void ExtrusionDepthWindow::statusChanged(
@@ -452,56 +454,67 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK_NOARG(ExtrusionDepthWindow, ClickHdl, weld::Button&, void)
 {
-    int nSelected = getSelectedEntryId();
-    if( nSelected != -1 )
+    SelectHdl(*mxCustom);
+}
+
+IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+{
+    if (mbSettingValue || !rButton.get_active())
+        return;
+
+    if (mxCustom->get_active())
     {
-        if( nSelected == 6 )
+        const OUString aCommand( ".uno:ExtrusionDepthDialog" );
+
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Name = "Depth";
+        aArgs[0].Value <<= mfDepth;
+        aArgs[1].Name = "Metric";
+        aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
+
+        rtl::Reference<svt::PopupWindowController> xControl(mxControl);
+        xControl->EndPopupMode();
+        xControl->dispatchCommand(aCommand, aArgs);
+    }
+    else
+    {
+        double fDepth;
+
+        if (mxInfinity->get_active())
         {
-            if ( IsInPopupMode() )
-                EndPopupMode();
-
-            const OUString aCommand( ".uno:ExtrusionDepthDialog" );
-
-            Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = "Depth";
-            aArgs[0].Value <<= mfDepth;
-            aArgs[1].Name = "Metric";
-            aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
-
-            mrController.dispatchCommand( aCommand, aArgs );
+            fDepth = 338666.6;
         }
         else
         {
-            double fDepth;
-
-            if( nSelected == 5 )
-            {
-                fDepth = 338666.6;
-            }
+            int nSelected;
+            if (mxDepth0->get_active())
+                nSelected = 0;
+            else if (mxDepth1->get_active())
+                nSelected = 1;
+            else if (mxDepth2->get_active())
+                nSelected = 2;
+            else if (mxDepth3->get_active())
+                nSelected = 3;
             else
-            {
-                fDepth = IsMetric( meUnit ) ? aDepthListMM[nSelected] : aDepthListInch[nSelected];
-            }
+                nSelected = 4;
 
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = OUString(gsExtrusionDepth).copy(5);
-            aArgs[0].Value <<= fDepth;
-
-            mrController.dispatchCommand( gsExtrusionDepth,  aArgs );
-            implSetDepth( fDepth );
-
-            if ( IsInPopupMode() )
-                EndPopupMode();
+            fDepth = IsMetric( meUnit ) ? aDepthListMM[nSelected] : aDepthListInch[nSelected];
         }
+
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = OUString(gsExtrusionDepth).copy(5);
+        aArgs[0].Value <<= fDepth;
+
+        mxControl->dispatchCommand( gsExtrusionDepth,  aArgs );
+        implSetDepth( fDepth );
+
+        mxControl->EndPopupMode();
     }
 }
 
-
 // ExtrusionDirectionControl
-
-
 ExtrusionDepthController::ExtrusionDepthController(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
@@ -512,10 +525,19 @@ ExtrusionDepthController::ExtrusionDepthController(
 {
 }
 
+std::unique_ptr<WeldToolbarPopup> ExtrusionDepthController::weldPopupWindow()
+{
+    return std::make_unique<ExtrusionDepthWindow>(this, m_pToolbar);
+}
 
 VclPtr<vcl::Window> ExtrusionDepthController::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionDepthWindow>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<ExtrusionDepthWindow>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 // XInitialization
