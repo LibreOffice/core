@@ -192,10 +192,7 @@ public:
     }
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override
     {
-        for( int i = 0 ; i < m_serviceNames.getLength() ; i ++ )
-            if( m_serviceNames[i] == ServiceName )
-                return true;
-        return false;
+        return cppu::supportsService(this, ServiceName);
     }
     Sequence< OUString > SAL_CALL getSupportedServiceNames() override
     {
