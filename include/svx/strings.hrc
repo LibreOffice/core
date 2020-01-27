@@ -1010,13 +1010,6 @@
 #define RID_SVXSTR_ALIGN_RIGHT                              NC_("RID_SVXSTR_ALIGN_RIGHT", "~Right Align")
 #define RID_SVXSTR_ALIGN_WORD                               NC_("RID_SVXSTR_ALIGN_WORD", "~Word Justify")
 #define RID_SVXSTR_ALIGN_STRETCH                            NC_("RID_SVXSTR_ALIGN_STRETCH", "S~tretch Justify")
-#define RID_SVXSTR_CHARS_SPACING_VERY_TIGHT                 NC_("RID_SVXSTR_CHARS_SPACING_VERY_TIGHT", "~Very Tight")
-#define RID_SVXSTR_CHARS_SPACING_TIGHT                      NC_("RID_SVXSTR_CHARS_SPACING_TIGHT", "~Tight")
-#define RID_SVXSTR_CHARS_SPACING_NORMAL                     NC_("RID_SVXSTR_CHARS_SPACING_NORMAL", "~Normal")
-#define RID_SVXSTR_CHARS_SPACING_LOOSE                      NC_("RID_SVXSTR_CHARS_SPACING_LOOSE", "~Loose")
-#define RID_SVXSTR_CHARS_SPACING_VERY_LOOSE                 NC_("RID_SVXSTR_CHARS_SPACING_VERY_LOOSE", "Very ~Loose")
-#define RID_SVXSTR_CHARS_SPACING_CUSTOM                     NC_("RID_SVXSTR_CHARS_SPACING_CUSTOM", "~Custom...")
-#define RID_SVXSTR_CHARS_SPACING_KERN_PAIRS                 NC_("RID_SVXSTR_CHARS_SPACING_KERN_PAIRS", "~Kern Character Pairs")
 
 #define RID_SVXSTR_QRY_PRINT_TITLE                          NC_("RID_SVXSTR_QRY_PRINT_TITLE", "Printing selection")
 #define RID_SVXSTR_QRY_PRINT_MSG                            NC_("RID_SVXSTR_QRY_PRINT_MSG", "Do you want to print the selection or the entire document?")
