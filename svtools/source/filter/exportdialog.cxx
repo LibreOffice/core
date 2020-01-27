@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <algorithm>
+
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -540,7 +544,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
 // to determine the exact graphic output size and preview for jpg
 bool ExportDialog::IsTempExportAvailable() const
 {
-    return GetRawFileSize() < static_cast< sal_uInt32 >( mnMaxFilesizeForRealtimePreview );
+    return GetRawFileSize() < o3tl::make_unsigned( mnMaxFilesizeForRealtimePreview );
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
@@ -622,7 +626,8 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
         ? mpOptionsItem->ReadInt32("PixelExportUnit", UNIT_DEFAULT)
         : mpOptionsItem->ReadInt32("VectorExportUnit", UNIT_DEFAULT);
 
-    mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32("MaxFilesizeForRealtimePreview", 0);
+    mnMaxFilesizeForRealtimePreview = std::max(
+        mpOptionsItem->ReadInt32("MaxFilesizeForRealtimePreview", 0), sal_Int32(0));
     mxFtEstimatedSize->set_label(" \n ");
 
     m_xDialog->set_title(m_xDialog->get_title().replaceFirst("%1", maExt)); //Set dialog title
