@@ -25,6 +25,98 @@
     },
     {
       "key": {
+        "uuid": "41439ada_1ae91c69",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T23:17:45Z",
+      "side": 1,
+      "message": "Please remove trailing spaces like this.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 4
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49927bab_bf77d9bf",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T23:17:45Z",
+      "side": 1,
+      "message": "A missing test of object ootional arguments seems relevant and nice-to-have, do you agree?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 4
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2908c7af_f572df77",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T23:17:45Z",
+      "side": 1,
+      "message": "Possibly having B with explicit Variant type, in addition to implicit A, would be useful. Also note that ByVal cs ByRef and array arguments might need testing.",
+      "range": {
+        "startLine": 67,
+        "startChar": 36,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e78db97f_9380d8f9",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_vba.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T23:17:45Z",
+      "side": 1,
+      "message": "Why explicit option here? VBASupport must imply Compatible.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfedc1d7_6544fbd6",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
