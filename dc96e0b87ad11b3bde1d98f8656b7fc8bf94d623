@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12433741_bb0c03eb",
+        "filename": "binaryurp/source/bridge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-27T13:30:36Z",
+      "side": 0,
+      "message": "why? there\u0027s uses of RTL_CONSTASCII_LENGTH here",
+      "revId": "dc96e0b87ad11b3bde1d98f8656b7fc8bf94d623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46be3d40_3d93593f",
+        "filename": "binaryurp/source/unmarshal.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-27T13:30:36Z",
+      "side": 0,
+      "message": "why? there\u0027s uses of std::vector e.g. in the copyMemberValues function",
+      "revId": "dc96e0b87ad11b3bde1d98f8656b7fc8bf94d623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
