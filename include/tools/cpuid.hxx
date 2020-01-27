@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_TOOLS_CPUID_HXX
-#define INCLUDED_TOOLS_CPUID_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <tools/toolsdllapi.h>
@@ -79,7 +78,5 @@ inline bool hasHyperThreading()
 }
 
 } // end cpuid
-
-#endif // INCLUDED_TOOLS_CPUID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
