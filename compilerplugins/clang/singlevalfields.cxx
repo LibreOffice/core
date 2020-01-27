@@ -12,7 +12,14 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+
+#include "config_clang.h"
+
 #include "plugin.hxx"
+
+#if CLANG_VERSION >= 110000
+#include "clang/AST/ParentMapContext.h"
+#endif
 
 /**
 Look for fields that are only ever assigned a single constant value.
