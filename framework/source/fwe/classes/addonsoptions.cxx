@@ -996,7 +996,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
     aMergeMenuBaseNode += m_aPathDelimiter;
 
     // extend the node names to have full path strings
-    for ( sal_uInt32 i = 0; i < static_cast<sal_uInt32>(aSubMenuNodeNames.getLength()); i++ )
+    for ( sal_Int32 i = 0; i < aSubMenuNodeNames.getLength(); i++ )
         aSubMenuNodeNames[i] = aMergeMenuBaseNode + aSubMenuNodeNames[i];
 
     ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
@@ -1323,7 +1323,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aRootSubMenuNodeNames.getLength()); n++ )
+            for ( sal_Int32 n = 0; n < aRootSubMenuNodeNames.getLength(); n++ )
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
@@ -1387,7 +1387,7 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aRootSubMenuNodeNames.getLength()); n++ )
+            for ( sal_Int32 n = 0; n < aRootSubMenuNodeNames.getLength(); n++ )
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;
@@ -1408,7 +1408,7 @@ void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
     {
         sal_uInt32 nIndex = aTargetSubMenuSeq.getLength();
         aTargetSubMenuSeq.realloc( nIndex + aSourceSubMenuSeq.getLength() );
-        for ( sal_uInt32 i = 0; i < sal_uInt32( aSourceSubMenuSeq.getLength() ); i++ )
+        for ( sal_Int32 i = 0; i < aSourceSubMenuSeq.getLength(); i++ )
             aTargetSubMenuSeq[nIndex++] = aSourceSubMenuSeq[i];
         rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
     }
