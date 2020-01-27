@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/scrwin \
     svtools/source/control/tabbar \
     svtools/source/control/toolbarmenu \
-    svtools/source/control/toolbarmenuacc \
     svtools/source/control/valueacc \
     svtools/source/control/valueset \
     svtools/source/dialogs/addresstemplate \

@@ -13658,8 +13658,6 @@ svtools/source/control/scriptedtext.cxx
 svtools/source/control/scrwin.cxx
 svtools/source/control/tabbar.cxx
 svtools/source/control/toolbarmenu.cxx
-svtools/source/control/toolbarmenuacc.cxx
-svtools/source/control/toolbarmenuimp.hxx
 svtools/source/control/valueacc.cxx
 svtools/source/control/valueimp.hxx
 svtools/source/control/valueset.cxx

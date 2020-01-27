@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-03 09:22:16 using:
+ Generated on 2020-01-27 20:08:05 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -106,7 +106,6 @@
 #include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
@@ -173,7 +172,6 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -218,7 +216,6 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -250,6 +247,7 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -347,7 +345,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/svmedit.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/table/tabletypes.hxx>
