@@ -62,8 +62,6 @@
 #define STR_AUTOLAYOUT_HANDOUT4                         NC_("STR_AUTOLAYOUT_HANDOUT4", "Four Slides")
 #define STR_AUTOLAYOUT_HANDOUT6                         NC_("STR_AUTOLAYOUT_HANDOUT6", "Six Slides")
 #define STR_AUTOLAYOUT_HANDOUT9                         NC_("STR_AUTOLAYOUT_HANDOUT9", "Nine Slides")
-#define STR_DISPLAYMODE_EDITMODES                       NC_("STR_DISPLAYMODE_EDITMODES", "Edit Modes")
-#define STR_DISPLAYMODE_MASTERMODES                     NC_("STR_DISPLAYMODE_MASTERMODES", "Master Modes")
 #define STR_AUTOLAYOUT_NOTES                            NC_("STR_AUTOLAYOUT_NOTES", "Notes")
 #define STR_TRANSFORM                                   NC_("STR_TRANSFORM", "Transform")
 #define STR_LINEEND                                     NC_("STR_LINEEND", "Line Ends")
