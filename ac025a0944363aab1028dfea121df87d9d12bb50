@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a029e08_eff17a59",
+        "filename": "toolkit/source/controls/tabpagemodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T20:53:22Z",
+      "side": 1,
+      "message": "I think you don\u0027t need this part at all.",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 181,
+        "endChar": 41
+      },
+      "revId": "ac025a0944363aab1028dfea121df87d9d12bb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
