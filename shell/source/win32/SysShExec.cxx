@@ -37,6 +37,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shellapi.h>
+#include <Shlobj.h>
 #include <Shobjidl.h>
 #include <objbase.h>
 
@@ -302,21 +303,33 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                      + "> failed with " + OUString::number(e1)),
                     {}, 0);
             }
+            const int MAX_LONG_PATH = 32767; // max longpath on WinNT
+            if (pathname.getLength() >= MAX_LONG_PATH)
+            {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute, path <" + pathname + "> too long", {}, 0);
+            }
+            wchar_t path[MAX_LONG_PATH];
+            wcscpy_s(path, o3tl::toW(pathname.getStr()));
             for (int i = 0;; ++i) {
+                // tdf#130216: normalize c:\path\to\something\..\else into c:\path\to\else
+                if (PathResolve(path, nullptr, PRF_VERIFYEXISTS | PRF_REQUIREABSOLUTE) == 0)
+                {
+                    throw css::lang::IllegalArgumentException(
+                        "XSystemShellExecute.execute, PathResolve(" + OUString(o3tl::toU(path))
+                            + ") failed",
+                        {}, 0);
+                }
                 SHFILEINFOW info;
-                if (SHGetFileInfoW(
-                        o3tl::toW(pathname.getStr()), 0, &info, sizeof info, SHGFI_EXETYPE)
-                    != 0)
+                if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_EXETYPE) != 0)
                 {
                     throw css::lang::IllegalArgumentException(
                         "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
                 }
-                if (SHGetFileInfoW(
-                        o3tl::toW(pathname.getStr()), 0, &info, sizeof info, SHGFI_ATTRIBUTES)
-                    == 0)
+                if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_ATTRIBUTES) == 0)
                 {
                     throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, SHGetFileInfoW(" + pathname + ") failed", {},
+                        "XSystemShellExecute.execute, SHGetFileInfoW(" + OUString(o3tl::toU(path)) + ") failed", {},
                         0);
                 }
                 if ((info.dwAttributes & SFGAO_LINK) == 0) {
@@ -341,7 +354,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                          + o3tl::runtimeToOUString(e3.what())),
                         {}, 0);
                 }
-                e2 = file->Load(o3tl::toW(pathname.getStr()), STGM_READ);
+                e2 = file->Load(path, STGM_READ);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IPersistFile.Load failed with "
@@ -355,16 +368,14 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                          + OUString::number(e2)),
                         {}, 0);
                 }
-                wchar_t path[MAX_PATH];
                 WIN32_FIND_DATAW wfd;
-                e2 = link->GetPath(path, MAX_PATH, &wfd, SLGP_RAWPATH);
+                e2 = link->GetPath(path, SAL_N_ELEMENTS(path), &wfd, SLGP_RAWPATH);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IShellLink.GetPath failed with "
                          + OUString::number(e2)),
                         {}, 0);
                 }
-                pathname = o3tl::toU(path);
                 // Fail at some arbitrary nesting depth, to avoid an infinite loop:
                 if (i == 30) {
                     throw css::lang::IllegalArgumentException(
@@ -372,6 +383,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                         {}, 0);
                 }
             }
+            pathname = o3tl::toU(path);
             auto const n = pathname.lastIndexOf('.');
             if (n > pathname.lastIndexOf('\\')) {
                 auto const ext = pathname.copy(n + 1);
