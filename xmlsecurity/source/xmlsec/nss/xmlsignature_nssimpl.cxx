@@ -29,6 +29,8 @@
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <memory>
 
+#include <cppuhelper/supportsservice.hxx>
+
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
@@ -292,13 +294,8 @@ OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
 {
-    const css::uno::Sequence<OUString> aServiceNames = getSupportedServiceNames();
-    for (OUString const & rCurrentServiceName : aServiceNames)
-    {
-        if (rCurrentServiceName == rServiceName)
-            return true;
-    }
-    return false;
+
+    return cppu::supportsService(this, rServiceName);
 }
 
 /* XServiceInfo */
