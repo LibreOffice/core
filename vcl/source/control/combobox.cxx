@@ -853,9 +853,6 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
         }
         else
         {
-            nSelect = m_pImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
-            if( nSelect != LISTBOX_ENTRY_NOTFOUND )
-                m_pImplLB->SelectEntry( nSelect, false );
             m_pImplLB->ResetCurrentPos();
         }
     }
