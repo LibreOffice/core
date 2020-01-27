@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1da0979_d6808968",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T19:12:08Z",
+      "side": 1,
+      "message": "Custom position on the page associated to the CUSTOM label placement [see below]?",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 78
+      },
+      "revId": "9b0230df9fcdcd1e76c573220af2ab7f43133e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beb9ea0e_723826a3",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T19:12:08Z",
+      "side": 1,
+      "message": "CustomLabelPosition sounds better, because this is not a relative position of a data point, but custom position of its label.",
+      "range": {
+        "startLine": 336,
+        "startChar": 68,
+        "endLine": 336,
+        "endChar": 84
+      },
+      "revId": "9b0230df9fcdcd1e76c573220af2ab7f43133e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c92602_3c60a5a8",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T19:12:08Z",
+      "side": 1,
+      "message": "It seems to be redundant. Could we use ReferencePageSize for this, too?",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 85
+      },
+      "revId": "9b0230df9fcdcd1e76c573220af2ab7f43133e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7744225b_69dd901c",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T19:12:08Z",
+      "side": 1,
+      "message": "It seems to be redundant. A new DataLabelPlacement constant, for example CUSTOM, could simplify the implementation, fixing also the recent UI problems, for example, modification of color of the data label removes the custom label position.",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 348,
+        "endChar": 48
+      },
+      "revId": "9b0230df9fcdcd1e76c573220af2ab7f43133e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
