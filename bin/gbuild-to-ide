@@ -917,7 +917,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.toolset = self.retrieve_toolset(ide)
-        self.solution_directory = './'
+        self.solution_directory = self.gbuildparser.builddir
         self.configurations = {
             'Build': {
                 'build': self.module_make_command('%(target)s'),
@@ -998,7 +998,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 f.write('EndProject\n')
             f.write('Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9292527-A979-4D13-A598-C75A33222174}"\n')
             f.write('\tProjectSection(SolutionItems) = preProject\n')
-            f.write('\t\tsolenv/vs/LibreOffice.natvis = solenv/vs/LibreOffice.natvis\n')
+            # The natvis file gives pretty-printed variable values when debugging
+            natvis_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.natvis')
+            f.write('\t\t%(natvis)s = %(natvis)s\n' % {'natvis': natvis_path})
             f.write('\tEndProjectSection\n')
             f.write('EndProject\n')
             f.write('Global\n')
