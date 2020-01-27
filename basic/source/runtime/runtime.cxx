@@ -4015,49 +4015,39 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
 
-// loading a parameter (+offset+type)
-// If the data type is wrong, create a copy.
-// The data type SbxEMPTY shows that no parameters are given.
-// Get( 0 ) may be EMPTY
+/** Loading of a parameter (+offset+type)
+    If the data type is wrong, create a copy and search for optionals including
+    the default value. The data type SbxEMPTY shows that no parameters are given.
 
+    @param nOp1
+    the index of the current parameter being processed,
+    where the entry of the index 0 is for the return value.
+
+    @param nOp2
+    the data type of the parameter.
+ */
 void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    sal_uInt16 i = static_cast<sal_uInt16>( nOp1 & 0x7FFF );
-    SbxDataType t = static_cast<SbxDataType>(nOp2);
-    SbxVariable* p;
+    sal_uInt16 nIdx = static_cast<sal_uInt16>( nOp1 & 0x7FFF );
+    SbxDataType eType = static_cast<SbxDataType>(nOp2);
+    SbxVariable* pVar;
 
     // #57915 solve missing in a cleaner way
     sal_uInt32 nParamCount = refParams->Count32();
-    if( i >= nParamCount )
+    if( nIdx >= nParamCount )
     {
-        sal_uInt16 iLoop = i;
+        sal_uInt16 iLoop = nIdx;
         while( iLoop >= nParamCount )
         {
-            p = new SbxVariable();
-
-            if( SbiRuntime::isVBAEnabled() &&
-                (t == SbxOBJECT || t == SbxSTRING) )
-            {
-                if( t == SbxOBJECT )
-                {
-                    p->PutObject( nullptr );
-                }
-                else
-                {
-                    p->PutString( OUString() );
-                }
-            }
-            else
-            {
-                p->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
-            }
-            refParams->Put32( p, iLoop );
+            pVar = new SbxVariable();
+            pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
+            refParams->Put32( pVar, iLoop );
             iLoop--;
         }
     }
-    p = refParams->Get32( i );
+    pVar = refParams->Get32( nIdx );
 
-    if( p->GetType() == SbxERROR && i )
+    if( pVar->GetType() == SbxERROR && nIdx )
     {
         // if there's a parameter missing, it can be OPTIONAL
         bool bOpt = false;
@@ -4066,7 +4056,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             SbxInfo* pInfo = pMeth->GetInfo();
             if ( pInfo )
             {
-                const SbxParamInfo* pParam = pInfo->GetParam( i );
+                const SbxParamInfo* pParam = pInfo->GetParam( nIdx );
                 if( pParam && ( pParam->nFlags & SbxFlagBits::Optional ) )
                 {
                     // Default value?
@@ -4074,9 +4064,15 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     if( nDefaultId > 0 )
                     {
                         OUString aDefaultStr = pImg->GetString( nDefaultId );
-                        p = new SbxVariable(pParam-> eType);
-                        p->PutString( aDefaultStr );
-                        refParams->Put32( p, i );
+                        pVar = new SbxVariable(pParam-> eType);
+                        pVar->PutString( aDefaultStr );
+                        refParams->Put32( pVar, nIdx );
+                    }
+                    else if ( SbiRuntime::isVBAEnabled() && eType != SbxVARIANT )
+                    {
+                        // tdf#36737 - initialize the parameter with the default value of its type
+                        pVar = new SbxVariable( pParam->eType );
+                        refParams->Put32( pVar, nIdx );
                     }
                     bOpt = true;
                 }
@@ -4087,19 +4083,19 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             Error( ERRCODE_BASIC_NOT_OPTIONAL );
         }
     }
-    else if( t != SbxVARIANT && static_cast<SbxDataType>(p->GetType() & 0x0FFF ) != t )
+    else if( eType != SbxVARIANT && static_cast<SbxDataType>(pVar->GetType() & 0x0FFF ) != eType )
     {
-        SbxVariable* q = new SbxVariable( t );
+        SbxVariable* q = new SbxVariable( eType );
         aRefSaved.emplace_back(q );
-        *q = *p;
-        p = q;
-        if ( i )
+        *q = *pVar;
+        pVar = q;
+        if ( nIdx )
         {
-            refParams->Put32( p, i );
+            refParams->Put32( pVar, nIdx );
         }
     }
-    SetupArgs( p, nOp1 );
-    PushVar( CheckArray( p ) );
+    SetupArgs( pVar, nOp1 );
+    PushVar( CheckArray( pVar ) );
 }
 
 // Case-Test (+True-Target+Test-Opcode)
