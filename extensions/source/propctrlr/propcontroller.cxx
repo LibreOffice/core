@@ -545,8 +545,7 @@ namespace pcr
 
     Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  )
     {
-        Sequence< OUString > aSupported { "com.sun.star.inspection.ObjectInspector" };
-        return aSupported;
+        return { "com.sun.star.inspection.ObjectInspector" };
     }
 
 
