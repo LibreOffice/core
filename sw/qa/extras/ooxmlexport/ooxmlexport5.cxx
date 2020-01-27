@@ -593,6 +593,23 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV",0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95033, "tdf95033.docx")
+{
+    //tdf#95033 : Table borders defined by row-level tblPrEx are not getting preserved.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    //Not disabled table cell borders
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77129, "fdo77129.docx")
 {
     // The problem was that text after TOC field was missing if footer reference  comes in field.

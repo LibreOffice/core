@@ -213,6 +213,25 @@ namespace dmapper {
                     pManager->SetLayoutType(static_cast<sal_uInt32>(nIntValue));
             }
             break;
+            case NS_ooxml::LN_CT_TblPrEx_tblBorders:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    auto pBorderHandler = std::make_shared<BorderHandler>(true);
+                    pProperties->resolve(*pBorderHandler);
+                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
+                    pTablePropMap->InsertProps(pBorderHandler->getProperties());
+
+#ifdef DBG_UTIL
+                    pTablePropMap->dumpXml();
+#endif
+                    // store row-level table border exceptions in row properties temporarily
+                    // and apply them on cells later
+                    insertRowProps( pTablePropMap );
+                }
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
             {
