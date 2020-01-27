@@ -47,8 +47,7 @@ OUString VCLXAccessibleListBox::getImplementationName()
 
 Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames()
 {
-    return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       Sequence<OUString>{"com.sun.star.accessibility.AccessibleListBox"});
+    return { "com.sun.star.accessibility.AccessibleListBox" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
