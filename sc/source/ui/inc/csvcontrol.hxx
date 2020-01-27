@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <scdllapi.h>
 #include <address.hxx>
 #include "csvsplits.hxx"
