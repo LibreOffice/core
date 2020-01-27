@@ -676,21 +676,6 @@ public:
 };
 
 
-class VCL_DLLPUBLIC TimeBox final : public ComboBox, public TimeFormatter
-{
-public:
-    explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
-    virtual void            dispose() override;
-};
-
 #endif // INCLUDED_VCL_FIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
