@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8db52414_9915c8e7",
+        "filename": "avmedia/source/vlc/wrapper/Player.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-01-27T18:04:42Z",
+      "side": 1,
+      "message": "could possibly do with a final\n    #elif\n    #error \"unknown platform, why are we building vlc here?\"\n    #endif",
+      "revId": "bbf7e1a5e6440d52e5095731ea25a43dd8ee66f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
