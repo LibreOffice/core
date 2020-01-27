@@ -76,7 +76,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 
 SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
-    // local fixed not o be changed values for local pointers
+    // local fixed not to be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
@@ -370,7 +370,7 @@ void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSe
     if (_pSet)
         m_rXFSet.Set(*_pSet);
 
-    sal_Int32 nPos = maBox.GetButtonPos(&rButton);
+    sal_Int32 nPos = 1+maBox.GetButtonPos(&rButton);
     if (nPos != -1 && (_pSet || nPos != maBox.GetCurrentButtonPos()))
     {
         maBox.SelectButton(&rButton);
