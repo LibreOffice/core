@@ -51,6 +51,7 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -782,7 +783,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                 if (instance) {
                     static constexpr auto keyPath = OUStringLiteral("app-path=");
                     static constexpr auto keyExtensions = OUStringLiteral("app-extensions=");
-                    if (!havePath && line.length() >= unsigned(keyPath.size)
+                    if (!havePath && line.length() >= o3tl::make_unsigned(keyPath.size)
                         && line.substr(0, keyPath.size) == keyPath.data)
                     {
                         auto const value = line.substr(keyPath.size);
@@ -800,7 +801,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                             throw Failure();
                         }
                         havePath = true;
-                    } else if (!haveExtensions && line.length() >= unsigned(keyExtensions.size)
+                    } else if (!haveExtensions && line.length() >= o3tl::make_unsigned(keyExtensions.size)
                                && line.substr(0, keyExtensions.size) == keyExtensions.data)
                     {
                         auto const value = line.substr(keyExtensions.size);

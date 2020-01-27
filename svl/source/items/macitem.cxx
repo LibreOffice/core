@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
@@ -99,7 +100,7 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         nMinRecordSize+=2;
 
     const size_t nMaxRecords = rStrm.remainingSize() / nMinRecordSize;
-    if (static_cast<size_t>(nMacro) > nMaxRecords)
+    if (o3tl::make_unsigned(nMacro) > nMaxRecords)
     {
         SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
                  " max possible entries, but " << nMacro<< " claimed, truncating");

@@ -1217,7 +1217,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     rSt.ReadInt16( nRowCount ).ReadInt16( i ).ReadInt16( i );
                     const size_t nMinRecordSize = 4;
                     const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
-                    if (nRowCount > 0 && static_cast<size_t>(nRowCount) > nMaxRecords)
+                    if (nRowCount > 0 && o3tl::make_unsigned(nRowCount) > nMaxRecords)
                     {
                         SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
                                  " max possible entries, but " << nRowCount << " claimed, truncating");
@@ -5366,7 +5366,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 }
                 else
                 {
-                    if (nCharReadCnt > static_cast<sal_uInt32>(aString.getLength()))
+                    if (nCharReadCnt > o3tl::make_unsigned(aString.getLength()))
                         aCharPropSet.maString = OUString();
                     else
                     {

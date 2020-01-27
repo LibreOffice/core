@@ -59,6 +59,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/safeint.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <Outliner.hxx>
@@ -236,7 +237,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     if( nIndex > 0 )
         nIndex--;
 
-    if( (nIndex >= 0) && ( aMatches.size() > static_cast<unsigned int>(nIndex)) )
+    if( (nIndex >= 0) && ( aMatches.size() > o3tl::make_unsigned(nIndex)) )
     {
         if( aMatches.size() > 1 )
             std::nth_element( aMatches.begin(), aMatches.begin() + nIndex, aMatches.end(),

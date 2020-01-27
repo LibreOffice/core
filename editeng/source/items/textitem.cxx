@@ -22,6 +22,7 @@
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <math.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <unotools/fontdefs.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -712,7 +713,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
         default:
             break;
     }
-    nRet = (nDiff < 0 || nRet >= static_cast<unsigned short>(nDiff))
+    nRet = (nDiff < 0 || nRet >= o3tl::make_unsigned(nDiff))
         ? nRet - nDiff : 0;
         //TODO: overflow in case nDiff < 0 and nRet - nDiff > SAL_MAX_UINT32
 

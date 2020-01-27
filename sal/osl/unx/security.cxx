@@ -32,6 +32,7 @@
 
 #include "system.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <osl/security.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
@@ -68,7 +69,7 @@ static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
            way and always set EINVAL, so be resilient here: */
         return false;
     }
-    SAL_WARN_IF( m < 0 || static_cast<unsigned long>(m) >= std::numeric_limits<std::size_t>::max(), "sal.osl",
+    SAL_WARN_IF( m < 0 || o3tl::make_unsigned(m) >= std::numeric_limits<std::size_t>::max(), "sal.osl",
                 "m < 0 || (unsigned long) m >= std::numeric_limits<std::size_t>::max()");
     *value = static_cast<std::size_t>(m);
     return true;
@@ -235,7 +236,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     if (pSecImpl != nullptr && pSecImpl->m_pPasswd.pw_name != nullptr) {
         pszName = pSecImpl->m_pPasswd.pw_name;
         auto const n = std::strlen(pszName);
-        if (n <= sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+        if (n <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             len = n;
             bRet = true;
         }
@@ -353,7 +354,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
         if (pStr != nullptr && pStr[0] != '\0' && access(pStr, 0) == 0)
         {
             auto const len = std::strlen(pStr);
-            if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
                 return false;
             }
             *pszDirectory = OString(pStr, len);
@@ -363,7 +364,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
     if (pSecImpl->m_pPasswd.pw_dir != nullptr)
     {
         auto const len = std::strlen(pSecImpl->m_pPasswd.pw_dir);
-        if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+        if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             return false;
         }
         *pszDirectory = OString(pSecImpl->m_pPasswd.pw_dir, len);
@@ -472,7 +473,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
     else
     {
         auto const len = std::strlen(pStr);
-        if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+        if (len > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
             return false;
         }
         *pszDirectory = OString(pStr, len);

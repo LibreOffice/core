@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/float_int_conversion.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/errcode.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
@@ -47,7 +48,7 @@ start:
             nRes = p->nInteger; break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > sal_uInt16(SbxMAXINT) )
+            if( p->nUShort > o3tl::make_unsigned(SbxMAXINT) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
             }

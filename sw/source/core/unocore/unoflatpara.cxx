@@ -21,6 +21,7 @@
 #include <unocrsrhelper.hxx>
 #include <unoflatpara.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -250,7 +251,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwTextNode *const pOldTextNode = GetTextNode();
 
-    if (nPos < 0 || pOldTextNode->Len() < nPos || nLen < 0 || static_cast<sal_uInt32>(pOldTextNode->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    if (nPos < 0 || pOldTextNode->Len() < nPos || nLen < 0 || o3tl::make_unsigned(pOldTextNode->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
     {
         throw lang::IllegalArgumentException();
     }
@@ -283,7 +284,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     if (!GetTextNode())
         return;
 
-    if (nPos < 0 || GetTextNode()->Len() < nPos || nLen < 0 || static_cast<sal_uInt32>(GetTextNode()->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    if (nPos < 0 || GetTextNode()->Len() < nPos || nLen < 0 || o3tl::make_unsigned(GetTextNode()->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
     {
         throw lang::IllegalArgumentException();
     }

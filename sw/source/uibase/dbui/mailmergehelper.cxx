@@ -32,6 +32,7 @@
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -460,7 +461,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_DOWN:
-                if(pImpl->aAddresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
+                if(pImpl->aAddresses.size() > o3tl::make_unsigned(pImpl->nSelectedAddress + pImpl->nColumns))
                     ++nSelectedRow;
                 bHandled = true;
             break;
@@ -470,7 +471,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_RIGHT:
-                if(nSelectedColumn < sal_uInt32(pImpl->nColumns - 1) &&
+                if(nSelectedColumn < o3tl::make_unsigned(pImpl->nColumns - 1) &&
                        pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
                     ++nSelectedColumn;
                 bHandled = true;

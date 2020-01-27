@@ -42,6 +42,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/functional.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
 
@@ -503,7 +504,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
     MutexGuard aGuard( m_aMutex);
     if( ! m_bMayHaveChildren ||
         i < 0 ||
-        static_cast< ChildListVectorType::size_type >( i ) >= m_aChildList.size() )
+        o3tl::make_unsigned( i ) >= m_aChildList.size() )
     {
         OUString aBuf = "Index " + OUString::number( i ) + " is invalid for range [ 0, " +
                         OUString::number( m_aChildList.size() - 1 ) +

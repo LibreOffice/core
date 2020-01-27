@@ -20,6 +20,7 @@
 #include <cellsuno.hxx>
 #include <convuno.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -509,7 +510,7 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
 void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    if (getCoreObject()->size() >= size_t(nIndex))
+    if (getCoreObject()->size() >= o3tl::make_unsigned(nIndex))
         throw lang::IllegalArgumentException();
 
     getCoreObject()->RemoveEntry(nIndex);
@@ -538,7 +539,7 @@ sal_Int32 ScCondFormatObj::getCount()
 uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    if (getCoreObject()->size() <= size_t(nIndex))
+    if (getCoreObject()->size() <= o3tl::make_unsigned(nIndex))
         throw lang::IllegalArgumentException();
 
     const ScFormatEntry* pEntry = getCoreObject()->GetEntry(nIndex);
@@ -1587,7 +1588,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
             // TODO: we need to check that the number of entries
             // corresponds to the icon type
             sal_Int32 nLength = aEntries.getLength();
-            for (size_t i = 0; i < size_t(nLength); ++i)
+            for (size_t i = 0; i < o3tl::make_unsigned(nLength); ++i)
             {
                 setIconSetEntry(getCoreObject(), aEntries[i], i);
             }

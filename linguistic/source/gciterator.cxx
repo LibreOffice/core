@@ -44,6 +44,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/conditn.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -257,7 +258,7 @@ sal_Bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
 
 OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 {
-    if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
 
     return OUString();
@@ -265,7 +266,7 @@ OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 
 css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
-    if (static_cast<sal_uInt32>(nIndex) >= maMap.size())
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
         throw css::lang::IndexOutOfBoundsException();
 
     return css::uno::Any();

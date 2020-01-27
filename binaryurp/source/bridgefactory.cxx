@@ -33,6 +33,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
@@ -150,7 +151,7 @@ BridgeFactory::getExistingBridges() {
             static_cast< cppu::OWeakObject * >(this));
     }
     sal_Int32 n = static_cast< sal_Int32 >(unnamed_.size());
-    if (named_.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32 - n)) {
+    if (named_.size() > o3tl::make_unsigned(SAL_MAX_INT32 - n)) {
         throw css::uno::RuntimeException(
             "BridgeFactory::getExistingBridges: too many",
             static_cast< cppu::OWeakObject * >(this));

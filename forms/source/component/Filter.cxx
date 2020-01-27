@@ -59,6 +59,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/predicateinput.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localedatawrapper.hxx>
@@ -458,7 +459,7 @@ namespace frm
             ::std::vector< OUString > aProposals;
             aProposals.reserve(16);
 
-            while ( xListCursor->next() && ( aProposals.size() < size_t( SHRT_MAX ) ) )
+            while ( xListCursor->next() && ( aProposals.size() < o3tl::make_unsigned( SHRT_MAX ) ) )
             {
                 const OUString sCurrentValue = aFormatter.getFormattedValue();
                 aProposals.push_back( sCurrentValue );

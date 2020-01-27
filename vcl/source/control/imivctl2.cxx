@@ -597,7 +597,7 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos )
         nY = _nGridRows - 1;
     }
     GridId nId = GetGrid( static_cast<sal_uInt16>(nX), static_cast<sal_uInt16>(nY) );
-    DBG_ASSERT(nId <static_cast<sal_uLong>(_nGridCols*_nGridRows),"GetGrid failed");
+    DBG_ASSERT(nId <o3tl::make_unsigned(_nGridCols*_nGridRows),"GetGrid failed");
     return nId;
 }
 

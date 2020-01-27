@@ -31,6 +31,8 @@
 
 #include <cstring>
 
+#include <o3tl/safeint.hxx>
+
 using ::std::vector;
 
 namespace {
@@ -53,7 +55,7 @@ bool extractFilePath(const OUString& rUrl, OUString& rPath)
 
     OUStringBuffer aBuf;
     const sal_Unicode* p = rUrl.getStr();
-    for (size_t i = 0; i < static_cast<size_t>(n); ++i, ++p)
+    for (size_t i = 0; i < o3tl::make_unsigned(n); ++i, ++p)
     {
         if (i < nPrefixLen)
         {

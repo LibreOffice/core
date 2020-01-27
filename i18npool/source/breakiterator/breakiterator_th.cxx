@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <o3tl/safeint.hxx>
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
@@ -187,7 +188,7 @@ void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos
 {
     if (Text != cachedText) {
         cachedText = Text;
-        if (m_aNextCellIndex.size() < size_t(cachedText.getLength())) {
+        if (m_aNextCellIndex.size() < o3tl::make_unsigned(cachedText.getLength())) {
             m_aNextCellIndex.resize(cachedText.getLength());
             m_aPreviousCellIndex.resize(cachedText.getLength());
         }
@@ -209,10 +210,10 @@ void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos
     sal_Int32 start, end, pos;
     pos = start = end = startPos;
 
-    assert(size_t(endPos) <= m_aNextCellIndex.size());
+    assert(endPos >= 0 && o3tl::make_unsigned(endPos) <= m_aNextCellIndex.size());
     while (pos < endPos) {
         end += getACell(str, start, endPos);
-        assert(size_t(end) <= m_aNextCellIndex.size());
+        assert(end >= 0 && o3tl::make_unsigned(end) <= m_aNextCellIndex.size());
         while (pos < end) {
             m_aNextCellIndex[pos] = end;
             m_aPreviousCellIndex[pos] = start;

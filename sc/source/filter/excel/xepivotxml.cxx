@@ -21,6 +21,7 @@
 #include <xeroot.hxx>
 
 #include <o3tl/temporary.hxx>
+#include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sax/tools/converter.hxx>
@@ -58,7 +59,7 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
         {
             const ScDPCache::IndexArrayType* pArray = rCache.GetFieldIndexArray(nField);
             assert(pArray);
-            assert(static_cast<size_t>(i) < pArray->size());
+            assert(o3tl::make_unsigned(i) < pArray->size());
 
             // We are using XML_x reference (like: <x v="0"/>), instead of values here (eg: <s v="No Discount"/>).
             // That's why in SavePivotCacheXml method, we need to list all items.

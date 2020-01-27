@@ -31,6 +31,7 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
 
@@ -565,7 +566,7 @@ extern "C" {
             nDeltaSec -= 1;
         }
         // if the clock changes backwards we need to cope ...
-        if( static_cast<unsigned long>(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
+        if( o3tl::make_unsigned(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
         {
             sal_gtk_timeout_defer( pTSource );
             return true;

@@ -49,6 +49,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -1537,8 +1538,8 @@ namespace frm
 
             Any operator ()( sal_Int16 _nIndex )
             {
-                OSL_ENSURE( static_cast<ValueList::size_type>(_nIndex) < m_rList.size(), "ExtractAnyFromValueList: inconsistence!" );
-                if ( static_cast<ValueList::size_type>(_nIndex) < m_rList.size() )
+                OSL_ENSURE( o3tl::make_unsigned(_nIndex) < m_rList.size(), "ExtractAnyFromValueList: inconsistence!" );
+                if ( o3tl::make_unsigned(_nIndex) < m_rList.size() )
                     return m_rList[ _nIndex ].makeAny();
                 return Any();
             }

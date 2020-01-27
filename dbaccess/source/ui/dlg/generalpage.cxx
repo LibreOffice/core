@@ -40,6 +40,7 @@
 #include <UITools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <dbwizsetup.hxx>
@@ -366,7 +367,7 @@ namespace dbaui
     {
         // get the type from the entry data
         const sal_Int32 nSelected = _rBox.get_active();
-        if (static_cast<size_t>(nSelected) >= m_aEmbeddedURLPrefixes.size() )
+        if (o3tl::make_unsigned(nSelected) >= m_aEmbeddedURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;
@@ -386,7 +387,7 @@ namespace dbaui
         const sal_Int32 nSelected = _rBox.get_active();
         if (nSelected == -1)
             return;
-        if (static_cast<size_t>(nSelected) >= m_aURLPrefixes.size() )
+        if (o3tl::make_unsigned(nSelected) >= m_aURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;

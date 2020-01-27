@@ -69,6 +69,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
@@ -548,7 +549,7 @@ bool CustomAnimationEffect::checkForText( const std::vector<sal_Int32>* paragrap
             if ( paragraphNumberingLevel )
             {
                 bHasText = !paragraphNumberingLevel->empty();
-                if (nPara >= 0 && static_cast<size_t>(nPara) < paragraphNumberingLevel->size())
+                if (nPara >= 0 && o3tl::make_unsigned(nPara) < paragraphNumberingLevel->size())
                     nParaDepth = paragraphNumberingLevel->at(nPara);
             }
             else

@@ -29,7 +29,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/settings.hxx>
@@ -145,7 +145,7 @@ namespace rptui
     {
         try
         {
-            if ( _nNewCondIndex > static_cast<size_t>(m_xCopy->getCount()) )
+            if ( _nNewCondIndex > o3tl::make_unsigned(m_xCopy->getCount()) )
                 throw IllegalArgumentException();
 
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();

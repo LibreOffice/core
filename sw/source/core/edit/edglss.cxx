@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <tools/urlobj.hxx>
 #include <doc.hxx>
@@ -311,7 +314,7 @@ void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
                 else
                 {
                     const sal_uInt64 nLen = aStream.GetSize();
-                    OSL_ENSURE( nLen/sizeof( sal_Unicode )<static_cast<sal_uInt64>(SAL_MAX_INT32), "Stream can't fit in OUString" );
+                    OSL_ENSURE( nLen/sizeof( sal_Unicode )<o3tl::make_unsigned(SAL_MAX_INT32), "Stream can't fit in OUString" );
                     rtl_uString *pStr = rtl_uString_alloc(static_cast<sal_Int32>(nLen / sizeof( sal_Unicode )));
                     aStream.Seek( 0 );
                     aStream.ResetError();

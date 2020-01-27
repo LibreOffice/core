@@ -44,6 +44,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/wall.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
@@ -287,7 +288,7 @@ public:
     sal_Ucs getCode( sal_Int32 i_nIndex ) const
     {
         sal_Ucs nRet = 0;
-        if (static_cast<size_t>(i_nIndex) < m_CodeUnits.size())
+        if (o3tl::make_unsigned(i_nIndex) < m_CodeUnits.size())
             nRet = m_CodeUnits[i_nIndex];
         return nRet;
     }

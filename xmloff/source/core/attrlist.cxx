@@ -19,6 +19,8 @@
 
 
 #include <vector>
+
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmltoken.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -88,7 +90,7 @@ SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
 
 OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i)
 {
-    return ( static_cast< SvXMLAttributeList_Impl::size_type >( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sName : OUString();
+    return ( o3tl::make_unsigned( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sName : OUString();
 }
 
 
@@ -99,7 +101,7 @@ OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16)
 
 OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i)
 {
-    return ( static_cast< SvXMLAttributeList_Impl::size_type >( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sValue : OUString();
+    return ( o3tl::make_unsigned( i ) < m_pImpl->vecAttribute.size() ) ? m_pImpl->vecAttribute[i].sValue : OUString();
 }
 
 OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& )
@@ -181,7 +183,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sa
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
         const OUString& rValue )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+    if( o3tl::make_unsigned( i )
             < m_pImpl->vecAttribute.size() )
     {
         m_pImpl->vecAttribute[i].sValue = rValue;
@@ -190,7 +192,7 @@ void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
 
 void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+    if( o3tl::make_unsigned( i )
             < m_pImpl->vecAttribute.size() )
         m_pImpl->vecAttribute.erase( m_pImpl->vecAttribute.begin() + i );
 }
@@ -198,7 +200,7 @@ void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
 void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
                                                  const OUString& rNewName )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+    if( o3tl::make_unsigned( i )
             < m_pImpl->vecAttribute.size() )
     {
         m_pImpl->vecAttribute[i].sName = rNewName;

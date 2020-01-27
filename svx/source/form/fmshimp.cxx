@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <fmobj.hxx>
@@ -2198,7 +2200,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     LoopGrids_Lock(LoopGridsSync::FORCE_SYNC);
 
     // and to the field (for that, I collected the XVclComponent interfaces before the start of the search)
-    SAL_WARN_IF(static_cast<size_t>(rfriWhere.nFieldPos) >=
+    SAL_WARN_IF(o3tl::make_unsigned(rfriWhere.nFieldPos) >=
             m_arrSearchedControls.size(),
         "svx.form", "FmXFormShell::OnFoundData : invalid index!");
     SdrObject* pObject = m_arrSearchedControls.at(rfriWhere.nFieldPos);

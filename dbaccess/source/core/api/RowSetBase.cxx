@@ -35,6 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 
 using namespace dbaccess;
@@ -233,7 +234,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         }
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
         ORowSetRow rRow = *m_aCurrentRow;
-        OSL_ENSURE(rRow.is() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() && o3tl::make_unsigned(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
 #endif
         return ((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex];
     }

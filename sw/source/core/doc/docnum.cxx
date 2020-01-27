@@ -48,6 +48,7 @@
 #include <calbck.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <map>
@@ -518,7 +519,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     ++aEndRg;
 
     // calculation of the new position
-    if( nOffset < 0 && nCurrentPos < SwOutlineNodes::size_type(-nOffset) )
+    if( nOffset < 0 && nCurrentPos < o3tl::make_unsigned(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
     else if( nCurrentPos + nOffset >= GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();
@@ -1987,7 +1988,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
     else
     {
         // Impossible to move to negative index
-        if( sal_uLong(std::abs( nOffset )) > nStIdx)
+        if( o3tl::make_unsigned(std::abs( nOffset )) > nStIdx)
             return false;
 
         nInEndIdx = nStIdx - 1;

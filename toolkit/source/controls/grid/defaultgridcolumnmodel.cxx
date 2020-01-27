@@ -33,6 +33,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -177,7 +178,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
+        if ( ( i_columnIndex < 0 ) || ( o3tl::make_unsigned( i_columnIndex ) >= m_aColumns.size() ) )
             throw css::lang::IndexOutOfBoundsException( OUString(), *this );
 
         Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;

@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <o3tl/optional.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -590,7 +591,7 @@ namespace emfio
 
                     auto nMaxStreamPos = nRecordPos + nRecSize;
                     auto nRemainingSize = std::min(mpInputStream->remainingSize(), nMaxStreamPos - mpInputStream->Tell());
-                    if (nRemainingSize < static_cast<sal_uInt32>(nOriginalBlockLen))
+                    if (nRemainingSize < o3tl::make_unsigned(nOriginalBlockLen))
                     {
                         SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
                         nOriginalTextLen = nOriginalBlockLen = nRemainingSize;

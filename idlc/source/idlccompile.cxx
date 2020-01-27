@@ -21,6 +21,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -135,7 +136,7 @@ static OString makeTempName(const OString& prefix)
 #if defined(_WIN32) || defined(SAL_UNX)
 
     OSL_ASSERT( sizeof(tmpFilePattern) >
-                static_cast<size_t>( tmpPath.getLength()
+                o3tl::make_unsigned( tmpPath.getLength()
                            + RTL_CONSTASCII_LENGTH( PATH_SEPARATOR )
                            + prefix.getLength()
                            + RTL_CONSTASCII_LENGTH( "XXXXXX") ) );

@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <tools/solar.h>
 #include <sal/log.hxx>
@@ -719,7 +720,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     {
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
-                                        if ( nPt < static_cast<sal_uInt32>(aCoordinates.getLength()) )
+                                        if ( nPt < o3tl::make_unsigned(aCoordinates.getLength()) )
                                         {
                                             nId = 4;
                                             css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
@@ -4217,7 +4218,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             }
         }
     }
-    if (size_t(nCalledByGroup) < maPendingGroupData.size())
+    if (o3tl::make_unsigned(nCalledByGroup) < maPendingGroupData.size())
     {
         // finalization for this group is pending, do it now
         pRet = FinalizeObj(maPendingGroupData.back().first, pRet);
@@ -4961,7 +4962,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     // If this shape opens a new group, push back its object data because
     // finalization will be called when nested objects have been imported;
     // otherwise, just finalize here
-    if (size_t(nCalledByGroup) > maPendingGroupData.size())
+    if (o3tl::make_unsigned(nCalledByGroup) > maPendingGroupData.size())
     {
         auto xHdClone = std::make_shared<DffRecordHeader>(aObjData.rSpHd);
         maPendingGroupData.emplace_back(DffObjData(xHdClone, aObjData), xHdClone );

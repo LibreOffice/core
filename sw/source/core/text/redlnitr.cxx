@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <hintids.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/whiter.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scriptinfo.hxx>
@@ -911,7 +912,7 @@ sal_Int32 SwExtend::Next(sal_uLong const nNode, sal_Int32 nNext)
     {
         sal_Int32 nIdx = m_nPos - m_nStart;
         const ExtTextInputAttr nAttr = m_rArr[ nIdx ];
-        while (static_cast<size_t>(++nIdx) < m_rArr.size() && nAttr == m_rArr[nIdx])
+        while (o3tl::make_unsigned(++nIdx) < m_rArr.size() && nAttr == m_rArr[nIdx])
             ; //nothing
         nIdx = nIdx + m_nStart;
         if( nNext > nIdx )

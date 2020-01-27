@@ -19,6 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <iconview.hxx>
 #include <salframe.hxx>
@@ -3557,7 +3558,7 @@ struct SalInstanceTreeIter : public weld::TreeIter
         if (static_cast<size_t>(col) == pEntry->ItemCount())
             return TRISTATE_FALSE;
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxButton*>(&rItem));
         SvLBoxButton& rToggle = static_cast<SvLBoxButton&>(rItem);
@@ -3572,7 +3573,7 @@ struct SalInstanceTreeIter : public weld::TreeIter
     {
         ++col; //skip dummy/expander column
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         return static_cast<SvLBoxString&>(rItem).IsEmphasized();
@@ -4004,7 +4005,7 @@ public:
         if (static_cast<size_t>(col) == pEntry->ItemCount())
             return OUString();
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         return static_cast<SvLBoxString&>(rItem).GetText();
@@ -4038,7 +4039,7 @@ public:
         }
         else
         {
-            assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+            assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
             SvLBoxItem& rItem = pEntry->GetItem(col);
             assert(dynamic_cast<SvLBoxString*>(&rItem));
             static_cast<SvLBoxString&>(rItem).SetText(rText);
@@ -4072,7 +4073,7 @@ public:
 
         ++col; //skip dummy/expander column
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         rItem.Enable(bSensitive);
 
@@ -4141,7 +4142,7 @@ public:
                 m_xTreeView->CheckBoxInserted(pEntry);
         }
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxButton*>(&rItem));
         switch (eState)
@@ -4176,7 +4177,7 @@ public:
     {
         ++col; //skip dummy/expander column
 
-        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
@@ -4249,7 +4250,7 @@ public:
         }
         else
         {
-            assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+            assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
             SvLBoxItem& rItem = pEntry->GetItem(col);
             assert(dynamic_cast<SvLBoxContextBmp*>(&rItem));
             static_cast<SvLBoxContextBmp&>(rItem).SetBitmap1(rImage);

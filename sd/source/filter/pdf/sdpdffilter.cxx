@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 
@@ -71,7 +74,7 @@ bool SdPdfFilter::Import()
         const Size& aSize = aPair.second;
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
-        assert(nPageNumber >= 0 && static_cast<size_t>(nPageNumber) < aGraphics.size());
+        assert(nPageNumber >= 0 && o3tl::make_unsigned(nPageNumber) < aGraphics.size());
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);

@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -1297,7 +1298,7 @@ sal_Int32 SAL_CALL AccessibleRelationSet::getRelationCount()
 
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex)
 {
-    if (nIndex<0 && sal_uInt32(nIndex)>=maRelations.size())
+    if (nIndex<0 && o3tl::make_unsigned(nIndex)>=maRelations.size())
         return AccessibleRelation();
     else
         return maRelations[nIndex];

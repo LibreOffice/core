@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -268,7 +269,7 @@ void AccessibleSmElementsControl::selectAccessibleChild(sal_Int32 nChildIndex)
     OExternalLockGuard aGuard(this);
 
     if ((!m_pControl) || nChildIndex < 0
-        || static_cast<size_t>(nChildIndex) >= m_aAccessibleChildren.size())
+        || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size())
         throw lang::IndexOutOfBoundsException();
 
     m_pControl->setItemHighlighted(nChildIndex);
@@ -278,7 +279,7 @@ sal_Bool AccessibleSmElementsControl::isAccessibleChildSelected(sal_Int32 nChild
 {
     OExternalLockGuard aGuard(this);
     if ((!m_pControl) || nChildIndex < 0
-        || static_cast<size_t>(nChildIndex) >= m_aAccessibleChildren.size())
+        || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size())
         throw lang::IndexOutOfBoundsException();
 
     return (m_pControl->itemHighlighted() == nChildIndex);

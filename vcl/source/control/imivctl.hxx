@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_IMIVCTL_HXX
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <vcl/ivctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
@@ -490,8 +493,8 @@ public:
     void                OccupyGrids( const SvxIconChoiceCtrlEntry* );
     void                OccupyGrid( GridId nId )
                         {
-                            DBG_ASSERT(!_pGridMap || nId<static_cast<sal_uLong>(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
-                            if(_pGridMap && nId < static_cast<sal_uLong>(_nGridCols *_nGridRows) )
+                            DBG_ASSERT(!_pGridMap || nId<o3tl::make_unsigned(_nGridCols*_nGridRows),"OccupyGrid: Bad GridId");
+                            if(_pGridMap && nId < o3tl::make_unsigned(_nGridCols *_nGridRows) )
                                 _pGridMap[ nId ] = true;
                         }
 

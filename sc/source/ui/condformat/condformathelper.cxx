@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <condformathelper.hxx>
 #include <globstr.hrc>
@@ -117,7 +120,7 @@ OUString getDateString(sal_Int32 nIndex)
         STR_COND_NEXTYEAR
     };
 
-    if (nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < SAL_N_ELEMENTS(aCondStrs))
+    if (nIndex >= 0 && o3tl::make_unsigned(nIndex) < SAL_N_ELEMENTS(aCondStrs))
         return ScResId(aCondStrs[nIndex]);
     assert(false);
     return OUString();

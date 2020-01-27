@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
@@ -4720,7 +4723,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
             return nullptr;
 
         const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (rTableTemplateMap.size() <= static_cast<size_t>(nTemplateIndex))
+        if (rTableTemplateMap.size() <= o3tl::make_unsigned(nTemplateIndex))
             return nullptr;
 
         SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);

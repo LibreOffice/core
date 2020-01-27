@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <o3tl/safeint.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclevent.hxx>
 #include <comphelper/accessiblewrapper.hxx>
@@ -689,7 +690,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     comphelper::OExternalLockGuard aGuard( this );
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || i < 0 || static_cast<size_t>(i) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || i < 0 || o3tl::make_unsigned(i) >= pToolBox->GetItemCount() )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
@@ -778,7 +779,7 @@ void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex )
     OExternalLockGuard aGuard( this );
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || nChildIndex < 0 || static_cast<size_t> (nChildIndex) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= pToolBox->GetItemCount() )
         throw IndexOutOfBoundsException();
 
     pToolBox->ChangeHighlight( nChildIndex );
@@ -788,7 +789,7 @@ sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex
 {
     OExternalLockGuard aGuard( this );
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || nChildIndex < 0 || static_cast<size_t>(nChildIndex) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= pToolBox->GetItemCount() )
         throw IndexOutOfBoundsException();
 
     if ( pToolBox->GetHighlightItemId() == pToolBox->GetItemId( nChildIndex ) )

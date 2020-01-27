@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vector>
 #include <comphelper/sequence.hxx>
@@ -66,7 +67,7 @@ sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
 
 AccessibleRelation const & AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
 {
-    if ((nIndex < 0) || (static_cast<sal_uInt32>(nIndex) >= maRelations.size()))
+    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maRelations.size()))
         throw lang::IndexOutOfBoundsException();
     return maRelations[nIndex];
 }

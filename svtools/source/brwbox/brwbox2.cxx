@@ -804,7 +804,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
     // redraw the invalid fields
     for ( sal_uLong nRelRow = nRelTopRow;
-          nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < static_cast<sal_uLong>(nRowCount);
+          nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < o3tl::make_unsigned(nRowCount);
           ++nRelRow, aPos.AdjustY(nDataRowHeigt ) )
     {
         // get row

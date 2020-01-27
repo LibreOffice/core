@@ -18,6 +18,7 @@
  */
 #include "xmlTable.hxx"
 #include "xmlfilter.hxx"
+#include <o3tl/safeint.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -223,7 +224,7 @@ void OXMLTable::endFastElement(sal_Int32 )
                             {
                                 if ( xFixedLine->getOrientation() == 1 ) // vertical
                                 {
-                                    OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
+                                    OSL_ENSURE(o3tl::make_unsigned(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
                                     nWidth += m_aWidth[j+1];
                                     if ( nWidth < MIN_WIDTH )
                                         nWidth = MIN_WIDTH;
@@ -258,9 +259,9 @@ void OXMLTable::endFastElement(sal_Int32 )
 void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
 {
     uno::Reference<report::XShape> xShape(_xElement,uno::UNO_QUERY);
-    OSL_ENSURE(static_cast<sal_uInt32>(m_nRowIndex-1 ) < m_aGrid.size() && static_cast<sal_uInt32>( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size(),
+    OSL_ENSURE(o3tl::make_unsigned(m_nRowIndex-1 ) < m_aGrid.size() && o3tl::make_unsigned( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size(),
         "OXMLTable::addCell: Invalid column and row index");
-    if ( static_cast<sal_uInt32>(m_nRowIndex-1 ) < m_aGrid.size() && static_cast<sal_uInt32>( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size() )
+    if ( o3tl::make_unsigned(m_nRowIndex-1 ) < m_aGrid.size() && o3tl::make_unsigned( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size() )
     {
         TCell& rCell = m_aGrid[m_nRowIndex-1][m_nColumnIndex-1];
         if ( _xElement.is() )

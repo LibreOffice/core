@@ -30,7 +30,7 @@
 #include <math.h>
 
 #include <cppuhelper/supportsservice.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.hxx>
 #include <salhelper/thread.hxx>
@@ -126,7 +126,7 @@ void MissingPluginInstaller::report(
         return;
     }
     std::size_t len = std::strlen(det);
-    if (len > sal_uInt32(SAL_MAX_INT32)) {
+    if (len > o3tl::make_unsigned(SAL_MAX_INT32)) {
         SAL_WARN("avmedia.gstreamer", "detail string too long");
         g_free(det);
         return;

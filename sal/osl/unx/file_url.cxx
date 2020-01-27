@@ -32,6 +32,7 @@
 #include <strings.h>
 #include <unistd.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.h>
@@ -834,7 +835,7 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
 
     osl_systemPathRemoveSeparator(strSystemPath.pData);
 
-    if (sal_uInt32(strSystemPath.getLength()) >= bufLen) {
+    if (o3tl::make_unsigned(strSystemPath.getLength()) >= bufLen) {
         return osl_File_E_OVERFLOW;
     }
     std::strcpy(buffer, strSystemPath.getStr());

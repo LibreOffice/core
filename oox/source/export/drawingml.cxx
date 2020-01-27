@@ -99,6 +99,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -3011,7 +3012,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
         sal_Int32 nValue, nLength = aAdjustmentSeq.getLength();
         // aAdjustments will give info about the number of adj values for a particular geometry. For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per lcl_getAdjNames.
         // Sometimes there are more values than needed, so we ignore the excessive ones.
-        if (aAdjustments.size() <= static_cast<sal_uInt32>(nLength))
+        if (aAdjustments.size() <= o3tl::make_unsigned(nLength))
         {
             for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aAdjustments.size()); i++)
             {

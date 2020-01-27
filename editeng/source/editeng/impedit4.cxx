@@ -33,6 +33,7 @@
 #include "editobj2.hxx"
 #include <i18nlangtag/lang.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <editxml.hxx>
@@ -2234,7 +2235,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             EditSelection aSel( aPaM, aPaM );
             while ( aSel.Max().GetNode() == pNode )
             {
-                if ( ( static_cast<size_t>(aSel.Min().GetIndex()) > nInvEnd )
+                if ( ( o3tl::make_unsigned(aSel.Min().GetIndex()) > nInvEnd )
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )
                     break;  // Document end or end of invalid region
 

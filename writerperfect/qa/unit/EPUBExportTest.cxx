@@ -18,6 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
@@ -804,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(*pStream);
     OString aExpected("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<svg");
-    CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(aExpected.getLength()));
+    CPPUNIT_ASSERT(aMemoryStream.GetSize() > o3tl::make_unsigned(aExpected.getLength()));
 
     // This failed, there was a '<!DOCTYPE' line between the xml and the svg
     // one, causing a validation error.

@@ -52,7 +52,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbexception.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -1258,7 +1258,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     if ( m_vColumnPositions.end() != aPosFind )
                     {
                         aPosFind->second = nNewPos;
-                        OSL_ENSURE( m_vColumnTypes.size() > size_t( aPosFind - m_vColumnPositions.begin() ),
+                        OSL_ENSURE( m_vColumnTypes.size() > o3tl::make_unsigned( aPosFind - m_vColumnPositions.begin() ),
                             "Invalid index for vector!" );
                         m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();
                     }

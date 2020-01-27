@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -331,7 +332,7 @@ oslFileError FileHandle_Impl::readAt(
 
         m_offset = nOffset;
 
-        if (static_cast<sal_uInt64>(m_offset) >= m_size)
+        if (o3tl::make_unsigned(m_offset) >= m_size)
         {
             nBytes = 0;
         }

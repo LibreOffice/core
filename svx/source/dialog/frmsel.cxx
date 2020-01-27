@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <svx/frmsel.hxx>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
@@ -49,7 +52,7 @@ using namespace ::com::sun::star::accessibility;
 
 FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
 {
-    DBG_ASSERT( nIndex < size_t(FRAMEBORDERTYPE_COUNT),
+    DBG_ASSERT( nIndex < o3tl::make_unsigned(FRAMEBORDERTYPE_COUNT),
         "svx::GetFrameBorderTypeFromIndex - invalid index" );
     return static_cast< FrameBorderType >( nIndex + 1 );
 }

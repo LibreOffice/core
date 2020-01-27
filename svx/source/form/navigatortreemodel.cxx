@@ -33,6 +33,7 @@
 #include <svx/strings.hrc>
 #include <fmshimp.hxx>
 #include <fmobj.hxx>
+#include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XContainer.hpp>
@@ -281,7 +282,7 @@ namespace svxform
                 m_pFormModel->BegUndo(aUndoStr);
             }
 
-            if (nRelPos >= static_cast<sal_uInt32>(xContainer->getCount()))
+            if (nRelPos >= o3tl::make_unsigned(xContainer->getCount()))
                 nRelPos = static_cast<sal_uInt32>(xContainer->getCount());
 
             // UndoAction

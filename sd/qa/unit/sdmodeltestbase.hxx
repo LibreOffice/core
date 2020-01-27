@@ -26,7 +26,7 @@
 #include <tools/color.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -194,7 +194,7 @@ protected:
     FileFormat* getFormat(sal_Int32 nExportType)
     {
         FileFormat* pFormat = &aFileFormats[0];
-        if (static_cast<sal_uInt32>(nExportType) < SAL_N_ELEMENTS(aFileFormats))
+        if (o3tl::make_unsigned(nExportType) < SAL_N_ELEMENTS(aFileFormats))
             pFormat = &aFileFormats[nExportType];
         return pFormat;
     }

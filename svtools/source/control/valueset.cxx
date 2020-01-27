@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/base64.hxx>
@@ -456,7 +459,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     }
     else
     {
-        if (mnFirstLine > static_cast<sal_uInt16>(mnLines - mnVisLines))
+        if (mnFirstLine > o3tl::make_unsigned(mnLines - mnVisLines))
             mnFirstLine = static_cast<sal_uInt16>(mnLines - mnVisLines);
     }
 
@@ -903,7 +906,7 @@ bool ValueSet::ImplScroll(const Point& rPos)
     }
     else if (rPos.Y() >= maItemListRect.Bottom() - nScrollOffset)
     {
-        if (mnFirstLine < static_cast<sal_uInt16>(mnLines - mnVisLines))
+        if (mnFirstLine < o3tl::make_unsigned(mnLines - mnVisLines))
         {
             ++mnFirstLine;
             bScroll = true;
@@ -1737,7 +1740,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             mnFirstLine = nNewLine;
             bNewLine = true;
         }
-        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
+        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
             bNewLine = true;
@@ -2825,7 +2828,7 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
             mnFirstLine = nNewLine;
             bNewLine = true;
         }
-        else if ( nNewLine > static_cast<sal_uInt16>(mnFirstLine+mnVisLines-1) )
+        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
             bNewLine = true;
@@ -3019,7 +3022,7 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
     else
     {
-        if (mnFirstLine > static_cast<sal_uInt16>(mnLines - mnVisLines))
+        if (mnFirstLine > o3tl::make_unsigned(mnLines - mnVisLines))
             mnFirstLine = static_cast<sal_uInt16>(mnLines - mnVisLines);
     }
 

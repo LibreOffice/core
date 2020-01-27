@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/ref.hxx>
@@ -628,7 +629,7 @@ ImplementationWrapper::getSupportedServiceNames()
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     if (impl->services.size()
-        > static_cast< sal_uInt32 >(SAL_MAX_INT32))
+        > o3tl::make_unsigned(SAL_MAX_INT32))
     {
         throw css::uno::RuntimeException(
             ("Implementation " + impl->name
@@ -935,7 +936,7 @@ cppuhelper::ServiceManager::getAvailableServiceNames()
     if (isDisposed()) {
         return css::uno::Sequence< OUString >();
     }
-    if (data_.services.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
+    if (data_.services.size() > o3tl::make_unsigned(SAL_MAX_INT32)) {
         throw css::uno::RuntimeException(
             "getAvailableServiceNames: too many services",
             static_cast< cppu::OWeakObject * >(this));
@@ -1426,7 +1427,7 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
     if (key.openKey(path, subkey) != RegError::NO_ERROR
         || subkey.getValueInfo(OUString(), &t, &s) != RegError::NO_ERROR
         || t != RegValueType::STRING
-        || s == 0 || s > static_cast< sal_uInt32 >(SAL_MAX_INT32))
+        || s == 0 || s > o3tl::make_unsigned(SAL_MAX_INT32))
     {
         throw css::uno::DeploymentException(
             "Failure reading legacy rdb file " + uri,

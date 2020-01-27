@@ -22,6 +22,8 @@
 #include "Tickmarks.hxx"
 #include <memory>
 
+#include <o3tl/safeint.hxx>
+
 namespace chart
 {
 
@@ -58,7 +60,7 @@ private: //methods
                         return (*m_pSimpleTicks)[nDepth][nIndex];
                     else
                     {
-                        if ((*m_pInfoTicks)[nDepth].size() <= size_t(nIndex))
+                        if ((*m_pInfoTicks)[nDepth].size() <= o3tl::make_unsigned(nIndex))
                             return std::numeric_limits<double>::max();
                         return (((*m_pInfoTicks)[nDepth])[nIndex]).fScaledTickValue;
                     }

@@ -18,6 +18,7 @@
 #include <document.hxx>
 #include <table.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 namespace sc {
@@ -230,7 +231,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
      * the content of a shifted column. Effectively this workaround has the
      * consequence that the group area listener is fouled up and not all
      * formula cells are notified... */
-    if (nBlockSize < static_cast<size_t>(mnGroupLen))
+    if (nBlockSize < o3tl::make_unsigned(mnGroupLen))
     {
         SAL_WARN("sc.core","FormulaGroupAreaListener::collectFormulaCells() nBlockSize " <<
                 nBlockSize << " < " << mnGroupLen << " mnGroupLen");

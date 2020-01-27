@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <osl/time.h>
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
@@ -1493,7 +1493,7 @@ public:
 
         if (!bVDev /* want everything in the vdev */ &&
             mnSelectedRenderer >= 0 &&
-            static_cast<sal_uInt32>(mnSelectedRenderer) < maRenderers.size())
+            o3tl::make_unsigned(mnSelectedRenderer) < maRenderers.size())
         {
             aCtx.meStyle = RENDER_EXPANDED;
             RegionRenderer * r = maRenderers[mnSelectedRenderer];

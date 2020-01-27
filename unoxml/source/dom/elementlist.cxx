@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "element.hxx"
@@ -171,7 +172,7 @@ namespace DOM
         if (!m_pElement.is()) { return nullptr; }
 
         buildlist(m_pElement->GetNodePtr());
-        if (m_nodevector.size() <= static_cast<size_t>(index)) {
+        if (m_nodevector.size() <= o3tl::make_unsigned(index)) {
             throw RuntimeException();
         }
         Reference< XNode > const xRet(

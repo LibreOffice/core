@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+
+#include <o3tl/safeint.hxx>
+
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hiodev.h"
@@ -399,7 +402,7 @@ void HWPFile::TagsRead()
 
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
-    if (static_cast<size_t>(num) < columnlist.size())
+    if (o3tl::make_unsigned(num) < columnlist.size())
         return columnlist[num]->xColdef.get();
     else
         return nullptr;
@@ -421,7 +424,7 @@ int HWPFile::GetPageMasterNum(int page)
 HyperText *HWPFile::GetHyperText()
 {
     ++currenthyper;
-    if (static_cast<size_t>(currenthyper) <= hyperlist.size())
+    if (o3tl::make_unsigned(currenthyper) <= hyperlist.size())
         return hyperlist[currenthyper-1].get();
     else
         return nullptr;
@@ -460,49 +463,49 @@ void HWPFile::AddBox(FBox * box)
 
 ParaShape *HWPFile::getParaShape(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= pslist.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= pslist.size())
         return nullptr;
     return pslist[index].get();
 }
 
 CharShape *HWPFile::getCharShape(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= cslist.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= cslist.size())
         return nullptr;
     return cslist[index].get();
 }
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= fbslist.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= fbslist.size())
         return nullptr;
     return fbslist[index];
 }
 
 DateCode *HWPFile::getDateCode(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= datecodes.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= datecodes.size())
         return nullptr;
     return datecodes[index];
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= headerfooters.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= headerfooters.size())
         return nullptr;
     return headerfooters[index];
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= pagenumbers.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= pagenumbers.size())
         return nullptr;
     return pagenumbers[index];
 }
 
 Table *HWPFile::getTable(int index)
 {
-    if (index < 0 || static_cast<unsigned int>(index) >= tables.size())
+    if (index < 0 || o3tl::make_unsigned(index) >= tables.size())
         return nullptr;
     return tables[index].get();
 }

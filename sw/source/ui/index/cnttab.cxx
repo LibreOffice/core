@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <vcl/weld.hxx>
@@ -3678,7 +3681,7 @@ bool SwEntryBrowseBox::SeekRow( long nRow )
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     OUString pRet;
-    if (static_cast<size_t>(nRow) < m_Entries.size())
+    if (o3tl::make_unsigned(nRow) < m_Entries.size())
     {
         const AutoMarkEntry* pEntry = m_Entries[ nRow ].get();
         switch(nColumn)

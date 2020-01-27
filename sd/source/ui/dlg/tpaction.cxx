@@ -30,7 +30,7 @@
 #include <sdattr.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
-
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
@@ -667,7 +667,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
     int nPos = m_xLbAction->get_active();
-    if (nPos != -1 && static_cast<size_t>(nPos) < maCurrentActions.size())
+    if (nPos != -1 && o3tl::make_unsigned(nPos) < maCurrentActions.size())
         eCA = maCurrentActions[ nPos ];
     return eCA;
 }
@@ -753,7 +753,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         case presentation::ClickAction_VERB:
             {
                 const int nPos = m_xLbOLEAction->get_selected_index();
-                if (nPos != -1 && static_cast<size_t>(nPos) < aVerbVector.size() )
+                if (nPos != -1 && o3tl::make_unsigned(nPos) < aVerbVector.size() )
                     aStr = OUString::number( aVerbVector[ nPos ] );
                 return aStr;
             }

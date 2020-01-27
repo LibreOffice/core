@@ -37,7 +37,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/types.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <svx/SvxShapeTypes.hxx>
@@ -132,7 +132,7 @@ uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (long nIndex)
 {
     // Check whether the given index is valid.
-    if (nIndex < 0 || static_cast<unsigned long>(nIndex) >= maVisibleChildren.size())
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
             "no accessible child with index " + OUString::number(nIndex),
             mxParent);

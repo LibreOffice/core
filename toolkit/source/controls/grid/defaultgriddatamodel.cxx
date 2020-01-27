@@ -27,6 +27,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -153,13 +154,13 @@ private:
 
     DefaultGridDataModel::CellData const & DefaultGridDataModel::impl_getCellData_throw( sal_Int32 const i_column, sal_Int32 const i_row ) const
     {
-        if  (   ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() )
+        if  (   ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) > m_aData.size() )
             ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
             )
             throw IndexOutOfBoundsException( OUString(), *const_cast< DefaultGridDataModel* >( this ) );
 
         RowData const & rRow( m_aData[ i_row ] );
-        if ( size_t( i_column ) < rRow.size() )
+        if ( o3tl::make_unsigned( i_column ) < rRow.size() )
             return rRow[ i_column ];
 
         static CellData s_aEmpty;
@@ -169,8 +170,8 @@ private:
 
     DefaultGridDataModel::RowData& DefaultGridDataModel::impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount )
     {
-        OSL_ENSURE( i_requiredColumnCount <= size_t( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
-        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+        OSL_ENSURE( i_requiredColumnCount <= o3tl::make_unsigned( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
+        if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         RowData& rRowData( m_aData[ i_rowIndex ] );
@@ -208,7 +209,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if ( ( i_row < 0 ) || ( size_t( i_row ) >= m_aRowHeaders.size() ) )
+        if ( ( i_row < 0 ) || ( o3tl::make_unsigned( i_row ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         return m_aRowHeaders[ i_row ];
@@ -328,7 +329,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+        if ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         m_aRowHeaders.erase( m_aRowHeaders.begin() + i_rowIndex );
@@ -375,7 +376,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
+        if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aData.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         if ( i_columnIndexes.getLength() != i_values.getLength() )
@@ -395,7 +396,7 @@ private:
         for ( sal_Int32 col = 0; col < columnCount; ++col )
         {
             sal_Int32 const columnIndex = i_columnIndexes[ col ];
-            if ( size_t( columnIndex ) >= rDataRow.size() )
+            if ( o3tl::make_unsigned( columnIndex ) >= rDataRow.size() )
                 rDataRow.resize( columnIndex + 1 );
 
             rDataRow[ columnIndex ].first = i_values[ col ];
@@ -416,7 +417,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aRowHeaders.size() ) )
+        if  ( ( i_rowIndex < 0 ) || ( o3tl::make_unsigned( i_rowIndex ) >= m_aRowHeaders.size() ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         m_aRowHeaders[ i_rowIndex ] = i_heading;

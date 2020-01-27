@@ -19,7 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
@@ -859,7 +859,7 @@ ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 
 void ScViewData::UpdateCurrentTab()
 {
-    assert(0 <= nTabNo && static_cast<size_t>(nTabNo) < maTabData.size());
+    assert(0 <= nTabNo && o3tl::make_unsigned(nTabNo) < maTabData.size());
     pThisTab = maTabData[nTabNo].get();
     while (!pThisTab)
     {
@@ -911,7 +911,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
     assert(nTab < static_cast<SCTAB>(maTabData.size()));
     maTabData.erase(maTabData.begin() + nTab);
 
-    if (static_cast<size_t>(nTabNo) >= maTabData.size())
+    if (o3tl::make_unsigned(nTabNo) >= maTabData.size())
     {
         EnsureTabDataSize(1);
         nTabNo = maTabData.size() - 1;
@@ -927,7 +927,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         mpMarkData->DeleteTab( nTab + i );
     }
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
-    if (static_cast<size_t>(nTabNo) >= maTabData.size())
+    if (o3tl::make_unsigned(nTabNo) >= maTabData.size())
     {
         EnsureTabDataSize(1);
         nTabNo = maTabData.size() - 1;

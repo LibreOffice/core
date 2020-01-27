@@ -22,6 +22,7 @@
 
 #include <cassert>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/dibtools.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/zcodec.hxx>
@@ -276,7 +277,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     assert(rHeader.nHeight >= 0);
     if (rHeader.nHeight != 0 && rHeader.nWidth >= 0
         && (rHeader.nSizeImage / 16 / static_cast<sal_uInt32>(rHeader.nHeight)
-            > static_cast<sal_uInt32>(rHeader.nWidth)))
+            > o3tl::make_unsigned(rHeader.nWidth)))
     {
         rHeader.nSizeImage = 0;
     }
@@ -929,7 +930,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 256;   //assume generous compression ratio
             nMaxWidth /= aHeader.nHeight;
-            if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
+            if (nMaxWidth < o3tl::make_unsigned(aHeader.nWidth))
                 return false;
             break;
         }
@@ -940,7 +941,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 512;   //assume generous compression ratio
             nMaxWidth /= aHeader.nHeight;
-            if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
+            if (nMaxWidth < o3tl::make_unsigned(aHeader.nWidth))
                 return false;
             break;
         }

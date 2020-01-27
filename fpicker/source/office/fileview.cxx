@@ -45,6 +45,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -1106,7 +1107,7 @@ void SvtFileView::SetConfigString(const OUString& rCfgStr)
             --nItemId;
         int nColumn = nItemId - 1;
 
-        if (nColumn >= 0 && static_cast<unsigned int>(nColumn) < aWidths.size())
+        if (nColumn >= 0 && o3tl::make_unsigned(nColumn) < aWidths.size())
             aWidths[nColumn] = nWidth;
     }
 
