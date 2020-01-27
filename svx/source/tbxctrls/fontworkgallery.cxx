@@ -418,20 +418,29 @@ com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation(
 
 namespace {
 
-class FontworkCharacterSpacingWindow : public ToolbarMenu
+class FontworkCharacterSpacingWindow final : public WeldToolbarPopup
 {
 public:
-    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
+    FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
+    virtual void GrabFocus() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 private:
-    svt::ToolboxController& mrController;
+    rtl::Reference<svt::PopupWindowController> mxControl;
+    std::unique_ptr<weld::RadioButton> mxVeryTight;
+    std::unique_ptr<weld::RadioButton> mxTight;
+    std::unique_ptr<weld::RadioButton> mxNormal;
+    std::unique_ptr<weld::RadioButton> mxLoose;
+    std::unique_ptr<weld::RadioButton> mxVeryLoose;
+    std::unique_ptr<weld::RadioButton> mxCustom;
+    std::unique_ptr<weld::CheckButton> mxKernPairs;
+    bool mbSettingValue;
 
-    DECL_LINK( SelectHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
-    void    implSetKernCharacterPairs( bool bEnabled );
-
+    void    implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled);
 };
 
 }
@@ -439,58 +448,86 @@ private:
 static const OUStringLiteral gsFontworkCharacterSpacing(".uno:FontworkCharacterSpacing");
 static const OUStringLiteral gsFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs");
 
-FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
-    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
-    , mrController(rController)
+FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkcharacterspacingcontrol.ui", "FontworkCharacterSpacingControl")
+    , mxControl(pControl)
+    , mxVeryTight(m_xBuilder->weld_radio_button("verytight"))
+    , mxTight(m_xBuilder->weld_radio_button("tight"))
+    , mxNormal(m_xBuilder->weld_radio_button("normal"))
+    , mxLoose(m_xBuilder->weld_radio_button("loose"))
+    , mxVeryLoose(m_xBuilder->weld_radio_button("veryloose"))
+    , mxCustom(m_xBuilder->weld_radio_button("custom"))
+    , mxKernPairs(m_xBuilder->weld_check_button("kernpairs"))
+    , mbSettingValue(false)
 {
-    SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
+    mxVeryTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxTight->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxNormal->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxVeryLoose->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
+    mxCustom->connect_clicked(LINK(this, FontworkCharacterSpacingWindow, ClickHdl));
 
-    appendEntry(0, SvxResId(RID_SVXSTR_CHARS_SPACING_VERY_TIGHT), MenuItemBits::RADIOCHECK);
-    appendEntry(1, SvxResId(RID_SVXSTR_CHARS_SPACING_TIGHT), MenuItemBits::RADIOCHECK);
-    appendEntry(2, SvxResId(RID_SVXSTR_CHARS_SPACING_NORMAL), MenuItemBits::RADIOCHECK);
-    appendEntry(3, SvxResId(RID_SVXSTR_CHARS_SPACING_LOOSE), MenuItemBits::RADIOCHECK);
-    appendEntry(4, SvxResId(RID_SVXSTR_CHARS_SPACING_VERY_LOOSE), MenuItemBits::RADIOCHECK);
-    appendEntry(5, SvxResId(RID_SVXSTR_CHARS_SPACING_CUSTOM), MenuItemBits::RADIOCHECK);
-    appendSeparator();
-    appendEntry(6, SvxResId(RID_SVXSTR_CHARS_SPACING_KERN_PAIRS), MenuItemBits::CHECKABLE);
-
-    SetOutputSizePixel( getMenuSize() );
+    mxKernPairs->connect_toggled(LINK(this, FontworkCharacterSpacingWindow, SelectHdl));
 
     AddStatusListener( gsFontworkCharacterSpacing );
     AddStatusListener( gsFontworkKernCharacterPairs );
+
+    // See TODO in svx/source/toolbars/fontworkbar.cxx for SID_FONTWORK_KERN_CHARACTER_PAIRS,
+    // the kernpairs setting is ignored, so hide the widget entirely
+    mxKernPairs->hide();
+}
+
+void FontworkCharacterSpacingWindow::GrabFocus()
+{
+    mxVeryTight->grab_focus();
 }
 
 void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled )
 {
-    sal_Int32 i;
-    for ( i = 0; i < 6; i++ )
+    bool bSettingValue = mbSettingValue;
+    mbSettingValue = true;
+
+    mxVeryTight->set_sensitive(bEnabled);
+    mxTight->set_sensitive(bEnabled);
+    mxNormal->set_sensitive(bEnabled);
+    mxLoose->set_sensitive(bEnabled);
+    mxVeryLoose->set_sensitive(bEnabled);
+    mxCustom->set_sensitive(bEnabled);
+
+    mxVeryTight->set_active(false);
+    mxTight->set_active(false);
+    mxNormal->set_active(false);
+    mxLoose->set_active(false);
+    mxVeryLoose->set_active(false);
+    mxCustom->set_active(true);
+
+    switch(nCharacterSpacing)
     {
-        checkEntry( i, false );
-        enableEntry( i, bEnabled );
+        case 80:
+            mxVeryTight->set_active(true);
+            break;
+        case 90:
+            mxTight->set_active(true);
+            break;
+        case 100:
+            mxNormal->set_active(true);
+            break;
+        case 120:
+            mxLoose->set_active(true);
+            break;
+        case 150:
+            mxVeryLoose->set_active(true);
+            break;
     }
-    if ( nCharacterSpacing != -1 )
-    {
-        sal_Int32 nEntry;
-        switch( nCharacterSpacing )
-        {
-            case 80 : nEntry = 0; break;
-            case 90 : nEntry = 1; break;
-            case 100 : nEntry = 2; break;
-            case 120 : nEntry = 3; break;
-            case 150 : nEntry = 4; break;
-            default : nEntry = 5; break;
-        }
-        checkEntry( nEntry, bEnabled );
-    }
+
+    mbSettingValue = bSettingValue;
 }
 
-
-void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool bEnabled )
+void FontworkCharacterSpacingWindow::implSetKernCharacterPairs(bool bKernOnOff, bool bEnabled)
 {
-    enableEntry( 6, bEnabled );
-    checkEntry( 6, bEnabled );
+    mxKernPairs->set_sensitive(bEnabled);
+    mxKernPairs->set_active(bKernOnOff);
 }
-
 
 void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
@@ -511,62 +548,72 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
     {
         if( !Event.IsEnabled )
         {
-            implSetKernCharacterPairs( false );
+            implSetKernCharacterPairs(false, false);
         }
         else
         {
             bool bValue = false;
             if( Event.State >>= bValue )
-                implSetKernCharacterPairs( true );
+                implSetKernCharacterPairs(bValue, true);
         }
     }
 }
 
-
-IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, ClickHdl, weld::Button&, void)
 {
-    if ( IsInPopupMode() )
-        EndPopupMode();
+    SelectHdl(*mxCustom);
+}
 
-    sal_Int32 nSelection = getSelectedEntryId();
-    sal_Int32 nCharacterSpacing;
-    switch( nSelection )
-    {
-        case 0 : nCharacterSpacing = 80; break;
-        case 1 : nCharacterSpacing = 90; break;
-        case 2 : nCharacterSpacing = 100; break;
-        case 3 : nCharacterSpacing = 120; break;
-        case 4 : nCharacterSpacing = 150; break;
-        default : nCharacterSpacing = 100; break;
-    }
-    if ( nSelection == 5 )  // custom spacing
+IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::ToggleButton&, rButton, void)
+{
+    if (mbSettingValue || !rButton.get_active())
+        return;
+
+    if (&rButton == mxCustom.get())
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
-        aArgs[0].Value <<= nCharacterSpacing;
+        aArgs[0].Value <<= sal_Int32(100);
 
-        mrController.dispatchCommand( ".uno:FontworkCharacterSpacingDialog", aArgs );
+        rtl::Reference<svt::PopupWindowController> xControl(mxControl);
+        xControl->EndPopupMode();
+        xControl->dispatchCommand(".uno:FontworkCharacterSpacingDialog", aArgs);
     }
-    else if ( nSelection == 6 ) // KernCharacterPairs
+    else if (&rButton == mxKernPairs.get())
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkKernCharacterPairs).copy(5);
-        aArgs[0].Value <<= true;
+        bool bKernOnOff = mxKernPairs->get_active();
+        aArgs[0].Value <<= bKernOnOff;
 
-        mrController.dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
+        mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
 
-        implSetKernCharacterPairs( true );
+        implSetKernCharacterPairs(bKernOnOff, true);
     }
-    else if( nSelection >= 0 )
+    else
     {
+        sal_Int32 nCharacterSpacing;
+        if (&rButton == mxVeryTight.get())
+            nCharacterSpacing = 80;
+        else if (&rButton == mxTight.get())
+            nCharacterSpacing = 90;
+        else if (&rButton == mxLoose.get())
+            nCharacterSpacing = 120;
+        else if (&rButton == mxVeryLoose.get())
+            nCharacterSpacing = 150;
+        else
+            nCharacterSpacing = 100;
+
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(gsFontworkCharacterSpacing).copy(5);
         aArgs[0].Value <<= nCharacterSpacing;
 
-        mrController.dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
+        mxControl->dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
 
         implSetCharacterSpacing( nCharacterSpacing, true );
     }
+
+    mxControl->EndPopupMode();
 }
 
 namespace {
@@ -576,6 +623,7 @@ class FontworkCharacterSpacingControl : public svt::PopupWindowController
 public:
     explicit FontworkCharacterSpacingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
@@ -593,10 +641,19 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 {
 }
 
+std::unique_ptr<WeldToolbarPopup> FontworkCharacterSpacingControl::weldPopupWindow()
+{
+    return std::make_unique<FontworkCharacterSpacingWindow>(this, m_pToolbar);
+}
 
 VclPtr<vcl::Window> FontworkCharacterSpacingControl::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<FontworkCharacterSpacingWindow>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 // XInitialization
