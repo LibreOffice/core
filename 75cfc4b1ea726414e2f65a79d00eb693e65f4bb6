@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e14df42_5f96fac2",
+        "filename": "svx/source/xml/xmlgrhlp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T13:12:56Z",
+      "side": 1,
+      "message": "Since nStreamLen is no longer a pointer, using \"nStreamLen \u003d\u003d 0\" instead of \"!nStreamLen\" here might be better.",
+      "revId": "75cfc4b1ea726414e2f65a79d00eb693e65f4bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9eee0e_864c455e",
+        "filename": "svx/source/xml/xmlgrhlp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T13:12:56Z",
+      "side": 1,
+      "message": "Since nStreamLen_ is now a proper integer, also using \"nStreamLen_ !\u003d 0\" or \"nStreamLen_ \u003e 0\" might be better here.",
+      "range": {
+        "startLine": 336,
+        "startChar": 28,
+        "endLine": 336,
+        "endChar": 39
+      },
+      "revId": "75cfc4b1ea726414e2f65a79d00eb693e65f4bb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
