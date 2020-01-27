@@ -51,10 +51,12 @@ namespace {
 class SdXMLLayerContext : public SvXMLImportContext
 {
 public:
-    SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
+    SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
     css::uno::Reference< css::container::XNameAccess > mxLayerManager;
@@ -67,49 +69,47 @@ private:
 
 }
 
-SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
-: SvXMLImportContext(rImport, nPrefix, rLocalName)
+SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
+: SvXMLImportContext(rImport)
 , mxLayerManager( xLayerManager )
 {
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString aLocalName;
-        if( GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &aLocalName ) == XML_NAMESPACE_DRAW )
-        {
-            const OUString sValue( xAttrList->getValueByIndex( i ) );
+        OUString sValue = aIter.toString();
 
-            if( IsXMLToken( aLocalName, XML_NAME ) )
-            {
+        switch( aIter.getToken()  )
+        {
+            case XML_ELEMENT(DRAW, XML_NAME):
                 msName = sValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_DISPLAY))
-            {
+                break;
+            case XML_ELEMENT(DRAW, XML_DISPLAY):
                 msDisplay = sValue;
-            }
-            else if ( IsXMLToken( aLocalName, XML_PROTECTED))
-            {
+                break;
+            case XML_ELEMENT(DRAW, XML_PROTECTED):
                 msProtected = sValue;
-            }
+                break;
         }
     }
 
 }
 
-SvXMLImportContextRef SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerContext::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_TITLE) )
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) )
     {
-        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sTitleBuffer);
+        return new XMLStringBufferImportContext( GetImport(), sTitleBuffer);
     }
-    else if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_DESC) )
+    else if( nElement == XML_ELEMENT(SVG, XML_DESC) )
     {
-        return new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, sDescriptionBuffer);
+        return new XMLStringBufferImportContext( GetImport(), sDescriptionBuffer);
     }
     return nullptr;
 }
 
-void SdXMLLayerContext::EndElement()
+void SdXMLLayerContext::endFastElement(sal_Int32 )
 {
     SAL_WARN_IF( msName.isEmpty(), "xmloff", "xmloff::SdXMLLayerContext::EndElement(), draw:layer element without draw:name!" );
     if( !msName.isEmpty() ) try
@@ -158,9 +158,8 @@ void SdXMLLayerContext::EndElement()
 }
 
 
-SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>&)
-: SvXMLImportContext(rImport, nPrfx, rLocalName)
+SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport )
+: SvXMLImportContext(rImport)
 {
     Reference< XLayerSupplier > xLayerSupplier( rImport.GetModel(), UNO_QUERY );
     SAL_WARN_IF( !xLayerSupplier.is(), "xmloff", "xmloff::SdXMLLayerSetContext::SdXMLLayerSetContext(), XModel is not supporting XLayerSupplier!" );
@@ -172,10 +171,11 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 {
 }
 
-SvXMLImportContextRef SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerSetContext::createFastChildContext(
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );
+    return new SdXMLLayerContext( GetImport(), xAttrList, mxLayerManager );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -367,87 +367,83 @@ public:
 public:
 
     XMLAnimationsEffectContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList,
         const std::shared_ptr<AnimImpImpl>& pImpl);
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 class XMLAnimationsSoundContext : public SvXMLImportContext
 {
 public:
 
-    XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
+    XMLAnimationsSoundContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
 };
 
 }
 
-XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
-: SvXMLImportContext( rImport, nPrfx, rLocalName )
+XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent )
+: SvXMLImportContext( rImport )
 {
-    if( pParent && nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SOUND ) )
+    if( pParent && nElement == XML_ELEMENT(PRESENTATION, XML_SOUND) )
     {
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        sax_fastparser::FastAttributeList *pAttribList =
+                        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        for (auto &aIter : *pAttribList)
         {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-            OUString sValue = xAttrList->getValueByIndex( i );
+            OUString sValue = aIter.toString();
 
-            switch( nPrefix )
+            switch( aIter.getToken() )
             {
-            case XML_NAMESPACE_XLINK:
-                if( IsXMLToken( aLocalName, XML_HREF ) )
+            case XML_ELEMENT(XLINK, XML_HREF):
                 {
                     pParent->maSoundURL = rImport.GetAbsoluteReference(sValue);
                 }
                 break;
-            case XML_NAMESPACE_PRESENTATION:
-                if( IsXMLToken( aLocalName, XML_PLAY_FULL ) )
+            case XML_ELEMENT(PRESENTATION, XML_PLAY_FULL):
                 {
                     pParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
                 }
+                break;
             }
         }
     }
 }
 
-XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const std::shared_ptr<AnimImpImpl>& pImpl )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, const std::shared_ptr<AnimImpImpl>& pImpl )
+:   SvXMLImportContext(rImport),
     mpImpl( pImpl ),
     meKind( XMLE_SHOW ), mbTextEffect( false ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( false )
 {
-    if( IsXMLToken( rLocalName, XML_SHOW_SHAPE ) )
+    if( (nElement & TOKEN_MASK) == XML_SHOW_SHAPE )
     {
         meKind = XMLE_SHOW;
     }
-    else if( IsXMLToken( rLocalName, XML_SHOW_TEXT ) )
+    else if( (nElement & TOKEN_MASK) == XML_SHOW_TEXT )
     {
         meKind = XMLE_SHOW;
         mbTextEffect = true;
     }
-    else if( IsXMLToken( rLocalName, XML_HIDE_SHAPE ) )
+    else if( (nElement & TOKEN_MASK) == XML_HIDE_SHAPE )
     {
         meKind = XMLE_HIDE;
     }
-    else if( IsXMLToken( rLocalName, XML_HIDE_TEXT ) )
+    else if( (nElement & TOKEN_MASK) == XML_HIDE_TEXT )
     {
         meKind = XMLE_HIDE;
         mbTextEffect = true;
     }
-    else if( IsXMLToken( rLocalName, XML_DIM ) )
+    else if( (nElement & TOKEN_MASK) == XML_DIM )
     {
         meKind = XMLE_DIM;
     }
-    else if( IsXMLToken( rLocalName, XML_PLAY ) )
+    else if( (nElement & TOKEN_MASK) == XML_PLAY )
     {
         meKind = XMLE_PLAY;
     }
@@ -458,47 +454,47 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     }
 
     // read attributes
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
 
-        switch( nPrefix )
+        switch( aIter.getToken() )
         {
-        case XML_NAMESPACE_DRAW:
-            if( IsXMLToken( aLocalName, XML_SHAPE_ID ) )
+        case XML_ELEMENT(DRAW, XML_SHAPE_ID):
             {
                 maShapeId = sValue;
             }
-            else if( IsXMLToken( aLocalName, XML_COLOR ) )
+            break;
+        case XML_ELEMENT(DRAW, XML_COLOR):
             {
                 ::sax::Converter::convertColor(maDimColor, sValue);
             }
             break;
-
-        case XML_NAMESPACE_PRESENTATION:
-            if( IsXMLToken( aLocalName, XML_EFFECT ) )
+        case XML_ELEMENT(PRESENTATION, XML_EFFECT):
             {
                 SvXMLUnitConverter::convertEnum( meEffect, sValue, aXML_AnimationEffect_EnumMap );
             }
-            else if( IsXMLToken(aLocalName, XML_DIRECTION ) )
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
             {
                 SvXMLUnitConverter::convertEnum( meDirection, sValue, aXML_AnimationDirection_EnumMap );
             }
-            else if( IsXMLToken( aLocalName, XML_START_SCALE ) )
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
                 sal_Int32 nScale;
                 if (::sax::Converter::convertPercent( nScale, sValue ))
                     mnStartScale = static_cast<sal_Int16>(nScale);
             }
-            else if( IsXMLToken( aLocalName, XML_SPEED ) )
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_SPEED):
             {
                 SvXMLUnitConverter::convertEnum( meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
             }
-            else if( IsXMLToken( aLocalName, XML_PATH_ID ) )
+            break;
+        case XML_ELEMENT(PRESENTATION, XML_PATH_ID):
             {
                 maPathShapeId = sValue;
             }
@@ -507,12 +503,14 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     }
 }
 
-SvXMLImportContextRef XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsEffectContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new XMLAnimationsSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
+    return new XMLAnimationsSoundContext( GetImport(), nElement, xAttrList, this );
 }
 
-void XMLAnimationsEffectContext::EndElement()
+void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
 {
     // set effect on shape
 
@@ -605,17 +603,17 @@ void XMLAnimationsEffectContext::EndElement()
 }
 
 
-XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& )
-: SvXMLImportContext(rImport, nPrfx, rLocalName)
+XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport )
+: SvXMLImportContext(rImport)
 , mpImpl(std::make_shared<AnimImpImpl>())
 {
 }
 
-SvXMLImportContextRef XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new XMLAnimationsEffectContext( GetImport(), nPrefix, rLocalName,  xAttrList, mpImpl );
+    return new XMLAnimationsEffectContext( GetImport(), nElement, xAttrList, mpImpl );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

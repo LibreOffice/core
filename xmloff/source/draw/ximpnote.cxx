@@ -18,49 +18,47 @@
  */
 
 #include "ximpnote.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLGenericPageContext( rImport, xAttrList, rShapes )
 {
     OUString sStyleName, sPageMasterName;
 
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetMasterPageAttrTokenMap();
+        OUString sValue = aIter.toString();
 
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        switch( aIter.getToken() )
         {
-            case XML_TOK_MASTERPAGE_PAGE_MASTER_NAME:
+            case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
             {
                 sPageMasterName = sValue;
                 break;
             }
-            case XML_TOK_MASTERPAGE_STYLE_NAME:
+            case XML_ELEMENT(DRAW, XML_STYLE_NAME):
             {
                 sStyleName = sValue;
                 break;
             }
-            case XML_TOK_MASTERPAGE_USE_HEADER_NAME:
+            case XML_ELEMENT(PRESENTATION, XML_USE_HEADER_NAME):
             {
                 maUseHeaderDeclName =  sValue;
                 break;
             }
-            case XML_TOK_MASTERPAGE_USE_FOOTER_NAME:
+            case XML_ELEMENT(PRESENTATION, XML_USE_FOOTER_NAME):
             {
                 maUseFooterDeclName =  sValue;
                 break;
             }
-            case XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME:
+            case XML_ELEMENT(PRESENTATION, XML_USE_DATE_TIME_NAME):
             {
                 maUseDateTimeDeclName =  sValue;
                 break;

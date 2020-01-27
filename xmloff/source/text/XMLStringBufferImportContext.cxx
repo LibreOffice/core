@@ -38,6 +38,14 @@ XMLStringBufferImportContext::XMLStringBufferImportContext(
 {
 }
 
+XMLStringBufferImportContext::XMLStringBufferImportContext(
+    SvXMLImport& rImport,
+    OUStringBuffer& rBuffer) :
+    SvXMLImportContext(rImport),
+    rTextBuffer(rBuffer)
+{
+}
+
 XMLStringBufferImportContext::~XMLStringBufferImportContext()
 {
 }
@@ -51,7 +59,21 @@ SvXMLImportContextRef XMLStringBufferImportContext::CreateChildContext(
                                             rLocalName, rTextBuffer);
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLStringBufferImportContext::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return new XMLStringBufferImportContext(GetImport(), rTextBuffer);
+}
+
+
 void XMLStringBufferImportContext::Characters(
+    const OUString& rChars )
+{
+    rTextBuffer.append(rChars);
+}
+
+void XMLStringBufferImportContext::characters(
     const OUString& rChars )
 {
     rTextBuffer.append(rChars);
@@ -68,4 +90,14 @@ void XMLStringBufferImportContext::EndElement()
     }
 }
 
+void XMLStringBufferImportContext::endFastElement(sal_Int32 )
+{
+    // add return for paragraph elements
+    if ( (XML_NAMESPACE_TEXT == GetPrefix() ||
+                XML_NAMESPACE_LO_EXT == GetPrefix()) &&
+         (IsXMLToken(GetLocalName(), XML_P))    )
+    {
+        rTextBuffer.append(u'\x000a');
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -748,7 +748,8 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         }
     }
 
-    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
+    if( !xContext.is())
+        SAL_WARN("xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
 
     if( !xContext.is() )
         xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
@@ -2075,8 +2076,10 @@ void SvXMLImport::initializeNamespaceMaps()
         {
             const OUString& sNamespace = GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) );
             const OUString& sPrefix = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
+            assert(aNamespaceMap.find(nToken+1) == aNamespaceMap.end() && "duplicate token");
             aNamespaceMap[ nToken + 1 ] = std::make_pair( sPrefix, sNamespace );
-            aNamespaceURIPrefixMap.emplace( sNamespace, sPrefix );
+            auto [it,inserted] = aNamespaceURIPrefixMap.emplace( sNamespace, sPrefix );
+            assert(inserted && "duplicate namespace");
         }
     };
 

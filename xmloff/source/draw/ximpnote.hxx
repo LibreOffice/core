@@ -28,9 +28,8 @@
 class SdXMLNotesContext : public SdXMLGenericPageContext
 {
 public:
-    SdXMLNotesContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    SdXMLNotesContext( SdXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLNotesContext() override;
 };
