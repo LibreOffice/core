@@ -303,8 +303,7 @@ OUString ExtrusionDirectionControl::getImplementationName()
 
 Sequence< OUString > ExtrusionDirectionControl::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 
@@ -562,8 +561,7 @@ OUString ExtrusionDepthController::getImplementationName()
 
 Sequence< OUString > ExtrusionDepthController::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 
@@ -800,8 +798,7 @@ OUString ExtrusionLightingControl::getImplementationName()
 
 Sequence< OUString > ExtrusionLightingControl::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 
@@ -939,8 +936,7 @@ OUString ExtrusionSurfaceControl::getImplementationName()
 
 Sequence< OUString > ExtrusionSurfaceControl::getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 
