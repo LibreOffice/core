@@ -153,7 +153,7 @@ namespace drawinglayer::primitive2d
                 {
                     // for compatibility, insert the center point at polygon start to get the same
                     // line stroking pattern as the old painting mechanisms.
-                    aUnitOutline.insert(0L, basegfx::B2DPoint(0.0, 0.0));
+                    aUnitOutline.insert(0, basegfx::B2DPoint(0.0, 0.0));
                 }
 
                 aUnitOutline.setClosed(true);

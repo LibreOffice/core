@@ -222,7 +222,7 @@ namespace
                 if(pCandidate && pCandidate->getTextLength())
                 {
                     aTextLayouter.setFont(pCandidate->getFont());
-                    fRetval += pCandidate->getDisplayLength(0L, pCandidate->getTextLength());
+                    fRetval += pCandidate->getDisplayLength(0, pCandidate->getTextLength());
                 }
             }
 
