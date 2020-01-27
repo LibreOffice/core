@@ -49,8 +49,6 @@
 #define RID_SVXBMP_DIRECTION_DIRECTION_SW           "svx/res/directionsouthwest_22.png"
 #define RID_SVXBMP_DIRECTION_DIRECTION_S            "svx/res/directionsouth_22.png"
 #define RID_SVXBMP_DIRECTION_DIRECTION_SE           "svx/res/directionsoutheast_22.png"
-#define RID_SVXBMP_PERSPECTIVE                      "svx/res/perspective_16.png"
-#define RID_SVXBMP_PARALLEL                         "svx/res/parallel_16.png"
 #define RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT          "svx/res/lightofffromtopleft_22.png"
 #define RID_SVXBMP_LIGHT_OFF_FROM_TOP               "svx/res/lightofffromtop_22.png"
 #define RID_SVXBMP_LIGHT_OFF_FROM_TOP_RIGHT         "svx/res/lightofffromtopright_22.png"

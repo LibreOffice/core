@@ -47,26 +47,26 @@ class ValueSet;
 
 namespace svx
 {
-class ExtrusionDirectionWindow : public svtools::ToolbarMenu
+class ExtrusionDirectionWindow final : public WeldToolbarPopup
 {
 public:
-    ExtrusionDirectionWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
+    ExtrusionDirectionWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
+    virtual void GrabFocus() override;
     virtual ~ExtrusionDirectionWindow() override;
-    virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    svt::ToolboxController& mrController;
-    VclPtr<ValueSet>        mpDirectionSet;
+    rtl::Reference<svt::PopupWindowController> mxControl;
+    std::unique_ptr<SvtValueSet> mxDirectionSet;
+    std::unique_ptr<weld::CustomWeld> mxDirectionSetWin;
+    std::unique_ptr<weld::RadioButton> mxPerspective;
+    std::unique_ptr<weld::RadioButton> mxParallel;
 
     Image       maImgDirection[9];
-    Image const       maImgPerspective;
-    Image const       maImgParallel;
 
-    DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
-    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
+    DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
+    DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
     void SelectHdl(void const *);
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled );
@@ -74,12 +74,12 @@ private:
 
 };
 
-
 class ExtrusionDirectionControl : public svt::PopupWindowController
 {
 public:
     explicit ExtrusionDirectionControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
