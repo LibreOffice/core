@@ -7,8 +7,13 @@
 
 from uitest.framework import UITestCase
 from uitest.debug import sleep
+from uitest.path import get_srcdir_url
 import time
 from uitest.uihelper.common import get_state_as_dict, type_text
+
+
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
 
 class trackedchanges(UITestCase):
 
@@ -149,6 +154,77 @@ class trackedchanges(UITestCase):
         self.xUITest.executeCommand(".uno:NextTrackedChange")
         self.xUITest.executeCommand(".uno:RejectTrackedChange")
         self.assertEqual(document.Text.String[0:30], "Test LibreOffice Test2 Test4")
+
+        self.ui_test.close_doc()
+
+    def test_list_of_changes(self):
+        self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt"))
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        document = self.ui_test.get_component()
+
+        listText = [
+                "Unknown Author\t01/24/2020 16:19:32\t",
+                "Unknown Author\t01/24/2020 16:19:35\t",
+                "Unknown Author\t01/24/2020 16:19:39\t",
+                "Unknown Author\t01/24/2020 16:19:39\t",
+                "Xisco Fauli\t01/27/2020 17:42:55\t"]
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+        print(xTrackDlg.getChildren())
+        changesList = xTrackDlg.getChild("writerchanges")
+
+        resultsAccept = [
+            "The tennis ball is a small ball. The baskedtball is much bigger.",
+            "The tennis ball is a small ball. The baskedtball is much bigger.",
+            "The tennis ball is a small ball. The baskedtball is much bigger.",
+            "The tennis ball is a small ball. The basketball is much bigger.",
+            "The tennis ball is a small ball. The basketball is much bigger.",
+            "The tennis ball is a small ball. The basketball is much bigger."]
+
+        for i in range(len(listText)):
+            self.assertEqual(document.Text.String.strip(), resultsAccept[i])
+            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+            xAccBtn = xTrackDlg.getChild("accept")
+            xAccBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(document.Text.String.strip(), resultsAccept[5])
+        #List is empty
+        self.assertFalse('0' in changesList.getChildren())
+
+        for i in reversed(range(len(listText))):
+            xUndoBtn = xTrackDlg.getChild("undo")
+            xUndoBtn.executeAction("CLICK", tuple())
+            self.assertEqual(document.Text.String.strip(), resultsAccept[i])
+            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+
+        resultsReject = [
+            "The tennis ball is a small ball. The baskedtball is much bigger.",
+            "The tenis ball is a small ball. The baskedtball is much bigger.",
+            "The tenis ball is a small bal. The baskedtball is much bigger.",
+            "The tenis ball is a small bal. The baskedtball is much bigger.",
+            "The tenis ball is a small bal. The baskedball is much bigger.",
+            "The tenis ball is a small bal. The baskedball is much biger."]
+
+        for i in range(len(listText)):
+            self.assertEqual(document.Text.String.strip(), resultsReject[i])
+            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+            xAccBtn = xTrackDlg.getChild("reject")
+            xAccBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(document.Text.String.strip(), resultsReject[5])
+        #List is empty
+        self.assertFalse('0' in changesList.getChildren())
+
+        for i in reversed(range(len(listText))):
+            xUndoBtn = xTrackDlg.getChild("undo")
+            xUndoBtn.executeAction("CLICK", tuple())
+            self.assertEqual(document.Text.String.strip(), resultsReject[i])
+            self.assertEqual(get_state_as_dict(changesList.getChild('0'))["Text"], listText[i] )
+
+        xcloseBtn = xTrackDlg.getChild("close")
+        xcloseBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
