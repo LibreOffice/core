@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "327a2fd2_25d42c4e",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T16:05:31Z",
+      "side": 1,
+      "message": "Should we add a local helper function to handle these and the similar \"Heading 1\"..\"Heading 9\" in this file?\n\nFor example\n\nstatic bool lcl_IsOutlineStyle(OUString sPrefix, OUString sStyleName)\n{\n    OUString sSuffix;\n    return sStyleName.getLength() \u003d\u003d sPrefix.getLength() + 2) \u0026\u0026\n         sStyleName.startsWith(sPrefix + \" \", \u0026sSuffix) \u0026\u0026 sSuffix.toInt32() \u003e 0;\n\n}\n\nif ( lcl_IsOutlineStyle(\"TOC Level\", sConvertedStyleName) || lcl_IsOutlineStyle(\"Appendix\", sConvertedStyleName) )\n\n...\nand\n\nif ( lcl_IsOutlineStyle(\"Heading\", sConvertedStyleName) )",
+      "range": {
+        "startLine": 1056,
+        "startChar": 0,
+        "endLine": 1073,
+        "endChar": 64
+      },
+      "revId": "a26694e041003f02651d25c3e2ffe0578bfcdac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
