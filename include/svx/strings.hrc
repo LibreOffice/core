@@ -1005,12 +1005,6 @@
 #define RID_GALLERYSTR_THEME_TROUBLE                        NC_("RID_GALLERYSTR_THEME_TROUBLE", "Problem Solving")
 #define RID_GALLERYSTR_THEME_SCREENBEANS                    NC_("RID_GALLERYSTR_THEME_SCREENBEANS", "Screen Beans")
 
-#define RID_SVXSTR_ALIGN_LEFT                               NC_("RID_SVXSTR_ALIGN_LEFT", "~Left Align")
-#define RID_SVXSTR_ALIGN_CENTER                             NC_("RID_SVXSTR_ALIGN_CENTER", "~Center")
-#define RID_SVXSTR_ALIGN_RIGHT                              NC_("RID_SVXSTR_ALIGN_RIGHT", "~Right Align")
-#define RID_SVXSTR_ALIGN_WORD                               NC_("RID_SVXSTR_ALIGN_WORD", "~Word Justify")
-#define RID_SVXSTR_ALIGN_STRETCH                            NC_("RID_SVXSTR_ALIGN_STRETCH", "S~tretch Justify")
-
 #define RID_SVXSTR_QRY_PRINT_TITLE                          NC_("RID_SVXSTR_QRY_PRINT_TITLE", "Printing selection")
 #define RID_SVXSTR_QRY_PRINT_MSG                            NC_("RID_SVXSTR_QRY_PRINT_MSG", "Do you want to print the selection or the entire document?")
 #define RID_SVXSTR_QRY_PRINT_ALL                            NC_("RID_SVXSTR_QRY_PRINT_ALL", "~All")
