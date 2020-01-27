@@ -34,7 +34,7 @@
 #include "x509certificate_mscryptimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <xmlsec-wrapper.h>
 #include "akmngr.hxx"
 
@@ -164,15 +164,8 @@ OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& serviceName) {
-    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
-    }
-    return false ;
+    return cppu::supportsService(this, serviceName);
 }
-
 /* XServiceInfo */
 uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
     uno::Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
