@@ -39,6 +39,7 @@
 #endif
 #include <windows.h>
 #include <shellapi.h>
+#include <Shlobj.h>
 #include <Shobjidl.h>
 #include <objbase.h>
 #if defined _MSC_VER
@@ -307,21 +308,33 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                      + "> failed with " + OUString::number(e1)),
                     {}, 0);
             }
+            const int MAX_LONG_PATH = 32767; // max longpath on WinNT
+            if (pathname.getLength() >= MAX_LONG_PATH)
+            {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute, path <" + pathname + "> too long", {}, 0);
+            }
+            wchar_t path[MAX_LONG_PATH];
+            wcscpy_s(path, SAL_W(pathname.getStr()));
             for (int i = 0;; ++i) {
+                // tdf#130216: normalize c:\path\to\something\..\else into c:\path\to\else
+                if (PathResolve(path, nullptr, PRF_VERIFYEXISTS | PRF_REQUIREABSOLUTE) == 0)
+                {
+                    throw css::lang::IllegalArgumentException(
+                        "XSystemShellExecute.execute, PathResolve(" + OUString(SAL_U(path))
+                            + ") failed",
+                        {}, 0);
+                }
                 SHFILEINFOW info;
-                if (SHGetFileInfoW(
-                        SAL_W(pathname.getStr()), 0, &info, sizeof info, SHGFI_EXETYPE)
-                    != 0)
+                if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_EXETYPE) != 0)
                 {
                     throw css::lang::IllegalArgumentException(
                         "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
                 }
-                if (SHGetFileInfoW(
-                        SAL_W(pathname.getStr()), 0, &info, sizeof info, SHGFI_ATTRIBUTES)
-                    == 0)
+                if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_ATTRIBUTES) == 0)
                 {
                     throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, SHGetFileInfoW(" + pathname + ") failed", {},
+                        "XSystemShellExecute.execute, SHGetFileInfoW(" + OUString(SAL_U(path)) + ") failed", {},
                         0);
                 }
                 if ((info.dwAttributes & SFGAO_LINK) == 0) {
@@ -346,7 +359,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                          + o3tl::runtimeToOUString(e3.what())),
                         {}, 0);
                 }
-                e2 = file->Load(SAL_W(pathname.getStr()), STGM_READ);
+                e2 = file->Load(path, STGM_READ);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IPersistFile.Load failed with "
@@ -360,16 +373,14 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                          + OUString::number(e2)),
                         {}, 0);
                 }
-                wchar_t path[MAX_PATH];
                 WIN32_FIND_DATAW wfd;
-                e2 = link->GetPath(path, MAX_PATH, &wfd, SLGP_RAWPATH);
+                e2 = link->GetPath(path, SAL_N_ELEMENTS(path), &wfd, SLGP_RAWPATH);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IShellLink.GetPath failed with "
                          + OUString::number(e2)),
                         {}, 0);
                 }
-                pathname = SAL_U(path);
                 // Fail at some arbitrary nesting depth, to avoid an infinite loop:
                 if (i == 30) {
                     throw css::lang::IllegalArgumentException(
@@ -377,6 +388,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                         {}, 0);
                 }
             }
+            pathname = OUString(SAL_U(path));
             auto const n = pathname.lastIndexOf('.');
             if (n > pathname.lastIndexOf('\\')) {
                 auto const ext = pathname.copy(n + 1);
