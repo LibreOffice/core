@@ -54,8 +54,6 @@
 
 #include <bitmaps.hlst>
 
-using ::svtools::ToolbarMenu;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -265,17 +263,26 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, SvtValueSet*, voi
 
 namespace {
 
-class FontworkAlignmentWindow : public ToolbarMenu
+class FontworkAlignmentWindow final : public WeldToolbarPopup
 {
 public:
-    FontworkAlignmentWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
-
+    FontworkAlignmentWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
+    virtual void GrabFocus() override
+    {
+        mxLeft->grab_focus();
+    }
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
 private:
-    svt::ToolboxController& mrController;
+    rtl::Reference<svt::PopupWindowController> mxControl;
+    std::unique_ptr<weld::RadioButton> mxLeft;
+    std::unique_ptr<weld::RadioButton> mxCenter;
+    std::unique_ptr<weld::RadioButton> mxRight;
+    std::unique_ptr<weld::RadioButton> mxWord;
+    std::unique_ptr<weld::RadioButton> mxStretch;
+    bool mbSettingValue;
 
-    DECL_LINK( SelectHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectHdl, weld::ToggleButton&, void );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
@@ -284,37 +291,40 @@ private:
 
 static const OUStringLiteral gsFontworkAlignment(".uno:FontworkAlignment");
 
-FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
-    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
-    , mrController(rController)
+FontworkAlignmentWindow::FontworkAlignmentWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkalignmentcontrol.ui", "FontworkAlignmentControl")
+    , mxControl(pControl)
+    , mxLeft(m_xBuilder->weld_radio_button("left"))
+    , mxCenter(m_xBuilder->weld_radio_button("center"))
+    , mxRight(m_xBuilder->weld_radio_button("right"))
+    , mxWord(m_xBuilder->weld_radio_button("word"))
+    , mxStretch(m_xBuilder->weld_radio_button("stretch"))
+    , mbSettingValue(false)
 {
-    SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
-
-    Image aImgAlgin1(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_LEFT);
-    Image aImgAlgin2(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_CENTER);
-    Image aImgAlgin3(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_RIGHT);
-    Image aImgAlgin4(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_WORD);
-    Image aImgAlgin5(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_STRETCH);
-
-    appendEntry(0, SvxResId(RID_SVXSTR_ALIGN_LEFT), aImgAlgin1);
-    appendEntry(1, SvxResId(RID_SVXSTR_ALIGN_CENTER), aImgAlgin2);
-    appendEntry(2, SvxResId(RID_SVXSTR_ALIGN_RIGHT), aImgAlgin3);
-    appendEntry(3, SvxResId(RID_SVXSTR_ALIGN_WORD), aImgAlgin4);
-    appendEntry(4, SvxResId(RID_SVXSTR_ALIGN_STRETCH), aImgAlgin5);
-
-    SetOutputSizePixel( getMenuSize() );
+    mxLeft->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
+    mxCenter->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
+    mxRight->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
+    mxWord->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
+    mxStretch->connect_toggled(LINK(this, FontworkAlignmentWindow, SelectHdl));
 
     AddStatusListener( gsFontworkAlignment );
 }
 
 void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 {
-    int i;
-    for( i = 0; i < 5; i++ )
-    {
-        checkEntry( i, (i == nSurface) && bEnabled );
-        enableEntry( i, bEnabled );
-    }
+    bool bSettingValue = mbSettingValue;
+    mbSettingValue = true;
+    mxLeft->set_active(nSurface == 0 && bEnabled);
+    mxLeft->set_sensitive(bEnabled);
+    mxCenter->set_active(nSurface == 1 && bEnabled);
+    mxCenter->set_sensitive(bEnabled);
+    mxRight->set_active(nSurface == 2 && bEnabled);
+    mxRight->set_sensitive(bEnabled);
+    mxWord->set_active(nSurface == 3 && bEnabled);
+    mxWord->set_sensitive(bEnabled);
+    mxStretch->set_active(nSurface == 4 && bEnabled);
+    mxStretch->set_sensitive(bEnabled);
+    mbSettingValue = bSettingValue;
 }
 
 void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
@@ -334,22 +344,32 @@ void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent
     }
 }
 
-IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::ToggleButton&, rButton, void)
 {
-    if ( IsInPopupMode() )
-        EndPopupMode();
+    if (mbSettingValue || !rButton.get_active())
+        return;
 
-    sal_Int32 nAlignment = getSelectedEntryId();
-    if( nAlignment >= 0 )
-    {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(gsFontworkAlignment).copy(5);
-        aArgs[0].Value <<= nAlignment;
+    sal_Int32 nAlignment;
+    if (mxLeft->get_active())
+        nAlignment = 0;
+    else if (mxCenter->get_active())
+        nAlignment = 1;
+    else if (mxRight->get_active())
+        nAlignment = 2;
+    else if (mxWord->get_active())
+        nAlignment = 3;
+    else
+        nAlignment = 4;
 
-        mrController.dispatchCommand( gsFontworkAlignment, aArgs );
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString(gsFontworkAlignment).copy(5);
+    aArgs[0].Value <<= nAlignment;
 
-        implSetAlignment( nAlignment, true );
-    }
+    mxControl->dispatchCommand( gsFontworkAlignment, aArgs );
+
+    implSetAlignment( nAlignment, true );
+
+    mxControl->EndPopupMode();
 }
 
 namespace {
@@ -359,6 +379,7 @@ class FontworkAlignmentControl : public svt::PopupWindowController
 public:
     explicit FontworkAlignmentControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
@@ -376,10 +397,19 @@ FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentC
 {
 }
 
+std::unique_ptr<WeldToolbarPopup> FontworkAlignmentControl::weldPopupWindow()
+{
+    return std::make_unique<FontworkAlignmentWindow>(this, m_pToolbar);
+}
 
 VclPtr<vcl::Window> FontworkAlignmentControl::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<FontworkAlignmentWindow>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<FontworkAlignmentWindow>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 // XInitialization

@@ -259,12 +259,6 @@
 #define BMP_MARKER_RECTPLUS11_5                       "svx/res/marker-rectplus11-5.png"
 #define BMP_MARKER_RECTPLUS11_6                       "svx/res/marker-rectplus11-6.png"
 
-#define RID_SVXBMP_FONTWORK_ALIGN_LEFT              "svx/res/fontworkalignleft_16.png"
-#define RID_SVXBMP_FONTWORK_ALIGN_CENTER            "svx/res/fontworkaligncentered_16.png"
-#define RID_SVXBMP_FONTWORK_ALIGN_RIGHT             "svx/res/fontworkalignright_16.png"
-#define RID_SVXBMP_FONTWORK_ALIGN_WORD              "svx/res/fontworkalignjustified_16.png"
-#define RID_SVXBMP_FONTWORK_ALIGN_STRETCH           "svx/res/fontworkalignstretch_16.png"
-
 /*
  * Bitmaps for SvxFrameWindow
  */
