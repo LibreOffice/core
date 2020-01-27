@@ -488,8 +488,7 @@ private:
 
     Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  )
     {
-        Sequence<OUString> aSeq { "com.sun.star.awt.grid.DefaultGridDataModel" };
-        return aSeq;
+        return { "com.sun.star.awt.grid.DefaultGridDataModel" };
     }
 
 

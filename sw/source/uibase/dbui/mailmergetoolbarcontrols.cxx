@@ -84,8 +84,7 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        uno::Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
-        return aServices;
+        return { "com.sun.star.frame.ToolbarController" };
     }
 
     // XComponent
@@ -145,8 +144,7 @@ public:
 
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        uno::Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
-        return aServices;
+        return { "com.sun.star.frame.ToolbarController" };
     }
 
     // XComponent
