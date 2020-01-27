@@ -1023,8 +1023,6 @@
 #define RID_SVXSTR_QRY_PRINT_ALL                            NC_("RID_SVXSTR_QRY_PRINT_ALL", "~All")
 #define RID_SVXSTR_QRY_PRINT_SELECTION                      NC_("RID_SVXSTR_QRY_PRINT_SELECTION", "~Selection")
 
-#define RID_SVXSTR_PERSPECTIVE                              NC_("RID_SVXSTR_PERSPECTIVE", "~Perspective")
-#define RID_SVXSTR_PARALLEL                                 NC_("RID_SVXSTR_PARALLEL", "P~arallel")
 #define RID_SVXSTR_DIRECTION_NW                             NC_("RID_SVXSTR_DIRECTION_NW", "Extrusion North-West")
 #define RID_SVXSTR_DIRECTION_N                              NC_("RID_SVXSTR_DIRECTION_N", "Extrusion North")
 #define RID_SVXSTR_DIRECTION_NE                             NC_("RID_SVXSTR_DIRECTION_NE", "Extrusion North-East")

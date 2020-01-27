@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/defaultshapespanel \
 	svx/uiconfig/ui/deleteheaderdialog \
 	svx/uiconfig/ui/deletefooterdialog \
+	svx/uiconfig/ui/directionwindow \
 	svx/uiconfig/ui/docking3deffects \
 	svx/uiconfig/ui/dockingcolorreplace \
 	svx/uiconfig/ui/dockingfontwork \
