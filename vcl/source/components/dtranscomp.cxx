@@ -280,8 +280,7 @@ public:
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
-        Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDragSource" };
-        return aRet;
+       return { "com.sun.star.datatransfer.dnd.GenericDragSource" };
     }
 };
 
@@ -381,8 +380,7 @@ public:
 
     static Sequence< OUString > getSupportedServiceNames_static()
     {
-        Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GenericDropTarget" };
-        return aRet;
+      return { "com.sun.star.datatransfer.dnd.GenericDropTarget" };
     }
 };
 
