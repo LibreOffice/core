@@ -127,8 +127,7 @@ namespace pcr
 
     Sequence< OUString > FormController::getSupportedServiceNames_static(  )
     {
-        Sequence< OUString > aSupported { "com.sun.star.form.PropertyBrowserController" };
-        return aSupported;
+        return { "com.sun.star.form.PropertyBrowserController" };
     }
 
 
@@ -254,8 +253,7 @@ namespace pcr
 
     Sequence< OUString > DialogController::getSupportedServiceNames_static(  )
     {
-        Sequence< OUString > aSupported { "com.sun.star.awt.PropertyBrowserController" };
-        return aSupported;
+        return { "com.sun.star.awt.PropertyBrowserController" };
     }
 
 

@@ -46,8 +46,7 @@ namespace unourl_resolver
 
 static Sequence< OUString > resolver_getSupportedServiceNames()
 {
-    Sequence< OUString > seqNames { "com.sun.star.bridge.UnoUrlResolver" };
-    return seqNames;
+    return { "com.sun.star.bridge.UnoUrlResolver" };
 }
 
 static OUString resolver_getImplementationName()

@@ -84,8 +84,7 @@ OUString SAL_CALL SvxUnoBitmapTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.BitmapTable" };
-    return aSNS;
+    return { "com.sun.star.drawing.BitmapTable" };
 }
 
 NameOrIndex* SvxUnoBitmapTable::createItem() const

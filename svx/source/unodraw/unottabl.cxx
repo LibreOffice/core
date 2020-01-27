@@ -63,8 +63,7 @@ OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.TransparencyGradientTable" };
-    return aSNS;
+    return { "com.sun.star.drawing.TransparencyGradientTable" };
 }
 
 NameOrIndex* SvxUnoTransGradientTable::createItem() const

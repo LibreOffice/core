@@ -63,8 +63,7 @@ OUString SAL_CALL SvxUnoHatchTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.HatchTable" };
-    return aSNS;
+    return { "com.sun.star.drawing.HatchTable" };
 }
 
 NameOrIndex* SvxUnoHatchTable::createItem() const
