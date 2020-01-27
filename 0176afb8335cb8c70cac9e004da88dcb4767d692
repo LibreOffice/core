@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77656e5b_ec2b2e7f",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-27T12:39:28Z",
+      "side": 1,
+      "message": "not necessary, because it\u0027s always true here",
+      "range": {
+        "startLine": 180,
+        "startChar": 33,
+        "endLine": 180,
+        "endChar": 54
+      },
+      "revId": "0176afb8335cb8c70cac9e004da88dcb4767d692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
