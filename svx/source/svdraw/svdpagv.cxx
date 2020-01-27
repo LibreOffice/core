@@ -500,7 +500,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
             {
                 DrawGridFlags nGridFlags = ( bHoriSolid ? DrawGridFlags::HorzLines : DrawGridFlags::Dots );
                 sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
-                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
+                sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000)/ nSteps) - (nx2 * 1000) ) : 0;
                 sal_uInt32 nStepOffset = 0;
                 sal_uInt16 nPointOffset = 0;
 

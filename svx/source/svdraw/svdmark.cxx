@@ -44,7 +44,7 @@ void SdrMark::setTime()
 {
     TimeValue aNow;
     osl_getSystemTime(&aNow);
-    mnTimeStamp = sal_Int64(aNow.Seconds) * 1000000000L + aNow.Nanosec;
+    mnTimeStamp = sal_Int64(aNow.Seconds) * 1000000000 + aNow.Nanosec;
 }
 
 SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)

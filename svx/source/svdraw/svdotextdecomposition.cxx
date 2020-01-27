@@ -1236,7 +1236,7 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
     rAnimList.append(aLoop);
 
     // add stopped state if loop is not endless
-    if(0L != nRepeat)
+    if(0 != nRepeat)
     {
         bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
         drawinglayer::animation::AnimationEntryFixed aStop(ENDLESS_TIME, bVisibleWhenStopped ? 0.0 : 1.0);
@@ -1263,7 +1263,7 @@ static void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animatio
     aLoop.append(aThrough);
     rAnimList.append(aLoop);
 
-    if(0L != nRepeat && bVisibleWhenStopped)
+    if(0 != nRepeat && bVisibleWhenStopped)
     {
         // move from outside to center
         drawinglayer::animation::AnimationEntryLinear aOutIn(fTimeFullPath * 0.5, fFrequency, bForward ? 0.0 : 1.0, 0.5);
@@ -1325,7 +1325,7 @@ static void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::anima
         rAnimList.append(aTime1);
     }
 
-    if(0L != nRepeat)
+    if(0 != nRepeat)
     {
         bool bVisibleWhenStopped(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE).GetValue());
         if(bVisibleWhenStopped)
@@ -1365,7 +1365,7 @@ static void impCreateSlideTiming(const SfxItemSet& rSet, drawinglayer::animation
     }
 
     // always visible when stopped, so add timing for staying at the end when not endless
-    if(0L != nRepeat)
+    if(0 != nRepeat)
     {
         drawinglayer::animation::AnimationEntryFixed aEnd(ENDLESS_TIME, 0.5);
         rAnimList.append(aEnd);
