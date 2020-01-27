@@ -68,7 +68,8 @@ bool MakeShared::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
         return true;
     if (!loplugin::TypeCheck(constructExpr->getType()).ClassOrStruct("shared_ptr").StdNamespace())
         return true;
-    if (constructExpr->getNumArgs() != 1)
+    if (!(constructExpr->getNumArgs() == 1
+          || (constructExpr->getNumArgs() > 1 && isa<CXXDefaultArgExpr>(constructExpr->getArg(1)))))
         return true;
     auto cxxNewExpr = dyn_cast<CXXNewExpr>(constructExpr->getArg(0)->IgnoreParenImpCasts());
     if (!cxxNewExpr)
