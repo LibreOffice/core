@@ -76,7 +76,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 
 SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
-    // local fixed not o be changed values for local pointers
+    // local fixed not to be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
@@ -371,10 +371,19 @@ void SvxAreaTabPage::SelectFillType(weld::ToggleButton& rButton, const SfxItemSe
         m_rXFSet.Set(*_pSet);
 
     sal_Int32 nPos = maBox.GetButtonPos(&rButton);
-    if (nPos != -1 && (_pSet || nPos != maBox.GetCurrentButtonPos()))
+    if (nPos != -1 && (_pSet || nPos !=  maBox.GetCurrentButtonPos()))
     {
         maBox.SelectButton(&rButton);
-        FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
+        FillType eFillType = static_cast<FillType>( maBox.GetCurrentButtonPos());
+        m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
+        if (m_xFillTabPage)
+            m_xFillTabPage->SetDialogController(GetDialogController());
+        CreatePage(eFillType, m_xFillTabPage.get());
+    }
+    else
+    {
+        maBox.SelectButton(&rButton);
+        FillType eFillType = static_cast<FillType>(nPos);
         m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
         if (m_xFillTabPage)
             m_xFillTabPage->SetDialogController(GetDialogController());
