@@ -27,7 +27,7 @@
 #include <comphelper/string.hxx>
 
 #include <vcl/builder.hxx>
-#include <vcl/field.hxx>
+#include <vcl/toolkit/field.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
