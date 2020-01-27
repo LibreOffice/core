@@ -142,7 +142,8 @@ void PluginHandler::createPlugins( std::set< std::string > rewriters )
         const char* name = plugins[i].optionName;
         // When in unit-test mode, ignore plugins whose names don't match the filename of the test,
         // so that we only generate warnings for the plugin that we want to test.
-        if (unitTestMode && mainFileName.find(plugins[ i ].optionName) == StringRef::npos)
+        if (unitTestMode && mainFileName.find(plugins[ i ].optionName) == StringRef::npos
+            && !plugins[ i ].isSharedPlugin)
             continue;
         if( rewriters.erase( name ) != 0 )
             plugins[ i ].object = plugins[ i ].create( InstantiationData { name, *this, compiler, &rewriter } );
