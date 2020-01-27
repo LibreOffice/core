@@ -123,19 +123,19 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ExtrusionLightingWindow : public svtools::ToolbarMenu
+class ExtrusionLightingWindow final : public WeldToolbarPopup
 {
 private:
-    svt::ToolboxController& mrController;
-    VclPtr<ValueSet>        mpLightingSet;
+    rtl::Reference<svt::PopupWindowController> mxControl;
+    std::unique_ptr<SvtValueSet> mxLightingSet;
+    std::unique_ptr<weld::CustomWeld> mxLightingSetWin;
+    std::unique_ptr<weld::RadioButton> mxBright;
+    std::unique_ptr<weld::RadioButton> mxNormal;
+    std::unique_ptr<weld::RadioButton> mxDim;
 
     Image maImgLightingOff[9];
     Image maImgLightingOn[9];
     Image maImgLightingPreview[9];
-
-    Image const maImgBright;
-    Image const maImgNormal;
-    Image const maImgDim;
 
     int     mnDirection;
     bool    mbDirectionEnabled;
@@ -143,24 +143,23 @@ private:
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
 
-    DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
-    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
+    DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
+    DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
     void SelectHdl(void const *);
 public:
-    ExtrusionLightingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
+    ExtrusionLightingWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
+    virtual void GrabFocus() override;
     virtual ~ExtrusionLightingWindow() override;
-    virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
-
 
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
 public:
     explicit ExtrusionLightingControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
