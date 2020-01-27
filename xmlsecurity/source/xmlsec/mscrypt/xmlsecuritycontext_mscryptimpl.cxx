@@ -26,6 +26,8 @@
 
 #include <xmlsec-wrapper.h>
 
+#include <cppuhelper/supportsservice.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -135,13 +137,7 @@ OUString SAL_CALL XMLSecurityContext_MSCryptImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSecurityContext_MSCryptImpl::supportsService( const OUString& serviceName) {
-    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
-    }
-    return false ;
+    return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
