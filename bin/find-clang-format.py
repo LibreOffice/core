@@ -18,7 +18,7 @@ CLANG_BINARY = Path(os.getenv("CLANG_FORMAT", "/opt/lo/bin/clang-format"))
 
 def calculate_diff_size(diff):
     additions, removals = 0, 0
-    # ignore first 2 item in the sequnece
+    # ignore first 2 item in the sequence
     # which are +++ and ---
     for line in diff[2:]:
         if line.startswith("+"):
