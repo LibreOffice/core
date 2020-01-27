@@ -127,7 +127,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
 		if user != '':
-			if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+			if sys.version_info < (3,0): # fdo#59249 i#105669 Python 2 needs "ascii"
 				user = user.encode('ascii')
 				password = password.encode('ascii')
 			if dbg:
@@ -198,8 +198,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 					except:
 						#it's a bytesequence, get raw bytes
 						textbody = textbody.value
-					if sys.version >= '3':
-						if sys.version_info.minor < 3 or (sys.version_info.minor == 3 and sys.version_info.micro <= 1):
+					if sys.version_info >= (3,0):
+						if sys.version_info <= (3,1):
 							#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
 							#see http://bugs.python.org/16564, etc. basically it now *seems* to be all ok
 							#in python 3.3.2 onwards, but a little busted in 3.3.0
@@ -333,7 +333,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
 		if user != '':
-			if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+			if sys.version_info < (3,0): # fdo#59249 i#105669 Python 2 needs "ascii"
 				user = user.encode('ascii')
 				password = password.encode('ascii')
 			if dbg:
@@ -411,7 +411,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
-		if sys.version < '3': # fdo#59249 i#105669 Python 2 needs "ascii"
+		if sys.version_info < (3,0): # fdo#59249 i#105669 Python 2 needs "ascii"
 			user = user.encode('ascii')
 			password = password.encode('ascii')
 		if dbg:

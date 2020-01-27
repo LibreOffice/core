@@ -90,7 +90,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     # read the file
                     filename = unohelper.fileUrlToSystemPath( url )
 
-                    if sys.version >= '3':
+                    if sys.version_info >= (3,0):
                         fileHandle = open( filename, encoding='utf_8' )
                     else:
                         fileHandle = open( filename )
