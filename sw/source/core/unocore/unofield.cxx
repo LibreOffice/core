@@ -79,6 +79,7 @@
 #include <svl/listener.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
@@ -1029,7 +1030,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
     if(SwFieldIds::SetExp == rType.Which())
     {
         const SwFieldTypes* pTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
-        for( size_t i = 0; i <= size_t(INIT_FLDTYPES); i++ )
+        for( size_t i = 0; i <= o3tl::make_unsigned(INIT_FLDTYPES); i++ )
         {
             if((*pTypes)[i].get() == &rType)
             {

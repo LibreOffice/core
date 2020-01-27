@@ -59,7 +59,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/unohelp2.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <memory>
@@ -471,7 +471,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     if (nLen)
     {
-        if (static_cast<size_t>(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
+        if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
             pDXBuffer.reset(new long[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
@@ -1060,7 +1060,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     if( !aText.isEmpty() )
     {
-        if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+        if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
             pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
@@ -1181,7 +1181,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     long   nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
     long*  pDX = nDXBuffer;
-    if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+    if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
         pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
@@ -2112,7 +2112,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
             if( !aText.isEmpty() )
             {
-                if( static_cast<size_t>(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+                if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
                     pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();

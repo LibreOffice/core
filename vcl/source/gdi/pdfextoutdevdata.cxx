@@ -27,6 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
@@ -121,7 +122,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
      */
     if( nLinkId >= 0 )
     {
-        if ( static_cast<sal_uInt32>(nLinkId) < mParaIds.size() )
+        if ( o3tl::make_unsigned(nLinkId) < mParaIds.size() )
             nLinkId = mParaIds[ nLinkId ];
         else
             nLinkId = -1;
@@ -134,7 +135,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
 
 sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
 {
-    if ( static_cast<sal_uInt32>(nStructId) < mStructIdMap.size() )
+    if ( o3tl::make_unsigned(nStructId) < mStructIdMap.size() )
         nStructId = mStructIdMap[ nStructId ];
     else
         nStructId = -1;
@@ -753,7 +754,7 @@ void PDFExtOutDevData::EndStructureElement()
 bool PDFExtOutDevData::SetCurrentStructureElement( sal_Int32 nStructId )
 {
     bool bSuccess = false;
-    if( sal_uInt32(nStructId) < mpGlobalSyncData->mStructParents.size() )
+    if( o3tl::make_unsigned(nStructId) < mpGlobalSyncData->mStructParents.size() )
     {
         mpGlobalSyncData->mCurrentStructElement = nStructId;
         mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetCurrentStructureElement );

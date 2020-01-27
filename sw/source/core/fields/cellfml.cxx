@@ -44,6 +44,7 @@
 #include <cellatr.hxx>
 #include <ndindex.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 
 namespace
 {
@@ -796,14 +797,14 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             nLineOffset < 0 )
             return nullptr;
 
-        if( static_cast<size_t>(nLineOffset) >= pLines->size() )
+        if( o3tl::make_unsigned(nLineOffset) >= pLines->size() )
             return nullptr;
 
         pLine = (*pLines)[ nLineOffset ];
 
         // ... then search the box
         pBoxes = &pLine->GetTabBoxes();
-        if( static_cast<size_t>(nBoxOffset) >= pBoxes->size() )
+        if( o3tl::make_unsigned(nBoxOffset) >= pBoxes->size() )
             return nullptr;
         pBox = (*pBoxes)[ nBoxOffset ];
 

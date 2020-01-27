@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/util/Color.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/debug.hxx>
@@ -214,7 +214,7 @@ namespace svt { namespace table
     void UnoControlTableModel::insertColumn( ColPos const i_position, Reference< XGridColumn > const & i_column )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= m_pImpl->aColumns.size() ),
             "UnoControlTableModel::insertColumn: illegal position!" );
 
         const PColumnModel pColumn = std::make_shared<UnoGridColumnFacade>( *this, i_column );
@@ -232,7 +232,7 @@ namespace svt { namespace table
     void UnoControlTableModel::removeColumn( ColPos const i_position )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= m_pImpl->aColumns.size() ),
             "UnoControlTableModel::removeColumn: illegal position!" );
 
         // remove the column

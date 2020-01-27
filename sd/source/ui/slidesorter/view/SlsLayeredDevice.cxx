@@ -22,6 +22,7 @@
 
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <tools/gen.hxx>
@@ -174,9 +175,9 @@ void LayeredDevice::Invalidate (
     const ::tools::Rectangle& rInvalidationArea,
     const sal_Int32 nLayer)
 {
-    if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
+    if (nLayer<0 || o3tl::make_unsigned(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && o3tl::make_unsigned(nLayer)<mpLayers->size());
         return;
     }
 
@@ -212,7 +213,7 @@ void LayeredDevice::RegisterPainter (
     }
 
     // Provide the layers.
-    if (sal_uInt32(nLayer) >= mpLayers->size())
+    if (o3tl::make_unsigned(nLayer) >= mpLayers->size())
     {
         const sal_Int32 nOldLayerCount (mpLayers->size());
         mpLayers->resize(nLayer+1);
@@ -238,9 +239,9 @@ void LayeredDevice::RemovePainter (
         OSL_ASSERT(rpPainter);
         return;
     }
-    if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
+    if (nLayer<0 || o3tl::make_unsigned(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && o3tl::make_unsigned(nLayer)<mpLayers->size());
         return;
     }
 

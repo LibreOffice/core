@@ -24,6 +24,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <flat/EConnection.hxx>
 #include <flat/EColumns.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/solar.h>
@@ -728,7 +729,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 if(m_nMaxRowCount != 0 && m_nRowPos > m_nMaxRowCount)
                     return false;
                 ++m_nRowPos;
-                if(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos))
+                if(m_aRowPosToFilePos.size() > o3tl::make_unsigned(m_nRowPos))
                 {
                     m_bNeedToReadLine = true;
                     m_nFilePos  = m_aRowPosToFilePos[m_nRowPos].first;
@@ -768,7 +769,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
             --m_nRowPos;
             {
                 assert (m_nRowPos >= 0);
-                assert(m_aRowPosToFilePos.size() >= static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
+                assert(m_aRowPosToFilePos.size() >= o3tl::make_unsigned(m_nRowPos));
                 const TRowPositionInFile &aPositions(m_aRowPosToFilePos[m_nRowPos]);
                 m_nFilePos = aPositions.first;
                 nCurPos = aPositions.second;
@@ -819,9 +820,9 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 }
 
                 assert(m_nRowPos >=0);
-                assert(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
+                assert(m_aRowPosToFilePos.size() > o3tl::make_unsigned(m_nRowPos));
                 assert(nOffset >= 0);
-                if(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(nOffset))
+                if(m_aRowPosToFilePos.size() > o3tl::make_unsigned(nOffset))
                 {
                     m_nFilePos  = m_aRowPosToFilePos[nOffset].first;
                     nCurPos     = m_aRowPosToFilePos[nOffset].second;

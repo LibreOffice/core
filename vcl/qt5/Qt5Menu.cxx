@@ -17,6 +17,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -55,7 +56,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
-                && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenuBar->actions().size())))
+                && (static_cast<size_t>(nPos) < o3tl::make_unsigned(mpQMenuBar->actions().size())))
             {
                 mpQMenuBar->insertMenu(mpQMenuBar->actions()[nPos], pQMenu);
             }
@@ -85,7 +86,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
-                && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
+                && (static_cast<size_t>(nPos) < o3tl::make_unsigned(mpQMenu->actions().size())))
             {
                 mpQMenu->insertMenu(mpQMenu->actions()[nPos], pQMenu);
             }
@@ -116,7 +117,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 pAction->setSeparator(true);
 
                 if ((nPos != MENU_APPEND)
-                    && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
+                    && (static_cast<size_t>(nPos) < o3tl::make_unsigned(mpQMenu->actions().size())))
                 {
                     mpQMenu->insertAction(mpQMenu->actions()[nPos], pAction);
                 }
@@ -134,7 +135,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
-                    && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenu->actions().size())))
+                    && (static_cast<size_t>(nPos) < o3tl::make_unsigned(mpQMenu->actions().size())))
                 {
                     mpQMenu->insertAction(mpQMenu->actions()[nPos], pAction);
                 }

@@ -33,6 +33,7 @@
 #include <UITools.hxx>
 #include <RelControliFace.hxx>
 #include <helpids.h>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <vector>
@@ -221,7 +222,7 @@ namespace dbaui
         {
             OUString sFieldName(m_pListCell->GetSelectedEntry());
             OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
-            if ( rLines.size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
+            if ( rLines.size() <= o3tl::make_unsigned(nRow) )
             {
                 rLines.push_back(new OConnectionLineData());
                 nRow = rLines.size() - 1;
@@ -266,7 +267,7 @@ namespace dbaui
     OUString ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
         OUString sText;
-        if ( m_pConnData->GetConnLineDataList().size() > static_cast<size_t>(nRow) )
+        if ( m_pConnData->GetConnLineDataList().size() > o3tl::make_unsigned(nRow) )
         {
             OConnectionLineDataRef pConnLineData = m_pConnData->GetConnLineDataList()[nRow];
             switch( getColumnIdent( nColId ) )

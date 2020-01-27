@@ -32,6 +32,7 @@
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <o3tl/safeint.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
 #include <unotbl.hxx>
@@ -1410,7 +1411,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if(static_cast<size_t>(nIndex) == i)
             break;
     }
-    if(!(nIndex >= 0 && static_cast<size_t>(nIndex) < rFormats.size()))
+    if(!(nIndex >= 0 && o3tl::make_unsigned(nIndex) < rFormats.size()))
         throw IndexOutOfBoundsException();
 
     SwSectionFormat* pFormat = rFormats[nIndex];
@@ -1699,7 +1700,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
 
     uno::Reference< XIndexReplace >  xRef;
-    if ( static_cast<size_t>(nIndex) < GetDoc()->GetNumRuleTable().size() )
+    if ( o3tl::make_unsigned(nIndex) < GetDoc()->GetNumRuleTable().size() )
     {
         xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTable()[ nIndex ], GetDoc());
         aRet <<= xRef;

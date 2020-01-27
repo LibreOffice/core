@@ -26,6 +26,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -298,7 +299,7 @@ OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
     DBG_ASSERT( pEntry, "SvTabListBox::GetCellText(): Invalid Entry" );
     OUString aResult;
-    if (pEntry && pEntry->ItemCount() > static_cast<size_t>(nCol+1))
+    if (pEntry && pEntry->ItemCount() > o3tl::make_unsigned(nCol+1))
     {
         const SvLBoxItem& rStr = pEntry->GetItem( nCol + 1 );
         if (rStr.GetType() == SvLBoxItemType::String)

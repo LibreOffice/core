@@ -33,6 +33,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -324,7 +325,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     if( !HasSdrObject() || GetSdrObject()->GetSubList() == nullptr )
         throw uno::RuntimeException();
 
-    if( Index<0 || GetSdrObject()->GetSubList()->GetObjCount() <= static_cast<size_t>(Index) )
+    if( Index<0 || GetSdrObject()->GetSubList()->GetObjCount() <= o3tl::make_unsigned(Index) )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pDestObj = GetSdrObject()->GetSubList()->GetObj( Index );

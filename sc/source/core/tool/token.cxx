@@ -61,6 +61,7 @@ using ::std::vector;
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/NameToken.hpp>
 #include <utility>
+#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 using namespace formula;
@@ -4990,7 +4991,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                         {
                             // On other sheet.
                             OUString aName;
-                            if (static_cast<size_t>(nTab) < rCxt.maTabNames.size())
+                            if (o3tl::make_unsigned(nTab) < rCxt.maTabNames.size())
                                 aName = rCxt.maTabNames[nTab];
                             if (!aName.isEmpty())
                             {

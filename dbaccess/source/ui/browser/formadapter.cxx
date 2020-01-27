@@ -18,6 +18,7 @@
  */
 
 #include <formadapter.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/types.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -1491,14 +1492,14 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasElements()
 // css::container::XIndexContainer
 void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element)
 {
-    if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
+    if ( ( _rIndex < 0 ) || ( o3tl::make_unsigned(_rIndex) >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
     implInsert(Element, _rIndex);
 }
 
 void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 {
-    if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
+    if ( ( _rIndex < 0 ) || ( o3tl::make_unsigned(_rIndex) >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
 
     Reference< css::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
@@ -1527,7 +1528,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 // css::container::XIndexReplace
 void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element)
 {
-    if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
+    if ( ( _rIndex < 0 ) || ( o3tl::make_unsigned(_rIndex) >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
 
     // extract the form component
@@ -1594,7 +1595,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getCount()
 
 Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex)
 {
-    if ( ( _rIndex < 0 ) || ( static_cast<size_t>(_rIndex) >= m_aChildren.size() ) )
+    if ( ( _rIndex < 0 ) || ( o3tl::make_unsigned(_rIndex) >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
 
     Reference< css::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);

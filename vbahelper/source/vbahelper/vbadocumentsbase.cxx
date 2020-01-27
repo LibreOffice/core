@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unordered_map>
 
@@ -154,7 +155,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
-            || static_cast< Documents::size_type >(Index) >= m_documents.size() )
+            || o3tl::make_unsigned(Index) >= m_documents.size() )
             throw lang::IndexOutOfBoundsException();
         return makeAny( m_documents[ Index ] ); // returns xspreadsheetdoc
     }

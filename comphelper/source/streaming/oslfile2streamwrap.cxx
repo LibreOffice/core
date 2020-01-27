@@ -22,6 +22,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 
 #include <algorithm>
@@ -60,7 +61,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     // If the read character < MaxLength, adjust css::uno::Sequence
-    if (nRead < static_cast<sal_uInt32>(nBytesToRead))
+    if (nRead < o3tl::make_unsigned(nBytesToRead))
         aData.realloc( sal::static_int_cast< sal_Int32 >(nRead) );
 
     return sal::static_int_cast< sal_Int32 >(nRead);

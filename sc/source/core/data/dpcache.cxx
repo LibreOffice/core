@@ -39,6 +39,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #if DUMP_PIVOT_TABLE
@@ -962,7 +963,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
     const Field& rField = *maFields[nDim];
-    if (static_cast<size_t>(nRow) >= rField.maData.size())
+    if (o3tl::make_unsigned(nRow) >= rField.maData.size())
     {
         // nRow is in the trailing empty rows area.
         if (bRepeatIfEmpty)
@@ -1151,7 +1152,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 
     // group field.
     nDim -= mnColumnCount;
-    if (static_cast<size_t>(nDim) < maGroupFields.size())
+    if (o3tl::make_unsigned(nDim) < maGroupFields.size())
     {
         const ScDPItemDataVec& rGI = maGroupFields[nDim]->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)

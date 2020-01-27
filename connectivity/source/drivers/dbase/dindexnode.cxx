@@ -19,6 +19,7 @@
 
 #include <dbase/dindexnode.hxx>
 #include <dbase/DIndex.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
@@ -245,7 +246,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         // How many nodes are being inserted?
         // Enough, then we can fill the page to the brim
         ONDXNode aInnerNode;
-        if (!IsLeaf() || nRowsLeft < static_cast<sal_uInt32>(rIndex.GetMaxNodes() / 2))
+        if (!IsLeaf() || nRowsLeft < o3tl::make_unsigned(rIndex.GetMaxNodes() / 2))
             aInnerNode = Split(*aNewPage);
         else
         {

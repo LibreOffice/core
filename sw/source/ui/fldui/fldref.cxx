@@ -33,6 +33,7 @@
 #include <unotools/charclass.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/safeint.hxx>
 
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800
@@ -191,7 +192,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(SwFieldIds::SetExp);
 
-    OSL_ENSURE( nFieldTypeCnt < static_cast<size_t>(REFFLDFLAG), "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
+    OSL_ENSURE( nFieldTypeCnt < o3tl::make_unsigned(REFFLDFLAG), "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
 
     for (size_t n = 0; n < nFieldTypeCnt; ++n)
     {

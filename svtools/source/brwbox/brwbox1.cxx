@@ -20,6 +20,7 @@
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/safeint.hxx>
 #include "datwin.hxx"
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
@@ -523,7 +524,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         nMaxWidth -= pDataWin->bAutoSizeLastCol
                 ? GetFieldRect(nItemId).Left()
                 : GetFrozenWidth();
-        if ( pDataWin->bAutoSizeLastCol || nWidth > static_cast<sal_uLong>(nMaxWidth) )
+        if ( pDataWin->bAutoSizeLastCol || nWidth > o3tl::make_unsigned(nMaxWidth) )
         {
             nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
         }

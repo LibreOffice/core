@@ -48,6 +48,7 @@
 #include <xltools.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <o3tl/safeint.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <memory>
@@ -410,7 +411,7 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     ScDocument& rDoc = GetDoc();
 
     OSL_ENSURE( (mnScTab >= 0) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
-    OSL_ENSURE( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    OSL_ENSURE( nExcTab <= o3tl::make_unsigned(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
     if( eBiff == EXC_BIFF8 )
@@ -552,7 +553,7 @@ void ExcTable::FillAsTableXml()
     ScDocument& rDoc = GetDoc();
 
     OSL_ENSURE( (mnScTab >= 0) && (mnScTab <= MAXTAB), "-ExcTable::Table(): mnScTab - no ordinary table!" );
-    OSL_ENSURE( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    OSL_ENSURE( nExcTab <= o3tl::make_unsigned(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     // create a new OBJ list for this sheet (may be used by notes, autofilter, data validation)
     GetObjectManager().StartSheet();

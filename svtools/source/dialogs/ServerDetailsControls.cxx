@@ -17,6 +17,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -385,7 +386,7 @@ void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
     const int nPos = m_pDialog->m_xLBRepository->get_active();
-    if( static_cast<size_t>(nPos) < m_aRepoIds.size() )
+    if( o3tl::make_unsigned(nPos) < m_aRepoIds.size() )
     {
         m_sRepoId = m_aRepoIds[nPos];
         notifyChange( );

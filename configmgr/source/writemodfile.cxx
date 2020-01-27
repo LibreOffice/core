@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <rtl/string.h>
@@ -58,7 +59,7 @@ namespace {
 
 OString convertToUtf8(std::u16string_view text) {
     OString s;
-    assert(text.size() <= sal_uInt32(std::numeric_limits<sal_Int32>::max()));
+    assert(text.size() <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max()));
     if (!rtl_convertUStringToString(
             &s.pData, text.data(), text.size(),
             RTL_TEXTENCODING_UTF8,

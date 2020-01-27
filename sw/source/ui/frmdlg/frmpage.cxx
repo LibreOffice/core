@@ -24,6 +24,7 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <bitmaps.hlst>
+#include <o3tl/safeint.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -1595,7 +1596,7 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos,
 
     const size_t nMapCount = ::lcl_GetFrameMapCount(pMap);
 
-    if (static_cast<size_t>(nMapPos) >= nMapCount)
+    if (o3tl::make_unsigned(nMapPos) >= nMapCount)
         return 0;
 
     // i#22341 special handling also for map <aVCharMap>,

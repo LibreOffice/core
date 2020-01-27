@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 
 #include <sfx2/mieclip.hxx>
@@ -56,7 +59,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
                 sBaseURL = OStringToOUString( sLine.copy(nIndex), RTL_TEXTENCODING_UTF8 );
 
             if (nEnd >= 0 && nStt >= 0 &&
-                (!sBaseURL.isEmpty() || rStream.Tell() >= static_cast<sal_uInt64>(nStt)))
+                (!sBaseURL.isEmpty() || rStream.Tell() >= o3tl::make_unsigned(nStt)))
             {
                 bRet = true;
                 break;

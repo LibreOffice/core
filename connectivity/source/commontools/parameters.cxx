@@ -36,6 +36,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <connectivity/ParameterCont.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -468,7 +469,7 @@ namespace dbtools
             size_t nAlreadyVisited = 0;
             for (auto & aIndex : aParam.second.aInnerIndexes)
             {
-                if ( ( m_aParametersVisited.size() > static_cast<size_t>(aIndex) ) && m_aParametersVisited[ aIndex ] )
+                if ( ( m_aParametersVisited.size() > o3tl::make_unsigned(aIndex) ) && m_aParametersVisited[ aIndex ] )
                 {   // exclude this index
                     aIndex = -1;
                     ++nAlreadyVisited;
@@ -949,7 +950,7 @@ namespace dbtools
 
     void ParameterManager::externalParameterVisited( sal_Int32 _nIndex )
     {
-        if ( m_aParametersVisited.size() < static_cast<size_t>(_nIndex) )
+        if ( m_aParametersVisited.size() < o3tl::make_unsigned(_nIndex) )
         {
             m_aParametersVisited.reserve( _nIndex );
             for ( sal_Int32 i = m_aParametersVisited.size(); i < _nIndex; ++i )

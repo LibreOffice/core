@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 
 #include "cgm.hxx"
 #include "chart.hxx"
@@ -75,7 +78,7 @@ void CGM::ImplDoClass7()
                     case 0x262 : /*AppData - ENDGROUP */break;
                     case 0x264 : /*AppData - DATANODE*/
                     {
-                        if (static_cast<size_t>(mpEndValidSource - pAppData) < sizeof(DataNode))
+                        if (o3tl::make_unsigned(mpEndValidSource - pAppData) < sizeof(DataNode))
                             throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                         mpChart->mDataNode[ 0 ] = *reinterpret_cast<DataNode*>( pAppData );

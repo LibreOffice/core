@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -730,7 +731,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
 {
     AccessibleSlideSorterObject* pChild = nullptr;
 
-    if (nIndex>=0 && static_cast<sal_uInt32>(nIndex)<maPageObjects.size())
+    if (nIndex>=0 && o3tl::make_unsigned(nIndex)<maPageObjects.size())
     {
         if (maPageObjects[nIndex] == nullptr)
         {
@@ -755,7 +756,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
     }
     else
     {
-        OSL_ASSERT(nIndex>=0 && static_cast<sal_uInt32>(nIndex)<maPageObjects.size());
+        OSL_ASSERT(nIndex>=0 && o3tl::make_unsigned(nIndex)<maPageObjects.size());
     }
 
     return pChild;

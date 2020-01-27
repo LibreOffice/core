@@ -25,6 +25,7 @@
 #include <JoinDesignView.hxx>
 #include <JoinController.hxx>
 #include <TableConnection.hxx>
+#include <o3tl/safeint.hxx>
 
 namespace dbaui
 {
@@ -71,7 +72,7 @@ namespace dbaui
             OJoinTableView::OTableWindowMap::const_iterator aIter = std::next(m_pTableView->GetTabWinMap().begin(), i);
             aRet = aIter->second->GetAccessible();
         }
-        else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
+        else if( o3tl::make_unsigned(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
             aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
         return aRet;
     }

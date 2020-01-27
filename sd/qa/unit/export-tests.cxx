@@ -1063,7 +1063,7 @@ void SdExportTest::testBulletsAsImage()
         CPPUNIT_ASSERT_MESSAGE(sFailed.getStr(), xBitmap.is());
         Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessageBase.getStr(), GraphicType::Bitmap, aGraphic.GetType());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessageBase.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessageBase.getStr(), aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
 
         if (nExportFormat == ODP || nExportFormat == PPT)
         {

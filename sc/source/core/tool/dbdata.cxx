@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
 
@@ -884,7 +885,7 @@ const OUString& ScDBData::GetTableColumnName( SCCOL nCol ) const
         return EMPTY_OUSTRING;
 
     SCCOL nOffset = nCol - nStartCol;
-    if (nOffset <  0 || maTableColumnNames.size() <= static_cast<size_t>(nOffset))
+    if (nOffset <  0 || maTableColumnNames.size() <= o3tl::make_unsigned(nOffset))
         return EMPTY_OUSTRING;
 
     return maTableColumnNames[nOffset];

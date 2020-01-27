@@ -42,7 +42,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
@@ -550,7 +550,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
         mbShapesNeedSorting = false;
     }
 
-    if (static_cast<sal_uInt32>(nIndex) >= maZOrderedShapes.size())
+    if (o3tl::make_unsigned(nIndex) >= maZOrderedShapes.size())
         return nullptr;
 
     return Get(maZOrderedShapes[nIndex]);
@@ -810,7 +810,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
         std::vector < uno::Reference < drawing::XShape > > aShapes;
         FillShapes(aShapes);
 
-        if (nSelectedChildIndex < 0 || static_cast<size_t>(nSelectedChildIndex) >= aShapes.size())
+        if (nSelectedChildIndex < 0 || o3tl::make_unsigned(nSelectedChildIndex) >= aShapes.size())
             return xAccessible;
 
         SortedShapes::iterator aItr;

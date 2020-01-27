@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -1385,7 +1388,7 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
 
         m_xEdComment->set_text(m_xLbCategory->get_text(1));
 
-        if( nFmtLbSelPos>=0 && static_cast<size_t>(nFmtLbSelPos)<aEntryList.size() )
+        if( nFmtLbSelPos>=0 && o3tl::make_unsigned(nFmtLbSelPos)<aEntryList.size() )
         {
             aFormat = aEntryList[nFmtLbSelPos];
         }

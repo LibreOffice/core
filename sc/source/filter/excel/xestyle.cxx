@@ -47,6 +47,7 @@
 #include <xltools.hxx>
 #include <conditio.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
@@ -1358,7 +1359,7 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
         return aIt->mnXclNumFmt;
 
     size_t nSize = maFormatMap.size();
-    if( nSize < static_cast< size_t >( 0xFFFF - mnXclOffset ) )
+    if( nSize < o3tl::make_unsigned( 0xFFFF - mnXclOffset ) )
     {
         sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( nSize + mnXclOffset );
         maFormatMap.emplace_back( nScNumFmt, nXclNumFmt, GetFormatCode( nScNumFmt ) );

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <framework/addonsoptions.hxx>
+#include <o3tl/safeint.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -805,7 +806,7 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
         }
     }
 
-    return ( static_cast<sal_uInt32>(rAddonOfficeToolBarSeq.getLength()) > nToolBarItemCount );
+    return ( o3tl::make_unsigned(rAddonOfficeToolBarSeq.getLength()) > nToolBarItemCount );
 }
 
 void AddonsOptions_Impl::ReadOfficeNotebookBarSet(
@@ -863,7 +864,7 @@ bool AddonsOptions_Impl::ReadNotebookBarItemSet(
         }
     }
 
-    return (static_cast<sal_uInt32>(rAddonOfficeNotebookBarSeq.getLength())
+    return (o3tl::make_unsigned(rAddonOfficeNotebookBarSeq.getLength())
             > nNotebookBarItemCount);
 }
 
@@ -1256,7 +1257,7 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
         }
     }
 
-    return ( static_cast<sal_uInt32>(rMergeStatusbarItems.getLength()) > nStatusbarItemCount );
+    return ( o3tl::make_unsigned(rMergeStatusbarItems.getLength()) > nStatusbarItemCount );
 }
 
 bool AddonsOptions_Impl::ReadStatusBarItem(

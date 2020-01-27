@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XDDELinks.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <oox/core/filterbase.hxx>
@@ -660,7 +661,7 @@ ExternalLinkRef ExternalLinkBuffer::createExternalLink()
 
 const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 {
-    return ((0 <= nRefId) && (static_cast< size_t >( nRefId ) < maRefSheets.size())) ?
+    return ((0 <= nRefId) && (o3tl::make_unsigned( nRefId ) < maRefSheets.size())) ?
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : nullptr;
 }
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <comphelper/lok.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -620,7 +621,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 AmbiguousIndex nEndInside;
                 sal_Int32 aLoop = bSrchForward ? 0 : postits.size();
 
-                while ((0 <= aLoop) && (static_cast<size_t>(aLoop) <= postits.size()))
+                while ((0 <= aLoop) && (o3tl::make_unsigned(aLoop) <= postits.size()))
                 {
                     if (bSrchForward)
                     {

@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 
 #include "vbawindow.hxx"
@@ -160,7 +161,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
-            || static_cast< Components::size_type >( Index ) >= m_windows.size() )
+            || o3tl::make_unsigned( Index ) >= m_windows.size() )
             throw lang::IndexOutOfBoundsException();
         return makeAny( m_windows[ Index ] ); // returns xspreadsheetdoc
     }

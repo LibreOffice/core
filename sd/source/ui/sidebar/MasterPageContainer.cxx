@@ -42,6 +42,7 @@
 #include <sdpage.hxx>
 #include <sdresid.hxx>
 #include <tools/TimerBasedTaskExecution.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <xmloff/autolayout.hxx>
@@ -673,13 +674,13 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
 bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
-        && static_cast<unsigned>(aToken)<maContainer.size()
+        && o3tl::make_unsigned(aToken)<maContainer.size()
         && maContainer[aToken].get()!=nullptr;
 }
 
 SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken) const
 {
-    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
+    if (aToken>=0 && o3tl::make_unsigned(aToken)<maContainer.size())
         return maContainer[aToken];
     else
         return SharedMasterPageDescriptor();
@@ -958,7 +959,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
 
 void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
 {
-    if (aToken>=0 && static_cast<unsigned>(aToken)<maContainer.size())
+    if (aToken>=0 && o3tl::make_unsigned(aToken)<maContainer.size())
     {
         maContainer[aToken].reset();
     }

@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <memory>
 
+#include <o3tl/safeint.hxx>
+
 namespace sc {
 
 namespace {
@@ -64,14 +66,14 @@ ColumnSpanSet::~ColumnSpanSet()
 
 ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
-    if (static_cast<size_t>(nTab) >= maTables.size())
+    if (o3tl::make_unsigned(nTab) >= maTables.size())
         maTables.resize(nTab+1);
 
     if (!maTables[nTab])
         maTables[nTab].reset(new TableType);
 
     TableType& rTab = *maTables[nTab];
-    if (static_cast<size_t>(nCol) >= rTab.size())
+    if (o3tl::make_unsigned(nCol) >= rTab.size())
         rTab.resize(nCol+1);
 
     if (!rTab[nCol])

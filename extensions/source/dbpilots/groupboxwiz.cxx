@@ -24,6 +24,7 @@
 #include "optiongrouplayouter.hxx"
 #include <helpids.h>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #define GBW_STATE_OPTIONLIST        0
@@ -361,12 +362,12 @@ namespace dbp
         if (::vcl::WizardTypes::WizardState(-1) != m_nLastSelection)
         {
             // save the value for the last option
-            DBG_ASSERT(static_cast<size_t>(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
+            DBG_ASSERT(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
             m_aUncommittedValues[m_nLastSelection] = m_xValue->get_text();
         }
 
         m_nLastSelection = m_xOptions->get_selected_index();
-        DBG_ASSERT(static_cast<size_t>(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
+        DBG_ASSERT(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_xValue->set_text(m_aUncommittedValues[m_nLastSelection]);
     }
 

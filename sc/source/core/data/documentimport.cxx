@@ -24,6 +24,7 @@
 #include <bcaslot.hxx>
 #include <scopetools.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -59,7 +60,7 @@ struct ScDocumentImportImpl
 
     bool isValid( size_t nTab, size_t nCol )
     {
-        return (nTab <= size_t(MAXTAB) && nCol <= size_t(mrDoc.MaxCol()));
+        return (nTab <= o3tl::make_unsigned(MAXTAB) && nCol <= o3tl::make_unsigned(mrDoc.MaxCol()));
     }
 
     ColAttr* getColAttr( size_t nTab, size_t nCol )
@@ -82,7 +83,7 @@ struct ScDocumentImportImpl
         if (!isValid(nTab, nCol))
             return nullptr;
 
-        if (size_t(nTab) >= maBlockPosSet.size())
+        if (o3tl::make_unsigned(nTab) >= maBlockPosSet.size())
         {
             for (SCTAB i = maBlockPosSet.size(); i <= nTab; ++i)
                 maBlockPosSet.emplace_back(mrDoc, i);

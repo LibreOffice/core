@@ -106,6 +106,7 @@
 #include <helpids.h>
 #include <toolkit/helper/convert.hxx>
 #include <o3tl/functional.hxx>
+#include <o3tl/safeint.hxx>
 
 #define DATA_OR_FORMULA     0
 #define FUNCTION            1
@@ -1257,7 +1258,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 sal_Int16 nParagraphAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
                 aPropertyValue >>= nParagraphAdjust;
-                if (static_cast<sal_uInt32>(nParagraphAdjust) < SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1)
+                if (o3tl::make_unsigned(nParagraphAdjust) < SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1)
                     aControlValue <<= RptResId(RID_STR_PARAADJUST_CONST[nParagraphAdjust]);
             }
             break;

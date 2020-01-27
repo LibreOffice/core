@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <vcl/errcode.hxx>
 //#include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -61,7 +64,7 @@ start:
             break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > sal_uInt16(SbxMAXBYTE) )
+            if( p->nUShort > o3tl::make_unsigned(SbxMAXBYTE) )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }

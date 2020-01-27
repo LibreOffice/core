@@ -23,7 +23,7 @@
 #include <queryparam.hxx>
 #include <dpitemdata.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <algorithm>
 
@@ -281,7 +281,7 @@ OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
 
 const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
 {
-    if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
+    if (nColumn < 0 || o3tl::make_unsigned(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
         static const ::std::vector<SCROW> emptyEntries{};

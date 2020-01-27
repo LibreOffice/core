@@ -18,6 +18,7 @@
  */
 
 #include <xmlscript/xml_helper.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -70,13 +71,13 @@ sal_Int16 XMLElement::getLength()
 
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
     return _attrNames[ nPos ];
 }
 
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
     // xxx todo
     return OUString();
 }
@@ -89,7 +90,7 @@ OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
 
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( static_cast<size_t>(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
     return _attrValues[ nPos ];
 }
 

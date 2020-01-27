@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1067,7 +1068,7 @@ OUString HtmlExport::DocumentMetadata() const
             &aNonConvertableCharacters);
 
     const sal_uInt64 nLen = aStream.GetSize();
-    OSL_ENSURE(nLen < static_cast<sal_uInt64>(SAL_MAX_INT32), "Stream can't fit in OString");
+    OSL_ENSURE(nLen < o3tl::make_unsigned(SAL_MAX_INT32), "Stream can't fit in OString");
     OString aData(static_cast<const char*>(aStream.GetData()), static_cast<sal_Int32>(nLen));
 
     return OStringToOUString(aData, RTL_TEXTENCODING_UTF8);

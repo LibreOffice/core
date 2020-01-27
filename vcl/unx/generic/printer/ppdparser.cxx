@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -885,7 +886,7 @@ void PPDParser::insertKey( std::unique_ptr<PPDKey> pKey )
 
 const PPDKey* PPDParser::getKey( int n ) const
 {
-    return (static_cast<unsigned int>(n) < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : nullptr;
+    return (n >= 0 && o3tl::make_unsigned(n) < m_aOrderedKeys.size()) ? m_aOrderedKeys[n] : nullptr;
 }
 
 const PPDKey* PPDParser::getKey( const OUString& rKey ) const
@@ -1581,7 +1582,7 @@ PPDKey::~PPDKey()
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
-    return (static_cast<unsigned int>(n) < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : nullptr;
+    return (n >= 0 && o3tl::make_unsigned(n) < m_aOrderedValues.size()) ? m_aOrderedValues[n] : nullptr;
 }
 
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const
@@ -1650,7 +1651,7 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
     assert(n >= 0);
-    if( m_aCurrentValues.size() <= static_cast<hash_type::size_type>(n) )
+    if( m_aCurrentValues.size() <= o3tl::make_unsigned(n) )
         return nullptr;
 
     hash_type::const_iterator it = m_aCurrentValues.begin();

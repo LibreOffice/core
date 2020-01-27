@@ -65,6 +65,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
@@ -3410,7 +3411,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     break;
                                                 }
 
-                                                if(nStart < static_cast<size_t>(nIndex))
+                                                if(nStart < o3tl::make_unsigned(nIndex))
                                                 {
                                                     nStart = nIndex;
                                                 }

@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -196,7 +197,7 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
     if( nIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
-    if( m_aAllAxis[ nDimensionIndex ].size() < static_cast< tAxisVecVecType::size_type >( nIndex+1 ))
+    if( m_aAllAxis[ nDimensionIndex ].size() < o3tl::make_unsigned( nIndex+1 ))
     {
         m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
         m_aAllAxis[ nDimensionIndex ][nIndex] = nullptr;

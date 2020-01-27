@@ -66,6 +66,7 @@
 #include <hints.hxx>
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
@@ -668,7 +669,7 @@ namespace
             {
                 const sal_uInt64 nSum = pStt->nContent.GetIndex() +
                     pEndNd->GetText().getLength() - pEnd->nContent.GetIndex();
-                return nSum > static_cast<sal_uInt64>(SAL_MAX_INT32);
+                return nSum > o3tl::make_unsigned(SAL_MAX_INT32);
             }
         }
         return false;

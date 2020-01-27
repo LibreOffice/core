@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <o3tl/safeint.hxx>
 #include <svl/converter.hxx>
 #include <dbase/DConnection.hxx>
 #include <dbase/DColumns.hxx>
@@ -848,7 +849,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         else if ( DataType::INTEGER == nType )
         {
             sal_Int32 nValue = 0;
-            if (static_cast<size_t>(nLen) > sizeof(nValue))
+            if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                 return false;
             memcpy(&nValue, pData, nLen);
             *(_rRow->get())[i] = nValue;
@@ -859,7 +860,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             if (getBOOL((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
             {
                 sal_Int64 nValue = 0;
-                if (static_cast<size_t>(nLen) > sizeof(nValue))
+                if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                     return false;
                 memcpy(&nValue, pData, nLen);
 
@@ -870,7 +871,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             }
             else
             {
-                if (static_cast<size_t>(nLen) > sizeof(d))
+                if (o3tl::make_unsigned(nLen) > sizeof(d))
                     return false;
                 memcpy(&d, pData, nLen);
             }
@@ -1697,11 +1698,11 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
     {
         // Lengths for each data type:
         assert(i >= 0);
-        OSL_ENSURE(sal_uInt32(i) < m_aPrecisions.size(),"Illegal index!");
+        OSL_ENSURE(o3tl::make_unsigned(i) < m_aPrecisions.size(),"Illegal index!");
         sal_Int32 nLen = 0;
         sal_Int32 nType = 0;
         sal_Int32 nScale = 0;
-        if ( sal_uInt32(i) < m_aPrecisions.size() )
+        if ( o3tl::make_unsigned(i) < m_aPrecisions.size() )
         {
             nLen    = m_aPrecisions[i];
             nType   = m_aTypes[i];
@@ -1832,7 +1833,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 case DataType::INTEGER:
                     {
                         sal_Int32 nValue = thisColVal;
-                        if (static_cast<size_t>(nLen) > sizeof(nValue))
+                        if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                             return false;
                         memcpy(pData,&nValue,nLen);
                     }
@@ -1849,13 +1850,13 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                                 nValue = static_cast<sal_Int64>(d * pow(10.0,static_cast<int>(m_aScales[i])));
                             else
                                 nValue = static_cast<sal_Int64>(d);
-                            if (static_cast<size_t>(nLen) > sizeof(nValue))
+                            if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                                 return false;
                             memcpy(pData,&nValue,nLen);
                         } // if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
                         else
                         {
-                            if (static_cast<size_t>(nLen) > sizeof(d))
+                            if (o3tl::make_unsigned(nLen) > sizeof(d))
                                 return false;
                             memcpy(pData,&d,nLen);
                         }

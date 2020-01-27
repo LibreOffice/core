@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -300,11 +301,11 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
     {
-        nRet = static_cast<sal_Int64>(*o3tl::forceAccess<sal_uInt64>(rAny));
-        if ((min < 0 || static_cast<sal_uInt64>(nRet) >= static_cast<sal_uInt64>(min)) && // lower bound
-            static_cast<sal_uInt64>(nRet) <= max)                            // upper bound
+        auto const n = *o3tl::forceAccess<sal_uInt64>(rAny);
+        if ((min < 0 || n >= o3tl::make_unsigned(min)) && // lower bound
+            n <= max)                            // upper bound
         {
-            return nRet;
+            return static_cast<sal_Int64>(n);
         }
         throw CannotConvertException(
             "UNSIGNED HYPER out of range!",
@@ -348,7 +349,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         nRet = nVal;
-        if (nVal >= min && (nVal < 0 || static_cast<sal_uInt64>(nVal) <= max))
+        if (nVal >= min && (nVal < 0 || o3tl::make_unsigned(nVal) <= max))
             return nRet;
         throw CannotConvertException(
             "STRING value out of range!",
@@ -361,7 +362,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
-    if (nRet >= min && (nRet < 0 || static_cast<sal_uInt64>(nRet) <= max))
+    if (nRet >= min && (nRet < 0 || o3tl::make_unsigned(nRet) <= max))
         return nRet;
     throw CannotConvertException(
         "VALUE is out of range!",

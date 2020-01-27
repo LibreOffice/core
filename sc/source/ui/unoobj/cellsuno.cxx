@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/svdpool.hxx>
 
 #include <vcl/svapp.hxx>
@@ -9286,7 +9287,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    if(static_cast<sal_uInt32>(nIndex) >= aRangeLists.size())
+    if(o3tl::make_unsigned(nIndex) >= aRangeLists.size())
         throw lang::IndexOutOfBoundsException();
 
     return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
@@ -9349,7 +9350,7 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
 sal_Bool SAL_CALL ScUniqueCellFormatsEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
-    return static_cast<sal_uInt32>(nCurrentPosition) < aRangeLists.size();
+    return o3tl::make_unsigned(nCurrentPosition) < aRangeLists.size();
 }
 
 uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement()

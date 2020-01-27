@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/textcvt.h>
 #include <sal/types.h>
 
@@ -141,7 +142,7 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
         cReplace = '_';
         break;
     }
-    if (static_cast<sal_Size>(pDestBufEnd - *pDestBufPtr) > nPrefixLen)
+    if (o3tl::make_unsigned(pDestBufEnd - *pDestBufPtr) > nPrefixLen)
     {
         while (nPrefixLen-- > 0)
             *(*pDestBufPtr)++ = *pPrefix++;

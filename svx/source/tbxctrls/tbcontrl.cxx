@@ -112,6 +112,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <bitmaps.hlst>
 #include <sal/log.hxx>
@@ -534,7 +535,7 @@ private:
 
     SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
     {
-        ImpLineListData* pData = (0 <= nPos && static_cast<size_t>(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;
+        ImpLineListData* pData = (0 <= nPos && o3tl::make_unsigned(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;
         return pData ? pData->GetStyle() : SvxBorderLineStyle::NONE;
     }
 

@@ -56,6 +56,7 @@
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
@@ -249,7 +250,7 @@ void ScTable::DeleteRow(
 
 bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
 {
-    if ( nSize > static_cast<SCSIZE>(pDocument->MaxCol()) )
+    if ( nSize > o3tl::make_unsigned(pDocument->MaxCol()) )
         return false;
 
     if ( nStartRow==0 && nEndRow==pDocument->MaxRow() && pOutlineTable
@@ -348,7 +349,7 @@ void ScTable::DeleteCol(
     {
         if (mpColWidth && mpColFlags)
         {
-            assert( nStartCol + nSize <= size_t(pDocument->MaxCol()+1) );    // moving 0 if ==pDocument->MaxCol()+1 is correct
+            assert( nStartCol + nSize <= o3tl::make_unsigned(pDocument->MaxCol()+1) );    // moving 0 if ==pDocument->MaxCol()+1 is correct
             mpColWidth->RemovePreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             mpColFlags->RemovePreservingSize(nStartCol, nSize, CRFlags::NONE);
         }

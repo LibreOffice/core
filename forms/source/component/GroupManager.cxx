@@ -22,6 +22,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/solar.h>
 
@@ -322,7 +323,7 @@ sal_Int32 OGroupManager::getGroupCount() const
 
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, OUString& _rName)
 {
-    OSL_ENSURE(nGroup >= 0 && static_cast<size_t>(nGroup) < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
+    OSL_ENSURE(nGroup >= 0 && o3tl::make_unsigned(nGroup) < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
     OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
     _rName                          = aGroupPos->second.GetGroupName();
     _rGroup                         = aGroupPos->second.GetControlModels();

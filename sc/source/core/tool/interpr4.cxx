@@ -22,6 +22,7 @@
 #include <interpre.hxx>
 
 #include <rangelst.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -1509,9 +1510,9 @@ bool ScInterpreter::ConvertMatrixParameters()
                         {
                             if ( eType == formula::ParamClass::Value )
                             {   // only if single value expected
-                                if ( nJumpCols < static_cast<SCSIZE>(nCol2 - nCol1 + 1) )
+                                if ( nJumpCols < o3tl::make_unsigned(nCol2 - nCol1 + 1) )
                                     nJumpCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
-                                if ( nJumpRows < static_cast<SCSIZE>(nRow2 - nRow1 + 1) )
+                                if ( nJumpRows < o3tl::make_unsigned(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
                             formula::FormulaToken* pNew = new ScMatrixToken( pMat);

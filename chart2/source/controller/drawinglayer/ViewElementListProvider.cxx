@@ -24,7 +24,7 @@
 #include <DrawViewWrapper.hxx>
 
 #include <com/sun/star/drawing/Direction3D.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <svx/xtable.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
@@ -141,7 +141,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         return Graphic();
     if(nStandardSymbol<0)
         nStandardSymbol*=-1;
-    if( static_cast<size_t>(nStandardSymbol) >= pSymbolList->GetObjCount() )
+    if( o3tl::make_unsigned(nStandardSymbol) >= pSymbolList->GetObjCount() )
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
 

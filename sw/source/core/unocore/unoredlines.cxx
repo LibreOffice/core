@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <unoredlines.hxx>
@@ -59,7 +60,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    if ((rRedTable.size() <= static_cast<size_t>(nIndex)) || (nIndex < 0))
+    if ((nIndex < 0) || (rRedTable.size() <= o3tl::make_unsigned(nIndex)))
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nIndex], *GetDoc() );

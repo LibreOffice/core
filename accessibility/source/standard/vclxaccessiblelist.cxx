@@ -457,7 +457,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 {
     Reference<XAccessible> xChild;
 
-    if ( static_cast<size_t>(nPos) >= m_aAccessibleChildren.size() )
+    if ( o3tl::make_unsigned(nPos) >= m_aAccessibleChildren.size() )
     {
         m_aAccessibleChildren.resize(nPos + 1);
 

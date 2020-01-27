@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <filter/msfilter/mstoolbar.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -676,7 +677,7 @@ bool TBCCDData::Read( SvStream &rS)
     if (cwstrItems > 0)
     {
         //each WString is at least one byte
-        if (rS.remainingSize() < static_cast<size_t>(cwstrItems))
+        if (rS.remainingSize() < o3tl::make_unsigned(cwstrItems))
             return false;
         for( sal_Int32 index=0; index < cwstrItems; ++index )
         {

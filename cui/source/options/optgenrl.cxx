@@ -28,6 +28,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
@@ -402,11 +403,11 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, weld::Entry&, rEdit, void )
     {
         OUString sShortName = rShortName.xEdit->get_text();
         // clear short name if it contains more characters than the number of initials
-        if (static_cast<unsigned>(sShortName.getLength()) > nInits)
+        if (o3tl::make_unsigned(sShortName.getLength()) > nInits)
         {
             rShortName.xEdit->set_text(OUString());
         }
-        while (static_cast<unsigned>(sShortName.getLength()) < nInits)
+        while (o3tl::make_unsigned(sShortName.getLength()) < nInits)
             sShortName += " ";
         OUString sName = rEdit.get_text();
         OUString sLetter = sName.isEmpty()

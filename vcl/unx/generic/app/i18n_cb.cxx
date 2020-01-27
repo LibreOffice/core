@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 
 #include <X11/Xlib.h>
@@ -114,7 +115,7 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 {
       size_t nnewsize = ptext->nSize;
 
-      while ( nnewsize <= static_cast<size_t>(nnewlimit) )
+      while ( nnewsize <= o3tl::make_unsigned(nnewlimit) )
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;

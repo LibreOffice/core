@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
@@ -288,7 +289,7 @@ SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int32 nIndex )
     if( nullptr == mpPage )
         throw DisposedException();
 
-    if( (nIndex < 0) || ( static_cast<size_t>(nIndex) >= mpPage->GetObjCount() ) )
+    if( (nIndex < 0) || ( o3tl::make_unsigned(nIndex) >= mpPage->GetObjCount() ) )
         throw lang::IndexOutOfBoundsException();
 
     return mpPage->GetObj( nIndex );

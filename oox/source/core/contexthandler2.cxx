@@ -22,6 +22,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 namespace oox::core {
@@ -74,7 +75,7 @@ sal_Int32 ContextHandler2Helper::getCurrentElement() const
 
 sal_Int32 ContextHandler2Helper::getParentElement( sal_Int32 nCountBack ) const
 {
-    if( (nCountBack < 0) || (mxContextStack->size() < static_cast< size_t >( nCountBack )) )
+    if( (nCountBack < 0) || (mxContextStack->size() < o3tl::make_unsigned( nCountBack )) )
         return XML_TOKEN_INVALID;
     return (mxContextStack->size() == static_cast< size_t >( nCountBack )) ?
         XML_ROOT_CONTEXT : (*mxContextStack)[ mxContextStack->size() - nCountBack - 1 ].mnElement;

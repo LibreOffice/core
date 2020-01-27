@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 using namespace ::com::sun::star;
@@ -159,7 +162,7 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
     // so we make sure we will never generate
     // an integer value like this one
     sal_Int32 nId = rIdentifier.copy(2).toInt32();
-    if (nId > 0 && mnNextId <= static_cast<sal_uInt32>(nId))
+    if (nId > 0 && mnNextId <= o3tl::make_unsigned(nId))
     {
         mnNextId = nId;
         ++mnNextId;

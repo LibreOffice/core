@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -296,7 +297,7 @@ namespace
 
 static bool lcl_checkDockingWindowID( sal_uInt16 nID )
 {
-    return !(nID < SID_DOCKWIN_START || nID >= sal_uInt16(SID_DOCKWIN_START+NUM_OF_DOCKINGWINDOWS));
+    return !(nID < SID_DOCKWIN_START || nID >= o3tl::make_unsigned(SID_DOCKWIN_START+NUM_OF_DOCKINGWINDOWS));
 }
 
 static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::XFrame >& rFrame )

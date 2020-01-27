@@ -25,6 +25,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <vector>
@@ -1289,7 +1290,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
     if (( nRow == 0 ) ||
-        ( nRow > static_cast<sal_uInt32>(nNumberOfRecords)) ){
+        ( nRow > o3tl::make_unsigned(nNumberOfRecords)) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }

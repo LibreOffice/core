@@ -27,6 +27,7 @@
 #include <ObjectIdentifier.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -182,7 +183,7 @@ void SelectorListBox::Select()
     if ( !IsTravelSelect() )
     {
         const sal_Int32 nPos = GetSelectedEntryPos();
-        if( static_cast<size_t>(nPos) < m_aEntries.size() )
+        if( o3tl::make_unsigned(nPos) < m_aEntries.size() )
         {
             ObjectIdentifier aOID = m_aEntries[nPos].OID;
             Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartController.get(), uno::UNO_QUERY );

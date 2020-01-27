@@ -26,6 +26,7 @@
 #include <vcl/split.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
@@ -2121,7 +2122,7 @@ namespace
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = nullptr;
                         sal_Int32 nColumnRefPos = pColumnRef->count() - 2;
-                        if ( nColumnRefPos >= 0 && static_cast<sal_uInt32>(nColumnRefPos) < pColumnRef->count() )
+                        if ( nColumnRefPos >= 0 && o3tl::make_unsigned(nColumnRefPos) < pColumnRef->count() )
                             pParamRef = pColumnRef->getChild(nColumnRefPos);
 
                         if ( SQL_ISRULE(pColumnRef,general_set_fct)

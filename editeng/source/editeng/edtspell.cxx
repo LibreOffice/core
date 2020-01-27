@@ -20,6 +20,7 @@
 
 #include "impedit.hxx"
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
@@ -369,7 +370,7 @@ void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
             {
                 i->mnStart = nEnd;
                 // Blanks?
-                while (i->mnStart < static_cast<size_t>(pNode->Len()) &&
+                while (i->mnStart < o3tl::make_unsigned(pNode->Len()) &&
                        (pNode->GetChar(i->mnStart) == ' ' ||
                         pNode->IsFeature(i->mnStart)))
                 {

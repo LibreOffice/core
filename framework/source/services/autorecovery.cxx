@@ -71,6 +71,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -4023,7 +4024,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     }
 
     sal_uInt64 nFreeMB = nFreeSpace/1048576;
-    return (nFreeMB >= static_cast<sal_uInt64>(nRequiredSpace));
+    return (nFreeMB >= o3tl::make_unsigned(nRequiredSpace));
 #endif // SIMULATE_FULL_DISC
 }
 

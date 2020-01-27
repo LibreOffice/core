@@ -24,6 +24,7 @@
 
 #include <scitems.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
@@ -246,7 +247,7 @@ void ImportExcel::ReadDimensions()
         aXclUsedArea.maFirst.mnCol = maStrm.ReaduInt16();
         aXclUsedArea.maLast.mnCol = maStrm.ReaduInt16();
         if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
-            (nXclRow1 <= static_cast< sal_uInt32 >( GetScMaxPos().Row() )) )
+            (nXclRow1 <= o3tl::make_unsigned( GetScMaxPos().Row() )) )
         {
             // Excel stores first unused row/column index
             --nXclRow2;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <swmodule.hxx>
@@ -878,7 +881,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi;
             y = x - d;
-            while( sal_uLong(x) < nEnd1 && sal_uLong(y) < nEnd2 &&
+            while( o3tl::make_unsigned(x) < nEnd1 && o3tl::make_unsigned(y) < nEnd2 &&
                 rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
             {
                 ++x;
@@ -910,7 +913,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi - 1;
             y = x - d;
-            while( sal_uLong(x) > nStt1 && sal_uLong(y) > nStt2 &&
+            while( o3tl::make_unsigned(x) > nStt1 && o3tl::make_unsigned(y) > nStt2 &&
                 rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
             {
                 --x;

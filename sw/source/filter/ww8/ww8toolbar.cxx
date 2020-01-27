@@ -19,6 +19,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/configmgr.hxx>
@@ -165,7 +166,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     }
     for ( const auto& rIndex : dropDownMenuIndices )
     {
-        if (rIndex < 0 || static_cast<size_t>(rIndex) >= rCustomizations.size())
+        if (rIndex < 0 || o3tl::make_unsigned(rIndex) >= rCustomizations.size())
             continue;
         rCustomizations[rIndex].bIsDroppedMenuTB = true;
     }
@@ -760,7 +761,7 @@ bool PlfMcd::Read(SvStream &rS)
     if (iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / 24 /*sizeof MCD*/;
-    if (static_cast<sal_uInt32>(iMac) > nMaxPossibleRecords)
+    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
     {
         SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
         iMac = nMaxPossibleRecords;
@@ -795,7 +796,7 @@ bool PlfAcd::Read( SvStream &rS)
     if (iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / (sizeof(sal_uInt16)*2);
-    if (static_cast<sal_uInt32>(iMac) > nMaxPossibleRecords)
+    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
     {
         SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
         iMac = nMaxPossibleRecords;
@@ -831,7 +832,7 @@ bool PlfKme::Read(SvStream &rS)
     {
         //each Kme is 14 bytes in size
         size_t nMaxAvailableRecords = rS.remainingSize() / 14;
-        if (static_cast<sal_uInt32>(iMac) > nMaxAvailableRecords)
+        if (o3tl::make_unsigned(iMac) > nMaxAvailableRecords)
             return false;
 
         rgkme.reset( new Kme[ iMac ] );

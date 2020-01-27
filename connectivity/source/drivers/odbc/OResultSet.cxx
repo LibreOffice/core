@@ -33,6 +33,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 using namespace ::comphelper;
@@ -815,7 +816,7 @@ void SAL_CALL OResultSet::insertRow(  )
 
     SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
-    static_assert(static_cast<size_t>(nMaxBookmarkLen) >= sizeof(SQLLEN), "must be larger");
+    static_assert(o3tl::make_unsigned(nMaxBookmarkLen) >= sizeof(SQLLEN), "must be larger");
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
                                 0,

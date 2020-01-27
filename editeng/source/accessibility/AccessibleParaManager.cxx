@@ -23,6 +23,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -62,7 +63,7 @@ namespace accessibility
 
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
     {
-        if( static_cast<size_t>(nNumParas) < maChildren.size() )
+        if( o3tl::make_unsigned(nNumParas) < maChildren.size() )
             Release( nNumParas, maChildren.size() );
 
         maChildren.resize( nNumParas );
@@ -95,10 +96,10 @@ namespace accessibility
     void AccessibleParaManager::FireEvent( sal_Int32 nPara,
                                            const sal_Int16 nEventId ) const
     {
-        DBG_ASSERT( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara),
+        DBG_ASSERT( 0 <= nPara && maChildren.size() > o3tl::make_unsigned(nPara),
                 "AccessibleParaManager::FireEvent: invalid index" );
 
-        if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
+        if( 0 <= nPara && maChildren.size() > o3tl::make_unsigned(nPara) )
         {
             auto aChild( GetChild( nPara ).first.get() );
             if( aChild.is() )
@@ -114,10 +115,10 @@ namespace accessibility
 
     bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
     {
-        DBG_ASSERT( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild),
+        DBG_ASSERT( 0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild),
                 "AccessibleParaManager::IsReferencable: invalid index" );
 
-        if( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild) )
+        if( 0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild) )
         {
             // retrieve hard reference from weak one
             return IsReferencable( GetChild( nChild ).first.get() );
@@ -130,10 +131,10 @@ namespace accessibility
 
     AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_Int32 nParagraphIndex ) const
     {
-        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex),
+        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex),
                 "AccessibleParaManager::GetChild: invalid index" );
 
-        if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
+        if( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex) )
         {
             return maChildren[ nParagraphIndex ];
         }
@@ -148,10 +149,10 @@ namespace accessibility
                                                                      SvxEditSourceAdapter&                  rEditSource,
                                                                      sal_Int32                              nParagraphIndex )
     {
-        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex),
+        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex),
                 "AccessibleParaManager::CreateChild: invalid index" );
 
-        if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
+        if( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex) )
         {
             // retrieve hard reference from weak one
             auto aChild( GetChild( nParagraphIndex ).first.get() );
@@ -318,14 +319,14 @@ namespace accessibility
                                            const uno::Any& rOldValue ) const
     {
         DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
-                    maChildren.size() > static_cast<size_t>(nStartPara) &&
-                    maChildren.size() >= static_cast<size_t>(nEndPara) &&
+                    maChildren.size() > o3tl::make_unsigned(nStartPara) &&
+                    maChildren.size() >= o3tl::make_unsigned(nEndPara) &&
                     nEndPara >= nStartPara, "AccessibleParaManager::FireEvent: invalid index" );
 
 
         if( 0 <= nStartPara && 0 <= nEndPara &&
-                maChildren.size() > static_cast<size_t>(nStartPara) &&
-                maChildren.size() >= static_cast<size_t>(nEndPara) &&
+                maChildren.size() > o3tl::make_unsigned(nStartPara) &&
+                maChildren.size() >= o3tl::make_unsigned(nEndPara) &&
                 nEndPara >= nStartPara )
         {
             VectorOfChildren::const_iterator front = maChildren.begin();
@@ -359,13 +360,13 @@ namespace accessibility
     void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
     {
         DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
-                    maChildren.size() > static_cast<size_t>(nStartPara) &&
-                    maChildren.size() >= static_cast<size_t>(nEndPara),
+                    maChildren.size() > o3tl::make_unsigned(nStartPara) &&
+                    maChildren.size() >= o3tl::make_unsigned(nEndPara),
                     "AccessibleParaManager::Release: invalid index" );
 
         if( 0 <= nStartPara && 0 <= nEndPara &&
-                maChildren.size() > static_cast<size_t>(nStartPara) &&
-                maChildren.size() >= static_cast<size_t>(nEndPara) )
+                maChildren.size() > o3tl::make_unsigned(nStartPara) &&
+                maChildren.size() >= o3tl::make_unsigned(nEndPara) )
         {
             VectorOfChildren::iterator front = maChildren.begin();
             VectorOfChildren::iterator back = front;
