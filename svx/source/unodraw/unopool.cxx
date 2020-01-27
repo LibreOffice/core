@@ -386,8 +386,7 @@ OUString SAL_CALL SvxUnoDrawPool::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.Defaults" };
-    return aSNS;
+    return { "com.sun.star.drawing.Defaults" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
