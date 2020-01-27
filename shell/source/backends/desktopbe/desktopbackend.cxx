@@ -63,9 +63,7 @@ OUString getDefaultImplementationName() {
 }
 
 css::uno::Sequence< OUString > getDefaultSupportedServiceNames() {
-    OUString name(
-            "com.sun.star.configuration.backend.DesktopBackend");
-    return css::uno::Sequence< OUString >(&name, 1);
+    return { "com.sun.star.configuration.backend.DesktopBackend" };
 }
 
 class Default:
