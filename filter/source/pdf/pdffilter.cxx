@@ -251,8 +251,7 @@ OUString PDFFilter_getImplementationName ()
 
 Sequence< OUString > PDFFilter_getSupportedServiceNames(  )
 {
-    Sequence<OUString> aRet { "com.sun.star.document.PDFFilter" };
-    return aRet;
+    return { "com.sun.star.document.PDFFilter" };
 }
 
 
