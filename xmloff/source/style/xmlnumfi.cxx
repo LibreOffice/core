@@ -1326,11 +1326,10 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
 
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStyleContext( rImport ),
     pData( pNewData ),
     pStyles( &rStyles ),
     aMyConditions(),
@@ -1466,11 +1465,9 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nTempKey,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
+    SvXMLStyleContext( rImport, XML_STYLE_FAMILY_DATA_STYLE ),
     pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),

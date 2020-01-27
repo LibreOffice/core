@@ -54,9 +54,8 @@ protected:
 public:
 
 
-    XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextStyleContext( SvXMLImport& rImport,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
     ~XMLTextStyleContext() override;
@@ -64,10 +63,9 @@ public:
     XMLTextStyleContext(const XMLTextStyleContext &) = delete;
     XMLTextStyleContext operator=(const XMLTextStyleContext &) = delete;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     const OUString& GetListStyle() const { return m_sListStyleName; }
     // XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)

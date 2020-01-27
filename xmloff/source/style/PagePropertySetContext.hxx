@@ -42,6 +42,13 @@ public:
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aType );
+    PagePropertySetContext( SvXMLImport& rImport,
+                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                 sal_uInt32 nFam,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                 sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+                 const PageContextType aType );
 
     virtual ~PagePropertySetContext() override;
 

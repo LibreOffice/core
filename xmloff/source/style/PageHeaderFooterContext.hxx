@@ -39,6 +39,12 @@ public:
                         const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                         sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                         const bool bHeader);
+    PageHeaderFooterContext( SvXMLImport& rImport,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        ::std::vector< XMLPropertyState > & rProperties,
+                        const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                        sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+                        const bool bHeader);
 
     virtual ~PageHeaderFooterContext() override;
 

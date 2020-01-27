@@ -34,10 +34,9 @@
 using namespace ::com::sun::star;
 
 
-XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+:   SvXMLStyleContext(rImport)
 {
 
     // start import
@@ -49,7 +48,7 @@ XMLGradientStyleContext::~XMLGradientStyleContext()
 {
 }
 
-void XMLGradientStyleContext::EndElement()
+void XMLGradientStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
 
@@ -77,10 +76,9 @@ bool XMLGradientStyleContext::IsTransient() const
 }
 
 
-XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport,
+                                              const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport)
 {
     // start import
     XMLHatchStyleImport aHatchStyle( GetImport() );
@@ -91,7 +89,7 @@ XMLHatchStyleContext::~XMLHatchStyleContext()
 {
 }
 
-void XMLHatchStyleContext::EndElement()
+void XMLHatchStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xHatch( GetImport().GetHatchHelper() );
 
@@ -119,10 +117,9 @@ bool XMLHatchStyleContext::IsTransient() const
 }
 
 
-XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport,
+                                              const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport)
 {
     // start import
     XMLImageStyle::importXML( xAttrList, maAny, maStrName, rImport );
@@ -132,10 +129,12 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 {
 }
 
-SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLBitmapStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    if( nElement == XML_ELEMENT(OFFICE, xmloff::token::XML_BINARY_DATA ) )
     {
         OUString sURL;
         maAny >>= sURL;
@@ -143,16 +142,16 @@ SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPre
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+                xContext = new XMLBase64ImportContext( GetImport(),
+                                                    xAttrList,
                                                     mxBase64Stream );
         }
     }
 
-    return pContext;
+    return xContext;
 }
 
-void XMLBitmapStyleContext::EndElement()
+void XMLBitmapStyleContext::endFastElement(sal_Int32 )
 {
     if (maAny.has<uno::Reference<graphic::XGraphic>>())
     {
@@ -186,10 +185,9 @@ bool XMLBitmapStyleContext::IsTransient() const
 }
 
 
-XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport,
+                                              const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport)
 {
     // start import
     XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
@@ -200,7 +198,7 @@ XMLTransGradientStyleContext::~XMLTransGradientStyleContext()
 {
 }
 
-void XMLTransGradientStyleContext::EndElement()
+void XMLTransGradientStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xTransGradient( GetImport().GetTransGradientHelper() );
 
@@ -228,10 +226,9 @@ bool XMLTransGradientStyleContext::IsTransient() const
 }
 
 
-XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport,
+                                              const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport)
 {
     // start import
     XMLMarkerStyleImport aMarkerStyle( GetImport() );
@@ -242,7 +239,7 @@ XMLMarkerStyleContext::~XMLMarkerStyleContext()
 {
 }
 
-void XMLMarkerStyleContext::EndElement()
+void XMLMarkerStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xMarker( GetImport().GetMarkerHelper() );
 
@@ -270,10 +267,9 @@ bool XMLMarkerStyleContext::IsTransient() const
 }
 
 
-XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                          const OUString& rLName,
-                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
+XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport,
+                                          const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport)
 {
     // start import
     XMLDashStyleImport aDashStyle( GetImport() );
@@ -284,7 +280,7 @@ XMLDashStyleContext::~XMLDashStyleContext()
 {
 }
 
-void XMLDashStyleContext::EndElement()
+void XMLDashStyleContext::endFastElement(sal_Int32 )
 {
     uno::Reference< container::XNameContainer > xDashes( GetImport().GetDashHelper() );
 

@@ -34,11 +34,11 @@ private:
 
 public:
 
-    XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLGradientStyleContext( SvXMLImport& rImport,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -53,11 +53,11 @@ private:
 
 public:
 
-    XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLHatchStyleContext( SvXMLImport& rImport,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32) override;
 
     virtual bool IsTransient() const override;
 };
@@ -73,16 +73,15 @@ private:
 
 public:
 
-    XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLBitmapStyleContext( SvXMLImport& rImport,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~XMLBitmapStyleContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -97,11 +96,11 @@ private:
 
 public:
 
-    XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLTransGradientStyleContext( SvXMLImport& rImport,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -116,11 +115,11 @@ private:
 
 public:
 
-    XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLMarkerStyleContext( SvXMLImport& rImport,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };
@@ -135,11 +134,11 @@ private:
 
 public:
 
-    XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
-                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLDashStyleContext( SvXMLImport& rImport,
+                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual bool IsTransient() const override;
 };

@@ -146,11 +146,9 @@ static const OUStringLiteral gsIsPhysical(  "IsPhysical"  );
 static const OUStringLiteral gsFollowStyle(  "FollowStyle"  );
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         bool bDefault )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
+:   SvXMLStyleContext( rImport, nFamily, bDefault )
 ,   mxStyles( &rStyles )
 {
 }

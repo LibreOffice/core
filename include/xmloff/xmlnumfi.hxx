@@ -153,23 +153,18 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                sal_uInt16 nPrfx,
-                                    const OUString& rLName,
                                     SvXMLNumImpData* pNewData,
                                     sal_uInt16 nNewType,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override;
 
     SvXMLNumImpData* GetData() const                { return pData; }

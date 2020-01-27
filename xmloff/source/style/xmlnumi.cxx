@@ -1017,21 +1017,8 @@ static const OUStringLiteral sNumberingRules( "NumberingRules"  );
 static const OUStringLiteral sIsContinuousNumbering( "IsContinuousNumbering"  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
         bool bOutl )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
-,   bConsecutive( false )
-,   bOutline( bOutl )
-{
-}
-
-SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-        bool bOutl )
-:   SvXMLStyleContext( rImport, nElement, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
+:   SvXMLStyleContext( rImport, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
 {
@@ -1039,13 +1026,14 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 
 SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
 
-SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext::createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
+    if ( (bOutline && nElement == XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL_STYLE))
+        || (!bOutline && nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_NUMBER )))
     if( XML_NAMESPACE_TEXT == nPrefix &&
         ( bOutline
               ? IsXMLToken( rLocalName, XML_OUTLINE_LEVEL_STYLE )

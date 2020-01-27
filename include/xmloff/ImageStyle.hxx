@@ -26,7 +26,7 @@
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastAttributeList; } } } } }
 
 class SvXMLExport;
 class SvXMLImport;
@@ -35,7 +35,7 @@ namespace XMLImageStyle
 {
 
 XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
-XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XAttributeList> const & xAttrList,
+XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
                                 css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

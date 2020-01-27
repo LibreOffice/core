@@ -53,9 +53,7 @@ public:
 
     SdXMLPageMasterStyleContext(
         SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext() override;
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
@@ -78,15 +76,11 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
 
 public:
 
-    SdXMLPageMasterContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SdXMLPageMasterContext(SdXMLImport& rImport);
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mxPageMasterStyle.get(); }
 };
@@ -153,17 +147,13 @@ class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 
 public:
 
-    SdXMLPresentationPageLayoutContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SdXMLPresentationPageLayoutContext( SdXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     sal_uInt16 GetTypeId() const { return mnTypeId; }
 };
 
@@ -186,9 +176,8 @@ class SdXMLStylesContext : public SvXMLStylesContext
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         sal_uInt16 nFamily,
@@ -250,8 +239,8 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     virtual bool IsTransient() const override;
-    virtual void EndElement() override;
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
 private:
     OUString maStrName;

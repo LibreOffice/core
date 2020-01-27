@@ -59,11 +59,9 @@ void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
         bool bDefaultStyle) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
+    XMLPropStyleContext( rImport, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
     sPageUsage(),
     m_bIsFillStyleAlreadyConverted(false) //
 {
@@ -73,16 +71,14 @@ PageStyleContext::~PageStyleContext()
 {
 }
 
-SvXMLImportContextRef PageStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        ((IsXMLToken(rLocalName, XML_HEADER_STYLE )) ||
-         (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_HEADER_STYLE) ||
+        nElement == XML_ELEMENT(STYLE, XML_FOOTER_STYLE) )
     {
-        bool bHeader = IsXMLToken(rLocalName, XML_HEADER_STYLE);
+        bool bHeader = (nElement & TOKEN_MASK) == XML_HEADER_STYLE;
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
@@ -117,13 +113,12 @@ SvXMLImportContextRef PageStyleContext::CreateChildContext(
             }
             if (!bEnd)
                 nEndIndex = nIndex;
-            return new PageHeaderFooterContext(GetImport(), nPrefix, rLocalName,
+            return new PageHeaderFooterContext(GetImport(),
                             xAttrList, GetProperties(), xImpPrMap, nStartIndex, nEndIndex, bHeader);
         }
     }
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken(rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
+    if( nElement == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_PROPERTIES) )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
@@ -146,15 +141,14 @@ SvXMLImportContextRef PageStyleContext::CreateChildContext(
             }
             if (!bEnd)
                 nEndIndex = nIndex;
-            return new PagePropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+            return new PagePropertySetContext( GetImport(), xAttrList,
                                                     XML_TYPE_PROP_PAGE_LAYOUT,
                                                     GetProperties(),
                                                     xImpPrMap, 0, nEndIndex, Page);
         }
     }
 
-    return XMLPropStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    return XMLPropStyleContext::createFastChildContext(nElement, xAttrList);
 }
 
 void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > & rPropSet)

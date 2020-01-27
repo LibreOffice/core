@@ -68,6 +68,11 @@ public:
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
+    SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport,
+                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
+
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
@@ -135,16 +140,12 @@ public:
 
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
 
-    SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 
@@ -156,37 +157,31 @@ public:
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
-:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
+:   XMLPropStyleContext(rImport, rStyles, nFamily )
 {
 }
 
-SvXMLImportContextRef SdXMLDrawingPageStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_DRAWING_PAGE_PROPERTIES) )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
-            xContext = new SdXMLDrawingPagePropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+            xContext = new SdXMLDrawingPagePropertySetContext( GetImport(),
+                                                    xAttrList,
                                                     GetProperties(),
                                                     xImpPrMap );
     }
 
     if (!xContext)
-        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
+        xContext = XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
 
     return xContext;
 }
@@ -293,10 +288,8 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID),
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
+:   SvXMLStyleContext(rImport, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID),
     mnBorderBottom( 0 ),
     mnBorderLeft( 0 ),
     mnBorderRight( 0 ),
@@ -308,54 +301,50 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPageMasterStyleAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        const OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP:
+            case XML_ELEMENT(FO, XML_MARGIN_TOP):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnBorderTop, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM:
+            case XML_ELEMENT(FO, XML_MARGIN_BOTTOM):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnBorderBottom, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT:
+            case XML_ELEMENT(FO, XML_MARGIN_LEFT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnBorderLeft, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT:
+            case XML_ELEMENT(FO, XML_MARGIN_RIGHT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnBorderRight, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH:
+            case XML_ELEMENT(FO, XML_PAGE_WIDTH):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnWidth, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT:
+            case XML_ELEMENT(FO, XML_PAGE_HEIGHT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnHeight, sValue);
                 break;
             }
-            case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
+            case XML_ELEMENT(STYLE, XML_PRINT_ORIENTATION):
             {
                 if( IsXMLToken( sValue, XML_PORTRAIT ) )
                     meOrientation = view::PaperOrientation_PORTRAIT;
@@ -372,68 +361,42 @@ SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
 }
 
 
-SdXMLPageMasterContext::SdXMLPageMasterContext(
-    SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID)
+SdXMLPageMasterContext::SdXMLPageMasterContext( SdXMLImport& rImport )
+:   SvXMLStyleContext(rImport, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID)
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPageMasterAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
-        {
-            case XML_TOK_PAGEMASTER_NAME:
-            {
-                break;
-            }
-        }
-    }
 }
 
-SvXMLImportContextRef SdXMLPageMasterContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
-    if(nPrefix == XML_NAMESPACE_STYLE && IsXMLToken( rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
+    if(nElement == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_PROPERTIES))
     {
         DBG_ASSERT(!mxPageMasterStyle.is(), "PageMasterStyle is set, there seem to be two of them (!)");
-        mxPageMasterStyle.set(new SdXMLPageMasterStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList));
+        mxPageMasterStyle.set(new SdXMLPageMasterStyleContext(GetSdImport(), nElement, xAttrList));
         xContext = mxPageMasterStyle.get();
     }
 
     // call base class
     if (!xContext)
-        xContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+        xContext = SvXMLStyleContext::createFastChildContext(nElement, xAttrList);
 
     return xContext;
 }
 
-SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
-    SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
+SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext( SdXMLImport& rImport )
+:   SvXMLStyleContext(rImport, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( AUTOLAYOUT_NONE )
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
 }
 
-SvXMLImportContextRef SdXMLPresentationPageLayoutContext::CreateChildContext(
+SvXMLImportContextRef SdXMLPresentationPageLayoutContext::createFastChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )

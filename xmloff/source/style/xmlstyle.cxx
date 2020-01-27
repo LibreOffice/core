@@ -127,23 +127,7 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 
 SvXMLStyleContext::SvXMLStyleContext(
-        SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >&,
-        sal_uInt16 nFam, bool bDefault ) :
-    SvXMLImportContext( rImp, nPrfx, rLName ),
-    mbHidden( false ),
-    mnFamily( nFam ),
-    mbValid( true ),
-    mbNew( true ),
-    mbDefaultStyle( bDefault )
-{
-}
-
-SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp,
-        sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
         sal_uInt16 nFam, bool bDefault ) :
     SvXMLImportContext( rImp ),
     mbHidden( false ),
@@ -351,9 +335,8 @@ bool SvXMLStylesContext::IsAutomaticStyle() const
     return mpImpl->IsAutomaticStyle();
 }
 
-SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
-                                                                const OUString& rLocalName,
-                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_Int32 nElement,
+                                                                const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 

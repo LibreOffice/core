@@ -85,23 +85,29 @@ protected:
 public:
 
 
-    SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    SvXMLStyleContext( SvXMLImport& rImport,
               sal_uInt16 nFamily=0,
               bool bDefaultStyle = false );
 
-    SvXMLStyleContext( SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            sal_uInt16 nFamily=0,
-            bool bDefaultStyle = false );
-
     virtual ~SvXMLStyleContext() override;
 
+private:
     virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override final;
+    virtual void EndElement() override final;
+    virtual void Characters(const OUString&) override final;
+    virtual SvXMLImportContextRef CreateChildContext(
+            sal_uInt16 nPrefix,
+            const OUString& rLocalName,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override final;
+public:
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
     const OUString&  GetAutoName() const { return maAutoName; }
@@ -177,9 +183,8 @@ protected:
     SvXMLStyleContext *GetStyle( sal_uInt32 i );
     const SvXMLStyleContext *GetStyle( sal_uInt32 i ) const;
 
-    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
