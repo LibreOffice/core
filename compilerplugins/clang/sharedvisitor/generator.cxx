@@ -102,12 +102,22 @@ void generate()
 "#include <clang/AST/RecursiveASTVisitor.h>\n"
 "\n"
 "#include \"plugin.hxx\"\n"
+"#include \"sharedvisitor/dummyplugin.hxx\"\n"
 "\n";
 
     output << "#undef LO_CLANG_SHARED_PLUGINS // to get sources of individual plugins\n";
+    output << "// make use of the dummy base classes\n";
+    output << "#define RecursiveASTVisitor DummyRecursiveASTVisitor\n";
+    output << "#define FilteringPlugin DummyFilteringPlugin\n";
+    output << "#define FilteringRewritePlugin DummyFilteringRewritePlugin\n";
+    output << "\n";
     for( const auto& pluginGroup : plugins )
         for( const PluginInfo& plugin : pluginGroup )
             output << "#include \"" << plugin.lowercaseName << ".cxx\"" << endl;
+    output << "\n";
+    output << "#undef RecursiveASTVisitor\n";
+    output << "#undef FilteringPlugin\n";
+    output << "#undef FilteringRewritePlugin\n";
 
     output <<
 "\n"
