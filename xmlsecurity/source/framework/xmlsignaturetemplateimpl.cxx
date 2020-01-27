@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <framework/xmlsignaturetemplateimpl.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
@@ -97,8 +98,7 @@ OUString SAL_CALL XMLSignatureTemplateImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    return comphelper::findValue(seqServiceNames, serviceName) != -1;
+    return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
