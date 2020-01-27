@@ -19,8 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTSTACK_HXX
 #define INCLUDED_IDLC_INC_ASTSTACK_HXX
 
-#include <sal/types.h>
-#include <vector>
+#pragma once
 
 class AstScope;
 
@@ -42,7 +41,5 @@ public:
 private:
     std::vector<AstScope*>  m_stack;
 };
-
-#endif // INCLUDED_IDLC_INC_ASTSTACK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
