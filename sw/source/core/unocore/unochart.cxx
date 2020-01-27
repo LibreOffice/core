@@ -81,43 +81,43 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 }
 
 SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
-    pDoc( pDocument )
-    , bIsLocked( false )
+    m_pDoc( pDocument )
+    , m_bIsLocked( false )
 {
-    aUnlockTimer.SetTimeout( 1500 );
-    aUnlockTimer.SetInvokeHandler( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
-    aUnlockTimer.SetDebugName( "sw::SwChartLockController_Helper aUnlockTimer" );
+    m_aUnlockTimer.SetTimeout( 1500 );
+    m_aUnlockTimer.SetInvokeHandler( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
+    m_aUnlockTimer.SetDebugName( "sw::SwChartLockController_Helper aUnlockTimer" );
 }
 
 SwChartLockController_Helper::~SwChartLockController_Helper() COVERITY_NOEXCEPT_FALSE
 {
-    if (pDoc)   // still connected?
+    if (m_pDoc)   // still connected?
         Disconnect();
 }
 
 void SwChartLockController_Helper::StartOrContinueLocking()
 {
-    if (!bIsLocked)
+    if (!m_bIsLocked)
         LockAllCharts();
-    aUnlockTimer.Start();   // start or continue time of locking
+    m_aUnlockTimer.Start();   // start or continue time of locking
 }
 
 void SwChartLockController_Helper::Disconnect()
 {
-    aUnlockTimer.Stop();
+    m_aUnlockTimer.Stop();
     UnlockAllCharts();
-    pDoc = nullptr;
+    m_pDoc = nullptr;
 }
 
 void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
 {
-    if (!pDoc)
+    if (!m_pDoc)
         return;
 
     uno::Reference< frame::XModel > xRes;
     SwOLENode *pONd;
     SwStartNode *pStNd;
-    SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+    SwNodeIndex aIdx( *m_pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
@@ -140,7 +140,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
 
-    bIsLocked = bLock;
+    m_bIsLocked = bLock;
 }
 
 IMPL_LINK_NOARG( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, void )

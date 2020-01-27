@@ -110,35 +110,35 @@ struct SwSpellArgs : SwArgsBase
 class SwInterHyphInfo
 {
     /// output: hyphenated word
-    css::uno::Reference<css::linguistic2::XHyphenatedWord> xHyphWord;
+    css::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
     /// input: cursor point to locate the frame
-    const Point aCursorPos;
+    const Point m_aCursorPos;
 public:
     /// input: requested range to hyphenate
-    sal_Int32 nStart;
-    sal_Int32 nEnd;
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
     /// output: found word
-    sal_Int32 nWordStart;
-    sal_Int32 nWordLen;
+    sal_Int32 m_nWordStart;
+    sal_Int32 m_nWordLen;
 
     SwInterHyphInfo( const Point &rCursorPos )
-        : aCursorPos(rCursorPos)
-        , nStart(0)
-        , nEnd(SAL_MAX_INT32)
-        , nWordStart(0), nWordLen(0)
+        : m_aCursorPos(rCursorPos)
+        , m_nStart(0)
+        , m_nEnd(SAL_MAX_INT32)
+        , m_nWordStart(0), m_nWordLen(0)
     {
     }
     const Point *GetCursorPos() const
     {
-        return aCursorPos.X() || aCursorPos.Y() ? &aCursorPos : nullptr;
+        return m_aCursorPos.X() || m_aCursorPos.Y() ? &m_aCursorPos : nullptr;
     }
     void SetHyphWord(const css::uno::Reference< css::linguistic2::XHyphenatedWord >  &rxHW)
     {
-        xHyphWord = rxHW;
+        m_xHyphWord = rxHW;
     }
     const css::uno::Reference< css::linguistic2::XHyphenatedWord >& GetHyphWord() const
     {
-        return xHyphWord;
+        return m_xHyphWord;
     }
 };
 

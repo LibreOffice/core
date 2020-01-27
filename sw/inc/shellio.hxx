@@ -296,11 +296,11 @@ public:
 
 class SW_DLLPUBLIC StgReader : public Reader
 {
-    OUString aFltName;
+    OUString m_aFltName;
 
 public:
     virtual SwReaderType GetReaderType() override;
-    const OUString& GetFltName() const { return aFltName; }
+    const OUString& GetFltName() const { return m_aFltName; }
     virtual void SetFltName( const OUString& r ) override;
 };
 

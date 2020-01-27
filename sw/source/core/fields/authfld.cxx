@@ -50,13 +50,13 @@ SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : SimpleReferenceObject()
 {
     for(int i = 0; i < AUTH_FIELD_END; ++i)
-        aAuthFields[i] = rCopy.aAuthFields[i];
+        m_aAuthFields[i] = rCopy.m_aAuthFields[i];
 }
 
 bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 {
     for(int i = 0; i < AUTH_FIELD_END; ++i)
-        if(aAuthFields[i] != rComp.aAuthFields[i])
+        if(m_aAuthFields[i] != rComp.m_aAuthFields[i])
             return false;
     return true;
 }

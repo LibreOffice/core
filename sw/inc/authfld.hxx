@@ -32,7 +32,7 @@
 class SwAuthEntry final : public salhelper::SimpleReferenceObject
 {
 friend class SwAuthorityFieldType;
-    OUString        aAuthFields[AUTH_FIELD_END];
+    OUString        m_aAuthFields[AUTH_FIELD_END];
 public:
     SwAuthEntry() = default;
     SwAuthEntry( const SwAuthEntry& rCopy );
@@ -181,13 +181,13 @@ public:
 inline OUString const & SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const
 {
     SAL_WARN_IF(AUTH_FIELD_END <= ePos, "sw", "wrong index");
-    return aAuthFields[ePos];
+    return m_aAuthFields[ePos];
 }
 inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const OUString& rField)
 {
     SAL_WARN_IF(AUTH_FIELD_END <= ePos, "sw", "wrong index");
     if(AUTH_FIELD_END > ePos)
-        aAuthFields[ePos] = rField;
+        m_aAuthFields[ePos] = rField;
 }
 
 #endif
