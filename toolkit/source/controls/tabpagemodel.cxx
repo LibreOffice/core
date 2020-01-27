@@ -177,8 +177,7 @@ sal_Bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceNam
 
 css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aSeq { "com.sun.star.awt.tab.UnoControlTabPage" };
-    return aSeq;
+    return { "com.sun.star.awt.tab.UnoControlTabPage" };
 }
 
 void UnoControlTabPage::dispose()
