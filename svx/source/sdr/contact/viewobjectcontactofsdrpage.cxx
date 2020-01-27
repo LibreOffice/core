@@ -464,8 +464,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::cre
         const Size aFine(rView.GetGridFine());
         const double fWidthX(aRaw.getWidth());
         const double fWidthY(aRaw.getHeight());
-        const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0L);
-        const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0L);
+        const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0);
+        const sal_uInt32 nSubdivisionsY(aFine.getHeight() ? aRaw.getHeight() / aFine.getHeight() : 0);
 
         xRetval.resize(1);
         xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GridPrimitive2D(

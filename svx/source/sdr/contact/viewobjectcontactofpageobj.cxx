@@ -229,11 +229,11 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aPageBound));
 
             // add replacement fill
-            xPageContent[0L] = drawinglayer::primitive2d::Primitive2DReference(
+            xPageContent[0] = drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aDocColor.getBColor()));
 
             // add replacement border
-            xPageContent[1L] = drawinglayer::primitive2d::Primitive2DReference(
+            xPageContent[1] = drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aBorderColor.getBColor()));
         }
         else
