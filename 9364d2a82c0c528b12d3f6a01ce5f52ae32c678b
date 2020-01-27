@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfedc1d7_6544fbd6",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4031,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "It\u0027s very unfortunate that in addition to variable renames (which admittedly improve readability), sometimes unnecessary rearrangements are done, like in this case, where declaration of this variable (previously named p) is moved up above data type. Every such move makes it more difficult to see what happened, and what actually changed.",
+      "range": {
+        "startLine": 4031,
+        "startChar": 4,
+        "endLine": 4031,
+        "endChar": 22
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283e373e_794d026e",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "You have changed this to assume that index can\u0027t be greater than already processed argument count. Is that based on some evidence?",
+      "range": {
+        "startLine": 4034,
+        "startChar": 9,
+        "endLine": 4034,
+        "endChar": 37
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf4dcf83_a23ea3be",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "This comment simply repeats already present one on new line 4046 (please keep that old one).",
+      "range": {
+        "startLine": 4043,
+        "startChar": 4,
+        "endLine": 4043,
+        "endChar": 52
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0ab2505_55657f1c",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "It doesn\u0027t just set default value; previous comment made it clear that this *checks* if there actually is a default for this parameter, then sets...",
+      "range": {
+        "startLine": 4056,
+        "startChar": 23,
+        "endLine": 4056,
+        "endChar": 64
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4ac743_14bf1c41",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "Type checks often contain masking with 0x0FFF (see 4080 below). IIRC, eType might include byval flag, which is relevant here: if you declare a param to be a byval optional variant, then here the check will allow to create a default variant, not a missing argument.",
+      "range": {
+        "startLine": 4065,
+        "startChar": 60,
+        "endLine": 4065,
+        "endChar": 79
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c10c524a_875af0ec",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 1,
+      "message": "This space correction is completely unjustified - you don\u0027t modify this line otherwise.",
+      "range": {
+        "startLine": 4083,
+        "startChar": 31,
+        "endLine": 4083,
+        "endChar": 32
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

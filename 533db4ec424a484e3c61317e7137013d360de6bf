@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eb7eea5_5947fd2d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T21:57:34Z",
+      "side": 0,
+      "message": "Moving this to new line 4053 is wrong. nOp1 is likely not just the index (as you state in new lines 4022-4024); it might have something in upper bits. Those bits are stripped here, and `i` actually contain the index, which is used later wherever the index is needed.",
+      "range": {
+        "startLine": 4025,
+        "startChar": 4,
+        "endLine": 4025,
+        "endChar": 60
+      },
+      "revId": "533db4ec424a484e3c61317e7137013d360de6bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
