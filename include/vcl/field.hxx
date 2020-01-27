@@ -236,24 +236,6 @@ private:
     OUString                maCustomUnitText;
 };
 
-
-class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
-{
-protected:
-                            CurrencyFormatter(Edit* pEdit);
-    SAL_DLLPRIVATE void     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
-    virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
-
-public:
-    virtual                 ~CurrencyFormatter() override;
-
-    virtual void            Reformat() override;
-
-    virtual void            SetValue( sal_Int64 nNewValue ) override;
-    virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
-};
-
-
 class VCL_DLLPUBLIC DateFormatter : public FormatterBase
 {
 private:
@@ -330,7 +312,6 @@ public:
     void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
     bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
-
 
 class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
 {
@@ -499,26 +480,6 @@ public:
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
-
-class VCL_DLLPUBLIC CurrencyField final : public SpinField, public CurrencyFormatter
-{
-public:
-    CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            Up() override;
-    virtual void            Down() override;
-    virtual void            First() override;
-    virtual void            Last() override;
-    virtual void            dispose() override;
-};
-
-
 class VCL_DLLPUBLIC DateField : public SpinField, public DateFormatter
 {
 private:
@@ -548,7 +509,6 @@ public:
     const Date&             GetLast() const                     { return maLast; }
     virtual void            dispose() override;
 };
-
 
 class VCL_DLLPUBLIC TimeField final : public SpinField, public TimeFormatter
 {
@@ -580,22 +540,6 @@ public:
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
     virtual void            dispose() override;
 };
-
-
-class VCL_DLLPUBLIC PatternBox final : public ComboBox, public PatternFormatter
-{
-public:
-                            PatternBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
-    virtual void            dispose() override;
-};
-
 
 class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 {
@@ -639,55 +583,6 @@ public:
     // Needed, because GetValue() with nPos hide these functions
     using MetricFormatter::GetValue;
 
-    virtual void            dispose() override;
-};
-
-
-class VCL_DLLPUBLIC CurrencyBox final : public ComboBox, public CurrencyFormatter
-{
-public:
-    explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
-
-    virtual void            dispose() override;
-};
-
-
-class VCL_DLLPUBLIC DateBox final : public ComboBox, public DateFormatter
-{
-public:
-    explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
-    virtual void            dispose() override;
-};
-
-
-class VCL_DLLPUBLIC TimeBox final : public ComboBox, public TimeFormatter
-{
-public:
-    explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
     virtual void            dispose() override;
 };
 
