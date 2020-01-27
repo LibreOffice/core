@@ -35,17 +35,17 @@ namespace
 // Shorten() -- inserts ellipsis (...) in the middle of a long text
 void Shorten (OUString& rString)
 {
-    unsigned nLen = rString.getLength();
+    auto const nLen = rString.getLength();
     if (nLen > 48)
     {
         // If possible, we don't break a word, hence first we look for a space.
         // Space before the ellipsis:
-        int iFirst = rString.lastIndexOf(' ', 32);
-        if (iFirst == -1 || unsigned(iFirst) < 16)
+        auto iFirst = rString.lastIndexOf(' ', 32);
+        if (iFirst == -1 || iFirst < 16)
             iFirst = 24; // not possible
         // Space after the ellipsis:
-        int iLast = rString.indexOf(' ', nLen - 16);
-        if (iLast == -1 || unsigned(iLast) > nLen - 4)
+        auto iLast = rString.indexOf(' ', nLen - 16);
+        if (iLast == -1 || iLast > nLen - 4)
             iLast = nLen - 8; // not possible
         // finally:
         rString =
