@@ -414,7 +414,7 @@ interface BaseTextFrame
     FN_POSTIT
     [
         ExecMethod = ExecField ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
     ]
 }
 
