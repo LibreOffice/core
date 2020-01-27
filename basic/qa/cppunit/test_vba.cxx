@@ -113,6 +113,7 @@ void VBATest::testMiscVBAFunctions()
         "month.vb",
         "monthname.vb",
         "oct.vb",
+        "optional_paramters.vb",
         "qbcolor.vb",
         "rgb.vb",
         "rtrim.vb",
