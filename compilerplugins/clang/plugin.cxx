@@ -18,8 +18,14 @@
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
 
+#include "config_clang.h"
+
 #include "compat.hxx"
 #include "pluginhandler.hxx"
+
+#if CLANG_VERSION >= 110000
+#include "clang/AST/ParentMapContext.h"
+#endif
 
 /*
 Base classes for plugin actions.

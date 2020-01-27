@@ -13,10 +13,16 @@
 #include <unordered_map>
 #include <iostream>
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
 #include "functionaddress.hxx"
+
+#if CLANG_VERSION >= 110000
+#include "clang/AST/ParentMapContext.h"
+#endif
 
 /**
    Find pointer and reference params that can be declared const.

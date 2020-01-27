@@ -9,12 +9,17 @@
  *
  */
 
+#include "config_clang.h"
 #include <config_global.h>
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
 #include <unordered_set>
 #include <unordered_map>
+
+#if CLANG_VERSION >= 110000
+#include "clang/AST/ParentMapContext.h"
+#endif
 
 namespace loplugin
 {

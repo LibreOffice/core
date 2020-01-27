@@ -18,9 +18,16 @@
 #include <algorithm>
 #include <sys/file.h>
 #include <unistd.h>
+
+#include "config_clang.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
+
+#if CLANG_VERSION >= 110000
+#include "clang/AST/ParentMapContext.h"
+#endif
 
 /**
 Look for fields that are only assigned to in the constructor using field-init, and can therefore be const.
