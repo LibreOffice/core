@@ -22,7 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
