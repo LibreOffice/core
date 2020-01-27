@@ -1,5 +1,3 @@
-Option VBASupport 1
-
 Dim passCount As Integer
 Dim failCount As Integer
 Dim result As String
@@ -10,19 +8,18 @@ Const IsMissingB = 1
 Const IsMissingAB = 2
 
 Function doUnitTest() As String
-    result = verify_testIsMissingVba()
+    result = verify_testIsMissingBasic()
     If failCount <> 0 Or passCount = 0 Then
-        doUnitTest = result
+        doUnitTest = 0
     Else
-        doUnitTest = "OK"
+        doUnitTest = 1
     End If
 End Function
 
-' tdf#36737 - Test isMissing function with different datatypes. In LO Basic
-' with option VBASupport, optional parameters are allowed with default values.
-' In addition, having types other than Variant will be initialized to
-' their respective default values of its datatype.
-Function verify_testIsMissingVba() As String
+' tdf#36737 - Test optionals with different datatypes. In LO Basic, optional
+' parameters are allowed, but without any default values. Missing optional parameters
+' will not be initialized to their respective default values of its datatype, either.
+Function verify_testIsMissingBasic() As String
 
     passCount = 0
     failCount = 0
@@ -32,59 +29,59 @@ Function verify_testIsMissingVba() As String
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    TestLog_ASSERT TestOptVariant() = IsMissingA, "the return of IsMissing in TestOptVariant(Optional, Optional) is: " & TestOptVariant(), "TestOptVariant()"
-    TestLog_ASSERT TestOptVariant(123) = IsMissingNone, "the return of IsMissing in TestOptVariant(Variant, Optional) is: " & TestOptVariant(123), "TestOptVariant(123)"
+    TestLog_ASSERT TestOptVariant() = IsMissingAB, "the return of IsMissing in TestOptVariant(Optional, Optional) is: " & TestOptVariant(), "TestOptVariant()"
+    TestLog_ASSERT TestOptVariant(123) = IsMissingB, "the return of IsMissing in TestOptVariant(Variant, Optional) is: " & TestOptVariant(123), "TestOptVariant(123)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariant(, 456) = IsMissingNone, "the return of IsMissing in TestOptVariant(Optional, Variant) is: " & TestOptVariant(, 456), "TestOptVariant(, 456)"
+    ' TestLog_ASSERT TestOptVariant(, 456) = IsMissingA, "the return of IsMissing in TestOptVariant(Optional, Variant) is: " & TestOptVariant(, 456), "TestOptVariant(, 456)"
     TestLog_ASSERT TestOptVariant(123, 456) = IsMissingNone, "the return of IsMissing in TestOptVariant(Variant, Variant) is: " & TestOptVariant(123, 456), "TestOptVariant(123, 456)"
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptVariantByRefByVal() = IsMissingA, "the return of IsMissing in TestOptVariantByRefByVal(Optional, Optional) is: " & TestOptVariantByRefByVal(), "TestOptVariantByRefByVal()"
-    TestLog_ASSERT TestOptVariantByRefByVal(123) = IsMissingNone, "the return of IsMissing in TestOptVariantByRefByVal(Variant, Optional) is: " & TestOptVariantByRefByVal(123), "TestOptVariantByRefByVal(123)"
+    TestLog_ASSERT TestOptVariantByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptVariantByRefByVal(Optional, Optional) is: " & TestOptVariantByRefByVal(), "TestOptVariantByRefByVal()"
+    TestLog_ASSERT TestOptVariantByRefByVal(123) = IsMissingB, "the return of IsMissing in TestOptVariantByRefByVal(Variant, Optional) is: " & TestOptVariantByRefByVal(123), "TestOptVariantByRefByVal(123)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariantByRefByVal(, 456) = IsMissingNone, "the return of IsMissing in TestOptVariantByRefByVal(Optional, Variant) is: " & TestOptVariantByRefByVal(, 456), "TestOptVariantByRefByVal(, 456)"
+    ' TestLog_ASSERT TestOptVariantByRefByVal(, 456) = IsMissingA, "the return of IsMissing in TestOptVariantByRefByVal(Optional, Variant) is: " & TestOptVariantByRefByVal(, 456), "TestOptVariantByRefByVal(, 456)"
     TestLog_ASSERT TestOptVariantByRefByVal(123, 456) = IsMissingNone, "the return of IsMissing in TestOptVariantByRefByVal(Variant, Variant) is: " & TestOptVariantByRefByVal(123, 456), "TestOptVariantByRefByVal(123, 456)"
 
     ' optionals with double datatypes
-    TestLog_ASSERT TestOptDouble() = IsMissingNone, "the return of IsMissing in TestOptDouble(Optional, Optional) is: " & TestOptDouble(), "TestOptDouble()"
-    TestLog_ASSERT TestOptDouble(123.4) = IsMissingNone, "the return of IsMissing in TestOptDouble(Double, Optional) is: " & TestOptDouble(123.4), "TestOptDouble(123.4)"
+    TestLog_ASSERT TestOptDouble() = IsMissingAB, "the return of IsMissing in TestOptDouble(Optional, Optional) is: " & TestOptDouble(), "TestOptDouble()"
+    TestLog_ASSERT TestOptDouble(123.4) = IsMissingB, "the return of IsMissing in TestOptDouble(Double, Optional) is: " & TestOptDouble(123.4), "TestOptDouble(123.4)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDouble(, 567.8) = IsMissingNone, "the return of IsMissing in TestOptDouble(Optional, Double) is: " & TestOptDouble(, 567.8), "TestOptDouble(, 567.8)"
+    ' TestLog_ASSERT TestOptDouble(, 567.8) = IsMissingA, "the return of IsMissing in TestOptDouble(Optional, Double) is: " & TestOptDouble(, 567.8), "TestOptDouble(, 567.8)"
     TestLog_ASSERT TestOptDouble(123.4, 567.8) = IsMissingNone, "the return of IsMissing in TestOptDouble(Double, Double) is: " & TestOptDouble(123.4, 567.8), "TestOptDouble(123.4, 567.8)"
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptDoubleByRefByVal() = IsMissingNone, "the return of IsMissing in TestOptDoubleByRefByVal(Optional, Optional) is: " & TestOptDoubleByRefByVal(), "TestOptDouble()"
-    TestLog_ASSERT TestOptDoubleByRefByVal(123.4) = IsMissingNone, "the return of IsMissing in TestOptDoubleByRefByVal(Double, Optional) is: " & TestOptDoubleByRefByVal(123.4), "TestOptDouble(123.4)"
+    TestLog_ASSERT TestOptDoubleByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptDoubleByRefByVal(Optional, Optional) is: " & TestOptDoubleByRefByVal(), "TestOptDouble()"
+    TestLog_ASSERT TestOptDoubleByRefByVal(123.4) = IsMissingB, "the return of IsMissing in TestOptDoubleByRefByVal(Double, Optional) is: " & TestOptDoubleByRefByVal(123.4), "TestOptDouble(123.4)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8) = IsMissingNone, "the return of IsMissing in TestOptDoubleByRefByVal(Optional, Double) is: " & TestOptDoubleByRefByVal(, 567.8), "TestOptDoubleByRefByVal(, 567.8)"
+    ' TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8) = IsMissingA, "the return of IsMissing in TestOptDoubleByRefByVal(Optional, Double) is: " & TestOptDoubleByRefByVal(, 567.8), "TestOptDoubleByRefByVal(, 567.8)"
     TestLog_ASSERT TestOptDoubleByRefByVal(123.4, 567.8) = IsMissingNone, "the return of IsMissing in TestOptDoubleByRefByVal(Double, Double) is: " & TestOptDoubleByRefByVal(123.4, 567.8), "TestOptDoubleByRefByVal(123.4, 567.8)"
 
     ' optionals with integer datatypes
-    TestLog_ASSERT TestOptInteger() = IsMissingNone, "the return of IsMissing in TestOptInteger(Optional, Optional) is: " & TestOptInteger(), "TestOptInteger()"
-    TestLog_ASSERT TestOptInteger(123) = IsMissingNone, "the return of IsMissing in TestOptInteger(Integer, Optional) is: " & TestOptInteger(123), "TestOptInteger(123)"
+    TestLog_ASSERT TestOptInteger() = IsMissingAB, "the return of IsMissing in TestOptInteger(Optional, Optional) is: " & TestOptInteger(), "TestOptInteger()"
+    TestLog_ASSERT TestOptInteger(123) = IsMissingB, "the return of IsMissing in TestOptInteger(Integer, Optional) is: " & TestOptInteger(123), "TestOptInteger(123)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptInteger(, 456) = IsMissingNone, "the return of IsMissing in TestOptInteger(Optional, Integer) is: " & TestOptInteger(, 456), "TestOptInteger(, 456)"
+    ' TestLog_ASSERT TestOptInteger(, 456) = IsMissingA, "the return of IsMissing in TestOptInteger(Optional, Integer) is: " & TestOptInteger(, 456), "TestOptInteger(, 456)"
     TestLog_ASSERT TestOptInteger(123, 456) = IsMissingNone, "the return of IsMissing in TestOptInteger(Integer, Integer) is: " & TestOptInteger(123, 456), "TestOptInteger(123, 456)"
 
     ' optionals with integer datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptIntegerByRefByVal() = IsMissingNone, "the return of IsMissing in TestOptIntegerByRefByVal(Optional, Optional) is: " & TestOptIntegerByRefByVal(), "TestOptIntegerByRefByVal()"
-    TestLog_ASSERT TestOptIntegerByRefByVal(123) = IsMissingNone, "the return of IsMissing in TestOptIntegerByRefByVal(Integer, Optional) is: " & TestOptIntegerByRefByVal(123), "TestOptIntegerByRefByVal(123)"
+    TestLog_ASSERT TestOptIntegerByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptIntegerByRefByVal(Optional, Optional) is: " & TestOptIntegerByRefByVal(), "TestOptIntegerByRefByVal()"
+    TestLog_ASSERT TestOptIntegerByRefByVal(123) = IsMissingB, "the return of IsMissing in TestOptIntegerByRefByVal(Integer, Optional) is: " & TestOptIntegerByRefByVal(123), "TestOptIntegerByRefByVal(123)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptIntegerByRefByVal(, 456) = IsMissingNone, "the return of IsMissing in TestOptIntegerByRefByVal(Optional, Integer) is: " & TestOptIntegerByRefByVal(, 456), "TestOptIntegerByRefByVal(, 456)"
+    ' TestLog_ASSERT TestOptIntegerByRefByVal(, 456) = IsMissingA, "the return of IsMissing in TestOptIntegerByRefByVal(Optional, Integer) is: " & TestOptIntegerByRefByVal(, 456), "TestOptIntegerByRefByVal(, 456)"
     TestLog_ASSERT TestOptIntegerByRefByVal(123, 456) = IsMissingNone, "the return of IsMissing in TestOptIntegerByRefByVal(Integer, Integer) is: " & TestOptIntegerByRefByVal(123, 456), "TestOptIntegerByRefByVal(123, 456)"
 
     ' optionals with string datatypes
-    TestLog_ASSERT TestOptString() = IsMissingNone, "the return of IsMissing in TestOptString(Optional, Optional) is: " & TestOptString(), "TestOptString()"
-    TestLog_ASSERT TestOptString("123") = IsMissingNone, "the return of IsMissing in TestOptString(String, Optional) is: " & TestOptString("123"), "TestOptString(""123"")"
+    TestLog_ASSERT TestOptString() = IsMissingAB, "the return of IsMissing in TestOptString(Optional, Optional) is: " & TestOptString(), "TestOptString()"
+    TestLog_ASSERT TestOptString("123") = IsMissingB, "the return of IsMissing in TestOptString(String, Optional) is: " & TestOptString("123"), "TestOptString(""123"")"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptString(, "456") = IsMissingNone, "the return of IsMissing in TestOptString(Optional, String) is: " & TestOptString(, "456"), "TestOptString(, ""456"")"
+    ' TestLog_ASSERT TestOptString(, "456") = IsMissingA, "the return of IsMissing in TestOptString(Optional, String) is: " & TestOptString(, "456"), "TestOptString(, ""456"")"
     TestLog_ASSERT TestOptString("123", "456") = IsMissingNone, "the return of IsMissing in TestOptString(String, String) is: " & TestOptString("123", "456"), "TestOptString(""123"", ""456"")"
 
     ' optionals with string datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptStringByRefByVal() = IsMissingNone, "the return of IsMissing in TestOptStringByRefByVal(Optional, Optional) is: " & TestOptStringByRefByVal(), "TestOptStringByRefByVal()"
-    TestLog_ASSERT TestOptStringByRefByVal("123") = IsMissingNone, "the return of IsMissing in TestOptStringByRefByVal(String, Optional) is: " & TestOptStringByRefByVal("123"), "TestOptStringByRefByVal(""123"")"
+    TestLog_ASSERT TestOptStringByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptStringByRefByVal(Optional, Optional) is: " & TestOptStringByRefByVal(), "TestOptStringByRefByVal()"
+    TestLog_ASSERT TestOptStringByRefByVal("123") = IsMissingB, "the return of IsMissing in TestOptStringByRefByVal(String, Optional) is: " & TestOptStringByRefByVal("123"), "TestOptStringByRefByVal(""123"")"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptStringByRefByVal(, "456") = IsMissingNone, "the return of IsMissing in TestOptStringByRefByVal(Optional, String) is: " & TestOptStringByRefByVal(, "456"), "TestOptStringByRefByVal(, ""456"")"
+    ' TestLog_ASSERT TestOptStringByRefByVal(, "456") = IsMissingA, "the return of IsMissing in TestOptStringByRefByVal(Optional, String) is: " & TestOptStringByRefByVal(, "456"), "TestOptStringByRefByVal(, ""456"")"
     TestLog_ASSERT TestOptStringByRefByVal("123", "456") = IsMissingNone, "the return of IsMissing in TestOptStringByRefByVal(String, String) is: " & TestOptStringByRefByVal("123", "456"), "TestOptStringByRefByVal(""123"", ""456"")"
 
     ' optionals with object datatypes
@@ -114,32 +111,28 @@ Function verify_testIsMissingVba() As String
     Dim aB(0 To 1) As Variant
     aB(0) = 123.4
     aB(1) = 567.8
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestLog_ASSERT TestOptArray() = IsMissingAB, "the return of IsMissing in TestOptArray(Optional, Optional) is: " & TestOptArray(), "TestOptArray()"
-    ' TestLog_ASSERT TestOptArray(aA) = IsMissingB, "the return of IsMissing in TestOptArray(Array, Optional) is: " & TestOptArray(aA), "TestOptArray(A)"
-
+    TestLog_ASSERT TestOptArray() = IsMissingAB, "the return of IsMissing in TestOptArray(Optional, Optional) is: " & TestOptArray(), "TestOptArray()"
+    TestLog_ASSERT TestOptArray(aA) = IsMissingB, "the return of IsMissing in TestOptArray(Array, Optional) is: " & TestOptArray(aA), "TestOptArray(A)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptArray(, aB) = IsMissingA, "the return of IsMissing in TestOptArray(Optional, Array) is: " & TestOptArray(, B), "TestOptArray(, B)"
+    'TestLog_ASSERT TestOptArray(, aB) = IsMissingA, "the return of IsMissing in TestOptArray(Optional, Array) is: " & TestOptArray(, B), "TestOptArray(, B)"
     TestLog_ASSERT TestOptArray(aA, aB) = IsMissingNone, "the return of IsMissing in TestOptArray(Array, Array) is: " & TestOptArray(aA, aB), "TestOptArray(A, B)"
 
     ' optionals with array datatypes (ByRef and ByVal)
-    ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestLog_ASSERT TestOptArrayByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptArrayByRefByVal(Optional, Optional) is: " & TestOptArrayByRefByVal(), "TestOptArrayByRefByVal()"
-    ' TestLog_ASSERT TestOptArrayByRefByVal(aA) = IsMissingB, "the return of IsMissing in TestOptArrayByRefByVal(Array, Optional) is: " & TestOptArrayByRefByVal(aA), "TestOptArrayByRefByVal(A)"
-
+    TestLog_ASSERT TestOptArrayByRefByVal() = IsMissingAB, "the return of IsMissing in TestOptArrayByRefByVal(Optional, Optional) is: " & TestOptArrayByRefByVal(), "TestOptArrayByRefByVal()"
+    TestLog_ASSERT TestOptArrayByRefByVal(aA) = IsMissingB, "the return of IsMissing in TestOptArrayByRefByVal(Array, Optional) is: " & TestOptArrayByRefByVal(aA), "TestOptArrayByRefByVal(A)"
     ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptArrayByRefByVal(, aB) = IsMissingA, "the return of IsMissing in TestOptArrayByRefByVal(Optional, Array) is: " & TestOptArrayByRefByVal(, B), "TestOptArrayByRefByVal(, B)"
+    'TestLog_ASSERT TestOptArrayByRefByVal(, aB) = IsMissingA, "the return of IsMissing in TestOptArrayByRefByVal(Optional, Array) is: " & TestOptArrayByRefByVal(, B), "TestOptArrayByRefByVal(, B)"
     TestLog_ASSERT TestOptArrayByRefByVal(aA, aB) = IsMissingNone, "the return of IsMissing in TestOptArrayByRefByVal(Array, Array) is: " & TestOptArrayByRefByVal(aA, aB), "TestOptArrayByRefByVal(A, B)"
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
-    verify_testIsMissingVba = result
+    verify_testIsMissingBasic = result
 
     Exit Function
 errorHandler:
     TestLog_ASSERT False, testName & ": hit error handler"
 End Function
 
-Function TestOptVariant(Optional A, Optional B As Variant = 123)
+Function TestOptVariant(Optional A, Optional B As Variant)
     If IsMissing(A) And IsMissing(B) Then
         TestOptVariant = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -151,7 +144,7 @@ Function TestOptVariant(Optional A, Optional B As Variant = 123)
     End If
 End Function
 
-Function TestOptVariantByRefByVal(Optional ByRef A, Optional ByVal B As Variant = 123)
+Function TestOptVariantByRefByVal(Optional ByRef A, Optional ByVal B As Variant)
     If IsMissing(A) And IsMissing(B) Then
         TestOptVariantByRefByVal = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -164,7 +157,7 @@ Function TestOptVariantByRefByVal(Optional ByRef A, Optional ByVal B As Variant 
 End Function
 
 
-Function TestOptDouble(Optional A As Double, Optional B As Double = 123.4)
+Function TestOptDouble(Optional A As Double, Optional B As Double)
     If IsMissing(A) And IsMissing(B) Then
         TestOptDouble = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -176,7 +169,7 @@ Function TestOptDouble(Optional A As Double, Optional B As Double = 123.4)
     End If
 End Function
 
-Function TestOptDoubleByRefByVal(Optional ByRef A As Double, Optional ByVal B As Double = 123.4)
+Function TestOptDoubleByRefByVal(Optional ByRef A As Double, Optional ByVal B As Double)
     If IsMissing(A) And IsMissing(B) Then
         TestOptDoubleByRefByVal = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -188,7 +181,7 @@ Function TestOptDoubleByRefByVal(Optional ByRef A As Double, Optional ByVal B As
     End If
 End Function
 
-Function TestOptInteger(Optional A As Integer, Optional B As Integer = 123)
+Function TestOptInteger(Optional A As Integer, Optional B As Integer)
     If IsMissing(A) And IsMissing(B) Then
         TestOptInteger = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -200,7 +193,7 @@ Function TestOptInteger(Optional A As Integer, Optional B As Integer = 123)
     End If
 End Function
 
-Function TestOptIntegerByRefByVal(Optional ByRef A As Integer, Optional ByVal B As Integer = 123)
+Function TestOptIntegerByRefByVal(Optional ByRef A As Integer, Optional ByVal B As Integer)
     If IsMissing(A) And IsMissing(B) Then
         TestOptIntegerByRefByVal = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -212,7 +205,7 @@ Function TestOptIntegerByRefByVal(Optional ByRef A As Integer, Optional ByVal B 
     End If
 End Function
 
-Function TestOptString(Optional A As String, Optional B As String = "123")
+Function TestOptString(Optional A As String, Optional B As String)
     If IsMissing(A) And IsMissing(B) Then
         TestOptString = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -224,7 +217,7 @@ Function TestOptString(Optional A As String, Optional B As String = "123")
     End If
 End Function
 
-Function TestOptStringByRefByVal(Optional ByRef A As String, Optional ByVal B As String = "123")
+Function TestOptStringByRefByVal(Optional ByRef A As String, Optional ByVal B As String)
     If IsMissing(A) And IsMissing(B) Then
         TestOptStringByRefByVal = IsMissingAB
     ElseIf IsMissing(A) Then
@@ -238,11 +231,11 @@ End Function
 
 Function TestOptObject(Optional A As Collection, Optional B As Collection)
     Dim idx As Integer
-    If IsNull(A) And IsNull(B) Then
+    If IsMissing(A) And IsMissing(B) Then
         TestOptObject = IsMissingAB
-    ElseIf IsNull(A) Then
+    ElseIf IsMissing(A) Then
         TestOptObject = IsMissingA
-    ElseIf IsNull(B) Then
+    ElseIf IsMissing(B) Then
         TestOptObject = IsMissingB
     Else
         TestOptObject = IsMissingNone
@@ -251,11 +244,11 @@ End Function
 
 Function TestOptObjectByRefByVal(Optional ByRef A As Collection, Optional ByVal B As Collection)
     Dim idx As Integer
-    If IsNull(A) And IsNull(B) Then
+    If IsMissing(A) And IsMissing(B) Then
         TestOptObjectByRefByVal = IsMissingAB
-    ElseIf IsNull(A) Then
+    ElseIf IsMissing(A) Then
         TestOptObjectByRefByVal = IsMissingA
-    ElseIf IsNull(B) Then
+    ElseIf IsMissing(B) Then
         TestOptObjectByRefByVal = IsMissingB
     Else
         TestOptObjectByRefByVal = IsMissingNone
@@ -264,11 +257,11 @@ End Function
 
 Function TestOptArray(Optional A() As Integer, Optional B() As Variant)
     Dim idx As Integer
-    If IsEmpty(A) And IsEmpty(B) Then
+    If IsMissing(A) And IsMissing(B) Then
         TestOptArray = IsMissingAB
-    ElseIf IsEmpty(A) Then
+    ElseIf IsMissing(A) Then
         TestOptArray = IsMissingA
-    ElseIf IsEmpty(B) Then
+    ElseIf IsMissing(B) Then
         TestOptArray = IsMissingB
     Else
         TestOptArray = IsMissingNone
@@ -277,11 +270,11 @@ End Function
 
 Function TestOptArrayByRefByVal(Optional ByRef A() As Integer, Optional ByVal B() As Variant)
     Dim idx As Integer
-    If IsEmpty(A) And IsEmpty(B) Then
+    If IsMissing(A) And IsMissing(B) Then
         TestOptArrayByRefByVal = IsMissingAB
-    ElseIf IsEmpty(A) Then
+    ElseIf IsMissing(A) Then
         TestOptArrayByRefByVal = IsMissingA
-    ElseIf IsEmpty(B) Then
+    ElseIf IsMissing(B) Then
         TestOptArrayByRefByVal = IsMissingB
     Else
         TestOptArrayByRefByVal = IsMissingNone
