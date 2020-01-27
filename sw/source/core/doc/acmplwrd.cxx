@@ -24,7 +24,7 @@
 #include <doc.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
-#include <calbck.hxx>
+#include <svl/listener.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <editeng/svxacorr.hxx>
 #include <osl/diagnose.h>
@@ -35,14 +35,12 @@
 
 #include <cassert>
 #include <vector>
+#include <atomic>
 
-class SwAutoCompleteClient : public SwClient
+class SwAutoCompleteClient final: public SvtListener
 {
     SwAutoCompleteWord* m_pAutoCompleteWord;
     SwDoc*              m_pDoc;
-#if OSL_DEBUG_LEVEL > 0
-    static sal_uLong s_nSwAutoCompleteClientCount;
-#endif
 public:
     SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc);
     SwAutoCompleteClient(const SwAutoCompleteClient& rClient);
@@ -51,12 +49,43 @@ public:
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
     const SwDoc& GetDoc() const {return *m_pDoc;}
+    virtual void Notify(const SfxHint&) override;
 #if OSL_DEBUG_LEVEL > 0
-    static sal_uLong GetElementCount() {return s_nSwAutoCompleteClientCount;}
+    static sal_uInt32 GetElementCount() {return s_nSwAutoCompleteClientCount.load();}
+private:
+    static std::atomic<sal_uInt32> s_nSwAutoCompleteClientCount;
 #endif
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
+
+
+SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc)
+    : m_pAutoCompleteWord(&rToTell)
+    , m_pDoc(&rSwDoc)
+{
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+#if OSL_DEBUG_LEVEL > 0
+    ++s_nSwAutoCompleteClientCount;
+#endif
+}
+
+SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient)
+    : SvtListener()
+    , m_pAutoCompleteWord(rClient.m_pAutoCompleteWord)
+    , m_pDoc(rClient.m_pDoc)
+{
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+#if OSL_DEBUG_LEVEL > 0
+    ++s_nSwAutoCompleteClientCount;
+#endif
+}
+
+SwAutoCompleteClient::~SwAutoCompleteClient()
+{
+#if OSL_DEBUG_LEVEL > 0
+    --s_nSwAutoCompleteClientCount;
+#endif
+    (void) this;
+}
 
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
 
@@ -72,6 +101,7 @@ public:
 };
 
 typedef std::vector<const SwDoc*> SwDocPtrVector;
+
 class SwAutoCompleteString
     : public editeng::IAutoCompleteString
 {
@@ -90,59 +120,22 @@ class SwAutoCompleteString
     static sal_uLong GetElementCount() {return s_nSwAutoCompleteStringCount;}
 #endif
 };
-#if OSL_DEBUG_LEVEL > 0
-    sal_uLong SwAutoCompleteClient::s_nSwAutoCompleteClientCount = 0;
-    sal_uLong SwAutoCompleteString::s_nSwAutoCompleteStringCount = 0;
-#endif
-
-SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
-        m_pAutoCompleteWord(&rToTell),
-        m_pDoc(&rSwDoc)
-{
-    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#if OSL_DEBUG_LEVEL > 0
-    ++s_nSwAutoCompleteClientCount;
-#endif
-}
-
-SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
-    SwClient(),
-    m_pAutoCompleteWord(rClient.m_pAutoCompleteWord),
-    m_pDoc(rClient.m_pDoc)
-{
-    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#if OSL_DEBUG_LEVEL > 0
-    ++s_nSwAutoCompleteClientCount;
-#endif
-}
-
-SwAutoCompleteClient::~SwAutoCompleteClient()
-{
-#if OSL_DEBUG_LEVEL > 0
-    --s_nSwAutoCompleteClientCount;
-#else
-    (void) this;
-#endif
-}
 
 SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient& rClient)
 {
     m_pAutoCompleteWord = rClient.m_pAutoCompleteWord;
     m_pDoc = rClient.m_pDoc;
-    StartListeningToSameModifyAs(rClient);
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     return *this;
 }
 
-void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
+void SwAutoCompleteClient::Notify(const SfxHint& rHint)
 {
-    switch( pOld ? pOld->Which() : 0 )
+    if(rHint.GetId() == SfxHintId::Dying)
     {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            EndListeningAll();
+        EndListeningAll();
         m_pAutoCompleteWord->DocumentDying(*m_pDoc);
-        break;
+        m_pDoc = nullptr;
     }
 }
 
@@ -213,7 +206,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
     m_WordList.DeleteAndDestroyAll(); // so the assertion below works
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
-    sal_uLong nClients = SwAutoCompleteClient::GetElementCount();
+    sal_uInt32 nClients = SwAutoCompleteClient::GetElementCount();
     OSL_ENSURE(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
@@ -400,5 +393,10 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         }
     }
 }
+
+#if OSL_DEBUG_LEVEL > 0
+std::atomic<sal_uInt32> SwAutoCompleteClient::s_nSwAutoCompleteClientCount = 0;
+sal_uLong SwAutoCompleteString::s_nSwAutoCompleteStringCount = 0;
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
