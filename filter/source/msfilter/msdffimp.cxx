@@ -658,12 +658,13 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     const OUString sSegments( "Segments" );
                                     const OUString sCoordinates( "Coordinates" );
 
-                                    sal_uInt32 k, nPt = nC;
+                                    sal_uInt32 nPt = nC;
                                     css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
                                     if ( pAny && (*pAny >>= aSegments) )
                                     {
-                                        for ( nPt = 0, k = 1; nC && ( k < static_cast<sal_uInt32>(aSegments.getLength()) ); k++ )
+                                        nPt = 0;
+                                        for ( sal_Int32 k = 1; nC && ( k < aSegments.getLength() ); k++ )
                                         {
                                             sal_Int16 j, nCnt2 = aSegments[ k ].Count;
                                             if ( aSegments[ k ].Command != EnhancedCustomShapeSegmentCommand::UNKNOWN )
