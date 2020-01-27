@@ -46,6 +46,7 @@
 #include <rtl/byteseq.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
+#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>

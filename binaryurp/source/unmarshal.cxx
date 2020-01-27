@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <new>
+#include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
