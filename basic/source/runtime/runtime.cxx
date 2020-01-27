@@ -4015,11 +4015,18 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
 
-// loading a parameter (+offset+type)
-// If the data type is wrong, create a copy.
-// The data type SbxEMPTY shows that no parameters are given.
-// Get( 0 ) may be EMPTY
+/** Loading of a parameter (+offset+type)
+    If the data type is wrong, create a copy and search for optionals including
+    the default value. The data type SbxEMPTY shows that no parameters are given.
+    Get( 0 ) may be EMPTY
 
+    @param nOp1
+    the index of the current parameter being processed,
+    where the entry of the index 0 is for the return value.
+
+    @param nOp2
+    the data type of the parameter.
+ */
 void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     sal_uInt16 nIdx = static_cast<sal_uInt16>( nOp1 & 0x7FFF );
@@ -4034,23 +4041,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         while( iLoop >= nParamCount )
         {
             pVar = new SbxVariable();
-
-            if( SbiRuntime::isVBAEnabled() &&
-                (eType == SbxOBJECT || eType == SbxSTRING) )
-            {
-                if( eType == SbxOBJECT )
-                {
-                    pVar->PutObject( nullptr );
-                }
-                else
-                {
-                    pVar->PutString( OUString() );
-                }
-            }
-            else
-            {
-                pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
-            }
+            pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
             refParams->Put32( pVar, iLoop );
             iLoop--;
         }
@@ -4076,6 +4067,12 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                         OUString aDefaultStr = pImg->GetString( nDefaultId );
                         pVar = new SbxVariable(pParam-> eType);
                         pVar->PutString( aDefaultStr );
+                        refParams->Put32( pVar, nIdx );
+                    }
+                    else if ( SbiRuntime::isVBAEnabled() && eType != SbxVARIANT )
+                    {
+                        // tdf#36737 - initialize the parameter with the default value of its type
+                        pVar = new SbxVariable( pParam->eType );
                         refParams->Put32( pVar, nIdx );
                     }
                     bOpt = true;
