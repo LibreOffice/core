@@ -108,8 +108,11 @@ bool MakeShared::VisitCXXMemberCallExpr(CXXMemberCallExpr const* cxxMemberCallEx
     if (!cxxRecordDecl->getName().contains("shared_ptr"))
         return true;
 
-    if (cxxMemberCallExpr->getMethodDecl()->getName() != "reset")
-        return true;
+    if (auto const id = cxxMemberCallExpr->getMethodDecl()->getIdentifier())
+    {
+        if (id->getName() != "reset")
+            return true;
+    }
     auto cxxNewExpr = dyn_cast<CXXNewExpr>(cxxMemberCallExpr->getArg(0)->IgnoreParenImpCasts());
     if (!cxxNewExpr)
         return true;
