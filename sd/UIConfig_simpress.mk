@@ -115,6 +115,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/customanimationtexttab \
 	sd/uiconfig/simpress/ui/customslideshows \
 	sd/uiconfig/simpress/ui/definecustomslideshow \
+	sd/uiconfig/simpress/ui/displaywindow \
 	sd/uiconfig/simpress/ui/dlgfield \
 	sd/uiconfig/simpress/ui/dockinganimation \
 	sd/uiconfig/simpress/ui/effectmenu \
