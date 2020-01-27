@@ -976,15 +976,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
     uno::Reference<beans::XPropertySet> xProps2(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT(xProps2->getPropertyValue("TextWritingMode") >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
     uno::Reference<beans::XPropertySet> xProps3(getShape(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT(xProps3->getPropertyValue("TextWritingMode") >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 
     uno::Reference<beans::XPropertySet> xProps4(getShape(4), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
+    CPPUNIT_ASSERT(xProps4->getPropertyValue("TextWritingMode") >>= eMode);
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 }
 
