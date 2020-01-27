@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "cd1253d2_e1792296",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-27T23:01:57Z",
+      "side": 1,
+      "message": "... having types other than Variant ...",
+      "range": {
+        "startLine": 20,
+        "startChar": 29,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfedc1d7_6544fbd6",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
