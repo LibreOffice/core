@@ -64,8 +64,7 @@ OUString SAL_CALL SvxUnoDashTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.DashTable" };
-    return aSNS;
+    return { "com.sun.star.drawing.DashTable" };
 }
 
 NameOrIndex* SvxUnoDashTable::createItem() const

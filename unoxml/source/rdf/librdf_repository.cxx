@@ -2464,8 +2464,7 @@ OUString _getImplementationName() {
 
 uno::Sequence< OUString > _getSupportedServiceNames()
 {
-    uno::Sequence< OUString > s { "com.sun.star.rdf.Repository" };
-    return s;
+    return { "com.sun.star.rdf.Repository" };
 }
 
 uno::Reference< uno::XInterface > _create(
