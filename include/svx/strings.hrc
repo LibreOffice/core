@@ -1042,8 +1042,6 @@
 #define RID_SVXSTR_DEPTH_2_INCH                             NC_("RID_SVXSTR_DEPTH_2_INCH", "~1 inch")
 #define RID_SVXSTR_DEPTH_3_INCH                             NC_("RID_SVXSTR_DEPTH_3_INCH", "~2 inch")
 #define RID_SVXSTR_DEPTH_4_INCH                             NC_("RID_SVXSTR_DEPTH_4_INCH", "~4 inch")
-#define RID_SVXSTR_CUSTOM                                   NC_("RID_SVXSTR_CUSTOM", "~Custom...")
-#define RID_SVXSTR_INFINITY                                 NC_("RID_SVXSTR_INFINITY", "~Infinity")
 
 #define RID_SVXSTR_NOFILL                                   NC_("RID_SVXSTR_NOFILL", "No Fill")
 #define RID_SVXSTR_TRANSPARENT                              NC_("RID_SVXSTR_TRANSPARENT", "Transparent")
