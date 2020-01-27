@@ -7876,6 +7876,7 @@ include/vcl/textview.hxx
 include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
+include/vcl/toolkit/field.hxx
 include/vcl/toolkit/fixedhyper.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx

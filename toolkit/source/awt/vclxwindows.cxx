@@ -44,7 +44,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
+#include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/toolkit/imgctrl.hxx>
