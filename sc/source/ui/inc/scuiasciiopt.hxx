@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIASCIIOPT_HXX
 
 #include <svx/langbox.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
