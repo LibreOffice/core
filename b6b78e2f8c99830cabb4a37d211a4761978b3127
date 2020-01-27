@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "56b7d303_6495dfdb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-01-27T06:31:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bb9d698_df01eceb",
+      "revId": "b6b78e2f8c99830cabb4a37d211a4761978b3127",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61500ccb_2edad013",
         "filename": "include/vcl/salnativewidgets.hxx",
         "patchSetId": 10
