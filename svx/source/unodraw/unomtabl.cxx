@@ -140,8 +140,7 @@ OUString SAL_CALL SvxUnoMarkerTable::getImplementationName()
 
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.drawing.MarkerTable" };
-    return aSNS;
+    return { "com.sun.star.drawing.MarkerTable" };
 }
 
 void SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )

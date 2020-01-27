@@ -872,8 +872,7 @@ sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { "com.sun.star.drawing.ShapeCollection" };
-    return aSeq;
+    return { "com.sun.star.drawing.ShapeCollection" };
 }
 
 SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
