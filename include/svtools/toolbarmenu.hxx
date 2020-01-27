@@ -32,13 +32,7 @@ namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: frame { struct FeatureStateEvent; }
 namespace svt { class FrameStatusListener; }
 
-class Control;
-class ValueSet;
-
 namespace svtools {
-
-class ToolbarMenuEntry;
-struct ToolbarMenu_Impl;
 
 class SVT_DLLPUBLIC ToolbarPopupBase
 {
@@ -76,79 +70,6 @@ protected:
 
 private:
     void init();
-};
-
-class SVT_DLLPUBLIC ToolbarMenu : public ToolbarPopup
-{
-    friend struct ToolbarMenu_Impl;
-public:
-    ToolbarMenu(const css::uno::Reference<css::frame::XFrame>& rFrame,
-                vcl::Window* pParentWindow,
-                WinBits nBits );
-
-    virtual ~ToolbarMenu() override;
-    virtual void dispose() override;
-
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
-
-    void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = MenuItemBits::NONE );
-    void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage );
-    void            appendEntry( int nEntryId, Control* pControl );
-    void            appendSeparator();
-
-    /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
-    VclPtr<ValueSet> createEmptyValueSetControl();
-
-    void            checkEntry( int nEntryId, bool bCheck );
-
-    void            enableEntry( int nEntryId, bool bEnable );
-
-    void            setEntryText( int nEntryId, const OUString& rStr );
-
-    void            setEntryImage( int nEntryId, const Image& rImage );
-
-    const Size&     getMenuSize() const;
-
-    void            SetSelectHdl( const Link<ToolbarMenu*,void>& rLink );
-
-    int             getSelectedEntryId() const;
-    int             getHighlightedEntryId() const;
-
-protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-
-    void            StateChanged( StateChangedType nType ) override;
-    void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-private:
-    DECL_LINK( HighlightHdl, ValueSet*, void );
-
-    void            initWindow();
-
-    Size            implCalcSize();
-
-    void            appendEntry(std::unique_ptr<ToolbarMenuEntry> pEntry);
-
-    void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry const * pThisOnly = nullptr, bool bHighlight = false);
-
-    void            implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry);
-    void            implHighlightAtPosition(const MouseEvent& rMEvt);
-
-    void            implChangeHighlightEntry( int nEntry );
-    void            implSelectEntry( int nSelectedEntry );
-
-    ToolbarMenuEntry*   implCursorUpDown( bool bUp, bool bHomeEnd );
-    ToolbarMenuEntry*   implGetEntry( int nEntry ) const;
-    ToolbarMenuEntry*   implSearchEntry( int nEntryId ) const;
-
-    std::unique_ptr<ToolbarMenu_Impl>   mpImpl;
 };
 
 } // namespace svtools
