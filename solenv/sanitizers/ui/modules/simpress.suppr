@@ -16,6 +16,7 @@ sd/uiconfig/simpress/ui/interactionpage.ui://GtkEntry[@id='bookmark'] no-labelle
 sd/uiconfig/simpress/ui/interactionpage.ui://GtkEntry[@id='document'] no-labelled-by
 sd/uiconfig/simpress/ui/interactionpage.ui://GtkEntry[@id='program'] no-labelled-by
 sd/uiconfig/simpress/ui/interactionpage.ui://GtkEntry[@id='macro'] no-labelled-by
+sd/uiconfig/simpress/ui/layoutwindow.ui://GtkButton[@id='more'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='clipboardgrouplabel'] orphan-label
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://svtlo-FontNameBox[@id='fontnamelist'] no-labelled-by
