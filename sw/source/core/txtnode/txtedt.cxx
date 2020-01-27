@@ -1584,8 +1584,8 @@ void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
 SwInterHyphInfoTextFrame::SwInterHyphInfoTextFrame(
         SwTextFrame const& rFrame, SwTextNode const& rNode,
         SwInterHyphInfo const& rHyphInfo)
-    : m_nStart(rFrame.MapModelToView(&rNode, rHyphInfo.nStart))
-    , m_nEnd(rFrame.MapModelToView(&rNode, rHyphInfo.nEnd))
+    : m_nStart(rFrame.MapModelToView(&rNode, rHyphInfo.m_nStart))
+    , m_nEnd(rFrame.MapModelToView(&rNode, rHyphInfo.m_nEnd))
     , m_nWordStart(0)
     , m_nWordLen(0)
 {
@@ -1601,8 +1601,8 @@ void SwInterHyphInfoTextFrame::UpdateTextNodeHyphInfo(SwTextFrame const& rFrame,
         SAL_WARN("sw.core", "UpdateTextNodeHyphInfo: outside of node");
         return;
     }
-    o_rHyphInfo.nWordStart = wordStart.second;
-    o_rHyphInfo.nWordLen = wordEnd.second - wordStart.second;
+    o_rHyphInfo.m_nWordStart = wordStart.second;
+    o_rHyphInfo.m_nWordLen = wordEnd.second - wordStart.second;
     o_rHyphInfo.SetHyphWord(m_xHyphWord);
 }
 

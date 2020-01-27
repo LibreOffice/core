@@ -69,11 +69,11 @@ public:
 
 class SwChartLockController_Helper
 {
-    SwDoc   *pDoc;
+    SwDoc   *m_pDoc;
 
     DECL_LINK( DoUnlockAllCharts, Timer *, void );
-    Timer   aUnlockTimer;   // timer to unlock chart controllers
-    bool    bIsLocked;
+    Timer   m_aUnlockTimer;   // timer to unlock chart controllers
+    bool    m_bIsLocked;
 
     SwChartLockController_Helper( const SwChartLockController_Helper & ) = delete;
     SwChartLockController_Helper & operator = ( const SwChartLockController_Helper & ) = delete;

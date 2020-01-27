@@ -750,8 +750,8 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
 
 inline void SwHyphArgs::SetRange( const SwNode *pNew )
 {
-    nStart = pStart == pNew ? nPamStart : 0;
-    nEnd   = pEnd   == pNew ? nPamStart + nPamLen : SAL_MAX_INT32;
+    m_nStart = pStart == pNew ? nPamStart : 0;
+    m_nEnd   = pEnd   == pNew ? nPamStart + nPamLen : SAL_MAX_INT32;
 }
 
 void SwHyphArgs::SetPam( SwPaM *pPam ) const
@@ -761,10 +761,10 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
     else
     {
         pPam->GetPoint()->nNode = nNode;
-        pPam->GetPoint()->nContent.Assign( pNode->GetContentNode(), nWordStart );
+        pPam->GetPoint()->nContent.Assign( pNode->GetContentNode(), m_nWordStart );
         pPam->GetMark()->nNode = nNode;
         pPam->GetMark()->nContent.Assign( pNode->GetContentNode(),
-                                          nWordStart + nWordLen );
+                                          m_nWordStart + m_nWordLen );
         OSL_ENSURE( nNode == pNode->GetIndex(),
                 "SwHyphArgs::SetPam: Pam disaster" );
     }

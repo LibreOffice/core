@@ -266,7 +266,7 @@ void SwFilterOptions::Notify( const css::uno::Sequence< OUString >& ) {}
 void StgReader::SetFltName( const OUString& rFltNm )
 {
     if( SwReaderType::Storage & GetReaderType() )
-        aFltName = rFltNm;
+        m_aFltName = rFltNm;
 }
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNDoc )
