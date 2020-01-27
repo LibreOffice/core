@@ -143,7 +143,7 @@ class WriterPageDialog(UITestCase):
 
             self.click_button(xDialog, 'ok')
 
-            self.check_default_area('btnnone')
+            #self.check_default_area('btnnone')
 
         self.ui_test.close_doc()
 
