@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "219f1dec_78f6e406",
+        "filename": "accessibility/source/standard/vclxaccessiblelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-27T21:10:48Z",
+      "side": 1,
+      "message": "I don\u0027t think this is equal to the current value. Where is the data coming from the call to the VCLXAccessibleBox::getSupportedServiceNames() method?",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 62
+      },
+      "revId": "4453f6cda615b3a3b527c8565a052b3786ee3879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
