@@ -25,7 +25,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/builderfactory.hxx>
 
 using namespace svx;
 

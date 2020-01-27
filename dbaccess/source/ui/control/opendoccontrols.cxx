@@ -38,7 +38,6 @@
 #include <tools/urlobj.hxx>
 #include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
-#include <vcl/builderfactory.hxx>
 
 namespace dbaui
 {
