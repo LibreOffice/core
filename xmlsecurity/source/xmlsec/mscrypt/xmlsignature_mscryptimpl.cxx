@@ -29,6 +29,7 @@
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <xmlsec-wrapper.h>
 
@@ -286,13 +287,7 @@ OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
-    }
-    return false ;
+return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
