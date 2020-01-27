@@ -425,14 +425,10 @@ void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ )
 
 bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
-    bool bSupports = false;
-
+    // TODO: cache xServiceInfo as member?
     Reference< lang::XServiceInfo > xServiceInfo( m_xReportComponent , UNO_QUERY );
-        // TODO: cache xServiceInfo as member?
-    if ( xServiceInfo.is() )
-        bSupports = xServiceInfo->supportsService( _sServiceName );
 
-    return bSupports;
+    return cppu::supportsService(xServiceInfo.get(), _sServiceName);
 }
 
 
