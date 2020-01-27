@@ -794,36 +794,37 @@ com_sun_star_comp_svx_ExtrusionLightingControl_get_implementation(
 
 static const char g_sExtrusionSurface[] = ".uno:ExtrusionSurface";
 
-ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
-    svt::ToolboxController& rController,
-    vcl::Window* pParentWindow)
-    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
-    , mrController(rController)
+ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
+    : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/surfacewindow.ui", "SurfaceWindow")
+    , mxControl(pControl)
+    , mxWireFrame(m_xBuilder->weld_radio_button("wireframe"))
+    , mxMatt(m_xBuilder->weld_radio_button("matt"))
+    , mxPlastic(m_xBuilder->weld_radio_button("plastic"))
+    , mxMetal(m_xBuilder->weld_radio_button("metal"))
 {
-    SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
-
-    Image aImgSurface1(StockImage::Yes, RID_SVXBMP_WIRE_FRAME);
-    Image aImgSurface2(StockImage::Yes, RID_SVXBMP_MATTE);
-    Image aImgSurface3(StockImage::Yes, RID_SVXBMP_PLASTIC);
-    Image aImgSurface4(StockImage::Yes, RID_SVXBMP_METAL);
-
-    appendEntry(0, SvxResId(RID_SVXSTR_WIREFRAME), aImgSurface1);
-    appendEntry(1, SvxResId(RID_SVXSTR_MATTE), aImgSurface2);
-    appendEntry(2, SvxResId(RID_SVXSTR_PLASTIC), aImgSurface3);
-    appendEntry(3, SvxResId(RID_SVXSTR_METAL), aImgSurface4);
-
-    SetOutputSizePixel( getMenuSize() );
+    mxWireFrame->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxMatt->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxPlastic->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
+    mxMetal->connect_clicked(LINK(this, ExtrusionSurfaceWindow, SelectHdl));
 
     AddStatusListener( g_sExtrusionSurface );
 }
 
+void ExtrusionSurfaceWindow::GrabFocus()
+{
+    mxWireFrame->grab_focus();
+}
+
 void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 {
-    for(int i = 0; i < 4; ++i)
-    {
-        checkEntry( i, (i == nSurface) && bEnabled );
-        enableEntry( i, bEnabled );
-    }
+    mxWireFrame->set_active(nSurface == 0 && bEnabled);
+    mxWireFrame->set_sensitive(bEnabled);
+    mxMatt->set_active(nSurface == 1 && bEnabled);
+    mxMatt->set_sensitive(bEnabled);
+    mxPlastic->set_active(nSurface == 2 && bEnabled);
+    mxPlastic->set_sensitive(bEnabled);
+    mxMetal->set_active(nSurface == 3 && bEnabled);
+    mxMetal->set_sensitive(bEnabled);
 }
 
 void ExtrusionSurfaceWindow::statusChanged(
@@ -845,23 +846,27 @@ void ExtrusionSurfaceWindow::statusChanged(
     }
 }
 
-
-IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, weld::Button&, void)
 {
-    if ( IsInPopupMode() )
-        EndPopupMode();
+    sal_Int32 nSurface;
+    if (mxWireFrame->get_active())
+        nSurface = 0;
+    else if (mxMatt->get_active())
+        nSurface = 1;
+    else if (mxPlastic->get_active())
+        nSurface = 2;
+    else
+        nSurface = 3;
 
-    sal_Int32 nSurface = getSelectedEntryId();
-    if( nSurface >= 0 )
-    {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString(g_sExtrusionSurface).copy(5);
-        aArgs[0].Value <<= nSurface;
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString(g_sExtrusionSurface).copy(5);
+    aArgs[0].Value <<= nSurface;
 
-        mrController.dispatchCommand( g_sExtrusionSurface, aArgs );
+    mxControl->dispatchCommand( g_sExtrusionSurface, aArgs );
 
-        implSetSurface( nSurface, true );
-    }
+    implSetSurface( nSurface, true );
+
+    mxControl->EndPopupMode();
 }
 
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
@@ -875,9 +880,19 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 {
 }
 
+std::unique_ptr<WeldToolbarPopup> ExtrusionSurfaceControl::weldPopupWindow()
+{
+    return std::make_unique<ExtrusionSurfaceWindow>(this, m_pToolbar);
+}
+
 VclPtr<vcl::Window> ExtrusionSurfaceControl::createVclPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionSurfaceWindow>::Create( *this, pParent );
+    mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
+        std::make_unique<ExtrusionSurfaceWindow>(this, pParent->GetFrameWeld()));
+
+    mxInterimPopover->Show();
+
+    return mxInterimPopover;
 }
 
 // XInitialization
