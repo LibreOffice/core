@@ -1237,7 +1237,6 @@ cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 cmd/sc_modifyfield.png cmd/sc_fields.png
 cmd/sc_namegroup.png cmd/sc_renameobject.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
-cmd/sc_setreminder.png cmd/sc_timefield.png
 cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
 cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png
@@ -1888,6 +1887,7 @@ sw/res/nc20011.png cmd/sc_insertdraw.png
 sw/res/one_left.png dbaccess/res/one_left.png
 sw/res/one_right.png dbaccess/res/one_right.png
 sw/res/page_break.png cmd/lc_insertpagebreak.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png sc/res/droplink.png
 sw/res/sc20239.png cmd/sc_copy.png
@@ -1911,7 +1911,7 @@ sw/res/sr20009.png cmd/sc_graphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/styfamnu.png sw/res/sf05.png
