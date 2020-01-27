@@ -785,8 +785,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     // Used for import of old parts in css::awt::FontDescriptor
     std::unique_ptr<css::awt::FontDescriptor> pFD;
 
-    sal_uInt32 i;
-    for ( i = 0; i < nProps; i++ )
+    for ( sal_uInt32 i = 0; i < nProps; i++ )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
         sal_Int32 nPropDataLen = InStream->readLong();
@@ -999,7 +998,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     }
     if ( bInvalidEntries )
     {
-        for ( i = 0; i < static_cast<sal_uInt32>(aProps.getLength()); i++ )
+        for ( sal_Int32 i = 0; i < aProps.getLength(); i++ )
         {
             if ( aProps.getConstArray()[i].isEmpty() )
             {
