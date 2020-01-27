@@ -3053,6 +3053,9 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
 void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 {
+    // do not propagate focus get/lose if floats are open
+    if (m_nFloats)
+        return;
     // change of focus between native widgets within the toplevel
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     // tdf#129634 interpret losing focus as focus passing explicitly to another widget
