@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <unotools/collatorwrapper.hxx>
 #include <swtypes.hxx>
@@ -156,7 +157,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
     if( ! aWriter.Write( xWrt ).IsError() )
     {
         const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
-        if (lUniLen < static_cast<sal_uInt64>(SAL_MAX_INT32-1))
+        if (lUniLen < o3tl::make_unsigned(SAL_MAX_INT32-1))
         {
             aStream.WriteUInt16( '\0' );
 

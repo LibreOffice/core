@@ -36,6 +36,7 @@
 
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -67,11 +68,11 @@ class StringEmitContext : public EmitContext
     }
     virtual unsigned int getCurPos() throw() override { return m_aBuf.getLength(); }
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) throw() override
-    { return (nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) ) &&
+    { return (nOrigOffset+nLen < o3tl::make_unsigned(m_aBuf.getLength()) ) &&
              write( m_aBuf.getStr() + nOrigOffset, nLen ); }
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) throw() override
     {
-        if( nOrigOffset+nLen < static_cast<unsigned int>(m_aBuf.getLength()) )
+        if( nOrigOffset+nLen < o3tl::make_unsigned(m_aBuf.getLength()) )
         {
             memcpy( pBuf, m_aBuf.getStr()+nOrigOffset, nLen );
             return nLen;

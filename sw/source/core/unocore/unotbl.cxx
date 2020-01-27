@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/memberids.h>
 #include <float.h>
@@ -4037,7 +4038,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(nIndex < 0)
         throw lang::IndexOutOfBoundsException();
     SwTable* pTable = SwTable::FindTable( pFrameFormat );
-    if(static_cast<size_t>(nIndex) >= pTable->GetTabLines().size())
+    if(o3tl::make_unsigned(nIndex) >= pTable->GetTabLines().size())
         throw lang::IndexOutOfBoundsException();
     SwTableLine* pLine = pTable->GetTabLines()[nIndex];
     FindUnoInstanceHint<SwTableLine,SwXTextTableRow> aHint{pLine};
@@ -4071,7 +4072,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrameFormat* pFrameFormat(lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this)));
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrameFormat), static_cast<cppu::OWeakObject*>(this));
     const size_t nRowCount = pTable->GetTabLines().size();
-    if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nRowCount))
+    if (nCount <= 0 || !(0 <= nIndex && o3tl::make_unsigned(nIndex) <= nRowCount))
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
@@ -4230,7 +4231,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwTableLines& rLines = pTable->GetTabLines();
     SwTableLine* pLine = rLines.front();
     const size_t nColCount = pLine->GetTabBoxes().size();
-    if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nColCount))
+    if (nCount <= 0 || !(0 <= nIndex && o3tl::make_unsigned(nIndex) <= nColCount))
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString sTLName = sw_GetCellName(nIndex, 0);
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );

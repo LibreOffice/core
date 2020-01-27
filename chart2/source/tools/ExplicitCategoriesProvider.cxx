@@ -28,6 +28,7 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart
@@ -360,7 +361,7 @@ static Sequence< OUString > lcl_getExplicitSimpleCategories(
             OUStringBuffer aText;
             for (auto const& complexCatPerIndex : aComplexCatsPerIndex)
             {
-                if ( static_cast<size_t>(nN) < complexCatPerIndex.size() )
+                if ( o3tl::make_unsigned(nN) < complexCatPerIndex.size() )
                 {
                     OUString aAddText = complexCatPerIndex[nN].Text;
                     if( !aAddText.isEmpty() )

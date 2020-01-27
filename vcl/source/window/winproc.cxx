@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <sal/log.hxx>
@@ -2336,7 +2339,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
         ImplCallCommand( pChild, CommandEventId::QueryCharPosition );
 
         ImplWinData* pWinData = pChild->ImplGetWinData();
-        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
+        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < o3tl::make_unsigned( pWinData->mnCompositionCharRects ) )
         {
             const OutputDevice *pChildOutDev = pChild->GetOutDev();
             const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];

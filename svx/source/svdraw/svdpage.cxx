@@ -23,6 +23,7 @@
 
 #include <svx/svdpage.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/svdview.hxx>
@@ -589,7 +590,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 {
     // no negative indexes and indexes larger than maList size are allowed
     auto it = std::find_if( sortOrder.begin(), sortOrder.end(), [this](const sal_Int32& rIt)
-         { return ( rIt < 0 || static_cast<size_t>(rIt) >= maList.size() ); } );
+         { return ( rIt < 0 || o3tl::make_unsigned(rIt) >= maList.size() ); } );
     if ( it != sortOrder.end())
         throw css::lang::IllegalArgumentException("negative index of shape", nullptr, 1);
 

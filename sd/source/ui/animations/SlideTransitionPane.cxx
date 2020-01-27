@@ -46,6 +46,7 @@
 #include <undoanim.hxx>
 #include <optsitem.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <algorithm>
@@ -303,7 +304,7 @@ OUString lcl_getSoundFileURL(
         DBG_ASSERT( static_cast<sal_uInt32>(rListBox.get_count() - 3) == rSoundList.size(),
                     "Sound list-box is not synchronized to sound list" );
         nPos -= 3;
-        if( rSoundList.size() > static_cast<size_t>(nPos) )
+        if( rSoundList.size() > o3tl::make_unsigned(nPos) )
             return rSoundList[ nPos ];
     }
 

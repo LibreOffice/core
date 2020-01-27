@@ -21,6 +21,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/objsh.hxx>
@@ -1758,7 +1759,7 @@ bool ScDocument::HasPartOfMerged( const ScRange& rRange )
 size_t ScDocument::GetFormulaHash( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if (!ValidTab(nTab) || static_cast<size_t>(nTab) >= maTabs.size() || !maTabs[nTab])
+    if (!ValidTab(nTab) || o3tl::make_unsigned(nTab) >= maTabs.size() || !maTabs[nTab])
         return 0;
 
     return maTabs[nTab]->GetFormulaHash(rPos.Col(), rPos.Row());
@@ -1767,7 +1768,7 @@ size_t ScDocument::GetFormulaHash( const ScAddress& rPos ) const
 ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if (!ValidTab(nTab) || static_cast<size_t>(nTab) >= maTabs.size() || !maTabs[nTab])
+    if (!ValidTab(nTab) || o3tl::make_unsigned(nTab) >= maTabs.size() || !maTabs[nTab])
         return FormulaVectorUnknown;
 
     return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
@@ -2500,7 +2501,7 @@ void ScDocument::DumpAreaBroadcasters() const
 
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
-    return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];
+    return ValidTab(nTab) && o3tl::make_unsigned(nTab) < maTabs.size() && maTabs[nTab];
 }
 
 ScTable* ScDocument::FetchTable( SCTAB nTab )
@@ -4807,7 +4808,7 @@ void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
 
 void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
 {
-    if(static_cast<size_t>(nTab) >= maTabs.size())
+    if(o3tl::make_unsigned(nTab) >= maTabs.size())
         return;
 
     if(!maTabs[nTab])
@@ -4818,7 +4819,7 @@ void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_u
 
 void ScDocument::RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
 {
-    if(static_cast<size_t>(nTab) >= maTabs.size())
+    if(o3tl::make_unsigned(nTab) >= maTabs.size())
         return;
 
     if(!maTabs[nTab])

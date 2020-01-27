@@ -22,6 +22,7 @@
 
 #include "acccontext.hxx"
 #include <accmap.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <viewsh.hxx>
 #include <fesh.hxx>
@@ -225,7 +226,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                     {
                         nCount++;
                     }
-                    if (static_cast<size_t>(nCount) >= nSelObjs)
+                    if (o3tl::make_unsigned(nCount) >= nSelObjs)
                         break;
                 }
             }
@@ -284,7 +285,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     else
     {
         const size_t nSelObjs = pFEShell->IsObjSelected();
-        if( 0 == nSelObjs || static_cast<size_t>(nSelectedChildIndex) >= nSelObjs )
+        if( 0 == nSelObjs || o3tl::make_unsigned(nSelectedChildIndex) >= nSelObjs )
             throwIndexOutOfBoundsException();
 
         std::list< SwAccessibleChild > aChildren;

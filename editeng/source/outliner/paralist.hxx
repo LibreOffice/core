@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <editeng/outliner.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/link.hxx>
 
 class Paragraph;
@@ -50,7 +51,7 @@ public:
 
     Paragraph*      GetParagraph( sal_Int32 nPos ) const
     {
-        return 0 <= nPos && static_cast<size_t>(nPos) < maEntries.size() ? maEntries[nPos].get() : nullptr;
+        return 0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size() ? maEntries[nPos].get() : nullptr;
     }
 
     sal_Int32       GetAbsPos( Paragraph const * pParent ) const;

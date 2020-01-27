@@ -127,6 +127,7 @@
 #include <basic/basmgr.hxx>
 
 #include "ww8toolbar.hxx"
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 
 #include <breakit.hxx>
@@ -2841,7 +2842,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = GetCharSetFromLanguage();
         else if (!m_aFontSrcCharSets.empty())
             eSrcCharSet = m_aFontSrcCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && o3tl::make_unsigned(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCharSet();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(m_nCurrentColl) && m_nCurrentColl < m_vColl.size())
             eSrcCharSet = m_vColl[m_nCurrentColl].GetCharSet();
@@ -2865,7 +2866,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!m_aFontSrcCJKCharSets.empty())
             eSrcCharSet = m_aFontSrcCJKCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && static_cast<size_t>(m_nCharFormat) < m_vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && m_nCharFormat >= 0 && o3tl::make_unsigned(m_nCharFormat) < m_vColl.size() )
             eSrcCharSet = m_vColl[m_nCharFormat].GetCJKCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(m_nCurrentColl) && m_nCurrentColl < m_vColl.size())
             eSrcCharSet = m_vColl[m_nCurrentColl].GetCJKCharSet();
@@ -3491,7 +3492,7 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
         if (m_bSymbol) // Insert special chars
         {
             sal_uInt64 nMaxPossible = m_pStrm->remainingSize();
-            if (static_cast<sal_uInt64>(nRequested) > nMaxPossible)
+            if (o3tl::make_unsigned(nRequested) > nMaxPossible)
             {
                 SAL_WARN("sw.ww8", "document claims to have more characters, " << nRequested << " than remaining, " << nMaxPossible);
                 nRequested = nMaxPossible;
@@ -6548,7 +6549,7 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
     // If we are in a table, see if an apo was inserted at the level below the table.
     if (nLvl)
         --nLvl;
-    if (nLvl < 0 || static_cast<size_t>(nLvl) >= m_aApos.size())
+    if (nLvl < 0 || o3tl::make_unsigned(nLvl) >= m_aApos.size())
         return false;
     return m_aApos[nLvl];
 }

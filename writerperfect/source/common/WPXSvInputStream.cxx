@@ -14,7 +14,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 
@@ -848,7 +848,7 @@ const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned lon
 
     if ((curpos + numBytes < curpos) /*overflow*/
         || (curpos + numBytes
-            >= static_cast<sal_uInt64>(mpImpl->mnLength))) /*reading more than available*/
+            >= o3tl::make_unsigned(mpImpl->mnLength))) /*reading more than available*/
     {
         numBytes = mpImpl->mnLength - curpos;
     }
@@ -909,7 +909,7 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
     }
 
     if (tmpOffset < mpImpl->tell()
-        && static_cast<unsigned long>(tmpOffset)
+        && o3tl::make_unsigned(tmpOffset)
                >= static_cast<unsigned long>(mpImpl->tell()) - mpImpl->mnReadBufferLength)
     {
         mpImpl->mnReadBufferPos = static_cast<unsigned long>(

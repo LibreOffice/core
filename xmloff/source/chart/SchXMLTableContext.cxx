@@ -26,6 +26,7 @@
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
 #include <XMLStringBufferImportContext.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -521,7 +522,7 @@ SchXMLTableRowContext::SchXMLTableRowContext(
 
     std::vector< SchXMLCell > aNewRow;
     aNewRow.reserve( mrTable.nNumberOfColsEstimate );
-    while( mrTable.aData.size() <= static_cast<unsigned long>(mrTable.nRowIndex) )
+    while( mrTable.aData.size() <= o3tl::make_unsigned(mrTable.nRowIndex) )
         mrTable.aData.push_back( aNewRow );
 }
 

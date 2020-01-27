@@ -30,6 +30,7 @@
 #include <compiler.hxx>
 #include <recursionhelper.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -728,13 +729,13 @@ public:
         sc::cellnote_block::const_iterator it = sc::cellnote_block::begin(*node.data);
         sc::cellnote_block::const_iterator itEnd = sc::cellnote_block::end(*node.data);
         size_t nOffset = 0;
-        if(nTopRow < size_t(mnStartRow))
+        if(nTopRow < o3tl::make_unsigned(mnStartRow))
         {
             std::advance(it, mnStartRow - nTopRow);
             nOffset = mnStartRow - nTopRow;
         }
 
-        for (; it != itEnd && nTopRow + nOffset <= size_t(mnEndRow);
+        for (; it != itEnd && nTopRow + nOffset <= o3tl::make_unsigned(mnEndRow);
                 ++it, ++nOffset)
         {
             ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
@@ -1336,7 +1337,7 @@ public:
             SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
             if (nBackTrackSize > 0)
             {
-                assert(static_cast<size_t>(nBackTrackSize) <= nOffset);
+                assert(o3tl::make_unsigned(nBackTrackSize) <= nOffset);
                 for (SCROW i = 0; i < nBackTrackSize; ++i)
                     --pp;
                 endListening(mrEndCxt, pp, ppBeg);
@@ -1413,7 +1414,7 @@ public:
             SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
             if (nBackTrackSize > 0)
             {
-                assert(static_cast<size_t>(nBackTrackSize) <= nOffset);
+                assert(o3tl::make_unsigned(nBackTrackSize) <= nOffset);
                 for (SCROW i = 0; i < nBackTrackSize; ++i)
                     --pp;
                 mnStartRow -= nBackTrackSize;

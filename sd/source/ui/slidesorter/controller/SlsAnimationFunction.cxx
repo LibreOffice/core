@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
+
 #include <controller/SlsAnimationFunction.hxx>
 
 namespace sd::slidesorter::controller {
@@ -114,7 +118,7 @@ double AnimationParametricFunction::operator() (const double nX)
 
     if (nIndex0<=0)
         return maY[0];
-    else if (sal_uInt32(nIndex0)>=maY.size() || nIndex1>=maY.size())
+    else if (o3tl::make_unsigned(nIndex0)>=maY.size() || nIndex1>=maY.size())
         return maY[maY.size()-1];
 
     const double nU ((nX-nX1) / (nX0 - nX1));

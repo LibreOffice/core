@@ -26,6 +26,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -139,7 +140,7 @@ long ScDPSource::GetDataDimensionCount() const
 
 ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
 {
-    if (nIndex < 0 || static_cast<size_t>(nIndex) >= maDataDims.size())
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maDataDims.size())
         return nullptr;
 
     long nDimIndex = maDataDims[nIndex];
@@ -708,7 +709,7 @@ void ScDPSource::FilterCacheByPageDimensions()
                 pGrpFilter->addMatchItem(aData);
             }
         }
-        if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(nMemCount))
+        if (pGrpFilter->getMatchItemCount() < o3tl::make_unsigned(nMemCount))
             // there is at least one invisible item.  Add this filter criterion to the mix.
             aCriteria.push_back(aFilter);
 

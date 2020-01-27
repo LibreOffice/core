@@ -24,6 +24,7 @@
 
 #include <fontsubset.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/strhelper.hxx>
 #include <sal/log.hxx>
 
@@ -1368,7 +1369,7 @@ bool CffSubsetterContext::initialCffRead()
 //      assert( mnFontDictBase == tellRel());
         mpReadPtr = mpBasePtr + mnFontDictBase;
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
-        if (static_cast<size_t>(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
+        if (o3tl::make_unsigned(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
         {
             SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
             return false;

@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
@@ -518,7 +518,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         if (IsError())
             break;
     }
-    if( nPos > sal_uInt32(SBX_MAXINDEX32) )
+    if( nPos > o3tl::make_unsigned(SBX_MAXINDEX32) )
     {
         SetError( ERRCODE_BASIC_OUT_OF_RANGE );
         nPos = 0;

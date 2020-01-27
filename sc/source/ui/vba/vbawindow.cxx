@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <o3tl/safeint.hxx>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/excel/XlWindowState.hpp>
 #include <ooo/vba/excel/XlWindowView.hpp>
@@ -144,7 +145,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
-        || static_cast< Sheets::size_type >( Index ) >= sheets.size() )
+        || o3tl::make_unsigned( Index ) >= sheets.size() )
             throw lang::IndexOutOfBoundsException();
 
         return uno::makeAny( sheets[ Index ] );

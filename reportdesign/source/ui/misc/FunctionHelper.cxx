@@ -19,6 +19,7 @@
 
 #include <FunctionHelper.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <formula/funcvarargs.h>
 
@@ -236,21 +237,21 @@ sal_uInt32 FunctionDescription::getVarArgsStart() const
 
 OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
-    if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
+    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Name;
     return OUString();
 }
 
 OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const
 {
-    if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
+    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Description;
     return OUString();
 }
 
 bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
 {
-    if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
+    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
         return m_aParameter[_nPos].IsOptional;
     return false;
 }

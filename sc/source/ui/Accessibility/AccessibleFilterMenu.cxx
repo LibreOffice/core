@@ -21,6 +21,7 @@
 #include <AccessibleFilterMenu.hxx>
 #include <AccessibleFilterMenuItem.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
 #include <checklistmenu.hxx>
 
@@ -116,7 +117,7 @@ sal_Int32 ScAccessibleFilterMenu::getAccessibleChildCount()
 
 Reference<XAccessible> ScAccessibleFilterMenu::getAccessibleChild(sal_Int32 nIndex)
 {
-    if (maMenuItems.size() <= static_cast<size_t>(nIndex))
+    if (maMenuItems.size() <= o3tl::make_unsigned(nIndex))
         throw IndexOutOfBoundsException();
 
     return maMenuItems[nIndex];
@@ -153,7 +154,7 @@ void ScAccessibleFilterMenu::removeAccessibleEventListener(
 
 void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
 {
-    if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
+    if (o3tl::make_unsigned(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
     mpWindow->setSelectedMenuItem(nChildIndex, false, true);
@@ -161,7 +162,7 @@ void ScAccessibleFilterMenu::selectAccessibleChild(sal_Int32 nChildIndex)
 
 sal_Bool ScAccessibleFilterMenu::isAccessibleChildSelected(sal_Int32 nChildIndex)
 {
-    if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
+    if (o3tl::make_unsigned(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
     return mpWindow->isMenuItemSelected(static_cast<size_t>(nChildIndex));
@@ -185,7 +186,7 @@ sal_Int32 ScAccessibleFilterMenu::getSelectedAccessibleChildCount()
 
 Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_Int32 nChildIndex)
 {
-    if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
+    if (o3tl::make_unsigned(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
     return maMenuItems[nChildIndex];
@@ -193,7 +194,7 @@ Reference<XAccessible> ScAccessibleFilterMenu::getSelectedAccessibleChild(sal_In
 
 void ScAccessibleFilterMenu::deselectAccessibleChild(sal_Int32 nChildIndex)
 {
-    if (static_cast<size_t>(nChildIndex) >= maMenuItems.size())
+    if (o3tl::make_unsigned(nChildIndex) >= maMenuItems.size())
         throw IndexOutOfBoundsException();
 
     mpWindow->selectMenuItem(nChildIndex, false, false);

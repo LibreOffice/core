@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <file/FStatement.hxx>
 #include <file/FConnection.hxx>
@@ -606,7 +609,7 @@ void OStatement_Base::GetAssignValues()
 
 void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
 {
-    OSL_ENSURE(size_t(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
+    OSL_ENSURE(o3tl::make_unsigned(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     OUString aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name not found");
     OSL_ENSURE(pRow_Value_Constructor_Elem != nullptr,"OResultSet: pRow_Value_Constructor_Elem must not be NULL!");

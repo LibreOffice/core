@@ -32,6 +32,7 @@
 #include <strings.hrc>
 
 #include <consdlg.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -452,7 +453,7 @@ IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
         && (nAreaDataCount > 0)
         && (pAreaData != nullptr) )
     {
-        if ( static_cast<size_t>(nSelPos) <= nAreaDataCount )
+        if ( o3tl::make_unsigned(nSelPos) <= nAreaDataCount )
         {
             OUString aString( pAreaData[nSelPos-1].aStrArea );
 

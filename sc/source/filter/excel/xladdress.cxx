@@ -22,6 +22,7 @@
 #include <xltracer.hxx>
 #include <xistream.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 void XclAddress::Read( XclImpStream& rStrm )
@@ -128,8 +129,8 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     mbRowTrunc( false ),
     mbTabTrunc( false )
 {
-    OSL_ENSURE( static_cast< size_t >( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
-    OSL_ENSURE( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
+    OSL_ENSURE( o3tl::make_unsigned( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
+    OSL_ENSURE( o3tl::make_unsigned( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
 XclAddressConverterBase::~XclAddressConverterBase()

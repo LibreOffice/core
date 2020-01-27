@@ -19,6 +19,8 @@
 
 #include <algorithm>
 #include <string.h>
+
+#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
@@ -330,7 +332,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     const size_t nMinActionSize = sizeof(sal_uInt16) + sizeof(sal_Int32);
     const size_t nMaxPossibleActions = rIStm.remainingSize() / nMinActionSize;
-    if (static_cast<sal_uInt32>(nActions) > nMaxPossibleActions)
+    if (o3tl::make_unsigned(nActions) > nMaxPossibleActions)
     {
         SAL_WARN("vcl.gdi", "svm claims more actions (" << nActions << ") than stream could provide, truncating");
         nActions = nMaxPossibleActions;
@@ -717,7 +719,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         const size_t nMinRecordSize = sizeof(sal_Int32);
                         const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
-                        if (static_cast<sal_uInt32>(nAryLen) > nMaxRecords)
+                        if (o3tl::make_unsigned(nAryLen) > nMaxRecords)
                         {
                             SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
                                      " max possible entries, but " << nAryLen << " claimed, truncating");

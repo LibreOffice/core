@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/miscopt.hxx>
@@ -199,7 +200,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     sal_uInt32  nElements( 0 );
     bool    bAppendSeparator( false );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
-    for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(rAddonToolbar.getLength()); n++ )
+    for ( sal_uInt32 n = 0; n < o3tl::make_unsigned(rAddonToolbar.getLength()); n++ )
     {
         OUString   aURL;
         OUString   aTitle;

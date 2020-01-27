@@ -20,6 +20,7 @@
 #include <scextopt.hxx>
 #include <autonamecache.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/thread.h>
 #include <svx/xtable.hxx>
 #include <sfx2/bindings.hxx>
@@ -526,7 +527,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 void ScDocument::EnsureTable( SCTAB nTab )
 {
     bool bExtras = !bIsUndo;        // Column-Widths, Row-Heights, Flags
-    if (static_cast<size_t>(nTab) >= maTabs.size())
+    if (o3tl::make_unsigned(nTab) >= maTabs.size())
         maTabs.resize(nTab+1);
 
     if (!maTabs[nTab])

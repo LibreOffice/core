@@ -21,6 +21,7 @@
 #include <svx/XPropertyTable.hxx>
 #include <xmlxtexp.hxx>
 #include <xmlxtimp.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
@@ -113,7 +114,7 @@ XPropertyList::XPropertyList(
 
 bool XPropertyList::isValidIdx(long nIndex) const
 {
-    return (static_cast<size_t>(nIndex) < maList.size() && nIndex >= 0);
+    return (nIndex >= 0 && o3tl::make_unsigned(nIndex) < maList.size());
 }
 
 

@@ -19,6 +19,8 @@
 
 
 #include <string.h>
+
+#include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <unotools/charclass.hxx>
@@ -438,7 +440,7 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
             // in this case it would mean a stream of more than 2Gb
             return false;
         }
-        if (static_cast<sal_uInt64>(m_nSize) > nUnderlyingStreamSize)
+        if (o3tl::make_unsigned(m_nSize) > nUnderlyingStreamSize)
         {
             // surely an entry cannot be larger than the underlying file
             return false;

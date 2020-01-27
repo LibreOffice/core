@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
@@ -488,7 +489,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             ++n;
         }
         nTotalLen += j;
-        if (nTotalLen > static_cast<std::size_t>(nMaxBytesToRead))
+        if (nTotalLen > o3tl::make_unsigned(nMaxBytesToRead))
         {
             n -= nTotalLen - nMaxBytesToRead;
             nTotalLen = nMaxBytesToRead;
@@ -574,7 +575,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
             }
         }
         nTotalLen += j;
-        if (nTotalLen > static_cast<std::size_t>(nMaxCodepointsToRead))
+        if (nTotalLen > o3tl::make_unsigned(nMaxCodepointsToRead))
         {
             n -= nTotalLen - nMaxCodepointsToRead;
             nTotalLen = nMaxCodepointsToRead;
@@ -796,7 +797,7 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
 
     if ( nPos >= 0 )
     {
-        if (SAL_MAX_UINT64 - nActualPos > static_cast<sal_uInt64>(nPos))
+        if (SAL_MAX_UINT64 - nActualPos > o3tl::make_unsigned(nPos))
             nActualPos += nPos;
     }
     else
@@ -1244,7 +1245,7 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         // check if block is completely within buffer
         m_isIoRead = true;
         m_isIoWrite = false;
-        if (nCount <= static_cast<std::size_t>(m_nBufActualLen - m_nBufActualPos))
+        if (nCount <= o3tl::make_unsigned(m_nBufActualLen - m_nBufActualPos))
         {
             // => yes
             if (nCount != 0)
@@ -1329,7 +1330,7 @@ std::size_t SvStream::WriteBytes( const void* pData, std::size_t nCount )
 
     m_isIoRead = false;
     m_isIoWrite = true;
-    if (nCount <= static_cast<std::size_t>(m_nBufSize - m_nBufActualPos))
+    if (nCount <= o3tl::make_unsigned(m_nBufSize - m_nBufActualPos))
     {
         memcpy( m_pBufPos, pData, nCount );
         m_nBufActualPos = m_nBufActualPos + static_cast<sal_uInt16>(nCount);

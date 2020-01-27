@@ -21,6 +21,7 @@
 
 #include <initializer_list>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 
@@ -94,7 +95,7 @@ sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     if( mpEditSource && !maContents.empty() )
-        return static_cast<unsigned>(mnNextParagraph) < maContents.size();
+        return o3tl::make_unsigned(mnNextParagraph) < maContents.size();
     else
         return false;
 }

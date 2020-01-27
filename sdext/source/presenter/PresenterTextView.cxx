@@ -35,6 +35,7 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -236,7 +237,7 @@ void PresenterTextView::MoveCaret (
                             nCharacterIndex = 0;
                             nRemainingDistance = 0;
                         }
-                        else if (sal_uInt32(nParagraphIndex) >= maParagraphs.size())
+                        else if (o3tl::make_unsigned(nParagraphIndex) >= maParagraphs.size())
                         {
                             nParagraphIndex = maParagraphs.size()-1;
                             pParagraph = GetParagraph(nParagraphIndex);
@@ -620,7 +621,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
 
     if (nIndex < 0)
         return -1;
-    else if (sal_uInt32(nIndex)>=maWordBoundaries.size())
+    else if (o3tl::make_unsigned(nIndex)>=maWordBoundaries.size())
         return -1;
     else
         return maWordBoundaries[nIndex];

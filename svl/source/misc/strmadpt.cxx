@@ -27,7 +27,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
@@ -254,7 +254,7 @@ sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
                     {
                         sal_Int64 nLength = m_xSeekable->getLength();
                         OSL_ASSERT(nLength >= 0);
-                        if (static_cast<sal_uInt64>(nLength)
+                        if (o3tl::make_unsigned(nLength)
                             < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();

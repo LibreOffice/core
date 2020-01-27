@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -305,7 +306,7 @@ void PivotCacheItemList::applyItemCaptions( const IdCaptionPairList& vCaptions )
 {
     for( const auto& [rId, rCaption] : vCaptions )
     {
-        if ( static_cast<sal_uInt32>( rId ) < maItems.size() )
+        if ( o3tl::make_unsigned( rId ) < maItems.size() )
             maItems[ rId ].setStringValue( rCaption );
     }
 }

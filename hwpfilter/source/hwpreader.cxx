@@ -23,6 +23,7 @@
 #include "hwpreader.hxx"
 #include <math.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
@@ -4355,7 +4356,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     OUStringBuffer oustr;
 
                     if ((drawobj->u.freeform.npt > 2) &&
-                        (static_cast<size_t>(drawobj->u.freeform.npt) <
+                        (o3tl::make_unsigned(drawobj->u.freeform.npt) <
                          (::std::numeric_limits<int>::max() / sizeof(double))))
                     {
                               int n, i;

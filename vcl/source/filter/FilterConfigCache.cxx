@@ -19,6 +19,7 @@
 
 #include "FilterConfigCache.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/configmgr.hxx>
 #include <tools/svlibrary.h>
@@ -380,7 +381,7 @@ OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 
 OUString FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    if ( (nFormat < aImport.size()) && (size_t(nEntry) < aImport[ nFormat ].lExtensionList.size()) )
+    if ( (nFormat < aImport.size()) && (o3tl::make_unsigned(nEntry) < aImport[ nFormat ].lExtensionList.size()) )
         return aImport[ nFormat ].lExtensionList[ nEntry ];
     return OUString();
 }
@@ -505,7 +506,7 @@ OUString FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 
 OUString FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    if ( (nFormat < aExport.size()) && (size_t(nEntry) < aExport[ nFormat ].lExtensionList.size()) )
+    if ( (nFormat < aExport.size()) && (o3tl::make_unsigned(nEntry) < aExport[ nFormat ].lExtensionList.size()) )
         return aExport[ nFormat ].lExtensionList[ nEntry ];
     return OUString();
 }

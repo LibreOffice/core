@@ -41,6 +41,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 
@@ -291,7 +292,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartDocument);
     Reference<chart2::XChartType> xChartType;
     Reference<chart2::XDataSeries> xSeries;
-    if (static_cast<size_t>(nAfterColumnIndex) < m_aColumns.size())
+    if (o3tl::make_unsigned(nAfterColumnIndex) < m_aColumns.size())
         // Get the data series at specific column position (if available).
         xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
 
@@ -436,7 +437,7 @@ void DataBrowserModel::removeComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 {
     OSL_ASSERT(m_apDialogModel);
-    if (nAtColumnIndex < 0 || static_cast<size_t>(nAtColumnIndex) >= m_aColumns.size())
+    if (nAtColumnIndex < 0 || o3tl::make_unsigned(nAtColumnIndex) >= m_aColumns.size())
         // Out of bound.
         return;
 
@@ -505,7 +506,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
 void DataBrowserModel::swapDataSeries( sal_Int32 nFirstColumnIndex )
 {
     OSL_ASSERT(m_apDialogModel);
-    if( static_cast< tDataColumnVector::size_type >( nFirstColumnIndex ) < m_aColumns.size() - 1 )
+    if( o3tl::make_unsigned( nFirstColumnIndex ) < m_aColumns.size() - 1 )
     {
         Reference< chart2::XDataSeries > xSeries( m_aColumns[nFirstColumnIndex].m_xDataSeries );
         if( xSeries.is())
@@ -728,7 +729,7 @@ sal_Int32 DataBrowserModel::getMaxRowCount() const
 OUString DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex != -1 &&
-        static_cast< sal_uInt32 >( nColumnIndex ) < m_aColumns.size())
+        o3tl::make_unsigned( nColumnIndex ) < m_aColumns.size())
         return m_aColumns[ nColumnIndex ].m_aUIRoleName;
     return OUString();
 }
@@ -738,7 +739,7 @@ bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const
     if (nColumnIndex < 0)
         return false;
 
-    if (static_cast<size_t>(nColumnIndex) >= m_aColumns.size())
+    if (o3tl::make_unsigned(nColumnIndex) >= m_aColumns.size())
         return false;
 
     // A column is a category when it doesn't have an associated data series.

@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include <comphelper/random.hxx>
+#include <o3tl/safeint.hxx>
 #include <opencl/openclconfig.hxx>
 #include <opencl/platforminfo.hxx>
 #include <sal/log.hxx>
@@ -593,7 +594,7 @@ ds_device const & getDeviceSelection(
         }
 
         /* Final device selection */
-        if (bestDeviceIdx >=0 && static_cast< std::vector<ds_device>::size_type> ( bestDeviceIdx ) < aProfile->devices.size() )
+        if (bestDeviceIdx >=0 && o3tl::make_unsigned( bestDeviceIdx ) < aProfile->devices.size() )
         {
             selectedDevice = aProfile->devices[bestDeviceIdx];
             bIsDeviceSelected = true;

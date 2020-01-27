@@ -49,6 +49,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <editeng/fieldupdater.hxx>
 #include <formula/errorcodes.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <map>
@@ -841,11 +842,11 @@ bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const
     if (it->type == sc::element_type_empty)
         nLastNonEmptyRow -= it->size;
 
-    if (nLastNonEmptyRow < static_cast<size_t>(nStartRow))
+    if (nLastNonEmptyRow < o3tl::make_unsigned(nStartRow))
         // No cells would get pushed out.
         return pAttrArray->TestInsertRow(nSize);
 
-    if (nLastNonEmptyRow + nSize > static_cast<size_t>(GetDoc()->MaxRow()))
+    if (nLastNonEmptyRow + nSize > o3tl::make_unsigned(GetDoc()->MaxRow()))
         // At least one cell would get pushed out. Not good.
         return false;
 
@@ -983,7 +984,7 @@ public:
                 maDestPos.miCellPos = aPos.first;
                 sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 size_t nLastRow = nTopRow + nDataSize;
-                if (nLastRow < static_cast<size_t>(mrSrcDoc.MaxRow()))
+                if (nLastRow < o3tl::make_unsigned(mrSrcDoc.MaxRow()))
                 {
                     aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
                     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -1069,11 +1070,11 @@ void ScColumn::CopyStaticToDocument(
     size_t nDataSize = 0;
     size_t nCurRow = nRow1;
 
-    for (; it != maCells.end() && nCurRow <= static_cast<size_t>(nRow2); ++it, nOffset = 0, nCurRow += nDataSize)
+    for (; it != maCells.end() && nCurRow <= o3tl::make_unsigned(nRow2); ++it, nOffset = 0, nCurRow += nDataSize)
     {
         bool bLastBlock = false;
         nDataSize = it->size - nOffset;
-        if (nCurRow + nDataSize - 1 > static_cast<size_t>(nRow2))
+        if (nCurRow + nDataSize - 1 > o3tl::make_unsigned(nRow2))
         {
             // Truncate the block to copy to clipboard.
             nDataSize = nRow2 - nCurRow + 1;

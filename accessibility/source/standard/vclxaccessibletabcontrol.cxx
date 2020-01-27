@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -354,7 +355,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || static_cast<std::size_t>(i) >= m_aAccessibleChildren.size() )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     return implGetAccessibleChild( i );
@@ -402,7 +403,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     if ( m_pTabControl )
@@ -414,7 +415,7 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     return implIsAccessibleChildSelected( nChildIndex );
@@ -476,7 +477,7 @@ void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     // This method makes no sense in a tab control, and so does nothing.

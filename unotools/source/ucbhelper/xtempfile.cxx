@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <o3tl/safeint.hxx>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/propshlp.hxx>
 
@@ -124,7 +125,7 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
     sal_uInt32 nRead = mpStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    if (nRead < static_cast<std::size_t>(aData.getLength()))
+    if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
 
     if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )

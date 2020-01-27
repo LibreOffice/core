@@ -34,6 +34,7 @@
 #include <SlideSorterViewShell.hxx>
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
@@ -429,7 +430,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
+    if (nIndex>0 && o3tl::make_unsigned(nIndex)<=PreviewValueSet::GetItemCount())
         return static_cast<UserData*>(PreviewValueSet::GetItemData(static_cast<sal_uInt16>(nIndex)));
     else
         return nullptr;

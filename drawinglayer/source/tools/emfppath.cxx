@@ -20,6 +20,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include "emfppath.hxx"
 
@@ -59,7 +60,7 @@ namespace emfplushelper
 
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
     {
-        if (_nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+        if (_nPoints<0 || o3tl::make_unsigned(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
         {
             _nPoints = SAL_MAX_INT32 / (2 * sizeof(float));
         }

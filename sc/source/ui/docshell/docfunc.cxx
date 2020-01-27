@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 
 #include <comphelper/lok.hxx>
+#include <o3tl/safeint.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/justifyitem.hxx>
@@ -1028,7 +1029,7 @@ bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCel
     ScDocument& rDoc = rDocShell.GetDocument();
 
     const size_t nLength = rCells.size();
-    if (rPos.Row() + nLength - 1 > static_cast<size_t>(rDoc.MaxRow()))
+    if (rPos.Row() + nLength - 1 > o3tl::make_unsigned(rDoc.MaxRow()))
         // out of bound
         return false;
 

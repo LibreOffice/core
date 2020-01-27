@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_INC_LISTBOX_HXX
 #define INCLUDED_VCL_INC_LISTBOX_HXX
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -96,7 +99,7 @@ private:
 
     ImplEntryType*  GetEntry( sal_Int32  nPos ) const
     {
-        if (nPos < 0 || static_cast<size_t>(nPos) >= maEntries.size())
+        if (nPos < 0 || o3tl::make_unsigned(nPos) >= maEntries.size())
             return nullptr;
         return maEntries[nPos].get();
     }

@@ -87,6 +87,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
@@ -745,10 +746,10 @@ void FormController::impl_setTextOnAllFilter_throw()
         return;
 
     // set the text for all filters
-    OSL_ENSURE( m_aFilterRows.size() > static_cast<size_t>(m_nCurrentFilterPosition),
+    OSL_ENSURE( m_aFilterRows.size() > o3tl::make_unsigned(m_nCurrentFilterPosition),
         "FormController::impl_setTextOnAllFilter_throw: m_nCurrentFilterPosition too big" );
 
-    if ( static_cast<size_t>(m_nCurrentFilterPosition) < m_aFilterRows.size() )
+    if ( o3tl::make_unsigned(m_nCurrentFilterPosition) < m_aFilterRows.size() )
     {
         FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
         for (const auto& rEntry : rRow)
@@ -1437,7 +1438,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e)
         appendEmptyDisjunctiveTerm();
 
     // find the current row
-    if ( ( static_cast<size_t>(m_nCurrentFilterPosition) >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
+    if ( ( m_nCurrentFilterPosition < 0 ) || ( o3tl::make_unsigned(m_nCurrentFilterPosition) >= m_aFilterRows.size() )  )
     {
         OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
         return;

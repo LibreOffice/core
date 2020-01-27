@@ -30,6 +30,7 @@
 #include <drawdoc.hxx>
 #include <Window.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -155,7 +156,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     const BitmapEx aExclusionOverlay (mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_HideSlideOverlay));
     for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
     {
-        if (rRepresentatives.size() <= sal_uInt32(nIndex))
+        if (rRepresentatives.size() <= o3tl::make_unsigned(nIndex))
             continue;
         switch(nIndex)
         {

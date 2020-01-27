@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -695,7 +697,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
         // get loop count
         sal_uInt32 nLoopCount(rPathPolyPolygon.count());
 
-        if(static_cast<sal_uInt32>(rOutliner.GetParagraphCount()) < nLoopCount)
+        if(o3tl::make_unsigned(rOutliner.GetParagraphCount()) < nLoopCount)
         {
             nLoopCount = rOutliner.GetParagraphCount();
         }

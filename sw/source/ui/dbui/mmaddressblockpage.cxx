@@ -22,6 +22,7 @@
 #include <swtypes.hxx>
 #include "addresslistdialog.hxx"
 #include <editeng/eeitem.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/event.hxx>
@@ -864,7 +865,7 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
             rNewLB.append_text(rField);
         //select the ListBox
         //if there is an assignment
-        if(static_cast<sal_uInt32>(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())
+        if(o3tl::make_unsigned(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())
             rNewLB.set_active_text(aAssignments[i]);
         else //otherwise the current column name may match one of the db columns
             rNewLB.set_active_text(rHeader);

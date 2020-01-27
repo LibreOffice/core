@@ -19,6 +19,7 @@
 
 #include "system.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -172,7 +173,7 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
         name += OStringLiteral("OSL_PIPE_") + pszPipeName;
     }
 
-    if (sal_uInt32(name.getLength()) >= sizeof addr.sun_path)
+    if (o3tl::make_unsigned(name.getLength()) >= sizeof addr.sun_path)
     {
         SAL_WARN("sal.osl.pipe", "osl_createPipe: pipe name too long");
         return nullptr;

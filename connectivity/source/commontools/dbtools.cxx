@@ -75,6 +75,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -1659,7 +1660,7 @@ namespace
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);
-            if ( m_aSet.size() < static_cast<size_t>(Index) )
+            if ( Index < 0 || m_aSet.size() < o3tl::make_unsigned(Index) )
                 throw IndexOutOfBoundsException();
 
             std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();

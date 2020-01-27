@@ -12,6 +12,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1056,7 +1057,7 @@ void Test::testBulletAsImage()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
 
@@ -1116,7 +1117,7 @@ void Test::testBulletAsImage()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             Graphic aGraphic(uno::Reference<graphic::XGraphic>(xBitmap, uno::UNO_QUERY));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), GraphicType::Bitmap, aGraphic.GetType());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > sal_uLong(0));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), aGraphic.GetSizeBytes() > o3tl::make_unsigned(0));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Width());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 16L, aGraphic.GetSizePixel().Height());
 

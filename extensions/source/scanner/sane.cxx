@@ -20,6 +20,8 @@
 #include <cstdarg>
 #include <type_traits>
 #include <math.h>
+
+#include <o3tl/safeint.hxx>
 #include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -270,7 +272,7 @@ void Sane::ReloadOptions()
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
     mnOptions = pOptions[ 0 ];
-    if( static_cast<size_t>(pZero->size) > sizeof( SANE_Word ) )
+    if( o3tl::make_unsigned(pZero->size) > sizeof( SANE_Word ) )
         fprintf( stderr, "driver returned number of options with larger size than SANE_Word!!!\n" );
     mppOptions.reset(new const SANE_Option_Descriptor*[ mnOptions ]);
     mppOptions[ 0 ] = pZero;

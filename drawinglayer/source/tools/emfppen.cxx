@@ -19,6 +19,7 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include "emfppen.hxx"
@@ -305,7 +306,7 @@ namespace emfplushelper
             s.ReadInt32(dashPatternLen);
             SAL_INFO("drawinglayer", "EMF+\t\t\tdashPatternLen: " << dashPatternLen);
 
-            if (dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32 / sizeof(float))
+            if (dashPatternLen<0 || o3tl::make_unsigned(dashPatternLen)>SAL_MAX_INT32 / sizeof(float))
             {
                 dashPatternLen = SAL_MAX_INT32 / sizeof(float);
             }
@@ -335,7 +336,7 @@ namespace emfplushelper
             sal_Int32 compoundArrayLen;
             s.ReadInt32(compoundArrayLen);
 
-            if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
+            if (compoundArrayLen<0 || o3tl::make_unsigned(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
             {
                 compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
             }

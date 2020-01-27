@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <vcl/fontcharmap.hxx>
 
 #include <unx/freetype_glyphcache.hxx>
@@ -181,7 +183,7 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
             FT_MM_Var *pFtMMVar;
             if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
             {
-                if (static_cast<sal_uInt32>(mnFaceVariation) <= pFtMMVar->num_namedstyles)
+                if (o3tl::make_unsigned(mnFaceVariation) <= pFtMMVar->num_namedstyles)
                 {
                     FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[mnFaceVariation - 1];
                     FT_Set_Var_Design_Coordinates(maFaceFT, pFtMMVar->num_axis, instance->coords);

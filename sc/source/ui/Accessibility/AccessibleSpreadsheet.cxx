@@ -27,6 +27,7 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -200,7 +201,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc, Sc
     int nSize =0;
     if (pDest->GetCellCount() == 0)//if the Dest Rang List is empty
     {
-        if (pSrc->GetCellCount() > sal_uInt32(nMax))//if the Src Cell count is greater than  nMax
+        if (pSrc->GetCellCount() > o3tl::make_unsigned(nMax))//if the Src Cell count is greater than  nMax
         {
             return true;
         }
@@ -1144,7 +1145,7 @@ uno::Reference<XAccessible > SAL_CALL
         if (mpMarkedRanges)
         {
             if ((nSelectedChildIndex < 0) ||
-                    (mpMarkedRanges->GetCellCount() <= static_cast<sal_uInt32>(nSelectedChildIndex)))
+                    (mpMarkedRanges->GetCellCount() <= o3tl::make_unsigned(nSelectedChildIndex)))
             {
                 throw lang::IndexOutOfBoundsException();
             }

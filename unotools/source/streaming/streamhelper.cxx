@@ -22,6 +22,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
+#include <o3tl/safeint.hxx>
 #include <unotools/streamhelper.hxx>
 
 namespace utl
@@ -47,7 +48,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
         throw css::io::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     // adjust sequence if data read is lower than the desired data
-    if (nRead < static_cast<std::size_t>(aData.getLength()))
+    if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
 
     return nRead;

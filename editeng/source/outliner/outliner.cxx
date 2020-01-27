@@ -47,6 +47,7 @@
 #include <svl/itempool.hxx>
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>
@@ -361,7 +362,7 @@ sal_Int32 Outliner::GetBulletsNumberingStatus() const
 std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     if ( static_cast<sal_uLong>(nStartPara) + nCount >
-            static_cast<sal_uLong>(pParaList->GetParagraphCount()) )
+            o3tl::make_unsigned(pParaList->GetParagraphCount()) )
         nCount = pParaList->GetParagraphCount() - nStartPara;
 
     // When a new OutlinerParaObject is created because a paragraph is just being deleted,

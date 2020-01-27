@@ -32,6 +32,7 @@
 #include <dpresfilter.hxx>
 #include <dputil.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -819,19 +820,19 @@ long ScDPResultData::GetRowStartMeasure() const
 
 ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
 {
-    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureFuncs.size(), "bumm");
+    OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureFuncs.size(), "bumm");
     return maMeasureFuncs[nMeasure];
 }
 
 const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
 {
-    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureRefs.size(), "bumm");
+    OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureRefs.size(), "bumm");
     return maMeasureRefs[nMeasure];
 }
 
 sheet::DataPilotFieldOrientation ScDPResultData::GetMeasureRefOrient(long nMeasure) const
 {
-    OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureRefOrients.size(), "bumm");
+    OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureRefOrients.size(), "bumm");
     return maMeasureRefOrients[nMeasure];
 }
 
@@ -853,7 +854,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     }
     else
     {
-        OSL_ENSURE(static_cast<size_t>(nMeasure) < maMeasureFuncs.size(), "bumm");
+        OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureFuncs.size(), "bumm");
         const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {
@@ -3938,7 +3939,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
         ScDPDimension* pDim = pDims->getByIndex(nDimIndex);
         ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
             GetLevelsObject()->getByIndex(0)->GetMembersObject();
-        if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(pMembers->getCount()))
+        if (pGrpFilter->getMatchItemCount() < o3tl::make_unsigned(pMembers->getCount()))
             rFilters.push_back(aCri);
     }
 }

@@ -21,7 +21,7 @@
 
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/currencytable.hxx>
@@ -1228,7 +1228,7 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
     if (nEntry < 0)
         return OUString();
 
-    if (static_cast<size_t>(nEntry) < aCurEntryList.size())
+    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
         const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1248,7 +1248,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 {
     if (nEntry < 0)
         return 0;
-    if (static_cast<size_t>(nEntry) < aCurEntryList.size())
+    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
 
@@ -1282,7 +1282,7 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
     if (nEntry < 0)
         return false;
-    if (static_cast<size_t>(nEntry) < aCurEntryList.size())
+    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
         const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1310,7 +1310,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 
     if (!aCurrencyFormatList.empty())
     {
-        if (aCurrencyFormatList.size() > static_cast<size_t>(nEntry))
+        if (aCurrencyFormatList.size() > o3tl::make_unsigned(nEntry))
             return aCurrencyFormatList[nEntry];
     }
     else
@@ -1335,7 +1335,7 @@ short SvxNumberFormatShell::GetListPos4Entry( sal_uInt32 nIdx, const OUString& r
     if (nIdx != NUMBERFORMAT_ENTRY_NEW_CURRENCY)
     {
         // Check list size against return type limit.
-        if (aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits<short>::max()))
+        if (aCurEntryList.size() <= o3tl::make_unsigned(::std::numeric_limits<short>::max()))
         {
             for (size_t i = 0; i < aCurEntryList.size(); ++i)
             {

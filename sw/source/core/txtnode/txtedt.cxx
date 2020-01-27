@@ -27,6 +27,7 @@
 #include <editeng/hangulhanja.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <SwSmartTagMgr.hxx>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/charclass.hxx>
@@ -1904,7 +1905,7 @@ void SwTextNode::TransliterateText(
                 swTransliterationChgData & rData =
                     aChanges[ aChanges.size() - 1 - i ];
                 nSum += rData.sChanged.getLength() - rData.nLen;
-                if (nSum > static_cast<size_t>(GetSpaceLeft()))
+                if (nSum > o3tl::make_unsigned(GetSpaceLeft()))
                 {
                     SAL_WARN("sw.core", "SwTextNode::ReplaceTextOnly: "
                             "node text with insertion > node capacity.");

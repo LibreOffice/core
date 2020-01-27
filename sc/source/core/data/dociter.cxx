@@ -39,6 +39,7 @@
 #include <scmatrix.hxx>
 #include <rowheightcontext.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <tools/fract.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
@@ -2229,7 +2230,7 @@ SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
 
     for (const ColParam& r : maColPositions)
     {
-        assert(static_cast<size_t>(mnRow) <= r.maPos->position);
+        assert(o3tl::make_unsigned(mnRow) <= r.maPos->position);
         nNextRow = std::min (nNextRow, static_cast<size_t>(r.maPos->position));
     }
 

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
@@ -377,7 +378,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection()
 
 std::deque< AttacherIndex_Impl >::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
 {
-    if ( (_nIndex < 0) || (static_cast<sal_uInt32>(_nIndex) >= aIndex.size()) )
+    if ( (_nIndex < 0) || (o3tl::make_unsigned(_nIndex) >= aIndex.size()) )
         throw IllegalArgumentException();
 
     std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin() + _nIndex;
@@ -498,7 +499,7 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     if( nIndex < 0 )
         throw IllegalArgumentException();
 
-    if ( static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
+    if ( o3tl::make_unsigned(nIndex) >= aIndex.size() )
         aIndex.resize(nIndex+1);
 
     AttacherIndex_Impl aTmp;
@@ -533,7 +534,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     if( nIndex < 0 || !xObject.is() )
         throw IllegalArgumentException();
 
-    if( static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
+    if( o3tl::make_unsigned(nIndex) >= aIndex.size() )
     {
         // read older files
         if( nVersion != 1 )
@@ -587,7 +588,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 {
     Guard< Mutex > aGuard( aLock );
     //return;
-    if( nIndex < 0 || static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() || !xObject.is() )
+    if( nIndex < 0 || o3tl::make_unsigned(nIndex) >= aIndex.size() || !xObject.is() )
         throw IllegalArgumentException();
 
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;

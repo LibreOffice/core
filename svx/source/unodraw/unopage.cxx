@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/classids.hxx>
@@ -355,7 +356,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     if( (mpModel == nullptr) || (mpPage == nullptr) )
         throw lang::DisposedException("Model or Page was already disposed!");
 
-    if ( Index < 0 || static_cast<size_t>(Index) >= mpPage->GetObjCount() )
+    if ( Index < 0 || o3tl::make_unsigned(Index) >= mpPage->GetObjCount() )
         throw lang::IndexOutOfBoundsException("Index (" + OUString::number(Index)
                                               + ") needs to be a positive integer smaller than the shape count ("
                                               + OUString::number(mpPage->GetObjCount()) + ")!");

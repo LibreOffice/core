@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <sal/log.hxx>
@@ -85,7 +87,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
@@ -99,7 +101,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
@@ -113,7 +115,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;

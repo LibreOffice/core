@@ -188,7 +188,7 @@ void CGM::ImplDoClass1()
                 ImplGetUI16(); // skip CharSetType
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 pElement->aFontList.InsertCharSet( mpSource + mnParaSize, nSize );

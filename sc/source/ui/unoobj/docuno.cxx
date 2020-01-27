@@ -26,6 +26,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
@@ -3242,10 +3243,10 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
 #else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
-    if(size_t(nPlatform) >= aPlatformInfo.size())
+    if(o3tl::make_unsigned(nPlatform) >= aPlatformInfo.size())
         throw uno::RuntimeException();
 
-    if(size_t(nDevice) >= aPlatformInfo[nPlatform].maDevices.size())
+    if(o3tl::make_unsigned(nDevice) >= aPlatformInfo[nPlatform].maDevices.size())
         throw uno::RuntimeException();
 
     OUString aDeviceString = aPlatformInfo[nPlatform].maVendor + " " + aPlatformInfo[nPlatform].maDevices[nDevice].maName;

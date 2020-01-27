@@ -493,7 +493,7 @@ static void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             --nRemainingBytes;
         }
         nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
-        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        if (o3tl::make_unsigned(nLen) < nRemainingBytes)
         {
             sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
             if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
@@ -516,7 +516,7 @@ static void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             --nRemainingBytes;
         }
         nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
-        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        if (o3tl::make_unsigned(nLen) < nRemainingBytes)
         {
             sal_uInt8 aOldValue(pDest[nLen]); pDest[nLen] = 0;
             const char* pStr = reinterpret_cast<char*>(pDest);
@@ -536,7 +536,7 @@ static void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             --nRemainingBytes;
         }
         nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
-        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        if (o3tl::make_unsigned(nLen) < nRemainingBytes)
         {
             sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
             if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )

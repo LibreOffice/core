@@ -21,6 +21,7 @@
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
+#include <o3tl/safeint.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 
@@ -71,7 +72,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     checkError();
 
     // If read characters < MaxLength, adjust css::uno::Sequence
-    if (nRead < static_cast<std::size_t>(aData.getLength()))
+    if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
 
     return nRead;

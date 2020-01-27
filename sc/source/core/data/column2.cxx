@@ -44,7 +44,7 @@
 #include <recursionhelper.hxx>
 
 #include <editeng/eeitem.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
@@ -2710,7 +2710,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     {
         case sc::element_type_numeric:
         {
-            if (static_cast<size_t>(nRow2) < itBlk->size)
+            if (o3tl::make_unsigned(nRow2) < itBlk->size)
             {
                 // Requested range falls within the first block. No need to cache.
                 const double* p = &sc::numeric_block::at(*itBlk->data, nRow1);
@@ -2757,7 +2757,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray();
 
-            if (static_cast<size_t>(nRow2) < itBlk->size)
+            if (o3tl::make_unsigned(nRow2) < itBlk->size)
             {
                 // Requested range falls within the first block.
                 copyFirstStringBlock(*pDocument, rArray, nRow2+1, itBlk);
@@ -2789,7 +2789,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         break;
         case sc::element_type_formula:
         {
-            if (static_cast<size_t>(nRow2) < itBlk->size)
+            if (o3tl::make_unsigned(nRow2) < itBlk->size)
             {
                 // Requested length is within a single block, and the data is
                 // not cached.
@@ -2844,7 +2844,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                 // Failed to insert a new cached column array.
                 return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 
-            if (static_cast<size_t>(nRow2) < itBlk->size)
+            if (o3tl::make_unsigned(nRow2) < itBlk->size)
                 return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1]);
 
             // Fill the remaining array with values from the following blocks.

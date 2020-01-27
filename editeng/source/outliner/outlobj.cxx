@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <libxml/xmlwriter.h>
 
 OutlinerParaObjData::OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
@@ -169,7 +170,7 @@ sal_Int32 OutlinerParaObject::Count() const
 
 sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 {
-    if(0 <= nPara && static_cast<size_t>(nPara) < mpImpl->maParagraphDataVector.size())
+    if(0 <= nPara && o3tl::make_unsigned(nPara) < mpImpl->maParagraphDataVector.size())
     {
         return mpImpl->maParagraphDataVector[nPara].getDepth();
     }
@@ -186,7 +187,7 @@ const EditTextObject& OutlinerParaObject::GetTextObject() const
 
 const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
-    if(0 <= nIndex && static_cast<size_t>(nIndex) < mpImpl->maParagraphDataVector.size())
+    if(0 <= nIndex && o3tl::make_unsigned(nIndex) < mpImpl->maParagraphDataVector.size())
     {
         return mpImpl->maParagraphDataVector[nIndex];
     }

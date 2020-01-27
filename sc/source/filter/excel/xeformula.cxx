@@ -32,6 +32,7 @@
 #include <xestring.hxx>
 #include <xllink.hxx>
 #include <xltools.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -197,7 +198,7 @@ void XclExpFuncData::IncParamInfoIdx()
     if( mpParamInfo )
     {
         // move pointer to next entry, if something explicit follows
-        if( (static_cast< size_t >( mpParamInfo - mrFuncInfo.mpParamInfos + 1 ) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
+        if( (o3tl::make_unsigned( mpParamInfo - mrFuncInfo.mpParamInfos + 1 ) < EXC_FUNCINFO_PARAMINFO_COUNT) && (mpParamInfo[ 1 ].meValid != EXC_PARAM_NONE) )
             ++mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( IsExcelOnlyParam() || IsCalcOnlyParam() )
@@ -2496,7 +2497,7 @@ void XclExpFmlaCompImpl::InsertZeros( sal_uInt16 nInsertPos, sal_uInt16 nInsertS
 
 void XclExpFmlaCompImpl::Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset )
 {
-    OSL_ENSURE( static_cast< size_t >( nWriteToPos + 1 ) < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Overwrite - invalid position" );
+    OSL_ENSURE( o3tl::make_unsigned( nWriteToPos + 1 ) < mxData->maTokVec.size(), "XclExpFmlaCompImpl::Overwrite - invalid position" );
     ShortToSVBT16( nOffset, &mxData->maTokVec[ nWriteToPos ] );
 }
 
@@ -2513,7 +2514,7 @@ void XclExpFmlaCompImpl::UpdateAttrGoto( sal_uInt16 nAttrPos )
 bool XclExpFmlaCompImpl::IsSpaceToken( sal_uInt16 nPos ) const
 {
     return
-        (static_cast< size_t >( nPos + 4 ) <= mxData->maTokVec.size()) &&
+        (o3tl::make_unsigned( nPos + 4 ) <= mxData->maTokVec.size()) &&
         (mxData->maTokVec[ nPos ] == EXC_TOKID_ATTR) &&
         (mxData->maTokVec[ nPos + 1 ] == EXC_TOK_ATTR_SPACE);
 }

@@ -7108,7 +7108,7 @@ namespace
     {
         assert(p <= pEnd);
         assert(value != nullptr);
-        if (offset >= static_cast<std::size_t>(pEnd - p)) {
+        if (offset >= o3tl::make_unsigned(pEnd - p)) {
             return false;
         }
         *value = p[offset];
@@ -7121,7 +7121,7 @@ namespace
     {
         assert(p <= pEnd);
         assert(value != nullptr);
-        if (offset > static_cast<std::size_t>(pEnd - p)
+        if (offset > o3tl::make_unsigned(pEnd - p)
             || static_cast<std::size_t>(pEnd - p) - offset < 2)
         {
             return false;
@@ -7135,7 +7135,7 @@ namespace
     {
         assert(p <= pEnd);
         assert(pEnd - p <= SAL_MAX_INT32);
-        if (offset >= static_cast<std::size_t>(pEnd - p)) {
+        if (offset >= o3tl::make_unsigned(pEnd - p)) {
             return -1;
         }
         void const * p2 = std::memchr(
@@ -7163,7 +7163,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
     sal_Int32 nFFn = rFib.m_lcbSttbfffn - 2;
 
     const sal_uInt64 nMaxPossible = rSt.remainingSize();
-    if (static_cast<sal_uInt64>(nFFn) > nMaxPossible)
+    if (o3tl::make_unsigned(nFFn) > nMaxPossible)
     {
         SAL_WARN("sw.ww8", "FFN structure longer than available data");
         nFFn = nMaxPossible;
