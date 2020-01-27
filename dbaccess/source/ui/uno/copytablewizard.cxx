@@ -435,8 +435,7 @@ css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames(
 
 css::uno::Sequence<OUString> CopyTableWizard::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.application.CopyTableWizard" };
-    return aSupported;
+    return { "com.sun.star.sdb.application.CopyTableWizard" };
 }
 
 Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo()

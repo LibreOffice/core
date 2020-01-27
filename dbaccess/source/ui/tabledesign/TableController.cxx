@@ -119,8 +119,7 @@ OUString OTableController::getImplementationName_Static()
 
 Sequence< OUString> OTableController::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aSupported { "com.sun.star.sdb.TableDesign" };
-    return aSupported;
+    return { "com.sun.star.sdb.TableDesign" };
 }
 
 Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames()

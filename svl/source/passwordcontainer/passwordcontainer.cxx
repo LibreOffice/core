@@ -1309,8 +1309,7 @@ Sequence< OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  )
 
 Sequence< OUString > PasswordContainer::impl_getStaticSupportedServiceNames(  )
 {
-    Sequence< OUString > aRet { "com.sun.star.task.PasswordContainer" };
-    return aRet;
+    return { "com.sun.star.task.PasswordContainer" };
 }
 
 OUString PasswordContainer::impl_getStaticImplementationName()

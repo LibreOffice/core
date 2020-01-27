@@ -1321,8 +1321,7 @@ OUString ZipPackageStream::getImplementationName()
 
 Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
 {
-    Sequence<OUString> aNames { "com.sun.star.packages.PackageStream" };
-    return aNames;
+    return { "com.sun.star.packages.PackageStream" };
 }
 
 sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
