@@ -55,6 +55,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/floatinglineproperty \
 	svx/uiconfig/ui/floatinglinestyle \
 	svx/uiconfig/ui/floatingundoredo \
+	svx/uiconfig/ui/fontworkcharacterspacingcontrol \
 	svx/uiconfig/ui/fontworkgallerydialog \
 	svx/uiconfig/ui/fontworkspacingdialog \
 	svx/uiconfig/ui/formdatamenu \
