@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "201e0fef_67f15acf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-01-27T20:03:48Z",
+      "side": 1,
+      "message": "In this line, describe briefly what the patch does. Refer to the bug report as “tdf#124548”. You can use further lines to elaborate on the patch’s effect or add notes if you want.",
+      "revId": "7a8fcfb1480962c0e9867b74a69dfd5fe4c48cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
