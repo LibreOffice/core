@@ -34,36 +34,15 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <shellapi.h>
+#include <prewin.h>
 #include <Shlobj.h>
-#include <Shobjidl.h>
-#include <objbase.h>
-
 #include <systools/win32/comtools.hxx>
-
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
-using com::sun::star::lang::XServiceInfo;
-using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::system::XSystemShellExecute;
-using com::sun::star::system::SystemShellExecuteException;
+#include <postwin.h>
 
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
-using namespace cppu;
-
-#define SYSSHEXEC_IMPL_NAME  "com.sun.star.sys.shell.SystemShellExecute"
 
 namespace
 {
-    Sequence< OUString > SysShExec_getSupportedServiceNames()
-    {
-        Sequence< OUString > aRet { "com.sun.star.system.SystemShellExecute" };
-        return aRet;
-    }
-
     /* This is the error table that defines the mapping between OS error
     codes and errno values */
 
@@ -165,8 +144,8 @@ namespace
     #define E_UNKNOWN_EXEC_ERROR -1
 }
 
-CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
-    WeakComponentImplHelper< XSystemShellExecute, XServiceInfo >( m_aMutex ),
+CSysShExec::CSysShExec( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+    WeakComponentImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >( m_aMutex ),
     m_xContext(xContext)
 {
     /*
@@ -224,15 +203,15 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 {
     // parameter checking
     if (0 == aCommand.getLength())
-        throw IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             "Empty command",
-            static_cast< XSystemShellExecute* >( this ),
+            static_cast< css::system::XSystemShellExecute* >( this ),
             1 );
 
     if ((nFlags & ~(NO_SYSTEM_ERROR_MESSAGE | URIS_ONLY)) != 0)
-        throw IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             "Invalid Flags specified",
-            static_cast< XSystemShellExecute* >( this ),
+            static_cast< css::system::XSystemShellExecute* >( this ),
             3 );
 
     OUString preprocessed_command(aCommand);
@@ -387,9 +366,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         else
             psxErr = MapError(psxErr);
 
-        throw SystemShellExecuteException(
+        throw css::system::SystemShellExecuteException(
             "Error executing command",
-            static_cast< XSystemShellExecute* >(this),
+            static_cast< css::system::XSystemShellExecute* >(this),
             psxErr);
     }
     else
@@ -412,7 +391,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 
 OUString SAL_CALL CSysShExec::getImplementationName(  )
 {
-    return SYSSHEXEC_IMPL_NAME;
+    return "com.sun.star.sys.shell.SystemShellExecute";
 }
 
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
@@ -420,9 +399,9 @@ sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
 {
-    return SysShExec_getSupportedServiceNames();
+    return { "com.sun.star.system.SystemShellExecute" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
