@@ -102,7 +102,7 @@ namespace accessibility
             xRet = implGetTable();
 
         if ( !xRet.is() )
-            throw RuntimeException();
+            throw RuntimeException("getAccessibleChild called with null xRet");
 
         return xRet;
     }

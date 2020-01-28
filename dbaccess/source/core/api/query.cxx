@@ -165,7 +165,7 @@ void OQuery::rebuildColumns()
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex ).release();
             if ( !xColumns.is() )
-                throw RuntimeException();
+                throw RuntimeException("null returned from rebuildColumns");
         }
 
         const Sequence<OUString> aColNames = xColumns->getElementNames();
