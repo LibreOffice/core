@@ -25,6 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
+#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
@@ -53,13 +54,9 @@ namespace sd {
 /**
  *  SdDisplay - Control
  */
-SdDisplay::SdDisplay(vcl::Window* pWin)
-    : Control(pWin, 0)
-    , aScale(1, 1)
+SdDisplay::SdDisplay()
+    : aScale(1, 1)
 {
-    SetMapMode(MapMode(MapUnit::MapPixel));
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
 }
 
 SdDisplay::~SdDisplay()
@@ -80,10 +77,18 @@ void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
     }
 }
 
-void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& )
+void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
+    rRenderContext.Push(PushFlags::MAPMODE);
+
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
+    rRenderContext.Erase();
+
     Point aPt;
-    Size aSize = GetOutputSize();
+    Size aSize = GetOutputSizePixel();
+
     Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
     aBmpSize.setWidth( static_cast<long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
     aBmpSize.setHeight( static_cast<long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) ) );
@@ -93,7 +98,9 @@ void SdDisplay::Paint( vcl::RenderContext& /*rRenderContext*/, const ::tools::Re
     if( aBmpSize.Height() < aSize.Height() )
         aPt.setY( ( aSize.Height() - aBmpSize.Height() ) / 2 );
 
-    aBitmapEx.Draw( this, aPt, aBmpSize );
+    aBitmapEx.Draw(&rRenderContext, aPt, aBmpSize);
+
+    rRenderContext.Pop();
 }
 
 void SdDisplay::SetScale( const Fraction& rFrac )
@@ -101,23 +108,12 @@ void SdDisplay::SetScale( const Fraction& rFrac )
     aScale = rFrac;
 }
 
-Size SdDisplay::GetOptimalSize() const
+void SdDisplay::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(147, 87), MapMode(MapUnit::MapAppFont));
-}
-
-void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Control::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-        SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-        SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? sd::OUTPUT_DRAWMODE_CONTRAST
-            : sd::OUTPUT_DRAWMODE_COLOR );
-    }
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(147, 87), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
 }
 
 const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
@@ -127,37 +123,33 @@ const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max
  */
 AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pInBindings, pCW, pParent,
-        "DockingAnimation", "modules/simpress/ui/dockinganimation.ui")
+        "DockingAnimation", "modules/simpress/ui/dockinganimation.ui", true)
+    , m_xCtlDisplay(new SdDisplay)
+    , m_xCtlDisplayWin(new weld::CustomWeld(*m_xBuilder, "preview", *m_xCtlDisplay))
+    , m_xBtnFirst(m_xBuilder->weld_button("first"))
+    , m_xBtnReverse(m_xBuilder->weld_button("prev"))
+    , m_xBtnStop(m_xBuilder->weld_button("stop"))
+    , m_xBtnPlay(m_xBuilder->weld_button("next"))
+    , m_xBtnLast(m_xBuilder->weld_button("last"))
+    , m_xNumFldBitmap(m_xBuilder->weld_spin_button("numbitmap"))
+    , m_xTimeField(m_xBuilder->weld_time_spin_button("duration", TimeFieldFormat::F_SEC_CS))
+    , m_xLbLoopCount(m_xBuilder->weld_combo_box("loopcount"))
+    , m_xBtnGetOneObject(m_xBuilder->weld_button("getone"))
+    , m_xBtnGetAllObjects(m_xBuilder->weld_button("getall"))
+    , m_xBtnRemoveBitmap(m_xBuilder->weld_button("delone"))
+    , m_xBtnRemoveAll(m_xBuilder->weld_button("delall"))
+    , m_xFiCount(m_xBuilder->weld_label("count"))
+    , m_xRbtGroup(m_xBuilder->weld_radio_button("group"))
+    , m_xRbtBitmap(m_xBuilder->weld_radio_button("bitmap"))
+    , m_xFtAdjustment(m_xBuilder->weld_label("alignmentft"))
+    , m_xLbAdjustment(m_xBuilder->weld_combo_box("alignment"))
+    , m_xBtnCreateGroup(m_xBuilder->weld_button("create"))
+    , m_xBtnHelp(m_xBuilder->weld_button("help"))
     , m_nCurrentFrame(EMPTY_FRAMELIST)
     , bMovie(false)
     , bAllObjects(false)
 {
-    get(m_pBtnFirst, "first");
-    get(m_pBtnReverse, "prev");
-    get(m_pBtnStop, "stop");
-    get(m_pBtnPlay, "next");
-    get(m_pBtnLast, "last");
-    get(m_pNumFldBitmap, "numbitmap");
-    get(m_pTimeField, "duration");
-    m_pTimeField->SetDuration(true);
-    m_pTimeField->EnforceValidValue(true);
-    m_pTimeField->SetMax(tools::Time(0, 0, 59, 99*tools::Time::nanoPerCenti));
-    get(m_pLbLoopCount, "loopcount");
-    get(m_pBtnGetOneObject, "getone");
-    get(m_pBtnGetAllObjects, "getall");
-    get(m_pBtnRemoveBitmap, "delone");
-    get(m_pBtnRemoveAll, "delall");
-    get(m_pFiCount, "count");
-    get(m_pRbtGroup, "group");
-    get(m_pRbtBitmap, "bitmap");
-    get(m_pFtAdjustment, "alignmentft");
-    get(m_pLbAdjustment, "alignment");
-    get(m_pBtnCreateGroup, "create");
-
-    m_pCtlDisplay = VclPtr<SdDisplay>::Create(get<Window>("box"));
-    m_pCtlDisplay->set_hexpand(true);
-    m_pCtlDisplay->set_vexpand(true);
-    m_pCtlDisplay->Show();
+    SetText(SdResId(STR_ANIMATION_DIALOG_TITLE));
 
     // create new document with page
     pMyDoc.reset( new SdDrawDocument(DocumentType::Impress, nullptr) );
@@ -166,35 +158,30 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
 
     pControllerItem.reset( new AnimationControllerItem( SID_ANIMATOR_STATE, this, pInBindings ) );
 
-    // as long as not in the resource
-    m_pTimeField->SetFormat( TimeFieldFormat::F_SEC_CS );
+    m_xBtnFirst->connect_clicked( LINK( this, AnimationWindow, ClickFirstHdl ) );
+    m_xBtnReverse->connect_clicked( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    m_xBtnStop->connect_clicked( LINK( this, AnimationWindow, ClickStopHdl ) );
+    m_xBtnPlay->connect_clicked( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    m_xBtnLast->connect_clicked( LINK( this, AnimationWindow, ClickLastHdl ) );
 
-    m_pBtnFirst->SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
-    m_pBtnReverse->SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
-    m_pBtnStop->SetClickHdl( LINK( this, AnimationWindow, ClickStopHdl ) );
-    m_pBtnPlay->SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
-    m_pBtnLast->SetClickHdl( LINK( this, AnimationWindow, ClickLastHdl ) );
+    m_xBtnGetOneObject->connect_clicked( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    m_xBtnGetAllObjects->connect_clicked( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    m_xBtnRemoveBitmap->connect_clicked( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
+    m_xBtnRemoveAll->connect_clicked( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
 
-    m_pBtnGetOneObject->SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
-    m_pBtnGetAllObjects->SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
-    m_pBtnRemoveBitmap->SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
-    m_pBtnRemoveAll->SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
-
-    m_pRbtGroup->SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
-    m_pRbtBitmap->SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
-    m_pBtnCreateGroup->SetClickHdl( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
-    m_pNumFldBitmap->SetModifyHdl( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
-    m_pTimeField->SetModifyHdl( LINK( this, AnimationWindow, ModifyTimeHdl ) );
-
-    // disable 3D border
-    m_pCtlDisplay->SetBorderStyle(WindowBorderStyle::MONO);
+    m_xRbtGroup->connect_clicked( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_xRbtBitmap->connect_clicked( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_xBtnCreateGroup->connect_clicked( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
+    m_xBtnHelp->connect_clicked( LINK( this, AnimationWindow, ClickHelpHdl ) );
+    m_xNumFldBitmap->connect_value_changed( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
+    m_xTimeField->connect_value_changed( LINK( this, AnimationWindow, ModifyTimeHdl ) );
 
     SetMinOutputSizePixel(GetOptimalSize());
 
     ResetAttrs();
 
     // the animator is empty; no animation group can be created
-    m_pBtnCreateGroup->Disable();
+    m_xBtnCreateGroup->set_sensitive(false);
 }
 
 AnimationWindow::~AnimationWindow()
@@ -212,57 +199,59 @@ void AnimationWindow::dispose()
     // delete the clones
     pMyDoc.reset();
 
-    m_pCtlDisplay.disposeAndClear();
-    m_pBtnFirst.clear();
-    m_pBtnReverse.clear();
-    m_pBtnStop.clear();
-    m_pBtnPlay.clear();
-    m_pBtnLast.clear();
-    m_pNumFldBitmap.clear();
-    m_pTimeField.clear();
-    m_pLbLoopCount.clear();
-    m_pBtnGetOneObject.clear();
-    m_pBtnGetAllObjects.clear();
-    m_pBtnRemoveBitmap.clear();
-    m_pBtnRemoveAll.clear();
-    m_pFiCount.clear();
-    m_pRbtGroup.clear();
-    m_pRbtBitmap.clear();
-    m_pFtAdjustment.clear();
-    m_pLbAdjustment.clear();
-    m_pBtnCreateGroup.clear();
+    m_xCtlDisplayWin.reset();
+    m_xCtlDisplay.reset();
+    m_xBtnFirst.reset();
+    m_xBtnReverse.reset();
+    m_xBtnStop.reset();
+    m_xBtnPlay.reset();
+    m_xBtnLast.reset();
+    m_xNumFldBitmap.reset();
+    m_xTimeField.reset();
+    m_xLbLoopCount.reset();
+    m_xBtnGetOneObject.reset();
+    m_xBtnGetAllObjects.reset();
+    m_xBtnRemoveBitmap.reset();
+    m_xBtnRemoveAll.reset();
+    m_xFiCount.reset();
+    m_xRbtGroup.reset();
+    m_xRbtBitmap.reset();
+    m_xFtAdjustment.reset();
+    m_xLbAdjustment.reset();
+    m_xBtnCreateGroup.reset();
+    m_xBtnHelp.reset();
     SfxDockingWindow::dispose();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl, Button*, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl, weld::Button&, void)
 {
     m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl, Button*, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl, weld::Button&, void)
 {
     bMovie = false;
 }
 
-IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
+IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
 {
     ScopeLockGuard aGuard( maPlayLock );
 
     bMovie = true;
     bool bDisableCtrls = false;
     size_t const nCount = m_FrameList.size();
-    bool bReverse = p == m_pBtnReverse;
+    bool bReverse = &rButton == m_xBtnReverse.get();
 
     // it is difficult to find it later on
-    bool bRbtGroupEnabled = m_pRbtGroup->IsEnabled();
-    bool bBtnGetAllObjectsEnabled = m_pBtnGetAllObjects->IsEnabled();
-    bool bBtnGetOneObjectEnabled = m_pBtnGetOneObject->IsEnabled();
+    bool bRbtGroupEnabled = m_xRbtGroup->get_sensitive();
+    bool bBtnGetAllObjectsEnabled = m_xBtnGetAllObjects->get_sensitive();
+    bool bBtnGetOneObjectEnabled = m_xBtnGetOneObject->get_sensitive();
 
     // calculate overall time
     tools::Time aTime( 0 );
     long nFullTime;
-    if( m_pRbtBitmap->IsChecked() )
+    if( m_xRbtBitmap->get_active() )
     {
         for (size_t i = 0; i < nCount; ++i)
         {
@@ -281,8 +270,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
     if( nFullTime >= 1000 )
     {
         bDisableCtrls = true;
-        m_pBtnStop->Enable();
-        m_pBtnStop->Update();
+        m_xBtnStop->set_sensitive(true);
         OUString const aStr("Animator:"); // here we should think about something smart
         pProgress.reset(new SfxProgress( nullptr, aStr, nFullTime ));
     }
@@ -302,11 +290,11 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
 
         UpdateControl(bDisableCtrls);
 
-        if( m_pRbtBitmap->IsChecked() )
+        if( m_xRbtBitmap->get_active() )
         {
             tools::Time const & rTime = m_FrameList[i].second;
 
-            m_pTimeField->SetTime( rTime );
+            m_xTimeField->set_value( rTime );
             sal_uLong nTime = rTime.GetMSFromTime();
 
             WaitInEffect( nTime, nTmpTime, pProgress.get() );
@@ -353,45 +341,51 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
     if( pProgress )
     {
         pProgress.reset();
-        m_pBtnStop->Disable();
+        m_xBtnStop->set_sensitive(false);
     }
 
-    m_pRbtGroup->Enable( bRbtGroupEnabled );
-    m_pBtnGetAllObjects->Enable( bBtnGetAllObjectsEnabled );
-    m_pBtnGetOneObject->Enable( bBtnGetOneObjectEnabled );
+    m_xRbtGroup->set_sensitive( bRbtGroupEnabled );
+    m_xBtnGetAllObjects->set_sensitive( bBtnGetAllObjectsEnabled );
+    m_xBtnGetOneObject->set_sensitive( bBtnGetOneObjectEnabled );
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl, Button*, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl, weld::Button&, void)
 {
     m_nCurrentFrame =
         (m_FrameList.empty()) ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
     UpdateControl();
 }
 
-IMPL_LINK( AnimationWindow, ClickRbtHdl, Button*, p, void )
+IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Button&, void)
 {
-    if (m_FrameList.empty() || p == m_pRbtGroup || m_pRbtGroup->IsChecked())
+    if (m_FrameList.empty() || m_xRbtGroup->get_active())
     {
-        m_pTimeField->SetText( OUString() );
-        m_pTimeField->Enable( false );
-        m_pLbLoopCount->Enable( false );
+        m_xTimeField->set_text( OUString() );
+        m_xTimeField->set_sensitive( false );
+        m_xLbLoopCount->set_sensitive( false );
     }
-    else if( p == m_pRbtBitmap || m_pRbtBitmap->IsChecked() )
+    else if (m_xRbtBitmap->get_active())
     {
-        sal_uLong n = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue());
+        sal_uLong n = m_xNumFldBitmap->get_value();
         if( n > 0 )
         {
             tools::Time const & rTime = m_FrameList[n - 1].second;
-            m_pTimeField->SetTime( rTime );
+            m_xTimeField->set_value( rTime );
         }
-        m_pTimeField->Enable();
-        m_pLbLoopCount->Enable();
+        m_xTimeField->set_sensitive(true);
+        m_xLbLoopCount->set_sensitive(true);
     }
 }
 
-IMPL_LINK( AnimationWindow, ClickGetObjectHdl, Button*, pBtn, void )
+IMPL_LINK(AnimationWindow, ClickHelpHdl, weld::Button&, rButton, void)
 {
-    bAllObjects = pBtn == m_pBtnGetAllObjects;
+    if (Help* pHelp = Application::GetHelp())
+        pHelp->Start(OStringToOUString(m_xContainer->get_help_id(), RTL_TEXTENCODING_UTF8), &rButton);
+}
+
+IMPL_LINK( AnimationWindow, ClickGetObjectHdl, weld::Button&, rBtn, void )
+{
+    bAllObjects = &rBtn == m_xBtnGetAllObjects.get();
 
     // Code now in AddObj()
     SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
@@ -400,13 +394,13 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, Button*, pBtn, void )
         SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
+IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, weld::Button&, rBtn, void )
 {
     SdPage*     pPage = pMyDoc->GetSdPage(0, PageKind::Standard);
     SdrObject*  pObject;
 
     // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
-    if (pBtn == m_pBtnRemoveBitmap && EMPTY_FRAMELIST  != m_nCurrentFrame)
+    if (&rBtn == m_xBtnRemoveBitmap.get() && EMPTY_FRAMELIST  != m_nCurrentFrame)
     {
         m_FrameList.erase(m_FrameList.begin() + m_nCurrentFrame);
 
@@ -457,20 +451,20 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
     // can we create an animation group
     if (m_FrameList.empty())
     {
-        m_pBtnCreateGroup->Disable();
+        m_xBtnCreateGroup->set_sensitive(false);
         // if previous disabled by acquisition of AnimatedGIFs:
-        //m_pRbtBitmap->Enable();
-        m_pRbtGroup->Enable();
+        //m_xRbtBitmap->set_sensitive(true);
+        m_xRbtGroup->set_sensitive(true);
     }
 
     // calculate and set zoom for DisplayWin
     Fraction aFrac(GetScale());
-    m_pCtlDisplay->SetScale(aFrac);
+    m_xCtlDisplay->SetScale(aFrac);
 
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl, Button*, void)
+IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl, weld::Button&, void)
 {
     // Code now in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
@@ -479,9 +473,9 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl, Button*, void)
             SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, Edit&, void)
+IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, weld::SpinButton&, void)
 {
-    sal_uLong nBmp = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue());
+    sal_uLong nBmp = m_xNumFldBitmap->get_value();
 
     if (nBmp > m_FrameList.size())
     {
@@ -493,13 +487,13 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, Edit&, void)
     UpdateControl();
 }
 
-IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, Edit&, void)
+IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, weld::TimeSpinButton&, void)
 {
-    sal_uLong nPos = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue() - 1);
+    sal_uLong nPos = m_xNumFldBitmap->get_value() - 1;
 
     tools::Time & rTime = m_FrameList[nPos].second;
 
-    rTime = m_pTimeField->GetTime();
+    rTime = m_xTimeField->get_value();
 }
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
@@ -532,81 +526,81 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             rBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
         }
 
-        m_pCtlDisplay->SetBitmapEx(&rBmp);
+        m_xCtlDisplay->SetBitmapEx(&rBmp);
     }
     else
     {
-        m_pCtlDisplay->SetBitmapEx(nullptr);
+        m_xCtlDisplay->SetBitmapEx(nullptr);
     }
-    m_pCtlDisplay->Invalidate();
-    m_pCtlDisplay->Update();
 
-    m_pFiCount->SetText(OUString::number(
+    m_xCtlDisplay->Invalidate();
+
+    m_xFiCount->set_label(OUString::number(
                 m_FrameList.size()));
 
     if (!m_FrameList.empty() && !bMovie)
     {
         size_t nIndex = m_nCurrentFrame + 1;
-        m_pNumFldBitmap->SetValue(nIndex);
+        m_xNumFldBitmap->set_value(nIndex);
 
         // if there is at least 1 object in the list
-        m_pBtnFirst->Enable();
-        m_pBtnReverse->Enable();
-        m_pBtnPlay->Enable();
-        m_pBtnLast->Enable();
-        m_pNumFldBitmap->Enable();
-        m_pTimeField->Enable();
-        m_pLbLoopCount->Enable();
-        m_pBtnRemoveBitmap->Enable();
-        m_pBtnRemoveAll->Enable();
+        m_xBtnFirst->set_sensitive(true);
+        m_xBtnReverse->set_sensitive(true);
+        m_xBtnPlay->set_sensitive(true);
+        m_xBtnLast->set_sensitive(true);
+        m_xNumFldBitmap->set_sensitive(true);
+        m_xTimeField->set_sensitive(true);
+        m_xLbLoopCount->set_sensitive(true);
+        m_xBtnRemoveBitmap->set_sensitive(true);
+        m_xBtnRemoveAll->set_sensitive(true);
     }
     else
     {
         // if no object is in the list
-        m_pBtnFirst->Enable( false );
-        m_pBtnReverse->Enable( false );
-        m_pBtnPlay->Enable( false );
-        m_pBtnLast->Enable( false );
-        m_pNumFldBitmap->Enable( false );
-        m_pTimeField->Enable( false );
-        m_pLbLoopCount->Enable( false );
-        m_pBtnRemoveBitmap->Enable( false );
-        m_pBtnRemoveAll->Enable( false );
+        m_xBtnFirst->set_sensitive( false );
+        m_xBtnReverse->set_sensitive( false );
+        m_xBtnPlay->set_sensitive( false );
+        m_xBtnLast->set_sensitive( false );
+        m_xNumFldBitmap->set_sensitive( false );
+        m_xTimeField->set_sensitive( false );
+        m_xLbLoopCount->set_sensitive( false );
+        m_xBtnRemoveBitmap->set_sensitive( false );
+        m_xBtnRemoveAll->set_sensitive( false );
     }
 
     if( bMovie && bDisableCtrls )
     {
-        m_pBtnGetOneObject->Enable( false );
-        m_pBtnGetAllObjects->Enable( false );
-        m_pRbtGroup->Enable( false );
-        m_pRbtBitmap->Enable( false );
-        m_pBtnCreateGroup->Enable( false );
-        m_pFtAdjustment->Enable( false );
-        m_pLbAdjustment->Enable( false );
+        m_xBtnGetOneObject->set_sensitive( false );
+        m_xBtnGetAllObjects->set_sensitive( false );
+        m_xRbtGroup->set_sensitive( false );
+        m_xRbtBitmap->set_sensitive( false );
+        m_xBtnCreateGroup->set_sensitive( false );
+        m_xFtAdjustment->set_sensitive( false );
+        m_xLbAdjustment->set_sensitive( false );
     }
     else
     {
         // enable 'group object' only if it is not an Animated GIF
         if (m_FrameList.empty())
         {
-            m_pRbtGroup->Enable();
+            m_xRbtGroup->set_sensitive(true);
         }
 
-        m_pRbtBitmap->Enable();
-        m_pBtnCreateGroup->Enable(!m_FrameList.empty());
-        m_pFtAdjustment->Enable();
-        m_pLbAdjustment->Enable();
+        m_xRbtBitmap->set_sensitive(true);
+        m_xBtnCreateGroup->set_sensitive(!m_FrameList.empty());
+        m_xFtAdjustment->set_sensitive(true);
+        m_xLbAdjustment->set_sensitive(true);
     }
 
-    ClickRbtHdl( nullptr );
+    ClickRbtHdl(*m_xRbtGroup);
 }
 
 void AnimationWindow::ResetAttrs()
 {
-    m_pRbtGroup->Check();
-    m_pLbAdjustment->SelectEntryPos( BA_CENTER );
+    m_xRbtGroup->set_active(true);
+    m_xLbAdjustment->set_active( BA_CENTER );
     // LoopCount
-    m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
+    m_xLbLoopCount->set_active( m_xLbLoopCount->get_count() - 1);
 
     UpdateControl();
 }
@@ -648,7 +642,7 @@ Fraction AnimationWindow::GetScale()
         aBmpSize.AdjustWidth(10 );
         aBmpSize.AdjustHeight(10 );
 
-        Size aDisplaySize(m_pCtlDisplay->GetOutputSize());
+        Size aDisplaySize(m_xCtlDisplay->GetOutputSizePixel());
 
         aFrac = Fraction( std::min( static_cast<double>(aDisplaySize.Width()) / static_cast<double>(aBmpSize.Width()),
                              static_cast<double>(aDisplaySize.Height()) / static_cast<double>(aBmpSize.Height()) ) );
@@ -660,7 +654,7 @@ void AnimationWindow::Resize()
 {
     SfxDockingWindow::Resize();
     Fraction aFrac(GetScale());
-    m_pCtlDisplay->SetScale(aFrac);
+    m_xCtlDisplay->SetScale(aFrac);
 }
 
 bool AnimationWindow::Close()
@@ -733,9 +727,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         sal_uInt32 nLoopCount = aAnimation.GetLoopCount();
 
                         if( !nLoopCount ) // endless
-                            m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
+                            m_xLbLoopCount->set_active( m_xLbLoopCount->get_count() - 1);
                         else
-                            m_pLbLoopCount->SelectEntry(OUString::number( nLoopCount ) );
+                            m_xLbLoopCount->set_active_text(OUString::number( nLoopCount ) );
                     }
 
                     long nTime = rAnimationBitmap.mnWait;
@@ -749,8 +743,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     ++m_nCurrentFrame;
                 }
                 // if an animated GIF is taken, only such one can be created
-                m_pRbtBitmap->Check();
-                m_pRbtGroup->Enable( false );
+                m_xRbtBitmap->set_active(true);
+                m_xRbtGroup->set_sensitive( false );
                 bAnimObj = true;
             }
         }
@@ -766,7 +760,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
-                        ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
+                        ::std::make_pair(aBitmapEx, m_xTimeField->get_value()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;
@@ -784,7 +778,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
     {
         BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
-        ::tools::Time aTime( m_pTimeField->GetTime() );
+        ::tools::Time aTime( m_xTimeField->get_value() );
 
         size_t nIndex = m_nCurrentFrame + 1;
         m_FrameList.insert(
@@ -815,7 +809,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                     m_FrameList.begin() + nIndex,
-                    ::std::make_pair(aBitmapEx, m_pTimeField->GetTime()));
+                    ::std::make_pair(aBitmapEx, m_xTimeField->get_value()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;
@@ -852,12 +846,12 @@ void AnimationWindow::AddObj (::sd::View& rView )
     // there, we can create an animation group
     if (nCloneCount == 0 && !m_FrameList.empty())
     {
-        m_pBtnCreateGroup->Enable();
+        m_xBtnCreateGroup->set_sensitive(true);
     }
 
     // calculate and set zoom for DisplayWin
     Fraction aFrac( GetScale() );
-    m_pCtlDisplay->SetScale(aFrac);
+    m_xCtlDisplay->SetScale(aFrac);
 
     UpdateControl();
 }
@@ -875,7 +869,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const Point         aWindowCenter( pOutWin->PixelToLogic( Point( aTemp.Width() >> 1, aTemp.Height() >> 1 ) ) );
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const size_t nCount = m_FrameList.size();
-    BitmapAdjustment    eBA = static_cast<BitmapAdjustment>(m_pLbAdjustment->GetSelectedEntryPos());
+    BitmapAdjustment    eBA = static_cast<BitmapAdjustment>(m_xLbAdjustment->get_active());
 
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
@@ -899,7 +893,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
     SdrPageView* pPV = rView.GetSdrPageView();
 
-    if( m_pRbtBitmap->IsChecked() )
+    if( m_xRbtBitmap->get_active() )
     {
         // create bitmap group (Animated GIF)
         Animation   aAnimation;
@@ -962,10 +956,10 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             // find LoopCount (number of passes)
             AnimationBitmap aAnimationBitmap;
             sal_uInt32 nLoopCount = 0;
-            sal_Int32 nPos = m_pLbLoopCount->GetSelectedEntryPos();
+            sal_Int32 nPos = m_xLbLoopCount->get_active();
 
-            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
-                nLoopCount = m_pLbLoopCount->GetSelectedEntry().toUInt32();
+            if( nPos != -1 && nPos != m_xLbLoopCount->get_count() - 1 ) // endless
+                nLoopCount = m_xLbLoopCount->get_active_text().toUInt32();
 
             aAnimationBitmap.maBitmapEx = rBitmapEx;
             aAnimationBitmap.maPositionPixel = aPt;
@@ -1088,7 +1082,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         }
     }
 
-    ClickFirstHdl( nullptr );
+    ClickFirstHdl(*m_xBtnFirst);
 }
 
 void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1123,8 +1117,8 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
         if (pStateItem)
         {
             sal_uInt16 nState = pStateItem->GetValue();
-            pAnimationWin->m_pBtnGetOneObject->Enable( nState & 1 );
-            pAnimationWin->m_pBtnGetAllObjects->Enable( nState & 2 );
+            pAnimationWin->m_xBtnGetOneObject->set_sensitive( nState & 1 );
+            pAnimationWin->m_xBtnGetAllObjects->set_sensitive( nState & 2 );
         }
     }
 }
