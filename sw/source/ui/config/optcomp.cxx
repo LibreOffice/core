@@ -108,7 +108,7 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
 }
 
-static sal_uLong convertBools2Ulong_Impl
+static sal_uInt32 convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,
@@ -302,9 +302,9 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
     }
 }
 
-sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
+sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
 {
-    sal_uLong nRet = 0;
+    sal_uInt32 nRet = 0;
     if ( m_pWrtShell )
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = m_pWrtShell->getIDocumentSettingAccess();
@@ -456,7 +456,7 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
 {
     m_xOptionsLB->select(0);
 
-    sal_uLong nOptions = GetDocumentOptions();
+    sal_uInt32 nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 
