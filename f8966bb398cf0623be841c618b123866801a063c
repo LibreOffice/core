@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0239553_d1fa774a",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-01-28T08:56:12Z",
+      "side": 1,
+      "message": "If you still have notes about that, could you please document (add a comment above the line) what was the wrong value? Once the test fails, it\u0027s useful to know if the new actual value is exactly the previous bad value or something else. Thanks.",
+      "revId": "f8966bb398cf0623be841c618b123866801a063c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
