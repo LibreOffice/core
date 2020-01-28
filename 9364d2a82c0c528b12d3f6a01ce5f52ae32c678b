@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "13bf5ae1_82bacd9d",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_vba.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-28T08:53:24Z",
+      "side": 1,
+      "message": "I suppose we must make sure that VBASupport implies Compatible. Doing otherwise doesn\u0027t make sense (Compatible means some subset of syntax from VBA, so having VBA support without that syntax is nonsense); and in fact, we should clean up the place in documentation that states otherwise.",
+      "parentUuid": "f4d6f5ee_184a4cb7",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfedc1d7_6544fbd6",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
