@@ -1409,7 +1409,6 @@ cmd/sc_selectmode.png cmd/sc_selectobject.png
 cmd/32/reportnavigator.png cmd/32/navigator.png
 cmd/lc_reportnavigator.png cmd/lc_navigator.png
 cmd/sc_reportnavigator.png cmd/sc_navigator.png
-cmd/sc_setreminder.png cmd/sc_timefield.png
 
 # Database
 cmd/32/dbdtableedit.png cmd/32/dbtableedit.png
@@ -2283,6 +2282,7 @@ sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
 sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
@@ -2317,7 +2317,7 @@ sw/res/sr20009.png cmd/sc_insertgraphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png

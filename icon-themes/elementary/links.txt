@@ -1331,6 +1331,8 @@ cmd/sc_pluginsactive.png cmd/sc_insertplugin.png
 cmd/32/cellprotection.png cmd/32/protect.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
+cmd/32/selectcolumn.png cmd/32/entirecolumn.png
+cmd/32/selectrow.png cmd/32/entirerow.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
 cmd/32/setrowheight.png cmd/32/rowheight.png
@@ -1343,6 +1345,8 @@ cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
+cmd/lc_selectcolumn.png cmd/lc_entirecolumn.png
+cmd/lc_selectrow.png cmd/lc_entirerow.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
 cmd/lc_setrowheight.png cmd/lc_rowheight.png
@@ -1355,6 +1359,8 @@ cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+cmd/sc_selectcolumn.png cmd/sc_entirecolumn.png
+cmd/sc_selectrow.png cmd/sc_entirerow.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
 cmd/sc_setrowheight.png cmd/sc_rowheight.png
@@ -1410,7 +1416,6 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 cmd/32/savesimple.png cmd/32/save.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
-cmd/sc_setreminder.png cmd/sc_timefield.png
 
 # Locale language support
 cmd/32/underlinesimple.png cmd/32/underline.png
@@ -2240,6 +2245,7 @@ sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
 sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png sd/res/nv010.png
@@ -2270,7 +2276,7 @@ sw/res/sr20009.png cmd/sc_graphic.png
 sw/res/sr20010.png sc/res/nc05.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
@@ -2341,7 +2347,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu
+# Edit menu 
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
