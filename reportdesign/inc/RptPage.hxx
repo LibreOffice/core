@@ -62,7 +62,7 @@ public:
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component
     */
-    sal_uLong getIndexOf(const css::uno::Reference< css::report::XReportComponent >& _xObject);
+    size_t getIndexOf(const css::uno::Reference< css::report::XReportComponent >& _xObject);
 
     /** removes the SdrObject which belongs to the report component.
         @param  _xObject    the report component

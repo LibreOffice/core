@@ -42,7 +42,7 @@ private:
     // impl object
     std::unique_ptr<SwCompatibilityOptPage_Impl> m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
-    sal_uLong                   m_nSavedOptions;
+    sal_uInt64                  m_nSavedOptions;
     bool                        m_bSavedMSFormsMenuOption;
 
     // controls
@@ -60,8 +60,8 @@ private:
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
-    void                    SetCurrentOptions( sal_uLong nOptions );
-    sal_uLong                   GetDocumentOptions() const;
+    void                    SetCurrentOptions( sal_uInt64 nOptions );
+    sal_uInt32              GetDocumentOptions() const;
     void                    WriteOptions();
 
 public:
