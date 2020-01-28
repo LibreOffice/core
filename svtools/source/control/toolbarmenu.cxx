@@ -110,13 +110,6 @@ ToolbarPopupBase::~ToolbarPopupBase()
     }
 }
 
-ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits )
-    : DockingWindow(pParentWindow, nBits)
-    , ToolbarPopupBase(rFrame)
-{
-    init();
-}
-
 ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow,
                             const OString& rID, const OUString& rUIXMLDescription )
     : DockingWindow(pParentWindow, rID, rUIXMLDescription, rFrame)
