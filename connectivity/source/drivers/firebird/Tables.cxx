@@ -51,12 +51,12 @@ ObjectType Tables::createObject(const OUString& rName)
                                                                   uno::Sequence< OUString >());
 
     if (!xTables.is())
-        throw RuntimeException();
+        throw RuntimeException("Could not acquire table.");
 
     uno::Reference< XRow > xRow(xTables,UNO_QUERY_THROW);
 
     if (!xTables->next())
-        throw RuntimeException();
+        throw RuntimeException("Could not acquire table.");
 
     ObjectType xRet(new Table(this,
                               m_rMutex,
@@ -66,7 +66,7 @@ ObjectType Tables::createObject(const OUString& rName)
                               xRow->getString(5))); // Description / Remarks / Comments
 
     if (xTables->next())
-        throw RuntimeException(); // Only one table should be returned
+        throw RuntimeException("Found more tables than expected.");
 
     return xRet;
 }

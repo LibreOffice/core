@@ -225,7 +225,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 // ----- XRename --------------------------------------------------------------
 void SAL_CALL Table::rename(const OUString&)
 {
-    throw RuntimeException(); // Firebird doesn't support this.
+    throw RuntimeException("Table renaming not supported by Firebird.");
 }
 
 // ----- XInterface -----------------------------------------------------------
