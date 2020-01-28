@@ -16,6 +16,24 @@
       "revId": "da70fd1edc211bf63f8388e11c1bd8dd398fdaf8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50f4fd8f_101eebbc",
+        "filename": "cui/uiconfig/ui/numberingoptionspage.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-01-28T15:47:01Z",
+      "side": 0,
+      "message": "(-: It was intentional.  Here is the story behind it:  I do not have glade, so I just compare the gtk3 code -- and this one property was different from the same implementation for Levels in the numberingpositionpage.ui  - plus I could not see that these property was listed for GtkTreeView (in the gtk3 manual) - so thought it best to delete -- in case it was also contributing to the problem.",
+      "parentUuid": "b3f0d5a7_a9cbbc5f",
+      "revId": "da70fd1edc211bf63f8388e11c1bd8dd398fdaf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
