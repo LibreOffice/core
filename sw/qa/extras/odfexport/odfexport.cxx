@@ -886,20 +886,20 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
             uno::Reference < beans::XPropertySet > xStyleSet(xStyleFamily->getByName("CharDiffBor"), uno::UNO_QUERY);
 
             // Top border
-            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[0], getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
-            CPPUNIT_ASSERT_EQUAL(aDistances[0], getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[0], getProperty<table::BorderLine2>(xStyleSet,"CharTopBorder"));
+            CPPUNIT_ASSERT_EQUAL(aDistances[0], getProperty<sal_Int32>(xStyleSet,"CharTopBorderDistance"));
 
             // Bottom border
-            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[1], getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
-            CPPUNIT_ASSERT_EQUAL(aDistances[1], getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[1], getProperty<table::BorderLine2>(xStyleSet,"CharBottomBorder"));
+            CPPUNIT_ASSERT_EQUAL(aDistances[1], getProperty<sal_Int32>(xStyleSet,"CharBottomBorderDistance"));
 
             // Left border
-            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[2], getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
-            CPPUNIT_ASSERT_EQUAL(aDistances[2], getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[2], getProperty<table::BorderLine2>(xStyleSet,"CharLeftBorder"));
+            CPPUNIT_ASSERT_EQUAL(aDistances[2], getProperty<sal_Int32>(xStyleSet,"CharLeftBorderDistance"));
 
             // Right border
-            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
-            CPPUNIT_ASSERT_EQUAL(aDistances[3], getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[3], getProperty<table::BorderLine2>(xStyleSet,"CharRightBorder"));
+            CPPUNIT_ASSERT_EQUAL(aDistances[3], getProperty<sal_Int32>(xStyleSet,"CharRightBorderDistance"));
         }
     }
 }
