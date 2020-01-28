@@ -124,7 +124,7 @@ DropTarget::DropTarget() :
     mSelectedDropAction(DNDConstants::ACTION_NONE),
     mDefaultActions(DNDConstants::ACTION_COPY_OR_MOVE | DNDConstants::ACTION_LINK | DNDConstants::ACTION_DEFAULT)
 {
-    mDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
+    mDataFlavorMapper = std::make_shared<DataFlavorMapper>();
 }
 
 DropTarget::~DropTarget()
