@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "3aaef3a9_5a69bd6b",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-28T08:35:57Z",
+      "side": 1,
+      "message": "Yes; I suppose this change could be done - but in a dedicated commit, for ease of reverting if a need arises.",
+      "parentUuid": "bf6ee10e_3df6618d",
+      "range": {
+        "startLine": 4034,
+        "startChar": 9,
+        "endLine": 4034,
+        "endChar": 37
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf4dcf83_a23ea3be",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -436,6 +460,30 @@
       "side": 1,
       "message": "I will change it like in line 4080.",
       "parentUuid": "8f4ac743_14bf1c41",
+      "range": {
+        "startLine": 4065,
+        "startChar": 60,
+        "endLine": 4065,
+        "endChar": 79
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad9a0a3f_ef494622",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-28T08:35:57Z",
+      "side": 1,
+      "message": "Please check first, if this should be something different: how does array parameter behave here? will it get a default value? I mean, do we need to distinguish array flag from ByVal flag here?",
+      "parentUuid": "f4375f7c_4887e15b",
       "range": {
         "startLine": 4065,
         "startChar": 60,
