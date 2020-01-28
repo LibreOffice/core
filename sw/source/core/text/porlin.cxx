@@ -103,32 +103,31 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
                   1800 :
                   rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
-    switch ( nDir )
+    if (nLastWidth > nHalfView)
     {
-    case 0 :
-        nPos = sal_uInt16( rInf.X() );
-        if( nLastWidth > nHalfView )
+        switch (nDir)
+        {
+        case 0:
+            nPos = sal_uInt16( rInf.X() );
             nPos += nLastWidth - nHalfView;
-        aInf.X( nPos );
-        break;
-    case 900 :
-        nPos = sal_uInt16( rInf.Y() );
-        if( nLastWidth > nHalfView )
+            aInf.X( nPos );
+            break;
+        case 900:
+            nPos = sal_uInt16( rInf.Y() );
             nPos -= nLastWidth + nHalfView;
-        aInf.Y( nPos );
-        break;
-    case 1800 :
-        nPos = sal_uInt16( rInf.X() );
-        if( nLastWidth > nHalfView )
+            aInf.Y( nPos );
+            break;
+        case 1800:
+            nPos = sal_uInt16( rInf.X() );
             nPos -= nLastWidth + nHalfView;
-        aInf.X( nPos );
-        break;
-    case 2700 :
-        nPos = sal_uInt16( rInf.Y() );
-        if( nLastWidth > nHalfView )
+            aInf.X( nPos );
+            break;
+        case 2700:
+            nPos = sal_uInt16( rInf.Y() );
             nPos += nLastWidth - nHalfView;
-        aInf.Y( nPos );
-        break;
+            aInf.Y( nPos );
+            break;
+        }
     }
 
     SwLinePortion *pThis = const_cast<SwLinePortion*>(this);
