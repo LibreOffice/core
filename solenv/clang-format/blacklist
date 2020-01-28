@@ -44,8 +44,6 @@ accessibility/inc/extended/accessibletabbarpage.hxx
 accessibility/inc/extended/accessibletabbarpagelist.hxx
 accessibility/inc/extended/accessibletablistbox.hxx
 accessibility/inc/extended/accessibletablistboxtable.hxx
-accessibility/inc/extended/listboxaccessible.hxx
-accessibility/inc/extended/textwindowaccessibility.hxx
 accessibility/inc/helper/IComboListBoxHelper.hxx
 accessibility/inc/helper/accresmgr.hxx
 accessibility/inc/helper/characterattributeshelper.hxx
@@ -113,8 +111,6 @@ accessibility/source/extended/accessibletabbarpage.cxx
 accessibility/source/extended/accessibletabbarpagelist.cxx
 accessibility/source/extended/accessibletablistbox.cxx
 accessibility/source/extended/accessibletablistboxtable.cxx
-accessibility/source/extended/listboxaccessible.cxx
-accessibility/source/extended/textwindowaccessibility.cxx
 accessibility/source/helper/IComboListBoxHelper.cxx
 accessibility/source/helper/acc_factory.cxx
 accessibility/source/helper/accresmgr.cxx
@@ -647,13 +643,9 @@ bridges/source/cpp_uno/gcc3_solaris_sparc/except.cxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/share.hxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx
-bridges/source/cpp_uno/msvc_win32_intel/dllinit.cxx
-bridges/source/cpp_uno/msvc_win32_intel/except.cxx
 bridges/source/cpp_uno/msvc_win32_intel/msci.hxx
 bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx
-bridges/source/cpp_uno/msvc_win32_x86-64/dllinit.cxx
-bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/mscx.hxx
 bridges/source/cpp_uno/msvc_win32_x86-64/uno2cpp.cxx
 bridges/source/cpp_uno/shared/bridge.cxx
@@ -1602,8 +1594,6 @@ comphelper/source/misc/proxyaggregation.cxx
 comphelper/source/misc/random.cxx
 comphelper/source/misc/sequenceashashmap.cxx
 comphelper/source/misc/servicedecl.cxx
-comphelper/source/misc/serviceinfohelper.cxx
-comphelper/source/misc/sharedmutex.cxx
 comphelper/source/misc/simplefileaccessinteraction.cxx
 comphelper/source/misc/solarmutex.cxx
 comphelper/source/misc/stillreadwriteinteraction.cxx
@@ -1921,8 +1911,6 @@ connectivity/inc/pch/precompiled_firebird_sdbc.cxx
 connectivity/inc/pch/precompiled_firebird_sdbc.hxx
 connectivity/inc/pch/precompiled_flat.cxx
 connectivity/inc/pch/precompiled_flat.hxx
-connectivity/inc/pch/precompiled_mysql.cxx
-connectivity/inc/pch/precompiled_mysql.hxx
 connectivity/inc/pch/precompiled_odbc.cxx
 connectivity/inc/pch/precompiled_odbc.hxx
 connectivity/inc/pch/precompiled_postgresql-sdbc-impl.cxx
@@ -3718,8 +3706,6 @@ desktop/win32/source/applauncher/simpress.cxx
 desktop/win32/source/applauncher/smath.cxx
 desktop/win32/source/applauncher/sweb.cxx
 desktop/win32/source/applauncher/swriter.cxx
-desktop/win32/source/guiloader/genericloader.cxx
-desktop/win32/source/guistdio/unopkgio.cxx
 desktop/win32/source/loader.cxx
 desktop/win32/source/loader.hxx
 desktop/win32/source/unoinfo.cxx
@@ -4997,12 +4983,10 @@ fpicker/source/win32/VistaFilePickerImpl.cxx
 fpicker/source/win32/VistaFilePickerImpl.hxx
 fpicker/source/win32/WinImplHelper.cxx
 fpicker/source/win32/WinImplHelper.hxx
-fpicker/source/win32/afxres.h
 fpicker/source/win32/asyncrequests.cxx
 fpicker/source/win32/asyncrequests.hxx
 fpicker/source/win32/comptr.hxx
 fpicker/source/win32/platform_vista.h
-fpicker/source/win32/resource.h
 fpicker/source/win32/resourceprovider.cxx
 fpicker/source/win32/resourceprovider.hxx
 fpicker/source/win32/shared.hxx
@@ -5082,7 +5066,6 @@ framework/inc/stdtypes.h
 framework/inc/targets.h
 framework/inc/taskcreatordefs.hxx
 framework/inc/threadhelp/gate.hxx
-framework/inc/threadhelp/transactionbase.hxx
 framework/inc/threadhelp/transactionguard.hxx
 framework/inc/threadhelp/transactionmanager.hxx
 framework/inc/uiconfiguration/globalsettings.hxx
@@ -5870,7 +5853,6 @@ include/comphelper/sequence.hxx
 include/comphelper/sequenceashashmap.hxx
 include/comphelper/servicedecl.hxx
 include/comphelper/servicehelper.hxx
-include/comphelper/serviceinfohelper.hxx
 include/comphelper/sharedmutex.hxx
 include/comphelper/simplefileaccessinteraction.hxx
 include/comphelper/solarmutex.hxx
@@ -17549,7 +17531,6 @@ vcl/opengl/win/WinDeviceInfo.cxx
 vcl/opengl/win/blocklist_parser.cxx
 vcl/opengl/win/gdiimpl.cxx
 vcl/opengl/x11/cairotextrender.cxx
-vcl/opengl/x11/cairotextrender.hxx
 vcl/opengl/x11/X11DeviceInfo.cxx
 vcl/opengl/x11/gdiimpl.cxx
 vcl/opengl/x11/salvd.cxx
@@ -18370,8 +18351,6 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx
 writerfilter/source/ooxml/OOXMLStreamImpl.cxx
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx
 writerfilter/source/ooxml/qnametostrcore.cxx
-xmlhelp/source/cxxhelp/inc/qe/DocGenerator.hxx
-xmlhelp/source/cxxhelp/inc/tvfactory.hxx
 xmlhelp/source/cxxhelp/inc/tvread.hxx
 xmlhelp/source/cxxhelp/provider/content.cxx
 xmlhelp/source/cxxhelp/provider/content.hxx
@@ -18396,8 +18375,6 @@ xmlhelp/source/cxxhelp/provider/resultsetforroot.hxx
 xmlhelp/source/cxxhelp/provider/services.cxx
 xmlhelp/source/cxxhelp/provider/urlparameter.cxx
 xmlhelp/source/cxxhelp/provider/urlparameter.hxx
-xmlhelp/source/cxxhelp/qe/DocGenerator.cxx
-xmlhelp/source/cxxhelp/test/abidebug.hxx
 xmlhelp/source/cxxhelp/test/searchdemo.cxx
 xmlhelp/source/treeview/tvfactory.cxx
 xmlhelp/source/treeview/tvread.cxx
@@ -18662,7 +18639,6 @@ xmloff/source/forms/logging.hxx
 xmloff/source/forms/officeforms.cxx
 xmloff/source/forms/officeforms.hxx
 xmloff/source/forms/property_description.hxx
-xmloff/source/forms/property_group.hxx
 xmloff/source/forms/property_meta_data.cxx
 xmloff/source/forms/property_meta_data.hxx
 xmloff/source/forms/propertyexport.cxx
@@ -19096,8 +19072,6 @@ xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
 xmlsecurity/inc/pch/precompiled_xmlsecurity.cxx
 xmlsecurity/inc/pch/precompiled_xmlsecurity.hxx
-xmlsecurity/inc/pch/precompiled_xsec_gpg.cxx
-xmlsecurity/inc/pch/precompiled_xsec_gpg.hxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
 xmlsecurity/inc/xmlsec-wrapper.h
