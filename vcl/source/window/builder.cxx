@@ -2061,29 +2061,17 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (bDropdown)
             nBits |= WB_DROPDOWN;
 
-        if (!sPattern.isEmpty())
-        {
-            connectNumericFormatterAdjustment(id, sAdjustment);
-            OUString sUnit = extractUnit(sPattern);
-            FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_INFO("vcl.layout", "making metric box for " << name << " " << sUnit);
-            VclPtrInstance<MetricBox> xBox(pParent, nBits);
-            xBox->EnableAutoSize(true);
-            xBox->SetUnit(eUnit);
-            xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FieldUnit::CUSTOM)
-                xBox->SetCustomUnitText(sUnit);
-            xWindow = xBox;
-        }
-        else
-        {
-            SAL_INFO("vcl.layout", "making numeric box for " << name);
-            connectNumericFormatterAdjustment(id, sAdjustment);
-            VclPtrInstance<NumericBox> xBox(pParent, nBits);
-            if (bDropdown)
-                xBox->EnableAutoSize(true);
-            xWindow = xBox;
-        }
+        connectNumericFormatterAdjustment(id, sAdjustment);
+        OUString sUnit = extractUnit(sPattern);
+        FieldUnit eUnit = detectMetricUnit(sUnit);
+        SAL_INFO("vcl.layout", "making metric box for " << name << " " << sUnit);
+        VclPtrInstance<MetricBox> xBox(pParent, nBits);
+        xBox->EnableAutoSize(true);
+        xBox->SetUnit(eUnit);
+        xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
+        if (eUnit == FieldUnit::CUSTOM)
+            xBox->SetCustomUnitText(sUnit);
+        xWindow = xBox;
     }
     else if (name == "GtkIconView")
     {
