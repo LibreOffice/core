@@ -2401,7 +2401,6 @@ namespace
                 pResId = STR_QRY_SYNTAX;
                 break;
         }
-        ;
         return DBA_RES(pResId);
     }
 }
