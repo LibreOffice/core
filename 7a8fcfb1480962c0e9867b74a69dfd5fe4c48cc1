@@ -16,6 +16,24 @@
       "revId": "7a8fcfb1480962c0e9867b74a69dfd5fe4c48cc1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a1b5197_1b952afc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002345
+      },
+      "writtenOn": "2020-01-28T17:59:58Z",
+      "side": 1,
+      "message": "whenever the area tab is opened it resumes with focus on the button which was last selected before entering ok. Before when the area tab is selected the None button is focused always. \nHowever, the focus still goes to \"none\" button in area tab if any other tab is visited and then area tab is revisited.",
+      "parentUuid": "201e0fef_67f15acf",
+      "revId": "7a8fcfb1480962c0e9867b74a69dfd5fe4c48cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
