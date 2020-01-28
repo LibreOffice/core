@@ -105,8 +105,6 @@ void SvxCharView::InsertCharToDoc()
     if (GetText().isEmpty())
         return;
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
     uno::Sequence<beans::PropertyValue> aArgs(2);
     aArgs[0].Name = "Symbols";
     aArgs[0].Value <<= GetText();

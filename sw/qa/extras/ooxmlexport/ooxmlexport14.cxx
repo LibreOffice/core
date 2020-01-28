@@ -154,7 +154,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf124986, "tdf124986.docx")
 {
     // Load a document with SET fields, where the SET fields contain leading/trailing quotation marks and spaces.
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());

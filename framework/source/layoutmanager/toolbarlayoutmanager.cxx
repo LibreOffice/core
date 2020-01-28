@@ -348,8 +348,6 @@ void ToolbarLayoutManager::reset()
 {
     {
         SolarMutexGuard aWriteLock;
-        uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr(m_xModuleCfgMgr);
-        uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr(m_xDocCfgMgr);
         m_xModuleCfgMgr.clear();
         m_xDocCfgMgr.clear();
         m_ePreviewDetection = PREVIEWFRAME_UNKNOWN;

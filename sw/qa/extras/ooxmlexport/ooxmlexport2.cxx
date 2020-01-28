@@ -355,7 +355,6 @@ struct SingleLineBorders {
 DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     uno::Reference<text::XTextTable> xTextTable (xTables->getByIndex(0), uno::UNO_QUERY);
@@ -648,7 +647,6 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     // 1st problem: last character was missing
     CPPUNIT_ASSERT_EQUAL(OUString("SAMPLE"), xShape->getString());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
     bool bFound = false;
     for (int i = 0; i < aProps.getLength(); ++i)

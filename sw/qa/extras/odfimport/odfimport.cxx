@@ -615,9 +615,8 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     pWrtShell->SelAll(); // Selects the whole document.
 
     // Ctrl-C
-    SwTransferable* pTransferable = new SwTransferable(*pWrtShell);
-    uno::Reference<datatransfer::XTransferable> xTransferable(pTransferable);
-    pTransferable->Copy();
+    rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
+    xTransferable->Copy();
 
     pWrtShell->SttEndDoc(false); // Go to the end of the doc.
 

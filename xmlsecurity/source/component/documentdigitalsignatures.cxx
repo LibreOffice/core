@@ -820,9 +820,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
     aSignatureManager.getSignatureHelper().SetStorage(xStorage, m_sODFVersion);
     aSignatureManager.setSignatureStream(xStream);
 
-    Reference<XXMLSecurityContext> xSecurityContext;
-    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
-    xSecurityContext = aSignatureManager.getSecurityContext();
+    Reference<XXMLSecurityContext> xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
 

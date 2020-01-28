@@ -222,7 +222,6 @@ Two pairs of horizontal rules (one absolute width, one relative width)
 have the same width (full page width, half page width).
 xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> rule1 = getShape(1), rule2 = getShape(2), rule3 = getShape(3), rule4 = getShape(4);
     uno::Reference<beans::XPropertySet> ruleProperties1(rule1, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> ruleProperties2(rule2, uno::UNO_QUERY);
@@ -492,7 +491,6 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 
 DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
 {
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;

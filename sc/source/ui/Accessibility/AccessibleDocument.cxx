@@ -159,7 +159,6 @@ struct ScShapeDataLess
     static bool LessThanSheet(const ScAccessibleShapeData* pData)
     {
         bool bResult(false);
-        uno::Reference< beans::XPropertySet> xProps(pData->xShape, uno::UNO_QUERY);
         if (pData->mxLayerID)
         {
             if (SdrLayerID(*pData->mxLayerID) == SC_LAYER_BACK)

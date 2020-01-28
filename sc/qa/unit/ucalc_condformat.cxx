@@ -1222,11 +1222,7 @@ void Test::testCondFormatListenToOwnRange()
     pList->InsertNew(std::move(pFormat));
 
     bool bFirstCallbackCalled = false;
-    bool bSecondCallbackCalled = false;
-    bool bThirdCallbackCalled = false;
     std::function<void()> aFirstCallback = [&]() {bFirstCallbackCalled = true;};
-    std::function<void()> aSecondCallback = [&]() {bSecondCallbackCalled = true;};
-    std::function<void()> aThirdCallback = [&]() {bThirdCallbackCalled = true;};
     pData->m_Entries[0]->SetType(COLORSCALE_PERCENT);
     pData->m_Entries[0]->SetRepaintCallback(aFirstCallback);
 

@@ -254,7 +254,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     {
         bool bHasCategories = true;
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-        ::std::unique_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
             OUString sLocalName;

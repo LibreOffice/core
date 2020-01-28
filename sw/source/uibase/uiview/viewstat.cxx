@@ -280,8 +280,6 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                uno::Reference<uno::XComponentContext> const xContext(
-                        comphelper::getProcessComponentContext());
                 rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
             }
             break;

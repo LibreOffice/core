@@ -1102,8 +1102,6 @@ void ZipFile::recover()
 
                     for( auto& rEntry : aEntries )
                     {
-                        ZipEntry aTmp = rEntry.second;
-
                         // this is a broken package, accept this block not only for DEFLATED streams
                         if( rEntry.second.nFlag & 8 )
                         {
