@@ -342,9 +342,7 @@ sal_Bool WriterFilter::supportsService(const OUString& rServiceName)
 
 uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { OUString("com.sun.star.document.ImportFilter"),
-                                     OUString("com.sun.star.document.ExportFilter") };
-    return aRet;
+    return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
