@@ -42,7 +42,7 @@ ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	$(foreach file,$(shell cat $^),\
 		$(if $(findstring /win32/,$(file)),&& printf '#ifdef _WIN32\n' >> $@) \
 	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(SDKDIRNAME)/include/,,$(file)) >> $@ \
-		$(if $(findstring /win32/,$(file)),&& printf '#endif // WNT\n' >> $@) \
+		$(if $(findstring /win32/,$(file)),&& printf '#endif\n' >> $@) \
 	)
 else
 	$(file >$@,\
