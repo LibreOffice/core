@@ -83,7 +83,7 @@ public:
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
                                           const OString& rID, const OUString& rUIXMLDescription,
-                                          bool bInterim = false );
+                                          bool bInterim );
                         virtual ~SfxDockingWindow() override;
     virtual void        dispose() override;
 
