@@ -132,7 +132,7 @@ OUString SAL_CALL ScVbaShapeRange::getName()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getName( );
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setName( const OUString& _name )
@@ -154,7 +154,7 @@ double SAL_CALL ScVbaShapeRange::getHeight()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getHeight( );
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setHeight( double _height )
@@ -176,7 +176,7 @@ double SAL_CALL ScVbaShapeRange::getWidth()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getWidth( );
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setWidth( double _width )
@@ -198,7 +198,7 @@ double SAL_CALL ScVbaShapeRange::getLeft()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getLeft();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setLeft( double _left )
@@ -220,7 +220,7 @@ double SAL_CALL ScVbaShapeRange::getTop()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getTop();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setTop( double _top )
@@ -242,7 +242,7 @@ uno::Reference< ov::msforms::XLineFormat > SAL_CALL ScVbaShapeRange::getLine()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getLine();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 uno::Reference< ov::msforms::XFillFormat > SAL_CALL ScVbaShapeRange::getFill()
@@ -254,7 +254,7 @@ uno::Reference< ov::msforms::XFillFormat > SAL_CALL ScVbaShapeRange::getFill()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getFill();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio()
@@ -266,7 +266,7 @@ sal_Bool SAL_CALL ScVbaShapeRange::getLockAspectRatio()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getLockAspectRatio();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setLockAspectRatio( sal_Bool _lockaspectratio )
@@ -288,7 +288,7 @@ sal_Bool SAL_CALL ScVbaShapeRange::getLockAnchor()
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getLockAnchor();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setLockAnchor( sal_Bool _lockanchor )
@@ -310,7 +310,7 @@ void SAL_CALL ScVbaShapeRange::setLockAnchor( sal_Bool _lockanchor )
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getRelativeHorizontalPosition();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition )
@@ -332,7 +332,7 @@ void SAL_CALL ScVbaShapeRange::setRelativeHorizontalPosition( ::sal_Int32 _relat
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->getRelativeVerticalPosition();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition )
@@ -354,7 +354,7 @@ uno::Any SAL_CALL ScVbaShapeRange::TextFrame(  )
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->TextFrame();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 uno::Any SAL_CALL ScVbaShapeRange::WrapFormat(  )
@@ -366,7 +366,7 @@ uno::Any SAL_CALL ScVbaShapeRange::WrapFormat(  )
         uno::Reference< msforms::XShape > xShape( Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
         return xShape->WrapFormat();
     }
-    throw uno::RuntimeException();
+    throw uno::RuntimeException("index was bigger than Count");
 }
 
 void SAL_CALL ScVbaShapeRange::ZOrder( sal_Int32 ZOrderCmd )
