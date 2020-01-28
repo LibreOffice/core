@@ -307,8 +307,7 @@ static OUString SlideLayoutController_getImplementationName()
 /// @throws RuntimeException
 static Sequence< OUString >  SlideLayoutController_getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+   return { "com.sun.star.frame.ToolbarController" };
 }
 
 /// @throws css::uno::RuntimeException
@@ -320,8 +319,7 @@ static OUString InsertSlideController_getImplementationName()
 /// @throws RuntimeException
 static Sequence< OUString >  InsertSlideController_getSupportedServiceNames()
 {
-    Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
-    return aSNS;
+    return { "com.sun.star.frame.ToolbarController" };
 }
 
 
