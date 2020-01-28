@@ -4138,6 +4138,12 @@ void DomainMapper_Impl::handleBibliography
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
+    if (m_aTextAppendStack.empty())
+    {
+        // tdf#130214: a workaround to avoid crash on import errors
+        SAL_WARN("writerfilter.dmapper", "no text append stack");
+        return;
+    }
     // Create section before setting m_bStartTOC and m_bStartBibliography: finishing paragraph
     // inside StartIndexSectionChecked could do the wrong thing otherwise
     const auto xTOC = StartIndexSectionChecked(sTOCServiceName);
