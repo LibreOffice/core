@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b01dd916_3ae16be3",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-28T09:09:09Z",
+      "side": 1,
+      "message": "Sorry, I mean, there are a similar \"Heading 1\" ... \"Heading 9\" in this file near line ~1070, you can clean up that this eay, too. I don\u0027t know, we need this condition here, or not.",
+      "range": {
+        "startLine": 1062,
+        "startChar": 28,
+        "endLine": 1062,
+        "endChar": 79
+      },
+      "revId": "53227c4293d0efb106e327c04992f41e9a9d7420",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
