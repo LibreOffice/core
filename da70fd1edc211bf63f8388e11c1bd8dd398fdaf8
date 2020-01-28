@@ -34,6 +34,24 @@
       "revId": "da70fd1edc211bf63f8388e11c1bd8dd398fdaf8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "564e8a18_a20fc3a7",
+        "filename": "cui/uiconfig/ui/numberingoptionspage.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-28T16:22:53Z",
+      "side": 0,
+      "message": "ah, FWIW vexpand is a GtkWidget property, i.e. https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget--vexpand so its an inherited property.\n\nI\u0027ll drop this part of the patch cause while the other .ui doesn\u0027t have it set on this widget, ultimately the toplevel parent has vexpand set in the other one while the toplevel here doesn\u0027t so without the expand bit the gtktreeview won\u0027t fill the dialog vertically.",
+      "parentUuid": "50f4fd8f_101eebbc",
+      "revId": "da70fd1edc211bf63f8388e11c1bd8dd398fdaf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
