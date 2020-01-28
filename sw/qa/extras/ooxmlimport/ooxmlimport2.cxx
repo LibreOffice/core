@@ -531,6 +531,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf130214, "tdf130214.docx")
+{
+    // Currently this file imports with errors because of tdf#126435; it must not segfault on load
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
