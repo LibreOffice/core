@@ -140,7 +140,7 @@ void Octree::reduce()
     pNode = mpReduce[nIndex];
     mpReduce[nIndex] = pNode->pNext;
 
-    for (sal_uLong i = 0; i < 8; i++)
+    for (unsigned int i = 0; i < 8; i++)
     {
         if (pNode->pChild[i])
         {
