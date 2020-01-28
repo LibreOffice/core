@@ -6556,36 +6556,6 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             CXXFLAGS="$CXXFLAGS -DSYSTEM_LIBCMIS $LIBCMIS_CFLAGS"
         fi
         AC_LANG_PUSH([C++])
-        dnl Clang 3.9 supports __float128 since
-        dnl <http://llvm.org/viewvc/llvm-project?view=revision&revision=268898> "Enable support for
-        dnl __float128 in Clang and enable it on pertinent platforms", but Clang 3.8 may need a
-        dnl hacky workaround to be able to include <vector> (as is done in the main check whether
-        dnl $flag is supported below, so check this first):
-        my_float128hack=
-        my_float128hack_impl=-D__float128=void
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-            #include <vector>
-            // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
-            // (__float128)
-            ]])
-        ],,[
-            dnl The only reason why libstdc++ headers fail with Clang in C++11 mode is because they
-            dnl use the __float128 type that Clang doesn't know (libstdc++ checks whether __float128
-            dnl is available during its build, but it's usually built using GCC, and so c++config.h
-            dnl hardcodes __float128 being supported). At least for some older libstdc++, the only
-            dnl place where __float128 is used is in a template specialization, -D__float128=void
-            dnl will avoid the problem there while still causing a problem if somebody actually uses
-            dnl the type. (But some later libstdc++ are known to use __float128 also in algorithm ->
-            dnl bits/stl_alog.h -> cstdlib -> bits/std_abs.h, in a way that unfortunately cannot be
-            dnl "fixed" with this hack):
-            CXXFLAGS="$CXXFLAGS $my_float128hack_impl"
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-                #include <vector>
-                // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
-                // (__float128)
-                ]])
-            ],[my_float128hack=$my_float128hack_impl])
-        ])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             #include <algorithm>
             #include <functional>
@@ -6607,7 +6577,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
             }
-            ]])],[CXXFLAGS_CXX11=$flag $my_float128hack])
+            ]])],[CXXFLAGS_CXX11=$flag])
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
         if test -n "$CXXFLAGS_CXX11"; then
