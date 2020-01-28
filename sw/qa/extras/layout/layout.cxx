@@ -3723,6 +3723,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105481)
     CPPUNIT_ASSERT_LESSEQUAL(nTxtBottom, nFormula2Bottom);
 }
 
+<<<<<<< HEAD   (a5d9fb [cp] Remove Help - Donate to LibreOffice menu item)
+=======
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117982)
+{
+    SwDoc* pDocument = createDoc("tdf117982.docx");
+    SwDocShell* pShell = pDocument->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]/text", "FOO AAA");
+    //The first cell must be "FOO AAA". If not, this means the first cell content not visible in
+    //the source document.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128959)
+{
+    // no orphan/widow control in table cells
+    SwDoc* pDocument = createDoc("tdf128959.docx");
+    CPPUNIT_ASSERT(pDocument);
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // first two lines of the paragraph in the split table cell on the first page
+    // (these lines were completely lost)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+        "a)Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[2]", "Line",
+        "massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit ");
+    // last line of the paragraph in the split table cell on the second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+                "amet commodo magna eros quis urna.");
+}
+
+>>>>>>> CHANGE (8b13da tdf#128959 DOCX import: fix missing text lines in tables)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
