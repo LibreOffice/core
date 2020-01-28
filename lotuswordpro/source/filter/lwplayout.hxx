@@ -240,6 +240,7 @@ protected:
     bool m_bGettingBorderStuff;
     bool m_bGettingUseWhen;
     bool m_bGettingStyleLayout;
+    bool m_bGettingAutoGrowUp;
     sal_uInt32 m_nAttributes;
     sal_uInt32 m_nAttributes2;
     sal_uInt32 m_nAttributes3;
