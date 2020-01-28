@@ -709,15 +709,13 @@ public:
 
 inline sal_uInt16 SwTextSizeInfo::GetAscent() const
 {
-    SAL_WARN_IF( !GetOut(), "sw.core", "SwTextSizeInfo::GetAscent() without m_pOut" );
-
+    assert(GetOut());
     return const_cast<SwFont*>(GetFont())->GetAscent( m_pVsh, *GetOut() );
 }
 
 inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 {
-    SAL_WARN_IF( !GetOut(), "sw.core", "SwTextSizeInfo::GetTextHeight() without m_pOut" );
-
+    assert(GetOut());
     return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *GetOut() );
 }
 
