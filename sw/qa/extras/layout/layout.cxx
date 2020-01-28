@@ -81,6 +81,7 @@ public:
     void testBtlrCell();
     void testImageComment();
     void testWriterImageNoCapture();
+    void testTdf128959();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testImageComment);
     CPPUNIT_TEST(testWriterImageNoCapture);
+    CPPUNIT_TEST(testTdf128959);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2958,6 +2960,27 @@ void SwLayoutWriter::testImageComment()
     // i.e. the cursor got positioned between the image and its comment, so typing extended the
     // comment, instead of adding content after the commented image.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
+}
+
+void SwLayoutWriter::testTdf128959()
+{
+    // no orphan/widow control in table cells
+    SwDoc* pDocument = createDoc("tdf128959.docx");
+    CPPUNIT_ASSERT(pDocument);
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // first two lines of the paragraph in the split table cell on the first page
+    // (these lines were completely lost)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+        "a)Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[2]", "Line",
+        "massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit ");
+    // last line of the paragraph in the split table cell on the second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+                "amet commodo magna eros quis urna.");
 }
 
 void SwLayoutWriter::testWriterImageNoCapture()
