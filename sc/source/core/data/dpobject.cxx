@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <docsh.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <dptabsrc.hxx>
@@ -3262,7 +3263,8 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     catch ( const sdbc::SQLException& rError )
     {
         //! store error message
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+        vcl::Window* pParent = ScDocShell::GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       rError.Message));
         xInfoBox->run();
