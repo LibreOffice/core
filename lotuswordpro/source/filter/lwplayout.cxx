@@ -88,6 +88,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingBorderStuff(false)
     , m_bGettingUseWhen(false)
     , m_bGettingStyleLayout(false)
+    , m_bGettingAutoGrowUp(false)
     , m_nAttributes(0)
     , m_nAttributes2(0)
     , m_nAttributes3(0)
@@ -1189,19 +1190,27 @@ bool LwpMiddleLayout::IsAutoGrowDown()
 */
 bool LwpMiddleLayout::IsAutoGrowUp()
 {
-    if(m_nOverrideFlag & OVER_SIZE)
+    if (m_bGettingAutoGrowUp)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingAutoGrowUp = true;
+
+    bool bRet;
+
+    if (m_nOverrideFlag & OVER_SIZE)
     {
-        return (m_nDirection & (LAY_AUTOGROW << SHIFT_UP)) != 0;
+        bRet = (m_nDirection & (LAY_AUTOGROW << SHIFT_UP)) != 0;
     }
     else
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
-        {
-            return pLay->IsAutoGrowUp();
-        }
+            bRet = pLay->IsAutoGrowUp();
+        else
+            bRet = LwpVirtualLayout::IsAutoGrowUp();
     }
-    return LwpVirtualLayout::IsAutoGrowUp();
+
+    m_bGettingAutoGrowUp = false;
+    return bRet;
 }
 
 /**
