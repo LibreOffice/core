@@ -4516,6 +4516,9 @@ void DomainMapper_Impl::handleBibliography
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
+    // tdf#130214: a workaround to avoid ceash on errors on import
+    if (m_aTextAppendStack.empty())
+        return;
     // Create section before setting m_bStartTOC and m_bStartBibliography: finishing paragraph
     // inside StartIndexSectionChecked could do the wrong thing otherwise
     const auto xTOC = StartIndexSectionChecked(sTOCServiceName);
