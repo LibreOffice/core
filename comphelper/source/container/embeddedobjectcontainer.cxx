@@ -708,7 +708,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     // this is an OOo link, it has no persistence
                     OUString aURL = xOrigLinkage->getLinkURL();
                     if ( aURL.isEmpty() )
-                        throw uno::RuntimeException();
+                        throw uno::RuntimeException("URL is not provided");
 
                     // create new linked object from the URL the link is based on
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
@@ -759,7 +759,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     // copy all the properties from xOrigProps to xTargetProps
                     uno::Reference< beans::XPropertySetInfo > xOrigInfo = xOrigProps->getPropertySetInfo();
                     if ( !xOrigInfo.is() )
-                        throw uno::RuntimeException();
+                        throw uno::RuntimeException("Reference didn't acqurie an interface");
 
                     uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
                     for ( sal_Int32 nInd = 0; nInd < aPropertiesList.getLength(); nInd++ )

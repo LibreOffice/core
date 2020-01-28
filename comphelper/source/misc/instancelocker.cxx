@@ -117,7 +117,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
         throw lang::DisposedException(); // TODO
 
     if ( !m_refCount )
-        throw uno::RuntimeException(); // the object must be refcounted already!
+        throw uno::RuntimeException("The object has been refcounted already");
 
     uno::Reference< uno::XInterface > xInstance;
     uno::Reference< embed::XActionsApproval > xApproval;
