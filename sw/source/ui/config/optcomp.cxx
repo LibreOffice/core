@@ -108,7 +108,7 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
 }
 
-static sal_uLong convertBools2Ulong_Impl
+static sal_uInt32 convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,
@@ -127,8 +127,8 @@ static sal_uLong convertBools2Ulong_Impl
     bool bEmptyDbFieldHidesPara
 )
 {
-    sal_uLong nRet = 0;
-    sal_uLong nSetBit = 1;
+    sal_uInt32 nRet = 0;
+    sal_uInt32 nSetBit = 1;
 
     if ( _bUsePrtMetrics )
         nRet |= nSetBit;
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
     }
 }
 
-void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
+void SwCompatibilityOptPage::SetCurrentOptions( sal_uInt32 nOptions )
 {
     const int nCount = m_xOptionsLB->n_children();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
@@ -302,9 +302,9 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
     }
 }
 
-sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
+sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
 {
-    sal_uLong nRet = 0;
+    sal_uInt32 nRet = 0;
     if ( m_pWrtShell )
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = m_pWrtShell->getIDocumentSettingAccess();
@@ -345,7 +345,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     bool bModified = false;
     if ( m_pWrtShell )
     {
-        sal_uLong nSavedOptions = m_nSavedOptions;
+        sal_uInt32 nSavedOptions = m_nSavedOptions;
         const int nCount = m_xOptionsLB->n_children();
         OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
@@ -456,7 +456,7 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
 {
     m_xOptionsLB->select(0);
 
-    sal_uLong nOptions = GetDocumentOptions();
+    sal_uInt32 nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 
