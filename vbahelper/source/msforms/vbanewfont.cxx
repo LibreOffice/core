@@ -71,7 +71,7 @@ void SAL_CALL VbaNewFont::setCharset( sal_Int16 nCharset )
     if( (0 <= nCharset) && (nCharset <= SAL_MAX_UINT8) )
         eFontEnc = rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( nCharset ) );
     if( eFontEnc == RTL_TEXTENCODING_DONTKNOW )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("an unknown or missing encoding");
     mxProps->setPropertyValue( "FontCharset" , uno::Any( static_cast< sal_Int16 >( eFontEnc ) ) );
 }
 
