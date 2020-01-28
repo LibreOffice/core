@@ -77,7 +77,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
 
     mrXMimeCntFactory = datatransfer::MimeContentTypeFactory::create(xContext);
 
-    mpDataFlavorMapper = DataFlavorMapperPtr_t(new DataFlavorMapper());
+    mpDataFlavorMapper = std::make_shared<DataFlavorMapper>();
 
     if (pasteboard != nullptr)
     {
