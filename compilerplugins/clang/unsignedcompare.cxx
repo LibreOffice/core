@@ -9,7 +9,7 @@
 
 // Find explicit casts from signed to unsigned integer in comparison against unsigned integer, where
 // the cast is presumably used to avoid warnings about signed vs. unsigned comparisons, and could
-// thus be replaced with o3tl::make_unsigned for clairty.
+// thus be replaced with o3tl::make_unsigned for clarity.
 
 #include <cassert>
 
