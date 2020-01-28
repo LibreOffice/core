@@ -81,6 +81,7 @@ public:
     void testBtlrCell();
     void testImageComment();
     void testWriterImageNoCapture();
+    void testTdf128959();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testBtlrCell);
     CPPUNIT_TEST(testImageComment);
     CPPUNIT_TEST(testWriterImageNoCapture);
+    CPPUNIT_TEST(testTdf128959);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2973,6 +2975,27 @@ void SwLayoutWriter::testWriterImageNoCapture()
     // i.e. the image position was modified to be inside the page frame ("captured"), even if Word
     // does not do that.
     CPPUNIT_ASSERT_LESS(nPageLeft, nImageLeft);
+}
+
+void SwLayoutWriter::testTdf128959()
+{
+    // no orphan/widow control in table cells
+    SwDoc* pDocument = createDoc("tdf128959.docx");
+    CPPUNIT_ASSERT(pDocument);
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // first two lines of the paragraph in the split table cell on the first page
+    // (these lines were completely lost)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+        "a)Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[2]", "Line",
+        "massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit ");
+    // last line of the paragraph in the split table cell on the second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+                "amet commodo magna eros quis urna.");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
