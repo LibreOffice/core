@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5695d93c_9969f487",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-28T10:24:24Z",
+      "side": 1,
+      "message": "area chart",
+      "range": {
+        "startLine": 2343,
+        "startChar": 18,
+        "endLine": 2343,
+        "endChar": 27
+      },
+      "revId": "f12642965fd7adcecc935aaecb4a7b5f2f26c83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaea65cc_b4d00370",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-28T10:24:24Z",
+      "side": 1,
+      "message": "element",
+      "range": {
+        "startLine": 2345,
+        "startChar": 65,
+        "endLine": 2345,
+        "endChar": 68
+      },
+      "revId": "f12642965fd7adcecc935aaecb4a7b5f2f26c83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e16f27b2_837d32a2",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-28T10:24:24Z",
+      "side": 1,
+      "message": "area chart z-axis",
+      "range": {
+        "startLine": 2345,
+        "startChar": 10,
+        "endLine": 2345,
+        "endChar": 26
+      },
+      "revId": "f12642965fd7adcecc935aaecb4a7b5f2f26c83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
