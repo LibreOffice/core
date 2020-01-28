@@ -6445,17 +6445,17 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
 
-    dnl Available in GCC 4.9 and at least since Clang 3.4:
-    AC_MSG_CHECKING([whether $CXX_BASE supports __attribute__((warn_unused))])
+    dnl Available in GCC 4.9 and at least since Clang 3.4; this check can eventually be removed
+    dnl completely (e.g., aftger libreoffice-6-5 branch off):
+    AC_MSG_CHECKING([that $CXX_BASE supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -Werror"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             struct __attribute__((warn_unused)) dummy {};
         ])], [
-            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
             AC_MSG_RESULT([yes])
-        ], [AC_MSG_RESULT([no])])
+        ], [AC_MSG_ERROR([no])])
     CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 fi
