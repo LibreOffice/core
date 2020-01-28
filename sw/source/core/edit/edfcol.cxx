@@ -1385,7 +1385,6 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;

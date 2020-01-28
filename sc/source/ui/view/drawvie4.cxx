@@ -61,7 +61,6 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         BrkAction();
 
         tools::Rectangle aMarkedRect = GetAllMarkedRect();
-        vcl::Region aRegion( aMarkedRect );
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
@@ -362,8 +361,7 @@ void ScDrawView::DoCopy()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
-    uno::Reference<css::datatransfer::XTransferable2> xTransferObj = pTransferObj;
+    rtl::Reference<ScDrawTransferObj> pTransferObj(new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc ));
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {

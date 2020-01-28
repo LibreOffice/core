@@ -66,8 +66,6 @@ void SwarmSolverTest::testUnconstrained()
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
-    uno::Reference<table::XCell> xCell;
-
     uno::Reference<sheet::XSolver> xSolver;
     const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
@@ -117,8 +115,6 @@ void SwarmSolverTest::testVariableBounded()
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-
-    uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
     const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
@@ -171,8 +167,6 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-
-    uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
     const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
@@ -229,8 +223,6 @@ void SwarmSolverTest::testTwoVariables()
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-
-    uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
     const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
@@ -294,8 +286,6 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-
-    uno::Reference<table::XCell> xCell;
 
     uno::Reference<sheet::XSolver> xSolver;
     const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");

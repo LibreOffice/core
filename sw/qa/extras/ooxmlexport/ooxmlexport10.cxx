@@ -102,8 +102,6 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
@@ -601,12 +599,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
-    uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     Graphic aVclGraphic(graphic);
     BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL(58L, aBitmap.GetSizePixel().Width());
@@ -1180,7 +1176,6 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
     sal_Int32 const cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
-    uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
     uno::Reference< container::XIndexAccess >   xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
 
     for ( int i = 0; i < 4; i++ )

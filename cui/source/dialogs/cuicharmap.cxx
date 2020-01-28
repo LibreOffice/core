@@ -607,8 +607,6 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         return;
 
     if (m_xFrame.is()) {
-        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
         uno::Sequence<beans::PropertyValue> aArgs(2);
         aArgs[0].Name = "Symbols";
         aArgs[0].Value <<= sGlyph;

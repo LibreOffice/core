@@ -178,8 +178,6 @@ void Test::testFormulaCreateStringFromTokens()
     };
     (void) aTests;
 
-    std::unique_ptr<ScTokenArray> pArray;
-
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
     // Artificially add external reference data after the context object is

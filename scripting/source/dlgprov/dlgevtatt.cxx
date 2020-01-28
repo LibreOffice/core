@@ -220,7 +220,6 @@ namespace dlgprov
             Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
 
             Reference< XControlModel > xControlModel = xControl->getModel();
-            Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
             if ( xEventCont.is() )
             {
                 const Sequence< OUString > aNames = xEventCont->getElementNames();

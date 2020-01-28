@@ -172,8 +172,6 @@ void SignatureLineDialog::Apply()
         // Default anchoring
         xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
 
-        const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY);
-
         // Writer
         const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
         if (xTextDocument.is())

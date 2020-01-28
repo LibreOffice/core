@@ -354,7 +354,6 @@ numbering = numberingstyle.getByIndex(0)
 xray numbering(11)  - should be 4, arabic
 note that the indexes may get off as the implementation evolves, C++ code searches in loops
 */
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference< text::XTextRange > paragraph(getParagraph( 1, "Text1." ));
     OUString numberingStyleName = getProperty< OUString >( paragraph, "NumberingStyleName" );
     uno::Reference<text::XNumberingRulesSupplier> xNumberingRulesSupplier(mxComponent, uno::UNO_QUERY);

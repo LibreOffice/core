@@ -2738,7 +2738,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
 
     uno::Reference<beans::XPropertySet> xInfoSet;
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 
     //SetLoading hack because the document properties will be re-initted

@@ -110,7 +110,6 @@ SlideFragmentHandler::~SlideFragmentHandler()
         }
         if( !bNotesFragmentPathFound && !mpSlidePersistPtr->getMasterPersist() )
         {
-            TextListStylePtr pTextListStyle = std::make_shared<TextListStyle>();
             SlidePersistPtr pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, true, mpSlidePersistPtr->getPage(),
                                 std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpSlidePersistPtr->getNotesTextStyle() );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
