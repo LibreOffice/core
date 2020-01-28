@@ -40,7 +40,7 @@ typedef std::vector< tools::Rectangle > RectangleVector;
 
 namespace vcl {
 
-class VCL_DLLPUBLIC Region
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Region
 {
 private:
     friend class ::OutputDevice;
