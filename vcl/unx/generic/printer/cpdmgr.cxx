@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <unistd.h>
 
 #include <unx/cpdmgr.hxx>
@@ -604,8 +607,8 @@ void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner,
     builder = g_variant_builder_new(G_VARIANT_TYPE("a(ss)"));
     g_variant_builder_add(builder, "(ss)", "job-name", rJobName.getStr());
     if( rJob.m_pParser ==  rJob.m_aContext.getParser() &&  rJob.m_pParser ) {
-        int i;
-        int nKeys = rJob.m_aContext.countValuesModified();
+        std::size_t i;
+        std::size_t nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )
             aKeys[i] = rJob.m_aContext.getModifiedKey( i );
