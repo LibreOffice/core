@@ -108,7 +108,7 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
 }
 
-static sal_uLong convertBools2Ulong_Impl
+static size_t convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,
@@ -127,8 +127,8 @@ static sal_uLong convertBools2Ulong_Impl
     bool bEmptyDbFieldHidesPara
 )
 {
-    sal_uLong nRet = 0;
-    sal_uLong nSetBit = 1;
+    size_t nRet = 0;
+    size_t nSetBit = 1;
 
     if ( _bUsePrtMetrics )
         nRet |= nSetBit;
@@ -302,9 +302,9 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
     }
 }
 
-sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
+size_t SwCompatibilityOptPage::GetDocumentOptions() const
 {
-    sal_uLong nRet = 0;
+    size_t nRet = 0;
     if ( m_pWrtShell )
     {
         const IDocumentSettingAccess& rIDocumentSettingAccess = m_pWrtShell->getIDocumentSettingAccess();
