@@ -297,7 +297,7 @@ namespace basegfx
     {
         static sal_Int32 minVal() { return SAL_MIN_INT32; };
         static sal_Int32 maxVal() { return SAL_MAX_INT32; };
-        static sal_Int32 neutral() { return 0L; };
+        static sal_Int32 neutral() { return 0; };
 
         typedef sal_Int64 DifferenceType;
     };
