@@ -25,6 +25,7 @@ public:
     void testTdf117188();
     void testTdf119875();
     void testTdf123651();
+    void testTdf128959();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -35,6 +36,7 @@ public:
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf123651);
+    CPPUNIT_TEST(testTdf128959);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -180,6 +182,27 @@ void SwLayoutWriter::testTdf123651()
     // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
     // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
+}
+
+void SwLayoutWriter::testTdf128959()
+{
+    // no orphan/widow control in table cells
+    SwDoc* pDocument = createDoc("tdf128959.docx");
+    CPPUNIT_ASSERT(pDocument);
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // first two lines of the paragraph in the split table cell on the first page
+    // (these lines were completely lost)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+        "a)Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[2]", "Line",
+        "massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit ");
+    // last line of the paragraph in the split table cell on the second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+                "amet commodo magna eros quis urna.");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
