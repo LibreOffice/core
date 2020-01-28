@@ -22,7 +22,7 @@
     </child>
     <child>
       <object class="GtkButton" id="accessibilityCheckEntryGotoButton">
-        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryGotoButton">Goto Issue</property>
+        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryGotoButton">Go to Issue</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
