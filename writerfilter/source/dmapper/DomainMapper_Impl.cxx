@@ -1568,19 +1568,23 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     }
                 }
 
-                // tdf#90069 in tables, apply paragraph level character style also on
-                // paragraph level to support its copy during insertion of new table rows
+                // fix table paragraph properties
                 if ( xParaProps && m_nTableDepth > 0 )
                 {
                     uno::Sequence< beans::PropertyValue > aValues = pParaContext->GetPropertyValues(false);
 
                     // tdf#90069 in tables, apply paragraph level character style also on
                     // paragraph level to support its copy during insertion of new table rows
-                    for( const auto& rParaProp : aParaProps )
+                    for( const auto& rProp : aValues )
                     {
                         if ( rProp.Name.startsWith("Char") && rProp.Name != "CharStyleName" && rProp.Name != "CharInteropGrabBag" )
                             xParaProps->setPropertyValue( rProp.Name, rProp.Value );
                     }
+
+                    // tdf#128959 table paragraphs haven't got window and orphan controls
+                    uno::Any aAny = uno::makeAny(static_cast<sal_Int8>(0));
+                    xParaProps->setPropertyValue("ParaOrphans", aAny);
+                    xParaProps->setPropertyValue("ParaWidows", aAny);
                 }
             }
             if( !bKeepLastParagraphProperties )
