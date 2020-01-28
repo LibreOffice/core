@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "b7ff0db1_83453b95",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "Visual Studio ...",
+      "parentUuid": "41439ada_1ae91c69",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 4
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49927bab_bf77d9bf",
         "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "691005c3_0c69599b",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49927bab_bf77d9bf",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 4
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2908c7af_f572df77",
         "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
         "patchSetId": 1
@@ -82,6 +130,30 @@
       "writtenOn": "2020-01-27T23:17:45Z",
       "side": 1,
       "message": "Possibly having B with explicit Variant type, in addition to implicit A, would be useful. Also note that ByVal cs ByRef and array arguments might need testing.",
+      "range": {
+        "startLine": 67,
+        "startChar": 36,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32123f36_d8c9f994",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will add it.",
+      "parentUuid": "2908c7af_f572df77",
       "range": {
         "startLine": 67,
         "startChar": 36,
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "f4d6f5ee_184a4cb7",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_vba.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "In the code it definitely does, but in the online documentation I found a statement that states that Option Compatible should be included with VBASupport. I will remove it.",
+      "parentUuid": "e78db97f_9380d8f9",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dfedc1d7_6544fbd6",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -128,6 +224,30 @@
       "writtenOn": "2020-01-27T21:57:34Z",
       "side": 1,
       "message": "It\u0027s very unfortunate that in addition to variable renames (which admittedly improve readability), sometimes unnecessary rearrangements are done, like in this case, where declaration of this variable (previously named p) is moved up above data type. Every such move makes it more difficult to see what happened, and what actually changed.",
+      "range": {
+        "startLine": 4031,
+        "startChar": 4,
+        "endLine": 4031,
+        "endChar": 22
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "623f67e5_00b1260d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4031,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will revert the variable declarations in order to improve the readability.",
+      "parentUuid": "dfedc1d7_6544fbd6",
       "range": {
         "startLine": 4031,
         "startChar": 4,
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "bf6ee10e_3df6618d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I have no evidence here, just some extensive tests. Should I change it back to the original code?",
+      "parentUuid": "283e373e_794d026e",
+      "range": {
+        "startLine": 4034,
+        "startChar": 9,
+        "endLine": 4034,
+        "endChar": 37
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf4dcf83_a23ea3be",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -174,6 +318,30 @@
       "writtenOn": "2020-01-27T21:57:34Z",
       "side": 1,
       "message": "This comment simply repeats already present one on new line 4046 (please keep that old one).",
+      "range": {
+        "startLine": 4043,
+        "startChar": 4,
+        "endLine": 4043,
+        "endChar": 52
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7183575b_c02ddd13",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will delete the comment.",
+      "parentUuid": "cf4dcf83_a23ea3be",
       "range": {
         "startLine": 4043,
         "startChar": 4,
@@ -209,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "9cf997fe_c2b49b51",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will change the comment accordingly.",
+      "parentUuid": "d0ab2505_55657f1c",
+      "range": {
+        "startLine": 4056,
+        "startChar": 23,
+        "endLine": 4056,
+        "endChar": 64
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f4ac743_14bf1c41",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -232,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "f4375f7c_4887e15b",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will change it like in line 4080.",
+      "parentUuid": "8f4ac743_14bf1c41",
+      "range": {
+        "startLine": 4065,
+        "startChar": 60,
+        "endLine": 4065,
+        "endChar": 79
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c10c524a_875af0ec",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -243,6 +459,30 @@
       "writtenOn": "2020-01-27T21:57:34Z",
       "side": 1,
       "message": "This space correction is completely unjustified - you don\u0027t modify this line otherwise.",
+      "range": {
+        "startLine": 4083,
+        "startChar": 31,
+        "endLine": 4083,
+        "endChar": 32
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44f59afd_66c534dc",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-01-28T08:23:39Z",
+      "side": 1,
+      "message": "I will revert it.",
+      "parentUuid": "c10c524a_875af0ec",
       "range": {
         "startLine": 4083,
         "startChar": 31,
