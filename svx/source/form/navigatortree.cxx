@@ -656,7 +656,7 @@ namespace svxform
 
         // selection can be modified during deletion,
         // but because I disabled SelectionHandling, I have to do it later
-        sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
+        sal_uLong nExpectedSelectionCount = GetSelectionCount();
 
         GetModel()->Remove(pEntry);
 
@@ -1631,7 +1631,7 @@ namespace svxform
     {
         // of course, i can't delete root
         bool bRootSelected = IsSelected(m_pRootEntry);
-        sal_uIntPtr nSelectedEntries = GetSelectionCount();
+        sal_uLong nSelectedEntries = GetSelectionCount();
         if (bRootSelected && (nSelectedEntries > 1))     // root and other elements ?
             Select(m_pRootEntry, false);                // yes -> remove root from selection
 

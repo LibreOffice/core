@@ -35,7 +35,7 @@ GalleryCodec::~GalleryCodec()
 
 bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
-    const sal_uIntPtr   nPos = rStm.Tell();
+    const sal_uInt64   nPos = rStm.Tell();
     bool        bRet;
     sal_uInt8       cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
@@ -101,7 +101,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
             sal_uInt8*  pTmpBuf = pOutBuf.get();
             sal_uInt8*  pLast = pOutBuf.get() + nUnCompressedSize - 1;
-            sal_uIntPtr   nIndex = 0, nCountByte, nRunByte;
+            sal_uInt16   nIndex = 0, nCountByte, nRunByte;
             bool    bEndDecoding = false;
 
             do

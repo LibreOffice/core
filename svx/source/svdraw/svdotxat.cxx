@@ -364,10 +364,10 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             }
         }
         // now remove all superfluous stylesheets
-        sal_uIntPtr nNum=GetBroadcasterCount();
+        sal_uInt16 nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
-            SfxBroadcaster* pBroadcast=GetBroadcasterJOE(static_cast<sal_uInt16>(nNum));
+            SfxBroadcaster* pBroadcast=GetBroadcasterJOE(nNum);
             SfxStyleSheet* pStyle=dynamic_cast<SfxStyleSheet*>( pBroadcast );
             if (pStyle!=nullptr && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
                 if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {

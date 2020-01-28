@@ -298,7 +298,7 @@ namespace svxform
 
     void DataTreeListBox::DeleteAndClear()
     {
-        sal_uIntPtr i, nCount = GetEntryCount();
+        sal_uLong i, nCount = GetEntryCount();
         for ( i = 0; i < nCount; ++i )
         {
             SvTreeListEntry* pEntry = GetEntry(i);
@@ -882,7 +882,7 @@ namespace svxform
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND ) + sTemp;
-                sal_uIntPtr nPos = 0;
+                short nPos = 0;
                 SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
