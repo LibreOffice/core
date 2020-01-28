@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a730c944_58aba4e7",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-28T09:42:32Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/87592\u003e \"Dispose configmgr at the end of unopkg\" should remove the need for this hack",
+      "parentUuid": "a05b9cf0_86f6187a",
+      "range": {
+        "startLine": 564,
+        "startChar": 29,
+        "endLine": 564,
+        "endChar": 56
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8c072f_bb34dd26",
         "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
         "patchSetId": 3
