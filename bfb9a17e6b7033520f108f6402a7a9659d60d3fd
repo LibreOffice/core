@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "232c5ea6_cb017dbc",
+        "filename": "vcl/source/components/dtranscomp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-28T08:09:16Z",
+      "side": 1,
+      "message": "here and below: please be careful to keep the four-spaces indentation intact",
+      "revId": "bfb9a17e6b7033520f108f6402a7a9659d60d3fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
