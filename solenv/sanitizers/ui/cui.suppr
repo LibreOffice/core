@@ -250,7 +250,6 @@ cui/uiconfig/ui/personalization_tab.ui://GtkToggleButton[@id='default8'] button-
 cui/uiconfig/ui/pickgraphicpage.ui://GtkLabel[@id='errorft'] orphan-label
 cui/uiconfig/ui/positionpage.ui://GtkLabel[@id='rotateandscale'] orphan-label
 cui/uiconfig/ui/positionpage.ui://GtkLabel[@id='scale'] orphan-label
-cui/uiconfig/ui/rotationtabpage.ui://GtkLabel[@id='FT_ANGLEPRESETS'] orphan-label
 cui/uiconfig/ui/securityoptionsdialog.ui://GtkImage[@id='lockwhenprinting'] no-labelled-by
 cui/uiconfig/ui/securityoptionsdialog.ui://GtkImage[@id='locksavesenddocs'] no-labelled-by
 cui/uiconfig/ui/securityoptionsdialog.ui://GtkImage[@id='lockwhensigning'] no-labelled-by
