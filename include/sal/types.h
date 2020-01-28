@@ -572,7 +572,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 */
 
-#if HAVE_GCC_ATTRIBUTE_WARN_UNUSED
+#if defined LIBO_INTERNAL_ONLY && (defined __GNUC__ || defined __clang__)
 #define SAL_WARN_UNUSED __attribute__((warn_unused))
 #else
 #define SAL_WARN_UNUSED
