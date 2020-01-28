@@ -21,6 +21,10 @@
 #include <clang/Lex/PPCallbacks.h>
 #include <stdio.h>
 
+#if CLANG_VERSION >= 90000
+#include <llvm/Support/TimeProfiler.h>
+#endif
+
 #if defined _WIN32
 #include <process.h>
 #else
@@ -292,6 +296,9 @@ void PluginHandler::addSourceModification(SourceRange range)
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )
 {
+#if CLANG_VERSION >= 90000
+    llvm::TimeTraceScope mainTimeScope("LOPluginMain", StringRef(""));
+#endif
     if( context.getDiagnostics().hasErrorOccurred())
         return;
     if (mainFileName.endswith(".ii"))
@@ -305,6 +312,9 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
         if( plugins[ i ].object != NULL && !plugins[ i ].disabledRun )
         {
+#if CLANG_VERSION >= 90000
+            llvm::TimeTraceScope timeScope("LOPlugin", [&]() { return plugins[i].optionName; });
+#endif
             plugins[ i ].object->run();
         }
     }
