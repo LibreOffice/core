@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3f0d5a7_a9cbbc5f",
+        "filename": "cui/uiconfig/ui/numberingoptionspage.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-01-28T15:42:05Z",
+      "side": 0,
+      "message": "did you intend this change as well, seems like a stray line delete ?",
+      "revId": "da70fd1edc211bf63f8388e11c1bd8dd398fdaf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
