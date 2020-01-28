@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "7ac9dff4_81d25919",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-28T15:24:31Z",
+      "side": 1,
+      "message": "Thanks, that helped indeed!",
+      "parentUuid": "a730c944_58aba4e7",
+      "range": {
+        "startLine": 564,
+        "startChar": 29,
+        "endLine": 564,
+        "endChar": 56
+      },
+      "revId": "0942eb0cf5fbfbd4dad5384b6cc2ea2142f3b587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d8c072f_bb34dd26",
         "filename": "desktop/source/pkgchk/unopkg/unopkg_app.cxx",
         "patchSetId": 3
