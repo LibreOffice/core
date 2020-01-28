@@ -3769,6 +3769,27 @@ static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
     return aFlyRect;
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128959)
+{
+    // no orphan/widow control in table cells
+    SwDoc* pDocument = createDoc("tdf128959.docx");
+    CPPUNIT_ASSERT(pDocument);
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // first two lines of the paragraph in the split table cell on the first page
+    // (these lines were completely lost)
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+        "a)Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue ");
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[2]", "Line",
+        "massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit ");
+    // last line of the paragraph in the split table cell on the second page
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]/LineBreak[1]", "Line",
+                "amet commodo magna eros quis urna.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
 {
     // this doc has two page-anchored frames: one tiny on page 3 and one large on page 4.
