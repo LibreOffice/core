@@ -40,6 +40,7 @@
 #include <vcl/window.hxx>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace psp;
 using namespace osl;
@@ -618,8 +619,8 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
     {
-        int i;
-        int nKeys = rJob.m_aContext.countValuesModified();
+        std::size_t i;
+        std::size_t nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )
             aKeys[i] = rJob.m_aContext.getModifiedKey( i );

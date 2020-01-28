@@ -19,6 +19,9 @@
 #ifndef INCLUDED_VCL_PPDPARSER_HXX
 #define INCLUDED_VCL_PPDPARSER_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -246,8 +249,8 @@ public:
     const PPDValue* getValue( const PPDKey* ) const;
     const PPDValue* setValue( const PPDKey*, const PPDValue*, bool bDontCareForConstraints = false );
 
-    int countValuesModified() const { return m_aCurrentValues.size(); }
-    const PPDKey* getModifiedKey( int n ) const;
+    std::size_t countValuesModified() const { return m_aCurrentValues.size(); }
+    const PPDKey* getModifiedKey( std::size_t n ) const;
 
     // public wrapper for the private method
     bool checkConstraints( const PPDKey*, const PPDValue* );

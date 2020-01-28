@@ -39,6 +39,7 @@
 // the group of the global defaults
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
+#include <cstddef>
 #include <unordered_set>
 
 using namespace psp;
@@ -346,7 +347,7 @@ void PrinterInfoManager::initialize()
                     // without constraints which might end up badly
                     // this feature should be use with caution
                     // it is mainly to select default paper sizes for new printers
-                    for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
+                    for( std::size_t nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
                     {
                         const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
                         const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
@@ -599,12 +600,16 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if( ! pPageSizeKey )
         return;
 
-    int nModified = rContext.countValuesModified();
-    while( nModified-- &&
-        rContext.getModifiedKey( nModified ) != pPageSizeKey )
-        ;
+    std::size_t nModified = rContext.countValuesModified();
+    auto set = false;
+    for (std::size_t i = 0; i != nModified; ++i) {
+        if (rContext.getModifiedKey(i) == pPageSizeKey) {
+            set = true;
+            break;
+        }
+    }
 
-    if( nModified >= 0 ) // paper was set already, do not modify
+    if( set ) // paper was set already, do not modify
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not setting default paper, already set %s\n",

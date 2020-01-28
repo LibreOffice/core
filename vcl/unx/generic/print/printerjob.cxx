@@ -38,6 +38,7 @@
 #include <osl/security.hxx>
 
 #include <algorithm>
+#include <cstddef>
 #include <deque>
 #include <vector>
 
@@ -682,8 +683,8 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
         ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == nullptr )
         )
     {
-        int i;
-        int nKeys = rJob.m_aContext.countValuesModified();
+        std::size_t i;
+        std::size_t nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )
             aKeys[i] = rJob.m_aContext.getModifiedKey( i );

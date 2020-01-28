@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
 #include <stdlib.h>
 
 #include <comphelper/string.hxx>
@@ -1648,10 +1647,9 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
     return *this;
 }
 
-const PPDKey* PPDContext::getModifiedKey( int n ) const
+const PPDKey* PPDContext::getModifiedKey( std::size_t n ) const
 {
-    assert(n >= 0);
-    if( m_aCurrentValues.size() <= o3tl::make_unsigned(n) )
+    if( m_aCurrentValues.size() <= n )
         return nullptr;
 
     hash_type::const_iterator it = m_aCurrentValues.begin();
