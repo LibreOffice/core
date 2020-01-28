@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-02 15:15:28 using:
+ Generated on 2020-01-28 15:30:31 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -73,17 +73,14 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -99,7 +96,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
@@ -260,6 +256,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/optional.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Impress.hxx>
@@ -317,9 +314,11 @@
 #include <svl/typedwhich.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/whiter.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
+#include <svtools/toolboxcontroller.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxColorChildWindow.hxx>
