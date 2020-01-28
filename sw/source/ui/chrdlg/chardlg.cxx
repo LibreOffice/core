@@ -112,7 +112,8 @@ void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
     else if (rId == "fonteffects")
     {
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH));
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER | SVX_ENABLE_FLASH
+                                                  | SVX_ENABLE_CHAR_TRANSPARENCY));
         rPage.PageCreated(aSet);
     }
     else if (rId == "position")
