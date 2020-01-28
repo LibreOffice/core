@@ -38,7 +38,7 @@ class AccessibleSmElementsControl final : public comphelper::OAccessibleComponen
                                           public AccessibleSmElementsControl_BASE
 {
     std::vector<rtl::Reference<AccessibleSmElement>> m_aAccessibleChildren;
-    VclPtr<SmElementsControl> m_pControl;
+    SmElementsControl* m_pControl;
 
     void UpdateFocus(sal_uInt16);
     inline void TestControl();
@@ -71,10 +71,6 @@ public:
     sal_Bool SAL_CALL containsPoint(const css::awt::Point& aPoint) override;
     css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
-    css::awt::Rectangle SAL_CALL getBounds() override;
-    css::awt::Point SAL_CALL getLocation() override;
-    css::awt::Point SAL_CALL getLocationOnScreen() override;
-    css::awt::Size SAL_CALL getSize() override;
     void SAL_CALL grabFocus() override;
     sal_Int32 SAL_CALL getForeground() override;
     sal_Int32 SAL_CALL getBackground() override;

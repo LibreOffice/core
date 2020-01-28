@@ -139,18 +139,14 @@ sal_Int32 AccessibleSmElementsControl::getForeground()
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pControl)
-        throw uno::RuntimeException();
-    return static_cast<sal_Int32>(m_pControl->GetTextColor());
+    return static_cast<sal_Int32>(SmElementsControl::GetTextColor());
 }
 
 sal_Int32 AccessibleSmElementsControl::getBackground()
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pControl)
-        throw uno::RuntimeException();
-    Color nCol = m_pControl->GetControlBackground();
+    Color nCol = SmElementsControl::GetControlBackground();
     return static_cast<sal_Int32>(nCol);
 }
 
@@ -183,30 +179,17 @@ sal_Int32 AccessibleSmElementsControl::getAccessibleChildCount()
         nCount = m_pControl->itemCount();
         if (m_aAccessibleChildren.size() != sal_uInt16(nCount))
             m_aAccessibleChildren.resize(nCount);
-        if (m_pControl->scrollbarAccessible().is())
-            nCount++;
     }
     return nCount;
 }
 
-uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleChild(sal_Int32 i)
+uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleChild(sal_Int32 c)
 {
     comphelper::OExternalLockGuard aGuard(this);
 
-    if (i < 0 || i >= getAccessibleChildCount())
+    if (c < 0 || c >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    // first child may be the scrollbar
-    sal_uInt16 c(i);
-    uno::Reference<XAccessible> xScrollbar = m_pControl->scrollbarAccessible();
-    if (xScrollbar.is())
-    {
-        if (c == 0)
-            return xScrollbar;
-        c--;
-    }
-
-    assert(c < m_aAccessibleChildren.size());
     rtl::Reference<AccessibleSmElement> xChild = m_aAccessibleChildren[c];
     const sal_uInt16 nItemId = m_pControl->itemOffset() + c;
     if (xChild.is() && xChild->itemId() != nItemId)
@@ -214,7 +197,7 @@ uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleChild(sal_
     if (!xChild.is())
     {
         sal_uInt16 nHighlightItemId = m_pControl->itemHighlighted();
-        AccessibleSmElement* pChild = new AccessibleSmElement(m_pControl, nItemId, i);
+        AccessibleSmElement* pChild = new AccessibleSmElement(m_pControl, nItemId, c);
         if (pChild->itemId() == nHighlightItemId)
             pChild->SetFocus(true);
         m_aAccessibleChildren[c] = pChild;
@@ -229,9 +212,7 @@ uno::Reference<XAccessible> AccessibleSmElementsControl::getAccessibleParent()
     if (!m_pControl)
         throw uno::RuntimeException();
 
-    vcl::Window* pAccParent = m_pControl->GetAccessibleParentWindow();
-    assert(pAccParent);
-    return pAccParent ? pAccParent->GetAccessible() : uno::Reference<XAccessible>();
+    return m_pControl->GetDrawingArea()->get_accessible_parent();
 }
 
 uno::Reference<XAccessible>
@@ -325,98 +306,36 @@ void AccessibleSmElementsControl::deselectAccessibleChild(sal_Int32 nChildIndex)
     clearAccessibleSelection(); // there can be just one selected child
 }
 
-// XAccessibleComponent
-static awt::Point lcl_GetLocationOnScreen(vcl::Window const* m_pControl)
-{
-    awt::Point aPos;
-    if (m_pControl)
-    {
-        tools::Rectangle aRect = m_pControl->GetWindowExtentsRelative(nullptr);
-        aPos.X = aRect.Left();
-        aPos.Y = aRect.Top();
-    }
-    return aPos;
-}
-
-static awt::Rectangle lcl_GetBounds(vcl::Window const* m_pControl)
-{
-    // !! see VCLXAccessibleComponent::implGetBounds()
-
-    //! the coordinates returned are relative to the parent window !
-    //! Thus the top-left point may be different from (0, 0) !
-
-    awt::Rectangle aBounds;
-    if (m_pControl)
-    {
-        tools::Rectangle aRect = m_pControl->GetWindowExtentsRelative(nullptr);
-        aBounds.X = aRect.Left();
-        aBounds.Y = aRect.Top();
-        aBounds.Width = aRect.GetWidth();
-        aBounds.Height = aRect.GetHeight();
-
-        vcl::Window* pParent = m_pControl->GetAccessibleParentWindow();
-        if (pParent)
-        {
-            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative(nullptr);
-            awt::Point aParentScreenLoc(aParentRect.Left(), aParentRect.Top());
-            aBounds.X -= aParentScreenLoc.X;
-            aBounds.Y -= aParentScreenLoc.Y;
-        }
-    }
-    return aBounds;
-}
-
 void AccessibleSmElementsControl::TestControl()
 {
     if (!m_pControl)
         throw uno::RuntimeException();
-    assert(m_pControl->GetParent()->GetAccessible() == getAccessibleParent());
 }
 
 awt::Rectangle AccessibleSmElementsControl::implGetBounds()
 {
     SolarMutexGuard aGuard;
     TestControl();
-    return lcl_GetBounds(m_pControl);
-}
 
-awt::Rectangle AccessibleSmElementsControl::getBounds() { return implGetBounds(); }
+    awt::Rectangle aRet;
+
+    const Point aOutPos;
+    Size aOutSize(m_pControl->GetOutputSizePixel());
+
+    aRet.X = aOutPos.X();
+    aRet.Y = aOutPos.Y();
+    aRet.Width = aOutSize.Width();
+    aRet.Height = aOutSize.Height();
+
+    return aRet;
+}
 
 sal_Bool AccessibleSmElementsControl::containsPoint(const awt::Point& aPoint)
 {
     SolarMutexGuard aGuard;
     TestControl();
-    Size aSz(m_pControl->GetSizePixel());
+    Size aSz(m_pControl->GetOutputSizePixel());
     return aPoint.X >= 0 && aPoint.Y >= 0 && aPoint.X < aSz.Width() && aPoint.Y < aSz.Height();
-}
-
-awt::Point AccessibleSmElementsControl::getLocation()
-{
-    SolarMutexGuard aGuard;
-    TestControl();
-    awt::Rectangle aRect(lcl_GetBounds(m_pControl));
-    return awt::Point(aRect.X, aRect.Y);
-}
-
-awt::Point AccessibleSmElementsControl::getLocationOnScreen()
-{
-    SolarMutexGuard aGuard;
-    TestControl();
-    return lcl_GetLocationOnScreen(m_pControl);
-}
-
-awt::Size AccessibleSmElementsControl::getSize()
-{
-    SolarMutexGuard aGuard;
-    TestControl();
-
-    Size aSz(m_pControl->GetSizePixel());
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    awt::Rectangle aRect(lcl_GetBounds(m_pControl));
-    Size aSz2(aRect.Width, aRect.Height);
-    assert(aSz == aSz2 && "mismatch in width");
-#endif
-    return awt::Size(aSz.Width(), aSz.Height());
 }
 
 uno::Reference<XAccessibleRelationSet> AccessibleSmElementsControl::getAccessibleRelationSet()
@@ -446,7 +365,7 @@ uno::Reference<XAccessibleStateSet> AccessibleSmElementsControl::getAccessibleSt
             pStateSet->AddState(AccessibleStateType::SHOWING);
         if (m_pControl->IsReallyVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
-        if (COL_TRANSPARENT != m_pControl->GetBackground().GetColor())
+        if (COL_TRANSPARENT != SmElementsControl::GetControlBackground())
             pStateSet->AddState(AccessibleStateType::OPAQUE);
     }
 
