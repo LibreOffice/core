@@ -40,7 +40,7 @@ typedef ::cppu::ImplHelper3<css::lang::XServiceInfo, css::accessibility::XAccess
 class AccessibleSmElement final : public comphelper::OAccessibleComponentHelper,
                                   public AccessibleSmElement_BASE
 {
-    VclPtr<SmElementsControl> m_pSmElementsControl;
+    SmElementsControl* m_pSmElementsControl;
     const sal_Int32 m_nIndexInParent; ///< index in the parent XAccessible
     const sal_uInt16 m_nItemId; ///< index in the SmElementsControl
     bool m_bHasFocus;

@@ -9,12 +9,12 @@
 
 #include <memory>
 #include "uiobject.hxx"
-
+#include <vcl/layout.hxx>
 #include <ElementsDockingWindow.hxx>
 
-ElementUIObject::ElementUIObject(const VclPtr<SmElementsControl>& xElementSelector,
+ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector,
         const OUString& rID):
-    mxElementsSelector(xElementSelector),
+    mpElementsSelector(pElementSelector),
     maID(rID)
 {
 }
@@ -22,11 +22,11 @@ ElementUIObject::ElementUIObject(const VclPtr<SmElementsControl>& xElementSelect
 SmElement* ElementUIObject::get_element()
 {
     sal_uInt32 nID = maID.toUInt32();
-    size_t n = mxElementsSelector->maElementList.size();
+    size_t n = mpElementsSelector->maElementList.size();
     if (nID >= n)
         return nullptr;
 
-    return mxElementsSelector->maElementList[nID].get();
+    return mpElementsSelector->maElementList[nID].get();
 }
 
 StringMap ElementUIObject::get_state()
@@ -48,13 +48,13 @@ void ElementUIObject::execute(const OUString& rAction,
     {
         SmElement* pElement = get_element();
         if (pElement)
-            mxElementsSelector->maSelectHdlLink.Call(*pElement);
+            mpElementsSelector->maSelectHdlLink.Call(*pElement);
     }
 }
 
-ElementSelectorUIObject::ElementSelectorUIObject(const VclPtr<SmElementsControl>& xElementSelector):
-    WindowUIObject(xElementSelector),
-    mxElementsSelector(xElementSelector)
+ElementSelectorUIObject::ElementSelectorUIObject(vcl::Window* pElementSelectorWindow, SmElementsControl* pElementSelector)
+    : WindowUIObject(pElementSelectorWindow)
+    , mpElementsSelector(pElementSelector)
 {
 }
 
@@ -62,11 +62,11 @@ StringMap ElementSelectorUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    SmElement* pElement = mxElementsSelector->current();
+    SmElement* pElement = mpElementsSelector->current();
     if (pElement)
         aMap["CurrentEntry"] = pElement->getText();
 
-    aMap["CurrentSelection"] = OUString::fromUtf8(mxElementsSelector->msCurrentSetId);
+    aMap["CurrentSelection"] = OUString::fromUtf8(mpElementsSelector->msCurrentSetId);
 
     return aMap;
 }
@@ -74,18 +74,18 @@ StringMap ElementSelectorUIObject::get_state()
 std::unique_ptr<UIObject> ElementSelectorUIObject::get_child(const OUString& rID)
 {
     size_t nID = rID.toInt32();
-    size_t n = mxElementsSelector->maElementList.size();
+    size_t n = mpElementsSelector->maElementList.size();
     if (nID >= n)
         throw css::uno::RuntimeException("invalid id");
 
-    return std::unique_ptr<UIObject>(new ElementUIObject(mxElementsSelector, rID));
+    return std::unique_ptr<UIObject>(new ElementUIObject(mpElementsSelector, rID));
 }
 
 std::set<OUString> ElementSelectorUIObject::get_children() const
 {
     std::set<OUString> aChildren;
 
-    size_t n = mxElementsSelector->maElementList.size();
+    size_t n = mpElementsSelector->maElementList.size();
     for (size_t i = 0; i < n; ++i)
     {
         aChildren.insert(OUString::number(i));
@@ -96,10 +96,9 @@ std::set<OUString> ElementSelectorUIObject::get_children() const
 
 std::unique_ptr<UIObject> ElementSelectorUIObject::create(vcl::Window* pWindow)
 {
-    SmElementsControl* pElementsControl = dynamic_cast<SmElementsControl*>(pWindow);
-    assert(pElementsControl);
-
-    return std::unique_ptr<UIObject>(new ElementSelectorUIObject(pElementsControl));
+    VclDrawingArea* pSmElementsWin = dynamic_cast<VclDrawingArea*>(pWindow);
+    assert(pSmElementsWin);
+    return std::unique_ptr<UIObject>(new ElementSelectorUIObject(pSmElementsWin, static_cast<SmElementsControl*>(pSmElementsWin->GetUserData())));
 }
 
 OUString ElementSelectorUIObject::get_name() const
