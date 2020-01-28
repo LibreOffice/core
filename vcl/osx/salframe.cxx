@@ -22,6 +22,7 @@
 #include <comphelper/fileurl.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <osl/file.h>
@@ -576,17 +577,17 @@ SalEvent AquaSalFrame::PreparePosSize(long nX, long nY, long nWidth, long nHeigh
         if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
         {
             maGeometry.nWidth = nWidth;
-            if (mnMaxWidth > 0 && maGeometry.nWidth > static_cast<unsigned int>(mnMaxWidth))
+            if (mnMaxWidth > 0 && maGeometry.nWidth > o3tl::make_unsigned(mnMaxWidth))
                 maGeometry.nWidth = mnMaxWidth;
-            if (mnMinWidth > 0 && maGeometry.nWidth < static_cast<unsigned int>(mnMinWidth))
+            if (mnMinWidth > 0 && maGeometry.nWidth < o3tl::make_unsigned(mnMinWidth))
                 maGeometry.nWidth = mnMinWidth;
         }
         if (nFlags & SAL_FRAME_POSSIZE_HEIGHT)
         {
             maGeometry.nHeight = nHeight;
-            if (mnMaxHeight > 0 && maGeometry.nHeight > static_cast<unsigned int>(mnMaxHeight))
+            if (mnMaxHeight > 0 && maGeometry.nHeight > o3tl::make_unsigned(mnMaxHeight))
                 maGeometry.nHeight = mnMaxHeight;
-            if (mnMinHeight > 0 && maGeometry.nHeight < static_cast<unsigned int>(mnMinHeight))
+            if (mnMinHeight > 0 && maGeometry.nHeight < o3tl::make_unsigned(mnMinHeight))
                 maGeometry.nHeight = mnMinHeight;
         }
         if (nEvent != SalEvent::NONE)
@@ -783,7 +784,7 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
         {
-            if( nDisplay >= 0 && static_cast<unsigned int>(nDisplay) < [pScreens count] )
+            if( nDisplay >= 0 && o3tl::make_unsigned(nDisplay) < [pScreens count] )
                 pScreen = [pScreens objectAtIndex: nDisplay];
             else
             {
