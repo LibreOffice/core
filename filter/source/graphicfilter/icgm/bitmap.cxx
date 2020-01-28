@@ -316,7 +316,15 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
         rDesc.mbStatus = false;
 
     sal_uInt32 nHeaderSize = 2 + 3 * nPrecision + 3 * mpCGM->ImplGetPointSize();
-    rDesc.mnScanSize = ( ( rDesc.mnX * rDesc.mnDstBitsPerPixel + 7 ) >> 3 );
+
+    sal_uInt32 nWidthBits;
+    if (o3tl::checked_multiply(rDesc.mnX, rDesc.mnDstBitsPerPixel, nWidthBits))
+    {
+        rDesc.mbStatus = false;
+        return false;
+    }
+
+    rDesc.mnScanSize = (nWidthBits + 7) >> 3;
 
     sal_uInt32  nScanSize;
     nScanSize = rDesc.mnScanSize;
