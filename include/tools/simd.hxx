@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_TOOLS_SIMD_HXX
-#define INCLUDED_TOOLS_SIMD_HXX
+#pragma once
 
 namespace simd
 {
@@ -24,7 +23,5 @@ template <typename T> inline T roundDown(T value, unsigned int multiple)
 }
 
 } // end namespace simd
-
-#endif // INCLUDED_TOOLS_SIMD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
