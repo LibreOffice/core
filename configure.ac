@@ -6446,7 +6446,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_LANG_POP([C++])
 
     dnl Available in GCC 4.9 and at least since Clang 3.4; this check can eventually be removed
-    dnl completely (e.g., aftger libreoffice-6-5 branch off):
+    dnl completely (e.g., after libreoffice-6-5 branch off):
     AC_MSG_CHECKING([that $CXX_BASE supports __attribute__((warn_unused))])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
