@@ -54,10 +54,10 @@ SdrPage* OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
 }
 
 
-sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
+sal_uInt64 OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& _xObject)
 {
     const size_t nCount = GetObjCount();
-    size_t i = 0;
+    sal_uInt64 i = 0;
     for (; i < nCount; ++i)
     {
         OObjectBase* pObj = dynamic_cast<OObjectBase*>(GetObj(i));
@@ -67,12 +67,12 @@ sal_uLong OReportPage::getIndexOf(const uno::Reference< report::XReportComponent
             break;
         }
     }
-    return static_cast<sal_uLong>(i);
+    return i;
 }
 
 void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
-    sal_uLong nPos = getIndexOf(_xObject);
+    sal_uInt64 nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
     {
         OObjectBase* pBase = dynamic_cast<OObjectBase*>(GetObj(nPos));
@@ -110,7 +110,7 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
     if ( !_xObject.is() )
         return;
-    sal_uLong nPos = getIndexOf(_xObject);
+    sal_uInt64 nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
         return; // Object already in list
 
