@@ -1555,7 +1555,7 @@ res/sc10864.png cmd/sc_grafcontrast.png
 res/sc10865.png cmd/sc_grafred.png
 res/sc10866.png cmd/sc_grafgreen.png
 res/sc10867.png cmd/sc_grafblue.png
-res/sc10868.png cmd/sc_graphicfilterinvert.png
+res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
 res/script.png cmd/sc_insertscript.png
 res/sx03150.png cmd/sc_showsinglepage.png
@@ -1744,7 +1744,7 @@ svtools/res/template.png cmd/lc_newdoc.png
 svx/res/3dgeo.png cmd/lc_window3d.png
 svx/res/3dlight.png svx/res/lighton.png
 svx/res/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
-svx/res/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
+svx/res/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/ColorModeBlackWhite_16x16.png cmd/sc_outputqualityblackwhite.png
@@ -1822,7 +1822,7 @@ svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
 svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
-svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
+svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/symphony/decrease_font.png cmd/sc_shrink.png
