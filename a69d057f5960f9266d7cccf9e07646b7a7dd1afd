@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ded5357_12af7567",
+        "filename": "configmgr/source/configurationprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-01-28T13:47:50Z",
+      "side": 1,
+      "message": "I think this could fit in a single line.",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 6
+      },
+      "revId": "a69d057f5960f9266d7cccf9e07646b7a7dd1afd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
