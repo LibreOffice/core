@@ -590,6 +590,8 @@ extern "C" int unopkg_main()
         logger->log(LogLevel::INFO, "$1$ done.", APP_NAME);
         //Force to release all bridges which connect us to the child processes
         dp_misc::disposeBridges(xLocalComponentContext);
+        css::uno::Reference<css::lang::XComponent>(
+            xLocalComponentContext, css::uno::UNO_QUERY_THROW)->dispose();
         return 0;
     }
     catch (const ucb::CommandFailedException &e)
@@ -621,6 +623,10 @@ extern "C" int unopkg_main()
     if (!bNoOtherErrorMsg)
         logger->log(LogLevel::SEVERE, "$1$ failed.", APP_NAME);
     dp_misc::disposeBridges(xLocalComponentContext);
+    if (xLocalComponentContext.is()) {
+        css::uno::Reference<css::lang::XComponent>(
+            xLocalComponentContext, css::uno::UNO_QUERY_THROW)->dispose();
+    }
     return 1;
 }
 
