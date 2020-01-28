@@ -180,16 +180,28 @@ MenuItemData* MenuItemList::SearchItem(
     nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
     if( nDuplicates )
     {
+        MenuItemData* pFirstMatch = nullptr;
+        size_t nFirstPos(0);
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
             MenuItemData* pData = maItemList[ rPos ].get();
             if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             {
-                if( nDuplicates > 1 && rPos == nCurrentPos )
-                    continue;   // select next entry with the same mnemonic
-                else
+                if (nDuplicates == 1)
                     return pData;
+                if (rPos > nCurrentPos)
+                    return pData;   // select next entry with the same mnemonic
+                if (!pFirstMatch)   // stash the first match for use if nothing follows nCurrentPos
+                {
+                    pFirstMatch = pData;
+                    nFirstPos = rPos;
+                }
             }
+        }
+        if (pFirstMatch)
+        {
+            rPos = nFirstPos;
+            return pFirstMatch;
         }
     }
 
@@ -202,6 +214,8 @@ MenuItemData* MenuItemList::SearchItem(
         if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
             ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
 
+        MenuItemData* pFirstMatch = nullptr;
+        size_t nFirstPos(0);
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
             MenuItemData* pData = maItemList[ rPos ].get();
@@ -223,13 +237,23 @@ MenuItemData* MenuItemList::SearchItem(
                          )
                       )
                     {
-                        if( nDuplicates > 1 && rPos == nCurrentPos )
-                            continue;   // select next entry with the same mnemonic
-                        else
+                        if (nDuplicates == 1)
                             return pData;
+                        if (rPos > nCurrentPos)
+                            return pData;   // select next entry with the same mnemonic
+                        if (!pFirstMatch)   // stash the first match for use if nothing follows nCurrentPos
+                        {
+                            pFirstMatch = pData;
+                            nFirstPos = rPos;
+                        }
                     }
                 }
             }
+        }
+        if (pFirstMatch)
+        {
+            rPos = nFirstPos;
+            return pFirstMatch;
         }
     }
 
