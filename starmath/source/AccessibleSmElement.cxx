@@ -140,7 +140,7 @@ uno::Reference<XAccessible> AccessibleSmElement::getAccessibleParent()
     OContextEntryGuard aGuard(this);
     uno::Reference<XAccessible> xParent;
     if (m_pSmElementsControl)
-        xParent = m_pSmElementsControl->GetAccessible();
+        xParent.set(m_pSmElementsControl->GetAccessible().get());
     return xParent;
 }
 
@@ -229,9 +229,7 @@ sal_Int32 AccessibleSmElement::getForeground()
 {
     OExternalLockGuard aGuard(this);
 
-    Color nColor;
-    if (m_pSmElementsControl)
-        nColor = m_pSmElementsControl->GetControlForeground();
+    Color nColor = SmElementsControl::GetTextColor();
     return sal_Int32(nColor);
 }
 
@@ -239,9 +237,7 @@ sal_Int32 AccessibleSmElement::getBackground()
 {
     OExternalLockGuard aGuard(this);
 
-    Color nColor;
-    if (m_pSmElementsControl)
-        nColor = m_pSmElementsControl->GetControlBackground();
+    Color nColor = SmElementsControl::GetControlBackground();
     return sal_Int32(nColor);
 }
 

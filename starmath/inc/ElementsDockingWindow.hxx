@@ -21,7 +21,8 @@
 #define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 #include <sfx2/dockwin.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 #include "format.hxx"
 #include <memory>
@@ -63,7 +64,7 @@ public:
 
 typedef std::pair<const char*, const char*> SmElementDescr;
 
-class SmElementsControl : public Control
+class SmElementsControl : public weld::CustomWidgetController
 {
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
@@ -81,16 +82,14 @@ class SmElementsControl : public Control
     static const std::tuple<const char*, const SmElementDescr*, size_t> m_aCategories[];
     static const size_t m_aCategoriesSize;
 
-    virtual void ApplySettings(vcl::RenderContext&) override;
-    virtual void DataChanged(const DataChangedEvent&) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove(const MouseEvent& rMEvt) override;
-    virtual void RequestHelp(const HelpEvent& rHEvt) override;
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseMove(const MouseEvent& rMEvt) override;
+    virtual OUString RequestHelp(tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
-    virtual void KeyInput(const KeyEvent& rKEvt) override;
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
     css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     SmDocShell*   mpDocShell;
@@ -104,7 +103,7 @@ class SmElementsControl : public Control
     std::vector< std::unique_ptr<SmElement> > maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
-    VclPtr< ScrollBar > mxScroll;
+    std::unique_ptr<weld::ScrolledWindow> mxScroll;
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
@@ -122,14 +121,12 @@ class SmElementsControl : public Control
 
     void build();
 
-    //if pContext is not NULL, then draw, otherwise
-    //just layout
-    void LayoutOrPaintContents(vcl::RenderContext *pContext = nullptr);
+    //if bDraw is true, then draw, otherwise just layout
+    void LayoutOrPaintContents(vcl::RenderContext& rContext, bool bDraw);
 
 public:
-    explicit SmElementsControl(vcl::Window *pParent);
+    explicit SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     virtual ~SmElementsControl() override;
-    virtual void dispose() override;
 
     static const auto& categories() { return m_aCategories; }
     static size_t categoriesSize() { return m_aCategoriesSize; }
@@ -148,28 +145,31 @@ public:
     bool itemTrigger(sal_uInt16);
     void setItemHighlighted(sal_uInt16);
     sal_uInt16 itemOffset() const { return m_nCurrentOffset; }
-    css::uno::Reference<css::accessibility::XAccessible> scrollbarAccessible() const;
 
-    Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
-    void DoScroll(long nDelta);
+    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
 
     void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
+
+    rtl::Reference<AccessibleSmElementsControl> GetAccessible() const { return m_xAccessible; }
+    static Color GetTextColor();
+    static Color GetControlBackground();
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class SmElementsDockingWindow final : public SfxDockingWindow
 {
-    VclPtr<SmElementsControl>  mpElementsControl;
-    VclPtr<ListBox>            mpElementListBox;
+    std::unique_ptr<SmElementsControl> mxElementsControl;
+    std::unique_ptr<weld::CustomWeld> mxElementsControlWin;
+    std::unique_ptr<weld::ComboBox> mxElementListBox;
 
     virtual void Resize() override;
     SmViewShell* GetView();
 
     DECL_LINK(SelectClickHandler, SmElement&, void);
-    DECL_LINK(ElementSelectedHandle, ListBox&, void);
+    DECL_LINK(ElementSelectedHandle, weld::ComboBox&, void);
 
 public:
 
