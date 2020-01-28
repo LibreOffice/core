@@ -20,6 +20,7 @@
 #include <sal/types.h>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include "DOTransferable.hxx"
 #include "../misc/ImplHelper.hxx"
@@ -59,6 +60,7 @@ namespace
 void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::ByteSequence_t& aByteSequence )
 {
     CStgTransferHelper memTransferHelper;
+    LPSTREAM pStream = nullptr;
 
     switch( stgmedium.tymed )
     {
@@ -75,12 +77,47 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
         break;
 
     case TYMED_ISTREAM:
-        //TODO: Has to be implemented
+        pStream = stgmedium.pstm;
         break;
 
     default:
         throw UnsupportedFlavorException( );
         break;
+    }
+
+    if (pStream)
+    {
+        // We have a stream, read from it.
+        STATSTG aStat;
+        HRESULT hr = pStream->Stat(&aStat, STATFLAG_NONAME);
+        if (FAILED(hr))
+        {
+            SAL_WARN("dtrans", "clipDataToByteStream: Stat() failed");
+            return;
+        }
+
+        size_t nMemSize = aStat.cbSize.QuadPart;
+        aByteSequence.realloc(nMemSize);
+        LARGE_INTEGER li;
+        li.QuadPart = 0;
+        hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
+        if (FAILED(hr))
+        {
+            SAL_WARN("dtrans", "clipDataToByteStream: Seek() failed");
+        }
+
+        ULONG nRead = 0;
+        hr = pStream->Read(aByteSequence.getArray(), nMemSize, &nRead);
+        if (FAILED(hr))
+        {
+            SAL_WARN("dtrans", "clipDataToByteStream: Read() failed");
+        }
+        if (nRead < nMemSize)
+        {
+            SAL_WARN("dtrans", "clipDataToByteStream: Read() was partial");
+        }
+
+        return;
     }
 
     int nMemSize = memTransferHelper.memSize( cf );
@@ -391,6 +428,14 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
         CFormatEtc aTempFormat( aFormatEtc );
         aTempFormat.setTymed( TYMED_HGLOBAL );
         hr = m_rDataObject->GetData( aTempFormat, &stgmedium );
+    }
+
+    if (FAILED(hr) && aFormatEtc.getTymed() == TYMED_HGLOBAL)
+    {
+        // Handle type is not memory, try stream.
+        CFormatEtc aTempFormat(aFormatEtc);
+        aTempFormat.setTymed(TYMED_ISTREAM);
+        hr = m_rDataObject->GetData(aTempFormat, &stgmedium);
     }
 
     if ( FAILED( hr ) )
