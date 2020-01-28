@@ -21,17 +21,12 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ANIMOBJS_HXX
 
 #include <sfx2/dockwin.hxx>
-#include <vcl/fixed.hxx>
 #include <tools/fract.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/progress.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-
-#include <vcl/lstbox.hxx>
-
 #include <misc/scopelock.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 
 class SdDrawDocument;
 
@@ -53,14 +48,14 @@ enum BitmapAdjustment
     BA_RIGHT_DOWN
 };
 
-class SdDisplay : public Control
+class SdDisplay : public weld::CustomWidgetController
 {
 private:
     BitmapEx    aBitmapEx;
     Fraction    aScale;
 
 public:
-    SdDisplay(vcl::Window* pWin);
+    SdDisplay();
     virtual ~SdDisplay() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
@@ -68,8 +63,7 @@ public:
     void    SetBitmapEx( BitmapEx const * pBmpEx );
     void    SetScale( const Fraction& rFrac );
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 };
 
 class AnimationWindow : public SfxDockingWindow
@@ -92,26 +86,28 @@ protected:
     virtual void    Resize() override;
 
 private:
-    VclPtr<SdDisplay>      m_pCtlDisplay;
-    VclPtr<PushButton>     m_pBtnFirst;
-    VclPtr<PushButton>     m_pBtnReverse;
-    VclPtr<PushButton>     m_pBtnStop;
-    VclPtr<PushButton>     m_pBtnPlay;
-    VclPtr<PushButton>     m_pBtnLast;
-    VclPtr<NumericField>   m_pNumFldBitmap;
-    VclPtr<TimeField>      m_pTimeField;
-    VclPtr<ListBox>        m_pLbLoopCount;
-    VclPtr<PushButton>     m_pBtnGetOneObject;
-    VclPtr<PushButton>     m_pBtnGetAllObjects;
-    VclPtr<PushButton>     m_pBtnRemoveBitmap;
-    VclPtr<PushButton>     m_pBtnRemoveAll;
-    VclPtr<FixedText>      m_pFiCount;
+    std::unique_ptr<SdDisplay> m_xCtlDisplay;
+    std::unique_ptr<weld::CustomWeld> m_xCtlDisplayWin;
+    std::unique_ptr<weld::Button> m_xBtnFirst;
+    std::unique_ptr<weld::Button> m_xBtnReverse;
+    std::unique_ptr<weld::Button> m_xBtnStop;
+    std::unique_ptr<weld::Button> m_xBtnPlay;
+    std::unique_ptr<weld::Button> m_xBtnLast;
+    std::unique_ptr<weld::SpinButton> m_xNumFldBitmap;
+    std::unique_ptr<weld::TimeSpinButton> m_xTimeField;
+    std::unique_ptr<weld::ComboBox> m_xLbLoopCount;
+    std::unique_ptr<weld::Button> m_xBtnGetOneObject;
+    std::unique_ptr<weld::Button> m_xBtnGetAllObjects;
+    std::unique_ptr<weld::Button> m_xBtnRemoveBitmap;
+    std::unique_ptr<weld::Button> m_xBtnRemoveAll;
+    std::unique_ptr<weld::Label> m_xFiCount;
 
-    VclPtr<RadioButton>    m_pRbtGroup;
-    VclPtr<RadioButton>    m_pRbtBitmap;
-    VclPtr<FixedText>      m_pFtAdjustment;
-    VclPtr<ListBox>        m_pLbAdjustment;
-    VclPtr<PushButton>     m_pBtnCreateGroup;
+    std::unique_ptr<weld::RadioButton> m_xRbtGroup;
+    std::unique_ptr<weld::RadioButton> m_xRbtBitmap;
+    std::unique_ptr<weld::Label> m_xFtAdjustment;
+    std::unique_ptr<weld::ComboBox> m_xLbAdjustment;
+    std::unique_ptr<weld::Button> m_xBtnCreateGroup;
+    std::unique_ptr<weld::Button> m_xBtnHelp;
 
     ::std::vector< ::std::pair<BitmapEx, ::tools::Time> > m_FrameList;
     static const size_t EMPTY_FRAMELIST;
@@ -125,16 +121,17 @@ private:
 
     ScopeLock       maPlayLock;
 
-    DECL_LINK( ClickFirstHdl, Button*, void );
-    DECL_LINK( ClickStopHdl, Button*, void );
-    DECL_LINK( ClickPlayHdl, Button*, void );
-    DECL_LINK( ClickLastHdl, Button*, void );
-    DECL_LINK( ClickGetObjectHdl, Button*, void );
-    DECL_LINK( ClickRemoveBitmapHdl, Button*, void );
-    DECL_LINK( ClickRbtHdl, Button*, void );
-    DECL_LINK( ClickCreateGroupHdl, Button*, void );
-    DECL_LINK( ModifyBitmapHdl, Edit&, void );
-    DECL_LINK( ModifyTimeHdl, Edit&, void );
+    DECL_LINK( ClickFirstHdl, weld::Button&, void );
+    DECL_LINK( ClickStopHdl, weld::Button&, void );
+    DECL_LINK( ClickPlayHdl, weld::Button&, void );
+    DECL_LINK( ClickLastHdl, weld::Button&, void );
+    DECL_LINK( ClickGetObjectHdl, weld::Button&, void );
+    DECL_LINK( ClickRemoveBitmapHdl, weld::Button&, void );
+    DECL_LINK( ClickRbtHdl, weld::Button&, void );
+    DECL_LINK( ClickHelpHdl, weld::Button&, void );
+    DECL_LINK( ClickCreateGroupHdl, weld::Button&, void );
+    DECL_LINK( ModifyBitmapHdl, weld::SpinButton&, void );
+    DECL_LINK( ModifyTimeHdl, weld::TimeSpinButton&, void );
 
     void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();
