@@ -108,7 +108,7 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
 }
 
-static sal_uLong convertBools2Ulong_Impl
+static sal_uInt32 convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,
@@ -127,8 +127,8 @@ static sal_uLong convertBools2Ulong_Impl
     bool bEmptyDbFieldHidesPara
 )
 {
-    sal_uLong nRet = 0;
-    sal_uLong nSetBit = 1;
+    sal_uInt32 nRet = 0;
+    sal_uInt32 nSetBit = 1;
 
     if ( _bUsePrtMetrics )
         nRet |= nSetBit;
