@@ -86,8 +86,7 @@ sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceNa
 
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 {
-    Sequence< OUString > seqNames { "com.sun.star.loader.SharedLibrary" };
-    return seqNames;
+    return { "com.sun.star.loader.SharedLibrary" };
 }
 
 
