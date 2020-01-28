@@ -435,7 +435,6 @@ cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/ca/underlinesimple.png cmd/32/ca/underline.png
 cmd/32/es/bold.png cmd/32/ca/bold.png
-cmd/32/es/bold.png cmd/32/ca/bold.png
 cmd/32/es/italic.png cmd/32/ca/italic.png
 cmd/32/es/numberformatdecdecimals.png cmd/32/de/numberformatdecdecimals.png
 cmd/32/es/numberformatdecimal.png cmd/32/de/numberformatdecimal.png
@@ -1310,16 +1309,22 @@ cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 
 # calc menu entries
+cmd/32/cellcontentsmenu.png cmd/32/calculate.png
+cmd/32/chartmenu.png cmd/32/drawchart.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
 cmd/32/sheetcommentmenu.png cmd/32/shownote.png
 
+cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
+cmd/lc_chartmenu.png cmd/lc_drawchart.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/lc_sheetcommentmenu.png cmd/lc_shownote.png
 
+cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
+cmd/sc_chartmenu.png cmd/sc_drawchart.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
@@ -1770,7 +1775,6 @@ cmd/sc_selectmode.png cmd/sc_selectobject.png
 # Navigator
 cmd/32/navigationbar.png cmd/32/navigator.png
 cmd/32/reportnavigator.png cmd/32/navigator.png
-cmd/sc_setreminder.png cmd/sc_timefield.png
 
 cmd/lc_navigationbar.png cmd/lc_navigator.png
 cmd/lc_reportnavigator.png cmd/lc_navigator.png
@@ -1801,7 +1805,7 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 cmd/32/donation.png cmd/32/currencyfield.png
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
-
+ 
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
@@ -2127,8 +2131,6 @@ res/sc05501.png cmd/sc_open.png
 res/lx03256.png cmd/lc_insertplugin.png
 
 res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
-res/mainapp_16.png cmd/sc_showsinglepage.png
 res/mainapp_16_8.png cmd/sc_showsinglepage.png
 
 res/mainapp.png res/newdoc.png
@@ -2386,7 +2388,6 @@ svx/res/fontworkalignright_16.png cmd/sc_alignright.png
 svx/res/fontworkalignstretch_16.png cmd/sc_text_marquee.png
 svx/res/fontworkaligncentered_26.png cmd/lc_alignhorizontalcenter.png
 svx/res/fontworkalignjustified_26.png cmd/lc_alignblock.png
-svx/res/fontworkalignjustified_26.png cmd/lc_alignblock.png
 svx/res/fontworkalignleft_26.png cmd/lc_alignleft.png
 svx/res/fontworkalignright_26.png cmd/lc_alignright.png
 svx/res/fontworkalignstretch_26.png cmd/lc_text_marquee.png
@@ -2430,11 +2431,7 @@ svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/wireframe_16.png cmd/sc_window3d.png
 svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
-svx/res/reloads.png cmd/sc_reload.png
 
-svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
-svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
-svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 svx/res/symphony/para_numbullet01.png cmd/sc_defaultbullet.png
 svx/res/symphony/para_numbullet02.png cmd/sc_defaultnumbering.png
 svx/res/symphony/decrease_font.png cmd/sc_shrink.png
@@ -2497,6 +2494,7 @@ sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
 sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
@@ -2528,7 +2526,7 @@ sw/res/sr20009.png cmd/sc_insertgraphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
@@ -2580,8 +2578,11 @@ cmd/sc_toolprotectiondocument.png cmd/sc_protect.png
 # writer
 # ===============================================
 cmd/32/addtextbox.png cmd/32/insertfixedtext.png
+cmd/32/wrapmenu.png cmd/32/wrapon.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
+cmd/lc_wrapmenu.png cmd/lc_wrapon.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
+cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 
 # Writer menu: MSO compatible Form menu
 cmd/32/textformfield.png cmd/32/edit.png
@@ -2603,19 +2604,16 @@ cmd/32/settabbgcolor.png cmd/32/backgroundcolor.png
 cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
 cmd/32/tabledeselectall.png cmd/32/dbviewtablenames.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
-cmd/32/tableselectall.png cmd/32/selecttable.png
 
 cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
 cmd/lc_tabledeselectall.png cmd/lc_dbviewtablenames.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
-cmd/lc_tableselectall.png cmd/lc_selecttable.png
 
 cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
 cmd/sc_tabledeselectall.png cmd/sc_dbviewtablenames.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
-cmd/sc_tableselectall.png cmd/sc_selecttable.png
 
 # calc context menu rowheader
 # ==============================================
@@ -2719,3 +2717,8 @@ cmd/lc_neutralcellstyles.png cmd/lc_neutralcellstyle.png
 cmd/sc_badcellstyles.png cmd/sc_badcellstyle.png
 cmd/sc_goodcellstyles.png cmd/sc_goodcellstyle.png
 cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
+
+# other
+cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
+cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
+cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
