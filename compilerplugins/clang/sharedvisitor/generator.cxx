@@ -141,7 +141,15 @@ void generateVisitor( PluginType type )
 "        : FilteringPlugin(rData)\n";
     for( const PluginInfo& plugin : plugins[ type ] )
         output << "        , " << plugin.variableName << "( nullptr )\n";
-    output << "        {}\n";
+    output << "        , activeRefCount( 0 )\n";
+    output << "    {}\n";
+
+    output <<
+"    ~SharedRecursiveASTVisitor" << pluginTypeNames[ type ] << "()\n"
+"    {\n"
+"        if( activeRefCount != 0 )\n"
+"            abort();\n"
+"    }\n";
 
     output <<
 "    virtual bool preRun() override\n"
@@ -251,7 +259,10 @@ void generateVisitor( PluginType type )
                 output << "            if( !" << plugin.variableName << "->Pre" << traverse.name << "( arg ))\n";
                 // This will disable the plugin for the time of the traverse, until restored later,
                 // just like directly returning from Traverse* would skip that part.
+                output << "            {\n";
                 output << "                " << plugin.variableName << " = nullptr;\n";
+                output << "                ++activeRefCount;\n";
+                output << "            }\n";
                 output << "        }\n";
             }
         }
@@ -271,6 +282,8 @@ void generateVisitor( PluginType type )
                 output << "                save" << plugin.className << " = nullptr;\n";
                 output << "        }\n";
             }
+            output << "        if( " << plugin.variableName << " == nullptr && save" << plugin.className << " != nullptr )\n";
+            output << "            --activeRefCount;\n";
             output << "        " << plugin.variableName << " = save" << plugin.className << ";\n";
         }
         output << "        return ret;\n";
@@ -282,21 +295,16 @@ void generateVisitor( PluginType type )
 
     output <<
 "    bool anyPluginActive() const\n"
-"    {\n";
-    first = true;
+"    {\n"
+"        return activeRefCount > 0";
     for( const PluginInfo& plugin : plugins[ type ] )
-    {
-        if( first )
-            output << "        return " << plugin.variableName << " != nullptr";
-        else
-            output << "\n            || " << plugin.variableName << " != nullptr";
-        first = false;
-    }
+        output << "\n            || " << plugin.variableName << " != nullptr";
     output << ";\n";
     output << "    }\n";
 
     for( const PluginInfo& plugin : plugins[ type ] )
         output << "    " << plugin.className << "* " << plugin.variableName << ";\n";
+    output << "    int activeRefCount;\n";
 
     output <<
 "};\n"
