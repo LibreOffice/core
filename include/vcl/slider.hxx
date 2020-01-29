@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/field.hxx>
 
 class VCL_DLLPUBLIC Slider final : public Control
 {
