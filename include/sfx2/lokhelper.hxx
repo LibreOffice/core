@@ -17,6 +17,27 @@
 #include <sfx2/viewsh.hxx>
 #include <cstddef>
 #include <rtl/string.hxx>
+#include <o3tl/optional.hxx>
+
+struct SFX2_DLLPUBLIC LokMouseEventData
+{
+    int mnType;
+    Point maPosition;
+    int mnCount;
+    MouseEventModifiers meModifiers;
+    int mnButtons;
+    int mnModifier;
+    o3tl::optional<Point> maLogicPosition;
+
+    LokMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
+        : mnType(nType)
+        , maPosition(aPosition)
+        , mnCount(nCount)
+        , meModifiers(eModifiers)
+        , mnButtons(nButtons)
+        , mnModifier(nModifier)
+    {}
+};
 
 class SFX2_DLLPUBLIC SfxLokHelper
 {
@@ -72,10 +93,7 @@ public:
                                       int nType, const OUString &rText);
 
     /// Helper for posting async mouse event
-    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                    int nType, const Point &rPos,
-                                    int nCount, MouseEventModifiers aModifiers,
-                                    int nButtons, int nModifier);
+    static void postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData);
 
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
