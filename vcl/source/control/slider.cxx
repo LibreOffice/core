@@ -19,7 +19,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/slider.hxx>
+#include <slider.hxx>
 #include <vcl/settings.hxx>
 
 #include "thumbpos.hxx"

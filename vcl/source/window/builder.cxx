@@ -47,7 +47,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/slider.hxx>
+#include <slider.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <iconview.hxx>
