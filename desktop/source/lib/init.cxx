@@ -2539,6 +2539,12 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     return false;
 }
 
+/**
+ * Initialize UNO commands, in the sense that from now on, the LOK client gets updates for status
+ * changes of these commands. This is necessary, because (unlike in the desktop case) there are no
+ * toolbars hosting widgets these UNO commands, so no such status updates would be sent to the
+ * headless LOK clients out of the box.
+ */
 static void doc_iniUnoCommands ()
 {
     SolarMutexGuard aGuard;
