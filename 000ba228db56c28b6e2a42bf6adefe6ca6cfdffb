@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84281e5f_60716bad",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-01-29T17:27:58Z",
+      "side": 1,
+      "message": "if(pEntry \u0026\u0026 !bChOnDemand) is probably a better way to do this. HasChildren() will always be false and HasChildrenOnDemand will return bChOnDemand value set in InsertEntry. Same result either way.",
+      "range": {
+        "startLine": 1766,
+        "startChar": 16,
+        "endLine": 1766,
+        "endChar": 86
+      },
+      "revId": "000ba228db56c28b6e2a42bf6adefe6ca6cfdffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
