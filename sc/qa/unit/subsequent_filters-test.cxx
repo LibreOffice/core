@@ -217,6 +217,7 @@ public:
     void testRefStringXLSX();
     void testHiddenSheetsXLSX();
     void testRelFormulaValidationXLS();
+    void testTdf130132();
     void testColumnStyle2XLSX();
     void testAutofilterXLSX();
 
@@ -358,6 +359,7 @@ public:
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRelFormulaValidationXLS);
+    CPPUNIT_TEST(testTdf130132);
     CPPUNIT_TEST(testColumnStyle2XLSX);
     CPPUNIT_TEST(testAutofilterXLSX);
 
@@ -3462,6 +3464,23 @@ void ScFiltersTest::testRefStringXLSX()
     CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, rCalcConfig.meStringRefAddressSyntax);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf130132()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf130132.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScPatternAttr* pAttr = rDoc.GetPattern(434, 0, 0);
+
+    {
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const Color& rColor = rBackground.GetColor();
+        // background colour is yellow
+        CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), rColor);
+    }
 }
 
 void ScFiltersTest::testColumnStyle2XLSX()
