@@ -491,37 +491,35 @@ static DWORD GetCaseCorrectPathNameEx(
 }
 
 DWORD GetCaseCorrectPathName(
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,      // size of path buffer
-    bool bCheckExistence
-)
-{
-    /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+       LPCWSTR lpszShortPath,  // file name
+       LPWSTR  lpszLongPath,   // path buffer
+       DWORD   cchBuffer,      // size of path buffer
+       BOOL bCheckExistence
+    )
     {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
-        {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-        else
-        {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
+       /* Special handling for "\\.\" as system root */
+       if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+       {
+           if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
+           {
+               wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
+              return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+           }
+           else
+           {
+               return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
+           }
+       }
+       else if ( lpszShortPath )
+       {
+           if ( wcslen( lpszShortPath ) <= cchBuffer )
+           {
+                wcscpy( lpszLongPath, lpszShortPath );
+                return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
+           }
+       }
+       return 0;
     }
-    else if ( lpszShortPath )
-    {
-        if ( wcslen( lpszShortPath ) <= cchBuffer )
-        {
-            wcscpy( lpszLongPath, lpszShortPath );
-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
-        }
-    }
-
-    return 0;
-}
-
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
     char        *pBuffer;
@@ -725,10 +723,9 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 else
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(pDecodedURL) + nSkip,
-                                                                 o3tl::toW(aBuf),
-                                                                 aBuf.getBufSizeInSymbols(),
-                                                                 false );
+                    sal_uInt32 nNewLen = GetLongPathName( pDecodedURL + nSkip,
+                                                          ::osl::mingw_reinterpret_cast<LPWSTR>(aBuf),
+                                                          aBuf.getBufSizeInSymbols() );
 
                     if ( nNewLen <= MAX_PATH - 12
                       || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )

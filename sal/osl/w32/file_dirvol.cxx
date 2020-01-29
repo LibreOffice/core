@@ -1571,9 +1571,6 @@ static oslFileError osl_getServerInfo(
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
-        if (error != osl_File_E_None)
-            return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
     return osl_File_E_None;
@@ -1680,17 +1677,9 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
-                                                         o3tl::toW( aBuffer ),
-                                                         aBuffer.getBufSizeInSymbols(),
-                                                         true );
-
-            if ( nNewLen )
-            {
-                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
-                sFullPath = OUString( pItemImpl->m_pFullPath );
-                pItemImpl->bFullPathNormalized = true;
-            }
+            sal_uInt32 nNewLen = GetLongPathName( rtl_uString_getStr( pItemImpl->m_pFullPath ),
+                                                  ::osl::mingw_reinterpret_cast<LPWSTR>( aBuffer ),
+                                                  aBuffer.getBufSizeInSymbols() );
         }
 
         oslFileError error = osl_getFileURLFromSystemPath( sFullPath.pData, &pStatus->ustrFileURL );
