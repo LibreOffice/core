@@ -1328,24 +1328,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr(
     @param len
     the length of the character array.
  */
-SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
-        rtl_uString ** newStr, const sal_Unicode * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
-
-/** Allocate a new string that is a substring of this string.
-
-    The substring begins at the specified beginIndex and contains count
-    characters. Meaningless combinations such as negative beginIndex,
-    or beginIndex + count greater than the length of the string have
-    undefined behaviour.
-
-    @param[out]    newStr       the specified substring.
-    @param[in]     from         the String to take the substring from.
-    @param[in]     beginIndex   the beginning index, inclusive.
-    @param[in]     count        the number of characters.
-    @return    the specified substring.
-
-    @since LibreOffice 4.0
- */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromSubString(
         rtl_uString ** newStr, const rtl_uString * from,
         sal_Int32 beginIndex, sal_Int32 count ) SAL_THROW_EXTERN_C();
