@@ -96,7 +96,7 @@ static bool inheritsPluginClassCheck( const Decl* decl )
 static TraverseFunctionInfo findOrCreateTraverseFunctionInfo( StringRef name )
 {
     TraverseFunctionInfo info;
-    info.name = name;
+    info.name = name.str();
     auto foundInfo = traverseFunctions.find( info );
     if( foundInfo != traverseFunctions.end())
     {
@@ -266,7 +266,9 @@ int main(int argc, char** argv)
     }
     SmallVector< StringRef, 20 > clangflags;
     SplitString( CLANGFLAGS, clangflags );
-    args.insert( args.end(), clangflags.begin(), clangflags.end());
+    for (auto const & i: clangflags) {
+        args.push_back(i.str());
+    }
     args.insert(
         args.end(),
         {   // These must match LO_CLANG_ANALYZER_PCH_CXXFLAGS in Makefile-clang.mk .

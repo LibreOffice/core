@@ -148,7 +148,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
         aInfo.nameAndParams += " const";
     }
-    aInfo.paramName = paramName;
+    aInfo.paramName = paramName.str();
     aInfo.paramIndex = paramIndex;
     if (paramIndex < (int)functionDecl->getNumParams())
         aInfo.paramType = functionDecl->getParamDecl(paramIndex)->getType().getCanonicalType().getAsString();
@@ -274,8 +274,8 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
             continue;
         std::string callValue = getCallValue(valExpr);
         std::string paramName = i < functionDecl->getNumParams()
-                                ? functionDecl->getParamDecl(i)->getName()
-                                : llvm::StringRef("###" + std::to_string(i));
+                                ? functionDecl->getParamDecl(i)->getName().str()
+                                : llvm::StringRef("###" + std::to_string(i)).str();
         addToCallSet(functionDecl, i, paramName, callValue);
     }
     return true;
@@ -298,8 +298,8 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
             continue;
         std::string callValue = getCallValue(valExpr);
         std::string paramName = i < constructorDecl->getNumParams()
-                                ? constructorDecl->getParamDecl(i)->getName()
-                                : llvm::StringRef("###" + std::to_string(i));
+                                ? constructorDecl->getParamDecl(i)->getName().str()
+                                : llvm::StringRef("###" + std::to_string(i)).str();
         addToCallSet(constructorDecl, i, paramName, callValue);
     }
     return true;

@@ -340,7 +340,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             bSkip = true;
         }
         if( modifyFile.empty())
-            modifyFile = name;
+            modifyFile = name.str();
         // Check whether the modified file is in the wanted scope
         if( scope == "mainfile" )
         {

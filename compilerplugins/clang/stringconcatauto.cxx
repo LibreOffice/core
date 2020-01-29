@@ -71,7 +71,7 @@ bool StringConcatAuto::checkDecl( const DeclaratorDecl* decl, QualType type, con
     if( isa< ParmVarDecl >( decl )) // parameters should be fine, temporaries should exist during the call
         return true;
     std::string fileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl)));
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl))).str();
     loplugin::normalizeDotDotInFilePath(fileName);
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/string.hxx")
         || loplugin::isSamePathname(fileName, SRCDIR "/include/rtl/ustring.hxx")

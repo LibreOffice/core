@@ -146,7 +146,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
     {
     if( logAreas.empty())
         readLogAreas();
-    if( !logAreas.count( area ))
+    if( !logAreas.count( area.str() ))
         {
         report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend include/sal/log-areas.dox)",
             location ) << area;
