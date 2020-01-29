@@ -61,7 +61,6 @@ DWORD GetCaseCorrectPathName (
 
 oslFileError osl_getSystemPathFromFileURL_ (
     rtl_uString * strURL,
-    rtl_uString ** pustrPath,
     bool bAllowRelative
 );
 
