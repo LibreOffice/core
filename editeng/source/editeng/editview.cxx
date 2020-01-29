@@ -486,6 +486,10 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
 
         if (pImpEditView->mpViewShell && !bActivate)
         {
+            VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
+            if (pParent && pParent->GetLOKWindowId() != 0)
+                return;
+
             OString aPayload = OString::boolean(true);
             pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
             pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
@@ -499,6 +503,10 @@ void EditView::HideCursor(bool bDeactivate)
 
     if (pImpEditView->mpViewShell && !bDeactivate)
     {
+        VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
+        if (pParent && pParent->GetLOKWindowId() != 0)
+            return;
+
         OString aPayload = OString::boolean(false);
         pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
         pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
