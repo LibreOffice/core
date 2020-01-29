@@ -67,13 +67,13 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
             || hasPathnamePrefix(filename, BUILDDIR "/config_build/") ))
         {
 //        fprintf(stderr,"DEF: %s %s\n", macroToken.getIdentifierInfo()->getName().data(), filename );
-        configMacros.insert( macroToken.getIdentifierInfo()->getName());
+        configMacros.insert( macroToken.getIdentifierInfo()->getName().str());
         }
     }
 
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, MacroDefinition const &, MacroDirective const * )
     {
-    configMacros.erase( macroToken.getIdentifierInfo()->getName());
+    configMacros.erase( macroToken.getIdentifierInfo()->getName().str());
     }
 
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, MacroDefinition const & )
@@ -93,7 +93,7 @@ void CheckConfigMacros::Defined( const Token& macroToken, MacroDefinition const 
 
 void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation location )
     {
-    if( configMacros.find( macroToken.getIdentifierInfo()->getName()) != configMacros.end())
+    if( configMacros.find( macroToken.getIdentifierInfo()->getName().str()) != configMacros.end())
         {
         const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
         if( filename == NULL

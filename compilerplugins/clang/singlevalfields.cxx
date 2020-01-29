@@ -146,7 +146,7 @@ void SingleValFields::niceName(const DeclaratorDecl* fieldOrVarDecl, MyFieldInfo
         else if (auto parentFunctionDecl = dyn_cast<FunctionDecl>(varDecl->getDeclContext()))
             aInfo.parentClass = parentFunctionDecl->getQualifiedNameAsString();
         else if (isa<TranslationUnitDecl>(varDecl->getDeclContext()))
-            aInfo.parentClass = handler.getMainFileName();
+            aInfo.parentClass = handler.getMainFileName().str();
         else if (auto parentNamespaceDecl = dyn_cast<NamespaceDecl>(varDecl->getDeclContext()))
             aInfo.parentClass = parentNamespaceDecl->getQualifiedNameAsString();
         else if (isa<LinkageSpecDecl>(varDecl->getDeclContext()))
@@ -529,7 +529,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     if (auto stringLiteral = dyn_cast<clang::StringLiteral>(arg))
     {
         if (stringLiteral->getCharByteWidth() == 1)
-            return stringLiteral->getString();
+            return stringLiteral->getString().str();
         return "?";
     }
     // ParenListExpr containing a CXXNullPtrLiteralExpr and has a NULL type pointer
@@ -546,7 +546,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
         {
             auto stringLiteral = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0));
             if (stringLiteral->getCharByteWidth() == 1)
-                return stringLiteral->getString();
+                return stringLiteral->getString().str();
             return "?";
         }
     }

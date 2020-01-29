@@ -32,7 +32,7 @@ public:
 
     virtual void run() override
     {
-        fn = handler.getMainFileName();
+        fn = handler.getMainFileName().str();
         loplugin::normalizeDotDotInFilePath(fn);
         // can't change these because we pass them down to the SfxItemPool stuff
         if (fn == SRCDIR "/sc/source/core/data/docpool.cxx")
@@ -500,16 +500,16 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (parentName == "ScBroadcastAreaSlot")
         return;
     // complicated
-    if (any_equal(parentName, "SwFormatField", "FontPropertyBox", "SdFontPropertyBox",
+    if (any_equal(parentName.str(), "SwFormatField", "FontPropertyBox", "SdFontPropertyBox",
         "SwHTMLParser", "PDFWriterImpl", "SbiParser", "DictionaryList", "SwGlossaryHdl", "SwGlossaryGroupDlg"))
         return;
     // ok
-    if (any_equal(parentName, "SbTreeListBox"))
+    if (any_equal(parentName.str(), "SbTreeListBox"))
         return;
 
     if (functionDecl->getIdentifier())
     {
-        std::string name = functionDecl->getName();
+        std::string name = functionDecl->getName().str();
         if (!parentName.empty())
             name = std::string(parentName) + "::" + name;
 

@@ -87,8 +87,8 @@ bool startsWith(const std::string& rStr, const char* pSubStr) {
 bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
-    if (startsWith(s, "rtl::") || startsWith(s, "sal::") || startsWith(s, "com::sun::")
-        || startsWith(s, "std::") || startsWith(s, "boost::")
+    if (startsWith(s.str(), "rtl::") || startsWith(s.str(), "sal::") || startsWith(s.str(), "com::sun::")
+        || startsWith(s.str(), "std::") || startsWith(s.str(), "boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {
         return true;
@@ -149,7 +149,7 @@ bool MergeClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (decl->isThisDeclarationADefinition())
     {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
-        std::string filename = getFilenameOfLocation(spellingLocation);
+        std::string filename = getFilenameOfLocation(spellingLocation).str();
         filename = filename.substr(strlen(SRCDIR));
         std::string s = decl->getQualifiedNameAsString();
         if (ignoreClass(s))

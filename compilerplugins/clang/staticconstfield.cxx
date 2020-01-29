@@ -46,7 +46,7 @@ private:
 
 void StaticConstField::run()
 {
-    std::string fn = handler.getMainFileName();
+    std::string fn = handler.getMainFileName().str();
     loplugin::normalizeDotDotInFilePath(fn);
 
     // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
@@ -107,7 +107,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
             if (constructExpr->getNumArgs() >= 1
                 && isa<clang::StringLiteral>(constructExpr->getArg(0)))
             {
-                value = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0))->getString();
+                value = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0))->getString().str();
                 found = true;
             }
         }

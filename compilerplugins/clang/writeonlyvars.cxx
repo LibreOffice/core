@@ -522,7 +522,7 @@ MyVarInfo WriteOnlyVars::niceName(const VarDecl* varDecl)
         = std::string(filename.substr(strlen(SRCDIR) + 1)) + ":"
           + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
-    aInfo.parent = filename;
+    aInfo.parent = filename.str();
 
     return aInfo;
 }

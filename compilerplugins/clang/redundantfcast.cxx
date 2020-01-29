@@ -305,7 +305,7 @@ public:
     {
         if (!compiler.getLangOpts().CPlusPlus)
             return false;
-        std::string fn = handler.getMainFileName();
+        std::string fn = handler.getMainFileName().str();
         loplugin::normalizeDotDotInFilePath(fn);
         // necessary on some other platforms
         if (fn == SRCDIR "/sal/osl/unx/socket.cxx")
