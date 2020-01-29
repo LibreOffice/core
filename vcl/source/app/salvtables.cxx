@@ -56,7 +56,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/slider.hxx>
+#include <slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/svtabbx.hxx>
