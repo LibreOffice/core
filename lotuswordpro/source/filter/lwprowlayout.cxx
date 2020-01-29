@@ -93,8 +93,8 @@ LwpRowLayout::~LwpRowLayout()
  */
 void LwpRowLayout::SetRowMap()
 {
-    LwpObjectID& rCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+    LwpObjectID *pCellID= &GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
     std::set<LwpCellLayout*> aSeen;
     while(pCellLayout)
@@ -102,8 +102,8 @@ void LwpRowLayout::SetRowMap()
         aSeen.insert(pCellLayout);
         pCellLayout->SetCellMap();
 
-        rCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        pCellID = &pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
         if (aSeen.find(pCellLayout) != aSeen.end())
             throw std::runtime_error("loop in conversion");
     }
@@ -137,8 +137,8 @@ void LwpRowLayout::RegisterStyle()
         pTableLayout->GetTable();
     }
     // register cells' style
-    LwpObjectID& rCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+    LwpObjectID *pCellID= &GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
     std::set<LwpCellLayout*> aSeen;
     while (pCellLayout)
@@ -147,8 +147,8 @@ void LwpRowLayout::RegisterStyle()
 
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
-        rCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        pCellID = &pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
         if (aSeen.find(pCellLayout) != aSeen.end())
             throw std::runtime_error("loop in conversion");
@@ -387,8 +387,8 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)
     {
         // add row to table
-        LwpObjectID& rCellID= GetChildHead();
-        LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        LwpObjectID *pCellID= &GetChildHead();
+        LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
         nCellStartCol = i;//mark the begin position of cell
         nCellEndCol = i;//mark the end position of cell
         rtl::Reference<XFCell> xCell;
@@ -405,8 +405,8 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
                 xCell = pCellLayout->DoConvertCell(pTable->GetObjectID(),crowid,i);
                 break;
             }
-            rCellID = pCellLayout->GetNext();
-            pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+            pCellID = &pCellLayout->GetNext();
+            pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
         }
         if (!pCellLayout)
         {
@@ -436,8 +436,8 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
  */
 void LwpRowLayout::CollectMergeInfo()
 {
-    LwpObjectID& rCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+    LwpObjectID *pCellID= &GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
     while(pCellLayout)
     {
@@ -446,8 +446,8 @@ void LwpRowLayout::CollectMergeInfo()
             LwpConnectedCellLayout* pConnCell = static_cast<LwpConnectedCellLayout*>(pCellLayout);
             m_ConnCellList.push_back(pConnCell);
         }
-        rCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        pCellID = &pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
     }
 }
 /**
