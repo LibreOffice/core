@@ -105,9 +105,9 @@
                     <property name="can_focus">False</property>
                     <items>
                       <item translatable="yes" context="effectspage|liststore1">(Without)</item>
-                      <item translatable="yes" context="effectspage|liststore1">Capitals</item>
-                      <item translatable="yes" context="effectspage|liststore1">Lowercase</item>
-                      <item translatable="yes" context="effectspage|liststore1">Title</item>
+                      <item translatable="yes" context="effectspage|liststore1">UPPERCASE</item>
+                      <item translatable="yes" context="effectspage|liststore1">lowercase</item>
+                      <item translatable="yes" context="effectspage|liststore1">Capitalize Every Word</item>
                       <item translatable="yes" context="effectspage|liststore1">Small capitals</item>
                     </items>
                   </object>
