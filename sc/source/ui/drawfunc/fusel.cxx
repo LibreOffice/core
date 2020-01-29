@@ -78,8 +78,11 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     bIsInDragMode = false;      //  somewhere it has to be reset (#50033#)
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
-
-    aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    auto aLogicPosition = rMEvt.getLogicPosition();
+    if (aLogicPosition)
+        aMDPos = *aLogicPosition;
+    else
+        aMDPos = pWindow->PixelToLogic(rMEvt.GetPosPixel());
 
     if ( rMEvt.IsLeft() )
     {

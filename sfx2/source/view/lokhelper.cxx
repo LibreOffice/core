@@ -528,13 +528,10 @@ void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                       int nType, const Point &rPos,
-                                       int nCount, MouseEventModifiers aModifiers,
-                                       int nButtons, int nModifier)
+void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
-    switch (nType)
+    switch (rLokMouseEventData.mnType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
         pLOKEv->mnEvent = VclEventId::WindowMouseButtonDown;
@@ -550,10 +547,15 @@ void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow,
     }
 
     // no reason - just always true so far.
-    assert (aModifiers == MouseEventModifiers::SIMPLECLICK);
+    assert (rLokMouseEventData.meModifiers == MouseEventModifiers::SIMPLECLICK);
 
-    pLOKEv->maMouseEvent = MouseEvent(rPos, nCount,
-                                      aModifiers, nButtons, nModifier);
+    pLOKEv->maMouseEvent = MouseEvent(rLokMouseEventData.maPosition, rLokMouseEventData.mnCount,
+                                      rLokMouseEventData.meModifiers, rLokMouseEventData.mnButtons,
+                                      rLokMouseEventData.mnModifier);
+    if (rLokMouseEventData.maLogicPosition)
+    {
+        pLOKEv->maMouseEvent.setLogicPosition(*rLokMouseEventData.maLogicPosition);
+    }
     pLOKEv->mpWindow = xWindow;
     postEventAsync(pLOKEv);
 }
