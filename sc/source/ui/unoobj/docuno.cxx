@@ -671,9 +671,11 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
 
     // Calc operates in pixels...
     const Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
-    SfxLokHelper::postMouseEventAsync(pGridWindow, nType, aPos, nCount,
-                                      MouseEventModifiers::SIMPLECLICK,
+
+    LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    aMouseEventData.maLogicPosition = Point(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    SfxLokHelper::postMouseEventAsync(pGridWindow, aMouseEventData);
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)

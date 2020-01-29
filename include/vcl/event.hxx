@@ -27,6 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/optional.hxx>
 
 class CommandEvent;
 
@@ -99,7 +100,6 @@ namespace o3tl
 #define MOUSE_MIDDLE            (sal_uInt16(0x0002))
 #define MOUSE_RIGHT             (sal_uInt16(0x0004))
 
-
 class VCL_DLLPUBLIC MouseEvent
 {
 private:
@@ -107,6 +107,9 @@ private:
     MouseEventModifiers mnMode;
     sal_uInt16          mnClicks;
     sal_uInt16          mnCode;
+
+    // Set, if the document relative logic position are available
+    o3tl::optional<Point> maLogicPosition;
 
 public:
     explicit        MouseEvent();
@@ -118,6 +121,16 @@ public:
     MouseEventModifiers GetMode() const         { return mnMode; }
 
     sal_uInt16      GetClicks() const       { return mnClicks; }
+
+    void setLogicPosition(Point aLogicPosition)
+    {
+        maLogicPosition = aLogicPosition;
+    }
+
+    o3tl::optional<Point> getLogicPosition() const
+    {
+        return maLogicPosition;
+    }
 
     bool            IsEnterWindow() const
                         { return bool(mnMode & MouseEventModifiers::ENTERWINDOW); }
