@@ -985,6 +985,11 @@ public:
         m_xToolBox->ShowItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bVisible);
     }
 
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        m_xToolBox->SetHelpId(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rHelpId);
+    }
+
     virtual bool get_item_visible(const OString& rIdent) const override
     {
         return m_xToolBox->IsItemVisible(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));

@@ -7462,6 +7462,11 @@ public:
         enable_item_notify_events();
     }
 
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        ::set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
+    }
+
     virtual bool get_item_visible(const OString& rIdent) const override
     {
         return gtk_widget_get_visible(GTK_WIDGET(m_aMap.find(rIdent)->second));
