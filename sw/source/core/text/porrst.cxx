@@ -522,7 +522,22 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 
             Point aOldPos = rInf.GetPos();
             Point aNewPos( aOldPos );
-            aNewPos.setX( aNewPos.X() + ( Width() / 2 ) - mnHalfCharWidth );
+            auto const deltaX((Width() / 2) - mnHalfCharWidth);
+            switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()))
+            {
+                case 0:
+                    aNewPos.AdjustX(deltaX);
+                    break;
+                case 900:
+                    aNewPos.AdjustY(-deltaX);
+                    break;
+                case 2700:
+                    aNewPos.AdjustY(deltaX);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
             const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
             rInf.DrawText( aOutString, *this );
