@@ -394,134 +394,6 @@ static bool IsPathSpecialPrefix(LPWSTR szPath, LPWSTR szFile)
     return false;
 }
 
-// Expects a proper absolute or relative path. NB: It is different from GetLongPathName WinAPI!
-static DWORD GetCaseCorrectPathNameEx(
-    LPWSTR  lpszPath,   // path buffer to convert
-    sal_uInt32 cchBuffer,      // size of path buffer
-    DWORD   nSkipLevels,
-    bool bCheckExistence )
-{
-        ::osl::LongPathBuffer< WCHAR > szFile( MAX_PATH + 1 );
-        sal_Int32 nRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
-        sal_Int32 nLastStepRemoved = nRemoved;
-        while ( nLastStepRemoved && szFile[0] == 0 )
-        {
-            // remove separators
-            nLastStepRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
-            nRemoved += nLastStepRemoved;
-        }
-
-        if ( nRemoved )
-        {
-            bool bSkipThis = false;
-
-            if ( 0 == wcscmp( szFile, L".." ) )
-            {
-                bSkipThis = true;
-                nSkipLevels += 1;
-            }
-            else if ( 0 == wcscmp( szFile, L"." ) )
-            {
-                bSkipThis = true;
-            }
-            else if ( nSkipLevels )
-            {
-                bSkipThis = true;
-                nSkipLevels--;
-            }
-            else
-                bSkipThis = false;
-
-            if ( !GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence ) )
-                return 0;
-
-            PathAddBackslash( lpszPath, cchBuffer );
-
-            /* Analyze parent if not only a trailing backslash was cutted but a real file spec */
-            if ( !bSkipThis )
-            {
-                if ( bCheckExistence )
-                {
-
-                    if (IsPathSpecialPrefix(lpszPath, szFile))
-                    {
-                        /* add the segment name back */
-                        wcscat(lpszPath, szFile);
-                    }
-                    else
-                    {
-                        osl::LongPathBuffer<WCHAR> aShortPath(MAX_LONG_PATH);
-                        wcscpy(aShortPath, lpszPath);
-                        wcscat(aShortPath, szFile);
-
-                        WIN32_FIND_DATAW aFindFileData;
-                        HANDLE hFind = FindFirstFileW(aShortPath, &aFindFileData);
-
-                        if (IsValidHandle(hFind))
-                        {
-                            wcscat(lpszPath, aFindFileData.cFileName[0]
-                                                 ? aFindFileData.cFileName
-                                                 : aFindFileData.cAlternateFileName);
-
-                            FindClose(hFind);
-                        }
-                        else
-                            lpszPath[0] = 0;
-                    }
-                }
-                else
-                {
-                    /* add the segment name back */
-                    wcscat( lpszPath, szFile );
-                }
-            }
-        }
-        else
-        {
-            /* File specification can't be removed therefore the short path is either a drive
-               or a network share. If still levels to skip are left, the path specification
-               tries to travel below the file system root */
-            if ( nSkipLevels )
-                    lpszPath[0] = 0;
-            else
-                _wcsupr( lpszPath );
-        }
-
-        return wcslen( lpszPath );
-}
-
-DWORD GetCaseCorrectPathName(
-    LPCWSTR lpszShortPath,  // file name
-    LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,      // size of path buffer
-    bool bCheckExistence
-)
-{
-    /* Special handling for "\\.\" as system root */
-    if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
-    {
-        if ( cchBuffer >= SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) )
-        {
-            wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-        else
-        {
-            return SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1;
-        }
-    }
-    else if ( lpszShortPath )
-    {
-        if ( wcslen( lpszShortPath ) <= cchBuffer )
-        {
-            wcscpy( lpszLongPath, lpszShortPath );
-            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
-        }
-    }
-
-    return 0;
-}
-
 static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
 {
     char        *pBuffer;
@@ -658,7 +530,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
     free( pszEncodedURL );
 }
 
-oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **pustrPath, bool bAllowRelative )
+oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, bool bAllowRelative )
 {
     rtl_String          *strUTF8 = nullptr;
     rtl_uString         *strDecodedURL = nullptr;
@@ -724,25 +596,11 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 }
                 else
                 {
-                    ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-                    sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW(pDecodedURL) + nSkip,
-                                                                 o3tl::toW(aBuf),
-                                                                 aBuf.getBufSizeInSymbols(),
-                                                                 false );
-
-                    if ( nNewLen <= MAX_PATH - 12
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1, SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 )
-                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, o3tl::toU(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1, SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1 ) )
-                    {
-                        rtl_uString_newFromStr_WithLength( &strTempPath, aBuf, nNewLen );
-                    }
-                    else if ( pDecodedURL[nSkip] == '\\' && pDecodedURL[nSkip+1] == '\\' )
+                    if ( pDecodedURL[nSkip] == '\\' && pDecodedURL[nSkip+1] == '\\' )
                     {
                         /* it should be an UNC path, use the according prefix */
                         rtl_uString *strSuffix = nullptr;
                         rtl_uString *strPrefix = nullptr;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, o3tl::toU(WSTR_LONG_PATH_PREFIX_UNC), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf + 2, nNewLen - 2 );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
 
@@ -753,8 +611,6 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                     {
                         rtl_uString *strSuffix = nullptr;
                         rtl_uString *strPrefix = nullptr;
-                        rtl_uString_newFromStr_WithLength( &strPrefix, o3tl::toU(WSTR_LONG_PATH_PREFIX), SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf, nNewLen );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
 
@@ -784,9 +640,6 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
     if ( strDecodedURL )
         rtl_uString_release( strDecodedURL );
 
-    if ( osl_File_E_None == nError )
-        rtl_uString_assign( pustrPath, strTempPath );
-
     if ( strTempPath )
         rtl_uString_release( strTempPath );
 
@@ -795,7 +648,6 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 
     return nError;
 }
-
 oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** pstrURL )
 {
     oslFileError nError = osl_File_E_INVAL; /* Assume failure */
@@ -904,9 +756,9 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 }
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL(
-    rtl_uString *ustrURL, rtl_uString **pustrPath)
+    rtl_uString *ustrURL)
 {
-    return osl_getSystemPathFromFileURL_( ustrURL, pustrPath, true );
+    return osl_getSystemPathFromFileURL_( ustrURL, true );
 }
 
 oslFileError SAL_CALL osl_searchFileURL(
@@ -919,12 +771,12 @@ oslFileError SAL_CALL osl_searchFileURL(
     oslFileError    error;
 
     /* First try to interpret the file name as a URL even a relative one */
-    error = osl_getSystemPathFromFileURL_( ustrFileName, &ustrUNCPath, true );
+    error = osl_getSystemPathFromFileURL_( ustrFileName, true );
 
     /* So far we either have an UNC path or something invalid
        Now create a system path */
     if ( osl_File_E_None == error )
-        error = osl_getSystemPathFromFileURL_( ustrUNCPath, &ustrSysPath, true );
+        error = osl_getSystemPathFromFileURL_( ustrUNCPath, true );
 
     if ( osl_File_E_None == error )
     {
@@ -999,14 +851,14 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
 
     if ( ustrBaseURL && ustrBaseURL->length )
     {
-        eError = osl_getSystemPathFromFileURL_( ustrBaseURL, &ustrBaseSysPath, false );
+        eError = osl_getSystemPathFromFileURL_( ustrBaseURL, false );
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with relative or invalid base URL" );
 
-        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, true );
+        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, true );
     }
     else
     {
-        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, false );
+        eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, false );
         OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL" );
     }
 
