@@ -331,11 +331,9 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     }
     else if (rsViewURL == FrameworkHelper::msDrawViewURL)
     {
-        pViewShell =
-            std::make_shared<GraphicViewShell>(
-                *mpBase,
-                &rWindow,
-                pFrameView);
+        pViewShell = std::shared_ptr<GraphicViewShell>(
+                new GraphicViewShell(*mpBase, &rWindow, pFrameView),
+                o3tl::default_delete<GraphicViewShell>());
         pViewShell->GetContentWindow()->set_id("draw_win");
     }
     else if (rsViewURL == FrameworkHelper::msOutlineViewURL)
