@@ -828,6 +828,8 @@ void SmElementsControl::addElement(SmParser &rParser, const OUString& aElementVi
     auto pNode = rParser.ParseExpression(aElementVisual);
 
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    rDevice.Push(PushFlags::MAPMODE);
+    rDevice.SetMapMode( MapMode(MapUnit::Map100thMM) );
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));
@@ -843,6 +845,8 @@ void SmElementsControl::addElement(SmParser &rParser, const OUString& aElementVi
     }
 
     maElementList.push_back(std::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
+
+    rDevice.Pop();
 }
 
 void SmElementsControl::setElementSetId(const char* pSetId)
