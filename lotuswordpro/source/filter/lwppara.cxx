@@ -119,11 +119,6 @@ LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
 
 LwpPara::~LwpPara()
 {
-    if (m_xXFContainer)
-    {
-        m_xXFContainer->Reset();
-        m_xXFContainer.clear();
-    }
 }
 
 void LwpPara::Read()
