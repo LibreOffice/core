@@ -312,7 +312,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     pSVData->mpWinData->mpFocusWin = this;
 
-    if ( pOldFocusWindow )
+    if ( pOldFocusWindow && pOldFocusWindow->mpWindowImpl )
     {
         // Cursor hidden
         if ( pOldFocusWindow->mpWindowImpl->mpCursor )
