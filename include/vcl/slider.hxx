@@ -51,8 +51,6 @@ private:
     bool            mbCalcSize;
     bool            mbScrollTypeSet;
 
-    VclPtr<NumericField> mpLinkedField;
-
     Link<Slider*,void>   maSlideHdl;
     Link<Slider*,void>   maEndSlideHdl;
 
@@ -72,12 +70,10 @@ private:
     SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction );
     SAL_DLLPRIVATE void ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE void ImplDoSlideAction( ScrollType eScrollType );
-    SAL_DLLPRIVATE void ImplUpdateLinkedField();
 
 public:
                     Slider( vcl::Window* pParent, WinBits nStyle);
     virtual         ~Slider() override;
-    virtual void    dispose() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
