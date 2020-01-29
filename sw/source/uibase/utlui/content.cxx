@@ -1763,6 +1763,11 @@ void SwContentTree::Display( bool bActive )
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
                 pEntry = InsertEntry(sEntry, aImage, aImage,
                                 nullptr, bChOnDemand, TREELIST_APPEND, rpContentT.get());
+                if(pEntry && !pEntry->HasChildren() && !pEntry->HasChildrenOnDemand())
+                {
+                    pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT);
+                    pEntry->SetTextColor(COL_GRAY);
+                }
                 if(nCntType == m_nLastSelType)
                     pSelEntry = pEntry;
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
