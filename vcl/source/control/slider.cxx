@@ -58,8 +58,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbCalcSize          = true;
     mbScrollTypeSet     = false;
 
-    mpLinkedField       = nullptr;
-
     Control::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings();
@@ -75,12 +73,6 @@ Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
 Slider::~Slider()
 {
     disposeOnce();
-}
-
-void Slider::dispose()
-{
-    mpLinkedField.clear();
-    Control::dispose();
 }
 
 void Slider::ImplInitSettings()
@@ -211,12 +203,6 @@ void Slider::ImplUpdateRects( bool bUpdate )
             }
         }
     }
-}
-
-void Slider::ImplUpdateLinkedField()
-{
-    if (mpLinkedField)
-        mpLinkedField->SetValue(mnThumbPos);
 }
 
 long Slider::ImplCalcThumbPos( long nPixPos )
@@ -770,7 +756,6 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                 {
                     ImplUpdateRects();
                     Update();
-                    ImplUpdateLinkedField();
                     if ( nOldPos != mnThumbPos )
                     {
                         Slide();
@@ -939,7 +924,6 @@ void Slider::SetRange( const Range& rRange )
             mnThumbPos = mnMaxRange;
         if ( mnThumbPos < mnMinRange )
             mnThumbPos = mnMinRange;
-        ImplUpdateLinkedField();
         CompatStateChanged( StateChangedType::Data );
     }
 }
@@ -954,7 +938,6 @@ void Slider::SetThumbPos( long nNewThumbPos )
     if ( mnThumbPos != nNewThumbPos )
     {
         mnThumbPos = nNewThumbPos;
-        ImplUpdateLinkedField();
         CompatStateChanged( StateChangedType::Data );
     }
 }
