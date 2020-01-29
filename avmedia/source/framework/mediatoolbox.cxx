@@ -23,6 +23,7 @@
 
 #include <tools/debug.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/toolbox.hxx>
 
 #include <comphelper/propertysequence.hxx>
 
