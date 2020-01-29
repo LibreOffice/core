@@ -20,7 +20,6 @@
 
 #include <stdlib.h>
 #include <comphelper/string.hxx>
-#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -1635,7 +1634,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
     }
     else
     {
-        if (o3tl::make_unsigned(nStringsCnt + 1) >= NF_MAX_FORMAT_SYMBOLS)
+        if (nStringsCnt >= NF_MAX_FORMAT_SYMBOLS - 1)
         {
             return false;
         }
