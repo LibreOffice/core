@@ -1992,7 +1992,7 @@ public:
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_FALSE);
+        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
