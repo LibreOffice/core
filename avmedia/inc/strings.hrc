@@ -44,6 +44,7 @@
 #define AVMEDIA_STR_ALL_MEDIAFILES  NC_("AVMEDIA_STR_ALL_MEDIAFILES", "All audio and video files")
 #define AVMEDIA_STR_ALL_FILES       NC_("AVMEDIA_STR_ALL_FILES", "All files")
 #define AVMEDIA_STR_ERR_URL         NC_("AVMEDIA_STR_ERR_URL", "The format of the selected file is not supported.")
+#define AVMEDIA_STR_ZOOM_TOOLTIP    NC_("AVMEDIA_STR_ZOOM_TOOLTIP", "View")
 
 #endif
 

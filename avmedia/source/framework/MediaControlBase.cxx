@@ -18,9 +18,6 @@
  */
 #include <avmedia/MediaControlBase.hxx>
 #include <avmedia/mediaplayer.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/slider.hxx>
-#include <vcl/toolbox.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/time.hxx>
@@ -36,6 +33,7 @@ using ::rtl::OUString;
 namespace avmedia {
 
 MediaControlBase::MediaControlBase()
+    : mbCurrentlySettingZoom(false)
 {
 }
 
@@ -52,20 +50,20 @@ void MediaControlBase::UpdateTimeField( MediaItem const & aMediaItem, double fTi
             " / " +
             rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( aMediaItem.getDuration() ) )) );
 
-        if( mpTimeEdit->GetText() != aTimeString )
-            mpTimeEdit->SetText( aTimeString );
+        if( mxTimeEdit->get_text() != aTimeString )
+            mxTimeEdit->set_text( aTimeString );
     }
 }
 
 void MediaControlBase::UpdateVolumeSlider( MediaItem const & aMediaItem )
 {
     if( aMediaItem.getURL().isEmpty() )
-        mpVolumeSlider->Disable();
+        mxVolumeSlider->set_sensitive(false);
     else
     {
-        mpVolumeSlider->Enable();
+        mxVolumeSlider->set_sensitive(true);
         const sal_Int32 nVolumeDB = aMediaItem.getVolumeDB();
-        mpVolumeSlider->SetThumbPos( std::min( std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
+        mxVolumeSlider->set_value( std::min( std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
                                                 static_cast< sal_Int32 >( 0 ) ) );
     }
 }
@@ -73,10 +71,10 @@ void MediaControlBase::UpdateVolumeSlider( MediaItem const & aMediaItem )
 void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
 {
     if( aMediaItem.getURL().isEmpty() )
-        mpTimeSlider->Disable();
+        mxTimeSlider->set_sensitive(false);
     else
     {
-        mpTimeSlider->Enable();
+        mxTimeSlider->set_sensitive(true);
 
         const double fDuration = aMediaItem.getDuration();
 
@@ -84,103 +82,101 @@ void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
         {
             const double fTime = std::min( aMediaItem.getTime(), fDuration );
 
-            if( !mpTimeSlider->GetLineSize() )
-                mpTimeSlider->SetLineSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration ) );
+            bool bChanged(false);
+            int nStep(0), nPage(0);
+            if (!nStep)
+            {
+                nStep = AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration;
+                bChanged = true;
+            }
+            if (!nPage)
+            {
+                nPage = AVMEDIA_TIME_RANGE * AVMEDIA_PAGEINCREMENT / fDuration;
+                bChanged = true;
+            }
+            if (bChanged)
+                mxTimeSlider->set_increments(nStep, nPage);
 
-            if( !mpTimeSlider->GetPageSize() )
-                mpTimeSlider->SetPageSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_PAGEINCREMENT / fDuration ) );
-
-            mpTimeSlider->SetThumbPos( static_cast< sal_Int32 >( fTime / fDuration * AVMEDIA_TIME_RANGE ) );
+            mxTimeSlider->set_value(fTime / fDuration * AVMEDIA_TIME_RANGE);
         }
     }
 }
 
 void MediaControlBase::InitializeWidgets()
 {
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, GetImage(AVMEDIA_TOOLBOXITEM_PLAY), AvmResId( AVMEDIA_STR_PLAY ), ToolBoxItemBits::CHECKABLE );
-    mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
+    mxPlayToolBox->set_item_help_id("play", HID_AVMEDIA_TOOLBOXITEM_PLAY);
+    mxPlayToolBox->set_item_label("play", AvmResId(AVMEDIA_STR_PLAY));
+    mxPlayToolBox->set_item_help_id("pause", HID_AVMEDIA_TOOLBOXITEM_PAUSE);
+    mxPlayToolBox->set_item_label("pause", AvmResId(AVMEDIA_STR_PAUSE));
+    mxPlayToolBox->set_item_help_id("stop", HID_AVMEDIA_TOOLBOXITEM_STOP);
+    mxPlayToolBox->set_item_label("stop", AvmResId(AVMEDIA_STR_STOP));
+    mxPlayToolBox->set_item_help_id("loop", HID_AVMEDIA_TOOLBOXITEM_LOOP);
+    mxPlayToolBox->set_item_label("loop", AvmResId(AVMEDIA_STR_LOOP));
+    mxMuteToolBox->set_item_help_id("mute", HID_AVMEDIA_TOOLBOXITEM_MUTE);
+    mxMuteToolBox->set_item_label("mute", AvmResId(AVMEDIA_STR_MUTE));
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, GetImage(AVMEDIA_TOOLBOXITEM_PAUSE), AvmResId( AVMEDIA_STR_PAUSE ), ToolBoxItemBits::CHECKABLE );
-    mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
-
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, GetImage(AVMEDIA_TOOLBOXITEM_STOP), AvmResId( AVMEDIA_STR_STOP ), ToolBoxItemBits::CHECKABLE );
-    mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
-
-    mpPlayToolBox->InsertSeparator();
-
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, GetImage(AVMEDIA_TOOLBOXITEM_LOOP), AvmResId( AVMEDIA_STR_LOOP ) );
-    mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_LOOP, HID_AVMEDIA_TOOLBOXITEM_LOOP );
-
-    mpMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, GetImage(AVMEDIA_TOOLBOXITEM_MUTE), AvmResId( AVMEDIA_STR_MUTE ) );
-    mpMuteToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_MUTE, HID_AVMEDIA_TOOLBOXITEM_MUTE );
-
-    mpZoomListBox->InsertEntry( AvmResId( AVMEDIA_STR_ZOOM_50 ), AVMEDIA_ZOOMLEVEL_50 );
-    mpZoomListBox->InsertEntry( AvmResId( AVMEDIA_STR_ZOOM_100 ), AVMEDIA_ZOOMLEVEL_100 );
-    mpZoomListBox->InsertEntry( AvmResId( AVMEDIA_STR_ZOOM_200 ), AVMEDIA_ZOOMLEVEL_200 );
-    mpZoomListBox->InsertEntry( AvmResId( AVMEDIA_STR_ZOOM_FIT ), AVMEDIA_ZOOMLEVEL_FIT );
-    mpZoomListBox->SetHelpId( HID_AVMEDIA_ZOOMLISTBOX );
+    mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_50), AvmResId( AVMEDIA_STR_ZOOM_50 ));
+    mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_100), AvmResId( AVMEDIA_STR_ZOOM_100 ));
+    mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_200), AvmResId( AVMEDIA_STR_ZOOM_200 ));
+    mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_FIT),  AvmResId( AVMEDIA_STR_ZOOM_FIT ));
+    mxZoomListBox->set_help_id( HID_AVMEDIA_ZOOMLISTBOX );
+    mxZoomListBox->set_tooltip_text(AvmResId( AVMEDIA_STR_ZOOM_TOOLTIP ));
 
     const OUString aTimeText( " 00:00:00/00:00:00 " );
-    mpTimeEdit->SetText( aTimeText );
-    mpTimeEdit->SetUpdateMode( true );
-    mpTimeEdit->SetHelpId( HID_AVMEDIA_TIMEEDIT );
-    mpTimeEdit->Disable();
-    mpTimeEdit->Show();
+    mxTimeEdit->set_text( aTimeText );
+    mxTimeEdit->set_help_id( HID_AVMEDIA_TIMEEDIT );
+    mxTimeEdit->set_sensitive(false);
 
-    mpVolumeSlider->SetRange( Range( AVMEDIA_DB_RANGE, 0 ) );
-    mpVolumeSlider->SetUpdateMode( true );
-    mpVolumeSlider->SetQuickHelpText( AvmResId( AVMEDIA_STR_VOLUME ));
-    mpVolumeSlider->SetHelpId( HID_AVMEDIA_VOLUMESLIDER );
+    mxVolumeSlider->set_range(AVMEDIA_DB_RANGE, 0);
+    mxVolumeSlider->set_tooltip_text( AvmResId( AVMEDIA_STR_VOLUME ));
+    mxVolumeSlider->set_help_id( HID_AVMEDIA_VOLUMESLIDER );
 
-    mpTimeSlider->SetRange( Range( 0, AVMEDIA_TIME_RANGE ) );
-    mpTimeSlider->SetUpdateMode( true );
-    mpTimeSlider->SetQuickHelpText( AvmResId( AVMEDIA_STR_POSITION ));
-    mpTimeSlider->SetStyle(WB_HORZ | WB_DRAG | WB_3DLOOK);
-    mpTimeSlider->SetScrollTypeSet(true);
+    mxTimeSlider->set_range( 0, AVMEDIA_TIME_RANGE );
+    mxTimeSlider->set_tooltip_text( AvmResId( AVMEDIA_STR_POSITION ));
 }
 
-void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
+void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
 {
-    const bool bValidURL = !aMediaItem.getURL().isEmpty();
-    mpPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );
-    mpPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_PAUSE, bValidURL );
-    mpPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_STOP, bValidURL );
-    mpPlayToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_LOOP, bValidURL );
-    mpMuteToolBox->EnableItem( AVMEDIA_TOOLBOXITEM_MUTE, bValidURL );
+    const bool bValidURL = !rMediaItem.getURL().isEmpty();
+    mxPlayToolBox->set_item_sensitive("play", bValidURL);
+    mxPlayToolBox->set_item_sensitive("pause", bValidURL);
+    mxPlayToolBox->set_item_sensitive("stop", bValidURL);
+    mxPlayToolBox->set_item_sensitive("loop", bValidURL);
+    mxMuteToolBox->set_item_sensitive("mute", bValidURL);
     if( !bValidURL )
     {
-        mpZoomListBox->Disable();
-        mpMuteToolBox->Disable();
+        mxZoomListBox->set_sensitive(false);
+        mxMuteToolBox->set_sensitive(false);
     }
     else
     {
-        mpPlayToolBox->Enable();
-        mpMuteToolBox->Enable();
-        if( aMediaItem.getState() == MediaState::Play )
+        mxPlayToolBox->set_sensitive(true);
+        mxMuteToolBox->set_sensitive(true);
+        if( rMediaItem.getState() == MediaState::Play )
         {
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
+            mxPlayToolBox->set_item_active("play", true);
+            mxPlayToolBox->set_item_active("pause", false);
+            mxPlayToolBox->set_item_active("stop", false);
         }
-        else if( aMediaItem.getState() == MediaState::Pause )
+        else if( rMediaItem.getState() == MediaState::Pause )
         {
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP, false );
+            mxPlayToolBox->set_item_active("play", false);
+            mxPlayToolBox->set_item_active("pause", true);
+            mxPlayToolBox->set_item_active("stop", false);
         }
         else
         {
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY, false );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
-            mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_STOP );
+            mxPlayToolBox->set_item_active("play", false);
+            mxPlayToolBox->set_item_active("pause", false);
+            mxPlayToolBox->set_item_active("stop", true);
         }
-        mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_LOOP, aMediaItem.isLoop() );
-        mpMuteToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_MUTE, aMediaItem.isMute() );
-        if( !mpZoomListBox->IsTravelSelect() && !mpZoomListBox->IsInDropDown() )
+        mxPlayToolBox->set_item_active("loop", rMediaItem.isLoop());
+        mxMuteToolBox->set_item_active("mute", rMediaItem.isMute());
+        if (!mbCurrentlySettingZoom)
         {
             sal_uInt16 nSelectEntryPos ;
 
-            switch( aMediaItem.getZoom() )
+            switch( rMediaItem.getZoom() )
             {
                 case css::media::ZoomLevel_ZOOM_1_TO_2:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_50;
@@ -205,134 +201,61 @@ void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
 
             if( nSelectEntryPos != AVMEDIA_ZOOMLEVEL_INVALID )
             {
-                mpZoomListBox->Enable();
-                mpZoomListBox->SelectEntryPos( nSelectEntryPos );
+                mxZoomListBox->show();
+                mxZoomListBox->set_sensitive(true);
+                mxZoomListBox->set_active(nSelectEntryPos);
             }
             else
-                mpZoomListBox->Disable();
+                mxZoomListBox->set_sensitive(false);
         }
     }
 }
 
-void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, sal_uInt16 nId)
+void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, const OString& rId)
 {
-    switch( nId )
+    if (rId == "apply")
     {
-        case AVMEDIA_TOOLBOXITEM_INSERT:
-        {
-            MediaFloater* pFloater = avmedia::getMediaFloater();
+        MediaFloater* pFloater = avmedia::getMediaFloater();
 
-            if( pFloater )
-                pFloater->dispatchCurrentURL();
-        }
-        break;
+        if( pFloater )
+            pFloater->dispatchCurrentURL();
+    }
+    else if (rId == "play")
+    {
+        aExecItem.setState( MediaState::Play );
 
-        case AVMEDIA_TOOLBOXITEM_PLAY:
-        {
-            aExecItem.setState( MediaState::Play );
-
-            if( aItem.getTime() == aItem.getDuration() )
-                aExecItem.setTime( 0.0 );
-            else
-                aExecItem.setTime( aItem.getTime() );
-        }
-        break;
-
-        case AVMEDIA_TOOLBOXITEM_PAUSE:
-        {
-            aExecItem.setState( MediaState::Pause );
-        }
-        break;
-
-        case AVMEDIA_TOOLBOXITEM_STOP:
-        {
-            aExecItem.setState( MediaState::Stop );
+        if( aItem.getTime() == aItem.getDuration() )
             aExecItem.setTime( 0.0 );
-        }
-        break;
-
-        case AVMEDIA_TOOLBOXITEM_MUTE:
-        {
-            aExecItem.setMute( !mpMuteToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_MUTE ) );
-        }
-        break;
-
-        case AVMEDIA_TOOLBOXITEM_LOOP:
-        {
-            aExecItem.setLoop( !mpPlayToolBox->IsItemChecked( AVMEDIA_TOOLBOXITEM_LOOP ) );
-        }
-        break;
-
-        default:
-        break;
+        else
+            aExecItem.setTime( aItem.getTime() );
+    }
+    else if (rId == "pause")
+    {
+        aExecItem.setState( MediaState::Pause );
+    }
+    else if (rId == "stop")
+    {
+        aExecItem.setState( MediaState::Stop );
+        aExecItem.setTime( 0.0 );
+    }
+    else if (rId == "mute")
+    {
+        aExecItem.setMute( mxMuteToolBox->get_item_active("mute") );
+    }
+    else if (rId == "loop")
+    {
+        aExecItem.setLoop( mxPlayToolBox->get_item_active("loop") );
     }
 }
 
-Image MediaControlBase::GetImage(sal_Int32 nImageId)
+void MediaControlBase::disposeWidgets()
 {
-    const bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
-
-    OUString sImageId;
-
-    if (bLarge)
-    {
-        switch (nImageId)
-        {
-            default:
-            case AVMEDIA_TOOLBOXITEM_PLAY:
-                sImageId = AVMEDIA_IMG_PLAY_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_PAUSE:
-                sImageId = AVMEDIA_IMG_PAUSE_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_STOP:
-                sImageId = AVMEDIA_IMG_STOP_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_MUTE:
-                sImageId = AVMEDIA_IMG_MUTE_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_LOOP:
-                sImageId = AVMEDIA_IMG_LOOP_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_OPEN:
-                sImageId = AVMEDIA_IMG_OPEN_LARGE;
-                break;
-            case AVMEDIA_TOOLBOXITEM_INSERT:
-                sImageId = AVMEDIA_IMG_INSERT_LARGE;
-                break;
-
-        }
-    }
-    else
-    {
-        switch (nImageId)
-        {
-            default:
-            case AVMEDIA_TOOLBOXITEM_PLAY:
-                sImageId = AVMEDIA_IMG_PLAY_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_PAUSE:
-                sImageId = AVMEDIA_IMG_PAUSE_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_STOP:
-                sImageId = AVMEDIA_IMG_STOP_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_MUTE:
-                sImageId = AVMEDIA_IMG_MUTE_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_LOOP:
-                sImageId = AVMEDIA_IMG_LOOP_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_OPEN:
-                sImageId = AVMEDIA_IMG_OPEN_NORMAL;
-                break;
-            case AVMEDIA_TOOLBOXITEM_INSERT:
-                sImageId = AVMEDIA_IMG_INSERT_NORMAL;
-                break;
-        }
-    }
-
-    return Image(StockImage::Yes, sImageId);
+    mxZoomListBox.reset();
+    mxTimeEdit.reset();
+    mxVolumeSlider.reset();
+    mxMuteToolBox.reset();
+    mxTimeSlider.reset();
+    mxPlayToolBox.reset();
 }
 
 }
