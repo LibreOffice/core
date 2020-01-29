@@ -2510,10 +2510,9 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     }
 
     const Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
-    SfxLokHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), nType,
-                                      aPos, nCount,
-                                      MouseEventModifiers::SIMPLECLICK,
+    LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    SfxLokHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }
 
 void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
