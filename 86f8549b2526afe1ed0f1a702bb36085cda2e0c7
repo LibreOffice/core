@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0ff92af_b1728284",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T12:23:52Z",
+      "side": 1,
+      "message": "It seems, this is an unnecessary duplicate.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 1,
+        "endLine": 1071,
+        "endChar": 172
+      },
+      "revId": "86f8549b2526afe1ed0f1a702bb36085cda2e0c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b39f57a_569ce998",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T12:23:52Z",
+      "side": 1,
+      "message": "aPropGrabBag",
+      "range": {
+        "startLine": 1072,
+        "startChar": 52,
+        "endLine": 1072,
+        "endChar": 64
+      },
+      "revId": "86f8549b2526afe1ed0f1a702bb36085cda2e0c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef991da4_4ae85cce",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T12:23:52Z",
+      "side": 1,
+      "message": "rVal as reference (see about Hungarian notation used here: https://wiki.openoffice.org/wiki/Writer/Code_Conventions#variables.2C_parameters.2C_members_and_constants) [Interesting, I didn\u0027t know about the special the is/has boolean prefix :)",
+      "range": {
+        "startLine": 1072,
+        "startChar": 45,
+        "endLine": 1072,
+        "endChar": 49
+      },
+      "revId": "86f8549b2526afe1ed0f1a702bb36085cda2e0c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
