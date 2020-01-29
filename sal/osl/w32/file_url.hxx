@@ -59,11 +59,12 @@ DWORD GetCaseCorrectPathName (
     bool bCheckExistence
 );
 
-oslFileError osl_getSystemPathFromFileURL_ (
-    rtl_uString * strURL,
-    rtl_uString ** pustrPath,
-    bool bAllowRelative
-);
+DWORD GetCaseCorrectPathName (
+    LPCWSTR lpszShortPath,  // file name
+    LPWSTR  lpszLongPath,   // path buffer
+    DWORD   cchBuffer,      // size of path buffer
+    BOOL bCheckExistence
+ );
 
 extern oslMutex g_CurrentDirectoryMutex;
 

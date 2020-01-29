@@ -444,7 +444,7 @@ static oslFileError osl_openLocalRoot(
 
     *pDirectory = nullptr;
 
-    error = osl_getSystemPathFromFileURL_( strDirectoryPath, &strSysPath, false );
+    error = osl_getSystemPathFromFileURL_( strDirectoryPath, false );
     if ( osl_File_E_None == error )
     {
         Directory_Impl  *pDirImpl;
@@ -672,7 +672,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     OUString sys_path;
     oslFileError osl_error =
-        osl_getSystemPathFromFileURL_(aDirectoryUrl, &sys_path.pData, false);
+        osl_getSystemPathFromFileURL_(aDirectoryUrl, false);
 
     if (osl_error != osl_File_E_None)
         return osl_error;
@@ -695,7 +695,7 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
 {
     rtl_uString *strSysPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
+    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, false );
 
     if ( osl_File_E_None == error )
     {
@@ -730,7 +730,7 @@ oslFileError osl_createDirectoryWithFlags(rtl_uString * strPath, sal_uInt32)
 oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
 {
     rtl_uString *strSysPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
+    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, false );
 
     if ( osl_File_E_None == error )
     {
@@ -755,7 +755,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
         rtl_uString *strSysDirectoryPath = nullptr;
         DWORD       dwPathType;
 
-        error = osl_getSystemPathFromFileURL_( strDirectoryPath, &strSysDirectoryPath, false );
+        error = osl_getSystemPathFromFileURL_( strDirectoryPath, false );
 
         if ( osl_File_E_None != error )
                 return error;
@@ -999,7 +999,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
     *pItem = nullptr;
 
-    error = osl_getSystemPathFromFileURL_( strFilePath, &strSysFilePath, false );
+    error = osl_getSystemPathFromFileURL_( strFilePath, false );
 
     if ( osl_File_E_None != error )
             return error;
@@ -1433,7 +1433,7 @@ oslFileError SAL_CALL osl_getVolumeInformation(
         return osl_File_E_INVAL;
 
     OUString system_path;
-    oslFileError error = osl_getSystemPathFromFileURL_(ustrURL, &system_path.pData, false);
+    oslFileError error = osl_getSystemPathFromFileURL_(ustrURL, false);
 
     if (osl_File_E_None != error)
         return error;
@@ -1571,9 +1571,6 @@ static oslFileError osl_getServerInfo(
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        oslFileError error = osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
-        if (error != osl_File_E_None)
-            return error;
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
     return osl_File_E_None;
@@ -1680,17 +1677,6 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
-                                                         o3tl::toW( aBuffer ),
-                                                         aBuffer.getBufSizeInSymbols(),
-                                                         true );
-
-            if ( nNewLen )
-            {
-                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
-                sFullPath = OUString( pItemImpl->m_pFullPath );
-                pItemImpl->bFullPathNormalized = true;
-            }
         }
 
         oslFileError error = osl_getFileURLFromSystemPath( sFullPath.pData, &pStatus->ustrFileURL );
@@ -1712,7 +1698,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     bool            fSuccess;
 
     // Converts the normalized path into a systempath
-    error = osl_getSystemPathFromFileURL_( ustrFileURL, &ustrSysPath, false );
+    error = osl_getSystemPathFromFileURL_( ustrFileURL, false );
 
     if ( osl_File_E_None != error )
         return error;
@@ -1761,7 +1747,7 @@ oslFileError SAL_CALL osl_setFileTime(
     HANDLE hFile;
     bool fSuccess;
 
-    error=osl_getSystemPathFromFileURL_(filePath, &sysPath, false);
+    error=osl_getSystemPathFromFileURL_(filePath, false);
 
     if (error==osl_File_E_INVAL)
         return error;
