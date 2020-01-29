@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e89a11ed_8102f572",
+        "filename": "chart2/source/controller/main/PositionAndSizeHelper.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:38:10Z",
+      "side": 1,
+      "message": "data label",
+      "range": {
+        "startLine": 76,
+        "startChar": 34,
+        "endLine": 76,
+        "endChar": 43
+      },
+      "revId": "a14f1982c3c953e511b36d315faa31c65aac5d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de82d700_20dcf92e",
         "filename": "chart2/source/controller/main/PositionAndSizeHelper.cxx",
         "patchSetId": 13
