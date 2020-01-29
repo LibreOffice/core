@@ -652,9 +652,6 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
     if ( strDecodedURL )
         rtl_uString_release( strDecodedURL );
 
-    if ( osl_File_E_None == nError )
-        rtl_uString_assign( pustrPath, strTempPath );
-
     if ( strTempPath )
         rtl_uString_release( strTempPath );
 
@@ -663,7 +660,6 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
 
     return nError;
 }
-
 oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** pstrURL )
 {
     oslFileError nError = osl_File_E_INVAL; /* Assume failure */
