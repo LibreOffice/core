@@ -1213,24 +1213,29 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
             {
                 if ( aSecPropSet.SeekToContent( DFF_Prop_tableRowProperties, rSt ) )
                 {
-                    sal_Int16 i, nRowCount = 0;
-                    rSt.ReadInt16( nRowCount ).ReadInt16( i ).ReadInt16( i );
-                    const size_t nMinRecordSize = 4;
-                    const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
-                    if (nRowCount > 0 && o3tl::make_unsigned(nRowCount) > nMaxRecords)
+                    sal_Int16 i, nReadRowCount = 0;
+                    rSt.ReadInt16( nReadRowCount ).ReadInt16( i ).ReadInt16( i );
+                    if (nReadRowCount > 0)
                     {
-                        SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
-                                 " max possible entries, but " << nRowCount << " claimed, truncating");
-                        nRowCount = nMaxRecords;
-                    }
-                    if (nRowCount > 0)
-                    {
-                        std::unique_ptr<sal_uInt32[]> pTableArry(new sal_uInt32[ nRowCount + 2 ]);
-                        pTableArry[ 0 ] = nTableProperties;
-                        pTableArry[ 1 ] = nRowCount;
-                        for ( i = 0; i < nRowCount; i++ )
-                            rSt.ReadUInt32( pTableArry[ i + 2 ] );
-                        rData.pTableRowProperties = std::move(pTableArry);
+                        const size_t nMinRecordSize = 4;
+                        const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
+
+                        auto nRowCount = o3tl::make_unsigned(nReadRowCount);
+                        if (nRowCount > nMaxRecords)
+                        {
+                            SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
+                                     " max possible entries, but " << nRowCount << " claimed, truncating");
+                            nRowCount = nMaxRecords;
+                        }
+                        if (nRowCount > 0)
+                        {
+                            std::unique_ptr<sal_uInt32[]> pTableArry(new sal_uInt32[ nRowCount + 2 ]);
+                            pTableArry[ 0 ] = nTableProperties;
+                            pTableArry[ 1 ] = nRowCount;
+                            for (decltype(nRowCount) nRow = 0; nRow < nRowCount; ++nRow)
+                                rSt.ReadUInt32(pTableArry[nRow + 2]);
+                            rData.pTableRowProperties = std::move(pTableArry);
+                        }
                     }
                 }
             }
