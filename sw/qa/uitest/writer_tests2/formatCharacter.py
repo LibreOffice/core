@@ -113,7 +113,7 @@ class formatCharacter(UITestCase):
         xEmphasis = xDialog.getChild("emphasislb")
         xPosition = xDialog.getChild("positionlb")
 
-        self.assertEqual(get_state_as_dict(xEffects)["SelectEntryText"], "Capitals")
+        self.assertEqual(get_state_as_dict(xEffects)["SelectEntryText"], "UPPERCASE")
         self.assertEqual(get_state_as_dict(xRelief)["SelectEntryText"], "Embossed")
         self.assertEqual(get_state_as_dict(xBlinking)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xHidden)["Selected"], "true")
