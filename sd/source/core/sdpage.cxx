@@ -21,6 +21,7 @@
 
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/lok.hxx>
 
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
@@ -35,6 +36,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/hint.hxx>
@@ -2602,36 +2604,35 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
                 aString = SdResId( STR_PRESOBJ_MPNOTESTITLE );
             }
         }
+        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            aString = SdResId(STR_PRESOBJ_TITLE_MOBILE);
         else
-        {
-            aString = SdResId( STR_PRESOBJ_TITLE );
-        }
+            aString = SdResId(STR_PRESOBJ_TITLE);
     }
     else if (eObjKind == PRESOBJ_OUTLINE)
     {
         if (mbMaster)
-        {
-            aString = SdResId( STR_PRESOBJ_MPOUTLINE );
-        }
+            aString = SdResId(STR_PRESOBJ_MPOUTLINE);
+        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            aString = SdResId(STR_PRESOBJ_OUTLINE_MOBILE);
         else
-        {
-            aString = SdResId( STR_PRESOBJ_OUTLINE );
-        }
+            aString = SdResId(STR_PRESOBJ_OUTLINE);
     }
     else if (eObjKind == PRESOBJ_NOTES)
     {
         if (mbMaster)
-        {
-            aString = SdResId( STR_PRESOBJ_MPNOTESTEXT );
-        }
+            aString = SdResId(STR_PRESOBJ_MPNOTESTEXT);
+        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            aString = SdResId(STR_PRESOBJ_NOTESTEXT_MOBILE);
         else
-        {
-            aString = SdResId( STR_PRESOBJ_NOTESTEXT );
-        }
+            aString = SdResId(STR_PRESOBJ_NOTESTEXT);
     }
     else if (eObjKind == PRESOBJ_TEXT)
     {
-        aString = SdResId( STR_PRESOBJ_TEXT );
+        if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            aString = SdResId(STR_PRESOBJ_TEXT_MOBILE);
+        else
+            aString = SdResId(STR_PRESOBJ_TEXT);
     }
     else if (eObjKind == PRESOBJ_GRAPHIC)
     {
