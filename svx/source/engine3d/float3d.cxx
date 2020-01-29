@@ -83,7 +83,7 @@ namespace {
 
 Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pInBindings, pCW, pParent,
-        "Docking3DEffects", "svx/ui/docking3deffects.ui", true)
+        "Docking3DEffects", "svx/ui/docking3deffects.ui")
 
     , m_xBtnGeo(m_xBuilder->weld_toggle_button("geometry"))
     , m_xBtnRepresentation(m_xBuilder->weld_toggle_button("representation"))
