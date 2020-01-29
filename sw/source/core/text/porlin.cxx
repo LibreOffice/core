@@ -114,12 +114,12 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
             break;
         case 900:
             nPos = sal_uInt16( rInf.Y() );
-            nPos -= nLastWidth + nHalfView;
+            nPos -= nLastWidth - nHalfView;
             aInf.Y( nPos );
             break;
         case 1800:
             nPos = sal_uInt16( rInf.X() );
-            nPos -= nLastWidth + nHalfView;
+            nPos -= nLastWidth - nHalfView;
             aInf.X( nPos );
             break;
         case 2700:
