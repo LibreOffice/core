@@ -44,6 +44,7 @@ accessibility/inc/extended/accessibletabbarpage.hxx
 accessibility/inc/extended/accessibletabbarpagelist.hxx
 accessibility/inc/extended/accessibletablistbox.hxx
 accessibility/inc/extended/accessibletablistboxtable.hxx
+accessibility/inc/extended/textwindowaccessibility.hxx
 accessibility/inc/helper/IComboListBoxHelper.hxx
 accessibility/inc/helper/accresmgr.hxx
 accessibility/inc/helper/characterattributeshelper.hxx
@@ -111,6 +112,7 @@ accessibility/source/extended/accessibletabbarpage.cxx
 accessibility/source/extended/accessibletabbarpagelist.cxx
 accessibility/source/extended/accessibletablistbox.cxx
 accessibility/source/extended/accessibletablistboxtable.cxx
+accessibility/source/extended/textwindowaccessibility.cxx
 accessibility/source/helper/IComboListBoxHelper.cxx
 accessibility/source/helper/acc_factory.cxx
 accessibility/source/helper/accresmgr.cxx
@@ -643,9 +645,11 @@ bridges/source/cpp_uno/gcc3_solaris_sparc/except.cxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/share.hxx
 bridges/source/cpp_uno/gcc3_solaris_sparc/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_intel/cpp2uno.cxx
+bridges/source/cpp_uno/msvc_win32_intel/except.cxx
 bridges/source/cpp_uno/msvc_win32_intel/msci.hxx
 bridges/source/cpp_uno/msvc_win32_intel/uno2cpp.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/cpp2uno.cxx
+bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx
 bridges/source/cpp_uno/msvc_win32_x86-64/mscx.hxx
 bridges/source/cpp_uno/msvc_win32_x86-64/uno2cpp.cxx
 bridges/source/cpp_uno/shared/bridge.cxx
@@ -1594,6 +1598,7 @@ comphelper/source/misc/proxyaggregation.cxx
 comphelper/source/misc/random.cxx
 comphelper/source/misc/sequenceashashmap.cxx
 comphelper/source/misc/servicedecl.cxx
+comphelper/source/misc/sharedmutex.cxx
 comphelper/source/misc/simplefileaccessinteraction.cxx
 comphelper/source/misc/solarmutex.cxx
 comphelper/source/misc/stillreadwriteinteraction.cxx
@@ -18351,6 +18356,7 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx
 writerfilter/source/ooxml/OOXMLStreamImpl.cxx
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx
 writerfilter/source/ooxml/qnametostrcore.cxx
+xmlhelp/source/cxxhelp/inc/tvfactory.hxx
 xmlhelp/source/cxxhelp/inc/tvread.hxx
 xmlhelp/source/cxxhelp/provider/content.cxx
 xmlhelp/source/cxxhelp/provider/content.hxx
@@ -18375,6 +18381,7 @@ xmlhelp/source/cxxhelp/provider/resultsetforroot.hxx
 xmlhelp/source/cxxhelp/provider/services.cxx
 xmlhelp/source/cxxhelp/provider/urlparameter.cxx
 xmlhelp/source/cxxhelp/provider/urlparameter.hxx
+xmlhelp/source/cxxhelp/test/abidebug.hxx
 xmlhelp/source/cxxhelp/test/searchdemo.cxx
 xmlhelp/source/treeview/tvfactory.cxx
 xmlhelp/source/treeview/tvread.cxx
