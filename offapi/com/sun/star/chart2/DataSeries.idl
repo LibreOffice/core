@@ -184,7 +184,7 @@ service DataSeries
     /** A sequence of indexes denoting which data points shouldn't be
         shown in the legend.
 
-        @since LibreOffice 6.5
+        @since LibreOffice 7.0
      */
     [optional, property] sequence<long>             DeletedLegendEntries;
 };

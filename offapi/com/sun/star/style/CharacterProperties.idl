@@ -462,7 +462,7 @@ published service CharacterProperties
 
     /** This is the transparency of the character text.
 
-        @since LibreOffice 6.5
+        @since LibreOffice 7.0
 
         <p>The value 100 means entirely transparent, while 0 means not transparent at all.</p>
     */

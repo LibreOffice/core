@@ -50,7 +50,7 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
         <li> boolean LoadPageStyles </li>
         <li> boolean LoadNumberingStyles </li>
         <li> boolean OverwriteStyles</li>
-        <li> com::sun::star::io::XInputStream InputStream (since LibreOffice 6.5)</li>
+        <li> com::sun::star::io::XInputStream InputStream (since LibreOffice 7.0)</li>
         </ul>
      <p>As the default, all supported style families are loaded and existing styles are overwritten.</p>
      */

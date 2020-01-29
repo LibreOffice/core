@@ -210,7 +210,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
         <p>The rest of document content will not be signed.</p>
 
-        @since LibreOffice 6.5
+        @since LibreOffice 7.0
     */
     boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
@@ -218,7 +218,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
     /** signs the full Package, which means everything in the storage except the content of META-INF with the provided certificate.
 
-        @since LibreOffice 6.5
+        @since LibreOffice 7.0
     */
     boolean signPackageWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
