@@ -50,6 +50,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <map>
 
 // Size check
 #define NAVI_ENTRIES 18
@@ -656,8 +657,12 @@ NavElementBox_Impl::NavElementBox_Impl(
 {
     m_xWidget->set_size_request(42, -1); // set to something small so the size set at the .ui takes precedence
 
-    for (sal_uInt16 i = 0; i < NID_COUNT; ++i)
-        m_xWidget->append("", SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
+    std::map<OUString,const std::pair<sal_uInt16, OUStringLiteral>() > my_map;
+    for(size_t i = 0; i<=NID_COUNT ; i++)
+        my_map[SwResId(aNavigationStrIds[i])]= std::make_pair(aNavigationInsertIds[i], aNavigationImgIds[i]);
+
+    for (auto const &itr : my_map)
+        m_xWidget->append("", itr.first, itr.second.second);
     m_xWidget->connect_changed(LINK(this, NavElementBox_Impl, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, NavElementBox_Impl, KeyInputHdl));
 
