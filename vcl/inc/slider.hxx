@@ -24,7 +24,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 
-class VCL_DLLPUBLIC Slider final : public Control
+class Slider final : public Control
 {
 private:
     tools::Rectangle       maChannel1Rect;
@@ -55,20 +55,20 @@ private:
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplInitSettings();
-    SAL_DLLPRIVATE void ImplUpdateRects( bool bUpdate = true );
-    SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
-    SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE bool ImplIsPageUp( const Point& rPos );
-    SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
-    SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );
-    SAL_DLLPRIVATE long ImplDoAction( bool bCallEndSlide );
-    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction );
-    SAL_DLLPRIVATE void ImplDoSlide( long nNewPos );
-    SAL_DLLPRIVATE void ImplDoSlideAction( ScrollType eScrollType );
+    void ImplInit( vcl::Window* pParent, WinBits nStyle );
+    void ImplInitSettings();
+    void ImplUpdateRects( bool bUpdate = true );
+    long ImplCalcThumbPos( long nPixPos );
+    long ImplCalcThumbPosPix( long nPos );
+    void ImplCalc( bool bUpdate = true );
+    void ImplDraw(vcl::RenderContext& rRenderContext);
+    bool ImplIsPageUp( const Point& rPos );
+    bool ImplIsPageDown( const Point& rPos );
+    long ImplSlide( long nNewPos, bool bCallEndSlide );
+    long ImplDoAction( bool bCallEndSlide );
+    void ImplDoMouseAction( const Point& rPos, bool bCallAction );
+    void ImplDoSlide( long nNewPos );
+    void ImplDoSlideAction( ScrollType eScrollType );
 
 public:
                     Slider( vcl::Window* pParent, WinBits nStyle);

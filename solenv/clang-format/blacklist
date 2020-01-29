@@ -7837,7 +7837,6 @@ include/vcl/scopedbitmapaccess.hxx
 include/vcl/scrbar.hxx
 include/vcl/seleng.hxx
 include/vcl/settings.hxx
-include/vcl/slider.hxx
 include/vcl/sound.hxx
 include/vcl/spinfld.hxx
 include/vcl/split.hxx
@@ -17303,6 +17302,7 @@ vcl/inc/schedulerimpl.hxx
 vcl/inc/scrptrun.h
 vcl/inc/scrwnd.hxx
 vcl/inc/sft.hxx
+vcl/inc/slider.hxx
 vcl/inc/spin.hxx
 vcl/inc/strings.hxx
 vcl/inc/svdata.hxx
