@@ -1262,6 +1262,10 @@ public:
     virtual void set_value(int value) = 0;
     virtual int get_value() const = 0;
     virtual void set_range(int min, int max) = 0;
+
+    virtual void set_increments(int step, int page) = 0;
+    virtual void get_increments(int& step, int& page) const = 0;
+
     void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
 };
 
@@ -1986,6 +1990,7 @@ public:
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) = 0;
     virtual void set_item_popover(const OString& rIdent, weld::Widget* pPopover) = 0;
     virtual void set_item_visible(const OString& rIdent, bool bVisible) = 0;
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
     virtual bool get_item_visible(const OString& rIdent) const = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_item_label(const OString& rIdent) const = 0;
