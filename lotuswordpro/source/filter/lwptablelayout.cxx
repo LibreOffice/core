@@ -109,11 +109,11 @@ void LwpSuperTableLayout::Read()
  */
 LwpTableLayout* LwpSuperTableLayout::GetTableLayout()
 {
-    LwpObjectID& rID = GetChildTail();
+    LwpObjectID *pID = &GetChildTail();
 
-    while(!rID.IsNull())
+    while(pID && !pID->IsNull())
     {
-        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(rID.obj().get());
+        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pID->obj().get());
         if (!pLayout)
         {
             break;
@@ -122,7 +122,7 @@ LwpTableLayout* LwpSuperTableLayout::GetTableLayout()
         {
             return dynamic_cast<LwpTableLayout *>(pLayout);
         }
-        rID = pLayout->GetPrevious();
+        pID = &pLayout->GetPrevious();
     }
 
     return nullptr;
@@ -133,11 +133,11 @@ LwpTableLayout* LwpSuperTableLayout::GetTableLayout()
  */
 LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 {
-    LwpObjectID& rID = GetChildTail();
+    LwpObjectID *pID = &GetChildTail();
 
-    while(!rID.IsNull())
+    while(pID && !pID->IsNull())
     {
-        LwpLayout * pLayout = dynamic_cast<LwpLayout *>(rID.obj().get());
+        LwpLayout * pLayout = dynamic_cast<LwpLayout *>(pID->obj().get());
         if (!pLayout)
         {
             break;
@@ -147,7 +147,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
         {
             return dynamic_cast<LwpTableHeadingLayout *>(pLayout);
         }
-        rID = pLayout->GetPrevious();
+        pID = &pLayout->GetPrevious();
     }
 
     return nullptr;
@@ -229,8 +229,8 @@ double LwpSuperTableLayout::GetTableWidth()
 
         for(sal_uInt16 i =0; i< nCol; i++)
         {
-            LwpObjectID& rColumnID = pTableLayout->GetColumnLayoutHead();
-            LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+            LwpObjectID *pColumnID = &pTableLayout->GetColumnLayoutHead();
+            LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
             double dColumnWidth = dDefaultWidth;
             std::set<LwpColumnLayout*> aSeen;
             while (pColumnLayout)
@@ -241,8 +241,8 @@ double LwpSuperTableLayout::GetTableWidth()
                     dColumnWidth = pColumnLayout->GetWidth();
                     break;
                 }
-                rColumnID = pColumnLayout->GetNext();
-                pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+                pColumnID = &pColumnLayout->GetNext();
+                pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
                 if (aSeen.find(pColumnLayout) != aSeen.end())
                     throw std::runtime_error("loop in conversion");
             }
@@ -450,8 +450,8 @@ void LwpTableLayout::TraverseTable()
     m_WordProCellsMap.insert(m_WordProCellsMap.end(), nCount, m_pDefaultCellLayout);
 
     // set value
-    LwpObjectID& rRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    LwpObjectID* pRowID = &GetChildHead();
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     std::set<LwpRowLayout*> aSeen;
     while (pRowLayout)
     {
@@ -464,8 +464,8 @@ void LwpTableLayout::TraverseTable()
         pRowLayout->CollectMergeInfo();
         // end for 's analysis
 
-        rRowID = pRowLayout->GetNext();
-        pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        pRowID = &pRowLayout->GetNext();
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
         if (aSeen.find(pRowLayout) != aSeen.end())
             throw std::runtime_error("loop in conversion");
     }
@@ -569,8 +569,8 @@ void LwpTableLayout::RegisterColumns()
 
     // Get total width of justifiable columns
     // NOTICE: all default columns are regarded as justifiable columns
-    LwpObjectID& rColumnID = GetColumnLayoutHead();
-    LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+    LwpObjectID* pColumnID = &GetColumnLayoutHead();
+    LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
     std::set<LwpColumnLayout*> aSeen;
     while (pColumnLayout)
     {
@@ -589,8 +589,8 @@ void LwpTableLayout::RegisterColumns()
             nJustifiableColumn --;
         }
 
-        rColumnID = pColumnLayout->GetNext();
-        pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColumnID.obj().get());
+        pColumnID = &pColumnLayout->GetNext();
+        pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
 
         if (aSeen.find(pColumnLayout) != aSeen.end())
             throw std::runtime_error("loop in conversion");
@@ -670,15 +670,15 @@ void LwpTableLayout::RegisterRows()
     m_DefaultRowStyleName =  pXFStyleManager->AddStyle(std::move(xRowStyle)).m_pStyle->GetStyleName();
 
     // register style of rows
-    LwpObjectID& rRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    LwpObjectID * pRowID = &GetChildHead();
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
-        rRowID = pRowLayout->GetNext();
-        pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        pRowID = &pRowLayout->GetNext();
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     }
 }
 /**
@@ -1274,8 +1274,8 @@ void LwpTableLayout::ConvertColumn(rtl::Reference<XFTable> const & pXFTable, sal
     for (sal_uInt32 iLoop = 0; iLoop < static_cast<sal_uInt32>(nEndCol)-nStartCol; ++iLoop)
     {
         // add row to table
-        LwpObjectID& rColID = GetColumnLayoutHead();
-        LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColID.obj().get());
+        LwpObjectID *pColID = &GetColumnLayoutHead();
+        LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColID->obj().get());
         while (pColumnLayout)
         {
             if (pColumnLayout->GetColumnID() == (iLoop+nStartCol))
@@ -1283,8 +1283,8 @@ void LwpTableLayout::ConvertColumn(rtl::Reference<XFTable> const & pXFTable, sal
                 pXFTable->SetColumnStyle(iLoop+1,  pColumnLayout->GetStyleName());
                 break;
             }
-            rColID = pColumnLayout->GetNext();
-            pColumnLayout = dynamic_cast<LwpColumnLayout *>(rColID.obj().get());
+            pColID = &pColumnLayout->GetNext();
+            pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColID->obj().get());
         }
         if (!pColumnLayout)
         {
@@ -1417,15 +1417,15 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
  */
  LwpRowLayout* LwpTableLayout::GetRowLayout(sal_uInt16 nRow)
 {
-    LwpObjectID& rRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    LwpObjectID *pRowID = &GetChildHead();
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     while (pRowLayout)
     {
         if(pRowLayout->GetRowID() == nRow)
             return pRowLayout;
 
-        rRowID = pRowLayout->GetNext();
-        pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        pRowID = &pRowLayout->GetNext();
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     }
     return nullptr;
 }
