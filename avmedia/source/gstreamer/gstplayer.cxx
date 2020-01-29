@@ -819,12 +819,11 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     ::osl::MutexGuard aGuard(m_aMutex);
 
     uno::Reference< ::media::XPlayerWindow >    xRet;
-    awt::Size                                   aSize;
 
-    if (rArguments.getLength() > 1 && (rArguments[1] >>= maArea))
-        aSize = awt::Size(maArea.Width, maArea.Height);
-    else
-        aSize = getPreferredPlayerWindowSize();
+    if (rArguments.getLength() > 1)
+       rArguments[1] >>= maArea;
+
+    awt::Size aSize = getPreferredPlayerWindowSize();
 
     if( mbFakeVideo )
         preparePlaybin( maURL, nullptr );
