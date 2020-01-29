@@ -16,6 +16,24 @@
       "revId": "f8966bb398cf0623be841c618b123866801a063c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "055964a3_b15865e8",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:26:20Z",
+      "side": 1,
+      "message": "@Miklós: You are right, thanks for the suggestion! With the upcoming export fix, it will be possible to extend this part, too (also checking the case of the stacked area type, when there was a regression with the first patch set).",
+      "parentUuid": "a0239553_d1fa774a",
+      "revId": "f8966bb398cf0623be841c618b123866801a063c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
