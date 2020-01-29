@@ -50,6 +50,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <map>
 
 // Size check
 #define NAVI_ENTRIES 18
@@ -656,8 +657,12 @@ NavElementBox_Impl::NavElementBox_Impl(
 {
     m_xWidget->set_size_request(42, -1); // set to something small so the size set at the .ui takes precedence
 
-    for (sal_uInt16 i = 0; i < NID_COUNT; ++i)
-        m_xWidget->append("", SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
+    std::map<OUString, std::pair<sal_uInt16, rtl::OUString> > aStoreSortedNavigationIds;
+    for(sal_uInt16 i = 0; i < NID_COUNT; i++)
+        aStoreSortedNavigationIds[SwResId(aNavigationStrIds[i])] = std::make_pair(aNavigationInsertIds[i], aNavigationImgIds[i]);// for ordering of Navigation Pane
+
+    for (auto const &itr : aStoreSortedNavigationIds)
+        m_xWidget->append(OUString::number(itr.second.first), itr.first, itr.second.second);
     m_xWidget->connect_changed(LINK(this, NavElementBox_Impl, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, NavElementBox_Impl, KeyInputHdl));
 
@@ -682,8 +687,7 @@ IMPL_LINK(NavElementBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-        sal_uInt16 nPos = rComboBox.get_active();
-        sal_uInt16 nMoveType = aNavigationInsertIds[nPos];
+        sal_uInt16 nMoveType = rComboBox.get_active_id().toUInt32();
         SwView::SetMoveType( nMoveType );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs;
