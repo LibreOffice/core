@@ -1097,7 +1097,7 @@ sal_uInt16 SmElementsControl::itemAtPos(const Point& rPoint) const
 
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent)
     : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DockingElements",
-        "modules/smath/ui/dockingelements.ui", true)
+        "modules/smath/ui/dockingelements.ui")
     , mxElementsControl(new SmElementsControl(m_xBuilder->weld_scrolled_window("scrolledwindow")))
     , mxElementsControlWin(new weld::CustomWeld(*m_xBuilder, "element_selector", *mxElementsControl))
     , mxElementListBox(m_xBuilder->weld_combo_box("listbox"))

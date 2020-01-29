@@ -123,7 +123,7 @@ const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max
  */
 AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pInBindings, pCW, pParent,
-        "DockingAnimation", "modules/simpress/ui/dockinganimation.ui", true)
+        "DockingAnimation", "modules/simpress/ui/dockinganimation.ui")
     , m_xCtlDisplay(new SdDisplay)
     , m_xCtlDisplayWin(new weld::CustomWeld(*m_xBuilder, "preview", *m_xCtlDisplay))
     , m_xBtnFirst(m_xBuilder->weld_button("first"))

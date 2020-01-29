@@ -767,20 +767,15 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     required because the docking is implemented in Sfx through SfxChildWindows.
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-    bool bInterim)
-    : DockingWindow(pParent, bInterim ? "DockingWindow" : rID,
-                             bInterim ? "sfx/ui/dockingwindow.ui" : rUIXMLDescription)
+    vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
     , pBindings(pBindinx)
     , pMgr(pCW)
 {
-    if (bInterim)
-    {
-        m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-        m_xVclContentArea->Show();
-        m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
-        m_xContainer = m_xBuilder->weld_container(rID);
-    }
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xContainer = m_xBuilder->weld_container(rID);
 
     pImpl.reset(new SfxDockingWindow_Impl(this));
 }

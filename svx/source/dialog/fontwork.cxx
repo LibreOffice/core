@@ -176,7 +176,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
                                      SfxChildWindow *pCW,
                                      vcl::Window* _pParent)
-    : SfxDockingWindow(pBindinx, pCW, _pParent, "DockingFontwork", "svx/ui/dockingfontwork.ui", true)
+    : SfxDockingWindow(pBindinx, pCW, _pParent, "DockingFontwork", "svx/ui/dockingfontwork.ui")
     , rBindings(*pBindinx)
     , aInputIdle("SvxFontWorkDialog Input")
     , nSaveShadowX(0)
