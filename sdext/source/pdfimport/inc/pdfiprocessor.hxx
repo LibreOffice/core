@@ -37,9 +37,6 @@
 #include "treevisitorfactory.hxx"
 #include "genericelements.hxx"
 
-#include <boost/bimap/bimap.hpp>
-#include <boost/bimap/unordered_set_of.hpp>
-
 namespace pdfi
 {
 
@@ -160,10 +157,8 @@ namespace pdfi
         typedef std::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef boost::bimaps::bimap<
-                             boost::bimaps::unordered_set_of<GraphicsContext, GraphicsContextHash>,
-                             boost::bimaps::unordered_set_of<sal_Int32>
-                            > GCToIdBiMap;
+        typedef std::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
+        typedef std::unordered_map<GraphicsContext, sal_Int32, GraphicsContextHash> GCToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
@@ -178,7 +173,8 @@ namespace pdfi
 
         GraphicsContextStack               m_aGCStack;
         sal_Int32                          m_nNextGCId;
-        GCToIdBiMap                        m_aGCToId;
+        IdToGCMap                          m_aIdToGC;
+        GCToIdMap                          m_aGCToId;
 
         ImageContainer                     m_aImages;
 

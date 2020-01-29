@@ -54,6 +54,7 @@ namespace pdfi
     m_aFontToId(),
     m_aGCStack(),
     m_nNextGCId( 1 ),
+    m_aIdToGC(),
     m_aGCToId(),
     m_aImages(),
     m_nPages(0),
@@ -65,12 +66,13 @@ namespace pdfi
     aDefFont.isBold     = false;
     aDefFont.isItalic   = false;
     aDefFont.size       = 10*PDFI_OUTDEV_RESOLUTION/72;
-    m_aIdToFont[ 0 ]    = aDefFont;
-    m_aFontToId[ aDefFont ] = 0;
+    m_aIdToFont.insert({0, aDefFont});
+    m_aFontToId.insert({aDefFont, 0});
 
     GraphicsContext aDefGC;
     m_aGCStack.push_back( aDefGC );
-    m_aGCToId.insert(GCToIdBiMap::relation(aDefGC, 0));
+    m_aGCToId.insert({aDefGC, 0});
+    m_aIdToGC.insert({0, aDefGC});
 }
 
 void PDFIProcessor::setPageNum( sal_Int32 nPages )
@@ -468,12 +470,13 @@ const FontAttributes& PDFIProcessor::getFont( sal_Int32 nFontId ) const
 sal_Int32 PDFIProcessor::getGCId( const GraphicsContext& rGC )
 {
     sal_Int32 nGCId = 0;
-    auto it = m_aGCToId.left.find( rGC );
-    if( it != m_aGCToId.left.end() )
+    auto it = m_aGCToId.find( rGC );
+    if( it != m_aGCToId.end() )
         nGCId = it->second;
     else
     {
-        m_aGCToId.insert(GCToIdBiMap::relation(rGC, m_nNextGCId));
+        m_aGCToId.insert({rGC, m_nNextGCId});
+        m_aIdToGC.insert({m_nNextGCId, rGC});
         nGCId = m_nNextGCId;
         m_nNextGCId++;
     }
@@ -483,9 +486,9 @@ sal_Int32 PDFIProcessor::getGCId( const GraphicsContext& rGC )
 
 const GraphicsContext& PDFIProcessor::getGraphicsContext( sal_Int32 nGCId ) const
 {
-    auto it = m_aGCToId.right.find( nGCId );
-    if( it == m_aGCToId.right.end() )
-        it = m_aGCToId.right.find( 0 );
+    auto it = m_aIdToGC.find( nGCId );
+    if( it == m_aIdToGC.end() )
+        it = m_aIdToGC.find( 0 );
     return it->second;
 }
 
