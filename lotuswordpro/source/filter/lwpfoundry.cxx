@@ -216,15 +216,15 @@ LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
     if (!pHeadHolder)
         return nullptr;
 
-    LwpObjectID& rObjID = pHeadHolder->GetHeadID();
-    LwpBookMark* pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
+    LwpObjectID* pObjID = &pHeadHolder->GetHeadID();
+    LwpBookMark* pBookMark = dynamic_cast<LwpBookMark*>(pObjID->obj().get());
 
     while (pBookMark)
     {
         if (pBookMark->IsRightMarker(objMarker))
             return pBookMark;
-        rObjID = pBookMark->GetNext();
-        pBookMark = dynamic_cast<LwpBookMark*>(rObjID.obj().get());
+        pObjID = &pBookMark->GetNext();
+        pBookMark = dynamic_cast<LwpBookMark*>(pObjID->obj().get());
     }
     return nullptr;
 }
