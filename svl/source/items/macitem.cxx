@@ -86,13 +86,15 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
     sal_uInt16 nVersion;
     rStrm.ReadUInt16( nVersion );
 
-    short nMacro(0);
-    rStrm.ReadInt16(nMacro);
-    if (nMacro < 0)
+    short nReadMacro(0);
+    rStrm.ReadInt16(nReadMacro);
+    if (nReadMacro < 0)
     {
-        SAL_WARN("editeng", "Parsing error: negative value " << nMacro);
+        SAL_WARN("editeng", "Parsing error: negative value " << nReadMacro);
         return;
     }
+
+    auto nMacro = o3tl::make_unsigned(nReadMacro);
 
     const size_t nMinStringSize = rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE ? 4 : 2;
     size_t nMinRecordSize = 2 + 2*nMinStringSize;
@@ -100,14 +102,14 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         nMinRecordSize+=2;
 
     const size_t nMaxRecords = rStrm.remainingSize() / nMinRecordSize;
-    if (o3tl::make_unsigned(nMacro) > nMaxRecords)
+    if (nMacro > nMaxRecords)
     {
         SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
                  " max possible entries, but " << nMacro<< " claimed, truncating");
         nMacro = nMaxRecords;
     }
 
-    for (short i = 0; i < nMacro; ++i)
+    for (decltype(nMacro) i = 0; i < nMacro; ++i)
     {
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;
@@ -121,7 +123,6 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         aSvxMacroTable.emplace( SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, static_cast<ScriptType>(eType) ) );
     }
 }
-
 
 SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 {
