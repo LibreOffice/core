@@ -3760,7 +3760,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     if (!bResult && gImpl)
     {
-        SetLastExceptionMsg("Failed to dispatch the .uno: command");
+        SetLastExceptionMsg("Failed to dispatch " + aCommand);
     }
 }
 
