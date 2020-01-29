@@ -503,7 +503,13 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
                 nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
             }
             break;
-        case 0x05 : // unknown calendar
+        case 0x05 : // Korean Dangi calendar
+            sCalendar = "[~dangi]";
+            // Only Korean language support dangi calendar
+            if ( nLocaleLang != LANGUAGE_KOREAN )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_KOREAN;
+            }
             break;
         case 0x06 : // Hijri calendar
         case 0x17 : // same?
