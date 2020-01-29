@@ -153,38 +153,17 @@ css::uno::Any Content::execute(
     return css::uno::makeAny(uri.toAsciiLowerCase());
 }
 
-class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
-public:
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
-        css::uno::Reference< css::ucb::XContentIdentifier > const & identifier) override
-    {
-        return new Content(identifier);
-    }
-
-    virtual sal_Int32 SAL_CALL compareContentIds(
-        css::uno::Reference< css::ucb::XContentIdentifier > const & id1,
-        css::uno::Reference< css::ucb::XContentIdentifier > const & id2) override
-    {
-        assert(id1.is() && id2.is());
-        return
-            id1->getContentIdentifier().compareTo(id2->getContentIdentifier());
-    }
-};
-
 class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp() override;
 
     void finish();
 
-    void testNormalizedMakeRelative();
-
     void testFindFirstURLInText();
 
     void testResolveIdnaHost();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testNormalizedMakeRelative);
     CPPUNIT_TEST(testFindFirstURLInText);
     CPPUNIT_TEST(testResolveIdnaHost);
     CPPUNIT_TEST(finish);
@@ -207,80 +186,6 @@ void Test::setUp() {
 void Test::finish() {
     css::uno::Reference< css::lang::XComponent >(
         m_context, css::uno::UNO_QUERY_THROW)->dispose();
-}
-
-void Test::testNormalizedMakeRelative() {
-    auto ucb(css::ucb::UniversalContentBroker::create(m_context));
-    ucb->registerContentProvider(new Provider, "test", true);
-    ucb->registerContentProvider(
-        css::uno::Reference<css::ucb::XContentProvider>(
-            m_context->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.comp.ucb.FileProvider", m_context),
-            css::uno::UNO_QUERY_THROW),
-        "file", true);
-    struct Data {
-        char const * base;
-        char const * absolute;
-        char const * relative;
-    };
-    static Data const tests[] = {
-        { "hierarchical:/", "mailto:def@a.b.c.", "mailto:def@a.b.c." },
-        { "hierarchical:/", "a/b/c", "a/b/c" },
-        { "hierarchical:/a", "hierarchical:/a/b/c?d#e", "/a/b/c?d#e" },
-        { "hierarchical:/a/", "hierarchical:/a/b/c?d#e", "b/c?d#e" },
-        { "test:/0/0/a", "test:/0/b", "../b" },
-        { "test:/1/1/a", "test:/1/b", "../b" },
-        { "test:/2/2//a", "test:/2/b", "../../b" },
-        { "test:/0a/b", "test:/0A/c#f", "c#f" },
-        { "file:///usr/bin/nonex1/nonex2",
-          "file:///usr/bin/nonex1/nonex3/nonex4", "nonex3/nonex4" },
-        { "file:///usr/bin/nonex1/nonex2#fragmentA",
-          "file:///usr/bin/nonex1/nonex3/nonex4#fragmentB",
-          "nonex3/nonex4#fragmentB" },
-        { "file:///usr/nonex1/nonex2", "file:///usr/nonex3", "../nonex3" },
-        { "file:///c:/windows/nonex1", "file:///c:/nonex2", "../nonex2" },
-#if defined(_WIN32)
-        { "file:///c:/nonex1/nonex2", "file:///C:/nonex1/nonex3/nonex4",
-          "nonex3/nonex4" }
-#endif
-    };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
-        css::uno::Reference< css::uri::XUriReference > ref(
-            URIHelper::normalizedMakeRelative(
-                m_context, OUString::createFromAscii(tests[i].base),
-                OUString::createFromAscii(tests[i].absolute)));
-        bool ok = tests[i].relative == nullptr
-            ? !ref.is()
-            : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
-        OString msg;
-        if (!ok) {
-            OStringBuffer buf;
-            buf.append('<');
-            buf.append(tests[i].base);
-            buf.append(">, <");
-            buf.append(tests[i].absolute);
-            buf.append(">: ");
-            if (ref.is()) {
-                buf.append('<');
-                buf.append(
-                    OUStringToOString(
-                        ref->getUriReference(), RTL_TEXTENCODING_UTF8));
-                buf.append('>');
-            } else {
-                buf.append("none");
-            }
-            buf.append(" instead of ");
-            if (tests[i].relative == nullptr) {
-                buf.append("none");
-            } else {
-                buf.append('<');
-                buf.append(tests[i].relative);
-                buf.append('>');
-            }
-            msg = buf.makeStringAndClear();
-        }
-        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
-    }
 }
 
 void Test::testFindFirstURLInText() {
