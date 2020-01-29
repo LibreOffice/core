@@ -383,12 +383,12 @@ bool LwpVirtualLayout::IsStyleLayout()
 */
 LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 {
-    LwpObjectID& rID = GetChildHead();
+    LwpObjectID *pID = &GetChildHead();
     LwpVirtualLayout* pPrevLayout = nullptr;
 
-    while(!rID.IsNull())
+    while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(rID.obj().get());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj().get());
         if (!pLayout)
             break;
 
@@ -403,7 +403,7 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
         if (pLayout->GetLayoutType() == eType)
             return pLayout;
 
-        rID = pLayout->GetNext();
+        pID = &pLayout->GetNext();
     }
 
     return nullptr;
