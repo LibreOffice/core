@@ -653,7 +653,7 @@ oslFileError SAL_CALL osl_openFile(
     sal_uInt32      uFlags)
 {
     rtl_uString * strSysPath = nullptr;
-    oslFileError result = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    oslFileError result = osl_getSystemPathFromFileURL_(strPath, false);
     if (result != osl_File_E_None)
         return result;
 
@@ -1043,7 +1043,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
 {
     rtl_uString *strSysPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, false);
 
     if (error == osl_File_E_None)
     {
@@ -1060,10 +1060,10 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
 oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
     rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(strDestPath, false);
 
     if (error == osl_File_E_None)
     {
@@ -1087,10 +1087,10 @@ oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPat
 oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPath)
 {
     rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(strDestPath, false);
 
     if (error == osl_File_E_None)
     {
@@ -1114,10 +1114,10 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
 oslFileError SAL_CALL osl_replaceFile(rtl_uString* strPath, rtl_uString* strDestPath)
 {
     rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
-    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    oslFileError    error = osl_getSystemPathFromFileURL_(strPath, false);
 
     if (error == osl_File_E_None)
-        error = osl_getSystemPathFromFileURL_(strDestPath, &strSysDestPath, false);
+        error = osl_getSystemPathFromFileURL_(strDestPath, false);
 
     if (error == osl_File_E_None)
     {
