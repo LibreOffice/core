@@ -291,9 +291,10 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
             // chart window expects pixels, but the conversion factor
             // can depend on the client zoom
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
-            SfxLokHelper::postMouseEventAsync(pChartWindow, nType, aPos, nCount,
-                                              MouseEventModifiers::SIMPLECLICK,
+
+            LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                               nButtons, nModifier);
+            SfxLokHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
 
             return true;
         }

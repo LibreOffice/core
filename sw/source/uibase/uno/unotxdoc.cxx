@@ -3565,10 +3565,10 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     }
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
-    SfxLokHelper::postMouseEventAsync(&rEditWin, nType,
-                                      Point(nX, nY), nCount,
+    LokMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    SfxLokHelper::postMouseEventAsync(&rEditWin, aMouseEventData);
 }
 
 void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
