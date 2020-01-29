@@ -18,6 +18,9 @@ AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID)
     : sfx::AccessibilityIssue(eIssueID)
     , m_eIssueObject(IssueObject::UNKNOWN)
     , m_pDoc(nullptr)
+    , m_pNode(nullptr)
+    , m_nStart(0)
+    , m_nEnd(0)
 {
 }
 
