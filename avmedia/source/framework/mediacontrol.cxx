@@ -24,7 +24,12 @@
 #include <helpids.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
+#include <unotools/syslocale.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <math.h>
+#include <algorithm>
 #include <avmedia/MediaControlBase.hxx>
 
 namespace avmedia
@@ -34,21 +39,31 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     Control( pParent ),
     MediaControlBase(),
     maIdle( "avmedia MediaControl Idle" ),
+    maChangeTimeIdle( "avmedia MediaControl Change Time Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),
     mbLocked( false ),
     meControlStyle( eControlStyle ),
     mfTime(0.0)
 {
-    mpPlayToolBox =  VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
-    mpTimeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK) ;
-    mpTimeSlider->SetScrollTypeSet(true);
-    mpMuteToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
-    mpVolumeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG) ;
-    mpVolumeSlider->SetScrollTypeSet(true);
-    mpZoomToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
-    mpZoomListBox = VclPtr<ListBox>::Create( mpZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ;
-    mpTimeEdit = VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
-    mpMediaPath = VclPtr<FixedText>::Create(this, WB_VCENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
+
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    // MEDIACONTROLSTYLE_MULTILINE is the normal docking windows of tools->media player
+    // MEDIACONTROLSTYLE_SINGLELINE is the toolbar of view->toolbar->media playback
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
+                eControlStyle == MEDIACONTROLSTYLE_MULTILINE ?
+                    OUString("svx/ui/mediawindow.ui") :
+                    OUString("svx/ui/medialine.ui")));
+    m_xContainer = m_xBuilder->weld_container("MediaWindow");
+
+    mxPlayToolBox = m_xBuilder->weld_toolbar("playtoolbox");
+    mxTimeSlider = m_xBuilder->weld_scale("timeslider");
+    mxMuteToolBox = m_xBuilder->weld_toolbar("mutetoolbox");
+    mxVolumeSlider = m_xBuilder->weld_scale("volumeslider");
+    mxZoomListBox = m_xBuilder->weld_combo_box("zoombox");
+    mxTimeEdit = m_xBuilder->weld_entry("timeedit");
+    mxMediaPath = m_xBuilder->weld_label("url");
 
     SetBackground();
     SetPaintTransparent( true );
@@ -56,59 +71,31 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
     InitializeWidgets();
 
-    mpPlayToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    mpPlayToolBox->SetSizePixel( mpPlayToolBox->CalcWindowSizePixel() );
-    mpPlayToolBox->Show();
-    maMinSize = mpPlayToolBox->GetSizePixel();
+    mxPlayToolBox->connect_clicked( LINK( this, MediaControl, implSelectHdl ) );
 
-    mpTimeSlider->SetSlideHdl( LINK( this, MediaControl, implTimeHdl ) );
-    mpTimeSlider->SetEndSlideHdl( LINK( this, MediaControl, implTimeEndHdl ) );
-    mpTimeSlider->SetSizePixel( Size( 128, mpPlayToolBox->GetSizePixel().Height() ) );
-    mpTimeSlider->Show();
-    maMinSize.AdjustWidth(mpTimeSlider->GetSizePixel().Width() );
+    mxTimeSlider->connect_value_changed( LINK( this, MediaControl, implTimeHdl ) );
+    // when changint the time, use this to do the time change after active scrolling
+    // has stopped for a little which
+    maChangeTimeIdle.SetPriority( TaskPriority::LOWEST );
+    maChangeTimeIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeEndHdl ) );
 
     const OUString aTimeText( " 00:00:00/00:00:00 " );
-    mpTimeEdit->SetSizePixel( Size( mpTimeEdit->GetTextWidth( aTimeText ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
-    mpTimeEdit->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-    maMinSize.AdjustWidth(mpTimeEdit->GetSizePixel().Width() );
+    mxTimeEdit->set_text(aTimeText);
+    Size aTextSize = mxTimeEdit->get_preferred_size();
+    mxTimeEdit->set_size_request(aTextSize.Width(), aTextSize.Height());
+    mxTimeEdit->set_text(OUString());
 
-    mpMuteToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    mpMuteToolBox->SetSizePixel( mpMuteToolBox->CalcWindowSizePixel() );
-    mpMuteToolBox->Show();
-    maMinSize.AdjustWidth(mpMuteToolBox->GetSizePixel().Width() );
+    mxMuteToolBox->connect_clicked( LINK( this, MediaControl, implSelectHdl ) );
+    mxVolumeSlider->connect_value_changed( LINK( this, MediaControl, implVolumeHdl ) );
 
-    mpVolumeSlider->SetSlideHdl( LINK( this, MediaControl, implVolumeHdl ) );
-    mpVolumeSlider->SetSizePixel( Size( 48, mpPlayToolBox->GetSizePixel().Height() ) );
-    mpVolumeSlider->Show();
-    maMinSize.AdjustWidth(mpVolumeSlider->GetSizePixel().Width() );
-
-    mpZoomListBox->SetSizePixel( Size( mpTimeEdit->GetSizePixel().Width(), 260 ) );
-    mpZoomListBox->SetSelectHdl( LINK( this, MediaControl, implZoomSelectHdl ) );
-
-    mpZoomToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_ZOOM, AvmResId( AVMEDIA_STR_ZOOM ) );
-    mpZoomToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_ZOOM, HID_AVMEDIA_ZOOMLISTBOX );
-
-    mpZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, mpZoomListBox );
-    mpZoomToolBox->SetSelectHdl( LINK( this, MediaControl, implSelectHdl ) );
-    mpZoomToolBox->SetSizePixel( mpZoomToolBox->CalcWindowSizePixel() );
-    mpZoomToolBox->Show();
-    maMinSize.AdjustWidth(mpZoomToolBox->GetSizePixel().Width() );
+    mxZoomListBox->connect_changed( LINK( this, MediaControl, implZoomSelectHdl ) );
+    mxZoomListBox->set_help_id(HID_AVMEDIA_ZOOMLISTBOX);
 
     const OUString aMediaPath( AvmResId( AVMEDIA_MEDIA_PATH_DEFAULT ) );
-    mpMediaPath->SetText(aMediaPath);
-    mpMediaPath->SetUpdateMode( false );
-    mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aMediaPath ) + 400, mpPlayToolBox->GetSizePixel().Height() ) ); // maybe extend the no. 400 to span the screen width
-    mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-    mpMediaPath->Show();
-    maMinSize.AdjustWidth(mpMediaPath->GetSizePixel().Width() );
+    mxMediaPath->set_label(aMediaPath);
+    if (meControlStyle == MEDIACONTROLSTYLE_SINGLELINE)
+        mxMediaPath->set_size_request(mxMediaPath->get_preferred_size().Width() + 400, -1); // maybe extend the no. 400 to span the screen width
 
-    if( meControlStyle == MEDIACONTROLSTYLE_MULTILINE )
-    {
-        maMinSize.setWidth( 256 );
-        maMinSize.setHeight( ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET );
-        mpZoomToolBox->SetBackground();
-        mpZoomToolBox->SetPaintTransparent( true );
-    }
     // we want time field + progress slider to update as the media plays
     // give this task a lower prio than REPAINT so that UI updates are not starved
     maIdle.SetPriority( TaskPriority::POST_PAINT );
@@ -119,25 +106,12 @@ void MediaControl::InitializeWidgets()
 {
     if( meControlStyle != MEDIACONTROLSTYLE_SINGLELINE )
     {
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage(AVMEDIA_TOOLBOXITEM_OPEN), AvmResId( AVMEDIA_STR_OPEN ) );
-        mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, GetImage(AVMEDIA_TOOLBOXITEM_INSERT), AvmResId( AVMEDIA_STR_INSERT ) );
-        mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_INSERT, HID_AVMEDIA_TOOLBOXITEM_INSERT );
-        mpPlayToolBox->InsertSeparator();
-    }
-    else
-    {
-        mpZoomListBox->SetBackground();
-        mpPlayToolBox->SetBackground();
-        mpPlayToolBox->SetPaintTransparent( true );
-        mpMuteToolBox->SetBackground();
-        mpMuteToolBox->SetPaintTransparent( true );
-        mpMuteToolBox->InsertSeparator();
+        mxPlayToolBox->set_item_help_id("open", HID_AVMEDIA_TOOLBOXITEM_OPEN);
+        mxPlayToolBox->set_item_label("open", AvmResId(AVMEDIA_STR_OPEN));
+        mxPlayToolBox->set_item_help_id("apply", HID_AVMEDIA_TOOLBOXITEM_INSERT);
+        mxPlayToolBox->set_item_label("apply", AvmResId(AVMEDIA_STR_INSERT));
     }
     avmedia::MediaControlBase::InitializeWidgets();
-
-    if( meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
-        mpPlayToolBox->InsertSeparator();
 }
 
 MediaControl::~MediaControl()
@@ -147,94 +121,31 @@ MediaControl::~MediaControl()
 
 void MediaControl::dispose()
 {
-    mpZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, nullptr );
-    mpZoomListBox.disposeAndClear();
-    mpTimeEdit.disposeAndClear();
-    mpMediaPath.disposeAndClear();
-    mpZoomToolBox.disposeAndClear();
-    mpVolumeSlider.disposeAndClear();
-    mpMuteToolBox.disposeAndClear();
-    mpTimeSlider.disposeAndClear();
-    mpPlayToolBox.disposeAndClear();
+    disposeWidgets();
+    mxMediaPath.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
     Control::dispose();
 }
 
-const Size& MediaControl::getMinSizePixel() const
+Size MediaControl::getMinSizePixel() const
 {
-    return maMinSize;
+    return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
 void MediaControl::UpdateURLField(MediaItem const & tempItem)
 {
     const OUString aURL( AvmResId(AVMEDIA_MEDIA_PATH) + ":  " + tempItem.getURL() ) ;
-    mpMediaPath->SetText(aURL);
-    mpMediaPath->SetUpdateMode( false );
-    mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aURL ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
-    mpMediaPath->SetControlBackground( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-    mpMediaPath->Show();
-    maMinSize.AdjustWidth(mpMediaPath->GetSizePixel().Width() );
+    mxMediaPath->set_label(aURL);
 }
 
 void MediaControl::Resize()
 {
-    Point           aPos( 0, 0 );
-    const sal_Int32 nPlayToolBoxWidth = mpPlayToolBox->GetSizePixel().Width();
-    const sal_Int32 nMuteToolBoxWidth = mpMuteToolBox->GetSizePixel().Width();
-    const sal_Int32 nVolumeSliderWidth = mpVolumeSlider->GetSizePixel().Width();
-    const sal_Int32 nZoomToolBoxWidth = mpZoomToolBox->GetSizePixel().Width();
-    const sal_Int32 nTimeEditWidth = mpTimeEdit->GetSizePixel().Width();
-    const sal_Int32 nMediaPathWidth = mpMediaPath->GetSizePixel().Width();
-    const sal_Int32 nTimeSliderHeight = mpTimeSlider->GetSizePixel().Height();
-
-    if( meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
-    {
-        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 4 ) -
-                                           nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth - nMediaPathWidth;
-
-        mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
-
-        aPos.AdjustX(nPlayToolBoxWidth );
-        mpTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
-
-        aPos.AdjustX(nTimeSliderWidth + AVMEDIA_CONTROLOFFSET );
-        mpTimeEdit->SetPosSizePixel( aPos, mpTimeEdit->GetSizePixel() );
-
-        aPos.AdjustX(nTimeEditWidth + AVMEDIA_CONTROLOFFSET );
-        mpMuteToolBox->SetPosSizePixel( aPos, mpMuteToolBox->GetSizePixel() );
-
-        aPos.AdjustX(nMuteToolBoxWidth );
-        mpVolumeSlider->SetPosSizePixel( aPos, mpVolumeSlider->GetSizePixel() );
-
-        aPos.AdjustX(nVolumeSliderWidth + AVMEDIA_CONTROLOFFSET );
-        mpZoomToolBox->SetPosSizePixel( aPos, mpZoomToolBox->GetSizePixel() );
-
-        aPos.AdjustX(nZoomToolBoxWidth + AVMEDIA_CONTROLOFFSET );
-        mpMediaPath->SetPosSizePixel( aPos, mpMediaPath->GetSizePixel() );
-    }
-    else
-    {
-        const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - AVMEDIA_CONTROLOFFSET - nTimeEditWidth;
-
-        mpTimeSlider->SetPosSizePixel( aPos, Size( nTimeSliderWidth, nTimeSliderHeight ) );
-
-        aPos.AdjustX(nTimeSliderWidth + AVMEDIA_CONTROLOFFSET );
-        mpTimeEdit->SetPosSizePixel( aPos, mpTimeEdit->GetSizePixel() );
-
-        aPos.setX( 0 );
-        aPos.AdjustY(nTimeSliderHeight + AVMEDIA_CONTROLOFFSET );
-        mpPlayToolBox->SetPosSizePixel( aPos, mpPlayToolBox->GetSizePixel() );
-
-        aPos.setX( GetSizePixel().Width() - nVolumeSliderWidth - nMuteToolBoxWidth - nZoomToolBoxWidth - AVMEDIA_CONTROLOFFSET );
-        mpMuteToolBox->SetPosSizePixel( aPos, mpMuteToolBox->GetSizePixel() );
-
-        aPos.AdjustX(nMuteToolBoxWidth );
-        mpVolumeSlider->SetPosSizePixel( aPos, mpVolumeSlider->GetSizePixel() );
-
-        aPos.setX( GetSizePixel().Width() - nZoomToolBoxWidth );
-        mpZoomToolBox->SetPosSizePixel( aPos, mpZoomToolBox->GetSizePixel() );
-    }
+    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
+    assert(pChild);
+    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
 }
-
 
 void MediaControl::setState( const MediaItem& rItem )
 {
@@ -244,7 +155,7 @@ void MediaControl::setState( const MediaItem& rItem )
         mfTime = fTime;
         maItem.merge( rItem );
         if( rItem.getURL().isEmpty() && meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
-            mpPlayToolBox->Disable();
+            mxPlayToolBox->set_sensitive(false);
         UpdateToolBoxes( maItem );
         UpdateTimeSlider( maItem );
         UpdateVolumeSlider( maItem );
@@ -253,19 +164,19 @@ void MediaControl::setState( const MediaItem& rItem )
     }
 }
 
-IMPL_LINK( MediaControl, implTimeHdl, Slider*, p, void )
+IMPL_LINK( MediaControl, implTimeHdl, weld::Scale&, rSlider, void )
 {
     mbLocked = true;
     maIdle.Stop();
-    UpdateTimeField( maItem, p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
+    UpdateTimeField(maItem, rSlider.get_value() * maItem.getDuration() / AVMEDIA_TIME_RANGE);
+    maChangeTimeIdle.Start();
 }
 
-
-IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p, void )
+IMPL_LINK_NOARG(MediaControl, implTimeEndHdl, Timer*, void)
 {
     MediaItem aExecItem;
 
-    aExecItem.setTime( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
+    aExecItem.setTime( mxTimeSlider->get_value() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
     // keep state (if the media was playing, keep it playing)
     aExecItem.setState(maItem.getState());
     execute( aExecItem );
@@ -274,63 +185,56 @@ IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p, void )
     mbLocked = false;
 }
 
-
-IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p, void )
+IMPL_LINK( MediaControl, implVolumeHdl, weld::Scale&, rSlider, void )
 {
     MediaItem aExecItem;
 
-    aExecItem.setVolumeDB( static_cast< sal_Int16 >( p->GetThumbPos() ) );
+    aExecItem.setVolumeDB(rSlider.get_value());
     execute( aExecItem );
     update();
 }
 
-
-IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
+IMPL_LINK( MediaControl, implSelectHdl, const OString&, rIdent, void )
 {
-    if( p )
+    MediaItem aExecItem;
+    if (rIdent == "open")
     {
-        MediaItem aExecItem;
-        if( p->GetCurItemId() == AVMEDIA_TOOLBOXITEM_OPEN )
+        OUString aURL;
+        if (MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr))
         {
-            OUString aURL;
-            if (MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr))
+            if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
+                MediaWindow::executeFormatErrorBox(GetFrameWeld());
+            else
             {
-                if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
-                    MediaWindow::executeFormatErrorBox(GetFrameWeld());
-                else
-                {
-                    aExecItem.setURL( aURL, "", ""/*TODO?*/ );
-                    aExecItem.setState( MediaState::Play );
-                }
+                aExecItem.setURL( aURL, "", ""/*TODO?*/ );
+                aExecItem.setState( MediaState::Play );
             }
         }
-        else
-            SelectPlayToolBoxItem( aExecItem, maItem, p->GetCurItemId() );
-
-        if (aExecItem.getState() == MediaState::Play)
-            maIdle.Start();
-        else if (aExecItem.getState() == MediaState::Pause ||
-                 aExecItem.getState() == MediaState::Stop)
-            maIdle.Stop();
-
-        if( aExecItem.getMaskSet() != AVMediaSetMask::NONE )
-            execute( aExecItem );
     }
+    else
+        SelectPlayToolBoxItem( aExecItem, maItem, rIdent );
+
+    if (aExecItem.getState() == MediaState::Play)
+        maIdle.Start();
+    else if (aExecItem.getState() == MediaState::Pause ||
+             aExecItem.getState() == MediaState::Stop)
+        maIdle.Stop();
+
+    if( aExecItem.getMaskSet() != AVMediaSetMask::NONE )
+        execute( aExecItem );
 
     update();
-    if(p)
-    {
-        p->Invalidate( InvalidateFlags::Update );
-    }
 }
 
-
-IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
+IMPL_LINK( MediaControl, implZoomSelectHdl, weld::ComboBox&, rBox, void )
 {
+    bool bCurrentlySettingZoom = mbCurrentlySettingZoom;
+    mbCurrentlySettingZoom = true;
+
     MediaItem aExecItem;
     css::media::ZoomLevel eLevel;
 
-    switch( p.GetSelectedEntryPos() )
+    switch (rBox.get_active())
     {
         case AVMEDIA_ZOOMLEVEL_50: eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
         case AVMEDIA_ZOOMLEVEL_100: eLevel = css::media::ZoomLevel_ORIGINAL; break;
@@ -344,8 +248,9 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
     aExecItem.setZoom( eLevel );
     execute( aExecItem );
     update();
-}
 
+    mbCurrentlySettingZoom = bCurrentlySettingZoom;
+}
 
 IMPL_LINK_NOARG(MediaControl, implTimeoutHdl, Timer *, void)
 {

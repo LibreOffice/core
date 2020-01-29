@@ -985,6 +985,11 @@ public:
         m_xToolBox->ShowItem(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), bVisible);
     }
 
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        m_xToolBox->SetHelpId(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)), rHelpId);
+    }
+
     virtual bool get_item_visible(const OString& rIdent) const override
     {
         return m_xToolBox->IsItemVisible(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)));
@@ -3171,6 +3176,18 @@ public:
     virtual int get_value() const override
     {
         return m_xScale->GetThumbPos();
+    }
+
+    virtual void set_increments(int step, int page) override
+    {
+        m_xScale->SetLineSize(step);
+        m_xScale->SetPageSize(page);
+    }
+
+    virtual void get_increments(int& step, int& page) const override
+    {
+        step = m_xScale->GetLineSize();
+        page = m_xScale->GetPageSize();
     }
 
     virtual ~SalInstanceScale() override

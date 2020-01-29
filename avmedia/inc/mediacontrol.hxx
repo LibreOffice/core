@@ -22,16 +22,13 @@
 
 #include <avmedia/mediaitem.hxx>
 
+#include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/slider.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
 #define AVMEDIA_CONTROLOFFSET 6
-
-class ListBox;
 
 namespace avmedia
 {
@@ -41,12 +38,11 @@ class MediaItem;
 class MediaControl : public Control, public MediaControlBase
 {
 public:
-
                         MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
     virtual             ~MediaControl() override;
     virtual void        dispose() override;
 
-    const Size&         getMinSizePixel() const;
+    Size                getMinSizePixel() const;
 
     void                setState( const MediaItem& rItem );
     void                UpdateURLField( MediaItem const & maItem );
@@ -58,21 +54,24 @@ protected:
 
     virtual void        Resize() override;
     virtual void        InitializeWidgets() override;
-    VclPtr<FixedText>        mpMediaPath;
+    std::unique_ptr<weld::Label> mxMediaPath;
 
 private:
 
-                        DECL_LINK( implTimeHdl, Slider*, void );
-                        DECL_LINK( implTimeEndHdl, Slider*, void );
-                        DECL_LINK( implVolumeHdl, Slider*, void );
-                        DECL_LINK( implSelectHdl, ToolBox*, void );
-                        DECL_LINK( implZoomSelectHdl, ListBox&, void );
-                        DECL_LINK(implTimeoutHdl, Timer *, void);
+                        DECL_LINK(implTimeHdl, weld::Scale&, void);
+                        DECL_LINK(implTimeEndHdl, Timer*, void);
+                        DECL_LINK(implVolumeHdl, weld::Scale&, void);
+                        DECL_LINK(implSelectHdl, const OString&, void);
+                        DECL_LINK(implZoomSelectHdl, weld::ComboBox&, void);
+                        DECL_LINK(implTimeoutHdl, Timer*, void);
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
 
     Idle                maIdle;
+    Idle                maChangeTimeIdle;
     MediaItem           maItem;
-    VclPtr<ToolBox>     mpZoomToolBox;
-    Size                maMinSize;
     bool                mbLocked;
     MediaControlStyle   meControlStyle;
     double mfTime;

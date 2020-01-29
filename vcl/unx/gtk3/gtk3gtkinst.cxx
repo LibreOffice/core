@@ -7462,6 +7462,11 @@ public:
         enable_item_notify_events();
     }
 
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        ::set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
+    }
+
     virtual bool get_item_visible(const OString& rIdent) const override
     {
         return gtk_widget_get_visible(GTK_WIDGET(m_aMap.find(rIdent)->second));
@@ -7783,6 +7788,20 @@ public:
         disable_notify_events();
         gtk_range_set_range(GTK_RANGE(m_pScale), min, max);
         enable_notify_events();
+    }
+
+    virtual void set_increments(int step, int page) override
+    {
+        disable_notify_events();
+        gtk_range_set_increments(GTK_RANGE(m_pScale), step, page);
+        enable_notify_events();
+    }
+
+    virtual void get_increments(int& step, int& page) const override
+    {
+        GtkAdjustment* pAdjustment = gtk_range_get_adjustment(GTK_RANGE(m_pScale));
+        step = gtk_adjustment_get_step_increment(pAdjustment);
+        page = gtk_adjustment_get_page_increment(pAdjustment);
     }
 
     virtual int get_value() const override

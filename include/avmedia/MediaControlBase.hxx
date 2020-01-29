@@ -19,10 +19,7 @@
 #ifndef INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 #define INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 
-#include <vcl/edit.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/slider.hxx>
+#include <vcl/weld.hxx>
 
 #include <avmedia/avmediadllapi.h>
 
@@ -64,19 +61,21 @@ public:
     virtual ~MediaControlBase(){};
 
 protected:
-    VclPtr<ToolBox>     mpPlayToolBox;
-    VclPtr<Slider>      mpTimeSlider;
-    VclPtr<ToolBox>     mpMuteToolBox;
-    VclPtr<Slider>      mpVolumeSlider;
-    VclPtr<ListBox>     mpZoomListBox;
-    VclPtr<Edit>        mpTimeEdit;
-    static Image GetImage(sal_Int32 nImageId);
+    std::unique_ptr<weld::Toolbar> mxPlayToolBox;
+    std::unique_ptr<weld::Scale> mxTimeSlider;
+    std::unique_ptr<weld::Toolbar> mxMuteToolBox;
+    std::unique_ptr<weld::Scale> mxVolumeSlider;
+    std::unique_ptr<weld::ComboBox> mxZoomListBox;
+    std::unique_ptr<weld::Entry> mxTimeEdit;
+    bool mbCurrentlySettingZoom;
+
     virtual void InitializeWidgets();
-    virtual void UpdateToolBoxes( MediaItem aMediaItem );
+    virtual void UpdateToolBoxes(const MediaItem& rMediaItem);
     void UpdateVolumeSlider( MediaItem const & aMediaItem );
     void UpdateTimeSlider( MediaItem const & aMediaItem );
     void UpdateTimeField( MediaItem const & aMediaItem, double fTime );
-    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, sal_uInt16 nId);
+    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, const OString& rId);
+    void disposeWidgets();
 };
 
 }
