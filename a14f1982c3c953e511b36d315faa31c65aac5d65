@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de82d700_20dcf92e",
+        "filename": "chart2/source/controller/main/PositionAndSizeHelper.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:30:58Z",
+      "side": 1,
+      "message": "it seems, this is unnecessary, too.",
+      "range": {
+        "startLine": 85,
+        "startChar": 1,
+        "endLine": 86,
+        "endChar": 90
+      },
+      "revId": "a14f1982c3c953e511b36d315faa31c65aac5d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
