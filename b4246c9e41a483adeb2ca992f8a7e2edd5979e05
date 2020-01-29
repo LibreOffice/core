@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "998842ef_f1f51880",
+        "filename": "chart2/source/controller/itemsetwrapper/TextLabelItemConverter.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:19:35Z",
+      "side": 1,
+      "message": "it\u0027s unnecessary",
+      "range": {
+        "startLine": 393,
+        "startChar": 26,
+        "endLine": 393,
+        "endChar": 100
+      },
+      "revId": "b4246c9e41a483adeb2ca992f8a7e2edd5979e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640c7913_318b7f73",
+        "filename": "chart2/source/controller/itemsetwrapper/TextLabelItemConverter.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:19:35Z",
+      "side": 1,
+      "message": "it\u0027s unnecessary",
+      "range": {
+        "startLine": 602,
+        "startChar": 105,
+        "endLine": 603,
+        "endChar": 96
+      },
+      "revId": "b4246c9e41a483adeb2ca992f8a7e2edd5979e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca4e03c_018f3286",
+        "filename": "chart2/source/controller/main/PositionAndSizeHelper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:19:35Z",
+      "side": 1,
+      "message": "it\u0027s unnecessary",
+      "range": {
+        "startLine": 71,
+        "startChar": 92,
+        "endLine": 71,
+        "endChar": 170
+      },
+      "revId": "b4246c9e41a483adeb2ca992f8a7e2edd5979e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf831efc_888d06d9",
+        "filename": "chart2/source/view/main/VDataSeries.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:19:35Z",
+      "side": 1,
+      "message": "true",
+      "range": {
+        "startLine": 659,
+        "startChar": 26,
+        "endLine": 659,
+        "endChar": 101
+      },
+      "revId": "b4246c9e41a483adeb2ca992f8a7e2edd5979e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffa6e1df_8c8eaa73",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-29T13:19:35Z",
+      "side": 1,
+      "message": "add \"maybevoid\"",
+      "range": {
+        "startLine": 336,
+        "startChar": 14,
+        "endLine": 336,
+        "endChar": 15
+      },
+      "revId": "b4246c9e41a483adeb2ca992f8a7e2edd5979e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
