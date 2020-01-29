@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="MediaPlaybackPanel">
@@ -11,21 +11,21 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
+        <property name="hexpand">True</property>
         <property name="border_width">6</property>
         <property name="column_spacing">7</property>
-        <property name="row_homogeneous">True</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="mediaplayback|label1">Playback:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">playtoolbox</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -34,12 +34,12 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="mediaplayback|label2">Seek:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">timeslider</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -48,12 +48,12 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="mediaplayback|label3">Volume:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">volumeslider</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -61,68 +61,14 @@
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="round_digits">1</property>
+            <property name="hexpand">True</property>
             <property name="digits">2</property>
             <property name="draw_value">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBox" id="zoombox">
-            <property name="width_request">150</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes" context="mediaplayback|zoombox|tooltip_text">View</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="timeedit:border">
-            <property name="width_request">150</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="editable">False</property>
-            <property name="xalign">0.5</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolbar" id="playtoolbox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToolbar" id="mutetoolbox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -130,27 +76,177 @@
             <property name="width_request">150</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="opacity">0.98999999999999999</property>
+            <property name="opacity">0.9882352941176471</property>
+            <property name="hexpand">True</property>
             <property name="draw_value">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkComboBoxText" id="zoombox">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkEntry" id="timeedit">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="editable">False</property>
+            <property name="xalign">0.5</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkToolbar" id="mutetoolbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkToggleToolButton" id="mute">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="no">Mute</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02054.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">3</property>
+          </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkToolbar" id="playtoolbox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="toolbar_style">icons</property>
+            <property name="show_arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkToolButton" id="open">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="no">Open</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02048.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="apply">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="no">Apply</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02053.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="separator1">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="play">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="no">Play</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02049.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="pause">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="no">Pause</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02050.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="stop">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="no">Stop</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02051.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="separator2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="loop">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="no">Repeat</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">avmedia/res/av02052.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
         </child>
         <child>
           <placeholder/>
@@ -162,8 +258,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
