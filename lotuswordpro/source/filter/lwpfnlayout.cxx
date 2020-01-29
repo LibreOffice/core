@@ -114,15 +114,15 @@ void LwpFnRowLayout::Read()
 void LwpFnRowLayout::RegisterStyle()
 {
     // register cells' style
-    LwpObjectID& rCellID = GetChildHead();
-    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+    LwpObjectID* pCellID = &GetChildHead();
+    LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
     while(pCellLayout)
     {
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
-        rCellID = pCellLayout->GetNext();
-        pCellLayout = dynamic_cast<LwpCellLayout *>(rCellID.obj().get());
+        pCellID = &pCellLayout->GetNext();
+        pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
     }
 }
 
@@ -194,15 +194,15 @@ void LwpEndnoteLayout::Read()
 void LwpEndnoteLayout::RegisterStyle()
 {
     // register style of rows
-    LwpObjectID& rRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+    LwpObjectID* pRowID = &GetChildHead();
+    LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
-        rRowID = pRowLayout->GetNext();
-        pRowLayout = dynamic_cast<LwpRowLayout *>(rRowID.obj().get());
+        pRowID = &pRowLayout->GetNext();
+        pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
     }
 }
 
@@ -254,12 +254,12 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
  */
 LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
 {
-    LwpObjectID& rID = GetChildTail();
+    LwpObjectID *pID = &GetChildTail();
 
     LwpVirtualLayout *pPrevLayout = nullptr;
-    while(!rID.IsNull())
+    while(!pID->IsNull())
     {
-        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(rID.obj().get());
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pID->obj().get());
         if (!pLayout || pLayout == pPrevLayout)
         {
             break;
@@ -268,7 +268,7 @@ LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
         {
             return pLayout;
         }
-        rID = pLayout->GetPrevious();
+        pID = &pLayout->GetPrevious();
         pPrevLayout = pLayout;
     }
 
@@ -312,11 +312,11 @@ void LwpFnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
  */
 LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
 {
-    LwpObjectID& rID = GetChildTail();
+    LwpObjectID *pID = &GetChildTail();
 
-    while(!rID.IsNull())
+    while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(rID.obj().get());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj().get());
         if(!pLayout)
         {
             break;
@@ -325,7 +325,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
         {
             return pLayout;
         }
-        rID = pLayout->GetPrevious();
+        pID = &pLayout->GetPrevious();
     }
 
     return nullptr;
