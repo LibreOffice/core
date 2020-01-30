@@ -39,6 +39,30 @@
       "revId": "0efe9322b71d16caf82ebea5fb02f0237c31e669",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e124e0c2_1b2c1ad3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-30T15:37:20Z",
+      "side": 1,
+      "message": "The whole change id handling of that hook is based on Gerrit. See https://gerrit-review.googlesource.com/Documentation/cmd-hook-commit-msg.html#_obtaining\n\nMiklos updated it to some local intermediate version he had on his disk AFAIK and I used the version from our currently deployed Gerrit.",
+      "parentUuid": "1fd6a038_645814ab",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "0efe9322b71d16caf82ebea5fb02f0237c31e669",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
