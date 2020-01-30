@@ -245,6 +245,9 @@ private:
     /// Write word/settings.xml
     void WriteSettings();
 
+    /// Writes the <w:docVars> part of settings.xml
+    void WriteDocVars(const sax_fastparser::FSHelperPtr& pFS);
+
     /// Write word/theme/theme1.xml
     void WriteTheme();
 
