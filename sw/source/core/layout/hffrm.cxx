@@ -170,7 +170,6 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
             nUL = pAttrs->CalcBottom() + nSpace;
 
         /* set print area */
-        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
 
@@ -209,7 +208,6 @@ void SwHeadFootFrame::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 
         // Set sizes - the sizes are given by the surrounding Frame, just
         // subtract the borders.
-        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
         SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         aPrt.Width ( getFrameArea().Width() - nLR );
         aPrt.Height( getFrameArea().Height()- nUL );
@@ -487,7 +485,7 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         else if (nEat > nMaxEat)
             nEat = nMaxEat;
 
-        // OD 10.04.2003 #108719# - Notify fly frame, if header frame
+        // Notify fly frame, if header frame
         // grows. Consider, that 'normal' grow of layout frame already notifies
         // the fly frames.
         bool bNotifyFlys = false;
@@ -506,7 +504,7 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             }
 
             nResult += nEat;
-            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            // trigger fly frame notify.
             if ( IsHeaderFrame() )
             {
                 bNotifyFlys = true;
@@ -525,7 +523,7 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             }
         }
 
-        // OD 10.04.2003 #108719# - notify fly frames, if necessary and triggered.
+        // notify fly frames, if necessary and triggered.
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
             NotifyLowerObjs();
@@ -578,9 +576,8 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                spacing. */
             nRest = nDist;
 
-        // OD 10.04.2003 #108719# - Notify fly frame, if header/footer frame
-        // shrinks. Consider, that 'normal' shrink of layout frame already notifies
-        // the fly frames.
+        // Notify fly frame, if header/footer frame shrinks.
+        //  Consider, that 'normal' shrink of layout frame already notifies the fly frames.
         bool bNotifyFlys = false;
         if (nRest > 0)
         {
@@ -622,7 +619,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 InvalidateAll();
             }
             nResult += nShrink;
-            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            // Trigger fly frame notify.
             if ( IsHeaderFrame() )
             {
                 bNotifyFlys = true;
@@ -641,7 +638,7 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             }
         }
 
-        // OD 10.04.2003 #108719# - notify fly frames, if necessary.
+        // Notify fly frames, if necessary.
         if ( ( nResult > 0 ) && bNotifyFlys )
         {
             NotifyLowerObjs();

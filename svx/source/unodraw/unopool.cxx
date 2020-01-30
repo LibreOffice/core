@@ -119,7 +119,6 @@ void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::Proper
             if( eMapUnit == MapUnit::Map100thMM )
                 nMemberId &= (~CONVERT_TWIPS);
 
-            // DVO, OD 10.10.2003 #i18732#
             // Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
             pPool->GetDefaultItem( pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) ) ).QueryValue( rValue, nMemberId );
@@ -153,7 +152,6 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         SvxUnoConvertFromMM( eMapUnit, aValue );
     }
 
-    // DVO, OD 10.10.2003 #i18732#
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
     const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
@@ -231,8 +229,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
     {
         while( *ppEntries )
         {
-            // OD 13.10.2003 #i18732#
-            // Assure, that ID is a Which-ID (it could be a Slot-ID.)
+            //Assure, that ID is a Which-ID (it could be a Slot-ID.)
             // Thus, convert handle to Which-ID.
             const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>((*ppEntries)->mnHandle) );
 
@@ -254,7 +251,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
                 }
                 break;
             default:
-                // OD 13.10.2003 #i18732# - correction:
+                //#i18732# - correction:
                 // use method <IsStaticDefaultItem(..)> instead of using probably
                 // incompatible item pool <mpDefaultPool>.
                 const SfxPoolItem& r1 = pPool->GetDefaultItem( nWhich );
@@ -289,14 +286,12 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
 
     SfxItemPool* pPool = getModelPool( true );
 
-    // OD 10.10.2003 #i18732#
     // Assure, that ID is a Which-ID (it could be a Slot-ID.)
     // Thus, convert handle to Which-ID.
     const sal_uInt16 nWhich = pPool->GetWhich( static_cast<sal_uInt16>(pEntry->mnHandle) );
     if ( pPool && pPool != mpDefaultsPool )
     {
-        // OD 13.10.2003 #i18732# - use method <ResetPoolDefaultItem(..)>
-        // instead of using probably incompatible item pool <mpDefaultsPool>.
+        // use method <ResetPoolDefaultItem(..)> instead of using probably incompatible item pool <mpDefaultsPool>.
         pPool->ResetPoolDefaultItem( nWhich );
     }
 }
@@ -304,8 +299,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
 uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )
 {
     SolarMutexGuard aGuard;
-
-    // OD 13.10.2003 #i18732# - use method <GetPoolDefaultItem(..)> instead of
+    //#i18732# - use method <GetPoolDefaultItem(..)> instead of
     // using probably incompatible item pool <mpDefaultsPool>
     uno::Any aAny;
     SfxItemPool* pPool = getModelPool( true );

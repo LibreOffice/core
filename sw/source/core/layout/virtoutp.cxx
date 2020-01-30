@@ -110,10 +110,10 @@ bool SwLayVout::DoesFit( const Size &rNew )
     return true;
 }
 
-/// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
+///     change 2nd parameter <rRect> - no longer <const>
 ///     in order to return value of class member variable <aRect>, if virtual
 ///     output is used.
-///     <aRect> contains the rectangle that represents the area the virtual
+///    <aRect> contains the rectangle that represents the area the virtual
 ///     output device is used for and that is flushed at the end.
 void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
 {
@@ -164,14 +164,14 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
         pVirDev->SetFillColor( pOut->GetFillColor() );
 
     MapMode aMapMode( pOut->GetMapMode() );
-    // OD 12.11.2002 #96272# - use method to set mapping
+    // use method to set mapping
     //aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
     ::SetMappingForVirtDev( aRect.Pos(), pOut, pVirDev );
 
     if( aMapMode != pVirDev->GetMapMode() )
         pVirDev->SetMapMode( aMapMode );
 
-    /// OD 27.09.2002 #103636# - set value of parameter <rRect>
+    // set value of parameter <rRect>
     rRect = aRect;
 
 }
