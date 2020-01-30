@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3120c17_7b2bac7d",
+        "filename": "offapi/com/sun/star/chart/DataLabelPlacement.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-30T09:53:10Z",
+      "side": 1,
+      "message": "Please add an @since comment here.",
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "885cc656_17b67486",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-01-30T09:53:10Z",
+      "side": 1,
+      "message": "7.0 is the next version.",
+      "range": {
+        "startLine": 334,
+        "startChar": 27,
+        "endLine": 334,
+        "endChar": 30
+      },
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
