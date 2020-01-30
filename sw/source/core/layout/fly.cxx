@@ -278,10 +278,8 @@ void SwFlyFrame::DestroyImpl()
     {
         ClearTmpConsiderWrapInfluence(); // remove this from SwLayouter
 
-        // OD 2004-01-19 #110582#
         Unchain();
 
-        // OD 2004-01-19 #110582#
         DeleteCnt();
 
         if ( GetAnchorFrame() )
@@ -305,7 +303,6 @@ const IDocumentDrawModelAccess& SwFlyFrame::getIDocumentDrawModelAccess()
     return GetFormat()->getIDocumentDrawModelAccess();
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrame::Unchain()
 {
     if ( GetPrevLink() )
@@ -314,7 +311,6 @@ void SwFlyFrame::Unchain()
         UnchainFrames( this, GetNextLink() );
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrame::DeleteCnt()
 {
     SwFrame* pFrame = m_pLower;
@@ -329,7 +325,7 @@ void SwFlyFrame::DeleteCnt()
             }
             else if ( dynamic_cast<const SwAnchoredDrawObject*>( pAnchoredObj) !=  nullptr )
             {
-                // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+                // consider 'virtual' drawing objects
                 SdrObject* pObj = pAnchoredObj->DrawObj();
                 if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr )
                 {
@@ -359,15 +355,12 @@ void SwFlyFrame::DeleteCnt()
 
 void SwFlyFrame::InitDrawObj()
 {
-    // OD 2004-03-22 #i26791#
     SetDrawObj(*SwFlyDrawContact::CreateNewRef(this, GetFormat()));
 
     // Set the right Layer
-    // OD 2004-01-19 #110582#
     IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
     SdrLayerID nHeavenId = rIDDMA.GetHeavenId();
     SdrLayerID nHellId = rIDDMA.GetHellId();
-    // OD 2004-03-22 #i26791#
     GetVirtDrawObj()->SetLayer( GetFormat()->GetOpaque().GetValue()
                                 ? nHeavenId
                                 : nHellId );
@@ -705,14 +698,14 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     {
         case RES_VERT_ORIENT:
         case RES_HORI_ORIENT:
-        // OD 22.09.2003 #i18732# - consider new option 'follow text flow'
+        //  #i18732# - consider new option 'follow text flow'
         case RES_FOLLOW_TEXT_FLOW:
         {
             // ATTENTION: Always also change Action in ChgRePos()!
             rInvFlags |= 0x09;
         }
         break;
-        // OD 2004-07-01 #i28701# - consider new option 'wrap influence on position'
+        // #i28701# - consider new option 'wrap influence on position'
         case RES_WRAP_INFLUENCE_ON_OBJPOS:
         {
             rInvFlags |= 0x89;
@@ -720,7 +713,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         break;
         case RES_SURROUND:
         {
-            // OD 2004-05-13 #i28701# - invalidate position on change of
+            //#i28701# - invalidate position on change of
             // wrapping style.
             //rInvFlags |= 0x40;
             rInvFlags |= 0x41;
@@ -1349,11 +1342,9 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     ColUnlock();
 }
 
-// OD 14.03.2003 #i11760# - change parameter <bNoColl>: type <bool>;
-//                          default value = false.
-// OD 14.03.2003 #i11760# - add new parameter <bNoCalcFollow> with
-//                          default value = false.
-// OD 11.04.2003 #108824# - new parameter <bNoCalcFollow> was used by method
+// #i11760# - change parameter <bNoColl>: type <bool>;
+//   add new parameter <bNoCalcFollow> with
+//  new parameter <bNoCalcFollow> was used by method
 //                          <FormatWidthCols(..)> to avoid follow formatting
 //                          for text frames. But, unformatted follows causes
 //                          problems in method <SwContentFrame::WouldFit_(..)>,
@@ -1431,7 +1422,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             if ( pFrame->IsTabFrame() )
             {
                 static_cast<SwTabFrame*>(pFrame)->m_bCalcLowers = true;
-                // OD 26.08.2003 #i18103# - lock move backward of follow table,
+                // #i18103# - lock move backward of follow table,
                 // if no section content is formatted or follow table belongs
                 // to the section, which content is formatted.
                 if ( static_cast<SwTabFrame*>(pFrame)->IsFollow() &&
@@ -1447,15 +1438,15 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 pFrame->Calc(pRenderContext);
             }
 
-            // OD 14.03.2003 #i11760# - reset control flag for follow format.
+            // #i11760# - reset control flag for follow format.
             if ( pFrame->IsTextFrame() )
             {
                 static_cast<SwTextFrame*>(pFrame)->AllowFollowFormat();
             }
 
-            // #111937# The keep-attribute can cause the position
+            // The keep-attribute can cause the position
             // of the prev to be invalid:
-            // OD 2004-03-15 #116560# - Do not consider invalid previous frame
+            // Do not consider invalid previous frame
             // due to its keep-attribute, if current frame is a follow or is locked.
             // #i44049# - do not consider invalid previous
             // frame due to its keep-attribute, if it can't move forward.
@@ -1569,7 +1560,7 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                     continue;
                 }
 
-                // OD 2004-05-17 #i28701# - format anchor frame after its objects
+                // #i28701# - format anchor frame after its objects
                 // are formatted, if the wrapping style influence has to be considered.
                 if ( pLay->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
@@ -1667,7 +1658,6 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
     while( true );
 }
 
-// OD 2004-03-23 #i26791#
 void SwFlyFrame::MakeObjPos()
 {
     if ( !isFrameAreaPositionValid() )
@@ -1675,7 +1665,7 @@ void SwFlyFrame::MakeObjPos()
         vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
         setFrameAreaPositionValid(true);
 
-        // OD 29.10.2003 #113049# - use new class to position object
+        // use new class to position object
         GetAnchorFrame()->Calc(pRenderContext);
         objectpositioning::SwToLayoutAnchoredObjectPosition
                 aObjPositioning( *GetVirtDrawObj() );
@@ -1703,7 +1693,7 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
     {
         setFramePrintAreaValid(true);
 
-        // OD 31.07.2003 #110978# - consider vertical layout
+        // consider vertical layout
         SwRectFnSet aRectFnSet(this);
         aRectFnSet.SetXMargins( *this, rAttrs.CalcLeftLine(),
                                         rAttrs.CalcRightLine() );
@@ -2568,7 +2558,7 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     return nRet;
 }
 
-/// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTextFrame> contains
+///  #i13147# -  If called for paint and the <SwNoTextFrame> contains
 /// a graphic, load of intrinsic graphic has to be avoided.
 bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                            const bool _bForPaint ) const
@@ -2582,7 +2572,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
         if(GetFormat()->GetSurround().IsContour())
         {
             SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwNoTextFrame*>(Lower())->GetNode()));
-            // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
+            // #i13147# - determine <GraphicObject> instead of <Graphic>
             // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
             // node and method is called for paint.
             std::unique_ptr<GraphicObject> xTmpGrfObj;
@@ -2602,7 +2592,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             {
                 if( !pNd->HasContour() )
                 {
-                    // OD 16.04.2003 #i13147# - no <CreateContour> for a graphic
+                    //#i13147# - no <CreateContour> for a graphic
                     // during paint. Thus, return (value of <bRet> should be <false>).
                     if ( pGrfNd && _bForPaint )
                     {
@@ -2618,7 +2608,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                 SwRect aOrig;
                 Lower()->Calc(pRenderContext);
                 static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig );
-                // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
+                // #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
                 // in order to avoid that graphic has to be loaded for contour scale.
                 //SvxContourDlg::ScaleContour( rContour, aGrf, MapUnit::MapTwip, aOrig.SSize() );
                 {
@@ -2656,7 +2646,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                         }
                     }
                 }
-                // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
+                // destroy created <GraphicObject>.
                 xTmpGrfObj.reset();
                 rContour.Move( aOrig.Left(), aOrig.Top() );
                 if( !aClip.Width() )
@@ -2717,7 +2707,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
     return bRet;
 }
 
-// OD 2004-03-25 #i26791#
+
 const SwVirtFlyDrawObj* SwFlyFrame::GetVirtDrawObj() const
 {
     return static_cast<const SwVirtFlyDrawObj*>(GetDrawObj());
@@ -2727,7 +2717,7 @@ SwVirtFlyDrawObj* SwFlyFrame::GetVirtDrawObj()
     return static_cast<SwVirtFlyDrawObj*>(DrawObj());
 }
 
-// OD 2004-03-24 #i26791# - implementation of pure virtual method declared in
+// implementation of pure virtual method declared in
 // base class <SwAnchoredObject>
 
 void SwFlyFrame::InvalidateObjPos()
@@ -2863,8 +2853,7 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
                 if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
                 {
                     SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
-                    // OD 06.11.2003 #i22305# - consider
-                    // only Writer fly frames, which follow the text flow.
+                    // consider only Writer fly frames, which follow the text flow.
                     if ( pFly->IsFlyLayFrame() &&
                         pFly->getFrameArea().Top() != FAR_AWAY &&
                         pFly->GetFormat()->GetFollowTextFlow().GetValue() )

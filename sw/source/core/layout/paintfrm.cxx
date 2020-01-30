@@ -2052,8 +2052,7 @@ void DrawGraphic(
             pOutDev->SetDrawMode( DrawModeFlags::Default );
         }
 
-        // OD 06.08.2002 #99657# - if background region has to be drawn
-        // transparent, set only the RGB values of the background color as
+        // If background region has to be drawn transparent, set only the RGB values of the background color as
         // the fill color for the output device.
         switch (eDrawStyle)
         {
@@ -2075,7 +2074,6 @@ void DrawGraphic(
         // restore draw mode
         pOutDev->SetDrawMode( nOldDrawMode );
 
-        // OD 02.09.2002 #99657#
         switch (eDrawStyle)
         {
             case Transparent:
@@ -2089,8 +2087,7 @@ void DrawGraphic(
                     if ( !bGrfIsTransparent )
                     {
                         // subtract area of background graphic from draw area
-                        // OD 08.10.2002 #103898# - consider only that part of the
-                        // graphic area that is overlapping with draw area.
+                        // Consider only that part of the graphic area that is overlapping with draw area.
                         SwRect aTmpGrf = aGrf;
                         aTmpGrf.Intersection( rOut );
                         if ( aTmpGrf.HasArea() )
@@ -2134,8 +2131,6 @@ void DrawGraphic(
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
-        // OD 02.09.2002 #99657#
-        // add parameter <bGrfBackgrdAlreadyDrawn>
         lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, bGrfNum, gProp,
                          bGrfBackgrdAlreadyDrawn );
 
@@ -3113,13 +3108,13 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
                 if(OUTDEV_WINDOW == gProp.pSGlobalShell->GetOut()->GetOutDevType())
                 {
-                    // OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
+                    // changed method SwLayVout::Enter(..)
                     // 2nd parameter is no longer <const> and will be set to the
                     // rectangle the virtual output device is calculated from <aPaintRect>,
                     // if the virtual output is used.
                     s_pVout->Enter(pSh, aPaintRect, !s_isNoVirDev);
 
-                    // OD 27.09.2002 #103636# - adjust paint rectangle to pixel size
+                    // Adjust paint rectangle to pixel size
                     // Thus, all objects overlapping on pixel level with the unadjusted
                     // paint rectangle will be considered in the paint.
                     lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
@@ -3128,7 +3123,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 // maybe this can be put in the above scope. Since we are not sure, just leave it ATM
                 s_pVout->SetOrgRect( aPaintRect );
 
-                // OD 29.08.2002 #102450#
                 // determine background color of page for <PaintLayer> method
                 // calls, paint <hell> or <heaven>
                 const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
@@ -3184,8 +3178,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
-                    // OD 29.08.2002 #102450# - add 3rd parameter
-                    // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->getIDocumentDrawModelAccess().GetHeavenId(),
                                             pPrintData,
                                             *pPage, pPage->getFrameArea(),
@@ -3245,9 +3237,9 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
                 if( pSh->GetOut()->GetFillColor() != aGlobalRetoucheColor )
                     pSh->GetOut()->SetFillColor( aGlobalRetoucheColor );
-
-                pSh->GetOut()->SetLineColor(); // OD 20.02.2003 #107369# - no line color
-                // OD 20.02.2003 #107369# - use aligned page rectangle
+                // No line color
+                pSh->GetOut()->SetLineColor();
+                // Use aligned page rectangle
                 {
                     SwRect aTmpPageRect( aEmptyPageRect );
                     ::SwAlignRect( aTmpPageRect, pSh, &rRenderContext );
@@ -3268,8 +3260,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
                 pSh->GetOut()->SetFont( aOldFont );
                 // paint shadow and border for empty page
-                // OD 19.02.2003 #107369# - use new method to paint page border and
-                // shadow
                 SwPageFrame::PaintBorderAndShadow( aEmptyPageRect, pSh, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
                 SwPageFrame::PaintNotesSidebar( aEmptyPageRect, pSh, pPage->GetPhyPageNum(), bRightSidebar);
 
@@ -3837,8 +3827,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         }
         else
         {
-            // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
-            // OD 2004-03-29 #i26791#
+            // Consider 'virtual' drawing objects
             SwDrawContact* pDrawContact = dynamic_cast<SwDrawContact*>(pUserCall);
             pAnch = pDrawContact ? pDrawContact->GetAnchorFrame(pObj) : nullptr;
             if ( pAnch )
@@ -3859,7 +3848,6 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             }
             else
             {
-                // OD 02.07.2003 #108784# - debug assert
                 if ( dynamic_cast< const SdrObjGroup *>( pObj ) ==  nullptr )
                 {
                     OSL_FAIL( "<SwFlyFrame::IsPaint(..)> - paint of drawing object without anchor frame!?" );
@@ -3953,7 +3941,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         tools::PolyPolygon aPoly;
         if ( bContour )
         {
-            // OD 16.04.2003 #i13147# - add 2nd parameter with value <true>
+            // add 2nd parameter with value <true>
             // to indicate that method is called for paint in order to avoid
             // load of the intrinsic graphic.
             bContour = GetContour( aPoly, true );
@@ -3985,7 +3973,6 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             else
             {
                 std::shared_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
-                // OD 07.08.2002 #99657# #GetTransChg#
                 //     to determine, if background has to be painted, by checking, if
                 //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
                 //     or a background graphic exists.
@@ -4032,7 +4019,6 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             //receives the original Rect but PaintSwFrameBackground only the limited
             //one.
 
-            // OD 2004-04-23 #116347#
             rRenderContext.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             rRenderContext.SetLineColor();
 
@@ -4086,15 +4072,14 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 }
             }
 
-            // OD 06.08.2002 #99657# - paint border before painting background
-            // paint border
+            // paint border before painting background
             PaintSwFrameShadowAndBorder(rRect, pPage, rAttrs);
 
             rRenderContext.Pop();
         }
     }
 
-    // OD 19.12.2002 #106318# - fly frame will paint it's subsidiary lines and
+    // fly frame will paint it's subsidiary lines and
     // the subsidiary lines of its lowers on its own, due to overlapping with
     // other fly frames or other objects.
     if( gProp.pSGlobalShell->GetWin()
@@ -4155,7 +4140,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
     Validate();
 
-    // OD 19.12.2002 #106318# - first paint lines added by fly frame paint
+    // first paint lines added by fly frame paint
     // and then unlock other lines.
     gProp.pSLines->PaintLines( &rRenderContext, gProp );
     gProp.pSLines->LockLines( false );
@@ -4205,10 +4190,10 @@ void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
     }
-    // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
+    // #i6467# - no light grey rectangle for page preview
     else if ( gProp.pSGlobalShell->GetWin() && !gProp.pSGlobalShell->IsPreview() )
     {
-        // OD 10.01.2003 #i6467# - intersect output rectangle with table frame
+        //  #i6467# - intersect output rectangle with table frame
         SwRect aTabRect( getFramePrintArea() );
         aTabRect.Pos() += getFrameArea().Pos();
         SwRect aTabOutRect( rRect );
@@ -4249,7 +4234,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    // OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // draw full shadow rectangle
                     aOut.Top( rOutRect.Top() + nHeight );
                     aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
@@ -4286,7 +4271,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    // OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // draw full shadow rectangle
                     aOut.Bottom( rOutRect.Bottom() - nHeight );
                     aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
@@ -4323,7 +4308,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    // OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // draw full shadow rectangle
                     aOut.Bottom( rOutRect.Bottom() - nHeight);
                     aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
@@ -4360,7 +4345,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             {
                 if ( bDrawFullShadowRectangle )
                 {
-                    // OD 06.08.2002 #99657# - draw full shadow rectangle
+                    // draw full shadow rectangle
                     aOut.Top( rOutRect.Top() + nHeight );
                     aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
@@ -4461,8 +4446,7 @@ void SwFrame::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         }
     }
 
-    // OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
-    //     be drawn or only two shadow rectangles beside the frame.
+    //  determine, if full shadow rectangle have to be drawn or only two shadow rectangles beside the frame.
     //     draw full shadow rectangle, if frame background is drawn transparent.
     //     Status Quo:
     //         SwLayoutFrame can have transparent drawn backgrounds. Thus,
@@ -5111,13 +5095,13 @@ void SwFrame::PaintSwFrameShadowAndBorder(
     SwRect aRect( getFramePrintArea() );
     aRect += getFrameArea().Pos();
     ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
-    // OD 27.09.2002 #103636# - new local boolean variable in order to
+    // new local boolean variable in order to
     // suspend border paint under special cases - see below.
     // NOTE: This is a fix for the implementation of feature #99657#.
     bool bDrawOnlyShadowForTransparentFrame = false;
     if ( aRect.IsInside( rRect ) )
     {
-        // OD 27.09.2002 #103636# - paint shadow, if background is transparent.
+        // paint shadow, if background is transparent.
         // Because of introduced transparent background for fly frame #99657#,
         // the shadow have to be drawn if the background is transparent,
         // in spite the fact that the paint rectangle <rRect> lies fully
@@ -5145,7 +5129,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         PaintShadow(rRect, aRect, rAttrs);
     }
 
-    // OD 27.09.2002 #103636# - suspend drawing of border
+    // suspend drawing of border
     // add condition < NOT bDrawOnlyShadowForTransparentFrame > - see above
     // - add condition <bFoundCellForTopOrBorderAttrs>
     //-hack.
@@ -6144,14 +6128,13 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
-    // OD 2004-04-23 #116347#
     pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
     pOut->SetLineColor();
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
-    // OD 20.11.2002 #104598# - take care of page margin area
+    // take care of page margin area
     // Note: code move from <SwFrame::PaintSwFrameBackground(..)> to new method
     // <SwPageFrame::Paintmargin(..)>.
     if ( IsPageFrame() && !bOnlyTextBackground)
@@ -6164,7 +6147,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
         PaintSwFrameBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
     }
 
-    // OD 06.08.2002 #99657# - paint border before painting background
+    // paint border before painting background
     // paint grid for page frame and paint border
     if (!bOnlyTextBackground)
     {
@@ -6190,7 +6173,6 @@ static bool lcl_compareFillAttributes(const drawinglayer::attribute::SdrAllFillA
     return pA->getFillAttribute() == pB->getFillAttribute();
 }
 
-/// OD 05.09.2002 #102912#
 /// Do not paint background for fly frames without a background brush by
 /// calling <PaintBaBo> at the page or at the fly frame its anchored
 void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pPage,
@@ -6199,8 +6181,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                              const bool bLowerBorder,
                              const bool bOnlyTextBackground ) const
 {
-    // OD 20.01.2003 #i1837# - no paint of table background, if corresponding
-    // option is *not* set.
+    // #i1837# - no paint of table background, if corresponding option is *not* set.
     if( IsTabFrame() &&
         !gProp.pSGlobalShell->GetViewOptions()->IsTable() )
     {
@@ -6217,7 +6198,6 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
 
     const SvxBrushItem* pItem;
-    // OD 05.09.2002 #102912#
     // temporary background brush for a fly frame without a background brush
     std::unique_ptr<SvxBrushItem> pTmpBackBrush;
     const Color* pCol;
@@ -6231,7 +6211,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     bool bNoFlyBackground = !gProp.bSFlyMetafile && !bBack && IsFlyFrame();
     if ( bNoFlyBackground )
     {
-        // OD 05.09.2002 #102912# - Fly frame has no background.
+        // Fly frame has no background.
         // Try to find background brush at parents, if previous call of
         // <GetBackgroundBrush> disabled this option with the parameter <bLowerMode>
         if ( bLowerMode )
@@ -6243,9 +6223,8 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
         // to true, that fly frame will paint its background using this color.
         if ( !bBack )
         {
-            // OD 10.01.2003 #i6467# - on print output, pdf output and
-            // in embedded mode not editing color COL_WHITE is used instead of
-            // the global retouche color.
+            //  #i6467# - on print output, pdf output and in embedded mode not editing color COL_WHITE is used
+            // instead of the global retouche color.
             if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
                  pSh->GetViewOptions()->IsPDFExport() ||
                  ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
@@ -6333,10 +6312,10 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                     ::lcl_SubtractFlys( this, pPage, aRect, aRegion, aClipState, gProp );
                 }
 
-                // OD 06.08.2002 #99657# - determine, if background transparency
-                //     have to be considered for drawing.
-                //     --> Status Quo: background transparency have to be
-                //        considered for fly frames
+                //  Determine, if background transparency
+                //  have to be considered for drawing.
+                //  Status Quo: background transparency have to be
+                //  considered for fly frames
                 const bool bConsiderBackgroundTransparency = IsFlyFrame();
                 bool bDone(false);
 
@@ -6375,8 +6354,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                             if( !aRegion[i].HasArea() )
                               continue;
                         }
-                    // OD 06.08.2002 #99657# - add 6th parameter to indicate, if
-                    //     background transparency have to be considered
+                    //  add 6th parameter to indicate, if background transparency have to be considered
                     //     Set missing 5th parameter to the default value GRFNUM_NO
                     //         - see declaration in /core/inc/frmtool.hxx.
                         ::DrawGraphic(
@@ -6394,7 +6372,6 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             bLowMode = bLowerMode;
     }
 
-    // OD 05.09.2002 #102912#
     // delete temporary background brush.
     pTmpBackBrush.reset();
 
@@ -6449,7 +6426,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
             if ( !gProp.pSSubsLines )
             {
                 gProp.pSSubsLines.reset(new SwSubsRects);
-                // OD 20.12.2002 #106318# - create container for special subsidiary lines
+                // create container for special subsidiary lines
                 gProp.pSSpecSubsLines.reset(new SwSubsRects);
                 bDelSubs = true;
             }
@@ -6458,8 +6435,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 
             if ( bDelSubs )
             {
-                // OD 20.12.2002 #106318# - paint special subsidiary lines
-                // and delete its container
+                // paint special subsidiary lines and delete its container
                 gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), nullptr, gProp );
                 gProp.pSSpecSubsLines.reset();
 
@@ -6582,10 +6558,8 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
                 continue;
             }
 
-            // OD 19.12.2002 #106318# - do *not* consider fly frames with
-            // a transparent background.
-            // OD 2004-02-12 #110582#-2 - do *not* consider fly frame, which
-            // belongs to an invisible layer
+            // do *not* consider fly frames with a transparent background.
+            // do *not* consider fly frame, which belongs to an invisible layer
             if ( pFly->IsBackgroundTransparent() ||
                  !pFly->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() ) )
             {
@@ -6618,8 +6592,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
         if ( (aP1.*pDirPt)() < (aP2.*pDirPt)() )
         {
             SwRect aRect( aP1, aP2 );
-            // OD 18.11.2002 #99672# - use parameter <pSubsLines> instead of
-            // global variable <gProp.pSSubsLines>.
+            // use parameter <pSubsLines> instead of global variable <gProp.pSSubsLines>.
             pSubsLines->AddLineRect( aRect, nullptr, SvxBorderLineStyle::SOLID,
                     nullptr, nSubColor, gProp );
         }
@@ -6860,8 +6833,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     const bool bFlys = pPage->GetSortedObjs() != nullptr;
 
     const bool bCell = IsCellFrame();
-    // use frame area for cells
-    // OD 13.02.2003 #i3662# - for section use also frame area
+    //  #i3662# - use frame area for cells for section use also frame area
     const bool bUseFrameArea = bCell || IsSctFrame();
     SwRect aOriginal( bUseFrameArea ? getFrameArea() : getFramePrintArea() );
     if ( !bUseFrameArea )
@@ -6888,7 +6860,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
                                 ? SubColFlags::Sect
                                 : ( IsInFly() ? SubColFlags::Fly : SubColFlags::Page ) );
 
-    // OD 18.11.2002 #99672# - collect body, header, footer, footnote and section
+    // collect body, header, footer, footnote and section
     // sub-lines in <pSpecSubsLine> array.
     const bool bSpecialSublines = IsBodyFrame() || IsHeaderFrame() || IsFooterFrame() ||
                                   IsFootnoteFrame() || IsSctFrame();
@@ -6902,20 +6874,20 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     const bool bVert = IsVertical();
     if ( bFlys )
     {
-        // OD 14.11.2002 #104822# - add control for drawing left and right lines
+        // add control for drawing left and right lines
         if ( !bCell || bNewTableModel || !bVert )
         {
             if ( aOriginal.Left() == aOut.Left() )
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor, pUsedSubsLines );
-            // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
+            // in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
                 ::lcl_RefreshLine( this, pPage, aRT, aRB, nSubColor, pUsedSubsLines );
         }
-        // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
+        // adjust control for drawing top and bottom lines
         if ( !bCell || bNewTableModel || bVert )
         {
             if ( aOriginal.Top() == aOut.Top() )
-                // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
+                // in horizontal layout set page/column break at top
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aRT, nSubColor, pUsedSubsLines );
             if ( aOriginal.Bottom() == nBottom )
                 ::lcl_RefreshLine( this, pPage, aLB, aRB, nSubColor,
@@ -6924,7 +6896,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     }
     else
     {
-        // OD 14.11.2002 #104822# - add control for drawing left and right lines
+        // add control for drawing left and right lines
         if ( !bCell || bNewTableModel || !bVert )
         {
             if ( aOriginal.Left() == aOut.Left() )
@@ -6933,7 +6905,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
                         SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
-            // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
+            // in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 const SwRect aRect( aRT, aRB );
@@ -6941,12 +6913,12 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
                         SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
             }
         }
-        // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
+        // adjust control for drawing top and bottom lines
         if ( !bCell || bNewTableModel || bVert )
         {
             if ( aOriginal.Top() == aOut.Top() )
             {
-                // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
+                // in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
                 pUsedSubsLines->AddLineRect( aRect, nullptr,
                         SvxBorderLineStyle::SOLID, nullptr, nSubColor, gProp );
@@ -7260,7 +7232,6 @@ bool SwFrame::GetBackgroundBrush(
         if( pFrame->IsSctFrame() )
         {
             const SwSection* pSection = static_cast<const SwSectionFrame*>(pFrame)->GetSection();
-            // OD 20.08.2002 #99657# #GetTransChg#
             //     Note: If frame <pFrame> is a section of the index and
             //         it its background color is "no fill"/"auto fill" and
             //         it has no background graphic and
@@ -7285,9 +7256,8 @@ bool SwFrame::GetBackgroundBrush(
             }
         }
 
-        // OD 20.08.2002 #99657#
         //     determine, if background draw of frame <pFrame> considers transparency
-        //     --> Status Quo: background transparency have to be
+        //     Status Quo: background transparency have to be
         //                     considered for fly frames
         const bool bConsiderBackgroundTransparency = pFrame->IsFlyFrame();
 
@@ -7318,7 +7288,6 @@ bool SwFrame::GetBackgroundBrush(
             }
         }
 
-        // OD 20.08.2002 #99657#
         //     add condition:
         //     If <bConsiderBackgroundTransparency> is set - see above -,
         //     return brush of frame <pFrame>, if its color is *not* "no fill"/"auto fill"
@@ -7369,7 +7338,6 @@ bool SwFrame::GetBackgroundBrush(
         // get parent frame - anchor or upper - for next loop
         if ( pFrame->IsFlyFrame() )
         {
-            // OD 20.08.2002 - use "static_cast" instead of "old C-cast"
             pFrame = static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame();
         }
         else
@@ -7456,7 +7424,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         gProp.pSFlyOnlyDraw = pFly;
         gProp.pSLines.reset(new SwLineRects);
 
-        // OD 09.12.2002 #103045# - determine page, fly frame is on
+        // determine page, fly frame is on
         const SwPageFrame* pFlyPage = pFly->FindPageFrame();
         const Color aPageBackgrdColor(pFlyPage->GetDrawBackgrdColor());
         const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
@@ -7471,7 +7439,6 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         if ( pFly->IsFlyInContentFrame() )
             pFly->PaintSwFrame( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
-        // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
                           *pFlyPage, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
