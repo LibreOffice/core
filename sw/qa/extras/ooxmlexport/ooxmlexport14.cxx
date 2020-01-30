@@ -301,6 +301,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(maTempFile.GetFileName(), test::OOXML);
     mbExported = true;
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
@@ -309,6 +310,12 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     // exported as <w:t>User Field foo = bar</w:t>.
     assertXPathContent(pXmlDoc, "//w:p/w:r[2]/w:instrText", " DOCVARIABLE foo ");
     assertXPathContent(pXmlDoc, "//w:p/w:r[4]/w:t", "bar");
+
+    // Make sure that not only the variables, but also their values are written.
+    pXmlDoc = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar", "name", "foo");
+    assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", "bar");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")

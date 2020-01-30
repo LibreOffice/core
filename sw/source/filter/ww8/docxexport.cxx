@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -887,6 +888,58 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps, bSecurityOptOpenReadOnly );
 }
 
+void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
+{
+    SwDocShell* pDocShell = m_pDoc->GetDocShell();
+    if (!pDocShell)
+    {
+        return;
+    }
+
+    uno::Reference<text::XTextFieldsSupplier> xModel(pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFieldMasters = xModel->getTextFieldMasters();
+    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    if (!aMasterNames.hasElements())
+    {
+        return;
+    }
+
+    // Only write docVars if there will be at least a single docVar.
+    bool bStarted = false;
+    const OUStringLiteral aPrefix("com.sun.star.text.fieldmaster.User.");
+    for (const auto& rMasterName : std::as_const(aMasterNames))
+    {
+        if (!rMasterName.startsWith(aPrefix))
+        {
+            // Not a user field.
+            continue;
+        }
+
+        uno::Reference<beans::XPropertySet> xField;
+        xTextFieldMasters->getByName(rMasterName) >>= xField;
+        if (!xField.is())
+        {
+            continue;
+        }
+
+        OUString aKey = rMasterName.copy(aPrefix.getLength());
+        OUString aValue;
+        xField->getPropertyValue("Content") >>= aValue;
+        if (!bStarted)
+        {
+            bStarted = true;
+            pFS->startElementNS(XML_w, XML_docVars);
+        }
+        pFS->singleElementNS(XML_w, XML_docVar, FSNS(XML_w, XML_name), aKey.toUtf8(),
+                             FSNS(XML_w, XML_val), aValue.toUtf8());
+    }
+
+    if (bStarted)
+    {
+        pFS->endElementNS(XML_w, XML_docVars);
+    }
+}
+
 void DocxExport::WriteSettings()
 {
     SwViewShell *pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -1150,6 +1203,8 @@ void DocxExport::WriteSettings()
             }
         }
     }
+
+    WriteDocVars(pFS);
 
     // Protect form
     // Section-specific write protection
