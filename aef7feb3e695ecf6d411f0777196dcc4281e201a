@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2bc6f656_b15e1c7a",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-30T20:17:46Z",
+      "side": 1,
+      "message": "This doesn\u0027t look correct. This cast is to ensure that CPPUNIT_ASSERT* macro takes two identical types (a requirement of a template used), not about comparing signed to unsigned...",
+      "range": {
+        "startLine": 1066,
+        "startChar": 86,
+        "endLine": 1066,
+        "endChar": 108
+      },
+      "revId": "aef7feb3e695ecf6d411f0777196dcc4281e201a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6308b10b_6e07115f",
         "filename": "svl/source/misc/strmadpt.cxx",
         "patchSetId": 3
