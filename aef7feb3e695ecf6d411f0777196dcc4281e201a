@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6308b10b_6e07115f",
+        "filename": "svl/source/misc/strmadpt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-01-30T19:45:17Z",
+      "side": 1,
+      "message": "Does this comparison make sense? STREAM_SEEK_TO_END is SAL_MAX_UINT64 ...",
+      "range": {
+        "startLine": 257,
+        "startChar": 28,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "aef7feb3e695ecf6d411f0777196dcc4281e201a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
