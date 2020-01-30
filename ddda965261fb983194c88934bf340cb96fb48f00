@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc3456fa_fb9ac61b",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-30T11:41:56Z",
+      "side": 1,
+      "message": "Sorry, I just recognized, that these are random custom styles with ad hoc names. Instead of this, we must recognize, that a style is a custom style with an Outline base style. This way we could fix the format of all user-defined styles, not only the styles of the unit test document.\n\nBy the way, the number is really important here? What if the custom style doesn\u0027t contain number, but inherited from Heading 1?",
+      "range": {
+        "startLine": 1061,
+        "startChar": 2,
+        "endLine": 1062,
+        "endChar": 79
+      },
+      "revId": "ddda965261fb983194c88934bf340cb96fb48f00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
