@@ -80,21 +80,15 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
     return true;
 }
 
-bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& /*rWhite*/,
-                                                         CompatibleDC& rBlack, int nX, int nY,
+bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
+                                                         int nX, int nY,
                                                          ControlCacheKey& aControlCacheKey)
 {
-    // assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
+    assert(dynamic_cast<SkiaCompatibleDC*>(&rWhite));
     assert(dynamic_cast<SkiaCompatibleDC*>(&rBlack));
 
-    // Native widgets are drawn twice on black/white background, which comes from an OpenGL
-    // commit c6b66646870cb2bffaa73565affcf80bf74e0b5c, where it is used to synthetize alpha.
-    // But getting the Windows theming API to draw into an empty area (fully transparent)
-    // actually results in the widget being in the premultiplied alpha format (and I have no
-    // idea why the OpenGL code uses the weird undocumented pixel diffing it does, probably
-    // the author did not realize this). Simply use the black variant as premultiplied data.
-    // TODO Remove the white variant completely once OpenGL code is removed.
-    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rBlack).getAsImage(true);
+    sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rBlack).getAsImageDiff(
+        static_cast<SkiaCompatibleDC&>(rWhite));
     preDraw();
     mSurface->getCanvas()->drawImage(image, nX, nY);
     postDraw();
@@ -204,13 +198,12 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
     return surface->makeImageSnapshot();
 }
 
-sk_sp<SkImage> SkiaCompatibleDC::getAsImage(bool fromPremultiplied) const
+sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
 {
     SkBitmap tmpBitmap;
-    if (!tmpBitmap.installPixels(
-            SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight, kBGRA_8888_SkColorType,
-                              fromPremultiplied ? kPremul_SkAlphaType : kUnpremul_SkAlphaType),
-            mpData, maRects.mnSrcWidth * 4))
+    if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                   kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
+                                 mpData, maRects.mnSrcWidth * 4))
         abort();
     tmpBitmap.setImmutable();
     sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
@@ -226,6 +219,54 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage(bool fromPremultiplied) const
     canvas->drawBitmapRect(tmpBitmap,
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
+    canvas->restore();
+    return surface->makeImageSnapshot();
+}
+
+sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) const
+{
+    assert(maRects.mnSrcWidth == white.maRects.mnSrcWidth
+           || maRects.mnSrcHeight == white.maRects.mnSrcHeight);
+    SkBitmap tmpBitmap;
+    if (!tmpBitmap.tryAllocPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
+                                                    kBGRA_8888_SkColorType, kPremul_SkAlphaType),
+                                  maRects.mnSrcWidth * 4))
+        abort();
+    // Native widgets are drawn twice on black/white background to synthetize alpha
+    // (commit c6b66646870cb2bffaa73565affcf80bf74e0b5c). The problem is that
+    // most widgets when drawn on transparent background are drawn properly (and the result
+    // is in premultiplied alpha format), some such as "Edit" (used by ControlType::Editbox)
+    // keep the alpha channel as transparent. Therefore the alpha is actually computed
+    // from the difference in the premultiplied red channels when drawn one black and on white.
+    // Alpha is computed as "alpha = 1.0 - abs(black.red - white.red)".
+    // TODO I doubt this can be done using Skia, so do it manually here. Fortunately
+    // the bitmaps should be fairly small and are cached.
+    uint32_t* dest = tmpBitmap.getAddr32(0, 0);
+    assert(dest == tmpBitmap.getPixels());
+    const sal_uInt32* src = mpData;
+    const sal_uInt32* whiteSrc = white.mpData;
+    uint32_t* end = dest + tmpBitmap.width() * tmpBitmap.height();
+    while (dest < end)
+    {
+        uint32_t alpha = 255 - abs(int(*src & 0xff) - int(*whiteSrc & 0xff));
+        *dest = (*src & 0x00ffffff) | (alpha << 24);
+        ++dest;
+        ++src;
+        ++whiteSrc;
+    }
+    tmpBitmap.notifyPixelsChanged();
+    tmpBitmap.setImmutable();
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+    SkCanvas* canvas = surface->getCanvas();
+    canvas->save();
+    // The data we got is upside-down.
+    SkMatrix matrix;
+    matrix.preTranslate(0, tmpBitmap.height());
+    matrix.setConcat(matrix, SkMatrix::MakeScale(1, -1));
+    canvas->concat(matrix);
+    canvas->drawBitmap(tmpBitmap, 0, 0, &paint);
     canvas->restore();
     return surface->makeImageSnapshot();
 }

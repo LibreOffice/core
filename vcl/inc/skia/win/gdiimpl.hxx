@@ -32,8 +32,9 @@ public:
 
     virtual bool wantsTextColorWhite() const override { return true; }
 
-    sk_sp<SkImage> getAsImage(bool fromPremultiplied = false) const;
+    sk_sp<SkImage> getAsImage() const;
     sk_sp<SkImage> getAsMaskImage() const;
+    sk_sp<SkImage> getAsImageDiff(const SkiaCompatibleDC& white) const;
 
     struct Texture;
     struct PackedTexture;
