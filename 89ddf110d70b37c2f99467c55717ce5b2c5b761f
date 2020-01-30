@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ca996ac_a810bbd0",
+        "filename": "compilerplugins/clang/indentation.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-30T19:49:10Z",
+      "side": 1,
+      "message": "Or rather move this into a plugin of its own, off by default?  I fail to see the connection with the existing loplugin:indentation.",
+      "revId": "89ddf110d70b37c2f99467c55717ce5b2c5b761f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
