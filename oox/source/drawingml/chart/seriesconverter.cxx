@@ -62,32 +62,6 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-/** Function to get vertical position of label from chart height factor.
-    Value can be negative, prefer top placement.
- */
-int lclGetPositionY( double nVal )
-{
-    if( nVal <= 0.1 )
-        return -1;
-    else if( nVal <= 0.6 )
-        return 0;
-    else
-        return 1;
-}
-
-/** Function to get horizontal position of label from chart width factor.
-    Value can be negative, prefer center placement.
-*/
-int lclGetPositionX( double nVal )
-{
-    if( nVal <= -0.2 )
-        return -1;
-    else if( nVal <= 0.2 )
-        return 0;
-    else
-        return 1;
-}
-
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
         DataSourceModel* pValues, const OUString& rRole,
@@ -275,31 +249,10 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
-        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout )
+        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
         {
-            if( rTypeInfo.meTypeCategory == TYPECATEGORY_BAR )
-            {
-                // It is only works for BAR Chart, yet!!!
-                RelativePosition aPos(mrModel.mxLayout->mfX, mrModel.mxLayout->mfY, css::drawing::Alignment_TOP_LEFT);
-                aPropSet.setProperty(PROP_CustomLabelPosition, aPos);
-            }
-            else if( !bIsPie )
-            {
-                // bnc#694340 - nasty hack - chart2 cannot individually
-                // place data labels, let's try to find a useful
-                // compromise instead
-                namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-                const sal_Int32 aPositionsLookupTable[] =
-                {
-                    csscd::TOP_LEFT,    csscd::TOP,    csscd::TOP_RIGHT,
-                    csscd::LEFT,        csscd::CENTER, csscd::RIGHT,
-                    csscd::BOTTOM_LEFT, csscd::BOTTOM, csscd::BOTTOM_RIGHT
-                };
-                const int simplifiedX = lclGetPositionX(mrModel.mxLayout->mfX);
-                const int simplifiedY = lclGetPositionY(mrModel.mxLayout->mfY);
-                aPropSet.setProperty(PROP_LabelPlacement,
-                    aPositionsLookupTable[simplifiedX + 1 + 3 * (simplifiedY + 1)]);
-            }
+            RelativePosition aPos(mrModel.mxLayout->mfX, mrModel.mxLayout->mfY, css::drawing::Alignment_TOP_LEFT);
+            aPropSet.setProperty(PROP_CustomLabelPosition, aPos);
         }
 
         if (mrModel.mxShapeProp)
