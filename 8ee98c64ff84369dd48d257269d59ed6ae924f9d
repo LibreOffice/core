@@ -22,6 +22,30 @@
       "revId": "8ee98c64ff84369dd48d257269d59ed6ae924f9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a9f8cc_c60a4405",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-01-30T17:35:28Z",
+      "side": 1,
+      "message": "Heiko: the guidelines in this very specific case shouldn’t apply. The capitalization is used here as self-documentation of the Capitalize feature. We should be pragmatic.",
+      "parentUuid": "6d2bfbc2_2f0e55ac",
+      "range": {
+        "startLine": 110,
+        "startChar": 80,
+        "endLine": 110,
+        "endChar": 101
+      },
+      "revId": "8ee98c64ff84369dd48d257269d59ed6ae924f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
