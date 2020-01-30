@@ -798,6 +798,11 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
                 aSet.Put( aLN );
+                if (nId == RES_POOLCOLL_TABLE)
+                {
+                    aSet.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
+                    aSet.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
+                }
             }
             break;
 
