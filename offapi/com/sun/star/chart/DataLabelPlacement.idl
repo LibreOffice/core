@@ -41,7 +41,7 @@ published constants DataLabelPlacement
     const long INSIDE = 10;
     const long OUTSIDE = 11;
     const long NEAR_ORIGIN = 12;
-    const long CUSTOM = 13;
+    /** @since LibreOffice 7.0 */ const long CUSTOM = 13;
 };
 
 

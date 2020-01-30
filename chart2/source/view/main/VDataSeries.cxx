@@ -641,8 +641,10 @@ awt::Point VDataSeries::getLabelPosition( awt::Point aTextShapePos, sal_Int32 nP
             aPos.Y = static_cast<sal_Int32>(aCustomLabelPosition.Secondary * m_aReferenceSize.Height) + aTextShapePos.Y;
         }
     }
-    catch (const uno::Exception&) {}
-
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "");
+    }
     return aPos;
 }
 
@@ -659,8 +661,10 @@ bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
                 bCustom = true;
         }
     }
-    catch (const uno::Exception&) {}
-
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "");
+    }
     return bCustom;
 }
 
