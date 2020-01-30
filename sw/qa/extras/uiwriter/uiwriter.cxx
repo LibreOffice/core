@@ -244,6 +244,7 @@ public:
     void testTdf75137();
     void testTdf83798();
     void testTdf89714();
+    void testTdf130287();
     void testPropertyDefaults();
     void testTableBackgroundColor();
     void testTdf88899();
@@ -451,6 +452,7 @@ public:
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTdf89714);
+    CPPUNIT_TEST(testTdf130287);
     CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf88899);
@@ -3611,6 +3613,26 @@ void SwUiWriterTest::testTdf89714()
     //enabled Paragraph Orphan and Widows by default starting in LO5.1
     CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaOrphans") );
     CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaWidows")  );
+}
+
+void SwUiWriterTest::testTdf130287()
+{
+    //create a new writer document
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    //insert a 1-cell table in the newly created document
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(TableOpt, 1, 1);
+    //checking for the row and column
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    uno::Reference<text::XText> xCellText(xCell, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xCellText);
+    // they were 2 (orphan/widow control enabled unnecessarily in Table Contents paragraph style)
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(0), getProperty<sal_Int8>(xParagraph, "ParaOrphans"));
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(0), getProperty<sal_Int8>(xParagraph, "ParaWidows"));
 }
 
 void SwUiWriterTest::testPropertyDefaults()
