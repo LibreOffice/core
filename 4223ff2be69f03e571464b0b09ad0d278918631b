@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "9856125b_5cb2329d",
+        "filename": "chart2/source/view/main/VDataSeries.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-30T10:38:45Z",
+      "side": 1,
+      "message": "FIXME: add TOOLS_WARN_EXCEPTION, as above",
+      "range": {
+        "startLine": 644,
+        "startChar": 33,
+        "endLine": 644,
+        "endChar": 36
+      },
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76b8cb18_809a4438",
+        "filename": "chart2/source/view/main/VDataSeries.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-30T10:38:45Z",
+      "side": 1,
+      "message": "FIXME: add TOOLS_WARN_EXCEPTION, as above",
+      "range": {
+        "startLine": 662,
+        "startChar": 33,
+        "endLine": 662,
+        "endChar": 36
+      },
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3120c17_7b2bac7d",
         "filename": "offapi/com/sun/star/chart/DataLabelPlacement.idl",
         "patchSetId": 15
@@ -19,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "879b99e0_a3d949b5",
+        "filename": "offapi/com/sun/star/chart/DataLabelPlacement.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-30T10:38:45Z",
+      "side": 1,
+      "message": "Next commit will fix it. Thanks, László",
+      "parentUuid": "c3120c17_7b2bac7d",
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "885cc656_17b67486",
         "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
         "patchSetId": 15
@@ -30,6 +94,30 @@
       "writtenOn": "2020-01-30T09:53:10Z",
       "side": 1,
       "message": "7.0 is the next version.",
+      "range": {
+        "startLine": 334,
+        "startChar": 27,
+        "endLine": 334,
+        "endChar": 30
+      },
+      "revId": "4223ff2be69f03e571464b0b09ad0d278918631b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "292853df_753fd4ca",
+        "filename": "offapi/com/sun/star/chart2/DataPointProperties.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-30T10:38:45Z",
+      "side": 1,
+      "message": "Ah, we have already heard the good news, but I didn\u0027t know, this is public information, or not. We will fix it in the upcoming ODF support of CustomLabelPosition, Thanks, László",
+      "parentUuid": "885cc656_17b67486",
       "range": {
         "startLine": 334,
         "startChar": 27,
