@@ -56,15 +56,11 @@ public:
         m_aSelectedLink = rLink;
     }
 
-    void SetSlotId(sal_uInt16 nSlotId);
-
     Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
 
-    void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
 
     void SetNoSelection() { getColorWindow()->SetNoSelection(); }
-    bool IsNoSelection() const { return getColorWindow()->IsNoSelection(); }
 
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
