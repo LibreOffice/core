@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8badd65b_08937b49",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10258,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-01-30T17:02:46Z",
+      "side": 1,
+      "message": "this would break on Debian. There the headers are in qrcodegen/*\n\nhttps://packages.debian.org/sid/amd64/libqrcodegencpp-dev/filelist",
+      "revId": "c6f0220b8a5278a27f8f7484e1ceabe78241ed5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
