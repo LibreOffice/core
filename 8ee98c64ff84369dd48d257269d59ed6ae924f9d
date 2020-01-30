@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d2bfbc2_2f0e55ac",
+        "filename": "cui/uiconfig/ui/effectspage.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-01-30T15:48:03Z",
+      "side": 1,
+      "message": "Title style capitalization is wrong here. It\u0027s used for dialog titles, button captions, and menu items but not in-dialog text. See also https://wiki.documentfoundation.org/Design/Guidelines/UIWriting",
+      "range": {
+        "startLine": 110,
+        "startChar": 80,
+        "endLine": 110,
+        "endChar": 101
+      },
+      "revId": "8ee98c64ff84369dd48d257269d59ed6ae924f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
