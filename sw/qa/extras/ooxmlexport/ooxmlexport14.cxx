@@ -22,6 +22,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -277,6 +278,37 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     // Without the accompanying fix in place, this test would have failed, as the w14:textFill
     // element was missing.
     CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
+{
+    // Create an in-memory empty document with a user field.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XDependentTextField> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.User"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMaster(
+        xFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY);
+    xMaster->setPropertyValue("Name", uno::makeAny(OUString("foo")));
+    xField->attachTextFieldMaster(xMaster);
+    xField->getTextFieldMaster()->setPropertyValue("Content", uno::makeAny(OUString("bar")));
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
+
+    // Export to docx.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mbExported = true;
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the accompanying fix in place, this test would have failed, the user field was
+    // exported as <w:t>User Field foo = bar</w:t>.
+    assertXPathContent(pXmlDoc, "//w:p/w:r[2]/w:instrText", " DOCVARIABLE foo ");
+    assertXPathContent(pXmlDoc, "//w:p/w:r[4]/w:t", "bar");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
