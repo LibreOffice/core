@@ -331,7 +331,7 @@ service DataPointProperties
 
     /** Custom position on the page associated to the CUSTOM label placement.
 
-        @since LibreOffice 6.5
+        @since LibreOffice 7.0
     */
     [optional, maybevoid, property] ::com::sun::star::chart2::RelativePosition CustomLabelPosition;
 };
