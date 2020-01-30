@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9eaa3f40_84652343",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-30T20:44:07Z",
+      "side": 1,
+      "message": "You mean, why o3tl::make_unsigned is necessary here?   Just as with any other unsigned\u003esigned comparison.  (CPPUNIT_ASSERT_MESSAGE takes two arguments, a message and a condition that should be true.  This test would arguably be better written as CPPUNIT_ASSERT_GREATER---though that doesn\u0027t let you provide a customized message.)",
+      "parentUuid": "5b001777_189aa667",
+      "range": {
+        "startLine": 1066,
+        "startChar": 86,
+        "endLine": 1066,
+        "endChar": 108
+      },
+      "revId": "aef7feb3e695ecf6d411f0777196dcc4281e201a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6308b10b_6e07115f",
         "filename": "svl/source/misc/strmadpt.cxx",
         "patchSetId": 3
@@ -60,6 +84,30 @@
       "writtenOn": "2020-01-30T19:45:17Z",
       "side": 1,
       "message": "Does this comparison make sense? STREAM_SEEK_TO_END is SAL_MAX_UINT64 ...",
+      "range": {
+        "startLine": 257,
+        "startChar": 28,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "aef7feb3e695ecf6d411f0777196dcc4281e201a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e6a1665_24869277",
+        "filename": "svl/source/misc/strmadpt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-30T20:44:07Z",
+      "side": 1,
+      "message": "the comparison has become tautologically true with \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/1258b576aef2ff3cdd4f44e1c03edb8c862a79f6%5E!\u003e \"tools: support 64-bit file positions in SvStream\" (until the next time one of the involved types gets changed...)",
+      "parentUuid": "6308b10b_6e07115f",
       "range": {
         "startLine": 257,
         "startChar": 28,
