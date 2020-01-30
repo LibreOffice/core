@@ -9424,7 +9424,7 @@ void ScInterpreter::ScRegex()
         return;
     }
     // Guard against pathological patterns, limit steps of engine, see
-    // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
+    // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
     aRegexMatcher.setTimeLimit( 23*1000, status);
 
     const icu::UnicodeString aIcuText( reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());

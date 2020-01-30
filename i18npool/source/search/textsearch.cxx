@@ -879,7 +879,7 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
         // Pathological patterns may result in exponential run time making the
         // application appear to be frozen. Limit that. Documentation for this
         // call says
-        // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
+        // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
         // "The units of the limit are steps of the match engine.
         // Correspondence with actual processor time will depend on the speed
         // of the processor and the details of the specific pattern, but will
