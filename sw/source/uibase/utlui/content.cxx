@@ -1758,12 +1758,11 @@ void SwContentTree::Display( bool bActive )
                     rpContentT.reset(new SwContentType(pShell, nCntType, m_nOutlineLevel ));
 
                 OUString sEntry = rpContentT->GetName();
-                SvTreeListEntry* pEntry;
                 Image aImage(GetBitmapForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
-                pEntry = InsertEntry(sEntry, aImage, aImage,
+                SvTreeListEntry* pEntry = InsertEntry(sEntry, aImage, aImage,
                                 nullptr, bChOnDemand, TREELIST_APPEND, rpContentT.get());
-                if(pEntry && !pEntry->HasChildren() && !pEntry->HasChildrenOnDemand())
+                if (!pEntry->HasChildren() && !pEntry->HasChildrenOnDemand())
                 {
                     pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT);
                     pEntry->SetTextColor(COL_GRAY);
