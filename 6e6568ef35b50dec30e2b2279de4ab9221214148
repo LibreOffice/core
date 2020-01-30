@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "e142f4d5_5ec77ca2",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-30T15:32:34Z",
+      "side": 1,
+      "message": "Consistency. If you want to modify bookmarks in any way, you have to disable the protection. If you insert them you also can\u0027t rename them, with the patch. IMHO the handling could be different, if we implemented protection per bookmark, but as a per-document setting, we should just allow the goto.",
+      "parentUuid": "9cf02998_047bc6eb",
+      "revId": "6e6568ef35b50dec30e2b2279de4ab9221214148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62a374a1_b75948dc",
         "filename": "sw/source/uibase/utlui/content.cxx",
         "patchSetId": 4
