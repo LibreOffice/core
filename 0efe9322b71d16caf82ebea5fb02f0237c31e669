@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cce7f68a_f60957e4",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-30T15:31:34Z",
+      "side": 1,
+      "message": "What does that comment pertain to?",
+      "revId": "0efe9322b71d16caf82ebea5fb02f0237c31e669",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fd6a038_645814ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-01-30T15:31:34Z",
+      "side": 1,
+      "message": "What does this mean?  If (part of) the content of that file comes from somewhere, where does it come from exactly?",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "0efe9322b71d16caf82ebea5fb02f0237c31e669",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
