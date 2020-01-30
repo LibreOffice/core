@@ -968,21 +968,10 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    OutDevType eOutDevType = pDev->GetOutDevType();
     AllSettings aOldSettings = pDev->GetSettings();
 
     pDev->Push();
     pDev->SetMapMode();
-
-    if (eOutDevType == OUTDEV_PRINTER)
-    {
-        StyleSettings aStyleSettings = aOldSettings.GetStyleSettings();
-        aStyleSettings.SetFaceColor(COL_LIGHTGRAY);
-        aStyleSettings.SetButtonTextColor(COL_BLACK);
-        AllSettings aSettings(aOldSettings);
-        aSettings.SetStyleSettings(aStyleSettings);
-        pDev->SetSettings(aSettings);
-    }
 
     tools::Rectangle aDD, aUp, aDown;
     ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
@@ -992,7 +981,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     aDown.Move(aPos.X(), aPos.Y());
 
     Color aButtonTextColor;
-    if ((nFlags & DrawFlags::Mono) || (eOutDevType == OUTDEV_PRINTER))
+    if (nFlags & DrawFlags::Mono)
         aButtonTextColor = COL_BLACK;
     else
         aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
