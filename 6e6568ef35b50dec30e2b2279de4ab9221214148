@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f8a31d2_6d9aa8a0",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-30T15:02:51Z",
+      "side": 1,
+      "message": "hmm it might make sense to disable renaming the bookmarks, the name is probably relevant for some workflow...",
+      "revId": "6e6568ef35b50dec30e2b2279de4ab9221214148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf02998_047bc6eb",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-30T15:02:51Z",
+      "side": 1,
+      "message": "but why disable insert too? the user might want to add additional bookmarks? granted they can\u0027t deleted them again...",
+      "revId": "6e6568ef35b50dec30e2b2279de4ab9221214148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62a374a1_b75948dc",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-30T15:02:51Z",
+      "side": 1,
+      "message": "if both edit and delete are disabled this is dead code, it should be one level up",
+      "revId": "6e6568ef35b50dec30e2b2279de4ab9221214148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
