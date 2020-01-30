@@ -60,7 +60,6 @@ WrapPropertyPanel::WrapPropertyPanel(
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame, true)
-    , mxFrame( rxFrame )
     , mpBindings(pBindings)
     // spacing
     , nTop(0)

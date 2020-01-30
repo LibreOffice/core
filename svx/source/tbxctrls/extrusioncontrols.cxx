@@ -586,8 +586,6 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
     , mxBright(m_xBuilder->weld_radio_button("bright"))
     , mxNormal(m_xBuilder->weld_radio_button("normal"))
     , mxDim(m_xBuilder->weld_radio_button("dim"))
-    , mnDirection(FROM_FRONT)
-    , mbDirectionEnabled(false)
 {
     mxLightingSet->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
 
@@ -651,9 +649,6 @@ void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
 
 void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 {
-    mnDirection = nDirection;
-    mbDirectionEnabled = bEnabled;
-
     if( !bEnabled )
         nDirection = FROM_FRONT;
 

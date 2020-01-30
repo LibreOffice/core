@@ -35,7 +35,6 @@ class SVT_DLLPUBLIC AsynchronLink
 {
     Link<void*,void> _aLink;
     ImplSVEvent*     _nEventId;
-    std::unique_ptr<Idle> _pIdle;
     bool             _bInCall;
     bool*            _pDeleted;
     void*            _pArg;

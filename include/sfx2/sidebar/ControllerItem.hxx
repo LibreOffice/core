@@ -57,9 +57,6 @@ public:
         SfxBindings &rBindings,
         ItemUpdateReceiverInterface& rItemUpdateReceiver);
 
-    /// releases our action listener
-    virtual void dispose() override;
-
     virtual ~ControllerItem() override;
 
     /** Force the controller item to call its NotifyItemUpdate
@@ -72,7 +69,6 @@ private:
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
 
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
-    css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
 };
 
 } } // end of namespace sfx2::sidebar

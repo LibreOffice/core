@@ -51,7 +51,6 @@ namespace sw { namespace sidebar {
             const css::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
     private:
-        css::uno::Reference< css::frame::XFrame > mxFrame;
         SfxBindings* mpBindings;
 
         //Spacing
