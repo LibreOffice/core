@@ -314,10 +314,26 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
     {
+        bool bStacked = false;
+        {
+            uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
+            chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
+            xSeriesProp->getPropertyValue("StackingDirection") >>= eStacking;
+            bStacked = (eStacking == chart2::StackingDirection_Y_STACKING);
+        }
+
         aRet.realloc(2);
         sal_Int32* pSeq = aRet.getArray();
-        *pSeq++ = css::chart::DataLabelPlacement::TOP;
-        *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+        if (bStacked)
+        {
+            *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+            *pSeq++ = css::chart::DataLabelPlacement::TOP;
+        }
+        else
+        {
+            *pSeq++ = css::chart::DataLabelPlacement::TOP;
+            *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+        }
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
     {
