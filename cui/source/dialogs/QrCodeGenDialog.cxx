@@ -16,7 +16,7 @@
 #include <vcl/weld.hxx>
 
 #if defined(SYSTEM_QRCODEGEN)
-#include <qrcodegen/QrCode.hpp>
+#include <qrcodegencpp/QrCode.hpp>
 #else
 #include <QrCode.hpp>
 #endif

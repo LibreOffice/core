@@ -10255,7 +10255,7 @@ if test "$with_system_qrcodegen" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_QRCODEGEN=TRUE
     AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER(qrcodegen/QrCode.hpp, [],
+    AC_CHECK_HEADER(qrcodegencpp/QrCode.hpp, [],
         [AC_MSG_ERROR(qrcodegen headers not found.)], [#include <stdexcept>])
     AC_CHECK_LIB([qrcodegencpp], [main], [:],
         [ AC_MSG_ERROR(qrcodegen C++ library not found.) ], [])
