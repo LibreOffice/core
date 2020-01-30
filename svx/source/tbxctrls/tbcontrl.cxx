@@ -4036,15 +4036,6 @@ void ColorListBox::EnsurePaletteManager()
     }
 }
 
-void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId)
-{
-    m_nSlotId = nSlotId;
-    m_xColorWindow.disposeAndClear();
-    m_aSelectedColor = GetAutoColor(m_nSlotId);
-    ShowPreview(m_aSelectedColor);
-    createColorWindow();
-}
-
 void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
 {
     m_nSlotId = nSlotId;
@@ -4167,19 +4158,6 @@ VclPtr<SvxColorWindow> const & SvxColorListBox::getColorWindow() const
     if (!m_xColorWindow || m_xColorWindow->isDisposed())
         const_cast<SvxColorListBox*>(this)->createColorWindow();
     return m_xColorWindow;
-}
-
-void SvxColorListBox::SelectEntry(const NamedColor& rColor)
-{
-    if (rColor.second.trim().isEmpty())
-    {
-        SelectEntry(rColor.first);
-        return;
-    }
-    VclPtr<SvxColorWindow> xColorWindow = getColorWindow();
-    xColorWindow->SelectEntry(rColor);
-    m_aSelectedColor = xColorWindow->GetSelectEntryColor();
-    ShowPreview(m_aSelectedColor);
 }
 
 void SvxColorListBox::SelectEntry(const Color& rColor)

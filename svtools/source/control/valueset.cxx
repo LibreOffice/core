@@ -1496,15 +1496,6 @@ void ValueSet::Select()
     maSelectHdl.Call( this );
 }
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
-{
-    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_IMAGE;
-    pItem->maImage  = rImage;
-    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
-}
-
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos,
                            bool bShowLegend )
@@ -1655,11 +1646,6 @@ tools::Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
         return ImplGetItemRect( nPos );
 
     return tools::Rectangle();
-}
-
-void ValueSet::EnableFullItemMode( bool bFullMode )
-{
-    mbFullMode = bFullMode;
 }
 
 void ValueSet::SetColCount( sal_uInt16 nNewCols )
@@ -1851,26 +1837,6 @@ Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
         return mItemList[nPos]->maImage;
     else
         return Image();
-}
-
-void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_COLOR;
-    pItem->maColor = rColor;
-
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-    {
-        const tools::Rectangle aRect = ImplGetItemRect(nPos);
-        Invalidate( aRect );
-    }
-    else
-        mbFormat = true;
 }
 
 Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
@@ -2111,11 +2077,6 @@ long ValueSet::GetScrollWidth() const
     }
     else
         return 0;
-}
-
-void ValueSet::SetHighlightHdl( const Link<ValueSet*,void>& rLink )
-{
-    maHighlightHdl = rLink;
 }
 
 Size ValueSet::GetLargestItemSize()

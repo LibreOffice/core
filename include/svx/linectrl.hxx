@@ -59,8 +59,6 @@ public:
     void setLineStyleSelectFunction(const LineStyleSelectFunction& aLineStyleSelectFunction);
     void dispatchLineStyleCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
-    int GetStyleIndex() const;
-
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;

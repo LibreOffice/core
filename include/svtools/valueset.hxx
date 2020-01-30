@@ -297,8 +297,6 @@ public:
 
     virtual void    Select();
 
-    /// Insert @rImage item.
-    void            InsertItem(sal_uInt16 nItemId, const Image& rImage);
     /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND, bool bShowLegend = false);
@@ -316,18 +314,9 @@ public:
     sal_uInt16      GetItemId( size_t nPos ) const;
     sal_uInt16      GetItemId( const Point& rPos ) const;
     tools::Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
-    void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );
-    sal_uInt16      GetColCount() const
-    {
-        return mnUserCols;
-    }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    sal_uInt16      GetLineCount() const
-    {
-        return mnUserVisLines;
-    }
     void           SetItemWidth( long nItemWidth );
     void           SetItemHeight( long nLineHeight );
     Size           GetLargestItemSize();
@@ -349,7 +338,6 @@ public:
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
-    void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemData( sal_uInt16 nItemId, void* pData );
     void*           GetItemData( sal_uInt16 nItemId ) const;
@@ -377,8 +365,6 @@ public:
     {
         maSelectHdl = rLink;
     }
-
-    void            SetHighlightHdl(const Link<ValueSet*,void>& rLink);
 
     bool GetEdgeBlending() const
     {

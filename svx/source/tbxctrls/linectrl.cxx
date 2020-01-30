@@ -182,11 +182,6 @@ void SvxLineStyleToolBoxControl::dispatchLineStyleCommand(const OUString& rComma
     dispatchCommand(rCommand, rArgs);
 }
 
-int SvxLineStyleToolBoxControl::GetStyleIndex() const
-{
-    return m_xBtnUpdater->GetStyleIndex();
-}
-
 std::unique_ptr<WeldToolbarPopup> SvxLineStyleToolBoxControl::weldPopupWindow()
 {
     return std::make_unique<SvxLineBox>(this, m_pToolbar, m_xBtnUpdater->GetStyleIndex());

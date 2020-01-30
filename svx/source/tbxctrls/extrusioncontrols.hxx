@@ -67,7 +67,6 @@ private:
 
     DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
     DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
-    void SelectHdl(void const *);
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled );
@@ -154,7 +153,6 @@ private:
 
     DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
     DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
-    void SelectHdl(void const *);
 public:
     ExtrusionLightingWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
     virtual void GrabFocus() override;
