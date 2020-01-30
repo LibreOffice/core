@@ -41,6 +41,9 @@ $(call gb_Output_announce,$(2),$(true),CSC,3)
 		$(CLI_CSCFLAGS) \
 		-target:library \
 		-out:$(1) \
+		$(if $(call gb_LinkTarget__symbols_enabled,$(1)),\
+			-debug:pdbonly \
+			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/Library/$(notdir $(1)))) \
 		-keyfile:$(CLI_KEYFILE) \
 		-reference:System.dll \
 		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \
