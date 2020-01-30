@@ -2515,7 +2515,39 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130031)
     xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4339
+    // - Actual  : 2182
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4339, nY, 50);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130242)
+{
+    SwDoc* pDoc = createDoc("tdf130242.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4958
+    // - Actual  : 3352
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4958, nY, 50);
+
+    nY = getXPath(pXmlDoc, "//textarray[13]", "y").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3018
+    // - Actual  : 2343
+    // - Delta   : 50
+    // i.e. the data label appeared above the data point.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
