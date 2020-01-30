@@ -59,13 +59,6 @@ Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFac
 *//*-*************************************************************************************************************/
 Oxt_Handler::~Oxt_Handler()
 {
-    if ( m_xListener.is() )
-    {
-        css::frame::DispatchResultEvent aEvent;
-        aEvent.State = css::frame::DispatchResultState::FAILURE;
-        m_xListener->dispatchFinished( aEvent );
-        m_xListener.clear();
-    }
 }
 
 /*-************************************************************************************************************

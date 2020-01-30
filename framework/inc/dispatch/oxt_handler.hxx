@@ -86,7 +86,6 @@ class Oxt_Handler final  :  public  ::cppu::WeakImplHelper<
         osl::Mutex m_mutex;
 
         css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory;   /// global uno service factory to create new services
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xListener;
 
 };
 

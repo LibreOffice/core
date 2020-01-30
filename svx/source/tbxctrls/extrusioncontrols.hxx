@@ -149,9 +149,6 @@ private:
     Image maImgLightingOn[9];
     Image maImgLightingPreview[9];
 
-    int     mnDirection;
-    bool    mbDirectionEnabled;
-
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
 

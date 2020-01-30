@@ -82,10 +82,8 @@ class ImplSplitSet
 {
 public:
     ImplSplitSet();
-    ~ImplSplitSet();
 
     std::vector< ImplSplitItem > mvItems;
-    std::unique_ptr<Wallpaper>   mpWallpaper;
     long                mnLastSize;
     long                mnSplitSize;
     sal_uInt16          mnId;
@@ -120,11 +118,6 @@ ImplSplitSet::ImplSplitSet() :
     mnId( 0 ),
     mbCalcPix( true )
 {
-}
-
-ImplSplitSet::~ImplSplitSet()
-{
-    mpWallpaper.reset();
 }
 
 /** Check whether the given size is inside the valid range defined by
@@ -859,13 +852,6 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
     for ( const auto& rItem : rItems )
     {
         pSet = rItem.mpSet.get();
-        if (pSet && pSet->mpWallpaper)
-        {
-            Point aPoint(rItem.mnLeft, rItem.mnTop);
-            Size aSize(rItem.mnWidth, rItem.mnHeight);
-            tools::Rectangle aRect(aPoint, aSize);
-            rRenderContext.DrawWallpaper(aRect, *pSet->mpWallpaper);
-        }
     }
 
     for ( auto& rItem : rItems )
@@ -1190,23 +1176,16 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 void SplitWindow::ImplInitSettings()
 {
-    // If MainSet has a Wallpaper, this is the background,
-    // otherwise it is the standard colour
-    if ( mpMainSet->mpWallpaper )
-        SetBackground( *mpMainSet->mpWallpaper );
-    else
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else if ( Window::GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetFaceColor();
-        else
-            aColor = rStyleSettings.GetWindowColor();
-        SetBackground( aColor );
-    }
+    Color aColor;
+    if ( IsControlBackground() )
+        aColor = GetControlBackground();
+    else if ( Window::GetStyle() & WB_3DLOOK )
+        aColor = rStyleSettings.GetFaceColor();
+    else
+        aColor = rStyleSettings.GetWindowColor();
+    SetBackground( aColor );
 }
 
 SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
