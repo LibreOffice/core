@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e565d0d7_18c0c85c",
+        "filename": ".git-hooks/commit-msg",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-01-30T15:42:27Z",
+      "side": 1,
+      "message": "This is a comment from the Gerrit commit msg hook before these argument checks and I thought it\u0027s nice to have. No particular reasoning to have it, based on problems, just a reminder.",
+      "parentUuid": "cce7f68a_f60957e4",
+      "revId": "0efe9322b71d16caf82ebea5fb02f0237c31e669",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fd6a038_645814ab",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
