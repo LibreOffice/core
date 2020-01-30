@@ -229,6 +229,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     return comphelper::containerToSequence(rProperties);
 }
 
+static bool isTab = false;
 uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults)
 {
     std::vector<beans::PropertyValue> aNumberingProperties;
@@ -271,7 +272,7 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
         }
     }
 
-    if (bDefaults || m_nTabstop != 0)
+    if ( (bDefaults || m_nTabstop != 0) && !isTab )
         aNumberingProperties.push_back(lcl_makePropVal(PROP_LISTTAB_STOP_POSITION, m_nTabstop));
 
     //TODO: handling of nFLegal?
@@ -286,6 +287,8 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
 
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
     if (bDefaults || m_nXChFollow != SvxNumberFormat::LISTTAB)
+        if (isTab)
+            m_nXChFollow = 0;
         aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_FOLLOW, m_nXChFollow));
 
     PropertyIds const aReadIds[] =
@@ -1051,6 +1054,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if(pProperties.get())
                     pProperties->resolve(*this);
+                isTab = true;
             }
             break;
             case NS_ooxml::LN_CT_Lvl_pStyle:
