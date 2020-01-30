@@ -378,22 +378,24 @@ void BitmapTest::testConvert()
         // 24 bit Bitmap on SVP backend can now use 24bit RGB everywhere.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
 
-#if defined LINUX || defined FREEBSD
+        if (SkiaHelper::isVCLSkiaEnabled()) // aligned to 4 bytes
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
+        else
 #if HAVE_FEATURE_OPENGL
-        if (OpenGLHelper::isVCLOpenGLEnabled())
+            if (OpenGLHelper::isVCLOpenGLEnabled())
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
         else
 #endif
+#if defined LINUX || defined FREEBSD
+        {
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
-#else
-#if defined(_WIN32)
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
+        }
+#elif defined(_WIN32)
         {
             // GDI Scanlines padded to DWORD multiples, it seems
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
         }
-        else
-#endif
+#else
         {
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
         }
