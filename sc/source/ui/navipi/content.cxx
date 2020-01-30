@@ -1648,6 +1648,18 @@ void ScContentTree::ApplyNavigatorSettings()
             ScContentId nEntry = static_cast<ScContentId>(i);
             if( pRootNodes[ nEntry ] )
             {
+                // gray or ungray
+                if( GetChildCount( pRootNodes[ nEntry ] ) == 0 )
+                {
+                    pRootNodes[ nEntry ]->SetFlags( pRootNodes[ nEntry ]->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT );
+                    pRootNodes[ nEntry ]->SetTextColor( COL_GRAY );
+                }
+                else
+                {
+                   pRootNodes[ nEntry ]->SetFlags( pRootNodes[ nEntry ]->GetFlags() & ~SvTLEntryFlags::SEMITRANSPARENT );
+                   pRootNodes[ nEntry ]->SetTextColor( GetTextColor() );
+                }
+
                 // expand
                 bool bExp = pSettings->IsExpanded( nEntry );
                 if( bExp != IsExpanded( pRootNodes[ nEntry ] ) )
