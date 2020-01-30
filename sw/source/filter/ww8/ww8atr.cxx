@@ -3271,6 +3271,13 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             GetExport().OutputField( pField, ww::eMACROBUTTON, sStr );
         }
         break;
+    case SwFieldIds::User:
+    {
+        ww::eField eField = ww::eDOCVARIABLE;
+        OUString aExpand = FieldString(eField) + pField->GetPar1() + " ";
+        GetExport().OutputField(pField, eField, aExpand);
+    }
+    break;
     default:
         bWriteExpand = true;
         break;
