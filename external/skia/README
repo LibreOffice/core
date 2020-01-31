@@ -11,14 +11,14 @@ cd skia
 git checkout chrome/mXX
 id=$(git rev-parse chrome/mXX)
 git clean -idx
-rm -rf .git gitignore
+rm -rf .git gitignore infra modules/canvaskit resources site
 cd ..
 tar cvJf skia-mXX-$id.tar.xz skia
 
 (where XX refers to the branch version)
 
-And review differences for BUILD.gn and relevant files in gn/
-(git diff chrome/mYY..chrome/mXX ./file).
+And review differences for BUILD.gn and relevant files in gn/ :
+git diff chrome/mYY..chrome/mXX ./BUILD.gn ./gn
 
 
 GrContext sharing
