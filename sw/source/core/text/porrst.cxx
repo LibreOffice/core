@@ -530,7 +530,7 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
 bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rInf,
         OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const
 {
-    if (!rInf.GetOpt().IsViewMetaChars())
+    if (!rInf.GetOpt().IsShowBookmarks())
     {
         return false;
     }

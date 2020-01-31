@@ -1172,6 +1172,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="Bookmarks" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display formatting -->
+          <info>
+            <desc>Specifies whether bookmark positions are displayed on the screen.</desc>
+            <label>Bookmarks</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="Update">
         <info>

@@ -49,6 +49,7 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
     bool bNonbreakingSpace  :1;
     bool bSoftHyphen        :1;
     bool bCharHiddenText    :1;
+    bool bBookmarks         :1;
     bool bManualBreak       :1;
 
 public:

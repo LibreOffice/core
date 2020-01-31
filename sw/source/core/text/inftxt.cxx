@@ -1378,7 +1378,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         case PortionType::Bookmark:
             if (!GetOpt().IsPagePreview()
                  && !GetOpt().IsReadonly()
-                 && GetOpt().IsViewMetaChars())
+                 && GetOpt().IsShowBookmarks())
             {
                 bDraw = true;
             }
