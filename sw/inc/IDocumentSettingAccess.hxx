@@ -103,7 +103,8 @@ enum class DocumentSettingId
     EMBED_SYSTEM_FONTS,
     APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     CONTINUOUS_ENDNOTES,
-    PROTECT_BOOKMARKS_AND_FIELDS,
+    PROTECT_BOOKMARKS,
+    PROTECT_FIELDS,
 };
 
  /** Provides access to settings of a document
