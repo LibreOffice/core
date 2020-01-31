@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91f527d1_95f57332",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-31T07:50:52Z",
+      "side": 1,
+      "message": "- missing check of pStyleSheetProperties (it can be nullptr, see above)\n- it\u0027s better to check it only once, outside of the loop",
+      "range": {
+        "startLine": 1064,
+        "startChar": 80,
+        "endLine": 1064,
+        "endChar": 177
+      },
+      "revId": "31ed4e934f4e1db7631b575b17b13cadcc646bef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66f1bb7b_87fc4303",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-31T07:50:52Z",
+      "side": 1,
+      "message": "Can this be also conditional? (Maybe the custom style uses different numbering style, or is that not possible?)",
+      "range": {
+        "startLine": 1075,
+        "startChar": 40,
+        "endLine": 1075,
+        "endChar": 102
+      },
+      "revId": "31ed4e934f4e1db7631b575b17b13cadcc646bef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
