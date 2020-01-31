@@ -78,6 +78,7 @@ namespace sw {
             virtual const_iterator_t findMark(const OUString& rName) const override;
 
             // bookmarks
+            virtual bool isBookmarkDeleted(SwPaM const& rPaM) const override;
             virtual const_iterator_t getBookmarksBegin() const override;
             virtual const_iterator_t getBookmarksEnd() const override;
             virtual sal_Int32 getBookmarksCount() const override;

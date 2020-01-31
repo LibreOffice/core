@@ -278,6 +278,9 @@ class IDocumentMarkAccess
 
         // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
+        /** check if the selection would delete a BOOKMARK */
+        virtual bool isBookmarkDeleted(SwPaM const& rPaM) const =0;
+
         /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.
         */
         virtual const_iterator_t getBookmarksBegin() const =0;
