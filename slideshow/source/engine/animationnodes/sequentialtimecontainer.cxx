@@ -58,10 +58,6 @@ void SequentialTimeContainer::dispose()
         mpCurrentSkipEvent->dispose();
         mpCurrentSkipEvent.reset();
     }
-    if (mpCurrentRewindEvent) {
-        mpCurrentRewindEvent->dispose();
-        mpCurrentRewindEvent.reset();
-    }
 }
 
 void SequentialTimeContainer::skipEffect(
@@ -86,8 +82,6 @@ bool SequentialTimeContainer::resolveChild(
         // discharge events:
         if (mpCurrentSkipEvent)
             mpCurrentSkipEvent->dispose();
-        if (mpCurrentRewindEvent)
-            mpCurrentRewindEvent->dispose();
 
         // event that will deactivate the resolved/running child:
         mpCurrentSkipEvent = makeEvent(

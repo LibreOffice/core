@@ -1796,7 +1796,6 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         Any aNewAny;
         ImplFireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny);
     }
-    maHighlightHdl.Call(this);
 }
 
 void ValueSet::SetNoSelection()
