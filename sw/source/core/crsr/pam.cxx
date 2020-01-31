@@ -43,6 +43,7 @@
 #include <IMark.hxx>
 #include <DocumentSettingManager.hxx>
 #include <hints.hxx>
+#include <txatbase.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <editsh.hxx>
@@ -756,6 +757,46 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         // Paragraph Signatures and Classification fields are read-only.
         if (pDoc && pDoc->GetEditShell())
             bRet = pDoc->GetEditShell()->IsCursorInParagraphMetadataField();
+    }
+
+    if (!bRet &&
+        pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
+    {
+        if (pDoc->getIDocumentMarkAccess()->isBookmarkDeleted(*this))
+        {
+            return true;
+        }
+    }
+    if (!bRet &&
+        pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS))
+    {
+        SwPosition const& rStart(*Start());
+        SwPosition const& rEnd(*End());
+        for (SwNodeIndex n = rStart.nNode; n <= rEnd.nNode; ++n)
+        {
+            if (SwTextNode const*const pNode = n.GetNode().GetTextNode())
+            {
+                if (SwpHints const*const pHints = pNode->GetpSwpHints())
+                {
+                    for (size_t i = 0; i < pHints->Count(); ++i)
+                    {
+                        SwTextAttr const*const pHint(pHints->Get(i));
+                        if (n == rStart.nNode && pHint->GetStart() < rStart.nContent.GetIndex())
+                        {
+                            continue; // before selection
+                        }
+                        if (n == rEnd.nNode && rEnd.nContent.GetIndex() <= pHint->GetStart())
+                        {
+                            break; // after selection
+                        }
+                        if (pHint->Which() == RES_TXTATR_FIELD)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return bRet;
