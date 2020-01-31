@@ -40,7 +40,6 @@ public:
     virtual ~TextCharacterSpacingControl() override;
 
 private:
-    sal_uInt16          mnId;
     long                mnCustomKern;
     short               mnLastCus;
 
@@ -60,7 +59,7 @@ private:
     DECL_LINK(PredefinedValuesHdl, weld::Button&, void);
     DECL_LINK(KerningModifyHdl, weld::MetricSpinButton&, void);
 
-    MapUnit GetCoreMetric() const;
+    static MapUnit GetCoreMetric();
 };
 
 }

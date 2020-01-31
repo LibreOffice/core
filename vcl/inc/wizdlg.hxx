@@ -74,7 +74,6 @@ namespace vcl
         VclPtr<PushButton>      mpNextBtn;
         VclPtr<vcl::Window>     mpViewWindow;
         sal_uInt16              mnCurLevel;
-        WindowAlign             meViewAlign;
         sal_Int16               mnLeftAlignCount;
         bool                    mbEmptyViewMargin;
 

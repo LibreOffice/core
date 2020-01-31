@@ -137,7 +137,6 @@ namespace vcl
         mpNextBtn       = nullptr;
         mpViewWindow    = nullptr;
         mnCurLevel      = 0;
-        meViewAlign     = WindowAlign::Left;
         mbEmptyViewMargin =  false;
         mnLeftAlignCount = 0;
 
@@ -159,7 +158,6 @@ namespace vcl
         m_xRoadmapImpl->pRoadmap->SetSizePixel( aRoadmapSize );
 
         mpViewWindow = m_xRoadmapImpl->pRoadmap;
-        meViewAlign = WindowAlign::Left;
         m_xRoadmapImpl->pRoadmap->Show();
     }
 

@@ -544,7 +544,6 @@ protected:
 
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    sal_uInt16      GetCurrentTabPos() const;
     void            CallImplEventListeners(VclEventId nEvent, void* pData);
 
     void            ImplEditEntry( SvTreeListEntry* pEntry );

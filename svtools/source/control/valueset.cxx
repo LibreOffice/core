@@ -87,13 +87,11 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbFormat            = true;
     mbHighlight         = false;
-    mbSelection         = false;
     mbNoSelection       = true;
     mbDrawSelection     = true;
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
-    mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
 
@@ -545,20 +543,10 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         }
 
         // calculate offsets
-        long nStartX;
-        long nStartY;
-        if (mbFullMode)
-        {
-            long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
-            long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
-            nStartX = (aWinSize.Width() - nScrBarWidth - nAllItemWidth) / 2;
-            nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
-        }
-        else
-        {
-            nStartX = 0;
-            nStartY = 0;
-        }
+        long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+        long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+        long nStartX = (aWinSize.Width() - nScrBarWidth - nAllItemWidth) / 2;
+        long nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
 
         // calculate and draw items
         rRenderContext.SetLineColor();
@@ -593,15 +581,6 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
         maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
 
-        if (!mbFullMode)
-        {
-            // If want also draw parts of items in the last line,
-            // then we add one more line if parts of these line are
-            // visible
-            if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
-                nLastItem += mnCols;
-            maItemListRect.SetBottom( aWinSize.Height() - y );
-        }
         for (size_t i = 0; i < nItemCount; i++)
         {
             ValueSetItem* pItem = mItemList[i].get();
@@ -1012,21 +991,11 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 
 IMPL_LINK_NOARG(ValueSet, ImplTimerHdl, Timer *, void)
 {
-    ImplTracking( GetPointerPosPixel(), true );
+    ImplTracking( GetPointerPosPixel() );
 }
 
-void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
+void ValueSet::ImplTracking( const Point& rPos )
 {
-    if ( bRepeat || mbSelection )
-    {
-        if ( ImplScroll( rPos ) && mbSelection )
-        {
-            maTimer.SetInvokeHandler( LINK( this, ValueSet, ImplTimerHdl ) );
-            maTimer.SetTimeout( MouseSettings::GetScrollRepeat() );
-            maTimer.Start();
-        }
-    }
-
     ValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
     if ( pItem )
     {
@@ -1057,17 +1026,15 @@ void ValueSet::ImplEndTracking( const Point& rPos, bool bCancel )
     if ( pItem )
     {
         SelectItem( pItem->mnId );
-        if ( !mbSelection && !(GetStyle() & WB_NOPOINTERFOCUS) )
+        if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
             GrabFocus();
         mbHighlight = false;
-        mbSelection = false;
         Select();
     }
     else
     {
         ImplHighlightItem( mnSelItemId, false );
         mbHighlight = false;
-        mbSelection = false;
     }
 }
 
@@ -1076,51 +1043,28 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsLeft() )
     {
         ValueSetItem* pItem = ImplGetItem( ImplGetItem( rMouseEvent.GetPosPixel() ) );
-        if ( mbSelection )
+        if ( pItem && !rMouseEvent.IsMod2() )
         {
-            mbHighlight = true;
-            if ( pItem )
+            if ( rMouseEvent.GetClicks() == 1 )
             {
+                mbHighlight  = true;
                 mnHighItemId = mnSelItemId;
                 ImplHighlightItem( pItem->mnId );
+                StartTracking( StartTrackingFlags::ScrollRepeat );
             }
 
             return;
-        }
-        else
-        {
-            if ( pItem && !rMouseEvent.IsMod2() )
-            {
-                if ( rMouseEvent.GetClicks() == 1 )
-                {
-                    mbHighlight  = true;
-                    mnHighItemId = mnSelItemId;
-                    ImplHighlightItem( pItem->mnId );
-                    StartTracking( StartTrackingFlags::ScrollRepeat );
-                }
-
-                return;
-            }
         }
     }
 
     Control::MouseButtonDown( rMouseEvent );
 }
 
-void ValueSet::MouseButtonUp( const MouseEvent& rMouseEvent )
-{
-    // because of SelectionMode
-    if ( rMouseEvent.IsLeft() && mbSelection )
-        ImplEndTracking( rMouseEvent.GetPosPixel(), false );
-    else
-        Control::MouseButtonUp( rMouseEvent );
-}
-
 void ValueSet::MouseMove( const MouseEvent& rMouseEvent )
 {
     // because of SelectionMode
-    if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
-        ImplTracking( rMouseEvent.GetPosPixel(), false );
+    if ( (GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
+        ImplTracking( rMouseEvent.GetPosPixel() );
     Control::MouseMove( rMouseEvent );
 }
 
@@ -1131,7 +1075,7 @@ void ValueSet::Tracking( const TrackingEvent& rTrackingEvent )
     if ( rTrackingEvent.IsTrackingEnded() )
         ImplEndTracking( aMousePos, rTrackingEvent.IsTrackingCanceled() );
     else
-        ImplTracking( aMousePos, rTrackingEvent.IsTrackingRepeat() );
+        ImplTracking( aMousePos );
 }
 
 void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
@@ -1803,7 +1747,6 @@ void ValueSet::SetNoSelection()
 {
     mbNoSelection   = true;
     mbHighlight     = false;
-    mbSelection     = false;
 
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
@@ -1960,7 +1903,6 @@ void ValueSet::EndSelection()
         ImplHighlightItem( mnSelItemId );
         mbHighlight = false;
     }
-    mbSelection = false;
 }
 
 void ValueSet::SetFormat()

@@ -1,7 +1,7 @@
 chart2/source/view/inc/PlottingPositionHelper.hxx:206
     chart::PolarPlottingPositionHelper m_fRadiusOffset
     double
-connectivity/source/inc/dbase/dindexnode.hxx:125
+connectivity/source/inc/dbase/dindexnode.hxx:122
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
 cui/source/inc/cfg.hxx:232
@@ -11,15 +11,15 @@ dbaccess/source/ui/inc/tabletree.hxx:149
     dbaui::TableTreeListBox m_nTextColumn
     int
 desktop/source/app/main.c:29
-    /media/disk2/libo4/desktop/source/app/main.c g_Exiting
+    /media/disk2/libo7/desktop/source/app/main.c g_Exiting
     int
-editeng/source/misc/hangulhanja.cxx:79
+editeng/source/misc/hangulhanja.cxx:78
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
-editeng/source/misc/svxacorr.cxx:239
+editeng/source/misc/svxacorr.cxx:233
     GetIgnoreTranslWrapper bIsInit
     int
-filter/source/graphicfilter/eps/eps.cxx:144
+filter/source/graphicfilter/eps/eps.cxx:140
     (anonymous namespace)::PSWriter nNextChrSetId
     sal_uInt8
 include/opencl/openclwrapper.hxx:46
@@ -37,10 +37,10 @@ include/vbahelper/vbapagesetupbase.hxx:50
 include/vcl/dialog.hxx:48
     Dialog mnMousePositioned
     long
-include/vcl/headbar.hxx:211
+include/vcl/headbar.hxx:208
     HeaderBar mnBorderOff1
     long
-include/vcl/headbar.hxx:212
+include/vcl/headbar.hxx:209
     HeaderBar mnBorderOff2
     long
 jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
@@ -49,7 +49,7 @@ jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
 libreofficekit/source/gtk/tilebuffer.hxx:229
     LOEvent m_nSetGraphicSelectionType
     int
-sal/rtl/cipher.cxx:112
+sal/rtl/cipher.cxx:113
     (anonymous namespace)::Cipher_Impl m_algorithm
     rtlCipherAlgorithm
 sc/source/filter/inc/stylesbuffer.hxx:290
@@ -58,22 +58,31 @@ sc/source/filter/inc/stylesbuffer.hxx:290
 sc/source/filter/inc/stylesbuffer.hxx:292
     oox::xls::ApiAlignmentData mnVerJustifyMethod
     sal_Int32
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1067
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
     (anonymous namespace)::ScPagePreviewCountData nHeaders
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1068
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1085
     (anonymous namespace)::ScPagePreviewCountData nTables
     long
-sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1070
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1087
     (anonymous namespace)::ScPagePreviewCountData nFooters
     long
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:958
+sd/qa/unit/tiledrendering/tiledrendering.cxx:959
     (anonymous namespace)::ViewCallback m_nPart
     int
-svx/source/inc/cell.hxx:205
+soltools/cpp/_tokens.c:35
+    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    int
+soltools/cpp/_tokens.c:36
+    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
+    int
+soltools/cpp/cpp.h:121
+    includelist always
+    char
+svx/source/inc/cell.hxx:204
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
 svx/source/table/tablertfimporter.cxx:57
@@ -101,14 +110,14 @@ vcl/unx/generic/app/saldata.cxx:502
     X11SalData::XError bOnce
     int
 vcl/unx/generic/app/sm.cxx:184
-    /media/disk2/libo4/vcl/unx/generic/app/sm.cxx nSmDel
+    /media/disk2/libo7/vcl/unx/generic/app/sm.cxx nSmDel
     int
 vcl/workben/icontest.cxx:147
     (anonymous namespace)::IconTestApp nRet
     int
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
-    /media/disk2/libo4/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
+    /media/disk2/libo7/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
-writerfilter/source/dmapper/PageBordersHandler.hxx:54
+writerfilter/source/dmapper/PageBordersHandler.hxx:53
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
     class SectionPropertyMap::BorderOffsetFrom

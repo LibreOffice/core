@@ -131,7 +131,6 @@ private:
     long                m_nNodeBmpWidth;
     long                m_nMostRight;
     short               m_nHorSBarHeight, m_nVerSBarWidth;
-    sal_uInt16          m_nCurTabPos;
 
     bool                m_bUpdateMode : 1;
     bool                m_bAsyncBeginDrag : 1;
@@ -330,8 +329,6 @@ public:
     bool                HasHorScrollBar() const { return m_aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
-
-    sal_uInt16          GetCurrentTabPos() const { return m_nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
     void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }

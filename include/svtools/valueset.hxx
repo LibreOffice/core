@@ -224,13 +224,11 @@ private:
 
     bool            mbFormat : 1;
     bool            mbHighlight : 1;
-    bool            mbSelection : 1;
     bool            mbNoSelection : 1;
     bool            mbDrawSelection : 1;
     bool            mbBlackSel : 1;
     bool            mbDoubleSel : 1;
     bool            mbScroll : 1;
-    bool            mbFullMode : 1;
     bool            mbEdgeBlending : 1;
     bool            mbHasVisibleItems : 1;
 
@@ -260,7 +258,7 @@ private:
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
+    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer*, void );
@@ -279,7 +277,6 @@ public:
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;

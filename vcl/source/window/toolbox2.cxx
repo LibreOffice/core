@@ -1086,11 +1086,10 @@ vcl::Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
 
 void ToolBox::EndSelection()
 {
-    if ( mbDrag || mbSelection )
+    if ( mbDrag )
     {
         // reset
         mbDrag = false;
-        mbSelection = false;
         if (mnCurPos != ITEM_NOTFOUND)
             InvalidateItem(mnCurPos);
         EndTracking();
@@ -1130,10 +1129,9 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown )
             }
         }
 
-        if ( mbDrag || mbSelection )
+        if ( mbDrag )
         {
             mbDrag = false;
-            mbSelection = false;
             EndTracking();
             if (IsMouseCaptured())
                 ReleaseMouse();
