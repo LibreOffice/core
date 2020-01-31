@@ -97,7 +97,6 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_pActiveTab = nullptr;
 
     m_nFlags = LBoxFlags::NONE;
-    m_nCurTabPos = FIRST_ENTRY_TAB;
 
     m_aEditIdle.SetPriority( TaskPriority::LOWEST );
     m_aEditIdle.SetInvokeHandler( LINK(this,SvImpLBox,EditTimerCall) );
@@ -217,14 +216,9 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
 
 void SvImpLBox::CalcCellFocusRect( tools::Rectangle& rRect )
 {
-    if ( m_nCurTabPos > FIRST_ENTRY_TAB )
+    if (m_pCursor->ItemCount() > o3tl::make_unsigned(FIRST_ENTRY_TAB+1))
     {
-        SvLBoxItem& rItem = m_pCursor->GetItem( m_nCurTabPos );
-        rRect.SetLeft( m_pView->GetTab( m_pCursor, &rItem )->GetPos() );
-    }
-    if (m_pCursor->ItemCount() > o3tl::make_unsigned(m_nCurTabPos+1))
-    {
-        SvLBoxItem& rNextItem = m_pCursor->GetItem( m_nCurTabPos + 1 );
+        SvLBoxItem& rNextItem = m_pCursor->GetItem( FIRST_ENTRY_TAB + 1 );
         long nRight = m_pView->GetTab( m_pCursor, &rNextItem )->GetPos() - 1;
         if ( nRight < rRect.Right() )
             rRect.SetRight( nRight );
@@ -1990,9 +1984,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( !m_pCursor )
         m_pCursor = m_pStartEntry;
     SvTreeListEntry* pEntry = GetEntry( aPos );
-    if ( pEntry != m_pCursor )
-        // new entry selected -> reset current tab position to first tab
-        m_nCurTabPos = FIRST_ENTRY_TAB;
     m_nFlags &= ~LBoxFlags::Filling;
     m_pView->GrabFocus();
     //fdo#82270 Grabbing focus can invalidate the entries, re-fetch
@@ -2177,9 +2168,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 pNewCursor = m_pView->PrevVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
 
-            if ( pNewCursor )
-                // new entry selected -> reset current tab position to first tab
-                m_nCurTabPos = FIRST_ENTRY_TAB;
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
@@ -2201,10 +2189,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             {
                 pNewCursor = m_pView->NextVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
-
-            if ( pNewCursor )
-                // new entry selected -> reset current tab position to first tab
-                m_nCurTabPos = FIRST_ENTRY_TAB;
 
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing

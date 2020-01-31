@@ -392,6 +392,8 @@ namespace {
 class ColumnsWidget final : public weld::CustomWidgetController
 {
 private:
+    static constexpr long WIDTH = 5;
+
     rtl::Reference<SvxColumnsToolBoxControl> mxControl;
     weld::SpinButton& mrSpinButton;
 
@@ -401,7 +403,6 @@ private:
     ::Color             aHighlightFillColor;
     ::Color             aFaceColor;
     long                nCol;
-    long                nWidth;
     long                nMX;
     bool                m_bMod1;
 
@@ -455,7 +456,6 @@ ColumnsWidget::ColumnsWidget(SvxColumnsToolBoxControl* pControl, weld::SpinButto
     : mxControl(pControl)
     , mrSpinButton(rSpinButton)
     , nCol(1)
-    , nWidth(5)
     , nMX(0)
     , m_bMod1(false)
 {
@@ -488,7 +488,7 @@ void ColumnsWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     Size aLogicSize = rDevice.LogicToPixel( Size( 95, 155 ), MapMode( MapUnit::Map10thMM ) );
     nMX = aLogicSize.Width();
-    Size aSize(nMX*nWidth-1, aLogicSize.Height());
+    Size aSize(nMX*WIDTH-1, aLogicSize.Height());
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     SetOutputSizePixel(aSize);
@@ -607,7 +607,7 @@ void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     long nLineWidth;
     Size aSize(GetOutputSizePixel());
 
-    for (i = 0; i < nWidth; i++)
+    for (i = 0; i < WIDTH; i++)
     {
         if (i < nCol)
         {

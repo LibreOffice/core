@@ -3529,11 +3529,6 @@ void SvTreeListBox::InitSettings()
         pCheckButtonData->SetDefaultImages(this);
 }
 
-sal_uInt16 SvTreeListBox::GetCurrentTabPos() const
-{
-    return pImpl->GetCurrentTabPos();
-}
-
 VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
     return nullptr;

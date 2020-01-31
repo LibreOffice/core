@@ -1119,7 +1119,6 @@ void ToolBox::ImplInitToolBoxData()
     mnDockLines           = 0;
     mnMouseModifier       = 0;
     mbDrag                = false;
-    mbSelection           = false;
     mbUpper               = false;
     mbLower               = false;
     mbIn                  = false;
@@ -2953,20 +2952,14 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         mpData->maDropdownTimer.Stop();
     }
 
-    if ( mbDrag || mbSelection )
+    if ( mbDrag )
     {
-        // set mouse data if in selection mode, as then
-        // the MouseButtonDown handler cannot be called
-        if ( mbSelection )
-            mnMouseModifier  = rMEvt.GetModifier();
-
         Deactivate();
 
         if ( mbDrag )
             mbDrag = false;
         else
         {
-            mbSelection = false;
             if ( mnCurPos == ITEM_NOTFOUND )
                 return true;
         }
@@ -3084,58 +3077,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     if( bFocusWindowIsAToolBoxChild || (pFocusWin && pFocusWin->ImplGetWindowImpl()->mbToolBox && pFocusWin != this) )
         bDrawHotSpot = false;
-
-    if ( mbSelection && bDrawHotSpot )
-    {
-        ImplToolItems::size_type i = 0;
-        ImplToolItems::size_type nNewPos = ITEM_NOTFOUND;
-
-        // search the item that has been clicked
-        for (auto const& item : mpData->m_aItems)
-        {
-            // if the mouse position is in this item,
-            // we can stop the search
-            if ( item.maRect.IsInside( aMousePos ) )
-            {
-                // select it if it is a button
-                if ( item.meType == ToolBoxItemType::BUTTON )
-                {
-                    // if button is disabled, do not
-                    // change it
-                    if ( !item.mbEnabled || item.mbShowWindow )
-                        nNewPos = mnCurPos;
-                    else
-                        nNewPos = i;
-                }
-                break;
-            }
-            ++i;
-        }
-
-        // was a new entry selected?
-        // don't change selection if keyboard selection is active and
-        // mouse leaves the toolbox
-        if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == ITEM_NOTFOUND ) )
-        {
-            if ( mnCurPos != ITEM_NOTFOUND )
-            {
-                InvalidateItem(mnCurPos);
-                CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( mnCurPos ) );
-            }
-
-            mnCurPos = nNewPos;
-            if ( mnCurPos != ITEM_NOTFOUND )
-            {
-                mnCurItemId = mnHighItemId = mpData->m_aItems[mnCurPos].mnId;
-                InvalidateItem(mnCurPos);
-            }
-            else
-                mnCurItemId = mnHighItemId = 0;
-
-            Highlight();
-        }
-        return;
-    }
 
     if ( mbDragging )
     {
@@ -3311,72 +3252,64 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             if ( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::REPEAT )
                 nTrackFlags |= StartTrackingFlags::ButtonRepeat;
 
-            if ( mbSelection )
+            // update bDrag here, as it is evaluated in the EndSelection
+            mbDrag = true;
+
+            // on double-click: only call the handler, but do so before the button
+            // is hit, as in the handler dragging
+            // can be terminated
+            if ( rMEvt.GetClicks() == 2 )
+                DoubleClick();
+
+            if ( mbDrag )
             {
                 InvalidateItem(mnCurPos);
                 Highlight();
             }
-            else
+
+            // was dropdown arrow pressed
+            if( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWN )
             {
-                // update bDrag here, as it is evaluated in the EndSelection
-                mbDrag = true;
-
-                // on double-click: only call the handler, but do so before the button
-                // is hit, as in the handler dragging
-                // can be terminated
-                if ( rMEvt.GetClicks() == 2 )
-                    DoubleClick();
-
-                if ( mbDrag )
+                if( ( (mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
+                    || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).IsInside( aMousePos ))
                 {
-                    InvalidateItem(mnCurPos);
-                    Highlight();
-                }
+                    // dropdownonly always triggers the dropdown handler, over the whole button area
 
-                // was dropdown arrow pressed
-                if( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWN )
-                {
-                    if( ( (mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
-                        || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).IsInside( aMousePos ))
+                    // the drop down arrow should not trigger the item action
+                    mpData->mbDropDownByKeyboard = false;
+                    mpData->maDropdownClickHdl.Call( this );
+
+                    // do not reset data if the dropdown handler opened a floating window
+                    // see ImplFloatControl()
+                    if( !mpFloatWin )
                     {
-                        // dropdownonly always triggers the dropdown handler, over the whole button area
+                        // no floater was opened
+                        Deactivate();
+                        InvalidateItem(mnCurPos);
 
-                        // the drop down arrow should not trigger the item action
-                        mpData->mbDropDownByKeyboard = false;
-                        mpData->maDropdownClickHdl.Call( this );
-
-                        // do not reset data if the dropdown handler opened a floating window
-                        // see ImplFloatControl()
-                        if( !mpFloatWin )
-                        {
-                            // no floater was opened
-                            Deactivate();
-                            InvalidateItem(mnCurPos);
-
-                            mnCurPos         = ITEM_NOTFOUND;
-                            mnCurItemId      = 0;
-                            mnDownItemId     = 0;
-                            mnMouseModifier  = 0;
-                            mnHighItemId     = 0;
-                        }
-                        return;
+                        mnCurPos         = ITEM_NOTFOUND;
+                        mnCurItemId      = 0;
+                        mnDownItemId     = 0;
+                        mnMouseModifier  = 0;
+                        mnHighItemId     = 0;
                     }
-                    else // activate long click timer
-                        mpData->maDropdownTimer.Start();
+                    return;
                 }
-
-                // call Click handler
-                if ( rMEvt.GetClicks() != 2 )
-                    Click();
-
-                // also call Select handler at repeat
-                if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
-                    Select();
-
-                // if the actions was not aborted in Click handler
-                if ( mbDrag )
-                    StartTracking( nTrackFlags );
+                else // activate long click timer
+                    mpData->maDropdownTimer.Start();
             }
+
+            // call Click handler
+            if ( rMEvt.GetClicks() != 2 )
+                Click();
+
+            // also call Select handler at repeat
+            if ( nTrackFlags & StartTrackingFlags::ButtonRepeat )
+                Select();
+
+            // if the actions was not aborted in Click handler
+            if ( mbDrag )
+                StartTracking( nTrackFlags );
 
             // if mouse was clicked over an item we
             // can abort here
@@ -3449,7 +3382,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             Click();
     }
 
-    if ( !mbDrag && !mbSelection && (mnCurPos == ITEM_NOTFOUND) )
+    if ( !mbDrag && (mnCurPos == ITEM_NOTFOUND) )
         DockingWindow::MouseButtonDown( rMEvt );
 }
 
@@ -4700,8 +4633,6 @@ void ToolBox::ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus
             mnHighItemId = pItem->mnId;
             InvalidateItem(aPos);
 
-            if( mbSelection )
-                mnCurPos = aPos;
             ImplShowFocus();
 
             if( pItem->mpWindow )

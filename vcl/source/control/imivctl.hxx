@@ -142,7 +142,6 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     SvxIconChoiceCtrlEntry* pHdlEntry;
-    VclPtr<VirtualDevice>   pDDBufDev;
     SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;

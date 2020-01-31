@@ -64,7 +64,7 @@ public:
 private:
     uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<uno::XInterface> mxObject;
-    int mMaxFieldIndex = 6;
+    static constexpr int MAX_FIELD_INDEX = 6;
 };
 
 CheckDataPilotTable::CheckDataPilotTable()
@@ -89,8 +89,8 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     sCellRangeAdress.Sheet = 0;
     sCellRangeAdress.StartColumn = 1;
     sCellRangeAdress.StartRow = 0;
-    sCellRangeAdress.EndColumn = mMaxFieldIndex-1;
-    sCellRangeAdress.EndRow = mMaxFieldIndex - 1;
+    sCellRangeAdress.EndColumn = MAX_FIELD_INDEX-1;
+    sCellRangeAdress.EndRow = MAX_FIELD_INDEX - 1;
 
     // position of the data pilot table
     table::CellAddress sCellAdress;
@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
     CPPUNIT_ASSERT(aAny2 >>= oSheet2);
 
     //Filling a table
-    for (int i = 1; i < mMaxFieldIndex; i++)
+    for (int i = 1; i < MAX_FIELD_INDEX; i++)
     {
         oSheet->getCellByPosition(i, 0)->setFormula("Col" + OUString::number(i));
         oSheet->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
@@ -120,9 +120,9 @@ uno::Reference< uno::XInterface > CheckDataPilotTable::init()
         oSheet2->getCellByPosition(0, i)->setFormula("Row" + OUString::number(i));
     }
 
-    for (int i = 1; i < mMaxFieldIndex; i++)
+    for (int i = 1; i < MAX_FIELD_INDEX; i++)
     {
-        for (int j = 1; j < mMaxFieldIndex; j++)
+        for (int j = 1; j < MAX_FIELD_INDEX; j++)
         {
             oSheet->getCellByPosition(i, j)->setValue(i * (j + 1));
             oSheet2->getCellByPosition(i, j)->setValue(i * (j + 2));

@@ -43,7 +43,6 @@ namespace svx {
 
 TextCharacterSpacingControl::TextCharacterSpacingControl(TextCharacterSpacingPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/textcharacterspacingcontrol.ui", "TextCharacterSpacingControl")
-    , mnId(SID_ATTR_CHAR_KERNING)
     , mnCustomKern(0)
     , mnLastCus(SPACING_NOCUSTOM)
     , mxEditKerning(m_xBuilder->weld_metric_spin_button("kerning", FieldUnit::POINT))
@@ -190,10 +189,10 @@ IMPL_LINK_NOARG(TextCharacterSpacingControl, KerningModifyHdl, weld::MetricSpinB
     ExecuteCharacterSpacing(mnCustomKern, false);
 }
 
-MapUnit TextCharacterSpacingControl::GetCoreMetric() const
+MapUnit TextCharacterSpacingControl::GetCoreMetric()
 {
     SfxItemPool &rPool = SfxGetpApp()->GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(mnId);
+    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_CHAR_KERNING);
     return rPool.GetMetric(nWhich);
 }
 

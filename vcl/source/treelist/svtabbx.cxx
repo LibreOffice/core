@@ -626,8 +626,7 @@ sal_Int32 SvHeaderTabListBox::GetCurrRow() const
 
 sal_uInt16 SvHeaderTabListBox::GetCurrColumn() const
 {
-    sal_uInt16 nPos = GetCurrentTabPos() - 1;
-    return nPos;
+    return 0;
 }
 
 OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
