@@ -34,7 +34,7 @@ class OutputDevice;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-enum class ViewOptFlags1 {
+enum class ViewOptFlags1 : sal_uInt32 {
     UseHeaderFooterMenu = 0x00000001,
     Tab           = 0x00000002,
     Blank         = 0x00000004,
@@ -44,6 +44,7 @@ enum class ViewOptFlags1 {
     Pagebreak     = 0x00000040,
     Columnbreak   = 0x00000080,
     SoftHyph      = 0x00000100,
+    Bookmarks     = 0x00000200,
     Ref           = 0x00000400,
     FieldName     = 0x00000800,
     Postits       = 0x00004000,
@@ -60,10 +61,10 @@ enum class ViewOptFlags1 {
     OnlineSpell   = 0x04000000,
     ShowInlineTooltips = 0x10000000, //tooltips on tracked changes
     ViewMetachars = 0x20000000,
-    Pageback      = 0x40000000
+    Pageback      = 0x40000000,
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcdff> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcfff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -231,6 +232,16 @@ public:
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
     void SetParagraph( bool b )
         { SetCoreOption(b, ViewOptFlags1::Paragraph); }
+
+    void SetShowBookmarks(bool const b)
+    {
+        SetCoreOption(b, ViewOptFlags1::Bookmarks);
+    }
+    bool IsShowBookmarks(bool const bHard = false) const
+    {
+        return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Bookmarks)
+                && (bHard || (m_nCoreOptions & ViewOptFlags1::ViewMetachars));
+    }
 
     bool IsLineBreak(bool bHard = false) const
                     {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Linebreak) &&

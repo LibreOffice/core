@@ -32,6 +32,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     bNonbreakingSpace   =
     bSoftHyphen         =
     bCharHiddenText     =
+    bBookmarks          =
     bManualBreak        = true;
 };
 
@@ -45,6 +46,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
     bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
+    bBookmarks          = rVOpt.IsShowBookmarks(true);
     bManualBreak        = rVOpt.IsLineBreak(true);
 }
 
@@ -65,6 +67,7 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bNonbreakingSpace     == rItem.bNonbreakingSpace   &&
               bSoftHyphen           == rItem.bSoftHyphen         &&
               bCharHiddenText       == rItem.bCharHiddenText         &&
+              bBookmarks            == rItem.bBookmarks          &&
               bManualBreak          == rItem.bManualBreak );
 }
 
@@ -76,6 +79,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetHardBlank  (bNonbreakingSpace  );
     rVOpt.SetSoftHyph   (bSoftHyphen        );
     rVOpt.SetShowHiddenChar(bCharHiddenText );
+    rVOpt.SetShowBookmarks(bBookmarks       );
     rVOpt.SetLineBreak  (bManualBreak       );
 }
 
