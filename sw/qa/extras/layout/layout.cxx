@@ -10,6 +10,10 @@
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <test/mtfxmldump.hxx>
+#include <wrtsh.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -32,6 +36,7 @@ public:
     void testTdf117188();
     void testTdf119875();
     void testTdf116989();
+    void testStableAtPageAnchoredFlyPosition();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -49,6 +54,7 @@ public:
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf116989);
+    CPPUNIT_TEST(testStableAtPageAnchoredFlyPosition);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -302,6 +308,49 @@ void SwLayoutWriter::testTdf116989()
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);
     }
+}
+
+static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
+{
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+    pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+    SwSortedObjs* pDrawObjs = pPage->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDrawObjs->size());
+    SwAnchoredObject* pDrawObj = (*pDrawObjs)[0];
+    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen8"), pDrawObj->GetFrameFormat().GetName());
+    pPage = static_cast<SwPageFrame*>(pPage->GetNext());
+    pDrawObjs = pPage->GetDrawObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDrawObjs->size());
+    pDrawObj = (*pDrawObjs)[0];
+    CPPUNIT_ASSERT_EQUAL(OUString("Rahmen123"), pDrawObj->GetFrameFormat().GetName());
+    SwRect aFlyRect = pDrawObj->GetObjRect();
+    CPPUNIT_ASSERT(pPage->getFrameArea().IsInside(aFlyRect));
+    return aFlyRect;
+}
+
+void SwLayoutWriter::testStableAtPageAnchoredFlyPosition()
+{
+    // this doc has two page-anchored frames: one tiny on page 3 and one large on page 4.
+    // it also has a style:master-page named "StandardEntwurf", which contains some fields.
+    // if you add a break to page 2, or append some text to page 4 (or just toggle display field names),
+    // the page anchored frame on page 4 vanishes, as it is incorrectly moved out of the page bounds.
+    SwDoc* pDoc = createDoc("stable-at-page-anchored-fly-position.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // look up the layout position of the page-bound frame on page four
+    SwRect aOrigRect = lcl_getVisibleFlyObjRect(pWrtShell);
+
+    // append some text to the document to trigger bug / relayout
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->Insert("foo");
+
+    // get the current position of the frame on page four
+    SwRect aRelayoutRect = lcl_getVisibleFlyObjRect(pWrtShell);
+
+    // the anchored frame should not have moved
+    CPPUNIT_ASSERT_EQUAL(aOrigRect, aRelayoutRect);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
