@@ -31,6 +31,10 @@
 #endif
 #include <liblangtag/langtag.h>
 
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
+
 using namespace com::sun::star;
 
 namespace {
@@ -198,6 +202,9 @@ void LiblangtagDataRef::teardown()
 
 void LiblangtagDataRef::setupDataPath()
 {
+#if defined(ANDROID)
+    maDataPath = OString(lo_get_app_data_dir()) + "/share/liblangtag";
+#else
     // maDataPath is assumed to be empty here.
     OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag");
     rtl::Bootstrap::expandMacros(aURL); //TODO: detect failure
@@ -212,6 +219,7 @@ void LiblangtagDataRef::setupDataPath()
         if (osl::FileBase::getSystemPathFromFileURL( aURL, aPath) == osl::FileBase::E_None)
             maDataPath = OUStringToOString( aPath, RTL_TEXTENCODING_UTF8);
     }
+#endif
     if (maDataPath.isEmpty())
         maDataPath = "|";   // assume system
     else
