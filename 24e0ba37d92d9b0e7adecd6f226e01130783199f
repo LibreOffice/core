@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dddfcd1_5327720e",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-31T11:18:20Z",
+      "side": 1,
+      "message": "I suggest to remove this bug number, because it is redundant. We must close that bug as a duplicate of the first one, or keep it open only for its remaining DOC part.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 41,
+        "endLine": 1057,
+        "endChar": 51
+      },
+      "revId": "24e0ba37d92d9b0e7adecd6f226e01130783199f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed6a78c3_ba92643e",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-01-31T11:18:20Z",
+      "side": 1,
+      "message": "It seems, we can really spare dozens of unnecessary looping on the unit test file, using conditional looping:\n\nif (pStyleSheetProperties-\u003eGetListLevel() \u003d\u003d -1 \u0026\u0026 pStyleSheetProperties-\u003eGetOutlineLevel() \u003d\u003d -1)\n{\n                            // tdf#95495\n\t\n                            // Import the old MSO export (2003) properly by getting the correct\n\t\n                            // ilvl, numId and outlineLevel of the styles.\n\t\n                            const beans::PropertyValues aPropGrabBag \u003d pEntry-\u003eGetInteropGrabBagSeq();\n\n                               ...\n\t\n                                if (rVal.Name \u003d\u003d \"customStyle\" \u0026\u0026 rVal.Value \u003d\u003d true)",
+      "range": {
+        "startLine": 1060,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 182
+      },
+      "revId": "24e0ba37d92d9b0e7adecd6f226e01130783199f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
