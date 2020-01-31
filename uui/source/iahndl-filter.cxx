@@ -19,13 +19,12 @@
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

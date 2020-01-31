@@ -20,16 +20,10 @@
 #include <comphelper/string.hxx>
 #include "logindlg.hxx"
 
-#include <strings.hrc>
-#include <osl/file.hxx>
-
 #ifdef UNX
 #include <limits.h>
 #define _MAX_PATH PATH_MAX
 #endif
-
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 
 using namespace com::sun::star;
 

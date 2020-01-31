@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-
-#include <ids.hxx>
 #include "sslwarndlg.hxx"
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

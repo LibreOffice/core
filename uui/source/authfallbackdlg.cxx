@@ -9,8 +9,6 @@
 
 #include "authfallbackdlg.hxx"
 
-#include <iostream>
-
 AuthFallbackDlg::AuthFallbackDlg(weld::Window* pParent, const OUString& instructions,
                                  const OUString& url)
     : GenericDialogController(pParent, "uui/ui/authfallback.ui", "AuthFallbackDlg")

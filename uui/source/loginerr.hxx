@@ -21,7 +21,7 @@
 #define INCLUDED_UUI_SOURCE_LOGINERR_HXX
 
 #include <rtl/ustring.hxx>
-
+#include <vcl/errinf.hxx>
 
 #define LOGINERROR_FLAG_MODIFY_ACCOUNT         1
 #define LOGINERROR_FLAG_MODIFY_USER_NAME       2

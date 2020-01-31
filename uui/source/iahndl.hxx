@@ -30,7 +30,6 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 
 #include <vcl/errcode.hxx>
-#include <tools/wintypes.hxx>
 
 #include <unordered_map>
 #include <vector>

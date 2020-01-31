@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com {
     namespace sun {

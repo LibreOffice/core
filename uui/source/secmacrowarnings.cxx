@@ -18,15 +18,11 @@
  */
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <comphelper/documentconstants.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
-#include <sal/macros.h>
 #include <tools/debug.hxx>
-#include <unotools/resmgr.hxx>
-#include <com/sun/star/security/NoPasswordException.hpp>
+#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star::security;
 

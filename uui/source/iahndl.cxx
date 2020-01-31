@@ -20,7 +20,6 @@
 #include <memory>
 
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/configuration/backend/MergeRecoveryRequest.hpp>
 #include <com/sun/star/configuration/backend/StratumCreationException.hpp>
@@ -40,7 +39,6 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
@@ -60,14 +58,12 @@
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>

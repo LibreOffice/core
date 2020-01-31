@@ -20,8 +20,9 @@
 #ifndef INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
 #define INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
 
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/weld.hxx>
 
 namespace com {

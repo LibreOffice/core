@@ -21,7 +21,6 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 

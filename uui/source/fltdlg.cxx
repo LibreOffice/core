@@ -19,14 +19,11 @@
 
 #include "fltdlg.hxx"
 
-#include <ids.hxx>
-
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/urlobj.hxx>
 
 #include <osl/file.hxx>
-#include <vcl/svapp.hxx>
 
 namespace uui
 {

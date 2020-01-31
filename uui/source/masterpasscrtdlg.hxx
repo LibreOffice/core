@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 #define INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 
-#include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <vcl/weld.hxx>
 
 class MasterPasswordCreateDialog : public weld::GenericDialogController
