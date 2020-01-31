@@ -82,9 +82,11 @@ SwMasterUsrPref::~SwMasterUsrPref()
 {
 }
 
+static const auto g_UpdateLinkIndex = 17;
+
 Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {
-    static const char* aPropNames[] =
+    static constexpr const char*const aPropNames[] =
     {
         "Display/GraphicObject",                    //  0
         "Display/Table",                            //  1
@@ -102,13 +104,18 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "NonprintingCharacter/HiddenText",      // 13
         "NonprintingCharacter/HiddenParagraph", // 14
         "NonprintingCharacter/HiddenCharacter",      // 15
-        "Update/Link",                          // 16
-        "Update/Field",                         // 17
-        "Update/Chart",                         // 18
-        "Display/ShowInlineTooltips",           // 19
-        "Display/UseHeaderFooterMenu"           // 20
+        "NonprintingCharacter/Bookmarks",       // 16
+        "Update/Link",                          // 17
+        "Update/Field",                         // 18
+        "Update/Chart",                         // 19
+        "Display/ShowInlineTooltips",           // 20
+        "Display/UseHeaderFooterMenu"           // 21
     };
-    const int nCount = bWeb ? 12 : 21;
+#if defined(__GNUC__) && !defined(__clang__)
+    // clang 8.0.0 says strcmp isn't constexpr
+    static_assert(std::strcmp("Update/Link", aPropNames[g_UpdateLinkIndex]) == 0);
+#endif
+    const int nCount = bWeb ? 12 : SAL_N_ELEMENTS(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -164,13 +171,14 @@ void SwContentViewConfig::ImplCommit()
             case 13: bVal = rParent.IsShowHiddenField(); break;// "NonprintingCharacter/Fields: HiddenText",
             case 14: bVal = rParent.IsShowHiddenPara(); break;// "NonprintingCharacter/Fields: HiddenParagraph",
             case 15: bVal = rParent.IsShowHiddenChar(true);    break;// "NonprintingCharacter/HiddenCharacter",
-            case 16: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
-            case 17: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
-            case 18: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
-            case 19: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
-            case 20: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
+            case 16: bVal = rParent.IsShowBookmarks(true);    break;// "NonprintingCharacter/Bookmarks",
+            case 17: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
+            case 18: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
+            case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
+            case 20: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
+            case 21: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
         }
-        if(nProp != 16)
+        if (nProp != g_UpdateLinkIndex)
             pValues[nProp] <<= bVal;
     }
     PutProperties(aNames, aValues);
@@ -188,7 +196,7 @@ void SwContentViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bSet = nProp != 16 && *o3tl::doAccess<bool>(pValues[nProp]);
+                bool bSet = nProp != g_UpdateLinkIndex && *o3tl::doAccess<bool>(pValues[nProp]);
                 switch(nProp)
                 {
                     case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
@@ -207,17 +215,18 @@ void SwContentViewConfig::Load()
                     case 13: rParent.SetShowHiddenField(bSet);   break;// "NonprintingCharacter/Fields: HiddenText",
                     case 14: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/Fields: HiddenParagraph",
                     case 15: rParent.SetShowHiddenChar(bSet); break;// "NonprintingCharacter/HiddenCharacter",
-                    case 16:
+                    case 16: rParent.SetShowBookmarks(bSet); break;// "NonprintingCharacter/Bookmarks",
+                    case 17:
                     {
                         sal_Int32 nSet = 0;
                         pValues[nProp] >>= nSet;
                         rParent.SetUpdateLinkMode(nSet, true);
                     }
                     break;// "Update/Link",
-                    case 17: rParent.SetUpdateFields(bSet); break;// "Update/Field",
-                    case 18: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
-                    case 19: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
-                    case 20: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
+                    case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
+                    case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
+                    case 20: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
+                    case 21: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
                 }
             }
         }

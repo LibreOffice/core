@@ -253,6 +253,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         {
             if(     (!aViewOpt.IsTab( true ) &&  pDocDispItem->bTab) ||
                     (!aViewOpt.IsBlank( true ) && pDocDispItem->bSpace) ||
+                    (!aViewOpt.IsShowBookmarks(true) && pDocDispItem->bBookmarks) ||
                     (!aViewOpt.IsParagraph( true ) && pDocDispItem->bParagraphEnd) ||
                     (!aViewOpt.IsLineBreak( true ) && pDocDispItem->bManualBreak) )
             {

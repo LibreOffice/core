@@ -101,7 +101,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="tabs">
-                            <property name="label" translatable="yes" context="optformataidspage|tabs">Ta_bs</property>
+                            <property name="label" translatable="yes" context="optformataidspage|tabs">Tabs</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -144,6 +144,21 @@
                             <property name="top_attach">6</property>
                           </packing>
                         </child>
+                    <child>
+                      <object class="GtkCheckButton" id="bookmarks">
+                        <property name="label" translatable="yes" context="optformataidspage|bookmarks">Bookmarks</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">7</property>
+                      </packing>
+                    </child>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
@@ -199,6 +214,17 @@
                             <property name="top_attach">5</property>
                           </packing>
                         </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label">| [ ]</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">7</property>
+                      </packing>
+                    </child>
                         <child>
                           <placeholder/>
                         </child>

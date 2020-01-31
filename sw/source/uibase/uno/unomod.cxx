@@ -95,6 +95,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_INLINECHANGES_TIPS,
     HANDLE_VIEWSET_HIDE_WHITESPACE,
     HANDLE_VIEWSET_USE_HEADERFOOTERMENU,
+    HANDLE_VIEWSET_BOOKMARKS,
 };
 
 enum SwPrintSettingsPropertyHandles
@@ -136,6 +137,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterSubdivisionY"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowBookmarks" ), HANDLE_VIEWSET_BOOKMARKS, cppu::UnoType<bool>::get(), PROPERTY_NONE },
         { OUString( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowFieldCommands"),    HANDLE_VIEWSET_FIELD_COMMANDS       , cppu::UnoType<bool>::get(), PROPERTY_NONE},
@@ -579,6 +581,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_PROTECTED_SPACES      :   mpViewOption->SetHardBlank(*o3tl::doAccess<bool>(rValue));    break;
         case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(*o3tl::doAccess<bool>(rValue));  break;
         case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_BOOKMARKS             :   mpViewOption->SetShowBookmarks(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(*o3tl::doAccess<bool>(rValue));  break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(*o3tl::doAccess<bool>(rValue));   break;
@@ -820,6 +823,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank(); break;
         case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(true);   break;
         case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(true); break;
+        case  HANDLE_VIEWSET_BOOKMARKS             :   bBoolVal = mpConstViewOption->IsShowBookmarks(true); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
         case  HANDLE_VIEWSET_HIDE_WHITESPACE       :   bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;

@@ -162,6 +162,7 @@ static void lcl_SetViewMetaChars( SwViewOption& rVOpt, bool bOn)
             rVOpt.IsTab()       ||
             rVOpt.IsLineBreak() ||
             rVOpt.IsShowHiddenChar() ||
+            rVOpt.IsShowBookmarks() ||
             rVOpt.IsBlank()))
     {
         rVOpt.SetParagraph(bOn);
@@ -169,6 +170,7 @@ static void lcl_SetViewMetaChars( SwViewOption& rVOpt, bool bOn)
         rVOpt.SetLineBreak(bOn);
         rVOpt.SetBlank(bOn);
         rVOpt.SetShowHiddenChar(bOn);
+        rVOpt.SetShowBookmarks(bOn);
     }
 }
 

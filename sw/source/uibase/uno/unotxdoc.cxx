@@ -4418,6 +4418,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions, 
     aRenderViewOptions.SetBlank( false );                 // spaces
     aRenderViewOptions.SetHardBlank( false );             // non-breaking spaces
     aRenderViewOptions.SetTab( false );                   // tabs
+    aRenderViewOptions.SetShowBookmarks( false );         // bookmarks
     aRenderViewOptions.SetLineBreak( false );             // breaks (type 1)
     aRenderViewOptions.SetPageBreak( false );             // breaks (type 2)
     aRenderViewOptions.SetColumnBreak( false );           // breaks (type 3)

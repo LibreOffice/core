@@ -1206,6 +1206,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xTabCB(m_xBuilder->weld_check_button("tabs"))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
     , m_xCharHiddenCB(m_xBuilder->weld_check_button("hiddentext"))
+    , m_xBookmarkCB(m_xBuilder->weld_check_button("bookmarks"))
     , m_xDirectCursorFrame(m_xBuilder->weld_frame("directcrsrframe"))
     , m_xOnOffCB(m_xBuilder->weld_check_button("cursoronoff"))
     , m_xFillMarginRB(m_xBuilder->weld_radio_button("fillmargin"))
@@ -1241,6 +1242,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
 
     m_xTabCB->hide();
     m_xCharHiddenCB->hide();
+    m_xBookmarkCB->hide();
 
     m_xDirectCursorFrame->hide();
     m_xOnOffCB->hide();
@@ -1320,6 +1322,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aDisp.bNonbreakingSpace     = m_xHSpacesCB->get_active();
     aDisp.bSoftHyphen           = m_xSHyphCB->get_active();
     aDisp.bCharHiddenText       = m_xCharHiddenCB->get_active();
+    aDisp.bBookmarks            = m_xBookmarkCB->get_active();
     aDisp.bManualBreak          = m_xBreakCB->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
@@ -1372,6 +1375,7 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xHSpacesCB->set_active( pDocDisplayAttr->bNonbreakingSpace );
         m_xSHyphCB->set_active( pDocDisplayAttr->bSoftHyphen );
         m_xCharHiddenCB->set_active( pDocDisplayAttr->bCharHiddenText );
+        m_xBookmarkCB->set_active(pDocDisplayAttr->bBookmarks);
         m_xBreakCB->set_active( pDocDisplayAttr->bManualBreak );
     }
 }

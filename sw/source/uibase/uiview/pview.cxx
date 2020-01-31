@@ -1111,6 +1111,7 @@ void SwPagePreview::Init()
     aOpt.SetSoftHyph( false );
     aOpt.SetFieldName( false );
     aOpt.SetPostIts( false );
+    aOpt.SetShowBookmarks( false );
     aOpt.SetShowHiddenChar( false );
     aOpt.SetShowHiddenField( false );
     aOpt.SetShowHiddenPara( false );

@@ -278,6 +278,12 @@ published service ViewSettings
     */
     [optional, property] boolean UseHeaderFooterMenu;
 
+    /** If this property is `TRUE`, bookmark positions are displayed.
+
+        @since LibreOffice 7.0
+     */
+    [optional, property] boolean ShowBookmarks;
+
 };
 
 }; }; }; };
