@@ -310,7 +310,7 @@ void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
 void SkiaSalGraphicsImpl::preDraw()
 {
     checkSurface();
-    assert(mXorExtents.isEmpty()); // must be reset in postDraw()
+    assert(!mXorMode || mXorExtents.isEmpty()); // must be reset in postDraw()
 }
 
 void SkiaSalGraphicsImpl::postDraw()
@@ -476,7 +476,12 @@ void SkiaSalGraphicsImpl::SetFillColor() { mFillColor = SALCOLOR_NONE; }
 
 void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { mFillColor = nColor; }
 
-void SkiaSalGraphicsImpl::SetXORMode(bool set, bool) { mXorMode = set; }
+void SkiaSalGraphicsImpl::SetXORMode(bool set, bool)
+{
+    mXorMode = set;
+    if (mXorMode)
+        mXorExtents.setEmpty();
+}
 
 SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
 {
