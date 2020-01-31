@@ -612,6 +612,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aContentTree->EnableAsyncDrag(true);
     m_aContentTree->ShowTree();
     m_aContentToolBox->CheckItem(m_aContentToolBox->GetItemId("listbox"));
+    m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
 
 //  TreeListBox for global document
     m_aGlobalTree->SetSelectionMode( SelectionMode::Multiple );
