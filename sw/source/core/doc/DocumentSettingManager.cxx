@@ -94,7 +94,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
     mbHeaderSpacingBelowLastPara(false),
-    mbProtectBookmarksAndFields( false )
+    mbProtectBookmarks(false),
+    mbProtectFields(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -226,7 +227,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbContinuousEndnotes;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             return mbHeaderSpacingBelowLastPara;
-        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS: return mbProtectBookmarksAndFields;
+        case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
+        case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -471,8 +473,11 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
-        case DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS:
-            mbProtectBookmarksAndFields = value;
+        case DocumentSettingId::PROTECT_BOOKMARKS:
+            mbProtectBookmarks = value;
+            break;
+        case DocumentSettingId::PROTECT_FIELDS:
+            mbProtectFields = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");
