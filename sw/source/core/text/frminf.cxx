@@ -82,7 +82,7 @@ bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
     long nWidth = pFrame->getFramePrintArea().Width();
     nWidth *= nPercent;
     nWidth /= 100;
-    return o3tl::make_unsigned(nWidth) <= pLay->Width();
+    return nWidth <= o3tl::make_signed(pLay->Width());
 }
 
 // Where does the text start (without whitespace)? (document global)

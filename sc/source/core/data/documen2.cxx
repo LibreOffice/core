@@ -527,7 +527,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 void ScDocument::EnsureTable( SCTAB nTab )
 {
     bool bExtras = !bIsUndo;        // Column-Widths, Row-Heights, Flags
-    if (o3tl::make_unsigned(nTab) >= maTabs.size())
+    if (nTab >= o3tl::make_signed(maTabs.size()))
         maTabs.resize(nTab+1);
 
     if (!maTabs[nTab])

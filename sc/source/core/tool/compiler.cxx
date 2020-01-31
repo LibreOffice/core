@@ -767,7 +767,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     static void MakeTabStr( OUStringBuffer &rBuf, const std::vector<OUString>& rTabNames, SCTAB nTab )
     {
-        if (o3tl::make_unsigned(nTab) >= rTabNames.size())
+        if (nTab >= o3tl::make_signed(rTabNames.size()))
             rBuf.append(ScResId(STR_NO_REF_TABLE));
         else
             rBuf.append(rTabNames[nTab]);
@@ -1103,7 +1103,7 @@ struct ConventionXL
         const ScSingleRefData& rRef, OUString& rTabName )
     {
         ScAddress aAbs = rRef.toAbs(rLimits, rPos);
-        if (rRef.IsTabDeleted() || o3tl::make_unsigned(aAbs.Tab()) >= rTabNames.size())
+        if (rRef.IsTabDeleted() || aAbs.Tab() >= o3tl::make_signed(rTabNames.size()))
         {
             rTabName = ScResId( STR_NO_REF_TABLE );
             return;
@@ -4508,7 +4508,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     bool bUseFunctionStack = (bPODF || bOOXML);
     const size_t nAlloc = 512;
     FunctionStack aFuncs[ nAlloc ];
-    FunctionStack* pFunctionStack = (bUseFunctionStack && o3tl::make_unsigned(rFormula.getLength()) > nAlloc ?
+    FunctionStack* pFunctionStack = (bUseFunctionStack && rFormula.getLength() > o3tl::make_signed(nAlloc) ?
          new FunctionStack[rFormula.getLength()] : &aFuncs[0]);
     pFunctionStack[0].eOp = ocNone;
     pFunctionStack[0].nSep = 0;

@@ -60,7 +60,7 @@ namespace emfplushelper
 
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
     {
-        if (_nPoints<0 || o3tl::make_unsigned(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+        if (_nPoints<0 || _nPoints>o3tl::make_signed(SAL_MAX_INT32 / (2 * sizeof(float))))
         {
             _nPoints = SAL_MAX_INT32 / (2 * sizeof(float));
         }

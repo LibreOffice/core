@@ -4991,7 +4991,7 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                         {
                             // On other sheet.
                             OUString aName;
-                            if (o3tl::make_unsigned(nTab) < rCxt.maTabNames.size())
+                            if (nTab < o3tl::make_signed(rCxt.maTabNames.size()))
                                 aName = rCxt.maTabNames[nTab];
                             if (!aName.isEmpty())
                             {

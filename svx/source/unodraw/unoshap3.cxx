@@ -200,7 +200,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     if( !HasSdrObject() || GetSdrObject()->GetSubList() == nullptr )
         throw uno::RuntimeException();
 
-    if( Index<0 || GetSdrObject()->GetSubList()->GetObjCount() <= o3tl::make_unsigned(Index) )
+    if( Index<0 || o3tl::make_signed(GetSdrObject()->GetSubList()->GetObjCount()) <= Index )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pDestObj = GetSdrObject()->GetSubList()->GetObj( Index );

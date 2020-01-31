@@ -787,7 +787,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         return;
     }
 
-    if (o3tl::make_unsigned(nLen) < sizeof(WW8_ANLD))
+    if (nLen < o3tl::make_signed(sizeof(WW8_ANLD)))
     {
         SAL_WARN("sw.ww8", "ANLevelDesc property is " << nLen << " long, needs to be at least " << sizeof(WW8_ANLD));
         m_nSwNumLevel = 0xff;
@@ -855,7 +855,7 @@ void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen 
     if (nLen <= 0)
         return;
 
-    if (o3tl::make_unsigned(nLen) < sizeof(WW8_OLST))
+    if (nLen < o3tl::make_signed(sizeof(WW8_OLST)))
     {
         SAL_WARN("sw.ww8", "WW8_OLST property is " << nLen << " long, needs to be at least " << sizeof(WW8_OLST));
         return;
@@ -2859,9 +2859,9 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 
 bool WW8TabDesc::IsValidCell(short nCol) const
 {
-    return (o3tl::make_unsigned(nCol) < SAL_N_ELEMENTS(m_pActBand->bExist)) &&
+    return (nCol < o3tl::make_signed(SAL_N_ELEMENTS(m_pActBand->bExist))) &&
            m_pActBand->bExist[nCol] &&
-           o3tl::make_unsigned(m_nCurrentRow) < m_pTabLines->size();
+           m_nCurrentRow < o3tl::make_signed(m_pTabLines->size());
 }
 
 bool WW8TabDesc::InFirstParaInCell() const
@@ -2887,7 +2887,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     sal_uInt16 nCol = m_pActBand->transCell(nWwCol);
 
-    if (o3tl::make_unsigned(m_nCurrentRow) >= m_pTabLines->size())
+    if (m_nCurrentRow >= o3tl::make_signed(m_pTabLines->size()))
     {
         OSL_ENSURE(false, "Actual row bigger than expected." );
         if (bPam)

@@ -566,7 +566,7 @@ extern "C" {
             nDeltaSec -= 1;
         }
         // if the clock changes backwards we need to cope ...
-        if( o3tl::make_unsigned(nDeltaSec) > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
+        if( nDeltaSec > o3tl::make_signed( 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) ) )
         {
             sal_gtk_timeout_defer( pTSource );
             return true;

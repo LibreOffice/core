@@ -142,7 +142,7 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
         cReplace = '_';
         break;
     }
-    if (o3tl::make_unsigned(pDestBufEnd - *pDestBufPtr) > nPrefixLen)
+    if (pDestBufEnd - *pDestBufPtr > o3tl::make_signed(nPrefixLen))
     {
         while (nPrefixLen-- > 0)
             *(*pDestBufPtr)++ = *pPrefix++;

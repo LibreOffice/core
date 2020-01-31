@@ -676,11 +676,10 @@ bool TBCCDData::Read( SvStream &rS)
     rS.ReadInt16( cwstrItems );
     if (cwstrItems > 0)
     {
-        auto nItems = o3tl::make_unsigned(cwstrItems);
         //each WString is at least one byte
-        if (rS.remainingSize() < nItems)
+        if (o3tl::make_signed(rS.remainingSize()) < cwstrItems)
             return false;
-        for (decltype(nItems) index = 0; index < nItems; ++index)
+        for (decltype(cwstrItems) index = 0; index < cwstrItems; ++index)
         {
             WString aString;
             if ( !aString.Read( rS ) )

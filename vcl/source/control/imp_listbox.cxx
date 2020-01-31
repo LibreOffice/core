@@ -82,7 +82,7 @@ void ImplEntryList::Clear()
 
 void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
 {
-    if (0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size())
+    if (0 <= nPos && nPos < o3tl::make_signed(maEntries.size()))
     {
         std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+nPos;
 
@@ -219,7 +219,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
 
 void ImplEntryList::RemoveEntry( sal_Int32 nPos )
 {
-    if (0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size())
+    if (0 <= nPos && nPos < o3tl::make_signed(maEntries.size()))
     {
         std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+ nPos;
 

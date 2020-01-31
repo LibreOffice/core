@@ -729,7 +729,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 if(m_nMaxRowCount != 0 && m_nRowPos > m_nMaxRowCount)
                     return false;
                 ++m_nRowPos;
-                if(m_aRowPosToFilePos.size() > o3tl::make_unsigned(m_nRowPos))
+                if(o3tl::make_signed(m_aRowPosToFilePos.size()) > m_nRowPos)
                 {
                     m_bNeedToReadLine = true;
                     m_nFilePos  = m_aRowPosToFilePos[m_nRowPos].first;
@@ -769,7 +769,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
             --m_nRowPos;
             {
                 assert (m_nRowPos >= 0);
-                assert(m_aRowPosToFilePos.size() >= o3tl::make_unsigned(m_nRowPos));
+                assert(o3tl::make_signed(m_aRowPosToFilePos.size()) >= m_nRowPos);
                 const TRowPositionInFile &aPositions(m_aRowPosToFilePos[m_nRowPos]);
                 m_nFilePos = aPositions.first;
                 nCurPos = aPositions.second;
@@ -820,9 +820,9 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 }
 
                 assert(m_nRowPos >=0);
-                assert(m_aRowPosToFilePos.size() > o3tl::make_unsigned(m_nRowPos));
+                assert(o3tl::make_signed(m_aRowPosToFilePos.size()) > m_nRowPos);
                 assert(nOffset >= 0);
-                if(m_aRowPosToFilePos.size() > o3tl::make_unsigned(nOffset))
+                if(o3tl::make_signed(m_aRowPosToFilePos.size()) > nOffset)
                 {
                     m_nFilePos  = m_aRowPosToFilePos[nOffset].first;
                     nCurPos     = m_aRowPosToFilePos[nOffset].second;

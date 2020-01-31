@@ -524,7 +524,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         nMaxWidth -= pDataWin->bAutoSizeLastCol
                 ? GetFieldRect(nItemId).Left()
                 : GetFrozenWidth();
-        if ( pDataWin->bAutoSizeLastCol || nWidth > o3tl::make_unsigned(nMaxWidth) )
+        if ( pDataWin->bAutoSizeLastCol || o3tl::make_signed(nWidth) > nMaxWidth )
         {
             nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
         }

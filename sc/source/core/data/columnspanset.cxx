@@ -66,14 +66,14 @@ ColumnSpanSet::~ColumnSpanSet()
 
 ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol)
 {
-    if (o3tl::make_unsigned(nTab) >= maTables.size())
+    if (nTab >= o3tl::make_signed(maTables.size()))
         maTables.resize(nTab+1);
 
     if (!maTables[nTab])
         maTables[nTab].reset(new TableType);
 
     TableType& rTab = *maTables[nTab];
-    if (o3tl::make_unsigned(nCol) >= rTab.size())
+    if (nCol >= o3tl::make_signed(rTab.size()))
         rTab.resize(nCol+1);
 
     if (!rTab[nCol])

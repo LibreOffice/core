@@ -591,7 +591,7 @@ namespace emfio
 
                     auto nMaxStreamPos = nRecordPos + nRecSize;
                     auto nRemainingSize = std::min(mpInputStream->remainingSize(), nMaxStreamPos - mpInputStream->Tell());
-                    if (nRemainingSize < o3tl::make_unsigned(nOriginalBlockLen))
+                    if (o3tl::make_signed(nRemainingSize) < nOriginalBlockLen)
                     {
                         SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
                         nOriginalTextLen = nOriginalBlockLen = nRemainingSize;

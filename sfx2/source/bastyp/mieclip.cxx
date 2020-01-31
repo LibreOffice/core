@@ -59,7 +59,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
                 sBaseURL = OStringToOUString( sLine.copy(nIndex), RTL_TEXTENCODING_UTF8 );
 
             if (nEnd >= 0 && nStt >= 0 &&
-                (!sBaseURL.isEmpty() || rStream.Tell() >= o3tl::make_unsigned(nStt)))
+                (!sBaseURL.isEmpty() || o3tl::make_signed(rStream.Tell()) >= nStt))
             {
                 bRet = true;
                 break;

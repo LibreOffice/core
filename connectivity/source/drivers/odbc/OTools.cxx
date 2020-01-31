@@ -138,7 +138,7 @@ void OTools::getValue(  OConnection const * _pConnection,
     else
     {
         OSL_ENSURE(static_cast<size_t>(_nSize) == properSize, "connectivity::odbc::OTools::getValue got wrongly sized memory region to write result to");
-        if ( o3tl::make_unsigned(_nSize) > properSize )
+        if ( _nSize > o3tl::make_signed(properSize) )
         {
             SAL_WARN( "connectivity.drivers", "memory region is too big - trying to fudge it");
             memset(_pValue, 0, _nSize);
@@ -148,7 +148,7 @@ void OTools::getValue(  OConnection const * _pConnection,
 #endif
         }
     }
-    OSL_ENSURE(o3tl::make_unsigned(_nSize) >= properSize, "memory region is too small");
+    OSL_ENSURE(_nSize >= o3tl::make_signed(properSize), "memory region is too small");
     SQLLEN pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
                             (*reinterpret_cast<T3SQLGetData>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::GetData)))(_aStatementHandle,

@@ -64,7 +64,7 @@ start:
             break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > o3tl::make_unsigned(SbxMAXBYTE) )
+            if( o3tl::make_signed(p->nUShort) > SbxMAXBYTE )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }

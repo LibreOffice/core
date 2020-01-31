@@ -797,14 +797,14 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             nLineOffset < 0 )
             return nullptr;
 
-        if( o3tl::make_unsigned(nLineOffset) >= pLines->size() )
+        if( nLineOffset >= o3tl::make_signed(pLines->size()) )
             return nullptr;
 
         pLine = (*pLines)[ nLineOffset ];
 
         // ... then search the box
         pBoxes = &pLine->GetTabBoxes();
-        if( o3tl::make_unsigned(nBoxOffset) >= pBoxes->size() )
+        if( nBoxOffset >= o3tl::make_signed(pBoxes->size()) )
             return nullptr;
         pBox = (*pBoxes)[ nBoxOffset ];
 

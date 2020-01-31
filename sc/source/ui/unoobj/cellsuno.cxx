@@ -9287,7 +9287,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    if(o3tl::make_unsigned(nIndex) >= aRangeLists.size())
+    if(nIndex >= o3tl::make_signed(aRangeLists.size()))
         throw lang::IndexOutOfBoundsException();
 
     return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
@@ -9350,7 +9350,7 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
 sal_Bool SAL_CALL ScUniqueCellFormatsEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
-    return o3tl::make_unsigned(nCurrentPosition) < aRangeLists.size();
+    return nCurrentPosition < o3tl::make_signed(aRangeLists.size());
 }
 
 uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement()

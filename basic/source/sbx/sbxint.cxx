@@ -48,7 +48,7 @@ start:
             nRes = p->nInteger; break;
         case SbxERROR:
         case SbxUSHORT:
-            if( p->nUShort > o3tl::make_unsigned(SbxMAXINT) )
+            if( o3tl::make_signed(p->nUShort) > SbxMAXINT )
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
             }

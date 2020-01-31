@@ -1359,7 +1359,7 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
         return aIt->mnXclNumFmt;
 
     size_t nSize = maFormatMap.size();
-    if( nSize < o3tl::make_unsigned( 0xFFFF - mnXclOffset ) )
+    if( o3tl::make_signed( nSize ) < 0xFFFF - mnXclOffset )
     {
         sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( nSize + mnXclOffset );
         maFormatMap.emplace_back( nScNumFmt, nXclNumFmt, GetFormatCode( nScNumFmt ) );

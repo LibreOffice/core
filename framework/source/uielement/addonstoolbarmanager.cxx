@@ -200,7 +200,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     sal_uInt32  nElements( 0 );
     bool    bAppendSeparator( false );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
-    for ( sal_uInt32 n = 0; n < o3tl::make_unsigned(rAddonToolbar.getLength()); n++ )
+    for ( sal_Int32 n = 0; n < rAddonToolbar.getLength(); n++ )
     {
         OUString   aURL;
         OUString   aTitle;

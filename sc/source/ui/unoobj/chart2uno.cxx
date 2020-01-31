@@ -165,7 +165,7 @@ struct TokenTable
     void push_back( std::unique_ptr<FormulaToken> pToken )
     {
         maTokens.push_back( std::move(pToken) );
-        OSL_ENSURE( maTokens.size()<= o3tl::make_unsigned( mnColCount*mnRowCount ), "too many tokens" );
+        OSL_ENSURE( o3tl::make_signed( maTokens.size() ) <= mnColCount*mnRowCount, "too many tokens" );
     }
 
     sal_uInt32 getIndex(SCCOL nCol, SCROW nRow) const
@@ -173,7 +173,7 @@ struct TokenTable
         OSL_ENSURE( nCol<mnColCount, "wrong column index" );
         OSL_ENSURE( nRow<mnRowCount, "wrong row index" );
         sal_uInt32 nRet = static_cast<sal_uInt32>(nCol*mnRowCount + nRow);
-        OSL_ENSURE( maTokens.size()>= o3tl::make_unsigned( mnColCount*mnRowCount ), "too few tokens" );
+        OSL_ENSURE( o3tl::make_signed( maTokens.size() ) >= mnColCount*mnRowCount, "too few tokens" );
         return nRet;
     }
 

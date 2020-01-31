@@ -175,9 +175,9 @@ void LayeredDevice::Invalidate (
     const ::tools::Rectangle& rInvalidationArea,
     const sal_Int32 nLayer)
 {
-    if (nLayer<0 || o3tl::make_unsigned(nLayer)>=mpLayers->size())
+    if (nLayer<0 || nLayer>=o3tl::make_signed(mpLayers->size()))
     {
-        OSL_ASSERT(nLayer>=0 && o3tl::make_unsigned(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && nLayer<o3tl::make_signed(mpLayers->size()));
         return;
     }
 
@@ -213,7 +213,7 @@ void LayeredDevice::RegisterPainter (
     }
 
     // Provide the layers.
-    if (o3tl::make_unsigned(nLayer) >= mpLayers->size())
+    if (nLayer >= o3tl::make_signed(mpLayers->size()))
     {
         const sal_Int32 nOldLayerCount (mpLayers->size());
         mpLayers->resize(nLayer+1);
@@ -239,9 +239,9 @@ void LayeredDevice::RemovePainter (
         OSL_ASSERT(rpPainter);
         return;
     }
-    if (nLayer<0 || o3tl::make_unsigned(nLayer)>=mpLayers->size())
+    if (nLayer<0 || nLayer>=o3tl::make_signed(mpLayers->size()))
     {
-        OSL_ASSERT(nLayer>=0 && o3tl::make_unsigned(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && nLayer<o3tl::make_signed(mpLayers->size()));
         return;
     }
 

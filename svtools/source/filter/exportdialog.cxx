@@ -544,7 +544,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
 // to determine the exact graphic output size and preview for jpg
 bool ExportDialog::IsTempExportAvailable() const
 {
-    return GetRawFileSize() < o3tl::make_unsigned( mnMaxFilesizeForRealtimePreview );
+    return o3tl::make_signed( GetRawFileSize() ) < mnMaxFilesizeForRealtimePreview;
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,

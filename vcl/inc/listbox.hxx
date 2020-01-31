@@ -99,7 +99,7 @@ private:
 
     ImplEntryType*  GetEntry( sal_Int32  nPos ) const
     {
-        if (nPos < 0 || o3tl::make_unsigned(nPos) >= maEntries.size())
+        if (nPos < 0 || nPos >= o3tl::make_signed(maEntries.size()))
             return nullptr;
         return maEntries[nPos].get();
     }

@@ -116,7 +116,7 @@ namespace emfplushelper
                 s.ReadInt32(surroundColorsNumber);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\t number of surround colors: " << surroundColorsNumber);
 
-                if (surroundColorsNumber<0 || o3tl::make_unsigned(surroundColorsNumber)>SAL_MAX_INT32 / sizeof(::Color))
+                if (surroundColorsNumber<0 || surroundColorsNumber>o3tl::make_signed(SAL_MAX_INT32 / sizeof(::Color)))
                 {
                     surroundColorsNumber = SAL_MAX_INT32 / sizeof(::Color);
                 }
@@ -191,7 +191,7 @@ namespace emfplushelper
                 {
                     s.ReadInt32(blendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tuse blend, points: " << blendPoints);
-                    if (blendPoints<0 || o3tl::make_unsigned(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+                    if (blendPoints<0 || blendPoints>o3tl::make_signed(SAL_MAX_INT32 / (2 * sizeof(float))))
                         blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
                     blendPositions.reset( new float[2 * blendPoints] );
                     blendFactors = blendPositions.get() + blendPoints;
@@ -214,12 +214,12 @@ namespace emfplushelper
                     s.ReadInt32(colorblendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse color blend, points: " << colorblendPoints);
 
-                    if (colorblendPoints<0 || o3tl::make_unsigned(colorblendPoints)>SAL_MAX_INT32 / sizeof(float))
+                    if (colorblendPoints<0 || colorblendPoints>o3tl::make_signed(SAL_MAX_INT32 / sizeof(float)))
                     {
                         colorblendPoints = SAL_MAX_INT32 / sizeof(float);
                     }
 
-                    if (o3tl::make_unsigned(colorblendPoints) > SAL_MAX_INT32 / sizeof(::Color))
+                    if (colorblendPoints > o3tl::make_signed(SAL_MAX_INT32 / sizeof(::Color)))
                     {
                         colorblendPoints = SAL_MAX_INT32 / sizeof(::Color);
                     }
@@ -273,7 +273,7 @@ namespace emfplushelper
                 {
                     s.ReadInt32(blendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse blend, points: " << blendPoints);
-                    if (blendPoints<0 || o3tl::make_unsigned(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+                    if (blendPoints<0 || blendPoints>o3tl::make_signed(SAL_MAX_INT32 / (2 * sizeof(float))))
                         blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
                     blendPositions.reset( new float[2 * blendPoints] );
                     blendFactors = blendPositions.get() + blendPoints;
@@ -296,12 +296,12 @@ namespace emfplushelper
                     s.ReadInt32(colorblendPoints);
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse color blend, points: " << colorblendPoints);
 
-                    if (colorblendPoints<0 || o3tl::make_unsigned(colorblendPoints)>SAL_MAX_INT32 / sizeof(float))
+                    if (colorblendPoints<0 || colorblendPoints>o3tl::make_signed(SAL_MAX_INT32 / sizeof(float)))
                     {
                         colorblendPoints = SAL_MAX_INT32 / sizeof(float);
                     }
 
-                    if (o3tl::make_unsigned(colorblendPoints) > SAL_MAX_INT32 / sizeof(::Color))
+                    if (colorblendPoints > o3tl::make_signed(SAL_MAX_INT32 / sizeof(::Color)))
                     {
                         colorblendPoints = sal_uInt32(SAL_MAX_INT32) / sizeof(::Color);
                     }

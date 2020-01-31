@@ -72,7 +72,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     checkError();
 
     // If read characters < MaxLength, adjust css::uno::Sequence
-    if (nRead < o3tl::make_unsigned(aData.getLength()))
+    if (o3tl::make_signed(nRead) < aData.getLength())
         aData.realloc( nRead );
 
     return nRead;

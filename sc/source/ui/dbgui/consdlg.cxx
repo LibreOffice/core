@@ -453,7 +453,7 @@ IMPL_LINK( ScConsolidateDlg, SelectCBHdl, weld::ComboBox&, rLb, void )
         && (nAreaDataCount > 0)
         && (pAreaData != nullptr) )
     {
-        if ( o3tl::make_unsigned(nSelPos) <= nAreaDataCount )
+        if ( nSelPos <= o3tl::make_signed(nAreaDataCount) )
         {
             OUString aString( pAreaData[nSelPos-1].aStrArea );
 

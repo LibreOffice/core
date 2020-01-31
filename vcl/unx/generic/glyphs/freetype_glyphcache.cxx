@@ -183,7 +183,7 @@ FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
             FT_MM_Var *pFtMMVar;
             if (FT_Get_MM_Var(maFaceFT, &pFtMMVar) == 0)
             {
-                if (o3tl::make_unsigned(mnFaceVariation) <= pFtMMVar->num_namedstyles)
+                if (mnFaceVariation <= o3tl::make_signed(pFtMMVar->num_namedstyles))
                 {
                     FT_Var_Named_Style *instance = &pFtMMVar->namedstyle[mnFaceVariation - 1];
                     FT_Set_Var_Design_Coordinates(maFaceFT, pFtMMVar->num_axis, instance->coords);

@@ -621,7 +621,7 @@ namespace emfio
 
             GDIObj *pGDIObj = nullptr;
 
-            if ( o3tl::make_unsigned(nIndex) < mvGDIObj.size() )
+            if ( nIndex < o3tl::make_signed(mvGDIObj.size()) )
                 pGDIObj = mvGDIObj[ nIndex ].get();
 
             if ( pGDIObj )
@@ -764,7 +764,7 @@ namespace emfio
                     }
                 }
             }
-            if ( o3tl::make_unsigned(nIndex) >= mvGDIObj.size() )
+            if ( nIndex >= o3tl::make_signed(mvGDIObj.size()) )
                 ImplResizeObjectArry( nIndex + 16 );
 
             mvGDIObj[ nIndex ] = std::move(pObject);
@@ -780,7 +780,7 @@ namespace emfio
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
         {
-            if ( o3tl::make_unsigned(nIndex) < mvGDIObj.size() )
+            if ( nIndex < o3tl::make_signed(mvGDIObj.size()) )
             {
                 mvGDIObj[ nIndex ].reset();
             }

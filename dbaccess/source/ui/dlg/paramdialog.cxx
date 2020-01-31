@@ -296,7 +296,7 @@ namespace dbaui
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        OSL_ENSURE(o3tl::make_unsigned(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        OSL_ENSURE(m_nCurrentlySelected < o3tl::make_signed(m_aVisitedParams.size()), "OParameterDialog::OnEntrySelected : invalid current entry !");
         m_aVisitedParams[m_nCurrentlySelected] &= ~VisitFlags::Dirty;
 
         m_aResetVisitFlag.SetTimeout(1000);
@@ -310,7 +310,7 @@ namespace dbaui
         OSL_ENSURE(m_nCurrentlySelected != -1, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        OSL_ENSURE(o3tl::make_unsigned(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < o3tl::make_signed(m_aVisitedParams.size()), "OParameterDialog::OnVisitedTimeout : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Visited;
 
         // was it the last "not visited yet" entry ?
@@ -335,7 +335,7 @@ namespace dbaui
     IMPL_LINK(OParameterDialog, OnValueModified, weld::Entry&, rEdit, void)
     {
         // mark the currently selected entry as dirty
-        OSL_ENSURE(o3tl::make_unsigned(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < o3tl::make_signed(m_aVisitedParams.size()), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Dirty;
         rEdit.set_message_type(weld::EntryMessageType::Normal);
     }

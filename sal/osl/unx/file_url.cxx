@@ -835,7 +835,7 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
 
     osl_systemPathRemoveSeparator(strSystemPath.pData);
 
-    if (o3tl::make_unsigned(strSystemPath.getLength()) >= bufLen) {
+    if (strSystemPath.getLength() >= o3tl::make_signed(bufLen)) {
         return osl_File_E_OVERFLOW;
     }
     std::strcpy(buffer, strSystemPath.getStr());

@@ -1258,7 +1258,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     if ( m_vColumnPositions.end() != aPosFind )
                     {
                         aPosFind->second = nNewPos;
-                        OSL_ENSURE( m_vColumnTypes.size() > o3tl::make_unsigned( aPosFind - m_vColumnPositions.begin() ),
+                        OSL_ENSURE( o3tl::make_signed( m_vColumnTypes.size() ) > aPosFind - m_vColumnPositions.begin(),
                             "Invalid index for vector!" );
                         m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();
                     }

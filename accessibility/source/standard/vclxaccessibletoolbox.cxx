@@ -690,7 +690,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     comphelper::OExternalLockGuard aGuard( this );
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || i < 0 || o3tl::make_unsigned(i) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || i < 0 || i >= o3tl::make_signed(pToolBox->GetItemCount()) )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
@@ -779,7 +779,7 @@ void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex )
     OExternalLockGuard aGuard( this );
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || nChildIndex < 0 || nChildIndex >= o3tl::make_signed(pToolBox->GetItemCount()) )
         throw IndexOutOfBoundsException();
 
     pToolBox->ChangeHighlight( nChildIndex );
@@ -789,7 +789,7 @@ sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex
 {
     OExternalLockGuard aGuard( this );
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( (!pToolBox) || nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= pToolBox->GetItemCount() )
+    if ( (!pToolBox) || nChildIndex < 0 || nChildIndex >= o3tl::make_signed(pToolBox->GetItemCount()) )
         throw IndexOutOfBoundsException();
 
     if ( pToolBox->GetHighlightItemId() == pToolBox->GetItemId( nChildIndex ) )

@@ -459,7 +459,7 @@ void XclExpString::SetStrLen( sal_Int32 nNewLen )
 
 void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
-    OSL_ENSURE( maUniBuffer.size() >= o3tl::make_unsigned( nBegin + nLen ),
+    OSL_ENSURE( o3tl::make_signed( maUniBuffer.size() ) >= nBegin + nLen,
         "XclExpString::CharsToBuffer - char buffer invalid" );
     ScfUInt16Vec::iterator aBeg = maUniBuffer.begin() + nBegin;
     ScfUInt16Vec::iterator aEnd = aBeg + nLen;
@@ -476,7 +476,7 @@ void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin,
 
 void XclExpString::CharsToBuffer( const char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
 {
-    OSL_ENSURE( maCharBuffer.size() >= o3tl::make_unsigned( nBegin + nLen ),
+    OSL_ENSURE( o3tl::make_signed( maCharBuffer.size() ) >= nBegin + nLen,
         "XclExpString::CharsToBuffer - char buffer invalid" );
     ScfUInt8Vec::iterator aBeg = maCharBuffer.begin() + nBegin;
     ScfUInt8Vec::iterator aEnd = aBeg + nLen;

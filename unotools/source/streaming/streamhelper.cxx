@@ -48,7 +48,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
         throw css::io::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     // adjust sequence if data read is lower than the desired data
-    if (nRead < o3tl::make_unsigned(aData.getLength()))
+    if (o3tl::make_signed(nRead) < aData.getLength())
         aData.realloc( nRead );
 
     return nRead;

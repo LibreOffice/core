@@ -246,7 +246,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 
         SAL_INFO("extensions.scanner", "ScannerManager::configureScanner");
 
-        if( scanner_context.InternalData < 0 || o3tl::make_unsigned(scanner_context.InternalData) >= rSanes.size() )
+        if( scanner_context.InternalData < 0 || scanner_context.InternalData >= o3tl::make_signed(rSanes.size()) )
             throw ScannerException(
                 "Scanner does not exist",
                 Reference< XScannerManager >( this ),
@@ -282,7 +282,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
     SAL_INFO("extensions.scanner", "ScannerManager::startScan");
 
-    if( scanner_context.InternalData < 0 || o3tl::make_unsigned(scanner_context.InternalData) >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= o3tl::make_signed(rSanes.size()) )
         throw ScannerException(
             "Scanner does not exist",
             Reference< XScannerManager >( this ),
@@ -307,7 +307,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context )
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || o3tl::make_unsigned(scanner_context.InternalData) >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= o3tl::make_signed(rSanes.size()) )
         throw ScannerException(
             "Scanner does not exist",
             Reference< XScannerManager >( this ),
@@ -325,7 +325,7 @@ Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& 
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || o3tl::make_unsigned(scanner_context.InternalData) >= rSanes.size() )
+    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= o3tl::make_signed(rSanes.size()) )
         throw ScannerException(
             "Scanner does not exist",
             Reference< XScannerManager >( this ),

@@ -129,8 +129,8 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     mbRowTrunc( false ),
     mbTabTrunc( false )
 {
-    OSL_ENSURE( o3tl::make_unsigned( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
-    OSL_ENSURE( o3tl::make_unsigned( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
+    OSL_ENSURE( rMaxPos.Col() <= o3tl::make_signed( SAL_MAX_UINT16 ), "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
+    OSL_ENSURE( rMaxPos.Row() <= o3tl::make_signed( SAL_MAX_UINT32 ), "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
 XclAddressConverterBase::~XclAddressConverterBase()

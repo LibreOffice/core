@@ -323,7 +323,7 @@ sal_Int32 OGroupManager::getGroupCount() const
 
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, OUString& _rName)
 {
-    OSL_ENSURE(nGroup >= 0 && o3tl::make_unsigned(nGroup) < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
+    OSL_ENSURE(nGroup >= 0 && nGroup < o3tl::make_signed(m_aActiveGroupMap.size()),"OGroupManager::getGroup: Invalid group index!");
     OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
     _rName                          = aGroupPos->second.GetGroupName();
     _rGroup                         = aGroupPos->second.GetControlModels();

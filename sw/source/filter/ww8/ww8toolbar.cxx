@@ -166,7 +166,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     }
     for ( const auto& rIndex : dropDownMenuIndices )
     {
-        if (rIndex < 0 || o3tl::make_unsigned(rIndex) >= rCustomizations.size())
+        if (rIndex < 0 || rIndex >= o3tl::make_signed(rCustomizations.size()))
             continue;
         rCustomizations[rIndex].bIsDroppedMenuTB = true;
     }
@@ -761,7 +761,7 @@ bool PlfMcd::Read(SvStream &rS)
     if (iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / 24 /*sizeof MCD*/;
-    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
+    if (iMac > o3tl::make_signed(nMaxPossibleRecords))
     {
         SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
         iMac = nMaxPossibleRecords;
@@ -796,7 +796,7 @@ bool PlfAcd::Read( SvStream &rS)
     if (iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / (sizeof(sal_uInt16)*2);
-    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
+    if (iMac > o3tl::make_signed(nMaxPossibleRecords))
     {
         SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
         iMac = nMaxPossibleRecords;
@@ -832,7 +832,7 @@ bool PlfKme::Read(SvStream &rS)
     {
         //each Kme is 14 bytes in size
         size_t nMaxAvailableRecords = rS.remainingSize() / 14;
-        if (o3tl::make_unsigned(iMac) > nMaxAvailableRecords)
+        if (iMac > o3tl::make_signed(nMaxAvailableRecords))
             return false;
 
         rgkme.reset( new Kme[ iMac ] );

@@ -1030,7 +1030,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
     if(SwFieldIds::SetExp == rType.Which())
     {
         const SwFieldTypes* pTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
-        for( size_t i = 0; i <= o3tl::make_unsigned(INIT_FLDTYPES); i++ )
+        for( size_t i = 0; o3tl::make_signed(i) <= INIT_FLDTYPES; i++ )
         {
             if((*pTypes)[i].get() == &rType)
             {

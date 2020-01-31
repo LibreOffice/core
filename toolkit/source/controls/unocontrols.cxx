@@ -2417,8 +2417,8 @@ void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition,
     // sync with legacy StringItemList property
     ::std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
-    OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) <= aStringItems.size(), "UnoControlListBoxModel::impl_handleInsert" );
-    if ( o3tl::make_unsigned( i_nItemPosition ) <= aStringItems.size() )
+    OSL_ENSURE( i_nItemPosition <= o3tl::make_signed( aStringItems.size() ), "UnoControlListBoxModel::impl_handleInsert" );
+    if ( i_nItemPosition <= o3tl::make_signed( aStringItems.size() ) )
     {
         const OUString sItemText( !!i_rItemText ? *i_rItemText : OUString() );
         aStringItems.insert( aStringItems.begin() + i_nItemPosition, sItemText );
@@ -2442,8 +2442,8 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     impl_getStringItemList( aStringItems );
     if ( !bAllItems )
     {
-        OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleRemove" );
-        if ( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size() )
+        OSL_ENSURE( i_nItemPosition < o3tl::make_signed( aStringItems.size() ), "UnoControlListBoxModel::impl_handleRemove" );
+        if ( i_nItemPosition < o3tl::make_signed( aStringItems.size() ) )
         {
             aStringItems.erase( aStringItems.begin() + i_nItemPosition );
         }
@@ -2480,8 +2480,8 @@ void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition,
         // sync with legacy StringItemList property
         ::std::vector< OUString > aStringItems;
         impl_getStringItemList( aStringItems );
-        OSL_ENSURE( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleModify" );
-        if ( o3tl::make_unsigned( i_nItemPosition ) < aStringItems.size() )
+        OSL_ENSURE( i_nItemPosition < o3tl::make_signed( aStringItems.size() ), "UnoControlListBoxModel::impl_handleModify" );
+        if ( i_nItemPosition < o3tl::make_signed( aStringItems.size() ) )
         {
             aStringItems[ i_nItemPosition] = *i_rItemText;
         }

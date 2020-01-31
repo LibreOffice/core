@@ -1220,19 +1220,18 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                         const size_t nMinRecordSize = 4;
                         const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
 
-                        auto nRowCount = o3tl::make_unsigned(nReadRowCount);
-                        if (nRowCount > nMaxRecords)
+                        if (nReadRowCount > o3tl::make_signed(nMaxRecords))
                         {
                             SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
-                                     " max possible entries, but " << nRowCount << " claimed, truncating");
-                            nRowCount = nMaxRecords;
+                                     " max possible entries, but " << nReadRowCount << " claimed, truncating");
+                            nReadRowCount = static_cast<decltype(nReadRowCount)>(nMaxRecords);
                         }
-                        if (nRowCount > 0)
+                        if (nReadRowCount > 0)
                         {
-                            std::unique_ptr<sal_uInt32[]> pTableArry(new sal_uInt32[ nRowCount + 2 ]);
+                            std::unique_ptr<sal_uInt32[]> pTableArry(new sal_uInt32[ nReadRowCount + 2 ]);
                             pTableArry[ 0 ] = nTableProperties;
-                            pTableArry[ 1 ] = nRowCount;
-                            for (decltype(nRowCount) nRow = 0; nRow < nRowCount; ++nRow)
+                            pTableArry[ 1 ] = static_cast<sal_uInt32>(nReadRowCount);
+                            for (decltype(nReadRowCount) nRow = 0; nRow < nReadRowCount; ++nRow)
                                 rSt.ReadUInt32(pTableArry[nRow + 2]);
                             rData.pTableRowProperties = std::move(pTableArry);
                         }
@@ -5371,7 +5370,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 }
                 else
                 {
-                    if (nCharReadCnt > o3tl::make_unsigned(aString.getLength()))
+                    if (o3tl::make_signed(nCharReadCnt) > aString.getLength())
                         aCharPropSet.maString = OUString();
                     else
                     {

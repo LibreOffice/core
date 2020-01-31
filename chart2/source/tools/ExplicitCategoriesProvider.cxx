@@ -361,7 +361,7 @@ static Sequence< OUString > lcl_getExplicitSimpleCategories(
             OUStringBuffer aText;
             for (auto const& complexCatPerIndex : aComplexCatsPerIndex)
             {
-                if ( o3tl::make_unsigned(nN) < complexCatPerIndex.size() )
+                if ( nN < o3tl::make_signed(complexCatPerIndex.size()) )
                 {
                     OUString aAddText = complexCatPerIndex[nN].Text;
                     if( !aAddText.isEmpty() )

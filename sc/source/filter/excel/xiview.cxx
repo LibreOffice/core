@@ -255,7 +255,7 @@ void XclImpTabViewSettings::Finalize()
             #i35812# Excel uses number of visible rows/columns, Calc uses position of freeze. */
         if( (maData.mnSplitX > 0) && (maData.maFirstXclPos.mnCol + maData.mnSplitX <= GetScMaxPos().Col()) )
             rTabSett.maFreezePos.SetCol( static_cast< SCCOL >( maData.maFirstXclPos.mnCol + maData.mnSplitX ) );
-        if( (maData.mnSplitY > 0) && (maData.maFirstXclPos.mnRow + maData.mnSplitY <= o3tl::make_unsigned(GetScMaxPos().Row())) )
+        if( (maData.mnSplitY > 0) && (o3tl::make_signed(maData.maFirstXclPos.mnRow + maData.mnSplitY) <= GetScMaxPos().Row()) )
             rTabSett.maFreezePos.SetRow( static_cast< SCROW >( maData.maFirstXclPos.mnRow + maData.mnSplitY ) );
     }
     else

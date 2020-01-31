@@ -661,7 +661,7 @@ ExternalLinkRef ExternalLinkBuffer::createExternalLink()
 
 const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 {
-    return ((0 <= nRefId) && (o3tl::make_unsigned( nRefId ) < maRefSheets.size())) ?
+    return ((0 <= nRefId) && (nRefId < o3tl::make_signed( maRefSheets.size() ))) ?
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : nullptr;
 }
 

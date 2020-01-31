@@ -549,7 +549,7 @@ bool CustomAnimationEffect::checkForText( const std::vector<sal_Int32>* paragrap
             if ( paragraphNumberingLevel )
             {
                 bHasText = !paragraphNumberingLevel->empty();
-                if (nPara >= 0 && o3tl::make_unsigned(nPara) < paragraphNumberingLevel->size())
+                if (nPara >= 0 && nPara < o3tl::make_signed(paragraphNumberingLevel->size()))
                     nParaDepth = paragraphNumberingLevel->at(nPara);
             }
             else

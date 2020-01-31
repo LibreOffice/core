@@ -9,7 +9,7 @@
 
 bool f(int i1, unsigned i2)
 {
-    // expected-error@+1 {{explicit cast from 'int' to 'unsigned int' (of equal rank) in comparison against 'unsigned int': if the cast value is known to be non-negative, use o3tl::make_unsigned instead of the cast [loplugin:unsignedcompare]}}
+    // expected-error@+1 {{explicit cast from 'int' to 'unsigned int' (of equal rank) in comparison against 'unsigned int': use o3tl::make_signed instead of the cast [loplugin:unsignedcompare]}}
     return unsigned(i1) < i2;
 }
 

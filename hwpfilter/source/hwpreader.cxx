@@ -4356,8 +4356,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     OUStringBuffer oustr;
 
                     if ((drawobj->u.freeform.npt > 2) &&
-                        (o3tl::make_unsigned(drawobj->u.freeform.npt) <
-                         (::std::numeric_limits<int>::max() / sizeof(double))))
+                        (drawobj->u.freeform.npt <
+                         o3tl::make_signed(::std::numeric_limits<int>::max() / sizeof(double))))
                     {
                               int n, i;
                               n = drawobj->u.freeform.npt;

@@ -122,7 +122,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
      */
     if( nLinkId >= 0 )
     {
-        if ( o3tl::make_unsigned(nLinkId) < mParaIds.size() )
+        if ( nLinkId < o3tl::make_signed(mParaIds.size()) )
             nLinkId = mParaIds[ nLinkId ];
         else
             nLinkId = -1;
@@ -135,7 +135,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
 
 sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
 {
-    if ( o3tl::make_unsigned(nStructId) < mStructIdMap.size() )
+    if ( nStructId < o3tl::make_signed(mStructIdMap.size()) )
         nStructId = mStructIdMap[ nStructId ];
     else
         nStructId = -1;
@@ -754,7 +754,7 @@ void PDFExtOutDevData::EndStructureElement()
 bool PDFExtOutDevData::SetCurrentStructureElement( sal_Int32 nStructId )
 {
     bool bSuccess = false;
-    if( o3tl::make_unsigned(nStructId) < mpGlobalSyncData->mStructParents.size() )
+    if( nStructId < o3tl::make_signed(mpGlobalSyncData->mStructParents.size()) )
     {
         mpGlobalSyncData->mCurrentStructElement = nStructId;
         mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetCurrentStructureElement );

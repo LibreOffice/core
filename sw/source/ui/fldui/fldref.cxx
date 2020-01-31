@@ -192,7 +192,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(SwFieldIds::SetExp);
 
-    OSL_ENSURE( nFieldTypeCnt < o3tl::make_unsigned(REFFLDFLAG), "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
+    OSL_ENSURE( o3tl::make_signed(nFieldTypeCnt) < REFFLDFLAG, "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
 
     for (size_t n = 0; n < nFieldTypeCnt; ++n)
     {

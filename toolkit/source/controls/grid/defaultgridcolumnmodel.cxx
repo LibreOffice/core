@@ -178,7 +178,7 @@ private:
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
-        if ( ( i_columnIndex < 0 ) || ( o3tl::make_unsigned( i_columnIndex ) >= m_aColumns.size() ) )
+        if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= o3tl::make_signed( m_aColumns.size() ) ) )
             throw css::lang::IndexOutOfBoundsException( OUString(), *this );
 
         Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;

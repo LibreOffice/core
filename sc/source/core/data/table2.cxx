@@ -250,7 +250,7 @@ void ScTable::DeleteRow(
 
 bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
 {
-    if ( nSize > o3tl::make_unsigned(pDocument->MaxCol()) )
+    if ( o3tl::make_signed(nSize) > pDocument->MaxCol() )
         return false;
 
     if ( nStartRow==0 && nEndRow==pDocument->MaxRow() && pOutlineTable
@@ -349,7 +349,7 @@ void ScTable::DeleteCol(
     {
         if (mpColWidth && mpColFlags)
         {
-            assert( nStartCol + nSize <= o3tl::make_unsigned(pDocument->MaxCol()+1) );    // moving 0 if ==pDocument->MaxCol()+1 is correct
+            assert( o3tl::make_signed(nStartCol + nSize) <= pDocument->MaxCol()+1 );    // moving 0 if ==pDocument->MaxCol()+1 is correct
             mpColWidth->RemovePreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             mpColFlags->RemovePreservingSize(nStartCol, nSize, CRFlags::NONE);
         }

@@ -1660,7 +1660,7 @@ namespace
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);
-            if ( Index < 0 || m_aSet.size() < o3tl::make_unsigned(Index) )
+            if ( Index < 0 || o3tl::make_signed(m_aSet.size()) < Index )
                 throw IndexOutOfBoundsException();
 
             std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();

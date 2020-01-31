@@ -424,7 +424,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 
 const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
 {
-    OSL_ENSURE( o3tl::make_unsigned(nIndex) < aValidationVec.size(), "out of range" );
+    OSL_ENSURE( nIndex < o3tl::make_signed(aValidationVec.size()), "out of range" );
     return aValidationVec[nIndex].sName;
 }
 
@@ -729,7 +729,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
     sal_Int32 nPrefixLength(rPrefix.getLength());
     OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1) == rString)
+    if (nIndex > 0 && nIndex-1 < o3tl::make_signed(aAutoStyleNames.size()) && aAutoStyleNames.at(nIndex - 1) == rString)
     {
         bIsAutoStyle = true;
         return nIndex - 1;
@@ -738,7 +738,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
     {
         sal_Int32 i(0);
         bool bFound(false);
-        while (!bFound && o3tl::make_unsigned(i) < aStyleNames.size())
+        while (!bFound && i < o3tl::make_signed(aStyleNames.size()))
         {
             if (aStyleNames[i] == rString)
                 bFound = true;
@@ -753,7 +753,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
         else
         {
             i = 0;
-            while (!bFound && o3tl::make_unsigned(i) < aAutoStyleNames.size())
+            while (!bFound && i < o3tl::make_signed(aAutoStyleNames.size()))
             {
                 if (aAutoStyleNames[i] == rString)
                     bFound = true;
@@ -774,8 +774,8 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, bool& bIsAutoStyle) const
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    if (o3tl::make_unsigned(nTable) >= aTables.size())
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
+    if (nTable >= o3tl::make_signed(aTables.size()))
         return -1;
     for (const ScMyFormatRange & rFormatRange : aTables[nTable])
     {
@@ -794,8 +794,8 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
     bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    if (o3tl::make_unsigned(nTable) >= aTables.size())
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
+    if (nTable >= o3tl::make_signed(aTables.size()))
         return -1;
     ScMyFormatRangeAddresses& rFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(rFormatRanges.begin());
@@ -810,8 +810,8 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
             bIsAutoStyle = aItr->bIsAutoStyle;
             nValidationIndex = aItr->nValidationIndex;
             nNumberFormat = aItr->nNumberFormat;
-            OSL_ENSURE( o3tl::make_unsigned(nColumn) < pColDefaults->size(), "nColumn out of bounds");
-            if (o3tl::make_unsigned(nColumn) < pColDefaults->size() &&
+            OSL_ENSURE( nColumn < o3tl::make_signed(pColDefaults->size()), "nColumn out of bounds");
+            if (nColumn < o3tl::make_signed(pColDefaults->size()) &&
                     ((*pColDefaults)[nColumn].nIndex != -1) &&
                     ((*pColDefaults)[nColumn].nIndex == (*aItr).nStyleNameIndex) &&
                     ((*pColDefaults)[nColumn].bIsAutoStyle == (*aItr).bIsAutoStyle))
@@ -834,7 +834,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     const sal_Int32 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
     sal_Int32 nTotalColumns(nEndColumn - nStartColumn + 1);
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
     ScMyFormatRangeAddresses& rFormatRanges(aTables[nTable]);
     ScMyFormatRangeAddresses::iterator aItr(rFormatRanges.begin());
     ScMyFormatRangeAddresses::iterator aEndItr(rFormatRanges.end());
@@ -902,7 +902,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress& rCell
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    OSL_ENSURE(o3tl::make_unsigned(rCellRangeAddress.Sheet) < aTables.size(), "wrong table");
+    OSL_ENSURE(rCellRangeAddress.Sheet < o3tl::make_signed(aTables.size()), "wrong table");
     ScMyFormatRangeAddresses& rFormatRanges(aTables[rCellRangeAddress.Sheet]);
     rFormatRanges.push_back(aFormatRange);
 }
@@ -941,13 +941,13 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
     sal_Int32 nPrefixLength(rPrefix.getLength());
     OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1) == rString)
+    if (nIndex > 0 && nIndex-1 < o3tl::make_signed(aStyleNames.size()) && aStyleNames.at(nIndex - 1) == rString)
         return nIndex - 1;
     else
     {
         sal_Int32 i(0);
         bool bFound(false);
-        while (!bFound && o3tl::make_unsigned(i) < aStyleNames.size())
+        while (!bFound && i < o3tl::make_signed(aStyleNames.size()))
         {
             if (aStyleNames.at(i) == rString)
                 bFound = true;
@@ -990,8 +990,8 @@ void ScColumnStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields
 sal_Int32 ScColumnStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
     bool& bIsVisible)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    if (o3tl::make_unsigned(nField) < aTables[nTable].size())
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
+    if (nField < o3tl::make_signed(aTables[nTable].size()))
     {
         bIsVisible = aTables[nTable][nField].bIsVisible;
         return aTables[nTable][nField].nIndex;
@@ -1006,8 +1006,8 @@ sal_Int32 ScColumnStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_In
 void ScColumnStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField,
     const sal_Int32 nStringIndex, const bool bIsVisible)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    OSL_ENSURE(aTables[nTable].size() >= o3tl::make_unsigned(nField), "wrong field");
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
+    OSL_ENSURE(o3tl::make_signed(aTables[nTable].size()) >= nField, "wrong field");
     ScColumnStyle aStyle;
     aStyle.nIndex = nStringIndex;
     aStyle.bIsVisible = bIsVisible;
@@ -1045,8 +1045,8 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
-    if (o3tl::make_unsigned(nTable) >= aTables.size())
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
+    if (nTable >= o3tl::make_signed(aTables.size()))
         return -1;
 
     if (maCache.hasCache(nTable, nField))
@@ -1074,7 +1074,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
 void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField,
     const sal_Int32 nStringIndex)
 {
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
     StylesType& r = *aTables[nTable];
     r.insert_back(nField, nField+1, nStringIndex);
 }
@@ -1083,7 +1083,7 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nSta
         const sal_Int32 nStringIndex, const sal_Int32 nEndField)
 {
     OSL_ENSURE( nStartField <= nEndField, "bad field range");
-    OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
+    OSL_ENSURE(nTable < o3tl::make_signed(aTables.size()), "wrong table");
     StylesType& r = *aTables[nTable];
     r.insert_back(nStartField, nEndField+1, nStringIndex);
 }

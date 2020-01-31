@@ -507,7 +507,7 @@ TVChildTarget::getByName( const OUString& aName )
 {
     OUString num( aName.copy( 2, aName.getLength()-4 ) );
     sal_Int32 idx = num.toInt32() - 1;
-    if( idx < 0 || Elements.size() <= o3tl::make_unsigned( idx ) )
+    if( idx < 0 || o3tl::make_signed( Elements.size() ) <= idx )
         throw NoSuchElementException();
 
     cppu::OWeakObject* p = Elements[idx].get();
@@ -529,7 +529,7 @@ TVChildTarget::hasByName( const OUString& aName )
 {
     OUString num( aName.copy( 2, aName.getLength()-4 ) );
     sal_Int32 idx = num.toInt32() - 1;
-    if( idx < 0 || Elements.size() <= o3tl::make_unsigned( idx ) )
+    if( idx < 0 || o3tl::make_signed( Elements.size() ) <= idx )
         return false;
 
     return true;
@@ -547,7 +547,7 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
         OUString num( aName.copy( 2, idx-4 ) );
         sal_Int32 pref = num.toInt32() - 1;
 
-        if( pref < 0 || Elements.size() <= o3tl::make_unsigned( pref ) )
+        if( pref < 0 || o3tl::make_signed( Elements.size() ) <= pref )
             throw NoSuchElementException();
 
         return Elements[pref]->getByHierarchicalName( aName.copy( 1 + idx ) );
@@ -565,7 +565,7 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
     {
         OUString num( aName.copy( 2, idx-4 ) );
         sal_Int32 pref = num.toInt32() - 1;
-        if( pref < 0 || Elements.size() <= o3tl::make_unsigned( pref ) )
+        if( pref < 0 || o3tl::make_signed( Elements.size() ) <= pref )
             return false;
 
         return Elements[pref]->hasByHierarchicalName( aName.copy( 1 + idx ) );

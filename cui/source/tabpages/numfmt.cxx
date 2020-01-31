@@ -1388,7 +1388,7 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
 
         m_xEdComment->set_text(m_xLbCategory->get_text(1));
 
-        if( nFmtLbSelPos>=0 && o3tl::make_unsigned(nFmtLbSelPos)<aEntryList.size() )
+        if( nFmtLbSelPos>=0 && nFmtLbSelPos<o3tl::make_signed(aEntryList.size()) )
         {
             aFormat = aEntryList[nFmtLbSelPos];
         }

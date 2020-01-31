@@ -173,7 +173,7 @@ void CGM::ImplDoClass1()
             {
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (mpEndValidSource - (mpSource + mnParaSize) < o3tl::make_signed(nSize))
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );
@@ -188,7 +188,7 @@ void CGM::ImplDoClass1()
                 ImplGetUI16(); // skip CharSetType
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (mpEndValidSource - (mpSource + mnParaSize) < o3tl::make_signed(nSize))
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 pElement->aFontList.InsertCharSet( mpSource + mnParaSize, nSize );

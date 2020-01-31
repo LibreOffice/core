@@ -1488,7 +1488,7 @@ sal_Int32 SAL_CALL SwXTextRangesImpl::getCount()
 uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= m_Ranges.size()))
+    if ((nIndex < 0) || (nIndex >= o3tl::make_signed(m_Ranges.size())))
         throw lang::IndexOutOfBoundsException();
     uno::Any ret;
     ret <<= m_Ranges.at(nIndex);

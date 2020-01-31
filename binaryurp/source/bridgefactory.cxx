@@ -151,7 +151,7 @@ BridgeFactory::getExistingBridges() {
             static_cast< cppu::OWeakObject * >(this));
     }
     sal_Int32 n = static_cast< sal_Int32 >(unnamed_.size());
-    if (named_.size() > o3tl::make_unsigned(SAL_MAX_INT32 - n)) {
+    if (o3tl::make_signed(named_.size()) > SAL_MAX_INT32 - n) {
         throw css::uno::RuntimeException(
             "BridgeFactory::getExistingBridges: too many",
             static_cast< cppu::OWeakObject * >(this));

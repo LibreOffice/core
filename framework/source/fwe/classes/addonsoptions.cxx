@@ -806,7 +806,7 @@ bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNode
         }
     }
 
-    return ( o3tl::make_unsigned(rAddonOfficeToolBarSeq.getLength()) > nToolBarItemCount );
+    return ( rAddonOfficeToolBarSeq.getLength() > o3tl::make_signed(nToolBarItemCount) );
 }
 
 void AddonsOptions_Impl::ReadOfficeNotebookBarSet(
@@ -864,8 +864,8 @@ bool AddonsOptions_Impl::ReadNotebookBarItemSet(
         }
     }
 
-    return (o3tl::make_unsigned(rAddonOfficeNotebookBarSeq.getLength())
-            > nNotebookBarItemCount);
+    return (rAddonOfficeNotebookBarSeq.getLength()
+            > o3tl::make_signed(nNotebookBarItemCount));
 }
 
 void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
@@ -1257,7 +1257,7 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
         }
     }
 
-    return ( o3tl::make_unsigned(rMergeStatusbarItems.getLength()) > nStatusbarItemCount );
+    return ( rMergeStatusbarItems.getLength() > o3tl::make_signed(nStatusbarItemCount) );
 }
 
 bool AddonsOptions_Impl::ReadStatusBarItem(

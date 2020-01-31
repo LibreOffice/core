@@ -885,7 +885,7 @@ const OUString& ScDBData::GetTableColumnName( SCCOL nCol ) const
         return EMPTY_OUSTRING;
 
     SCCOL nOffset = nCol - nStartCol;
-    if (nOffset <  0 || maTableColumnNames.size() <= o3tl::make_unsigned(nOffset))
+    if (nOffset <  0 || o3tl::make_signed(maTableColumnNames.size()) <= nOffset)
         return EMPTY_OUSTRING;
 
     return maTableColumnNames[nOffset];

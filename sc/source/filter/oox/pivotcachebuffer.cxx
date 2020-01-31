@@ -306,7 +306,7 @@ void PivotCacheItemList::applyItemCaptions( const IdCaptionPairList& vCaptions )
 {
     for( const auto& [rId, rCaption] : vCaptions )
     {
-        if ( o3tl::make_unsigned( rId ) < maItems.size() )
+        if ( rId < o3tl::make_signed( maItems.size() ) )
             maItems[ rId ].setStringValue( rCaption );
     }
 }

@@ -237,21 +237,21 @@ sal_uInt32 FunctionDescription::getVarArgsStart() const
 
 OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
-    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
+    if ( o3tl::make_signed(_nPos) < m_aParameter.getLength() )
         return m_aParameter[_nPos].Name;
     return OUString();
 }
 
 OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const
 {
-    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
+    if ( o3tl::make_signed(_nPos) < m_aParameter.getLength() )
         return m_aParameter[_nPos].Description;
     return OUString();
 }
 
 bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
 {
-    if ( _nPos < o3tl::make_unsigned(m_aParameter.getLength()) )
+    if ( o3tl::make_signed(_nPos) < m_aParameter.getLength() )
         return m_aParameter[_nPos].IsOptional;
     return false;
 }

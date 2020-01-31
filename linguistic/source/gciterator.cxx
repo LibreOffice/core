@@ -258,7 +258,7 @@ sal_Bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
 
 OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 {
-    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
+    if (nIndex < 0 || nIndex >= o3tl::make_signed(maMap.size()))
         throw css::lang::IndexOutOfBoundsException();
 
     return OUString();
@@ -266,7 +266,7 @@ OUString SAL_CALL LngXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex)
 
 css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 {
-    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maMap.size())
+    if (nIndex < 0 || nIndex >= o3tl::make_signed(maMap.size()))
         throw css::lang::IndexOutOfBoundsException();
 
     return css::uno::Any();

@@ -2339,7 +2339,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
         ImplCallCommand( pChild, CommandEventId::QueryCharPosition );
 
         ImplWinData* pWinData = pChild->ImplGetWinData();
-        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < o3tl::make_unsigned( pWinData->mnCompositionCharRects ) )
+        if ( pWinData->mpCompositionCharRects && o3tl::make_signed( pEvt->mnCharPos ) < pWinData->mnCompositionCharRects )
         {
             const OutputDevice *pChildOutDev = pChild->GetOutDev();
             const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];

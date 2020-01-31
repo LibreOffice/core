@@ -1456,7 +1456,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
         Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
         const sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-        if ( m_aParametersSet.size() < o3tl::make_unsigned(nParamCount) )
+        if ( o3tl::make_signed(m_aParametersSet.size()) < nParamCount )
             m_aParametersSet.resize( nParamCount ,false);
 
         ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler,m_aParametersSet );
@@ -2439,7 +2439,7 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
     if ( parameterIndex < 1 )
         throwInvalidIndexException( *this );
 
-    if ( m_aParametersSet.size() < o3tl::make_unsigned(parameterIndex) )
+    if ( o3tl::make_signed(m_aParametersSet.size()) < parameterIndex )
         m_aParametersSet.resize( parameterIndex ,false);
     m_aParametersSet[parameterIndex - 1] = true;
 
@@ -2451,13 +2451,13 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
             impl_disposeParametersContainer_nothrow();
         if ( m_pParameters.is() )
         {
-            if ( o3tl::make_unsigned(parameterIndex) > m_pParameters->size() )
+            if ( parameterIndex > o3tl::make_signed(m_pParameters->size()) )
                 throwInvalidIndexException( *this );
             return (*m_pParameters)[ parameterIndex - 1 ];
         }
     }
 
-    if ( m_aPrematureParamValues->get().size() < o3tl::make_unsigned(parameterIndex) )
+    if ( o3tl::make_signed(m_aPrematureParamValues->get().size()) < parameterIndex )
         m_aPrematureParamValues->get().resize( parameterIndex );
     return m_aPrematureParamValues->get()[ parameterIndex - 1 ];
 }

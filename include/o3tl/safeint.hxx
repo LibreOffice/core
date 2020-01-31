@@ -12,7 +12,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
 #include <limits>
 #include <type_traits>
 
@@ -227,11 +226,75 @@ template<typename T> inline typename std::enable_if<std::is_unsigned<T>::value, 
 
 #endif
 
-template<typename T> constexpr std::enable_if_t<std::is_signed_v<T>, std::make_unsigned_t<T>>
-make_unsigned(T value)
+template <typename T> struct unsigned_comparison_helper
 {
-    assert(value >= 0);
-    return value;
+    static_assert(std::is_unsigned_v<T>);
+    std::conditional_t<sizeof(T) < sizeof(long long), long long, T> val;
+    template <typename T2>
+    constexpr std::enable_if_t<std::is_signed_v<T2>, bool> operator<(T2 other) const
+    {
+        if constexpr (std::is_signed_v<decltype(val)>)
+            return val < other;
+        else
+            return other > 0 && val < std::make_unsigned_t<T2>(other);
+    }
+    template <typename T2>
+    constexpr std::enable_if_t<std::is_signed_v<T2>, bool> operator<=(T2 other) const
+    {
+        if constexpr (std::is_signed_v<decltype(val)>)
+            return val <= other;
+        else
+            return other >= 0 && val <= std::make_unsigned_t<T2>(other);
+    }
+    template <typename T2>
+    constexpr std::enable_if_t<std::is_signed_v<T2>, bool> operator==(T2 other) const
+    {
+        if constexpr (std::is_signed_v<decltype(val)>)
+            return val == other;
+        else
+            return other >= 0 && val == std::make_unsigned_t<T2>(other);
+    }
+    template <typename T2> constexpr bool operator>(T2 other) const { return !operator<=(other); }
+    template <typename T2> constexpr bool operator>=(T2 other) const { return !operator<(other); }
+    template <typename T2> constexpr bool operator!=(T2 other) const { return !operator==(other); }
+};
+template <typename T1, typename T2>
+constexpr bool operator<(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 > v1;
+}
+template <typename T1, typename T2>
+constexpr bool operator<=(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 >= v1;
+}
+template <typename T1, typename T2>
+constexpr bool operator>(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 < v1;
+}
+template <typename T1, typename T2>
+constexpr bool operator>=(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 <= v1;
+}
+template <typename T1, typename T2>
+constexpr bool operator==(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 == v1;
+}
+template <typename T1, typename T2>
+constexpr bool operator!=(T1 v1, const unsigned_comparison_helper<T2>& v2)
+{
+    return v2 != v1;
+}
+
+template <typename T>
+constexpr std::enable_if_t<!std::is_same_v<bool, std::remove_reference_t<std::remove_cv_t<T>>>,
+                           unsigned_comparison_helper<T>>
+make_signed(T value)
+{
+    return { value };
 }
 
 }

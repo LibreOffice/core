@@ -226,7 +226,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                     {
                         nCount++;
                     }
-                    if (o3tl::make_unsigned(nCount) >= nSelObjs)
+                    if (nCount >= o3tl::make_signed(nSelObjs))
                         break;
                 }
             }
@@ -285,7 +285,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     else
     {
         const size_t nSelObjs = pFEShell->IsObjSelected();
-        if( 0 == nSelObjs || o3tl::make_unsigned(nSelectedChildIndex) >= nSelObjs )
+        if( 0 == nSelObjs || nSelectedChildIndex >= o3tl::make_signed(nSelObjs) )
             throwIndexOutOfBoundsException();
 
         std::list< SwAccessibleChild > aChildren;

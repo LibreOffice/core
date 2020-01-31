@@ -461,7 +461,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_DOWN:
-                if(pImpl->aAddresses.size() > o3tl::make_unsigned(pImpl->nSelectedAddress + pImpl->nColumns))
+                if(o3tl::make_signed(pImpl->aAddresses.size()) > pImpl->nSelectedAddress + pImpl->nColumns)
                     ++nSelectedRow;
                 bHandled = true;
             break;
@@ -471,7 +471,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
                 bHandled = true;
             break;
             case KEY_RIGHT:
-                if(nSelectedColumn < o3tl::make_unsigned(pImpl->nColumns - 1) &&
+                if(o3tl::make_signed(nSelectedColumn) < pImpl->nColumns - 1 &&
                        pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
                     ++nSelectedColumn;
                 bHandled = true;

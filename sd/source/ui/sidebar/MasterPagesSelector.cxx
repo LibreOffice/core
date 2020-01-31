@@ -430,7 +430,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && o3tl::make_unsigned(nIndex)<=PreviewValueSet::GetItemCount())
+    if (nIndex>0 && nIndex<=o3tl::make_signed(PreviewValueSet::GetItemCount()))
         return static_cast<UserData*>(PreviewValueSet::GetItemData(static_cast<sal_uInt16>(nIndex)));
     else
         return nullptr;

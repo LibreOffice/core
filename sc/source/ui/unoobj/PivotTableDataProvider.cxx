@@ -411,7 +411,7 @@ void PivotTableDataProvider::collectPivotTableData()
                                 if (i >= m_aLabels.size())
                                     m_aLabels.resize(i + 1);
 
-                                if (o3tl::make_unsigned(nDimPos) >= m_aLabels[i].size())
+                                if (nDimPos >= o3tl::make_signed(m_aLabels[i].size()))
                                     m_aLabels[i].resize(nDimPos + 1);
                                 m_aLabels[i][nDimPos] = ValueAndFormat(sCaption);
 
@@ -460,11 +460,11 @@ void PivotTableDataProvider::collectPivotTableData()
                                     if (i >= m_aCategoriesRowOrientation.size())
                                         m_aCategoriesRowOrientation.resize(i + 1);
 
-                                    if (o3tl::make_unsigned(nDimPos) >= m_aCategoriesColumnOrientation.size())
+                                    if (nDimPos >= o3tl::make_signed(m_aCategoriesColumnOrientation.size()))
                                         m_aCategoriesColumnOrientation.resize(nDimPos + 1);
                                     m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
 
-                                    if (o3tl::make_unsigned(nDimPos) >= m_aCategoriesRowOrientation[i].size())
+                                    if (nDimPos >= o3tl::make_signed(m_aCategoriesRowOrientation[i].size()))
                                         m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
                                     m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
 

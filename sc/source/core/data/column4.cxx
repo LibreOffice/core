@@ -729,13 +729,13 @@ public:
         sc::cellnote_block::const_iterator it = sc::cellnote_block::begin(*node.data);
         sc::cellnote_block::const_iterator itEnd = sc::cellnote_block::end(*node.data);
         size_t nOffset = 0;
-        if(nTopRow < o3tl::make_unsigned(mnStartRow))
+        if(o3tl::make_signed(nTopRow) < mnStartRow)
         {
             std::advance(it, mnStartRow - nTopRow);
             nOffset = mnStartRow - nTopRow;
         }
 
-        for (; it != itEnd && nTopRow + nOffset <= o3tl::make_unsigned(mnEndRow);
+        for (; it != itEnd && o3tl::make_signed(nTopRow + nOffset) <= mnEndRow;
                 ++it, ++nOffset)
         {
             ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
@@ -1337,7 +1337,7 @@ public:
             SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
             if (nBackTrackSize > 0)
             {
-                assert(o3tl::make_unsigned(nBackTrackSize) <= nOffset);
+                assert(nBackTrackSize <= o3tl::make_signed(nOffset));
                 for (SCROW i = 0; i < nBackTrackSize; ++i)
                     --pp;
                 endListening(mrEndCxt, pp, ppBeg);
@@ -1414,7 +1414,7 @@ public:
             SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
             if (nBackTrackSize > 0)
             {
-                assert(o3tl::make_unsigned(nBackTrackSize) <= nOffset);
+                assert(nBackTrackSize <= o3tl::make_signed(nOffset));
                 for (SCROW i = 0; i < nBackTrackSize; ++i)
                     --pp;
                 mnStartRow -= nBackTrackSize;

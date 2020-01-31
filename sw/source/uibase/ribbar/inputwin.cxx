@@ -528,7 +528,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
                 ++nEndPos;
             }
             // Only if the current position lies in the range or right behind.
-            if( bFound && !( nStartPos < o3tl::make_unsigned(aSelection.Max()) &&
+            if( bFound && !( o3tl::make_signed(nStartPos) < aSelection.Max() &&
                              static_cast<sal_uInt16>(aSelection.Max()) <= nEndPos + 1 ))
                 bFound = false;
         }

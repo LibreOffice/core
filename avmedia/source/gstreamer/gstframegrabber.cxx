@@ -138,7 +138,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 
     if( pBuf && nWidth > 0 && nHeight > 0 &&
         // sanity check the size
-        gst_buffer_get_size( pBuf ) >= o3tl::make_unsigned( nWidth * nHeight * 3 )
+        o3tl::make_signed( gst_buffer_get_size( pBuf ) ) >= nWidth * nHeight * 3
         )
     {
         sal_uInt8 *pData = nullptr;

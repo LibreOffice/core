@@ -1206,7 +1206,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
         nPos &= 0xFFFE;             // Pos for Sprms ( gerade Pos )
     }
 
-    if( o3tl::make_unsigned(nPos) <= ( nIMax + 2U ) * 4U + ( nIMax + 1U ) * nItemSize )
+    if( nPos <= o3tl::make_signed( ( nIMax + 2U ) * 4U + ( nIMax + 1U ) * nItemSize ) )
                                             // does it fits after the CPs and offsets?
         return false;                       // no
 
@@ -1419,7 +1419,7 @@ void WW8_WrPct::SetParaBreak()
 
 WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 {
-    OSL_ENSURE( nFc >= o3tl::make_unsigned(nOldFc), "FilePos lies in front of last piece" );
+    OSL_ENSURE( o3tl::make_signed(nFc) >= nOldFc, "FilePos lies in front of last piece" );
     OSL_ENSURE( ! m_Pcts.empty(), "Fc2Cp no piece available" );
 
     nFc -= nOldFc;

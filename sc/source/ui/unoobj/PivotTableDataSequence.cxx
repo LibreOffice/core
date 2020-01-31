@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL PivotTableDataSequence::getNumberFormatKeyByIndex(sal_Int32 n
     {
         return m_aData[0].m_nNumberFormat;
     }
-    else if (nIndex < 0 && o3tl::make_unsigned(nIndex) >= m_aData.size())
+    else if (nIndex < 0 && nIndex >= o3tl::make_signed(m_aData.size()))
     {
         SAL_WARN("sc.ui", "Passed invalid index to getNumberFormatKeyByIndex(). Will return default value '0'.");
         return 0;

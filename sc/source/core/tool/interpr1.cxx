@@ -656,9 +656,9 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         ScAddress aAdr( aRange.aStart);
                         sal_uLong nCol = static_cast<sal_uLong>(aAdr.Col()) + nC;
                         sal_uLong nRow = static_cast<sal_uLong>(aAdr.Row()) + nR;
-                        if ((nCol > o3tl::make_unsigned(aRange.aEnd.Col()) &&
+                        if ((o3tl::make_signed(nCol) > aRange.aEnd.Col() &&
                                     aRange.aEnd.Col() != aRange.aStart.Col())
-                                || (nRow > o3tl::make_unsigned(aRange.aEnd.Row()) &&
+                                || (o3tl::make_signed(nRow) > aRange.aEnd.Row() &&
                                     aRange.aEnd.Row() != aRange.aStart.Row()))
                         {
                             fVal = CreateDoubleError( FormulaError::NotAvailable );
@@ -6975,7 +6975,7 @@ void ScInterpreter::ScLookup()
             VectorMatrixAccessor aMatAcc(*pDataMat, bVertical);
             SCCOLROW i = nDelta;
             SCSIZE n = aMatAcc.GetElementCount();
-            if (o3tl::make_unsigned(i) >= n)
+            if (i >= o3tl::make_signed(n))
                 i = static_cast<SCCOLROW>(n);
             bool bByString = rEntry.GetQueryItem().meType == ScQueryEntry::ByString;
             if (bByString == aMatAcc.IsValue(i))
@@ -6994,7 +6994,7 @@ void ScInterpreter::ScLookup()
         {
             VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
             // result array is matrix.
-            if (o3tl::make_unsigned(nDelta) >= aResMatAcc.GetElementCount())
+            if (nDelta >= o3tl::make_signed(aResMatAcc.GetElementCount()))
             {
                 PushNA();
                 return;
@@ -8533,8 +8533,8 @@ void ScInterpreter::ScIndex()
                         SCSIZE nElement = ::std::max( static_cast<SCSIZE>(nCol),
                                 static_cast<SCSIZE>(nRow));
                         if (nC == 0 || nR == 0 ||
-                                (!bVector && (o3tl::make_unsigned(nCol) > nC ||
-                                              o3tl::make_unsigned(nRow) > nR)) ||
+                                (!bVector && (nCol > o3tl::make_signed(nC) ||
+                                              nRow > o3tl::make_signed(nR))) ||
                                 (bVector && nElement > nC * nR))
                             PushIllegalArgument();
                         else if (nCol == 0 && nRow == 0)

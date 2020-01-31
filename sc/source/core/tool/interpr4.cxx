@@ -1510,9 +1510,9 @@ bool ScInterpreter::ConvertMatrixParameters()
                         {
                             if ( eType == formula::ParamClass::Value )
                             {   // only if single value expected
-                                if ( nJumpCols < o3tl::make_unsigned(nCol2 - nCol1 + 1) )
+                                if ( o3tl::make_signed(nJumpCols) < nCol2 - nCol1 + 1 )
                                     nJumpCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
-                                if ( nJumpRows < o3tl::make_unsigned(nRow2 - nRow1 + 1) )
+                                if ( o3tl::make_signed(nJumpRows) < nRow2 - nRow1 + 1 )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
                             formula::FormulaToken* pNew = new ScMatrixToken( pMat);

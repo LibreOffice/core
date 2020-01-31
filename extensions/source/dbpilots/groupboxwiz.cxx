@@ -362,12 +362,12 @@ namespace dbp
         if (::vcl::WizardTypes::WizardState(-1) != m_nLastSelection)
         {
             // save the value for the last option
-            DBG_ASSERT(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
+            DBG_ASSERT(m_nLastSelection < o3tl::make_signed(m_aUncommittedValues.size()), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
             m_aUncommittedValues[m_nLastSelection] = m_xValue->get_text();
         }
 
         m_nLastSelection = m_xOptions->get_selected_index();
-        DBG_ASSERT(o3tl::make_unsigned(m_nLastSelection) < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
+        DBG_ASSERT(m_nLastSelection < o3tl::make_signed(m_aUncommittedValues.size()), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_xValue->set_text(m_aUncommittedValues[m_nLastSelection]);
     }
 

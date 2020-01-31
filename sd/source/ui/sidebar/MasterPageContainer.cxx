@@ -674,13 +674,13 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
 bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
-        && o3tl::make_unsigned(aToken)<maContainer.size()
+        && aToken<o3tl::make_signed(maContainer.size())
         && maContainer[aToken].get()!=nullptr;
 }
 
 SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken) const
 {
-    if (aToken>=0 && o3tl::make_unsigned(aToken)<maContainer.size())
+    if (aToken>=0 && aToken<o3tl::make_signed(maContainer.size()))
         return maContainer[aToken];
     else
         return SharedMasterPageDescriptor();
@@ -959,7 +959,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
 
 void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
 {
-    if (aToken>=0 && o3tl::make_unsigned(aToken)<maContainer.size())
+    if (aToken>=0 && aToken<o3tl::make_signed(maContainer.size()))
     {
         maContainer[aToken].reset();
     }

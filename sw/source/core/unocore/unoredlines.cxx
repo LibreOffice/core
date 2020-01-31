@@ -60,7 +60,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    if ((nIndex < 0) || (rRedTable.size() <= o3tl::make_unsigned(nIndex)))
+    if ((nIndex < 0) || (o3tl::make_signed(rRedTable.size()) <= nIndex))
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nIndex], *GetDoc() );

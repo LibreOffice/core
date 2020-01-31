@@ -420,7 +420,7 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         {
             nCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
-            if (nCount > 0 && o3tl::make_unsigned(nCount) <= rDGR.remainingSize())
+            if (nCount > 0 && nCount <= o3tl::make_signed(rDGR.remainingSize()))
                 aP.reserve(nCount);
             else
                 nCount = 0;
@@ -587,7 +587,7 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             {
                 nPointCount = rDGR.GetI();
                 // limit alloc to max reasonable size based on remaining data in stream
-                if (nPointCount > 0 && o3tl::make_unsigned(nPointCount) <= rDGR.remainingSize())
+                if (nPointCount > 0 && nPointCount <= o3tl::make_signed(rDGR.remainingSize()))
                     aP.reserve(nPointCount);
                 else
                     nPointCount = 0;
@@ -675,7 +675,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             bIsInBoundaryPathContext = true;
             nBoundaryPathCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
-            if (nBoundaryPathCount > 0 && o3tl::make_unsigned(nBoundaryPathCount) <= rDGR.remainingSize())
+            if (nBoundaryPathCount > 0 && nBoundaryPathCount <= o3tl::make_signed(rDGR.remainingSize()))
                 pBoundaryPathData.reset( new DXFBoundaryPathData[ nBoundaryPathCount ] );
             else
                 nBoundaryPathCount = 0;

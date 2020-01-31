@@ -314,7 +314,7 @@ void SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
                 else
                 {
                     const sal_uInt64 nLen = aStream.GetSize();
-                    OSL_ENSURE( nLen/sizeof( sal_Unicode )<o3tl::make_unsigned(SAL_MAX_INT32), "Stream can't fit in OUString" );
+                    OSL_ENSURE( o3tl::make_signed(nLen/sizeof( sal_Unicode ))<SAL_MAX_INT32, "Stream can't fit in OUString" );
                     rtl_uString *pStr = rtl_uString_alloc(static_cast<sal_Int32>(nLen / sizeof( sal_Unicode )));
                     aStream.Seek( 0 );
                     aStream.ResetError();

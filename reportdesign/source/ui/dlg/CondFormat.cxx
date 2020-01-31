@@ -145,7 +145,7 @@ namespace rptui
     {
         try
         {
-            if ( _nNewCondIndex > o3tl::make_unsigned(m_xCopy->getCount()) )
+            if ( o3tl::make_signed(_nNewCondIndex) > m_xCopy->getCount() )
                 throw IllegalArgumentException();
 
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();

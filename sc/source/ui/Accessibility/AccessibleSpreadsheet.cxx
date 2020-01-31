@@ -201,7 +201,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc, Sc
     int nSize =0;
     if (pDest->GetCellCount() == 0)//if the Dest Rang List is empty
     {
-        if (pSrc->GetCellCount() > o3tl::make_unsigned(nMax))//if the Src Cell count is greater than  nMax
+        if (o3tl::make_signed(pSrc->GetCellCount()) > nMax)//if the Src Cell count is greater than  nMax
         {
             return true;
         }
@@ -1145,7 +1145,7 @@ uno::Reference<XAccessible > SAL_CALL
         if (mpMarkedRanges)
         {
             if ((nSelectedChildIndex < 0) ||
-                    (mpMarkedRanges->GetCellCount() <= o3tl::make_unsigned(nSelectedChildIndex)))
+                    (o3tl::make_signed(mpMarkedRanges->GetCellCount()) <= nSelectedChildIndex))
             {
                 throw lang::IndexOutOfBoundsException();
             }

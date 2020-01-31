@@ -272,7 +272,7 @@ void Sane::ReloadOptions()
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
     mnOptions = pOptions[ 0 ];
-    if( o3tl::make_unsigned(pZero->size) > sizeof( SANE_Word ) )
+    if( pZero->size > o3tl::make_signed(sizeof( SANE_Word )) )
         fprintf( stderr, "driver returned number of options with larger size than SANE_Word!!!\n" );
     mppOptions.reset(new const SANE_Option_Descriptor*[ mnOptions ]);
     mppOptions[ 0 ] = pZero;

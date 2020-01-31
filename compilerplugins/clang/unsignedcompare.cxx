@@ -9,7 +9,7 @@
 
 // Find explicit casts from signed to unsigned integer in comparison against unsigned integer, where
 // the cast is presumably used to avoid warnings about signed vs. unsigned comparisons, and could
-// thus be replaced with o3tl::make_unsigned for clarity.
+// thus be replaced with o3tl::make_signed for clarity.
 
 #include <cassert>
 
@@ -118,8 +118,7 @@ public:
         {
             return true;
         }
-        // o3tl::make_unsigned requires its argument to be non-negative, but this plugin doesn't
-        // check that when it reports its finding, so will produce false positives when the cast is
+        // This plugin will produce false positives when the cast is
         // actually meant to e.g. clamp from a large signed type to a small unsigned type.  The
         // assumption is that this will only be likely the case for BO_EQ (==) and BO_NE (!=)
         // comparisons, so filter these out here (not sure what case BO_Cmp (<=>) will turn out to
@@ -155,8 +154,7 @@ public:
         auto const castToT = cast->getTypeAsWritten();
         report(DiagnosticsEngine::Warning,
                "explicit cast from %0 to %1 (of %select{smaller|equal|larger}2 rank) in comparison "
-               "against %3: if the cast value is known to be non-negative, use o3tl::make_unsigned "
-               "instead of the cast",
+               "against %3: use o3tl::make_signed on unsigned (other) operator instead of the cast",
                cast->getExprLoc())
             << castFromT << castToT << (orderTypes(castToT, castFromT) + 1) << otherT
             << expr->getSourceRange();

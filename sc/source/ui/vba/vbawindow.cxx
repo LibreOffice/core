@@ -145,7 +145,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
-        || o3tl::make_unsigned( Index ) >= sheets.size() )
+        || Index >= o3tl::make_signed( sheets.size() ) )
             throw lang::IndexOutOfBoundsException();
 
         return uno::makeAny( sheets[ Index ] );

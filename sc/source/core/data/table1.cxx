@@ -168,7 +168,7 @@ bool SetOptimalHeightsToRows(
     SCROW nRngEnd = 0;
     sal_uInt16 nLast = 0;
     sal_uInt16 nExtraHeight = rCxt.getExtraHeight();
-    for (SCSIZE i = nStartRow; i <= o3tl::make_unsigned(nEndRow); i++)
+    for (SCSIZE i = nStartRow; o3tl::make_signed(i) <= nEndRow; i++)
     {
         size_t nIndex;
         SCROW nRegionEndRow;

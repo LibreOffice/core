@@ -246,7 +246,7 @@ namespace toolkit
 
                 // found a set?
                 std::vector< Image > aImages;
-                if ( ( nPreferredSet >= 0 ) && ( o3tl::make_unsigned( nPreferredSet ) < nImageSetCount ) )
+                if ( ( nPreferredSet >= 0 ) && ( nPreferredSet < o3tl::make_signed( nImageSetCount ) ) )
                 {
                     // => set the images
                     ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );

@@ -237,7 +237,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     if( nIndex > 0 )
         nIndex--;
 
-    if( (nIndex >= 0) && ( aMatches.size() > o3tl::make_unsigned(nIndex)) )
+    if( (nIndex >= 0) && ( o3tl::make_signed(aMatches.size()) > nIndex) )
     {
         if( aMatches.size() > 1 )
             std::nth_element( aMatches.begin(), aMatches.begin() + nIndex, aMatches.end(),

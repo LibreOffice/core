@@ -2961,7 +2961,7 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
         nOp1 &= 0x7FFF;
         PushGosub( pCode + 5 * nOp1 );
     }
-    if( n < 1 || o3tl::make_unsigned(n) > nOp1 )
+    if( n < 1 || n > o3tl::make_signed(nOp1) )
         n = static_cast<sal_Int16>( nOp1 + 1 );
     nOp1 = static_cast<sal_uInt32>( reinterpret_cast<const char*>(pCode) - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );

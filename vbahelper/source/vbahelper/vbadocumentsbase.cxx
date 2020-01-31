@@ -155,7 +155,7 @@ public:
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
-            || o3tl::make_unsigned(Index) >= m_documents.size() )
+            || Index >= o3tl::make_signed(m_documents.size()) )
             throw lang::IndexOutOfBoundsException();
         return makeAny( m_documents[ Index ] ); // returns xspreadsheetdoc
     }

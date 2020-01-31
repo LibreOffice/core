@@ -684,7 +684,7 @@ sal_Int32 EditTextObjectImpl::GetParagraphCount() const
 
 OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || nPara >= o3tl::make_signed(aContents.size()))
         return OUString();
 
     return aContents[nPara]->GetText();
@@ -707,7 +707,7 @@ bool EditTextObjectImpl::HasOnlineSpellErrors() const
 
 void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || nPara >= o3tl::make_signed(aContents.size()))
         return;
 
     rLst.clear();
@@ -749,7 +749,7 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
 
 const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || nPara >= o3tl::make_signed(aContents.size()))
         return nullptr;
 
     const ContentInfo& rC = *aContents[nPara];
@@ -981,7 +981,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
 void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& rFamily) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || nPara >= o3tl::make_signed(aContents.size()))
         return;
 
     const ContentInfo& rC = *aContents[nPara];
@@ -991,7 +991,7 @@ void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyl
 
 void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& rFamily)
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || nPara >= o3tl::make_signed(aContents.size()))
         return;
 
     ContentInfo& rC = *aContents[nPara];

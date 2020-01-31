@@ -659,7 +659,7 @@ static oslThreadIdentifier insertThreadId (pthread_t hThread)
         assert(tid >= 0);
 #else
         long const tid = syscall(SYS_gettid);
-        if (tid < 0 || o3tl::make_unsigned(tid) > std::numeric_limits<sal_uInt32>::max()) {
+        if (tid < 0 || tid > o3tl::make_signed(std::numeric_limits<sal_uInt32>::max())) {
             std::abort();
         }
 #endif

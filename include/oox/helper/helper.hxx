@@ -43,7 +43,8 @@ namespace detail {
 // proper function (template):
 template<typename T> constexpr std::make_unsigned_t<T> make_unsigned(T value) {
     if constexpr (std::is_signed_v<T>) {
-        return o3tl::make_unsigned(value);
+        assert(value >= 0);
+        return value;
     } else {
         return value;
     }

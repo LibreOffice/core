@@ -1290,7 +1290,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
     if (( nRow == 0 ) ||
-        ( nRow > o3tl::make_unsigned(nNumberOfRecords)) ){
+        ( o3tl::make_signed(nRow) > nNumberOfRecords ) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }

@@ -67,7 +67,7 @@ sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
 
 AccessibleRelation const & AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
 {
-    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maRelations.size()))
+    if ((nIndex < 0) || (nIndex >= o3tl::make_signed(maRelations.size())))
         throw lang::IndexOutOfBoundsException();
     return maRelations[nIndex];
 }

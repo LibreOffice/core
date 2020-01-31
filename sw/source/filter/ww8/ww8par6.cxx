@@ -599,7 +599,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
         // #i19922# - correction:
         // consider that <nWWUp> can be negative, compare only if it's positive
         if ( nWWUp > 0 &&
-             o3tl::make_unsigned(abs(nWWUp)) >= nWWHTop )
+             abs(nWWUp) >= o3tl::make_signed(nWWHTop) )
             rData.nSwHLo = nWWUp - nWWHTop;
         else
             rData.nSwHLo = 0;
@@ -617,7 +617,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
         rData.nSwLo = nWWFBot;              // footer -> convert
         // #i19922# - correction: consider that <nWWLo> can be negative, compare only if it's positive
         if ( nWWLo > 0 &&
-             o3tl::make_unsigned(abs(nWWLo)) >= nWWFBot )
+             abs(nWWLo) >= o3tl::make_signed(nWWFBot) )
             rData.nSwFUp = nWWLo - nWWFBot;
         else
             rData.nSwFUp = 0;

@@ -847,8 +847,8 @@ const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned lon
         return nullptr;
 
     if ((curpos + numBytes < curpos) /*overflow*/
-        || (curpos + numBytes
-            >= o3tl::make_unsigned(mpImpl->mnLength))) /*reading more than available*/
+        || (o3tl::make_signed(curpos + numBytes)
+            >= mpImpl->mnLength)) /*reading more than available*/
     {
         numBytes = mpImpl->mnLength - curpos;
     }
@@ -909,8 +909,8 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
     }
 
     if (tmpOffset < mpImpl->tell()
-        && o3tl::make_unsigned(tmpOffset)
-               >= static_cast<unsigned long>(mpImpl->tell()) - mpImpl->mnReadBufferLength)
+        && tmpOffset >= o3tl::make_signed(static_cast<unsigned long>(mpImpl->tell())
+                                          - mpImpl->mnReadBufferLength))
     {
         mpImpl->mnReadBufferPos = static_cast<unsigned long>(
             tmpOffset + static_cast<long>(mpImpl->mnReadBufferLength) - mpImpl->tell());

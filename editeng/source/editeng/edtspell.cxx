@@ -370,7 +370,7 @@ void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
             {
                 i->mnStart = nEnd;
                 // Blanks?
-                while (i->mnStart < o3tl::make_unsigned(pNode->Len()) &&
+                while (o3tl::make_signed(i->mnStart) < pNode->Len() &&
                        (pNode->GetChar(i->mnStart) == ' ' ||
                         pNode->IsFeature(i->mnStart)))
                 {

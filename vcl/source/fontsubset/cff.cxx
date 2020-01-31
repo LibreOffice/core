@@ -1369,7 +1369,7 @@ bool CffSubsetterContext::initialCffRead()
 //      assert( mnFontDictBase == tellRel());
         mpReadPtr = mpBasePtr + mnFontDictBase;
         mnFDAryCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
-        if (o3tl::make_unsigned(mnFDAryCount) >= SAL_N_ELEMENTS(maCffLocal))
+        if (mnFDAryCount >= o3tl::make_signed(SAL_N_ELEMENTS(maCffLocal)))
         {
             SAL_INFO("vcl.fonts", "CffSubsetterContext: too many CFF in font");
             return false;

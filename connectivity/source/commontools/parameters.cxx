@@ -469,7 +469,7 @@ namespace dbtools
             size_t nAlreadyVisited = 0;
             for (auto & aIndex : aParam.second.aInnerIndexes)
             {
-                if ( ( m_aParametersVisited.size() > o3tl::make_unsigned(aIndex) ) && m_aParametersVisited[ aIndex ] )
+                if ( ( o3tl::make_signed(m_aParametersVisited.size()) > aIndex ) && m_aParametersVisited[ aIndex ] )
                 {   // exclude this index
                     aIndex = -1;
                     ++nAlreadyVisited;
@@ -950,7 +950,7 @@ namespace dbtools
 
     void ParameterManager::externalParameterVisited( sal_Int32 _nIndex )
     {
-        if ( m_aParametersVisited.size() < o3tl::make_unsigned(_nIndex) )
+        if ( o3tl::make_signed(m_aParametersVisited.size()) < _nIndex )
         {
             m_aParametersVisited.reserve( _nIndex );
             for ( sal_Int32 i = m_aParametersVisited.size(); i < _nIndex; ++i )

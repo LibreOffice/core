@@ -238,17 +238,17 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
     {
         maGeometry.nWidth = nWidth;
-        if( m_nMaxWidth > 0 && maGeometry.nWidth > o3tl::make_unsigned(m_nMaxWidth) )
+        if( m_nMaxWidth > 0 && o3tl::make_signed(maGeometry.nWidth) > m_nMaxWidth )
             maGeometry.nWidth = m_nMaxWidth;
-        if( m_nMinWidth > 0 && maGeometry.nWidth < o3tl::make_unsigned(m_nMinWidth) )
+        if( m_nMinWidth > 0 && o3tl::make_signed(maGeometry.nWidth) < m_nMinWidth )
             maGeometry.nWidth = m_nMinWidth;
     }
     if( (nFlags & SAL_FRAME_POSSIZE_HEIGHT) != 0 )
     {
         maGeometry.nHeight = nHeight;
-        if( m_nMaxHeight > 0 && maGeometry.nHeight > o3tl::make_unsigned(m_nMaxHeight) )
+        if( m_nMaxHeight > 0 && o3tl::make_signed(maGeometry.nHeight) > m_nMaxHeight )
             maGeometry.nHeight = m_nMaxHeight;
-        if( m_nMinHeight > 0 && maGeometry.nHeight < o3tl::make_unsigned(m_nMinHeight) )
+        if( m_nMinHeight > 0 && o3tl::make_signed(maGeometry.nHeight) < m_nMinHeight )
             maGeometry.nHeight = m_nMinHeight;
     }
 #ifndef IOS

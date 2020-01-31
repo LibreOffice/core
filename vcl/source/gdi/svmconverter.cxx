@@ -332,7 +332,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     const size_t nMinActionSize = sizeof(sal_uInt16) + sizeof(sal_Int32);
     const size_t nMaxPossibleActions = rIStm.remainingSize() / nMinActionSize;
-    if (o3tl::make_unsigned(nActions) > nMaxPossibleActions)
+    if (nActions > o3tl::make_signed(nMaxPossibleActions))
     {
         SAL_WARN("vcl.gdi", "svm claims more actions (" << nActions << ") than stream could provide, truncating");
         nActions = nMaxPossibleActions;
@@ -719,7 +719,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         const size_t nMinRecordSize = sizeof(sal_Int32);
                         const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
-                        if (o3tl::make_unsigned(nAryLen) > nMaxRecords)
+                        if (nAryLen > o3tl::make_signed(nMaxRecords))
                         {
                             SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
                                      " max possible entries, but " << nAryLen << " claimed, truncating");

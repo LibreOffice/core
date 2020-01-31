@@ -94,22 +94,20 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         return;
     }
 
-    auto nMacro = o3tl::make_unsigned(nReadMacro);
-
     const size_t nMinStringSize = rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE ? 4 : 2;
     size_t nMinRecordSize = 2 + 2*nMinStringSize;
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         nMinRecordSize+=2;
 
     const size_t nMaxRecords = rStrm.remainingSize() / nMinRecordSize;
-    if (nMacro > nMaxRecords)
+    if (nReadMacro > o3tl::make_signed(nMaxRecords))
     {
         SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
-                 " max possible entries, but " << nMacro<< " claimed, truncating");
-        nMacro = nMaxRecords;
+                 " max possible entries, but " << nReadMacro<< " claimed, truncating");
+        nReadMacro = static_cast<short>(nMaxRecords);
     }
 
-    for (decltype(nMacro) i = 0; i < nMacro; ++i)
+    for (decltype(nReadMacro) i = 0; i < nReadMacro; ++i)
     {
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;

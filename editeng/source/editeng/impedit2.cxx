@@ -2851,14 +2851,14 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         {
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if (elem.mnStart > o3tl::make_unsigned(nEnd))
+            if (o3tl::make_signed(elem.mnStart) > nEnd)
             {
                 pRWrongs->push_back(elem);
                 editeng::MisspellRange& rRWrong = pRWrongs->back();
                 rRWrong.mnStart = rRWrong.mnStart - nEnd;
                 rRWrong.mnEnd = rRWrong.mnEnd - nEnd;
             }
-            else if (elem.mnStart < o3tl::make_unsigned(nEnd) && elem.mnEnd > o3tl::make_unsigned(nEnd))
+            else if (o3tl::make_signed(elem.mnStart) < nEnd && o3tl::make_signed(elem.mnEnd) > nEnd)
                 elem.mnEnd = nEnd;
         }
         sal_Int32 nInv = nEnd ? nEnd-1 : nEnd;

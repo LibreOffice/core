@@ -313,14 +313,14 @@ IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
 
 OUString const & TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
-    if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maItems.size())
+    if (nIndex<0 || nIndex>=o3tl::make_signed(maItems.size()))
         throw RuntimeException();
     return maItems[nIndex].msDeckId;
 }
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 {
-    if (nIndex<0 || o3tl::make_unsigned(nIndex) >= maItems.size())
+    if (nIndex<0 || nIndex >= o3tl::make_signed(maItems.size()))
         throw RuntimeException();
 
     maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
