@@ -502,7 +502,7 @@ bool Slider::ImplIsPageDown( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
+long Slider::ImplSlide( long nNewPos )
 {
     long nOldPos = mnThumbPos;
     SetThumbPos( nNewPos );
@@ -510,36 +510,34 @@ long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
     if ( nDelta )
     {
         Slide();
-        if ( bCallEndSlide )
-            EndSlide();
     }
     return nDelta;
 }
 
-long Slider::ImplDoAction( bool bCallEndSlide )
+long Slider::ImplDoAction()
 {
     long nDelta = 0;
 
     switch ( meScrollType )
     {
         case ScrollType::LineUp:
-            nDelta = ImplSlide( mnThumbPos-mnLineSize, bCallEndSlide );
+            nDelta = ImplSlide( mnThumbPos-mnLineSize );
             break;
 
         case ScrollType::LineDown:
-            nDelta = ImplSlide( mnThumbPos+mnLineSize, bCallEndSlide );
+            nDelta = ImplSlide( mnThumbPos+mnLineSize );
             break;
 
         case ScrollType::PageUp:
-            nDelta = ImplSlide( mnThumbPos-mnPageSize, bCallEndSlide );
+            nDelta = ImplSlide( mnThumbPos-mnPageSize );
             break;
 
         case ScrollType::PageDown:
-            nDelta = ImplSlide( mnThumbPos+mnPageSize, bCallEndSlide );
+            nDelta = ImplSlide( mnThumbPos+mnPageSize );
             break;
 
         case ScrollType::Set:
-            nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ), bCallEndSlide );
+            nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ) );
             break;
         default:
             break;
@@ -594,7 +592,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
     if ( bAction )
     {
-        if ( ImplDoAction( false ) )
+        if ( ImplDoAction() )
         {
             Update();
             Invalidate();
@@ -612,7 +610,7 @@ void Slider::ImplDoSlide( long nNewPos )
         return;
 
     meScrollType = ScrollType::Drag;
-    ImplSlide( nNewPos, true );
+    ImplSlide( nNewPos );
     meScrollType = ScrollType::DontKnow;
 }
 
@@ -624,7 +622,7 @@ void Slider::ImplDoSlideAction( ScrollType eScrollType )
         return;
 
     meScrollType = eScrollType;
-    ImplDoAction( true );
+    ImplDoAction();
     meScrollType = ScrollType::DontKnow;
 }
 
@@ -694,7 +692,7 @@ void Slider::MouseButtonUp( const MouseEvent& )
         {
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
         }
-        ImplDoAction( true );
+        ImplDoAction();
         meScrollType = ScrollType::DontKnow;
     }
 }
@@ -726,7 +724,6 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
             Update();
         }
 
-        EndSlide();
         meScrollType = ScrollType::DontKnow;
     }
     else
@@ -887,11 +884,6 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
 void Slider::Slide()
 {
     maSlideHdl.Call( this );
-}
-
-void Slider::EndSlide()
-{
-    maEndSlideHdl.Call( this );
 }
 
 void Slider::SetRangeMin(long nNewRange)
