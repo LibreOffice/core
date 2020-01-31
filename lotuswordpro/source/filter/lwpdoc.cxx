@@ -68,7 +68,7 @@
 #include "lwpverdocument.hxx"
 #include <xfilter/xfstylemanager.hxx>
 #include <osl/thread.h>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
@@ -287,7 +287,7 @@ void LwpDocument::RegisterStylesInPara()
     if (xContent.is())
     {
         rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
-        std::set<LwpStory*> aSeen;
+        o3tl::sorted_vector<LwpStory*> aSeen;
         while (xStory.is())
         {
             aSeen.insert(xStory.get());
@@ -314,7 +314,7 @@ void LwpDocument::RegisterBulletStyles()
         return;
     LwpSilverBullet* pBullet = dynamic_cast<LwpSilverBullet*>
                         (pBulletHead->GetHeadID().obj().get());
-    std::set<LwpSilverBullet*> aSeen;
+    o3tl::sorted_vector<LwpSilverBullet*> aSeen;
     while (pBullet)
     {
         aSeen.insert(pBullet);
@@ -562,7 +562,7 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
     {
         LwpDocument* pDivision = GetLastDivision();
 
-        std::set<LwpDocument*> aSeen;
+        o3tl::sorted_vector<LwpDocument*> aSeen;
         while (pDivision && pDivision != this)
         {
             aSeen.insert(pDivision);
@@ -628,7 +628,7 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
  LwpDocument* LwpDocument::GetRootDocument()
 {
     LwpDocument* pRoot = this;
-    std::set<LwpDocument*> aSeen;
+    o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pRoot)
     {
         aSeen.insert(pRoot);
@@ -651,7 +651,7 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
         return this;
 
     LwpDocument* pDivision = GetFirstDivision();
-    std::set<LwpDocument*> aSeen;
+    o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pDivision)
     {
         aSeen.insert(pDivision);
@@ -671,7 +671,7 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
 {
     LwpDocument* pRoot = GetRootDocument();
     LwpDocument *pLastDoc = pRoot ? pRoot->GetLastDivisionWithContents() : nullptr;
-    std::set<LwpDocument*> aSeen;
+    o3tl::sorted_vector<LwpDocument*> aSeen;
     while (pLastDoc)
     {
         aSeen.insert(pLastDoc);

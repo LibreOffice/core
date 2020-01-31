@@ -68,7 +68,7 @@
 #include <xfilter/xftable.hxx>
 #include <xfilter/xfcell.hxx>
 #include <xfilter/xfcellstyle.hxx>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 LwpRowLayout::LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
@@ -96,7 +96,7 @@ void LwpRowLayout::SetRowMap()
     LwpObjectID *pCellID= &GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
-    std::set<LwpCellLayout*> aSeen;
+    o3tl::sorted_vector<LwpCellLayout*> aSeen;
     while(pCellLayout)
     {
         aSeen.insert(pCellLayout);
@@ -140,7 +140,7 @@ void LwpRowLayout::RegisterStyle()
     LwpObjectID *pCellID= &GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj().get());
 
-    std::set<LwpCellLayout*> aSeen;
+    o3tl::sorted_vector<LwpCellLayout*> aSeen;
     while (pCellLayout)
     {
         aSeen.insert(pCellLayout);
