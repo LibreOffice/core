@@ -51,7 +51,7 @@ public:
 
     Paragraph*      GetParagraph( sal_Int32 nPos ) const
     {
-        return 0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size() ? maEntries[nPos].get() : nullptr;
+        return 0 <= nPos && nPos < o3tl::make_signed(maEntries.size()) ? maEntries[nPos].get() : nullptr;
     }
 
     sal_Int32       GetAbsPos( Paragraph const * pParent ) const;

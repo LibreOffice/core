@@ -157,7 +157,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
     if( ! aWriter.Write( xWrt ).IsError() )
     {
         const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
-        if (lUniLen < o3tl::make_unsigned(SAL_MAX_INT32-1))
+        if (o3tl::make_signed(lUniLen) < SAL_MAX_INT32-1)
         {
             aStream.WriteUInt16( '\0' );
 

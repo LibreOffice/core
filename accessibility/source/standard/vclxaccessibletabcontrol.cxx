@@ -355,7 +355,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
+    if ( i < 0 || i >= o3tl::make_signed(m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     return implGetAccessibleChild( i );
@@ -403,7 +403,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || nChildIndex >= o3tl::make_signed(m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     if ( m_pTabControl )
@@ -415,7 +415,7 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || nChildIndex >= o3tl::make_signed(m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     return implIsAccessibleChildSelected( nChildIndex );
@@ -477,7 +477,7 @@ void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size() )
+    if ( nChildIndex < 0 || nChildIndex >= o3tl::make_signed(m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     // This method makes no sense in a tab control, and so does nothing.

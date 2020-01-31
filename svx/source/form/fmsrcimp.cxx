@@ -283,7 +283,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
-    DBG_ASSERT(o3tl::make_unsigned(nWhich) < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
+    DBG_ASSERT(nWhich < o3tl::make_signed(m_aControlTexts.size()), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
     DBG_ASSERT(m_aControlTexts[nWhich], "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
     DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
 
@@ -294,7 +294,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
         nWhich = m_nCurrentFieldIndex;
     }
 
-    DBG_ASSERT((nWhich >= 0) && (o3tl::make_unsigned(nWhich) < m_aControlTexts.size()),
+    DBG_ASSERT((nWhich >= 0) && (nWhich < o3tl::make_signed(m_aControlTexts.size())),
         "FmSearchEngine::FormatField : invalid argument nWhich !");
     return m_aControlTexts[m_nCurrentFieldIndex == -1 ? nWhich : m_nCurrentFieldIndex]->getCurrentText();
 }
@@ -1040,7 +1040,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, bool bForce)
 
     DBG_ASSERT((nFieldIndex == -1) ||
                ((nFieldIndex >= 0) &&
-                (o3tl::make_unsigned(nFieldIndex) < m_arrFieldMapping.size())),
+                (nFieldIndex < o3tl::make_signed(m_arrFieldMapping.size()))),
             "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
     // collect all fields I need to search through
     m_arrUsedFields.clear();

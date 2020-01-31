@@ -103,11 +103,11 @@ void ParagraphList::Append( std::unique_ptr<Paragraph> pPara)
 
 void ParagraphList::Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos)
 {
-    SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < o3tl::make_unsigned(nAbsPos) && nAbsPos != EE_PARA_APPEND),
+    SAL_WARN_IF( nAbsPos < 0 || (o3tl::make_signed(maEntries.size()) < nAbsPos && nAbsPos != EE_PARA_APPEND),
             "editeng", "ParagraphList::Insert - bad insert position " << nAbsPos);
     SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Insert - overflow");
 
-    if (nAbsPos < 0 || maEntries.size() <= o3tl::make_unsigned(nAbsPos))
+    if (nAbsPos < 0 || o3tl::make_signed(maEntries.size()) <= nAbsPos)
         Append( std::move(pPara) );
     else
         maEntries.insert(maEntries.begin()+nAbsPos, std::move(pPara));
@@ -115,7 +115,7 @@ void ParagraphList::Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos)
 
 void ParagraphList::Remove( sal_Int32 nPara )
 {
-    if (nPara < 0 || maEntries.size() <= o3tl::make_unsigned(nPara))
+    if (nPara < 0 || o3tl::make_signed(maEntries.size()) <= nPara)
     {
         SAL_WARN( "editeng", "ParagraphList::Remove - out of bounds " << nPara);
         return;
@@ -126,7 +126,7 @@ void ParagraphList::Remove( sal_Int32 nPara )
 
 void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 _nCount )
 {
-    OSL_ASSERT(o3tl::make_unsigned(nStart) < maEntries.size() && o3tl::make_unsigned(nDest) < maEntries.size());
+    OSL_ASSERT(nStart < o3tl::make_signed(maEntries.size()) && nDest < o3tl::make_signed(maEntries.size()));
 
     if ( (( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) )) && nStart >= 0 && nDest >= 0 && _nCount >= 0 )
     {

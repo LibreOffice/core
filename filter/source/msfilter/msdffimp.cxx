@@ -720,7 +720,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     {
                                         css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
-                                        if ( nPt < o3tl::make_unsigned(aCoordinates.getLength()) )
+                                        if ( o3tl::make_signed(nPt) < aCoordinates.getLength() )
                                         {
                                             nId = 4;
                                             css::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
@@ -4218,7 +4218,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             }
         }
     }
-    if (o3tl::make_unsigned(nCalledByGroup) < maPendingGroupData.size())
+    if (nCalledByGroup < o3tl::make_signed(maPendingGroupData.size()))
     {
         // finalization for this group is pending, do it now
         pRet = FinalizeObj(maPendingGroupData.back().first, pRet);
@@ -4962,7 +4962,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     // If this shape opens a new group, push back its object data because
     // finalization will be called when nested objects have been imported;
     // otherwise, just finalize here
-    if (o3tl::make_unsigned(nCalledByGroup) > maPendingGroupData.size())
+    if (nCalledByGroup > o3tl::make_signed(maPendingGroupData.size()))
     {
         auto xHdClone = std::make_shared<DffRecordHeader>(aObjData.rSpHd);
         maPendingGroupData.emplace_back(DffObjData(xHdClone, aObjData), xHdClone );

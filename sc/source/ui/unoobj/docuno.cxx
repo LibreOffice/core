@@ -3245,10 +3245,10 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
 #else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
-    if(o3tl::make_unsigned(nPlatform) >= aPlatformInfo.size())
+    if(nPlatform >= o3tl::make_signed(aPlatformInfo.size()))
         throw uno::RuntimeException();
 
-    if(o3tl::make_unsigned(nDevice) >= aPlatformInfo[nPlatform].maDevices.size())
+    if(nDevice >= o3tl::make_signed(aPlatformInfo[nPlatform].maDevices.size()))
         throw uno::RuntimeException();
 
     OUString aDeviceString = aPlatformInfo[nPlatform].maVendor + " " + aPlatformInfo[nPlatform].maDevices[nDevice].maName;

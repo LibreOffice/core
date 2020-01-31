@@ -70,7 +70,7 @@ SwXAutoTextContainer::~SwXAutoTextContainer()
 
 sal_Int32 SwXAutoTextContainer::getCount()
 {
-    OSL_ENSURE(pGlossaries->GetGroupCnt() < o3tl::make_unsigned(SAL_MAX_INT32),
+    OSL_ENSURE(o3tl::make_signed(pGlossaries->GetGroupCnt()) < SAL_MAX_INT32,
                "SwXAutoTextContainer::getCount: too many items");
     return static_cast<sal_Int32>(pGlossaries->GetGroupCnt());
 }
@@ -79,7 +79,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     const size_t nCount = pGlossaries->GetGroupCnt();
-    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) >= nCount )
+    if ( nIndex < 0 || nIndex >= o3tl::make_signed(nCount) )
         throw lang::IndexOutOfBoundsException();
     return getByName(pGlossaries->GetGroupName( static_cast<size_t>(nIndex) ));
 }
@@ -115,7 +115,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
 {
     SolarMutexGuard aGuard;
     const size_t nCount = pGlossaries->GetGroupCnt();
-    OSL_ENSURE(nCount < o3tl::make_unsigned(SAL_MAX_INT32),
+    OSL_ENSURE(o3tl::make_signed(nCount) < SAL_MAX_INT32,
                "SwXAutoTextContainer::getElementNames: too many groups");
 
     uno::Sequence< OUString > aGroupNames(static_cast<sal_Int32>(nCount));

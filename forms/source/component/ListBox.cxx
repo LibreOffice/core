@@ -1538,8 +1538,8 @@ namespace frm
 
             Any operator ()( sal_Int16 _nIndex )
             {
-                OSL_ENSURE( o3tl::make_unsigned(_nIndex) < m_rList.size(), "ExtractAnyFromValueList: inconsistence!" );
-                if ( o3tl::make_unsigned(_nIndex) < m_rList.size() )
+                OSL_ENSURE( _nIndex < o3tl::make_signed(m_rList.size()), "ExtractAnyFromValueList: inconsistence!" );
+                if ( _nIndex < o3tl::make_signed(m_rList.size()) )
                     return m_rList[ _nIndex ].makeAny();
                 return Any();
             }

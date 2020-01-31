@@ -194,7 +194,7 @@ protected:
     FileFormat* getFormat(sal_Int32 nExportType)
     {
         FileFormat* pFormat = &aFileFormats[0];
-        if (o3tl::make_unsigned(nExportType) < SAL_N_ELEMENTS(aFileFormats))
+        if (nExportType < o3tl::make_signed(SAL_N_ELEMENTS(aFileFormats)))
             pFormat = &aFileFormats[nExportType];
         return pFormat;
     }

@@ -859,7 +859,7 @@ ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 
 void ScViewData::UpdateCurrentTab()
 {
-    assert(0 <= nTabNo && o3tl::make_unsigned(nTabNo) < maTabData.size());
+    assert(0 <= nTabNo && nTabNo < o3tl::make_signed(maTabData.size()));
     pThisTab = maTabData[nTabNo].get();
     while (!pThisTab)
     {
@@ -911,7 +911,7 @@ void ScViewData::DeleteTab( SCTAB nTab )
     assert(nTab < static_cast<SCTAB>(maTabData.size()));
     maTabData.erase(maTabData.begin() + nTab);
 
-    if (o3tl::make_unsigned(nTabNo) >= maTabData.size())
+    if (nTabNo >= o3tl::make_signed(maTabData.size()))
     {
         EnsureTabDataSize(1);
         nTabNo = maTabData.size() - 1;
@@ -927,7 +927,7 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
         mpMarkData->DeleteTab( nTab + i );
     }
     maTabData.erase(maTabData.begin() + nTab, maTabData.begin()+ nTab+nSheets);
-    if (o3tl::make_unsigned(nTabNo) >= maTabData.size())
+    if (nTabNo >= o3tl::make_signed(maTabData.size()))
     {
         EnsureTabDataSize(1);
         nTabNo = maTabData.size() - 1;

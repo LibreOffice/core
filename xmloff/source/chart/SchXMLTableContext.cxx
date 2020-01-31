@@ -522,7 +522,7 @@ SchXMLTableRowContext::SchXMLTableRowContext(
 
     std::vector< SchXMLCell > aNewRow;
     aNewRow.reserve( mrTable.nNumberOfColsEstimate );
-    while( mrTable.aData.size() <= o3tl::make_unsigned(mrTable.nRowIndex) )
+    while( o3tl::make_signed(mrTable.aData.size()) <= mrTable.nRowIndex )
         mrTable.aData.push_back( aNewRow );
 }
 

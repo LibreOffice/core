@@ -1560,7 +1560,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrien
 
     //  test for column header
 
-    if ( nRow == nTabStartRow && nCol >= nDataStartCol && o3tl::make_unsigned(nCol) < nDataStartCol + pColFields.size())
+    if ( nRow == nTabStartRow && nCol >= nDataStartCol && nCol < o3tl::make_signed(nDataStartCol + pColFields.size()))
     {
         rOrient = sheet::DataPilotFieldOrientation_COLUMN;
         long nField = nCol - nDataStartCol;
@@ -1569,7 +1569,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrien
 
     //  test for row header
 
-    if ( nRow+1 == nDataStartRow && nCol >= nTabStartCol && o3tl::make_unsigned(nCol) < nTabStartCol + pRowFields.size() )
+    if ( nRow+1 == nDataStartRow && nCol >= nTabStartCol && nCol < o3tl::make_signed(nTabStartCol + pRowFields.size()) )
     {
         rOrient = sheet::DataPilotFieldOrientation_ROW;
         long nField = nCol - nTabStartCol;
@@ -1579,7 +1579,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrien
     //  test for page field
 
     SCROW nPageStartRow = aStartPos.Row() + ( bDoFilter ? 1 : 0 );
-    if ( nCol == aStartPos.Col() && nRow >= nPageStartRow && o3tl::make_unsigned(nRow) < nPageStartRow + pPageFields.size() )
+    if ( nCol == aStartPos.Col() && nRow >= nPageStartRow && nRow < o3tl::make_signed(nPageStartRow + pPageFields.size()) )
     {
         rOrient = sheet::DataPilotFieldOrientation_PAGE;
         long nField = nRow - nPageStartRow;
@@ -1611,7 +1611,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
     //  test for column header
 
     if ( nCol >= nDataStartCol && nCol <= nTabEndCol &&
-            nRow + 1 >= nMemberStartRow && o3tl::make_unsigned(nRow) < nMemberStartRow + pColFields.size())
+            nRow + 1 >= nMemberStartRow && nRow < o3tl::make_signed(nMemberStartRow + pColFields.size()))
     {
         long nField = nRow - nMemberStartRow;
         if (nField < 0)
@@ -1627,7 +1627,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         bool bFound = false;            // is this within the same orientation?
         bool bBeforeDrag = false;
         bool bAfterDrag = false;
-        for (long nPos=0; o3tl::make_unsigned(nPos)<pColFields.size() && !bFound; nPos++)
+        for (long nPos=0; nPos<o3tl::make_signed(pColFields.size()) && !bFound; nPos++)
         {
             if (pColFields[nPos].mnDim == nDragDim)
             {
@@ -1670,7 +1670,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
                         pRowFields.empty() && nCol == nTabStartCol && bMouseLeft );
 
     if ( bSpecial || ( nRow+1 >= nDataStartRow && nRow <= nTabEndRow &&
-                        nCol + 1 >= nTabStartCol && o3tl::make_unsigned(nCol) < nTabStartCol + pRowFields.size() ) )
+                        nCol + 1 >= nTabStartCol && nCol < o3tl::make_signed(nTabStartCol + pRowFields.size()) ) )
     {
         long nField = nCol - nTabStartCol;
         //TODO: find start of dimension
@@ -1681,7 +1681,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         bool bFound = false;            // is this within the same orientation?
         bool bBeforeDrag = false;
         bool bAfterDrag = false;
-        for (long nPos=0; o3tl::make_unsigned(nPos)<pRowFields.size() && !bFound; nPos++)
+        for (long nPos=0; nPos<o3tl::make_signed(pRowFields.size()) && !bFound; nPos++)
         {
             if (pRowFields[nPos].mnDim == nDragDim)
             {
@@ -1721,7 +1721,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
 
     SCROW nPageStartRow = aStartPos.Row() + ( bDoFilter ? 1 : 0 );
     if ( nCol >= aStartPos.Col() && nCol <= nTabEndCol &&
-            nRow + 1 >= nPageStartRow && o3tl::make_unsigned(nRow) < nPageStartRow + pPageFields.size() )
+            nRow + 1 >= nPageStartRow && nRow < o3tl::make_signed(nPageStartRow + pPageFields.size()) )
     {
         long nField = nRow - nPageStartRow;
         if (nField < 0)
@@ -1737,7 +1737,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
         bool bFound = false;            // is this within the same orientation?
         bool bBeforeDrag = false;
         bool bAfterDrag = false;
-        for (long nPos=0; o3tl::make_unsigned(nPos)<pPageFields.size() && !bFound; nPos++)
+        for (long nPos=0; nPos<o3tl::make_signed(pPageFields.size()) && !bFound; nPos++)
         {
             if (pPageFields[nPos].mnDim == nDragDim)
             {

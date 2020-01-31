@@ -156,7 +156,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     const BitmapEx aExclusionOverlay (mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_HideSlideOverlay));
     for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
     {
-        if (rRepresentatives.size() <= o3tl::make_unsigned(nIndex))
+        if (o3tl::make_signed(rRepresentatives.size()) <= nIndex)
             continue;
         switch(nIndex)
         {

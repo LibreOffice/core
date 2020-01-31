@@ -60,7 +60,7 @@ private: //methods
                         return (*m_pSimpleTicks)[nDepth][nIndex];
                     else
                     {
-                        if ((*m_pInfoTicks)[nDepth].size() <= o3tl::make_unsigned(nIndex))
+                        if (o3tl::make_signed((*m_pInfoTicks)[nDepth].size()) <= nIndex)
                             return std::numeric_limits<double>::max();
                         return (((*m_pInfoTicks)[nDepth])[nIndex]).fScaledTickValue;
                     }

@@ -222,7 +222,7 @@ void SvImpLBox::CalcCellFocusRect( tools::Rectangle& rRect )
         SvLBoxItem& rItem = m_pCursor->GetItem( m_nCurTabPos );
         rRect.SetLeft( m_pView->GetTab( m_pCursor, &rItem )->GetPos() );
     }
-    if (m_pCursor->ItemCount() > o3tl::make_unsigned(m_nCurTabPos+1))
+    if (o3tl::make_signed(m_pCursor->ItemCount()) > m_nCurTabPos+1)
     {
         SvLBoxItem& rNextItem = m_pCursor->GetItem( m_nCurTabPos + 1 );
         long nRight = m_pView->GetTab( m_pCursor, &rNextItem )->GetPos() - 1;
@@ -1318,7 +1318,7 @@ void SvImpLBox::FillView()
         long nTempThumb = m_aVerSBar->GetThumbPos();
         if( nTempThumb < 0 )
             nTempThumb = 0;
-        else if( o3tl::make_unsigned(nTempThumb) >= nVisibleViewCount )
+        else if( nTempThumb >= o3tl::make_signed(nVisibleViewCount) )
             nTempThumb = nVisibleViewCount == 0 ? 0 : nVisibleViewCount - 1;
         m_pStartEntry = m_pView->GetEntryAtVisPos(nTempThumb);
     }

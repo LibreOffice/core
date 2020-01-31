@@ -2235,7 +2235,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             EditSelection aSel( aPaM, aPaM );
             while ( aSel.Max().GetNode() == pNode )
             {
-                if ( ( o3tl::make_unsigned(aSel.Min().GetIndex()) > nInvEnd )
+                if ( ( aSel.Min().GetIndex() > o3tl::make_signed(nInvEnd) )
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )
                     break;  // Document end or end of invalid region
 

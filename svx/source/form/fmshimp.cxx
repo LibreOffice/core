@@ -2200,8 +2200,8 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     LoopGrids_Lock(LoopGridsSync::FORCE_SYNC);
 
     // and to the field (for that, I collected the XVclComponent interfaces before the start of the search)
-    SAL_WARN_IF(o3tl::make_unsigned(rfriWhere.nFieldPos) >=
-            m_arrSearchedControls.size(),
+    SAL_WARN_IF(rfriWhere.nFieldPos >=
+            o3tl::make_signed(m_arrSearchedControls.size()),
         "svx.form", "FmXFormShell::OnFoundData : invalid index!");
     SdrObject* pObject = m_arrSearchedControls.at(rfriWhere.nFieldPos);
 

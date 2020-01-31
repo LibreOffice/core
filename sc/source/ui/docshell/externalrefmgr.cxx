@@ -637,8 +637,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                     }
                 }
 
-                if (nMinCol <= nMaxCol && ((o3tl::make_unsigned(nMaxCol-nMinCol+1) < nMatrixColumns) ||
-                            (o3tl::make_unsigned(nDataRow2-nDataRow1+1) < nMatrixRows)))
+                if (nMinCol <= nMaxCol && ((nMaxCol-nMinCol+1 < o3tl::make_signed(nMatrixColumns)) ||
+                            (nDataRow2-nDataRow1+1 < o3tl::make_signed(nMatrixRows))))
                 {
                     nMatrixColumns = static_cast<SCSIZE>(nMaxCol-nMinCol+1);
                     nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
@@ -826,7 +826,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
         const ScMatrixRef& pMat = rItem.mpRangeData;
         SCSIZE nMatCols, nMatRows;
         pMat->GetDimensions( nMatCols, nMatRows);
-        if (nMatCols > o3tl::make_unsigned(nCol2 - nCol1) && nMatRows > o3tl::make_unsigned(nRow2 - nRow1))
+        if (o3tl::make_signed(nMatCols) > nCol2 - nCol1 && o3tl::make_signed(nMatRows) > nRow2 - nRow1)
         {
             ScMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
             {
@@ -1578,8 +1578,8 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         }
         else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
         {
-            if ((o3tl::make_unsigned(nDataCol2-nDataCol1+1) < nMatrixColumns) ||
-                (o3tl::make_unsigned(nDataRow2-nDataRow1+1) < nMatrixRows))
+            if ((nDataCol2-nDataCol1+1 < o3tl::make_signed(nMatrixColumns)) ||
+                (nDataRow2-nDataRow1+1 < o3tl::make_signed(nMatrixRows)))
             {
                 nMatrixColumns = static_cast<SCSIZE>(nDataCol2-nDataCol1+1);
                 nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);

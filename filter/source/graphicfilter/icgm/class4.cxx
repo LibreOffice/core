@@ -189,7 +189,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
-                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (mpEndValidSource - (mpSource + mnParaSize) < o3tl::make_signed(nSize))
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
@@ -226,7 +226,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI(1);
 
-                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
+                if (mpEndValidSource - (mpSource + mnParaSize) < o3tl::make_signed(nSize))
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
@@ -243,7 +243,7 @@ void CGM::ImplDoClass4()
                 (void)ImplGetUI16(); // nType
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
-                if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) <= nSize)
+                if (mpEndValidSource - (mpSource + mnParaSize) <= o3tl::make_signed(nSize))
                     throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                 mpSource[ mnParaSize + nSize ] = 0;

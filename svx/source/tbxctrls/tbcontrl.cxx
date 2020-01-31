@@ -521,7 +521,7 @@ private:
 
     SvxBorderLineStyle LineListBox::GetEntryStyle( sal_Int32 nPos ) const
     {
-        ImpLineListData* pData = (0 <= nPos && o3tl::make_unsigned(nPos) < m_vLineList.size()) ? m_vLineList[ nPos ].get() : nullptr;
+        ImpLineListData* pData = (0 <= nPos && nPos < o3tl::make_signed(m_vLineList.size())) ? m_vLineList[ nPos ].get() : nullptr;
         return pData ? pData->GetStyle() : SvxBorderLineStyle::NONE;
     }
 

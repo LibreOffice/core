@@ -1905,7 +1905,7 @@ void SwTextNode::TransliterateText(
                 swTransliterationChgData & rData =
                     aChanges[ aChanges.size() - 1 - i ];
                 nSum += rData.sChanged.getLength() - rData.nLen;
-                if (nSum > o3tl::make_unsigned(GetSpaceLeft()))
+                if (o3tl::make_signed(nSum) > GetSpaceLeft())
                 {
                     SAL_WARN("sw.core", "SwTextNode::ReplaceTextOnly: "
                             "node text with insertion > node capacity.");

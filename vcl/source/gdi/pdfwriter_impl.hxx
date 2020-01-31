@@ -288,7 +288,7 @@ public:
     sal_Ucs getCode( sal_Int32 i_nIndex ) const
     {
         sal_Ucs nRet = 0;
-        if (o3tl::make_unsigned(i_nIndex) < m_CodeUnits.size())
+        if (i_nIndex < o3tl::make_signed(m_CodeUnits.size()))
             nRet = m_CodeUnits[i_nIndex];
         return nRet;
     }

@@ -2230,7 +2230,7 @@ SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
 
     for (const ColParam& r : maColPositions)
     {
-        assert(o3tl::make_unsigned(mnRow) <= r.maPos->position);
+        assert(mnRow <= o3tl::make_signed(r.maPos->position));
         nNextRow = std::min (nNextRow, static_cast<size_t>(r.maPos->position));
     }
 

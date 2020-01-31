@@ -594,7 +594,7 @@ ds_device const & getDeviceSelection(
         }
 
         /* Final device selection */
-        if (bestDeviceIdx >=0 && o3tl::make_unsigned( bestDeviceIdx ) < aProfile->devices.size() )
+        if (bestDeviceIdx >=0 && bestDeviceIdx < o3tl::make_signed( aProfile->devices.size() ) )
         {
             selectedDevice = aProfile->devices[bestDeviceIdx];
             bIsDeviceSelected = true;

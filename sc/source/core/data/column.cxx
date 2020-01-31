@@ -842,11 +842,11 @@ bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const
     if (it->type == sc::element_type_empty)
         nLastNonEmptyRow -= it->size;
 
-    if (nLastNonEmptyRow < o3tl::make_unsigned(nStartRow))
+    if (o3tl::make_signed(nLastNonEmptyRow) < nStartRow)
         // No cells would get pushed out.
         return pAttrArray->TestInsertRow(nSize);
 
-    if (nLastNonEmptyRow + nSize > o3tl::make_unsigned(GetDoc()->MaxRow()))
+    if (o3tl::make_signed(nLastNonEmptyRow + nSize) > GetDoc()->MaxRow())
         // At least one cell would get pushed out. Not good.
         return false;
 
@@ -984,7 +984,7 @@ public:
                 maDestPos.miCellPos = aPos.first;
                 sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 size_t nLastRow = nTopRow + nDataSize;
-                if (nLastRow < o3tl::make_unsigned(mrSrcDoc.MaxRow()))
+                if (o3tl::make_signed(nLastRow) < mrSrcDoc.MaxRow())
                 {
                     aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
                     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -1070,11 +1070,11 @@ void ScColumn::CopyStaticToDocument(
     size_t nDataSize = 0;
     size_t nCurRow = nRow1;
 
-    for (; it != maCells.end() && nCurRow <= o3tl::make_unsigned(nRow2); ++it, nOffset = 0, nCurRow += nDataSize)
+    for (; it != maCells.end() && o3tl::make_signed(nCurRow) <= nRow2; ++it, nOffset = 0, nCurRow += nDataSize)
     {
         bool bLastBlock = false;
         nDataSize = it->size - nOffset;
-        if (nCurRow + nDataSize - 1 > o3tl::make_unsigned(nRow2))
+        if (o3tl::make_signed(nCurRow + nDataSize - 1) > nRow2)
         {
             // Truncate the block to copy to clipboard.
             nDataSize = nRow2 - nCurRow + 1;

@@ -162,7 +162,7 @@ void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIde
     // so we make sure we will never generate
     // an integer value like this one
     sal_Int32 nId = rIdentifier.copy(2).toInt32();
-    if (nId > 0 && mnNextId <= o3tl::make_unsigned(nId))
+    if (nId > 0 && o3tl::make_signed(mnNextId) <= nId)
     {
         mnNextId = nId;
         ++mnNextId;

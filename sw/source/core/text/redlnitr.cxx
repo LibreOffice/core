@@ -912,7 +912,7 @@ sal_Int32 SwExtend::Next(sal_uLong const nNode, sal_Int32 nNext)
     {
         sal_Int32 nIdx = m_nPos - m_nStart;
         const ExtTextInputAttr nAttr = m_rArr[ nIdx ];
-        while (o3tl::make_unsigned(++nIdx) < m_rArr.size() && nAttr == m_rArr[nIdx])
+        while (++nIdx < o3tl::make_signed(m_rArr.size()) && nAttr == m_rArr[nIdx])
             ; //nothing
         nIdx = nIdx + m_nStart;
         if( nNext > nIdx )

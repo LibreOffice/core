@@ -865,7 +865,7 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
             rNewLB.append_text(rField);
         //select the ListBox
         //if there is an assignment
-        if(o3tl::make_unsigned(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())
+        if(aAssignments.getLength() > o3tl::make_signed(i) && !aAssignments[i].isEmpty())
             rNewLB.set_active_text(aAssignments[i]);
         else //otherwise the current column name may match one of the db columns
             rNewLB.set_active_text(rHeader);

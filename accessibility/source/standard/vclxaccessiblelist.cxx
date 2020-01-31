@@ -457,7 +457,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 {
     Reference<XAccessible> xChild;
 
-    if ( o3tl::make_unsigned(nPos) >= m_aAccessibleChildren.size() )
+    if ( nPos >= o3tl::make_signed(m_aAccessibleChildren.size()) )
     {
         m_aAccessibleChildren.resize(nPos + 1);
 
@@ -625,7 +625,7 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
         {
             bool bVisible = ( i >= nTop && i < ( nTop + m_nVisibleLineCount ) );
             Reference< XAccessible > xHold;
-            if ( o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
+            if ( i < o3tl::make_signed(m_aAccessibleChildren.size()) )
                 xHold = m_aAccessibleChildren[i];
             else if ( bVisible )
                 xHold = CreateChild(i);

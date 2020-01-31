@@ -214,7 +214,7 @@ namespace svt { namespace table
     void UnoControlTableModel::insertColumn( ColPos const i_position, Reference< XGridColumn > const & i_column )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= m_pImpl->aColumns.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( i_position <= o3tl::make_signed( m_pImpl->aColumns.size() ) ),
             "UnoControlTableModel::insertColumn: illegal position!" );
 
         const PColumnModel pColumn = std::make_shared<UnoGridColumnFacade>( *this, i_column );
@@ -232,7 +232,7 @@ namespace svt { namespace table
     void UnoControlTableModel::removeColumn( ColPos const i_position )
     {
         DBG_CHECK_ME();
-        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= m_pImpl->aColumns.size() ),
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( i_position <= o3tl::make_signed( m_pImpl->aColumns.size() ) ),
             "UnoControlTableModel::removeColumn: illegal position!" );
 
         // remove the column

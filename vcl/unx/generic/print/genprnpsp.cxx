@@ -717,7 +717,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( "InputSlot" ): nullptr;
-        if( ! pKey || nPaperBin >= o3tl::make_unsigned(pKey->countValues()) )
+        if( ! pKey || o3tl::make_signed(nPaperBin) >= pKey->countValues() )
             return aData.m_pParser->getDefaultInputSlot();
         const PPDValue* pValue = pKey->getValue( nPaperBin );
         if( pValue )

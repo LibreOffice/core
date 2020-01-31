@@ -3758,7 +3758,7 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
     SvStream& rStrm = Strm();
     sal_uLong nRetPos = 0, nPos = rStrm.Tell();
     //If there is at least two characters already output
-    if (nPos - 2 >= o3tl::make_unsigned(pFib->m_fcMin))
+    if (o3tl::make_signed(nPos - 2) >= pFib->m_fcMin)
     {
         sal_uInt16 nUCode=0;
 
@@ -3768,7 +3768,7 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
         if (nUCode == 0x0d)             // CR ?
         {
             if ((nChar == 0x0c) &&
-                (nPos - 4 >= o3tl::make_unsigned(pFib->m_fcMin)))
+                (o3tl::make_signed(nPos - 4) >= pFib->m_fcMin))
             {
                 rStrm.SeekRel(-4);
                 rStrm.ReadUInt16( nUCode );

@@ -78,7 +78,7 @@ void CGM::ImplDoClass7()
                     case 0x262 : /*AppData - ENDGROUP */break;
                     case 0x264 : /*AppData - DATANODE*/
                     {
-                        if (o3tl::make_unsigned(mpEndValidSource - pAppData) < sizeof(DataNode))
+                        if (mpEndValidSource - pAppData < o3tl::make_signed(sizeof(DataNode)))
                             throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                         mpChart->mDataNode[ 0 ] = *reinterpret_cast<DataNode*>( pAppData );

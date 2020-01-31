@@ -1107,7 +1107,7 @@ void SvtFileView::SetConfigString(const OUString& rCfgStr)
             --nItemId;
         int nColumn = nItemId - 1;
 
-        if (nColumn >= 0 && o3tl::make_unsigned(nColumn) < aWidths.size())
+        if (nColumn >= 0 && nColumn < o3tl::make_signed(aWidths.size()))
             aWidths[nColumn] = nWidth;
     }
 

@@ -254,8 +254,8 @@ sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
                     {
                         sal_Int64 nLength = m_xSeekable->getLength();
                         OSL_ASSERT(nLength >= 0);
-                        if (o3tl::make_unsigned(nLength)
-                            < STREAM_SEEK_TO_END)
+                        if (nLength
+                            < o3tl::make_signed(STREAM_SEEK_TO_END))
                         {
                             m_nSeekedFrom = Tell();
                             return sal_uInt64(nLength);

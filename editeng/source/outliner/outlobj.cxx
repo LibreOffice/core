@@ -170,7 +170,7 @@ sal_Int32 OutlinerParaObject::Count() const
 
 sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 {
-    if(0 <= nPara && o3tl::make_unsigned(nPara) < mpImpl->maParagraphDataVector.size())
+    if(0 <= nPara && nPara < o3tl::make_signed(mpImpl->maParagraphDataVector.size()))
     {
         return mpImpl->maParagraphDataVector[nPara].getDepth();
     }
@@ -187,7 +187,7 @@ const EditTextObject& OutlinerParaObject::GetTextObject() const
 
 const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
-    if(0 <= nIndex && o3tl::make_unsigned(nIndex) < mpImpl->maParagraphDataVector.size())
+    if(0 <= nIndex && nIndex < o3tl::make_signed(mpImpl->maParagraphDataVector.size()))
     {
         return mpImpl->maParagraphDataVector[nIndex];
     }

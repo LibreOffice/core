@@ -1493,7 +1493,7 @@ public:
 
         if (!bVDev /* want everything in the vdev */ &&
             mnSelectedRenderer >= 0 &&
-            o3tl::make_unsigned(mnSelectedRenderer) < maRenderers.size())
+            mnSelectedRenderer < o3tl::make_signed(maRenderers.size()))
         {
             aCtx.meStyle = RENDER_EXPANDED;
             RegionRenderer * r = maRenderers[mnSelectedRenderer];

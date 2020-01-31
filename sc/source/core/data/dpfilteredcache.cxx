@@ -281,7 +281,7 @@ OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
 
 const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
 {
-    if (nColumn < 0 || o3tl::make_unsigned(nColumn) >= maFieldEntries.size())
+    if (nColumn < 0 || nColumn >= o3tl::make_signed(maFieldEntries.size()))
     {
         // index out of bound.  Hopefully this code will never be reached.
         static const ::std::vector<SCROW> emptyEntries{};

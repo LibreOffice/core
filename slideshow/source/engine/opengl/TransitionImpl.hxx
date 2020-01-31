@@ -341,7 +341,7 @@ public:
 
     int getVerticesCount() const
     {
-        assert(Vertices.size() < o3tl::make_unsigned(std::numeric_limits<int>::max()));
+        assert(o3tl::make_signed(Vertices.size()) < std::numeric_limits<int>::max());
         return int(unsigned(Vertices.size()));
     }
 

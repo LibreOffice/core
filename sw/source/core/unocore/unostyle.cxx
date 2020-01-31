@@ -4723,7 +4723,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
             return nullptr;
 
         const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (rTableTemplateMap.size() <= o3tl::make_unsigned(nTemplateIndex))
+        if (o3tl::make_signed(rTableTemplateMap.size()) <= nTemplateIndex)
             return nullptr;
 
         SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);

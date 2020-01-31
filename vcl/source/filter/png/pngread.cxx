@@ -937,7 +937,7 @@ void PNGReaderImpl::ImplReadIDAT()
                 mnYpos += mnYAdd;
             }
 
-            if ( mnYpos >= o3tl::make_unsigned(maOrigSize.Height()) )
+            if ( o3tl::make_signed(mnYpos) >= maOrigSize.Height() )
             {
                 if( (mnPass < 7) && mnInterlaceType )
                     if( ImplPreparePass() )

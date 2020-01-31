@@ -669,7 +669,7 @@ namespace
             {
                 const sal_uInt64 nSum = pStt->nContent.GetIndex() +
                     pEndNd->GetText().getLength() - pEnd->nContent.GetIndex();
-                return nSum > o3tl::make_unsigned(SAL_MAX_INT32);
+                return o3tl::make_signed(nSum) > SAL_MAX_INT32;
             }
         }
         return false;

@@ -282,7 +282,7 @@ namespace svxform
                 m_pFormModel->BegUndo(aUndoStr);
             }
 
-            if (nRelPos >= o3tl::make_unsigned(xContainer->getCount()))
+            if (o3tl::make_signed(nRelPos) >= xContainer->getCount())
                 nRelPos = static_cast<sal_uInt32>(xContainer->getCount());
 
             // UndoAction

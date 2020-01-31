@@ -322,8 +322,7 @@ bool getStringValue(
     }
     gsize n;
     char const * p = g_variant_get_string(variant.get(), &n);
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long string value for key " << key);
         return false;
@@ -366,8 +365,7 @@ bool getHexbinaryValue(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (guchar));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long hexbinary value for key " << key);
         return false;
@@ -404,8 +402,7 @@ bool getBooleanList(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (guchar));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long boolean list for key " << key);
         return false;
@@ -431,8 +428,7 @@ bool getShortList(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (gint16));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long short list for key " << key);
         return false;
@@ -458,8 +454,7 @@ bool getIntList(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (gint32));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long int list for key " << key);
         return false;
@@ -485,8 +480,7 @@ bool getLongList(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (gint64));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long long list for key " << key);
         return false;
@@ -512,8 +506,7 @@ bool getDoubleList(
     gsize n;
     gconstpointer p = g_variant_get_fixed_array(
         variant.get(), &n, sizeof (gdouble));
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long double list for key " << key);
         return false;
@@ -537,8 +530,7 @@ bool getStringList(
         return false;
     }
     gsize n = g_variant_n_children(variant.get());
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long string list for key " << key);
         return false;
@@ -565,8 +557,7 @@ bool getHexbinaryList(
         return false;
     }
     gsize n = g_variant_n_children(variant.get());
-    if (n > o3tl::make_unsigned(
-            std::numeric_limits<sal_Int32>::max()))
+    if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("configmgr.dconf", "too long hexbinary list for key " << key);
         return false;
@@ -765,8 +756,7 @@ void readDir(
     StringArrayHolder a(dconf_client_list(client.get(), dir.getStr(), nullptr));
     for (char const * const * p = a.get(); *p != nullptr; ++p) {
         std::size_t n = std::strlen(*p);
-        if (n > o3tl::make_unsigned(
-                std::numeric_limits<sal_Int32>::max()))
+        if (o3tl::make_signed(n) > std::numeric_limits<sal_Int32>::max())
         {
             SAL_WARN("configmgr.dconf", "too long dir/key in dir " << dir);
             continue;

@@ -386,7 +386,7 @@ void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
     const int nPos = m_pDialog->m_xLBRepository->get_active();
-    if( o3tl::make_unsigned(nPos) < m_aRepoIds.size() )
+    if( nPos < o3tl::make_signed(m_aRepoIds.size()) )
     {
         m_sRepoId = m_aRepoIds[nPos];
         notifyChange( );

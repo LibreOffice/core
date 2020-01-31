@@ -71,13 +71,13 @@ sal_Int16 XMLElement::getLength()
 
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && nPos < o3tl::make_signed(_attrNames.size()) );
     return _attrNames[ nPos ];
 }
 
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && nPos < o3tl::make_signed(_attrNames.size()) );
     // xxx todo
     return OUString();
 }
@@ -90,7 +90,7 @@ OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
 
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( nPos >= 0 && o3tl::make_unsigned(nPos) < _attrNames.size() );
+    OSL_ASSERT( nPos >= 0 && nPos < o3tl::make_signed(_attrNames.size()) );
     return _attrValues[ nPos ];
 }
 

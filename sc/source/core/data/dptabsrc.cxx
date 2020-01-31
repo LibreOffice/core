@@ -140,7 +140,7 @@ long ScDPSource::GetDataDimensionCount() const
 
 ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
 {
-    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maDataDims.size())
+    if (nIndex < 0 || nIndex >= o3tl::make_signed(maDataDims.size()))
         return nullptr;
 
     long nDimIndex = maDataDims[nIndex];
@@ -709,7 +709,7 @@ void ScDPSource::FilterCacheByPageDimensions()
                 pGrpFilter->addMatchItem(aData);
             }
         }
-        if (pGrpFilter->getMatchItemCount() < o3tl::make_unsigned(nMemCount))
+        if (o3tl::make_signed(pGrpFilter->getMatchItemCount()) < nMemCount)
             // there is at least one invisible item.  Add this filter criterion to the mix.
             aCriteria.push_back(aFilter);
 

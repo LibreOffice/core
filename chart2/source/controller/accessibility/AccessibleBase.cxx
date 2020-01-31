@@ -504,7 +504,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
     MutexGuard aGuard( m_aMutex);
     if( ! m_bMayHaveChildren ||
         i < 0 ||
-        o3tl::make_unsigned( i ) >= m_aChildList.size() )
+        i >= o3tl::make_signed( m_aChildList.size() ) )
     {
         OUString aBuf = "Index " + OUString::number( i ) + " is invalid for range [ 0, " +
                         OUString::number( m_aChildList.size() - 1 ) +

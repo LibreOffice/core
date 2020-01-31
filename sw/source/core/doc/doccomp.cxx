@@ -881,7 +881,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi;
             y = x - d;
-            while( o3tl::make_unsigned(x) < nEnd1 && o3tl::make_unsigned(y) < nEnd2 &&
+            while( x < o3tl::make_signed(nEnd1) && y < o3tl::make_signed(nEnd2) &&
                 rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
             {
                 ++x;
@@ -913,7 +913,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             else
                 x = thi - 1;
             y = x - d;
-            while( o3tl::make_unsigned(x) > nStt1 && o3tl::make_unsigned(y) > nStt2 &&
+            while( x > o3tl::make_signed(nStt1) && y > o3tl::make_signed(nStt2) &&
                 rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
             {
                 --x;

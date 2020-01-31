@@ -440,7 +440,7 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
             // in this case it would mean a stream of more than 2Gb
             return false;
         }
-        if (o3tl::make_unsigned(m_nSize) > nUnderlyingStreamSize)
+        if (m_nSize > o3tl::make_signed(nUnderlyingStreamSize))
         {
             // surely an entry cannot be larger than the underlying file
             return false;

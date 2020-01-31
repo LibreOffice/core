@@ -141,7 +141,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
         return Graphic();
     if(nStandardSymbol<0)
         nStandardSymbol*=-1;
-    if( o3tl::make_unsigned(nStandardSymbol) >= pSymbolList->GetObjCount() )
+    if( nStandardSymbol >= o3tl::make_signed(pSymbolList->GetObjCount()) )
         nStandardSymbol %= pSymbolList->GetObjCount();
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
 

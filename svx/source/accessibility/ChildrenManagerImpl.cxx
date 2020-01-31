@@ -132,7 +132,7 @@ uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (long nIndex)
 {
     // Check whether the given index is valid.
-    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
+    if (nIndex < 0 || nIndex >= o3tl::make_signed(maVisibleChildren.size()))
         throw lang::IndexOutOfBoundsException (
             "no accessible child with index " + OUString::number(nIndex),
             mxParent);

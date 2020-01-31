@@ -816,7 +816,7 @@ void SAL_CALL OResultSet::insertRow(  )
 
     SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
-    static_assert(o3tl::make_unsigned(nMaxBookmarkLen) >= sizeof(SQLLEN), "must be larger");
+    static_assert(nMaxBookmarkLen >= o3tl::make_signed(sizeof(SQLLEN)), "must be larger");
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
                                 0,

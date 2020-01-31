@@ -697,7 +697,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
         // get loop count
         sal_uInt32 nLoopCount(rPathPolyPolygon.count());
 
-        if(o3tl::make_unsigned(rOutliner.GetParagraphCount()) < nLoopCount)
+        if(rOutliner.GetParagraphCount() < o3tl::make_signed(nLoopCount))
         {
             nLoopCount = rOutliner.GetParagraphCount();
         }

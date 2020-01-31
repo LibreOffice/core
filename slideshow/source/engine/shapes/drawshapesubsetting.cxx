@@ -87,7 +87,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( nIndex < o3tl::make_signed(maActionClassVector.size()),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
@@ -101,7 +101,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( nIndex < o3tl::make_signed(maActionClassVector.size()),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
@@ -115,7 +115,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( o3tl::make_unsigned(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( nIndex < o3tl::make_signed(maActionClassVector.size()),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;

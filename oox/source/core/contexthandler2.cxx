@@ -75,7 +75,7 @@ sal_Int32 ContextHandler2Helper::getCurrentElement() const
 
 sal_Int32 ContextHandler2Helper::getParentElement( sal_Int32 nCountBack ) const
 {
-    if( (nCountBack < 0) || (mxContextStack->size() < o3tl::make_unsigned( nCountBack )) )
+    if( (nCountBack < 0) || (o3tl::make_signed( mxContextStack->size() ) < nCountBack) )
         return XML_TOKEN_INVALID;
     return (mxContextStack->size() == static_cast< size_t >( nCountBack )) ?
         XML_ROOT_CONTEXT : (*mxContextStack)[ mxContextStack->size() - nCountBack - 1 ].mnElement;

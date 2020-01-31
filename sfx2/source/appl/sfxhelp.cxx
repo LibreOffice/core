@@ -783,7 +783,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                 if (instance) {
                     static constexpr auto keyPath = OUStringLiteral("app-path=");
                     static constexpr auto keyExtensions = OUStringLiteral("app-extensions=");
-                    if (!havePath && line.length() >= o3tl::make_unsigned(keyPath.size)
+                    if (!havePath && o3tl::make_signed(line.length()) >= keyPath.size
                         && line.substr(0, keyPath.size) == keyPath.data)
                     {
                         auto const value = line.substr(keyPath.size);
@@ -801,7 +801,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                             throw Failure();
                         }
                         havePath = true;
-                    } else if (!haveExtensions && line.length() >= o3tl::make_unsigned(keyExtensions.size)
+                    } else if (!haveExtensions && o3tl::make_signed(line.length()) >= keyExtensions.size
                                && line.substr(0, keyExtensions.size) == keyExtensions.data)
                     {
                         auto const value = line.substr(keyExtensions.size);

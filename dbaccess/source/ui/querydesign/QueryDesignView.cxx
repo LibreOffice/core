@@ -2122,7 +2122,7 @@ namespace
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = nullptr;
                         sal_Int32 nColumnRefPos = pColumnRef->count() - 2;
-                        if ( nColumnRefPos >= 0 && o3tl::make_unsigned(nColumnRefPos) < pColumnRef->count() )
+                        if ( nColumnRefPos >= 0 && nColumnRefPos < o3tl::make_signed(pColumnRef->count()) )
                             pParamRef = pColumnRef->getChild(nColumnRefPos);
 
                         if ( SQL_ISRULE(pColumnRef,general_set_fct)

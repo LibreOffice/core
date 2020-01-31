@@ -4024,7 +4024,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     }
 
     sal_uInt64 nFreeMB = nFreeSpace/1048576;
-    return (nFreeMB >= o3tl::make_unsigned(nRequiredSpace));
+    return (o3tl::make_signed(nFreeMB) >= nRequiredSpace);
 #endif // SIMULATE_FULL_DISC
 }
 

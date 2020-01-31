@@ -332,7 +332,7 @@ oslFileError FileHandle_Impl::readAt(
 
         m_offset = nOffset;
 
-        if (o3tl::make_unsigned(m_offset) >= m_size)
+        if (m_offset >= o3tl::make_signed(m_size))
         {
             nBytes = 0;
         }

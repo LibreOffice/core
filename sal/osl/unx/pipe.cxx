@@ -173,7 +173,7 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
         name += OStringLiteral("OSL_PIPE_") + pszPipeName;
     }
 
-    if (o3tl::make_unsigned(name.getLength()) >= sizeof addr.sun_path)
+    if (name.getLength() >= o3tl::make_signed(sizeof addr.sun_path))
     {
         SAL_WARN("sal.osl.pipe", "osl_createPipe: pipe name too long");
         return nullptr;

@@ -804,7 +804,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
     // redraw the invalid fields
     for ( sal_uLong nRelRow = nRelTopRow;
-          nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < o3tl::make_unsigned(nRowCount);
+          nRelRow <= nRelBottomRow && o3tl::make_signed(static_cast<sal_uLong>(nTopRow)+nRelRow) < nRowCount;
           ++nRelRow, aPos.AdjustY(nDataRowHeigt ) )
     {
         // get row
@@ -1360,7 +1360,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     sal_uInt16 nX = 0;
     for ( size_t nCol = 0;
           nCol < mvCols.size() &&
-            ( nX + mvCols[ nCol ]->Width() ) < o3tl::make_unsigned(GetOutputSizePixel().Width());
+            o3tl::make_signed( nX + mvCols[ nCol ]->Width() ) < GetOutputSizePixel().Width();
           ++nCol )
         // is this column visible?
         if ( mvCols[ nCol ]->IsFrozen() || nCol >= nFirstCol )

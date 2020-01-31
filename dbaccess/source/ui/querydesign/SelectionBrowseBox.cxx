@@ -290,7 +290,7 @@ void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo )
     // swap the two columns
     sal_uInt16 nNewPos = GetColumnPos( nColId );
     OTableFields& rFields = getFields();
-    if ( rFields.size() > o3tl::make_unsigned(nNewPos-1) )
+    if ( o3tl::make_signed(rFields.size()) > nNewPos-1 )
     {
         sal_uInt16 nOldPos = 0;
         bool bFoundElem = false;
@@ -889,7 +889,7 @@ bool OSelectionBrowseBox::SaveModified()
     OQueryController& rController = static_cast<OQueryController&>(getDesignView()->getController());
     OTableFieldDescRef pEntry;
     sal_uInt16 nCurrentColumnPos = GetColumnPos(GetCurColumnId());
-    if(getFields().size() > o3tl::make_unsigned(nCurrentColumnPos - 1))
+    if(o3tl::make_signed(getFields().size()) > nCurrentColumnPos - 1)
         pEntry = getEntry(nCurrentColumnPos - 1);
 
     bool bWasEmpty      = pEntry.is() && pEntry->IsEmpty();
@@ -1214,7 +1214,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
 
     OTableFieldDescRef pEntry;
     sal_uInt16 nPos = GetColumnPos(nColumnId);
-    if(getFields().size() > o3tl::make_unsigned(nPos - 1))
+    if(o3tl::make_signed(getFields().size()) > nPos - 1)
         pEntry = getFields()[nPos - 1];
 
     if (!pEntry.is())
@@ -1279,7 +1279,7 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nColumnId )
     OQueryController& rController = static_cast<OQueryController&>(getDesignView()->getController());
 
     sal_uInt16 nPos = GetColumnPos(nColumnId);
-    OSL_ENSURE(getFields().size() > o3tl::make_unsigned(nPos-1),"ID is to great!");
+    OSL_ENSURE(o3tl::make_signed(getFields().size()) > nPos-1,"ID is too great!");
 
     OTableFieldDescRef pDesc = getEntry(static_cast<sal_uInt32>(nPos - 1)) ;
     pDesc->SetColWidth( static_cast<sal_uInt16>(GetColumnWidth(nColumnId)) );    // was not stored this before
@@ -2643,7 +2643,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
 Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     OTableFieldDescRef pEntry;
-    if(getFields().size() > o3tl::make_unsigned(_nColumnPos - 1))
+    if(o3tl::make_signed(getFields().size()) > _nColumnPos - 1)
         pEntry = getFields()[_nColumnPos - 1];
 
     if ( _nRow == BROW_VIS_ROW && pEntry.is() )

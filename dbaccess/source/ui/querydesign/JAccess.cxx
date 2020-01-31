@@ -72,7 +72,7 @@ namespace dbaui
             OJoinTableView::OTableWindowMap::const_iterator aIter = std::next(m_pTableView->GetTabWinMap().begin(), i);
             aRet = aIter->second->GetAccessible();
         }
-        else if( o3tl::make_unsigned(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
+        else if( i - nTableWindowCount < o3tl::make_signed(m_pTableView->getTableConnections().size()) )
             aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
         return aRet;
     }

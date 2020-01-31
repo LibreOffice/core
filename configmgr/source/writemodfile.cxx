@@ -59,7 +59,7 @@ namespace {
 
 OString convertToUtf8(std::u16string_view text) {
     OString s;
-    assert(text.size() <= o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max()));
+    assert(o3tl::make_signed(text.size()) <= std::numeric_limits<sal_Int32>::max());
     if (!rtl_convertUStringToString(
             &s.pData, text.data(), text.size(),
             RTL_TEXTENCODING_UTF8,

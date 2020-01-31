@@ -276,8 +276,8 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     // #144105# protect a little against damaged files
     assert(rHeader.nHeight >= 0);
     if (rHeader.nHeight != 0 && rHeader.nWidth >= 0
-        && (rHeader.nSizeImage / 16 / static_cast<sal_uInt32>(rHeader.nHeight)
-            > o3tl::make_unsigned(rHeader.nWidth)))
+        && (o3tl::make_signed(rHeader.nSizeImage / 16 / static_cast<sal_uInt32>(rHeader.nHeight))
+            > rHeader.nWidth))
     {
         rHeader.nSizeImage = 0;
     }
@@ -930,7 +930,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 256;   //assume generous compression ratio
             nMaxWidth /= aHeader.nHeight;
-            if (nMaxWidth < o3tl::make_unsigned(aHeader.nWidth))
+            if (o3tl::make_signed(nMaxWidth) < aHeader.nWidth)
                 return false;
             break;
         }
@@ -941,7 +941,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
             sal_uInt64 nMaxWidth = pIStm->remainingSize();
             nMaxWidth *= 512;   //assume generous compression ratio
             nMaxWidth /= aHeader.nHeight;
-            if (nMaxWidth < o3tl::make_unsigned(aHeader.nWidth))
+            if (o3tl::make_signed(nMaxWidth) < aHeader.nWidth)
                 return false;
             break;
         }

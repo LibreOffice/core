@@ -222,7 +222,7 @@ namespace dbaui
         {
             OUString sFieldName(m_pListCell->GetSelectedEntry());
             OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
-            if ( rLines.size() <= o3tl::make_unsigned(nRow) )
+            if ( o3tl::make_signed(rLines.size()) <= nRow )
             {
                 rLines.push_back(new OConnectionLineData());
                 nRow = rLines.size() - 1;
@@ -267,7 +267,7 @@ namespace dbaui
     OUString ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
         OUString sText;
-        if ( m_pConnData->GetConnLineDataList().size() > o3tl::make_unsigned(nRow) )
+        if ( o3tl::make_signed(m_pConnData->GetConnLineDataList().size()) > nRow )
         {
             OConnectionLineDataRef pConnLineData = m_pConnData->GetConnLineDataList()[nRow];
             switch( getColumnIdent( nColId ) )

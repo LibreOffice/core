@@ -83,7 +83,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 
     Reference< XAccessible > xChild;
     // search for the child
-    if ( o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
+    if ( i >= o3tl::make_signed(m_aAccessibleChildren.size()) )
         xChild = CreateChild (i);
     else
     {

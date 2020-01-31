@@ -549,7 +549,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
         mbShapesNeedSorting = false;
     }
 
-    if (o3tl::make_unsigned(nIndex) >= maZOrderedShapes.size())
+    if (nIndex >= o3tl::make_signed(maZOrderedShapes.size()))
         return nullptr;
 
     return Get(maZOrderedShapes[nIndex]);
@@ -809,7 +809,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
         std::vector < uno::Reference < drawing::XShape > > aShapes;
         FillShapes(aShapes);
 
-        if (nSelectedChildIndex < 0 || o3tl::make_unsigned(nSelectedChildIndex) >= aShapes.size())
+        if (nSelectedChildIndex < 0 || nSelectedChildIndex >= o3tl::make_signed(aShapes.size()))
             return xAccessible;
 
         SortedShapes::iterator aItr;

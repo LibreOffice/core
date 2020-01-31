@@ -1249,7 +1249,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTextNode* pTextNd = pOutlineNode->GetTextNode();
         if( pTextNd && pTextNd->Len() && pTextNd->HasWriterListeners() &&
-            o3tl::make_unsigned( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
+            pTextNd->GetAttrOutlineLevel() <= o3tl::make_signed(GetLevel()) &&
             pTextNd->getLayoutFrame(pLayout) &&
            !pTextNd->IsHiddenByParaField() &&
            !pTextNd->HasHiddenCharAttribute( true ) &&

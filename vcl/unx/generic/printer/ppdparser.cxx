@@ -885,7 +885,7 @@ void PPDParser::insertKey( std::unique_ptr<PPDKey> pKey )
 
 const PPDKey* PPDParser::getKey( int n ) const
 {
-    return (n >= 0 && o3tl::make_unsigned(n) < m_aOrderedKeys.size()) ? m_aOrderedKeys[n] : nullptr;
+    return (n >= 0 && n < o3tl::make_signed(m_aOrderedKeys.size())) ? m_aOrderedKeys[n] : nullptr;
 }
 
 const PPDKey* PPDParser::getKey( const OUString& rKey ) const
@@ -1581,7 +1581,7 @@ PPDKey::~PPDKey()
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
-    return (n >= 0 && o3tl::make_unsigned(n) < m_aOrderedValues.size()) ? m_aOrderedValues[n] : nullptr;
+    return (n >= 0 && n < o3tl::make_signed(m_aOrderedValues.size())) ? m_aOrderedValues[n] : nullptr;
 }
 
 const PPDValue* PPDKey::getValue( const OUString& rOption ) const

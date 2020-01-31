@@ -172,7 +172,7 @@ namespace DOM
         if (!m_pElement.is()) { return nullptr; }
 
         buildlist(m_pElement->GetNodePtr());
-        if (m_nodevector.size() <= o3tl::make_unsigned(index)) {
+        if (o3tl::make_signed(m_nodevector.size()) <= index) {
             throw RuntimeException();
         }
         Reference< XNode > const xRet(

@@ -621,7 +621,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 AmbiguousIndex nEndInside;
                 sal_Int32 aLoop = bSrchForward ? 0 : postits.size();
 
-                while ((0 <= aLoop) && (o3tl::make_unsigned(aLoop) <= postits.size()))
+                while ((0 <= aLoop) && (aLoop <= o3tl::make_signed(postits.size())))
                 {
                     if (bSrchForward)
                     {

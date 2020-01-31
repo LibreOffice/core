@@ -188,7 +188,7 @@ void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos
 {
     if (Text != cachedText) {
         cachedText = Text;
-        if (m_aNextCellIndex.size() < o3tl::make_unsigned(cachedText.getLength())) {
+        if (o3tl::make_signed(m_aNextCellIndex.size()) < cachedText.getLength()) {
             m_aNextCellIndex.resize(cachedText.getLength());
             m_aPreviousCellIndex.resize(cachedText.getLength());
         }
@@ -210,10 +210,10 @@ void BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const nStartPos
     sal_Int32 start, end, pos;
     pos = start = end = startPos;
 
-    assert(endPos >= 0 && o3tl::make_unsigned(endPos) <= m_aNextCellIndex.size());
+    assert(endPos >= 0 && endPos <= o3tl::make_signed(m_aNextCellIndex.size()));
     while (pos < endPos) {
         end += getACell(str, start, endPos);
-        assert(end >= 0 && o3tl::make_unsigned(end) <= m_aNextCellIndex.size());
+        assert(end >= 0 && end <= o3tl::make_signed(m_aNextCellIndex.size()));
         while (pos < end) {
             m_aNextCellIndex[pos] = end;
             m_aPreviousCellIndex[pos] = start;

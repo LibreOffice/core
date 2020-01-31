@@ -1228,7 +1228,7 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
     if (nEntry < 0)
         return OUString();
 
-    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
+    if (nEntry < o3tl::make_signed(aCurEntryList.size()))
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
         const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1248,7 +1248,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
 {
     if (nEntry < 0)
         return 0;
-    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
+    if (nEntry < o3tl::make_signed(aCurEntryList.size()))
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
 
@@ -1282,7 +1282,7 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
     if (nEntry < 0)
         return false;
-    if (o3tl::make_unsigned(nEntry) < aCurEntryList.size())
+    if (nEntry < o3tl::make_signed(aCurEntryList.size()))
     {
         sal_uInt32 nMyNfEntry = aCurEntryList[nEntry];
         const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1310,7 +1310,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 
     if (!aCurrencyFormatList.empty())
     {
-        if (aCurrencyFormatList.size() > o3tl::make_unsigned(nEntry))
+        if (o3tl::make_signed(aCurrencyFormatList.size()) > nEntry)
             return aCurrencyFormatList[nEntry];
     }
     else
@@ -1335,7 +1335,7 @@ short SvxNumberFormatShell::GetListPos4Entry( sal_uInt32 nIdx, const OUString& r
     if (nIdx != NUMBERFORMAT_ENTRY_NEW_CURRENCY)
     {
         // Check list size against return type limit.
-        if (aCurEntryList.size() <= o3tl::make_unsigned(::std::numeric_limits<short>::max()))
+        if (o3tl::make_signed(aCurEntryList.size()) <= ::std::numeric_limits<short>::max())
         {
             for (size_t i = 0; i < aCurEntryList.size(); ++i)
             {

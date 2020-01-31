@@ -3681,7 +3681,7 @@ bool SwEntryBrowseBox::SeekRow( long nRow )
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     OUString pRet;
-    if (o3tl::make_unsigned(nRow) < m_Entries.size())
+    if (nRow < o3tl::make_signed(m_Entries.size()))
     {
         const AutoMarkEntry* pEntry = m_Entries[ nRow ].get();
         switch(nColumn)

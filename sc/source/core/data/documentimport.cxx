@@ -60,7 +60,7 @@ struct ScDocumentImportImpl
 
     bool isValid( size_t nTab, size_t nCol )
     {
-        return (nTab <= o3tl::make_unsigned(MAXTAB) && nCol <= o3tl::make_unsigned(mrDoc.MaxCol()));
+        return (o3tl::make_signed(nTab) <= MAXTAB && o3tl::make_signed(nCol) <= mrDoc.MaxCol());
     }
 
     ColAttr* getColAttr( size_t nTab, size_t nCol )
@@ -83,7 +83,7 @@ struct ScDocumentImportImpl
         if (!isValid(nTab, nCol))
             return nullptr;
 
-        if (o3tl::make_unsigned(nTab) >= maBlockPosSet.size())
+        if (nTab >= o3tl::make_signed(maBlockPosSet.size()))
         {
             for (SCTAB i = maBlockPosSet.size(); i <= nTab; ++i)
                 maBlockPosSet.emplace_back(mrDoc, i);

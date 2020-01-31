@@ -805,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(*pStream);
     OString aExpected("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<svg");
-    CPPUNIT_ASSERT(aMemoryStream.GetSize() > o3tl::make_unsigned(aExpected.getLength()));
+    CPPUNIT_ASSERT(o3tl::make_signed(aMemoryStream.GetSize()) > aExpected.getLength());
 
     // This failed, there was a '<!DOCTYPE' line between the xml and the svg
     // one, causing a validation error.

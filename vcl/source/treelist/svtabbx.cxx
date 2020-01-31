@@ -299,7 +299,7 @@ OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
     DBG_ASSERT( pEntry, "SvTabListBox::GetCellText(): Invalid Entry" );
     OUString aResult;
-    if (pEntry && pEntry->ItemCount() > o3tl::make_unsigned(nCol+1))
+    if (pEntry && o3tl::make_signed(pEntry->ItemCount()) > nCol+1)
     {
         const SvLBoxItem& rStr = pEntry->GetItem( nCol + 1 );
         if (rStr.GetType() == SvLBoxItemType::String)

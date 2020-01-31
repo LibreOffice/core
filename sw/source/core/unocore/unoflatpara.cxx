@@ -251,7 +251,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwTextNode *const pOldTextNode = GetTextNode();
 
-    if (nPos < 0 || pOldTextNode->Len() < nPos || nLen < 0 || o3tl::make_unsigned(pOldTextNode->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    if (nPos < 0 || pOldTextNode->Len() < nPos || nLen < 0 || pOldTextNode->Len() < o3tl::make_signed(static_cast<sal_uInt32>(nPos) + nLen))
     {
         throw lang::IllegalArgumentException();
     }
@@ -284,7 +284,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     if (!GetTextNode())
         return;
 
-    if (nPos < 0 || GetTextNode()->Len() < nPos || nLen < 0 || o3tl::make_unsigned(GetTextNode()->Len()) < static_cast<sal_uInt32>(nPos) + nLen)
+    if (nPos < 0 || GetTextNode()->Len() < nPos || nLen < 0 || GetTextNode()->Len() < o3tl::make_signed(static_cast<sal_uInt32>(nPos) + nLen))
     {
         throw lang::IllegalArgumentException();
     }

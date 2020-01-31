@@ -1596,7 +1596,7 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos,
 
     const size_t nMapCount = ::lcl_GetFrameMapCount(pMap);
 
-    if (o3tl::make_unsigned(nMapPos) >= nMapCount)
+    if (nMapPos >= o3tl::make_signed(nMapCount))
         return 0;
 
     // i#22341 special handling also for map <aVCharMap>,

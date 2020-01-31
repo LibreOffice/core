@@ -361,8 +361,8 @@ sal_Int32 Outliner::GetBulletsNumberingStatus() const
 
 std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
-    if ( static_cast<sal_uLong>(nStartPara) + nCount >
-            o3tl::make_unsigned(pParaList->GetParagraphCount()) )
+    if ( o3tl::make_signed(static_cast<sal_uLong>(nStartPara) + nCount) >
+            pParaList->GetParagraphCount() )
         nCount = pParaList->GetParagraphCount() - nStartPara;
 
     // When a new OutlinerParaObject is created because a paragraph is just being deleted,

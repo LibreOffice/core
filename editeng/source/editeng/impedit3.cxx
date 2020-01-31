@@ -3411,7 +3411,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     break;
                                                 }
 
-                                                if(nStart < o3tl::make_unsigned(nIndex))
+                                                if(o3tl::make_signed(nStart) < nIndex)
                                                 {
                                                     nStart = nIndex;
                                                 }

@@ -492,7 +492,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 }
             }
             // do not compensate rounding errors here
-            if ( (nAbsItems < o3tl::make_unsigned(std::abs( nSizeDelta ))) && nSizeWinSize )
+            if ( (o3tl::make_signed(nAbsItems) < std::abs( nSizeDelta )) && nSizeWinSize )
             {
                 long nNewSizeWinSize = 0;
 
@@ -1679,7 +1679,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
     bool            bPropSmaller;
 
     mnMouseModifier = rMEvt.GetModifier();
-    bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (o3tl::make_unsigned(mnSplitPos+1) < mpSplitSet->mvItems.size());
+    bPropSmaller = (mnMouseModifier & KEY_SHIFT) && (mnSplitPos+1 < o3tl::make_signed(mpSplitSet->mvItems.size()));
 
     // here we can set the maximum size
     StartSplit();

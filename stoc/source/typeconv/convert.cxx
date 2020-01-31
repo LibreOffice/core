@@ -302,7 +302,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_UNSIGNED_HYPER:
     {
         auto const n = *o3tl::forceAccess<sal_uInt64>(rAny);
-        if ((min < 0 || n >= o3tl::make_unsigned(min)) && // lower bound
+        if ((min < 0 || o3tl::make_signed(n) >= min) && // lower bound
             n <= max)                            // upper bound
         {
             return static_cast<sal_Int64>(n);
@@ -349,7 +349,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         nRet = nVal;
-        if (nVal >= min && (nVal < 0 || o3tl::make_unsigned(nVal) <= max))
+        if (nVal >= min && (nVal < 0 || nVal <= o3tl::make_signed(max)))
             return nRet;
         throw CannotConvertException(
             "STRING value out of range!",
@@ -362,7 +362,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
-    if (nRet >= min && (nRet < 0 || o3tl::make_unsigned(nRet) <= max))
+    if (nRet >= min && (nRet < 0 || nRet <= o3tl::make_signed(max)))
         return nRet;
     throw CannotConvertException(
         "VALUE is out of range!",

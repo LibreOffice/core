@@ -381,7 +381,7 @@ OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 
 OUString FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    if ( (nFormat < aImport.size()) && (o3tl::make_unsigned(nEntry) < aImport[ nFormat ].lExtensionList.size()) )
+    if ( (nFormat < aImport.size()) && (nEntry < o3tl::make_signed(aImport[ nFormat ].lExtensionList.size())) )
         return aImport[ nFormat ].lExtensionList[ nEntry ];
     return OUString();
 }
@@ -506,7 +506,7 @@ OUString FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 
 OUString FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    if ( (nFormat < aExport.size()) && (o3tl::make_unsigned(nEntry) < aExport[ nFormat ].lExtensionList.size()) )
+    if ( (nFormat < aExport.size()) && (nEntry < o3tl::make_signed(aExport[ nFormat ].lExtensionList.size())) )
         return aExport[ nFormat ].lExtensionList[ nEntry ];
     return OUString();
 }

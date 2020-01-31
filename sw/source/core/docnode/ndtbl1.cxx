@@ -1364,7 +1364,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         if ( nWidth && pCell->getFrameArea().Width() )
         {
             long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
-            if ( o3tl::make_unsigned(nTmp) > rToFill[i] )
+            if ( nTmp > o3tl::make_signed(rToFill[i]) )
                 rToFill[i] = sal_uInt16(nTmp);
         }
     }

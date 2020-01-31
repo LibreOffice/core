@@ -713,7 +713,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
         default:
             break;
     }
-    nRet = (nDiff < 0 || nRet >= o3tl::make_unsigned(nDiff))
+    nRet = (nDiff < 0 || o3tl::make_signed(nRet) >= nDiff)
         ? nRet - nDiff : 0;
         //TODO: overflow in case nDiff < 0 and nRet - nDiff > SAL_MAX_UINT32
 

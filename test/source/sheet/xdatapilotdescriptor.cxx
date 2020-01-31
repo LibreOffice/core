@@ -178,7 +178,7 @@ void XDataPilotDescriptor::testGetHiddenFields()
 void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > const & xIndex, sal_Int32 nIndex )
 {
     CPPUNIT_ASSERT(xIndex.is());
-    CPPUNIT_ASSERT(maFieldNames.size() >= o3tl::make_unsigned(nIndex));
+    CPPUNIT_ASSERT(o3tl::make_signed(maFieldNames.size()) >= nIndex);
 
     for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
     {

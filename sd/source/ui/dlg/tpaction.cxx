@@ -667,7 +667,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
     int nPos = m_xLbAction->get_active();
-    if (nPos != -1 && o3tl::make_unsigned(nPos) < maCurrentActions.size())
+    if (nPos != -1 && nPos < o3tl::make_signed(maCurrentActions.size()))
         eCA = maCurrentActions[ nPos ];
     return eCA;
 }
@@ -753,7 +753,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         case presentation::ClickAction_VERB:
             {
                 const int nPos = m_xLbOLEAction->get_selected_index();
-                if (nPos != -1 && o3tl::make_unsigned(nPos) < aVerbVector.size() )
+                if (nPos != -1 && nPos < o3tl::make_signed(aVerbVector.size()) )
                     aStr = OUString::number( aVerbVector[ nPos ] );
                 return aStr;
             }

@@ -438,7 +438,7 @@ void lcl_clear( STLCONTAINER& i_container )
             OSL_ENSURE( false, "SortableGridDataModel::rowsRemoved: missing implementation - removal of multiple rows!" );
             needReIndex = true;
         }
-        else if ( o3tl::make_unsigned( i_event.FirstRow ) >= m_privateToPublicRowIndex.size() )
+        else if ( i_event.FirstRow >= o3tl::make_signed( m_privateToPublicRowIndex.size() ) )
         {
             OSL_ENSURE( false, "SortableGridDataModel::rowsRemoved: inconsistent/wrong data!" );
             needReIndex = true;
@@ -892,7 +892,7 @@ void lcl_clear( STLCONTAINER& i_container )
             // no need to translate anything
             return i_publicRowIndex;
 
-        ENSURE_OR_RETURN( o3tl::make_unsigned( i_publicRowIndex ) < m_publicToPrivateRowIndex.size(),
+        ENSURE_OR_RETURN( i_publicRowIndex < o3tl::make_signed( m_publicToPrivateRowIndex.size() ),
             "SortableGridDataModel::impl_getPrivateRowIndex_throw: inconsistency!", i_publicRowIndex );
                 // obviously the translation table contains too few elements - it should have exactly |getRowCount()|
                 // elements
@@ -910,7 +910,7 @@ void lcl_clear( STLCONTAINER& i_container )
         if ( i_privateRowIndex < 0 )
             return i_privateRowIndex;
 
-        ENSURE_OR_RETURN( o3tl::make_unsigned( i_privateRowIndex ) < m_privateToPublicRowIndex.size(),
+        ENSURE_OR_RETURN( i_privateRowIndex < o3tl::make_signed( m_privateToPublicRowIndex.size() ),
             "SortableGridDataModel::impl_getPublicRowIndex_nothrow: invalid index!", i_privateRowIndex );
 
         return m_privateToPublicRowIndex[ i_privateRowIndex ];

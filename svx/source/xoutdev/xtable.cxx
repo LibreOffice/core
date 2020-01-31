@@ -114,7 +114,7 @@ XPropertyList::XPropertyList(
 
 bool XPropertyList::isValidIdx(long nIndex) const
 {
-    return (nIndex >= 0 && o3tl::make_unsigned(nIndex) < maList.size());
+    return (nIndex >= 0 && nIndex < o3tl::make_signed(maList.size()));
 }
 
 

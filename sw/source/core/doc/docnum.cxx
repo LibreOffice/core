@@ -519,7 +519,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     ++aEndRg;
 
     // calculation of the new position
-    if( nOffset < 0 && nCurrentPos < o3tl::make_unsigned(-nOffset) )
+    if( nOffset < 0 && o3tl::make_signed(nCurrentPos) < -nOffset )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
     else if( nCurrentPos + nOffset >= GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();
@@ -1988,7 +1988,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
     else
     {
         // Impossible to move to negative index
-        if( o3tl::make_unsigned(std::abs( nOffset )) > nStIdx)
+        if( std::abs( nOffset ) > o3tl::make_signed(nStIdx) )
             return false;
 
         nInEndIdx = nStIdx - 1;

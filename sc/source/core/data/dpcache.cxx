@@ -963,7 +963,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
     const Field& rField = *maFields[nDim];
-    if (o3tl::make_unsigned(nRow) >= rField.maData.size())
+    if (nRow >= o3tl::make_signed(rField.maData.size()))
     {
         // nRow is in the trailing empty rows area.
         if (bRepeatIfEmpty)
@@ -1152,7 +1152,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 
     // group field.
     nDim -= mnColumnCount;
-    if (o3tl::make_unsigned(nDim) < maGroupFields.size())
+    if (nDim < o3tl::make_signed(maGroupFields.size()))
     {
         const ScDPItemDataVec& rGI = maGroupFields[nDim]->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)

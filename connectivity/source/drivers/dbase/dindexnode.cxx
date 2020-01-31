@@ -246,7 +246,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
         // How many nodes are being inserted?
         // Enough, then we can fill the page to the brim
         ONDXNode aInnerNode;
-        if (!IsLeaf() || nRowsLeft < o3tl::make_unsigned(rIndex.GetMaxNodes() / 2))
+        if (!IsLeaf() || o3tl::make_signed(nRowsLeft) < rIndex.GetMaxNodes() / 2)
             aInnerNode = Split(*aNewPage);
         else
         {

@@ -183,7 +183,7 @@ void SelectorListBox::Select()
     if ( !IsTravelSelect() )
     {
         const sal_Int32 nPos = GetSelectedEntryPos();
-        if( o3tl::make_unsigned(nPos) < m_aEntries.size() )
+        if( nPos < o3tl::make_signed(m_aEntries.size()) )
         {
             ObjectIdentifier aOID = m_aEntries[nPos].OID;
             Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartController.get(), uno::UNO_QUERY );

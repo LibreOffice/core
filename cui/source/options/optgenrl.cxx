@@ -403,11 +403,11 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, weld::Entry&, rEdit, void )
     {
         OUString sShortName = rShortName.xEdit->get_text();
         // clear short name if it contains more characters than the number of initials
-        if (o3tl::make_unsigned(sShortName.getLength()) > nInits)
+        if (sShortName.getLength() > o3tl::make_signed(nInits))
         {
             rShortName.xEdit->set_text(OUString());
         }
-        while (o3tl::make_unsigned(sShortName.getLength()) < nInits)
+        while (sShortName.getLength() < o3tl::make_signed(nInits))
             sShortName += " ";
         OUString sName = rEdit.get_text();
         OUString sLetter = sName.isEmpty()

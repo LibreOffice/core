@@ -237,7 +237,7 @@ void PresenterTextView::MoveCaret (
                             nCharacterIndex = 0;
                             nRemainingDistance = 0;
                         }
-                        else if (o3tl::make_unsigned(nParagraphIndex) >= maParagraphs.size())
+                        else if (nParagraphIndex >= o3tl::make_signed(maParagraphs.size()))
                         {
                             nParagraphIndex = maParagraphs.size()-1;
                             pParagraph = GetParagraph(nParagraphIndex);
@@ -621,7 +621,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
 
     if (nIndex < 0)
         return -1;
-    else if (o3tl::make_unsigned(nIndex)>=maWordBoundaries.size())
+    else if (nIndex>=o3tl::make_signed(maWordBoundaries.size()))
         return -1;
     else
         return maWordBoundaries[nIndex];

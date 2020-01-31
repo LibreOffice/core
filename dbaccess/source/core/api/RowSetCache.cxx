@@ -881,7 +881,7 @@ void ORowSetCache::moveWindow()
             const sal_Int32 nOverlapSize = m_nEndPos - m_nStartPos;
             const sal_Int32 nStartPosOffset = m_nStartPos - nNewStartPos; // by how much m_nStartPos moves
             m_nStartPos = nNewStartPos;
-            OSL_ENSURE( o3tl::make_unsigned(nOverlapSize) <= m_pMatrix->size(), "new window end is after end of cache matrix!" );
+            OSL_ENSURE( nOverlapSize <= o3tl::make_signed(m_pMatrix->size()), "new window end is after end of cache matrix!" );
             // the first position in m_pMatrix whose data we don't keep;
             // content will be moved to m_pMatrix.begin()
             ORowSetMatrix::iterator aEnd (m_pMatrix->begin() + nOverlapSize);

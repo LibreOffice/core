@@ -571,7 +571,7 @@ bool DataBrowser::MayMoveLeftColumns() const
     {
         sal_Int32 nColIndex(0);
         if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders, &nColIndex ))
-            return (o3tl::make_unsigned( nColIndex ) <= (m_aSeriesHeaders.size() - 1)) && (static_cast< sal_uInt32 >( nColIndex ) != 0);
+            return (nColIndex <= o3tl::make_signed(m_aSeriesHeaders.size() - 1)) && (static_cast< sal_uInt32 >( nColIndex ) != 0);
     }
 
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
@@ -588,7 +588,7 @@ bool DataBrowser::MayMoveRightColumns() const
     {
         sal_Int32 nColIndex(0);
         if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders, &nColIndex ))
-            return (o3tl::make_unsigned( nColIndex ) < (m_aSeriesHeaders.size() - 1));
+            return (nColIndex < o3tl::make_signed(m_aSeriesHeaders.size() - 1));
     }
 
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );

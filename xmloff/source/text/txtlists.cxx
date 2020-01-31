@@ -370,7 +370,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     if (static_cast<sal_uInt16>(io_rLevel) + 1U > rNPList.size()) {
         // new level: need to enlarge
         for (size_t i = rNPList.size();
-                i < o3tl::make_unsigned(io_rLevel); ++i)
+                o3tl::make_signed(i) < io_rLevel; ++i)
         {
             NumParaList_t::value_type const rule(rNPList.back());
             rNPList.push_back(rule);
@@ -389,7 +389,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
         }
     }
     // remember the list id
-    if (mLastNumberedParagraphs.size() <= o3tl::make_unsigned(io_rLevel)) {
+    if (o3tl::make_signed(mLastNumberedParagraphs.size()) <= io_rLevel) {
         mLastNumberedParagraphs.resize(io_rLevel+1);
     }
     mLastNumberedParagraphs[io_rLevel] = std::make_pair(i_StyleName, i_ListId);

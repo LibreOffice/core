@@ -577,17 +577,17 @@ SalEvent AquaSalFrame::PreparePosSize(long nX, long nY, long nWidth, long nHeigh
         if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
         {
             maGeometry.nWidth = nWidth;
-            if (mnMaxWidth > 0 && maGeometry.nWidth > o3tl::make_unsigned(mnMaxWidth))
+            if (mnMaxWidth > 0 && o3tl::make_signed(maGeometry.nWidth) > mnMaxWidth)
                 maGeometry.nWidth = mnMaxWidth;
-            if (mnMinWidth > 0 && maGeometry.nWidth < o3tl::make_unsigned(mnMinWidth))
+            if (mnMinWidth > 0 && o3tl::make_signed(maGeometry.nWidth) < mnMinWidth)
                 maGeometry.nWidth = mnMinWidth;
         }
         if (nFlags & SAL_FRAME_POSSIZE_HEIGHT)
         {
             maGeometry.nHeight = nHeight;
-            if (mnMaxHeight > 0 && maGeometry.nHeight > o3tl::make_unsigned(mnMaxHeight))
+            if (mnMaxHeight > 0 && o3tl::make_signed(maGeometry.nHeight) > mnMaxHeight)
                 maGeometry.nHeight = mnMaxHeight;
-            if (mnMinHeight > 0 && maGeometry.nHeight < o3tl::make_unsigned(mnMinHeight))
+            if (mnMinHeight > 0 && o3tl::make_signed(maGeometry.nHeight) < mnMinHeight)
                 maGeometry.nHeight = mnMinHeight;
         }
         if (nEvent != SalEvent::NONE)
@@ -784,7 +784,7 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
         {
-            if( nDisplay >= 0 && o3tl::make_unsigned(nDisplay) < [pScreens count] )
+            if( nDisplay >= 0 && nDisplay < o3tl::make_signed([pScreens count]) )
                 pScreen = [pScreens objectAtIndex: nDisplay];
             else
             {

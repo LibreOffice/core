@@ -1029,7 +1029,7 @@ bool ScDocFunc::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCel
     ScDocument& rDoc = rDocShell.GetDocument();
 
     const size_t nLength = rCells.size();
-    if (rPos.Row() + nLength - 1 > o3tl::make_unsigned(rDoc.MaxRow()))
+    if (o3tl::make_signed(rPos.Row() + nLength - 1) > rDoc.MaxRow())
         // out of bound
         return false;
 

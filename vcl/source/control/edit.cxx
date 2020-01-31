@@ -471,7 +471,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     if (nLen)
     {
-        if (o3tl::make_unsigned(2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
+        if (2 * nLen > o3tl::make_signed(SAL_N_ELEMENTS(nDXBuffer)))
         {
             pDXBuffer.reset(new long[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
@@ -1060,7 +1060,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     if( !aText.isEmpty() )
     {
-        if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+        if( 2*aText.getLength() > o3tl::make_signed(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
@@ -1181,7 +1181,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     long   nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
     long*  pDX = nDXBuffer;
-    if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+    if( 2*aText.getLength() > o3tl::make_signed(SAL_N_ELEMENTS(nDXBuffer)) )
     {
         pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
@@ -2112,7 +2112,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
             if( !aText.isEmpty() )
             {
-                if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+                if( 2*aText.getLength() > o3tl::make_signed(SAL_N_ELEMENTS(nDXBuffer)) )
                 {
                     pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();

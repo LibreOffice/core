@@ -135,11 +135,11 @@ static OString makeTempName(const OString& prefix)
 
 #if defined(_WIN32) || defined(SAL_UNX)
 
-    OSL_ASSERT( sizeof(tmpFilePattern) >
-                o3tl::make_unsigned( tmpPath.getLength()
+    OSL_ASSERT( o3tl::make_signed(sizeof(tmpFilePattern)) >
+                tmpPath.getLength()
                            + RTL_CONSTASCII_LENGTH( PATH_SEPARATOR )
                            + prefix.getLength()
-                           + RTL_CONSTASCII_LENGTH( "XXXXXX") ) );
+                           + RTL_CONSTASCII_LENGTH( "XXXXXX") );
 
     tmpFilePattern[ sizeof(tmpFilePattern)-1 ] = '\0';
     strncpy(tmpFilePattern, tmpPath.getStr(), sizeof(tmpFilePattern)-1);

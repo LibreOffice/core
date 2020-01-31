@@ -459,7 +459,7 @@ namespace frm
             ::std::vector< OUString > aProposals;
             aProposals.reserve(16);
 
-            while ( xListCursor->next() && ( aProposals.size() < o3tl::make_unsigned( SHRT_MAX ) ) )
+            while ( xListCursor->next() && ( o3tl::make_signed( aProposals.size() ) < SHRT_MAX ) )
             {
                 const OUString sCurrentValue = aFormatter.getFormattedValue();
                 aProposals.push_back( sCurrentValue );

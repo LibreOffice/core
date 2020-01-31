@@ -367,7 +367,7 @@ namespace dbaui
     {
         // get the type from the entry data
         const sal_Int32 nSelected = _rBox.get_active();
-        if (o3tl::make_unsigned(nSelected) >= m_aEmbeddedURLPrefixes.size() )
+        if (nSelected >= o3tl::make_signed(m_aEmbeddedURLPrefixes.size()))
         {
             SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;
@@ -387,7 +387,7 @@ namespace dbaui
         const sal_Int32 nSelected = _rBox.get_active();
         if (nSelected == -1)
             return;
-        if (o3tl::make_unsigned(nSelected) >= m_aURLPrefixes.size() )
+        if (nSelected >= o3tl::make_signed(m_aURLPrefixes.size()))
         {
             SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;

@@ -421,7 +421,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event 
         return;
 
     auto& rTermItems = pFormItem->GetChildren();
-    const bool bValidIndex = ( Event.DisjunctiveTerm >= 0 ) && ( o3tl::make_unsigned(Event.DisjunctiveTerm) < rTermItems.size() );
+    const bool bValidIndex = ( Event.DisjunctiveTerm >= 0 ) && ( Event.DisjunctiveTerm < o3tl::make_signed(rTermItems.size()) );
     OSL_ENSURE( bValidIndex, "FmFilterAdapter::disjunctiveTermRemoved: invalid term index!" );
     if ( !bValidIndex )
         return;
@@ -456,7 +456,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
         return;
 
     const sal_Int32 nInsertPos = Event.DisjunctiveTerm;
-    bool bValidIndex = ( nInsertPos >= 0 ) && ( o3tl::make_unsigned(nInsertPos) <= pFormItem->GetChildren().size() );
+    bool bValidIndex = ( nInsertPos >= 0 ) && ( nInsertPos <= o3tl::make_signed(pFormItem->GetChildren().size()) );
     if ( !bValidIndex )
     {
         OSL_FAIL( "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
@@ -658,7 +658,7 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
     {
         Reference< XFilterController > xFilterController( m_xController, UNO_QUERY_THROW );
         const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
-        if ( pItem->GetChildren().size() > o3tl::make_unsigned(nActiveTerm) )
+        if ( o3tl::make_signed(pItem->GetChildren().size()) > nActiveTerm )
         {
             SetCurrentItems( static_cast< FmFilterItems* >( pItem->GetChildren()[ nActiveTerm ].get() ) );
         }

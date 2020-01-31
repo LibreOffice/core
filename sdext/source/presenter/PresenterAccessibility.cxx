@@ -1298,7 +1298,7 @@ sal_Int32 SAL_CALL AccessibleRelationSet::getRelationCount()
 
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex)
 {
-    if (nIndex<0 && o3tl::make_unsigned(nIndex)>=maRelations.size())
+    if (nIndex<0 && nIndex>=o3tl::make_signed(maRelations.size()))
         return AccessibleRelation();
     else
         return maRelations[nIndex];

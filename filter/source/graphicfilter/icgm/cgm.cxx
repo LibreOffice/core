@@ -95,7 +95,7 @@ sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (pSource > mpEndValidSource || o3tl::make_unsigned(mpEndValidSource - pSource) < nPrecision)
+    if (pSource > mpEndValidSource || mpEndValidSource - pSource < o3tl::make_signed(nPrecision))
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -127,7 +127,7 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
-    if (pSource > mpEndValidSource || o3tl::make_unsigned(mpEndValidSource - pSource) < nPrecision)
+    if (pSource > mpEndValidSource || mpEndValidSource - pSource < o3tl::make_signed(nPrecision))
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     mnParaSize += nPrecision;
     switch( nPrecision )
@@ -182,7 +182,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     const bool bCompatible = false;
 #endif
 
-    if (o3tl::make_unsigned(mpEndValidSource - (mpSource + mnParaSize)) < nRealSize)
+    if (mpEndValidSource - (mpSource + mnParaSize) < o3tl::make_signed(nRealSize))
         throw css::uno::Exception("attempt to read past end of input", nullptr);
 
     if ( bCompatible )

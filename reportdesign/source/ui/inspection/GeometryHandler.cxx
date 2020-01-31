@@ -1258,7 +1258,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
             {
                 sal_Int16 nParagraphAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
                 aPropertyValue >>= nParagraphAdjust;
-                if (o3tl::make_unsigned(nParagraphAdjust) < SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1)
+                if (nParagraphAdjust < o3tl::make_signed(SAL_N_ELEMENTS(RID_STR_PARAADJUST_CONST) - 1))
                     aControlValue <<= RptResId(RID_STR_PARAADJUST_CONST[nParagraphAdjust]);
             }
             break;

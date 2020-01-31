@@ -115,7 +115,7 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
 {
       size_t nnewsize = ptext->nSize;
 
-      while ( nnewsize <= o3tl::make_unsigned(nnewlimit) )
+      while ( o3tl::make_signed(nnewsize) <= nnewlimit)
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;

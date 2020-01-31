@@ -489,9 +489,9 @@ uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
                                             sal_Int32 nExt )
 {
-    OSL_ENSURE( o3tl::make_unsigned( nRowOrCol ) < m_aSelected.size(),
+    OSL_ENSURE( nRowOrCol < o3tl::make_signed( m_aSelected.size() ),
              "index too large" );
-    OSL_ENSURE( o3tl::make_unsigned( nRowOrCol+nExt ) <= m_aSelected.size(),
+    OSL_ENSURE( nRowOrCol+nExt <= o3tl::make_signed( m_aSelected.size() ),
              "extent too large" );
     while( nExt )
     {

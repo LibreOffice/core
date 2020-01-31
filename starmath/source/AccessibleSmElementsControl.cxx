@@ -250,7 +250,7 @@ void AccessibleSmElementsControl::selectAccessibleChild(sal_Int32 nChildIndex)
     OExternalLockGuard aGuard(this);
 
     if ((!m_pControl) || nChildIndex < 0
-        || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size())
+        || nChildIndex >= o3tl::make_signed(m_aAccessibleChildren.size()))
         throw lang::IndexOutOfBoundsException();
 
     m_pControl->setItemHighlighted(nChildIndex);
@@ -260,7 +260,7 @@ sal_Bool AccessibleSmElementsControl::isAccessibleChildSelected(sal_Int32 nChild
 {
     OExternalLockGuard aGuard(this);
     if ((!m_pControl) || nChildIndex < 0
-        || o3tl::make_unsigned(nChildIndex) >= m_aAccessibleChildren.size())
+        || nChildIndex >= o3tl::make_signed(m_aAccessibleChildren.size()))
         throw lang::IndexOutOfBoundsException();
 
     return (m_pControl->itemHighlighted() == nChildIndex);

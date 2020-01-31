@@ -197,7 +197,7 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
     if( nIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
-    if( m_aAllAxis[ nDimensionIndex ].size() < o3tl::make_unsigned( nIndex+1 ))
+    if( o3tl::make_signed( m_aAllAxis[ nDimensionIndex ].size() ) < nIndex+1 )
     {
         m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
         m_aAllAxis[ nDimensionIndex ][nIndex] = nullptr;

@@ -518,7 +518,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         if (IsError())
             break;
     }
-    if( nPos > o3tl::make_unsigned(SBX_MAXINDEX32) )
+    if( o3tl::make_signed(nPos) > SBX_MAXINDEX32 )
     {
         SetError( ERRCODE_BASIC_OUT_OF_RANGE );
         nPos = 0;

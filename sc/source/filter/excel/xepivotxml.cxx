@@ -59,7 +59,7 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
         {
             const ScDPCache::IndexArrayType* pArray = rCache.GetFieldIndexArray(nField);
             assert(pArray);
-            assert(o3tl::make_unsigned(i) < pArray->size());
+            assert(i < o3tl::make_signed(pArray->size()));
 
             // We are using XML_x reference (like: <x v="0"/>), instead of values here (eg: <s v="No Discount"/>).
             // That's why in SavePivotCacheXml method, we need to list all items.

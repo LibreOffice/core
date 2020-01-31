@@ -213,7 +213,7 @@ namespace toolkit {
         void lcl_checkIndex( const AnimatedImagesControlModel_Data& i_data, const sal_Int32 i_index, const Reference< XInterface >& i_context,
             const bool i_forInsert = false )
         {
-            if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) > i_data.aImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
+            if ( ( i_index < 0 ) || ( i_index > o3tl::make_signed( i_data.aImageSets.size() + ( i_forInsert ? 1 : 0 ) ) ) )
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 

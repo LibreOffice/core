@@ -52,7 +52,7 @@ using namespace ::com::sun::star::accessibility;
 
 FrameBorderType GetFrameBorderTypeFromIndex( size_t nIndex )
 {
-    DBG_ASSERT( nIndex < o3tl::make_unsigned(FRAMEBORDERTYPE_COUNT),
+    DBG_ASSERT( o3tl::make_signed(nIndex) < FRAMEBORDERTYPE_COUNT,
         "svx::GetFrameBorderTypeFromIndex - invalid index" );
     return static_cast< FrameBorderType >( nIndex + 1 );
 }

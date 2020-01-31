@@ -50,7 +50,7 @@ sal_Int32
 ToxWhitespaceStripper::GetPositionInStrippedString(sal_Int32 pos) const
 {
     assert(0 <= pos);
-    if (o3tl::make_unsigned(pos) >= mNewPositions.size()) {
+    if (pos >= o3tl::make_signed(mNewPositions.size())) {
         // TODO probably this should assert, not just warn?
         SAL_WARN("sw.core", "Requested position of TOX entry text which does not exist. "
                             "Maybe the formatting hint is corrupt?");
