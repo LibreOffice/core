@@ -156,7 +156,8 @@ class DocumentSettingManager :
     bool mbLastBrowseMode                           : 1;
     bool mbDisableOffPagePositioning; // tdf#112443
     bool mbEmptyDbFieldHidesPara;
-    bool mbProtectBookmarksAndFields;
+    bool mbProtectBookmarks;
+    bool mbProtectFields;
 
 public:
 

@@ -137,7 +137,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_SUBTRACT_FLYS,
     HANDLE_DISABLE_OFF_PAGE_POSITIONING,
     HANDLE_EMPTY_DB_FIELD_HIDES_PARA,
-    HANDLE_PROTECT_BOOKMARKS_AND_FIELDS,
+    HANDLE_PROTECT_BOOKMARKS,
+    HANDLE_PROTECT_FIELDS,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -217,7 +218,8 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("SubtractFlysAnchoredAtFlys"),       HANDLE_SUBTRACT_FLYS,         cppu::UnoType<bool>::get(),           0},
         { OUString("DisableOffPagePositioning"),       HANDLE_DISABLE_OFF_PAGE_POSITIONING,         cppu::UnoType<bool>::get(),           0},
         { OUString("EmptyDbFieldHidesPara"), HANDLE_EMPTY_DB_FIELD_HIDES_PARA, cppu::UnoType<bool>::get(), 0 },
-        { OUString("ProtectBookmarksAndFields"), HANDLE_PROTECT_BOOKMARKS_AND_FIELDS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ProtectBookmarks"), HANDLE_PROTECT_BOOKMARKS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("ProtectFields"), HANDLE_PROTECT_FIELDS, cppu::UnoType<bool>::get(), 0 },
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -892,12 +894,22 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
-        case HANDLE_PROTECT_BOOKMARKS_AND_FIELDS:
+        case HANDLE_PROTECT_BOOKMARKS:
         {
             bool bTmp;
             if (rValue >>= bTmp)
             {
-                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS,
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_BOOKMARKS,
+                                                       bTmp);
+            }
+        }
+        break;
+        case HANDLE_PROTECT_FIELDS:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FIELDS,
                                                        bTmp);
             }
         }
@@ -1334,10 +1346,16 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
                 DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA);
         }
         break;
-        case HANDLE_PROTECT_BOOKMARKS_AND_FIELDS:
+        case HANDLE_PROTECT_BOOKMARKS:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
-                DocumentSettingId::PROTECT_BOOKMARKS_AND_FIELDS);
+                DocumentSettingId::PROTECT_BOOKMARKS);
+        }
+        break;
+        case HANDLE_PROTECT_FIELDS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::PROTECT_FIELDS);
         }
         break;
         default:
