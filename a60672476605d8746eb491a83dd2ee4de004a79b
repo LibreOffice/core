@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "096264e8_f4420c60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-31T17:25:50Z",
+      "side": 1,
+      "message": "typo -\u003e four",
+      "range": {
+        "startLine": 13,
+        "startChar": 47,
+        "endLine": 13,
+        "endChar": 51
+      },
+      "revId": "a60672476605d8746eb491a83dd2ee4de004a79b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f434873_6518ce07",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-01-31T17:25:50Z",
+      "side": 1,
+      "message": "can we add a check here that the rectangle is inside the page\u0027s rectangle?",
+      "revId": "a60672476605d8746eb491a83dd2ee4de004a79b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
