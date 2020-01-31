@@ -107,14 +107,8 @@ namespace vcl
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             Size aViewSize = mpViewWindow->GetSizePixel();
-            if ( meViewAlign == WindowAlign::Top )
-                rSize.AdjustHeight(aViewSize.Height() );
-            else if ( meViewAlign == WindowAlign::Left )
-                rSize.AdjustWidth(aViewSize.Width() );
-            else if ( meViewAlign == WindowAlign::Bottom )
-                rSize.AdjustHeight(aViewSize.Height() );
-            else if ( meViewAlign == WindowAlign::Right )
-                rSize.AdjustWidth(aViewSize.Width() );
+            // align left
+            rSize.AdjustWidth(aViewSize.Width() );
         }
 
         if (nBarWidth > rSize.Width())
@@ -202,14 +196,7 @@ namespace vcl
         long    nViewHeight = 0;
         long    nDlgHeight = nOffY;
         PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
-        if ( meViewAlign == WindowAlign::Top )
-        {
-            nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
-            nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-            nViewWidth      = aDlgSize.Width()-(WIZARDDIALOG_VIEW_DLGOFFSET_X*2);
-            nViewPosFlags  |= PosSizeFlags::Width;
-        }
-        else if ( meViewAlign == WindowAlign::Left )
+        // align left
         {
             if ( mbEmptyViewMargin )
             {
@@ -223,20 +210,6 @@ namespace vcl
                 nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
                 nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
             }
-            nViewPosFlags  |= PosSizeFlags::Height;
-        }
-        else if ( meViewAlign == WindowAlign::Bottom )
-        {
-            nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
-            nViewOffY       = nDlgHeight-mpViewWindow->GetSizePixel().Height()-WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-            nViewWidth      = aDlgSize.Width()-(WIZARDDIALOG_VIEW_DLGOFFSET_X*2);
-            nViewPosFlags  |= PosSizeFlags::Width;
-        }
-        else if ( meViewAlign == WindowAlign::Right )
-        {
-            nViewOffX       = aDlgSize.Width()-mpViewWindow->GetSizePixel().Width()-WIZARDDIALOG_VIEW_DLGOFFSET_X;
-            nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-            nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
             nViewPosFlags  |= PosSizeFlags::Height;
         }
         mpViewWindow->setPosSizePixel( nViewOffX, nViewOffY,
@@ -284,21 +257,10 @@ namespace vcl
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             Size aViewSize = mpViewWindow->GetSizePixel();
-            if ( meViewAlign == WindowAlign::Top )
-            {
-                nOffY += aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-                aDlgSize.AdjustHeight( -(aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y) );
-            }
-            else if ( meViewAlign == WindowAlign::Left )
-            {
-                long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
-                nOffX += aViewSize.Width() + nViewOffset;
-                aDlgSize.AdjustWidth( -nOffX );
-            }
-            else if ( meViewAlign == WindowAlign::Bottom )
-                aDlgSize.AdjustHeight( -(aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y) );
-            else if ( meViewAlign == WindowAlign::Right )
-                aDlgSize.AdjustWidth( -(aViewSize.Width()+WIZARDDIALOG_VIEW_DLGOFFSET_X) );
+            // align left
+            long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
+            nOffX += aViewSize.Width() + nViewOffset;
+            aDlgSize.AdjustWidth( -nOffX );
         }
         Point aPos( nOffX, nOffY );
         mpCurTabPage->SetPosSizePixel( aPos, aDlgSize );

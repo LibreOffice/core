@@ -125,7 +125,6 @@ private:
     ImplToolItems::size_type mnDockLines;
     sal_uInt16          mnMouseModifier;
     bool                mbDrag:1,
-                        mbSelection:1,
                         mbUpper:1,
                         mbLower:1,
                         mbIn:1,
