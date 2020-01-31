@@ -90,8 +90,8 @@ void ScJumpMatrix::GetJump(
 
 void ScJumpMatrix::SetAllJumps(double fBool, short nStart, short nNext, short nStop)
 {
-    sal_uLong n = static_cast<sal_uLong>(nCols) * nRows;
-    for (sal_uLong j = 0; j < n; ++j)
+    sal_uInt64 n = nCols * nRows;
+    for (sal_uInt64 j = 0; j < n; ++j)
     {
         mvJump[j].SetJump(fBool, nStart,
                          nNext, nStop);
