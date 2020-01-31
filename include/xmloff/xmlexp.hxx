@@ -180,7 +180,7 @@ protected:
     // Get (modifiable) namespace map
     SvXMLNamespaceMap& GetNamespaceMap_() { return *mpNamespaceMap; }
 
-    // get a new namespave map (used in starmath to have a default namespace)
+    // get a new namespace map (used in starmath to have a default namespace)
     void ResetNamespaceMap();
 
     /// Override this method to export the content of <office:meta>.
