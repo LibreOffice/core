@@ -959,6 +959,98 @@ namespace sw::mark
         lcl_DebugMarks(m_vAllMarks);
     }
 
+    static bool isDeleteMark(
+            ::sw::mark::MarkBase const*const pMark,
+            SwNodeIndex const& rStt,
+            SwNodeIndex const& rEnd,
+            SwIndex const*const pSttIdx,
+            SwIndex const*const pEndIdx,
+            bool & rbIsPosInRange,
+            bool & rbIsOtherPosInRange)
+    {
+        assert(pMark);
+        // navigator marks should not be moved
+        // TODO: Check if this might make them invalid
+        if (IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER)
+        {
+            return false;
+        }
+
+        // on position ??
+        rbIsPosInRange = lcl_GreaterThan(pMark->GetMarkPos(), rStt, pSttIdx)
+                            && lcl_Lower(pMark->GetMarkPos(), rEnd, pEndIdx);
+        rbIsOtherPosInRange = pMark->IsExpanded()
+                            && lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx)
+                            && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
+        // special case: completely in range, touching the end?
+        if ( pEndIdx != nullptr
+             && ( ( rbIsOtherPosInRange
+                    && pMark->GetMarkPos().nNode == rEnd
+                    && pMark->GetMarkPos().nContent == *pEndIdx )
+                  || ( rbIsPosInRange
+                       && pMark->IsExpanded()
+                       && pMark->GetOtherMarkPos().nNode == rEnd
+                       && pMark->GetOtherMarkPos().nContent == *pEndIdx ) ) )
+        {
+            rbIsPosInRange = true;
+            rbIsOtherPosInRange = true;
+        }
+
+        if (rbIsPosInRange
+             && (rbIsOtherPosInRange
+                  || !pMark->IsExpanded()))
+        {
+            // completely in range
+
+            bool bDeleteMark = true;
+            {
+                switch ( IDocumentMarkAccess::GetType( *pMark ) )
+                {
+                case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+                case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+                    // no delete of cross-reference bookmarks, if range is inside one paragraph
+                    bDeleteMark = rStt != rEnd;
+                    break;
+                case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
+                    // no delete of UNO mark, if it is not expanded and only touches the start of the range
+                    bDeleteMark = rbIsOtherPosInRange
+                                  || pMark->IsExpanded()
+                                  || pSttIdx == nullptr
+                                  || !( pMark->GetMarkPos().nNode == rStt
+                                        && pMark->GetMarkPos().nContent == *pSttIdx );
+                    break;
+                default:
+                    bDeleteMark = true;
+                    break;
+                }
+            }
+            return bDeleteMark;
+        }
+        return false;
+    }
+
+    bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM) const
+    {
+        SwPosition const& rStart(*rPaM.Start());
+        SwPosition const& rEnd(*rPaM.End());
+        for (auto ppMark = m_vBookmarks.begin();
+            ppMark != m_vBookmarks.end();
+            ++ppMark)
+        {
+            bool bIsPosInRange(false);
+            bool bIsOtherPosInRange(false);
+            bool const bDeleteMark = isDeleteMark(*ppMark,
+                rStart.nNode, rEnd.nNode, &rStart.nContent, &rEnd.nContent,
+                bIsPosInRange, bIsOtherPosInRange);
+            if (bDeleteMark
+                && IDocumentMarkAccess::GetType(**ppMark) == MarkType::BOOKMARK)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void MarkManager::deleteMarks(
             const SwNodeIndex& rStt,
             const SwNodeIndex& rEnd,
@@ -980,65 +1072,15 @@ namespace sw::mark
             ppMark != m_vAllMarks.end();
             ++ppMark)
         {
-            // navigator marks should not be moved
-            // TODO: Check if this might make them invalid
-            if(IDocumentMarkAccess::GetType(**ppMark) == MarkType::NAVIGATOR_REMINDER)
-                continue;
-
             ::sw::mark::MarkBase *const pMark = *ppMark;
-
-            if (!pMark)
-                continue;
-
-            // on position ??
-            bool bIsPosInRange = lcl_GreaterThan(pMark->GetMarkPos(), rStt, pSttIdx)
-                                 && lcl_Lower(pMark->GetMarkPos(), rEnd, pEndIdx);
-            bool bIsOtherPosInRange = pMark->IsExpanded()
-                                      && lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx)
-                                      && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
-            // special case: completely in range, touching the end?
-            if ( pEndIdx != nullptr
-                 && ( ( bIsOtherPosInRange
-                        && pMark->GetMarkPos().nNode == rEnd
-                        && pMark->GetMarkPos().nContent == *pEndIdx )
-                      || ( bIsPosInRange
-                           && pMark->IsExpanded()
-                           && pMark->GetOtherMarkPos().nNode == rEnd
-                           && pMark->GetOtherMarkPos().nContent == *pEndIdx ) ) )
-            {
-                bIsPosInRange = true;
-                bIsOtherPosInRange = true;
-            }
+            bool bIsPosInRange(false);
+            bool bIsOtherPosInRange(false);
+            bool const bDeleteMark = isDeleteMark(pMark, rStt, rEnd, pSttIdx, pEndIdx, bIsPosInRange, bIsOtherPosInRange);
 
             if ( bIsPosInRange
                  && ( bIsOtherPosInRange
                       || !pMark->IsExpanded() ) )
             {
-                // completely in range
-
-                bool bDeleteMark = true;
-                {
-                    switch ( IDocumentMarkAccess::GetType( *pMark ) )
-                    {
-                    case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
-                    case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
-                        // no delete of cross-reference bookmarks, if range is inside one paragraph
-                        bDeleteMark = rStt != rEnd;
-                        break;
-                    case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
-                        // no delete of UNO mark, if it is not expanded and only touches the start of the range
-                        bDeleteMark = bIsOtherPosInRange
-                                      || pMark->IsExpanded()
-                                      || pSttIdx == nullptr
-                                      || !( pMark->GetMarkPos().nNode == rStt
-                                            && pMark->GetMarkPos().nContent == *pSttIdx );
-                        break;
-                    default:
-                        bDeleteMark = true;
-                        break;
-                    }
-                }
-
                 if ( bDeleteMark )
                 {
                     if ( pSaveBkmk )
