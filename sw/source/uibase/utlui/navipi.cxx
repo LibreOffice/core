@@ -612,6 +612,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aContentTree->EnableAsyncDrag(true);
     m_aContentTree->ShowTree();
     m_aContentToolBox->CheckItem(m_aContentToolBox->GetItemId("listbox"));
+    m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
 
 //  TreeListBox for global document
     m_aGlobalTree->SetSelectionMode( SelectionMode::Multiple );
@@ -765,6 +766,9 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // its size, the sidebar can not, and the navigator would just waste
         // space. Therefore hide this button.
         m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+        // show content if docked
+        if (SfxChildWindowContext::GetFloatingWindow(GetParent()) == nullptr && IsZoomedIn())
+            ZoomOut();
     }
     else if (nStateChange == StateChangedType::ControlFocus)
     {
