@@ -51,7 +51,6 @@ private:
     bool            mbScrollTypeSet;
 
     Link<Slider*,void>   maSlideHdl;
-    Link<Slider*,void>   maEndSlideHdl;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -64,8 +63,8 @@ private:
     void ImplDraw(vcl::RenderContext& rRenderContext);
     bool ImplIsPageUp( const Point& rPos );
     bool ImplIsPageDown( const Point& rPos );
-    long ImplSlide( long nNewPos, bool bCallEndSlide );
-    long ImplDoAction( bool bCallEndSlide );
+    long ImplSlide( long nNewPos );
+    long ImplDoAction( );
     void ImplDoMouseAction( const Point& rPos, bool bCallAction );
     void ImplDoSlide( long nNewPos );
     void ImplDoSlideAction( ScrollType eScrollType );
@@ -83,7 +82,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void            Slide();
-    void            EndSlide();
 
     void            SetRangeMin(long nNewRange);
     long            GetRangeMin() const { return mnMinRange; }
@@ -101,7 +99,6 @@ public:
     Size            CalcWindowSizePixel();
 
     void            SetSlideHdl( const Link<Slider*,void>& rLink ) { maSlideHdl = rLink; }
-    void            SetEndSlideHdl( const Link<Slider*,void>& rLink ) { maEndSlideHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SLIDER_HXX
