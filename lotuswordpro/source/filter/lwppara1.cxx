@@ -102,7 +102,7 @@
 #include "lwpcelllayout.hxx"
 #include "lwpframelayout.hxx"
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 // boost::polymorphic_downcast checks and reports (using assert), if the
 // cast is incorrect (in debug builds).
@@ -168,7 +168,7 @@ LwpPara* LwpPara::GetParent()
     if (level != 1)
     {
         pPara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
-        std::set<LwpPara*> aSeen;
+        o3tl::sorted_vector<LwpPara*> aSeen;
         while (pPara)
         {
             aSeen.insert(pPara);

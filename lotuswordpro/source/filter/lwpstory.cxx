@@ -69,7 +69,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 
 LwpStory::LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
@@ -104,7 +104,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     //process para list
     XFContentContainer* pParaCont = pCont;
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
-    std::set<LwpPara*> aConverted;
+    o3tl::sorted_vector<LwpPara*> aConverted;
     while (xPara.is())
     {
         xPara->SetFoundry(m_pFoundry);
@@ -139,7 +139,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 void LwpStory::RegisterStyle()
 {
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
-    std::set<LwpPara*> aSeen;
+    o3tl::sorted_vector<LwpPara*> aSeen;
     while (xPara.is())
     {
         aSeen.insert(xPara.get());
@@ -322,7 +322,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
     while (xLayout.is())
     {
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
-        std::set<LwpVirtualLayout*> aSeen;
+        o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
             aSeen.insert(xFrameLayout.get());
@@ -349,7 +349,7 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
     while (xLayout.get())
     {
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
-        std::set<LwpVirtualLayout*> aSeen;
+        o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
             aSeen.insert(xFrameLayout.get());

@@ -96,7 +96,7 @@
 #include <lwpdropcapmgr.hxx>
 #include "lwptable.hxx"
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
@@ -511,7 +511,7 @@ void LwpPara::RegisterStyle()
                     }
                     bool bHeading = pNumbering->IsHeading();
 
-                    std::set<LwpPara*> aSeen;
+                    o3tl::sorted_vector<LwpPara*> aSeen;
                     while(true)
                     {
                         aSeen.insert(pPara);
