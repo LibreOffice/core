@@ -1782,6 +1782,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     if (bIsPlaceHolder || name == "GtkTreeSelection")
         return nullptr;
 
+    ToolBox *pToolBox = (pParent && pParent->GetType() == WindowType::TOOLBOX) ? static_cast<ToolBox*>(pParent) : nullptr;
+
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
     VclPtr<vcl::Window> xWindow;
@@ -2316,9 +2318,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         return nullptr;
     }
     else if (name == "GtkToolButton" || name == "GtkMenuToolButton" ||
-             name == "GtkToggleToolButton" || name == "GtkRadioToolButton")
+             name == "GtkToggleToolButton" || name == "GtkRadioToolButton" || name == "GtkToolItem")
     {
-        ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
         if (pToolBox)
         {
             OUString aCommand(extractActionName(rMap));
@@ -2366,7 +2367,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkSeparatorToolItem")
     {
-        ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
         if (pToolBox)
         {
             pToolBox->InsertSeparator();
@@ -2407,6 +2407,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
         }
     }
+
     SAL_INFO_IF(!xWindow, "vcl.layout", "probably need to implement " << name << " or add a make" << name << " function");
     if (xWindow)
     {
@@ -2422,6 +2423,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow->ImplGetWindowImpl()->mpBorderWindow.get() << ") with helpid " <<
             xWindow->GetHelpId());
         m_aChildren.emplace_back(id, xWindow, bVertical);
+
+        // if the parent was a toolbox set it as an itemwindow for the latest itemid
+        if (pToolBox)
+        {
+            pToolBox->SetItemWindow(m_pParserState->m_nLastToolbarId, xWindow);
+            pToolBox->SetItemExpand(m_pParserState->m_nLastToolbarId, true);
+        }
     }
     return xWindow;
 }
