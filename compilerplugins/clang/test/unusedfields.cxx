@@ -15,6 +15,8 @@
 #include <ostream>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ref.hxx>
 
 struct Foo
 // expected-error@-1 {{read m_foo1 [loplugin:unusedfields]}}
@@ -254,6 +256,41 @@ namespace WriteOnlyAnalysis3
         ~Foo1()
         {
             setFoo(m_field1);
+        }
+    };
+};
+
+// Check that writes to fields that are wrapped by conditional checks are ignored,
+// where those conditional checks use an 'operator bool'
+namespace ReadOnlyAnalysis5
+{
+    struct RefTarget
+    {
+        void acquire();
+        void release();
+    };
+    struct Foo1
+    // expected-error@-1 {{read m_field1 [loplugin:unusedfields]}}
+    // expected-error@-2 {{read m_field2 [loplugin:unusedfields]}}
+    // expected-error@-3 {{read m_field3xx [loplugin:unusedfields]}}
+    {
+        std::unique_ptr<int> m_field1;
+        rtl::Reference<RefTarget> m_field2;
+        css::uno::Reference<css::uno::XInterface> m_field3xx;
+        void f1(css::uno::Reference<css::uno::XInterface> a)
+        {
+            if (m_field1)
+                m_field1.reset(new int);
+            if (m_field1.get())
+                m_field1.reset(new int);
+            if (m_field2)
+                m_field2 = new RefTarget;
+            if (m_field2.get())
+                m_field2 = new RefTarget;
+            if (m_field3xx)
+                m_field3xx = a;
+            if (m_field3xx.get())
+                m_field3xx = a;
         }
     };
 };

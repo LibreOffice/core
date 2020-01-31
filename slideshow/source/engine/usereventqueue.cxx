@@ -535,7 +535,6 @@ UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
       mpAudioStoppedEventHandler(),
       mpClickEventHandler(),
       mpSkipEffectEventHandler(),
-      mpDoubleClickEventHandler(),
       mpMouseEnterHandler(),
       mpMouseLeaveHandler(),
       mbAdvanceOnClick( true )
@@ -590,10 +589,6 @@ void UserEventQueue::clear()
         mrMultiplexer.removeDoubleClickHandler( mpShapeDoubleClickEventHandler );
         mrMultiplexer.removeMouseMoveHandler( mpShapeDoubleClickEventHandler );
         mpShapeDoubleClickEventHandler.reset();
-    }
-    if( mpDoubleClickEventHandler ) {
-        mrMultiplexer.removeDoubleClickHandler( mpDoubleClickEventHandler );
-        mpDoubleClickEventHandler.reset();
     }
     if( mpMouseEnterHandler ) {
         mrMultiplexer.removeMouseMoveHandler( mpMouseEnterHandler );

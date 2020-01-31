@@ -238,9 +238,9 @@ framework/inc/xml/menudocumenthandler.hxx:158
     framework::OReadMenuHandler m_bMenuPopupMode _Bool
 framework/inc/xml/menudocumenthandler.hxx:188
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
-framework/source/fwe/classes/addonsoptions.cxx:343
-    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 framework/source/fwe/classes/addonsoptions.cxx:344
+    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
+framework/source/fwe/classes/addonsoptions.cxx:345
     framework::AddonsOptions_Impl m_aEmptyAddonNotebookBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 i18npool/inc/textconversion.hxx:79
     i18npool::(anonymous) code sal_Unicode
@@ -260,12 +260,20 @@ include/comphelper/parallelsort.hxx:164
     comphelper::(anonymous namespace)::Binner maLabels uint8_t [mnMaxStaticSize]
 include/connectivity/DriversConfig.hxx:75
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
+include/connectivity/sdbcx/VCatalog.hxx:68
+    connectivity::sdbcx::OCatalog m_pViews std::unique_ptr<OCollection>
 include/connectivity/sdbcx/VCatalog.hxx:69
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
 include/connectivity/sdbcx/VDescriptor.hxx:53
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
 include/connectivity/sdbcx/VGroup.hxx:55
     connectivity::sdbcx::OGroup m_pUsers std::unique_ptr<OUsers>
+include/connectivity/sdbcx/VKey.hxx:72
+    connectivity::sdbcx::OKey m_pColumns std::unique_ptr<OCollection>
+include/connectivity/sdbcx/VTable.hxx:78
+    connectivity::sdbcx::OTable m_xColumns rtl::Reference<OCollection>
+include/connectivity/sdbcx/VTable.hxx:79
+    connectivity::sdbcx::OTable m_xIndexes rtl::Reference<OCollection>
 include/connectivity/sdbcx/VUser.hxx:55
     connectivity::sdbcx::OUser m_pGroups std::unique_ptr<OGroups>
 include/connectivity/sqlparse.hxx:109
@@ -316,6 +324,8 @@ include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
+include/svtools/valueset.hxx:223
+    ValueSet maHighlightHdl Link<class ValueSet *, void>
 include/svx/colorwindow.hxx:67
     SvxColorWindow maSelectedLink Link<const NamedColor &, void>
 include/svx/graphctl.hxx:52
@@ -333,7 +343,7 @@ include/svx/svdoedge.hxx:160
 include/svx/svdpntv.hxx:160
     SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo7/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -360,7 +370,7 @@ include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
-include/vcl/ppdparser.hxx:127
+include/vcl/ppdparser.hxx:130
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
 io/source/stm/odata.cxx:578
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
@@ -408,11 +418,13 @@ sal/rtl/uuid.cxx:66
     (anonymous namespace)::UUID clock_seq_low sal_uInt8
 sal/rtl/uuid.cxx:67
     (anonymous namespace)::UUID node sal_uInt8 [6]
-sc/inc/compiler.hxx:128
-    ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
+sc/inc/attarray.hxx:68
+    ScMergePatternState pItemSet std::unique_ptr<SfxItemSet>
 sc/inc/compiler.hxx:129
-    ScRawToken::(anonymous) table const struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:126:9)
-sc/inc/compiler.hxx:134
+    ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
+sc/inc/compiler.hxx:130
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/disk2/libo7/sc/inc/compiler.hxx:127:9)
+sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **const
@@ -430,10 +442,10 @@ sc/source/filter/excel/xltoolbar.cxx:28
     (anonymous namespace)::MSOExcelCommandConvertor msoToOOcmd IdToString
 sc/source/filter/excel/xltoolbar.cxx:29
     (anonymous namespace)::MSOExcelCommandConvertor tcidToOOcmd IdToString
-sc/source/filter/inc/autofilterbuffer.hxx:181
-    oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
 sc/source/filter/inc/commentsbuffer.hxx:42
     oox::xls::CommentModel maAnchor const css::awt::Rectangle
+sc/source/filter/inc/htmlexp.hxx:118
+    ScHTMLExport pFileNameMap ScHTMLExport::FileNameMapPtr
 sc/source/filter/inc/htmlpars.hxx:56
     ScHTMLStyles maEmpty const class rtl::OUString
 sc/source/filter/inc/namebuff.hxx:81
@@ -448,6 +460,8 @@ sc/source/filter/inc/stylesbuffer.hxx:767
     oox::xls::CellStyleBuffer maBuiltinStyles oox::xls::CellStyleBuffer::CellStyleVector
 sc/source/filter/inc/stylesbuffer.hxx:768
     oox::xls::CellStyleBuffer maUserStyles oox::xls::CellStyleBuffer::CellStyleVector
+sc/source/filter/inc/XclExpChangeTrack.hxx:348
+    XclExpChTrAction pAddAction std::unique_ptr<XclExpChTrAction>
 sc/source/filter/inc/xepage.hxx:122
     XclExpChartPageSettings maData struct XclPageData
 sc/source/filter/inc/xistyle.hxx:518
@@ -462,6 +476,12 @@ sc/source/ui/inc/csvruler.hxx:39
     ScCsvRuler maBackgrDev ScopedVclPtrInstance<class VirtualDevice>
 sc/source/ui/inc/csvruler.hxx:40
     ScCsvRuler maRulerDev ScopedVclPtrInstance<class VirtualDevice>
+sc/source/ui/inc/inputhdl.hxx:67
+    ScInputHandler pColumnData std::unique_ptr<ScTypedCaseStrSet>
+sc/source/ui/inc/inputhdl.hxx:68
+    ScInputHandler pFormulaData std::unique_ptr<ScTypedCaseStrSet>
+sc/source/ui/inc/inputhdl.hxx:69
+    ScInputHandler pFormulaDataPara std::unique_ptr<ScTypedCaseStrSet>
 sc/source/ui/inc/tabcont.hxx:38
     ScTabControl bErrorShown _Bool
 sc/source/ui/vba/vbaformatconditions.hxx:37
@@ -488,13 +508,13 @@ sd/source/ui/inc/unopage.hxx:165
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/inc/unopage.hxx:226
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
-sd/source/ui/sidebar/MasterPageContainer.cxx:141
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:142
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
+sd/source/ui/sidebar/MasterPageContainer.cxx:143
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:147
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:148
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
+sd/source/ui/sidebar/MasterPageContainer.cxx:149
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
 sd/source/ui/slideshow/showwindow.hxx:99
     sd::ShowWindow mbMouseCursorHidden _Bool
@@ -508,8 +528,12 @@ sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:99
     sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
+slideshow/source/engine/animationnodes/sequentialtimecontainer.hxx:58
+    slideshow::internal::SequentialTimeContainer mpCurrentRewindEvent slideshow::internal::EventSharedPtr
 slideshow/source/engine/slideshowimpl.cxx:132
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
+slideshow/source/inc/usereventqueue.hxx:260
+    slideshow::internal::UserEventQueue mpDoubleClickEventHandler ::std::shared_ptr<ClickEventHandler>
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
 starmath/source/view.cxx:862
@@ -566,8 +590,12 @@ svx/source/svdraw/svdpdf.hxx:171
     ImpSdrPdfImport maDash const class XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree const editeng::Trie
+sw/inc/breakit.hxx:38
+    SwBreakIt m_xLanguageTag std::unique_ptr<LanguageTag>
 sw/inc/calc.hxx:197
     SwCalc m_aSysLocale const class SvtSysLocale
+sw/inc/dpage.hxx:35
+    SwDPage pGridLst std::unique_ptr<SdrPageGridFrameList>
 sw/inc/hints.hxx:230
     SwAttrSetChg m_bDelSet const _Bool
 sw/inc/shellio.hxx:153
@@ -592,13 +620,21 @@ sw/source/core/doc/swstylemanager.cxx:61
     (anonymous namespace)::SwStyleManager aAutoParaPool class StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
+sw/source/core/text/atrhndl.hxx:50
+    SwAttrHandler m_pFnt std::unique_ptr<SwFont>
 sw/source/core/text/inftxt.cxx:567
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<class VirtualDevice>
+sw/source/core/text/redlnitr.hxx:76
+    SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
+sw/source/filter/html/htmltab.cxx:2834
+    CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
-sw/source/ui/dbui/dbinsdlg.cxx:120
+sw/source/filter/writer/writer.cxx:68
+    Writer_Impl pFileNameMap std::unique_ptr<std::map<OUString, OUString> >
+sw/source/ui/dbui/dbinsdlg.cxx:99
     DB_Column::(anonymous) pText class rtl::OUString *const
-sw/source/ui/dbui/dbinsdlg.cxx:122
+sw/source/ui/dbui/dbinsdlg.cxx:101
     DB_Column::(anonymous) nFormat const sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
@@ -622,6 +658,8 @@ ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx:76
     hierarchy_ucp::DataSupplier_Impl m_aIterator const class HierarchyEntry::iterator
+ucb/source/ucp/package/pkgprovider.hxx:51
+    package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
 ucbhelper/source/client/proxydecider.cxx:130
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const struct ucbhelper::InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:88
@@ -892,41 +930,41 @@ vcl/source/fontsubset/sft.cxx:1050
     vcl::(anonymous namespace)::subHeader2 entryCount const sal_uInt16
 vcl/source/fontsubset/sft.cxx:1051
     vcl::(anonymous namespace)::subHeader2 idDelta const sal_uInt16
-vcl/source/gdi/dibtools.cxx:52
-    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:53
-    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:54
+    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+vcl/source/gdi/dibtools.cxx:55
     (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:65
-    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:66
-    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:67
+    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+vcl/source/gdi/dibtools.cxx:68
     (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:107
-    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:108
-    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:110
+    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+vcl/source/gdi/dibtools.cxx:111
     (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:112
-    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:113
-    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
+    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:114
-    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
 vcl/source/gdi/dibtools.cxx:115
+    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+vcl/source/gdi/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5GammaBlue sal_uInt32
-vcl/source/gdi/dibtools.cxx:117
-    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:118
-    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:119
+    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+vcl/source/gdi/dibtools.cxx:120
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:257
+vcl/source/gdi/pdfwriter_impl.hxx:258
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:40
     ImplHeadItem maHelpId const class rtl::OString

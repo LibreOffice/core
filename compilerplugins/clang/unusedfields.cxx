@@ -447,11 +447,30 @@ bool UnusedFields::TraverseIfStmt(IfStmt* ifStmt)
 {
     FieldDecl const * memberFieldDecl = nullptr;
     Expr const * cond = ifStmt->getCond()->IgnoreParenImpCasts();
-    if (auto memberExpr = dyn_cast<MemberExpr>(cond))
+
+    if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(cond))
+    {
+        if (auto cxxConvert = dyn_cast_or_null<CXXConversionDecl>(memberCallExpr->getMethodDecl()))
+        {
+            if (cxxConvert->getConversionType()->isBooleanType())
+                if (auto memberExpr = dyn_cast<MemberExpr>(memberCallExpr->getImplicitObjectArgument()->IgnoreParenImpCasts()))
+                    if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
+                        insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
+        }
+        else if (auto cxxMethod = memberCallExpr->getMethodDecl())
+        {
+            if (cxxMethod->getIdentifier() && cxxMethod->getName() == "get" && memberCallExpr->getNumArgs()==0)
+                if (auto memberExpr = dyn_cast<MemberExpr>(memberCallExpr->getImplicitObjectArgument()->IgnoreParenImpCasts()))
+                    if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
+                        insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
+        }
+    }
+    else if (auto memberExpr = dyn_cast<MemberExpr>(cond))
     {
         if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
             insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
     }
+
     bool ret = RecursiveASTVisitor::TraverseIfStmt(ifStmt);
     if (memberFieldDecl)
         insideConditionalCheckOfMemberSet.pop_back();

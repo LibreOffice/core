@@ -257,7 +257,6 @@ private:
     ::std::shared_ptr<ClickEventHandler>          mpClickEventHandler;
     ::std::shared_ptr<SkipEffectEventHandler>     mpSkipEffectEventHandler;
     ::std::shared_ptr<ShapeClickEventHandler>     mpShapeDoubleClickEventHandler;
-    ::std::shared_ptr<ClickEventHandler>          mpDoubleClickEventHandler;
     ::std::shared_ptr<MouseEnterHandler>          mpMouseEnterHandler;
     ::std::shared_ptr<MouseLeaveHandler>          mpMouseLeaveHandler;
 

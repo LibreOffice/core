@@ -220,7 +220,6 @@ private:
     DrawFrameStyle  mnFrameStyle;
     Color           maColor;
     Link<ValueSet*,void>  maSelectHdl;
-    Link<ValueSet*,void>  maHighlightHdl;
 
     bool            mbFormat : 1;
     bool            mbHighlight : 1;

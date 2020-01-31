@@ -55,7 +55,6 @@ private:
     bool resolveChild( AnimationNodeSharedPtr const& pChildNode );
 
     EventSharedPtr mpCurrentSkipEvent;
-    EventSharedPtr mpCurrentRewindEvent;
 };
 
 } // namespace internal
