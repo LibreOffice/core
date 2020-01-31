@@ -122,3 +122,16 @@ index b8fd426e13..5e6f2a9b28 100755
          auto near = [&](skvm::F32 t) {
              // 1/18 + 9/18t + 27/18t^2 - 21/18t^3 == t ( t ( -21/18t + 27/18) + 9/18) + 1/18
              return p->mad(t,
+diff --git a/src/gpu/gl/GrGLGpu.cpp b/src/gpu/gl/GrGLGpu.cpp
+index 191b6a3ce5..26754acccd 100644
+--- a/src/gpu/gl/GrGLGpu.cpp
++++ b/src/gpu/gl/GrGLGpu.cpp
+@@ -3766,6 +3766,8 @@
+     }
+ }
+ 
++#undef MemoryBarrier
++
+ void GrGLGpu::insertManualFramebufferBarrier() {
+     SkASSERT(this->caps()->requiresManualFBBarrierAfterTessellatedStencilDraw());
+     GL_CALL(MemoryBarrier(GR_GL_FRAMEBUFFER_BARRIER_BIT));
