@@ -17,6 +17,7 @@ endif
 
 $(eval $(call gb_Library_add_defs,OGLTrans,\
     -DGLM_FORCE_RADIANS \
+    -DGLM_FORCE_CTOR_INIT \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,OGLTrans))
