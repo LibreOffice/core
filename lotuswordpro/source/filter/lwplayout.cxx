@@ -73,6 +73,7 @@
 #include "lwpgrfobj.hxx"
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
@@ -500,7 +501,7 @@ void LwpHeadLayout::RegisterStyle()
 {
     //Register all children styles
     rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
-    std::set<LwpVirtualLayout*> aSeen;
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout.is())
     {
         aSeen.insert(xLayout.get());
@@ -522,7 +523,7 @@ void LwpHeadLayout::RegisterStyle()
 rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 {
     rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
-    std::set<LwpVirtualLayout*> aSeen;
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLayout.get())
     {
         aSeen.insert(xLayout.get());
@@ -1376,7 +1377,7 @@ bool LwpMiddleLayout::IsProtected()
 rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 {
     rtl::Reference<LwpVirtualLayout> xLay(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
-    std::set<LwpVirtualLayout*> aSeen;
+    o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
     while (xLay.is())
     {
         aSeen.insert(xLay.get());

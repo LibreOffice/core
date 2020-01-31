@@ -82,7 +82,7 @@
 #include "lwpframelayout.hxx"
 #include <xfilter/xfparastyle.hxx>
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
@@ -232,7 +232,7 @@ double LwpSuperTableLayout::GetTableWidth()
             LwpObjectID *pColumnID = &pTableLayout->GetColumnLayoutHead();
             LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
             double dColumnWidth = dDefaultWidth;
-            std::set<LwpColumnLayout*> aSeen;
+            o3tl::sorted_vector<LwpColumnLayout*> aSeen;
             while (pColumnLayout)
             {
                 aSeen.insert(pColumnLayout);
@@ -452,7 +452,7 @@ void LwpTableLayout::TraverseTable()
     // set value
     LwpObjectID* pRowID = &GetChildHead();
     LwpRowLayout * pRowLayout = dynamic_cast<LwpRowLayout *>(pRowID->obj().get());
-    std::set<LwpRowLayout*> aSeen;
+    o3tl::sorted_vector<LwpRowLayout*> aSeen;
     while (pRowLayout)
     {
         aSeen.insert(pRowLayout);
@@ -571,7 +571,7 @@ void LwpTableLayout::RegisterColumns()
     // NOTICE: all default columns are regarded as justifiable columns
     LwpObjectID* pColumnID = &GetColumnLayoutHead();
     LwpColumnLayout * pColumnLayout = dynamic_cast<LwpColumnLayout *>(pColumnID->obj().get());
-    std::set<LwpColumnLayout*> aSeen;
+    o3tl::sorted_vector<LwpColumnLayout*> aSeen;
     while (pColumnLayout)
     {
         aSeen.insert(pColumnLayout);
@@ -1117,7 +1117,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         LwpTableRange* pTableRange = pHolder ? dynamic_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get()) : nullptr;
 
         //Look up the table
-        std::set<LwpTableRange*> aTableSeen;
+        o3tl::sorted_vector<LwpTableRange*> aTableSeen;
         while (pTableRange)
         {
             aTableSeen.insert(pTableRange);
@@ -1146,7 +1146,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
         LwpRowList* pRowList = dynamic_cast<LwpRowList*>(aRowListID.obj().get());
 
         //loop the rowlist
-        std::set<LwpRowList*> aOuterSeen;
+        o3tl::sorted_vector<LwpRowList*> aOuterSeen;
         while (pRowList)
         {
             aOuterSeen.insert(pRowList);
@@ -1154,7 +1154,7 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
             {
                 LwpCellList* pCellList = dynamic_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
                 //loop the cellList
-                std::set<LwpCellList*> aSeen;
+                o3tl::sorted_vector<LwpCellList*> aSeen;
                 while (pCellList)
                 {
                     aSeen.insert(pCellList);
