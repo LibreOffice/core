@@ -878,7 +878,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel* pMod
     {
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_LINEDASH, &pModel->GetItemPool(),
-                XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH11,
+                XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH20,
                 pModel->GetPropertyList( XPropertyListType::Dash ) );
 
         // if the given name is not valid, replace it!
