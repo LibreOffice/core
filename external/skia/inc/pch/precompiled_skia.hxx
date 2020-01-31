@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-06 12:13:34 using:
+ Generated on 2020-01-31 10:35:49 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./external/skia/inc/pch/precompiled_skia.hxx "make external/skia.build" --find-conflicts
+ ./bin/update_pch_bisect /home/seli/build/src/l2/external/skia/inc/pch/precompiled_skia.hxx "make external/skia.build" --find-conflicts
 */
 
 #if PCH_LEVEL >= 1
@@ -70,7 +70,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 #endif // PCH_LEVEL >= 2
-#if PCH_LEVEL >= 3
+// PCH_LEVEL >= 3
 #include <include/c/sk_canvas.h>
 #include <include/c/sk_colorspace.h>
 #include <include/c/sk_data.h>
@@ -195,6 +195,7 @@
 #include <include/effects/SkPaintImageFilter.h>
 #include <include/effects/SkPerlinNoiseShader.h>
 #include <include/effects/SkPictureImageFilter.h>
+#include <include/effects/SkRuntimeEffect.h>
 #include <include/effects/SkShaderMaskFilter.h>
 #include <include/effects/SkTableColorFilter.h>
 #include <include/effects/SkTableMaskFilter.h>
@@ -245,6 +246,7 @@
 #include <include/private/SkFloatingPoint.h>
 #include <include/private/SkHalf.h>
 #include <include/private/SkImageInfoPriv.h>
+#include <include/private/SkM44.h>
 #include <include/private/SkMacros.h>
 #include <include/private/SkMalloc.h>
 #include <include/private/SkMutex.h>
@@ -330,14 +332,15 @@
 #include <src/core/SkBlurPriv.h>
 #include <src/core/SkBuffer.h>
 #include <src/core/SkCachedData.h>
+#include <src/core/SkCanvasMatrix.h>
 #include <src/core/SkCanvasPriv.h>
 #include <src/core/SkClipOpPriv.h>
 #include <src/core/SkClipStack.h>
 #include <src/core/SkClipStackDevice.h>
-#include <src/core/SkColorFilterPriv.h>
 #include <src/core/SkColorFilter_Matrix.h>
 #include <src/core/SkColorSpacePriv.h>
 #include <src/core/SkColorSpaceXformSteps.h>
+#include <src/core/SkCompressedDataUtils.h>
 #include <src/core/SkConvertPixels.h>
 #include <src/core/SkCoreBlitters.h>
 #include <src/core/SkCoverageModePriv.h>
@@ -382,7 +385,6 @@
 #include <src/core/SkLocalMatrixImageFilter.h>
 #include <src/core/SkMD5.h>
 #include <src/core/SkMSAN.h>
-#include <src/core/SkMakeUnique.h>
 #include <src/core/SkMask.h>
 #include <src/core/SkMaskBlurFilter.h>
 #include <src/core/SkMaskCache.h>
@@ -524,6 +526,8 @@
 #include <src/gpu/GrDrawOpAtlas.h>
 #include <src/gpu/GrDrawOpTest.h>
 #include <src/gpu/GrDrawingManager.h>
+#include <src/gpu/GrEagerVertexAllocator.h>
+#include <src/gpu/GrFPArgs.h>
 #include <src/gpu/GrFixedClip.h>
 #include <src/gpu/GrFragmentProcessor.h>
 #include <src/gpu/GrGeometryProcessor.h>
@@ -559,9 +563,7 @@
 #include <src/gpu/GrProgramInfo.h>
 #include <src/gpu/GrProxyProvider.h>
 #include <src/gpu/GrRecordingContextPriv.h>
-#include <src/gpu/GrRectanizer.h>
-#include <src/gpu/GrRectanizer_pow2.h>
-#include <src/gpu/GrRectanizer_skyline.h>
+#include <src/gpu/GrRectanizerSkyline.h>
 #include <src/gpu/GrReducedClip.h>
 #include <src/gpu/GrRenderTarget.h>
 #include <src/gpu/GrRenderTargetContext.h>
@@ -581,7 +583,6 @@
 #include <src/gpu/GrShaderCaps.h>
 #include <src/gpu/GrShaderUtils.h>
 #include <src/gpu/GrShaderVar.h>
-#include <src/gpu/GrSkSLFPFactoryCache.h>
 #include <src/gpu/GrSoftwarePathRenderer.h>
 #include <src/gpu/GrStencilAttachment.h>
 #include <src/gpu/GrStencilClip.h>
@@ -592,11 +593,11 @@
 #include <src/gpu/GrSurfacePriv.h>
 #include <src/gpu/GrSurfaceProxy.h>
 #include <src/gpu/GrSurfaceProxyPriv.h>
+#include <src/gpu/GrSurfaceProxyView.h>
 #include <src/gpu/GrSwizzle.h>
 #include <src/gpu/GrTessellator.h>
 #include <src/gpu/GrTestUtils.h>
 #include <src/gpu/GrTextureAdjuster.h>
-#include <src/gpu/GrTextureContext.h>
 #include <src/gpu/GrTextureMaker.h>
 #include <src/gpu/GrTexturePriv.h>
 #include <src/gpu/GrTextureProducer.h>
@@ -655,6 +656,7 @@
 #include <src/gpu/effects/GrShadowGeoProc.h>
 #include <src/gpu/effects/GrSkSLFP.h>
 #include <src/gpu/effects/GrTextureDomain.h>
+#include <src/gpu/effects/GrTextureEffect.h>
 #include <src/gpu/effects/GrXfermodeFragmentProcessor.h>
 #include <src/gpu/effects/GrYUVtoRGBEffect.h>
 #include <src/gpu/effects/generated/GrAARectEffect.h>
@@ -662,6 +664,7 @@
 #include <src/gpu/effects/generated/GrBlurredEdgeFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrCircleBlurFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrCircleEffect.h>
+#include <src/gpu/effects/generated/GrClampFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrColorMatrixFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrComposeLerpEffect.h>
 #include <src/gpu/effects/generated/GrComposeLerpRedEffect.h>
@@ -677,8 +680,6 @@
 #include <src/gpu/effects/generated/GrRGBToHSLFilterEffect.h>
 #include <src/gpu/effects/generated/GrRRectBlurEffect.h>
 #include <src/gpu/effects/generated/GrRectBlurEffect.h>
-#include <src/gpu/effects/generated/GrSaturateProcessor.h>
-#include <src/gpu/effects/generated/GrSimpleTextureEffect.h>
 #include <src/gpu/geometry/GrPathUtils.h>
 #include <src/gpu/geometry/GrQuad.h>
 #include <src/gpu/geometry/GrQuadBuffer.h>
@@ -749,7 +750,6 @@
 #include <src/gpu/ops/GrClearStencilClipOp.h>
 #include <src/gpu/ops/GrDashLinePathRenderer.h>
 #include <src/gpu/ops/GrDashOp.h>
-#include <src/gpu/ops/GrDebugMarkerOp.h>
 #include <src/gpu/ops/GrDefaultPathRenderer.h>
 #include <src/gpu/ops/GrDrawAtlasOp.h>
 #include <src/gpu/ops/GrDrawOp.h>
@@ -772,6 +772,11 @@
 #include <src/gpu/ops/GrStrokeRectOp.h>
 #include <src/gpu/ops/GrTessellatingPathRenderer.h>
 #include <src/gpu/ops/GrTextureOp.h>
+#include <src/gpu/tessellate/GrFillPathShader.h>
+#include <src/gpu/tessellate/GrGpuTessellationPathRenderer.h>
+#include <src/gpu/tessellate/GrPathParser.h>
+#include <src/gpu/tessellate/GrStencilPathShader.h>
+#include <src/gpu/tessellate/GrTessellatePathOp.h>
 #include <src/gpu/text/GrAtlasManager.h>
 #include <src/gpu/text/GrDistanceFieldAdjustTable.h>
 #include <src/gpu/text/GrSDFMaskFilter.h>
@@ -913,6 +918,7 @@
 #include <src/sksl/SkSLGLSLCodeGenerator.h>
 #include <src/sksl/SkSLHCodeGenerator.h>
 #include <src/sksl/SkSLIRGenerator.h>
+#include <src/sksl/SkSLInterpreter.h>
 #include <src/sksl/SkSLLexer.h>
 #include <src/sksl/SkSLMetalCodeGenerator.h>
 #include <src/sksl/SkSLOutputStream.h>
@@ -973,6 +979,7 @@
 #include <src/sksl/ir/SkSLWhileStatement.h>
 #include <src/utils/SkCanvasStack.h>
 #include <src/utils/SkCharToGlyphCache.h>
+#include <src/utils/SkClipStackUtils.h>
 #include <src/utils/SkDashPathPriv.h>
 #include <src/utils/SkFloatToDecimal.h>
 #include <src/utils/SkJSON.h>
@@ -991,8 +998,7 @@
 #include <tools/sk_app/GLWindowContext.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 #include <vulkan/vulkan_core.h>
-#endif // PCH_LEVEL >= 3
-#if PCH_LEVEL >= 4
-#endif // PCH_LEVEL >= 4
+// PCH_LEVEL >= 4
+// PCH_LEVEL >= 5
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
