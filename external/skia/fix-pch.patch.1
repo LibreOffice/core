@@ -96,3 +96,29 @@ index cc5738d977..c67310f6cc 100644
  
  #if defined(__clang__)
      template <int N, typename T> using Vec = T __attribute__((ext_vector_type(N)));
+diff --git a/src/core/SkM44.cpp b/src/core/SkM44.cpp
+index 2c82a0abd7..8505253d12 100644
+--- a/src/core/SkM44.cpp
++++ b/src/core/SkM44.cpp
+@@ -300,6 +300,8 @@ SkM44 Sk3LookAt(const SkV3& eye, const SkV3& center, const SkV3& up) {
+     return m;
+ }
+ 
++#undef near
++#undef far
+ SkM44 Sk3Perspective(float near, float far, float angle) {
+     SkASSERT(far > near);
+ 
+diff --git a/src/shaders/SkImageShader.cpp b/src/shaders/SkImageShader.cpp
+index b8fd426e13..5e6f2a9b28 100755
+--- a/src/shaders/SkImageShader.cpp
++++ b/src/shaders/SkImageShader.cpp
+@@ -781,6 +781,8 @@ bool SkImageShader::onProgram(skvm::Builder* p,
+ 
+         // See GrCubicEffect for details of these weights.
+         // TODO: these maybe don't seem right looking at gm/bicubic and GrBicubicEffect.
++#undef near
++#undef far
+         auto near = [&](skvm::F32 t) {
+             // 1/18 + 9/18t + 27/18t^2 - 21/18t^3 == t ( t ( -21/18t + 27/18) + 9/18) + 1/18
+             return p->mad(t,
