@@ -1,0 +1,13 @@
+---
+assumeFilename: uui/source/iahndl.cxx
+blacklist:
+    uui/inc/ids.hxx:
+    # Needed by macro defines
+    - vcl/errcode.hxx
+    uui/source/iahndl.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindow.hpp
+    - com/sun/star/task/XInteractionRequest.hpp
+    uui/source/passwordcontainer.cxx:
+    # Actually used
+    - com/sun/star/lang/XMultiServiceFactory.hpp

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ids.hxx>
 #include <strings.hrc>
 #include "lockcorrupt.hxx"
 #include <unotools/resmgr.hxx>
