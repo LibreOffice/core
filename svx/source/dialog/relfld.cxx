@@ -18,29 +18,6 @@
  */
 
 #include <svx/relfld.hxx>
-#include <vcl/builder.hxx>
-
-SvxRelativeField::SvxRelativeField(
-        vcl::Window *const pParent, WinBits const nBits, FieldUnit const eUnit)
-    : MetricField( pParent, nBits)
-{
-    SetUnit(eUnit);
-    SetDecimalDigits( 2 );
-    SetMin( 0 );
-    SetMax( 9999 );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSvxRelativeField(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSvxRelativeField)>);
-    OUString const custom(BuilderUtils::extractCustomProperty(rMap));
-    FieldUnit const eUnit(BuilderUtils::detectUnit(custom));
-    rRet = VclPtr<SvxRelativeField>::Create(pParent,
-                                            WB_BORDER | WB_SPIN | WB_REPEAT |
-                                            WB_LEFT | WB_GROUP,
-                                            eUnit);
-}
 
 RelativeField::RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_xSpinButton(std::move(pControl))
