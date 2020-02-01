@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "057c509b_c9bdcc06",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-01T19:19:04Z",
+      "side": 1,
+      "message": "The inline doesn\u0027t make sense here... inline function allows function definition to appear in multiple translation units - which won\u0027t happen here. Inlining of the body does not depend on the function being inline or not - it depends only on definition available at the place of possible inlining, and on compiler internal considerations. Ref: https://en.cppreference.com/w/cpp/language/inline",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 7
+      },
+      "revId": "961f7e8ec8ef188c361b2b20b60b95e78ecccd33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
