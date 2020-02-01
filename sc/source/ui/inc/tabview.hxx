@@ -100,15 +100,9 @@ public:
 
     ~ScExtraEditViewManager();
 
-    void Add(SfxViewShell* pViewShell, ScSplitPos eWhich)
-    {
-        Apply<Adder>(pViewShell, eWhich);
-    }
+    void Add(SfxViewShell* pViewShell, ScSplitPos eWhich);
 
-    void Remove(SfxViewShell* pViewShell, ScSplitPos eWhich)
-    {
-        Apply<Remover>(pViewShell, eWhich);
-    }
+    void Remove(SfxViewShell* pViewShell, ScSplitPos eWhich);
 
 private:
     template<ModifierTagType ModifierTag>
