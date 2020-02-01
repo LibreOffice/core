@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:33 using:
+ Generated on 2020-01-22 15:57:32 using:
  ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <limits>
 #include <memory>
 #include <numeric>
 #include <ostream>
@@ -35,6 +36,9 @@
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>

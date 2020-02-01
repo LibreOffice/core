@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-21 17:15:06 using:
+ Generated on 2020-02-01 12:22:35 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -188,6 +188,7 @@
 #include <core/fpdfapi/render/cpdf_progressiverenderer.h>
 #include <core/fpdfapi/render/cpdf_rendercontext.h>
 #include <core/fpdfapi/render/cpdf_renderoptions.h>
+#include <core/fpdfapi/render/cpdf_rendershading.h>
 #include <core/fpdfapi/render/cpdf_renderstatus.h>
 #include <core/fpdfapi/render/cpdf_scaledrenderbuffer.h>
 #include <core/fpdfapi/render/cpdf_textrenderer.h>
@@ -210,6 +211,7 @@
 #include <core/fpdfdoc/cpdf_filespec.h>
 #include <core/fpdfdoc/cpdf_formcontrol.h>
 #include <core/fpdfdoc/cpdf_formfield.h>
+#include <core/fpdfdoc/cpdf_icon.h>
 #include <core/fpdfdoc/cpdf_iconfit.h>
 #include <core/fpdfdoc/cpdf_interactiveform.h>
 #include <core/fpdfdoc/cpdf_link.h>
@@ -307,6 +309,7 @@
 #include <core/fxcrt/fx_coordinates.h>
 #include <core/fxcrt/fx_extension.h>
 #include <core/fxcrt/fx_memory.h>
+#include <core/fxcrt/fx_memory_wrappers.h>
 #include <core/fxcrt/fx_number.h>
 #include <core/fxcrt/fx_random.h>
 #include <core/fxcrt/fx_safe_types.h>
@@ -454,11 +457,13 @@
 #include <third_party/base/allocator/partition_allocator/partition_oom.h>
 #include <third_party/base/allocator/partition_allocator/partition_page.h>
 #include <third_party/base/allocator/partition_allocator/partition_root_base.h>
+#include <third_party/base/allocator/partition_allocator/random.h>
 #include <third_party/base/allocator/partition_allocator/spin_lock.h>
 #include <third_party/base/bits.h>
 #include <third_party/base/compiler_specific.h>
 #include <third_party/base/debug/alias.h>
 #include <third_party/base/logging.h>
+#include <third_party/base/no_destructor.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
 #include <third_party/base/optional.h>

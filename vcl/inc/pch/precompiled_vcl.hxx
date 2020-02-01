@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:46 using:
+ Generated on 2020-02-01 10:59:03 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,18 +39,19 @@
 #include <new>
 #include <ostream>
 #include <set>
+#include <stddef.h>
 #include <string.h>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
-#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/functional/hash.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
-#include <o3tl/optional.hxx>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
@@ -171,6 +172,7 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -180,6 +182,8 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -197,7 +201,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <test/outputdevice.hxx>
-#include <tools/GenericTypeSerializer.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
@@ -284,6 +287,7 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
@@ -296,6 +300,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -309,6 +314,8 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/unowrap.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
 #include <vcl/treelistentries.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/uitest/logger.hxx>

@@ -249,7 +249,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
     bool bBtnGetOneObjectEnabled = m_xBtnGetOneObject->get_sensitive();
 
     // calculate overall time
-    tools::Time aTime( 0 );
+    ::tools::Time aTime( 0 );
     long nFullTime;
     if( m_xRbtBitmap->get_active() )
     {
@@ -292,7 +292,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
 
         if( m_xRbtBitmap->get_active() )
         {
-            tools::Time const & rTime = m_FrameList[i].second;
+            ::tools::Time const & rTime = m_FrameList[i].second;
 
             m_xTimeField->set_value( rTime );
             sal_uLong nTime = rTime.GetMSFromTime();
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickRbtHdl, weld::Button&, void)
         sal_uLong n = m_xNumFldBitmap->get_value();
         if( n > 0 )
         {
-            tools::Time const & rTime = m_FrameList[n - 1].second;
+            ::tools::Time const & rTime = m_FrameList[n - 1].second;
             m_xTimeField->set_value( rTime );
         }
         m_xTimeField->set_sensitive(true);
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, weld::TimeSpinButton&, void)
 {
     sal_uLong nPos = m_xNumFldBitmap->get_value() - 1;
 
-    tools::Time & rTime = m_FrameList[nPos].second;
+    ::tools::Time & rTime = m_FrameList[nPos].second;
 
     rTime = m_xTimeField->get_value();
 }
@@ -608,11 +608,11 @@ void AnimationWindow::ResetAttrs()
 void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                     SfxProgress* pProgress ) const
 {
-    sal_uInt64 aEnd = tools::Time::GetSystemTicks() + nMilliSeconds;
-    sal_uInt64 aCurrent = tools::Time::GetSystemTicks();
+    sal_uInt64 aEnd = ::tools::Time::GetSystemTicks() + nMilliSeconds;
+    sal_uInt64 aCurrent = ::tools::Time::GetSystemTicks();
     while (aCurrent < aEnd)
     {
-        aCurrent = tools::Time::GetSystemTicks();
+        aCurrent = ::tools::Time::GetSystemTicks();
 
         if( pProgress )
             pProgress->SetState( nTime + nMilliSeconds + aCurrent - aEnd );
@@ -901,7 +901,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
         for (size_t i = 0; i < nCount; ++i)
         {
-            tools::Time const & rTime = m_FrameList[i].second;
+            ::tools::Time const & rTime = m_FrameList[i].second;
             long  nTime = rTime.GetNanoSec();
             nTime += rTime.GetSec() * 100;
 

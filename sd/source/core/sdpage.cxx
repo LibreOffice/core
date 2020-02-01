@@ -2965,7 +2965,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
             rAreas.resize( static_cast<size_t>(vSlidesAreas.size()) );
 
-            for( const tools::Rectangle& rRect : vSlidesAreas )
+            for( const ::tools::Rectangle& rRect : vSlidesAreas )
             {
                 rAreas[*pOffsets++] = rRect;
             }

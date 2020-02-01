@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:16:18 using:
+ Generated on 2020-01-22 15:58:24 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,7 +23,6 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
 #include <cstring>
 #include <deque>
@@ -31,12 +30,9 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
-#include <iterator>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
-#include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -49,8 +45,7 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -75,8 +70,7 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
@@ -87,16 +81,11 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/EnumContext.hxx>
-#include <vcl/GraphicExternalLink.hxx>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -106,13 +95,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/image.hxx>
-#include <vcl/keycod.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
@@ -122,16 +105,13 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <avmedia/avmediadllapi.h>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -142,7 +122,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
@@ -152,32 +131,29 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -201,23 +177,23 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <comphelper/anytostring.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/weak.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/bitmapcanvas.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
-#include <cppcanvas/spritecanvas.hxx>
+#include <cppcanvas/color.hxx>
+#include <cppcanvas/customsprite.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -233,10 +209,12 @@
 #include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/itempool.hxx>
@@ -255,7 +233,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
@@ -266,7 +243,6 @@
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -276,11 +252,34 @@
 #include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <activitiesfactory.hxx>
+#include <activitiesqueue.hxx>
+#include <animatableshape.hxx>
+#include <animationfactory.hxx>
+#include <animationnode.hxx>
+#include <cursormanager.hxx>
+#include <delayevent.hxx>
+#include <disposable.hxx>
+#include <doctreenode.hxx>
+#include <doctreenodesupplier.hxx>
+#include <event.hxx>
+#include <eventmultiplexer.hxx>
+#include <eventqueue.hxx>
+#include <rgbcolor.hxx>
+#include <screenupdater.hxx>
+#include <shape.hxx>
+#include <shapeattributelayer.hxx>
+#include <slideshowcontext.hxx>
+#include <slideshowexceptions.hxx>
+#include <subsettableshapemanager.hxx>
+#include <tools.hxx>
+#include <transitionfactory.hxx>
+#include <unoview.hxx>
+#include <unoviewcontainer.hxx>
+#include <usereventqueue.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

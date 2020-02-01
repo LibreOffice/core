@@ -1134,7 +1134,7 @@ void DataBrowser::InitController(
     {
         OUString aText( GetCellText( nRow, nCol ) );
         m_aTextEditField->SetText( aText );
-        m_aTextEditField->SetSelection( Selection( 0, aText.getLength() ));
+        m_aTextEditField->SetSelection( ::Selection( 0, aText.getLength() ));
     }
     else if( rController == m_rNumberEditController )
     {
@@ -1145,7 +1145,7 @@ void DataBrowser::InitController(
         else
             m_aNumberEditField->SetValue( GetCellNumber( nRow, nCol ) );
         OUString aText( m_aNumberEditField->GetText());
-        m_aNumberEditField->SetSelection( Selection( 0, aText.getLength()));
+        m_aNumberEditField->SetSelection( ::Selection( 0, aText.getLength()));
     }
     else
     {
