@@ -3645,8 +3645,11 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     //Delete selected content, not at table-selection and table in Clipboard, and don't delete hovering graphics.
     if( rShell.HasSelection() && !( nSelection & SelectionType::TableCell) && !( nSelection & SelectionType::DrawObject))
     {
-        bKillPaMs = true;
-        rShell.SetRetainSelection( true );
+        if (!(nSelection & SelectionType::NumberList))
+        {
+            bKillPaMs = true;
+            rShell.SetRetainSelection( true );
+        }
         if (pContext)
             pContext->forget();
         rShell.DelRight();
@@ -3662,7 +3665,10 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
             Point aPt( rShell.GetCharRect().Pos() );
             rShell.SwCursorShell::SetCursor( aPt, true );
         }
-        rShell.SetRetainSelection( false );
+        if (!(nSelection & SelectionType::NumberList))
+        {
+            rShell.SetRetainSelection( false );
+        }
     }
     if ( nSelection & SelectionType::DrawObject) //unselect hovering graphics
     {
