@@ -18,7 +18,6 @@
  */
 
 #include "FormsCollection.hxx"
-#include <services.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>

@@ -18,10 +18,13 @@
  */
 
 #include "scrollbar.hxx"
+#include <property.hxx>
+#include <services.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 #include <rtl/math.hxx>
+#include <com/sun/star/form/FormComponentType.hpp>
 
 namespace frm
 {

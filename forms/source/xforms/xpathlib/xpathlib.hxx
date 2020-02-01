@@ -20,9 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_XPATHLIB_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_XPATHLIB_HXX
 
-#include <libxml/tree.h>
 #include <libxml/xpath.h>
-#include <libxml/xpathInternals.h>
 
 /*
    entry functions for libxml xpath engine

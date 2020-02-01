@@ -20,7 +20,6 @@
 #include "FormattedFieldWrapper.hxx"
 #include "Edit.hxx"
 #include "FormattedField.hxx"
-#include "EditBase.hxx"
 #include <services.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -29,7 +28,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <com/sun/star/io/XMarkableStream.hpp>
 
+using namespace comphelper;
 using namespace frm;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;

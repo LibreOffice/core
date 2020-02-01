@@ -20,16 +20,15 @@
 
 #include "navbarcontrol.hxx"
 #include <frm_strings.hxx>
-#include <FormComponent.hxx>
 #include <componenttools.hxx>
 #include <navtoolbar.hxx>
 #include <commandimageprovider.hxx>
 
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <tools/debug.hxx>

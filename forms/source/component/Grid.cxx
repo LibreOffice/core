@@ -17,22 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include "Columns.hxx"
 #include "findpos.hxx"
 #include "Grid.hxx"
 #include <property.hxx>
 #include <services.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 
@@ -43,7 +39,6 @@ namespace frm
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

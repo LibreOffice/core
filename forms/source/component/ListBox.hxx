@@ -25,23 +25,21 @@
 #include "errorbroadcaster.hxx"
 #include "entrylisthelper.hxx"
 
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 
 #include <comphelper/asyncnotification.hxx>
 #include <connectivity/FValue.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
 #include <vector>
+
+using namespace comphelper;
 
 /** ListBox is a bit confusing / different from other form components,
     so here are a few notes:

@@ -25,7 +25,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
-#include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>

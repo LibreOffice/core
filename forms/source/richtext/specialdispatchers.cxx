@@ -19,8 +19,8 @@
 
 #include "specialdispatchers.hxx"
 #include <editeng/editeng.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/scriptspaceitem.hxx>
 #include <osl/diagnose.h>
 

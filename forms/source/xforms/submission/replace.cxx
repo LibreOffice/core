@@ -21,15 +21,11 @@
 #include "submission.hxx"
 #include "serialization_app_xml.hxx"
 
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -37,7 +33,6 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;

@@ -23,6 +23,7 @@
 #include "enumeration.hxx"
 
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -32,13 +33,10 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <vector>
-#include <algorithm>
 
 
 typedef cppu::WeakImplHelper<

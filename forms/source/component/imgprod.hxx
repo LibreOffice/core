@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_IMGPROD_HXX
 
 #include <tools/link.hxx>
-#include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XImageProducer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

@@ -21,10 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
 #include <comphelper/uno3.hxx>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -32,11 +29,9 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/script/ScriptEvent.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <osl/mutex.hxx>

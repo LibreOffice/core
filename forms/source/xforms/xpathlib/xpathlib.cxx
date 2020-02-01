@@ -20,10 +20,8 @@
 
 #include <string.h>
 #include <sal/types.h>
-#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -37,6 +35,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <libxml/xpathInternals.h>
 
 #include "xpathlib.hxx"
 #include "extension.hxx"

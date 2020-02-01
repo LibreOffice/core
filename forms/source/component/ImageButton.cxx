@@ -23,6 +23,9 @@
 #include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <property.hxx>
+#include <services.hxx>
 
 namespace frm
 {
@@ -31,7 +34,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
