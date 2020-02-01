@@ -30,7 +30,7 @@
 
 #include <vector>
 #include <memory>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 class SwAccessibleParagraph;
 class SwViewShell;
@@ -304,7 +304,7 @@ public:
     virtual bool IsDocumentSelAll() override;
 
     //Para Container for InvalidateCursorPosition
-    typedef std::set< SwAccessibleParagraph* >  SET_PARA;
+    typedef o3tl::sorted_vector< SwAccessibleParagraph* >  SET_PARA;
     SET_PARA m_setParaAdd;
     SET_PARA m_setParaRemove;
 };
