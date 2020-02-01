@@ -52,18 +52,18 @@ private:
     SvxParaPrevWindow m_aExampleWin;
 
     // indention
-    std::unique_ptr<RelativeField> m_xLeftIndent;
+    std::unique_ptr<SvxRelativeField> m_xLeftIndent;
 
     std::unique_ptr<weld::Label> m_xRightLabel;
-    std::unique_ptr<RelativeField> m_xRightIndent;
+    std::unique_ptr<SvxRelativeField> m_xRightIndent;
 
     std::unique_ptr<weld::Label> m_xFLineLabel;
-    std::unique_ptr<RelativeField> m_xFLineIndent;
+    std::unique_ptr<SvxRelativeField> m_xFLineIndent;
     std::unique_ptr<weld::CheckButton> m_xAutoCB;
 
     // distance
-    std::unique_ptr<RelativeField> m_xTopDist;
-    std::unique_ptr<RelativeField> m_xBottomDist;
+    std::unique_ptr<SvxRelativeField> m_xTopDist;
+    std::unique_ptr<SvxRelativeField> m_xBottomDist;
     std::unique_ptr<weld::CheckButton> m_xContextualCB;
 
     // line spacing

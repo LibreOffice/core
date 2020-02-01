@@ -97,9 +97,9 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
                   true)
     , m_pBindings(pBindings)
     , m_xRowHeightEdit(
-          new RelativeField(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM)))
+          new SvxRelativeField(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM)))
     , m_xColumnWidthEdit(
-          new RelativeField(m_xBuilder->weld_metric_spin_button("columnwidth", FieldUnit::CM)))
+          new SvxRelativeField(m_xBuilder->weld_metric_spin_button("columnwidth", FieldUnit::CM)))
     , m_xInsert(m_xBuilder->weld_toolbar("insert"))
     , m_xInsertDispatch(new ToolbarUnoDispatcher(*m_xInsert, rxFrame))
     , m_xSelect(m_xBuilder->weld_toolbar("select"))

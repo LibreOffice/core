@@ -1460,7 +1460,7 @@ void limitWidthForSidebar(weld::SpinButton& rSpinButton)
     rSpinButton.set_width_chars(std::min(rSpinButton.get_width_chars(), nMaxDigits));
 }
 
-void limitWidthForSidebar(RelativeField& rMetricSpinButton)
+void limitWidthForSidebar(SvxRelativeField& rMetricSpinButton)
 {
     weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
     limitWidthForSidebar(rSpinButton);

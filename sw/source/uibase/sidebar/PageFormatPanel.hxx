@@ -66,8 +66,8 @@ private:
     SfxBindings* mpBindings;
 
     std::unique_ptr<SvxPaperSizeListBox> mxPaperSizeBox;
-    std::unique_ptr<RelativeField> mxPaperWidth;
-    std::unique_ptr<RelativeField> mxPaperHeight;
+    std::unique_ptr<SvxRelativeField> mxPaperWidth;
+    std::unique_ptr<SvxRelativeField> mxPaperHeight;
     std::unique_ptr<weld::ComboBox> mxPaperOrientation;
     std::unique_ptr<weld::ComboBox> mxMarginSelectBox;
     std::unique_ptr<weld::Label> mxCustomEntry;
