@@ -20,6 +20,7 @@
 #
 
 # where stuff is built
+/bazel-*
 /buck-out
 /instdir
 /instdir_for_build

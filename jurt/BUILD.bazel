@@ -1,0 +1,44 @@
+load("@com_googlesource_gerrit_bazlets//tools:javadoc.bzl", "java_doc")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# TODO(davido): Remove that hack to create source package without the wrong path prefix,
+# see https://github.com/bazelbuild/bazel/issues/10692.
+java_binary(
+    name = "jurt-src-binary",
+    main_class = "Dummy.java",
+    resource_strip_prefix = "jurt",
+    resources = glob(["com/**/*.java"]),
+)
+
+# TODO(davido): Remove that hack to rename the java_binary source with ".jar" suffit
+# to zip with ".srcjar" suffix so that java_library can accept it.
+# Unfortunately, Bazel is still missing zip_file() rule compared to Buck tool, see:
+# https://buck.build/rule/zip_file.html.
+genrule(
+    name = "jurt-src",
+    srcs = [":jurt-src-binary_deploy.jar"],
+    outs = ["jurt.srcjar"],
+    cmd = "mv $< $@",
+)
+
+java_library(
+    name = "jurt",
+    srcs = [":jurt-src"],
+    deps = [
+        "//:ridl",
+        "//ridljar/source/unoloader",
+    ],
+)
+
+java_doc(
+    name = "jurt-javadoc",
+    libs = [
+        ":jurt",
+    ],
+    pkgs = ["com.sun.star"],
+    title = "LibreOffice Java Uno Runtime",
+)
+
+exports_files(["pom.jurt.xml"])

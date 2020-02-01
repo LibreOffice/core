@@ -1,0 +1,45 @@
+load("@com_googlesource_gerrit_bazlets//tools:genrule2.bzl", "genrule2")
+load("@rules_java//java:defs.bzl", "java_import")
+
+package(default_visibility = ["//visibility:public"])
+
+java_import(
+    name = "ridl",
+    jars = ["instdir/program/classes/ridl.jar"],
+    srcjar = "//ridljar:ridl-src-binary_deploy.jar",
+)
+
+java_import(
+    name = "unoil",
+    jars = ["instdir/program/classes/unoil.jar"],
+)
+
+genrule2(
+    name = "api",
+    srcs = [
+        ":ridl",
+        ":unoil",
+        "//bean:officebean",
+        "//bean:officebean-javadoc",
+        "//bean:officebean-src",
+        "//javaunohelper:juh",
+        "//javaunohelper:juh-javadoc",
+        "//javaunohelper:juh-src",
+        "//jurt",
+        "//jurt:jurt-javadoc",
+        "//jurt:jurt-src",
+        "//ridljar:ridl-javadoc",
+        "//ridljar:ridl-src",
+        "//ridljar/source/unoloader",
+        "//ridljar/source/unoloader:unoloader-javadoc",
+        "//ridljar/source/unoloader:unoloader-src",
+        "//unoil:unoil-javadoc",
+        "//unoil:unoil-src",
+    ],
+    outs = ["all.zip"],
+    cmd = " && ".join([
+        "cp $(SRCS) $$TMP",
+        "cd $$TMP",
+        "zip -qr $$ROOT/$@ .",
+    ]),
+)

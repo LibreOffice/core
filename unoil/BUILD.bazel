@@ -1,0 +1,25 @@
+load("@com_googlesource_gerrit_bazlets//tools:genrule2.bzl", "genrule2")
+
+package(default_visibility = ["//visibility:public"])
+
+genrule2(
+    name = "unoil-src",
+    outs = ["unoil.srcjar"],
+    cmd = " && ".join([
+        "cd $$TMP",
+        "echo \"FAKE SOURCE ARCHIVE\" > README",
+        "zip -qr $$ROOT/$@ *",
+    ]),
+)
+
+genrule2(
+    name = "unoil-javadoc",
+    outs = ["unoil-javadoc.jar"],
+    cmd = " && ".join([
+        "cd $$TMP",
+        "echo \"FAKE JAVADOC ARCHIVE\" > README",
+        "zip -qr $$ROOT/$@ *",
+    ]),
+)
+
+exports_files(["pom.unoil.xml"])

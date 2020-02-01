@@ -1,0 +1,30 @@
+load("@com_googlesource_gerrit_bazlets//tools:javadoc.bzl", "java_doc")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+
+package(default_visibility = ["//visibility:public"])
+
+java_binary(
+    name = "unoloader-src-binary",
+    main_class = "Dummy.java",
+    resource_strip_prefix = "ridljar/source/unoloader",
+    resources = glob(["com/**"]),
+)
+
+genrule(
+    name = "unoloader-src",
+    srcs = [":unoloader-src-binary_deploy.jar"],
+    outs = ["unoloader.srcjar"],
+    cmd = "mv $< $@",
+)
+
+java_library(
+    name = "unoloader",
+    srcs = [":unoloader-src"],
+)
+
+java_doc(
+    name = "unoloader-javadoc",
+    libs = [":unoloader"],
+    pkgs = ["com.sun.star.lib.unoloader"],
+    title = "LibreOffice Uno loader",
+)
