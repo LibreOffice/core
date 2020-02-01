@@ -609,12 +609,8 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
     rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](std::unique_ptr<StyleTree_Impl> const & pEntry) { return !pEntry; }), rArr.end());
 
     // tdf#91106 sort top level styles
-    std::sort(rArr.begin(), rArr.end(),
+    std::sort(rArr.begin()+1, rArr.end(),
         [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
-            if (pEntry2->getName() == "Default Style")
-                return false;
-            if (pEntry1->getName() == "Default Style")
-                return true; // default always first
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
 }
