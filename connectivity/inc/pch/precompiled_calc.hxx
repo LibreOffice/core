@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:00 using:
+ Generated on 2020-01-22 15:57:33 using:
  ./bin/update_pch connectivity calc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,12 +25,10 @@
 #include <cstddef>
 #include <cstring>
 #include <limits>
-#include <memory>
 #include <new>
 #include <string_view>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
-#include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
@@ -44,30 +42,34 @@
 #include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
+#include <calc/CCatalog.hxx>
+#include <calc/CConnection.hxx>
+#include <calc/CDatabaseMetaData.hxx>
+#include <calc/CDriver.hxx>
+#include <calc/CTable.hxx>
+#include <calc/CTables.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <comphelper/processfactory.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <o3tl/typed_flags_set.hxx>
-#include <svl/svldllapi.h>
+#include <file/filedllapi.hxx>
+#include <resource/sharedresources.hxx>
+#include <tools/toolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #endif // PCH_LEVEL >= 4

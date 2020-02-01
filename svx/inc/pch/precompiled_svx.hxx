@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-23 20:54:27 using:
+ Generated on 2020-02-01 10:58:24 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -96,6 +96,7 @@
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -107,6 +108,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
@@ -132,14 +134,17 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -148,8 +153,10 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XController2.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -161,7 +168,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -205,6 +214,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/weak.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -219,9 +229,12 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakagg.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editdata.hxx>
@@ -348,6 +361,12 @@
 #include <unotools/viewoptions.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <cell.hxx>
+#include <celltypes.hxx>
+#include <charmapacc.hxx>
+#include <fmprop.hxx>
+#include <fmservs.hxx>
+#include <fmshimp.hxx>
 #include <helpids.h>
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
@@ -370,6 +389,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
+#include <svx/framebordertype.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>
@@ -413,6 +433,7 @@
 #include <svx/unopage.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshtxt.hxx>
+#include <svx/view3d.hxx>
 #include <svx/viewpt3d.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xdef.hxx>

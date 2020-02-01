@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:35 using:
+ Generated on 2020-02-01 10:57:36 using:
  ./bin/update_pch desktop sofficeapp --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,7 +32,6 @@
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -44,30 +43,31 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
-#include <osl/module.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
+#include <osl/pipe.h>
+#include <osl/pipe.hxx>
 #include <osl/security.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/process.h>
@@ -92,36 +92,19 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/fntstyle.hxx>
-#include <vcl/font.hxx>
-#include <vcl/keycod.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/metaactiontypes.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/outdevmap.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/task.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vclreferencebase.hxx>
-#include <vcl/wall.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -144,7 +127,6 @@
 #include <basic/sbxdef.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -156,6 +138,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -163,40 +146,37 @@
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/implbase_ex_post.hxx>
+#include <cppuhelper/implbase_ex_pre.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/thread.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/hint.hxx>
-#include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

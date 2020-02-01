@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:23 using:
+ Generated on 2020-01-22 15:57:40 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,6 +22,8 @@
 
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <assert.h>
+#include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <cstring>
@@ -37,6 +39,7 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -44,7 +47,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -93,6 +95,9 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -114,30 +119,60 @@
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxvar.hxx>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
+#include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#include <com/sun/star/sdbcx/XDrop.hpp>
+#include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -149,26 +184,48 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <comphelper/IdPropArrayHelper.hxx>
+#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertycontainer.hxx>
+#include <comphelper/propertycontainerhelper.hxx>
+#include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <connectivity/IParseContext.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/sqlerror.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -180,7 +237,10 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
@@ -209,7 +269,13 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <ContainerMediator.hxx>
+#include <apitools.hxx>
+#include <columnsettings.hxx>
 #include <core_resource.hxx>
+#include <definitioncolumn.hxx>
+#include <sdbcoretools.hxx>
+#include <stringconstants.hxx>
 #include <strings.hxx>
 #endif // PCH_LEVEL >= 4
 

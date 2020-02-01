@@ -76,8 +76,6 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile const & rMtf )
     return pComment;
 }
 
-namespace xmloff {
-
 class GraphicInputStream : public cppu::WeakImplHelper<XInputStream>
 {
 private:
@@ -208,8 +206,6 @@ void SAL_CALL GraphicInputStream::closeInput()
 
     mxStreamWrapper->closeInput();
 }
-
-} // end xmloff namespace
 
 class SvXMLGraphicOutputStream:
     public cppu::WeakImplHelper<XOutputStream>
@@ -868,7 +864,7 @@ uno::Reference<io::XInputStream> SAL_CALL SvXMLGraphicHelper::createInputStream(
     if (SvXMLGraphicHelperMode::Write == meCreateMode)
     {
         OUString sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(maOutputMimeType, RTL_TEXTENCODING_ASCII_US));
-        std::unique_ptr<xmloff::GraphicInputStream> pInputStream(new xmloff::GraphicInputStream(aGraphicObject, sMimeType));
+        std::unique_ptr<GraphicInputStream> pInputStream(new GraphicInputStream(aGraphicObject, sMimeType));
 
         // We release the pointer from unique_ptr and assign it to the input stream return type.
         // In case the stream doesn't exists, unique_ptr will delete the pointer when we go out of scope.

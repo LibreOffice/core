@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:39 using:
+ Generated on 2020-01-22 15:57:44 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,13 +29,12 @@
 #include <limits>
 #include <memory>
 #include <new>
-#include <numeric>
 #include <ostream>
 #include <string.h>
 #include <string_view>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -62,7 +61,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
@@ -77,8 +75,8 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -99,11 +97,11 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureKind2.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -111,10 +109,12 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <svtools/svtdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
@@ -124,28 +124,29 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
-#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
-#include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>

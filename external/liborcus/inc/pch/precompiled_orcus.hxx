@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-13 10:38:03 using:
+ Generated on 2020-02-01 12:22:35 using:
  ./bin/update_pch external/liborcus orcus --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -64,6 +64,7 @@
 #include <orcus/format_detection.hpp>
 #include <orcus/global.hpp>
 #include <orcus/info.hpp>
+#include <orcus/interface.hpp>
 #include <orcus/json_document_tree.hpp>
 #include <orcus/json_global.hpp>
 #include <orcus/json_parser.hpp>

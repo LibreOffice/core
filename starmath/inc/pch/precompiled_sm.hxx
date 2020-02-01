@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:16:20 using:
+ Generated on 2020-02-01 10:58:19 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,15 +28,16 @@
 #include <functional>
 #include <limits.h>
 #include <limits>
+#include <list>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -59,12 +60,15 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/font.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
@@ -88,6 +92,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -101,12 +106,14 @@
 #include <editeng/editstat.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/shell.hxx>
+#include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>

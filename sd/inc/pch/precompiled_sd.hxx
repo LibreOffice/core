@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-28 15:30:31 using:
+ Generated on 2020-02-01 10:58:15 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -53,6 +53,7 @@
 #include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
+#include <osl/socket_decl.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -76,6 +77,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
@@ -91,6 +93,7 @@
 #include <vcl/image.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -99,6 +102,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
@@ -127,13 +131,20 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
+#include <cache/SlsPageCache.hxx>
+#include <cache/SlsPageCacheManager.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -145,7 +156,15 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -165,6 +184,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -209,9 +229,23 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsFocusManager.hxx>
+#include <controller/SlsInsertionIndicatorHandler.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsProperties.hxx>
+#include <controller/SlsScrollBarManager.hxx>
+#include <controller/SlsSelectionFunction.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsSelectionObserver.hxx>
+#include <controller/SlsSlotManager.hxx>
+#include <controller/SlsVisibleAreaManager.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
@@ -219,6 +253,8 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -249,18 +285,28 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
+#include <framework/ConfigurationController.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <framework/Pane.hxx>
+#include <framework/ViewShellWrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/optional.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -284,6 +330,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/shell.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -294,6 +341,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -319,6 +367,9 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
+#include <svx/AccessibleShapeTreeInfo.hxx>
+#include <svx/IAccessibleViewForwarder.hxx>
+#include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxColorChildWindow.hxx>
@@ -349,6 +400,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdetc.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdobj.hxx>
@@ -420,34 +472,99 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsTheme.hxx>
 #include <xmloff/autolayout.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <AccessibleViewForwarder.hxx>
+#include <AnimationChildWindow.hxx>
 #include <Annotation.hxx>
+#include <Client.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
+#include <DrawController.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
 #include <EffectMigration.hxx>
+#include <EventMultiplexer.hxx>
 #include <FactoryIds.hxx>
+#include <FormShellManager.hxx>
+#include <FrameView.hxx>
+#include <GraphicDocShell.hxx>
+#include <GraphicViewShell.hxx>
+#include <LayerTabBar.hxx>
+#include <MasterPageObserver.hxx>
+#include <MutexOwner.hxx>
+#include <OutlineView.hxx>
+#include <OutlineViewShell.hxx>
 #include <Outliner.hxx>
+#include <PaneChildWindows.hxx>
+#include <PaneDockingWindow.hxx>
+#include <PresentationViewShell.hxx>
+#include <PreviewRenderer.hxx>
 #include <SdShapeTypes.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <SpellDialogChildWindow.hxx>
+#include <TextObjectBar.hxx>
+#include <ToolBarManager.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellHint.hxx>
+#include <ViewShellImplementation.hxx>
+#include <ViewShellManager.hxx>
+#include <Window.hxx>
 #include <anminfo.hxx>
 #include <cusshow.hxx>
 #include <customshowlist.hxx>
 #include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <fubullet.hxx>
+#include <fuconstr.hxx>
+#include <fucushow.hxx>
+#include <fudraw.hxx>
+#include <fuexpand.hxx>
+#include <fuinsfil.hxx>
+#include <fupoor.hxx>
+#include <fusel.hxx>
+#include <fusldlg.hxx>
+#include <fusumry.hxx>
+#include <futempl.hxx>
+#include <futext.hxx>
 #include <glob.hxx>
 #include <helpids.h>
+#include <navigatr.hxx>
 #include <notifydocumentevent.hxx>
+#include <optsitem.hxx>
+#include <pres.hxx>
 #include <sdabstdlg.hxx>
 #include <sddll.hxx>
+#include <sddllapi.h>
 #include <sdfilter.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
+#include <sdtreelb.hxx>
+#include <sdundo.hxx>
+#include <sdundogr.hxx>
+#include <sdxfer.hxx>
+#include <slideshow.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <strings.hxx>
 #include <textapi.hxx>
+#include <unchss.hxx>
 #include <undoanim.hxx>
+#include <unmodpg.hxx>
+#include <unokywds.hxx>
+#include <unomodel.hxx>
+#include <unopage.hxx>
+#include <unoprnms.hxx>
+#include <zoomlist.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

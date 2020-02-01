@@ -51,8 +51,7 @@
 
 using namespace ::com::sun::star::script;
 
-
-#define RTLNAME "@SBRTL"
+#define SB_RTLNAME "@SBRTL"
 //  i#i68894#
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -935,7 +934,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
         GetSbData()->pUnoFac.reset( new SbUnoFactory );
         AddFactory( GetSbData()->pUnoFac.get() );
     }
-    pRtl = new SbiStdObject(RTLNAME, this );
+    pRtl = new SbiStdObject(SB_RTLNAME, this );
     // Search via StarBasic is always global
     SetFlag( SbxFlagBits::GlobalSearch );
     pVBAGlobals = nullptr;
@@ -1276,7 +1275,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
     {
         if( t == SbxClassType::DontCare || t == SbxClassType::Object )
         {
-            if( rName.equalsIgnoreAsciiCase( RTLNAME ) )
+            if( rName.equalsIgnoreAsciiCase( SB_RTLNAME ) )
             {
                 pRes = pRtl.get();
             }

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:42 using:
+ Generated on 2020-02-01 10:57:37 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,13 +27,13 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <deque>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -45,11 +45,11 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -77,6 +77,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -88,18 +89,19 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/EnumContext.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
+#include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
@@ -108,10 +110,10 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/task.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
@@ -128,6 +130,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -137,8 +140,6 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
@@ -148,7 +149,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -174,7 +174,6 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/fileformat.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -203,8 +202,9 @@
 #include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/transliteration.hxx>
 #include <libxml/xmlwriter.h>
-#include <linguistic/lngprops.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -216,6 +216,7 @@
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -228,6 +229,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
@@ -238,11 +240,9 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/tenccvt.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -250,9 +250,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configitem.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
@@ -275,7 +273,6 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/edtdlg.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/emphasismarkitem.hxx>
@@ -286,7 +283,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/itemtype.hxx>
-#include <editeng/justifyitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -298,11 +294,11 @@
 #include <editeng/postitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/shdditem.hxx>
+#include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/unoedhlp.hxx>
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/unolingu.hxx>
