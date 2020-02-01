@@ -12757,6 +12757,24 @@ fi
 AC_SUBST(ENABLE_FORMULA_LOGGER)
 
 dnl ===================================================================
+dnl Checking for active Antivirus software.
+dnl ===================================================================
+SRC_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+SRC_ROOT=`cygpath -m $SRC_ROOT` 
+
+if test $_os = WINNT ; then
+    AC_MSG_CHECKING([for active Antivirus software])
+	ANTIVIRUS_LIST=`cscript.exe //Nologo $SRC_ROOT/antivirusDetection.vbs`
+	if [ [ "$ANTIVIRUS_LIST" != "NOT_FOUND" ] ]; then
+		AC_MSG_RESULT([found])
+		AC_MSG_WARN([Active Antivirus software detected: $ANTIVIRUS_LIST])
+		add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST"
+	else 
+		AC_MSG_RESULT([not found])
+	fi
+fi
+
+dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
 AC_MSG_NOTICE([setting up the build environment variables...])
@@ -13052,5 +13070,4 @@ if test -f warn; then
     cat warn
     rm warn
 fi
-
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
