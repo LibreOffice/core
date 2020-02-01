@@ -31,7 +31,7 @@
 #include <map>
 #include <memory>
 #include <unordered_map>
-#include <unordered_set>
+#include <o3tl/sorted_vector.hxx>
 
 class XclExtLst;
 
@@ -195,7 +195,7 @@ private:
     bool IsValidTokenArray( const ScTokenArray& rArray ) const;
 
     typedef std::unordered_map<const ScTokenArray*, XclExpShrfmlaRef> TokensType;
-    typedef std::unordered_set<const ScTokenArray*> BadTokenArraysType;
+    typedef o3tl::sorted_vector<const ScTokenArray*> BadTokenArraysType;
 
     TokensType         maRecMap;    /// Map containing the SHRFMLA records.
     BadTokenArraysType maBadTokens; /// shared tokens we should *not* export as SHRFMLA

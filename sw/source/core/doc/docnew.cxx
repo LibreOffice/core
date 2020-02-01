@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <unordered_set>
+#include <o3tl/sorted_vector.hxx>
 
 #include <doc.hxx>
 #include <proofreadingiterator.hxx>
@@ -915,7 +915,7 @@ static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rSt
 static bool lcl_PageDescOrFollowContainsHeaderFooter(const SwPageDesc& rPageDesc)
 {
     // remember already checked page descs to avoid cycle
-    std::unordered_set<const SwPageDesc*> aCheckedPageDescs;
+    o3tl::sorted_vector<const SwPageDesc*> aCheckedPageDescs;
     const SwPageDesc* pCurPageDesc = &rPageDesc;
     while (aCheckedPageDescs.count(pCurPageDesc) == 0)
     {

@@ -253,7 +253,7 @@ ScFormulaGroupDependencyComputeGuard::~ScFormulaGroupDependencyComputeGuard()
 }
 
 ScCheckIndependentFGGuard::ScCheckIndependentFGGuard(ScRecursionHelper& rRecursionHelper,
-                                                     std::unordered_set<ScFormulaCellGroup*>* pSet) :
+                                                     o3tl::sorted_vector<ScFormulaCellGroup*>* pSet) :
     mrRecHelper(rRecursionHelper),
     mbUsedFGSet(false)
 {

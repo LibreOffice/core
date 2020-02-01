@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
 
 #include <uno/dispatcher.h>
@@ -78,7 +79,7 @@ struct hash_ptr
 
 }
 
-typedef std::unordered_set< void *, hash_ptr > t_ptr_set;
+typedef o3tl::sorted_vector< void * > t_ptr_set;
 typedef std::unordered_map< void *, t_ptr_set, hash_ptr > t_ptr_map;
 
 namespace {
@@ -825,7 +826,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
                 &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
             if (nullptr == that) // again no entry
             {
-                pair< t_ptr_set::iterator, bool > i(adapter_set->insert(pNew));
+                pair< t_ptr_set::const_iterator, bool > i(adapter_set->insert(pNew));
                 SAL_WARN_IF(
                     !i.second, "stoc",
                     "set already contains " << *(i.first) << " != " << pNew);

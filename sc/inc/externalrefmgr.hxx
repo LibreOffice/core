@@ -39,6 +39,7 @@
 #include <unordered_set>
 #include <vector>
 #include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScTokenArray;
@@ -381,14 +382,6 @@ public:
         LinkListener();
         virtual ~LinkListener() COVERITY_NOEXCEPT_FALSE = 0;
         virtual void notify(sal_uInt16 nFileId, LinkUpdateType eType) = 0;
-
-        struct Hash
-        {
-            size_t operator() (const LinkListener* p) const
-            {
-                return reinterpret_cast<size_t>(p);
-            }
-        };
     };
 
     /**
@@ -421,7 +414,7 @@ private:
 
     typedef std::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
-    typedef std::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
+    typedef o3tl::sorted_vector<LinkListener*>                     LinkListeners;
     typedef std::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
 public:

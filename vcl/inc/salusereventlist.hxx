@@ -26,18 +26,12 @@
 #include <osl/thread.hxx>
 
 #include <list>
-#include <unordered_set>
+#include <o3tl/sorted_vector.hxx>
 
 class SalFrame;
 enum class SalEvent;
 
-struct SalFrameHash : public std::hash<sal_IntPtr>
-{
-    size_t operator()(const SalFrame* frame) const
-        { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<sal_IntPtr>(frame) ); }
-};
-
-typedef std::unordered_set< SalFrame*, SalFrameHash > SalFrameSet;
+typedef o3tl::sorted_vector< SalFrame* > SalFrameSet;
 
 class VCL_PLUGIN_PUBLIC SalUserEventList
 {

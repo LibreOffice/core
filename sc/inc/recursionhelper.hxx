@@ -25,7 +25,7 @@
 #include <list>
 #include <vector>
 #include <stack>
-#include <unordered_set>
+#include <o3tl/sorted_vector.hxx>
 
 class ScFormulaCell;
 
@@ -65,7 +65,7 @@ class ScRecursionHelper
     bool                                bConverging;
     bool                                bGroupsIndependent;
     std::vector< ScFormulaCell* >       aTemporaryGroupCells;
-    std::unordered_set< ScFormulaCellGroup* >* pFGSet;
+    o3tl::sorted_vector< ScFormulaCellGroup* >* pFGSet;
 
     void Init();
     void ResetIteration();
@@ -120,7 +120,7 @@ public:
     void AddTemporaryGroupCell(ScFormulaCell* cell);
     void CleanTemporaryGroupCells();
 
-    void SetFormulaGroupSet(std::unordered_set<ScFormulaCellGroup*>* pSet) { pFGSet = pSet; }
+    void SetFormulaGroupSet(o3tl::sorted_vector<ScFormulaCellGroup*>* pSet) { pFGSet = pSet; }
     bool HasFormulaGroupSet() { return pFGSet != nullptr; }
     bool CheckFGIndependence(ScFormulaCellGroup* pFG);
     void SetGroupsIndependent(bool bSet) { bGroupsIndependent = bSet; }
@@ -157,7 +157,7 @@ class ScCheckIndependentFGGuard
 public:
     ScCheckIndependentFGGuard() = delete;
     ScCheckIndependentFGGuard(ScRecursionHelper& rRecursionHelper,
-                              std::unordered_set<ScFormulaCellGroup*>* pSet);
+                              o3tl::sorted_vector<ScFormulaCellGroup*>* pSet);
     ~ScCheckIndependentFGGuard();
 
     bool AreGroupsIndependent();

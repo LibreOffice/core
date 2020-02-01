@@ -198,6 +198,11 @@ public:
         return (ret.second) ? ret.first : m_vector.end();
     }
 
+    size_type count(const Value& v) const
+    {
+        return find(v) != end() ? 1 : 0;
+    }
+
     bool operator==(const sorted_vector & other) const
     {
         return m_vector == other.m_vector;

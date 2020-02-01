@@ -4717,7 +4717,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
 }
 
 static SCCOL lcl_probeLeftOrRightFGs(const ScFormulaCellGroupRef& xGroup, const ScDocument& rDoc,
-                                     std::unordered_set<ScFormulaCellGroup*>& rFGSet,
+                                     o3tl::sorted_vector<ScFormulaCellGroup*>& rFGSet,
                                      std::map<SCCOL, ScFormulaCell*>& rFGMap, bool bLeft)
 {
     const SCROW nLen = xGroup->mnLength;
@@ -4856,7 +4856,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
-        std::unordered_set<ScFormulaCellGroup*> aFGSet;
+        o3tl::sorted_vector<ScFormulaCellGroup*> aFGSet;
         std::map<SCCOL, ScFormulaCell*> aFGMap;
         aFGSet.insert(mxGroup.get());
 
