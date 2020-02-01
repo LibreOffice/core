@@ -145,6 +145,7 @@ void MediaControl::Resize()
     vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
+    Control::Resize();
 }
 
 void MediaControl::setState( const MediaItem& rItem )

@@ -29,9 +29,7 @@ using namespace com::sun::star;
 
 namespace svx {
 
-class ParaULSpacingWindow : public VclVBox,
-                            public VclBuilderContainer
-
+class ParaULSpacingWindow : public Control
 {
 public:
     virtual ~ParaULSpacingWindow() override;
@@ -40,78 +38,92 @@ public:
     void SetValue(const SvxULSpaceItem* pItem);
     void SetUnit(FieldUnit eUnit);
 
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
+
 protected:
-    ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
-    VclPtr<SvxRelativeField> m_pAboveSpacing;
-    VclPtr<SvxRelativeField> m_pBelowSpacing;
-    VclPtr<VclHBox> m_pAboveContainer;
-    VclPtr<VclHBox> m_pBelowContainer;
+    ParaULSpacingWindow(vcl::Window* pParent);
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+    std::unique_ptr<RelativeField> m_xAboveSpacing;
+    std::unique_ptr<RelativeField> m_xBelowSpacing;
+    std::unique_ptr<weld::Container> m_xAboveContainer;
+    std::unique_ptr<weld::Container> m_xBelowContainer;
 
     MapUnit m_eUnit;
 
-    DECL_LINK(ModifySpacingHdl, Edit&, void);
+    DECL_LINK(ModifySpacingHdl, weld::MetricSpinButton&, void);
 };
 
 class ParaAboveSpacingWindow : public ParaULSpacingWindow
 {
 public:
-    explicit ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    explicit ParaAboveSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
 
 class ParaBelowSpacingWindow : public ParaULSpacingWindow
 {
 public:
-    explicit ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    explicit ParaBelowSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
 
-class ParaLRSpacingWindow : public VclVBox,
-                            public VclBuilderContainer
+class ParaLRSpacingWindow : public Control
 {
 public:
     virtual ~ParaLRSpacingWindow() override;
     virtual void dispose() override;
+
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
 
     void SetValue(SfxItemState eState, const SfxPoolItem* pState);
     void SetUnit(FieldUnit eUnit);
     void SetContext(const vcl::EnumContext& eContext);
 
 protected:
-    ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    ParaLRSpacingWindow(vcl::Window* pParent);
 
-    VclPtr<SvxRelativeField> m_pBeforeSpacing;
-    VclPtr<SvxRelativeField> m_pAfterSpacing;
-    VclPtr<SvxRelativeField> m_pFLSpacing;
-    VclPtr<VclHBox> m_pBeforeContainer;
-    VclPtr<VclHBox> m_pAfterContainer;
-    VclPtr<VclHBox> m_pFirstLineContainer;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+
+    std::unique_ptr<RelativeField> m_xBeforeSpacing;
+    std::unique_ptr<RelativeField> m_xAfterSpacing;
+    std::unique_ptr<RelativeField> m_xFLSpacing;
+    std::unique_ptr<weld::Container> m_xBeforeContainer;
+    std::unique_ptr<weld::Container> m_xAfterContainer;
+    std::unique_ptr<weld::Container> m_xFirstLineContainer;
 
     MapUnit m_eUnit;
 
     vcl::EnumContext m_aContext;
 
-    DECL_LINK(ModifySpacingHdl, Edit&, void);
+    DECL_LINK(ModifySpacingHdl, weld::MetricSpinButton&, void);
 };
 
 class ParaLeftSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    explicit ParaLeftSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
 
 class ParaRightSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    explicit ParaRightSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
 
 class ParaFirstLineSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
+    explicit ParaFirstLineSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
 
