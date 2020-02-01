@@ -1032,8 +1032,8 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
-    sal_uLong c3 = Application::GetReservedKeyCodeCount();
-    sal_uLong i3 = 0;
+    size_t c3 = Application::GetReservedKeyCodeCount();
+    size_t i3 = 0;
     for (i3 = 0; i3 < c3; ++i3)
     {
         const vcl::KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);

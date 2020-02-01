@@ -274,12 +274,12 @@ void Application::Abort( const OUString& rErrorText )
     SalAbort( rErrorText, dumpCore );
 }
 
-sal_uLong Application::GetReservedKeyCodeCount()
+size_t Application::GetReservedKeyCodeCount()
 {
     return SAL_N_ELEMENTS(ReservedKeys);
 }
 
-const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
+const vcl::KeyCode* Application::GetReservedKeyCode( size_t i )
 {
     if( i >= GetReservedKeyCodeCount() )
         return nullptr;

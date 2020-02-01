@@ -1038,7 +1038,7 @@ public:
 
      @see GetReservedKeyCode
     */
-    static sal_uLong            GetReservedKeyCodeCount();
+    static size_t               GetReservedKeyCodeCount();
 
     /** Get the reserved key code.
 
@@ -1048,7 +1048,7 @@ public:
 
      @see GetReservedKeyCodeCount
     */
-    static const vcl::KeyCode*  GetReservedKeyCode( sal_uLong i );
+    static const vcl::KeyCode*  GetReservedKeyCode( size_t i );
 
     ///@}
 
