@@ -89,7 +89,7 @@ ParaAboveSpacingControl::ParaAboveSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 
 VclPtr<vcl::Window> ParaAboveSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
-    VclPtr<ParaAboveSpacingWindow> pWindow = VclPtr<ParaAboveSpacingWindow>::Create(pParent, m_xFrame);
+    VclPtr<ParaAboveSpacingWindow> pWindow = VclPtr<ParaAboveSpacingWindow>::Create(pParent);
     pWindow->Show();
 
     return pWindow;
@@ -104,7 +104,7 @@ ParaBelowSpacingControl::ParaBelowSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 
 VclPtr<vcl::Window> ParaBelowSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
-    VclPtr<ParaBelowSpacingWindow> pWindow = VclPtr<ParaBelowSpacingWindow>::Create(pParent, m_xFrame);
+    VclPtr<ParaBelowSpacingWindow> pWindow = VclPtr<ParaBelowSpacingWindow>::Create(pParent);
     pWindow->Show();
 
     return pWindow;
@@ -218,7 +218,7 @@ ParaLeftSpacingControl::ParaLeftSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nI
 
 VclPtr<vcl::Window> ParaLeftSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
-    VclPtr<ParaLeftSpacingWindow> pWindow = VclPtr<ParaLeftSpacingWindow>::Create(pParent, m_xFrame);
+    VclPtr<ParaLeftSpacingWindow> pWindow = VclPtr<ParaLeftSpacingWindow>::Create(pParent);
     pWindow->Show();
 
     return pWindow;
@@ -233,7 +233,7 @@ ParaRightSpacingControl::ParaRightSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 
 VclPtr<vcl::Window> ParaRightSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
-    VclPtr<ParaRightSpacingWindow> pWindow = VclPtr<ParaRightSpacingWindow>::Create(pParent, m_xFrame);
+    VclPtr<ParaRightSpacingWindow> pWindow = VclPtr<ParaRightSpacingWindow>::Create(pParent);
     pWindow->Show();
 
     return pWindow;
@@ -248,7 +248,7 @@ ParaFirstLineSpacingControl::ParaFirstLineSpacingControl(sal_uInt16 nSlotId, sal
 
 VclPtr<vcl::Window> ParaFirstLineSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
-    VclPtr<ParaFirstLineSpacingWindow> pWindow = VclPtr<ParaFirstLineSpacingWindow>::Create(pParent, m_xFrame);
+    VclPtr<ParaFirstLineSpacingWindow> pWindow = VclPtr<ParaFirstLineSpacingWindow>::Create(pParent);
     pWindow->Show();
 
     return pWindow;

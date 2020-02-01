@@ -65,6 +65,7 @@ public:
     void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
     void save_value() { m_xSpinButton->save_value(); }
     bool get_value_changed_from_saved() const { return m_xSpinButton->get_value_changed_from_saved(); }
+    void grab_focus() { m_xSpinButton->grab_focus(); }
 
     int GetCoreValue(MapUnit eUnit) const { return ::GetCoreValue(*m_xSpinButton, eUnit); }
     void SetFieldUnit(FieldUnit eUnit, bool bAll = false) { ::SetFieldUnit(*m_xSpinButton, eUnit, bAll); }
