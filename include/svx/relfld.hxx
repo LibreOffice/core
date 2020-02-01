@@ -21,15 +21,8 @@
 
 #include <tools/fldunit.hxx>
 #include <svtools/unitconv.hxx>
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
-
-class SAL_DLLPUBLIC_RTTI SvxRelativeField final : public MetricField
-{
-public:
-    SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
-};
 
 class SVX_DLLPUBLIC RelativeField
 {

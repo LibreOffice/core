@@ -515,7 +515,6 @@ custom_widgets = [
     'SearchResultsBox',
     'SidebarToolBox',
     'SvxColorValueSet',
-    'SvxRelativeField',
     'TemplateDefaultView',
     ]
 
