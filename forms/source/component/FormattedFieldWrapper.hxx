@@ -20,10 +20,13 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 
-#include <FormComponent.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 
 namespace frm
 {

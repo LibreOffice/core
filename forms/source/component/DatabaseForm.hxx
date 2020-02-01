@@ -24,9 +24,7 @@
 #include <vector>
 
 #include <propertybaghelper.hxx>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
@@ -45,7 +43,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
-#include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

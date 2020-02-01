@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "Columns.hxx"
 #include <property.hxx>
 #include <componenttools.hxx>
 #include "findpos.hxx"
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +33,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <services.hxx>
-#include <strings.hrc>
 #include <tools/debug.hxx>
 #include <o3tl/sorted_vector.hxx>
 

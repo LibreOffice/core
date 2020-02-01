@@ -30,7 +30,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svl/undo.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

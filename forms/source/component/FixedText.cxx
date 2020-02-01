@@ -18,8 +18,10 @@
  */
 
 #include "FixedText.hxx"
+#include <frm_strings.hxx>
 #include <services.hxx>
-#include <property.hxx>
+
+#include <com/sun/star/form/FormComponentType.hpp>
 
 #include <comphelper/property.hxx>
 
@@ -29,7 +31,6 @@ namespace frm
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
@@ -37,7 +38,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
+using namespace comphelper;
 
 OFixedTextModel::OFixedTextModel( const Reference<XComponentContext>& _rxFactory )
         :OControlModel(_rxFactory, VCL_CONTROLMODEL_FIXEDTEXT)

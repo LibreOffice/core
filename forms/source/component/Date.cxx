@@ -18,11 +18,12 @@
  */
 
 #include "Date.hxx"
+#include <property.hxx>
 #include <services.hxx>
-#include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 
 using namespace dbtools;
 
@@ -34,7 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;

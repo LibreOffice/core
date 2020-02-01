@@ -20,14 +20,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_HXX
 
-#include <map>
-
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
 /**

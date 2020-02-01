@@ -22,7 +22,6 @@
 
 #include "findpos.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

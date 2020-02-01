@@ -20,7 +20,6 @@
 #pragma once
 
 #include <cloneable.hxx>
-#include <frm_strings.hxx>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -33,7 +32,6 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/component.hxx>
 
 using namespace comphelper;
 

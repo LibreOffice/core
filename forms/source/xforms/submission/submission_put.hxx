@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_PUT_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_PUT_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include "submission.hxx"
 
 class CSubmissionPut : public CSubmission

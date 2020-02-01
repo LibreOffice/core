@@ -18,12 +18,12 @@
  */
 
 #include "parametrizedattributedispatcher.hxx"
+#include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <osl/diagnose.h>
 
-#include <svx/svxids.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

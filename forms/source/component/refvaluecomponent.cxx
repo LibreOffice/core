@@ -18,6 +18,7 @@
  */
 
 #include "refvaluecomponent.hxx"
+#include <property.hxx>
 
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>

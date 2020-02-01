@@ -27,11 +27,8 @@
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/util/VetoException.hpp>
+#include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <comphelper/enumhelper.hxx>
-
-#include <functional>
-#include <algorithm>
-#include <o3tl/functional.hxx>
 
 namespace xforms
 {

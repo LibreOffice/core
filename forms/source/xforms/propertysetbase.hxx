@@ -19,15 +19,11 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_PROPERTYSETBASE_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_PROPERTYSETBASE_HXX
 
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/propstate.hxx>
-#include <comphelper/propertysetinfo.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 // include for inlined helper function below
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <map>

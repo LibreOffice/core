@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_GROUPMANAGER_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_GROUPMANAGER_HXX
 
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <algorithm>
 #include <map>
 #include <memory>
 #include <vector>
