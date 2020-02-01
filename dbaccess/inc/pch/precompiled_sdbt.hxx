@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:38 using:
+ Generated on 2020-01-22 15:57:42 using:
  ./bin/update_pch dbaccess sdbt --cutoff=1 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,6 +45,8 @@
 #include <tools/diagnose_ex.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <connectiontools.hxx>
+#include <stringconstants.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

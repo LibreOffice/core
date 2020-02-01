@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-01 19:37:49 using:
+ Generated on 2020-01-29 23:12:45 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,23 +25,26 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <deque>
 #include <functional>
+#include <limits.h>
 #include <limits>
+#include <list>
 #include <map>
 #include <memory>
 #include <new>
 #include <ostream>
+#include <set>
 #include <string_view>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
@@ -64,46 +67,89 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <vcl/IDialogRenderable.hxx>
+#include <vcl/accel.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/event.hxx>
 #include <vcl/font.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
+#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -118,47 +164,86 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/optional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <sfx2/dllapi.h>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sot/sotdllapi.h>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
+#include <svl/hint.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
+#include <svx/svxdllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/contnr.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/link.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
+#include <tools/wintypes.hxx>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
+#include <unotools/confignode.hxx>
+#include <unotools/eventlisteneradapter.hxx>
 #include <unotools/fontdefs.hxx>
+#include <unotools/sharedunocomponent.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <ConnectionLineData.hxx>
+#include <FieldDescriptions.hxx>
+#include <QEnumTypes.hxx>
+#include <QueryDesignView.hxx>
+#include <QueryTableView.hxx>
+#include <TableWindowData.hxx>
+#include <TypeInfo.hxx>
+#include <UITools.hxx>
+#include <browserids.hxx>
+#include <callbacks.hxx>
+#include <dbaccess/dataview.hxx>
+#include <dbaccess/dbaccessdllapi.h>
+#include <dbadmin.hxx>
+#include <dbu_dlg.hxx>
+#include <dbu_reghelper.hxx>
+#include <dsitems.hxx>
+#include <querycontroller.hxx>
+#include <sqlmessage.hxx>
+#include <stringconstants.hxx>
+#include <uiservices.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

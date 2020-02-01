@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:13:59 using:
+ Generated on 2020-01-22 15:57:33 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,6 +30,7 @@
 #include <oledb.h>
 #include <sstream>
 #include <string>
+#include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -49,6 +50,34 @@
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <ado/ACallableStatement.hxx>
+#include <ado/ACatalog.hxx>
+#include <ado/AColumn.hxx>
+#include <ado/AColumns.hxx>
+#include <ado/AConnection.hxx>
+#include <ado/ADatabaseMetaData.hxx>
+#include <ado/ADatabaseMetaDataResultSet.hxx>
+#include <ado/ADatabaseMetaDataResultSetMetaData.hxx>
+#include <ado/ADriver.hxx>
+#include <ado/AGroup.hxx>
+#include <ado/AGroups.hxx>
+#include <ado/AIndex.hxx>
+#include <ado/AIndexes.hxx>
+#include <ado/AKey.hxx>
+#include <ado/AKeys.hxx>
+#include <ado/APreparedStatement.hxx>
+#include <ado/AResultSet.hxx>
+#include <ado/AResultSetMetaData.hxx>
+#include <ado/AStatement.hxx>
+#include <ado/ATable.hxx>
+#include <ado/ATables.hxx>
+#include <ado/AUser.hxx>
+#include <ado/AUsers.hxx>
+#include <ado/AView.hxx>
+#include <ado/AViews.hxx>
+#include <ado/Awrapado.hxx>
+#include <ado/Awrapadox.hxx>
+#include <ado/adoimp.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -64,6 +93,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
@@ -74,9 +104,11 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <resource/sharedresources.hxx>
 #include <salhelper/singletonref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <TConnection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

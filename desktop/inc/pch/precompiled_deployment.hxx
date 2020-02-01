@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:31 using:
+ Generated on 2020-02-01 10:57:35 using:
  ./bin/update_pch desktop deployment --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,41 +27,28 @@
 #include <ostream>
 #include <unordered_map>
 #include <vector>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/security.hxx>
-#include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
-#include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/saldllapi.h>
-#include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
-#include <com/sun/star/deployment/InstallException.hpp>
-#include <com/sun/star/deployment/LicenseException.hpp>
-#include <com/sun/star/deployment/VersionException.hpp>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -74,11 +61,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
@@ -86,6 +72,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/optional.hxx>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
@@ -93,6 +80,14 @@
 #include <xmlscript/xml_helper.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <dp_backend.h>
+#include <dp_descriptioninfoset.hxx>
+#include <dp_identifier.hxx>
+#include <dp_interact.h>
+#include <dp_misc_api.hxx>
+#include <dp_platform.hxx>
+#include <dp_services.hxx>
+#include <dp_ucb.h>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

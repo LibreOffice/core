@@ -262,7 +262,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         return false;
 
     // some loop invariants
-    Animation   aAnimation( rGraphic.GetAnimation() );
+    ::Animation   aAnimation( rGraphic.GetAnimation() );
     const Point aEmptyPoint;
     const Size  aAnimSize( aAnimation.GetDisplaySizePixel() );
 

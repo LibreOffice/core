@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:13:54 using:
+ Generated on 2020-02-01 10:57:25 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,10 +27,8 @@
 #include <ostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <vector>
-#include <o3tl/optional.hxx>
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/file.hxx>
@@ -39,7 +37,6 @@
 #include <osl/time.h>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -48,14 +45,33 @@
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <vcl/bitmap.hxx>
+#include <vcl/cairo.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
+#include <vcl/font.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -64,16 +80,25 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/float_int_conversion.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
+#include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
+#include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/resmgr.hxx>
+#include <unotools/fontdefs.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
@@ -90,7 +115,13 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxvar.hxx>
+#include <date.hxx>
+#include <iosys.hxx>
+#include <rtlproto.hxx>
+#include <runtime.hxx>
+#include <sbintern.hxx>
 #include <sbobjmod.hxx>
+#include <sbunoobj.hxx>
 #include <sbxbase.hxx>
 #endif // PCH_LEVEL >= 4
 
