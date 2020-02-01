@@ -18,6 +18,7 @@
  */
 
 #include "richtextcontrol.hxx"
+#include <property.hxx>
 #include <services.hxx>
 
 #include "richtextmodel.hxx"

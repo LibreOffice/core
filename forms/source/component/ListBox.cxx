@@ -28,6 +28,7 @@
 #include <listenercontainers.hxx>
 #include <componenttools.hxx>
 
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

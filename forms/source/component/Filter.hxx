@@ -20,21 +20,19 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FILTER_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_FILTER_HXX
 
-#include <config_features.h>
-
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <toolkit/controls/unocontrol.hxx>
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
-#include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
 
 #include <unordered_map>

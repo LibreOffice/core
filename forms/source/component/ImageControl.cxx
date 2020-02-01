@@ -21,6 +21,7 @@
 
 #include <strings.hrc>
 #include <frm_resource.hxx>
+#include <property.hxx>
 #include <services.hxx>
 #include <componenttools.hxx>
 
@@ -30,6 +31,7 @@
 #include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -70,7 +72,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

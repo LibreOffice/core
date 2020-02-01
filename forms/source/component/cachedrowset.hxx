@@ -22,8 +22,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <unotools/sharedunocomponent.hxx>
-
 #include <memory>
 
 

@@ -27,9 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <osl/diagnose.h>
 

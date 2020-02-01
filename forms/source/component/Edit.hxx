@@ -25,6 +25,8 @@
 #include <tools/link.hxx>
 #include <cppuhelper/implbase3.hxx>
 
+#include <com/sun/star/form/XChangeBroadcaster.hpp>
+
 namespace dbtools { class FormattedColumnValue; }
 struct ImplSVEvent;
 

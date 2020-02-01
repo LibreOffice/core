@@ -22,6 +22,9 @@
 #include <comphelper/property.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <property.hxx>
+#include <services.hxx>
 
 
 namespace frm

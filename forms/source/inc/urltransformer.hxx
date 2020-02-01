@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_INC_URLTRANSFORMER_HXX
 
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 

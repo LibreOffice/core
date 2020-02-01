@@ -18,11 +18,13 @@
  */
 
 #include "Currency.hxx"
+#include <property.hxx>
 #include <services.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
+#include <com/sun/star/form/FormComponentType.hpp>
 
 
 namespace frm
@@ -31,7 +33,6 @@ namespace frm
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

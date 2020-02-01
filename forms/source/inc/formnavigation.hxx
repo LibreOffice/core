@@ -22,9 +22,7 @@
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "featuredispatcher.hxx"
 #include <vector>

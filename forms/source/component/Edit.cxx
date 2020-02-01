@@ -19,7 +19,10 @@
 
 
 #include "Edit.hxx"
+#include <property.hxx>
+#include <services.hxx>
 
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

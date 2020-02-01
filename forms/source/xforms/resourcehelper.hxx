@@ -19,10 +19,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_RESOURCEHELPER_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_RESOURCEHELPER_HXX
 
-// include resource IDs
-#include <strings.hrc>
-
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 namespace xforms

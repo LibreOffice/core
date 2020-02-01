@@ -20,11 +20,12 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
 #define INCLUDED_FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
+
+#include <urltransformer.hxx>
 
 
 namespace frm

@@ -21,16 +21,12 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_NAVIGATIONBAR_HXX
 
 #include <FormComponent.hxx>
-#include <com/sun/star/io/XPersistObject.hpp>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <formcontrolfont.hxx>
 
-#include <set>
 
+using namespace comphelper;
 
 namespace frm
 {

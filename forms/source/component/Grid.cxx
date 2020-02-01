@@ -27,6 +27,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
@@ -43,7 +44,6 @@ namespace frm
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

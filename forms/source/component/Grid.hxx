@@ -26,7 +26,6 @@
 #include <InterfaceContainer.hxx>
 
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/XRowSetSupplier.hpp>
 #include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

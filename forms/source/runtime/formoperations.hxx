@@ -22,13 +22,10 @@
 
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

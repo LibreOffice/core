@@ -25,6 +25,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include "errorbroadcaster.hxx"
 
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
 struct ImplSVEvent;
 
 namespace frm

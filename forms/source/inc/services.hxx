@@ -20,9 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 #define INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 
-#include <rtl/ustring.hxx>
-#include "frm_strings.hxx"
-
 #define AWT_CONTROL_TEXTFIELD "com.sun.star.awt.TextField"
 
 #define VCL_CONTROL_EDIT "stardiv.vcl.control.Edit"

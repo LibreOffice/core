@@ -21,7 +21,11 @@
 #include "richtextengine.hxx"
 #include "richtextunowrapper.hxx"
 
+#include <property.hxx>
+#include <services.hxx>
+
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 

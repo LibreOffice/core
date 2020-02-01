@@ -20,19 +20,14 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
 
-#include <rtl/ustring.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 
 

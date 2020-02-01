@@ -20,11 +20,13 @@
 #include <FormComponent.hxx>
 #include <strings.hrc>
 #include <frm_resource.hxx>
+#include <property.hxx>
 #include <services.hxx>
 
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>

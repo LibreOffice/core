@@ -26,6 +26,7 @@
 #include <strings.hrc>
 #include "BaseListBox.hxx"
 
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

@@ -21,6 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_INC_FEATUREDISPATCHER_HXX
 
 #include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 
 namespace frm

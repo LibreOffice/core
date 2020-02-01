@@ -28,6 +28,7 @@
 #include "resourcehelper.hxx"
 #include "xmlhelper.hxx"
 #include "xformsevent.hxx"
+#include <strings.hrc>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

@@ -26,17 +26,9 @@
 #include "entrylisthelper.hxx"
 #include "cachedrowset.hxx"
 
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
-#include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 
 #include <connectivity/formattedcolumnvalue.hxx>
-
-#include <cppuhelper/interfacecontainer.hxx>
-
-#include <vcl/timer.hxx>
 
 
 namespace frm

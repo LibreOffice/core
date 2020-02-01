@@ -18,6 +18,9 @@
  */
 
 #include "Pattern.hxx"
+#include <property.hxx>
+#include <services.hxx>
+#include <com/sun/star/form/FormComponentType.hpp>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

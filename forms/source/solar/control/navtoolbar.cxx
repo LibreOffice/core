@@ -30,6 +30,7 @@
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <sal/macros.h>
 #include <osl/diagnose.h>

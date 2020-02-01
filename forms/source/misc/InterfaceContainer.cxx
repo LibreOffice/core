@@ -20,6 +20,7 @@
 
 #include <strings.hrc>
 #include <frm_resource.hxx>
+#include <frm_strings.hxx>
 #include <InterfaceContainer.hxx>
 #include <componenttools.hxx>
 #include <services.hxx>
@@ -29,6 +30,7 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

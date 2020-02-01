@@ -20,9 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_FRM_STRINGS_HXX
 #define INCLUDED_FORMS_SOURCE_INC_FRM_STRINGS_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-
 
 namespace frm
 {

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <config_features.h>
+
 #include <string_view>
 
 #include "Filter.hxx"

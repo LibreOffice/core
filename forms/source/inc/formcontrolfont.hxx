@@ -20,10 +20,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_FORMCONTROLFONT_HXX
 #define INCLUDED_FORMS_SOURCE_INC_FORMCONTROLFONT_HXX
 
-#include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <tools/color.hxx>
 
 namespace cppu {

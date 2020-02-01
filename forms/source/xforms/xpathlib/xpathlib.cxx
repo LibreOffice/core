@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <libxml/xpathInternals.h>
 
 #include "xpathlib.hxx"
 #include "extension.hxx"
