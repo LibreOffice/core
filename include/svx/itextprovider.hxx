@@ -22,7 +22,7 @@ namespace svx
     /** This interface provides access to text object(s) in an SdrObject.
 
      */
-    class SVX_DLLPUBLIC ITextProvider
+    class SVXCORE_DLLPUBLIC ITextProvider
     {
     public:
         /** Return the number of texts available for this object. */

@@ -28,7 +28,7 @@
 // SdrGrafGamma100Item -
 
 
-class SVX_DLLPUBLIC SdrGrafGamma100Item : public SfxUInt32Item
+class SVXCORE_DLLPUBLIC SdrGrafGamma100Item : public SfxUInt32Item
 {
 public:
 

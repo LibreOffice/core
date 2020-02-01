@@ -805,7 +805,7 @@ bool SdTransferable::SetTableRTF( SdDrawDocument* pModel )
             if( pTableObj )
             {
                 SvMemoryStream aMemStm( 65535, 65535 );
-                sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );
+                sdr::table::ExportAsRTF( aMemStm, *pTableObj );
                 return SetAny( Any( Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() ) ) );
             }
         }

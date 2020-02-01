@@ -30,13 +30,13 @@
 
 namespace com::sun::star::uno { class Any; }
 
-class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
+class SVXCORE_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
 {
 public:
     typedef std::pair < const OUString, const OUString > PropertyPair;
 
 private:
-    struct SVX_DLLPUBLIC PropertyPairHash
+    struct SVXCORE_DLLPUBLIC PropertyPairHash
     {
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };

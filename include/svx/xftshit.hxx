@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextShadowItem final : public SfxEnumItem<XFormTextShadow>
+class SVXCORE_DLLPUBLIC XFormTextShadowItem final : public SfxEnumItem<XFormTextShadow>
 {
 public:
                             static SfxPoolItem* CreateDefault();

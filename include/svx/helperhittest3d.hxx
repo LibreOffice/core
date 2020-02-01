@@ -73,7 +73,7 @@ E3dScene* fillViewInformation3DForCompoundObject(
     not empty, the first object is the object closest to the viewer
 
 */
-SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
+SVXCORE_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     const basegfx::B2DPoint& rPoint,
     const E3dScene& rScene,
     ::std::vector< const E3dCompoundObject* >& o_rResult);

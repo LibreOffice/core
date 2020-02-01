@@ -51,13 +51,13 @@ class XPolyPolygon;
 inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
-SVX_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+SVXCORE_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
-SVX_DLLPUBLIC void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs);
+SVXCORE_DLLPUBLIC void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 
@@ -65,7 +65,7 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 
 inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
-SVX_DLLPUBLIC void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn);
+SVXCORE_DLLPUBLIC void ShearPoly(tools::Polygon& rPoly, const Point& rRef, double tn);
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
 /**
@@ -159,11 +159,11 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
  * @return the returned value is in the range of -180.00..179.99 deg
  * and is in 1/100 deg units
  */
-SVX_DLLPUBLIC long GetAngle(const Point& rPnt);
+SVXCORE_DLLPUBLIC long GetAngle(const Point& rPnt);
 
 long NormAngle18000(long a); /// Normalize angle to -180.00..179.99
 
-SVX_DLLPUBLIC long NormAngle36000(long a); /// Normalize angle to 0.00..359.99
+SVXCORE_DLLPUBLIC long NormAngle36000(long a); /// Normalize angle to 0.00..359.99
 
 sal_uInt16 GetAngleSector(long nAngle); /// Determine sector within the cartesian coordinate system
 
@@ -232,7 +232,7 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 
 // Multiplication and subsequent division
 // Calculation and intermediate values are in BigInt
-SVX_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
+SVXCORE_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
 
 class FrPair {
     Fraction aX;
@@ -249,7 +249,7 @@ public:
 };
 
 // To convert units of measurement
-SVX_DLLPUBLIC FrPair GetMapFactor(MapUnit eS, MapUnit eD);
+SVXCORE_DLLPUBLIC FrPair GetMapFactor(MapUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
 inline bool IsMetric(MapUnit eU) {
@@ -272,7 +272,7 @@ inline bool IsInch(FieldUnit eU) {
             || eU == FieldUnit::FOOT || eU == FieldUnit::MILE);
 }
 
-class SVX_DLLPUBLIC SdrFormatter {
+class SVXCORE_DLLPUBLIC SdrFormatter {
     long      nMul_;
     long      nDiv_;
     short     nComma_;

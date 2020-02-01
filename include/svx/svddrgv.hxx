@@ -26,7 +26,7 @@
 
 class SdrUndoGeoObj;
 
-class SVX_DLLPUBLIC SdrDragView : public SdrExchangeView
+class SVXCORE_DLLPUBLIC SdrDragView : public SdrExchangeView
 {
     friend class                SdrPageView;
     friend class                SdrDragMethod;

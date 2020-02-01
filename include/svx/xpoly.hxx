@@ -41,7 +41,7 @@ class OutputDevice;
 
 class ImpXPolygon;
 
-class SVX_DLLPUBLIC XPolygon final
+class SVXCORE_DLLPUBLIC XPolygon final
 {
     o3tl::cow_wrapper< ImpXPolygon > pImpXPolygon;
 

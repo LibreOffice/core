@@ -25,7 +25,7 @@
 
 class SfxObjectShell;
 
-class SVX_DLLPUBLIC SdrUndoManager : public EditUndoManager
+class SVXCORE_DLLPUBLIC SdrUndoManager : public EditUndoManager
 {
 private:
     using EditUndoManager::Undo;

@@ -43,7 +43,7 @@ namespace svxform
 {
     //= OSQLParserClient
 
-    class SVX_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
+    class SVXCORE_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
     {
     protected:
         mutable std::shared_ptr< ::connectivity::OSQLParser > m_pParser;

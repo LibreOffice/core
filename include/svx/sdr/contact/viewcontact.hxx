@@ -33,7 +33,7 @@ namespace sdr { namespace contact {
 class ObjectContact;
 class ViewObjectContact;
 
-class SVX_DLLPUBLIC ViewContact
+class SVXCORE_DLLPUBLIC ViewContact
 {
 private:
     // make ViewObjectContact a friend to exclusively allow it to use

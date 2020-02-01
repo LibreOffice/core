@@ -41,7 +41,7 @@ namespace sdr { namespace contact {
 
 // SdrUnoObj
 struct SdrUnoObjDataHolder;
-class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrUnoObj : public SdrRectObj
 {
     friend class                SdrPageView;
     friend class                SdrControlEventListenerImpl;

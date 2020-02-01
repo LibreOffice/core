@@ -35,7 +35,7 @@ class SdrMarkList;
 // SdrIterMode::DeepNoGroups      : With recursive descent parser, Next() returns no group objects
 enum class SdrIterMode { Flat, DeepWithGroups, DeepNoGroups };
 
-class SVX_DLLPUBLIC SdrObjListIter
+class SVXCORE_DLLPUBLIC SdrObjListIter
 {
     std::vector< const SdrObject* > maObjList;
     size_t                          mnIndex;

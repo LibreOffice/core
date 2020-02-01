@@ -160,7 +160,7 @@ enum class DbGridControlNavigationBarState
 
 class FmXGridSourcePropListener;
 class DisposeListenerGridBridge;
-class SVX_DLLPUBLIC DbGridControl : public svt::EditBrowseBox
+class SVXCORE_DLLPUBLIC DbGridControl : public svt::EditBrowseBox
 {
     friend class FmXGridSourcePropListener;
     friend class GridFieldValueListener;

@@ -29,7 +29,7 @@
 class SfxItemSet;
 
 //   SdrObjGroup
-class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
+class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 {
 private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;

@@ -31,7 +31,7 @@ enum class SdrTextAniDirection
     Left, Right, Up, Down
 };
 
-class SVX_DLLPUBLIC SdrTextAniDirectionItem: public SfxEnumItem<SdrTextAniDirection> {
+class SVXCORE_DLLPUBLIC SdrTextAniDirectionItem: public SfxEnumItem<SdrTextAniDirection> {
 public:
     SdrTextAniDirectionItem(SdrTextAniDirection eDir=SdrTextAniDirection::Left): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION, eDir) {}
     virtual SdrTextAniDirectionItem* Clone(SfxItemPool* pPool=nullptr) const override;

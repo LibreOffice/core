@@ -44,7 +44,7 @@ public:
     sal_Int32 getScale() const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog final : public weld::GenericDialogController
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public weld::GenericDialogController
 {
     sal_uInt16          mnThemeId;
     SdrView&            mrSdrView;

@@ -28,7 +28,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineEndWidthItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XLineEndWidthItem final : public SfxMetricItem
 {
 public:
                             XLineEndWidthItem(long nWidth = LINE_END_WIDTH_DEFAULT);

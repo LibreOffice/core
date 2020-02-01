@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextStartItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XFormTextStartItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

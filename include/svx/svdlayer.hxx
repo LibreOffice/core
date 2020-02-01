@@ -55,7 +55,7 @@
 
 class SdrModel;
 
-class SVX_DLLPUBLIC SdrLayer
+class SVXCORE_DLLPUBLIC SdrLayer
 {
     friend class SdrLayerAdmin;
 
@@ -99,7 +99,7 @@ public:
 #define SDRLAYERPOS_NOTFOUND 0xffff
 
 // When Changing the layer data you currently have to set the Modify flag manually
-class SVX_DLLPUBLIC SdrLayerAdmin {
+class SVXCORE_DLLPUBLIC SdrLayerAdmin {
 friend class SdrView;
 friend class SdrModel;
 friend class SdrPage;

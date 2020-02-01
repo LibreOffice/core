@@ -30,7 +30,7 @@ enum class SdrCaptionEscDir { Horizontal, Vertical, BestFit };
 
 // class SdrCaptionEscDirItem
 
-class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem<SdrCaptionEscDir> {
+class SVXCORE_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem<SdrCaptionEscDir> {
 public:
     SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal): SfxEnumItem(SDRATTR_CAPTIONESCDIR, eDir) {}
     virtual SdrCaptionEscDirItem* Clone(SfxItemPool* pPool=nullptr) const override;
@@ -46,7 +46,7 @@ public:
 // sal_True = line escape position is relative
 // sal_False = line escape position is absolute
 
-class SVX_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
     SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     virtual ~SdrCaptionEscIsRelItem() override;
@@ -65,7 +65,7 @@ public:
 // 10000 = 100.00% = right resp. down
 // only when SdrCaptionEscIsRelItem=TRUE
 
-class SVX_DLLPUBLIC SdrCaptionEscRelItem: public SfxInt32Item {
+class SVXCORE_DLLPUBLIC SdrCaptionEscRelItem: public SfxInt32Item {
 public:
     SdrCaptionEscRelItem(long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
     virtual ~SdrCaptionEscRelItem() override;

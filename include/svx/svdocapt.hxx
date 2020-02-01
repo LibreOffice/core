@@ -39,7 +39,7 @@ public:
 };
 
 //   SdrCaptionObj
-class SVX_DLLPUBLIC SdrCaptionObj final : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrCaptionObj final : public SdrRectObj
 {
 private:
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()

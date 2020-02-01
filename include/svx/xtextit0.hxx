@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextStyleItem final : public SfxEnumItem<XFormTextStyle>
+class SVXCORE_DLLPUBLIC XFormTextStyleItem final : public SfxEnumItem<XFormTextStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -48,7 +48,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextHideFormItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XFormTextHideFormItem final : public SfxBoolItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

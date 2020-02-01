@@ -131,7 +131,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1
 
-SVX_DLLPUBLIC void FillEquationParameter( const css::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
+SVXCORE_DLLPUBLIC void FillEquationParameter( const css::drawing::EnhancedCustomShapeParameter&, const sal_Int32, EnhancedCustomShapeEquation& );
 
 class SAL_DLLPUBLIC_RTTI ExpressionNode
 {
@@ -232,7 +232,7 @@ public:
         @return the generated function object.
        */
 
-    SVX_DLLPUBLIC static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    SVXCORE_DLLPUBLIC static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

@@ -91,7 +91,7 @@ struct TableStyleSettings
 /// SdrTableObj
 class SdrTableObjImpl;
 
-class SVX_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
+class SVXCORE_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
 {
     friend class Cell;
     friend class SdrTableObjImpl;
@@ -258,10 +258,6 @@ public:
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus ) override;
 
-    /** Hack for clipboard with calc and writer, export and import table content as rtf table */
-    static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
-    static void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
-
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
@@ -285,6 +281,9 @@ private:
     rtl::Reference<SdrTableObjImpl>    mpImpl;
 };
 
+/** Hack for clipboard with calc and writer, export and import table content as rtf table */
+SVX_DLLPUBLIC void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
+SVX_DLLPUBLIC void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
 } }
 

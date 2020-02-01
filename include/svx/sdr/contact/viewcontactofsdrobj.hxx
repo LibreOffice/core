@@ -31,7 +31,7 @@ class Bitmap;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewContactOfSdrObj : public ViewContact
+class SVXCORE_DLLPUBLIC ViewContactOfSdrObj : public ViewContact
 {
 protected:
     // the owner of this ViewContact. Set from constructor and not

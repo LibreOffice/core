@@ -38,10 +38,10 @@ public:
 
 enum class SdrCircKind { Full, Section, Cut, Arc };
 
-extern SVX_DLLPUBLIC SdrCircKind ToSdrCircKind(SdrObjKind);
+extern SVXCORE_DLLPUBLIC SdrCircKind ToSdrCircKind(SdrObjKind);
 
 
-class SVX_DLLPUBLIC SdrCircObj final : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrCircObj final : public SdrRectObj
 {
 private:
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()

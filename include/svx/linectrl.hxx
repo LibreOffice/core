@@ -34,7 +34,7 @@ class XLineDashItem;
 typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSelectFunction;
 
 // SvxLineStyleController:
-class SVX_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
+class SVXCORE_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
 {
 private:
     std::unique_ptr<svx::ToolboxButtonLineStyleUpdater> m_xBtnUpdater;

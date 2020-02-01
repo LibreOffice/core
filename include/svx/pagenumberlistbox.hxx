@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
 
-class SVX_DLLPUBLIC SvxPageNumberListBox
+class SVXCORE_DLLPUBLIC SvxPageNumberListBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;

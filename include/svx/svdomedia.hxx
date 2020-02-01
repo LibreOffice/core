@@ -31,7 +31,7 @@ namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
 namespace com::sun::star::graphic { class XGraphic; }
 
 
-class SVX_DLLPUBLIC SdrMediaObj final : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrMediaObj final : public SdrRectObj
 {
     friend class sdr::contact::ViewContactOfSdrMediaObj;
 

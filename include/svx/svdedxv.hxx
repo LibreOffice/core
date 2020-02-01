@@ -58,7 +58,7 @@ enum class SdrEndTextEditKind
 // - macromode
 
 
-class SVX_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCallbacks
+class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCallbacks
 {
     friend class                SdrPageView;
     friend class                ImpSdrEditPara;

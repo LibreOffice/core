@@ -33,7 +33,7 @@ namespace svx
 
     /** specifies a boolean predicate on the set of all SdrObjects - vulgo a filter.
     */
-    class SVX_DLLPUBLIC SAL_NO_VTABLE ISdrObjectFilter
+    class SVXCORE_DLLPUBLIC SAL_NO_VTABLE ISdrObjectFilter
     {
     public:
         virtual bool    includeObject( const SdrObject& i_rObject ) const = 0;

@@ -118,7 +118,7 @@ BitmapEx convertMetafileToBitmapEx(
 //                                                      SwDrawView
 //                                              OSectionView
 
-class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
+class SVXCORE_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
 private:
     friend class                SdrPageView;

@@ -29,7 +29,7 @@
 
 
 
-class SVX_DLLPUBLIC XFillColorItem final : public XColorItem
+class SVXCORE_DLLPUBLIC XFillColorItem final : public XColorItem
 {
 public:
             static SfxPoolItem* CreateDefault();

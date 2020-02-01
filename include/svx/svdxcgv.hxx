@@ -25,7 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrExchangeView : public SdrObjEditView
+class SVXCORE_DLLPUBLIC SdrExchangeView : public SdrObjEditView
 {
     friend class SdrPageView;
 
