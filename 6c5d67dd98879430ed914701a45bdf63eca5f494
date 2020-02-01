@@ -46,6 +46,30 @@
       "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4156513_a1b8da17",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-01T22:34:34Z",
+      "side": 1,
+      "message": "Also, both of them use same file which is styles.xml for pXmlDoc.",
+      "parentUuid": "2bbf4112_84c203b0",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 35
+      },
+      "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
