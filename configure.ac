@@ -13053,8 +13053,13 @@ if test -f warn; then
     rm warn
 fi
 
+if test $_os = WINNT ; then
+        ./exec.bat
+fi
+
+
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
 
 
-./check.exe
+
 
