@@ -23,7 +23,7 @@
 #include <vcl/vclptr.hxx>
 
 class CheckBox;
-class ImageRadioButton;
+class RadioButton;
 namespace vcl { class Window; }
 
 namespace sfx2 { namespace sidebar {
@@ -40,7 +40,7 @@ public:
     */
     static VclPtr<CheckBox> CreateMenuButton (vcl::Window* pParentWindow);
 
-    static VclPtr<ImageRadioButton> CreateTabItem (vcl::Window* pParentWindow);
+    static VclPtr<RadioButton> CreateTabItem (vcl::Window* pParentWindow);
 };
 
 

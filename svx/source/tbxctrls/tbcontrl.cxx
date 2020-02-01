@@ -2639,8 +2639,6 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
     Size aSize = m_xLineStyleLb->SetWidth( 20 ); // 1pt by default
 
-    fprintf(stderr, "width height is %ld %ld\n", aSize.Width(), aSize.Height());
-
     m_xLineStyleLb->SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
 
     m_xContainer->set_help_id(HID_POPUP_LINE);

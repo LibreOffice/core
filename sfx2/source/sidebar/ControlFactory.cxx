@@ -28,7 +28,7 @@ VclPtr<CheckBox> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
     return VclPtr<MenuButton>::Create(pParentWindow);
 }
 
-VclPtr<ImageRadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
+VclPtr<RadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
 {
     return VclPtr<TabItem>::Create(pParentWindow);
 }

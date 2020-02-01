@@ -3691,11 +3691,6 @@ void ImageButton::ImplInitStyle()
     SetStyle( nStyle );
 }
 
-ImageRadioButton::ImageRadioButton( vcl::Window* pParent ) :
-    RadioButton( pParent, 0 )
-{
-}
-
 TriStateBox::TriStateBox( vcl::Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
