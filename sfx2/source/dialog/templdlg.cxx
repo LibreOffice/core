@@ -19,6 +19,9 @@
 
 #include <memory>
 
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
@@ -576,7 +579,7 @@ public:
 
 }
 
-static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
+static void MakeTree_Impl(StyleTreeArr_Impl& rArr, bool bHasDefaultStyleName)
 {
     const comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
@@ -609,12 +612,11 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
     rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](std::unique_ptr<StyleTree_Impl> const & pEntry) { return !pEntry; }), rArr.end());
 
     // tdf#91106 sort top level styles
-    std::sort(rArr.begin(), rArr.end(),
+    auto itr=rArr.begin();
+    if(bHasDefaultStyleName && (!rArr.empty()))
+        ++itr;
+    std::sort(itr, rArr.end(),
         [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
-            if (pEntry2->getName() == "Default Style")
-                return false;
-            if (pEntry1->getName() == "Default Style")
-                return true; // default always first
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
 }
@@ -1078,6 +1080,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         return;
 
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    const SfxStyleFamily eFam = pItem->GetFamily();
     if (!pItem)
         return;
     pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SfxStyleSearchBits::AllVisible);
@@ -1096,7 +1099,9 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         pStyle = pStyleSheetPool->Next();
     }
 
-    MakeTree_Impl(aArr);
+    bool bHasDefaultStyleName(eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char ||
+                eFam == SfxStyleFamily::Page || eFam == SfxStyleFamily::Table);
+    MakeTree_Impl(aArr, bHasDefaultStyleName) ;
     std::vector<OUString> aEntries;
     pTreeBox->MakeExpanded_Impl(aEntries);
     pTreeBox->SetUpdateMode( false );
@@ -1138,6 +1143,20 @@ bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
             aFmtLb->GetSelectionCount() != 0;
 }
 
+OUString GetStyleFamilyName( SfxStyleFamily nFamily ){
+    if(nFamily == SfxStyleFamily::Char)
+        return "CharacterStyles" ;
+    else
+    if(nFamily == SfxStyleFamily::Para)
+        return "ParagraphStyles";
+    else
+    if(nFamily == SfxStyleFamily::Page)
+        return "PageStyles";
+    else
+    if(nFamily == SfxStyleFamily::Table)
+        return "TableStyles";
+    return "otherwise";
+}
 // internal: Refresh the display
 // nFlags: what we should update.
 void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
@@ -1241,11 +1260,44 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     // sorting twice is faster than sorting once.
     // The first sort has a cheap comparator, and gets the list into mostly-sorted order.
     // Then the second sort needs to call its (much more expensive) comparator less often.
+
     std::sort(aStrings.begin(), aStrings.end());
     std::sort(aStrings.begin(), aStrings.end(),
        [&aSorter](const OUString& rLHS, const OUString& rRHS) {
        return aSorter.compare(rLHS, rRHS) < 0;
        });
+
+    SfxStringItem* pNameItem ;
+    SfxStringItem* pFamilyItem = SfxStringItem( SID_STYLE_APPLY, GetStyleFamilyName(eFam)) ;
+    OUString aFamily = static_cast<const SfxStringItem*>(pFamilyItem)->GetValue();
+    if( aFamily=="TableStyles" )
+        pNameItem = SfxStringItem( SID_STYLE_APPLY, "Default Styles" );
+    else
+        pNameItem = SfxStringItem( SID_STYLE_APPLY, "Standard" );
+    uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
+    try
+    {
+        uno::Reference< container::XNameAccess > xStyles;
+        uno::Reference< container::XNameAccess > xCont = xModel->getStyleFamilies();
+        xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
+        uno::Reference< beans::XPropertySet > xInfo;
+        xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
+        OUString aUIName;
+        xInfo->getPropertyValue("DisplayName") >>= aUIName;
+        if ( !aUIName.isEmpty() )
+        {
+            for (size_t i=0; i<aStrings.size() ;i++)
+            {
+                if( aStrings[i]==aUIName ){
+                    std::swap( aStrings[0] , aStrings[i] );
+                    break;
+                }
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
 
     size_t nCount = aStrings.size();
     size_t nPos = 0;
