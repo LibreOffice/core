@@ -99,6 +99,17 @@ ScExtraEditViewManager::~ScExtraEditViewManager()
     DBG_ASSERT(nTotalWindows == 0, "ScExtraEditViewManager dtor: some out window has not yet been removed!");
 }
 
+inline void ScExtraEditViewManager::Add(SfxViewShell* pViewShell, ScSplitPos eWhich)
+{
+    Apply<Adder>(pViewShell, eWhich);
+}
+
+inline void ScExtraEditViewManager::Remove(SfxViewShell* pViewShell, ScSplitPos eWhich)
+{
+    Apply<Remover>(pViewShell, eWhich);
+}
+
+
 template<ScExtraEditViewManager::ModifierTagType ModifierTag>
 void ScExtraEditViewManager::Apply(SfxViewShell* pViewShell, ScSplitPos eWhich)
 {
