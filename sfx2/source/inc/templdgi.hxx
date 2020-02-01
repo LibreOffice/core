@@ -163,6 +163,7 @@ private:
     void ClearResource();
     void impl_clear();
     DeletionWatcher* impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
+    OUString lcl_getDefaultStyleName( const SfxStyleFamily eFam );
 
 protected:
 #define MAX_FAMILIES            6
