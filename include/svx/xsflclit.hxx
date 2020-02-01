@@ -22,7 +22,7 @@
 
 #include <svx/xcolit.hxx>
 
-class SVX_DLLPUBLIC XSecondaryFillColorItem final : public XColorItem
+class SVXCORE_DLLPUBLIC XSecondaryFillColorItem final : public XColorItem
 {
 public:
     XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);

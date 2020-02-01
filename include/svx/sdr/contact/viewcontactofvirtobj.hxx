@@ -26,7 +26,7 @@ class SdrVirtObj;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
+class SVXCORE_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
 {
 protected:
     // internal access to SdrObject. Implementation in *.cxx to avoid

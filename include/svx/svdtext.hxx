@@ -41,7 +41,7 @@ namespace sdr { namespace properties {
 */
 
 class SfxStyleSheet;
-class SVX_DLLPUBLIC SdrText : public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrText : public tools::WeakBase
 {
 public:
     explicit SdrText( SdrTextObj& rObject );

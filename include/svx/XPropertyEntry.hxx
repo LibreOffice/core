@@ -25,7 +25,7 @@
 
 
 
-class SVX_DLLPUBLIC XPropertyEntry
+class SVXCORE_DLLPUBLIC XPropertyEntry
 {
 private:
     OUString maPropEntryName;

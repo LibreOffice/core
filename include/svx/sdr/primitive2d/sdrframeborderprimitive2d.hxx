@@ -29,7 +29,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SVX_DLLPUBLIC SdrFrameBorderData
+        class SVXCORE_DLLPUBLIC SdrFrameBorderData
         {
         private:
             basegfx::B2DPoint   maOrigin;       /// start point of borderline
@@ -88,7 +88,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SVX_DLLPUBLIC SdrFrameBorderPrimitive2D final : public BufferedDecompositionPrimitive2D
+        class SVXCORE_DLLPUBLIC SdrFrameBorderPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
             std::shared_ptr<SdrFrameBorderDataVector>   maFrameBorders;

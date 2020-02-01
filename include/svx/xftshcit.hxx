@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextShadowColorItem final : public XColorItem
+class SVXCORE_DLLPUBLIC XFormTextShadowColorItem final : public XColorItem
 {
 public:
             static SfxPoolItem* CreateDefault();

@@ -23,7 +23,7 @@
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpPosOffsetXItem final : public SfxUInt16Item
+class SVXCORE_DLLPUBLIC XFillBmpPosOffsetXItem final : public SfxUInt16Item
 {
 public:
                             XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX = 0 );
@@ -36,7 +36,7 @@ public:
                                                  OUString &rText, const IntlWrapper& ) const override;
 };
 
-class SVX_DLLPUBLIC XFillBmpPosOffsetYItem final : public SfxUInt16Item
+class SVXCORE_DLLPUBLIC XFillBmpPosOffsetYItem final : public SfxUInt16Item
 {
 public:
                             XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY = 0 );

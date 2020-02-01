@@ -31,7 +31,7 @@ namespace sdr
 {
 
 /** this class implements some helper functions to edit a B2DPolyPolygon */
-class SVX_DLLPUBLIC PolyPolygonEditor
+class SVXCORE_DLLPUBLIC PolyPolygonEditor
 {
 public:
     PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon);

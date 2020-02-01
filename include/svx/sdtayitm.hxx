@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrTextAniDelayItem final : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC SdrTextAniDelayItem final : public SfxUInt16Item {
 public:
     SdrTextAniDelayItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY,nVal) {}
     virtual SdrTextAniDelayItem* Clone(SfxItemPool* pPool=nullptr) const override;

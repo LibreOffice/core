@@ -50,7 +50,7 @@ class OutlinerParaObject;
  * Abstract base class (ABC) for all UndoActions of DrawingEngine
  */
 
-class SVX_DLLPUBLIC SdrUndoAction : public SfxUndoAction
+class SVXCORE_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
 protected:
     SdrModel&     rMod;
@@ -82,7 +82,7 @@ public:
  * added (FIFO).
  */
 
-class SVX_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
+class SVXCORE_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
 {
     std::vector<std::unique_ptr<SdrUndoAction>> maActions;
 
@@ -117,7 +117,7 @@ public:
  * Abstract base class for all UndoActions that handle objects.
  */
 
-class SVX_DLLPUBLIC SdrUndoObj : public SdrUndoAction
+class SVXCORE_DLLPUBLIC SdrUndoObj : public SdrUndoAction
 {
 protected:
     SdrObject*                  pObj;
@@ -139,7 +139,7 @@ protected:
  * Also for StyleSheets.
  */
 
-class SVX_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
 {
 protected:
     std::unique_ptr<SfxItemSet> pUndoSet;
@@ -180,7 +180,7 @@ public:
  * Create Action right before moving.
  */
 
-class SVX_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
 {
     Size const                        aDistance;     // Distance by which we move
 
@@ -203,7 +203,7 @@ public:
  * Create Action right before the geometric transformation.
  */
 
-class SVX_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
     std::unique_ptr<SdrObjGeoData>  pUndoGeo;
     std::unique_ptr<SdrObjGeoData>  pRedoGeo;
@@ -228,7 +228,7 @@ public:
  * Abstract base class.
  */
 
-class SVX_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
+class SVXCORE_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
     class ObjListListener;
     friend class ObjListListener;
 
@@ -254,7 +254,7 @@ protected:
  * Create Action before removing from the ObjList.
  */
 
-class SVX_DLLPUBLIC SdrUndoRemoveObj : public SdrUndoObjList
+class SVXCORE_DLLPUBLIC SdrUndoRemoveObj : public SdrUndoObjList
 {
 public:
     SdrUndoRemoveObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
@@ -272,7 +272,7 @@ public:
  * Create Action before removal from ObjList.
  */
 
-class SVX_DLLPUBLIC SdrUndoInsertObj : public SdrUndoObjList
+class SVXCORE_DLLPUBLIC SdrUndoInsertObj : public SdrUndoObjList
 {
 public:
     SdrUndoInsertObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
@@ -287,7 +287,7 @@ public:
  * Create Action before removing from ObjList.
  */
 
-class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
+class SVXCORE_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
 public:
     SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect = false);
@@ -307,7 +307,7 @@ public:
  * Create Action after insertion into the ObjList.
  */
 
-class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
+class SVXCORE_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
 {
 public:
     SdrUndoNewObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
@@ -326,7 +326,7 @@ public:
  * Create Action before Replace in ObjList.
  */
 
-class SVX_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
 {
     bool                        bOldOwner;
     bool                        bNewOwner;
@@ -379,7 +379,7 @@ public:
 
 // #i11702#
 
-class SVX_DLLPUBLIC SdrUndoObjectLayerChange final : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoObjectLayerChange final : public SdrUndoObj
 {
     SdrLayerID const                  maOldLayer;
     SdrLayerID const                  maNewLayer;
@@ -391,7 +391,7 @@ public:
     virtual void Redo() override;
 };
 
-class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
+class SVXCORE_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
 protected:
     std::unique_ptr<OutlinerParaObject>
@@ -534,7 +534,7 @@ protected:
  * ABC for manipulation of a PageList: New Page, DeletePage, MovePage (ChangePageNum).
  */
 
-class SVX_DLLPUBLIC SdrUndoPageList : public SdrUndoPage
+class SVXCORE_DLLPUBLIC SdrUndoPageList : public SdrUndoPage
 {
 protected:
     sal_uInt16                      nPageNum;
@@ -553,7 +553,7 @@ protected:
  * Create Action before removing from the List.
  */
 
-class SVX_DLLPUBLIC SdrUndoDelPage final : public SdrUndoPageList
+class SVXCORE_DLLPUBLIC SdrUndoDelPage final : public SdrUndoPageList
 {
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
@@ -585,7 +585,7 @@ private:
  * Create Action after inserting into the List.
  */
 
-class SVX_DLLPUBLIC SdrUndoNewPage : public SdrUndoPageList
+class SVXCORE_DLLPUBLIC SdrUndoNewPage : public SdrUndoPageList
 {
 public:
     SdrUndoNewPage(SdrPage& rNewPg): SdrUndoPageList(rNewPg) {}
@@ -654,7 +654,7 @@ protected:
     SdrUndoPageMasterPage(SdrPage& rChangedPage);
 
 public:
-    SVX_DLLPUBLIC virtual ~SdrUndoPageMasterPage() override;
+    SVXCORE_DLLPUBLIC virtual ~SdrUndoPageMasterPage() override;
 };
 
 /**
@@ -699,7 +699,7 @@ public:
  * It is used by the drawing layer implementations to create undo actions.
  * It can be used by applications to create application specific undo actions.
  */
-class SVX_DLLPUBLIC SdrUndoFactory
+class SVXCORE_DLLPUBLIC SdrUndoFactory
 {
 public:
     // Shapes

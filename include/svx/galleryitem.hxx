@@ -37,7 +37,7 @@ namespace com::sun::star::lang { class XComponent; }
 #define SVXGALLERYITEM_PARAMS   5
 #define SVXGALLERYITEM_ARGNAME  "GalleryItem"
 
-class SVX_DLLPUBLIC SvxGalleryItem final : public SfxPoolItem
+class SVXCORE_DLLPUBLIC SvxGalleryItem final : public SfxPoolItem
 {
     sal_Int8 m_nType;
     OUString m_aURL;

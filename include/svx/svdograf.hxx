@@ -76,7 +76,7 @@ class SdrGraphicLink;
 /**
  * This class represents an embedded or linked bitmap graphic object.
  */
-class SVX_DLLPUBLIC SdrGrafObj : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrGrafObj : public SdrRectObj
 {
 private:
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()

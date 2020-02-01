@@ -67,7 +67,7 @@ public:
     static void         PreviewMedia( const INetURLObject& rURL );
 };
 
-class SVX_DLLPUBLIC DialogGalleryPreview final : public weld::CustomWidgetController
+class SVXCORE_DLLPUBLIC DialogGalleryPreview final : public weld::CustomWidgetController
 {
 private:
     GraphicObject aGraphicObj;

@@ -90,7 +90,7 @@ enum class SdrCrookMode {
 // #114409#-1 Migrate PageOrigin
 class ImplPageOriginOverlay;
 
-class SVX_DLLPUBLIC SdrSnapView : public SdrPaintView
+class SVXCORE_DLLPUBLIC SdrSnapView : public SdrPaintView
 {
 protected:
     // #114409#-1 Migrate PageOrigin

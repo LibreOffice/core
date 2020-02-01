@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
+        class SVXCORE_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
         {
             // geometry
             basegfx::B2DPolyPolygon const             maLinePolyPolygon;

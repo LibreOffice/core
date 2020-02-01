@@ -41,7 +41,7 @@ class DisplayInfo;
 class ViewContact;
 class ViewObjectContactRedirector;
 
-class SVX_DLLPUBLIC ObjectContact
+class SVXCORE_DLLPUBLIC ObjectContact
 {
 private:
     // make ViewObjectContact a friend to exclusively allow it to use

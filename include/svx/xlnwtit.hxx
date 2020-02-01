@@ -25,7 +25,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineWidthItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XLineWidthItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

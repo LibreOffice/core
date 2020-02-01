@@ -32,7 +32,7 @@ class E3dDefaultAttributes;
  * SphereObject with diameter r3DSize.
  * The count of planes depends on the horizontal and vertical segment count.
  */
-class SVX_DLLPUBLIC E3dSphereObj final : public E3dCompoundObject
+class SVXCORE_DLLPUBLIC E3dSphereObj final : public E3dCompoundObject
 {
 private:
     basegfx::B3DPoint               aCenter;

@@ -125,7 +125,7 @@ public:
 
 
 /// Utility class SdrEdgeObj
-class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
 private:
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()

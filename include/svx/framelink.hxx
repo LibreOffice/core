@@ -98,7 +98,7 @@ enum class RefMode
                                 |
                                 |<- middle of the frame border
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Style
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Style
 {
 private:
     class implStyle

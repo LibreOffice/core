@@ -30,7 +30,7 @@ enum class PaperSizeApp
     Draw
 };
 
-class SVX_DLLPUBLIC SvxPaperSizeListBox
+class SVXCORE_DLLPUBLIC SvxPaperSizeListBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;

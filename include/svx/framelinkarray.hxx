@@ -60,7 +60,7 @@ class Style;
     whether to mirror the double frame styles, and whether to swap diagonal
     frame borders.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Array
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Array
 {
 public:
     /** Constructs an empty array. */

@@ -33,7 +33,7 @@
 class SdrObject;
 struct SdrObjCreatorParams;
 
-class SVX_DLLPUBLIC E3dObjFactory
+class SVXCORE_DLLPUBLIC E3dObjFactory
 {
 public:
     E3dObjFactory();

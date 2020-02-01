@@ -25,7 +25,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineColorItem final : public XColorItem
+class SVXCORE_DLLPUBLIC XLineColorItem final : public XColorItem
 {
 public:
             static SfxPoolItem* CreateDefault();

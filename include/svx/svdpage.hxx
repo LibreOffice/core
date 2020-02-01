@@ -55,7 +55,7 @@ class SvxUnoDrawPagesAccess;
 //      SdrPage -> see continuation there
 
 // class SdrObjList
-class SVX_DLLPUBLIC SdrObjList
+class SVXCORE_DLLPUBLIC SdrObjList
 {
 friend class SdrObjListIter;
 friend class SdrEditView;
@@ -288,7 +288,7 @@ public:
     const tools::Rectangle& GetUserArea() const                   { return aUserArea; }
 };
 
-class SVX_DLLPUBLIC SdrPageGridFrameList final
+class SVXCORE_DLLPUBLIC SdrPageGridFrameList final
 {
     std::vector<SdrPageGridFrame*> aList;
 
@@ -307,7 +307,7 @@ public:
 };
 
 // class SdrPageProperties
-class SVX_DLLPUBLIC SdrPageProperties : public SfxListener, public svl::StyleSheetUser
+class SVXCORE_DLLPUBLIC SdrPageProperties : public SfxListener, public svl::StyleSheetUser
 {
 private:
     // data
@@ -363,7 +363,7 @@ public:
 //          SwDPage
 //      OReportPage
 
-class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase
 {
     // #i9076#
     friend class SdrModel;

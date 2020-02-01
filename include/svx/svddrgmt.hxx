@@ -48,7 +48,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrDragEntryPolyPolygon final : public SdrDragEntry
+class SVXCORE_DLLPUBLIC SdrDragEntryPolyPolygon final : public SdrDragEntry
 {
 private:
     basegfx::B2DPolyPolygon const        maOriginalPolyPolygon;
@@ -112,7 +112,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrDragMethod
+class SVXCORE_DLLPUBLIC SdrDragMethod
 {
 private:
     std::vector< std::unique_ptr<SdrDragEntry> > maSdrDragEntries;
@@ -226,7 +226,7 @@ inline const tools::Rectangle& SdrDragMethod::GetMarkedRect() const
 
 //   SdrDragMove
 
-class SVX_DLLPUBLIC SdrDragMove : public SdrDragMethod
+class SVXCORE_DLLPUBLIC SdrDragMove : public SdrDragMethod
 {
 private:
     long                        nBestXSnap;
@@ -255,7 +255,7 @@ public:
 
 //   SdrDragResize
 
-class SVX_DLLPUBLIC SdrDragResize : public SdrDragMethod
+class SVXCORE_DLLPUBLIC SdrDragResize : public SdrDragMethod
 {
 protected:
     Fraction                    aXFact;
@@ -277,7 +277,7 @@ public:
 
 //   SdrDragObjOwn
 
-class SVX_DLLPUBLIC SdrDragObjOwn : public SdrDragMethod
+class SVXCORE_DLLPUBLIC SdrDragObjOwn : public SdrDragMethod
 {
 private:
     // SdrDragObjOwn always works on a clone since it has no transformation

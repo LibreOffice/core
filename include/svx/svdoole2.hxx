@@ -43,7 +43,7 @@ namespace svt { class EmbeddedObjectRef; }
 
 class SdrOle2ObjImpl;
 
-class SVX_DLLPUBLIC SdrOle2Obj : public SdrRectObj
+class SVXCORE_DLLPUBLIC SdrOle2Obj : public SdrRectObj
 {
 private:
     std::unique_ptr<SdrOle2ObjImpl> mpImpl;
@@ -185,7 +185,7 @@ public:
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 };
 
-class SVX_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink
+class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink
 {
     SdrOle2Obj*         pObj;
 

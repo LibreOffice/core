@@ -43,7 +43,7 @@ class SvGlobalName;
 class OutputStorageWrapper_Impl;
 
 
-class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
+class SVXCORE_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
     public cppu::WeakComponentImplHelper< css::document::XEmbeddedObjectResolver, css::container::XNameAccess >
 {
     ::osl::Mutex                maMutex;

@@ -27,7 +27,7 @@ enum class SdrCaptionType { Type1, Type2, Type3, Type4 };
 
 
 
-class SVX_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem<SdrCaptionType> {
+class SVXCORE_DLLPUBLIC SdrCaptionTypeItem: public SfxEnumItem<SdrCaptionType> {
 public:
     SdrCaptionTypeItem(SdrCaptionType eStyle=SdrCaptionType::Type3): SfxEnumItem(SDRATTR_CAPTIONTYPE, eStyle) {}
     virtual SdrCaptionTypeItem* Clone(SfxItemPool* pPool=nullptr) const override;

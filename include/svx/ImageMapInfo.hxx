@@ -25,7 +25,7 @@
 
 #define SVX_IMAPINFO_ID 2
 
-class SVX_DLLPUBLIC SvxIMapInfo final : public SdrObjUserData, public SfxListener
+class SVXCORE_DLLPUBLIC SvxIMapInfo final : public SdrObjUserData, public SfxListener
 {
     ImageMap aImageMap;
 

@@ -60,7 +60,7 @@ class SdrPage;
 class SdrObject;
 class SdrLayerIDSet;
 
-class SVX_DLLPUBLIC SdrViewIter
+class SVXCORE_DLLPUBLIC SdrViewIter
 {
     const SdrModel*                                     mpModel;
     const SdrPage*                                      mpPage;

@@ -32,7 +32,7 @@ enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally 
                         SDRTEXTVERTADJUST_BLOCK    // support vertical full with supported now
                         /*,SDRTEXTVERTADJUST_STRETCH*/}; // also stretch letters in their height (ni)
 
-class SVX_DLLPUBLIC SdrTextVertAdjustItem: public SfxEnumItem<SdrTextVertAdjust> {
+class SVXCORE_DLLPUBLIC SdrTextVertAdjustItem: public SfxEnumItem<SdrTextVertAdjust> {
 public:
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST, eAdj) {}
     SdrTextVertAdjustItem(SdrTextVertAdjust eAdj, sal_uInt16 nWhich): SfxEnumItem(nWhich, eAdj) {}
@@ -56,7 +56,7 @@ enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
                         SDRTEXTHORZADJUST_BLOCK    // use the whole text frame width
                         /*,SDRTEXTHORZADJUST_STRETCH*/}; // FitToSize in X direction (ni).
 
-class SVX_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem<SdrTextHorzAdjust> {
+class SVXCORE_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem<SdrTextHorzAdjust> {
 public:
     SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST, eAdj) {}
     virtual SdrTextHorzAdjustItem* Clone(SfxItemPool* pPool=nullptr) const override;

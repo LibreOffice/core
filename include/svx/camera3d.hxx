@@ -31,7 +31,7 @@
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D final : public Viewport3D
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Camera3D final : public Viewport3D
 {
     basegfx::B3DPoint   aPosition;
     basegfx::B3DPoint   aLookAt;

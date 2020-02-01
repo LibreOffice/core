@@ -26,9 +26,9 @@
 
 class SfxItemSet;
 
-SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
-SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit();
-SVX_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
+SVXCORE_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
+SVXCORE_DLLPUBLIC FieldUnit GetModuleFieldUnit();
+SVXCORE_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
 
 constexpr DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
 constexpr DrawModeFlags OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;

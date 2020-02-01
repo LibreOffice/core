@@ -44,7 +44,7 @@ namespace sdr { namespace properties {
 namespace sdr { namespace table {
 
 
-class SVX_DLLPUBLIC Cell :  public SdrText,
+class SVXCORE_DLLPUBLIC Cell :  public SdrText,
                 public SvxUnoTextBase,
                 public css::table::XMergeableCell,
                 public css::awt::XLayoutConstrains,

@@ -53,7 +53,7 @@ public:
 };
 
 // The decimal places used for the measure value
-class SVX_DLLPUBLIC SdrMeasureDecimalPlacesItem: public SfxInt16Item {
+class SVXCORE_DLLPUBLIC SdrMeasureDecimalPlacesItem: public SfxInt16Item {
 public:
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,nVal)  {}
     virtual ~SdrMeasureDecimalPlacesItem() override;
