@@ -21,17 +21,12 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_HXX
 
 #include <tools/urlobj.hxx>
-#include <rtl/ustring.h>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

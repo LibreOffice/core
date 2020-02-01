@@ -20,11 +20,12 @@
 #include <FormComponent.hxx>
 #include <strings.hrc>
 #include <frm_resource.hxx>
+#include <property.hxx>
 #include <services.hxx>
 
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
@@ -46,14 +47,11 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
-#include <functional>
 #include <algorithm>
 
 namespace frm

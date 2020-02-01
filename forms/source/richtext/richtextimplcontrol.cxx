@@ -23,18 +23,14 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <editeng/editeng.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
-#include <svx/svxids.hrc>
 #include <editeng/scripttypeitem.hxx>
 
-#include <editeng/editobj.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <tools/mapunit.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>

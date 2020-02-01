@@ -25,7 +25,6 @@
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>

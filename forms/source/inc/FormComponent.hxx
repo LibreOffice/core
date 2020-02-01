@@ -21,19 +21,15 @@
 #define INCLUDED_FORMS_SOURCE_INC_FORMCOMPONENT_HXX
 
 #include "cloneable.hxx"
-#include "property.hxx"
 #include "propertybaghelper.hxx"
 #include "resettable.hxx"
-#include "services.hxx"
 #include "windowstateguard.hxx"
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/form/validation/XValidityConstraintListener.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
@@ -41,17 +37,13 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <com/sun/star/sdb/XRowSetChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -59,7 +51,6 @@
 #include <com/sun/star/form/XLoadable.hpp>
 
 #include <comphelper/propagg.hxx>
-#include <comphelper/propertybag.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
@@ -68,6 +59,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -311,7 +303,7 @@ typedef ::cppu::ImplHelper7 <   css::form::XFormComponent
                             >   OControlModel_BASE;
 
 class OControlModel :public ::cppu::OComponentHelper
-                    ,public OPropertySetAggregationHelper
+                    ,public comphelper::OPropertySetAggregationHelper
                     ,public OControlModel_BASE
                     ,public OCloneableAggregation
                     ,public IPropertyBagHelperContext

@@ -19,14 +19,14 @@
 
 #include <sal/config.h>
 
+#include <config_features.h>
+
 #include <string_view>
 
 #include "Filter.hxx"
-#include <FormComponent.hxx>
 #include <strings.hrc>
 #include <frm_resource.hxx>
-#include <property.hxx>
-#include <services.hxx>
+#include <frm_strings.hxx>
 
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
@@ -35,16 +35,13 @@
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/ErrorMessageDialog.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -55,16 +52,12 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/predicateinput.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/localedatawrapper.hxx>
-#include <vcl/stdtext.hxx>
-#include <vcl/svapp.hxx>
-#include <tools/wintypes.hxx>
+#include <tools/gen.hxx>
 
 
 namespace frm

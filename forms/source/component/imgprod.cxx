@@ -18,7 +18,6 @@
  */
 
 #include "imgprod.hxx"
-#include <services.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
@@ -26,10 +25,9 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svtools/imageresourceaccess.hxx>
 #include <comphelper/processfactory.hxx>

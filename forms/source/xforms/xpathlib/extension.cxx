@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "extension.hxx"
 #include "xpathlib.hxx"
-#include <services.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

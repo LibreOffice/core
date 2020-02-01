@@ -26,22 +26,14 @@
 #include <strings.hrc>
 #include "BaseListBox.hxx"
 
-#include <com/sun/star/sdb/SQLErrorEvent.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

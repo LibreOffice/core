@@ -18,11 +18,16 @@
  */
 
 #include "navigationbar.hxx"
+#include <property.hxx>
+#include <services.hxx>
 
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
+
+using namespace comphelper;
 
 namespace frm
 {

@@ -1,0 +1,67 @@
+---
+assumeFilename: forms/source/component/DatabaseForm.cxx
+blacklist:
+    forms/source/inc/property.hxx:
+    # Needed for macro defines
+    - frm_strings.hxx
+    - com/sun/star/beans/PropertyAttribute.hpp
+    forms/source/component/errorbroadcaster.hxx:
+    # 
+    - cppuhelper/interfacecontainer.hxx
+    forms/source/xforms/unohelper.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    forms/source/xforms/datatypes.hxx:
+    # Needed for macro defines
+    - com/sun/star/beans/PropertyAttribute.hpp
+    forms/source/xforms/propertysetbase.hxx:
+    # Needed for macro defines
+    - com/sun/star/beans/PropertyAttribute.hpp
+    forms/source/component/DatabaseForm.cxx:
+    # Actually used
+    - com/sun/star/io/XObjectInputStream.hpp
+    - com/sun/star/io/XObjectOutputStream.hpp
+    - tools/datetime.hxx
+    forms/source/component/imgprod.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    forms/source/richtext/parametrizedattributedispatcher.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    forms/source/richtext/richtextunowrapper.cxx:
+    # Needed for UnoType template instatiation
+    - com/sun/star/lang/Locale.hpp
+    # Needed for macro defines to work
+    - editeng/unoprnms.hxx
+    forms/source/solar/component/navbarcontrol.cxx:
+    # Actually used
+    - com/sun/star/awt/XControlModel.hpp
+    forms/source/xforms/binding.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XNodeList.hpp
+    - com/sun/star/xml/dom/events/XEventListener.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    forms/source/xforms/enumeration.cxx:
+    # Actually used
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/uno/Any.hxx
+    forms/source/xforms/pathexpression.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XNode.hpp
+    - com/sun/star/xml/dom/XNodeList.hpp
+    forms/source/xforms/propertysetbase.cxx:
+    # Actually used
+    - com/sun/star/uno/Reference.hxx
+    forms/source/xforms/submission.cxx:
+    # Actually used
+    - com/sun/star/xforms/XModel.hpp
+    - com/sun/star/xml/dom/XDocumentFragment.hpp
+    - com/sun/star/task/XInteractionHandler.hpp
+    forms/source/xforms/unohelper.cxx:
+    # Actually used
+    - com/sun/star/uno/Reference.hxx
+    - com/sun/star/beans/XPropertySet.hpp
+    forms/source/xforms/submission/serialization_urlencoded.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XNode.hpp

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 #include "submission.hxx"
 
 class CSubmissionGet : public CSubmission

@@ -24,12 +24,11 @@
 
 #include <unordered_map>
 
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <cppuhelper/propshlp.hxx>
 #include <comphelper/propagg.hxx>
 #include <tools/debug.hxx>
+
+#include "frm_strings.hxx"
 
 using namespace comphelper;
 

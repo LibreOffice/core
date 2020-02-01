@@ -25,19 +25,13 @@
 #include <frm_resource.hxx>
 #include <strings.hrc>
 #include "BaseListBox.hxx"
-#include <listenercontainers.hxx>
 #include <componenttools.hxx>
 
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
@@ -46,19 +40,17 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <vcl/svapp.hxx>
 
 #include <o3tl/optional.hxx>
 
 #include <algorithm>
 #include <iterator>
+#include <climits>
 
 namespace frm
 {

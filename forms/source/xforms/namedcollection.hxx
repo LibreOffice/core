@@ -22,7 +22,9 @@
 
 #include "collection.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <algorithm>
 
