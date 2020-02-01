@@ -611,12 +611,17 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
     // tdf#91106 sort top level styles
     std::sort(rArr.begin(), rArr.end(),
         [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
-            if (pEntry2->getName() == "Default Style")
-                return false;
-            if (pEntry1->getName() == "Default Style")
-                return true; // default always first
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
+
+    for( size_t i = 0; i<rArr.size() ; i++ )
+    {
+        if(rArr[i]->getName() == "Default Style")
+        {
+            swap(rArr[i],rArr[0]);
+            break;
+        }
+    }
 }
 
 static bool IsExpanded_Impl( const std::vector<OUString>& rEntries,
