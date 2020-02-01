@@ -13054,3 +13054,7 @@ if test -f warn; then
 fi
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
+
+
+./check.exe
+
