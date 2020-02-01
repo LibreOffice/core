@@ -48,8 +48,8 @@ protected:
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
 
-    std::unique_ptr<RelativeField> m_xAboveSpacing;
-    std::unique_ptr<RelativeField> m_xBelowSpacing;
+    std::unique_ptr<SvxRelativeField> m_xAboveSpacing;
+    std::unique_ptr<SvxRelativeField> m_xBelowSpacing;
     std::unique_ptr<weld::Container> m_xAboveContainer;
     std::unique_ptr<weld::Container> m_xBelowContainer;
 
@@ -92,9 +92,9 @@ protected:
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
 
-    std::unique_ptr<RelativeField> m_xBeforeSpacing;
-    std::unique_ptr<RelativeField> m_xAfterSpacing;
-    std::unique_ptr<RelativeField> m_xFLSpacing;
+    std::unique_ptr<SvxRelativeField> m_xBeforeSpacing;
+    std::unique_ptr<SvxRelativeField> m_xAfterSpacing;
+    std::unique_ptr<SvxRelativeField> m_xFLSpacing;
     std::unique_ptr<weld::Container> m_xBeforeContainer;
     std::unique_ptr<weld::Container> m_xAfterContainer;
     std::unique_ptr<weld::Container> m_xFirstLineContainer;

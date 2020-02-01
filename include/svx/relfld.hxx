@@ -24,7 +24,7 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC RelativeField
+class SVX_DLLPUBLIC SvxRelativeField
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xSpinButton;
@@ -38,7 +38,7 @@ private:
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl);
+    SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pControl);
 
     void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax );
     void            SetRelative( bool bRelative );

@@ -19,7 +19,7 @@
 
 #include <svx/relfld.hxx>
 
-RelativeField::RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
+SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_xSpinButton(std::move(pControl))
     , nRelMin(0)
     , nRelMax(0)
@@ -29,10 +29,10 @@ RelativeField::RelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
 
 {
     weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
-    rSpinButton.connect_changed(LINK(this, RelativeField, ModifyHdl));
+    rSpinButton.connect_changed(LINK(this, SvxRelativeField, ModifyHdl));
 }
 
-IMPL_LINK_NOARG(RelativeField, ModifyHdl, weld::Entry&, void)
+IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
 {
     if (bRelativeMode)
     {
@@ -65,7 +65,7 @@ IMPL_LINK_NOARG(RelativeField, ModifyHdl, weld::Entry&, void)
     }
 }
 
-void RelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
+void SvxRelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
 {
     bRelativeMode = true;
     nRelMin       = nMin;
@@ -73,7 +73,7 @@ void RelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
     m_xSpinButton->set_unit(FieldUnit::CM);
 }
 
-void RelativeField::SetRelative( bool bNewRelative )
+void SvxRelativeField::SetRelative( bool bNewRelative )
 {
     weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
 

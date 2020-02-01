@@ -45,8 +45,8 @@ ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent)
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "svx/ui/paraulspacing.ui"));
     m_xContainer = m_xBuilder->weld_container("ParaULSpacingWindow");
 
-    m_xAboveSpacing = std::make_unique<RelativeField>(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM));
-    m_xBelowSpacing = std::make_unique<RelativeField>(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM));
+    m_xAboveSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM));
+    m_xBelowSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM));
     m_xAboveContainer = m_xBuilder->weld_container("above");
     m_xBelowContainer = m_xBuilder->weld_container("below");
 
@@ -170,9 +170,9 @@ ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent)
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "svx/ui/paralrspacing.ui"));
     m_xContainer = m_xBuilder->weld_container("ParaLRSpacingWindow");
 
-    m_xBeforeSpacing = std::make_unique<RelativeField>(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM));
-    m_xAfterSpacing = std::make_unique<RelativeField>(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM));
-    m_xFLSpacing = std::make_unique<RelativeField>(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM));
+    m_xBeforeSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM));
+    m_xAfterSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM));
+    m_xFLSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM));
     m_xBeforeContainer = m_xBuilder->weld_container("before");
     m_xAfterContainer = m_xBuilder->weld_container("after");
     m_xFirstLineContainer = m_xBuilder->weld_container("firstline");
