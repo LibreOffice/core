@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-20 15:44:23 using:
+ Generated on 2020-02-01 10:57:43 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,15 +30,19 @@
 #include <memory>
 #include <new>
 #include <ostream>
+#include <set>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -74,8 +78,11 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -104,15 +111,21 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XTransformation.hpp>
+#include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
@@ -127,7 +140,10 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -145,17 +161,23 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/unoprnms.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
@@ -174,9 +196,11 @@
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
+#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>
@@ -185,8 +209,68 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <AxisHelper.hxx>
+#include <AxisIndexDefines.hxx>
+#include <BaseGFXHelper.hxx>
+#include <CartesianCoordinateSystem.hxx>
+#include <CharacterProperties.hxx>
 #include <ChartModel.hxx>
+#include <ChartModelHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ChartViewHelper.hxx>
+#include <Clipping.hxx>
+#include <CloneHelper.hxx>
+#include <CommonConverters.hxx>
+#include <CommonFunctors.hxx>
+#include <ControllerLockGuard.hxx>
+#include <DataSeries.hxx>
+#include <DataSeriesHelper.hxx>
+#include <DataSource.hxx>
+#include <DataSourceHelper.hxx>
+#include <DateHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <EventListenerHelper.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <FillProperties.hxx>
+#include <LabelPositionHelper.hxx>
+#include <LabeledDataSequence.hxx>
+#include <LegendEntryProvider.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <MediaDescriptorHelper.hxx>
+#include <MinimumAndMaximumSupplier.hxx>
+#include <ModifyListenerHelper.hxx>
+#include <MutexContainer.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <OPropertySet.hxx>
+#include <ObjectIdentifier.hxx>
+#include <PlottingPositionHelper.hxx>
+#include <PolarCoordinateSystem.hxx>
+#include <PolarLabelPositionHelper.hxx>
+#include <PropertyHelper.hxx>
+#include <PropertyMapper.hxx>
+#include <ReferenceSizeProvider.hxx>
+#include <RegressionCalculationHelper.hxx>
+#include <RegressionCurveCalculator.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <RelativePositionHelper.hxx>
+#include <RelativeSizeHelper.hxx>
+#include <ResId.hxx>
+#include <ScaleAutomatism.hxx>
+#include <ShapeFactory.hxx>
 #include <SpecialCharacters.hxx>
+#include <Stripe.hxx>
+#include <ThreeDHelper.hxx>
+#include <TitleHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <VLineProperties.hxx>
+#include <ViewDefines.hxx>
+#include <WeakListenerAdapter.hxx>
+#include <WrappedProperty.hxx>
+#include <charttoolsdllapi.hxx>
+#include <defines.hxx>
+#include <servicenames.hxx>
+#include <servicenames_charttypes.hxx>
+#include <servicenames_coosystems.hxx>
 #include <unonames.hxx>
 #endif // PCH_LEVEL >= 4
 

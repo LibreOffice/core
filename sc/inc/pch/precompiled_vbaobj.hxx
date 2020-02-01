@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-15 16:58:13 using:
+ Generated on 2020-02-01 10:58:11 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -213,6 +213,7 @@
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <ooo/vba/XCommandBarControls.hpp>
 #include <ooo/vba/XCommandBars.hpp>
 #include <ooo/vba/XControlProvider.hpp>
@@ -312,15 +313,21 @@
 #include <columnspanset.hxx>
 #include <compiler.hxx>
 #include <convuno.hxx>
+#include <dbdata.hxx>
+#include <docfunc.hxx>
 #include <docoptio.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
 #include <global.hxx>
+#include <gridwin.hxx>
 #include <macromgr.hxx>
 #include <markdata.hxx>
 #include <nameuno.hxx>
 #include <olinetab.hxx>
 #include <patattr.hxx>
+#include <preview.hxx>
+#include <prevwsh.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
 #include <rangelst.hxx>
@@ -331,9 +338,13 @@
 #include <scmod.hxx>
 #include <sortparam.hxx>
 #include <tabprotection.hxx>
+#include <tabvwsh.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
+#include <transobj.hxx>
 #include <unonames.hxx>
+#include <viewdata.hxx>
+#include <viewutil.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

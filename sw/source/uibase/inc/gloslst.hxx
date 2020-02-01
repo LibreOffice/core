@@ -27,7 +27,6 @@
 #include <vector>
 
 class SwGlossaries;
-class vector;
 
 struct AutoTextGroup
 {

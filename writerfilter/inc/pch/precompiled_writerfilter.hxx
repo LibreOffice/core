@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:48 using:
+ Generated on 2020-02-01 11:41:16 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,11 +29,9 @@
 #include <iostream>
 #include <memory>
 #include <ostream>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/logic/tribool.hpp>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -48,10 +46,7 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/string.hxx>
-#include <rtl/stringconcat.hxx>
-#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
@@ -97,8 +92,11 @@
 #include <cppuhelper/weak.hxx>
 #include <editeng/editengdllapi.h>
 #include <filter/msfilter/util.hxx>
+#include <i18nlangtag/lang.h>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
@@ -107,6 +105,7 @@
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/toolsdllapi.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/mediadescriptor.hxx>

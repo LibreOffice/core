@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-27 20:08:05 using:
+ Generated on 2020-02-01 10:58:20 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -102,6 +102,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
@@ -173,9 +174,41 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/awt/XAdjustmentListener.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XDockableWindow.hpp>
+#include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XKeyListener.hpp>
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XMenuListener.hpp>
+#include <com/sun/star/awt/XMouseListener.hpp>
+#include <com/sun/star/awt/XMouseMotionListener.hpp>
+#include <com/sun/star/awt/XPaintListener.hpp>
+#include <com/sun/star/awt/XSpinListener.hpp>
+#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/XTabListener.hpp>
+#include <com/sun/star/awt/XTextListener.hpp>
+#include <com/sun/star/awt/XTopWindow2.hpp>
+#include <com/sun/star/awt/XTopWindowListener.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
+#include <com/sun/star/awt/XVclContainer.hpp>
+#include <com/sun/star/awt/XVclContainerListener.hpp>
+#include <com/sun/star/awt/XVclContainerPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
+#include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
+#include <com/sun/star/awt/tree/XTreeEditListener.hpp>
+#include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -184,9 +217,11 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -218,6 +253,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -245,6 +281,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
@@ -264,6 +301,7 @@
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -283,6 +321,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/optional.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -296,7 +335,13 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <toolkit/awt/vclxcontainer.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/dllapi.h>
+#include <toolkit/helper/listenermultiplexer.hxx>
+#include <toolkit/helper/macros.hxx>
+#include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
