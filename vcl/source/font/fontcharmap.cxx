@@ -229,7 +229,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 // update the glyphid-array with the glyphs in this range
                 pStartGlyphs[i] = -static_cast<int>(aGlyphIdArray.size());
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
-                const size_t nRemainingSize = pEndValidArea - pGlyphIdPtr;
+                const size_t nRemainingSize = pEndValidArea >= pGlyphIdPtr ? pEndValidArea - pGlyphIdPtr : 0;
                 const size_t nMaxPossibleRecords = nRemainingSize/2;
                 if (nMaxPossibleRecords == 0) {  // no sane font should trigger this
                     SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
@@ -333,7 +333,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
         static const int NINSIZE = 64;
         static const int NOUTSIZE = 64;
-        sal_Char    cCharsInp[ NINSIZE ];
+        std::vector<char> cCharsInp;
+        cCharsInp.reserve(NINSIZE);
         sal_Unicode cCharsOut[ NOUTSIZE ];
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
@@ -344,25 +345,26 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             // input codepoints in 0..SAL_MAX_UINT16 range
             while (cMin < cEnd && cMin <= SAL_MAX_UINT16)
             {
-                int j = 0;
-                for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
+                for (int j = 0; (cMin < cEnd) && (j < NINSIZE); ++cMin, ++j)
                 {
                     if( cMin >= 0x0100 )
-                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
+                        cCharsInp.push_back(static_cast<char>(cMin >> 8));
                     if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
-                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
+                        cCharsInp.push_back(static_cast<char>(cMin));
                 }
 
                 sal_uInt32 nCvtInfo;
                 sal_Size nSrcCvtBytes;
                 int nOutLen = rtl_convertTextToUnicode(
                     aConverter, aCvtContext,
-                    cCharsInp, j, cCharsOut, NOUTSIZE,
+                    cCharsInp.data(), cCharsInp.size(), cCharsOut, NOUTSIZE,
                     RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
                     | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
                     &nCvtInfo, &nSrcCvtBytes );
 
-                for( j = 0; j < nOutLen; ++j )
+                cCharsInp.clear();
+
+                for (int j = 0; j < nOutLen; ++j)
                     aSupportedCodePoints.insert( cCharsOut[j] );
             }
         }

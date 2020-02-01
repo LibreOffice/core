@@ -1196,7 +1196,7 @@ private:
     std::unique_ptr<SwMSConvertControls> m_xFormImpl; // implementation of control
 
     SwFlyFrameFormat* m_pFlyFormatOfJustInsertedGraphic;
-    SwFrameFormat* m_pFormatOfJustInsertedApo;
+    std::unique_ptr<FrameDeleteWatch> m_xFormatOfJustInsertedApo;
     SwPaM* m_pPreviousNumPaM;
     const SwNumRule* m_pPrevNumRule;
 

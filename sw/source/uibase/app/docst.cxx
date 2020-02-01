@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/flagguard.hxx>
-
+#include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
@@ -693,21 +693,20 @@ void syncEndnoteOrientation(const uno::Reference< style::XStyleFamiliesSupplier 
         return;
     }
 
-    sal_Int32 nWidth, nHeight;
-    bool bIsDefLandScape, bIsEndLandScape;
-
-    xDefaultPagePropSet->getPropertyValue("IsLandscape") >>= bIsDefLandScape;
-    xEndnotePagePropSet->getPropertyValue("IsLandscape") >>= bIsEndLandScape;
+    auto const bIsDefLandScape = *o3tl::doAccess<bool>(
+        xDefaultPagePropSet->getPropertyValue("IsLandscape"));
+    auto const bIsEndLandScape = *o3tl::doAccess<bool>(
+        xEndnotePagePropSet->getPropertyValue("IsLandscape"));
 
     if (bIsDefLandScape == bIsEndLandScape)
         return;
 
-    xEndnotePagePropSet->getPropertyValue("Width") >>= nWidth;
-    xEndnotePagePropSet->getPropertyValue("Height") >>= nHeight;
+    auto const nWidth = xEndnotePagePropSet->getPropertyValue("Width");
+    auto const nHeight = xEndnotePagePropSet->getPropertyValue("Height");
 
     xEndnotePagePropSet->setPropertyValue("IsLandscape", css::uno::toAny(bIsDefLandScape));
-    xEndnotePagePropSet->setPropertyValue("Width", css::uno::toAny(nHeight));
-    xEndnotePagePropSet->setPropertyValue("Height", css::uno::toAny(nWidth));
+    xEndnotePagePropSet->setPropertyValue("Width", nHeight);
+    xEndnotePagePropSet->setPropertyValue("Height", nWidth);
 }
 }
 

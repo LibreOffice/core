@@ -191,7 +191,8 @@ void LwpRowLayout::Read()
 void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
     LwpTableLayout* pTableLayout = GetParentTableLayout();
-    assert(pTableLayout);
+    if (!pTableLayout)
+        throw std::runtime_error("missing TableLayout");
     LwpTable* pTable = pTableLayout->GetTable();
 
     //calculate the connected cell position
@@ -282,14 +283,15 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         {
             pRowStyle = static_cast<XFRowStyle*>(
                 pXFStyleManager->FindStyle(pTableLayout->GetDefaultRowStyleName()));
-            fHeight += pRowStyle->GetRowHeight();
         }
         else
         {
             pRowStyle = static_cast<XFRowStyle*>(
                 pXFStyleManager->FindStyle(iter->second->GetStyleName()));
-            fHeight+=pRowStyle->GetRowHeight();
         }
+        if (!pRowStyle)
+            throw std::runtime_error("missing RowStyle");
+        fHeight += pRowStyle->GetRowHeight();
     }
 
     if (m_nDirection & 0x0030)
@@ -377,11 +379,13 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (!pTableLayout)
         return;
+    LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        return;
 
     rtl::Reference<XFRow> xRow(new XFRow);
     xRow->SetStyleName(m_StyleName);
 
-    LwpTable* pTable = pTableLayout->GetTable();
     sal_uInt8 nCellStartCol,nCellEndCol;
 
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)

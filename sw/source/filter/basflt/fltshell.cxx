@@ -659,9 +659,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             {
                 SwTextNode const*const pTextNode(
                         aRegion.End()->nNode.GetNode().GetTextNode());
-                assert(pTextNode);
-                SwTextField const*const pField(pTextNode->GetFieldTextAttrAt(
-                        aRegion.End()->nContent.GetIndex() - 1, true));
+                SwTextField const*const pField = pTextNode ? pTextNode->GetFieldTextAttrAt(
+                        aRegion.End()->nContent.GetIndex() - 1, true) : nullptr;
                 if (pField)
                 {
                     SwPostItField const*const pPostIt(
@@ -1124,6 +1123,33 @@ void UpdatePageDescs(SwDoc &rDoc, size_t nInPageDescOffset)
     // PageDescs "Convert..."
     for (size_t i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
         rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
+}
+
+FrameDeleteWatch::FrameDeleteWatch(SwFrameFormat* pFormat)
+    : m_pFormat(pFormat)
+{
+    if(m_pFormat)
+        StartListening(pFormat->GetNotifier());
+}
+
+void FrameDeleteWatch::Notify(const SfxHint& rHint)
+{
+    bool bDying = false;
+    if (rHint.GetId() == SfxHintId::Dying)
+        bDying = true;
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+        bDying = pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING;
+    if (bDying)
+    {
+        m_pFormat = nullptr;
+        EndListeningAll();
+    }
+}
+
+FrameDeleteWatch::~FrameDeleteWatch()
+{
+    m_pFormat = nullptr;
+    EndListeningAll();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
