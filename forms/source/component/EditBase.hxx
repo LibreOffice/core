@@ -20,13 +20,6 @@
 #pragma once
 
 #include <FormComponent.hxx>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XKeyListener.hpp>
-#include <com/sun/star/form/XChangeBroadcaster.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 
 // persistence flags for use with the version id
 #define PF_HANDLE_COMMON_PROPS  0x8000

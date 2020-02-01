@@ -22,7 +22,6 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/form/binding/XListEntryListener.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/interfacecontainer2.hxx>

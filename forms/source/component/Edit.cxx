@@ -19,22 +19,20 @@
 
 
 #include "Edit.hxx"
+#include <property.hxx>
+#include <services.hxx>
 
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/keycodes.hxx>
-#include <tools/wintypes.hxx>
 
-#include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
-#include <connectivity/dbconversion.hxx>
 
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
@@ -48,7 +46,6 @@ namespace frm
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

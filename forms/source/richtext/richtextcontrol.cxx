@@ -18,6 +18,7 @@
  */
 
 #include "richtextcontrol.hxx"
+#include <frm_strings.hxx>
 #include <services.hxx>
 
 #include "richtextmodel.hxx"
@@ -29,6 +30,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>

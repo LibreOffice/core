@@ -21,10 +21,8 @@
 #include <memory>
 
 #include "submission_post.hxx"
-#include "serialization_app_xml.hxx"
-#include "serialization_urlencoded.hxx"
 
-#include <osl/file.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>

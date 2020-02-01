@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_BASELISTBOX_HXX
 
+#include <sal/types.h>
+
 
 namespace frm
 {

@@ -19,16 +19,13 @@
 
 #include "EditBase.hxx"
 #include <property.hxx>
-#include <services.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/queryinterface.hxx>
-#include <frm_resource.hxx>
-#include <strings.hrc>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
+#include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 
@@ -39,7 +36,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;

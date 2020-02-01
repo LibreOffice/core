@@ -22,8 +22,10 @@
 #include "resourcehelper.hxx"
 #include <frm_strings.hxx>
 #include <property.hxx>
+#include <strings.hrc>
 #include "convert.hxx"
 
+#include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
