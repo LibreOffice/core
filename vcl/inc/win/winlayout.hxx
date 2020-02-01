@@ -25,6 +25,7 @@
 #include <sallayout.hxx>
 #include <svsys.h>
 #include <win/salgdi.h>
+#include <o3tl/sorted_vector.hxx>
 
 class WinFontInstance;
 
@@ -60,7 +61,7 @@ class WinGlyphCache;
 
 struct GlobalWinGlyphCache
 {
-    std::unordered_set<WinGlyphCache*> maWinGlyphCaches;
+    o3tl::sorted_vector<WinGlyphCache*> maWinGlyphCaches;
 
     static GlobalWinGlyphCache * get();
 

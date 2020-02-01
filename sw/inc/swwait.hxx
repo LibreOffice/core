@@ -21,7 +21,7 @@
 
 #include "swdllapi.h"
 
-#include <unordered_set>
+#include <o3tl/sorted_vector.hxx>
 
 class SwDocShell;
 class SfxDispatcher;
@@ -42,7 +42,7 @@ private:
 
     SwDocShell& mrDoc;
     const bool mbLockUnlockDispatcher;
-    std::unordered_set< SfxDispatcher* > mpLockedDispatchers;
+    o3tl::sorted_vector< SfxDispatcher* > mpLockedDispatchers;
 };
 
 #endif
