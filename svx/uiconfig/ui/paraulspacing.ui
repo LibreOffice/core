@@ -2,8 +2,12 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -11,17 +15,21 @@
   <object class="GtkBox" id="ParaULSpacingWindow">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="row_spacing">1</property>
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkBox" id="above">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image6">
@@ -29,7 +37,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="pixbuf">svx/res/symphony/spacing1.png</property>
+                <property name="icon_name">svx/res/symphony/spacing1.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -38,12 +46,14 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
+              <object class="GtkSpinButton" id="aboveparaspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paraulspacing|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
+                <property name="hexpand">True</property>
                 <property name="text">0</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -61,6 +71,7 @@
           <object class="GtkBox" id="below">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image7">
@@ -68,7 +79,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="pixbuf">svx/res/symphony/spacing2.png</property>
+                <property name="icon_name">svx/res/symphony/spacing2.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -77,12 +88,14 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxRelativeField" id="belowparaspacing">
+              <object class="GtkSpinButton" id="belowparaspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paraulspacing|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
+                <property name="hexpand">True</property>
                 <property name="text">0</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="adjustment">adjustment2</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="expand">False</property>

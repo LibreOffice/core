@@ -2,19 +2,37 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="ParaLRSpacingWindow">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <child>
           <object class="GtkBox" id="before">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image5">
@@ -22,7 +40,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="pixbuf">svx/res/symphony/Indent4.png</property>
+                <property name="icon_name">svx/res/symphony/Indent4.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -31,11 +49,14 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxRelativeField" id="beforetextindent">
+              <object class="GtkSpinButton" id="beforetextindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|beforetextindent|tooltip_text">Before Text Indent</property>
+                <property name="hexpand">True</property>
                 <property name="text">0</property>
+                <property name="adjustment">adjustment1</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -53,6 +74,7 @@
           <object class="GtkBox" id="after">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image4">
@@ -60,7 +82,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="pixbuf">svx/res/symphony/Indent3.png</property>
+                <property name="icon_name">svx/res/symphony/Indent3.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -69,11 +91,14 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxRelativeField" id="aftertextindent">
+              <object class="GtkSpinButton" id="aftertextindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|aftertextindent|tooltip_text">After Text Indent</property>
+                <property name="hexpand">True</property>
                 <property name="text">0</property>
+                <property name="adjustment">adjustment2</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -90,6 +115,7 @@
         <child>
           <object class="GtkBox" id="firstline">
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="image11">
@@ -97,7 +123,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="pixbuf">svx/res/symphony/Indent2.png</property>
+                <property name="icon_name">svx/res/symphony/Indent2.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -106,11 +132,14 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxRelativeField" id="firstlineindent">
+              <object class="GtkSpinButton" id="firstlineindent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|firstlineindent|tooltip_text">First Line Indent</property>
+                <property name="hexpand">True</property>
                 <property name="text">0</property>
+                <property name="adjustment">adjustment3</property>
+                <property name="digits">2</property>
               </object>
               <packing>
                 <property name="expand">False</property>
