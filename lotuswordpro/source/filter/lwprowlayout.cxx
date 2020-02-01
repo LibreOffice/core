@@ -282,14 +282,15 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         {
             pRowStyle = static_cast<XFRowStyle*>(
                 pXFStyleManager->FindStyle(pTableLayout->GetDefaultRowStyleName()));
-            fHeight += pRowStyle->GetRowHeight();
         }
         else
         {
             pRowStyle = static_cast<XFRowStyle*>(
                 pXFStyleManager->FindStyle(iter->second->GetStyleName()));
-            fHeight+=pRowStyle->GetRowHeight();
         }
+        if (!pRowStyle)
+            throw std::runtime_error("missing RowStyle");
+        fHeight += pRowStyle->GetRowHeight();
     }
 
     if (m_nDirection & 0x0030)
