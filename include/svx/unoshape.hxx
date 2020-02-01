@@ -83,10 +83,10 @@ class SvxShapeMaster;
 class SvxItemPropertySet;
 class SfxItemSet;
 
-void SVX_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertySimpleEntry* pMap,
+void SVXCORE_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertySimpleEntry* pMap,
         const css::uno::Any& rVal, SfxItemSet& rSet );
 
-css::uno::Any SVX_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet );
+css::uno::Any SVXCORE_DLLPUBLIC SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet );
 
 
 // WARNING: if you update the supported interfaces,
@@ -105,7 +105,7 @@ typedef ::cppu::WeakAggImplHelper12<
     css::document::XActionLockable,
     css::beans::XMultiPropertyStates> SvxShape_UnoImplHelper;
 
-class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
+class SVXCORE_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
                  public SfxListener,
                  public SvxShapeMutex
 {
@@ -350,7 +350,7 @@ private:
     SVX_DLLPRIVATE void impl_construct();
 };
 
-class SVX_DLLPUBLIC SvxShapeText : public SvxShape, public SvxUnoTextBase
+class SVXCORE_DLLPUBLIC SvxShapeText : public SvxShape, public SvxUnoTextBase
 {
 protected:
     /** called from the XActionLockable interface methods on initial locking */
@@ -511,7 +511,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SVX_DLLPUBLIC SvxShapeControl final : public css::drawing::XControlShape, public SvxShapeText
+class SVXCORE_DLLPUBLIC SvxShapeControl final : public css::drawing::XControlShape, public SvxShapeText
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -579,7 +579,7 @@ public:
 ***********************************************************************/
 
 // #i118485# changed parent to SvxShapeText to allow Text handling over UNO API
-class SVX_DLLPUBLIC SvxOle2Shape : public SvxShapeText
+class SVXCORE_DLLPUBLIC SvxOle2Shape : public SvxShapeText
 {
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
@@ -787,7 +787,7 @@ typedef ::cppu::WeakAggImplHelper1<
     css::drawing::XEnhancedCustomShapeDefaulter
     > SvxShape_UnoImplHelper1;
 
-class SVX_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public SvxShape_UnoImplHelper1
+class SVXCORE_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public SvxShape_UnoImplHelper1
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;

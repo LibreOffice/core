@@ -95,7 +95,7 @@ enum class SdrMouseEventKind
 };
 
 // helper class SdrViewEvent
-struct SVX_DLLPUBLIC SdrViewEvent
+struct SVXCORE_DLLPUBLIC SdrViewEvent
 {
     SdrHdl*                     pHdl;
     SdrObject*                  pObj;
@@ -128,7 +128,7 @@ public:
 };
 
 // helper class for all D&D overlays
-class SVX_DLLPUBLIC SdrDropMarkerOverlay
+class SVXCORE_DLLPUBLIC SdrDropMarkerOverlay
 {
     // The OverlayObjects
     sdr::overlay::OverlayObjectList               maObjects;
@@ -145,7 +145,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrView : public SdrCreateView, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrView : public SdrCreateView, public tools::WeakBase
 {
     friend class                SdrPageView;
 

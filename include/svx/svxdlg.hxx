@@ -318,7 +318,7 @@ public:
     virtual sal_uInt16 getInsertCount() const = 0;
 };
 
-class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, public EditAbstractDialogFactory
+class SVXCORE_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, public EditAbstractDialogFactory
 {
 public:
     static SvxAbstractDialogFactory* Create();

@@ -25,7 +25,7 @@
 
 #include <svx/ipolypolygoneditorcontroller.hxx>
 
-class SVX_DLLPUBLIC SdrPolyEditView : public SdrEditView, public IPolyPolygonEditorController
+class SVXCORE_DLLPUBLIC SdrPolyEditView : public SdrEditView, public IPolyPolygonEditorController
 {
     friend class                SdrEditView;
 

@@ -28,7 +28,7 @@ private:
     VclPtr<SvxColorListBox> mxControl;
 };
 
-class SVX_DLLPUBLIC SvxColorListBox : public MenuButton
+class SVXCORE_DLLPUBLIC SvxColorListBox : public MenuButton
 {
 private:
     friend class SvxListBoxColorWrapper;
@@ -79,7 +79,7 @@ private:
     ColorListBox* mpControl;
 };
 
-class SVX_DLLPUBLIC ColorListBox
+class SVXCORE_DLLPUBLIC ColorListBox
 {
 private:
     friend class ListBoxColorWrapper;

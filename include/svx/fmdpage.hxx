@@ -27,7 +27,7 @@
 
 // SvxFmDrawPage
 
-class SVX_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
+class SVXCORE_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
                                     ,public css::form::XFormsSupplier2
 {
 protected:

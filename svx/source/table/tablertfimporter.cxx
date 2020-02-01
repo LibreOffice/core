@@ -498,7 +498,7 @@ void SdrTableRTFParser::ProcToken( RtfImportInfo* pInfo )
     }
 }
 
-void SdrTableObj::ImportAsRTF( SvStream& rStream, SdrTableObj& rObj )
+void ImportAsRTF( SvStream& rStream, SdrTableObj& rObj )
 {
     SdrTableRTFParser aParser( rObj );
     aParser.Read( rStream );

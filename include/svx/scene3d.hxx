@@ -54,7 +54,7 @@ class Imp3DDepthRemapper;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
+class SVXCORE_DLLPUBLIC E3dScene : public E3dObject, public SdrObjList
 {
 protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;

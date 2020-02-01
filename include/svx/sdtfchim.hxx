@@ -22,7 +22,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrTextFixedCellHeightItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC SdrTextFixedCellHeightItem final : public SfxBoolItem
 {
 public:
 

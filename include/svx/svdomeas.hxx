@@ -43,7 +43,7 @@ public:
     virtual ~SdrMeasureObjGeoData() override;
 };
 
-class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
 private:
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()

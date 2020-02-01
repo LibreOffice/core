@@ -25,7 +25,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineStartCenterItem : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XLineStartCenterItem : public SfxBoolItem
 {
 public:
                             XLineStartCenterItem(bool bStartCenter = false);

@@ -44,7 +44,7 @@ enum class ProjectionType { Parallel, Perspective };
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC Viewport3D
+class SVXCORE_DLLPUBLIC Viewport3D
 {
  protected:
     basegfx::B3DHomMatrix       aViewTf;        // the real transformations matrix

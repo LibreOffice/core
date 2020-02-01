@@ -36,7 +36,7 @@ namespace sdr { namespace properties {
 //   SdrRectObj
 
 /// Rectangle objects (rectangle, circle, ...)
-class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
 private:
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()

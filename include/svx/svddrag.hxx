@@ -43,7 +43,7 @@ struct SdrDragStatUserData
     virtual ~SdrDragStatUserData() = 0;
 };
 
-class SVX_DLLPUBLIC SdrDragStat final
+class SVXCORE_DLLPUBLIC SdrDragStat final
 {
     SdrHdl*  pHdl;      // The Handle for the User
     SdrView* pView;

@@ -40,7 +40,7 @@ typedef std::set<sal_uInt16> SdrUShortCont;
 /**
  * Everything a View needs to know about a selected object
  */
-class SVX_DLLPUBLIC SdrMark final : public sdr::ObjectUser
+class SVXCORE_DLLPUBLIC SdrMark final : public sdr::ObjectUser
 {
     sal_Int64                                           mnTimeStamp;
     SdrObject*                                          mpSelectedSdrObject; // the selected object
@@ -132,7 +132,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC SdrMarkList final
+class SVXCORE_DLLPUBLIC SdrMarkList final
 {
     std::vector<std::unique_ptr<SdrMark>>               maList;
 
@@ -224,7 +224,7 @@ public:
 
 namespace sdr
 {
-    class SVX_DLLPUBLIC ViewSelection
+    class SVXCORE_DLLPUBLIC ViewSelection
     {
         SdrMarkList                 maMarkedObjectList;
         SdrMarkList                 maEdgesOfMarkedNodes;

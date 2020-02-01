@@ -27,7 +27,7 @@
 // here GetValueTextByVal() returns "on" or "off" instead
 // of "TRUE" or "FALSE"
 
-class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
+class SVXCORE_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
     SdrOnOffItem(sal_uInt16 nId, bool bOn): SfxBoolItem(nId,bOn) {}
     virtual SdrOnOffItem* Clone(SfxItemPool* pPool=nullptr) const override;

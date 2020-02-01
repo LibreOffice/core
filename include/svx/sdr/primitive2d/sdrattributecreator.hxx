@@ -55,17 +55,17 @@ namespace drawinglayer
     namespace primitive2d
     {
         // SdrAttribute creators
-        attribute::SdrLineAttribute SVX_DLLPUBLIC createNewSdrLineAttribute(
+        attribute::SdrLineAttribute SVXCORE_DLLPUBLIC createNewSdrLineAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrLineStartEndAttribute SVX_DLLPUBLIC createNewSdrLineStartEndAttribute(
+        attribute::SdrLineStartEndAttribute SVXCORE_DLLPUBLIC createNewSdrLineStartEndAttribute(
             const SfxItemSet& rSet,
             double fWidth);
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrFillAttribute SVX_DLLPUBLIC createNewSdrFillAttribute(
+        attribute::SdrFillAttribute SVXCORE_DLLPUBLIC createNewSdrFillAttribute(
             const SfxItemSet& rSet);
 
         // #i101508# Support handing over given text-to-border distances
@@ -77,7 +77,7 @@ namespace drawinglayer
             const sal_Int32* pRight = nullptr,
             const sal_Int32* pLower = nullptr);
 
-        attribute::FillGradientAttribute SVX_DLLPUBLIC createNewTransparenceGradientAttribute(
+        attribute::FillGradientAttribute SVXCORE_DLLPUBLIC createNewTransparenceGradientAttribute(
             const SfxItemSet& rSet);
 
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(

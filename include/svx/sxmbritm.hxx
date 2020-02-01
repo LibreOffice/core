@@ -29,7 +29,7 @@
 // TextUpsideDown, but easily operated)
 // can also be dragged by dragging the measure line item
 // (SdrMeasureLineDistItem) over the reference edge
-class SVX_DLLPUBLIC SdrMeasureBelowRefEdgeItem: public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrMeasureBelowRefEdgeItem: public SdrYesNoItem {
 public:
     SdrMeasureBelowRefEdgeItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASUREBELOWREFEDGE,bOn) {}
     virtual ~SdrMeasureBelowRefEdgeItem() override;

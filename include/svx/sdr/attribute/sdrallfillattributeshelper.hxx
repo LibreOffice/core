@@ -34,7 +34,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SVX_DLLPUBLIC SdrAllFillAttributesHelper
+        class SVXCORE_DLLPUBLIC SdrAllFillAttributesHelper
         {
         private:
             basegfx::B2DRange                                                   maLastPaintRange;

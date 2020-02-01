@@ -39,7 +39,7 @@
 #include <limits>
 #include <memory>
 
-class SVX_DLLPUBLIC XColorEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XColorEntry final : public XPropertyEntry
 {
 private:
     Color   aColor;
@@ -53,7 +53,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XLineEndEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XLineEndEntry final : public XPropertyEntry
 {
 private:
     basegfx::B2DPolyPolygon const aB2DPolyPolygon;
@@ -68,7 +68,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XDashEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XDashEntry final : public XPropertyEntry
 {
 private:
     XDash const   aDash;
@@ -83,7 +83,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XHatchEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XHatchEntry final : public XPropertyEntry
 {
 private:
     XHatch const  aHatch;
@@ -98,7 +98,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XGradientEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XGradientEntry final : public XPropertyEntry
 {
 private:
     XGradient const  aGradient;
@@ -113,7 +113,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC XBitmapEntry final : public XPropertyEntry
+class SVXCORE_DLLPUBLIC XBitmapEntry final : public XPropertyEntry
 {
 private:
     GraphicObject const   maGraphicObject;
@@ -150,7 +150,7 @@ class XPatternList ; typedef rtl::Reference< class XPatternList > XPatternListRe
 class XLineEndList ; typedef rtl::Reference< class XLineEndList > XLineEndListRef;
 class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientListRef;
 
-class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
+class SVXCORE_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 {
 protected:
     XPropertyListType const   meType;
@@ -234,7 +234,7 @@ public:
         rtl::Reference<XPropertyList> const & plist);
 };
 
-class SVX_DLLPUBLIC XColorList : public XPropertyList
+class SVXCORE_DLLPUBLIC XColorList : public XPropertyList
 {
 protected:
     virtual BitmapEx  CreateBitmapForUI(long nIndex) override;
@@ -253,7 +253,7 @@ public:
     static XColorListRef GetStdColorList(); // returns a singleton
 };
 
-class SVX_DLLPUBLIC XLineEndList : public XPropertyList
+class SVXCORE_DLLPUBLIC XLineEndList : public XPropertyList
 {
 protected:
     virtual BitmapEx CreateBitmapForUI(long nIndex) override;
@@ -268,7 +268,7 @@ public:
     virtual bool Create() override;
 };
 
-class SVX_DLLPUBLIC XDashList : public XPropertyList
+class SVXCORE_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
     BitmapEx            maBitmapSolidLine;
@@ -300,7 +300,7 @@ public:
     OUString const & GetStringForUiNoLine() const;
 };
 
-class SVX_DLLPUBLIC XHatchList : public XPropertyList
+class SVXCORE_DLLPUBLIC XHatchList : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap(long nIndex, const Size& rSize) const;
@@ -318,7 +318,7 @@ public:
     virtual bool Create() override;
 };
 
-class SVX_DLLPUBLIC XGradientList : public XPropertyList
+class SVXCORE_DLLPUBLIC XGradientList : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap(long nIndex, const Size& rSize) const;
@@ -338,7 +338,7 @@ public:
     virtual bool Create() override;
 };
 
-class SVX_DLLPUBLIC XBitmapList : public XPropertyList
+class SVXCORE_DLLPUBLIC XBitmapList : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap( long nIndex, const Size& rSize ) const;
@@ -357,7 +357,7 @@ public:
     virtual bool Create() override;
 };
 
-class SVX_DLLPUBLIC XPatternList : public XPropertyList
+class SVXCORE_DLLPUBLIC XPatternList : public XPropertyList
 {
 private:
     BitmapEx CreateBitmap( long nIndex, const Size& rSize ) const;

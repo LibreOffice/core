@@ -44,7 +44,7 @@ struct SvxGraphicHelperStream_Impl
     css::uno::Reference < css::io::XStream > xStream;
 };
 
-class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
+class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
                                                                                     css::document::XGraphicStorageHandler,
                                                                                     css::document::XBinaryStreamResolver>
 {

@@ -74,7 +74,7 @@ namespace o3tl
 // escher, but we are using it internally in to differentiate
 // between X_RANGE and Y_RANGE
 
-class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
+class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 {
         SdrObjCustomShape&          mrSdrObjCustomShape;
         MSO_SPT                     eSpType;

@@ -32,9 +32,9 @@ class SdrView;
 namespace svx
 {
 
-SVX_DLLPUBLIC bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded );
+SVXCORE_DLLPUBLIC bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded );
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ExtrusionBar final : public SfxShell
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ExtrusionBar final : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_EXTRUSION_BAR)

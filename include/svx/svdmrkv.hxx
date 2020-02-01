@@ -85,7 +85,7 @@ enum class ImpGetDescriptionOptions
 
 class ImplMarkingOverlay;
 
-class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView
+class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
 {
     friend class                SdrPageView;
 

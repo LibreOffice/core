@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpStretchItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XFillBmpStretchItem final : public SfxBoolItem
 {
 public:
                             XFillBmpStretchItem( bool bStretch = true );

@@ -27,7 +27,7 @@
 // Integer percents of 0
 
 
-class SVX_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
+class SVXCORE_DLLPUBLIC SdrPercentItem : public SfxUInt16Item
 {
 public:
     SdrPercentItem(sal_uInt16 nId, sal_uInt16 nVal): SfxUInt16Item(nId,nVal) {}
@@ -41,7 +41,7 @@ public:
 // Integer percents of +/-
 
 
-class SVX_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
+class SVXCORE_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
 {
 public:
     SdrSignedPercentItem( sal_uInt16 nId, sal_Int16 nVal ) : SfxInt16Item( nId,nVal ) {}

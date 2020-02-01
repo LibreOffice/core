@@ -27,7 +27,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineJointItem final : public SfxEnumItem<css::drawing::LineJoint>
+class SVXCORE_DLLPUBLIC XLineJointItem final : public SfxEnumItem<css::drawing::LineJoint>
 {
 public:
                             static SfxPoolItem* CreateDefault();

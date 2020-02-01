@@ -22,8 +22,8 @@
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
-SVX_DLLPUBLIC std::locale SvxResLocale();
-SVX_DLLPUBLIC OUString SvxResId(const char* pId);
+SVXCORE_DLLPUBLIC std::locale SvxResLocale();
+SVXCORE_DLLPUBLIC OUString SvxResId(const char* pId);
 
 #endif
 
