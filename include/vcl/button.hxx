@@ -499,15 +499,6 @@ public:
                  ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
 };
 
-class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
-{
-                    ImageRadioButton( const ImageRadioButton & ) = delete;
-                    ImageRadioButton & operator= ( const ImageRadioButton & ) = delete;
-
-public:
-    explicit        ImageRadioButton( vcl::Window* pParent );
-};
-
 class VCL_DLLPUBLIC TriStateBox final : public CheckBox
 {
                     TriStateBox( const TriStateBox & ) = delete;

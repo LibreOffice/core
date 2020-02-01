@@ -28,7 +28,7 @@ namespace sfx2 { namespace sidebar {
 /** A single button in the tab bar.
 */
 class TabItem final
-    : public ImageRadioButton
+    : public RadioButton
 {
 public:
     TabItem (vcl::Window* pParentWindow);

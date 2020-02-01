@@ -69,7 +69,7 @@ class ListBox
 WinBits
 
 WB_RADIOSEL         If set the selection will be drawn like an
-                    ImageRadioButton. This does only make sense if the image
+                    RadioButton. This does only make sense if the image
                     is at least 8 pixel smaller on each side than the item
                     and also WB_DOUBLEBORDER is set and as color
                     COL_WINDOWWORKSPACE is specified.
