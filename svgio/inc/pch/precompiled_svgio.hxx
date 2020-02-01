@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 16:11:32 using:
+ Generated on 2020-01-22 15:58:25 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,7 +29,6 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/thread.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -42,7 +41,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/vclenum.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -54,11 +52,11 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/toolsdllapi.h>

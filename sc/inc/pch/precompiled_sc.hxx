@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-02 15:21:26 using:
+ Generated on 2020-02-01 10:58:09 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,16 +30,20 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <iostream>
 #include <iterator>
 #include <limits.h>
 #include <limits>
 #include <list>
+#include <locale>
 #include <map>
 #include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <set>
+#include <sstream>
+#include <stack>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -74,12 +78,14 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
+#include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -89,6 +95,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -105,6 +112,7 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -112,11 +120,15 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -137,6 +149,7 @@
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -169,6 +182,11 @@
 #include <basic/basicdllapi.h>
 #include <basic/sbxdef.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -186,16 +204,28 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -208,6 +238,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -231,6 +262,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -252,9 +284,13 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -266,6 +302,9 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
@@ -303,13 +342,18 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <oox/dllapi.h>
+#include <oox/helper/refmap.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
+#include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/chalign.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
@@ -319,8 +363,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/tbxctrl.hxx>
+#include <sfx2/shell.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
@@ -344,8 +389,10 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/ehdl.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
+#include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/algitem.hxx>
@@ -401,12 +448,15 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
@@ -436,6 +486,11 @@
 #include <xmloff/xmltoken.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <AccessibleContextBase.hxx>
+#include <IAnyRefDialog.hxx>
+#include <TableFillingAndNavigationTools.hxx>
+#include <address.hxx>
+#include <anyrefdg.hxx>
 #include <appoptio.hxx>
 #include <attrib.hxx>
 #include <brdcst.hxx>
@@ -452,9 +507,15 @@
 #include <conditio.hxx>
 #include <convuno.hxx>
 #include <datamapper.hxx>
+#include <dbdata.hxx>
+#include <dbdocfun.hxx>
+#include <dbfunc.hxx>
+#include <decl.h>
+#include <docfunc.hxx>
 #include <dociter.hxx>
 #include <docoptio.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <documentlinkmgr.hxx>
 #include <docuno.hxx>
@@ -462,34 +523,59 @@
 #include <dpsave.hxx>
 #include <dpshttab.hxx>
 #include <dputil.hxx>
+#include <drawview.hxx>
 #include <drwlayer.hxx>
+#include <editable.hxx>
 #include <editsrc.hxx>
 #include <editutil.hxx>
 #include <externalrefmgr.hxx>
 #include <fillinfo.hxx>
+#include <filter.hxx>
+#include <flttypes.hxx>
+#include <formula/IControlReferenceHandler.hxx>
+#include <formula/compiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/formuladllapi.h>
+#include <formula/funcutl.hxx>
+#include <formula/opcode.hxx>
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
 #include <formulacell.hxx>
+#include <ftools.hxx>
 #include <funcdesc.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
+#include <gridwin.hxx>
 #include <hints.hxx>
+#include <inputhdl.hxx>
 #include <inputopt.hxx>
+#include <interpre.hxx>
 #include <listenercontext.hxx>
+#include <lotattr.hxx>
+#include <lotfntbf.hxx>
+#include <lotrange.hxx>
 #include <markdata.hxx>
 #include <miscuno.hxx>
+#include <namebuff.hxx>
 #include <olinetab.hxx>
+#include <optab.h>
+#include <output.hxx>
 #include <patattr.hxx>
 #include <postit.hxx>
+#include <prevwsh.hxx>
+#include <printfun.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
 #include <rechead.hxx>
+#include <refdata.hxx>
+#include <reffact.hxx>
+#include <refundo.hxx>
+#include <refupdat.hxx>
 #include <refupdatecontext.hxx>
+#include <root.hxx>
 #include <rowheightcontext.hxx>
 #include <scabstdlg.hxx>
 #include <scdllapi.h>
@@ -500,16 +586,27 @@
 #include <scresid.hxx>
 #include <sheetdata.hxx>
 #include <sheetevents.hxx>
+#include <shellids.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <stringutil.hxx>
+#include <table.hxx>
 #include <tablink.hxx>
 #include <tabprotection.hxx>
+#include <tabvwsh.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
+#include <transobj.hxx>
+#include <types.hxx>
+#include <uiitems.hxx>
+#include <undoblk.hxx>
 #include <unonames.hxx>
 #include <userdat.hxx>
 #include <validat.hxx>
+#include <viewdata.hxx>
+#include <xiroot.hxx>
+#include <xlconst.hxx>
+#include <xlroot.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-12-20 15:44:10 using:
+ Generated on 2020-02-01 10:57:42 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,6 +95,8 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/builderpage.hxx>
+#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/ctrl.hxx>
@@ -103,6 +105,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -114,6 +117,7 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -129,6 +133,7 @@
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
@@ -151,6 +156,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -160,9 +166,15 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -177,6 +189,7 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -185,6 +198,8 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
@@ -196,6 +211,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -212,6 +229,8 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -240,10 +259,13 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/propagg.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
@@ -261,12 +283,16 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
@@ -295,8 +321,10 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
@@ -375,6 +403,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
@@ -395,6 +424,7 @@
 #include <uno/sequence2.h>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/eventlisteneradapter.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
@@ -406,7 +436,40 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <AxisHelper.hxx>
+#include <CharacterPropertyItemConverter.hxx>
+#include <ChartController.hxx>
 #include <ChartModel.hxx>
+#include <ChartModelHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ChartWindow.hxx>
+#include <CommonConverters.hxx>
+#include <ControllerLockGuard.hxx>
+#include <DataSeriesHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <DrawViewWrapper.hxx>
+#include <FastPropertyIdRanges.hxx>
+#include <FillProperties.hxx>
+#include <GraphicPropertyItemConverter.hxx>
+#include <ItemConverter.hxx>
+#include <ItemPropertyMap.hxx>
+#include <LegendHelper.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <MutexContainer.hxx>
+#include <ObjectHierarchy.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ObjectNameProvider.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <ResId.hxx>
+#include <StatisticsHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <TitleHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <ViewElementListProvider.hxx>
+#include <WrappedProperty.hxx>
+#include <charttoolsdllapi.hxx>
+#include <servicenames.hxx>
 #include <unonames.hxx>
 #endif // PCH_LEVEL >= 4
 

@@ -27,6 +27,7 @@ import sys
 import re
 import os
 import unittest
+import glob
 
 CUTOFF = 1
 EXCLUDE_MODULE = False
@@ -200,16 +201,21 @@ def is_c_runtime(inc, root, module):
     if inc.endswith('.h') and inc.startswith( 'config_' ):
         return False
 
+    hasdot = False
     for c in inc:
         if c == '/':
             return False
         if c == '.' and not inc.endswith('.h'):
             return False
+        if c == '.':
+            hasdot = True
         if c.isupper():
             return False
+    if not hasdot: # <memory> etc.
+        return True
 
-    if os.path.isfile( os.path.join(root, module, 'inc', inc)):
-        return False
+    if glob.glob(os.path.join(root, module, '**', inc), recursive=True):
+        return False;
 
     return True
 
@@ -315,7 +321,17 @@ class Filter_Local(object):
 
         # Locals are included first (by the compiler).
         if self.is_local(filename):
-            return line if self.allow_locals and '/inc/' in filename else ''
+            # Use only locals that are in some /inc/ directory (either in <module>/inc or
+            # somewhere under <module>/source/**/inc/, compilations use -I for these paths
+            # and headers elsewhere would not be found when compiling the PCH.
+            if not self.allow_locals:
+                return ''
+            elif '/inc/' in filename:
+                return filename
+            elif glob.glob(os.path.join(self.root, self.module, '**', 'inc', filename), recursive=True):
+                return filename
+            else:
+                return ''
 
         # Module headers are next.
         if self.is_module(filename):
@@ -376,6 +392,9 @@ def filter_ignore(line, module):
         ignore_list += [
             'com/sun/star/beans/PropertyAttribute.hpp', # OPTIONAL defined via objbase.h
             'com/sun/star/sdbcx/Privilege.hpp', # DELETE defined via objbase.h
+            'ado/*' , # some strange type conflict because of Window's adoctint.h
+            'adoint.h',
+            'adoctint.h',
             ]
     if module == 'sc':
         ignore_list += [

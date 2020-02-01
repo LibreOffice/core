@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:13:59 using:
+ Generated on 2020-02-01 19:24:06 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,10 +26,12 @@
 #include <cstddef>
 #include <cstdlib>
 #include <limits>
+#include <map>
 #include <memory>
 #include <oledb.h>
 #include <sstream>
 #include <string>
+#include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
@@ -50,6 +52,7 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -58,29 +61,50 @@
 #include <com/sun/star/sdbc/ProcedureResult.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#include <com/sun/star/sdbc/XCloseable.hpp>
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
+#include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <resource/sharedresources.hxx>
 #include <salhelper/singletonref.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <OColumn.hxx>
+#include <TConnection.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/sdbcx/VCollection.hxx>
 #endif // PCH_LEVEL >= 4
 
 // Cleanup windows header macro pollution.

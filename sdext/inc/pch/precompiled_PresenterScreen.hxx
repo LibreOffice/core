@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:16:10 using:
+ Generated on 2020-02-01 10:58:12 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,10 +22,14 @@
 
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <assert.h>
+#include <atomic>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
@@ -46,6 +50,7 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
+#include <osl/endian.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -55,6 +60,7 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -71,44 +77,31 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/dllapi.h>
+#include <vcl/exceptiontypes.hxx>
+#include <vcl/inputtypes.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-#include <com/sun/star/drawing/CanvasFeature.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
-#include <com/sun/star/drawing/XSlideSorterBase.hpp>
-#include <com/sun/star/drawing/framework/Configuration.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
@@ -118,13 +111,11 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -136,7 +127,8 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Color.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
+#include <comphelper/comphelperdllapi.h>
+#include <comphelper/solarmutex.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -146,7 +138,16 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/weak.hxx>
+#include <i18nlangtag/lang.h>
+#include <o3tl/safeint.hxx>
+#include <o3tl/strong_int.hxx>
+#include <o3tl/typed_flags_set.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <tools/solar.h>
+#include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>

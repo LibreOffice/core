@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 16:10:32 using:
+ Generated on 2020-02-01 10:57:36 using:
  ./bin/update_pch desktop deploymentmisc --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,19 +29,14 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <o3tl/optional.hxx>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-#include <osl/file.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
-#include <osl/module.hxx>
-#include <osl/mutex.hxx>
 #include <osl/pipe.hxx>
 #include <osl/security.hxx>
-#include <osl/socket.hxx>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -51,10 +46,8 @@
 #include <rtl/locale.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
-#include <rtl/string.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
@@ -64,6 +57,7 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.h>
@@ -81,9 +75,11 @@
 #include <salhelper/linkhelper.hxx>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
-#include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <dp_descriptioninfoset.hxx>
+#include <dp_misc_api.hxx>
+#include <dp_version.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
