@@ -65,7 +65,7 @@ namespace o3tl
     template<> struct typed_flags<SdrAlign> : is_typed_flags<SdrAlign, 0x1313> {};
 }
 
-class SVX_DLLPUBLIC SdrGluePoint {
+class SVXCORE_DLLPUBLIC SdrGluePoint {
     // Reference Point is SdrObject::GetSnapRect().Center()
     // bNoPercent=false: position is -5000..5000 (1/100)% or 0..10000 (depending on align)
     // bNoPercent=true : position is in log unit, relative to the reference point
@@ -115,7 +115,7 @@ public:
 
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
 
-class SVX_DLLPUBLIC SdrGluePointList {
+class SVXCORE_DLLPUBLIC SdrGluePointList {
     std::vector<std::unique_ptr<SdrGluePoint>> aList;
 public:
     SdrGluePointList() {};

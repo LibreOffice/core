@@ -40,7 +40,7 @@ enum GalSoundType
     SOUND_ANIMAL = 7
 };
 
-class SVX_DLLPUBLIC SgaObject
+class SVXCORE_DLLPUBLIC SgaObject
 {
     friend class GalleryTheme;
 

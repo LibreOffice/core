@@ -43,9 +43,9 @@ namespace o3tl
 }
 
 // load language strings from resource
-SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg );
+SVXCORE_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg );
 
-class SVX_DLLPUBLIC SvxLanguageBox
+class SVXCORE_DLLPUBLIC SvxLanguageBox
 {
 public:
     enum class EditedAndValid

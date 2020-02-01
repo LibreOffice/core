@@ -29,7 +29,7 @@ namespace avmedia { class MediaItem; }
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
+class SVXCORE_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
 {
     friend class ViewObjectContactOfSdrMediaObj;
 

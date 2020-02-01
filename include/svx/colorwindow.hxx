@@ -34,7 +34,7 @@ namespace com::sun::star::frame { class XFrame; }
 
 class PaletteManager;
 
-class SVX_DLLPUBLIC ColorStatus
+class SVXCORE_DLLPUBLIC ColorStatus
 {
     Color maColor;
     Color maTLBRColor;
@@ -51,7 +51,7 @@ typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunct
 
 #define COL_NONE_COLOR    ::Color(0x80, 0xFF, 0xFF, 0xFF)
 
-class SVX_DLLPUBLIC SvxColorWindow final : public svtools::ToolbarPopup
+class SVXCORE_DLLPUBLIC SvxColorWindow final : public svtools::ToolbarPopup
 {
 private:
     const sal_uInt16    theSlotId;
@@ -109,7 +109,7 @@ public:
 
 class SvxColorToolBoxControl;
 
-class SVX_DLLPUBLIC MenuOrToolMenuButton
+class SVXCORE_DLLPUBLIC MenuOrToolMenuButton
 {
 private:
     // either
@@ -137,7 +137,7 @@ public:
     weld::Widget* get_widget() const;
 };
 
-class SVX_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
+class SVXCORE_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 {
 private:
     const sal_uInt16    theSlotId;

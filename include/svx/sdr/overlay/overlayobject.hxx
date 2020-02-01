@@ -50,7 +50,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObject : public sdr::animation::Event
+        class SVXCORE_DLLPUBLIC OverlayObject : public sdr::animation::Event
         {
         private:
             OverlayObject(const OverlayObject&) = delete;
@@ -184,7 +184,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObjectWithBasePosition : public OverlayObject
+        class SVXCORE_DLLPUBLIC OverlayObjectWithBasePosition : public OverlayObject
         {
         protected:
             // base position in logical coordinates

@@ -62,7 +62,7 @@ private:
     Reference< XTable > mxTable;
 };
 
-void SdrTableObj::ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
+void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
 {
     SdrTableRtfExporter aEx( rStrm, rObj );
     aEx.Write();

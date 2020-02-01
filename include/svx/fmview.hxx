@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star { namespace form {
     }
 } } } }
 
-class SVX_DLLPUBLIC FmFormView : public E3dView
+class SVXCORE_DLLPUBLIC FmFormView : public E3dView
 {
     rtl::Reference<FmXFormView> pImpl;
     FmFormShell*    pFormShell;

@@ -32,7 +32,7 @@ class ViewObjectContact;
 // single ViewObjectContacts. An own derivation may be set at single ViewContacts
 // or at the ObjectContact for redirecting all. If both is used, the one at single
 // objects will have priority.
-class SVX_DLLPUBLIC ViewObjectContactRedirector
+class SVXCORE_DLLPUBLIC ViewObjectContactRedirector
 {
 public:
     // basic constructor.

@@ -112,7 +112,7 @@ public:
 
     /** returns an object mapping from control models to drawing shapes.
     */
-    SVX_DLLPUBLIC css::uno::Reference< css::container::XMap > getControlToShapeMap();
+    SVXCORE_DLLPUBLIC css::uno::Reference< css::container::XMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used

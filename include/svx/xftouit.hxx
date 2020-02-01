@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextOutlineItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XFormTextOutlineItem final : public SfxBoolItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

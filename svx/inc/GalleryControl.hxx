@@ -33,7 +33,7 @@ class Splitter;
 namespace svx { namespace sidebar {
 
 
-class SVX_DLLPUBLIC GalleryControl final : public PanelLayout
+class SVXCORE_DLLPUBLIC GalleryControl final : public PanelLayout
 {
 public:
     GalleryControl( vcl::Window* pParentWindow );

@@ -30,7 +30,7 @@ class SdrObject;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
+class SVXCORE_DLLPUBLIC ObjectContactPainter : public ObjectContact
 {
 protected:
     // Hierarchy access methods
@@ -46,7 +46,7 @@ public:
 // typedef for transferring SdrObject
 typedef ::std::vector< SdrObject* > SdrObjectVector;
 
-class SVX_DLLPUBLIC ObjectContactOfObjListPainter final : public ObjectContactPainter
+class SVXCORE_DLLPUBLIC ObjectContactOfObjListPainter final : public ObjectContactPainter
 {
     // Target OutputDevice
     OutputDevice&                                   mrTargetOutputDevice;

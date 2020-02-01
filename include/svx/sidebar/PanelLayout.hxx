@@ -21,7 +21,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 /// This class is the base for the Widget Layout-based sidebar panels.
-class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
+class SVXCORE_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;

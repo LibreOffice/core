@@ -26,7 +26,7 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-class SVX_DLLPUBLIC XLineStyleItem final : public SfxEnumItem<css::drawing::LineStyle>
+class SVXCORE_DLLPUBLIC XLineStyleItem final : public SfxEnumItem<css::drawing::LineStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();

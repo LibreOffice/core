@@ -106,7 +106,7 @@ enum class SdrHintKind
     EndEdit                // Is called after the object has left text edit mode
 };
 
-class SVX_DLLPUBLIC SdrHint final : public SfxHint
+class SVXCORE_DLLPUBLIC SdrHint final : public SfxHint
 {
 private:
     SdrHintKind const                       meHint;
@@ -136,7 +136,7 @@ public:
 
 struct SdrModelImpl;
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
 {
 private:
 #ifdef DBG_UTIL

@@ -27,7 +27,7 @@
 
 
 
-class SVX_DLLPUBLIC XHatch final
+class SVXCORE_DLLPUBLIC XHatch final
 {
     css::drawing::HatchStyle     eStyle;
     Color           aColor;

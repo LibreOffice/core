@@ -27,7 +27,7 @@
 using namespace css::uno;
 using namespace css::text;
 
-class SVX_DLLPUBLIC SvxNumOptionsTabPageHelper
+class SVXCORE_DLLPUBLIC SvxNumOptionsTabPageHelper
 {
 public:
     static Reference<XDefaultNumberingProvider> GetNumberingProvider();

@@ -27,7 +27,7 @@ class XLineAttrSetItem;
 class XFillAttrSetItem;
 
 
-class SVX_DLLPUBLIC SdrItemPool final : public XOutdevItemPool
+class SVXCORE_DLLPUBLIC SdrItemPool final : public XOutdevItemPool
 {
 public:
     SdrItemPool(SfxItemPool* pMaster = nullptr);

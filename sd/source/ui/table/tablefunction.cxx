@@ -265,7 +265,7 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 
     pPage->NbcInsertObject( pObj );
 
-    sdr::table::SdrTableObj::ImportAsRTF( rStream, *pObj );
+    sdr::table::ImportAsRTF( rStream, *pObj );
 }
 
 }

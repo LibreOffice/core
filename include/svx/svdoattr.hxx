@@ -31,7 +31,7 @@ class SfxItemSet;
 class SfxItemPool;
 
 //   SdrAttrObj
-class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
+class SVXCORE_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
     friend class                SdrOutliner;

@@ -44,7 +44,7 @@ namespace svxform
 
     //= OLocalExchange
 
-    class SVX_DLLPUBLIC OLocalExchange : public TransferableHelper
+    class SVXCORE_DLLPUBLIC OLocalExchange : public TransferableHelper
     {
     private:
         Link<OLocalExchange&,void>  m_aClipboardListener;
@@ -89,7 +89,7 @@ namespace svxform
     //= OLocalExchangeHelper
 
     /// a helper for navigator windows (SvTreeListBox'es) which allow DnD within themself
-    class SVX_DLLPUBLIC OLocalExchangeHelper
+    class SVXCORE_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
         VclPtr<vcl::Window>            m_pDragSource;

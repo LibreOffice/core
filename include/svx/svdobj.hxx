@@ -107,7 +107,7 @@ namespace svx
 
 class SvxShape;
 class SdrObject;
-struct SVX_DLLPUBLIC SdrObjectFreeOp;
+struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
 
 // helper for constructing std::unique_ptr for SdrObjects where a
 // deleter is needed - here, SdrObject::Free needs to be used.
@@ -178,14 +178,14 @@ enum class SdrUserCallType {
     ChildRemoved      // a child within a group has changed
 };
 
-class SVX_DLLPUBLIC SdrObjUserCall
+class SVXCORE_DLLPUBLIC SdrObjUserCall
 {
 public:
     virtual ~SdrObjUserCall();
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect);
 };
 
-class SVX_DLLPUBLIC SdrObjMacroHitRec
+class SVXCORE_DLLPUBLIC SdrObjMacroHitRec
 {
 public:
     Point                       aPos;
@@ -201,7 +201,7 @@ public:
  * Every drawing object can have an arbitrary amount of such records (SV list).
  * Whoever wants to save data here, must inherit from this and set a corresponding link in the factory.
  */
-class SVX_DLLPUBLIC SdrObjUserData
+class SVXCORE_DLLPUBLIC SdrObjUserData
 {
     SdrInventor const                     nInventor;
     sal_uInt16 const                      nIdentifier;
@@ -245,7 +245,7 @@ public:
 /**
  * Provides information about various ZObject properties
  */
-class SVX_DLLPUBLIC SdrObjTransformInfoRec
+class SVXCORE_DLLPUBLIC SdrObjTransformInfoRec
 {
 public:
     bool bMoveAllowed : 1;             // if false, object cannot be moved
@@ -309,7 +309,7 @@ public:
 //      SwFlyDrawObj
 
 /// Abstract DrawObject
-class SVX_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
 {
 private:
     friend class                SdrObjListIter;
@@ -1031,7 +1031,7 @@ private:
     SdrObject( const SdrObject& ) = delete;
 };
 
-struct SVX_DLLPUBLIC SdrObjectFreeOp
+struct SVXCORE_DLLPUBLIC SdrObjectFreeOp
 {
     void operator()(SdrObject* obj)
     {
@@ -1054,7 +1054,7 @@ struct SdrObjCreatorParams
  * and must create a new drawing object instance accordingly.
  * He must also make the pNewObj pointer reference to this instance.
  */
-class SVX_DLLPUBLIC SdrObjFactory
+class SVXCORE_DLLPUBLIC SdrObjFactory
 {
 public:
     static SdrObject* MakeNewObject(

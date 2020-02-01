@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 
 // SetItem with all ItemSets of fill-attributes
-class SVX_DLLPUBLIC XFillAttrSetItem final : public SfxSetItem
+class SVXCORE_DLLPUBLIC XFillAttrSetItem final : public SfxSetItem
 {
 public:
                             XFillAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );

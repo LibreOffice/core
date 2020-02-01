@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
 
 namespace basegfx { class B2DRange; }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ChartHelper
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ChartHelper
 {
 public:
     /// Use chart's XUpdatable::update() to update values.

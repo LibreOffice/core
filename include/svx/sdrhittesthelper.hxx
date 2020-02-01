@@ -38,7 +38,7 @@ namespace drawinglayer { namespace primitive2d { class Primitive2DContainer; }}
 
 // Wrappers for classic Sdr* Mode/View classes
 
-SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
+SVXCORE_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     const SdrObject& rObject,
     const Point& rPnt,
     sal_uInt16 nTol,
@@ -48,7 +48,7 @@ SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     /// allow getting back an evtl. resulting primitive stack which lead to a hit
     drawinglayer::primitive2d::Primitive2DContainer* pHitContainer = nullptr);
 
-SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
+SVXCORE_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
     const Point& rPnt,
     sal_uInt16 nTol,

@@ -50,7 +50,7 @@ namespace tools {
     class Polygon;
 }
 
-class SVX_DLLPUBLIC XOutBitmap
+class SVXCORE_DLLPUBLIC XOutBitmap
 {
 public:
 

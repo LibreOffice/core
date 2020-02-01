@@ -57,7 +57,7 @@ namespace sdr
 class SdrPageWindow;
 
 
-class SVX_DLLPUBLIC SdrPageView
+class SVXCORE_DLLPUBLIC SdrPageView
 {
 private:
     SdrView&     mrView;

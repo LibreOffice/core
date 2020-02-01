@@ -33,7 +33,7 @@ typedef bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p
 
 
 
-class SVX_DLLPUBLIC NameOrIndex : public SfxStringItem
+class SVXCORE_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
     sal_Int32    nPalIndex;
 

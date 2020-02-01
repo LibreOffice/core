@@ -45,23 +45,23 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DReference SVX_DLLPUBLIC createPolyPolygonFillPrimitive(
+        Primitive2DReference SVXCORE_DLLPUBLIC createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient);
 
-        Primitive2DReference SVX_DLLPUBLIC createPolyPolygonFillPrimitive(
+        Primitive2DReference SVXCORE_DLLPUBLIC createPolyPolygonFillPrimitive(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient);
 
-        Primitive2DReference SVX_DLLPUBLIC createPolygonLinePrimitive(
+        Primitive2DReference SVXCORE_DLLPUBLIC createPolygonLinePrimitive(
             const basegfx::B2DPolygon& rPolygon,
             const attribute::SdrLineAttribute& rLine,
             const attribute::SdrLineStartEndAttribute& rStroke);
 
-        Primitive2DReference SVX_DLLPUBLIC createTextPrimitive(
+        Primitive2DReference SVXCORE_DLLPUBLIC createTextPrimitive(
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DHomMatrix& rObjectTransform,
             const attribute::SdrTextAttribute& rText,
@@ -69,7 +69,7 @@ namespace drawinglayer
             bool bCellText,
             bool bWordWrap);
 
-        Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
+        Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow);
 

@@ -25,7 +25,7 @@
 
 
 
-class SVX_DLLPUBLIC XLineEndCenterItem : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XLineEndCenterItem : public SfxBoolItem
 {
 public:
                             XLineEndCenterItem(bool bEndCenter = false);

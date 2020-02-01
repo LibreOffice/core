@@ -23,7 +23,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrEdgeNode1HorzDistItem: public SdrMetricItem {
+class SVXCORE_DLLPUBLIC SdrEdgeNode1HorzDistItem: public SdrMetricItem {
 public:
     SdrEdgeNode1HorzDistItem(long nVal): SdrMetricItem(SDRATTR_EDGENODE1HORZDIST,nVal)  {}
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -31,7 +31,7 @@ public:
     virtual SdrEdgeNode1HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
-class SVX_DLLPUBLIC SdrEdgeNode1VertDistItem: public SdrMetricItem {
+class SVXCORE_DLLPUBLIC SdrEdgeNode1VertDistItem: public SdrMetricItem {
 public:
     SdrEdgeNode1VertDistItem(long nVal): SdrMetricItem(SDRATTR_EDGENODE1VERTDIST,nVal)  {}
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -39,7 +39,7 @@ public:
     virtual SdrEdgeNode1VertDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
-class SVX_DLLPUBLIC SdrEdgeNode2HorzDistItem: public SdrMetricItem {
+class SVXCORE_DLLPUBLIC SdrEdgeNode2HorzDistItem: public SdrMetricItem {
 public:
     SdrEdgeNode2HorzDistItem(long nVal): SdrMetricItem(SDRATTR_EDGENODE2HORZDIST,nVal)  {}
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -47,7 +47,7 @@ public:
     virtual SdrEdgeNode2HorzDistItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
-class SVX_DLLPUBLIC SdrEdgeNode2VertDistItem: public SdrMetricItem {
+class SVXCORE_DLLPUBLIC SdrEdgeNode2VertDistItem: public SdrMetricItem {
 public:
     SdrEdgeNode2VertDistItem(long nVal): SdrMetricItem(SDRATTR_EDGENODE2VERTDIST,nVal)  {}
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
