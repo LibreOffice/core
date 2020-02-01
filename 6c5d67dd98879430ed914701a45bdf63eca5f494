@@ -22,6 +22,30 @@
       "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bbf4112_84c203b0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-01T22:04:44Z",
+      "side": 1,
+      "message": "I think the difference between these two and others is existence of \"assert\" before if(!pXmlDoc). Is it correct?",
+      "parentUuid": "a827fcbd_d7a42617",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 35
+      },
+      "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
