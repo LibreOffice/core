@@ -19,6 +19,9 @@
 
 #include <memory>
 
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
@@ -576,7 +579,7 @@ public:
 
 }
 
-static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
+static void MakeTree_Impl(StyleTreeArr_Impl& rArr, const OUString& aUIName)
 {
     const comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
@@ -609,11 +612,12 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
     rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](std::unique_ptr<StyleTree_Impl> const & pEntry) { return !pEntry; }), rArr.end());
 
     // tdf#91106 sort top level styles
+    std::sort(rArr.begin(), rArr.end());
     std::sort(rArr.begin(), rArr.end(),
-        [&aSorter](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
-            if (pEntry2->getName() == "Default Style")
+        [&aSorter, &aUIName](std::unique_ptr<StyleTree_Impl> const & pEntry1, std::unique_ptr<StyleTree_Impl> const & pEntry2) {
+            if (pEntry2->getName() == aUIName)
                 return false;
-            if (pEntry1->getName() == "Default Style")
+            if (pEntry1->getName() == aUIName)
                 return true; // default always first
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
@@ -697,7 +701,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(nullptr)
 
-    , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT) )
+    , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP) )
     , pTreeBox( VclPtr<StyleTreeListBox_Impl>::Create(this, WB_HASBUTTONS | WB_HASLINES |
                                                       WB_BORDER | WB_TABSTOP | WB_HASLINESATROOT |
                                                       WB_HASBUTTONSATROOT | WB_HIDESELECTION) )
@@ -729,7 +733,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     aFmtLb->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
     aFmtLb->SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb->SetHelpId( HID_TEMPLATE_FILTER );
-    aFmtLb->SetStyle( aFmtLb->GetStyle() | WB_SORT | WB_HIDESELECTION );
+    aFmtLb->SetStyle( aFmtLb->GetStyle() | WB_HIDESELECTION );
     vcl::Font aFont = aFmtLb->GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb->SetFont( aFont );
@@ -1071,6 +1075,44 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( bool bEnable )
     bTreeDrag = bEnable;
 }
 
+static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
+{
+    if(nFamily == SfxStyleFamily::Char)
+        return "CharacterStyles" ;
+    if(nFamily == SfxStyleFamily::Para)
+        return "ParagraphStyles";
+    if(nFamily == SfxStyleFamily::Page)
+        return "PageStyles";
+    if(nFamily == SfxStyleFamily::Table)
+        return "TableStyles";
+    return OUString();
+}
+
+OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily eFam )
+{
+    OUString sDefaultStyle;
+    OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
+    if( aFamilyName == "TableStyles" )
+        sDefaultStyle = "Default Style";
+    else
+        sDefaultStyle = "Standard";
+    uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
+    OUString aUIName;
+    try
+    {
+        uno::Reference< container::XNameAccess > xStyles;
+        uno::Reference< container::XNameAccess > xCont = xModel->getStyleFamilies();
+        xCont->getByName( aFamilyName ) >>= xStyles;
+        uno::Reference< beans::XPropertySet > xInfo;
+        xStyles->getByName( sDefaultStyle ) >>= xInfo;
+        xInfo->getPropertyValue("DisplayName") >>= aUIName;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    return aUIName;
+}
+
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     OSL_ENSURE( pTreeBox, "FillTreeBox() without treebox");
@@ -1080,7 +1122,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
     if (!pItem)
         return;
-    pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SfxStyleSearchBits::AllVisible);
+    const SfxStyleFamily eFam = pItem->GetFamily();
+    pStyleSheetPool->SetSearchMask(eFam, SfxStyleSearchBits::AllVisible);
     StyleTreeArr_Impl aArr;
     SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
 
@@ -1095,8 +1138,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         aArr.emplace_back(pNew);
         pStyle = pStyleSheetPool->Next();
     }
-
-    MakeTree_Impl(aArr);
+    OUString aUIName = getDefaultStyleName(eFam);
+    MakeTree_Impl(aArr, aUIName);
     std::vector<OUString> aEntries;
     pTreeBox->MakeExpanded_Impl(aEntries);
     pTreeBox->SetUpdateMode( false );
@@ -1105,7 +1148,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        FillBox_Impl(pTreeBox, aArr[i].get(), aEntries, pItem->GetFamily(), nullptr);
+        FillBox_Impl(pTreeBox, aArr[i].get(), aEntries, eFam, nullptr);
         aArr[i].reset();
     }
     pTreeBox->Recalc();
@@ -1236,6 +1279,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         aStrings.push_back(pStyle->GetName());
         pStyle = pStyleSheetPool->Next();
     }
+    OUString aUIName = getDefaultStyleName(eFam);
 
     // Paradoxically, with a list and non-Latin style names,
     // sorting twice is faster than sorting once.
@@ -1243,8 +1287,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     // Then the second sort needs to call its (much more expensive) comparator less often.
     std::sort(aStrings.begin(), aStrings.end());
     std::sort(aStrings.begin(), aStrings.end(),
-       [&aSorter](const OUString& rLHS, const OUString& rRHS) {
-       return aSorter.compare(rLHS, rRHS) < 0;
+       [&aSorter, &aUIName](const OUString& rLHS, const OUString& rRHS) {
+            if(rRHS == aUIName)
+                return false;
+            if(rLHS == aUIName)
+                return true; // default always first
+            return aSorter.compare(rLHS, rRHS) < 0;
        });
 
     size_t nCount = aStrings.size();
