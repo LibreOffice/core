@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "596fcbd4_94bd4932",
+        "filename": "accessibility/source/standard/accessiblemenuitemcomponent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-01T10:08:56Z",
+      "side": 1,
+      "message": "What is the rationale for choosing sal_uInt64 here?\n\nApart from the question above, I think you should also change the return type of the GetMenuDelay() command, and the type of the mnMenuDelay var of the ImplMouseData struct accordingly.",
+      "range": {
+        "startLine": 132,
+        "startChar": 12,
+        "endLine": 132,
+        "endChar": 62
+      },
+      "revId": "f21e404d92fa6cc25e3fc64da2b53ae64334d9f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea03b9f7_c02e2937",
+        "filename": "basctl/source/basicide/baside2.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-01T10:08:56Z",
+      "side": 1,
+      "message": "Why use sal_uInt64 here instead of sal_uInt32 which is in compliance with usage of nLineOff inside the ImpDoHighlight mmethod?",
+      "range": {
+        "startLine": 98,
+        "startChar": 36,
+        "endLine": 98,
+        "endChar": 55
+      },
+      "revId": "f21e404d92fa6cc25e3fc64da2b53ae64334d9f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
