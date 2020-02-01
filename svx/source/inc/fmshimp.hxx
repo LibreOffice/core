@@ -144,7 +144,7 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class SVX_DLLPUBLIC FmXFormShell final : public FmXFormShell_BASE
+class SVXCORE_DLLPUBLIC FmXFormShell final : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public svx::IControllerFeatureInvalidation
 {

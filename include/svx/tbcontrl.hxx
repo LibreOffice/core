@@ -153,7 +153,7 @@ namespace svx
     class ToolboxButtonColorUpdaterBase;
 }
 
-class SVX_DLLPUBLIC SvxStyleToolBoxControl final : public SfxToolBoxControl
+class SVXCORE_DLLPUBLIC SvxStyleToolBoxControl final : public SfxToolBoxControl
 {
     struct Impl;
     std::unique_ptr<Impl> pImpl;
@@ -201,7 +201,7 @@ friend class SfxStyleControllerItem_Impl;
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-class SVX_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
+class SVXCORE_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                                                                  css::frame::XSubToolbarController >
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdaterBase> m_xBtnUpdater;
@@ -245,7 +245,7 @@ public:
     void EnsurePaletteManager();
 };
 
-class SVX_DLLPUBLIC SvxSimpleUndoRedoController final : public SfxToolBoxControl
+class SVXCORE_DLLPUBLIC SvxSimpleUndoRedoController final : public SfxToolBoxControl
 {
 private:
     OUString aDefaultText;
@@ -259,7 +259,7 @@ public:
                               const SfxPoolItem* pState) override;
 };
 
-class SVX_DLLPUBLIC SvxCurrencyToolBoxControl final : public svt::PopupWindowController
+class SVXCORE_DLLPUBLIC SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
 private:
     OUString     m_aFormatString;

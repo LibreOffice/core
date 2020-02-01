@@ -72,7 +72,7 @@ struct SdrCustomShapeInteraction
     CustomShapeHandleModes                                  nMode;
 };
 
-class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
 private:
     // fObjectRotation is containing the object rotation in degrees.

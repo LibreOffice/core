@@ -29,6 +29,12 @@
 #endif
 #define SVX_DLLPRIVATE SAL_DLLPRIVATE
 
+#if defined(SVXCORE_DLLIMPLEMENTATION)
+#define SVXCORE_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define SVXCORE_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+
 #endif // INCLUDED_SVX_SVXDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dDefaultAttributes
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dDefaultAttributes
 {
 private:
     // Cube object

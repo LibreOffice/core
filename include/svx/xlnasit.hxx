@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 
 // SetItem with all ItemSets of line-attributes
-class SVX_DLLPUBLIC XLineAttrSetItem final : public SfxSetItem
+class SVXCORE_DLLPUBLIC XLineAttrSetItem final : public SfxSetItem
 {
 public:
                             XLineAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );

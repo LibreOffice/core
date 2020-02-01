@@ -27,7 +27,7 @@
 
 // FmFormObj
 
-class SVX_DLLPUBLIC FmFormObj : public SdrUnoObj
+class SVXCORE_DLLPUBLIC FmFormObj : public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 

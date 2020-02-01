@@ -16,7 +16,7 @@
 
 class SdrObject;
 
-class SVX_DLLPUBLIC SdrUIObject : public UIObject
+class SVXCORE_DLLPUBLIC SdrUIObject : public UIObject
 {
 public:
 

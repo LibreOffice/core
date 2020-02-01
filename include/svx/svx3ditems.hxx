@@ -66,7 +66,7 @@ public:
     Svx3DReducedLineGeometryItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
-class SVX_DLLPUBLIC Svx3DNormalsKindItem : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DNormalsKindItem : public SfxUInt16Item {
 public:
     Svx3DNormalsKindItem(sal_uInt16 nVal = 0);
 
@@ -80,7 +80,7 @@ inline SfxBoolItem makeSvx3DNormalsInvertItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bVal);
 }
 
-class SVX_DLLPUBLIC Svx3DTextureProjectionXItem : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DTextureProjectionXItem : public SfxUInt16Item {
 public:
     Svx3DTextureProjectionXItem(sal_uInt16 nVal = 0);
 
@@ -90,7 +90,7 @@ public:
     SVX_DLLPRIVATE virtual Svx3DTextureProjectionXItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
-class SVX_DLLPUBLIC Svx3DTextureProjectionYItem : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DTextureProjectionYItem : public SfxUInt16Item {
 public:
     Svx3DTextureProjectionYItem(sal_uInt16 nVal = 0);
 
@@ -116,7 +116,7 @@ inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nVal);
 }
 
-class SVX_DLLPUBLIC Svx3DTextureKindItem final : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DTextureKindItem final : public SfxUInt16Item {
 public:
     Svx3DTextureKindItem(sal_uInt16 nVal = 3);
 
@@ -126,7 +126,7 @@ public:
     SVX_DLLPRIVATE virtual Svx3DTextureKindItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
-class SVX_DLLPUBLIC Svx3DTextureModeItem final : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DTextureModeItem final : public SfxUInt16Item {
 public:
     Svx3DTextureModeItem(sal_uInt16 nVal = 2);
 
@@ -141,7 +141,7 @@ inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
 }
 
 // Svx3D _3DSCENE_ Items
-class SVX_DLLPUBLIC Svx3DPerspectiveItem : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DPerspectiveItem : public SfxUInt16Item {
 public:
     Svx3DPerspectiveItem(ProjectionType nVal = ProjectionType::Perspective);
 
@@ -267,7 +267,7 @@ inline SfxUInt16Item makeSvx3DShadowSlantItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nVal);
 }
 
-class SVX_DLLPUBLIC Svx3DShadeModeItem : public SfxUInt16Item {
+class SVXCORE_DLLPUBLIC Svx3DShadeModeItem : public SfxUInt16Item {
 public:
     Svx3DShadeModeItem(sal_uInt16 nVal = 2);
 
@@ -300,14 +300,14 @@ public:
 };
 
 // #107245# Item to replace bExtrudeCloseFront and bLatheCloseFront
-class SVX_DLLPUBLIC Svx3DCloseFrontItem : public SfxBoolItem {
+class SVXCORE_DLLPUBLIC Svx3DCloseFrontItem : public SfxBoolItem {
 public:
     Svx3DCloseFrontItem(bool bVal = true);
     Svx3DCloseFrontItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 // #107245# Item to replace bExtrudeCloseBack and bLatheCloseBack
-class SVX_DLLPUBLIC Svx3DCloseBackItem : public SfxBoolItem {
+class SVXCORE_DLLPUBLIC Svx3DCloseBackItem : public SfxBoolItem {
 public:
     Svx3DCloseBackItem(bool bVal = true);
     Svx3DCloseBackItem* Clone(SfxItemPool * = nullptr) const override;

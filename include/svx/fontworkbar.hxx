@@ -32,9 +32,9 @@ class SdrView;
 namespace svx
 {
 
-bool SVX_DLLPUBLIC checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus );
+bool SVXCORE_DLLPUBLIC checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus );
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FontworkBar final : public SfxShell
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontworkBar final : public SfxShell
 {
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FONTWORK_BAR)

@@ -28,7 +28,7 @@
 class SdrModel;
 
 
-class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
+class SVXCORE_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 {
 private:
     GraphicObject   maGraphicObject;

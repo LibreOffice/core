@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
 class SdrView;
 class HelpEvent;
 
-class SVX_DLLPUBLIC FmFormPage : public SdrPage
+class SVXCORE_DLLPUBLIC FmFormPage : public SdrPage
 {
     FmFormPage& operator=(const FmFormPage&) = delete;
     FmFormPage(const FmFormPage&) = delete;

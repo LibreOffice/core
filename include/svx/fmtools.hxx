@@ -49,13 +49,13 @@ namespace vcl { class Window; }
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
 void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent);
-SVX_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent);
+SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent);
 void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent = nullptr);
 void displayException(const css::uno::Any&, vcl::Window* _pParent = nullptr);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 
-SVX_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XPropertySet>& xControlModel);
+SVXCORE_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XPropertySet>& xControlModel);
 
 
 // = class CursorWrapper - a helper class which works in common with a css::uno::Reference<XDatabaseUpdateCursor>,
@@ -74,7 +74,7 @@ private:
 public:
     // Construction/Destruction
     CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
-    SVX_DLLPUBLIC CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
+    SVXCORE_DLLPUBLIC CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 

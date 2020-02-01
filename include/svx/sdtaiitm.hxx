@@ -22,7 +22,7 @@
 #include <svx/sdynitm.hxx>
 #include <svx/svddef.hxx>
 
-class SVX_DLLPUBLIC SdrTextAniStartInsideItem final : public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrTextAniStartInsideItem final : public SdrYesNoItem {
 public:
     SdrTextAniStartInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
     virtual ~SdrTextAniStartInsideItem() override;
@@ -34,7 +34,7 @@ public:
     SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem &&) = delete; // due to SdrYesNoItem
 };
 
-class SVX_DLLPUBLIC SdrTextAniStopInsideItem final : public SdrYesNoItem {
+class SVXCORE_DLLPUBLIC SdrTextAniStopInsideItem final : public SdrYesNoItem {
 public:
     SdrTextAniStopInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
     virtual ~SdrTextAniStopInsideItem() override;

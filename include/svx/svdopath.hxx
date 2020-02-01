@@ -40,7 +40,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrPathObj final : public SdrTextObj
+class SVXCORE_DLLPUBLIC SdrPathObj final : public SdrTextObj
 {
 private:
     friend class ImpPathForDragAndCreate;

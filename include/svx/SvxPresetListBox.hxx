@@ -24,7 +24,7 @@
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 
-class SVX_DLLPUBLIC SvxPresetListBox final : public SvtValueSet
+class SVXCORE_DLLPUBLIC SvxPresetListBox final : public SvtValueSet
 {
 private:
     static constexpr sal_uInt32  nColCount = 3;

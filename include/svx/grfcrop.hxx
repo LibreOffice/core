@@ -26,7 +26,7 @@
 #define GRFCROP_VERSION_SWDEFAULT       0
 #define GRFCROP_VERSION_MOVETOSVX       1
 
-class SVX_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
+class SVXCORE_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   nLeft, nRight, nTop, nBottom;
 public:

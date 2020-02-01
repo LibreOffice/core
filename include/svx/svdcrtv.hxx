@@ -32,7 +32,7 @@ class SdrObjConnection;
 class ImplConnectMarkerOverlay;
 class ImpSdrCreateViewExtraData;
 
-class SVX_DLLPUBLIC SdrCreateView : public SdrDragView
+class SVXCORE_DLLPUBLIC SdrCreateView : public SdrDragView
 {
     friend class                SdrPageView;
 

@@ -34,7 +34,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC DefaultProperties : public BaseProperties
+        class SVXCORE_DLLPUBLIC DefaultProperties : public BaseProperties
         {
         protected:
             // the to be used ItemSet

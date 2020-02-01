@@ -29,7 +29,7 @@ namespace sdr
 {
     namespace contact
     {
-        class SVX_DLLPUBLIC DisplayInfo final
+        class SVXCORE_DLLPUBLIC DisplayInfo final
         {
             // The Layers which shall be processed (visible)
             SdrLayerIDSet                                       maProcessLayers;

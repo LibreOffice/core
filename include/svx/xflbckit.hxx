@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFillBackgroundItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XFillBackgroundItem final : public SfxBoolItem
 {
 public:
                             XFillBackgroundItem( bool bFill = false );

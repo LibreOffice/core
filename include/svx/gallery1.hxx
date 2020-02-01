@@ -82,7 +82,7 @@ class GalleryTheme;
 class GalleryThemeCacheEntry;
 
 
-class SVX_DLLPUBLIC Gallery final : public SfxBroadcaster
+class SVXCORE_DLLPUBLIC Gallery final : public SfxBroadcaster
 {
     typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
 

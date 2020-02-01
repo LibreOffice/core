@@ -22,7 +22,7 @@
 #include <svx/unomod.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxFmMSFactory : public SvxUnoDrawMSFactory
+class SVXCORE_DLLPUBLIC SvxFmMSFactory : public SvxUnoDrawMSFactory
 {
 
 public:

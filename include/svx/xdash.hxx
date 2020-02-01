@@ -28,7 +28,7 @@
 
 #include <vector>
 
-class SVX_DLLPUBLIC XDash final
+class SVXCORE_DLLPUBLIC XDash final
 {
     css::drawing::DashStyle  eDash;
     sal_uInt32               nDotLen;

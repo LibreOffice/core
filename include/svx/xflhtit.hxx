@@ -29,7 +29,7 @@ class SdrModel;
 
 
 
-class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
+class SVXCORE_DLLPUBLIC XFillHatchItem : public NameOrIndex
 {
     XHatch  aHatch;
 

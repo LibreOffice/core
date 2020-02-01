@@ -29,7 +29,7 @@ class SdrGluePoint;
 //  Edit GluePoints at the objects (GluePoints for connector)
 
 
-class SVX_DLLPUBLIC SdrGlueEditView : public SdrPolyEditView
+class SVXCORE_DLLPUBLIC SdrGlueEditView : public SdrPolyEditView
 {
     // copy marked GluePoints and mark instead of the old ones
     void ImpCopyMarkedGluePoints();

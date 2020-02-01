@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace lang {
  * The resulting default font height, however, stays the same (the logical
  * font height is converted).
  */
-SVX_DLLPUBLIC std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rMod);
+SVXCORE_DLLPUBLIC std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rMod);
 
 /**
  * Global default settings for the DrawingEngine.
@@ -88,7 +88,7 @@ class SfxItemSet;
  *
  * @returns false for XFILL_NONE and rCol remains unchanged
  */
-SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
+SVXCORE_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 
 /**
@@ -108,7 +108,7 @@ std::unique_ptr<sal_uInt16[]> RemoveWhichRange(const sal_uInt16* pOldWhichTable,
  * In order to break open Metafiles (sd/source/ui/dlg/brkdlg.cxx),
  * SdrEditView::DoImportMarkedMtf() and ImpSdrGDIMetaFileImport::DoImport()
  */
-class SVX_DLLPUBLIC SvdProgressInfo
+class SVXCORE_DLLPUBLIC SvdProgressInfo
 {
 private:
     size_t      m_nSumCurAction;   // Sum of all handled Actions
@@ -168,18 +168,18 @@ class OLEObjCache
 
 public:
     OLEObjCache();
-    SVX_DLLPUBLIC ~OLEObjCache();
+    SVXCORE_DLLPUBLIC ~OLEObjCache();
 
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 
-    SVX_DLLPUBLIC size_t size() const;
-    SVX_DLLPUBLIC SdrOle2Obj* operator[](size_t nPos);
-    SVX_DLLPUBLIC const SdrOle2Obj* operator[](size_t nPos) const;
+    SVXCORE_DLLPUBLIC size_t size() const;
+    SVXCORE_DLLPUBLIC SdrOle2Obj* operator[](size_t nPos);
+    SVXCORE_DLLPUBLIC const SdrOle2Obj* operator[](size_t nPos) const;
 };
 
 
-class SVX_DLLPUBLIC SdrGlobalData
+class SVXCORE_DLLPUBLIC SdrGlobalData
 {
     const SvtSysLocale*         pSysLocale;     // follows always locale settings
     const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
@@ -197,13 +197,13 @@ public:
     OLEObjCache&        GetOLEObjCache() { return aOLEObjCache; }
 };
 
-SVX_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
+SVXCORE_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
 
 
 // #i101872# isolated GetTextEditBackgroundColor for tooling
 class SdrObjEditView;
 
-SVX_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
+SVXCORE_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
 
 
 #endif // INCLUDED_SVX_SVDETC_HXX

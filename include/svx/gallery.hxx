@@ -96,7 +96,7 @@ class SdrModel;
 class Graphic;
 class BitmapEx;
 
-class SVX_DLLPUBLIC GalleryExplorer
+class SVXCORE_DLLPUBLIC GalleryExplorer
 {
 public:
 

@@ -27,7 +27,7 @@ namespace com::sun::star::drawing { class XShape; }
 namespace weld { class Widget; }
 namespace weld { class Window; }
 
-class SVX_DLLPUBLIC GraphicHelper
+class SVXCORE_DLLPUBLIC GraphicHelper
 {
 
 public:

@@ -76,7 +76,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC BaseProperties
+        class SVXCORE_DLLPUBLIC BaseProperties
         {
         private:
             // the owner of this Properties. Set from constructor and not
@@ -203,7 +203,7 @@ namespace sdr
         };
 
         // checks the FillStyle item and removes unneeded Gradient, FillBitmap and Hatch items
-        void SVX_DLLPUBLIC CleanupFillProperties( SfxItemSet& rItemSet );
+        void SVXCORE_DLLPUBLIC CleanupFillProperties( SfxItemSet& rItemSet );
 
     } // end of namespace properties
 } // end of namespace sdr

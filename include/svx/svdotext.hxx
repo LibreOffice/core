@@ -134,7 +134,7 @@ namespace sdr
 
 typedef std::unique_ptr<SdrPathObj, SdrObjectFreeOp> SdrPathObjUniquePtr;
 
-class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
+class SVXCORE_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
 private:
     // Cell needs access to ImpGetDrawOutliner();

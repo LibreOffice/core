@@ -27,7 +27,7 @@
 
 
 
-class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
+class SVXCORE_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {
 private:
 

@@ -127,7 +127,7 @@ enum class BitmapMarkerKind
 };
 
 
-class SVX_DLLPUBLIC SdrHdl
+class SVXCORE_DLLPUBLIC SdrHdl
 {
     friend class                SdrMarkView; // for the access to nObjHdlNum
     friend class                SdrHdlList;
@@ -252,7 +252,7 @@ public:
 #define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
 #define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
 
-class SVX_DLLPUBLIC SdrHdlColor final : public SdrHdl
+class SVXCORE_DLLPUBLIC SdrHdlColor final : public SdrHdl
 {
     // size of colr markers
     Size                        aMarkerSize;
@@ -425,7 +425,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrHdlList
+class SVXCORE_DLLPUBLIC SdrHdlList
 {
 protected:
     size_t                      mnFocusIndex;
@@ -485,7 +485,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrCropHdl final : public SdrHdl
+class SVXCORE_DLLPUBLIC SdrCropHdl final : public SdrHdl
 {
 public:
     SdrCropHdl(

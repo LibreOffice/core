@@ -31,7 +31,7 @@ namespace sdr
     namespace animation
     {
 
-        class SVX_DLLPUBLIC Event
+        class SVXCORE_DLLPUBLIC Event
         {
             // time of event in ms
             sal_uInt32                                      mnTime;
@@ -49,7 +49,7 @@ namespace sdr
             virtual void Trigger(sal_uInt32 nTime) = 0;
         };
 
-        class SVX_DLLPUBLIC Scheduler : public Timer
+        class SVXCORE_DLLPUBLIC Scheduler : public Timer
         {
             // time in ms
             sal_uInt32                                      mnTime;
