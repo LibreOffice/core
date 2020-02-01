@@ -74,7 +74,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mxPlayToolBox->connect_clicked( LINK( this, MediaControl, implSelectHdl ) );
 
     mxTimeSlider->connect_value_changed( LINK( this, MediaControl, implTimeHdl ) );
-    // when changint the time, use this to do the time change after active scrolling
+    // when changing the time, use this to do the time change after active scrolling
     // has stopped for a little which
     maChangeTimeIdle.SetPriority( TaskPriority::LOWEST );
     maChangeTimeIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeEndHdl ) );
