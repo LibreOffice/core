@@ -37,7 +37,7 @@ class ObjectContact;
 class ViewContact;
 class ViewObjectContactRedirector;
 
-class SVX_DLLPUBLIC ViewObjectContact
+class SVXCORE_DLLPUBLIC ViewObjectContact
 {
 private:
     // must-exist and constant contacts

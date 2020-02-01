@@ -19,7 +19,7 @@ class Graphic;
 class GraphicObject;
 class FileChangedChecker;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC ExternalToolEdit
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ExternalToolEdit
 {
 protected:
     OUString m_aFileName;
@@ -42,7 +42,7 @@ public:
 class FmFormView;
 class SdrObject;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SdrExternalToolEdit final
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SdrExternalToolEdit final
 :   public ExternalToolEdit
     ,public SfxListener
 {

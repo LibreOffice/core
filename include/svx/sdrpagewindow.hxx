@@ -45,7 +45,7 @@ namespace basegfx { class B2DRange; }
 class SdrPaintWindow;
 class SdrPageView;
 
-class SVX_DLLPUBLIC SdrPageWindow
+class SVXCORE_DLLPUBLIC SdrPageWindow
 {
     struct Impl;
 

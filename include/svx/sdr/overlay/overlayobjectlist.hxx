@@ -33,7 +33,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObjectList final
+        class SVXCORE_DLLPUBLIC OverlayObjectList final
         {
             // the vector of OverlayObjects
             ::std::vector< std::unique_ptr<OverlayObject> > maVector;

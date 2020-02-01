@@ -27,7 +27,7 @@
  * FIXME: The virtual object is not yet fully implemented and tested.
  * At the moment we only use it in a derived class in Writer.
  */
-class SVX_DLLPUBLIC SdrVirtObj : public SdrObject
+class SVXCORE_DLLPUBLIC SdrVirtObj : public SdrObject
 {
     SdrVirtObj( const SdrVirtObj& ) = delete;
 public:

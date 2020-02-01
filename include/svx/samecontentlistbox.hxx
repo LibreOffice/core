@@ -25,7 +25,7 @@
 
 namespace SameContentListBox
 {
-    void SVX_DLLPUBLIC Fill(weld::ComboBox& rComboBox);
+    void SVXCORE_DLLPUBLIC Fill(weld::ComboBox& rComboBox);
 };
 
 #endif

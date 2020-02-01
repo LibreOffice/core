@@ -23,7 +23,7 @@
 #include <svl/metitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpSizeXItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XFillBmpSizeXItem final : public SfxMetricItem
 {
 public:
                             XFillBmpSizeXItem( long nSizeX = 0 );
@@ -39,7 +39,7 @@ public:
     SVX_DLLPRIVATE virtual bool HasMetrics() const override;
 };
 
-class SVX_DLLPUBLIC XFillBmpSizeYItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XFillBmpSizeYItem final : public SfxMetricItem
 {
 public:
                             XFillBmpSizeYItem( long nSizeY = 0 );

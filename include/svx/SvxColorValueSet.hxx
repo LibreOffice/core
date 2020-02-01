@@ -25,7 +25,7 @@
 
 class XColorList;
 
-class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
+class SVXCORE_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
 public:
     SvxColorValueSet(vcl::Window* pParent, WinBits nWinStyle);
@@ -42,7 +42,7 @@ public:
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
 
-class SVX_DLLPUBLIC ColorValueSet : public SvtValueSet
+class SVXCORE_DLLPUBLIC ColorValueSet : public SvtValueSet
 {
 public:
     ColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);

@@ -30,7 +30,7 @@
 // TextMaxFrameWidth is reached).
 
 
-class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem
+class SVXCORE_DLLPUBLIC SdrTextFitToSizeTypeItem
     : public SfxEnumItem<css::drawing::TextFitToSizeType>
 {
 public:

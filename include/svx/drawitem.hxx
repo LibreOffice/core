@@ -23,7 +23,7 @@
 #include <svx/xtable.hxx>
 #include <svx/svxdllapi.h>
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxColorListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxColorListItem final : public SfxPoolItem
 {
     XColorListRef     pColorList;
 
@@ -48,7 +48,7 @@ public:
     const XColorListRef&     GetColorList() const { return pColorList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxGradientListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxGradientListItem final : public SfxPoolItem
 {
     XGradientListRef  pGradientList;
 
@@ -73,7 +73,7 @@ public:
     const XGradientListRef& GetGradientList() const { return pGradientList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxHatchListItem final : public SfxPoolItem
 {
     XHatchListRef     pHatchList;
 
@@ -97,7 +97,7 @@ public:
     const XHatchListRef&    GetHatchList() const { return pHatchList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBitmapListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxBitmapListItem final : public SfxPoolItem
 {
     XBitmapListRef    pBitmapList;
 
@@ -122,7 +122,7 @@ public:
     const XBitmapListRef&   GetBitmapList() const { return pBitmapList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPatternListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxPatternListItem final : public SfxPoolItem
 {
     XPatternListRef    pPatternList;
 
@@ -146,7 +146,7 @@ public:
     const XPatternListRef&  GetPatternList() const { return pPatternList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDashListItem final : public SfxPoolItem
 {
     XDashListRef      pDashList;
 
@@ -171,7 +171,7 @@ public:
     const XDashListRef&     GetDashList() const { return pDashList; }
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndListItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxLineEndListItem final : public SfxPoolItem
 {
     XLineEndListRef   pLineEndList;
 

@@ -28,7 +28,7 @@ enum class SdrEdgeKind
     OrthoLines, ThreeLines, OneLine, Bezier, Arc
 };
 
-class SVX_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem<SdrEdgeKind> {
+class SVXCORE_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem<SdrEdgeKind> {
 public:
     SdrEdgeKindItem(SdrEdgeKind eStyle=SdrEdgeKind::OrthoLines): SfxEnumItem(SDRATTR_EDGEKIND, eStyle) {}
     virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;

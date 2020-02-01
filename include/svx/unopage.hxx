@@ -51,7 +51,7 @@ enum class SdrInventor : sal_uInt32;
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
+class SVXCORE_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
                                                css::drawing::XShapes2,
                                                css::drawing::XShapes3,

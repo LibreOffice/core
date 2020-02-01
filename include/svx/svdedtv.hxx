@@ -68,7 +68,7 @@ namespace o3tl
     template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x0f> {};
 }
 
-class SVX_DLLPUBLIC SdrEditView : public SdrMarkView
+class SVXCORE_DLLPUBLIC SdrEditView : public SdrMarkView
 {
     friend class                SdrPageView;
     friend class                SdrDragDistort;

@@ -32,7 +32,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
 
-class SVX_DLLPUBLIC PaletteManager
+class SVXCORE_DLLPUBLIC PaletteManager
 {
     const sal_uInt16        mnMaxRecentColors;
 

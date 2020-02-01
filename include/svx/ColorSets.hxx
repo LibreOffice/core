@@ -43,7 +43,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC ColorSets
+class SVXCORE_DLLPUBLIC ColorSets
 {
     std::vector<ColorSet> maColorSets;
 public:

@@ -28,7 +28,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayBitmapEx final : public OverlayObjectWithBasePosition
+        class SVXCORE_DLLPUBLIC OverlayBitmapEx final : public OverlayObjectWithBasePosition
         {
             // the Bitmap itself
             BitmapEx const                                maBitmapEx;

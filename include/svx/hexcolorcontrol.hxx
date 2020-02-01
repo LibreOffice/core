@@ -30,7 +30,7 @@ struct ImplSVEvent;
 
 namespace weld {
 
-class SVX_DLLPUBLIC HexColorControl
+class SVXCORE_DLLPUBLIC HexColorControl
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;

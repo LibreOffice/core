@@ -23,7 +23,7 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpTileItem final : public SfxBoolItem
+class SVXCORE_DLLPUBLIC XFillBmpTileItem final : public SfxBoolItem
 {
 public:
                             XFillBmpTileItem( bool bTile = true );

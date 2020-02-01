@@ -25,7 +25,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XOBitmap
+class SVXCORE_DLLPUBLIC XOBitmap
 {
 private:
     std::unique_ptr<GraphicObject> xGraphicObject;

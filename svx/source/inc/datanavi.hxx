@@ -368,7 +368,7 @@ namespace svxform
                                                   const SfxPoolItem* pState ) override;
     };
 
-    class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
+    class SVXCORE_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
     {
     public:
         SVX_DLLPRIVATE DataNavigatorManager( vcl::Window* pParent, sal_uInt16 nId,

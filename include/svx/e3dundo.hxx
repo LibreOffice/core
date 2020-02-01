@@ -80,7 +80,7 @@ public:
 |* Undo for 3D attributes (implemented using Set3DAttributes())
 |*
 \************************************************************************/
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction final : public SdrUndoAction
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dAttributesUndoAction final : public SdrUndoAction
 {
 private:
     using SdrUndoAction::Repeat;

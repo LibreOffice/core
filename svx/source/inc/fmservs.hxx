@@ -80,7 +80,7 @@ namespace com { namespace sun { namespace star { namespace lang {
 
 namespace svxform
 {
-    SVX_DLLPUBLIC void ImplSmartRegisterUnoServices();
+    SVXCORE_DLLPUBLIC void ImplSmartRegisterUnoServices();
 
     css::uno::Reference<css::uno::XInterface>
     OAddConditionDialog_Create(

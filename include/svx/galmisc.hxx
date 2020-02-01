@@ -83,7 +83,7 @@ class FmFormModel;
 GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName );
 bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 bool                CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC OUString
+SVXCORE_DLLPUBLIC OUString
                     GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen );
 OUString            GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
@@ -115,7 +115,7 @@ public:
 
 class GraphicFilter;
 
-class SVX_DLLPUBLIC GalleryProgress
+class SVXCORE_DLLPUBLIC GalleryProgress
 {
     css::uno::Reference< css::awt::XProgressBar > mxProgressBar;
 

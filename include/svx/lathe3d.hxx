@@ -39,7 +39,7 @@ class E3dDefaultAttributes;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dLatheObj final : public E3dCompoundObject
+class SVXCORE_DLLPUBLIC E3dLatheObj final : public E3dCompoundObject
 {
     basegfx::B2DPolyPolygon maPolyPoly2D;
 

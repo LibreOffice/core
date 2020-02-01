@@ -27,7 +27,7 @@
 class SdrTextObj;
 class SdrPage;
 
-class SVX_DLLPUBLIC SdrOutliner : public Outliner
+class SVXCORE_DLLPUBLIC SdrOutliner : public Outliner
 {
     tools::WeakReference<SdrTextObj> mpTextObj;
     const SdrPage* mpVisualizedPage;

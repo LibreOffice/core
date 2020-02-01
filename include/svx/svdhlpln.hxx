@@ -58,7 +58,7 @@ public:
 
 #define SDRHELPLINE_NOTFOUND 0xFFFF
 
-class SVX_DLLPUBLIC SdrHelpLineList {
+class SVXCORE_DLLPUBLIC SdrHelpLineList {
     std::vector<std::unique_ptr<SdrHelpLine>> aList;
 
 public:

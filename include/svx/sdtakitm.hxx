@@ -76,7 +76,7 @@ enum class SdrTextAniKind {
 //   of the text depends on the anchor of the drawing object.  This
 //   corresponds to the position of the text in normal Paint (without scrolling).
 
-class SVX_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem<SdrTextAniKind> {
+class SVXCORE_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem<SdrTextAniKind> {
 public:
     SdrTextAniKindItem(SdrTextAniKind eKind=SdrTextAniKind::NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND, eKind) {}
     virtual SdrTextAniKindItem* Clone(SfxItemPool* pPool=nullptr) const override;

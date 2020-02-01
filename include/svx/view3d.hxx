@@ -38,7 +38,7 @@ class Impl3DMirrorConstructOverlay;
  * Derived class of SdrView to edit 3D objects.
  */
 
-class SVX_DLLPUBLIC E3dView : public SdrView
+class SVXCORE_DLLPUBLIC E3dView : public SdrView
 {
     E3dDefaultAttributes        a3DDefaultAttr;
     MouseEvent                  aMouseEvent;                    // The parameters of the last Events (Mouse, Keyboard)

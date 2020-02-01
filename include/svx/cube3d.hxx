@@ -44,7 +44,7 @@ class E3dDefaultAttributes;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
 {
     // Parameter
     basegfx::B3DPoint                   aCubePos;

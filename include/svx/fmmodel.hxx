@@ -29,7 +29,7 @@ class SfxItemPool;
 class FmXUndoEnvironment;
 
 struct FmFormModelImplData;
-class SVX_DLLPUBLIC FmFormModel :
+class SVXCORE_DLLPUBLIC FmFormModel :
     public SdrModel
 {
 private:

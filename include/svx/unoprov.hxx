@@ -80,7 +80,7 @@ public:
  * SvxUnoPropertyMapProvider
  */
 
-class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
+class SVXCORE_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry const * aMapArr[SVXMAP_END];
     std::unique_ptr<SvxItemPropertySet> aSetArr[SVXMAP_END];
@@ -113,7 +113,7 @@ namespace comphelper { class PropertySetInfo; }
 class SvxPropertySetInfoPool
 {
 public:
-    SVX_DLLPUBLIC static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) throw();
+    SVXCORE_DLLPUBLIC static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) throw();
 
 private:
     static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];

@@ -40,7 +40,7 @@ namespace sdr
 
 namespace table { struct CellPos; }
 
-class SVX_DLLPUBLIC SelectionController: public cppu::OWeakObject
+class SVXCORE_DLLPUBLIC SelectionController: public cppu::OWeakObject
 {
 public:
     virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);

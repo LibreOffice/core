@@ -31,7 +31,7 @@
 class SfxItemPool;
 struct SvxClipboardFormatItem_Impl;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem final : public SfxPoolItem
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxClipboardFormatItem final : public SfxPoolItem
 {
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SvxClipboardFormatItem* Clone( SfxItemPool *pPool = nullptr ) const override;

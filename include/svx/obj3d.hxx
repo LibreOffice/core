@@ -59,7 +59,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dObject : public SdrAttrObj
+class SVXCORE_DLLPUBLIC E3dObject : public SdrAttrObj
 {
 private:
     // Allow everything for E3dObjList and E3dDragMethod
@@ -150,7 +150,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dCompoundObject : public E3dObject
+class SVXCORE_DLLPUBLIC E3dCompoundObject : public E3dObject
 {
 private:
     // to allow sdr::properties::E3dCompoundProperties access to SetGeometryValid()

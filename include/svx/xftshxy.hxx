@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextShadowXValItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XFormTextShadowXValItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -44,7 +44,7 @@ public:
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextShadowYValItem final : public SfxMetricItem
+class SVXCORE_DLLPUBLIC XFormTextShadowYValItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();

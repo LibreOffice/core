@@ -24,7 +24,7 @@
 #include <svx/rectenum.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpPosItem final : public SfxEnumItem<RectPoint>
+class SVXCORE_DLLPUBLIC XFillBmpPosItem final : public SfxEnumItem<RectPoint>
 {
 public:
                             XFillBmpPosItem( RectPoint eRP = RectPoint::MM );

@@ -91,7 +91,7 @@ struct TableStyleSettings
 /// SdrTableObj
 class SdrTableObjImpl;
 
-class SVX_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
+class SVXCORE_DLLPUBLIC SdrTableObj final : public ::SdrTextObj
 {
     friend class Cell;
     friend class SdrTableObjImpl;

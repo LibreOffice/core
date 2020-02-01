@@ -32,7 +32,7 @@ protected:
         SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}
 };
 
-class SVX_DLLPUBLIC SdrGrafModeItem : public SdrGrafModeItem_Base
+class SVXCORE_DLLPUBLIC SdrGrafModeItem : public SdrGrafModeItem_Base
 {
 public:
                             SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}

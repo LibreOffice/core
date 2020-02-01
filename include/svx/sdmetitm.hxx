@@ -27,7 +27,7 @@
 // For all metrics. GetPresentation returns for example for
 // Value=2500 a "25mm".
 
-class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
+class SVXCORE_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal):  SfxInt32Item(nId,nVal) {}
     virtual SdrMetricItem* Clone(SfxItemPool* pPool=nullptr) const override;

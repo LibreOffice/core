@@ -28,7 +28,7 @@ class OutputDevice;
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
+class SVXCORE_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
 {
     /** Test whether the primitive is visible on any layer from @c aLayers
 

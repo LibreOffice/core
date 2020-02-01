@@ -42,7 +42,7 @@ namespace svx
     //= OXFormsDescriptor
 
 
-    struct SVX_DLLPUBLIC OXFormsDescriptor {
+    struct SVXCORE_DLLPUBLIC OXFormsDescriptor {
 
         OUString szName;
         OUString szServiceName;
@@ -61,7 +61,7 @@ namespace svx
 
     //= OXFormsTransferable
 
-    class SVX_DLLPUBLIC OXFormsTransferable final : public TransferableHelper {
+    class SVXCORE_DLLPUBLIC OXFormsTransferable final : public TransferableHelper {
 
             // TransferableHelper overridables
             virtual void        AddSupportedFormats() override;

@@ -24,7 +24,7 @@
 #include <svx/sdrpageuser.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrPageObj final : public SdrObject, public sdr::PageUser
+class SVXCORE_DLLPUBLIC SdrPageObj final : public SdrObject, public sdr::PageUser
 {
 public:
     // this method is called from the destructor of the referenced page.

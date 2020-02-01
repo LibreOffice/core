@@ -51,7 +51,7 @@ namespace svx
 
     //= OColumnTransferable
 
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OColumnTransferable final : public TransferDataContainer
+    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC OColumnTransferable final : public TransferDataContainer
     {
     public:
         OColumnTransferable(ColumnTransferFormatFlags nFormats);
@@ -152,7 +152,7 @@ namespace svx
 
     /** class for transferring data access objects (tables, queries, statements ...)
     */
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
     {
         ODataAccessDescriptor   m_aDescriptor;
         OUString         m_sCompatibleObjectDescription;
@@ -238,7 +238,7 @@ namespace svx
 
     /** class for transferring multiple columns
     */
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OMultiColumnTransferable final : public TransferDataContainer
+    class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC OMultiColumnTransferable final : public TransferDataContainer
     {
     public:
         OMultiColumnTransferable();

@@ -31,7 +31,7 @@ namespace svxform
 
     //= OSystemParseContext
 
-    class SVX_DLLPUBLIC OSystemParseContext final : public ::connectivity::IParseContext
+    class SVXCORE_DLLPUBLIC OSystemParseContext final : public ::connectivity::IParseContext
     {
     private:
 
@@ -63,7 +63,7 @@ namespace svxform
     /** helper class which needs access to a (shared and ref-counted) OSystemParseContext
         instance.
     */
-    class SVX_DLLPUBLIC OParseContextClient
+    class SVXCORE_DLLPUBLIC OParseContextClient
     {
     protected:
         OParseContextClient();
