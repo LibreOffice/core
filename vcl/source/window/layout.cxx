@@ -10,6 +10,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
+#include <vcl/button.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
@@ -1539,6 +1540,35 @@ bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
     else
         return VclBin::set_property(rKey, rValue);
     return true;
+}
+
+VclExpander::VclExpander(vcl::Window *pParent)
+    : VclBin(pParent)
+    , m_bResizeTopLevel(true)
+    , m_pDisclosureButton(VclPtr<DisclosureButton>::Create(this))
+{
+    m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
+    m_pDisclosureButton->Show();
+}
+
+VclExpander::~VclExpander()
+{
+    disposeOnce();
+}
+
+bool VclExpander::get_expanded() const
+{
+    return m_pDisclosureButton->IsChecked();
+}
+
+void VclExpander::set_expanded(bool bExpanded)
+{
+    m_pDisclosureButton->Check(bExpanded);
+}
+
+void VclExpander::set_label(const OUString& rLabel)
+{
+    m_pDisclosureButton->SetText(rLabel);
 }
 
 void VclExpander::dispose()

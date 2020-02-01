@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_LAYOUT_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/button.hxx>
 #include <vcl/help.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
@@ -459,34 +458,21 @@ private:
     sal_Int32 m_nTopPadding;
 };
 
+class DisclosureButton;
+class CheckBox;
+
 class VclExpander final : public VclBin
 {
 public:
-    VclExpander(vcl::Window *pParent)
-        : VclBin(pParent)
-        , m_bResizeTopLevel(true)
-        , m_pDisclosureButton(VclPtr<DisclosureButton>::Create(this))
-    {
-        m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
-        m_pDisclosureButton->Show();
-    }
-    virtual ~VclExpander() override { disposeOnce(); }
+    VclExpander(vcl::Window *pParent);
+    virtual ~VclExpander() override;
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    bool get_expanded() const
-    {
-        return m_pDisclosureButton->IsChecked();
-    }
-    void set_expanded(bool bExpanded)
-    {
-        m_pDisclosureButton->Check(bExpanded);
-    }
-    void set_label(const OUString& rLabel)
-    {
-        m_pDisclosureButton->SetText(rLabel);
-    }
+    bool get_expanded() const;
+    void set_expanded(bool bExpanded);
+    void set_label(const OUString& rLabel);
     virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
 private:

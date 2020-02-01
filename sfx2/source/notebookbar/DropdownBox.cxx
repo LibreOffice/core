@@ -18,6 +18,7 @@
  */
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include "DropdownBox.hxx"
 
