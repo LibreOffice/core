@@ -2007,6 +2007,35 @@ DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
 
 }
 
+namespace
+{
+
+void testTdf129568_testCellStyle(const uno::Reference<lang::XComponent>& xComponent)
+{
+    // Test that export doesn't fail, and that style is imported and in use.
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies(xFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xFamily(xFamilies->getByName("CellStyles"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xFamily->getByName("Default Style.1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStyle->isInUse());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
+}
+
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf129568, "tdf129568.fodt")
+{
+    // Document references table and cell styles by programmatic name.
+    testTdf129568_testCellStyle(mxComponent);
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
+{
+    // Document references table and cell styles by UI name.
+    // This used to be the case for non-English UI.
+    testTdf129568_testCellStyle(mxComponent);
+}
+
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
