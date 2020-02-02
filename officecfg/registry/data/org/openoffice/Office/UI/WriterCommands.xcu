@@ -3267,7 +3267,7 @@
           <value xml:lang="en-US">Text Body Paragraph Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Text Body&amp;FamilyName:string=ParagraphStyles</value>
+          <value>.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
