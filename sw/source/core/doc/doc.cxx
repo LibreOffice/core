@@ -1184,7 +1184,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
  */
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
-    std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
     assert(getIDocumentLayoutAccess().GetCurrentLayout() && "SpellAgain: Where's my RootFrame?");
     if( bInvalid )
     {
@@ -1207,7 +1207,7 @@ void SwDoc::InvalidateAutoCompleteFlag()
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot )
     {
-        std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
+        o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
         for( auto aLayout : aAllLayouts )
             aLayout->AllInvalidateAutoCompleteWords();
         for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )

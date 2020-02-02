@@ -1068,7 +1068,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         pDoc->GetNodes().Delete( aInsPos );
 
     aN2L.RestoreUpperFrames( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
     for ( const auto& rpLayout : aAllLayouts )
     {
         SwFrame::CheckPageDescs( static_cast<SwPageFrame*>(rpLayout->Lower()) );

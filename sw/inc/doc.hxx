@@ -21,6 +21,7 @@
 
 // SwDoc interfaces
 #include <o3tl/deleter.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <vcl/idle.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
@@ -680,7 +681,7 @@ public:
     OUString GetUniqueFrameName() const;
     OUString GetUniqueShapeName() const;
 
-    std::set<SwRootFrame*> GetAllLayouts();
+    o3tl::sorted_vector<SwRootFrame*> GetAllLayouts();
 
     void SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName );
     const SwFlyFrameFormat* FindFlyByName( const OUString& rName, SwNodeType nNdTyp = SwNodeType::NONE ) const;

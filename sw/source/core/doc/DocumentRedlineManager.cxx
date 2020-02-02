@@ -936,7 +936,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
 
-            std::set<SwRootFrame *> hiddenLayouts;
+            o3tl::sorted_vector<SwRootFrame *> hiddenLayouts;
             if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
             {
                 // sw_redlinehide: the problem here is that MoveFromSection
@@ -944,7 +944,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
                 // SwRangeRedline has wrong positions until after the nodes
                 // are all moved, so fix things up by force by re-creating
                 // all merged frames from scratch.
-                std::set<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
+                o3tl::sorted_vector<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
                 for (SwRootFrame *const pLayout : layouts)
                 {
                     if (pLayout->IsHideRedlines())
