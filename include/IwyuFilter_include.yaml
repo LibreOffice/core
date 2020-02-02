@@ -465,19 +465,11 @@ blacklist:
     # Needed for macros
     - comphelper/servicehelper.hxx
     - tools/diagnose_ex.h
-    include/xmloff/XMLEmbeddedObjectExportFilter.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XInitialization.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
     include/xmloff/attrlist.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/xml/sax/XAttributeList.hpp
-    include/xmloff/fasttokenhandler.hxx:
-    # base class has to be a complete type
-    - com/sun/star/xml/sax/XFastTokenHandler.hpp
     include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/XInterface.hpp
@@ -510,9 +502,6 @@ blacklist:
     - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
-    include/xmloff/xmltabe.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     include/svtools/accessibleruler.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessible.hpp

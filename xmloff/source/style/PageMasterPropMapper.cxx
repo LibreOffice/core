@@ -20,7 +20,7 @@
 #include "PageMasterPropMapper.hxx"
 
 #include <rtl/ref.hxx>
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include "PageMasterPropHdlFactory.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>

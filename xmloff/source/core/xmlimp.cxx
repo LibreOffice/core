@@ -65,7 +65,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/attributelist.hxx>
 #include <unotools/fontcvt.hxx>
-#include <xmloff/fasttokenhandler.hxx>
+#include <fasttokenhandler.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>

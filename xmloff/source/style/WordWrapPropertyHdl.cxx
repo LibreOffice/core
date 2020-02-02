@@ -18,7 +18,7 @@
  */
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/WordWrapPropertyHdl.hxx>
+#include <WordWrapPropertyHdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>

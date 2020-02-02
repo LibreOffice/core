@@ -25,7 +25,7 @@
 #include "PageMasterPropHdl.hxx"
 #include "PagePropertySetContext.hxx"
 #include "PageHeaderFooterContext.hxx"
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 
