@@ -36,6 +36,8 @@ public:
                      const OUString& aStartStr,
                      double         fStep,
                      double         fMax,
+                     SCSIZE       nSelectHeight,
+                     SCSIZE       nSelectWidth,
                      sal_uInt16     nPossDir );
     virtual ~ScFillSeriesDlg() override;
 
@@ -61,6 +63,8 @@ private:
     double      fStartVal;
     double      fIncrement;
     double      fEndVal;
+    const SCSIZE m_nSelectHeight;
+    const SCSIZE m_nSelectWidth;
 
     std::unique_ptr<weld::Label> m_xFtStartVal;
     std::unique_ptr<weld::Entry> m_xEdStartVal;
@@ -89,9 +93,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnOk;
 
     void Init( sal_uInt16 nPossDir );
-    bool CheckStartVal();
-    bool CheckIncrementVal();
-    bool CheckEndVal();
+    weld::Entry* CheckValues();
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(DisableHdl, weld::ToggleButton&, void);
