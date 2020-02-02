@@ -6,154 +6,22 @@ API to Maven Central or local Maven repository.
 To install LibreOffice API to local Maven repository or deploy the API
 to the Maven Central, extra build toolchain is required.
 
-`Ant` is used to bootstrap `Buck` build tool. `Buck` build tool is
-used to build sources and javadocs for the API and install or deploy
-the artifacts to Maven repository. `Maven` commands are invoked for
-that from within `Buck` driven build - so make sure you've maven
-installed, too. To be able to upload the API to Maven Central, access
+`Bazel` build tool is used to build sources and javadocs for the API and
+install or deploy the artifacts to Maven repository. `Maven` commands are
+invoked for that from within `Bazel` driven build - so make sure you've
+Maven installed, too. To be able to upload the API to Maven Central, access
 must be granted to LibreOffice project on OSSRH.
 
 
-== Buck
+== Bazel
 
-`Buck` is new build tool that uses Python to write build files. It is
-maintained by Facebook and is available under Apache 2 license.
-
-
-=== Installing Buck
-
-There is currently no binary distribution of `Buck`, so it has to be manually
-built and installed. Apache Ant and gcc are required.
-
-Clone the git and build it:
-
-----
-  git clone https://github.com/facebook/buck
-  cd buck
-  ant
-----
-
-If you don't have a `bin/` directory in your home directory, create one:
-
-----
-  mkdir ~/bin
-----
-
-Add the `~/bin` folder to the path:
-
-----
-  PATH=~/bin:$PATH
-----
-
-Note that the buck executable needs to be available in all shell sessions,
-so also make sure it is appended to the path globally.
-
-Add a symbolic link in `~/bin` to the buck and buckd executables:
-
-----
-  ln -s `pwd`/bin/buck ~/bin/
-  ln -s `pwd`/bin/buckd ~/bin/
-----
-
-Verify that `buck` is accessible:
-
-----
-  which buck
-----
-
-To enable autocompletion of buck commands, install the autocompletion
-script from `./scripts/buck_completion.bash` in the buck project.  Refer
-to the script's header comments for installation instructions.
+`Bazel` is a build tool that uses Python to write build files. It is
+maintained by Google and is available under Apache 2 license.
 
 
-=== Prerequisites
+=== Installing Bazel
 
-Buck requires Python version 2.7 to be installed. The Maven download toolchain
-requires `curl` to be installed.
-
-
-=== Using Buck daemon
-
-Buck ships with a daemon command `buckd`, which uses the
-link:https://github.com/martylamb/nailgun[Nailgun] protocol for running
-Java programs from the command line without incurring the JVM startup
-overhead.
-
-Using a Buck daemon can save significant amounts of time as it avoids the
-overhead of starting a Java virtual machine, loading the buck class files
-and parsing the build files for each command.
-
-It is safe to run several buck daemons started from different project
-directories and they will not interfere with each other. Buck's documentation
-covers daemon in http://facebook.github.io/buck/command/buckd.html[buckd].
-
-To use `buckd` the additional
-link:https://facebook.github.io/watchman[watchman] program must be installed.
-
-To disable `buckd`, the environment variable `NO_BUCKD` must be set. It's not
-recommended to put it in the shell config, as it can be forgotten about it and
-then assumed Buck was working as it should when it should be using buckd.
-Prepend the variable to Buck invocation instead:
-
-----
-  NO_BUCKD=1 buck build api
-----
-
-
-=== Installing watchman
-
-Watchman is used internally by Buck to monitor directory trees and is needed
-for buck daemon to work properly. Because buckd is activated by default in the
-latest version of Buck, it searches for the watchman executable in the
-path and issues a warning when it is not found and kills buckd.
-
-To prepare watchman installation on Linux:
-
-----
-  git clone https://github.com/facebook/watchman.git
-  cd watchman
-  ./autogen.sh
-----
-
-To install it in user home directory (without root privileges):
-
-----
-  ./configure --prefix $HOME/watchman
-  make install
-----
-
-To install it system wide:
-
-----
-  ./configure
-  make
-  sudo make install
-----
-
-Put $HOME/watchman/bin/watchman in path or link to $HOME/bin/watchman.
-
-To install watchman on macOS:
-
-----
-  brew install --HEAD watchman
-----
-
-See the original documentation for more information:
-link:https://facebook.github.io/watchman/docs/install.html[Watchman
-installation].
-
-
-=== Override Buck's settings
-
-Additional JVM args for Buck can be set in `.buckjavaargs` in the
-project root directory. For example to override Buck's default 1GB
-heap size:
-
-----
-  cat > .buckjavaargs <<EOF
-  -XX:MaxPermSize=512m -Xms8000m -Xmx16000m
-  EOF
-----
+See link:https://docs.bazel.build/versions/master/install.html[Documentation].
 
 
 == Preparations to publish LibreOffice API to Maven Central
@@ -236,7 +104,7 @@ It can also be included in the key chain on macOS.
 == Update Versions
 
 Before publishing new artifacts to Maven Central, `LIBREOFFICE_VERSION`
-in the `VERSION` file must be updated, e.g. change it from `5.0.0` to `5.1.0`.
+in the `version.bzl` file must be updated.
 
 In addition the version must be updated in a number of pom.xml files.
 
@@ -244,7 +112,7 @@ To do this run the `./solenv/bin/version.py` script and provide the new
 version as parameter, e.g.:
 
 ----
-  ./solenv/bin/version.py 5.1.0
+  ./solenv/bin/version.py 6.4.0
 ----
 
 
@@ -260,19 +128,19 @@ repository. For troubleshooting, the environment variable `VERBOSE`
 can be set:
 
 ----
-  VERBOSE=1 buck build api_install
+  VERBOSE=1 solenv/maven/msn.sh install
 ----
 
 Once executed, the local Maven repository contains the LibreOffice API
 artifacts:
 
 ----
-  $ ls -1 ~/.m2/repository/org/libreoffice/unoil/5.1.0/
+  $ ls -1 ~/.m2/repository/org/libreoffice/unoil/6.4.0/
   _maven.repositories
-  unoil-5.1.0.jar
-  unoil-5.1.0-javadoc.jar
-  unoil-5.1.0.pom
-  unoil-5.1.0-sources.jar
+  unoil-6.4.0.jar
+  unoil-6.4.0-javadoc.jar
+  unoil-6.4.0.pom
+  unoil-6.4.0-sources.jar
 ----
 
 
@@ -285,24 +153,18 @@ the `pom.xml` files as described above.
 Push the API to Maven Central:
 
 ----
-  buck build api_deploy
+  solenv/maven/mvn.sh deploy
 ----
 
 For troubleshooting, the environment variable `VERBOSE` can be set. This
-prints out the commands that are executed by the Buck build process:
+prints out the commands that are executed by the Bazel build process:
 
 ----
-  VERBOSE=1 buck build api_deploy
-----
-
-If no artifacts are uploaded, clean the `buck-out` folder and retry:
-
-----
-  rm -rf buck-out
+  VERBOSE=1 solenv/maven/mvn.sh deploy
 ----
 
 * To where the artifacts are uploaded depends on the `LIBREOFFICE_VERSION`
-in the `VERSION` file:
+in the `version.bzl` file:
 
 ** SNAPSHOT versions are directly uploaded into the Sonatype snapshots
 repository and no further action is needed:

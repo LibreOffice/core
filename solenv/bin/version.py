@@ -46,5 +46,4 @@ for a in ['juh', 'jurt', 'officebean', 'ridl', 'unoil', 'unoloader']:
 
 src_pattern = re.compile(r"^(LIBREOFFICE_VERSION = ')([-.@\w]+)(')$",
                          re.MULTILINE)
-replace_in_file('solenv/maven/VERSION', src_pattern)
 replace_in_file('solenv/maven/version.bzl', src_pattern)
