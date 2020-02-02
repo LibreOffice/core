@@ -2007,6 +2007,22 @@ DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
 
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf129568, "tdf129568.fodt")
+{
+    // Test that export doesn't fail, and that style is imported and in use.
+    uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStyle->isInUse());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
+{
+    // Same as above, but styles referenced by UI name.
+    uno::Reference<style::XStyle> xStyle(getStyles("CellStyles")->getByName("Default Style.1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStyle->isInUse());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
+}
+
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
