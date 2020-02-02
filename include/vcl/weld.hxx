@@ -2122,7 +2122,7 @@ public:
                          const OString& treeviewid, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Menu> weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id, bool bTakeOwnership = true)
+    virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id, bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
     /* return a Dialog suitable to take a screenshot of containing the contents of the .ui file.
