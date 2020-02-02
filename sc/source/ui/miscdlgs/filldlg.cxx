@@ -38,6 +38,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
                                   const OUString& aStartStr,
                                   double        fStep,
                                   double        fMax,
+                                  const SCSIZE  nSelectHeight,
+                                  const SCSIZE  nSelectWidth,
                                   sal_uInt16        nPossDir )
     : GenericDialogController(pParent, "modules/scalc/ui/filldlg.ui", "FillSeriesDialog")
     , aStartStrVal(aStartStr)
@@ -48,6 +50,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
     , theFillDateCmd(eFillDateCmd)
     , fIncrement(fStep)
     , fEndVal(fMax)
+    , m_nSelectHeight(nSelectHeight)
+    , m_nSelectWidth(nSelectWidth)
     , m_xFtStartVal(m_xBuilder->weld_label("startL"))
     , m_xEdStartVal(m_xBuilder->weld_entry("startValue"))
     , m_xFtEndVal(m_xBuilder->weld_label("endL"))
@@ -174,48 +178,46 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
     m_xEdEndVal->set_text( aEndTxt );
 }
 
-bool ScFillSeriesDlg::CheckStartVal()
+weld::Entry* ScFillSeriesDlg::CheckValues()
 {
-    bool bValOk = false;
-    OUString aStr = m_xEdStartVal->get_text();
-
-    if ( aStr.isEmpty() || m_xBtnAutoFill->get_active())
-    {
-        fStartVal = MAXDOUBLE;
-        bValOk = true;
-    }
-    else
-    {
-        sal_uInt32 nKey = 0;
-        bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fStartVal );
-    }
-    return bValOk;
-}
-
-bool ScFillSeriesDlg::CheckIncrementVal()
-{
+    OUString aStartStr = m_xEdStartVal->get_text();
+    OUString aIncStr = m_xEdIncrement->get_text();
+    OUString aEndStr = m_xEdEndVal->get_text();
     sal_uInt32 nKey = 0;
-    OUString aStr = m_xEdIncrement->get_text();
 
-    return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
-}
+    // If entry is filled, capture value before handling special cases.
+    if ( !aStartStr.isEmpty()
+         && theFillCmd != FILL_AUTO
+         && !rDoc.GetFormatTable()->IsNumberFormat( aStartStr, nKey, fStartVal ) )
+        return m_xEdStartVal.get();
+    if ( !aIncStr.isEmpty()
+         && !rDoc.GetFormatTable()->IsNumberFormat( aIncStr, nKey, fIncrement ) )
+        return m_xEdIncrement.get();
+    if ( !aEndStr.isEmpty()
+         && !rDoc.GetFormatTable()->IsNumberFormat( aEndStr, nKey, fEndVal ) )
+        return m_xEdEndVal.get();
 
-bool ScFillSeriesDlg::CheckEndVal()
-{
-    bool bValOk = false;
-    OUString aStr = m_xEdEndVal->get_text();
-
-    if (aStr.isEmpty())
+    if ( theFillCmd == FILL_LINEAR && !aEndStr.isEmpty()
+         && aStartStr.isEmpty() != aIncStr.isEmpty()
+         && ( ( m_nSelectHeight == 1 ) != ( m_nSelectWidth == 1 ) ) )
     {
-        fEndVal = (fIncrement < 0) ? -MAXDOUBLE : MAXDOUBLE;
-        bValOk  = true;
+        SCSIZE nStepAmount = ( theFillDir == FILL_TO_BOTTOM || theFillDir == FILL_TO_TOP ) ?
+                    m_nSelectHeight - 1 : m_nSelectWidth - 1 ;
+        if ( aStartStr.isEmpty() )
+            fStartVal = fEndVal - fIncrement * nStepAmount;
+        if ( aIncStr.isEmpty() )
+            fIncrement = (fEndVal - fStartVal) / nStepAmount;
     }
     else
     {
-        sal_uInt32 nKey = 0;
-        bValOk = rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fEndVal );
+        if ( aStartStr.isEmpty() || m_xBtnAutoFill->get_active() )
+            fStartVal = MAXDOUBLE;
+        if ( aIncStr.isEmpty() )
+            return m_xEdIncrement.get();
+        if ( aEndStr.isEmpty() )
+            fEndVal = ( fIncrement < 0 ) ? -MAXDOUBLE : MAXDOUBLE;
     }
-    return bValOk;
+    return nullptr;
 }
 
 // Handler:
@@ -271,25 +273,11 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl, weld::Button&, void)
     else if ( m_xBtnMonth->get_active() )       theFillDateCmd = FILL_MONTH;
     else if ( m_xBtnYear->get_active() )        theFillDateCmd = FILL_YEAR;
 
-    bool  bAllOk = true;
-    weld::Entry* pEdWrong = nullptr;
-    if ( !CheckStartVal() )
+    weld::Entry* pEdWrong = CheckValues();
+    if ( pEdWrong == nullptr )
     {
-        bAllOk = false;
-        pEdWrong = m_xEdStartVal.get();
-    }
-    else if ( !CheckIncrementVal() )
-    {
-        bAllOk = false;
-        pEdWrong = m_xEdIncrement.get();
-    }
-    else if ( !CheckEndVal() )
-    {
-        bAllOk = false;
-        pEdWrong = m_xEdEndVal.get();
-    }
-    if ( bAllOk )
         m_xDialog->response(RET_OK);
+    }
     else
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
