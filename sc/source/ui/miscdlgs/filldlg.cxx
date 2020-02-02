@@ -38,6 +38,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
                                   const OUString& aStartStr,
                                   double        fStep,
                                   double        fMax,
+                                  const int     nSelectHeight,
+                                  const int     nSelectWidth,
                                   sal_uInt16        nPossDir )
     : GenericDialogController(pParent, "modules/scalc/ui/filldlg.ui", "FillSeriesDialog")
     , aStartStrVal(aStartStr)
@@ -48,6 +50,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
     , theFillDateCmd(eFillDateCmd)
     , fIncrement(fStep)
     , fEndVal(fMax)
+    , nSelectionHeight(nSelectHeight)
+    , nSelectionWidth(nSelectWidth)
     , m_xFtStartVal(m_xBuilder->weld_label("startL"))
     , m_xEdStartVal(m_xBuilder->weld_entry("startValue"))
     , m_xFtEndVal(m_xBuilder->weld_label("endL"))
@@ -196,8 +200,16 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
     OUString aStr = m_xEdIncrement->get_text();
+    OUString aStartStr = m_xEdStartVal->get_text();
+    OUString aEndStr = m_xEdEndVal->get_text();
 
-    return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
+    if( aStr.isEmpty() && !aStartStr.isEmpty() && !aEndStr.isEmpty() )
+    {
+        fIncrement = MAXDOUBLE;
+        return true;
+    }
+    else
+        return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
 
 bool ScFillSeriesDlg::CheckEndVal()
@@ -289,7 +301,14 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl, weld::Button&, void)
         pEdWrong = m_xEdEndVal.get();
     }
     if ( bAllOk )
+    {
+        int nSize = ( theFillDir == FILL_TO_BOTTOM || theFillDir == FILL_TO_TOP ) ? nSelectionHeight : nSelectionWidth;
+        if( fStartVal == MAXDOUBLE && fIncrement != MAXDOUBLE && !( fEndVal == MAXDOUBLE || fEndVal == -MAXDOUBLE  ) )
+            fStartVal = fEndVal - fIncrement * nSize;
+        if( fIncrement == MAXDOUBLE )
+            fIncrement = (fEndVal - fStartVal) / nSize;
         m_xDialog->response(RET_OK);
+    }
     else
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
