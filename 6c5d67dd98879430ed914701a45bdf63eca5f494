@@ -70,6 +70,30 @@
       "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6728db36_85351c0e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-02T07:22:32Z",
+      "side": 1,
+      "message": "\u003e I think the difference between these two and others is existence of \"assert\" before if(!pXmlDoc). Is it correct?\n\nRight. Both those tests were not only export-only; and the part before `if (!pXmlDoc)` was usefully checked in initial import stage; so those tests should not had been converted.",
+      "parentUuid": "a4156513_a1b8da17",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 35
+      },
+      "revId": "6c5d67dd98879430ed914701a45bdf63eca5f494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
