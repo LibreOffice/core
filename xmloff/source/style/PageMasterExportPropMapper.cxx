@@ -23,7 +23,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/extract.hxx>
 

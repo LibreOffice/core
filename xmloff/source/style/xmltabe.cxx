@@ -27,7 +27,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmltabe.hxx>
+#include <xmltabe.hxx>
 
 
 using namespace ::com::sun::star;

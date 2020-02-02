@@ -29,7 +29,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "PageMasterPropHdlFactory.hxx"
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include "PageMasterPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
 

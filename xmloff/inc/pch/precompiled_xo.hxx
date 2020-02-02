@@ -196,7 +196,7 @@
 #include <XMLStringBufferImportContext.hxx>
 #include <facreg.hxx>
 #include <xexptran.hxx>
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
