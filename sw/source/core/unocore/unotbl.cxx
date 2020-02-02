@@ -2753,6 +2753,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     OUString sName;
                     if (!(aValue >>= sName))
                         break;
+                    SwStyleNameMapper::FillUIName(sName, sName, SwGetPoolIdFromName::TabStyle);
                     pTable->SetTableStyleName(sName);
                     SwDoc* pDoc = pFormat->GetDoc();
                     pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
@@ -2995,7 +2996,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_TEMPLATE_NAME:
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
-                    aRet <<= pTable->GetTableStyleName();
+                    OUString sName;
+                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TabStyle);
+                    aRet <<= sName;
                 }
                 break;
 
