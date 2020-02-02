@@ -1014,9 +1014,11 @@ VclPtr<AbstractScFillSeriesDlg> ScAbstractDialogFactory_Impl::CreateScFillSeries
                                                             const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
+                                                            const SCCOLROW  nSelectHeight,
+                                                            const SCCOLROW  nSelectWidth,
                                                             sal_uInt16      nPossDir)
 {
-    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(std::make_unique<ScFillSeriesDlg>(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir));
+    return VclPtr<AbstractScFillSeriesDlg_Impl>::Create(std::make_unique<ScFillSeriesDlg>(pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nSelectHeight,nSelectWidth,nPossDir));
 }
 
 VclPtr<AbstractScGroupDlg> ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup)
