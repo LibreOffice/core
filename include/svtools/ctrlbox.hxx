@@ -361,21 +361,6 @@ private:
     FontNameBox&    operator =( const FontNameBox& ) = delete;
 };
 
-class FontStyleBox final : public ComboBox
-{
-    Size            aOptimalSize;
-
-public:
-    FontStyleBox( vcl::Window* pParent, WinBits nBits );
-
-    virtual void    Modify() override;
-    virtual Size    GetOptimalSize() const override;
-
-private:
-                    FontStyleBox( const FontStyleBox& ) = delete;
-    FontStyleBox&   operator =( const FontStyleBox& ) = delete;
-};
-
 class SVT_DLLPUBLIC SvtFontStyleBox
 {
     std::unique_ptr<weld::ComboBox> m_xComboBox;

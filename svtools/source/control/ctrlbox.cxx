@@ -699,56 +699,6 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-FontStyleBox::FontStyleBox(vcl::Window* pParent, WinBits nBits)
-    : ComboBox(pParent, nBits)
-{
-    //Use the standard texts to get an optimal size and stick to that size.
-    //That should stop the character dialog dancing around.
-    InsertEntry(SvtResId(STR_SVT_STYLE_LIGHT));
-    InsertEntry(SvtResId(STR_SVT_STYLE_LIGHT_ITALIC));
-    InsertEntry(SvtResId(STR_SVT_STYLE_NORMAL));
-    InsertEntry(SvtResId(STR_SVT_STYLE_NORMAL_ITALIC));
-    InsertEntry(SvtResId(STR_SVT_STYLE_BOLD));
-    InsertEntry(SvtResId(STR_SVT_STYLE_BOLD_ITALIC));
-    InsertEntry(SvtResId(STR_SVT_STYLE_BLACK));
-    InsertEntry(SvtResId(STR_SVT_STYLE_BLACK_ITALIC));
-    aOptimalSize = GetOptimalSize();
-    Clear();
-}
-
-Size FontStyleBox::GetOptimalSize() const
-{
-    if (aOptimalSize.Width() || aOptimalSize.Height())
-        return aOptimalSize;
-    return ComboBox::GetOptimalSize();
-}
-
-void FontStyleBox::Modify()
-{
-    CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
-                        GetSettings().GetLanguageTag() );
-    OUString   aStr = GetText();
-    sal_Int32      nEntryCount = GetEntryCount();
-
-    if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
-    {
-        aStr = aChrCls.uppercase(aStr);
-        for ( sal_Int32 i = 0; i < nEntryCount; i++ )
-        {
-            OUString aEntryText = aChrCls.uppercase(GetEntry(i));
-
-            if ( aStr == aEntryText )
-            {
-                SetText( GetEntry( i ) );
-                break;
-            }
-        }
-    }
-
-    ComboBox::Modify();
-}
-
-
 SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p)
     : m_xComboBox(std::move(p))
 {
