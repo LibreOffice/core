@@ -547,6 +547,11 @@ class CheckTable(unittest.TestCase):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(1, 1)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, True)
+        # should return programmatic name, even though UI name was set.
+        xTable.setPropertyValue("TableTemplateName", "Default Table Style")
+        self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "Default Style")
         xTable.setPropertyValue("TableTemplateName", "Default")
         self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "Default")
         xTable.setPropertyValue("TableTemplateName", "other_style")
