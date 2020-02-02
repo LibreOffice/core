@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTHEMESELECTOR_HXX
-#define INCLUDED_VCL_ICONTHEMESELECTOR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
-
-#include <vcl/dllapi.h>
 
 #include <vector>
 
@@ -28,7 +25,7 @@ class IconThemeInfo;
  * -# When high contrast mode is enabled, the high contrast icon theme is selected (if it is installed).
  * -# When a preferred theme has been set (e.g., in the gnome desktop settings), that theme is selected.
  */
-class VCL_DLLPUBLIC IconThemeSelector {
+class IconThemeSelector {
 public:
     IconThemeSelector();
 
@@ -91,7 +88,5 @@ private:
 };
 
 } /* namespace vcl */
-
-#endif // INCLUDED_VCL_ICONTHEMESELECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

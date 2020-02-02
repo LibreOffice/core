@@ -12,7 +12,7 @@
 
 #include <deque>
 
-#include <vcl/IconThemeScanner.hxx>
+#include <IconThemeScanner.hxx>
 
 #include <osl/file.hxx>
 #include <salhelper/linkhelper.hxx>

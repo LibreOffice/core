@@ -10,7 +10,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/BitmapDuoToneFilter.hxx>
+#include <BitmapDuoToneFilter.hxx>
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>

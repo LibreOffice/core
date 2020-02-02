@@ -22,7 +22,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapDuoToneFilter.hxx>
+#include <BitmapDuoToneFilter.hxx>
 
 using namespace com::sun::star;
 

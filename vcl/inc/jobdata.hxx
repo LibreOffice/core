@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_JOBDATA_HXX
-#define INCLUDED_VCL_JOBDATA_HXX
+#pragma once
 
-#include <vcl/ppdparser.hxx>
+#include <ppdparser.hxx>
 
 namespace psp {
 
@@ -29,7 +28,7 @@ enum class orientation {
     Landscape
 };
 
-struct VCL_DLLPUBLIC JobData
+struct JobData
 {
     int                     m_nCopies;
     bool                    m_bCollate;
@@ -80,8 +79,5 @@ struct VCL_DLLPUBLIC JobData
 };
 
 } // namespace
-
-
-#endif // PSPRINT_JOBDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

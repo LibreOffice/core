@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPGAUSSIANSEPARABLEBLURFILTER_HXX
-#define INCLUDED_VCL_BITMAPGAUSSIANSEPARABLEBLURFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 #include <vector>
@@ -46,7 +45,5 @@ private:
                                   std::vector<double>& rWeights, std::vector<int>& rPixels,
                                   std::vector<int>& rCounts);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

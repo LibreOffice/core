@@ -26,7 +26,7 @@
 #include <unordered_set>
 
 #include <vcl/dllapi.h>
-#include <vcl/jobdata.hxx>
+#include <jobdata.hxx>
 #include <vcl/prntypes.hxx>
 #include <osl/time.h>
 

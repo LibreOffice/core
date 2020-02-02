@@ -16,27 +16,25 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_STRHELPER_HXX
-#define INCLUDED_VCL_STRHELPER_HXX
+#pragma once
 
 #include <cstring>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/dllapi.h>
 
 namespace psp
 {
-    VCL_DLLPUBLIC OUString GetCommandLineToken( int, const OUString& );
-    VCL_DLLPUBLIC OString GetCommandLineToken(int, const OString&);
+    OUString GetCommandLineToken( int, const OUString& );
+    OString GetCommandLineToken(int, const OString&);
     // gets one token of a unix command line style string
     // doublequote, singlequote and singleleftquote protect their respective
     // contents
 
-    VCL_DLLPUBLIC int GetCommandLineTokenCount(const OUString&);
+    int GetCommandLineTokenCount(const OUString&);
     // returns number of tokens (zero if empty or whitespace only)
 
-    VCL_DLLPUBLIC OUString WhitespaceToSpace( const OUString&, bool bProtect = true );
-    VCL_DLLPUBLIC OString WhitespaceToSpace(const OString&);
+    OUString WhitespaceToSpace( const OUString&, bool bProtect = true );
+    OString WhitespaceToSpace(const OString&);
     // returns a string with multiple adjacent occurrences of whitespace
     // converted to a single space. if bProtect is sal_True (nonzero), then
     // doublequote, singlequote and singleleftquote protect their respective
@@ -66,7 +64,5 @@ namespace psp
     }
 
 } // namespace
-
-#endif // INCLUDED_VCL_STRHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

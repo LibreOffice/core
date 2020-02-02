@@ -7,12 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UITEST_UITEST_HXX
-#define INCLUDED_VCL_UITEST_UITEST_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
-
-#include <vcl/dllapi.h>
 
 #include <memory>
 
@@ -38,7 +35,5 @@ public:
 
     static std::unique_ptr<UIObject> getFloatWindow();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,12 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_CONFIGSETTINGS_HXX
-#define INCLUDED_VCL_CONFIGSETTINGS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <vcl/dllapi.h>
 
 #include <unordered_map>
 
@@ -35,7 +33,7 @@ namespace vcl
 
     //= SettingsConfigItem
 
-    class VCL_DLLPUBLIC SettingsConfigItem final : public ::utl::ConfigItem
+    class SettingsConfigItem final : public ::utl::ConfigItem
     {
     private:
         std::unordered_map< OUString, SmallOUStrMap > m_aSettings;
@@ -60,7 +58,5 @@ namespace vcl
 
 } // namespace vcl
 
-
-#endif // INCLUDED_VCL_CONFIGSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

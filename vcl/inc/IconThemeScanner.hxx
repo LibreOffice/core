@@ -7,10 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_ICONTHEMESCANNER_HXX
-#define INCLUDED_VCL_ICONTHEMESCANNER_HXX
-
-#include <vcl/dllapi.h>
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/IconThemeInfo.hxx>
@@ -25,7 +22,7 @@ namespace vcl {
 
 /** This class scans a folder for icon themes and provides the results.
  */
-class VCL_DLLPUBLIC IconThemeScanner
+class IconThemeScanner
 {
 public:
     /** Factory method to create the object.
@@ -86,7 +83,5 @@ private:
 };
 
 } // end namespace vcl
-
-#endif // INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

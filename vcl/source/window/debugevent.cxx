@@ -12,7 +12,7 @@
 #include <sal/log.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/debugevent.hxx>
+#include <debugevent.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
 #include <window.h>

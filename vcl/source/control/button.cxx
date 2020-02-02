@@ -32,7 +32,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/vclstatuslistener.hxx>
+#include <vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 #include <bitmaps.hlst>

@@ -25,7 +25,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/OptionalBox.hxx>
+#include <OptionalBox.hxx>
 #include <vcl/IPrioritable.hxx>
 
 static const char STYLE_TEXT[] = "Text";

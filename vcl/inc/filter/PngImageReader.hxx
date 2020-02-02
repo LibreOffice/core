@@ -8,10 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
-#define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
-
-#include <vcl/dllapi.h>
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -25,7 +22,7 @@ class SvStream;
 
 namespace vcl
 {
-class VCL_DLLPUBLIC PngImageReader
+class PngImageReader
 {
     SvStream& mrStream;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
@@ -37,7 +34,5 @@ public:
 };
 
 } // namespace vcl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,26 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OPTIONALBOX_HXX
-#define INCLUDED_VCL_OPTIONALBOX_HXX
+#pragma once
 
-#include <vcl/IPrioritable.hxx>
-#include <vcl/layout.hxx>
+#include <rtl/ustring.hxx>
 
-class OptionalBox final : public VclHBox, public vcl::IPrioritable
+class BitmapEx;
+
+
+namespace vcl
 {
-private:
-    bool m_bInFullView;
 
-public:
-    explicit OptionalBox(vcl::Window* pParent);
-    virtual ~OptionalBox() override;
 
-    void HideContent() override;
-    void ShowContent() override;
-    bool IsHidden() override;
-};
+    //= ImageRepository
 
-#endif
+    // provides access to the application's image repository (image.zip)
+    class ImageRepository
+    {
+    public:
+        /** loads an image from the application's image repository
+            @param  _rName
+                the name of the image to load.
+            @param  _out_rImage
+                will take the image upon successful return.
+            @return
+                whether or not the image could be loaded successfully.
+        */
+        static bool loadImage(
+            const OUString& _rName,
+            BitmapEx& _out_rImage
+        );
+    };
+
+
+} // namespace vcl
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

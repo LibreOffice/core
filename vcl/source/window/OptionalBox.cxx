@@ -19,7 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/OptionalBox.hxx>
+#include <OptionalBox.hxx>
 
 /*
  * OptionalBox - shows or hides the content. To use with PriorityHBox

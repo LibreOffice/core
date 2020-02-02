@@ -8,7 +8,7 @@
  */
 
 #include <memory>
-#include <vcl/uitest/uitest.hxx>
+#include <uitest.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 #include <vcl/dialog.hxx>

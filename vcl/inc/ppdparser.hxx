@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_PPDPARSER_HXX
-#define INCLUDED_VCL_PPDPARSER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,7 +28,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <vcl/dllapi.h>
 
 #define PRINTER_PPDDIR "driver"
 
@@ -40,7 +38,7 @@ class PPDTranslator;
 
 enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 
-struct VCL_DLLPUBLIC PPDValue
+struct PPDValue
 {
     PPDValueType     m_eType;
     //CustomOption stuff for fdo#43049
@@ -268,7 +266,5 @@ public:
 };
 
 } // namespace
-
-#endif // INCLUDED_VCL_PPDPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

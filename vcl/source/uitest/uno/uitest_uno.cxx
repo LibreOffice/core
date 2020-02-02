@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include <vcl/uitest/uitest.hxx>
+#include <uitest.hxx>
 #include <vcl/svapp.hxx>
 
 #include "uiobject_uno.hxx"
