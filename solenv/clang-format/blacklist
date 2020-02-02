@@ -6736,7 +6736,6 @@ include/sfx2/sidebar/TabBar.hxx
 include/sfx2/sidebar/TabItem.hxx
 include/sfx2/sidebar/Theme.hxx
 include/sfx2/sidebar/TitleBar.hxx
-include/sfx2/sidebar/ToolBox.hxx
 include/sfx2/sidebar/Tools.hxx
 include/sfx2/sidebar/UnoDeck.hxx
 include/sfx2/sidebar/UnoDecks.hxx
@@ -7599,7 +7598,6 @@ include/uno/sequence2.h
 include/uno/threadpool.h
 include/unoidl/detail/dllapi.hxx
 include/unoidl/unoidl.hxx
-include/unotest/assertion_traits.hxx
 include/unotest/bootstrapfixturebase.hxx
 include/unotest/detail/unotestdllapi.hxx
 include/unotest/directories.hxx
