@@ -500,7 +500,6 @@ custom_widgets = [
     'EmojiView',
     'FontNameBox',
     'FontSizeBox',
-    'FontStyleBox',
     'IndexBox',
     'IndexBox',
     'ManagedMenuButton',

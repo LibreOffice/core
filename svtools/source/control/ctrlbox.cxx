@@ -723,20 +723,6 @@ Size FontStyleBox::GetOptimalSize() const
     return ComboBox::GetOptimalSize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFontStyleBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeFontStyleBox)>);
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<FontStyleBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 void FontStyleBox::Modify()
 {
     CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
