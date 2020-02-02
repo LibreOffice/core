@@ -28,7 +28,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <osl/diagnose.h>
 
 

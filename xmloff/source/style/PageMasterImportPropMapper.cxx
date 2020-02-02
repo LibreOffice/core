@@ -19,7 +19,7 @@
 
 
 #include "PageMasterImportPropMapper.hxx"
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

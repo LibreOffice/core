@@ -39,7 +39,7 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlement.hxx>
 
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 
 #include <vector>
 

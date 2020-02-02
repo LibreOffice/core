@@ -72,7 +72,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <xmloff/XMLFilterServiceNames.h>
-#include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
+#include <XMLEmbeddedObjectExportFilter.hxx>
 #include <XMLBasicExportFilter.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
