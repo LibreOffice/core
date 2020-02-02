@@ -316,7 +316,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
     if (pTmpRoot)
     {
-        std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
+        o3tl::sorted_vector<SwRootFrame*> aAllLayouts = GetAllLayouts();
         if ( bFootnotePos )
             for( auto aLayout : aAllLayouts )
                 aLayout->AllRemoveFootnotes();

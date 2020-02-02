@@ -189,7 +189,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
                     pLayoutToReset->SetHideRedlines(m_pTOXBase->second == sw::RedlineMode::Shown);
                 }
             });
-        std::set<SwRootFrame *> layouts(rDoc.GetAllLayouts());
+        o3tl::sorted_vector<SwRootFrame *> layouts(rDoc.GetAllLayouts());
         for (SwRootFrame const*const p : layouts)
         {
             if ((m_pTOXBase->second == sw::RedlineMode::Hidden) == p->IsHideRedlines())

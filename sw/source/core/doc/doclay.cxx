@@ -1657,9 +1657,9 @@ bool SwDoc::IsInVerticalText( const SwPosition& rPos ) const
     return SvxFrameDirection::Vertical_RL_TB == nDir || SvxFrameDirection::Vertical_LR_TB == nDir;
 }
 
-std::set<SwRootFrame*> SwDoc::GetAllLayouts()
+o3tl::sorted_vector<SwRootFrame*> SwDoc::GetAllLayouts()
 {
-    std::set<SwRootFrame*> aAllLayouts;
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts;
     SwViewShell *pStart = getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pStart)
     {

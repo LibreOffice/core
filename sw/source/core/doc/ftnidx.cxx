@@ -77,7 +77,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
     if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
     {
         SwRootFrame const* pLayout(nullptr);
-        std::set<SwRootFrame*> layouts = pDoc->GetAllLayouts();
+        o3tl::sorted_vector<SwRootFrame*> layouts = pDoc->GetAllLayouts();
         // sw_redlinehide: here we need to know if there's *any* layout with
         // IsHideRedlines(), because then the hidden-numbers have to be updated
         for (SwRootFrame const* pTmp : layouts)
@@ -279,7 +279,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
     SwRootFrame const* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    std::set<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
