@@ -361,11 +361,11 @@ private:
     FontNameBox&    operator =( const FontNameBox& ) = delete;
 };
 
-class SVT_DLLPUBLIC SvtFontStyleBox
+class SVT_DLLPUBLIC FontStyleBox
 {
     std::unique_ptr<weld::ComboBox> m_xComboBox;
 public:
-    SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p);
+    FontStyleBox(std::unique_ptr<weld::ComboBox> p);
 
     void Fill(const OUString& rName, const FontList* pList);
 
@@ -379,8 +379,8 @@ public:
     int get_count() const { return m_xComboBox->get_count(); }
     int find_text(const OUString& rStr) const { return m_xComboBox->find_text(rStr); }
 private:
-    SvtFontStyleBox(const SvtFontStyleBox& ) = delete;
-    SvtFontStyleBox& operator=(const SvtFontStyleBox&) = delete;
+    FontStyleBox(const FontStyleBox& ) = delete;
+    FontStyleBox& operator=(const FontStyleBox&) = delete;
 };
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox

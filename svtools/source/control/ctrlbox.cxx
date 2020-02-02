@@ -699,7 +699,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p)
+FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
     : m_xComboBox(std::move(p))
 {
     //Use the standard texts to get an optimal size and stick to that size.
@@ -715,7 +715,7 @@ SvtFontStyleBox::SvtFontStyleBox(std::unique_ptr<weld::ComboBox> p)
     m_xComboBox->set_entry_width_chars(std::ceil(nMaxLen / m_xComboBox->get_approximate_digit_width()));
 }
 
-void SvtFontStyleBox::Fill( const OUString& rName, const FontList* pList )
+void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
 {
     m_xComboBox->freeze();
     OUString aOldText = m_xComboBox->get_active_text();
