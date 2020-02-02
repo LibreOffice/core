@@ -765,8 +765,8 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Cell>(const SwDoc& rDoc, OUString* 
             const sal_Int32 nAutoFormat = nIndex / rTableTemplateMap.size();
             const sal_Int32 nBoxFormat = rTableTemplateMap[nIndex % rTableTemplateMap.size()];
             const SwTableAutoFormat& rTableFormat = rAutoFormats[nAutoFormat];
-            *pString = rTableFormat.GetName()
-                  + rTableFormat.GetTableTemplateCellSubName(rTableFormat.GetBoxFormat(nBoxFormat));
+            SwStyleNameMapper::FillProgName(rTableFormat.GetName(), *pString, SwGetPoolIdFromName::TabStyle);
+            *pString += rTableFormat.GetTableTemplateCellSubName(rTableFormat.GetBoxFormat(nBoxFormat));
         }
         else
             *pString = rDoc.GetCellStyles()[nIndex-nUsedCellStylesCount].GetName();
@@ -1003,8 +1003,10 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(rName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
     // replacements only for userdefined styles
     if(!pBase)
         throw container::NoSuchElementException();
@@ -1012,7 +1014,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     {
         // handle cell styles, don't call on assigned cell styles (TableStyle child)
         OUString sParent;
-        SwBoxAutoFormat* pBoxAutoFormat = SwXTextCellStyle::GetBoxAutoFormat(m_pDocShell, rName, &sParent);
+        SwBoxAutoFormat* pBoxAutoFormat = SwXTextCellStyle::GetBoxAutoFormat(m_pDocShell, sStyleName, &sParent);
         if (pBoxAutoFormat && sParent.isEmpty())// if parent exists then this style is assigned to a table style. Don't replace.
         {
             uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
@@ -1020,7 +1022,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
             if (!pStyleToReplaceWith)
                 throw lang::IllegalArgumentException();
 
-            pStyleToReplaceWith->setName(rName);
+            pStyleToReplaceWith->setName(sStyleName);
             *pBoxAutoFormat = *pStyleToReplaceWith->GetBoxFormat();
             pStyleToReplaceWith->SetPhysical();
         }
@@ -1028,7 +1030,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     else if (SwGetPoolIdFromName::TabStyle == m_rEntry.m_aPoolId)
     {
         // handle table styles
-        SwTableAutoFormat* pTableAutoFormat = SwXTextTableStyle::GetTableAutoFormat(m_pDocShell, rName);
+        SwTableAutoFormat* pTableAutoFormat = SwXTextTableStyle::GetTableAutoFormat(m_pDocShell, sStyleName);
         if (pTableAutoFormat)
         {
             uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
@@ -1036,7 +1038,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
             if (!pStyleToReplaceWith)
                 throw lang::IllegalArgumentException();
 
-            pStyleToReplaceWith->setName(rName);
+            pStyleToReplaceWith->setName(sStyleName);
             *pTableAutoFormat = *pStyleToReplaceWith->GetTableFormat();
             pStyleToReplaceWith->SetPhysical();
         }
@@ -4455,17 +4457,9 @@ sal_Bool SAL_CALL SwXTextTableStyle::isInUse()
     {
         if (!pFormat->GetInfo(aGetHt))
         {
-            uno::Reference<text::XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
-            if (xTable.is())
-            {
-                uno::Reference<beans::XPropertySet> xTablePropertySet(xTable, uno::UNO_QUERY);
-                OUString sTableTemplateName;
-                if (xTablePropertySet.is() && (xTablePropertySet->getPropertyValue("TableTemplateName") >>= sTableTemplateName)
-                    && sTableTemplateName == m_pTableAutoFormat->GetName())
-                {
-                    return true;
-                }
-            }
+            SwTable* pTable = SwTable::FindTable(pFormat);
+            if (pTable->GetTableStyleName() == m_pTableAutoFormat->GetName())
+                return true;
         }
     }
 
@@ -4606,11 +4600,11 @@ void SAL_CALL SwXTextTableStyle::replaceByName(const OUString& rName, const uno:
 
     // move SwBoxAutoFormat to dest. SwTableAutoFormat
     m_pTableAutoFormat->SetBoxFormat(*pStyleToReplaceWith->GetBoxFormat(), nBoxFormat);
+    // remove unassigned SwBoxAutoFormat, which is not anymore in use anyways
+    m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(xStyle->getName());
     // make SwXTextCellStyle use new, moved SwBoxAutoFormat
     pStyleToReplaceWith->SetBoxFormat(&m_pTableAutoFormat->GetBoxFormat(nBoxFormat));
     m_pTableAutoFormat->GetBoxFormat(nBoxFormat).SetXObject(xStyle);
-    // remove unassigned SwBoxAutoFormat, which is not anymore in use anyways
-    m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(xStyle->getName());
     // make this SwXTextTableStyle use new SwXTextCellStyle
     m_aCellStyles[nCellStyle] = xStyle;
 }
@@ -4726,6 +4720,7 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const
         if (rTableTemplateMap.size() <= o3tl::make_unsigned(nTemplateIndex))
             return nullptr;
 
+        SwStyleNameMapper::FillUIName(sParentName, sParentName, SwGetPoolIdFromName::TabStyle);
         SwTableAutoFormat* pTableAutoFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
         if (!pTableAutoFormat)
             return nullptr;
@@ -4826,16 +4821,18 @@ OUString SAL_CALL SwXTextCellStyle::getName()
     // if style is physical then we request a name from doc
     if (m_bPhysical)
     {
-        OUString sParentStyle;
-        SwStyleNameMapper::FillUIName(m_sParentStyle, sParentStyle, SwGetPoolIdFromName::TabStyle);
-        SwTableAutoFormat* pTableFormat = m_pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentStyle);
+        SwTableAutoFormat* pTableFormat = m_pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(m_sParentStyle);
         if (!pTableFormat)
         {
             // if auto format is not found as a child of table formats, look in SwDoc cellstyles
             sName = m_pDocShell->GetDoc()->GetCellStyles().GetBoxFormatName(*m_pBoxAutoFormat);
         }
         else
+        {
+            OUString sParentStyle;
+            SwStyleNameMapper::FillProgName(m_sParentStyle, sParentStyle, SwGetPoolIdFromName::TabStyle);
             sName = sParentStyle + pTableFormat->GetTableTemplateCellSubName(*m_pBoxAutoFormat);
+        }
     }
     else
         sName = m_sName;

@@ -60,6 +60,7 @@
 #include "xmltbli.hxx"
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
+#include <SwStyleNameMapper.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -2613,9 +2614,11 @@ void SwXMLTableContext::MakeTable()
 
     sal_uInt8 nPercentWidth = 0U;
 
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName( m_aTemplateName, sStyleName, SwGetPoolIdFromName::TabStyle );
+    m_pTableNode->GetTable().SetTableStyleName( sStyleName );
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
-    m_pTableNode->GetTable().SetTableStyleName( m_aTemplateName );
 
     const SfxItemSet *pAutoItemSet = nullptr;
     if( !m_aStyleName.isEmpty() &&
