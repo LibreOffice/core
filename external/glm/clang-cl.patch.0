@@ -1,32 +1,14 @@
 # "#pragma intrinsic" not (yet?) handled in the "if (LangOpts.MicrosoftExt)"
 # block in Preprocessor::RegisterBuiltinPragmas in Clang's lib/Lex/Pragma.cpp:
---- glm/core/func_integer.inl
-+++ glm/core/func_integer.inl
-@@ -29,7 +29,9 @@
- #if(GLM_ARCH != GLM_ARCH_PURE)
- #if(GLM_COMPILER & GLM_COMPILER_VC)
+--- glm/detail/func_integer.inl
++++ glm/detail/func_integer.inl
+@@ -3,7 +3,9 @@
+ #include "_vectorize.hpp"
+ #if(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
  #	include <intrin.h>
-+#if !defined __clang__
++#if !defined __clang__^M
  #	pragma intrinsic(_BitScanReverse)
 +#endif
- #endif//(GLM_COMPILER & GLM_COMPILER_VC)
- #endif//(GLM_ARCH != GLM_ARCH_PURE)
+ #endif//(GLM_ARCH & GLM_ARCH_X86 && GLM_COMPILER & GLM_COMPILER_VC)
+ #include <limits>
  
-
-# Fix check for availability of C++11 static_assert (it apparently should be
-# conditional on GLM_LANG_CXX11 instead of GLM_LANG_CXX0X, but just don't care
-# to try to fix that mess, and use __cplusplus value instead; unconditionally
-# using C++11 static_assert would fail in external/libgltf, which uses
-# external/glm but does not -std=c++11); falling back to BOOST_STATIC_ASSERT
-# would cause unnecessary warnings with clang-cl:
---- glm/core/setup.hpp
-+++ glm/core/setup.hpp
-@@ -628,7 +628,7 @@
- ///////////////////////////////////////////////////////////////////////////////////////////////////
- // Static assert
- 
--#if(GLM_LANG == GLM_LANG_CXX0X)
-+#if __cplusplus >= 201103L
- #	define GLM_STATIC_ASSERT(x, message) static_assert(x, message)
- #elif(defined(BOOST_STATIC_ASSERT))
- #	define GLM_STATIC_ASSERT(x, message) BOOST_STATIC_ASSERT(x)
