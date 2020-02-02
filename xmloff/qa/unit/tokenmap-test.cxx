@@ -12,7 +12,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <xmloff/fasttokenhandler.hxx>
+#include <fasttokenhandler.hxx>
 #include <xmloff/token/tokens.hxx>
 #include <xmloff/xmltoken.hxx>
 

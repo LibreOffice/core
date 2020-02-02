@@ -21,7 +21,7 @@
 #include "PagePropertySetContext.hxx"
 #include <XMLBackgroundImageContext.hxx>
 #include <XMLTextColumnsContext.hxx>
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include "XMLFootnoteSeparatorImport.hxx"
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlprmap.hxx>

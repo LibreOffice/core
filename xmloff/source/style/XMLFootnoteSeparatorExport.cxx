@@ -29,7 +29,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlement.hxx>
 
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <rtl/ustrbuf.hxx>
 
