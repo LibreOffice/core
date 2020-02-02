@@ -219,7 +219,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
     , m_xEastFontNameLB(m_xBuilder->weld_combo_box("eastfontnamelb"))
     , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
-    , m_xEastFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
+    , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
     , m_xEastFontSizeFT(m_xBuilder->weld_label("eastsizeft"))
     , m_xEastFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
     , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
@@ -230,7 +230,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
     , m_xCTLFontNameLB(m_xBuilder->weld_combo_box("ctlfontnamelb"))
     , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
-    , m_xCTLFontStyleLB(new SvtFontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
+    , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
     , m_xCTLFontSizeFT(m_xBuilder->weld_label("ctlsizeft"))
     , m_xCTLFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
@@ -257,7 +257,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         m_xWestFontStyleFT = m_xBuilder->weld_label("weststyleft-cjk");
         m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-cjk");
 
-        m_xWestFontStyleLB.reset(new SvtFontStyleBox(m_xBuilder->weld_combo_box("weststylelb-cjk")));
+        m_xWestFontStyleLB.reset(new FontStyleBox(m_xBuilder->weld_combo_box("weststylelb-cjk")));
         m_xWestFontSizeLB.reset(new SvtFontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-cjk");
@@ -289,7 +289,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         xWestFontSizeLB->set_height_request_by_rows(7);
 
         m_xWestFontNameLB = std::move(xWestFontNameLB);
-        m_xWestFontStyleLB.reset(new SvtFontStyleBox(std::move(xWestFontStyleLB)));
+        m_xWestFontStyleLB.reset(new FontStyleBox(std::move(xWestFontStyleLB)));
         m_xWestFontSizeLB.reset(new SvtFontSizeBox(std::move(xWestFontSizeLB)));
     }
 
@@ -403,7 +403,7 @@ namespace
     FontMetric calcFontMetrics(  SvxFont& _rFont,
                     SvxCharNamePage const * _pPage,
                     const weld::ComboBox* _pFontNameLB,
-                    const SvtFontStyleBox* _pFontStyleLB,
+                    const FontStyleBox* _pFontStyleLB,
                     const SvtFontSizeBox* _pFontSizeLB,
                     const SvxLanguageBox* _pLanguageLB,
                     const FontList* _pFontList,
@@ -506,7 +506,7 @@ void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    SvtFontStyleBox* pStyleBox = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
     OUString sFontName;
 
     if (m_xWestFontNameLB.get() == &rNameBox)
@@ -552,7 +552,7 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    SvtFontStyleBox* pStyleBox = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
     OUString sFontName;
 
@@ -605,7 +605,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 {
     weld::ComboBox* pNameBox = nullptr;
     weld::Label* pStyleLabel = nullptr;
-    SvtFontStyleBox* pStyleBox = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
     weld::Label* pSizeLabel = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
     weld::Label* pLangFT = nullptr;
@@ -835,7 +835,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     bool bModified = false;
 
     weld::ComboBox* pNameBox = nullptr;
-    SvtFontStyleBox* pStyleBox = nullptr;
+    FontStyleBox* pStyleBox = nullptr;
     SvtFontSizeBox* pSizeBox = nullptr;
     SvxLanguageBox* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
