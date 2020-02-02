@@ -627,6 +627,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pDoc->GetNumberFormat( nStartCol, nStartRow, nStartTab, nPrivFormat );
                     pDoc->GetCellType( nStartCol, nStartRow, nStartTab,eCellType );
                     const SvNumberformat* pPrivEntry = pFormatter->GetEntry( nPrivFormat );
+                    const int nSelectHeight = nEndRow - nStartRow;
+                    const int nSelectWidth = nEndCol - nStartCol;
+
                     if (!pPrivEntry)
                     {
                         OSL_FAIL("Numberformat not found !!!");
@@ -646,7 +649,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     OUString aStartStr;
 
-                    //  suggest default Startvalue only, when just 1 row or column
+                    //  suggest default StartValue, EndValue and IncrementValue when just 1 row or column
                     if ( nStartCol == nEndCol || nStartRow == nEndRow )
                     {
                         double fInputEndVal = 0.0;
@@ -663,6 +666,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pDoc->GetValue( nStartCol, nStartRow+1, nStartTab, fInputEndVal);
                                 fIncVal=fInputEndVal-fStartVal;
                             }
+                            else
+                            {
+                                pDoc->GetInputString( nEndCol, nEndRow, nEndTab, aEndStr );
+                                if(!aEndStr.isEmpty())
+                                {
+                                    pDoc->GetValue( nEndCol, nEndRow, nEndTab, fMaxVal );
+                                    if( !aStartStr.isEmpty() )
+                                        fIncVal = (fMaxVal - fStartVal) / nSelectHeight;
+                                }
+                            }
                         }
                         else
                         {
@@ -673,6 +686,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 {
                                     pDoc->GetValue( nStartCol+1, nStartRow, nStartTab, fInputEndVal);
                                     fIncVal=fInputEndVal-fStartVal;
+                                }
+                                else
+                                {
+                                    pDoc->GetInputString( nEndCol, nEndRow, nEndTab, aEndStr );
+                                    if(!aEndStr.isEmpty())
+                                    {
+                                        pDoc->GetValue( nEndCol, nEndRow, nEndTab, fMaxVal );
+                                        if( !aStartStr.isEmpty() )
+                                            fIncVal = (fMaxVal - fStartVal) / nSelectWidth;
+                                    }
                                 }
                             }
                         }
@@ -707,7 +730,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
-                                                            nPossDir));
+                                                            nSelectHeight, nSelectWidth, nPossDir));
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
