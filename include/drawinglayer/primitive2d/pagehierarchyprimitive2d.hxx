@@ -41,7 +41,7 @@ namespace drawinglayer
             explicit PageHierarchyPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

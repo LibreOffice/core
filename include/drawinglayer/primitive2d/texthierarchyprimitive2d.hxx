@@ -47,7 +47,7 @@ namespace drawinglayer
             explicit TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -69,7 +69,7 @@ namespace drawinglayer
             explicit TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -103,7 +103,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -125,7 +125,7 @@ namespace drawinglayer
             explicit TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -181,7 +181,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -209,7 +209,7 @@ namespace drawinglayer
             explicit TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren);
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
