@@ -27,7 +27,7 @@
 #include <XMLTextColumnsPropertyHandler.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "PageMasterPropHdl.hxx"
-#include <xmloff/PageMasterStyleMap.hxx>
+#include <PageMasterStyleMap.hxx>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>

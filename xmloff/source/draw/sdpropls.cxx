@@ -30,7 +30,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#include <xmloff/WordWrapPropertyHdl.hxx>
+#include <WordWrapPropertyHdl.hxx>
 #include <enummaps.hxx>
 #include "numithdl.hxx"
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>

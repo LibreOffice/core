@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_PAGEMASTERSTYLEMAP_HXX
-#define INCLUDED_XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#ifndef XMLOFF_INC_PAGEMASTERSTYLEMAP_HXX
+#define XMLOFF_INC_PAGEMASTERSTYLEMAP_HXX
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
