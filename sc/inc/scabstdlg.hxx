@@ -434,6 +434,8 @@ public:
                                                             const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
+                                                            const int       nSelectHeight,
+                                                            const int       nSelectWidth,
                                                             sal_uInt16          nPossDir) = 0;
 
     virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) = 0;

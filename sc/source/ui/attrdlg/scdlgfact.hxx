@@ -700,6 +700,8 @@ public:
                                                             const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
+                                                            const int       nSelectHeight,
+                                                            const int       nSelectWidth,
                                                             sal_uInt16       nPossDir) override;
     virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) override;
 

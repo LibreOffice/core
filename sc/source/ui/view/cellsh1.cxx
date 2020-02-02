@@ -627,6 +627,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pDoc->GetNumberFormat( nStartCol, nStartRow, nStartTab, nPrivFormat );
                     pDoc->GetCellType( nStartCol, nStartRow, nStartTab,eCellType );
                     const SvNumberformat* pPrivEntry = pFormatter->GetEntry( nPrivFormat );
+                    const int nSelectHeight = nEndRow - nStartRow;
+                    const int nSelectWidth = nEndCol - nStartCol;
+
                     if (!pPrivEntry)
                     {
                         OSL_FAIL("Numberformat not found !!!");
@@ -707,7 +710,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
-                                                            nPossDir));
+                                                            nSelectHeight, nSelectWidth, nPossDir));
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {
