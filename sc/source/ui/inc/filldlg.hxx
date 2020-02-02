@@ -36,6 +36,8 @@ public:
                      const OUString& aStartStr,
                      double         fStep,
                      double         fMax,
+                     const int      nSelectHeight,
+                     const int      nSelectWidth,
                      sal_uInt16     nPossDir );
     virtual ~ScFillSeriesDlg() override;
 
@@ -61,6 +63,8 @@ private:
     double      fStartVal;
     double      fIncrement;
     double      fEndVal;
+    const int   nSelectionHeight;
+    const int   nSelectionWidth;
 
     std::unique_ptr<weld::Label> m_xFtStartVal;
     std::unique_ptr<weld::Entry> m_xEdStartVal;
