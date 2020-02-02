@@ -85,7 +85,7 @@ namespace drawinglayer
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
 
             // XAccounting
             virtual sal_Int64 SAL_CALL estimateUsage() override;

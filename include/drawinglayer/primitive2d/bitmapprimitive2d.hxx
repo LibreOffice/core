@@ -65,7 +65,7 @@ public:
     virtual sal_Int64 SAL_CALL estimateUsage() override;
 
     /// provide unique ID
-    DeclPrimitive2DIDBlock()
+    virtual sal_uInt32 getPrimitive2DID() const override;
 };
 
 } // end of namespace drawinglayer::primitive2d
