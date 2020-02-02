@@ -28,7 +28,6 @@
 
 namespace drawinglayer::primitive2d
 {
-
 /** BitmapPrimitive2D class
 
     This class is the central primitive for Bitmap-based primitives.
@@ -40,18 +39,16 @@ class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the RGBA Bitmap-data
-    BitmapEx                                    maBitmapEx;
+    BitmapEx maBitmapEx;
 
     /** the object transformation from unit coordinates, defining
         size, shear, rotate and position
      */
-    basegfx::B2DHomMatrix                       maTransform;
+    basegfx::B2DHomMatrix maTransform;
 
 public:
     /// constructor
-    BitmapPrimitive2D(
-        const BitmapEx& rBitmapEx,
-        const basegfx::B2DHomMatrix& rTransform);
+    BitmapPrimitive2D(const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform);
 
     /// data read access
     const BitmapEx& getBitmapEx() const { return maBitmapEx; }
@@ -61,13 +58,14 @@ public:
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
     /// get range
-    virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-    /// provide unique ID
-    DeclPrimitive2DIDBlock()
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
     // XAccounting
     virtual sal_Int64 SAL_CALL estimateUsage() override;
+
+    /// provide unique ID
+    DeclPrimitive2DIDBlock()
 };
 
 } // end of namespace drawinglayer::primitive2d
