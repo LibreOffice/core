@@ -20,48 +20,43 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-
 using namespace com::sun::star;
-
 
 namespace drawinglayer::primitive2d
 {
-        BitmapPrimitive2D::BitmapPrimitive2D(
-            const BitmapEx& rBitmapEx,
-            const basegfx::B2DHomMatrix& rTransform)
-        :   BasePrimitive2D(),
-            maBitmapEx(rBitmapEx),
-            maTransform(rTransform)
-        {
-        }
+BitmapPrimitive2D::BitmapPrimitive2D(const BitmapEx& rBitmapEx,
+                                     const basegfx::B2DHomMatrix& rTransform)
+    : BasePrimitive2D()
+    , maBitmapEx(rBitmapEx)
+    , maTransform(rTransform)
+{
+}
 
-        bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const BitmapPrimitive2D& rCompare = static_cast<const BitmapPrimitive2D&>(rPrimitive);
+bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (BasePrimitive2D::operator==(rPrimitive))
+    {
+        const BitmapPrimitive2D& rCompare = static_cast<const BitmapPrimitive2D&>(rPrimitive);
 
-                return (getBitmapEx() == rCompare.getBitmapEx()
-                    && getTransform() == rCompare.getTransform());
-            }
+        return (getBitmapEx() == rCompare.getBitmapEx()
+                && getTransform() == rCompare.getTransform());
+    }
 
-            return false;
-        }
+    return false;
+}
 
-        basegfx::B2DRange BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(maTransform);
-            return aRetval;
-        }
+basegfx::B2DRange
+BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
+    aRetval.transform(maTransform);
+    return aRetval;
+}
 
-        sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage()
-        {
-            return getBitmapEx().GetSizeBytes();
-        }
+sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage() { return getBitmapEx().GetSizeBytes(); }
 
-        // provide unique ID
-        ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
+// provide unique ID
+ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
 
 } // end of namespace
 

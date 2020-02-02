@@ -3751,7 +3751,6 @@ drawinglayer/source/geometry/viewinformation2d.cxx
 drawinglayer/source/geometry/viewinformation3d.cxx
 drawinglayer/source/primitive2d/animatedprimitive2d.cxx
 drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx
-drawinglayer/source/primitive2d/bitmapprimitive2d.cxx
 drawinglayer/source/primitive2d/borderlineprimitive2d.cxx
 drawinglayer/source/primitive2d/controlprimitive2d.cxx
 drawinglayer/source/primitive2d/cropprimitive2d.cxx
@@ -6052,7 +6051,6 @@ include/drawinglayer/geometry/viewinformation2d.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
 include/drawinglayer/primitive2d/animatedprimitive2d.hxx
 include/drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx
-include/drawinglayer/primitive2d/bitmapprimitive2d.hxx
 include/drawinglayer/primitive2d/borderlineprimitive2d.hxx
 include/drawinglayer/primitive2d/controlprimitive2d.hxx
 include/drawinglayer/primitive2d/cropprimitive2d.hxx
