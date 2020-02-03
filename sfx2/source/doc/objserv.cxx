@@ -60,7 +60,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
-#include <sfx2/asyncfunc.hxx>
+#include <asyncfunc.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>

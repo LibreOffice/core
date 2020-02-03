@@ -26,7 +26,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <sal/macros.h>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 
 #include <unx/wmadaptor.hxx>
 #include <unx/saldisp.hxx>

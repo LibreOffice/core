@@ -25,7 +25,7 @@
 #include <fontsubset.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <vcl/strhelper.hxx>
+#include <strhelper.hxx>
 #include <sal/log.hxx>
 
 typedef sal_uInt8 U8;

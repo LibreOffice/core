@@ -271,7 +271,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>

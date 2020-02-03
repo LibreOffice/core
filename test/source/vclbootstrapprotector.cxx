@@ -12,9 +12,9 @@
 #include <cppunit/Protector.h>
 #include <sal/types.h>
 #include <sal/log.hxx>
-#include <test/setupvcl.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/threadpool.hxx>
+#include "setupvcl.hxx"
 
 namespace {
 

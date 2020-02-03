@@ -8,12 +8,13 @@
  *
  */
 
-#include <svx/ClassificationEditView.hxx>
 #include <svx/ClassificationField.hxx>
 
 #include <svl/itemset.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
+
+#include "ClassificationEditView.hxx"
 
 namespace svx {
 

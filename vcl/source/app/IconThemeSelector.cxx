@@ -9,7 +9,7 @@
 
 #include <comphelper/lok.hxx>
 
-#include <vcl/IconThemeSelector.hxx>
+#include <IconThemeSelector.hxx>
 
 #include <vcl/IconThemeInfo.hxx>
 #include <config_mpl.h>

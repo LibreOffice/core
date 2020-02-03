@@ -61,7 +61,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/strhelper.hxx>
+#include <strhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>

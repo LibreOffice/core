@@ -20,7 +20,6 @@
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <sfx2/recentdocsview.hxx>
-#include <sfx2/recentdocsviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>
@@ -39,6 +38,7 @@
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/virdev.hxx>
+#include "recentdocsviewitem.hxx"
 
 #include <officecfg/Office/Common.hxx>
 

@@ -317,9 +317,6 @@ blacklist:
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
-    include/vcl/vclstatuslistener.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XStatusListener.hpp
     include/vcl/weld.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleRelationSet.hpp
@@ -502,13 +499,6 @@ blacklist:
     - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
-    include/svtools/accessibleruler.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/accessibility/XAccessibleComponent.hpp
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     include/svtools/asynclink.hxx:
     # unique_ptr needs complete type
     - osl/mutex.hxx
@@ -701,9 +691,6 @@ blacklist:
     include/drawinglayer/primitive3d/baseprimitive3d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive3D.hpp
-    include/sfx2/asyncfunc.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
     include/sfx2/charwin.hxx:
     # Needed for implicit dtor
     - vcl/virdev.hxx
@@ -835,13 +822,6 @@ blacklist:
     - class SfxViewFactory
     include/editeng/AccessibleContextBase.hxx:
     # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
-    - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    include/editeng/AccessibleImageBullet.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleComponent.hpp
     - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessible.hpp

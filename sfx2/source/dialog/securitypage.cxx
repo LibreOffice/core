@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/htmlmode.hxx>
-#include <sfx2/securitypage.hxx>
 
 #include <sfx2/sfxresid.hxx>
 
@@ -36,6 +35,8 @@
 #include <svl/PasswordHelper.hxx>
 
 #include <sfx2/strings.hrc>
+
+#include "securitypage.hxx"
 
 using namespace ::com::sun::star;
 

@@ -25,8 +25,8 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/OptionalBox.hxx>
 #include <vcl/IPrioritable.hxx>
+#include <OptionalBox.hxx>
 
 static const char STYLE_TEXT[] = "Text";
 static const char STYLE_ICON[] = "Icon";

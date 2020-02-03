@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/asyncfunc.hxx>
+#include <asyncfunc.hxx>
 
 AsyncFunc::AsyncFunc(const std::function<void()>& rAsyncFunc)
     : m_pAsyncFunc(rAsyncFunc)

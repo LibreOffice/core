@@ -27,7 +27,7 @@
 #include <vcl/print.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

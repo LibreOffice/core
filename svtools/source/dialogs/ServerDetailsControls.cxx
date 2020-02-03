@@ -24,9 +24,9 @@
 #include <tools/diagnose_ex.h>
 
 #include <svtools/PlaceEditDialog.hxx>
-#include <svtools/ServerDetailsControls.hxx>
-
 #include <config_oauth2.h>
+
+#include "ServerDetailsControls.hxx"
 
 using namespace std;
 using namespace com::sun::star::lang;

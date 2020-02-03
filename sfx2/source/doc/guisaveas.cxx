@@ -69,7 +69,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/asyncfunc.hxx>
+#include <asyncfunc.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <alienwarn.hxx>
