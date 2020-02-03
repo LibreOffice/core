@@ -492,7 +492,7 @@ ErrCode StgWriter::WriteStream()
 ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
 {
     SetStream(nullptr);
-    pStg = &rStg;
+    m_pStg = &rStg;
     m_pDoc = rPaM.GetDoc();
     m_pOrigFileName = pFName;
 
@@ -505,7 +505,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
 
     ErrCode nRet = WriteStorage();
 
-    pStg = nullptr;
+    m_pStg = nullptr;
     ResetWriter();
 
     return nRet;
@@ -514,8 +514,8 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
 ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
 {
     SetStream(nullptr);
-    pStg = nullptr;
-    xStg = rStg;
+    m_pStg = nullptr;
+    m_xStg = rStg;
     m_pDoc = rPaM.GetDoc();
     m_pOrigFileName = pFName;
 
@@ -528,7 +528,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >&
 
     ErrCode nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
-    pStg = nullptr;
+    m_pStg = nullptr;
     ResetWriter();
 
     return nRet;

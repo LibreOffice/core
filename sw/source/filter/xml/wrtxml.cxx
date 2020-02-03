@@ -87,8 +87,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
-    OSL_ENSURE( xStg.is(), "Where is my storage?" );
-    xGraphicHelper = SvXMLGraphicHelper::Create( xStg,
+    OSL_ENSURE( m_xStg.is(), "Where is my storage?" );
+    xGraphicHelper = SvXMLGraphicHelper::Create( m_xStg,
                                                  SvXMLGraphicHelperMode::Write );
     xGraphicStorageHandler = xGraphicHelper.get();
 
@@ -96,7 +96,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     if( pPersist )
     {
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                         xStg, *pPersist,
+                                         m_xStg, *pPersist,
                                          SvXMLEmbeddedObjectHelperMode::Write );
         xObjectResolver = xObjectHelper.get();
     }
@@ -159,7 +159,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    xInfoSet->setPropertyValue( "TargetStorage", Any( xStg ) );
+    xInfoSet->setPropertyValue( "TargetStorage", Any( m_xStg ) );
 
     if (m_bShowProgress)
     {
@@ -210,7 +210,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     }
 
     // #i69627#
-    const bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
+    const bool bOASIS = ( SotStorage::GetVersion( m_xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *m_pDoc ) )
     {
@@ -273,7 +273,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     // N.B.: embedded documents have their own manifest.rdf!
     if ( bOASIS )
     {
-        const uno::Reference<beans::XPropertySet> xPropSet(xStg,
+        const uno::Reference<beans::XPropertySet> xPropSet(m_xStg,
             uno::UNO_QUERY_THROW);
         try
         {
@@ -285,7 +285,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
             {
                 const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
                     xModelComp, uno::UNO_QUERY_THROW);
-                xDMA->storeMetadataToStorage(xStg);
+                xDMA->storeMetadataToStorage(m_xStg);
             }
         }
         catch (beans::UnknownPropertyException &)
@@ -377,7 +377,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     {
         try
         {
-            uno::Reference < io::XStream > xStm = xStg->openStreamElement( "layout-cache", embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+            uno::Reference < io::XStream > xStm = m_xStg->openStreamElement( "layout-cache", embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStream->GetError() )
             {
@@ -470,7 +470,7 @@ bool SwXMLWriter::WriteThroughComponent(
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc )
 {
-    OSL_ENSURE( xStg.is(), "Need storage!" );
+    OSL_ENSURE( m_xStg.is(), "Need storage!" );
     OSL_ENSURE( nullptr != pStreamName, "Need stream name!" );
     OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
 
@@ -481,7 +481,7 @@ bool SwXMLWriter::WriteThroughComponent(
     {
         const OUString sStreamName = OUString::createFromAscii( pStreamName );
         uno::Reference<io::XStream> xStream =
-                xStg->openStreamElement( sStreamName,
+                m_xStg->openStreamElement( sStreamName,
                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
 
         uno::Reference <beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
