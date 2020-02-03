@@ -27,9 +27,7 @@
 
 enum class SvxBorderLineStyle : sal_Int16;
 
-namespace drawinglayer
-{
-namespace primitive2d
+namespace drawinglayer::primitive2d
 {
 /** BorderLine class
     Helper class holding the style definition for a single part of a full BorderLine definition.
@@ -142,7 +140,7 @@ public:
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
