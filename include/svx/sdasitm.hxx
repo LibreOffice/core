@@ -36,9 +36,9 @@ public:
     typedef std::pair < const OUString, const OUString > PropertyPair;
 
 private:
-    struct SVXCORE_DLLPUBLIC PropertyPairHash
+    struct PropertyPairHash
     {
-        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
+        inline size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
     typedef std::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
     typedef std::unordered_map<OUString, sal_Int32> PropertyHashMap;
@@ -86,7 +86,7 @@ inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
 
 // some useful inline methods
 
-inline size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
+size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
 {
     size_t hash = 17;
     hash = hash * 37 + r1.first.hashCode();
