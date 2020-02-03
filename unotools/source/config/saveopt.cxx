@@ -322,7 +322,7 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
             bReadOnly = bROLoadDocPrinter;
             break;
         case SvtSaveOptions::EOption::OdfDefaultVersion :
-            bReadOnly = bROLoadDocPrinter;
+            bReadOnly = bROODFDefaultVersion;
             break;
     }
     return bReadOnly;
@@ -932,7 +932,9 @@ void SvtSaveOptions::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVe
 
 SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
 {
-    return pImp->pSaveOpt->GetODFDefaultVersion();
+    auto const nRet = pImp->pSaveOpt->GetODFDefaultVersion();
+    SAL_WARN_IF(nRet == ODFVER_UNKNOWN, "unotools.config", "DefaultVersion is ODFVER_UNKNOWN?");
+    return (nRet == ODFVER_UNKNOWN) ? ODFVER_LATEST : nRet;
 }
 
 SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion() const
