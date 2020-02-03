@@ -945,7 +945,7 @@ private:
     /// Currently paragraph SDT has a <w:id> child element.
     bool m_bParagraphSdtHasId;
 
-    std::map<SvxBoxItemLine, css::table::BorderLine2> m_aTableStyleConf;
+    std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, const ::sax_fastparser::FSHelperPtr& pSerializer, oox::drawingml::DrawingML* pDrawingML );

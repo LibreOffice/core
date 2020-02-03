@@ -30,10 +30,12 @@
 #include <editsh.hxx>
 #include <frmatr.hxx>
 
+char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
+
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
+    Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
 
 protected:
     /**
@@ -454,6 +456,27 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "name", "foo");
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", "bar");
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTableStyleConfNested)
+{
+    // Create the doc model.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-style-conf-nested.docx";
+    loadURL(aURL, nullptr);
+
+    // Export to docx.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(maTempFile.GetFileName(), test::OOXML);
+    mbExported = true;
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed, as the custom table cell
+    // border properties were lost, so the outer A2 cell started to have borders, not present in the
+    // doc model.
+    assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders/w:top", "val", "nil");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
