@@ -132,8 +132,6 @@ LayoutMenu::LayoutMenu (
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : ValueSet (pParent, WB_ITEMBORDER),
-      DragSourceHelper(this),
-      DropTargetHelper(this),
       mrBase(rViewShellBase),
       mbIsMainViewChangePending(false),
       mxSidebar(rxSidebar),
@@ -196,8 +194,6 @@ void LayoutMenu::dispose()
 {
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
-    DragSourceHelper::dispose();
-    DropTargetHelper::dispose();
     ValueSet::dispose();
 }
 
@@ -553,20 +549,6 @@ void LayoutMenu::Clear()
     for (size_t nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
     ValueSet::Clear();
-}
-
-void LayoutMenu::StartDrag (sal_Int8 , const Point& )
-{
-}
-
-sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& )
-{
-    return 0;
-}
-
-sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& )
-{
-    return 0;
 }
 
 void LayoutMenu::Command (const CommandEvent& rEvent)
