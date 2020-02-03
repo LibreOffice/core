@@ -1300,8 +1300,12 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 OUString aText;
                 aData >>= aText;
-                if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
+
+                Selection aSelection(maSelection);
+                aSelection.Justify();
+                if (ImplTruncateToMaxLen(aText, aSelection.Len()))
                     ShowTruncationWarning(GetFrameWeld());
+
                 ReplaceSelected( aText );
             }
             catch( const css::uno::Exception& )
