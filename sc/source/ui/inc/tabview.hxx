@@ -340,7 +340,6 @@ public:
     bool            SelMouseButtonDown( const MouseEvent& rMEvt );
 
     ScDrawView*     GetScDrawView()         { return pDrawView.get(); }
-    // against CLOKs
     SdrView*        GetSdrView()            { return pDrawView.get(); }
 
     bool            IsMinimized() const     { return bMinimized; }
