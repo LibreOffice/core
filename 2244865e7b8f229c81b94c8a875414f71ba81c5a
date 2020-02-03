@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "309a6c8e_27a69ef0",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-03T19:27:43Z",
+      "side": 0,
+      "message": "This (and aMarginDocDefault) should be a generic name now...",
+      "range": {
+        "startLine": 1005,
+        "startChar": 25,
+        "endLine": 1005,
+        "endChar": 32
+      },
+      "revId": "2244865e7b8f229c81b94c8a875414f71ba81c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
