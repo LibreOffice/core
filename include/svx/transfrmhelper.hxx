@@ -21,16 +21,14 @@
 #define INCLUDED_SVX_TRANSFRMHELPER_HXX
 
 #include <basegfx/range/b2drange.hxx>
-#include <svx/svxdllapi.h>
 #include <tools/fract.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/field.hxx>
 
-class SVX_DLLPUBLIC TransfrmHelper
+namespace TransfrmHelper
 {
-public:
-    static void ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
+    inline void ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
     {
         const basegfx::B2DPoint aTopLeft(
             static_cast<double>(MetricField::ConvertValue(basegfx::fround(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit)),
@@ -42,12 +40,12 @@ public:
         rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
     }
 
-    static void ScaleRect(basegfx::B2DRange& rRange, const Fraction& rUIScale)
+    inline void ScaleRect(basegfx::B2DRange& rRange, const Fraction& rUIScale)
     {
         const double fFactor(1.0 / double(rUIScale));
         rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
     }
-};
+}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
