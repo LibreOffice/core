@@ -237,7 +237,6 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
 {
     OUString                               m_sDefaultDesc;
     SfxStylesInfo_Impl                     m_aStylesInfo;
-    bool                                   m_bShowSlots;
 
     std::unique_ptr<weld::Label> m_xDialogDescription;
     std::unique_ptr<CuiConfigGroupListBox> m_xCategories;

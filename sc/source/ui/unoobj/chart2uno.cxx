@@ -1011,7 +1011,7 @@ namespace
 
 uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
     vector< ScTokenRef > && aValueTokens, vector< ScTokenRef > && aLabelTokens,
-    ScDocument* pDoc, const uno::Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
+    ScDocument* pDoc, bool bIncludeHiddenCells )
 {
     uno::Reference< chart2::data::XLabeledDataSequence >  xResult;
     bool bHasValues = !aValueTokens.empty();
@@ -1027,12 +1027,12 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequen
             }
             if ( bHasValues )
             {
-                uno::Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aValueTokens), bIncludeHiddenCells ) );
+                uno::Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, std::move(aValueTokens), bIncludeHiddenCells ) );
                 xResult->setValues( xSeq );
             }
             if ( bHasLabel )
             {
-                uno::Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aLabelTokens), bIncludeHiddenCells ) );
+                uno::Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, std::move(aLabelTokens), bIncludeHiddenCells ) );
                 xResult->setLabel( xLabelSeq );
             }
         }
@@ -1493,7 +1493,7 @@ ScChart2DataProvider::createDataSource(
                 pChartMap->getLeftUpperCornerRanges());
 
         uno::Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
-            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
+            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xCategories.is() )
         {
             aSeqs.push_back( xCategories );
@@ -1517,7 +1517,7 @@ ScChart2DataProvider::createDataSource(
             aLabelTokens = pChartMap->getRowHeaderRanges(static_cast<SCROW>(i));
         }
         uno::Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
-            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
+            std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().hasElements() )
         {
             aSeqs.push_back( xChartSeries );
@@ -2001,7 +2001,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
 
     shrinkToDataRange(m_pDocument, aRefTokens);
 
-    xResult.set(new ScChart2DataSequence(m_pDocument, this, std::move(aRefTokens), m_bIncludeHiddenCells));
+    xResult.set(new ScChart2DataSequence(m_pDocument, std::move(aRefTokens), m_bIncludeHiddenCells));
 
     return xResult;
 }
@@ -2146,7 +2146,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
 
     shrinkToDataRange(m_pDocument, aRefTokens);
 
-    xResult.set(new ScChart2DataSequence(m_pDocument, this, std::move(aRefTokens), m_bIncludeHiddenCells));
+    xResult.set(new ScChart2DataSequence(m_pDocument, std::move(aRefTokens), m_bIncludeHiddenCells));
     return xResult;
 }
 
@@ -2343,14 +2343,12 @@ void ScChart2DataSequence::HiddenRangeListener::notify()
 }
 
 ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
-        const uno::Reference < chart2::data::XDataProvider >& xDP,
         vector<ScTokenRef>&& rTokens,
         bool bIncludeHiddenCells )
     : m_bIncludeHiddenCells( bIncludeHiddenCells)
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
     , m_aTokens(std::move(rTokens))
-    , m_xDataProvider( xDP)
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
     , m_bGotDataChangedHint(false)
     , m_bExtDataRebuildQueued(false)
@@ -3158,7 +3156,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
         aTokensNew.push_back(p);
     }
 
-    rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, std::move(aTokensNew), m_bIncludeHiddenCells));
+    rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, std::move(aTokensNew), m_bIncludeHiddenCells));
     p->CopyData(*this);
     uno::Reference< util::XCloneable > xClone(p.get());
 

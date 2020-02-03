@@ -39,10 +39,9 @@ static const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     return aDataSequencePropertyMap_Impl;
 }
 
-PivotTableDataSequence::PivotTableDataSequence(ScDocument* pDocument, OUString const & sPivotTableName, OUString const & sID,
+PivotTableDataSequence::PivotTableDataSequence(ScDocument* pDocument, OUString const & sID,
                                                std::vector<ValueAndFormat> const & rData)
     : m_pDocument(pDocument)
-    , m_sPivotTableName(sPivotTableName)
     , m_aID(sID)
     , m_aData(rData)
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
@@ -167,7 +166,7 @@ uno::Reference<util::XCloneable> SAL_CALL PivotTableDataSequence::createClone()
     SolarMutexGuard aGuard;
 
     std::unique_ptr<PivotTableDataSequence> pClone;
-    pClone.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName, m_aID, m_aData));
+    pClone.reset(new PivotTableDataSequence(m_pDocument, m_aID, m_aData));
     pClone->setRole(m_aRole);
 
     uno::Reference<util::XCloneable> xClone(pClone.release());
