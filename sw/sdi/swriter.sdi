@@ -7934,3 +7934,20 @@ SfxUInt32Item TableColumWidth SID_ATTR_TABLE_COLUMN_WIDTH
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
+
+SfxVoidItem MoveTabstop FN_MOVE_TABSTOP
+(SfxInt32Item Tabstop FN_PARAM_1, SfxInt32Item Amount FN_PARAM_2)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
