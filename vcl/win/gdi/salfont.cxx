@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <string.h>
 #include <svsys.h>
@@ -1210,7 +1211,8 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     // make sure all LO shared fonts are registered temporarily
-    static bool bOnce = []()
+    static std::once_flag init;
+    std::call_once(init, []()
     {
         auto registerFontsIn = [](const OUString& dir) {
             // collect fonts in font path that could not be registered
@@ -1246,7 +1248,7 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         registerFontsIn(aPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype");
 
         return true;
-    }();
+    });
 
     ImplEnumInfo aInfo;
     aInfo.mhDC          = getHDC();
