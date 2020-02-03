@@ -1933,6 +1933,14 @@ protected:
             m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
     }
 
+    void ensure_drag_begin_end()
+    {
+        if (!m_nDragBeginSignalId)
+            m_nDragBeginSignalId = g_signal_connect(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
+        if (!m_nDragEndSignalId)
+            m_nDragEndSignalId = g_signal_connect(m_pWidget, "drag-end", G_CALLBACK(signalDragEnd), this);
+    }
+
 private:
     bool m_bTakeOwnership;
     bool m_bFrozen;
@@ -2211,8 +2219,8 @@ private:
             m_nDragFailedSignalId = g_signal_connect(m_pWidget, "drag-failed", G_CALLBACK(signalDragFailed), this);
             m_nDragDataDeleteignalId = g_signal_connect(m_pWidget, "drag-data-delete", G_CALLBACK(signalDragDelete), this);
             m_nDragGetSignalId = g_signal_connect(m_pWidget, "drag-data-get", G_CALLBACK(signalDragDataGet), this);
-            m_nDragBeginSignalId = g_signal_connect(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
-            m_nDragEndSignalId = g_signal_connect(m_pWidget, "drag-end", G_CALLBACK(signalDragEnd), this);
+
+            ensure_drag_begin_end();
         }
     }
 
@@ -9000,6 +9008,8 @@ public:
             a.second = nIndex++;
         for (auto& a : m_aSensitiveMap)
             a.second = nIndex++;
+
+        ensure_drag_begin_end();
 
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         m_nRowDeletedSignalId = g_signal_connect(pModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
