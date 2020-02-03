@@ -63,36 +63,36 @@ namespace com { namespace sun { namespace star { namespace embed { class XStorag
 
 class SW_DLLPUBLIC SwAsciiOptions
 {
-    OUString sFont;
-    rtl_TextEncoding eCharSet;
-    LanguageType nLanguage;
-    LineEnd eCRLF_Flag;
-    bool bIncludeBOM;   // Whether to include a byte-order-mark in the output.
+    OUString m_sFont;
+    rtl_TextEncoding m_eCharSet;
+    LanguageType m_nLanguage;
+    LineEnd m_eCRLF_Flag;
+    bool m_bIncludeBOM;   // Whether to include a byte-order-mark in the output.
 
 public:
 
-    const OUString& GetFontName() const { return sFont; }
-    void SetFontName( const OUString& rFont ) { sFont = rFont; }
+    const OUString& GetFontName() const { return m_sFont; }
+    void SetFontName( const OUString& rFont ) { m_sFont = rFont; }
 
-    rtl_TextEncoding GetCharSet() const { return eCharSet; }
-    void SetCharSet( rtl_TextEncoding nVal ) { eCharSet = nVal; }
+    rtl_TextEncoding GetCharSet() const { return m_eCharSet; }
+    void SetCharSet( rtl_TextEncoding nVal ) { m_eCharSet = nVal; }
 
-    LanguageType GetLanguage() const { return nLanguage; }
-    void SetLanguage( LanguageType nVal ) { nLanguage = nVal; }
+    LanguageType GetLanguage() const { return m_nLanguage; }
+    void SetLanguage( LanguageType nVal ) { m_nLanguage = nVal; }
 
-    LineEnd GetParaFlags() const { return eCRLF_Flag; }
-    void SetParaFlags( LineEnd eVal ) { eCRLF_Flag = eVal; }
+    LineEnd GetParaFlags() const { return m_eCRLF_Flag; }
+    void SetParaFlags( LineEnd eVal ) { m_eCRLF_Flag = eVal; }
 
-    bool GetIncludeBOM() const { return bIncludeBOM; }
-    void SetIncludeBOM( bool bVal ) { bIncludeBOM = bVal; }
+    bool GetIncludeBOM() const { return m_bIncludeBOM; }
+    void SetIncludeBOM( bool bVal ) { m_bIncludeBOM = bVal; }
 
     void Reset()
     {
-        sFont.clear();
-        eCRLF_Flag = GetSystemLineEnd();
-        eCharSet = ::osl_getThreadTextEncoding();
-        nLanguage = LANGUAGE_SYSTEM;
-        bIncludeBOM = true;
+        m_sFont.clear();
+        m_eCRLF_Flag = GetSystemLineEnd();
+        m_eCharSet = ::osl_getThreadTextEncoding();
+        m_nLanguage = LANGUAGE_SYSTEM;
+        m_bIncludeBOM = true;
     }
     // for the automatic conversion (mail/news/...)
     void ReadUserData( const OUString& );
@@ -149,14 +149,14 @@ public:
 // Calls reader with its options, document, cursor etc.
 class SW_DLLPUBLIC SwReader: public SwDocFac
 {
-    SvStream* pStrm;
-    tools::SvRef<SotStorage> const pStg;
-    css::uno::Reference < css::embed::XStorage > xStg;
-    SfxMedium* const pMedium;     // Who wants to obtain a Medium (W4W).
+    SvStream* mpStrm;
+    tools::SvRef<SotStorage> const mpStg;
+    css::uno::Reference < css::embed::XStorage > mxStg;
+    SfxMedium* const mpMedium;     // Who wants to obtain a Medium (W4W).
 
-    SwPaM* const pCursor;
-    OUString const aFileName;
-    OUString sBaseURL;
+    SwPaM* const mpCursor;
+    OUString const maFileName;
+    OUString msBaseURL;
     bool mbSkipImages;
 
 public:
@@ -180,7 +180,7 @@ public:
     bool ReadGlossaries( const Reader&, SwTextBlocks&, bool bSaveRelFiles );
 
 protected:
-    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
+    void                SetBaseURL( const OUString& rURL ) { msBaseURL = rURL; }
     void                SetSkipImages( bool bSkipImages ) { mbSkipImages = bSkipImages; }
 };
 
@@ -311,8 +311,8 @@ class SwImpBlocks;
 
 class SW_DLLPUBLIC SwTextBlocks
 {
-    std::unique_ptr<SwImpBlocks> pImp;
-    ErrCode        nErr;
+    std::unique_ptr<SwImpBlocks> m_pImp;
+    ErrCode        m_nErr;
 
 public:
     SwTextBlocks( const OUString& );
@@ -322,7 +322,7 @@ public:
     void   ClearDoc();                  // Delete Doc-contents.
     OUString GetName() const;
     void   SetName( const OUString& );
-    ErrCode const & GetError() const { return nErr; }
+    ErrCode const & GetError() const { return m_nErr; }
 
     OUString GetBaseURL() const;
     void   SetBaseURL( const OUString& rURL );
@@ -479,8 +479,8 @@ typedef tools::SvRef<Writer> WriterRef;
 class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
-    tools::SvRef<SotStorage> pStg;
-    css::uno::Reference < css::embed::XStorage > xStg;
+    tools::SvRef<SotStorage> m_pStg;
+    css::uno::Reference < css::embed::XStorage > m_xStg;
 
     // Create error at call.
     virtual ErrCode WriteStream() override;
@@ -497,7 +497,7 @@ public:
     virtual ErrCode Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
     virtual ErrCode Write( SwPaM&, SotStorage&, const OUString* ) override;
 
-    SotStorage& GetStorage() const       { return *pStg; }
+    SotStorage& GetStorage() const       { return *m_pStg; }
 };
 
 // Interface class for general access on special writers.

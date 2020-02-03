@@ -565,31 +565,31 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
     sal_Int32 nToken = 0;
     OUString sToken = rStr.getToken(0, ',', nToken); // 1. Charset name
     if (!sToken.isEmpty())
-        eCharSet = CharSetFromName(sToken);
+        m_eCharSet = CharSetFromName(sToken);
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 2. Line ending type
     {
         if (sToken.equalsIgnoreAsciiCase("CRLF"))
-            eCRLF_Flag = LINEEND_CRLF;
+            m_eCRLF_Flag = LINEEND_CRLF;
         else if (sToken.equalsIgnoreAsciiCase("LF"))
-            eCRLF_Flag = LINEEND_LF;
+            m_eCRLF_Flag = LINEEND_LF;
         else
-            eCRLF_Flag = LINEEND_CR;
+            m_eCRLF_Flag = LINEEND_CR;
     }
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 3. Font name
-        sFont = sToken;
+        m_sFont = sToken;
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 4. Language tag
-        nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
+        m_nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 5. Include BOM?
-        bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
+        m_bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
 }
 
 void SwAsciiOptions::WriteUserData(OUString& rStr)
 {
     // 1. charset
-    rStr = NameFromCharSet(eCharSet) + ",";
+    rStr = NameFromCharSet(m_eCharSet) + ",";
 
     // 2. LineEnd
-    switch(eCRLF_Flag)
+    switch(m_eCRLF_Flag)
     {
     case LINEEND_CRLF:
         rStr += "CRLF";
@@ -604,17 +604,17 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
     rStr += ",";
 
     // 3. Fontname
-    rStr += sFont + ",";
+    rStr += m_sFont + ",";
 
     // 4. Language
-    if (nLanguage)
+    if (m_nLanguage)
     {
-        rStr += LanguageTag::convertToBcp47(nLanguage);
+        rStr += LanguageTag::convertToBcp47(m_nLanguage);
     }
     rStr += ",";
 
     // 5. Whether to include byte-order-mark
-    if( bIncludeBOM )
+    if( m_bIncludeBOM )
     {
         rStr += "true";
     }

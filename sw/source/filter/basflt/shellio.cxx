@@ -75,14 +75,14 @@ ErrCode SwReader::Read( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->m_pStream = pStrm;
-    po->m_pStorage  = pStg;
-    po->m_xStorage  = xStg;
-    po->m_bInsertMode = nullptr != pCursor;
+    po->m_pStream = mpStrm;
+    po->m_pStorage  = mpStg;
+    po->m_xStorage  = mxStg;
+    po->m_bInsertMode = nullptr != mpCursor;
     po->m_bSkipImages = mbSkipImages;
 
     // if a Medium is selected, get its Stream
-    if( nullptr != (po->m_pMedium = pMedium ) &&
+    if( nullptr != (po->m_pMedium = mpMedium ) &&
         !po->SetStrmStgPtr() )
     {
         po->SetReadUTF8( false );
@@ -104,8 +104,8 @@ ErrCode SwReader::Read( const Reader& rOptions )
     mxDoc->SetInXMLImport( dynamic_cast< XMLReader* >(po) !=  nullptr );
 
     SwPaM *pPam;
-    if( pCursor )
-        pPam = pCursor;
+    if( mpCursor )
+        pPam = mpCursor;
     else
     {
         // if the Reader was not called by a Shell, create a PaM ourselves
@@ -123,7 +123,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
     bool bReadPageDescs = false;
     bool const bDocUndo = mxDoc->GetIDocumentUndoRedo().DoesUndo();
-    bool bSaveUndo = bDocUndo && pCursor;
+    bool bSaveUndo = bDocUndo && mpCursor;
     if( bSaveUndo )
     {
         // the reading of the page template cannot be undone!
@@ -160,7 +160,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
         std::unique_ptr<SwPaM> pUndoPam;
-        if( bDocUndo || pCursor )
+        if( bDocUndo || mpCursor )
         {
             // set Pam to the previous node, so that it is not also moved
             const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
@@ -168,7 +168,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         }
 
         // store for now all Fly's
-        if( pCursor )
+        if( mpCursor )
         {
             std::copy(mxDoc->GetSpzFrameFormats()->begin(),
                 mxDoc->GetSpzFrameFormats()->end(), std::back_inserter(aFlyFrameArr));
@@ -183,7 +183,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
-        nError = po->Read( *mxDoc, sBaseURL, *pPam, aFileName );
+        nError = po->Read( *mxDoc, msBaseURL, *pPam, maFileName );
 
         // an ODF document may contain redline mode in settings.xml; save it!
         ePostReadRedlineFlags = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
@@ -216,7 +216,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
             }
         }
 
-        if( pCursor )
+        if( mpCursor )
         {
             *pUndoPam->GetMark() = *pPam->GetPoint();
             ++pUndoPam->GetPoint()->nNode;
@@ -277,7 +277,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                                 {
                                     pFrameFormat->MakeFrames();
                                 }
-                                else if( pCursor )
+                                else if( mpCursor )
                                 {
                                     mxDoc->SetContainsAtPageObjWithContentAnchor( true );
                                 }
@@ -323,10 +323,10 @@ ErrCode SwReader::Read( const Reader& rOptions )
          *     When Seeking, the current Status-, EOF- and bad-Bit is set;
          *     nobody knows why
          */
-        if( pStrm )
+        if( mpStrm )
         {
-            pStrm->Seek(0);
-            pStrm->ResetError();
+            mpStrm->Seek(0);
+            mpStrm->ResetError();
         }
     }
 
@@ -356,7 +356,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     }
 
     // delete Pam if it was created only for reading
-    if( !pCursor )
+    if( !mpCursor )
     {
         delete pPam;          // open a new one
 
@@ -374,7 +374,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     mxDoc->SetOle2Link( aOLELink );
 
-    if( pCursor )                 // the document is now modified
+    if( mpCursor )                 // the document is now modified
         mxDoc->getIDocumentState().SetModified();
     // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
@@ -395,8 +395,8 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
 
 SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocument)
-    : SwDocFac(pDocument), pStrm(nullptr), pMedium(&rMedium), pCursor(nullptr),
-    aFileName(rFileName), mbSkipImages(false)
+    : SwDocFac(pDocument), mpStrm(nullptr), mpMedium(&rMedium), mpCursor(nullptr),
+    maFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
     SetSkipImages( rMedium.IsSkipImages() );
@@ -405,21 +405,21 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
 
 // Read into an existing document
 SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(nullptr), pCursor(&rPam),
-    aFileName(rFileName), mbSkipImages(false)
+    : SwDocFac(rPam.GetDoc()), mpStrm(&rStrm), mpMedium(nullptr), mpCursor(&rPam),
+    maFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rBaseURL );
 }
 
 SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(nullptr), pMedium(&rMedium),
-    pCursor(&rPam), aFileName(rFileName), mbSkipImages(false)
+    : SwDocFac(rPam.GetDoc()), mpStrm(nullptr), mpMedium(&rMedium),
+    mpCursor(&rPam), maFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
 SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUString& rFilename, SwPaM &rPam )
-    : SwDocFac(rPam.GetDoc()), pStrm(nullptr), xStg( rStg ), pMedium(nullptr), pCursor(&rPam), aFileName(rFilename), mbSkipImages(false)
+    : SwDocFac(rPam.GetDoc()), mpStrm(nullptr), mxStg( rStg ), mpMedium(nullptr), mpCursor(&rPam), maFileName(rFilename), mbSkipImages(false)
 {
 }
 
@@ -636,13 +636,13 @@ bool SwReader::HasGlossaries( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->m_pStream = pStrm;
-    po->m_pStorage  = pStg;
+    po->m_pStream = mpStrm;
+    po->m_pStorage  = mpStg;
     po->m_bInsertMode = false;
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if(  nullptr == (po->m_pMedium = pMedium ) || po->SetStrmStgPtr() )
+    if(  nullptr == (po->m_pMedium = mpMedium ) || po->SetStrmStgPtr() )
         bRet = po->HasGlossaries();
     return bRet;
 }
@@ -652,13 +652,13 @@ bool SwReader::ReadGlossaries( const Reader& rOptions,
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
-    po->m_pStream = pStrm;
-    po->m_pStorage  = pStg;
+    po->m_pStream = mpStrm;
+    po->m_pStorage  = mpStg;
     po->m_bInsertMode = false;
 
     // if a Medium is selected, get its Stream
     bool bRet = false;
-    if( nullptr == (po->m_pMedium = pMedium ) || po->SetStrmStgPtr() )
+    if( nullptr == (po->m_pMedium = mpMedium ) || po->SetStrmStgPtr() )
         bRet = po->ReadGlossaries( rBlocks, bSaveRelFiles );
     return bRet;
 }
