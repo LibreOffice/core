@@ -55,6 +55,7 @@ static int bText=0;
 %}
 
 %option yylineno
+%option nounput
 %option never-interactive
 
 %p 24000
