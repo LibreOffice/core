@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e61aad76_e4fda3da",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-03T14:27:23Z",
+      "side": 1,
+      "message": "But the next line unconditionally dereferences pData, so it looks like the DBG_ASSERT wanted to assert the invariant that pData must be non-null here (rather than log a warning if it is not)?\n(I didn\u0027t yet look at the other changes in this file.)",
+      "revId": "5dbeb56660c025487c4a080e8f964e427455a7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
