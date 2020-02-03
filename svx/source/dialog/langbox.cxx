@@ -34,6 +34,11 @@
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 
+#include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
@@ -185,8 +190,10 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
     }
 }
 
-void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
-        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
+void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLangNone,
+                                     bool bLangNoneIsLangAll, bool bCheckSpellAvail,
+                                     const LanguageType defaultLangType, sal_Int16 defaultType,
+                                     bool bDefaultLangExist)
 {
     m_bHasLangNone          = bHasLangNone;
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
@@ -278,10 +285,30 @@ void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         AddLanguages(aThesAvailLang, nLangList, aEntries);
     }
 
+    std::sort(aEntries.begin(), aEntries.end(),
+              [](const weld::ComboBoxEntry e1, const weld::ComboBoxEntry e2) {
+                  static const auto aSorter = comphelper::string::NaturalStringSorter(
+                      ::comphelper::getProcessComponentContext(),
+                      Application::GetSettings().GetLanguageTag().getLocale());
+                  return aSorter.compare(e1.sString, e2.sString) < 0;
+              });
+
+    sal_uInt32 nSeperatorPosition = 0;
+    if (defaultLangExist)
+    {
+        aEntries.insert(aEntries.begin(), BuildEntry(defaultLangType, defaultType));
+        nSeperatorPosition++;
+    }
+
     if (bHasLangNone)
-       aEntries.push_back(BuildEntry(LANGUAGE_NONE));
+    {
+        aEntries.insert(aEntries.begin(), BuildEntry(LANGUAGE_NONE));
+        nSeperatorPosition++;
+    }
 
     m_xControl->insert_vector(aEntries, false);
+    if (nSeperatorPosition > 0)
+        m_xControl->insert_separator(nSeperatorPosition, "");
 }
 
 int SvxLanguageBox::ImplTypeToPos(LanguageType eType) const
@@ -438,7 +465,6 @@ SvxLanguageBox::SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl)
     , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(false)
 {
-    m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, SvxLanguageBox, ChangeHdl));
 }
 
