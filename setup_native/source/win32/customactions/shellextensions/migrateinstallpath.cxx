@@ -19,46 +19,68 @@
 
 #include "shlxtmsi.hxx"
 #include <algorithm>
+#include <sstream>
 #include <systools/win32/uwinapi.h>
 
-extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath(MSIHANDLE handle)
 {
-    WCHAR   szValue[8192];
-    DWORD   nValueSize = sizeof(szValue); // yes, it is the number of bytes
-    HKEY    hKey;
-    std::wstring   sInstDir;
+    auto RegValue = [](HKEY hRoot, const WCHAR* sKey, const WCHAR* sVal) {
+        std::wstring sResult;
+
+        if (HKEY hKey; RegOpenKeyW(hRoot, sKey, &hKey) == ERROR_SUCCESS)
+        {
+            WCHAR buf[32767]; // max longpath
+            DWORD bufsize = sizeof(buf); // yes, it is the number of bytes
+            if (RegQueryValueExW(hKey, sVal, nullptr, nullptr, reinterpret_cast<LPBYTE>(buf),
+                                 &bufsize)
+                == ERROR_SUCCESS)
+            {
+                buf[std::min<size_t>(SAL_N_ELEMENTS(buf) - 1, bufsize / sizeof(*buf))] = 0;
+                sResult = buf;
+            }
+            RegCloseKey(hKey);
+        }
+
+        return sResult;
+    };
 
     std::wstring   sManufacturer = GetMsiPropertyW( handle, L"Manufacturer" );
     std::wstring   sDefinedName = GetMsiPropertyW( handle, L"DEFINEDPRODUCT" );
     std::wstring   sUpdateVersion = GetMsiPropertyW( handle, L"DEFINEDVERSION" );
     std::wstring   sUpgradeCode = GetMsiPropertyW( handle, L"UpgradeCode" );
 
-    std::wstring   sProductKey = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
+    std::wstring   sKey = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
                                         L"\\" + sUpdateVersion + L"\\" + sUpgradeCode;
 
-    if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
+    if (auto sInstDir = RegValue(HKEY_CURRENT_USER, sKey.c_str(), L"INSTALLLOCATION");
+        !sInstDir.empty())
     {
-        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
-        {
-            szValue[std::min(static_cast<unsigned int>(SAL_N_ELEMENTS(szValue) - 1), static_cast<unsigned int>(nValueSize / sizeof(*szValue)))] = 0;
-            sInstDir = szValue;
-            MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
-            // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_CURRENT_USER", MB_OK );
-        }
-
-        RegCloseKey( hKey );
+        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
+        // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_CURRENT_USER", MB_OK );
     }
-    else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
+    else if (auto sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"INSTALLLOCATION");
+             !sInstDir.empty())
     {
-        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
+        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
+        // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_LOCAL_MACHINE", MB_OK );
+    }
+    else if (std::wistringstream sOlds{ GetMsiPropertyW(handle, L"OLDPRODUCTS") }; !sOlds.eof())
+    {
+        std::wstring sOld;
+        bool bFound = false;
+        while (!bFound && std::getline(sOlds, sOld, L';'))
         {
-            szValue[std::min(static_cast<unsigned int>(SAL_N_ELEMENTS(szValue) - 1), static_cast<unsigned int>(nValueSize / sizeof(*szValue)))] = 0;
-            sInstDir = szValue;
-            MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
-            // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_LOCAL_MACHINE", MB_OK );
+            if (sOld.empty())
+                continue;
+            sKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + sOld;
+            if (auto sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"InstallLocation");
+                !sInstDir.empty())
+            {
+                MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
+                // MessageBoxW( NULL, sInstDir.c_str(), L"Found in Uninstall", MB_OK );
+                bFound = true;
+            }
         }
-
-        RegCloseKey( hKey );
     }
 
     return ERROR_SUCCESS;
