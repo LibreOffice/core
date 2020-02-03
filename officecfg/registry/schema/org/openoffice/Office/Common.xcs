@@ -2478,6 +2478,11 @@
                 <desc>ODFVER_012</desc>
               </info>
             </enumeration>
+            <enumeration oor:value="8">
+              <info>
+                <desc>ODFVER_012_EXT_COMPAT</desc>
+              </info>
+            </enumeration>
             <enumeration oor:value="3">
               <info>
                 <desc>ODFVER_LATEST</desc>
