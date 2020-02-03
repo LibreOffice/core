@@ -100,7 +100,7 @@ void clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, CDOTransferable::
         aByteSequence.realloc(nMemSize);
         LARGE_INTEGER li;
         li.QuadPart = 0;
-        hr = pStream->Seek(li, STREAM_SEEK_SET, NULL);
+        hr = pStream->Seek(li, STREAM_SEEK_SET, nullptr);
         if (FAILED(hr))
         {
             SAL_WARN("dtrans", "clipDataToByteStream: Seek() failed");
