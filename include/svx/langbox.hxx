@@ -77,7 +77,9 @@ public:
     SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
-                            bool bCheckSpellAvail = false );
+                            bool bCheckSpellAvail = false, bool bDefaultLangExist = false,
+                            LanguageType eDefaultLangType = LANGUAGE_NONE,
+                            sal_Int16 nDefaultType = 0 );
     void            InsertLanguage(const LanguageType nLangType);
     void            InsertDefaultLanguage(sal_Int16 nType);
 
