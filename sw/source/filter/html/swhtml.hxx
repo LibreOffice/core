@@ -924,6 +924,8 @@ public:
 
     bool IsReqIF() const;
 
+    bool IsReadingHeaderOrFooter() const { return m_bReadingHeaderOrFooter; }
+
     void NotifyMacroEventRead();
 
     /// Strips query and fragment from a URL path if base URL is a file:// one.

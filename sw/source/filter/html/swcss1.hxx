@@ -33,6 +33,7 @@ class SwTextFormatColl;
 class SvxBrushItem;
 class SwFormatDrop;
 class SwPageDesc;
+class SwHTMLParser;
 
 // This header looks harmless, but includes still quite
 // inconspicuous one or the other! On the other hand this class
@@ -41,6 +42,7 @@ class SwPageDesc;
 class SwCSS1Parser : public SvxCSS1Parser
 {
     SwDoc *m_pDoc;
+    SwHTMLParser const& m_rHTMLParser;
 
     sal_uLong m_aFontHeights[7];
 
@@ -75,7 +77,8 @@ protected:
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 const aFHeight[7], const OUString& rBaseURL, bool bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, SwHTMLParser const& rParser,
+        sal_uInt32 const aFHeight[7], const OUString& rBaseURL, bool bNewDoc);
     virtual ~SwCSS1Parser() override;
 
     virtual bool ParseStyleSheet( const OUString& rIn ) override;
