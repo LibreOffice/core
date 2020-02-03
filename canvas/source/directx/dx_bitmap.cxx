@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <memory>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <tools/diagnose_ex.h>
@@ -56,19 +58,17 @@ namespace dxcanvas
         // create container for pixel data
         if(mbAlpha)
         {
-            mpBitmap.reset(
-                new Gdiplus::Bitmap(
+            mpBitmap = std::make_shared<Gdiplus::Bitmap>(
                     maSize.getX(),
                     maSize.getY(),
-                    PixelFormat32bppARGB));
+                    PixelFormat32bppARGB);
         }
         else
         {
-            mpBitmap.reset(
-                new Gdiplus::Bitmap(
+            mpBitmap = std::make_shared<Gdiplus::Bitmap>(
                     maSize.getX(),
                     maSize.getY(),
-                    PixelFormat24bppRGB));
+                    PixelFormat24bppRGB);
         }
 
         mpGraphics.reset( tools::createGraphicsFromBitmap(mpBitmap) );

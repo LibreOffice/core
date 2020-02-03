@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/rendering/PanoseWeight.hpp>
@@ -57,14 +60,14 @@ namespace dxcanvas
         mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
     {
-        mpFontFamily.reset( new Gdiplus::FontFamily(o3tl::toW(rFontRequest.FontDescription.FamilyName.getStr()),nullptr) );
+        mpFontFamily = std::make_shared<Gdiplus::FontFamily>(o3tl::toW(rFontRequest.FontDescription.FamilyName.getStr()),nullptr);
         if( !mpFontFamily->IsAvailable() )
-            mpFontFamily.reset( new Gdiplus::FontFamily(L"Arial",nullptr) );
+            mpFontFamily = std::make_shared<Gdiplus::FontFamily>(L"Arial",nullptr);
 
-        mpFont.reset( new Gdiplus::Font( mpFontFamily.get(),
+        mpFont = std::make_shared<Gdiplus::Font>( mpFontFamily.get(),
                                          static_cast<Gdiplus::REAL>(rFontRequest.CellSize),
                                          calcFontStyle( rFontRequest ),
-                                         Gdiplus::UnitWorld ));
+                                         Gdiplus::UnitWorld );
 
         ::canvas::tools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }

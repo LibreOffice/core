@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <memory>
 #include <string.h>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -1205,7 +1206,7 @@ namespace dxcanvas
 
     IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent )
     {
-        return IDXRenderModuleSharedPtr( new DXRenderModule(rParent) );
+        return std::make_shared<DXRenderModule>(rParent);
     }
 }
 
