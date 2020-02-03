@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Look for headers inside include/ that can be moved into their respective modules.
 

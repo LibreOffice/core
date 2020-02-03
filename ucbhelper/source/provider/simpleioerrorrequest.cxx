@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <ucbhelper/simpleioerrorrequest.hxx>
+#include "simpleioerrorrequest.hxx"
 
 using namespace com::sun::star;
 using namespace ucbhelper;

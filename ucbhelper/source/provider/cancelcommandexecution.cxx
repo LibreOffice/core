@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <ucbhelper/simpleioerrorrequest.hxx>
+#include "simpleioerrorrequest.hxx"
 
 using namespace com::sun::star;
 
