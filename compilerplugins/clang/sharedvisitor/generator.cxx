@@ -296,6 +296,16 @@ void generateVisitor( PluginType type )
             output << "            --activeRefCount;\n";
             output << "        " << plugin.variableName << " = save" << plugin.className << ";\n";
         }
+        output << "        if( false ) // silence -Wunused-function warnings\n";
+        output << "        {\n";
+        for( const PluginInfo& plugin : plugins[ type ] )
+        {
+            auto pluginTraverse = plugin.traverseFunctions.find( traverse );
+            if( pluginTraverse == plugin.traverseFunctions.end())
+                continue;
+            output << "            " << plugin.variableName << "->" << pluginTraverse->name << "( arg );\n";
+        }
+        output << "        }\n";
         output << "        return ret;\n";
         output << "    }\n";
     }
