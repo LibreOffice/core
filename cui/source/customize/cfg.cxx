@@ -1562,12 +1562,10 @@ IMPL_LINK_NOARG(SvxConfigPage, FunctionDoubleClickHdl, weld::TreeView&, bool)
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
 {
-    // Store the tooltip of the description field at first run
-    static const OUString sDescTooltip = m_xDescriptionField->get_tooltip_text();
-
     // GetScriptURL() returns a non-empty string if a
     // valid command is selected on the left box
-    bool bIsValidCommand = !GetScriptURL().isEmpty();
+    OUString aSelectCommand = GetScriptURL();
+    bool bIsValidCommand = !aSelectCommand.isEmpty();
 
     // Enable/disable Add and Remove buttons depending on current selection
     if (bIsValidCommand)
@@ -1576,6 +1574,13 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
         m_xRemoveCommandButton->set_sensitive(true);
 
         m_xDescriptionField->set_text(m_xFunctions->GetHelpText(false));
+
+        if (!SfxHelp::IsHelpInstalled())
+        {
+            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aSelectCommand, m_aModuleId);
+            OUString aDescriptionText = vcl::CommandInfoProvider::GetTooltipForCommand(aSelectCommand, aProperties, m_xFrame);
+            m_xDescriptionField->set_text(aDescriptionText);
+        }
     }
     else
     {
@@ -1584,23 +1589,6 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
         m_xRemoveCommandButton->set_sensitive(false);
 
         m_xDescriptionField->set_text("");
-    }
-
-    // Disable the description field and its label if the local help is not installed
-    // And inform the user via tooltips
-    if ( !SfxHelp::IsHelpInstalled() )
-    {
-        m_xDescriptionField->set_sensitive(false);
-        m_xDescriptionFieldLb->set_sensitive(false);
-        m_xDescriptionField->set_tooltip_text( sDescTooltip );
-        m_xDescriptionFieldLb->set_tooltip_text( sDescTooltip );
-    }
-    else
-    {
-        m_xDescriptionField->set_sensitive(true);
-        m_xDescriptionFieldLb->set_sensitive(true);
-        m_xDescriptionField->set_tooltip_text("");
-        m_xDescriptionFieldLb->set_tooltip_text("");
     }
 }
 
