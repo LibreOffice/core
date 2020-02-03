@@ -58,7 +58,7 @@ public:
      */
     enum ODFDefaultVersion
     {
-        ODFVER_UNKNOWN = 0, // unknown
+        ODFVER_UNKNOWN = 0, // unknown - very dubious, avoid using
         ODFVER_010 = 1,         // ODF 1.0
         ODFVER_011 = 2,         // ODF 1.1
         DO_NOT_USE = 3,         // Do not use this, only here for compatibility with pre OOo 3.2 configuration
