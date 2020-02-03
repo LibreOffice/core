@@ -275,7 +275,7 @@
               <object class="GtkTextView" id="desc">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="menuassignpage|desc">Local help is not installed.</property>
+                <property name="tooltip_text" translatable="yes" context="menuassignpage|desc">Description of the currently selected function.</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
