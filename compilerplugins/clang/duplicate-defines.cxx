@@ -77,6 +77,11 @@ void DuplicateDefines::MacroDefined(const Token& rMacroNameTok, const MacroDirec
     // we replicate these macros in all the .hrc files
     if (aMacroName == "NC_" || aMacroName == "NNC_")
         return;
+    // We define this prior to including <windows.h>:
+    if (aMacroName == "WIN32_LEAN_AND_MEAN")
+    {
+        return;
+    }
     // TODO no obvious fix for these
     if (aMacroName == "FID_SEARCH_NOW" || aMacroName == "FID_SVX_START" || aMacroName == "FN_PARAM")
         return;
