@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3507060_893a3ad3",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-03T21:14:13Z",
+      "side": 1,
+      "message": "If there is a reference with a definition of the constant, it would be nice to mention it here in a comment.",
+      "range": {
+        "startLine": 5,
+        "startChar": 35,
+        "endLine": 5,
+        "endChar": 42
+      },
+      "revId": "fd222ea85e9060b724fdb6c83f2a4ed1c54cdab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e515d1_76434ac6",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-03T21:14:13Z",
+      "side": 1,
+      "message": "Please *no* message boxes in the script! This is not acceptable. It will nag people every time configure is run (e.g.,after each pull which changes autogen.sh or configure.ac - as many times as there will be detected AVs. And - you know, it would also be run headlessly.\n\nOnly output things to console.",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 10
+      },
+      "revId": "fd222ea85e9060b724fdb6c83f2a4ed1c54cdab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92c10948_dd4cf406",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 13057,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-03T21:14:13Z",
+      "side": 1,
+      "message": "Please drop the batfile. You may run console script host directly ftom here. (and even if you would use the bat, its name should be something more relevant ;-).",
+      "range": {
+        "startLine": 13057,
+        "startChar": 10,
+        "endLine": 13057,
+        "endChar": 18
+      },
+      "revId": "fd222ea85e9060b724fdb6c83f2a4ed1c54cdab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
