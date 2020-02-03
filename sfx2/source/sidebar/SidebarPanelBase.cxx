@@ -156,15 +156,14 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
     else
     {
         ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mpControl.get());
-
-        if (isLayoutEnabled(mpControl))
+        if (pLayoutableWindow)
+            return pLayoutableWindow->GetHeightForWidth(nWidth);
+        else if (isLayoutEnabled(mpControl))
         {
             // widget layout-based sidebar
             Size aSize(mpControl->get_preferred_size());
             return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
         }
-        else if (pLayoutableWindow != nullptr)
-            return pLayoutableWindow->GetHeightForWidth(nWidth);
         else if (mpControl != nullptr)
         {
             const sal_Int32 nHeight (mpControl->GetSizePixel().Height());

@@ -184,13 +184,13 @@ void CurrentMasterPagesSelector::UpdateSelection()
     }
 
     // Find the items for the master pages in the set.
-    sal_uInt16 nItemCount (PreviewValueSet::GetItemCount());
+    sal_uInt16 nItemCount (mxPreviewValueSet->GetItemCount());
     for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
-        OUString sName (PreviewValueSet::GetItemText (nIndex));
+        OUString sName (mxPreviewValueSet->GetItemText (nIndex));
         if (aNames.find(sName) != aNames.end())
         {
-            PreviewValueSet::SelectItem (nIndex);
+            mxPreviewValueSet->SelectItem (nIndex);
         }
     }
 }

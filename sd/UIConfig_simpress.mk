@@ -131,6 +131,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/layoutwindow \
 	sd/uiconfig/simpress/ui/masterlayoutdlg \
 	sd/uiconfig/simpress/ui/mastermenu \
+	sd/uiconfig/simpress/ui/masterpagepanel \
 	sd/uiconfig/simpress/ui/navigatorpanel \
 	sd/uiconfig/simpress/ui/notebookbar \
 	sd/uiconfig/simpress/ui/notebookbar_compact \

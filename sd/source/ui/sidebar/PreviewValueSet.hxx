@@ -26,11 +26,11 @@ namespace sd { namespace sidebar {
 
 /** Adapt the svtools valueset to the needs of the master page controls.
 */
-class PreviewValueSet
-    : public ValueSet
+class PreviewValueSet : public SvtValueSet
 {
 public:
-    explicit PreviewValueSet (vcl::Window* pParent);
+    explicit PreviewValueSet();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~PreviewValueSet() override;
 
     void SetRightMouseClickHandler (const Link<const MouseEvent&,void>& rLink);
@@ -46,7 +46,7 @@ public:
     void Rearrange();
 
 protected:
-    virtual void MouseButtonDown (const MouseEvent& rEvent) override;
+    virtual bool MouseButtonDown (const MouseEvent& rEvent) override;
 
 private:
     Link<const MouseEvent&,void> maRightMouseClickHandler;

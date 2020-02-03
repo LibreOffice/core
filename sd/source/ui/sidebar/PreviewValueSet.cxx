@@ -25,15 +25,21 @@ namespace sd::sidebar {
 static const int gnBorderWidth(3);
 static const int gnBorderHeight(3);
 
-PreviewValueSet::PreviewValueSet (vcl::Window* pParent)
-    : ValueSet (pParent, WB_TABSTOP),
-      maPreviewSize(10,10)
+PreviewValueSet::PreviewValueSet()
+    : SvtValueSet(nullptr)
+    , maPreviewSize(10,10)
 {
     SetStyle (
         GetStyle()
         & ~(WB_ITEMBORDER)// | WB_MENUSTYLEVALUESET)
         //        | WB_FLATVALUESET);
         );
+}
+
+void PreviewValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    SvtValueSet::SetDrawingArea(pDrawingArea);
+
     SetColCount(2);
     SetExtraSpacing (2);
 }
@@ -52,18 +58,19 @@ void PreviewValueSet::SetRightMouseClickHandler (const Link<const MouseEvent&,vo
     maRightMouseClickHandler = rLink;
 }
 
-void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
+bool PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.IsRight())
+    {
         maRightMouseClickHandler.Call(rEvent);
-    else
-        ValueSet::MouseButtonDown(rEvent);
-
+        return true;
+    }
+    return SvtValueSet::MouseButtonDown(rEvent);
 }
 
 void PreviewValueSet::Resize()
 {
-    ValueSet::Resize ();
+    SvtValueSet::Resize();
 
     Size aWindowSize (GetOutputSizePixel());
     if (aWindowSize.Width()>0 && aWindowSize.Height()>0)
