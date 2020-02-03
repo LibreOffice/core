@@ -3521,7 +3521,8 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), m_aTableStyleConf );
+        impl_borders(m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma),
+                     m_aTableStyleConfs.back());
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -3560,6 +3561,8 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
 {
+    m_aTableStyleConfs.push_back({});
+
     // In case any paragraph SDT's are open, close them here.
     EndParaSdtBlock();
 
@@ -3593,7 +3596,7 @@ void DocxAttributeOutput::EndTable()
     // Cleans the table helper
     m_xTableWrt.reset();
 
-    m_aTableStyleConf.clear();
+    m_aTableStyleConfs.pop_back();
 }
 
 void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
@@ -3823,7 +3826,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // We should clear the TableStyle map. In case of Table inside multiple tables it contains the
     // table border style of the previous table.
-    m_aTableStyleConf.clear();
+    std::map<SvxBoxItemLine, css::table::BorderLine2>& rTableStyleConf = m_aTableStyleConfs.back();
+    rTableStyleConf.clear();
 
     // Extract properties from grab bag
     for( const auto & rGrabBagElement : aGrabBag )
@@ -3834,13 +3838,16 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             m_pSerializer->singleElementNS(XML_w, XML_tblStyle, FSNS(XML_w, XML_val), sStyleName);
         }
         else if( rGrabBagElement.first == "TableStyleTopBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::TOP ] = rGrabBagElement.second.get<table::BorderLine2>();
+            rTableStyleConf[SvxBoxItemLine::TOP] = rGrabBagElement.second.get<table::BorderLine2>();
         else if( rGrabBagElement.first == "TableStyleBottomBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::BOTTOM ] = rGrabBagElement.second.get<table::BorderLine2>();
+            rTableStyleConf[SvxBoxItemLine::BOTTOM]
+                = rGrabBagElement.second.get<table::BorderLine2>();
         else if( rGrabBagElement.first == "TableStyleLeftBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::LEFT ] = rGrabBagElement.second.get<table::BorderLine2>();
+            rTableStyleConf[SvxBoxItemLine::LEFT]
+                = rGrabBagElement.second.get<table::BorderLine2>();
         else if( rGrabBagElement.first == "TableStyleRightBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::RIGHT ] = rGrabBagElement.second.get<table::BorderLine2>();
+            rTableStyleConf[SvxBoxItemLine::RIGHT]
+                = rGrabBagElement.second.get<table::BorderLine2>();
         else if (rGrabBagElement.first == "TableStyleLook")
         {
             FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
