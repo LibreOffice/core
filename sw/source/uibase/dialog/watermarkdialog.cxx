@@ -55,12 +55,14 @@ void SwWatermarkDialog::InitFields()
         pFontList = xFontList.get();
     }
 
+    m_xFont->freeze();
     sal_uInt16 nFontCount = pFontList->GetFontNameCount();
     for (sal_uInt16 i = 0; i < nFontCount; ++i)
     {
         const FontMetric& rFontMetric = pFontList->GetFontName(i);
         m_xFont->append_text(rFontMetric.GetFamilyName());
     }
+    m_xFont->thaw();
 
     m_xOKButton->connect_clicked(LINK(this, SwWatermarkDialog, OKButtonHdl));
 

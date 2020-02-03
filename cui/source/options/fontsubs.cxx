@@ -189,6 +189,11 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_xCheckLB->freeze();
     m_xCheckLB->clear();
 
+    m_xFont1CB->freeze();
+    m_xFont1CB->clear();
+    m_xFont2CB->freeze();
+    m_xFont2CB->clear();
+
     FontList aFntLst(Application::GetDefaultDevice());
     sal_uInt16 nFontCount = aFntLst.GetFontNameCount();
     for (sal_uInt16 i = 0; i < nFontCount; ++i)
@@ -197,6 +202,9 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
         m_xFont1CB->append_text(rFontMetric.GetFamilyName());
         m_xFont2CB->append_text(rFontMetric.GetFamilyName());
     }
+
+    m_xFont2CB->thaw();
+    m_xFont1CB->thaw();
 
     sal_Int32 nCount = m_xConfig->SubstitutionCount();
     if (nCount)
