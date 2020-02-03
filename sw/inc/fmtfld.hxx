@@ -48,7 +48,6 @@ class SW_DLLPUBLIC SwFormatField
     SwTextField* mpTextField; // the TextAttribute
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
 public:

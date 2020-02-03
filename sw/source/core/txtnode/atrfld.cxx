@@ -226,96 +226,95 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     if( !mpTextField )
         return;
 
-    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
-    if ( pHint )
+    if (const SwFieldHint* pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
         // replace field content by text
-        SwPaM* pPaM = pHint->m_pPaM;
+        SwPaM* pPaM = pFieldHint->m_pPaM;
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
         pPaM->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(&rTextNode), mpTextField->GetStart() );
 
-        OUString const aEntry(mpField->ExpandField(pDoc->IsClipBoard(), pHint->m_pLayout));
+        OUString const aEntry(mpField->ExpandField(pDoc->IsClipBoard(), pFieldHint->m_pLayout));
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
         pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
         pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
-    }
-}
-
-void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
-{
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached UNO object
-        m_wXTextField = nullptr;
-        // ??? why does this Modify method not already do this?
-        NotifyClients(pOld, pNew);
-        return;
-    }
-
-    if( !mpTextField )
-        return;
-
-    // don't do anything, especially not expand!
-    if( pNew && pNew->Which() == RES_OBJECTDYING )
-        return;
-
-    SwTextNode* pTextNd = &mpTextField->GetTextNode();
-    OSL_ENSURE( pTextNd, "Where is my Node?" );
-    if( pNew )
+    } else if (const sw::LegacyModifyHint* pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
-        switch( pNew->Which() )
-        {
-        case RES_REFMARKFLD_UPDATE:
-                // update GetRef fields
-                if( SwFieldIds::GetRef == mpField->GetTyp()->Which() )
-                {
-                    // #i81002#
-                    static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField );
-                }
-                break;
-        case RES_DOCPOS_UPDATE:
-                // handled in SwTextFrame::Modify()
-                pTextNd->ModifyNotification( pNew, this );
-                return;
-
-        case RES_ATTRSET_CHG:
-        case RES_FMT_CHG:
-                pTextNd->ModifyNotification( pOld, pNew );
-                return;
-        default:
-                break;
-        }
-    }
-
-    switch (mpField->GetTyp()->Which())
-    {
-        case SwFieldIds::HiddenPara:
-            if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
-                break;
-            [[fallthrough]];
-        case SwFieldIds::DbSetNumber:
-        case SwFieldIds::DbNumSet:
-        case SwFieldIds::DbNextSet:
-        case SwFieldIds::DatabaseName:
-            pTextNd->ModifyNotification( nullptr, pNew);
+        auto pOld = pLegacyHint->m_pOld;
+        auto pNew = pLegacyHint->m_pNew;
+        if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+        {   // invalidate cached UNO object
+            m_wXTextField = nullptr;
+            // ??? why does this Modify method not already do this?
+            NotifyClients(pOld, pNew);
             return;
-        default: break;
-    }
-
-    if( SwFieldIds::User == mpField->GetTyp()->Which() )
-    {
-        SwUserFieldType* pType = static_cast<SwUserFieldType*>(mpField->GetTyp());
-        if(!pType->IsValid())
-        {
-            SwCalc aCalc( *pTextNd->GetDoc() );
-            pType->GetValue( aCalc );
         }
-    }
 
-    const bool bForceNotify = (pOld == nullptr) && (pNew == nullptr);
-    mpTextField->ExpandTextField( bForceNotify );
+        if( !mpTextField )
+            return;
+
+        // don't do anything, especially not expand!
+        if( pNew && pNew->Which() == RES_OBJECTDYING )
+            return;
+
+        SwTextNode* pTextNd = &mpTextField->GetTextNode();
+        OSL_ENSURE( pTextNd, "Where is my Node?" );
+        if( pNew )
+        {
+            switch( pNew->Which() )
+            {
+            case RES_REFMARKFLD_UPDATE:
+                    // update GetRef fields
+                    if( SwFieldIds::GetRef == mpField->GetTyp()->Which() )
+                    {
+                        // #i81002#
+                        static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField );
+                    }
+                    break;
+            case RES_DOCPOS_UPDATE:
+                    // handled in SwTextFrame::Modify()
+                    pTextNd->ModifyNotification( pNew, this );
+                    return;
+
+            case RES_ATTRSET_CHG:
+            case RES_FMT_CHG:
+                    pTextNd->ModifyNotification( pOld, pNew );
+                    return;
+            default:
+                    break;
+            }
+        }
+
+        switch (mpField->GetTyp()->Which())
+        {
+            case SwFieldIds::HiddenPara:
+                if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
+                    break;
+                [[fallthrough]];
+            case SwFieldIds::DbSetNumber:
+            case SwFieldIds::DbNumSet:
+            case SwFieldIds::DbNextSet:
+            case SwFieldIds::DatabaseName:
+                pTextNd->ModifyNotification( nullptr, pNew);
+                return;
+            default: break;
+        }
+
+        if( SwFieldIds::User == mpField->GetTyp()->Which() )
+        {
+            SwUserFieldType* pType = static_cast<SwUserFieldType*>(mpField->GetTyp());
+            if(!pType->IsValid())
+            {
+                SwCalc aCalc( *pTextNd->GetDoc() );
+                pType->GetValue( aCalc );
+            }
+        }
+
+        const bool bForceNotify = (pOld == nullptr) && (pNew == nullptr);
+        mpTextField->ExpandTextField( bForceNotify );
+    }
 }
 
 bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const
