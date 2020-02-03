@@ -13,6 +13,7 @@
 #include <cassert>
 #include <string>
 #include <iostream>
+#include <locale>
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
