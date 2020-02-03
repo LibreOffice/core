@@ -12,12 +12,10 @@
 
 #include <sal/config.h>
 
-#include <test/testdllapi.hxx>
-
 namespace test {
 
 // Calls InitVCL etc.; needed from multiple places in the test infrastructure:
-OOO_DLLPUBLIC_TEST_SETUPVCL void setUpVcl(bool forceHeadless = false);
+void setUpVcl(bool forceHeadless = false);
 
 }
 
