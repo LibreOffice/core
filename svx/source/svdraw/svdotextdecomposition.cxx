@@ -1108,12 +1108,6 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
 
-    if(rSdrBlockTextPrimitive.getClipOnBounds())
-    {
-        aClipRange.expand(-aAdjOffset);
-        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()) - aAdjOffset);
-    }
-
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
     aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);

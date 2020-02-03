@@ -119,7 +119,7 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
-    SC_DLLPUBLIC ScPostIt* ImportNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate );
+    SC_DLLPUBLIC ScPostIt* ImportNote( const ScAddress& rPos, const OUString& rNoteText );
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                            bool bApi );

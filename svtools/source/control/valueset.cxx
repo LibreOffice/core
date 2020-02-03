@@ -1441,12 +1441,11 @@ void ValueSet::Select()
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const OUString& rText, size_t nPos,
-                           bool bShowLegend )
+                           const OUString& rText, size_t nPos )
 {
     std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
-    pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
+    pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
     ImplInsertItem( std::move(pItem), nPos );

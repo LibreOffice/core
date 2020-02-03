@@ -330,8 +330,7 @@ namespace drawinglayer::primitive2d
                         rText.isFixedCellHeight(),
                         rText.isScroll(),
                         bCellText,
-                        bWordWrap,
-                        false/*bClipOnBounds*/));
+                        bWordWrap));
                 }
             }
 

@@ -532,8 +532,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             if (pFieldmark!=nullptr) {
                 // adapt redline positions to inserted field mark start
                 // dummy char (assume not necessary for end dummy char)
-                m_xRedlineStack->MoveAttrs(*aFieldPam.Start(),
-                        RedlineStack::MoveAttrsMode::FieldmarkInserted);
+                m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
                 const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
             }
@@ -633,8 +632,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     {
                         // adapt redline positions to inserted field mark start
                         // dummy char (assume not necessary for end dummy char)
-                        m_xRedlineStack->MoveAttrs(*aFieldPam.Start(),
-                            RedlineStack::MoveAttrsMode::FieldmarkInserted);
+                        m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
                         const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
                         pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
                         OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );

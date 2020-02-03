@@ -688,7 +688,7 @@ void SvImpLBox::ShowCursor( bool bShow )
 
 void SvImpLBox::UpdateAll( bool bInvalidateCompleteView )
 {
-    FindMostRight(nullptr);
+    FindMostRight();
     m_aVerSBar->SetRange( Range(0, m_pView->GetVisibleCount()-1 ) );
     SyncVerThumb();
     FillView();
@@ -1482,7 +1482,7 @@ void SvImpLBox::EntryExpanded( SvTreeListEntry* pEntry )
     if( IsLineVisible(nY) )
     {
         InvalidateEntriesFrom( nY );
-        FindMostRight( pEntry, nullptr  );
+        FindMostRight( pEntry );
     }
     m_aVerSBar->SetRange( Range(0, m_pView->GetVisibleCount()-1 ) );
     // if we expanded before the thumb, the thumb's position has to be
@@ -1501,7 +1501,7 @@ void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
 
     if( !m_pMostRightEntry || m_pTree->IsChild( pEntry,m_pMostRightEntry ) )
     {
-        FindMostRight(nullptr);
+        FindMostRight();
     }
 
     if( m_pStartEntry )
@@ -1694,7 +1694,7 @@ void SvImpLBox::EntryRemoved()
     if( GetUpdateMode())
     {
         if( m_nFlags & LBoxFlags::RemovedRecalcMostRight )
-            FindMostRight(nullptr);
+            FindMostRight();
         m_aVerSBar->SetRange( Range(0, m_pView->GetVisibleCount()-1 ) );
         FillView();
         if( m_pStartEntry )
@@ -1767,7 +1767,7 @@ void SvImpLBox::EntryMoved( SvTreeListEntry* pEntry )
     m_aVerSBar->SetRange( Range(0, m_pView->GetVisibleCount()-1));
     sal_uInt16 nFirstPos = static_cast<sal_uInt16>(m_pTree->GetAbsPos( m_pStartEntry ));
     sal_uInt16 nNewPos = static_cast<sal_uInt16>(m_pTree->GetAbsPos( pEntry ));
-    FindMostRight(nullptr);
+    FindMostRight();
     if( nNewPos < nFirstPos ) // HACK!
         m_pStartEntry = pEntry;
     SyncVerThumb();
@@ -3212,7 +3212,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
     return false;
 }
 
-void SvImpLBox::FindMostRight( SvTreeListEntry const * pEntryToIgnore )
+void SvImpLBox::FindMostRight()
 {
     m_nMostRight = -1;
     m_pMostRightEntry = nullptr;
@@ -3222,21 +3222,20 @@ void SvImpLBox::FindMostRight( SvTreeListEntry const * pEntryToIgnore )
     SvTreeListEntry* pEntry = m_pView->FirstVisible();
     while( pEntry )
     {
-        if( pEntry != pEntryToIgnore )
-            SetMostRight( pEntry );
+        SetMostRight( pEntry );
         pEntry = m_pView->NextVisible( pEntry );
     }
 }
 
-void SvImpLBox::FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* pEntryToIgnore )
+void SvImpLBox::FindMostRight( SvTreeListEntry* pParent )
 {
     if( !pParent )
-        FindMostRight( pEntryToIgnore );
+        FindMostRight();
     else
-        FindMostRight_Impl( pParent, pEntryToIgnore  );
+        FindMostRight_Impl( pParent );
 }
 
-void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent, SvTreeListEntry* pEntryToIgnore )
+void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent )
 {
     SvTreeListEntries& rList = m_pTree->GetChildList( pParent );
 
@@ -3244,12 +3243,9 @@ void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent, SvTreeListEntry* p
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvTreeListEntry* pChild = rList[nCur].get();
-        if( pChild != pEntryToIgnore )
-        {
-            SetMostRight( pChild );
-            if( pChild->HasChildren() && m_pView->IsExpanded( pChild ))
-                FindMostRight_Impl( pChild, pEntryToIgnore );
-        }
+        SetMostRight( pChild );
+        if( pChild->HasChildren() && m_pView->IsExpanded( pChild ))
+            FindMostRight_Impl( pChild );
     }
 }
 
@@ -3277,7 +3273,7 @@ IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg, void )
     }
     else
     {
-        FindMostRight( nullptr );
+        FindMostRight();
         ShowVerSBar();
         m_pView->Invalidate( GetVisibleArea() );
     }

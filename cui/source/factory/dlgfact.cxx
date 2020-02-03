@@ -1117,7 +1117,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateScriptErrorDialog(co
 VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(weld::Window* pParent,
         const Reference<frame::XFrame>& rxFrame)
 {
-    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_unique<SvxScriptSelectorDialog>(pParent, false/*bShowSlots*/, rxFrame));
+    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_unique<SvxScriptSelectorDialog>(pParent, rxFrame));
 }
 
 OUString AbstractScriptSelectorDialog_Impl::GetScriptURL() const

@@ -266,7 +266,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
     bool bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls( bShow );
     bShow = rTypeController.shouldShow_StackingControl();
-    m_pStackingResourceGroup->showControls( bShow, false );
+    m_pStackingResourceGroup->showControls( bShow );
     bShow = rTypeController.shouldShow_SplineControl();
     m_pSplineResourceGroup->showControls( bShow );
     bShow = rTypeController.shouldShow_GeometryControl();
@@ -344,7 +344,7 @@ void ChartTypeTabPage::initializePage()
     {
         m_xSubTypeList->Hide();
         m_pDim3DLookResourceGroup->showControls( false );
-        m_pStackingResourceGroup->showControls( false, false );
+        m_pStackingResourceGroup->showControls( false );
         m_pSplineResourceGroup->showControls( false );
         m_pGeometryResourceGroup->showControls( false );
         m_pSortByXValuesResourceGroup->showControls( false );

@@ -1169,7 +1169,7 @@ void ScTable::SortReorderByRowRefUpdate(
     SCROW nRow2 = pArray->GetLast();
 
     ScRange aMoveRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab);
-    sc::ColumnSpanSet aGrpListenerRanges(false);
+    sc::ColumnSpanSet aGrpListenerRanges;
 
     {
         // Get the range of formula group listeners within sorted range (if any).

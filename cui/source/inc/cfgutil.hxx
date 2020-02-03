@@ -257,7 +257,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
     void                            UpdateUI();
 
 public:
-    SvxScriptSelectorDialog(weld::Window* pParent, bool bShowSlots,
+    SvxScriptSelectorDialog(weld::Window* pParent,
                             const css::uno::Reference< css::frame::XFrame >& xFrame);
     virtual ~SvxScriptSelectorDialog() override;
 

@@ -352,8 +352,7 @@ namespace drawinglayer::primitive2d
             bool bFixedCellHeight,
             bool bUnlimitedPage,
             bool bCellText,
-            bool bWordWrap,
-            bool bClipOnBounds)
+            bool bWordWrap)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
             maTextRangeTransform(rTextRangeTransform),
             maSdrTextHorzAdjust(aSdrTextHorzAdjust),
@@ -361,8 +360,7 @@ namespace drawinglayer::primitive2d
             mbFixedCellHeight(bFixedCellHeight),
             mbUnlimitedPage(bUnlimitedPage),
             mbCellText(bCellText),
-            mbWordWrap(bWordWrap),
-            mbClipOnBounds(bClipOnBounds)
+            mbWordWrap(bWordWrap)
         {
         }
 
@@ -378,8 +376,7 @@ namespace drawinglayer::primitive2d
                     && isFixedCellHeight() == rCompare.isFixedCellHeight()
                     && getUnlimitedPage() == rCompare.getUnlimitedPage()
                     && getCellText() == rCompare.getCellText()
-                    && getWordWrap() == rCompare.getWordWrap()
-                    && getClipOnBounds() == rCompare.getClipOnBounds());
+                    && getWordWrap() == rCompare.getWordWrap());
             }
 
             return false;
@@ -396,8 +393,7 @@ namespace drawinglayer::primitive2d
                 isFixedCellHeight(),
                 getUnlimitedPage(),
                 getCellText(),
-                getWordWrap(),
-                getClipOnBounds());
+                getWordWrap());
         }
 
         // provide unique ID

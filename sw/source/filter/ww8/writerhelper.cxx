@@ -737,12 +737,10 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
         }
 
-        void RedlineStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode const eMode)
+        void RedlineStack::MoveAttrsFieldmarkInserted(const SwPosition& rPos)
         {
             size_t nCnt = maStack.size();
-            sal_Int32 const nInserted = eMode == MoveAttrsMode::FieldmarkInserted
-                ? 2 // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
-                : 1;
+            sal_Int32 const nInserted = 2; // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
             sal_uLong nPosNd = rPos.nNode.GetIndex();
             sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
 

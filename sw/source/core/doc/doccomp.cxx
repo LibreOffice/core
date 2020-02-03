@@ -149,8 +149,8 @@ public:
 class CompareMainText : public CompareData
 {
 public:
-    CompareMainText(SwDoc &rD, bool bRecordDiff=true)
-        : CompareData(rD, bRecordDiff)
+    CompareMainText(SwDoc &rD)
+        : CompareData(rD, false)
     {
     }
 
@@ -2082,8 +2082,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
     getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
 
-    CompareMainText aD0(rSrcDoc, false);
-    CompareMainText aD1(*this, false);
+    CompareMainText aD0(rSrcDoc);
+    CompareMainText aD1(*this);
     aD1.CompareLines( aD0 );
     if( !aD1.HasDiffs( aD0 ) )
     {

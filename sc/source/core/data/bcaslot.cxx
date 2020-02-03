@@ -1085,7 +1085,7 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     if (it == m_BulkGroupAreas.end() || m_BulkGroupAreas.key_comp()(pArea, it->first))
     {
         // Insert a new one.
-        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, std::make_unique<sc::ColumnSpanSet>(false)));
+        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, std::make_unique<sc::ColumnSpanSet>()));
     }
 
     sc::ColumnSpanSet *const pSet = it->second.get();

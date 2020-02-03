@@ -122,13 +122,11 @@ private:
 
     /** Add a property value formatted as color to the description string.
     */
-    void AddColor (const OUString& sPropertyName,
-        const OUString& sLocalizedName);
+    void AddColor (const OUString& sPropertyName);
 
     /** Add a property value formatted as integer to the description string.
     */
-    void AddInteger (const OUString& sPropertyName,
-        const OUString& sLocalizedName);
+    void AddInteger (const OUString& sPropertyName);
 };
 
 

@@ -80,7 +80,7 @@ class StackingResourceGroup : public ChangingResource
 public:
     explicit StackingResourceGroup(weld::Builder* pBuilder);
 
-    void showControls(bool bShow, bool bShowDeepStacking);
+    void showControls(bool bShow);
 
     void fillControls(const ChartTypeParameter& rParameter);
     void fillParameter(ChartTypeParameter& rParameter);

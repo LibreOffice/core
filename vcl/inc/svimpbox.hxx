@@ -181,8 +181,8 @@ private:
     SvLBoxTab*          NextTab( SvLBoxTab const * );
 
     bool                SetMostRight( SvTreeListEntry* pEntry );
-    void                FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* EntryToIgnore );
-    void                FindMostRight_Impl( SvTreeListEntry* pParent,SvTreeListEntry* EntryToIgnore  );
+    void                FindMostRight( SvTreeListEntry* pParent );
+    void                FindMostRight_Impl( SvTreeListEntry* pParent );
     void                NotifyTabsChanged();
 
     // if element at cursor can be expanded in general
@@ -233,7 +233,7 @@ protected:
     void                BeginScroll();
     void                EndScroll();
     void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
-    void                FindMostRight( SvTreeListEntry const * EntryToIgnore );
+    void                FindMostRight();
     void                FillView();
     void                ShowVerSBar();
     void                StopUserEvent();

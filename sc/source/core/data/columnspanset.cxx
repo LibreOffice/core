@@ -58,7 +58,7 @@ void ColumnSpanSet::Action::startColumn(SCTAB /*nTab*/, SCCOL /*nCol*/) {}
 
 ColumnSpanSet::ColumnAction::~ColumnAction() {}
 
-ColumnSpanSet::ColumnSpanSet(bool bInit) : mbInit(bInit) {}
+ColumnSpanSet::ColumnSpanSet() {}
 
 ColumnSpanSet::~ColumnSpanSet()
 {
@@ -77,7 +77,7 @@ ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTA
         rTab.resize(nCol+1);
 
     if (!rTab[nCol])
-        rTab[nCol].reset(new ColumnType(0, rDoc.MaxRow(), mbInit));
+        rTab[nCol].reset(new ColumnType(0, rDoc.MaxRow(), /*bInit*/false));
 
     return *rTab[nCol];
 }

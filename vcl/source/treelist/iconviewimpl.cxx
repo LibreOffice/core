@@ -351,7 +351,7 @@ void IconViewImpl::SyncVerThumb()
 
 void IconViewImpl::UpdateAll( bool bInvalidateCompleteView )
 {
-    FindMostRight( nullptr );
+    FindMostRight();
     m_aVerSBar->SetRange( Range( 0, m_pView->GetVisibleCount() ) );
     SyncVerThumb();
     FillView();

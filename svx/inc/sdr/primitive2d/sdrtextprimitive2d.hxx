@@ -199,7 +199,6 @@ namespace drawinglayer
             bool const                                    mbUnlimitedPage : 1;    // force layout with no text break
             bool const                                    mbCellText : 1;         // this is a cell text as block text
             bool const                                    mbWordWrap : 1;         // for CustomShapes text layout
-            bool const                                    mbClipOnBounds : 1;     // for CustomShapes text layout
 
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
@@ -214,8 +213,7 @@ namespace drawinglayer
                 bool bFixedCellHeight,
                 bool bUnlimitedPage,
                 bool bCellText,
-                bool bWordWrap,
-                bool bClipOnBounds);
+                bool bWordWrap);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
@@ -225,7 +223,6 @@ namespace drawinglayer
             bool getUnlimitedPage() const { return mbUnlimitedPage; }
             bool getCellText() const { return mbCellText; }
             bool getWordWrap() const { return mbWordWrap; }
-            bool getClipOnBounds() const { return mbClipOnBounds; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

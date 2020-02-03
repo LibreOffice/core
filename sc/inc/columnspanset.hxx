@@ -62,7 +62,6 @@ private:
     typedef std::vector<std::unique_ptr<ColumnType>> TableType;
 
     std::vector<std::unique_ptr<TableType>> maTables;
-    bool const mbInit;
 
     ColumnType& getColumn(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol);
 
@@ -84,7 +83,7 @@ public:
         virtual void executeSum(SCROW, SCROW, bool, double& )  { return; } ;
     };
 
-    ColumnSpanSet(bool bInit);
+    ColumnSpanSet();
     ColumnSpanSet(const ColumnSpanSet&) = delete;
     const ColumnSpanSet& operator=(const ColumnSpanSet&) = delete;
     ~ColumnSpanSet();
