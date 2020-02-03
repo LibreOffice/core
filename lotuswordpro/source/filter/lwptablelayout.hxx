@@ -81,6 +81,19 @@ class LwpRowHeadingLayout;
 class LwpConnectedCellLayout;
 class LwpColumnLayout;
 
+struct TableConvertAttempt
+{
+    sal_uInt16 mnStartRow;
+    sal_uInt16 mnEndRow;
+    sal_uInt8 mnStartCol;
+    sal_uInt8 mnEndCol;
+
+    TableConvertAttempt(sal_uInt16 nStartRow, sal_uInt16 nEndRow, sal_uInt8 nStartCol, sal_uInt8 nEndCol)
+        : mnStartRow(nStartRow), mnEndRow(nEndRow), mnStartCol(nStartCol), mnEndCol(nEndCol)
+    {
+    }
+};
+
 /**
  * @brief
  * VO_TABLELAYOUT object and functions for registering styles and converting tables
@@ -114,6 +127,8 @@ protected:
 
     sal_uInt16 m_nRows;
     sal_uInt16 m_nCols;
+
+    std::vector<TableConvertAttempt> m_aConvertingStack;
 
 private:
     //CColumnLayoutHead cColumnLayout;
