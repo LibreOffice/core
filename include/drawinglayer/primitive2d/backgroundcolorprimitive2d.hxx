@@ -24,60 +24,63 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-
 // BackgroundColorPrimitive2D class
 
 namespace drawinglayer
 {
-    namespace primitive2d
-    {
-        /** BackgroundColorPrimitive2D class
+namespace primitive2d
+{
+/** BackgroundColorPrimitive2D class
 
-            This primitive is defined to fill the whole visible Viewport with
-            the given color (and thus decomposes to a filled polygon). This
-            makes it a view-dependent primitive by definition. It only has
-            a valid decomposition if a valid Viewport is given in the
-            ViewInformation2D at decomposition time.
+    This primitive is defined to fill the whole visible Viewport with
+    the given color (and thus decomposes to a filled polygon). This
+    makes it a view-dependent primitive by definition. It only has
+    a valid decomposition if a valid Viewport is given in the
+    ViewInformation2D at decomposition time.
 
-            It will try to buffer its last decomposition using maLastViewport
-            to detect changes in the get2DDecomposition call.
-         */
-        class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the fill color to use
-            basegfx::BColor                             maBColor;
-            double mfTransparency;
+    It will try to buffer its last decomposition using maLastViewport
+    to detect changes in the get2DDecomposition call.
+ */
+class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the fill color to use
+    basegfx::BColor maBColor;
+    double mfTransparency;
 
-            /// the last used viewInformation, used from getDecomposition for buffering
-            basegfx::B2DRange                           maLastViewport;
+    /// the last used viewInformation, used from getDecomposition for buffering
+    basegfx::B2DRange maLastViewport;
 
-            /// create local decomposition
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+    /// create local decomposition
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
 
-        public:
-            /// constructor
-            explicit BackgroundColorPrimitive2D(
-                const basegfx::BColor& rBColor,
-                double fTransparency = 0);
+public:
+    /// constructor
+    explicit BackgroundColorPrimitive2D(const basegfx::BColor& rBColor, double fTransparency = 0);
 
-            /// data read access
-            const basegfx::BColor& getBColor() const { return maBColor; }
-            double getTransparency() const { return mfTransparency; }
+    /// data read access
+    const basegfx::BColor& getBColor() const { return maBColor; }
+    double getTransparency() const { return mfTransparency; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-            /// get B2Drange
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+    /// get B2Drange
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
 
-            /// Override standard getDecomposition call to be view-dependent here
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
-        };
-    } // end of namespace primitive2d
+    /// Override standard getDecomposition call to be view-dependent here
+    virtual void
+    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                       const geometry::ViewInformation2D& rViewInformation) const override;
+};
+} // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
