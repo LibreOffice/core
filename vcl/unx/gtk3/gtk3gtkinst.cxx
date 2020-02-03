@@ -12308,19 +12308,23 @@ public:
         set(pos, id_column, rId);
     }
 
-    // https://gitlab.gnome.org/GNOME/gtk/issues/94
-    // when a super tall combobox menu is activated, and the selected entry is sufficiently
-    // far down the list, then the menu doesn't appear under wayland
-    void bodge_wayland_menu_not_appearing()
+    void bodge_menu_not_appearing()
     {
         if (get_frozen())
             return;
         if (has_entry())
+        {
+            // tdf#130143 font menu not appearing with lots of entries in it
+            gtk_combo_box_set_wrap_width(m_pComboBox, get_count() > 1000 ? 2 : 0);
             return;
+        }
 #if defined(GDK_WINDOWING_WAYLAND)
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
         if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
         {
+            // https://gitlab.gnome.org/GNOME/gtk/issues/94
+            // when a super tall combobox menu is activated, and the selected entry is sufficiently
+            // far down the list, then the menu doesn't appear under wayland
             gtk_combo_box_set_wrap_width(m_pComboBox, get_count() > 30 ? 1 : 0);
         }
 #endif
@@ -12355,7 +12359,7 @@ public:
         gtk_list_store_remove(GTK_LIST_STORE(m_pTreeModel), &iter);
         m_aSeparatorRows.erase(std::remove(m_aSeparatorRows.begin(), m_aSeparatorRows.end(), pos), m_aSeparatorRows.end());
         enable_notify_events();
-        bodge_wayland_menu_not_appearing();
+        bodge_menu_not_appearing();
     }
 
     virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
@@ -12364,7 +12368,7 @@ public:
         GtkTreeIter iter;
         insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, pId, rText, pIconName, pImageSurface);
         enable_notify_events();
-        bodge_wayland_menu_not_appearing();
+        bodge_menu_not_appearing();
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -12377,7 +12381,7 @@ public:
             gtk_combo_box_set_row_separator_func(m_pComboBox, separatorFunction, this, nullptr);
         insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, "", nullptr, nullptr);
         enable_notify_events();
-        bodge_wayland_menu_not_appearing();
+        bodge_menu_not_appearing();
     }
 
     virtual int get_count() const override
@@ -12403,7 +12407,7 @@ public:
         m_aSeparatorRows.clear();
         gtk_combo_box_set_row_separator_func(m_pComboBox, nullptr, nullptr, nullptr);
         enable_notify_events();
-        bodge_wayland_menu_not_appearing();
+        bodge_menu_not_appearing();
     }
 
     virtual void make_sorted() override
@@ -12551,7 +12555,7 @@ public:
         g_object_unref(m_pTreeModel);
         enable_notify_events();
 
-        bodge_wayland_menu_not_appearing();
+        bodge_menu_not_appearing();
         bodge_area_apply_attributes_cb();
     }
 
