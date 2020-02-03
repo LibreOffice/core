@@ -29,7 +29,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vclstatuslistener.hxx>
+#include <vclstatuslistener.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <bitmaps.hlst>
 

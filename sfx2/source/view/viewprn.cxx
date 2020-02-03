@@ -41,7 +41,6 @@
 #include "viewimp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/prnmon.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
@@ -54,6 +53,8 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <toolkit/awt/vclxdevice.hxx>
+
+#include "prnmon.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

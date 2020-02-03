@@ -10,7 +10,7 @@
 #include <stdexcept>
 
 #include <rtl/ustring.hxx>
-#include <vcl/IconThemeScanner.hxx>
+#include <IconThemeScanner.hxx>
 #include <vcl/IconThemeInfo.hxx>
 
 #include <cppunit/TestAssert.h>

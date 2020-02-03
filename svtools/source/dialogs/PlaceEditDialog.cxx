@@ -10,13 +10,14 @@
 #include <config_oauth2.h>
 
 #include <svtools/PlaceEditDialog.hxx>
-#include <svtools/ServerDetailsControls.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/place.hxx>
+
+#include "ServerDetailsControls.hxx"
 
 using namespace com::sun::star::uno;
 

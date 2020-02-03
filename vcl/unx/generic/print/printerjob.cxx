@@ -26,8 +26,8 @@
 
 #include <unx/printerjob.hxx>
 #include <unx/printergfx.hxx>
-#include <vcl/ppdparser.hxx>
-#include <vcl/strhelper.hxx>
+#include <ppdparser.hxx>
+#include <strhelper.hxx>
 #include <printerinfomanager.hxx>
 
 #include <rtl/ustring.hxx>

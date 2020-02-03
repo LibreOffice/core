@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 11:40:31 using:
+ Generated on 2020-02-03 10:51:07 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -383,6 +383,7 @@
 #include <appbaslib.hxx>
 #include <appdata.hxx>
 #include <appopen.hxx>
+#include <asyncfunc.hxx>
 #include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
 #include <eventsupplier.hxx>
@@ -395,7 +396,6 @@
 #include <openuriexternally.hxx>
 #include <openurlhint.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/asyncfunc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>

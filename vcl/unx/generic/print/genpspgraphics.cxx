@@ -31,7 +31,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/jobdata.hxx>
+#include <jobdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>

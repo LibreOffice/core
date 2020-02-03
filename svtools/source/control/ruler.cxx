@@ -26,11 +26,11 @@
 #include <vcl/ptrstyle.hxx>
 #include <sal/log.hxx>
 
-#include <svtools/accessibleruler.hxx>
 #include <svtools/ruler.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/colorcfg.hxx>
+#include "accessibleruler.hxx"
 
 #include <memory>
 #include <vector>

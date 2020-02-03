@@ -15,9 +15,9 @@
 
 #include <ostream>
 
-VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
-VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
-VCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos);
+std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix);
+std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos);
+std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos);
 
 #endif
 

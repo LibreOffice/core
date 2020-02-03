@@ -34,14 +34,14 @@
 #include <comphelper/lok.hxx>
 
 #include <vcl/graphicfilter.hxx>
-#include <vcl/IconThemeScanner.hxx>
-#include <vcl/IconThemeSelector.hxx>
+#include <IconThemeScanner.hxx>
+#include <IconThemeSelector.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/outdev.hxx>
 
 #include <unotools/fontcfg.hxx>

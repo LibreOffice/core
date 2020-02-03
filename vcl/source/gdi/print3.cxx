@@ -21,7 +21,7 @@
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
