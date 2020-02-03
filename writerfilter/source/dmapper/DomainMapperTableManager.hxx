@@ -46,8 +46,8 @@ class DomainMapperTableManager : public TableManager
     sal_uInt32      m_nGridAfter; ///< number of grid columns in the parent table's table grid which shall be left after the last cell in the table row
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
-    /// Are we in a shape (text append stack is not empty) or in the body document?
-    bool m_bIsInShape;
+    /// Unfloat tables in a shape/table-only header (text append stack is not empty)
+    bool m_bIsUnfloatTable;
     OUString m_sTableStyleName;
     /// Grab-bag of table look attributes for preserving.
     comphelper::SequenceAsHashMap m_aTableLook;
@@ -131,7 +131,7 @@ public:
 
     using TableManager::isInCell;
 
-    void setIsInShape(bool bIsInShape);
+    void setIsUnfloatTable(bool bIsUnfloatTable);
 
 };
 
