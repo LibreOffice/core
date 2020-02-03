@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <tuple>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -376,8 +377,8 @@ namespace dxcanvas
                     tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ));
                 pGradientPath->Transform( &aMatrix );
 
-                pGradientBrush.reset(
-                    new Gdiplus::PathGradientBrush( pGradientPath.get() ) );
+                pGradientBrush
+                    = std::make_shared<Gdiplus::PathGradientBrush>( pGradientPath.get() );
                 pGradientBrush->SetInterpolationColors( rColors.data(),
                                                         rStops.data(),
                                                         rStops.size() );
@@ -489,10 +490,9 @@ namespace dxcanvas
             if( ::rtl::math::approxEqual( rTexture.Alpha,
                                           1.0 ) )
             {
-                pBrush.reset(
-                    new Gdiplus::TextureBrush(
+                pBrush = std::make_shared<Gdiplus::TextureBrush>(
                         pBitmap.get(),
-                        bClamp ? Gdiplus::WrapModeClamp : Gdiplus::WrapModeTile ) );
+                        bClamp ? Gdiplus::WrapModeClamp : Gdiplus::WrapModeTile );
             }
             else
             {
@@ -507,11 +507,10 @@ namespace dxcanvas
                 Gdiplus::Rect aRect(0,0,
                                     aBmpSize.Width,
                                     aBmpSize.Height);
-                pBrush.reset(
-                    new Gdiplus::TextureBrush(
+                pBrush = std::make_shared<Gdiplus::TextureBrush>(
                         pBitmap.get(),
                         aRect,
-                        &aImgAttr ) );
+                        &aImgAttr );
 
                 pBrush->SetWrapMode(
                     bClamp ? Gdiplus::WrapModeClamp : Gdiplus::WrapModeTile );

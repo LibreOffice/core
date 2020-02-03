@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <memory>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -46,14 +48,13 @@ namespace dxcanvas
         ENSURE_OR_THROW( rRefDevice.get(),
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        mpSurface.reset(
-            new DXSurfaceBitmap(
+        mpSurface = std::make_shared<DXSurfaceBitmap>(
                 ::basegfx::B2IVector(
                     ::canvas::tools::roundUp( rSpriteSize.Width ),
                     ::canvas::tools::roundUp( rSpriteSize.Height )),
                 rSurfaceProxy,
                 rRenderModule,
-                true));
+                true);
 
         maCanvasHelper.setDevice( *rRefDevice );
         maCanvasHelper.setTarget( mpSurface );

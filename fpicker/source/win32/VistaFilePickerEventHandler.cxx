@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 
 #include "VistaFilePickerEventHandler.hxx"
 
@@ -293,7 +296,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
     // See special handling in ~AsyncRequests for this static
-    static AsyncRequests aNotify(RequestHandlerRef(new AsyncPickerEvents()));
+    static AsyncRequests aNotify(std::make_shared<AsyncPickerEvents>());
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
@@ -306,7 +309,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
         {
             css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (pIterator.next(), css::uno::UNO_QUERY);
 
-            RequestRef rRequest(new Request());
+            RequestRef rRequest = std::make_shared<Request>();
             rRequest->setRequest (eEventType);
             rRequest->setArgument(PROP_PICKER_LISTENER, xListener);
             if ( nControlID )

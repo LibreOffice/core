@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svsys.h>
 
 #include "gdiimpl.hxx"
@@ -2108,7 +2112,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         // (at least for now...)
 
         // create data
-        pGraphicsPath.reset(new Gdiplus::GraphicsPath());
+        pGraphicsPath = std::make_shared<Gdiplus::GraphicsPath>();
 
         for(sal_uInt32 a(0); a < nCount; a++)
         {
@@ -2308,7 +2312,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     else
     {
         // fill data of buffered data
-        pGraphicsPath.reset(new Gdiplus::GraphicsPath());
+        pGraphicsPath = std::make_shared<Gdiplus::GraphicsPath>();
 
         impAddB2DPolygonToGDIPlusGraphicsPathReal(
             *pGraphicsPath,

@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <string.h>
 
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
@@ -222,19 +223,18 @@ namespace dxcanvas
         // create container for pixel data
         if(mbAlpha)
         {
-            mpGDIPlusBitmap.reset(
-                new Gdiplus::Bitmap(
+            mpGDIPlusBitmap = std::make_shared<Gdiplus::Bitmap>(
                     maSize.getX(),
                     maSize.getY(),
                     PixelFormat32bppARGB
-                    ));
+                    );
             mpGraphics.reset( tools::createGraphicsFromBitmap(mpGDIPlusBitmap) );
 
             // create the colorbuffer object, which is basically a simple
             // wrapper around the directx surface. the colorbuffer is the
             // interface which is used by the surfaceproxy to support any
             // kind of underlying structure for the pixel data container.
-            mpColorBuffer.reset(new GDIColorBuffer(mpGDIPlusBitmap,maSize));
+            mpColorBuffer = std::make_shared<GDIColorBuffer>(mpGDIPlusBitmap,maSize);
         }
         else
         {
@@ -244,7 +244,7 @@ namespace dxcanvas
             // wrapper around the directx surface. the colorbuffer is the
             // interface which is used by the surfaceproxy to support any
             // kind of underlying structure for the pixel data container.
-            mpColorBuffer.reset(new DXColorBuffer(mpSurface,maSize));
+            mpColorBuffer = std::make_shared<DXColorBuffer>(mpSurface,maSize);
         }
 
         // create a (possibly hardware accelerated) mirror surface.
@@ -324,10 +324,10 @@ namespace dxcanvas
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
             // construct a gdi+ bitmap from the raw pixel data.
-            pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
+            pResult = std::make_shared<Gdiplus::Bitmap>( maSize.getX(),maSize.getY(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
-                                                static_cast<BYTE *>(aLockedRect.pBits) ));
+                                                static_cast<BYTE *>(aLockedRect.pBits) );
 
             mpSurface->UnlockRect();
         }

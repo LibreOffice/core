@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "VistaFilePicker.hxx"
 
 #include "WinImplHelper.hxx"
@@ -57,7 +61,7 @@ namespace
 VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR, bool bFolderPicker)
     : TVistaFilePickerBase  (m_aMutex                 )
     , m_xSMGR               (xSMGR                    )
-    , m_rDialog             (new VistaFilePickerImpl())
+    , m_rDialog             (std::make_shared<VistaFilePickerImpl>())
     , m_aAsyncExecute       (m_rDialog                )
     , m_nFilePickerThreadId (0                        )
     , m_bInitialized        (false                    )
@@ -71,7 +75,7 @@ VistaFilePicker::~VistaFilePicker()
 
 void SAL_CALL VistaFilePicker::addFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener)
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_ADD_PICKER_LISTENER);
     rRequest->setArgument(PROP_PICKER_LISTENER, xListener);
 
@@ -80,7 +84,7 @@ void SAL_CALL VistaFilePicker::addFilePickerListener(const css::uno::Reference< 
 
 void SAL_CALL VistaFilePicker::removeFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_REMOVE_PICKER_LISTENER);
     rRequest->setArgument(PROP_PICKER_LISTENER, xListener);
 
@@ -95,7 +99,7 @@ void SAL_CALL VistaFilePicker::setMultiSelectionMode(sal_Bool bMode)
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_MULTISELECTION_MODE);
     rRequest->setArgument(PROP_MULTISELECTION_MODE, bMode);
 
@@ -106,7 +110,7 @@ void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_TITLE);
     rRequest->setArgument(PROP_TITLE, sTitle);
 
@@ -116,7 +120,7 @@ void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
 void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
                                             const OUString& sFilter)
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_APPEND_FILTER);
     rRequest->setArgument(PROP_FILTER_TITLE, sTitle );
     rRequest->setArgument(PROP_FILTER_VALUE, sFilter);
@@ -126,7 +130,7 @@ void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
 
 void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_CURRENT_FILTER);
     rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
 
@@ -135,7 +139,7 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
 
 OUString SAL_CALL VistaFilePicker::getCurrentFilter()
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_GET_CURRENT_FILTER);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
@@ -147,7 +151,7 @@ OUString SAL_CALL VistaFilePicker::getCurrentFilter()
 void SAL_CALL VistaFilePicker::appendFilterGroup(const OUString&                              /*sGroupTitle*/,
                                                  const css::uno::Sequence< css::beans::StringPair >& rFilters   )
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_APPEND_FILTERGROUP);
     rRequest->setArgument(PROP_FILTER_GROUP, rFilters);
 
@@ -158,7 +162,7 @@ void SAL_CALL VistaFilePicker::setDefaultName(const OUString& sName )
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_DEFAULT_NAME);
     rRequest->setArgument(PROP_FILENAME, sName);
 
@@ -169,7 +173,7 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_DIRECTORY);
     rRequest->setArgument(PROP_DIRECTORY, sDirectory);
 
@@ -180,7 +184,7 @@ OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
     const OUString sDirectory = rRequest->getArgumentOrDefault(PROP_DIRECTORY, OUString());
@@ -202,7 +206,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
 
 css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_GET_SELECTED_FILES);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
@@ -224,7 +228,7 @@ void VistaFilePicker::ensureInit()
     {
         if (m_bFolderPicker)
         {
-            RequestRef rRequest(new Request());
+            RequestRef rRequest = std::make_shared<Request>();
             rRequest->setRequest (VistaFilePickerImpl::E_CREATE_FOLDER_PICKER);
             if ( ! m_aAsyncExecute.isRunning())
                 m_aAsyncExecute.create();
@@ -247,7 +251,7 @@ void VistaFilePicker::ensureInit()
 {
     ensureInit();
 
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SHOW_DIALOG_MODAL);
 
     // if we want to show a modal window, the calling thread needs to process messages
@@ -268,7 +272,7 @@ void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
                                               ::sal_Int16    nControlAction,
                                         const css::uno::Any& aValue        )
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_CONTROL_VALUE);
     rRequest->setArgument(PROP_CONTROL_ID    , nControlId    );
     rRequest->setArgument(PROP_CONTROL_ACTION, nControlAction);
@@ -280,7 +284,7 @@ void SAL_CALL VistaFilePicker::setValue(      ::sal_Int16    nControlId    ,
 css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
                                                  ::sal_Int16 nControlAction)
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_GET_CONTROL_VALUE);
     rRequest->setArgument(PROP_CONTROL_ID    , nControlId    );
     rRequest->setArgument(PROP_CONTROL_ACTION, nControlAction);
@@ -292,7 +296,7 @@ css::uno::Any SAL_CALL VistaFilePicker::getValue(::sal_Int16 nControlId    ,
 void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
                                              sal_Bool  bEnable   )
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_ENABLE_CONTROL);
     rRequest->setArgument(PROP_CONTROL_ID    , nControlId);
     rRequest->setArgument(PROP_CONTROL_ENABLE, bEnable   );
@@ -303,7 +307,7 @@ void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
 void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
                                          const OUString& sLabel    )
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_SET_CONTROL_LABEL);
     rRequest->setArgument(PROP_CONTROL_ID   , nControlId);
     rRequest->setArgument(PROP_CONTROL_LABEL, sLabel    );
@@ -313,7 +317,7 @@ void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
 
 OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
 {
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     rRequest->setRequest (VistaFilePickerImpl::E_GET_CONTROL_LABEL);
     rRequest->setArgument(PROP_CONTROL_ID, nControlId);
 
@@ -488,7 +492,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     {
         lArguments[1] >>= xParentWindow;
     }
-    RequestRef rRequest(new Request());
+    RequestRef rRequest = std::make_shared<Request>();
     if (bFileOpenDialog)
         rRequest->setRequest (VistaFilePickerImpl::E_CREATE_OPEN_DIALOG);
     else

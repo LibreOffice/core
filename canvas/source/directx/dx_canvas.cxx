@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <sal/log.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -113,9 +116,8 @@ namespace dxcanvas
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
         maCanvasHelper.setDevice( *this );
         maCanvasHelper.setTarget(
-            GraphicsProviderSharedPtr(
-                new GraphicsProviderImpl(
-                    Gdiplus::Graphics::FromHDC(pSysData->hDC))));
+            std::make_shared<GraphicsProviderImpl>(
+                    Gdiplus::Graphics::FromHDC(pSysData->hDC)));
 
         maArguments.realloc(0);
     }
@@ -184,11 +186,11 @@ namespace dxcanvas
             throw lang::NoSupportException( "Passed HDC is no mem DC/has no bitmap selected!");
         }
 
-        mpTarget.reset( new DXBitmap(
+        mpTarget = std::make_shared<DXBitmap>(
                             BitmapSharedPtr(
                                 Gdiplus::Bitmap::FromHBITMAP(
                                     hBmp, nullptr) ),
-                            false ));
+                            false );
 
         maCanvasHelper.setTarget( mpTarget );
 

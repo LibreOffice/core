@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 
@@ -404,7 +405,7 @@ namespace dxcanvas
 
         GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
         {
-            GraphicsPathSharedPtr pRes( new Gdiplus::GraphicsPath() );
+            GraphicsPathSharedPtr pRes = std::make_shared<Gdiplus::GraphicsPath>();
             std::vector< Gdiplus::PointF > aPoints;
 
             sal_Int32 nCurrPoly;
@@ -432,7 +433,7 @@ namespace dxcanvas
 
         GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly, bool bNoLineJoin )
         {
-            GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
+            GraphicsPathSharedPtr               pRes = std::make_shared<Gdiplus::GraphicsPath>();
             std::vector< Gdiplus::PointF >    aPoints;
 
             graphicsPathFromB2DPolygon( pRes, aPoints, rPoly, bNoLineJoin );
@@ -442,7 +443,7 @@ namespace dxcanvas
 
         GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly, bool bNoLineJoin )
         {
-            GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
+            GraphicsPathSharedPtr               pRes = std::make_shared<Gdiplus::GraphicsPath>();
             std::vector< Gdiplus::PointF >    aPoints;
 
             const sal_uInt32 nPolies( rPoly.count() );
@@ -495,9 +496,9 @@ namespace dxcanvas
         bool drawRGBABits( const std::shared_ptr<Gdiplus::Graphics>& rGraphics,
                            const RawRGBABitmap&     rRawRGBAData )
         {
-            BitmapSharedPtr pBitmap( new Gdiplus::Bitmap( rRawRGBAData.mnWidth,
+            BitmapSharedPtr pBitmap = std::make_shared<Gdiplus::Bitmap>( rRawRGBAData.mnWidth,
                                                           rRawRGBAData.mnHeight,
-                                                          PixelFormat32bppARGB ) );
+                                                          PixelFormat32bppARGB );
 
             Gdiplus::BitmapData aBmpData;
             aBmpData.Width       = rRawRGBAData.mnWidth;
@@ -545,9 +546,9 @@ namespace dxcanvas
                     // TODO(P2): At least for the alpha bitmap case, it
                     // would be possible to generate the corresponding
                     // bitmap directly
-                    pBitmap.reset( new Gdiplus::Bitmap( aBmpSize.Width,
+                    pBitmap = std::make_shared<Gdiplus::Bitmap>( aBmpSize.Width,
                                                         aBmpSize.Height,
-                                                        PixelFormat32bppARGB ) );
+                                                        PixelFormat32bppARGB );
                 }
                 else
                 {
@@ -555,9 +556,9 @@ namespace dxcanvas
                     // to the VCL bitmap. Also, check whether the VCL
                     // bitmap's system handles can be used to create the
                     // GDI+ bitmap (currently, it does not seem so).
-                    pBitmap.reset( new Gdiplus::Bitmap( aBmpSize.Width,
+                    pBitmap = std::make_shared<Gdiplus::Bitmap>( aBmpSize.Width,
                                                         aBmpSize.Height,
-                                                        PixelFormat24bppRGB ) );
+                                                        PixelFormat24bppRGB );
                 }
 
                 GraphicsSharedPtr pGraphics(createGraphicsFromBitmap(pBitmap));
