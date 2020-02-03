@@ -225,9 +225,9 @@ void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8
         {
             xXFCell.set(new XFCell);
             xXFCell->SetColumnSpaned(nColMark-i);
-            XFTable* pSubTable = new XFTable;
-            pTableLayout->ConvertTable(pSubTable,crowid,nRowMark,i,nColMark);
-            xXFCell->Add(pSubTable);
+            rtl::Reference<XFTable> xSubTable(new XFTable);
+            pTableLayout->ConvertTable(xSubTable,crowid,nRowMark,i,nColMark);
+            xXFCell->Add(xSubTable.get());
             i = nColMark;
         }
         else
