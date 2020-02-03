@@ -321,9 +321,9 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     m_xEastFrame->set_visible(bShowCJK);
     m_xCTLFrame->set_visible(bShowCTL);
 
-    m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true);
-    m_xEastFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CJK, true, false, true);
-    m_xCTLFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CTL, true, false, true);
+    m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true, LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN, true );
+    m_xEastFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CJK, true, false, true, LANGUAGE_SYSTEM, css::i18n::ScriptType::ASIAN, true );
+    m_xCTLFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CTL, true, false, true, LANGUAGE_SYSTEM, css::i18n::ScriptType::COMPLEX, true );
 
     Initialize();
 }
@@ -1198,6 +1198,9 @@ void SvxCharNamePage::Reset( const SfxItemSet* rSet )
 
     SetPrevFontWidthScale( *rSet );
     UpdatePreview_Impl();
+    m_xWestFontLanguageLB->set_active(1);
+    m_xEastFontLanguageLB->set_active(1);
+    m_xCTLFontLanguageLB->set_active(1);
 }
 
 void  SvxCharNamePage::ChangesApplied()

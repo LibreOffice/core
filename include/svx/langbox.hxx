@@ -75,9 +75,10 @@ private:
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 public:
     SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl);
-    void            SetLanguageList( SvxLanguageListFlags nLangList,
-                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
-                            bool bCheckSpellAvail = false );
+    void SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLangNone,
+                         bool bLangNoneIsLangAll = false, bool bCheckSpellAvail = false,
+                         const LanguageType defaultLangType = LANGUAGE_NONE,
+                         sal_Int16 defaultType = 0, bool bDefaultLangExist = false);
     void            InsertLanguage(const LanguageType nLangType);
     void            InsertDefaultLanguage(sal_Int16 nType);
 
