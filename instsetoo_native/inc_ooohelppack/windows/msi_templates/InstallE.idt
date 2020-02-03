@@ -2,7 +2,7 @@ Action	Condition	Sequence
 s72	S255	I2
 InstallExecuteSequence	Action
 AllocateRegistrySpace	NOT Installed	750
-AppSearch		25
+AppSearch		50
 BindImage		2100
 CCPSearch	CCP_TEST	200
 CostFinalize		500
@@ -12,7 +12,7 @@ CreateShortcuts		2150
 DeleteServices	VersionNT	1000
 DuplicateFiles		2050
 FileCost		400
-FindRelatedProducts		100
+FindRelatedProducts		25
 InstallFiles		1950
 InstallFinalize		3150
 InstallInitialize		700
@@ -20,7 +20,7 @@ InstallODBC		2600
 InstallServices	VersionNT	2750
 InstallValidate		650
 IsolateComponents		450
-LaunchConditions		50
+LaunchConditions		100
 MigrateFeatureStates		600
 MoveFiles		1900
 MsiPublishAssemblies		3025

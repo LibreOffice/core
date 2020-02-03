@@ -5,3 +5,4 @@ installuser	1	Software\LibreOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]
 installmachine	2	Software\LibreOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
 installuserdev	1	Software\LibreOffice\LayerDev\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
 installmachinedev	2	Software\LibreOffice\LayerDev\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+OldVersionInstallLocation	2	Software\Microsoft\Windows\CurrentVersion\Uninstall\[OLDPRODUCTS]	INSTALLLOCATION	0

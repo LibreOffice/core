@@ -5,3 +5,4 @@ INSTALLLOCATION	installuser
 INSTALLLOCATION	installmachine
 INSTALLLOCATION	installuserdev
 INSTALLLOCATION	installmachinedev
+INSTALLLOCATION	OldVersionInstallLocation
