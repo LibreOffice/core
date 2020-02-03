@@ -6879,7 +6879,6 @@ include/svtools/cliplistener.hxx
 include/svtools/collatorres.hxx
 include/svtools/colorcfg.hxx
 include/svtools/colrdlg.hxx
-include/svtools/controldims.hxx
 include/svtools/ctrlbox.hxx
 include/svtools/ctrltool.hxx
 include/svtools/dialogclosedlistener.hxx
