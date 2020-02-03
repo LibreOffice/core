@@ -98,7 +98,6 @@ public:
     virtual ~SvxColorWindow() override;
     virtual void        dispose() override;
     void                SetNoSelection();
-    bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);
     void                SelectEntry(const Color& rColor);
     NamedColor          GetSelectEntryColor() const;

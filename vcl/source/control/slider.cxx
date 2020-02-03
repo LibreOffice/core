@@ -56,7 +56,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnStateFlags        = 0;
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
-    mbScrollTypeSet     = false;
 
     Control::ImplInit( pParent, nStyle, nullptr );
 
@@ -646,23 +645,13 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( ImplIsPageUp( rMousePos ) )
         {
-            if( mbScrollTypeSet )
-                meScrollType = ScrollType::Set;
-            else
-            {
-                nTrackFlags = StartTrackingFlags::ButtonRepeat;
-                meScrollType = ScrollType::PageUp;
-            }
+            nTrackFlags = StartTrackingFlags::ButtonRepeat;
+            meScrollType = ScrollType::PageUp;
         }
         else if ( ImplIsPageDown( rMousePos ) )
         {
-            if( mbScrollTypeSet )
-                meScrollType = ScrollType::Set;
-            else
-            {
-                nTrackFlags = StartTrackingFlags::ButtonRepeat;
-                meScrollType = ScrollType::PageDown;
-            }
+            nTrackFlags = StartTrackingFlags::ButtonRepeat;
+            meScrollType = ScrollType::PageDown;
         }
 
         // Shall we start Tracking?

@@ -2497,12 +2497,6 @@ namespace BuilderUtils
         return sCustomProperty;
     }
 
-    FieldUnit detectUnit(OUString const& rString)
-    {
-        OUString const unit(extractUnit(rString));
-        return detectMetricUnit(unit);
-    }
-
     void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
     {
         OString sWidthChars("width-chars");
