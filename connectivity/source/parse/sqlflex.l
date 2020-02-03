@@ -98,7 +98,7 @@ static void do_fatal_error(const char* msg)
 {
     xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);
     /*hack to silence -Wunused-function*/
-    if (0) yy_fatal_error(msg);
+    if ((0)) yy_fatal_error(msg);
 }
 
 #define YY_FATAL_ERROR(msg) \
