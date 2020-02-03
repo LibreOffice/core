@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "883773d5_f3b75724",
+        "filename": "xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-03T14:42:47Z",
+      "side": 1,
+      "message": "why add a spurious empty line here?",
+      "revId": "0606eafb834aed0edf53fca24ff9a796f374a16d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
