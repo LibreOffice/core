@@ -1906,8 +1906,9 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
     FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pPageObject));
-    CPPUNIT_ASSERT_EQUAL(1, FPDFFormObj_CountObjects(pPageObject));
-    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, 0);
+    // 2: white background and the actual object.
+    CPPUNIT_ASSERT_EQUAL(2, FPDFFormObj_CountObjects(pPageObject));
+    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, 1);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pFormObject));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
