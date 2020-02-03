@@ -2135,15 +2135,6 @@ void ColorWindow::SetNoSelection()
     mpDefaultButton = nullptr;
 }
 
-bool SvxColorWindow::IsNoSelection() const
-{
-    if (!mpColorSet->IsNoSelection())
-        return false;
-    if (!mpRecentColorSet->IsNoSelection())
-        return false;
-    return !mpButtonAutoColor->IsVisible() && !mpButtonNoneColor->IsVisible();
-}
-
 bool ColorWindow::IsNoSelection() const
 {
     if (!mxColorSet->IsNoSelection())

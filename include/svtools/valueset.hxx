@@ -247,8 +247,6 @@ private:
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
-    using Window::ImplScroll;
-    SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
@@ -260,7 +258,6 @@ private:
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
-    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer*, void );
 
     ValueSet (const ValueSet &) = delete;
     ValueSet & operator= (const ValueSet &) = delete;

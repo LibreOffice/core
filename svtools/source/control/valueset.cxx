@@ -867,39 +867,6 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
     ImplDrawSelect(rRenderContext);
 }
 
-bool ValueSet::ImplScroll(const Point& rPos)
-{
-    if (!mbScroll || !maItemListRect.IsInside(rPos))
-        return false;
-
-    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET / 2 : SCROLL_OFFSET;
-    bool bScroll = false;
-
-    if (rPos.Y() <= maItemListRect.Top() + nScrollOffset)
-    {
-        if (mnFirstLine > 0)
-        {
-            --mnFirstLine;
-            bScroll = true;
-        }
-    }
-    else if (rPos.Y() >= maItemListRect.Bottom() - nScrollOffset)
-    {
-        if (mnFirstLine < o3tl::make_unsigned(mnLines - mnVisLines))
-        {
-            ++mnFirstLine;
-            bScroll = true;
-        }
-    }
-
-    if (!bScroll)
-        return false;
-
-    mbFormat = true;
-    Invalidate();
-    return true;
-}
-
 size_t ValueSet::ImplGetItem( const Point& rPos ) const
 {
     if (!mbHasVisibleItems)
@@ -987,11 +954,6 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
         mbFormat = true;
         Invalidate();
     }
-}
-
-IMPL_LINK_NOARG(ValueSet, ImplTimerHdl, Timer *, void)
-{
-    ImplTracking( GetPointerPosPixel() );
 }
 
 void ValueSet::ImplTracking( const Point& rPos )

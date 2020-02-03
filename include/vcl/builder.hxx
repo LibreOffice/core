@@ -407,7 +407,6 @@ namespace BuilderUtils
     VCL_DLLPUBLIC OUString convertMnemonicMarkup(const OUString &rIn);
 
     VCL_DLLPUBLIC OUString extractCustomProperty(VclBuilder::stringmap &rMap);
-    VCL_DLLPUBLIC FieldUnit detectUnit(OUString const&);
 
     VCL_DLLPUBLIC bool extractDropdown(VclBuilder::stringmap &rMap);
 

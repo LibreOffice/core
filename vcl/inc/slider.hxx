@@ -48,7 +48,6 @@ private:
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
-    bool            mbScrollTypeSet;
 
     Link<Slider*,void>   maSlideHdl;
 
@@ -94,7 +93,6 @@ public:
     long            GetLineSize() const { return mnLineSize; }
     void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
     long            GetPageSize() const { return mnPageSize; }
-    void            SetScrollTypeSet(bool b) { mbScrollTypeSet = b; }
 
     Size            CalcWindowSizePixel();
 
