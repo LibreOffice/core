@@ -307,8 +307,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     // initialize language ListBox
 
-    m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
-    m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
+    m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false, false, LANGUAGE_SYSTEM, css::i18n::ScriptType::WEAK, true);
 }
 
 std::unique_ptr<SfxTabPage> SvxNumberFormatTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
