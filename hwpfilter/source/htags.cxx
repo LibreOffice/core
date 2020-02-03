@@ -51,9 +51,7 @@ EmPicture::EmPicture(size_t tsize)
     if (size != 0)
         data.reset( new uchar[size] );
 }
-#ifdef _WIN32
-#define unlink _unlink
-#endif
+
 EmPicture::~EmPicture()
 {
 };
