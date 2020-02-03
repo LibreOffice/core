@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c8b78f0c_0028d11b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-03T21:16:08Z",
+      "side": 1,
+      "message": "Also drop this note - it\u0027s irrelevant for the change.",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 63
+      },
+      "revId": "fd222ea85e9060b724fdb6c83f2a4ed1c54cdab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e3507060_893a3ad3",
         "filename": "antivirusDetection.vbs",
         "patchSetId": 5
