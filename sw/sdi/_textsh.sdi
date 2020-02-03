@@ -1574,6 +1574,12 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_MOVE_TABSTOP
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_TRANSLITERATE_SENTENCE_CASE
     [
         ExecMethod = ExecTransliteration;

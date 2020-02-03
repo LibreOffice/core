@@ -1576,6 +1576,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.SetInsMode( bOldIns );
     }
     break;
+    case FN_MOVE_TABSTOP:
+    {
+        const SfxInt32Item* pIndex = rReq.GetArg<SfxInt32Item>(FN_PARAM_1);
+        const SfxInt32Item* pAmount = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+        if (!pIndex || !pAmount)
+            break;
+        SAL_INFO("sw.ui", "MoveTabstop(" << pIndex->GetValue() << "," << pAmount->GetValue() << ")");
+        // To be implemented
+    }
+    break;
     default:
         OSL_ENSURE(false, "wrong dispatcher");
         return;
