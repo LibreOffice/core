@@ -48,9 +48,6 @@ size_t ArrayLength(T (&)[N])
     return N;
 }
 
-#define GFX_DRIVER_VERSION(a,b,c,d) \
-((uint64_t(a)<<48) | (uint64_t(b)<<32) | (uint64_t(c)<<16) | uint64_t(d))
-
 bool GetKeyValue(const WCHAR* keyLocation, const WCHAR* keyName, OUString& destString, int type)
 {
     HKEY key;
