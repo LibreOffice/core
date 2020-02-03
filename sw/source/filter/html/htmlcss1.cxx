@@ -87,11 +87,13 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
         m_pDoc->ChgPageDesc( pos, rNewPageDesc );
 }
 
-SwCSS1Parser::SwCSS1Parser( SwDoc *pD, const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool bNewDoc ) :
-    SvxCSS1Parser( pD->GetAttrPool(), rBaseURL,
-                   aItemIds, SAL_N_ELEMENTS(aItemIds)),
-    m_pDoc( pD ),
-    m_nDropCapCnt( 0 ),
+SwCSS1Parser::SwCSS1Parser(SwDoc *const pDoc, SwHTMLParser const& rParser,
+        const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool const bNewDoc)
+    : SvxCSS1Parser(pDoc->GetAttrPool(), rBaseURL,
+                   aItemIds, SAL_N_ELEMENTS(aItemIds))
+    , m_pDoc( pDoc )
+    , m_rHTMLParser(rParser)
+    , m_nDropCapCnt( 0 ),
     m_bIsNewDoc( bNewDoc ),
     m_bBodyBGColorSet( false ),
     m_bBodyBackgroundSet( false ),
@@ -1341,6 +1343,12 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
     const SwPageDesc *pPageDesc = FindPageDesc(m_pDoc, nPoolId);
     if( !pPageDesc && bCreate )
     {
+        if (m_rHTMLParser.IsReadingHeaderOrFooter())
+        {   // (there should be only one definition of header/footer in HTML)
+            SAL_WARN("sw.html", "no creating PageDesc while reading header/footer");
+            return nullptr;
+        }
+
         // The first page is created from the right page, if there is one.
         SwPageDesc *pMasterPageDesc = nullptr;
         if( RES_POOLPAGE_FIRST == nPoolId )
