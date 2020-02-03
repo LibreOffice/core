@@ -81,9 +81,11 @@
 #include <xfilter/xffloatframe.hxx>
 #include "lwpframelayout.hxx"
 #include <xfilter/xfparastyle.hxx>
-#include <memory>
 #include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
+
+#include <algorithm>
+#include <memory>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
@@ -1057,6 +1059,14 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
     return bFindFlag;
 }
 
+static bool operator==(const TableConvertAttempt& a, const TableConvertAttempt& b)
+{
+    return a.mnStartRow == b.mnStartRow &&
+           a.mnEndRow == b.mnEndRow &&
+           a.mnStartCol== b.mnStartCol &&
+           a.mnEndCol == b.mnEndCol;
+}
+
 /**
  * @short   convert word pro table to SODC table
  * @param  pXFTable - pointer of table
@@ -1068,6 +1078,16 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
 void LwpTableLayout::ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
+    TableConvertAttempt aConversionAttempt(nStartRow, nEndRow, nStartCol, nEndCol);
+    auto itr = std::find(m_aConvertingStack.begin(), m_aConvertingStack.end(), aConversionAttempt);
+    if (itr != m_aConvertingStack.end())
+    {
+        SAL_WARN("lwp", "already trying to convert this range");
+        return;
+    }
+
+    m_aConvertingStack.push_back(aConversionAttempt);
+
     //out put column info TO BE CHANGED
     ConvertColumn(pXFTable,nStartCol,nEndCol);
 
@@ -1096,6 +1116,8 @@ void LwpTableLayout::ConvertTable(rtl::Reference<XFTable> const & pXFTable, sal_
             }
         }
     }
+
+    m_aConvertingStack.pop_back();
 }
 
 /**
