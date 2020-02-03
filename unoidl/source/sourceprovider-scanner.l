@@ -13,6 +13,8 @@
 %option never-interactive
 %option nounistd
 %option noyywrap
+%option noinput
+%option nounput
 %option reentrant
 %option warn
 %option yylineno
