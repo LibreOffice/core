@@ -175,6 +175,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
+
+                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = nullptr;
@@ -204,6 +206,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
+                pOLV->GetOutliner()->UndoActionEnd();
+                mpViewShell->Invalidate( SID_UNDO );
             }
             rReq.Done();
 
@@ -228,6 +232,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
+
+                pOLV->GetOutliner()->UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = nullptr;
@@ -267,6 +273,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
+                pOLV->GetOutliner()->UndoActionEnd();
+                mpViewShell->Invalidate( SID_UNDO );
             }
             else
             {
@@ -815,14 +823,14 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
-
-            if ( pOLV )
-            {
-                pOLV->ShowCursor();
-                pOLV->GetWindow()->GrabFocus();
-            }
         }
         break;
+    }
+
+    if ( pOLV )
+    {
+        pOLV->ShowCursor();
+        pOLV->GetWindow()->GrabFocus();
     }
 
     Invalidate( SID_OUTLINE_LEFT );

@@ -605,13 +605,10 @@
         "--socket=pulseaudio",
         "--device=dri",
         "--filesystem=host",
-        "--filesystem=xdg-run/dconf",
-        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--env=JAVA_HOME=/app/jre",
         "--env=LIBO_FLATPAK=1",
         "--own-name=org.libreoffice.LibreOfficeIpc0",
-        "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*"
     ]
 }

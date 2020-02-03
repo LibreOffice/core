@@ -320,10 +320,11 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
         if ( pDoc )
         {
-            for ( sal_uInt16 i=nStartField; i<nSortKeyCount; i++ )
+            for (sal_uInt16 j = nStartField; j < nSortKeyCount; ++j)
             {
-                m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->clear();
-                m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->append_text(aStrUndefined);
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->clear();
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->freeze();
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->append_text(aStrUndefined);
             }
 
             SCCOL   nFirstSortCol   = aSortData.nCol1;
@@ -375,6 +376,12 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
                     i++;
                 }
             }
+
+            for (sal_uInt16 j=nStartField; j < nSortKeyCount; ++j)
+            {
+                m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->thaw();
+            }
+
             nFieldCount = i;
         }
     }

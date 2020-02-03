@@ -467,7 +467,7 @@ private:
     bool                                                                            m_bStartedTOC;
     bool                                                                            m_bStartIndex;
     bool                                                                            m_bStartBibliography;
-    bool                                                                            m_bStartGenericField;
+    unsigned int                                                                    m_nStartGenericField;
     bool                                                                            m_bTextInserted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 

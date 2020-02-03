@@ -91,7 +91,8 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         }
 
         // create empty, and copy the default thumbnail in
-        aThumbnail = BitmapEx(aThumbnailSize, 24);
+        sal_uInt8 nAlpha = 255;
+        aThumbnail = BitmapEx(Bitmap(aThumbnailSize, 24), AlphaMask(aThumbnailSize, &nAlpha));
 
         aThumbnail.CopyPixel(
                 ::tools::Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),

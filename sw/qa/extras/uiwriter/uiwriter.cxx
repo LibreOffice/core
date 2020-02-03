@@ -99,6 +99,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <o3tl/deleter.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
@@ -747,7 +748,7 @@ void SwUiWriterTest::testBookmarkCopy()
     aPaM.SttEndDoc(true/*start*/);
     aPaM.Move(fnMoveForward, GoInContent); // partially select 1st para
 
-    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true);
+    rIDCO.CopyRange(aPaM, target, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
 
     // check bookmark was copied to correct position
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rIDMA.getBookmarksCount());
@@ -763,7 +764,7 @@ void SwUiWriterTest::testBookmarkCopy()
     rIDCO.SplitNode(*aPaM.GetPoint(), false);
     aPaM.SttEndDoc(true/*start*/);
 
-    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true);
+    rIDCO.CopyRange(aCopyPaM, *aPaM.GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false);
 
     // check bookmark was copied to correct position
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getBookmarksCount());

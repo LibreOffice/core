@@ -5140,8 +5140,13 @@ SvxMSDffImportRec* SvxMSDffImportData::find(const SdrObject* pObj)
 
 void SvxMSDffImportData::insert(std::unique_ptr<SvxMSDffImportRec> pImpRec)
 {
-    m_ObjToRecMap[pImpRec->pObj] = pImpRec.get();
-    m_Records.insert(std::move(pImpRec));
+    auto aRet = m_Records.insert(std::move(pImpRec));
+    bool bSuccess = aRet.second;
+    if (bSuccess)
+    {
+        SvxMSDffImportRec* pRec = aRet.first->get();
+        m_ObjToRecMap[pRec->pObj] = pRec;
+    }
 }
 
 void SvxMSDffImportData::NotifyFreeObj(SdrObject* pObj)

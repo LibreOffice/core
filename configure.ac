@@ -1583,8 +1583,8 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, *breeze_svg, *colibre, *colibre_svg, *elementary,
-         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sif_svg, *sifr_dark, *tango.]),
+         Possible choices: *breeze, *breeze_dark, *breeze_svg, *breeze_dark_svg, *colibre, *colibre_svg, *elementary,
+         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_svg, *sifr_dark, *sifr_dark_svg, *tango.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -6671,6 +6671,22 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
+AC_MSG_CHECKING([whether $CXX_BASE supports C++2a <span> with unsigned size_type])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <span>
+        #include <type_traits>
+        // Don't check size_type directly, as it was called index_type before P1872R0:
+        void f(std::span<int> s) { static_assert(std::is_unsigned_v<decltype(s.size())>); };
+    ])], [
+        AC_DEFINE([HAVE_CPP_SPAN],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX_BASE has GCC bug 87150])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
@@ -8765,6 +8781,9 @@ internal)
     fi
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
+    if test "$OS" = LINUX; then
+        BUILD_TYPE="$BUILD_TYPE LIBFFI"
+    fi
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then
         export HOME=""
@@ -11486,14 +11505,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark tango"
+    with_theme="breeze breeze_dark breeze_svg breeze_dark_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|tango) real_theme="$theme" ;;
+        breeze|breeze_dark|breeze_svg|breeze_dark_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango) real_theme="$theme" ;;
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac

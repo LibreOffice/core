@@ -257,7 +257,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartedTOC(false),
         m_bStartIndex(false),
         m_bStartBibliography(false),
-        m_bStartGenericField(false),
+        m_nStartGenericField(0),
         m_bTextInserted(false),
         m_sCurrentPermId(0),
         m_pLastSectionContext( ),
@@ -1870,7 +1870,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
             }
             else
             {
-                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
+                if (m_bStartTOC || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
                 {
                     if (IsInHeaderFooter() && !m_bStartTOCHeaderFooter)
                     {
@@ -1882,8 +1882,10 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
                         assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
-                        if (m_bStartGenericField)
+                        if (m_nStartGenericField != 0)
+                        {
                             xTOCTextCursor->goLeft(1, false);
+                        }
                         xTextRange = xTextAppend->insertTextPortion(rString, aValues, xTOCTextCursor);
                         SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                         if (!xTextRange.is())
@@ -1891,7 +1893,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                         m_bTextInserted = true;
                         xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                         mxTOCTextCursor = xTOCTextCursor;
-                        if (!m_bStartGenericField)
+                        if (m_nStartGenericField == 0)
                         {
                             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
                         }
@@ -3634,7 +3636,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"FORMCHECKBOX",    {"",                        FIELD_FORMCHECKBOX  }},
         {"FORMDROPDOWN",    {"DropDown",                FIELD_FORMDROPDOWN  }},
         {"FORMTEXT",        {"Input",                   FIELD_FORMTEXT      }},
-//      {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
+        {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
         {"HYPERLINK",       {"",                        FIELD_HYPERLINK     }},
         {"IF",              {"ConditionalText",         FIELD_IF            }},
 //      {"INFO",            {"",                        FIELD_INFO          }},
@@ -4424,6 +4426,12 @@ void DomainMapper_Impl::handleBibliography
     (const FieldContextPtr& pContext,
     const OUString & sTOCServiceName)
 {
+    if (m_aTextAppendStack.empty())
+    {
+        // tdf#130214: a workaround to avoid crash on import errors
+        SAL_WARN("writerfilter.dmapper", "no text append stack");
+        return;
+    }
     // Create section before setting m_bStartTOC and m_bStartBibliography: finishing paragraph
     // inside StartIndexSectionChecked could do the wrong thing otherwise
     const auto xTOC = StartIndexSectionChecked(sTOCServiceName);
@@ -4605,6 +4613,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_EQ:
                 case FIELD_INCLUDEPICTURE:
                 case FIELD_SYMBOL:
+                case FIELD_GOTOBUTTON:
                         bCreateField = false;
                         break;
                 case FIELD_FORMCHECKBOX :
@@ -5320,7 +5329,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     InsertFieldmark(m_aTextAppendStack, xFormField, pContext->GetStartRange(),
                             pContext->GetFieldId());
                     xFormField->setFieldType(ODF_UNHANDLED);
-                    m_bStartGenericField = true;
+                    ++m_nStartGenericField;
                     pContext->SetFormField( xFormField );
                     uno::Reference<container::XNameContainer> const xNameCont(xFormField->getParameters());
                     // note: setting the code to empty string is *required* in
@@ -5530,18 +5539,24 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     else
                     {
                         uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
+                        // In case of SetExpression, and Input fields the field result contains the content of the variable.
                         uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
-                        OUString sContent;
-                        bool bCanHaveContent = false;
-                        try
-                        {   // this will throw for field types without Content property
-                            uno::Any aValue(xFieldProperties->getPropertyValue(getPropertyName(PROP_CONTENT)));
-                            bCanHaveContent = true;
-                            aValue >>= sContent;
+                        // there are fields with a content property, which aren't working correctly with
+                        // a generalized try catch of the content, property, so just restrict content
+                        // handling to these explicit services.
+                        const bool bHasContent = xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression") ||
+                            xServiceInfo->supportsService("com.sun.star.text.TextField.Input");
+                        // If we already have content set, then use the current presentation
+                        OUString sValue;
+                        if (bHasContent)
+                        {
+                            // this will throw for field types without Content
+                            uno::Any aValue(xFieldProperties->getPropertyValue(
+                                    getPropertyName(PROP_CONTENT)));
+                            aValue >>= sValue;
                         }
-                        catch (...) {}
                         xFieldProperties->setPropertyValue(
-                                getPropertyName(bCanHaveContent && sContent.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
+                                getPropertyName(bHasContent && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
                     }
                 }
@@ -5736,9 +5751,9 @@ void DomainMapper_Impl::PopFieldContext()
                                 }
                             }
                         }
-                        else if(m_bStartGenericField)
+                        else if (m_nStartGenericField != 0)
                         {
-                            m_bStartGenericField = false;
+                            --m_nStartGenericField;
                             PopFieldmark(m_aTextAppendStack, xCrsr, pContext->GetFieldId());
                             if(m_bTextInserted)
                             {
@@ -6101,6 +6116,10 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
 
     // Update the shape properties if it is embedded object.
     if(m_xEmbedded.is()){
+        if (m_pGraphicImport->GetXShapeObject())
+                m_pGraphicImport->GetXShapeObject()->setPosition(
+                    m_pGraphicImport->GetGraphicObjectPosition());
+
         uno::Reference<drawing::XShape> xShape = m_pGraphicImport->GetXShapeObject();
         UpdateEmbeddedShapeProps(xShape);
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)

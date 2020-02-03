@@ -1828,9 +1828,30 @@ DocumentContentOperationsManager::DocumentContentOperationsManager( SwDoc& i_rSw
 {
 }
 
+/**
+ * Checks if rStart..rEnd mark a range that makes sense to copy.
+ *
+ * bCopyText is misnamed and means that the copy is a move to create a fly
+ * and so existing flys at the edge must not be copied.
+ */
+static bool IsEmptyRange(const SwPosition& rStart, const SwPosition& rEnd, bool bCopyText)
+{
+    if (rStart == rEnd)
+    {   // check if a fly anchored there would be copied - then copy...
+        return !IsDestroyFrameAnchoredAtChar(rStart, rStart, rEnd,
+                bCopyText
+                    ? DelContentType::WriterfilterHack|DelContentType::AllMask
+                    : DelContentType::AllMask);
+    }
+    else
+    {
+        return rEnd < rStart;
+    }
+}
+
 // Copy an area into this document or into another document
 bool
-DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos ) const
+DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll, bool bCheckPos, bool bCopyText ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -1838,7 +1859,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
     // Catch if there's no copy to do
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
+    if (!rPam.HasMark() || (IsEmptyRange(*pStt, *pEnd, bCopyText) && !bColumnSel))
         return false;
 
     // Prevent copying in Flys that are anchored in the area
@@ -1878,7 +1899,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
 
     if( pDoc != &m_rDoc )
     {   // ordinary copy
-        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange, bCopyText );
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->nNode != pEnd->nNode ||
@@ -1886,7 +1907,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     {
         // Copy to a position outside of the area, or copy a single TextNode
         // Do an ordinary copy
-        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange );
+        bRet = CopyImpl( rPam, rPos, bCopyAll, pRedlineRange, bCopyText );
     }
     else
     {
@@ -3361,7 +3382,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const std::pair<const SwPaM&, const SwPosition&>* pCopiedPaM /*and real insert pos*/,
     const bool bMakeNewFrames,
     const bool bDelRedlines,
-    const bool bCopyFlyAtFly ) const
+    const bool bCopyFlyAtFly,
+    bool bCopyText ) const
 {
     assert(!pCopiedPaM || pCopiedPaM->first.End()->nNode == rRg.aEnd);
     assert(!pCopiedPaM || pCopiedPaM->second.nNode <= rInsPos);
@@ -3411,7 +3433,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
                 ? pCopiedPaM->second.nNode
                 : aSavePos,
-            bCopyFlyAtFly);
+            bCopyFlyAtFly,
+            bCopyText);
     }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
@@ -3449,7 +3472,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     SwPaM const*const pCopiedPaM,
     const SwNodeIndex& rStartIdx,
-    const bool bCopyFlyAtFly ) const
+    const bool bCopyFlyAtFly,
+    bool bCopyText ) const
 {
     assert(!pCopiedPaM || pCopiedPaM->End()->nNode == rRg.aEnd);
 
@@ -3486,14 +3510,20 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 {
                     bAdd = IsSelectFrameAnchoredAtPara(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        bCopyText
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             case RndStdIds::FLY_AT_CHAR:
                 {
                     bAdd = IsDestroyFrameAnchoredAtChar(*pAPos,
                         pCopiedPaM ? *pCopiedPaM->Start() : SwPosition(rRg.aStart),
-                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd));
+                        pCopiedPaM ? *pCopiedPaM->End() : SwPosition(rRg.aEnd),
+                        bCopyText
+                            ? DelContentType::AllMask|DelContentType::WriterfilterHack
+                            : DelContentType::AllMask);
                 }
             break;
             default:
@@ -4438,7 +4468,8 @@ static void lcl_PopNumruleState(
 
 bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
         const bool bCopyAll,
-        SwPaM *const pCopyRange) const
+        SwPaM *const pCopyRange,
+        bool bCopyText) const
 {
     std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
@@ -4446,7 +4477,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
 
     if (Breaks.empty())
     {
-        return CopyImplImpl(rPam, rPos, bCopyAll, pCopyRange);
+        return CopyImplImpl(rPam, rPos, bCopyAll, pCopyRange, bCopyText);
     }
 
     SwPosition const & rSelectionEnd( *rPam.End() );
@@ -4468,7 +4499,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
         if (rStart < rEnd) // check if part is empty
         {
             // pass in copyRange member as rPos; should work ...
-            bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange);
+            bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange, /*bCopyText=*/false);
             nOffset = iter->first - rStart.nNode.GetIndex(); // fly nodes...
             if (pCopyRange)
             {
@@ -4488,7 +4519,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
     rStart = *rPam.Start(); // set to original start
     if (rStart < rEnd) // check if part is empty
     {
-        bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange);
+        bRet &= CopyImplImpl(aPam, *copyRange.Start(), bCopyAll, &copyRange, /*bCopyText=*/false);
         if (pCopyRange)
         {
             if (bFirst)
@@ -4505,7 +4536,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
 
 bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPos,
         const bool bCopyAll,
-        SwPaM *const pCpyRange ) const
+        SwPaM *const pCpyRange, bool bCopyText ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
     const bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
@@ -4514,7 +4545,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     SwPosition *const pEnd = rPam.End();
 
     // Catch when there's no copy to do.
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
+    if (!rPam.HasMark() || (IsEmptyRange(*pStt, *pEnd, bCopyText) && !bColumnSel) ||
         //JP 29.6.2001: 88963 - don't copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == &m_rDoc && *pStt <= rPos && rPos < *pEnd ))
@@ -4838,13 +4869,13 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 assert(pStt->nNode != pEnd->nNode);
                 pEnd->nContent = 0; // TODO why this?
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, bCopyText );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false );
+                CopyWithFlyInFly( aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, bCopyText );
 
             bCopyBookmarks = false;
         }

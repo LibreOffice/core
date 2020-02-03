@@ -3169,6 +3169,12 @@ endif
 
 endef
 
+# this is only used by python currently
+define gb_ExternalProject__use_libffi
+$(call gb_ExternalProject_use_external_project,$(1),libffi)
+
+endef
+
 endif # SYSTEM_PYTHON
 
 # ORCUS

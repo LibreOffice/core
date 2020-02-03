@@ -285,6 +285,8 @@ void PivotTableDataProvider::collectPivotTableData()
     m_aFieldOutputDescriptionMap.clear();
 
     uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
+    if (!xDPResults.is())
+        return;
     const uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
 
     double fNan;

@@ -424,6 +424,11 @@ GraphicImport::~GraphicImport()
 {
 }
 
+com::sun::star::awt::Point GraphicImport::GetGraphicObjectPosition()
+{
+    return (com::sun::star::awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+}
+
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {
     switch (nVal)
@@ -863,7 +868,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         //tdf#109411 If anchored object is in table, Word calculates its position from cell border
                         //instead of page (what is set in the sample document)
-                        if (m_pImpl->rDomainMapper.IsInTable() &&
+                        if (m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell &&
                             m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && IsGraphic())
                         {
                             m_pImpl->nHoriRelation = text::RelOrientation::FRAME;

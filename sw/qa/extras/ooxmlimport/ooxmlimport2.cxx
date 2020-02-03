@@ -283,6 +283,35 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
                                  getProperty<sal_Int32>(xText, "CharColor"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTextCopy, "text-copy.docx")
+{
+    // The document has a header on the second page that is copied as part of the import process.
+    // The header has a single paragraph: make sure shapes anchored to it are not lost.
+    // Note that the single paragraph itself has no text portions.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPara;
+    while (xParaEnum->hasMoreElements())
+    {
+        xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    }
+    auto aPageStyleName = getProperty<OUString>(xPara, "PageStyleName");
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles("PageStyles")->getByName(aPageStyleName), uno::UNO_QUERY);
+    auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
+    uno::Reference<container::XContentEnumerationAccess> xHeaderPara(
+        getParagraphOfText(1, xHeaderText), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xHeaderShapes
+        = xHeaderPara->createContentEnumeration("com.sun.star.text.TextContent");
+    // Without the accompanying fix in place, this test would have failed with:
+    // assertion failed
+    // - Expression: xHeaderShapes->hasMoreElements()
+    // i.e. the second page's header had no anchored shapes.
+    CPPUNIT_ASSERT(xHeaderShapes->hasMoreElements());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 {
     // the position of the flying text frame should be off page
@@ -500,6 +529,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
             return;
         }
     }
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf130214, "tdf130214.docx")
+{
+    // Currently this file imports with errors because of tdf#126435; it must not segfault on load
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129659, "tdf129659.docx")
+{
+    // don't crash on footnote with page break
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT

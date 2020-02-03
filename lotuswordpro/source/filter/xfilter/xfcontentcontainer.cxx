@@ -70,9 +70,6 @@ XFContentContainer::~XFContentContainer()
 
 void XFContentContainer::Add(XFContent *pContent)
 {
-    if (pContent->m_bInserted)
-        throw std::runtime_error("already inserted");
-    pContent->m_bInserted = true;
     m_aContents.emplace_back(pContent);
 }
 

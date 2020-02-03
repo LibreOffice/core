@@ -45,6 +45,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <o3tl/cppunittraitshelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -207,6 +208,49 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
     // use a small trick and instead of checking the page layout, check the page style
     uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xTextContent->getAnchor(), "PageStyleName"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129237, "tdf129237.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("title new"), xEnumerationAccess1->getPresentation(false).trim());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("MoM is supreme"), xEnumerationAccess2->getPresentation(false).trim());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("MY PATNA IS BEST IN THE WORLD"), xEnumerationAccess3->getPresentation(false).trim());
+
+    if( !xFields->hasMoreElements() ) {
+        CPPUNIT_ASSERT(false);
+        return;
+    }
+
+    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess4->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("Title New"), xEnumerationAccess4->getPresentation(false).trim());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf128076, "tdf128076.docx")
@@ -568,8 +612,9 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
 
 #if HAVE_MORE_FONTS
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
-    // This was 887, i.e. border distances were included in the height.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);
+    // This was true, a VML textbox without <v:textbox style="mso-fit-shape-to-text:t"> had
+    // auto-grow on.
+    CPPUNIT_ASSERT(!getProperty<bool>(xShape, "TextAutoGrowHeight"));
 #endif
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getByIndex(5), uno::UNO_QUERY);
