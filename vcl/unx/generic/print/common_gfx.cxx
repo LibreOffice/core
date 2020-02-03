@@ -25,7 +25,7 @@
 #include <unx/printergfx.hxx>
 #include <unx/printerjob.hxx>
 #include <unx/fontmanager.hxx>
-#include <vcl/strhelper.hxx>
+#include <strhelper.hxx>
 #include <printerinfomanager.hxx>
 
 #include <tools/color.hxx>

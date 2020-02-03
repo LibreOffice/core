@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svtools/accessibleruler.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -29,6 +28,7 @@
 #include <tools/gen.hxx>
 
 #include <svtools/ruler.hxx>
+#include "accessibleruler.hxx"
 
 using namespace ::cppu;
 using namespace ::osl;

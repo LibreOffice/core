@@ -23,8 +23,8 @@
 
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/ppdparser.hxx>
-#include <vcl/strhelper.hxx>
+#include <ppdparser.hxx>
+#include <strhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

@@ -25,7 +25,7 @@
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/print.hxx>

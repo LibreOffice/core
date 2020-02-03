@@ -14,7 +14,7 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkprn.hxx>
 
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/help.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
