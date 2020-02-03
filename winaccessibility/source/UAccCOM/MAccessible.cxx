@@ -1666,7 +1666,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *
         if (!m_xContext.is())
             return E_FAIL;
         Reference<XAccessibleRelationSet> pRrelationSet =
-            m_xContext.get()->getAccessibleRelationSet();
+            m_xContext->getAccessibleRelationSet();
         if(!pRrelationSet.is())
         {
             *nRelations = 0;
@@ -1709,7 +1709,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relation( long relationIndex
         if( relationIndex < nMax )
         {
             Reference<XAccessibleRelationSet> const pRrelationSet =
-                m_xContext.get()->getAccessibleRelationSet();
+                m_xContext->getAccessibleRelationSet();
             if(!pRrelationSet.is())
             {
 
@@ -1759,7 +1759,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relations( long, IAccessible
             return E_FAIL;
 
         Reference<XAccessibleRelationSet> const pRrelationSet =
-            m_xContext.get()->getAccessibleRelationSet();
+            m_xContext->getAccessibleRelationSet();
         if(!pRrelationSet.is())
         {
             *nRelations = 0;
@@ -3047,7 +3047,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_states(AccessibleStates __R
         return E_FAIL;
 
     Reference<XAccessibleStateSet> const pRStateSet =
-        m_xContext.get()->getAccessibleStateSet();
+        m_xContext->getAccessibleStateSet();
     if(!pRStateSet.is())
     {
         return S_OK;
@@ -3108,7 +3108,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_F
         if (!m_xContext.is())
             return E_FAIL;
 
-        *accParentIndex = m_xContext.get()->getAccessibleIndexInParent();
+        *accParentIndex = m_xContext->getAccessibleIndexInParent();
         return S_OK;
 
 
@@ -3124,7 +3124,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR
         if (!m_xContext.is())
             return E_FAIL;
 
-        css::lang::Locale unoLoc = m_xContext.get()->getLocale();
+        css::lang::Locale unoLoc = m_xContext->getLocale();
         locale->language = SysAllocString(o3tl::toW(unoLoc.Language.getStr()));
         locale->country = SysAllocString(o3tl::toW(unoLoc.Country.getStr()));
         locale->variant = SysAllocString(o3tl::toW(unoLoc.Variant.getStr()));

@@ -660,7 +660,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
     Reference<XAccessibleTableSelection>        pRTableExtent(pRXTable, UNO_QUERY);
     if(pRTableExtent.is())
     {
-        pRTableExtent.get()->selectRow(row);
+        pRTableExtent->selectRow(row);
         return S_OK;
     }
     else
@@ -676,7 +676,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
         for(lCol = 0; lCol < lColumnCount; lCol ++)
         {
             long lChildIndex = GetXInterface()->getAccessibleIndex(row, lCol);
-            pRSelection.get()->selectAccessibleChild(lChildIndex);
+            pRSelection->selectAccessibleChild(lChildIndex);
         }
 
         return S_OK;
@@ -704,7 +704,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
     Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
     if(pRTableExtent.is())
     {
-        pRTableExtent.get()->selectColumn(column);
+        pRTableExtent->selectColumn(column);
         return S_OK;
     }
     else
@@ -720,7 +720,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
             long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
-            pRSelection.get()->selectAccessibleChild(lChildIndex);
+            pRSelection->selectAccessibleChild(lChildIndex);
         }
 
         return S_OK;
@@ -749,7 +749,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
     Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
     if(pRTableExtent.is())
     {
-        if(pRTableExtent.get()->unselectRow(row))
+        if(pRTableExtent->unselectRow(row))
             return S_OK;
         else
             return E_FAIL;
@@ -767,7 +767,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
         for(lColumn = 0; lColumn < lColumnCount; lColumn ++)
         {
             long lChildIndex = GetXInterface()->getAccessibleIndex(row,lColumn);
-            pRSelection.get()->deselectAccessibleChild(lChildIndex);
+            pRSelection->deselectAccessibleChild(lChildIndex);
         }
 
         return S_OK;
@@ -796,7 +796,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
     Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
     if(pRTableExtent.is())
     {
-        if(pRTableExtent.get()->unselectColumn(column))
+        if(pRTableExtent->unselectColumn(column))
             return S_OK;
         else
             return E_FAIL;
@@ -815,7 +815,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
             long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
-            pRSelection.get()->deselectAccessibleChild(lChildIndex);
+            pRSelection->deselectAccessibleChild(lChildIndex);
         }
         return S_OK;
     }

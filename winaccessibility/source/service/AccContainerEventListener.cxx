@@ -369,7 +369,7 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
             //for editable combobox, send focus event on only edit control,
             bool bSendFocusOnCombobox = true;
             //send focused event to the first text child
-            Reference<XAccessibleContext> mxContext = m_xAccessible.get()->getAccessibleContext();
+            Reference<XAccessibleContext> mxContext = m_xAccessible->getAccessibleContext();
             if(mxContext.is())
             {
                 Reference<XAccessible> mxChild = mxContext->getAccessibleChild(0);
