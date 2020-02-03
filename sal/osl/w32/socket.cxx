@@ -30,6 +30,7 @@
 #include <rtl/byteseq.h>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeint.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
 #include "sockimpl.hxx"
@@ -641,7 +642,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
-                        && sal_uInt32(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
+                        && o3tl::make_unsigned(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
                     {
                         memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof (sal_Unicode));
                     }

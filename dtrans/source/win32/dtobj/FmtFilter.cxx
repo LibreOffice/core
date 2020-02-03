@@ -20,6 +20,8 @@
 #include <string.h>
 
 #include "FmtFilter.hxx"
+
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <shobjidl.h>
@@ -176,7 +178,7 @@ HENHMETAFILE OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePic
 
 Sequence< sal_Int8 > WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 {
-    OSL_ENSURE(sal_uInt32(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
+    OSL_ENSURE(o3tl::make_unsigned(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
     Sequence< sal_Int8 > ooBmpStream;
 
     ooBmpStream.realloc(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));

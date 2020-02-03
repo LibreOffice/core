@@ -21,9 +21,10 @@
 
 #if defined(_WIN32)
 
-#include <cstddef>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
+#include <o3tl/safeint.hxx>
 #include <sal/types.h>
 #include <tools/pathutils.hxx>
 
@@ -79,8 +80,7 @@ WCHAR * buildPath(
         }
     }
     if (backLength <
-        static_cast< std::size_t >(MAX_PATH - (frontEnd - frontBegin)))
-        // hopefully std::size_t is large enough
+        o3tl::make_unsigned(MAX_PATH - (frontEnd - frontBegin)))
     {
         WCHAR * p;
         if (frontBegin == path) {

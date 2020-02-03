@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/sysdata.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
@@ -175,7 +176,7 @@ void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 void WinSalMenu::RemoveItem( unsigned nPos )
 {
     int num = ::GetMenuItemCount( mhMenu );
-    if( num != -1 && nPos < static_cast<unsigned>(num) )
+    if( num != -1 && nPos < o3tl::make_unsigned(num) )
     {
         WinSalMenuItem *pSalMenuItem = nullptr;
 
