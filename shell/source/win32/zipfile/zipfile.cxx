@@ -29,6 +29,8 @@
 
 #include <string.h>
 
+#include <o3tl/safeint.hxx>
+
 namespace
 {
 
@@ -450,7 +452,7 @@ void ZipFile::GetUncompressedContent(
         return;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && static_cast<unsigned long>(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return;
@@ -522,7 +524,7 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
         return dir;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && static_cast<unsigned long>(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return dir;
@@ -559,7 +561,7 @@ long ZipFile::GetFileLongestFileNameLength() const
         return lmax;
     m_pStream->sseek(end.cdir_offset, SEEK_SET);
     CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && static_cast<unsigned long>(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
+    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
     {
         if (!readCentralDirectoryEntry(m_pStream, entry))
             return lmax;

@@ -92,6 +92,7 @@
 #include <comphelper/windowsdebugoutput.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeint.hxx>
 
 #include "comifaces.hxx"
 #include "jscriptclasses.hxx"
@@ -807,7 +808,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
     assert(xClass->getTypeClass() == TypeClass_INTERFACE &&
            aMethods.getLength() > 0);
 
-    if (index > static_cast<UINT>(aMethods.getLength() - 3 + 3 + 4))
+    if (index > o3tl::make_unsigned(aMethods.getLength() - 3 + 3 + 4))
         return E_INVALIDARG;
 
     *ppFuncDesc = new FUNCDESC;
@@ -1904,7 +1905,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMembe
         if( bHandled)
             return ret;
 
-        if ((dispidMember > 0) && (static_cast<size_t>(dispidMember) <= m_MemberInfos.size()) && m_xInvocation.is())
+        if ((dispidMember > 0) && (o3tl::make_unsigned(dispidMember) <= m_MemberInfos.size()) && m_xInvocation.is())
         {
             MemberInfo d = m_MemberInfos[dispidMember - 1];
             DWORD flags = wFlags & d.flags;

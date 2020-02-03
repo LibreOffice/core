@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeint.hxx>
 
 #include "XTDataObject.hxx"
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -368,11 +369,11 @@ void CXTDataObject::renderAnyDataAndSetupStgMedium(
 #ifdef DBG_UTIL
         if(CF_DIBV5 == fetc.cfFormat)
         {
-            OSL_ENSURE(sal_uInt32(clipDataStream.getLength()) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPV5HEADER)), "Wrong size on CF_DIBV5 data (!)");
+            OSL_ENSURE(o3tl::make_unsigned(clipDataStream.getLength()) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPV5HEADER)), "Wrong size on CF_DIBV5 data (!)");
         }
         else // CF_DIB == fetc.cfFormat
         {
-            OSL_ENSURE(sal_uInt32(clipDataStream.getLength()) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)), "Wrong size on CF_DIB data (!)");
+            OSL_ENSURE(o3tl::make_unsigned(clipDataStream.getLength()) > (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)), "Wrong size on CF_DIB data (!)");
         }
 #endif
 
