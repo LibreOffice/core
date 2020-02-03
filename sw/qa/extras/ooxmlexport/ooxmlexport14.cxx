@@ -144,6 +144,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShado
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf130167_spilloverHeaderShape, "testTdf130167_spilloverHeader.docx")
+{
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNameAccess(
+        xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+    // graphics from discarded headers were being added to the text body. Reduced from 5 to 2 shapes overall.
+    CPPUNIT_ASSERT(xNameAccess->getCount() < 4);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
 {
     OUString aActual = getParagraph(1)->getString();
