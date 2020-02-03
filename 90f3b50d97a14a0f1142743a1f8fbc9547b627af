@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9132a2a2_fdc5b489",
+        "filename": "sc/source/core/tool/jumpmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-03T13:33:10Z",
+      "side": 1,
+      "message": "ScJumpMatrix::nCols and ScJumpMatrix::nRows are both of type SCSIZE, which is a typedef for size_t (sc/inc/address.hxx).  The cast to sal_uLong is presumably there to make sure that the multiplication does not overflow on platforms where size_t is 32-bit (and sal_uLong is 64-bit).",
+      "revId": "90f3b50d97a14a0f1142743a1f8fbc9547b627af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
