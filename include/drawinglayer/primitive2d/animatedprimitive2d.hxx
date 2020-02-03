@@ -26,12 +26,9 @@
 #include <memory>
 
 // predefines
-namespace drawinglayer
-{
-namespace animation
+namespace drawinglayer::animation
 {
 class AnimationEntry;
-}
 }
 
 namespace basegfx
@@ -39,9 +36,7 @@ namespace basegfx
 class B2DHomMatrix;
 }
 
-namespace drawinglayer
-{
-namespace primitive2d
+namespace drawinglayer::primitive2d
 {
 /** AnimatedSwitchPrimitive2D class
 
@@ -107,13 +102,7 @@ public:
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-namespace primitive2d
-{
 /** AnimatedBlinkPrimitive2D class
 
     Basically the same mechanism as in AnimatedSwitchPrimitive2D, but the
@@ -135,13 +124,7 @@ public:
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-namespace drawinglayer
-{
-namespace primitive2d
-{
 /** AnimatedInterpolatePrimitive2D class
 
     Specialized on multi-step animations based on matrix transformations. The
@@ -169,7 +152,7 @@ public:
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
-} // end of namespace primitive2d
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
