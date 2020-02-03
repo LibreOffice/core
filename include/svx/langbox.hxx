@@ -78,12 +78,17 @@ public:
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
+    void            SetLanguageList( SvxLanguageListFlags nLangList,
+                            bool bHasLangNone, bool bLangNoneIsLangAll,
+                            bool bCheckSpellAvail,
+                            const LanguageType defaultLangType, sal_Int16 defaultType);
     void            InsertLanguage(const LanguageType nLangType);
     void            InsertDefaultLanguage(sal_Int16 nType);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
     sal_Int32           SaveEditedAsEntry();
 
+    bool ComboBoxEntryLessThan(const weld::ComboBoxEntry e1, const weld::ComboBoxEntry e2);
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xControl->connect_focus_in(rLink); }
     void grab_focus() { m_xControl->grab_focus(); }
