@@ -52,12 +52,13 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
     m_sAutomatic = m_xFontNameLB->get_text(0);
     assert(!m_sAutomatic.isEmpty());
 
-    m_xCheckLB->set_size_request(m_xCheckLB->get_approximate_digit_width() * 80,
-                                 m_xCheckLB->get_height_rows(10));
+    m_xCheckLB->set_size_request(m_xCheckLB->get_approximate_digit_width() * 60,
+                                 m_xCheckLB->get_height_rows(8));
     m_xCheckLB->set_help_id(HID_OFA_FONT_SUBST_CLB);
     m_xCheckLB->set_selection_mode(SelectionMode::Multiple);
 
-    setColSizes();
+    setColSizes(m_xCheckLB->get_size_request());
+    m_xCheckLB->connect_size_allocate(LINK(this, SvxFontSubstTabPage, ResizeHdl));
 
     m_xCheckLB->set_centered_column(1);
     m_xCheckLB->set_centered_column(2);
@@ -111,7 +112,7 @@ IMPL_LINK(SvxFontSubstTabPage, HeaderBarClick, int, nColumn, void)
     }
 }
 
-void SvxFontSubstTabPage::setColSizes()
+void SvxFontSubstTabPage::setColSizes(const Size& rSize)
 {
     int nW1 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(3)).Width();
     int nW2 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(4)).Width();
@@ -119,13 +120,18 @@ void SvxFontSubstTabPage::setColSizes()
     int nMin = m_xCheckLB->get_checkbox_column_width();
     nMax = std::max(nMax, nMin);
     const int nDoubleMax = 2*nMax;
-    const int nRest = m_xCheckLB->get_size_request().Width() - nDoubleMax;
+    const int nRest = rSize.Width() - nDoubleMax;
     std::vector<int> aWidths;
     aWidths.push_back(1);   // just abandon the built-in column for checkbuttons and use another
     aWidths.push_back(nMax);
     aWidths.push_back(nMax);
     aWidths.push_back(nRest/2);
     m_xCheckLB->set_column_fixed_widths(aWidths);
+}
+
+IMPL_LINK(SvxFontSubstTabPage, ResizeHdl, const Size&, rSize, void)
+{
+    setColSizes(rSize);
 }
 
 SvxFontSubstTabPage::~SvxFontSubstTabPage()

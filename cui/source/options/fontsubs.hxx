@@ -43,10 +43,12 @@ class SvxFontSubstTabPage : public SfxTabPage
     DECL_LINK(TreeListBoxSelectHdl, weld::TreeView&, void);
     DECL_LINK(NonPropFontsHdl, weld::ToggleButton&, void);
     DECL_LINK(HeaderBarClick, int, void);
+    DECL_LINK(ResizeHdl, const Size&, void);
+
     void SelectHdl(const weld::Widget* pWidget);
 
     void            CheckEnable();
-    void            setColSizes();
+    void            setColSizes(const Size& rSize);
 
 public:
     SvxFontSubstTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
