@@ -380,6 +380,10 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
     }
 
+    if (containsPreprocessingConditionalInclusion(methodDecl->getBody()->getSourceRange())) {
+        return true;
+    }
+
     report(
             DiagnosticsEngine::Warning, "%0%1 function just calls %2 parent",
             methodDecl->getLocation())
