@@ -1364,7 +1364,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
     }
 }
 
-ScPostIt* ScDocFunc::ImportNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate )
+ScPostIt* ScDocFunc::ImportNote( const ScAddress& rPos, const OUString& rNoteText  )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -1373,12 +1373,7 @@ ScPostIt* ScDocFunc::ImportNote( const ScAddress& rPos, const OUString& rNoteTex
     assert(!pOldNote && "imported data has >1 notes on same cell?");
 
     // create new note
-    ScPostIt* pNewNote = nullptr;
-    if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, /*nNoteId*/0 )) )
-    {
-        if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
-        if( pDate ) pNewNote->SetDate( *pDate );
-    }
+    ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, /*nNoteId*/0 );
 
     rDoc.SetStreamValid(rPos.Tab(), false);
 

@@ -299,8 +299,7 @@ namespace sw
 
         public:
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
-            enum class MoveAttrsMode { Default, FieldmarkInserted };
-            void MoveAttrs(const SwPosition& rPos, MoveAttrsMode eMode = MoveAttrsMode::Default);
+            void MoveAttrsFieldmarkInserted(const SwPosition& rPos);
             void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
             bool close(const SwPosition& rPos, RedlineType eType);
             void close(const SwPosition& rPos, RedlineType eType,

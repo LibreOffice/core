@@ -129,7 +129,6 @@ namespace drawinglayer::primitive2d
                     rTextAttribute.isScroll(),
                     false,
                     false,
-                    false,
                     false);
 
                 aTextRange = xBlockText->getB2DRange(aViewInformation);

@@ -133,10 +133,10 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
             switch (aType)
             {
                 case PropertyType::Color:
-                    AddColor (sPropertyName, "");
+                    AddColor (sPropertyName);
                     break;
                 case PropertyType::Integer:
-                    AddInteger (sPropertyName, "");
+                    AddInteger (sPropertyName);
                     break;
             }
         }
@@ -152,10 +152,8 @@ void DescriptionGenerator::AppendString (const OUString& sString)
 /** Search for the given color in the global color table.  If found append
     its name to the description.  Otherwise append its RGB tuple.
 */
-void DescriptionGenerator::AddColor (const OUString& sPropertyName,
-    const OUString& sLocalizedName)
+void DescriptionGenerator::AddColor (const OUString& sPropertyName)
 {
-    msDescription.append(sLocalizedName);
     msDescription.append('=');
 
     try
@@ -177,10 +175,8 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 }
 
 
-void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
-    const OUString& sLocalizedName)
+void DescriptionGenerator::AddInteger (const OUString& sPropertyName)
 {
-    msDescription.append(sLocalizedName);
     msDescription.append('=');
 
     try

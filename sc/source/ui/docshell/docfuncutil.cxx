@@ -99,7 +99,7 @@ std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
 
         std::pair<ScSimpleUndo::DataSpansType::iterator,bool> r =
-            pDataSpans->insert(std::make_pair(nTab, std::make_unique<sc::ColumnSpanSet>(false)));
+            pDataSpans->insert(std::make_pair(nTab, std::make_unique<sc::ColumnSpanSet>()));
 
         if (r.second)
         {

@@ -2880,7 +2880,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
-    sc::ColumnSpanSet aBroadcastSpans(false);
+    sc::ColumnSpanSet aBroadcastSpans;
 
     SCCOL nClipStartCol = aClipRange.aStart.Col();
     SCROW nClipStartRow = aClipRange.aStart.Row();
@@ -3039,7 +3039,7 @@ void ScDocument::CopyMultiRangeFromClip(
     SCROW nRow1 = rDestPos.Row();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
 
-    sc::ColumnSpanSet aBroadcastSpans(false);
+    sc::ColumnSpanSet aBroadcastSpans;
 
     if (!bSkipAttrForEmpty)
     {

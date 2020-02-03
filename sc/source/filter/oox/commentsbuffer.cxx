@@ -166,7 +166,7 @@ void Comment::finalizeImport()
         rtl::Reference<ScAnnotationsObj> xAnnos = static_cast<ScAnnotationsObj*>(pAnnosSupp->getAnnotations().get());
         ScDocShell* pDocShell = xAnnos->GetDocShell();
         // non-empty string required by note implementation (real text will be added below)
-        ScPostIt* pPostIt = pDocShell->GetDocFunc().ImportNote( maModel.maRange.aStart, OUString( ' ' ), nullptr, nullptr );
+        ScPostIt* pPostIt = pDocShell->GetDocFunc().ImportNote( maModel.maRange.aStart, OUString( ' ' ) );
         SdrCaptionObj* pCaption = pPostIt->GetOrCreateCaption( maModel.maRange.aStart );
 
         Reference< XShape > xAnnoShape( pCaption->getUnoShape(), UNO_QUERY_THROW ); // SvxShapeText

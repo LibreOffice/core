@@ -4,7 +4,7 @@ codemaker/source/javamaker/classfile.hxx:153
 codemaker/source/javamaker/classfile.hxx:168
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
-dbaccess/source/filter/xml/xmlExport.hxx:172
+dbaccess/source/filter/xml/xmlExport.hxx:170
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
 include/basegfx/polygon/b2dpolygontools.hxx:144
@@ -13,7 +13,7 @@ include/basegfx/polygon/b2dpolygontools.hxx:144
 include/framework/framelistanalyzer.hxx:184
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:456
+include/sfx2/objsh.hxx:461
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:431
@@ -23,7 +23,7 @@ include/vcl/wizardmachine.hxx:140
     void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
 sc/inc/rangelst.hxx:48
-    void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
+    void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,const class ScDocument &,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool) const
     enum ScRefFlags nFlags setBits=0x8000 clearBits=0x7f80
 sc/inc/rangeutl.hxx:162
     void ScRangeStringConverter::GetStringFromAddress(class rtl::OUString &,const class ScAddress &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t,_Bool,enum ScRefFlags)
@@ -37,13 +37,13 @@ sc/source/ui/view/cellsh1.cxx:102
 sc/source/ui/view/cellsh1.cxx:125
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sw/source/core/view/viewsh.cxx:728
+sw/source/core/view/viewsh.cxx:715
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:670
+sw/source/filter/html/swhtml.hxx:672
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
-sw/source/filter/ww8/wrtw8esh.cxx:1557
+sw/source/filter/ww8/wrtw8esh.cxx:1544
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:32

@@ -191,7 +191,7 @@ SvtScriptType ScDocument::GetRangeScriptType(
 
 SvtScriptType ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
 {
-    sc::ColumnSpanSet aSet(false);
+    sc::ColumnSpanSet aSet;
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange& rRange = rRanges[i];

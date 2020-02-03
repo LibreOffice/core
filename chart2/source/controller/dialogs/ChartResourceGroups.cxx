@@ -122,12 +122,12 @@ StackingResourceGroup::StackingResourceGroup(weld::Builder* pBuilder)
     m_xRB_Stack_Z->connect_toggled(LINK(this, StackingResourceGroup, StackingChangeHdl));
 }
 
-void StackingResourceGroup::showControls(bool bShow, bool bShowDeepStacking)
+void StackingResourceGroup::showControls(bool bShow)
 {
     m_xCB_Stacked->set_visible(bShow);
     m_xRB_Stack_Y->set_visible(bShow);
     m_xRB_Stack_Y_Percent->set_visible(bShow);
-    m_xRB_Stack_Z->set_visible(bShow && bShowDeepStacking);
+    m_xRB_Stack_Z->set_visible(false);
 }
 
 void StackingResourceGroup::fillControls(const ChartTypeParameter& rParameter)
