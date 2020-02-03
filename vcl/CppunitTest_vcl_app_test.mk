@@ -15,6 +15,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_app_test, \
 	vcl/qa/cppunit/app/test_IconThemeSelector \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,vcl_app_test,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_app_test, \
 	sal \
 	vcl \

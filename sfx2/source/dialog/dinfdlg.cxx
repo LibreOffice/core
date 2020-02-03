@@ -54,7 +54,6 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/securitypage.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -69,6 +68,7 @@
 #include <sfx2/strings.hrc>
 #include <strings.hxx>
 #include <tools/diagnose_ex.h>
+#include "securitypage.hxx"
 
 #include <algorithm>
 

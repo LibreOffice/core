@@ -49,7 +49,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/IconThemeScanner.hxx>
+#include <IconThemeScanner.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pngwrite.hxx>

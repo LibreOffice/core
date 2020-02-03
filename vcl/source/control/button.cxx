@@ -32,13 +32,13 @@
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/vclstatuslistener.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
+#include <vclstatuslistener.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/dispatchcommand.hxx>

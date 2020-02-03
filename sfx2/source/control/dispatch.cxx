@@ -45,7 +45,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/hintpost.hxx>
+#include <hintpost.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>

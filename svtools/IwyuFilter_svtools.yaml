@@ -1,6 +1,13 @@
 ---
 assumeFilename: svtools/source/control/ruler.cxx
 blacklist:
+    svtools/source/control/accessibleruler.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     svtools/source/dialogs/insdlg.cxx:
     # Needed on WIN
     - comphelper/classids.hxx

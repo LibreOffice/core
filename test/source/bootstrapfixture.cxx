@@ -10,7 +10,6 @@
 #include <config_features.h>
 
 #include <test/bootstrapfixture.hxx>
-#include <test/setupvcl.hxx>
 #include <vcl/errinf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
@@ -29,6 +28,8 @@
 
 #include <memory>
 #include <cstring>
+
+#include "setupvcl.hxx"
 
 using namespace ::com::sun::star;
 

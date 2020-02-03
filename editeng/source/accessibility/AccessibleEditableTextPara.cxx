@@ -49,7 +49,6 @@
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <editeng/AccessibleImageBullet.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>
@@ -67,6 +66,7 @@
 #include <editeng/unopracc.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include "AccessibleHyperlink.hxx"
+#include "AccessibleImageBullet.hxx"
 
 #include <svtools/colorcfg.hxx>
 using namespace std;
