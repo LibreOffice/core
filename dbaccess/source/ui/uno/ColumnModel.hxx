@@ -49,7 +49,6 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
                             ,public OColumnControlModel_BASE
 {
 
-    css::uno::Reference< css::lang::XMultiServiceFactory> m_xORB;
 // [properties]
     css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
     css::uno::Reference< css::beans::XPropertySet >       m_xColumn;
@@ -64,10 +63,9 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
 protected:
 
     virtual ~OColumnControlModel() override;
-    OColumnControlModel(const OColumnControlModel* _pSource
-                        ,const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
+    OColumnControlModel(const OColumnControlModel* _pSource);
 public:
-    explicit OColumnControlModel(const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
+    explicit OColumnControlModel();
 
 // UNO binding
     DECLARE_XINTERFACE( )

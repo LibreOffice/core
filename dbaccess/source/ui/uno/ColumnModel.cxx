@@ -43,10 +43,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OColumnControlModel::OColumnControlModel()
     :OPropertyContainer(m_aBHelper)
     ,OColumnControlModel_BASE(m_aMutex)
-    ,m_xORB(_rxFactory)
     ,m_sDefaultControl(SERVICE_CONTROLDEFAULT)
     ,m_bEnable(true)
     ,m_nBorder(0)
@@ -55,10 +54,9 @@ OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& 
     registerProperties();
 }
 
-OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,const Reference<XMultiServiceFactory>& _rxFactory)
+OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource)
     :OPropertyContainer(m_aBHelper)
     ,OColumnControlModel_BASE(m_aMutex)
-    ,m_xORB(_rxFactory)
     ,m_sDefaultControl(_pSource->m_sDefaultControl)
     ,m_aTabStop(_pSource->m_aTabStop)
     ,m_bEnable(_pSource->m_bEnable)
@@ -101,7 +99,7 @@ void OColumnControlModel::registerProperties()
 // XCloneable
 Reference< XCloneable > SAL_CALL OColumnControlModel::createClone( )
 {
-    return new OColumnControlModel( this, m_xORB );
+    return new OColumnControlModel( this );
 }
 
 css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()
@@ -111,7 +109,14 @@ css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()
 
 IMPLEMENT_GETTYPES2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OColumnControlModel)
-IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControlModel,"com.sun.star.comp.dbu.OColumnControlModel","com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel")
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControlModel, "com.sun.star.comp.dbu.OColumnControlModel")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControlModel)
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControlModel, "com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel")
+css::uno::Reference< css::uno::XInterface >
+    OColumnControlModel::Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& )
+{
+    return static_cast< XServiceInfo* >(new OColumnControlModel());
+}
 IMPLEMENT_FORWARD_REFCOUNT( OColumnControlModel, OColumnControlModel_BASE )
 Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType )
 {

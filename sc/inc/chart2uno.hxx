@@ -201,7 +201,6 @@ class ScChart2DataSequence final : public
 {
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
-            const css::uno::Reference< css::chart2::data::XDataProvider >& xDP,
             ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence() override;
@@ -375,7 +374,6 @@ private:
     std::vector<ScTokenRef>     m_aTokens;
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
-    css::uno::Reference < css::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet const    m_aPropSet;
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;

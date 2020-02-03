@@ -82,7 +82,7 @@ typedef cppu::WeakImplHelper<css::chart2::data::XDataSequence,
 class PivotTableDataSequence final : public PivotTableDataSequence_Base, public SfxListener
 {
 public:
-    explicit PivotTableDataSequence(ScDocument* pDocument, OUString const & sPivotTableName,
+    explicit PivotTableDataSequence(ScDocument* pDocument,
                                     OUString const & sID, std::vector<ValueAndFormat> const & rData);
 
     virtual ~PivotTableDataSequence() override;
@@ -156,7 +156,6 @@ public:
 
 private:
     ScDocument* m_pDocument;
-    OUString const m_sPivotTableName;
     OUString const m_aID;
     std::vector<ValueAndFormat> m_aData;
     SfxItemPropertySet const m_aPropSet;
