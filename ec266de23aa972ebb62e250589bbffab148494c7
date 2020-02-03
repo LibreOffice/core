@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d7fd840_ddc4df99",
+        "filename": "lotuswordpro/CppunitTest_lotuswordpro_import_test.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-03T12:19:37Z",
+      "side": 1,
+      "message": "Unless you know what you are doing, don\u0027t list components manually. CppunitTest_oox_mathml uses a call to the gb_CppunitTest_use_rdb macro instead; can\u0027t you do the same?",
+      "revId": "ec266de23aa972ebb62e250589bbffab148494c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
