@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+﻿/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -43,6 +43,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
@@ -1335,9 +1336,6 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     , m_xCTLSupportCB(m_xBuilder->weld_check_button("ctlsupport"))
     , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button("ignorelanguagechange"))
 {
-    m_xUserInterfaceLB->make_sorted();
-    m_xCurrencyLB->make_sorted();
-
     // tdf#125483 save original default label
     m_sDecimalSeparatorLabel = m_xDecimalSeparatorCB->get_label();
 
@@ -1349,7 +1347,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
                        SvtLanguageTable::GetLanguageString(GetInstalledLocaleForSystemUILanguage().getLanguageType());
 
     m_xUserInterfaceLB->append("0", aUILang);
-    m_xUserInterfaceLB->set_active(0);
+    m_xUserInterfaceLB->append_separator("");
     try
     {
         Reference< XMultiServiceFactory > theConfigProvider(
@@ -1364,15 +1362,31 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
         LanguageType aLang = LANGUAGE_DONTKNOW;
-        for (sal_IntPtr i=0; i<seqInstalledLanguages.getLength(); i++)
+        std::vector< std::pair<sal_Int32, OUString> > aUILanguages;
+        for (sal_Int32 i=0; i<seqInstalledLanguages.getLength(); i++)
         {
             aLang = LanguageTag::convertToLanguageTypeWithFallback(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang ) );
-                m_xUserInterfaceLB->append(OUString::number(i+1), aLangStr);
+                aUILanguages.emplace_back(i+1, aLangStr);
             }
         }
+
+        std::sort(aUILanguages.begin(), aUILanguages.end(), [](const auto& l1, const auto& l2) {
+            static const auto aSorter = comphelper::string::NaturalStringSorter(
+                comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetLanguageTag().getLocale());
+            return aSorter.compare(l1.second, l2.second) < 0;
+        });
+
+        // tdf#114694: append the sorted list after the default entry and separator.
+        for (const auto & [ nGroupID, sGroupName ] : aUILanguages)
+        {
+            m_xUserInterfaceLB->append(OUString::number(nGroupID), sGroupName);
+        }
+
+        m_xUserInterfaceLB->set_active(0);
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
@@ -1400,37 +1414,56 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         TOOLS_WARN_EXCEPTION("cui.options", "ignoring" );
     }
 
-    m_xWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_xWesternLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::LATIN );
-    m_xAsianLanguageLB->SetLanguageList( SvxLanguageListFlags::CJK     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_xAsianLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::ASIAN );
-    m_xComplexLanguageLB->SetLanguageList( SvxLanguageListFlags::CTL     | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
-    m_xComplexLanguageLB->InsertDefaultLanguage( css::i18n::ScriptType::COMPLEX );
+    m_xWesternLanguageLB->SetLanguageList(
+        SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, false, true, true,
+        LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN);
 
-    m_xLocaleSettingLB->SetLanguageList( SvxLanguageListFlags::ALL     | SvxLanguageListFlags::ONLY_KNOWN, false, false, false );
-    m_xLocaleSettingLB->InsertLanguage(LANGUAGE_USER_SYSTEM_CONFIG);
+    m_xAsianLanguageLB->SetLanguageList(
+        SvxLanguageListFlags::CJK | SvxLanguageListFlags::ONLY_KNOWN, true, false, true, true,
+        LANGUAGE_SYSTEM, css::i18n::ScriptType::ASIAN);
+
+    m_xComplexLanguageLB->SetLanguageList(
+        SvxLanguageListFlags::CTL | SvxLanguageListFlags::ONLY_KNOWN, true, false, true, true,
+        LANGUAGE_SYSTEM, css::i18n::ScriptType::COMPLEX);
+
+    m_xLocaleSettingLB->SetLanguageList(
+        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false, false, false, true,
+        LANGUAGE_USER_SYSTEM_CONFIG, css::i18n::ScriptType::WEAK);
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
     m_xCurrencyLB->append("default", aDefaultCurr);
+    m_xCurrencyLB->append_separator("");
+
     assert(m_xCurrencyLB->find_id("default") != -1);
     // all currencies
     OUString aTwoSpace( "  " );
     sal_uInt16 nCurrCount = rCurrTab.size();
+    std::vector< const NfCurrencyEntry* > aCurrencies;
     // first entry is SYSTEM, skip it
     for ( sal_uInt16 j=1; j < nCurrCount; ++j )
     {
-        const NfCurrencyEntry* pCurr = &rCurrTab[j];
-        OUString aStr_ = pCurr->GetBankSymbol() +
+        aCurrencies.push_back(&rCurrTab[j]);
+    }
+    std::sort(aCurrencies.begin(), aCurrencies.end(),
+              [](const NfCurrencyEntry* c1, const NfCurrencyEntry* c2) {
+                  return c1->GetBankSymbol().compareTo(c2->GetBankSymbol()) < 0;
+              });
+
+    for (auto &v : aCurrencies)
+    {
+        OUString aStr_ = v->GetBankSymbol() +
                          aTwoSpace +
-                         pCurr->GetSymbol();
+                         v->GetSymbol();
         aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
                 aTwoSpace +
-                ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( pCurr->GetLanguage() ) );
-        m_xCurrencyLB->append(OUString::number(reinterpret_cast<sal_Int64>(pCurr)), aStr_);
+                ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( v->GetLanguage() ) );
+        m_xCurrencyLB->append(OUString::number(reinterpret_cast<sal_Int64>(v)), aStr_);
     }
+
+    m_xCurrencyLB->set_active(0);
 
     m_xLocaleSettingLB->connect_changed( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
     m_xDatePatternsED->connect_changed( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
@@ -1930,11 +1963,12 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
 
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
             (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang);
+    const OUString aDefaultID = "default";
     // Update the "Default ..." currency.
-    m_xCurrencyLB->remove_id("default");
+    m_xCurrencyLB->remove_id(aDefaultID);
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
-    m_xCurrencyLB->append("default", aDefaultCurr);
-    assert(m_xCurrencyLB->find_id("default") != -1);
+    m_xCurrencyLB->insert(0, aDefaultCurr, &aDefaultID, nullptr, nullptr);
+    assert(m_xCurrencyLB->find_id(aDefaultID) != -1);
     m_xCurrencyLB->set_active_text(aDefaultCurr);
 
     // obtain corresponding locale data
