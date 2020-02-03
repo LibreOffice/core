@@ -33,7 +33,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
-#include <editeng/AccessibleImageBullet.hxx>
 #include <editeng/eerdll.hxx>
 
 #include <editeng/editdata.hxx>
@@ -42,6 +41,7 @@
 #include <editeng/unoedsrc.hxx>
 #include <svtools/colorcfg.hxx>
 
+#include "AccessibleImageBullet.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

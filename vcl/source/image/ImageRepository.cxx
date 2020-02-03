@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/imagerepository.hxx>
+#include <imagerepository.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

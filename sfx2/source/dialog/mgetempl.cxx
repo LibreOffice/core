@@ -29,7 +29,6 @@
 #include <sfx2/styledlg.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/mgetempl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/module.hxx>
@@ -39,6 +38,8 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
+
+#include "mgetempl.hxx"
 
 /*  SfxManageStyleSheetPage Constructor
  *

@@ -22,9 +22,9 @@
 #include <utility>
 
 #include <sfx2/printer.hxx>
-#include <sfx2/prnmon.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
+#include "prnmon.hxx"
 
 // class SfxPrinter ------------------------------------------------------
 

@@ -21,8 +21,8 @@
 #define INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 
 #include <vcl/idle.hxx>
-#include <vcl/ppdparser.hxx>
 #include <vcl/weld.hxx>
+#include <ppdparser.hxx>
 #include <printerinfomanager.hxx>
 
 class RTSPaperPage;

@@ -21,10 +21,10 @@
 #include <svl/style.hxx>
 
 #include <sfx2/styledlg.hxx>
-#include <sfx2/mgetempl.hxx>
 #include <sfx2/sfxresid.hxx>
-
 #include <sfx2/strings.hrc>
+
+#include "mgetempl.hxx"
 
 /*  [Description]
 

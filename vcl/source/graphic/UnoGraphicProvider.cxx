@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/imagerepository.hxx>
+#include <imagerepository.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>

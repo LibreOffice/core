@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/recentdocsviewitem.hxx>
-
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
@@ -24,6 +22,7 @@
 #include <vcl/ptrstyle.hxx>
 
 #include <bitmaps.hlst>
+#include "recentdocsviewitem.hxx"
 
 using namespace basegfx;
 using namespace com::sun::star;

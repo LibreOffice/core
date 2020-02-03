@@ -10,6 +10,13 @@ blacklist:
     editeng/source/accessibility/AccessibleEditableTextPara.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
+    editeng/source/accessibility/AccessibleImageBullet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
     editeng/source/items/CustomPropertyField.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp

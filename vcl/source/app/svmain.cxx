@@ -40,14 +40,14 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/unowrap.hxx>
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/embeddedfontshelper.hxx>
-#include <vcl/debugevent.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
+#include <debugevent.hxx>
 #include <scrwnd.hxx>
 
 #ifdef _WIN32

@@ -50,7 +50,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <vcl/toolkit/unowrap.hxx>
 
-#include <vcl/configsettings.hxx>
+#include <configsettings.hxx>
 
 #include <map>
 #include <string_view>

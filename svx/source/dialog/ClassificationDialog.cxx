@@ -10,7 +10,6 @@
 
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
-#include <svx/ClassificationEditView.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
@@ -30,6 +29,8 @@
 #include <sfx2/objsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
+
+#include "ClassificationEditView.hxx"
 
 namespace svx {
 
