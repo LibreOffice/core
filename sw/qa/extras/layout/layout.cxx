@@ -2550,6 +2550,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130242)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130380)
+{
+    SwDoc* pDoc = createDoc("tdf130380.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nY = getXPath(pXmlDoc,
+                            "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[1]/polypolygon/"
+                            "polygon/point[1]",
+                            "y")
+                       .toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6727
+    // - Actual  : 4411
+    // - Delta   : 50
+    // i.e. the area chart shrank.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6727, nY, 50);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");

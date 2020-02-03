@@ -903,7 +903,10 @@ void AreaChart::createShapes()
 
                             if (m_bArea && nLabelPlacement == css::chart::DataLabelPlacement::CENTER)
                             {
-                                fLogicY -= (fLogicY - fPreviousYValue) / 2.0;
+                                if (fPreviousYValue)
+                                    fLogicY -= (fLogicY - fPreviousYValue) / 2.0;
+                                else
+                                    fLogicY = (fLogicY + rPosHelper.getLogicMinY()) / 2.0;
                                 aScenePosition = rPosHelper.transformLogicToScene(fLogicX, fLogicY, fLogicZ, false);
                             }
 
