@@ -80,6 +80,8 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace ::com::sun::star;
 
 // Slotmaps for the application's methods
@@ -414,21 +416,36 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 {
     if(!lcl_hasAllComponentsAvailable())
     {
-        try
+        if (officecfg::Office::Common::PackageKit::EnableBaseInstallation::get())
         {
-            using namespace org::freedesktop::PackageKit;
-            using namespace svtools;
-            css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-            const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
-            xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
-            SolarMutexGuard aGuard;
-            executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
-        }
-        catch (const css::uno::Exception &)
-        {
-            TOOLS_INFO_EXCEPTION(
-                "sw.core",
-                "trying to install LibreOffice Base, caught");
+            try
+            {
+                using namespace org::freedesktop::PackageKit;
+                using namespace svtools;
+                css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+                const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
+                xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
+                SolarMutexGuard aGuard;
+                executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
+            }
+            catch (const css::uno::Exception &)
+            {
+                TOOLS_INFO_EXCEPTION(
+                    "sw.core",
+                    "trying to install LibreOffice Base, caught");
+                auto xRestartManager
+                    = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
+                if (!xRestartManager->isRestartRequested(false))
+                {
+                    // Base is absent, and could not initiate its install - ask user to do that manually
+                    // Only show the dialog if restart is not initiated yet
+                    std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
+                        nullptr, VclMessageType::Info, VclButtonsType::Ok,
+                        SwResId(STR_NO_BASE_FOR_MERGE)));
+                    xWarnBox->run();
+                }
+            }
+        } else {
             auto xRestartManager
                 = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
             if (!xRestartManager->isRestartRequested(false))

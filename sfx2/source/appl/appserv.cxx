@@ -174,20 +174,23 @@ namespace
         // make sure we actually can instantiate services from base first
         if(!lcl_isBaseAvailable())
         {
-            try
+            if (officecfg::Office::Common::PackageKit::EnableBaseInstallation::get())
             {
-                using namespace org::freedesktop::PackageKit;
-                using namespace svtools;
-                Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                Sequence< OUString > vPackages { "libreoffice-base" };
-                xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
-                // Ill be back (hopefully)!
-                SolarMutexGuard aGuard;
-                executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
-            }
-            catch (const Exception &)
-            {
-                TOOLS_INFO_EXCEPTION("sfx.appl", "trying to install LibreOffice Base");
+                try
+                {
+                    using namespace org::freedesktop::PackageKit;
+                    using namespace svtools;
+                    Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+                    Sequence< OUString > vPackages { "libreoffice-base" };
+                    xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
+                    // I'll be back (hopefully)!
+                    SolarMutexGuard aGuard;
+                    executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
+                }
+                catch (const Exception &)
+                {
+                    TOOLS_INFO_EXCEPTION("sfx.appl", "trying to install LibreOffice Base");
+                }
             }
             return;
         }

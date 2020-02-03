@@ -556,6 +556,9 @@
       <prop oor:name="EnableLangpackInstallation" oor:type="xs:boolean">
         <value install:module="unx">true</value>
       </prop>
+      <prop oor:name="EnableBaseInstallation" oor:type="xs:boolean">
+        <value install:module="unx">true</value>
+      </prop>
   </node>
   <node oor:name="Classification">
       <prop oor:name="Policy" oor:type="xs:short">
