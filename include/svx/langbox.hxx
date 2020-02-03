@@ -78,6 +78,10 @@ public:
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
+    void            SetLanguageList( SvxLanguageListFlags nLangList,
+                            bool bHasLangNone, bool bLangNoneIsLangAll,
+                            bool bCheckSpellAvail,
+                            const LanguageType defaultLangType, sal_Int16 defaultType);
     void            InsertLanguage(const LanguageType nLangType);
     void            InsertDefaultLanguage(sal_Int16 nType);
 
