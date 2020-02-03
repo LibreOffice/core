@@ -578,9 +578,10 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
 
         case SAL_MSG_STARTTIMER:
         {
+            auto const nParam = static_cast<sal_uInt64>( lParam );
             sal_uInt64 nTime = tools::Time::GetSystemTicks();
-            if ( nTime < static_cast<sal_uInt64>( lParam ) )
-                nTime = static_cast<sal_uInt64>( lParam ) - nTime;
+            if ( nTime < nParam )
+                nTime = nParam - nTime;
             else
                 nTime = 0;
             assert( pTimer != nullptr );
