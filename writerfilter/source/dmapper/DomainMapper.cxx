@@ -2236,6 +2236,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_anchor_anchor: // at_character drawing
     case NS_ooxml::LN_inline_inline: // as_character drawing
     {
+        if ( m_pImpl->IsDiscardHeaderFooter() )
+            break;
+
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
