@@ -1851,6 +1851,11 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 
     if (m_aTextAppendStack.empty())
         return;
+
+    // not a table-only header/footer, don't avoid of floating tables
+    if (IsInHeaderFooter() && !IsInShape() && hasTableManager() && !getTableManager().isInCell())
+        getTableManager().setIsInShape(false);
+
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
@@ -2197,6 +2202,10 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
     m_eInHeaderFooterImport
         = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
+
+    // ignore <w:tblpPr> in table-only header/footer, those tables are imported as non-floating ones
+    if (hasTableManager())
+        getTableManager().setIsInShape(true);
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
