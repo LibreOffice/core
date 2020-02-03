@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecdeeef0_89a71fbf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-03T10:11:41Z",
+      "side": 1,
+      "message": "by the way: there is a patch by Samuel to merge the content of all the jar files for Java 9 Module support, https://gerrit.libreoffice.org/c/core/+/84946\n\nbut it\u0027s stuck at the moment...",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 7
+      },
+      "revId": "443f5c6e43760c0b95bad5490f7aa1f2712a9734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
