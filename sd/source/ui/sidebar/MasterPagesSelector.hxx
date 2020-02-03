@@ -25,6 +25,7 @@
 #include "MasterPageContainer.hxx"
 #include "PreviewValueSet.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -42,9 +43,8 @@ namespace sd { namespace sidebar {
 /** Base class of a menu that lets the user select from a list of
     templates or designs that are loaded from files.
 */
-class MasterPagesSelector
-    : public PreviewValueSet,
-      public sfx2::sidebar::ILayoutableWindow
+class MasterPagesSelector : public PanelLayout
+                          , public sfx2::sidebar::ILayoutableWindow
 {
 public:
     MasterPagesSelector (
@@ -80,12 +80,17 @@ public:
 
     void UpdateAllPreviews();
 
+    void ShowContextMenu(const Point* pPos);
+
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 protected:
     mutable ::osl::Mutex maMutex;
     std::shared_ptr<MasterPageContainer> mpContainer;
+
+    std::unique_ptr<PreviewValueSet> mxPreviewValueSet;
+    std::unique_ptr<weld::CustomWeld> mxPreviewValueSetWin;
 
     SdDrawDocument& mrDocument;
     ViewShellBase& mrBase;
@@ -157,7 +162,7 @@ private:
         last seen.  This value is used heuristically to speed up the lookup
         of an index for a token.
     */
-    DECL_LINK(ClickHandler, ValueSet*, void);
+    DECL_LINK(ClickHandler, SvtValueSet*, void);
     DECL_LINK(RightClickHandler, const MouseEvent&, void);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
     DECL_LINK(OnMenuItemSelected, Menu*, bool);
