@@ -24,64 +24,70 @@
 
 extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath(MSIHANDLE handle)
 {
+    std::wstring sInstDir = GetMsiPropertyW(handle, L"INSTALLLOCATION");
+    if (!sInstDir.empty())
+        return ERROR_SUCCESS; // Don't overwrite explicitly set value
+
     auto RegValue = [](HKEY hRoot, const WCHAR* sKey, const WCHAR* sVal) {
         std::wstring sResult;
-
-        if (HKEY hKey; RegOpenKeyW(hRoot, sKey, &hKey) == ERROR_SUCCESS)
-        {
-            WCHAR buf[32767]; // max longpath
-            DWORD bufsize = sizeof(buf); // yes, it is the number of bytes
-            if (RegQueryValueExW(hKey, sVal, nullptr, nullptr, reinterpret_cast<LPBYTE>(buf),
-                                 &bufsize)
-                == ERROR_SUCCESS)
-            {
-                buf[std::min<size_t>(SAL_N_ELEMENTS(buf) - 1, bufsize / sizeof(*buf))] = 0;
-                sResult = buf;
-            }
-            RegCloseKey(hKey);
-        }
+        WCHAR buf[32767]; // max longpath
+        DWORD bufsize = sizeof(buf); // yes, it is the number of bytes
+        if (RegGetValueW(hRoot, sKey, sVal, RRF_RT_REG_SZ, nullptr, buf, &bufsize) == ERROR_SUCCESS)
+            sResult = buf; // RegGetValueW null-terminates strings
 
         return sResult;
     };
 
-    std::wstring   sManufacturer = GetMsiPropertyW( handle, L"Manufacturer" );
-    std::wstring   sDefinedName = GetMsiPropertyW( handle, L"DEFINEDPRODUCT" );
-    std::wstring   sUpdateVersion = GetMsiPropertyW( handle, L"DEFINEDVERSION" );
-    std::wstring   sUpgradeCode = GetMsiPropertyW( handle, L"UpgradeCode" );
+    const std::wstring sManufacturer = GetMsiPropertyW( handle, L"Manufacturer" );
+    const std::wstring sDefinedName = GetMsiPropertyW( handle, L"DEFINEDPRODUCT" );
+    const std::wstring sUpdateVersion = GetMsiPropertyW( handle, L"DEFINEDVERSION" );
+    const std::wstring sUpgradeCode = GetMsiPropertyW( handle, L"UpgradeCode" );
+    const std::wstring sBrandPackageVersion = GetMsiPropertyW(handle, L"BRANDPACKAGEVERSION");
 
     std::wstring   sKey = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
                                         L"\\" + sUpdateVersion + L"\\" + sUpgradeCode;
 
-    if (auto sInstDir = RegValue(HKEY_CURRENT_USER, sKey.c_str(), L"INSTALLLOCATION");
-        !sInstDir.empty())
+    sInstDir = RegValue(HKEY_CURRENT_USER, sKey.c_str(), L"INSTALLLOCATION");
+    if (sInstDir.empty())
+        sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"INSTALLLOCATION");
+    // See #i93032# for layers description
+    if (sInstDir.empty())
     {
-        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
-        // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_CURRENT_USER", MB_OK );
+        sKey = L"Software\\LibreOffice\\Layers\\" + sDefinedName + L"\\" + sBrandPackageVersion;
+        sInstDir = RegValue(HKEY_CURRENT_USER, sKey.c_str(), L"INSTALLLOCATION");
     }
-    else if (auto sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"INSTALLLOCATION");
-             !sInstDir.empty())
+    if (sInstDir.empty())
     {
-        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
-        // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_LOCAL_MACHINE", MB_OK );
+        sKey = L"Software\\LibreOffice\\Layers_\\" + sDefinedName + L"\\" + sBrandPackageVersion;
+        sInstDir = RegValue(HKEY_CURRENT_USER, sKey.c_str(), L"INSTALLLOCATION");
     }
-    else if (std::wistringstream sOlds{ GetMsiPropertyW(handle, L"OLDPRODUCTS") }; !sOlds.eof())
+    if (sInstDir.empty())
     {
+        sKey = L"Software\\LibreOffice\\Layers\\" + sDefinedName + L"\\" + sBrandPackageVersion;
+        sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"INSTALLLOCATION");
+    }
+    if (sInstDir.empty())
+    {
+        sKey = L"Software\\LibreOffice\\Layers_\\" + sDefinedName + L"\\" + sBrandPackageVersion;
+        sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"INSTALLLOCATION");
+    }
+    if (sInstDir.empty())
+    {
+        std::wistringstream sOlds{ GetMsiPropertyW(handle, L"OLDPRODUCTS") };
         std::wstring sOld;
-        bool bFound = false;
-        while (!bFound && std::getline(sOlds, sOld, L';'))
+        while (std::getline(sOlds, sOld, L';'))
         {
             if (sOld.empty())
                 continue;
             sKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + sOld;
-            if (auto sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"InstallLocation");
-                !sInstDir.empty())
-            {
-                MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
-                // MessageBoxW( NULL, sInstDir.c_str(), L"Found in Uninstall", MB_OK );
-                bFound = true;
-            }
+            sInstDir = RegValue(HKEY_LOCAL_MACHINE, sKey.c_str(), L"InstallLocation");
+            if (!sInstDir.empty())
+                break;
         }
     }
+
+    if (!sInstDir.empty())
+        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
 
     return ERROR_SUCCESS;
 
