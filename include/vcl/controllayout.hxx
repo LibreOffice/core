@@ -23,9 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vector>
+#include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
-
-class Control;
 
 namespace vcl
 {
