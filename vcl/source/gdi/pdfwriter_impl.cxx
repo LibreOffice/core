@@ -9001,6 +9001,16 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         // Reset line width to the default.
         aStream.append(" 1 w\n");
 
+        // vcl::RenderPDFBitmaps() effectively renders a white background for transparent input, be
+        // consistent with that.
+        aStream.append("1 1 1 rg\n");
+        aStream.append("0 0 ");
+        aStream.append(aSize.Width());
+        aStream.append(" ");
+        aStream.append(aSize.Height());
+        aStream.append(" re\n");
+        aStream.append("f*\n");
+
         // No reference XObject, draw the form XObject containing the original
         // page streams.
         aStream.append("/Im");
