@@ -34,6 +34,8 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <sal/log.hxx>
+#include <vcl/lok.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -201,8 +203,21 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     {
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         css::uno::Reference<css::lang::XComponent> xFrame(xProvider, css::uno::UNO_QUERY);
-        AsyncAccelExec* pExec = AsyncAccelExec::createOneShotInstance(xFrame, xDispatch, aURL);
-        pExec->execAsync();
+        if (vcl::lok::isUnipoll())
+        { // tdf#130382 - all synchronous really.
+            try {
+                xDispatch->dispatch (aURL, css::uno::Sequence< css::beans::PropertyValue >());
+            }
+            catch(const css::uno::Exception&ev)
+            {
+                SAL_INFO("svtools", "exception on key emission: " << ev.Message);
+            }
+        }
+        else
+        {
+            AsyncAccelExec* pExec = AsyncAccelExec::createOneShotInstance(xFrame, xDispatch, aURL);
+            pExec->execAsync();
+        }
     }
 
     return bRet;
