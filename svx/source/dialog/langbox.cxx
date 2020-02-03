@@ -185,6 +185,121 @@ void SvxLanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTy
     }
 }
 
+static bool ComboBoxEntryLessThan(const weld::ComboBoxEntry e1, const weld::ComboBoxEntry e2)
+{
+    return e1.sString.compareTo(e2.sString) < 0;
+}
+
+void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
+        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail,
+        const LanguageType defaultLangType, sal_Int16 defaultType)
+{
+    m_bHasLangNone          = bHasLangNone;
+    m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
+    m_bWithCheckmark        = bCheckSpellAvail;
+
+    if (SvxLanguageListFlags::EMPTY == nLangList)
+    {
+        m_xControl->clear();
+        return;
+    }
+
+    bool bAddAvailable = (!(nLangList & SvxLanguageListFlags::ONLY_KNOWN) &&
+            ((nLangList & SvxLanguageListFlags::ALL) ||
+             (nLangList & SvxLanguageListFlags::WESTERN) ||
+             (nLangList & SvxLanguageListFlags::CTL) ||
+             (nLangList & SvxLanguageListFlags::CJK)));
+    std::vector< LanguageType > aSpellAvailLang;
+    std::vector< LanguageType > aHyphAvailLang;
+    std::vector< LanguageType > aThesAvailLang;
+    Sequence< sal_Int16 > aSpellUsedLang;
+    Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
+    if (xAvail.is())
+    {
+        Sequence< css::lang::Locale > aTmp;
+
+        if (bAddAvailable)
+        {
+            aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
+            aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
+        }
+        if (bAddAvailable)
+        {
+            aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
+            aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
+        }
+        if (bAddAvailable)
+        {
+            aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
+            aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
+        }
+    }
+    if (SvxLanguageListFlags::SPELL_USED & nLangList)
+    {
+        Reference< XSpellChecker1 > xTmp1 = LinguMgr::GetSpellChecker();
+        if (xTmp1.is())
+            aSpellUsedLang = xTmp1->getLanguages();
+    }
+
+    std::vector<LanguageType> aKnown;
+    sal_uInt32 nCount;
+    if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
+    {
+        aKnown = LocaleDataWrapper::getInstalledLanguageTypes();
+        nCount = aKnown.size();
+    }
+    else
+    {
+        nCount = SvtLanguageTable::GetLanguageEntryCount();
+    }
+
+    std::vector<weld::ComboBoxEntry> aEntries;
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
+    {
+        LanguageType nLangType;
+        if ( nLangList & SvxLanguageListFlags::ONLY_KNOWN )
+            nLangType = aKnown[i];
+        else
+            nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
+        if ( lcl_isPrerequisite( nLangType ) &&
+             (lcl_isScriptTypeRequested( nLangType, nLangList) ||
+              (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
+               MsLangId::hasForbiddenCharacters(nLangType)) ||
+              (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
+               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType)))
+              ) )
+        {
+            aEntries.push_back(BuildEntry(nLangType));
+            if (aEntries.back().sString.isEmpty())
+                aEntries.pop_back();
+        }
+    }
+
+    if (bAddAvailable)
+    {
+        // Spell checkers, hyphenators and thesauri may add language tags
+        // unknown so far.
+        AddLanguages(aSpellAvailLang, nLangList, aEntries);
+        AddLanguages(aHyphAvailLang, nLangList, aEntries);
+        AddLanguages(aThesAvailLang, nLangList, aEntries);
+    }
+
+    std::sort(aEntries.begin(), aEntries.end(), ComboBoxEntryLessThan);
+
+    std::vector<weld::ComboBoxEntry> finalEntries;
+    finalEntries.push_back(BuildEntry(defaultLangType,defaultType));
+
+    if (bHasLangNone)
+       finalEntries.push_back(BuildEntry(LANGUAGE_NONE));
+
+    for (const auto& aEntry : aEntries)
+    {
+        finalEntries.push_back(aEntry);
+    }
+    m_xControl->insert_vector(finalEntries, false);
+    m_xControl->insert_separator(1,"");
+}
+
 void SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
@@ -308,6 +423,7 @@ void SvxLanguageBox::InsertLanguage(const LanguageType nLangType)
 void SvxLanguageBox::InsertDefaultLanguage(sal_Int16 nType)
 {
     InsertLanguage(LANGUAGE_SYSTEM, nType);
+    m_xControl->append_separator("");
 }
 
 weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal_Int16 nType)
@@ -438,7 +554,7 @@ SvxLanguageBox::SvxLanguageBox(std::unique_ptr<weld::ComboBox> pControl)
     , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(false)
 {
-    m_xControl->make_sorted();
+    //m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, SvxLanguageBox, ChangeHdl));
 }
 
