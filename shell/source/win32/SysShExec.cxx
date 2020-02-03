@@ -253,7 +253,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 if (PathResolve(path, nullptr, PRF_VERIFYEXISTS | PRF_REQUIREABSOLUTE) == 0)
                 {
                     throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, PathResolve(" + OUString(o3tl::toU(path))
+                        OUStringLiteral("XSystemShellExecute.execute, PathResolve(") + o3tl::toU(path)
                             + ") failed",
                         {}, 0);
                 }
@@ -266,7 +266,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_ATTRIBUTES) == 0)
                 {
                     throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, SHGetFileInfoW(" + OUString(o3tl::toU(path)) + ") failed", {},
+                        OUStringLiteral("XSystemShellExecute.execute, SHGetFileInfoW(") + o3tl::toU(path) + ") failed", {},
                         0);
                 }
                 if ((info.dwAttributes & SFGAO_LINK) == 0) {
