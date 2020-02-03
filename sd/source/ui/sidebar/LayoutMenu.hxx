@@ -44,8 +44,6 @@ namespace sd { namespace sidebar {
 
 class LayoutMenu
     : public ValueSet,
-      public DragSourceHelper,
-      public DropTargetHelper,
       public sfx2::sidebar::ILayoutableWindow
 {
 public:
@@ -86,13 +84,6 @@ public:
         settings.
     */
     void InvalidateContent();
-
-    // DragSourceHelper
-    virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel) override;
-
-    // DropTargetHelper
-    virtual sal_Int8 AcceptDrop (const AcceptDropEvent& rEvent) override;
-    virtual sal_Int8 ExecuteDrop (const ExecuteDropEvent& rEvent) override;
 
     /** The context menu is requested over this Command() method.
     */
