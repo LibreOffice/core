@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,lotuswordpro,\
 
 $(eval $(call gb_Module_add_check_targets,lotuswordpro,\
     CppunitTest_lotuswordpro_test_lotuswordpro \
+    CppunitTest_lotuswordpro_import_test \
 ))
 
 endif
