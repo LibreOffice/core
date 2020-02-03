@@ -2613,7 +2613,11 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
                 aString = SdResId( STR_PRESOBJ_MPNOTESTITLE );
             }
         }
-        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())
+#ifdef IOS
+                 || true
+#endif
+                 )
             aString = SdResId(STR_PRESOBJ_TITLE_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_TITLE);
