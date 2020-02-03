@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPER_CONTENTINFO_HXX
-#define INCLUDED_UCBHELPER_CONTENTINFO_HXX
+#ifndef UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX
+#define UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX
 
 #include <memory>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -123,6 +123,6 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* ! INCLUDED_UCBHELPER_CONTENTINFO_HXX */
+#endif /* ! UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

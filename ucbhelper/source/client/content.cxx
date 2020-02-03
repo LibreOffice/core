@@ -55,7 +55,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/activedatasink.hxx>
-#include <ucbhelper/activedatastreamer.hxx>
+#include "activedatastreamer.hxx"
 #include <ucbhelper/cancelcommandexecution.hxx>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }

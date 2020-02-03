@@ -7544,14 +7544,12 @@ include/typelib/typedescription.h
 include/typelib/typedescription.hxx
 include/typelib/uik.h
 include/ucbhelper/activedatasink.hxx
-include/ucbhelper/activedatastreamer.hxx
 include/ucbhelper/authenticationfallback.hxx
 include/ucbhelper/cancelcommandexecution.hxx
 include/ucbhelper/commandenvironment.hxx
 include/ucbhelper/content.hxx
 include/ucbhelper/contenthelper.hxx
 include/ucbhelper/contentidentifier.hxx
-include/ucbhelper/contentinfo.hxx
 include/ucbhelper/fd_inputstream.hxx
 include/ucbhelper/getcomponentcontext.hxx
 include/ucbhelper/interactionrequest.hxx
@@ -7567,7 +7565,6 @@ include/ucbhelper/resultsetmetadata.hxx
 include/ucbhelper/simpleauthenticationrequest.hxx
 include/ucbhelper/simplecertificatevalidationrequest.hxx
 include/ucbhelper/simpleinteractionrequest.hxx
-include/ucbhelper/simpleioerrorrequest.hxx
 include/ucbhelper/simplenameclashresolverequest.hxx
 include/ucbhelper/ucbhelperdllapi.h
 include/uno/Enterable.h
@@ -16784,6 +16781,7 @@ ucb/source/ucp/webdav/webdavresultset.hxx
 ucb/source/ucp/webdav/webdavservices.cxx
 ucbhelper/source/client/activedatasink.cxx
 ucbhelper/source/client/activedatastreamer.cxx
+ucbhelper/source/client/activedatastreamer.hxx
 ucbhelper/source/client/commandenvironment.cxx
 ucbhelper/source/client/content.cxx
 ucbhelper/source/client/interceptedinteraction.cxx
@@ -16793,6 +16791,7 @@ ucbhelper/source/provider/cancelcommandexecution.cxx
 ucbhelper/source/provider/contenthelper.cxx
 ucbhelper/source/provider/contentidentifier.cxx
 ucbhelper/source/provider/contentinfo.cxx
+ucbhelper/source/provider/contentinfo.hxx
 ucbhelper/source/provider/fd_inputstream.cxx
 ucbhelper/source/provider/getcomponentcontext.cxx
 ucbhelper/source/provider/interactionrequest.cxx
@@ -16806,6 +16805,7 @@ ucbhelper/source/provider/simpleauthenticationrequest.cxx
 ucbhelper/source/provider/simplecertificatevalidationrequest.cxx
 ucbhelper/source/provider/simpleinteractionrequest.cxx
 ucbhelper/source/provider/simpleioerrorrequest.cxx
+ucbhelper/source/provider/simpleioerrorrequest.hxx
 ucbhelper/source/provider/simplenameclashresolverequest.cxx
 unodevtools/inc/options.hxx
 unodevtools/source/skeletonmaker/cppcompskeleton.cxx

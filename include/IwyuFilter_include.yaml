@@ -91,9 +91,6 @@ blacklist:
     include/ucbhelper/activedatasink.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XActiveDataSink.hpp
-    include/ucbhelper/activedatastreamer.hxx:
-    # base class has to be a complete type
-    - com/sun/star/io/XActiveDataStreamer.hpp
     include/ucbhelper/commandenvironment.hxx:
     # base class has to be a complete type
     - com/sun/star/ucb/XCommandEnvironment.hpp
