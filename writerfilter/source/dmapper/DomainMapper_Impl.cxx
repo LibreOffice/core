@@ -807,7 +807,7 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
     return m_sDefaultParaStyleName;
 }
 
-uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara)
+uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* pIsDocDefault)
 {
     while(pEntry.get( ) )
     {
@@ -817,6 +817,9 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
                     pEntry->pProperties->getProperty(eId);
             if( aProperty )
             {
+                if (pIsDocDefault)
+                    *pIsDocDefault = pEntry->pProperties->isDocDefault(eId);
+
                 return aProperty->second;
             }
         }
@@ -840,7 +843,12 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         {
             o3tl::optional<PropertyMap::Property> aProperty = pDefaultParaProps->getProperty(eId);
             if ( aProperty )
+            {
+                if (pIsDocDefault)
+                    *pIsDocDefault = true;
+
                 return aProperty->second;
+            }
         }
     }
     if ( bDocDefaults && isCharacterProperty(eId) )
@@ -850,9 +858,18 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         {
             o3tl::optional<PropertyMap::Property> aProperty = pDefaultCharProps->getProperty(eId);
             if ( aProperty )
+            {
+                if (pIsDocDefault)
+                    *pIsDocDefault = true;
+
                 return aProperty->second;
+            }
         }
     }
+
+    if (pIsDocDefault)
+        *pIsDocDefault = false;
+
     return uno::Any();
 }
 
