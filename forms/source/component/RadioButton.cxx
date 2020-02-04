@@ -24,7 +24,6 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 
 namespace frm

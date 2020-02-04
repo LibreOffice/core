@@ -20,7 +20,6 @@
 #include "Date.hxx"
 #include <property.hxx>
 #include <services.hxx>
-#include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>

@@ -18,7 +18,6 @@
  */
 
 #include <limitedformats.hxx>
-#include <services.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>

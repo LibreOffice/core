@@ -18,8 +18,8 @@
  */
 
 #include "FixedText.hxx"
+#include <frm_strings.hxx>
 #include <services.hxx>
-#include <property.hxx>
 
 #include <com/sun/star/form/FormComponentType.hpp>
 
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
+using namespace comphelper;
 
 OFixedTextModel::OFixedTextModel( const Reference<XComponentContext>& _rxFactory )
         :OControlModel(_rxFactory, VCL_CONTROLMODEL_FIXEDTEXT)

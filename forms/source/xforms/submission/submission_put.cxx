@@ -21,11 +21,9 @@
 #include <memory>
 
 #include "submission_put.hxx"
-#include "serialization_app_xml.hxx"
-#include "serialization_urlencoded.hxx"
 
-#include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/content.hxx>
 
 using namespace css::uno;

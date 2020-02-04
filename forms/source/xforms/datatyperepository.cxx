@@ -30,10 +30,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <comphelper/enumhelper.hxx>
 
-#include <functional>
-#include <algorithm>
-#include <o3tl/functional.hxx>
-
 namespace xforms
 {
 

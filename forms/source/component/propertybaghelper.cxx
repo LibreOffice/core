@@ -30,7 +30,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/sequence.hxx>
-#include <rtl/instance.hxx>
 
 
 #define NEW_HANDLE_BASE 10000

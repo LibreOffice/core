@@ -18,12 +18,10 @@
  */
 
 #include "GroupManager.hxx"
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <osl/diagnose.h>
-#include <tools/solar.h>
 
 #include <frm_strings.hxx>
 

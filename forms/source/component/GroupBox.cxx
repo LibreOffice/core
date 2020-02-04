@@ -18,7 +18,7 @@
  */
 
 #include "GroupBox.hxx"
-#include <property.hxx>
+#include <frm_strings.hxx>
 #include <services.hxx>
 #include <comphelper/property.hxx>
 #include <tools/debug.hxx>
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
+using namespace comphelper;
 
 // OGroupBoxModel
 

@@ -19,12 +19,10 @@
 
 
 #include "submission_get.hxx"
-#include "serialization_app_xml.hxx"
 #include "serialization_urlencoded.hxx"
 
 #include <rtl/strbuf.hxx>
-#include <rtl/string.hxx>
-#include <osl/file.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>

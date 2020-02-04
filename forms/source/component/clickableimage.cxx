@@ -22,8 +22,6 @@
 #include <urltransformer.hxx>
 #include <componenttools.hxx>
 #include <com/sun/star/form/XSubmit.hpp>
-#include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

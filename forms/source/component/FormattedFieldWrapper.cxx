@@ -20,7 +20,6 @@
 #include "FormattedFieldWrapper.hxx"
 #include "Edit.hxx"
 #include "FormattedField.hxx"
-#include "EditBase.hxx"
 #include <services.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>

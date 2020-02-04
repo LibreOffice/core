@@ -48,12 +48,10 @@
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
-#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <unotools/textsearch.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 

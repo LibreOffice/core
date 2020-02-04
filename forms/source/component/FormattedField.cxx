@@ -19,8 +19,6 @@
 #include "FormattedField.hxx"
 #include <services.hxx>
 #include <property.hxx>
-#include <frm_resource.hxx>
-#include <strings.hrc>
 #include <propertybaghelper.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -31,13 +29,11 @@
 #include <o3tl/any.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
-#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
-#include <tools/wintypes.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -45,9 +41,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

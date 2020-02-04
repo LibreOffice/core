@@ -21,7 +21,6 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>

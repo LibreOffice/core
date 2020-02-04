@@ -20,9 +20,6 @@
 
 #include "convert.hxx"
 
-#include "unohelper.hxx"
-#include <algorithm>
-#include <functional>
 #include <sstream>
 #include <o3tl/functional.hxx>
 #include <rtl/math.hxx>
@@ -30,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>

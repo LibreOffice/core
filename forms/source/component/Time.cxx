@@ -20,7 +20,6 @@
 #include "Time.hxx"
 #include <property.hxx>
 #include <services.hxx>
-#include <tools/time.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
