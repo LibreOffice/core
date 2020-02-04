@@ -430,6 +430,13 @@ struct SymbolData
     { }
 };
 
+/// Information about a paragraph to be finished after a table end.
+struct TableParagraph
+{
+    PropertyMapPtr m_pPropertyMap;
+    css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
+};
+
 class DomainMapper;
 class DomainMapper_Impl final
 {
@@ -754,7 +761,7 @@ public:
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
-    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara);
+    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* bIsDocDefault = nullptr);
     // current paragraph style - including inherited properties
     css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
     // context's character style - including inherited properties
@@ -1063,6 +1070,9 @@ public:
     /// store their data, and create them after frame creation
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
+
+    /// Table paragraph properties may need style update based on table style
+    std::vector<TableParagraph> m_aParagraphsToEndTable;
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);

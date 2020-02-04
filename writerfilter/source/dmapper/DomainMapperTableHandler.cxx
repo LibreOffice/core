@@ -226,6 +226,7 @@ struct TableInfo
     PropertyMapPtr pTableBorders;
     TableStyleSheetEntry* pTableStyle;
     css::beans::PropertyValues aTableProperties;
+    std::vector< PropertyIds > aTablePropertyIds;
 
     TableInfo()
     : nLeftBorderDistance(DEF_BORDER_DIST)
@@ -494,7 +495,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // Set the table default attributes for the cells
-        rInfo.pTableDefaults->InsertProps(m_aTableProperties.get());
+        // without paragraph properties (those are applied later considering the paragraph style precedence)
+        rInfo.pTableDefaults->InsertProps(m_aTableProperties.get(), /*bOverwrite=*/true, /*bNoParaProperty=*/true);
 
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("TableDefaults");
@@ -665,6 +667,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
+        rInfo.aTablePropertyIds = m_aTableProperties->GetPropertyIds();
 
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("debug.tableprops");
@@ -1029,6 +1032,41 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
     return aRowProperties;
 }
 
+// table style has got bigger precedence than docDefault style,
+// but lower precedence than the paragraph styles and direct paragraph formatting
+void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableInfo & rInfo)
+{
+    for( auto const& eId : rInfo.aTablePropertyIds )
+    {
+        // apply paragraph and character properties of the table style on cell paragraphs
+        if ( isParagraphProperty(eId) || isCharacterProperty(eId) )
+        {
+            // check all paragraphs of the cell
+            for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+            {
+                // there is no direct paragraph formatting
+                if (!rParaProp.m_pPropertyMap->isSet(eId))
+                {
+                    bool bDocDefault;
+                    OUString sParaStyleName;
+                    rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
+                    StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
+                    uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
+                    // use table style only when no paragraph style definition or that is a docDefault value
+                    if (aParaStyle == uno::Any() || bDocDefault)
+                    {
+                        OUString sPropertyName = getPropertyName(eId);
+                        auto pTableProp = std::find_if(rInfo.aTableProperties.begin(), rInfo.aTableProperties.end(),
+                            [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
+                          if (pTableProp != rInfo.aTableProperties.end())
+                            rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pTableProp->Value );
+                    }
+                }
+            }
+        }
+    }
+}
+
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DBG_UTIL
@@ -1126,6 +1164,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                         }
                     }
                 }
+
+                // OOXML table style may contain paragraph properties, apply these now.
+                ApplyParagraphPropertiesFromTableStyle(aTableInfo);
             }
         }
         catch ( const lang::IllegalArgumentException & )
@@ -1203,6 +1244,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
+    m_rDMapper_Impl.m_aParagraphsToEndTable.clear();
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();

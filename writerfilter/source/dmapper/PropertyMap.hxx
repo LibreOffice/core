@@ -95,23 +95,35 @@ class PropValue
 private:
     css::uno::Any m_aValue;
     GrabBagType   m_GrabBagType;
+    bool          m_bIsDocDefault;
 
 public:
+    PropValue( const css::uno::Any& rValue, GrabBagType i_GrabBagType, bool bDocDefault )
+        : m_aValue( rValue )
+        , m_GrabBagType( i_GrabBagType )
+        , m_bIsDocDefault( bDocDefault )
+    {
+    }
+
     PropValue( const css::uno::Any& rValue, GrabBagType i_GrabBagType )
         : m_aValue( rValue )
         , m_GrabBagType( i_GrabBagType )
+        , m_bIsDocDefault( false )
     {
     }
 
     PropValue()
         : m_aValue()
         , m_GrabBagType( NO_GRAB_BAG )
+        , m_bIsDocDefault( false )
     {
     }
 
     const css::uno::Any& getValue() const { return m_aValue; }
 
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
+
+    bool getIsDocDefault() const { return m_bIsDocDefault; }
 };
 
 class PropertyMap;
@@ -139,20 +151,23 @@ public:
     // the contained properties are their Value.
     css::uno::Sequence< css::beans::PropertyValue > GetPropertyValues( bool bCharGrabBag = true );
 
+    const std::vector< PropertyIds > GetPropertyIds();
+
     // Add property, optionally overwriting existing attributes
-    void Insert( PropertyIds eId, const css::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG );
+    void Insert( PropertyIds eId, const css::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG, bool bDocDefault = false );
 
     // Remove a named property from *this, does nothing if the property id has not been set
     void Erase( PropertyIds eId);
 
-    // Imports properties from pMap
-    void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true );
+    // Imports properties from pMap (bOverwrite==false means m_bIsDocDefault=true setting)
+    void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true, const bool bNoParaProperty = false );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     o3tl::optional< Property > getProperty( PropertyIds eId ) const;
 
     // Has the property named been set (via Insert)?
     bool isSet( PropertyIds eId ) const;
+    bool isDocDefault( PropertyIds eId ) const;
 
     const css::uno::Reference< css::text::XFootnote >& GetFootnote() const { return m_xFootnote; }
     const OUString& GetFootnoteStyle() const { return m_sFootnoteCharStyleName; }

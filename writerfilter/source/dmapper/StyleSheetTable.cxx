@@ -397,6 +397,11 @@ StyleSheetTable::~StyleSheetTable()
 {
 }
 
+void StyleSheetTable::SetDefaultParaProps(PropertyIds eId, const css::uno::Any& rAny)
+{
+    m_pImpl->m_pDefaultParaProps->Insert(eId, rAny, /*bOverwrite=*/false, NO_GRAB_BAG, /*bDocDefault=*/true);
+}
+
 PropertyMapPtr const & StyleSheetTable::GetDefaultParaProps() const
 {
     return m_pImpl->m_pDefaultParaProps;
@@ -692,7 +697,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pImpl->m_pDefaultParaProps.get() &&
                 !m_pImpl->m_pDefaultParaProps->isSet( PROP_PARA_TOP_MARGIN ) )
             {
-                m_pImpl->m_pDefaultParaProps->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( sal_Int32(0) ) );
+                SetDefaultParaProps( PROP_PARA_TOP_MARGIN, uno::makeAny( sal_Int32(0) ) );
             }
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
@@ -991,7 +996,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     else if( bParaStyle )
                     {
                         // Paragraph styles that don't inherit from some parent need to apply the DocDefaults
-                        pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bAllowOverwrite=*/false );
+                        pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bOverwrite=*/false );
 
                         //now it's time to set the default parameters - for paragraph styles
                         //Fonts: Western first entry in font table
@@ -1455,13 +1460,13 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
         {
             // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
-            m_pImpl->m_pDefaultParaProps->Insert(PROP_WRITING_MODE, uno::makeAny(sal_Int16(text::WritingMode_LR_TB)), /*bOverwrite=*/false);
-            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_ADJUST, uno::makeAny(sal_Int16(style::ParagraphAdjust_LEFT)), false);
+            SetDefaultParaProps(PROP_WRITING_MODE, uno::makeAny(sal_Int16(text::WritingMode_LR_TB)));
+            SetDefaultParaProps(PROP_PARA_ADJUST, uno::makeAny(sal_Int16(style::ParagraphAdjust_LEFT)));
 
             // Widow/Orphan -> set both to two if not already set
             uno::Any aTwo = uno::makeAny(sal_Int8(2));
-            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_WIDOWS, aTwo, /*bOverwrite=*/false);
-            m_pImpl->m_pDefaultParaProps->Insert(PROP_PARA_ORPHANS, aTwo, false);
+            SetDefaultParaProps(PROP_PARA_WIDOWS, aTwo);
+            SetDefaultParaProps(PROP_PARA_ORPHANS, aTwo);
 
             uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
             uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();

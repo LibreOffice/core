@@ -104,6 +104,7 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <itabenum.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -970,67 +971,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo()
     return xRef;
 }
 
-// If the current property matches the previous parent's property (i.e. no reason for it to be set),
-// then it may be a ::DEFAULT value, even if it is marked as ::SET
-static bool lcl_mayBeDefault( const sal_uInt16 nWhich, sal_uInt8 nMemberId,
-                       const SfxPoolItem* pPrevItem, const SfxPoolItem& rCurrItem,
-                       const bool bDirect )
-{
-    bool bMayBeDefault = false;
-    // These are the paragraph/character pairs that I found running unit tests.
-    // UNFORTUNATELY there is no way to see if a property has multiple members.
-    // Since valid members can be nMemberId == 0, we can't do something like "if (nMemberId & ~CONVERT_TWIPS) != 0"
-    // Perhaps the full list can be found in editeng/memberids.h???
-    switch ( nWhich )
-    {
-        case RES_BOX:
-        case RES_UL_SPACE:
-        case RES_LR_SPACE:
-        case RES_CHRATR_ESCAPEMENT:
-        case RES_CHRATR_FONT:
-        case RES_CHRATR_CJK_FONT:
-        case RES_CHRATR_CTL_FONT:
-        case RES_CHRATR_FONTSIZE:
-        case RES_CHRATR_CJK_FONTSIZE:
-        case RES_CHRATR_CTL_FONTSIZE:
-        case RES_CHRATR_WEIGHT:
-        case RES_CHRATR_CJK_WEIGHT:
-        case RES_CHRATR_CTL_WEIGHT:
-        case RES_CHRATR_LANGUAGE:
-        case RES_CHRATR_CJK_LANGUAGE:
-        case RES_CHRATR_CTL_LANGUAGE:
-        case RES_CHRATR_POSTURE:
-        case RES_CHRATR_CJK_POSTURE:
-        case RES_CHRATR_CTL_POSTURE:
-        case RES_PARATR_ADJUST:
-        {
-            // These properties are paired up, containing multiple properties in one nWhich.
-            // If one is ::SET, they all report ::SET, even if only initialized with the default value.
-            // Assume created automatically by another MemberId.
-            bMayBeDefault = true;
-            if ( pPrevItem )
-            {
-                uno::Any aPrev;
-                uno::Any aCurr;
-                (*pPrevItem).QueryValue(aPrev, nMemberId);
-                rCurrItem.QueryValue(aCurr, nMemberId);
-                // If different, it overrides a parent value, so can't be considered a default.
-                bMayBeDefault = aPrev == aCurr;
-            }
-            break;
-        }
-        default:
-        {
-            // Since DocDefaults are copied into root-level stylesheets (tdf#103961),
-            // identify the duplicated properties as DocDefault values.
-            // Assume any style information could have been inherited/copied.
-            if ( !bDirect )
-                bMayBeDefault = !pPrevItem || *pPrevItem == rCurrItem;
-        }
-    }
-    return bMayBeDefault;
-}
-
 void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
@@ -1073,60 +1013,26 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                 while ( &aIdx.GetNode() != pEndNd )
                 {
                     const SwTextNode* pNd = aIdx.GetNode().GetTextNode();
-                    ++aIdx;
-                    if ( !pNd )
-                        continue;
-
-                    const SfxPoolItem* pPrevItem = nullptr;
-                    const SfxPoolItem* pCurrItem = nullptr;
-                    // Table-styles don't override direct formatting
-                    if ( pNd->HasSwAttrSet() && SfxItemState::SET == pNd->GetSwAttrSet().GetItemState(pEntry->nWID, false, &pCurrItem) )
+                    if ( pNd )
                     {
-                        // Some WIDs have several MIDs, so perhaps ::SET refers to another MID and this property was copied from parents?
-                        if ( lcl_mayBeDefault(pEntry->nWID, pEntry->nMemberId, pPrevItem, *pCurrItem, /*bDirect=*/true) )
-                            pPrevItem = pCurrItem;
-                        else
-                            continue; //don't override direct formatting
-                    }
-
-                    bool bSet = false;
-                    SwFormat* pFormatColl = pNd->GetFormatColl();
-                    // Manually walk through the parent properties in order to avoid the default properties.
-                    // Table-styles don't override paragraph-style formatting.
-                    //    TODO: ?except for fontsize/justification if compat:overrideTableStyleFontSizeAndJustification?
-                    while ( pFormatColl )
-                    {
-                        if ( SfxItemState::SET == pFormatColl->GetItemState(pEntry->nWID, /*bSrchInParent=*/false, &pCurrItem) )
+                        //point and mark selecting the whole paragraph
+                        SwPaM aPaM(*pNd, 0, *pNd, pNd->GetText().getLength());
+                        const bool bHasAttrSet = pNd->HasSwAttrSet();
+                        const SfxItemSet& aSet = pNd->GetSwAttrSet();
+                        // isPARATR: replace DEFAULT_VALUE properties only
+                        // Require that the property is default in the paragraph style as well,
+                        // unless the style is the default style.
+                        // isCHRATR: change the base/auto SwAttr property, but don't remove the DIRECT hints
+                        bool bCustomParent = false;
+                        if (const SwFormatColl* pFormatColl = pNd->GetFormatColl())
                         {
-                            if ( lcl_mayBeDefault(pEntry->nWID, pEntry->nMemberId, pPrevItem, *pCurrItem, false) )
-                            {
-                                // if the property matches DocDefaults, then table-style needs to override it
-                                pPrevItem = pFormatColl->IsDefault() ? nullptr : pCurrItem;
-                            }
-                            else
-                            {
-                                bSet = true; //don't override style formatting
-                                break;
-                            }
+                            bCustomParent = pFormatColl->GetPoolFormatId() != RES_POOLCOLL_STANDARD;
                         }
-                        pFormatColl = pFormatColl->DerivedFrom();
+                        bool bSearchInParent = bCustomParent && !pNd->GetNumRule();
+                        if ( !bHasAttrSet || SfxItemState::DEFAULT == aSet.GetItemState(pEntry->nWID, bSearchInParent) )
+                            SwUnoCursorHelper::SetPropertyValue(aPaM, rParaPropSet, rPropertyName, aValue, SetAttrMode::DONTREPLACE);
                     }
-                    if ( bSet )
-                        continue;
-
-                    // Check if previous ::SET came from the pool defaults.
-                    if ( pPrevItem && pNd->GetSwAttrSet().GetPool() )
-                    {
-                        pCurrItem = &pNd->GetSwAttrSet().GetPool()->GetDefaultItem(pEntry->nWID);
-                        if ( !lcl_mayBeDefault(pEntry->nWID, pEntry->nMemberId, pPrevItem, *pCurrItem, false) )
-                            continue;
-                    }
-
-                    // Apply table-style property
-                    // point and mark selecting the whole paragraph
-                    SwPaM aPaM(*pNd, 0, *pNd, pNd->GetText().getLength());
-                    // for isCHRATR: change the base/auto SwAttr property, but don't remove the DIRECT hints
-                    SwUnoCursorHelper::SetPropertyValue(aPaM, rParaPropSet, rPropertyName, aValue, SetAttrMode::DONTREPLACE);
+                    ++aIdx;
                 }
                 return;
             }

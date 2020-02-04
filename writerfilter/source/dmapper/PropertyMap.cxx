@@ -186,6 +186,14 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
     return comphelper::containerToSequence( m_aValues );
 }
 
+const std::vector< PropertyIds > PropertyMap::GetPropertyIds()
+{
+    std::vector< PropertyIds > aRet;
+    for ( const auto& rPropPair : m_vMap )
+        aRet.push_back( rPropPair.first );
+    return aRet;
+}
+
 #ifdef DBG_UTIL
 static void lcl_AnyToTag( const uno::Any& rAny )
 {
@@ -224,7 +232,7 @@ static void lcl_AnyToTag( const uno::Any& rAny )
 }
 #endif
 
-void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType i_GrabBagType )
+void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType i_GrabBagType, bool bDocDefault )
 {
 #ifdef DBG_UTIL
     const OUString& rInsert = getPropertyName(eId);
@@ -236,7 +244,7 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
 #endif
 
     if ( !bOverwrite )
-        m_vMap.insert(std::make_pair(eId, PropValue(rAny, i_GrabBagType)));
+        m_vMap.insert(std::make_pair(eId, PropValue(rAny, i_GrabBagType, bDocDefault)));
     else
         m_vMap[eId] = PropValue(rAny, i_GrabBagType);
 
@@ -263,6 +271,15 @@ o3tl::optional< PropertyMap::Property > PropertyMap::getProperty( PropertyIds eI
 bool PropertyMap::isSet( PropertyIds eId) const
 {
     return m_vMap.find( eId ) != m_vMap.end();
+}
+
+bool PropertyMap::isDocDefault( PropertyIds eId ) const
+{
+    std::map< PropertyIds, PropValue >::const_iterator aIter = m_vMap.find( eId );
+    if ( aIter == m_vMap.end() )
+        return false;
+    else
+        return aIter->second.getIsDocDefault();
 }
 
 #ifdef DBG_UTIL
@@ -314,14 +331,21 @@ void PropertyMap::dumpXml() const
 }
 #endif
 
-void PropertyMap::InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite )
+void PropertyMap::InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite, const bool bNoParaProperty )
 {
     if ( rMap )
     {
         for ( const auto& rPropPair : rMap->m_vMap )
         {
-            if ( bOverwrite || !m_vMap.count(rPropPair.first) )
-                m_vMap[rPropPair.first] = rPropPair.second;
+            if ( ( bOverwrite || !m_vMap.count(rPropPair.first) ) &&
+                 // skip character and paragraph properties, if requested
+                 ( !bNoParaProperty || (!isCharacterProperty(rPropPair.first) && !isParagraphProperty(rPropPair.first)) ) )
+            {
+                if ( !bOverwrite && !rPropPair.second.getIsDocDefault() )
+                    m_vMap.insert(std::make_pair(rPropPair.first, PropValue(rPropPair.second.getValue(), rPropPair.second.getGrabBagType(), true)));
+                else
+                    m_vMap[rPropPair.first] = rPropPair.second;
+            }
         }
 
         insertTableProperties( rMap.get(), bOverwrite );
