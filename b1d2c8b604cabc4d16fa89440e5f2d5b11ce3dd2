@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "6b7c7850_728d9eee",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T10:51:48Z",
+      "side": 1,
+      "message": "I don\u0027t see a need for a variable for machine name, when it will only run for local machine? Just put the dot into the string below, without those \u0026 machineName \u0026",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a150435_7206e5ae",
         "filename": "antivirusDetection.vbs",
         "patchSetId": 6
