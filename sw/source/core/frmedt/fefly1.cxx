@@ -881,7 +881,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
 }
 
 SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
-                        const SfxItemSet* pFlyAttrSet )
+                        SfxItemSet* pFlyAttrSet )
 {
     SwFlyFrameFormat* pFormat = nullptr;
     SET_CURR_SHELL( this );
