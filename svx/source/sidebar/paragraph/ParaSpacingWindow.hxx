@@ -27,9 +27,26 @@
 
 using namespace com::sun::star;
 
+class InterimItemWindow : public Control
+{
+public:
+    virtual ~InterimItemWindow() override;
+    virtual void dispose() override;
+
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
+
+protected:
+    InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+};
+
 namespace svx {
 
-class ParaULSpacingWindow : public Control
+class ParaULSpacingWindow : public InterimItemWindow
 {
 public:
     virtual ~ParaULSpacingWindow() override;
@@ -38,15 +55,8 @@ public:
     void SetValue(const SvxULSpaceItem* pItem);
     void SetUnit(FieldUnit eUnit);
 
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-
 protected:
     ParaULSpacingWindow(vcl::Window* pParent);
-
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
 
     std::unique_ptr<SvxRelativeField> m_xAboveSpacing;
     std::unique_ptr<SvxRelativeField> m_xBelowSpacing;
@@ -72,14 +82,11 @@ public:
     virtual void GetFocus() override;
 };
 
-class ParaLRSpacingWindow : public Control
+class ParaLRSpacingWindow : public InterimItemWindow
 {
 public:
     virtual ~ParaLRSpacingWindow() override;
     virtual void dispose() override;
-
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
 
     void SetValue(SfxItemState eState, const SfxPoolItem* pState);
     void SetUnit(FieldUnit eUnit);
@@ -87,10 +94,6 @@ public:
 
 protected:
     ParaLRSpacingWindow(vcl::Window* pParent);
-
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
 
     std::unique_ptr<SvxRelativeField> m_xBeforeSpacing;
     std::unique_ptr<SvxRelativeField> m_xAfterSpacing;

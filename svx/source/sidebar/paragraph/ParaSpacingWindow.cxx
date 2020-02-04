@@ -34,17 +34,48 @@ using namespace svx;
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
 
-// ParaULSpacingWindow
-
-ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent)
+InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
     : Control(pParent, WB_TABSTOP)
-    , m_eUnit(MapUnit::MapTwip)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "svx/ui/paraulspacing.ui"));
-    m_xContainer = m_xBuilder->weld_container("ParaULSpacingWindow");
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xContainer = m_xBuilder->weld_container(rID);
+}
 
+InterimItemWindow::~InterimItemWindow()
+{
+    disposeOnce();
+}
+
+void InterimItemWindow::dispose()
+{
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
+
+    Control::dispose();
+}
+
+void InterimItemWindow::Resize()
+{
+    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
+    assert(pChild);
+    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
+    Control::Resize();
+}
+
+Size InterimItemWindow::GetOptimalSize() const
+{
+    return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+}
+
+// ParaULSpacingWindow
+
+ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "svx/ui/paraulspacing.ui", "ParaULSpacingWindow")
+    , m_eUnit(MapUnit::MapTwip)
+{
     m_xAboveSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aboveparaspacing", FieldUnit::CM));
     m_xBelowSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("belowparaspacing", FieldUnit::CM));
     m_xAboveContainer = m_xBuilder->weld_container("above");
@@ -71,11 +102,7 @@ void ParaULSpacingWindow::dispose()
     m_xAboveContainer.reset();
     m_xBelowContainer.reset();
 
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-
-    Control::dispose();
+    InterimItemWindow::dispose();
 }
 
 void ParaULSpacingWindow::SetUnit(FieldUnit eUnit)
@@ -100,19 +127,6 @@ void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
     nVal = pItem->GetLower();
     nVal = m_xBelowSpacing->normalize(nVal);
     m_xBelowSpacing->set_value(nVal, FieldUnit::MM_100TH);
-}
-
-void ParaULSpacingWindow::Resize()
-{
-    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-    assert(pChild);
-    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
-    Control::Resize();
-}
-
-Size ParaULSpacingWindow::GetOptimalSize() const
-{
-    return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
 IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, void)
@@ -162,14 +176,9 @@ void ParaBelowSpacingWindow::GetFocus()
 // ParaLRSpacingWindow
 
 ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent)
-    : Control(pParent, WB_TABSTOP)
+    : InterimItemWindow(pParent, "svx/ui/paralrspacing.ui", "ParaLRSpacingWindow")
     , m_eUnit(MapUnit::MapTwip)
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "svx/ui/paralrspacing.ui"));
-    m_xContainer = m_xBuilder->weld_container("ParaLRSpacingWindow");
-
     m_xBeforeSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("beforetextindent", FieldUnit::CM));
     m_xAfterSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("aftertextindent", FieldUnit::CM));
     m_xFLSpacing = std::make_unique<SvxRelativeField>(m_xBuilder->weld_metric_spin_button("firstlineindent", FieldUnit::CM));
@@ -202,11 +211,7 @@ void ParaLRSpacingWindow::dispose()
     m_xAfterContainer.reset();
     m_xFirstLineContainer.reset();
 
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-
-    Control::dispose();
+    InterimItemWindow::dispose();
 }
 
 void ParaLRSpacingWindow::SetContext(const vcl::EnumContext& eContext)
@@ -309,19 +314,6 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         m_xAfterSpacing->set_text("");
         m_xFLSpacing->set_text("");
     }
-}
-
-void ParaLRSpacingWindow::Resize()
-{
-    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-    assert(pChild);
-    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
-    Control::Resize();
-}
-
-Size ParaLRSpacingWindow::GetOptimalSize() const
-{
-    return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
 void ParaLRSpacingWindow::SetUnit(FieldUnit eUnit)
