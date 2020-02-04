@@ -151,7 +151,7 @@ bool SwInputFieldList::BuildSortLst()
                 if( rTextNode.GetNodes().IsDocNodes() )
                 {
                     // not in TempList, thus add to SortList
-                    std::set<const SwTextField*>::iterator it = maTmpLst.find( pTextField );
+                    auto it = maTmpLst.find( pTextField );
                     if( maTmpLst.end() == it )
                     {
                         SwNodeIndex aIdx( rTextNode );

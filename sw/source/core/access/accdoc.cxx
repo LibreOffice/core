@@ -744,7 +744,7 @@ css::uno::Sequence< css::uno::Any >
     if ( pCursorShell )
     {
         SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
-        std::set<SwFrame*> vFrameList;
+        o3tl::sorted_vector<SwFrame*> vFrameList;
         do
         {
             if ( _pStartCursor && _pStartCursor->HasMark() )

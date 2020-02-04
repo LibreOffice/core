@@ -2594,7 +2594,7 @@ struct SwTableCellInfo::Impl
     const SwTable * m_pTable;
     const SwCellFrame * m_pCellFrame;
     const SwTabFrame * m_pTabFrame;
-    typedef std::set<const SwTableBox *> TableBoxes_t;
+    typedef o3tl::sorted_vector<const SwTableBox *> TableBoxes_t;
     TableBoxes_t m_HandledTableBoxes;
 
 public:

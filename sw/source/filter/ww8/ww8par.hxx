@@ -52,6 +52,7 @@
 #include <ndtxt.hxx>
 #include <editeng/lrspitem.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <oox/ole/olehelper.hxx>
 
 #define SW_UD_IMAPDATA      2
@@ -1223,8 +1224,8 @@ private:
     std::shared_ptr<WW8PLCFMan> m_xPlcxMan;
     std::map<short, OUString> m_aLinkStringMap;
 
-    std::set<const SwNode*> m_aTextNodesHavingFirstLineOfstSet; // #i103711#
-    std::set<const SwNode*> m_aTextNodesHavingLeftIndentSet; // #i105414#
+    o3tl::sorted_vector<const SwNode*> m_aTextNodesHavingFirstLineOfstSet; // #i103711#
+    o3tl::sorted_vector<const SwNode*> m_aTextNodesHavingLeftIndentSet; // #i105414#
 
     std::unique_ptr<WW8RStyle> m_xStyles;     // pointer to the style reading class
     SwFormat* m_pCurrentColl;        // collection to be created now

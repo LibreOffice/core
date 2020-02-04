@@ -26,6 +26,7 @@
 #include <memory>
 #include <vector>
 #include <tools/solar.h>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxPoolItem;
 class SwTextNode;
@@ -359,7 +360,7 @@ public:
 private:
     SwEditShell*                      mpSh;
     std::unique_ptr<SetGetExpFields>  mpSrtLst;
-    std::set<const SwTextField*>      maTmpLst;
+    o3tl::sorted_vector<const SwTextField*> maTmpLst;
 };
 
  /// Implementation in tblcalc.cxx.
