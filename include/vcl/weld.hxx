@@ -27,6 +27,8 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 #include <assert.h>
 #include <memory>
 #include <vector>
@@ -262,6 +264,8 @@ public:
     virtual void set_highlight_background() = 0;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
+
+    virtual boost::property_tree::ptree get_property_tree() const = 0;
 
     virtual ~Widget() {}
 };
@@ -643,7 +647,17 @@ public:
     virtual int find_id(const OUString& rId) const = 0;
     void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
+    /* m_aChangeHdl is called when the active item is changed. The can be due
+       to the user selecting a different item from the list or while typing
+       into the entry of a combo box with an entry.
+
+       Use changed_by_menu() to discover whether an item was actually selected
+       from the menu.
+     */
     void connect_changed(const Link<ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
+
+    virtual bool changed_by_menu() const = 0;
+
     virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink)
     {
         m_aPopupToggledHdl = rLink;

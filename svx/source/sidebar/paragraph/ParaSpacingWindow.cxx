@@ -70,6 +70,42 @@ Size InterimItemWindow::GetOptimalSize() const
     return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
+bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
+{
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    if (nCode != KEY_TAB)
+        return false;
+
+    /* if the native widget has focus, then no vcl window has focus.
+
+       We want to grab focus to this vcl widget so that pressing tab will travese
+       to the next vcl widget.
+
+       But just using GrabFocus will, because no vcl widget has focus, trigger
+       bringing the toplevel to front with the expectation that a suitable widget
+       will be picked for focus when that happen, which is no use to us here.
+
+       SetFakeFocus avoids the problem, allowing GrabFocus to do the expected thing
+       then sending the Tab to our parent will do the right traversal
+    */
+    SetFakeFocus(true);
+    GrabFocus();
+
+    /* let toolbox know we have focus so it updates its mnHighItemId to point
+       to this toolitem in case tab means to move to another toolitem within
+       the toolbox
+    */
+    NotifyEvent aNEvt(MouseNotifyEvent::GETFOCUS, this);
+    vcl::Window* pToolBox = GetParent();
+    pToolBox->EventNotify(aNEvt);
+
+    /* now give focus to our toolbox parent and send it the tab */
+    pToolBox->GrabFocus();
+    pToolBox->KeyInput(rKEvt);
+
+    return true;
+}
+
 // ParaULSpacingWindow
 
 ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent)
@@ -149,7 +185,7 @@ ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent)
     m_xAboveContainer->show();
     m_xBelowContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaAboveSpacingWindow::GetFocus()
@@ -165,7 +201,7 @@ ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent)
     m_xAboveContainer->hide();
     m_xBelowContainer->show();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaBelowSpacingWindow::GetFocus()
@@ -350,7 +386,7 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->hide();
     m_xFirstLineContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaLeftSpacingWindow::GetFocus()
@@ -367,7 +403,7 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->show();
     m_xFirstLineContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaRightSpacingWindow::GetFocus()
@@ -384,7 +420,7 @@ ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->hide();
     m_xFirstLineContainer->show();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaFirstLineSpacingWindow::GetFocus()
