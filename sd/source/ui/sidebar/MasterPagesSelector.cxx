@@ -181,7 +181,7 @@ IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, voi
             if (nIndex > 0)
             {
                 mxPreviewValueSet->SelectItem (nIndex);
-                // Now do the the actual display of the context menu
+                // Now do the actual display of the context menu
                 ShowContextMenu(&rEvent.GetPosPixel());
             }
         }
