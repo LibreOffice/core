@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8ded34b6_e4ad860f",
+        "filename": "external/libxslt/UnpackedTarball_libxslt.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2020-02-04T13:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33361c3d_d74b568e",
+      "revId": "606f94116cbea336a99ea7ba77d2184f5613bc3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e3e03b9f_1284074d",
         "filename": "external/libxslt/libxslt-msvc-sym.patch.2",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-04T12:22:50Z",
       "side": 1,
       "message": "putting a pdb file into that directory that isn\u0027t associated with a LinkTarget is very confusing. it should work without the /pdb: flag?",
+      "revId": "606f94116cbea336a99ea7ba77d2184f5613bc3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b701582_a7305a4d",
+        "filename": "external/libxslt/libxslt-msvc-sym.patch.2",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2020-02-04T13:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e03b9f_1284074d",
       "revId": "606f94116cbea336a99ea7ba77d2184f5613bc3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
