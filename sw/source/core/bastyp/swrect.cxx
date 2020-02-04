@@ -19,6 +19,8 @@
 
 #include <swrect.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
 #endif
@@ -217,6 +219,16 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
     { m_Point = Point(rNew.X() - m_Size.getWidth(), rNew.Y()); }
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.X(), rNew.Y() - m_Size.getHeight()); }
+
+void SwRect::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
+{
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("left"), "%li", Left());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("top"), "%li", Top());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("width"), "%li", Width());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("height"), "%li", Height());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("bottom"), "%li", Bottom());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("right"), "%li", Right());
+}
 
 #ifdef DBG_UTIL
 SvStream& WriteSwRect(SvStream &rStream, const SwRect &rRect)
