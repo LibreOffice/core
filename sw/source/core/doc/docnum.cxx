@@ -2171,7 +2171,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
 
             --aIdx; // move before insertion
 
-            getIDocumentContentOperations().CopyRange( aPam, aInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
+            getIDocumentContentOperations().CopyRange(aPam, aInsPos, SwCopyFlags::CheckPosInFly);
 
             // now delete all the delete redlines that were copied
 #ifndef NDEBUG

@@ -428,7 +428,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                         *rTmp.GetPoint() != *rTmp.GetMark() )
                     {
                         // aPos is the newly created fly section, so definitely outside rPam, it's pointless to check that again.
-                        getIDocumentContentOperations().CopyRange( *const_cast<SwPaM*>(&rTmp), aPos, /*bCopyAll=*/false, /*bCheckPos=*/false, /*bCopyText=*/true);
+                        getIDocumentContentOperations().CopyRange(*const_cast<SwPaM*>(&rTmp), aPos, SwCopyFlags::IsMoveToFly);
                     }
                 }
                 getIDocumentRedlineAccess().SetRedlineMove(bOldRedlineMove);

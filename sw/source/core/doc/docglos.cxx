@@ -189,7 +189,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 SwDontExpandItem aACD;
                 aACD.SaveDontExpandItems( rInsPos );
 
-                pGDoc->getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
+                pGDoc->getIDocumentContentOperations().CopyRange(aCpyPam, rInsPos, SwCopyFlags::CheckPosInFly);
 
                 aACD.RestoreDontExpandItems( rInsPos );
                 if( pShell )
