@@ -2664,6 +2664,12 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="CheckDocumentEvents" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Warn on load when a document binds an event to a macro</desc>
+          </info>
+          <value>true</value>
+        </prop>
         <set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
           <info>
             <desc>List with trusted authors.</desc>
