@@ -130,7 +130,7 @@ for arg in "$@" $EXTRAOPT ; do
                     unset MALLOC_CHECK_ MALLOC_PERTURB_ G_SLICE
                     export SAL_DISABLE_FLOATGRAB=1
                     export OOO_DISABLE_RECOVERY=1
-                    export SAL_DISABLE_GL_WATCHDOG=1
+                    export SAL_DISABLE_WATCHDOG=1
                     export LD_BIND_NOW=1
                     ;;
                 esac

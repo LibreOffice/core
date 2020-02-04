@@ -17,11 +17,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-// FIXME: templatize me vs. OpenGLZone.
-
-std::sig_atomic_t volatile OpenCLZone::gnEnterCount = 0;
-bool volatile OpenCLZone::gbInInitialTest = false;
-
 /**
  * Called from a signal handler if we get
  * a crash or hang in some CL code.
@@ -45,11 +40,6 @@ void OpenCLZone::hardDisable()
 
         releaseOpenCLEnv(&openclwrapper::gpuEnv);
     }
-}
-
-void OpenCLZone::enterInitialTest()
-{
-    gbInInitialTest = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

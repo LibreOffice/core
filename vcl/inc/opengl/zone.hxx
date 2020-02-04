@@ -13,48 +13,19 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-
-#include <atomic>
-#include <csignal>
-#include <type_traits>
-
-class OpenGLWatchdogThread;
+#include <comphelper/crashzone.hxx>
 
 /**
  * We want to be able to detect if a given crash came
  * from the OpenGL code, so use this helper to track that.
  */
-class VCL_DLLPUBLIC OpenGLZone {
-    friend class OpenGLWatchdogThread;
-    friend class OpenGLSalGraphicsImpl;
-
-    // gnEnterCount and gnLeaveCount are accessed both from multiple threads (cf.
-    // OpenGLWatchdogThread::execute; so need to be of atomic type) and from signal handlers (cf.
-    // VCLExceptionSignal_impl; so need to be of lock-free atomic type).  sig_atomic_t is chosen as
-    // the underlying type under the assumption that it is most likely to lead to an atomic type
-    // that is actually lock-free.  However, gnEnterCount and gnLeaveCount are both monotonically
-    // increasing, so will eventually overflow, so the underlying type better be unsigned, which
-    // sig_atomic_t is not guaranteed to be:
-#if !defined ARM32 || (defined ARM32 && defined __ARM_PCS_VFP)
-    using AtomicCounter = std::atomic<std::make_unsigned_t<std::sig_atomic_t>>;
-    static_assert(AtomicCounter::is_always_lock_free);
-#else
-    using AtomicCounter = volatile std::make_unsigned_t<std::sig_atomic_t>;
-#endif
-
-    /// how many times have we entered a GL zone
-    static AtomicCounter gnEnterCount;
-    /// how many times have we left a new GL zone
-    static AtomicCounter gnLeaveCount;
-
-    static void enter() { gnEnterCount++; }
-    static void leave() { gnLeaveCount++; }
+class VCL_DLLPUBLIC OpenGLZone : public CrashZone< OpenGLZone > {
 public:
-     OpenGLZone() { enter(); }
-    ~OpenGLZone() { leave(); }
-    static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static void hardDisable();
     static void relaxWatchdogTimings();
+    static const CrashWatchdogTimingsValues& getCrashWatchdogTimingsValues();
+    static void checkDebug( int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues );
+    static const char* name() { return "OpenGL"; }
 };
 
 /// Create this to not only enter the zone, but set VCL context.
