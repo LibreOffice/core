@@ -82,6 +82,8 @@
 #include <window.h>
 #include <numeric>
 
+#include <boost/property_tree/ptree.hpp>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -2860,6 +2862,12 @@ public:
             m_nDragLeaveSignalId = g_signal_connect(m_pWidget, "drag-leave", G_CALLBACK(signalDragLeave), this);
         }
         return m_xDropTarget.get();
+    }
+
+    virtual boost::property_tree::ptree get_property_tree() const override
+    {
+        //not implemented for the gtk variant
+        return boost::property_tree::ptree();
     }
 
     virtual void set_stack_background() override
@@ -11749,6 +11757,7 @@ private:
     bool m_bPopupActive;
     bool m_bAutoComplete;
     bool m_bAutoCompleteCaseSensitive;
+    bool m_bChangedByMenu;
     gulong m_nToggleFocusInSignalId;
     gulong m_nToggleFocusOutSignalId;
     gulong m_nChangedSignalId;
@@ -11758,6 +11767,8 @@ private:
     gulong m_nEntryActivateSignalId;
     gulong m_nEntryFocusInSignalId;
     gulong m_nEntryFocusOutSignalId;
+    gulong m_nOriginalMenuActivateEventId;
+    gulong m_nMenuActivateSignalId;
     guint m_nAutoCompleteIdleId;
 
     static gboolean idleAutoComplete(gpointer widget)
@@ -11855,7 +11866,13 @@ private:
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_changed();
+        pThis->fire_signal_changed();
+    }
+
+    void fire_signal_changed()
+    {
+        signal_changed();
+        m_bChangedByMenu = false;
     }
 
     static void signalPopupToggled(GtkComboBox*, GParamSpec*, gpointer widget)
@@ -12012,6 +12029,27 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    static void signalMenuActivate(GtkWidget* pWidget, const gchar *path, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        return pThis->signal_menu_activate(pWidget, path);
+    }
+
+    void signal_menu_activate(GtkWidget* pWidget, const gchar *path)
+    {
+        // we disabled the original menu-active to get our own handler in first
+        // so we know before changed is called that it will be called by the
+        // menu, now block our handler and unblock the original and replay the
+        // event to call the original handler
+        m_bChangedByMenu = true;
+        g_signal_handler_block(m_pMenu, m_nMenuActivateSignalId);
+        g_signal_handler_unblock(m_pMenu, m_nOriginalMenuActivateEventId);
+        guint nMenuActivateSignalId = g_signal_lookup("menu-activate", G_TYPE_FROM_INSTANCE(m_pMenu));
+        g_signal_emit(pWidget, nMenuActivateSignalId, 0, path);
+        g_signal_handler_block(m_pMenu, m_nOriginalMenuActivateEventId);
+        g_signal_handler_unblock(m_pMenu, m_nMenuActivateSignalId);
+    }
+
     bool signal_key_press(const GdkEventKey* pEvent)
     {
         KeyEvent aKEvt(GtkToVcl(*pEvent));
@@ -12134,11 +12172,20 @@ private:
             return;
         m_pMenu = GTK_MENU(pWidget);
 
-        guint nSignalId = g_signal_lookup("key-press-event", GTK_TYPE_MENU);
+        guint nKeyPressSignalId = g_signal_lookup("key-press-event", GTK_TYPE_MENU);
         gulong nOriginalMenuKeyPressEventId = g_signal_handler_find(m_pMenu,
                                                                     static_cast<GSignalMatchType>(G_SIGNAL_MATCH_DATA | G_SIGNAL_MATCH_ID),
-                                                                    nSignalId, 0,
+                                                                    nKeyPressSignalId, 0,
                                                                     nullptr, nullptr, m_pComboBox);
+
+        guint nMenuActivateSignalId = g_signal_lookup("menu-activate", G_TYPE_FROM_INSTANCE(m_pMenu));
+        m_nOriginalMenuActivateEventId = g_signal_handler_find(m_pMenu,
+                                                               static_cast<GSignalMatchType>(G_SIGNAL_MATCH_DATA | G_SIGNAL_MATCH_ID),
+                                                               nMenuActivateSignalId, 0,
+                                                               nullptr, nullptr, m_pComboBox);
+
+        g_signal_handler_block(m_pMenu, m_nOriginalMenuActivateEventId);
+        m_nMenuActivateSignalId = g_signal_connect(m_pMenu, "menu-activate", G_CALLBACK(signalMenuActivate), this);
 
         g_signal_handler_block(m_pMenu, nOriginalMenuKeyPressEventId);
         g_signal_connect(m_pMenu, "key-press-event", G_CALLBACK(signalKeyPress), this);
@@ -12166,10 +12213,13 @@ public:
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
         , m_bAutoCompleteCaseSensitive(false)
+        , m_bChangedByMenu(false)
         , m_nToggleFocusInSignalId(0)
         , m_nToggleFocusOutSignalId(0)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupToggled), this))
+        , m_nOriginalMenuActivateEventId(0)
+        , m_nMenuActivateSignalId(0)
         , m_nAutoCompleteIdleId(0)
     {
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
@@ -12232,6 +12282,7 @@ public:
         disable_notify_events();
         OString aId(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
         gtk_combo_box_set_active_id(m_pComboBox, aId.getStr());
+        m_bChangedByMenu = false;
         enable_notify_events();
     }
 
@@ -12278,6 +12329,7 @@ public:
     {
         disable_notify_events();
         gtk_combo_box_set_active(m_pComboBox, pos);
+        m_bChangedByMenu = false;
         enable_notify_events();
     }
 
@@ -12591,8 +12643,17 @@ public:
         return gtk_widget_has_focus(m_pToggleButton) || GtkInstanceWidget::has_focus();
     }
 
+    virtual bool changed_by_menu() const override
+    {
+        return m_bChangedByMenu;
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
+        if (m_nOriginalMenuActivateEventId)
+            g_signal_handler_unblock(m_pMenu, m_nOriginalMenuActivateEventId);
+        if (m_nMenuActivateSignalId)
+            g_signal_handler_disconnect(m_pMenu, m_nMenuActivateSignalId);
         if (m_nAutoCompleteIdleId)
             g_source_remove(m_nAutoCompleteIdleId);
         if (GtkEntry* pEntry = get_entry())
@@ -12622,6 +12683,7 @@ private:
     gulong m_nEntryInsertTextSignalId;
     guint m_nAutoCompleteIdleId;
     bool m_bAutoCompleteCaseSensitive;
+    bool m_bTreeChange;
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
@@ -12646,7 +12708,9 @@ private:
             }
             m_xEntry->select_region(0, -1);
             enable_notify_events();
+            m_bTreeChange = true;
             m_pEntry->fire_signal_changed();
+            m_bTreeChange = false;
             return true;
         }
         return false;
@@ -12747,6 +12811,7 @@ public:
         , m_pTreeView(dynamic_cast<GtkInstanceTreeView*>(m_xTreeView.get()))
         , m_nAutoCompleteIdleId(0)
         , m_bAutoCompleteCaseSensitive(false)
+        , m_bTreeChange(false)
     {
         assert(m_pEntry);
         GtkWidget* pWidget = m_pEntry->getWidget();
@@ -12801,6 +12866,11 @@ public:
         g_signal_handler_unblock(pWidget, m_nEntryInsertTextSignalId);
         m_pTreeView->enable_notify_events();
         GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual bool changed_by_menu() const override
+    {
+        return m_bTreeChange;
     }
 
     virtual ~GtkInstanceEntryTreeView() override
