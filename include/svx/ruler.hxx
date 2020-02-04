@@ -279,6 +279,8 @@ public:
     void SetTabsRelativeToIndent( bool bRel );
     void SetValues(RulerChangeType type, long value);
     long GetPageWidth() const;
+
+    void MoveTabstop(int nTabstop, int nAmount);
 };
 
 #endif
