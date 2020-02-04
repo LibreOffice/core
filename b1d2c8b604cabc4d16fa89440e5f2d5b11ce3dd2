@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc920a45_25124999",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "Please *don\u0027t* put what had you changed in this patch set compared to the previous patch set of the same change to the commit message. The commit message should *only* contain what is changed compared to the baseline. Any comments regarding e.g. how you addressed others\u0027 comments should go to comments, or to \"patchset description\" available in the gerrit change - see \"NO PATCHSET DESCRIPTION\" to the right of \"Files   Base -\u003e Patchset N   [hash]\".",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 66
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a150435_7206e5ae",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "Good to have the explanation; yet, if there is a reference to the source of this information (say, to a MS documentation online), it would be nice to provide it in a comment like\n\n    \u0027 see https//www....",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 40
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00f17723_e927a5d9",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "I suppose it\u0027s better to separate them by newlines and indents to stand out from the surrounding text.",
+      "range": {
+        "startLine": 14,
+        "startChar": 17,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42a57af0_8afd8f18",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "Please remove this (and other) trailing whitespaces from the file (note the red markers here in gerrit web UI that are supposed to draw your attention to these - look at lines 1, 26, 27; and this line was also marked red before I made my comment).",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 1
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9840ee0f_4a9acd49",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 13056,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "A comment above or below this line explaining the intent would be fine, to allow one understand what is going on here, without the need to look into the .vb file.",
+      "range": {
+        "startLine": 13056,
+        "startChar": 0,
+        "endLine": 13056,
+        "endChar": 27
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd69b8b_983c1d89",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 13057,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T09:46:30Z",
+      "side": 1,
+      "message": "Please use 4-space indents\n\nYou should use path to the .vbs, because current directory (build directory) might be different from source directory. Something like\n\n    cscript.exe \"$SRC_ROOT/antivirusDetection.vbs\"\n\nAlso note that cscript issues logo information by default. See its /? output for switches that suppress logo information.",
+      "range": {
+        "startLine": 13057,
+        "startChar": 0,
+        "endLine": 13057,
+        "endChar": 8
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
