@@ -371,7 +371,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetLRSpace();
     nLeftMargin = rLRSpace.GetTextLeft();
     nRightMargin = rLRSpace.GetRight();
-    nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
+    nFirstLineIndent = rLRSpace.GetTextFirstLineOffset();
 
     const SvxULSpaceItem &rULSpace =
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
@@ -708,7 +708,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             rHWrt.m_nDfltLeftMargin = rLRSpace.GetTextLeft();
 
         // In numbered lists, don't output a first line indent.
-        rHWrt.m_nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
+        rHWrt.m_nFirstLineIndent = rLRSpace.GetTextFirstLineOffset();
     }
 
     if( rInfo.bInNumberBulletList && bNumbered && bPara && !rHWrt.m_bCfgOutStyles )

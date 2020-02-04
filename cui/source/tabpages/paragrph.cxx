@@ -349,19 +349,19 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 aMargin.SetRight(m_xRightIndent->GetCoreValue(eUnit));
 
             if ( m_xFLineIndent->IsRelative() )
-                aMargin.SetTextFirstLineOfst( rOldItem.GetTextFirstLineOfst(),
+                aMargin.SetTextFirstLineOffset( rOldItem.GetTextFirstLineOffset(),
                                              static_cast<sal_uInt16>(m_xFLineIndent->get_value(FieldUnit::NONE)) );
             else
-                aMargin.SetTextFirstLineOfst(static_cast<sal_uInt16>(m_xFLineIndent->GetCoreValue(eUnit)));
+                aMargin.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_xFLineIndent->GetCoreValue(eUnit)));
         }
         else
         {
             aMargin.SetTextLeft(m_xLeftIndent->GetCoreValue(eUnit));
             aMargin.SetRight(m_xRightIndent->GetCoreValue(eUnit));
-            aMargin.SetTextFirstLineOfst(static_cast<sal_uInt16>(m_xFLineIndent->GetCoreValue(eUnit)));
+            aMargin.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_xFLineIndent->GetCoreValue(eUnit)));
         }
         aMargin.SetAutoFirst(m_xAutoCB->get_active());
-        if ( aMargin.GetTextFirstLineOfst() < 0 )
+        if ( aMargin.GetTextFirstLineOffset() < 0 )
             bNullTab = true;
         eState = GetItemSet().GetItemState( nWhich );
 
@@ -493,7 +493,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_xFLineIndent->SetRelative(false);
                 m_xFLineIndent->set_min(-9999, FieldUnit::NONE);
                 m_xFLineIndent->SetFieldUnit(eFUnit);
-                m_xFLineIndent->SetMetricValue(rOldItem.GetTextFirstLineOfst(), eUnit);
+                m_xFLineIndent->SetMetricValue(rOldItem.GetTextFirstLineOffset(), eUnit);
             }
             m_xAutoCB->set_active(rOldItem.IsAutoFirst());
         }
@@ -504,7 +504,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
             m_xLeftIndent->SetMetricValue(rSpace.GetTextLeft(), eUnit);
             m_xRightIndent->SetMetricValue(rSpace.GetRight(), eUnit);
-            m_xFLineIndent->SetMetricValue(rSpace.GetTextFirstLineOfst(), eUnit);
+            m_xFLineIndent->SetMetricValue(rSpace.GetTextFirstLineOffset(), eUnit);
             m_xAutoCB->set_active(rSpace.IsAutoFirst());
         }
         AutoHdl_Impl(*m_xAutoCB);

@@ -1694,7 +1694,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
         const long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
         aLR.SetTextLeft(nAbsLSpace);
-        aLR.SetTextFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
+        aLR.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent));
         rStyle.m_pFormat->SetFormatAttr(aLR);
         rStyle.m_bListReleventIndentSet = true;
     }
@@ -1713,7 +1713,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
         else
         {
             aLR.SetTextLeft(0);
-            aLR.SetTextFirstLineOfst(0);
+            aLR.SetTextFirstLineOffset(0);
         }
         rStyle.m_pFormat->SetFormatAttr(aLR);
     }
@@ -2004,7 +2004,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
                 // reset/blank the left indent (and only the left)
                 aLR->SetTextLeft(0);
-                aLR->SetTextFirstLineOfst(0);
+                aLR->SetTextFirstLineOffset(0);
 
                 // apply the modified SvxLRSpaceItem to the current paragraph
                 pTextNode->SetAttr( *aLR );

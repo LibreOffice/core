@@ -280,7 +280,7 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
                 if( aPropInfo.m_bTextIndent )
                 {
                     short nTextIndent =
-                        aItemSet.Get( RES_LR_SPACE ).GetTextFirstLineOfst();
+                        aItemSet.Get( RES_LR_SPACE ).GetTextFirstLineOffset();
                     aNumFormat.SetFirstLineOffset( nTextIndent );
                     bChangeNumFormat = true;
                 }

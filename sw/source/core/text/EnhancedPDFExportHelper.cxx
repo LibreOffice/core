@@ -619,7 +619,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             OSL_ENSURE( pFrame->IsTextFrame(), "Frame type <-> tag attribute mismatch" );
             const SvxLRSpaceItem &rSpace =
                 static_cast<const SwTextFrame*>(pFrame)->GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
-            nVal =  rSpace.GetTextFirstLineOfst();
+            nVal =  rSpace.GetTextFirstLineOffset();
             if ( 0 != nVal )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::TextIndent, nVal );
         }

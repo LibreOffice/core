@@ -3146,7 +3146,7 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
             long nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
             if ( nLine == 0 )
             {
-                long nFI = GetXValue( rLRItem.GetTextFirstLineOfst() );
+                long nFI = GetXValue( rLRItem.GetTextFirstLineOffset() );
                 nCurWidth -= nFI;
                 if ( pPortion->GetBulletX() > nCurWidth )
                 {

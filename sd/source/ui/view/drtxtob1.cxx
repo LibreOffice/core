@@ -376,9 +376,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
             SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE );
-            aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
+            aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOffset() );
             aNewMargin.SetRight( aParaMargin.GetRight() );
-            aNewMargin.SetTextFirstLineOfst( ( aParaMargin.GetTextFirstLineOfst() ) * -1 );
+            aNewMargin.SetTextFirstLineOffset( ( aParaMargin.GetTextFirstLineOffset() ) * -1 );
             aLRSpaceSet.Put( aNewMargin );
             mpView->SetAttributes( aLRSpaceSet );
 

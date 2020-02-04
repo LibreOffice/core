@@ -556,7 +556,7 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
             {
                 nDiff = rInf.Left()
                     + rInf.GetTextFrame()->GetTextNodeForParaProps()->
-                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst()
+                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset()
                     - rInf.First()
                     + rInf.ForcedLeftMargin();
             }

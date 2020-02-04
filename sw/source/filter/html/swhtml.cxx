@@ -4690,7 +4690,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
             sal_Int32 nLeft = pLRItem->GetTextLeft();
             sal_Int32 nRight = pLRItem->GetRight();
-            nFirstLineIndent = pLRItem->GetTextFirstLineOfst();
+            nFirstLineIndent = pLRItem->GetTextFirstLineOffset();
 
             // In Definition lists the margins also contain the margins from the previous levels
             if( RES_POOLCOLL_HTML_DD == nTopColl )
@@ -4732,7 +4732,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         if( !nRightMargin )
             nRightMargin = static_cast< sal_uInt16 >(rLRItem.GetRight());
         if( !nFirstLineIndent )
-            nFirstLineIndent = rLRItem.GetTextFirstLineOfst();
+            nFirstLineIndent = rLRItem.GetTextFirstLineOffset();
     }
 
     // remove previous hard attribution of paragraph
@@ -4746,7 +4746,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     // if applicable correct the paragraph indent
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
     bool bSetLRSpace = nLeftMargin != rLRItem.GetTextLeft() ||
-                      nFirstLineIndent != rLRItem.GetTextFirstLineOfst() ||
+                      nFirstLineIndent != rLRItem.GetTextFirstLineOffset() ||
                       nRightMargin != rLRItem.GetRight();
 
     if( bSetLRSpace )
@@ -4754,7 +4754,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         SvxLRSpaceItem aLRItem( rLRItem );
         aLRItem.SetTextLeft( nLeftMargin );
         aLRItem.SetRight( nRightMargin );
-        aLRItem.SetTextFirstLineOfst( nFirstLineIndent );
+        aLRItem.SetTextFirstLineOffset( nFirstLineIndent );
         if( pItemSet )
             pItemSet->Put( aLRItem );
         else
@@ -4990,7 +4990,7 @@ void SwHTMLParser::InsertSpacer()
                 SvxLRSpaceItem aLRItem( RES_LR_SPACE );
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
-                aLRItem.SetTextFirstLineOfst( nIndent );
+                aLRItem.SetTextFirstLineOffset( nIndent );
 
                 NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);
                 EndAttr( m_xAttrTab->pLRSpace, false );

@@ -174,7 +174,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTextLeft(mxLeftIndent->GetCoreValue(m_eLRSpaceUnit));
     aMargin.SetRight(mxRightIndent->GetCoreValue(m_eLRSpaceUnit));
-    aMargin.SetTextFirstLineOfst(static_cast<short>(mxFLineIndent->GetCoreValue(m_eLRSpaceUnit)));
+    aMargin.SetTextFirstLineOffset(static_cast<short>(mxFLineIndent->GetCoreValue(m_eLRSpaceUnit)));
 
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
@@ -268,7 +268,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         aTxtRight = OutputDevice::LogicToLogic( aTxtRight, m_eLRSpaceUnit, MapUnit::Map100thMM );
         aTxtRight = OutputDevice::LogicToLogic( aTxtRight, MapUnit::Map100thMM, MapUnit::MapTwip );
 
-        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOfst();
+        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOffset();
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, m_eLRSpaceUnit, MapUnit::Map100thMM );
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, MapUnit::MapTwip );
 

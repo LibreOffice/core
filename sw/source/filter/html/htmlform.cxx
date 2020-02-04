@@ -888,7 +888,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             // Flatten first line indent
             const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
             SvxLRSpaceItem aLRItem( *pLRItem );
-            aLRItem.SetTextFirstLineOfst( 0 );
+            aLRItem.SetTextFirstLineOffset( 0 );
             if( rCSS1PropInfo.m_bLeftMargin )
             {
                 nLeftSpace = convertTwipToMm100( aLRItem.GetLeft() );

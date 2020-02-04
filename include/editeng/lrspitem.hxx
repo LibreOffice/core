@@ -108,13 +108,13 @@ public:
     inline void SetTextLeft( const long nL, const sal_uInt16 nProp = 100 );
     long GetTextLeft() const { return nTxtLeft; }
 
-    inline void   SetTextFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
-    short  GetTextFirstLineOfst() const { return nFirstLineOfst; }
+    inline void   SetTextFirstLineOffset( const short nF, const sal_uInt16 nProp = 100 );
+    short  GetTextFirstLineOffset() const { return nFirstLineOfst; }
     void SetPropTextFirstLineOfst( const sal_uInt16 nProp )
                     { nPropFirstLineOfst = nProp; }
     sal_uInt16 GetPropTextFirstLineOfst() const
                     { return nPropFirstLineOfst; }
-    void SetTextFirstLineOfstValue( const short nValue )
+    void SetTextFirstLineOffsetValue( const short nValue )
                     { nFirstLineOfst = nValue; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -136,7 +136,7 @@ inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
     nRightMargin = (nR * nProp) / 100;
     nPropRightMargin = nProp;
 }
-inline void SvxLRSpaceItem::SetTextFirstLineOfst( const short nF,
+inline void SvxLRSpaceItem::SetTextFirstLineOffset( const short nF,
                                                  const sal_uInt16 nProp )
 {
     nFirstLineOfst = short((long(nF) * nProp ) / 100);

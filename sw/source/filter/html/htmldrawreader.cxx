@@ -104,7 +104,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // maybe flatten the first line indentation
         const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
-        aLRItem.SetTextFirstLineOfst( 0 );
+        aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
         {
             nLeftSpace = static_cast< sal_uInt16 >(aLRItem.GetLeft());

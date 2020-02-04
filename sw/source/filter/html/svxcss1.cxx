@@ -953,7 +953,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
             if( rSrcInfo.m_bRightMargin )
                 aLRSpace.SetRight( rNewLRSpace.GetRight() );
             if( rSrcInfo.m_bTextIndent )
-                aLRSpace.SetTextFirstLineOfst( rNewLRSpace.GetTextFirstLineOfst() );
+                aLRSpace.SetTextFirstLineOffset( rNewLRSpace.GetTextFirstLineOffset() );
 
             rTargetSet.Put( aLRSpace );
         }
@@ -1981,13 +1981,13 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetTextFirstLineOfst( nIndent );
+            aLRItem.SetTextFirstLineOffset( nIndent );
             rItemSet.Put( aLRItem );
         }
         else
         {
             SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetTextFirstLineOfst( nIndent );
+            aLRItem.SetTextFirstLineOffset( nIndent );
             rItemSet.Put( aLRItem );
         }
         rPropInfo.m_bTextIndent = true;

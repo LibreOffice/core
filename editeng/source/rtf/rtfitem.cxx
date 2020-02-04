@@ -326,7 +326,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                             CalcValue();
                         nSz = sal_uInt16(nTokenValue);
                     }
-                    aLR.SetTextFirstLineOfst( nSz );
+                    aLR.SetTextFirstLineOffset( nSz );
                     pSet->Put( aLR );
                 }
                 break;

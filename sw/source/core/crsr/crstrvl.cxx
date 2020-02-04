@@ -2119,7 +2119,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                     SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(
                                         pCNd->GetAttr( RES_LR_SPACE ) ) );
                     aLR.SetTextLeft( aFPos.nTabCnt );
-                    aLR.SetTextFirstLineOfst( 0 );
+                    aLR.SetTextFirstLineOffset( 0 );
                     aSet.Put( aLR );
 
                     const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>(pCNd->

@@ -557,7 +557,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             if (nIndex == INDENT_LEFT_MARGIN)
                 nIndentValue = mxParaItem->GetTextLeft();
             else if (nIndex == INDENT_FIRST_LINE)
-                nIndentValue = mxParaItem->GetTextFirstLineOfst();
+                nIndentValue = mxParaItem->GetTextFirstLineOffset();
             else if (nIndex == INDENT_RIGHT_MARGIN)
                 nIndentValue = mxParaItem->GetRight();
 
@@ -836,13 +836,13 @@ void SvxRuler::UpdatePara()
         if(bRTLText)
         {
             leftMargin    = nRightFrameMargin - mxParaItem->GetTextLeft() + lAppNullOffset;
-            leftFirstLine = leftMargin - mxParaItem->GetTextFirstLineOfst();
+            leftFirstLine = leftMargin - mxParaItem->GetTextFirstLineOffset();
             rightMargin   = nLeftFrameMargin + mxParaItem->GetRight() + lAppNullOffset;
         }
         else
         {
             leftMargin    = nLeftFrameMargin + mxParaItem->GetTextLeft() + lAppNullOffset;
-            leftFirstLine = leftMargin + mxParaItem->GetTextFirstLineOfst();
+            leftFirstLine = leftMargin + mxParaItem->GetTextFirstLineOffset();
             rightMargin   = nRightFrameMargin - mxParaItem->GetRight() + lAppNullOffset;
         }
 
@@ -2073,7 +2073,7 @@ void SvxRuler::ApplyIndents()
         nNewRight           = RoundToCurrentMapMode(nNewRight);
     }
 
-    mxParaItem->SetTextFirstLineOfst(sal::static_int_cast<short>(nNewFirstLineOffset));
+    mxParaItem->SetTextFirstLineOffset(sal::static_int_cast<short>(nNewFirstLineOffset));
     mxParaItem->SetTextLeft(nNewTxtLeft);
     mxParaItem->SetRight(nNewRight);
 

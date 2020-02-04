@@ -1971,11 +1971,11 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst()) );
+// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset()) );
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
             short nX = static_cast<short>(rLRItem.GetTextLeft()
-                            + rLRItem.GetTextFirstLineOfst()
+                            + rLRItem.GetTextFirstLineOffset()
                             + nSpaceBefore);
             aPoint.setX( pImpEditEngine->GetXValue( nX
                              ) );
