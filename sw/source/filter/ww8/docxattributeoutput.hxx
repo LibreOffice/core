@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <o3tl/optional.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/drawingml.hxx>
 #include "docxtablestyleexport.hxx"
@@ -847,7 +848,7 @@ private:
     bool m_bPageBreakAfter = false;
 
     std::vector<ww8::Frame> m_aFramesOfParagraph;
-    std::set<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
+    o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
     // close of hyperlink needed

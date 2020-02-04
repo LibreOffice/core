@@ -868,7 +868,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
 {
     if (bFlag)
     {
-        std::set< SwList* > aLists;
+        o3tl::sorted_vector< SwList* > aLists;
         for ( const SwTextNode* pTextNode : maTextNodeList )
         {
             // #i111681# - applying patch from cmc
@@ -980,7 +980,7 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
 
 void SwNumRule::Validate()
 {
-    std::set< SwList* > aLists;
+    o3tl::sorted_vector< SwList* > aLists;
     for ( const SwTextNode* pTextNode : maTextNodeList )
     {
         aLists.insert( pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );

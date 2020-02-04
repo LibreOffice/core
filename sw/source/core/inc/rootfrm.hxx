@@ -72,7 +72,7 @@ enum class SwRemoveResult
 using SwCurrShells = std::set<CurrShell*>;
 
 class SwSectionFrame;
-using SwDestroyList = std::set<SwSectionFrame*>;
+using SwDestroyList = o3tl::sorted_vector<SwSectionFrame*>;
 
 /// The root element of a Writer document layout. Lower frames are expected to
 /// be SwPageFrame instances.

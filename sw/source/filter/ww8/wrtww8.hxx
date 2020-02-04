@@ -1265,7 +1265,7 @@ class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
 private:
     WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&) = delete;
     WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations const &) = delete;
-    std::set<const SwRedlineData*> maProcessedRedlines;
+    o3tl::sorted_vector<const SwRedlineData*> maProcessedRedlines;
 
     std::map<const OUString, std::pair<WW8_CP, bool>> m_aRangeStartPositions;
 public:

@@ -196,7 +196,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
     const SwTextAttr *pLastStart = nullptr;
     const SwTextAttr *pLastEnd = nullptr;
-    std::set<SwTextAttr const*> RsidOnlyAutoFormats;
+    o3tl::sorted_vector<SwTextAttr const*> RsidOnlyAutoFormats;
     if (bPortionsMerged)
     {
         for (size_t i = 0; i < Count(); ++i)

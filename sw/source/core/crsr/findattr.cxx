@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-typedef std::set<SwFormat*> SwpFormats;
+typedef o3tl::sorted_vector<SwFormat*> SwpFormats;
 
 // Special case for SvxFontItem: only compare the name
 static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )

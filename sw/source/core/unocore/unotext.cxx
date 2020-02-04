@@ -1645,7 +1645,7 @@ SwXText::convertToTextFrame(
     // see if there are frames already anchored to this node
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
     // tdf#115094: do nothing if we have a graphic node
-    std::set<const SdrObject*> aAnchoredObjectsByPtr;
+    o3tl::sorted_vector<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {

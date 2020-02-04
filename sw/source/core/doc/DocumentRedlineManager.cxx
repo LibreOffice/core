@@ -215,7 +215,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     else
     {
         std::vector<SwTextFrame*> frames;
-        std::set<SwRootFrame*> layouts;
+        o3tl::sorted_vector<SwRootFrame*> layouts;
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
         for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {

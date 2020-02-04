@@ -37,6 +37,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <frmfmt.hxx>
 #include <fmtclds.hxx>
 #include <hfspacingitem.hxx>
@@ -239,7 +240,7 @@ namespace myImplHelpers
     {
     private:
         MapperImpl<C> maHelper;
-        std::set<const C*> maUsedStyles;
+        o3tl::sorted_vector<const C*> maUsedStyles;
         C* MakeNonCollidingStyle(const OUString& rName);
     public:
         typedef std::pair<C*, bool> StyleResult;
