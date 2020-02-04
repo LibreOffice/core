@@ -401,7 +401,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             nPropLeftMargin = aLRSpace.ScaleLeft;
             nPropRightMargin = aLRSpace.ScaleRight;
             SetTextFirstLineOffset(static_cast<short>(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
-            SetPropTextFirstLineOfst ( static_cast<sal_uInt16>(aLRSpace.ScaleFirstLine) );
+            SetPropTextFirstLineOffset ( static_cast<sal_uInt16>(aLRSpace.ScaleFirstLine) );
             SetAutoFirst( aLRSpace.AutoFirstLine );
             break;
         }
@@ -436,7 +436,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTextFirstLineOfst ( static_cast<sal_uInt16>(nVal) );
+            SetPropTextFirstLineOffset ( static_cast<sal_uInt16>(nVal) );
             break;
 
         case MID_FIRST_AUTO:
@@ -472,7 +472,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nTxtLeft == rOther.GetTextLeft() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
-        nPropFirstLineOfst == rOther.GetPropTextFirstLineOfst() &&
+        nPropFirstLineOfst == rOther.GetPropTextFirstLineOffset() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
         bAutoFirst == rOther.IsAutoFirst() &&
