@@ -29,12 +29,11 @@
 #include <unordered_map>
 
 #include <opengl/zone.hxx>
-#include <opengl/watchdog.hxx>
-#include <osl/conditn.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <watchdog.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
 #include <opengl/x11/X11DeviceInfo.hxx>
@@ -45,8 +44,6 @@
 #include "GLMHelper.hxx"
 
 static bool volatile gbInShaderCompile = false;
-OpenGLZone::AtomicCounter OpenGLZone::gnEnterCount = 0;
-OpenGLZone::AtomicCounter OpenGLZone::gnLeaveCount = 0;
 
 namespace {
 
@@ -793,120 +790,44 @@ bool OpenGLHelper::supportsVCLOpenGL()
     return !bDisableGL && !bBlacklisted;
 }
 
-namespace {
-    static volatile bool gbWatchdogFiring = false;
-    static osl::Condition* gpWatchdogExit = nullptr;
-    static WatchdogTimings gWatchdogTimings;
-    static rtl::Reference<OpenGLWatchdogThread> gxWatchdog;
-}
+enum class CrashWatchdogTimingMode
+{
+    NORMAL,
+    SHADER_COMPILE
+};
 
-WatchdogTimings::WatchdogTimings()
+class CrashWatchdogTimings
+{
+private:
+    std::vector<CrashWatchdogTimingsValues> maTimingValues;
+    std::atomic<bool> mbRelaxed;
+
+public:
+    CrashWatchdogTimings();
+
+    void setRelax(bool bRelaxed)
+    {
+        mbRelaxed = bRelaxed;
+    }
+
+    CrashWatchdogTimingsValues const & getWatchdogTimingsValues(CrashWatchdogTimingMode eMode)
+    {
+        size_t index = (eMode == CrashWatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;
+        index = mbRelaxed ? index + 2 : index;
+
+        return maTimingValues[index];
+    }
+};
+
+static CrashWatchdogTimings gWatchdogTimings;
+
+CrashWatchdogTimings::CrashWatchdogTimings()
     : maTimingValues{
                      {{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
                       {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */}
                     }
     , mbRelaxed(false)
 {
-}
-
-OpenGLWatchdogThread::OpenGLWatchdogThread()
-    : salhelper::Thread("OpenGL Watchdog")
-{
-}
-
-void OpenGLWatchdogThread::execute()
-{
-    int nUnchanged = 0; // how many unchanged nEnters
-    TimeValue aQuarterSecond(0, 1000*1000*1000*0.25);
-    bool bAbortFired = false;
-
-    do {
-        sal_uInt64 nLastEnters = OpenGLZone::gnEnterCount;
-
-        gpWatchdogExit->wait(&aQuarterSecond);
-
-        if (OpenGLZone::isInZone())
-        {
-            // The shader compiler can take a long time, first time.
-            WatchdogTimingMode eMode = gbInShaderCompile ? WatchdogTimingMode::SHADER_COMPILE : WatchdogTimingMode::NORMAL;
-            WatchdogTimingsValues aTimingValues = gWatchdogTimings.getWatchdogTimingsValues(eMode);
-
-            if (nLastEnters == OpenGLZone::gnEnterCount)
-                nUnchanged++;
-            else
-                nUnchanged = 0;
-            SAL_INFO("vcl.opengl", "GL watchdog - unchanged " <<
-                     nUnchanged << " enter count " <<
-                     OpenGLZone::gnEnterCount << " type " <<
-                     (eMode == WatchdogTimingMode::SHADER_COMPILE ? "in shader" : "normal gl") <<
-                     "breakpoints mid: " << aTimingValues.mnDisableEntries <<
-                     " max " << aTimingValues.mnAbortAfter);
-
-            // Not making progress
-            if (nUnchanged >= aTimingValues.mnDisableEntries)
-            {
-                static bool bFired = false;
-                if (!bFired)
-                {
-                    gbWatchdogFiring = true;
-                    SAL_WARN("vcl.opengl", "Watchdog triggered: hard disable GL");
-                    OpenGLZone::hardDisable();
-                    gbWatchdogFiring = false;
-                }
-                bFired = true;
-
-                // we can hang using VCL in the abort handling -> be impatient
-                if (bAbortFired)
-                {
-                    SAL_WARN("vcl.opengl", "Watchdog gave up: hard exiting");
-                    _exit(1);
-                }
-            }
-
-            // Not making even more progress
-            if (nUnchanged >= aTimingValues.mnAbortAfter)
-            {
-                if (!bAbortFired)
-                {
-                    SAL_WARN("vcl.opengl", "Watchdog gave up: aborting");
-                    gbWatchdogFiring = true;
-                    std::abort();
-                }
-                // coverity[dead_error_line] - we might have caught SIGABRT and failed to exit yet
-                bAbortFired = true;
-            }
-        }
-        else
-        {
-            nUnchanged = 0;
-        }
-    } while (!gpWatchdogExit->check());
-}
-
-void OpenGLWatchdogThread::start()
-{
-    assert (gxWatchdog == nullptr);
-    gpWatchdogExit = new osl::Condition();
-    gxWatchdog.set(new OpenGLWatchdogThread());
-    gxWatchdog->launch();
-}
-
-void OpenGLWatchdogThread::stop()
-{
-    if (gbWatchdogFiring)
-        return; // in watchdog thread
-
-    if (gpWatchdogExit)
-        gpWatchdogExit->set();
-
-    if (gxWatchdog.is())
-    {
-        gxWatchdog->join();
-        gxWatchdog.clear();
-    }
-
-    delete gpWatchdogExit;
-    gpWatchdogExit = nullptr;
 }
 
 /**
@@ -932,14 +853,28 @@ void OpenGLZone::hardDisable()
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()),
             css::uno::UNO_QUERY_THROW)->flush();
-
-        OpenGLWatchdogThread::stop();
     }
 }
 
 void OpenGLZone::relaxWatchdogTimings()
 {
     gWatchdogTimings.setRelax(true);
+}
+
+void OpenGLZone::checkDebug( int nUnchanged, const CrashWatchdogTimingsValues& aTimingValues )
+{
+    SAL_INFO("vcl.watchdog", "GL watchdog - unchanged "
+                                 << nUnchanged << " enter count " << enterCount() << " type "
+                                 << (gbInShaderCompile ? "in shader" : "normal gl")
+                                 << " breakpoints mid: " << aTimingValues.mnDisableEntries
+                                 << " max " << aTimingValues.mnAbortAfter);
+}
+
+const CrashWatchdogTimingsValues& OpenGLZone::getCrashWatchdogTimingsValues()
+{
+    // The shader compiler can take a long time, first time.
+    CrashWatchdogTimingMode eMode = gbInShaderCompile ? CrashWatchdogTimingMode::SHADER_COMPILE : CrashWatchdogTimingMode::NORMAL;
+    return gWatchdogTimings.getWatchdogTimingsValues(eMode);
 }
 
 OpenGLVCLContextZone::OpenGLVCLContextZone()
@@ -1019,10 +954,8 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     }
 
     if (bRet)
-    {
-        if (!getenv("SAL_DISABLE_GL_WATCHDOG"))
-            OpenGLWatchdogThread::start();
-    }
+        WatchdogThread::start();
+
     CrashReporter::addKeyValue("UseOpenGL", OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
