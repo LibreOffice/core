@@ -324,7 +324,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
             while (pView)
             {
-                if (pView->GetObjectShell() == pRootFrame->GetCurrShell()->GetSfxViewShell()->GetObjectShell())
+                if (pRootFrame->GetCurrShell()->GetSfxViewShell() && pView->GetObjectShell() == pRootFrame->GetCurrShell()->GetSfxViewShell()->GetObjectShell())
                     pView->dumpAsXml(writer);
                 pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
             }
