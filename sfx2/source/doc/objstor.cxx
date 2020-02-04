@@ -3583,7 +3583,9 @@ void SfxObjectShell::SetMacroCallsSeenWhileLoading()
 
 bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
 {
-    return pImpl->m_bMacroCallsSeenWhileLoading;
+    if (officecfg::Office::Common::Security::Scripting::CheckDocumentEvents::get())
+        return pImpl->m_bMacroCallsSeenWhileLoading;
+    return false;
 }
 
 bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
