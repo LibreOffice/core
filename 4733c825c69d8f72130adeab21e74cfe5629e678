@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40aed074_70cf51bc",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-04T08:57:58Z",
+      "side": 1,
+      "message": "If the selected function/command is invalid, this block also becomes irrelevant/invalid. You should also check for command validity here. (... \u0026\u0026 bIsValidCommand)",
+      "range": {
+        "startLine": 1587,
+        "startChar": 9,
+        "endLine": 1587,
+        "endChar": 36
+      },
+      "revId": "4733c825c69d8f72130adeab21e74cfe5629e678",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70faa282_a44137ac",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-04T08:57:58Z",
+      "side": 1,
+      "message": "Sounds odd. Lets make this \"Description of the currently selected function\"",
+      "range": {
+        "startLine": 278,
+        "startChar": 95,
+        "endLine": 278,
+        "endChar": 141
+      },
+      "revId": "4733c825c69d8f72130adeab21e74cfe5629e678",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
