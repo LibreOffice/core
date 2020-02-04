@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
+#pragma once
 
-#include <toolkit/controls/controlmodelcontainerbase.hxx>
+#include <controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <toolkit/helper/macros.hxx>
@@ -308,7 +307,5 @@ public:
 // css::lang::XServiceInfo
 DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, "com.sun.star.awt.UnoControlFrame" )
 };
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

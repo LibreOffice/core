@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <toolkit/awt/vclxpointer.hxx>
+#include <awt/vclxpointer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 VCLXPointer::VCLXPointer() : maPointer(PointerStyle::Arrow)

@@ -18,9 +18,9 @@
  */
 
 
-#include <toolkit/controls/geometrycontrolmodel.hxx>
-#include <toolkit/controls/tabpagecontainer.hxx>
-#include <toolkit/controls/tabpagemodel.hxx>
+#include <controls/geometrycontrolmodel.hxx>
+#include <controls/tabpagecontainer.hxx>
+#include <controls/tabpagemodel.hxx>
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XControlModel.hpp>

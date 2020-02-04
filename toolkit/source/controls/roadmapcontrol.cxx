@@ -18,10 +18,10 @@
  */
 
 
-#include <toolkit/controls/roadmapcontrol.hxx>
-#include <toolkit/controls/roadmapentry.hxx>
+#include <controls/roadmapcontrol.hxx>
+#include <controls/roadmapentry.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

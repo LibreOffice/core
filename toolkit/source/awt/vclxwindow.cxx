@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxpointer.hxx>
+#include <awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>

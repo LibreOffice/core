@@ -37,7 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/controls/accessiblecontrolcontext.hxx>
+#include <controls/accessiblecontrolcontext.hxx>
 
 #include <algorithm>
 #include <map>

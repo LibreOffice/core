@@ -18,18 +18,18 @@
  */
 
 
-#include <toolkit/controls/controlmodelcontainerbase.hxx>
+#include <controls/controlmodelcontainerbase.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
-#include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <helper/servicenames.hxx>
+#include <controls/geometrycontrolmodel.hxx>
 #include <toolkit/controls/unocontrols.hxx>
-#include <toolkit/controls/formattedcontrol.hxx>
-#include <toolkit/controls/roadmapcontrol.hxx>
-#include <toolkit/controls/tkscrollbar.hxx>
-#include <toolkit/controls/tabpagemodel.hxx>
-#include <toolkit/controls/stdtabcontroller.hxx>
+#include <controls/formattedcontrol.hxx>
+#include <controls/roadmapcontrol.hxx>
+#include <controls/tkscrollbar.hxx>
+#include <controls/tabpagemodel.hxx>
+#include <controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -43,14 +43,14 @@
 
 #include "tree/treecontrol.hxx"
 #include "grid/gridcontrol.hxx"
-#include <toolkit/controls/tabpagecontainer.hxx>
+#include <controls/tabpagecontainer.hxx>
 
 #include <map>
 #include <algorithm>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <toolkit/controls/dialogcontrol.hxx>
+#include <controls/dialogcontrol.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"

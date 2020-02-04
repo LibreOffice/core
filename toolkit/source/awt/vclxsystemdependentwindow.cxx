@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #endif
 
-#include <toolkit/awt/vclxsystemdependentwindow.hxx>
+#include <awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

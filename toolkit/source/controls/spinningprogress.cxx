@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <toolkit/controls/animatedimages.hxx>
+#include <controls/animatedimages.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/toolkit/throbber.hxx>
 

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
+#pragma once
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propagg.hxx>
@@ -240,12 +239,10 @@ namespace com { namespace sun { namespace star {
                 sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
     };
 
-#include <toolkit/controls/geometrycontrolmodel_impl.hxx>
+#include <controls/geometrycontrolmodel_impl.hxx>
 
 
 // }    // namespace toolkit
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

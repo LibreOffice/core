@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_SERVICENAMES_HXX
-#define INCLUDED_TOOLKIT_HELPER_SERVICENAMES_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -101,6 +100,5 @@ extern const char szServiceName_UnoControlTabPageContainer[];
 
 // ExtUnoWrapper:
 extern const char szServiceName_ImageProducer[], szServiceName2_ImageProducer[];
-#endif // INCLUDED_TOOLKIT_HELPER_SERVICENAMES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/controls/tabpagemodel.hxx>
+#include <controls/tabpagemodel.hxx>
 
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/property.hxx>
@@ -29,8 +29,8 @@
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 
-#include <toolkit/controls/controlmodelcontainerbase.hxx>
-#include <toolkit/controls/unocontrolcontainer.hxx>
+#include <controls/controlmodelcontainerbase.hxx>
+#include <controls/unocontrolcontainer.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

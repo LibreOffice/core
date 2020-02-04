@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXSYSTEMDEPENDENTWINDOW_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXSYSTEMDEPENDENTWINDOW_HXX
+#pragma once
 
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
@@ -46,7 +45,5 @@ public:
     css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 };
 
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXSYSTEMDEPENDENTWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

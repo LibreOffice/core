@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXSPINBUTTON_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXSPINBUTTON_HXX
+#pragma once
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -85,7 +84,5 @@ namespace toolkit
 
 } // namespacetoolkit
 
-
-#endif // TOOLKIT_INC_ INCLUDED_TOOLKIT_AWT_VCLXSPINBUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

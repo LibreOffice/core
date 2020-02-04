@@ -22,8 +22,8 @@
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <toolkit/controls/stdtabcontroller.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <controls/stdtabcontroller.hxx>
+#include <helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -22,7 +22,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
-#include <toolkit/awt/vclxgraphics.hxx>
+#include <awt/vclxgraphics.hxx>
 
 #include <toolkit/dllapi.h>
 #include <vcl/menu.hxx>

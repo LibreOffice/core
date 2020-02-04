@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_ANIMATEDIMAGESPEER_HXX
-#define INCLUDED_TOOLKIT_AWT_ANIMATEDIMAGESPEER_HXX
+#pragma once
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -91,7 +90,5 @@ namespace toolkit
 
 } // namespace toolkit
 
-
-#endif // INCLUDED_TOOLKIT_AWT_ANIMATEDIMAGESPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,7 @@
  */
 
 
-#include <toolkit/controls/animatedimages.hxx>
+#include <controls/animatedimages.hxx>
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>

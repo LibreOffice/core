@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_CONTROLMODELCONTAINERBASE_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_CONTROLMODELCONTAINERBASE_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -33,7 +32,7 @@
 #include <cppuhelper/weak.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/controls/unocontrolcontainer.hxx>
+#include <controls/unocontrolcontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
@@ -268,6 +267,5 @@ protected:
     virtual void removingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
     virtual void addingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

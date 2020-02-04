@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <toolkit/awt/vclxgraphics.hxx>
+#include <awt/vclxgraphics.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
