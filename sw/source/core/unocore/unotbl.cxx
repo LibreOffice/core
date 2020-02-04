@@ -105,6 +105,7 @@
 #include <docsh.hxx>
 #include <fesh.hxx>
 #include <itabenum.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
