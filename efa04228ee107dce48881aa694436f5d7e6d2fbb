@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08782032_fdfb81e9",
+        "filename": "sc/source/ui/inc/tabview.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-04T15:36:26Z",
+      "side": 1,
+      "message": "Actually not ;-)\n\nThough the original was a typo, it should had been CLOOKs instead.. Compiler Limit Out Of Keys.\nNowadays that doesn\u0027t even make sense anymore.. probably just remove the comment.",
+      "range": {
+        "startLine": 343,
+        "startChar": 15,
+        "endLine": 343,
+        "endChar": 21
+      },
+      "revId": "efa04228ee107dce48881aa694436f5d7e6d2fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
