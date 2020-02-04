@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef70f9a3_b23a2fd6",
+        "filename": "sw/source/core/inc/txtfrm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-04T10:10:30Z",
+      "side": 1,
+      "message": "this entire comment is misleading because there is no nOffset anywhere; there wasn\u0027t a nOffset in the CVS initial import.\n\nit can\u0027t refer to the nOfst member because that\u0027s obviously not returned.\n\nbetter rename the function to GetModelPositionForViewPoint, which makes it much more obvious what it does.",
+      "revId": "329326424695772b24d49bdfbcecd9fce2b9783b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
