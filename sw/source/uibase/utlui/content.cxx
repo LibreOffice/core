@@ -426,7 +426,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
             m_bEdit = true;
             nOldMemberCount = m_nMemberCount;
-            m_bDelete = false;
+            m_bDelete = true;
         }
         break;
         case ContentTypeId::POSTIT:
@@ -3654,7 +3654,10 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         break;
 
         case ContentTypeId::URLFIELD:
-            nSlot = SID_EDIT_HYPERLINK;
+            if (nMode == EditEntryMode::DELETE)
+                nSlot = SID_REMOVE_HYPERLINK;
+            else
+                nSlot = SID_EDIT_HYPERLINK;
         break;
         case ContentTypeId::REFERENCE:
             nSlot = FN_EDIT_FIELD;
