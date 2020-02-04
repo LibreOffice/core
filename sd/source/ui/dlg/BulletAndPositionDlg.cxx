@@ -899,8 +899,14 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, PopupActivateHdl_Impl, weld::ToggleButt
                     // We want to show only icon names not full path.
                     // That part finds the last index of the slash and
                     // gets the part before .gif
+                    sal_Int32 last = 0;
 
-                    sal_Int32 last = sGrfName.lastIndexOf("/");
+#if defined _WIN32
+                    last = sGrfName.lastIndexOf("\\");
+#else
+                    last = sGrfName.lastIndexOf("/");
+#endif
+
                     last++;
                     OUString sIconName = sGrfName.getToken(0, '.', last);
 
