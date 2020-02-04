@@ -25,6 +25,8 @@
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
+#include <fmtftn.hxx>
+#include <ftnidx.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -539,6 +541,41 @@ DECLARE_OOXMLIMPORT_TEST(testTdf130214, "tdf130214.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf129659, "tdf129659.docx")
 {
     // don't crash on footnote with page break
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Goto*FootnoteAnchor iterates the footnotes in a ring, so we need the amount of footnotes to stop the loop
+    sal_Int32 nCount = pWrtShell->GetDoc()->GetFootnoteIdxs().size();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
+    pWrtShell->GotoPrevFootnoteAnchor();
+    nCount--;
+
+    // the expected footnote labels
+    // TODO: the 5th label is actually wrong (missing the "PR" after the symbol part), but the "b" is there?!
+    const sal_Unicode pLabel5[] = { 61649, 61489, 61490, 98 };
+    const OUString sFootnoteLabels[] = { OUString(static_cast<sal_Unicode>(61607)),
+                                         "1",
+                                         "2",
+                                         OUString(static_cast<sal_Unicode>(61472)),
+                                         { pLabel5, SAL_N_ELEMENTS(pLabel5) } };
+
+    SwFormatFootnote aFootnoteNote;
+    while (nCount >= 0)
+    {
+        CPPUNIT_ASSERT(pWrtShell->GetCurFootnote(&aFootnoteNote));
+        OUString sNumStr = aFootnoteNote.GetNumStr();
+        if (sNumStr.isEmpty())
+            sNumStr = OUString::number(aFootnoteNote.GetNumber());
+        CPPUNIT_ASSERT_EQUAL(sFootnoteLabels[nCount], sNumStr);
+        pWrtShell->GotoPrevFootnoteAnchor();
+        nCount--;
+    }
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
