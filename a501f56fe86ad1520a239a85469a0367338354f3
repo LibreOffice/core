@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9184389d_7b89f3fb",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T20:43:29Z",
+      "side": 1,
+      "message": "Note this object. It has everything to properly handle the last segment of the path: you only need to remove extension first, then get last part like this:\n\n    aObj.removeExtension();\n    OUString sIconName \u003d aObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);\n\nwhich would eliminate all platform-specific code and index operations.",
+      "range": {
+        "startLine": 881,
+        "startChar": 30,
+        "endLine": 881,
+        "endChar": 34
+      },
+      "revId": "a501f56fe86ad1520a239a85469a0367338354f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54540036_9fcc2eb0",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-04T20:43:29Z",
+      "side": 1,
+      "message": "This initialization is useless here, since it is assigned immediately after.",
+      "range": {
+        "startLine": 902,
+        "startChar": 34,
+        "endLine": 902,
+        "endChar": 38
+      },
+      "revId": "a501f56fe86ad1520a239a85469a0367338354f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
