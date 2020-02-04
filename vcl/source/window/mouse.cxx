@@ -397,6 +397,7 @@ void Window::ImplGrabFocusToDocument( GetFocusFlags nFlags )
     {
         if( !pWin->GetParent() )
         {
+            pWin->mpWindowImpl->mpFrame->GrabFocus();
             pWin->ImplGetFrameWindow()->GetWindow( GetWindowType::Client )->ImplGrabFocus(nFlags);
             return;
         }

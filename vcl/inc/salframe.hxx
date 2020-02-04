@@ -180,6 +180,9 @@ public:
     // Window to top and grab focus
     virtual void            ToTop( SalFrameToTop nFlags ) = 0;
 
+    // grab focus to the main widget, can be no-op if the vclplug only uses one widget
+    virtual void            GrabFocus() {}
+
     // this function can call with the same
     // pointer style
     virtual void            SetPointer( PointerStyle ePointerStyle ) = 0;

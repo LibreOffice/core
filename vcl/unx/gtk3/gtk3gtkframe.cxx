@@ -2478,6 +2478,12 @@ namespace
     }
 }
 
+void GtkSalFrame::GrabFocus()
+{
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
+    gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
+}
+
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -2498,10 +2504,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
 
         // focus on click
         if (!bDifferentEventWindow)
-        {
-            gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), true);
-            gtk_widget_grab_focus(GTK_WIDGET(pThis->m_pFixedContainer));
-        }
+            pThis->GrabFocus();
     }
 
     SalMouseEvent aEvent;
