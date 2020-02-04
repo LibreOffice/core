@@ -3072,11 +3072,6 @@ void SvxStyleToolBoxControl::Update()
             nActFamily++;
             pItem = pFamilyState[nActFamily-1].get();
         }
-
-        if ( !pItem )
-        {
-            SAL_INFO( "svx", "Unknown Family" ); // can happen
-        }
     }
     else if ( pPool != pStyleSheetPool )
         pStyleSheetPool = pPool;
