@@ -6153,6 +6153,11 @@ public:
         return false;
     }
 
+    virtual bool changed_by_list() const override
+    {
+        return true;
+    }
+
     virtual void set_entry_message_type(weld::EntryMessageType /*eType*/) override
     {
         assert(false);
@@ -6223,6 +6228,11 @@ public:
     virtual bool has_entry() const override
     {
         return true;
+    }
+
+    virtual bool changed_by_list() const override
+    {
+        return m_xComboBox->IsSyntheticModify() && !m_xComboBox->IsTravelSelect();
     }
 
     virtual void set_entry_message_type(weld::EntryMessageType eType) override
@@ -6328,6 +6338,7 @@ private:
     DECL_LINK(KeyPressListener, VclWindowEvent&, void);
     SalInstanceEntry* m_pEntry;
     SalInstanceTreeView* m_pTreeView;
+    bool m_bTreeChange;
 public:
     SalInstanceEntryTreeView(vcl::Window *pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                              std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
@@ -6335,6 +6346,7 @@ public:
         , SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
         , m_pEntry(dynamic_cast<SalInstanceEntry*>(m_xEntry.get()))
         , m_pTreeView(dynamic_cast<SalInstanceTreeView*>(m_xTreeView.get()))
+        , m_bTreeChange(false)
     {
         assert(m_pEntry && m_pTreeView);
 
@@ -6373,6 +6385,11 @@ public:
         m_xEntry->connect_focus_out(rLink);
     }
 
+    virtual bool changed_by_list() const override
+    {
+        return m_bTreeChange;
+    }
+
     virtual ~SalInstanceEntryTreeView() override
     {
         Edit& rEntry = m_pEntry->getEntry();
@@ -6398,7 +6415,9 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         m_xEntry->set_text(m_xTreeView->get_selected_text());
         m_xEntry->select_region(0, -1);
         m_pTreeView->enable_notify_events();
+        m_bTreeChange = true;
         m_pEntry->fire_signal_changed();
+        m_bTreeChange = false;
     }
 }
 

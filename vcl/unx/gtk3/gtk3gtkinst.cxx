@@ -12589,6 +12589,11 @@ public:
         return gtk_widget_has_focus(m_pToggleButton) || GtkInstanceWidget::has_focus();
     }
 
+    virtual bool changed_by_list() const override
+    {
+        return gtk_combo_box_get_active(m_pComboBox) != -1;
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         if (m_nAutoCompleteIdleId)
@@ -12620,6 +12625,7 @@ private:
     gulong m_nEntryInsertTextSignalId;
     guint m_nAutoCompleteIdleId;
     bool m_bAutoCompleteCaseSensitive;
+    bool m_bTreeChange;
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
@@ -12644,7 +12650,9 @@ private:
             }
             m_xEntry->select_region(0, -1);
             enable_notify_events();
+            m_bTreeChange = true;
             m_pEntry->fire_signal_changed();
+            m_bTreeChange = false;
             return true;
         }
         return false;
@@ -12745,6 +12753,7 @@ public:
         , m_pTreeView(dynamic_cast<GtkInstanceTreeView*>(m_xTreeView.get()))
         , m_nAutoCompleteIdleId(0)
         , m_bAutoCompleteCaseSensitive(false)
+        , m_bTreeChange(false)
     {
         assert(m_pEntry);
         GtkWidget* pWidget = m_pEntry->getWidget();
@@ -12799,6 +12808,11 @@ public:
         g_signal_handler_unblock(pWidget, m_nEntryInsertTextSignalId);
         m_pTreeView->enable_notify_events();
         GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual bool changed_by_list() const override
+    {
+        return m_bTreeChange;
     }
 
     virtual ~GtkInstanceEntryTreeView() override

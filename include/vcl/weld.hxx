@@ -643,7 +643,17 @@ public:
     virtual int find_id(const OUString& rId) const = 0;
     void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
+    /* m_aChangeHdl is called when the active item is changed. The can be due
+       to the user selecting a different item from the list or while typing
+       into the entry of a combo box with an entry.
+
+       Use changed_by_list() to discover whether an item was actually selected
+       from the list.
+     */
     void connect_changed(const Link<ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
+
+    virtual bool changed_by_list() const = 0;
+
     virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink)
     {
         m_aPopupToggledHdl = rLink;

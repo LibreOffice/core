@@ -428,6 +428,7 @@ class SVT_DLLPUBLIC SvtFontSizeBox
                     bPtRelative:1,
                     bStdSize:1;
     Link<weld::ComboBox&, void> m_aChangeHdl;
+    Link<weld::Widget&, void> m_aFocusOutHdl;
     std::unique_ptr<weld::ComboBox> m_xComboBox;
 
     sal_uInt16 GetDecimalDigits() const { return nDecimalDigits; }
@@ -461,14 +462,23 @@ public:
     bool IsPtRelative() const { return bPtRelative; }
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
+    void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xComboBox->connect_key_press(rLink); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
+    int get_active() const { return m_xComboBox->get_active(); }
     int get_value() const;
     void set_value(int nValue);
     void save_value() { nSavedValue = get_value(); }
     int get_saved_value() const { return nSavedValue; }
     bool get_value_changed_from_saved() const { return get_value() != get_saved_value(); }
+    int get_count() const { return m_xComboBox->get_count(); }
+    OUString get_text(int i) const { return m_xComboBox->get_text(i); }
+    void grab_focus() { m_xComboBox->grab_focus(); }
+    bool has_focus() const { return m_xComboBox->has_focus(); }
+    void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
+    void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }
 
 private:
     SvtFontSizeBox(const SvtFontSizeBox&) = delete;

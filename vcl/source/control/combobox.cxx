@@ -148,6 +148,11 @@ void ComboBox::Impl::ImplInitComboBoxData()
     m_nWidthInChars     = -1;
 }
 
+bool ComboBox::IsSyntheticModify() const
+{
+    return m_pImpl->m_isSyntheticModify;
+}
+
 void ComboBox::ImplCalcEditHeight()
 {
     sal_Int32 nLeft, nTop, nRight, nBottom;
