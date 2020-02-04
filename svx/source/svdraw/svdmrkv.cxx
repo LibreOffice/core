@@ -851,9 +851,10 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
                 OStringBuffer aExtraInfo;
 
-                aExtraInfo.append("{ \"id\": \"");
+                aExtraInfo.append("{\"id\":\"");
                 aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
-                aExtraInfo.append("\"");
+                aExtraInfo.append("\",\"type\":");
+                aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
 
                 if (bWriterGraphic)
                 {
@@ -985,7 +986,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         }
                     }
                 }
-                aExtraInfo.append(" }");
+                aExtraInfo.append("}");
 
                 sSelectionText = aSelection.toString();
                 sSelectionText += OString(", ") + OString::number(nRotAngle);
