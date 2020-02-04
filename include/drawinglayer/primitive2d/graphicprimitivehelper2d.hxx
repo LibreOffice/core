@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVEHELPER2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVEHELPER2D_HXX
+
+#pragma once
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -62,8 +62,5 @@ namespace drawinglayer
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
-
-
-#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVEHELPER2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
