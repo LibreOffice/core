@@ -110,9 +110,9 @@ public:
 
     inline void   SetTextFirstLineOffset( const short nF, const sal_uInt16 nProp = 100 );
     short  GetTextFirstLineOffset() const { return nFirstLineOfst; }
-    void SetPropTextFirstLineOfst( const sal_uInt16 nProp )
+    void SetPropTextFirstLineOffset( const sal_uInt16 nProp )
                     { nPropFirstLineOfst = nProp; }
-    sal_uInt16 GetPropTextFirstLineOfst() const
+    sal_uInt16 GetPropTextFirstLineOffset() const
                     { return nPropFirstLineOfst; }
     void SetTextFirstLineOffsetValue( const short nValue )
                     { nFirstLineOfst = nValue; }

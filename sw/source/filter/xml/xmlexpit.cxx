@@ -410,10 +410,10 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 case  MID_FIRST_LINE_INDENT:
                     if (!rLRSpace.IsAutoFirst())
                     {
-                        if (rLRSpace.GetPropTextFirstLineOfst() != 100)
+                        if (rLRSpace.GetPropTextFirstLineOffset() != 100)
                         {
                             ::sax::Converter::convertPercent(
-                                aOut, rLRSpace.GetPropTextFirstLineOfst() );
+                                aOut, rLRSpace.GetPropTextFirstLineOffset() );
                         }
                         else
                         {

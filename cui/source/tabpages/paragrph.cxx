@@ -483,10 +483,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_xRightIndent->SetMetricValue(rOldItem.GetRight(), eUnit);
             }
 
-            if ( rOldItem.GetPropTextFirstLineOfst() != 100 )
+            if ( rOldItem.GetPropTextFirstLineOffset() != 100 )
             {
                 m_xFLineIndent->SetRelative(true);
-                m_xFLineIndent->set_value(rOldItem.GetPropTextFirstLineOfst(), FieldUnit::NONE);
+                m_xFLineIndent->set_value(rOldItem.GetPropTextFirstLineOffset(), FieldUnit::NONE);
             }
             else
             {
