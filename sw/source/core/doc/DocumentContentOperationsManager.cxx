@@ -2856,14 +2856,22 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphicObject(
 
 SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
         const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
-                        const SfxItemSet* pFlyAttrSet)
+                        SfxItemSet* pFlyAttrSet)
 {
     sal_uInt16 nId = RES_POOLFRM_OLE;
     if (xObj.is())
     {
         SvGlobalName aClassName( xObj->getClassID() );
         if (SotExchange::IsMath(aClassName))
+        {
             nId = RES_POOLFRM_FORMEL;
+            if (pFlyAttrSet && pFlyAttrSet->HasItem(RES_ANCHOR))
+            {
+                // Clear the at-char anchor set in the SwFlyFrameAttrMgr ctor, so the as-char one
+                // set later in pFrameFormat is considered.
+                pFlyAttrSet->ClearItem(RES_ANCHOR);
+            }
+        }
     }
 
     SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
