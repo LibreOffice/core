@@ -761,7 +761,7 @@ public:
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
-    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara);
+    css::uno::Any GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* bIsDocDefault = nullptr);
     // current paragraph style - including inherited properties
     css::uno::Any GetPropertyFromParaStyleSheet(PropertyIds eId);
     // context's character style - including inherited properties

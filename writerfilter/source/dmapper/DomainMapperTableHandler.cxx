@@ -59,6 +59,7 @@ using namespace ::std;
 #define CNF_FIRST_ROW_FIRST_COLUMN  0x004
 #define CNF_LAST_ROW_LAST_COLUMN    0x002
 #define CNF_LAST_ROW_FIRST_COLUMN   0x001
+#define CNF_ALL                     0xFFF
 
 DomainMapperTableHandler::DomainMapperTableHandler(
             css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
@@ -225,6 +226,7 @@ struct TableInfo
     PropertyMapPtr pTableBorders;
     TableStyleSheetEntry* pTableStyle;
     css::beans::PropertyValues aTableProperties;
+    std::vector< PropertyIds > aTablePropertyIds;
 
     TableInfo()
     : nLeftBorderDistance(DEF_BORDER_DIST)
@@ -664,6 +666,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
+        rInfo.aTablePropertyIds = m_aTableProperties->GetPropertyIds();
 
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("debug.tableprops");
@@ -863,9 +866,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // Remove properties from style/row that aren't allowed in cells
                 pAllCellProps->Erase( PROP_HEADER_ROW_COUNT );
                 pAllCellProps->Erase( PROP_TBL_HEADER );
-                // Remove paragraph properties from style/row that paragraph style can overwrite
-                pAllCellProps->Erase( PROP_PARA_BOTTOM_MARGIN );
-                pAllCellProps->Erase( PROP_PARA_LINE_SPACING );
 
                 // Then add the cell properties
                 pAllCellProps->InsertProps(*aCellIterator);
@@ -1066,29 +1066,59 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 
 // table style has got bigger precedence than docDefault style,
 // but lower precedence than the paragraph styles and direct paragraph formatting
-void DomainMapperTableHandler::ApplyParaProperty(css::beans::PropertyValues aTableProperties, PropertyIds eId)
+void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableInfo & rInfo)
 {
-    OUString sPropertyName = getPropertyName(eId);
-    auto pTableProp = std::find_if(aTableProperties.begin(), aTableProperties.end(),
-        [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
-    if (pTableProp != aTableProperties.end())
+    for( auto const& eId : rInfo.aTablePropertyIds )
     {
-        uno::Any aValue = pTableProp->Value;
-        for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+        // apply paragraph and character properties of the table style on table paragraphs
+        if ( isParagraphProperty(eId) || isCharacterProperty(eId) )
         {
-            // there is no direct paragraph formatting
-            if (!rParaProp.m_pPropertyMap->isSet(eId))
+            // check all paragraphs of the table
+            for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
             {
-                OUString sParaStyleName;
-                rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
-                StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
-                uno::Any aMargin = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true);
-                uno::Any aMarginDocDefault = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, nullptr, true, true);
-                // use table style only when 1) both values are empty (no docDefault and paragraph style definitions) or
-                // 2) both non-empty values are equal (docDefault paragraph properties are copied to the base paragraph style during import)
-                // TODO check the case, when two parent styles modify the docDefault and the last one set back the docDefault value
-                if (aMargin == aMarginDocDefault)
-                    rParaProp.m_rPropertySet->setPropertyValue(sPropertyName, aValue);
+                // there is no direct paragraph formatting
+                if (!rParaProp.m_pPropertyMap->isSet(eId))
+                {
+                    bool bDocDefault;
+                    OUString sParaStyleName;
+                    rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
+                    StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
+                    uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
+                    // use table style when a docDefault value is applied instead of it,
+                    // and there is no associated TableStyleSheetEntry
+                    // TODO: replace CNF_ALL with the actual mask
+                    if ( (aParaStyle == uno::Any() || bDocDefault) && !rInfo.pTableStyle->GetProperties(CNF_ALL)->getProperty(eId) )
+                    {
+                        OUString sPropertyName = getPropertyName(eId);
+                        auto pTableProp = std::find_if(rInfo.aTableProperties.begin(), rInfo.aTableProperties.end(),
+                            [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
+                        if (pTableProp != rInfo.aTableProperties.end())
+                        {
+                            try
+                            {
+                                rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pTableProp->Value );
+                            }
+                            catch ( const uno::Exception & )
+                            {
+                                TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
+                            }
+                        }
+                    }
+                    // table style can overwrite paragraph style, when the paragraph style property has a default value, restore it
+                    // TODO remove the associated TableStyleSheetEntry styles, if needed
+                    else if ( aParaStyle != uno::Any() && !bDocDefault )
+                    {
+                        OUString sPropertyName = getPropertyName(eId);
+                        try
+                        {
+                            rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, aParaStyle );
+                        }
+                        catch ( const uno::Exception & )
+                        {
+                            TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
+                        }
+                    }
+                }
             }
         }
     }
@@ -1192,9 +1222,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     }
                 }
 
-                // OOXML table style may container paragraph properties, apply these now.
-                ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_BOTTOM_MARGIN);
-                ApplyParaProperty(aTableInfo.aTableProperties, PROP_PARA_LINE_SPACING);
+                // OOXML table style may contain paragraph properties, apply these now.
+                ApplyParagraphPropertiesFromTableStyle(aTableInfo);
             }
         }
         catch ( const lang::IllegalArgumentException & )

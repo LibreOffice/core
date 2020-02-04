@@ -30,6 +30,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+//#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -182,6 +183,70 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
     // had a reduced auto-space, just because of a next paragraph in the A2
     // cell.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // direct paragraph formatting
+    // This was 212 twips from the table style, but always direct paragraph formatting wins, in the case of the default 0 margin, too
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // default margin
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_directAfter, "tdf129575-directAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // from table style
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // direct paragraph formatting
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_styleAfter, "tdf129575-styleAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // direct paragraph formatting
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // from table style
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // docDefault defines both bottom margin and line spacing, but
+    // applied bottom margin values are based on non-docDefault paragraph styles, line spacing is based on table style
+
+    // docDefault: <w:spacing w:after="160" w:line="320" w:lineRule="auto"/>
+    // table style: <w:spacing w:after="0" w:line="240" w:lineRule="auto"/> (single line space, overwriting bigger docDefault)
+
+    // Paragraph style Normal: <w:spacing w:after="160"/> (same as docDefault),
+    // table style based single line spacing
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(282), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+    style::LineSpacing aLineSpacing = getProperty<style::LineSpacing>(getParagraphOfText(1, xCell->getText()), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+    // Heading 2: <w:spacing w:after="360"/> (different from docDefault),
+    // table style based single line spacing
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
+    aLineSpacing = getProperty<style::LineSpacing>(getParagraphOfText(1, xCell->getText()), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
