@@ -6213,14 +6213,14 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  o3tl::optional< sal_Int16 >& r
         sal_uInt16 nAbsLSpace = static_cast<sal_uInt16>( ( _nTextOfs * 2540 ) / 576 );
         auto const nFirstLineOffset = nAbsLSpace - static_cast<sal_uInt16>( ( _nBulletOfs * 2540 ) / 576 );
         aLRSpaceItem.SetLeft( nAbsLSpace );
-        aLRSpaceItem.SetTextFirstLineOfstValue( -nFirstLineOffset );
+        aLRSpaceItem.SetTextFirstLineOffsetValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );
     }
     else
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
         aLRSpaceItem.SetLeft( 0 );
-        aLRSpaceItem.SetTextFirstLineOfstValue( 0 );
+        aLRSpaceItem.SetTextFirstLineOffsetValue( 0 );
         rSet.Put( aLRSpaceItem );
     }
     if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )

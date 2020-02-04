@@ -1423,7 +1423,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
                 {
                     SvxLRSpaceItem aLR( RES_LR_SPACE );
                     aLR.SetTextLeft( rFormat.GetIndentAt() );
-                    aLR.SetTextFirstLineOfst( static_cast<short>(rFormat.GetFirstLineIndent()) );
+                    aLR.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
                     rSet.Put( aLR );
                 }
             }

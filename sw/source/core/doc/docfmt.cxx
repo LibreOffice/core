@@ -1652,7 +1652,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                         {
                             aLS.SetTextLeft( rFormat.GetIndentAt() );
-                            aLS.SetTextFirstLineOfst( static_cast<short>(rFormat.GetFirstLineIndent()) );
+                            aLS.SetTextFirstLineOffset( static_cast<short>(rFormat.GetFirstLineIndent()) );
                         }
                     }
                 }

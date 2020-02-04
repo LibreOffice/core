@@ -62,16 +62,16 @@ bool SwWrtShell::TryRemoveIndent()
     GetCurAttr(aAttrSet);
 
     SvxLRSpaceItem aItem = aAttrSet.Get(RES_LR_SPACE);
-    short aOldFirstLineOfst = aItem.GetTextFirstLineOfst();
+    short aOldFirstLineOfst = aItem.GetTextFirstLineOffset();
 
     if (aOldFirstLineOfst > 0)
     {
-        aItem.SetTextFirstLineOfst(0);
+        aItem.SetTextFirstLineOffset(0);
         bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
-        aItem.SetTextFirstLineOfst(0);
+        aItem.SetTextFirstLineOffset(0);
         aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
 
         bResult = true;

@@ -70,7 +70,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
             aDebStr.append("FI=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOfst()));
+            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOffset()));
             aDebStr.append(", LI=");
             aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft()));
             aDebStr.append(", RI=");

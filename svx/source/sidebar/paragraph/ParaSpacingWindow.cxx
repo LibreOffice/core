@@ -253,7 +253,7 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
         long aTxtLeft = pSpace->GetTextLeft();
         long aTxtRight = pSpace->GetRight();
-        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOfst();
+        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOffset();
 
         aTxtLeft = m_xBeforeSpacing->normalize(aTxtLeft);
 
@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
         SvxLRSpaceItem aMargin(SID_ATTR_PARA_LRSPACE);
         aMargin.SetTextLeft(m_xBeforeSpacing->GetCoreValue(m_eUnit));
         aMargin.SetRight(m_xAfterSpacing->GetCoreValue(m_eUnit));
-        aMargin.SetTextFirstLineOfst(m_xFLSpacing->GetCoreValue(m_eUnit));
+        aMargin.SetTextFirstLineOffset(m_xFLSpacing->GetCoreValue(m_eUnit));
 
         pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});
     }

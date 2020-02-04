@@ -227,10 +227,10 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             // We had a relative value -> recalculate
             if( 100 != aNew.GetPropTextFirstLineOfst() )
             {
-                short nTmp = aNew.GetTextFirstLineOfst();    // keep so that we can compare
-                aNew.SetTextFirstLineOfst( pNewLRSpace->GetTextFirstLineOfst(),
+                short nTmp = aNew.GetTextFirstLineOffset();    // keep so that we can compare
+                aNew.SetTextFirstLineOffset( pNewLRSpace->GetTextFirstLineOffset(),
                                             aNew.GetPropTextFirstLineOfst() );
-                bChg |= nTmp != aNew.GetTextFirstLineOfst();
+                bChg |= nTmp != aNew.GetTextFirstLineOffset();
             }
             if( bChg )
             {

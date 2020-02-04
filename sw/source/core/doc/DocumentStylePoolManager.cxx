@@ -204,7 +204,7 @@ namespace
                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
                     SvxLRSpaceItem aLR( pColl->GetFormatAttr( RES_LR_SPACE ) );
-                    aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
+                    aLR.SetTextFirstLineOffsetValue( rNFormat.GetFirstLineOffset() );
                         //TODO: overflow
                     aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
                     pColl->SetFormatAttr( aLR );
@@ -251,7 +251,7 @@ namespace
 
         SvxLRSpaceItem aLR( RES_LR_SPACE );
         SvxULSpaceItem aUL( RES_UL_SPACE );
-        aLR.SetTextFirstLineOfst( sal_uInt16(nEZ) );
+        aLR.SetTextFirstLineOffset( sal_uInt16(nEZ) );
         aLR.SetTextLeft( sal_uInt16(nLeft) );
         aUL.SetUpper( sal_uInt16(nUpper) );
         aUL.SetLower( sal_uInt16(nLower) );
@@ -690,14 +690,14 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( GetMetricVal( CM_05 ));
+                aLR.SetTextFirstLineOffset( GetMetricVal( CM_05 ));
                 aSet.Put( aLR );
             }
             break;
         case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( -static_cast<short>(GetMetricVal( CM_05 )));
+                aLR.SetTextFirstLineOffset( -static_cast<short>(GetMetricVal( CM_05 )));
                 aLR.SetTextLeft( GetMetricVal( CM_1 ));
                 SvxTabStopItem aTStops(RES_PARATR_TABSTOP);
                 aTStops.Insert( SvxTabStop( 0 ));
@@ -717,7 +717,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_CONFRONTATION:    // Text body confrontation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( - short( GetMetricVal( CM_1 ) * 4 +
+                aLR.SetTextFirstLineOffset( - short( GetMetricVal( CM_1 ) * 4 +
                                                   GetMetricVal( CM_05)) );
                 aLR.SetTextLeft( GetMetricVal( CM_1 ) * 5 );
                 SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
@@ -922,7 +922,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOfst( -static_cast<short>( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
+                aLR.SetTextFirstLineOffset( -static_cast<short>( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
                 aLR.SetTextLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
                 aSet.Put( aLR );

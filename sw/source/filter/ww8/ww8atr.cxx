@@ -817,7 +817,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                         ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
 
                     aLR.SetTextLeft( aLR.GetTextLeft() + rNFormat.GetAbsLSpace() );
-                    aLR.SetTextFirstLineOfst( GetWordFirstLineOffset(rNFormat));
+                    aLR.SetTextFirstLineOffset( GetWordFirstLineOffset(rNFormat));
 
                     aSet.Put( aLR );
                     CorrectTabStopInSet( aSet, rNFormat.GetAbsLSpace() );
@@ -4076,7 +4076,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 
         // sprmPDxaLeft1
         m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
-        m_rWW8Export.InsUInt16( rLR.GetTextFirstLineOfst() );
+        m_rWW8Export.InsUInt16( rLR.GetTextFirstLineOffset() );
     }
 }
 

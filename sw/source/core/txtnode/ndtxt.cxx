@@ -3211,7 +3211,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
-                    rFLOffset = rFLOffset + aItem.GetTextFirstLineOfst();
+                    rFLOffset = rFLOffset + aItem.GetTextFirstLineOffset();
                 }
             }
             else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3223,7 +3223,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
-                    rFLOffset = aItem.GetTextFirstLineOfst();
+                    rFLOffset = aItem.GetTextFirstLineOffset();
                 }
             }
         }
@@ -3231,7 +3231,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         return true;
     }
 
-    rFLOffset = GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst();
+    rFLOffset = GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
     return false;
 }
 
@@ -3250,7 +3250,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
             if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
                 nAdditionalIndent = nAdditionalIndent -
-                                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst();
+                                    GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
             }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3265,7 +3265,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     nAdditionalIndent = nAdditionalIndent -
-                                        GetSwAttrSet().GetLRSpace().GetTextFirstLineOfst();
+                                        GetSwAttrSet().GetLRSpace().GetTextFirstLineOffset();
                 }
             }
         }

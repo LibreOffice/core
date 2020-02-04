@@ -822,7 +822,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 nId = EE_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                         rItem.GetRight(), rItem.GetTextLeft(),
-                        rItem.GetTextFirstLineOfst(), nId );
+                        rItem.GetTextFirstLineOffset(), nId );
 
                 const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
                 const SvxLRSpaceItem& rOrigLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
@@ -849,19 +849,19 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                     // negative first line indent goes to the number
                     // format, positive to the lrSpace item
-                    if( rItem.GetTextFirstLineOfst() < 0 )
+                    if( rItem.GetTextFirstLineOffset() < 0 )
                     {
                         aFormat.SetFirstLineOffset(
-                            rItem.GetTextFirstLineOfst()
-                            - rOrigLRSpaceItem.GetTextFirstLineOfst()
+                            rItem.GetTextFirstLineOffset()
+                            - rOrigLRSpaceItem.GetTextFirstLineOffset()
                             + aFormat.GetCharTextDistance());
-                        aLRSpaceItem.SetTextFirstLineOfst(0);
+                        aLRSpaceItem.SetTextFirstLineOffset(0);
                     }
                     else
                     {
                         aFormat.SetFirstLineOffset(0);
-                        aLRSpaceItem.SetTextFirstLineOfst(
-                            rItem.GetTextFirstLineOfst()
+                        aLRSpaceItem.SetTextFirstLineOffset(
+                            rItem.GetTextFirstLineOffset()
                             - aFormat.GetFirstLineOffset() //TODO: overflow
                             + aFormat.GetCharTextDistance());
                     }
@@ -953,7 +953,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     const SvxLRSpaceItem& rLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTextLeft(),
-                            rLRSpaceItem.GetTextFirstLineOfst(), SID_ATTR_PARA_LRSPACE );
+                            rLRSpaceItem.GetTextFirstLineOffset(), SID_ATTR_PARA_LRSPACE );
 
                     const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = aEditAttr.Get( EE_PARA_NUMBULLET );
@@ -963,8 +963,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     {
                         const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
                         aLRSpaceItem.SetTextLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTextLeft());
-                        aLRSpaceItem.SetTextFirstLineOfst(
-                            rLRSpaceItem.GetTextFirstLineOfst() + rFormat.GetFirstLineOffset()
+                        aLRSpaceItem.SetTextFirstLineOffset(
+                            rLRSpaceItem.GetTextFirstLineOffset() + rFormat.GetFirstLineOffset()
                                 //TODO: overflow
                             - rFormat.GetCharTextDistance());
                     }

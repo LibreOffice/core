@@ -2466,7 +2466,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     {
                         const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
                         if ( pLRSpace )
-                            nFirstLineIndent = pLRSpace->GetTextFirstLineOfst();
+                            nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
                     }
 
                     // Insert tab for aesthetic purposes #i24762#
@@ -2748,9 +2748,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                     {
                         if (bParaRTL)
-                            aLR.SetTextFirstLineOfstValue(pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
+                            aLR.SetTextFirstLineOffsetValue(pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
                         else
-                            aLR.SetTextFirstLineOfst(GetWordFirstLineOffset(*pFormat));
+                            aLR.SetTextFirstLineOffset(GetWordFirstLineOffset(*pFormat));
                     }
 
                     // correct fix for issue i94187
@@ -2870,7 +2870,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // new first line indent = 0
                 // (first line indent is ignored for NO_NUMLEVEL)
                 if (!bParaRTL)
-                    aLRSpace.SetTextFirstLineOfst( 0 );
+                    aLRSpace.SetTextFirstLineOffset( 0 );
 
                 // put back the new item
                 pTmpSet->Put( aLRSpace );

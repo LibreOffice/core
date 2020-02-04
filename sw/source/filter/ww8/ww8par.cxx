@@ -1238,7 +1238,7 @@ static long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFormat &rFor
             "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     const long nBodyIndent = rLR.GetTextLeft();
-    const long nFirstLineDiff = rLR.GetTextFirstLineOfst();
+    const long nFirstLineDiff = rLR.GetTextFirstLineOffset();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
     const auto nPseudoListBodyIndent = rFormat.GetAbsLSpace();
@@ -1260,14 +1260,14 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
         long nWantedFirstLinePos;
         long nExtraListIndent = lcl_GetTrueMargin(rLR, rFormat, nWantedFirstLinePos);
         rLR.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
-        rLR.SetTextFirstLineOfst(0);
+        rLR.SetTextFirstLineOffset(0);
     }
     else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         if ( !bFirstLineOfstSet && bLeftIndentSet &&
              rFormat.GetFirstLineIndent() != 0 )
         {
-            rLR.SetTextFirstLineOfst( rFormat.GetFirstLineIndent() );
+            rLR.SetTextFirstLineOffset( rFormat.GetFirstLineIndent() );
         }
         else if ( bFirstLineOfstSet && !bLeftIndentSet &&
                   rFormat.GetIndentAt() != 0 )
@@ -1278,7 +1278,7 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
         {
             if ( rFormat.GetFirstLineIndent() != 0 )
             {
-                rLR.SetTextFirstLineOfst( rFormat.GetFirstLineIndent() );
+                rLR.SetTextFirstLineOffset( rFormat.GetFirstLineIndent() );
             }
             if ( rFormat.GetIndentAt() != 0 )
             {

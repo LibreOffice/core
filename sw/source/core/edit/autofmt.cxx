@@ -2402,7 +2402,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     if (SfxItemState::SET == m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, true,
                                         reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
-                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOfst()) ||
+                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
                             0 != pLRSpace->GetTextLeft() ) )
                     {
                         // exception: numbering/enumeration can have an indentation
@@ -2637,7 +2637,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                         SfxItemState::SET == m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, false,
                                         reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
-                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOfst()) ||
+                        ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
                             0 != pLRSpace->GetTextLeft() ) )
                     {
                         // then use one of our templates

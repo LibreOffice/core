@@ -75,7 +75,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
         // left margin of paragraph style
         const SvxLRSpaceItem& rLRSpace = targetNode.GetTextColl()->GetLRSpace();
         nRightMargin -= rLRSpace.GetLeft();
-        nRightMargin -= rLRSpace.GetTextFirstLineOfst();
+        nRightMargin -= rLRSpace.GetTextFirstLineOffset();
     }
 
     result.tabStop = SvxTabStop(nRightMargin, SvxTabAdjust::Right, cDfltDecimalChar, aToken.cTabFillChar);

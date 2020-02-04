@@ -292,7 +292,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    rLRSpace.SetTextFirstLineOfst( static_cast<short>(nAbs), static_cast<sal_uInt16>(nProp) );
+                    rLRSpace.SetTextFirstLineOffset( static_cast<short>(nAbs), static_cast<sal_uInt16>(nProp) );
                 }
                 break;
 

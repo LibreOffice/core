@@ -617,14 +617,14 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                         nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.m_nRightMargin);
                 }
                 if( rPropInfo.m_bTextIndent )
-                    nIndent = pLRItem->GetTextFirstLineOfst();
+                    nIndent = pLRItem->GetTextFirstLineOffset();
 
                 // Remember the value for the following paragraphs
                 pContext->SetMargins( nLeft, nRight, nIndent );
 
                 // Set the attribute on the current paragraph
                 SvxLRSpaceItem aLRItem( *pLRItem );
-                aLRItem.SetTextFirstLineOfst( nIndent );
+                aLRItem.SetTextFirstLineOffset( nIndent );
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 NewAttr(m_xAttrTab, &m_xAttrTab->pLRSpace, aLRItem);

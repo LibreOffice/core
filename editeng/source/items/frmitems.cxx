@@ -400,7 +400,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetRight(bConvert ? convertMm100ToTwip(aLRSpace.Right) : aLRSpace.Right);
             nPropLeftMargin = aLRSpace.ScaleLeft;
             nPropRightMargin = aLRSpace.ScaleRight;
-            SetTextFirstLineOfst(static_cast<short>(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
+            SetTextFirstLineOffset(static_cast<short>(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
             SetPropTextFirstLineOfst ( static_cast<sal_uInt16>(aLRSpace.ScaleFirstLine) );
             SetAutoFirst( aLRSpace.AutoFirstLine );
             break;
@@ -432,7 +432,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTextFirstLineOfst(static_cast<short>(bConvert ?  convertMm100ToTwip(nVal) : nVal));
+            SetTextFirstLineOffset(static_cast<short>(bConvert ?  convertMm100ToTwip(nVal) : nVal));
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
@@ -468,7 +468,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
     return (
-        nFirstLineOfst == rOther.GetTextFirstLineOfst() &&
+        nFirstLineOfst == rOther.GetTextFirstLineOffset() &&
         nTxtLeft == rOther.GetTextLeft() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
@@ -616,7 +616,7 @@ boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
     OUString sRight = GetMetricText(GetRight(),
                         MapUnit::MapTwip, eTargetUnit, nullptr);
 
-    OUString sFirstline = GetMetricText(GetTextFirstLineOfst(),
+    OUString sFirstline = GetMetricText(GetTextFirstLineOffset(),
                         MapUnit::MapTwip, eTargetUnit, nullptr);
 
     aState.put("left", sLeft);

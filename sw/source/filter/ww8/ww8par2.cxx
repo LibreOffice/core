@@ -256,7 +256,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 {
                     const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
                     if ( pLRSpace )
-                        nFirstLineIndent = pLRSpace->GetTextFirstLineOfst();
+                        nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
                 }
 
                 m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );

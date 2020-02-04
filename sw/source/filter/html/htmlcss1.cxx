@@ -285,7 +285,7 @@ static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
         if( rPropInfo.m_bRightMargin )
             aLRItem.SetRight( pLRItem->GetRight() );
         if( rPropInfo.m_bTextIndent )
-            aLRItem.SetTextFirstLineOfst( pLRItem->GetTextFirstLineOfst() );
+            aLRItem.SetTextFirstLineOffset( pLRItem->GetTextFirstLineOffset() );
 
         rItemSet.Put( aLRItem );
     }

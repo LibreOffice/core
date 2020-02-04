@@ -515,8 +515,8 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 const SvxLRSpaceItem &rSpace =
                     GetTextNodeForParaProps()->GetSwAttrSet().GetLRSpace();
 
-                if ( rSpace.GetTextFirstLineOfst() > 0 )
-                    aPos.AdjustX(rSpace.GetTextFirstLineOfst() );
+                if ( rSpace.GetTextFirstLineOffset() > 0 )
+                    aPos.AdjustX(rSpace.GetTextFirstLineOffset() );
 
                 std::unique_ptr<SwSaveClip> pClip;
                 if( IsUndersized() )

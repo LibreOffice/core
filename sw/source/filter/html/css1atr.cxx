@@ -2940,7 +2940,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     // The LineIndent of the first line might contain the room for numbering
-    long nFirstLineIndent = static_cast<long>(rLRItem.GetTextFirstLineOfst()) -
+    long nFirstLineIndent = static_cast<long>(rLRItem.GetTextFirstLineOffset()) -
         rHTMLWrt.m_nFirstLineIndent;
     if( rHTMLWrt.m_nDfltFirstLineIndent != nFirstLineIndent )
     {

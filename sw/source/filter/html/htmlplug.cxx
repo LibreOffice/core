@@ -262,7 +262,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         // if applicable remove the first line indent
         const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
-        aLRItem.SetTextFirstLineOfst( 0 );
+        aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
         {
             nLeftSpace = aLRItem.GetLeft();

@@ -825,7 +825,7 @@ void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, 
         {
             assert(dynamic_cast<const SvxLRSpaceItem *>(rPoolItem.get()) != nullptr);
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(*rPoolItem);
-            rItem.SetTextFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTextFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
+            rItem.SetTextFirstLineOffset( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTextFirstLineOffset(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTextLeft( OutputDevice::LogicToLogic( rItem.GetTextLeft(), eSourceUnit, eDestUnit ) );
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
         }

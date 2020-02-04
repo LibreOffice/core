@@ -418,7 +418,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         else
                         {
                             rUnitConverter.convertMeasureToXML(
-                                    aOut, rLRSpace.GetTextFirstLineOfst() );
+                                    aOut, rLRSpace.GetTextFirstLineOffset() );
                         }
                     }
                     else

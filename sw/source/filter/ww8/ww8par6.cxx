@@ -4174,7 +4174,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aLR->SetTextLeft( pFormat->GetIndentAt() );
-                aLR->SetTextFirstLineOfst( static_cast<short>(pFormat->GetFirstLineIndent()) );
+                aLR->SetTextFirstLineOffset( static_cast<short>(pFormat->GetFirstLineIndent()) );
                 // make paragraph have hard-set indent attributes
                 pTextNode->SetAttr( *aLR );
             }
@@ -4246,11 +4246,11 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     const SvxLRSpaceItem &rLR =
                         ItemGet<SvxLRSpaceItem>(*(m_vColl[m_nCurrentColl].m_pFormat),
                         RES_LR_SPACE);
-                    nPara = nPara - rLR.GetTextFirstLineOfst();
+                    nPara = nPara - rLR.GetTextFirstLineOffset();
                 }
             }
 
-            aLR->SetTextFirstLineOfst(nPara);
+            aLR->SetTextFirstLineOffset(nPara);
 
             if (!m_pCurrentColl)
             {

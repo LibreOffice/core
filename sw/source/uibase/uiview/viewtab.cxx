@@ -627,7 +627,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             rSh.GetCurAttr( aSet );
             const SvxLRSpaceItem& rLR = aSet.Get(RES_LR_SPACE);
 
-            if ( rLR.GetTextFirstLineOfst() < 0 )
+            if ( rLR.GetTextFirstLineOffset() < 0 )
             {
                 SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
                 aTabStops.Insert( aSwTabStop );
@@ -655,9 +655,9 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( RES_LR_SPACE ) );
 
         SvxLRSpaceItem aNewMargin( RES_LR_SPACE );
-        aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOfst() );
+        aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOffset() );
         aNewMargin.SetRight( aParaMargin.GetRight() );
-        aNewMargin.SetTextFirstLineOfst( (aParaMargin.GetTextFirstLineOfst()) * -1 );
+        aNewMargin.SetTextFirstLineOffset( (aParaMargin.GetTextFirstLineOffset()) * -1 );
 
         rSh.SetAttrItem( aNewMargin );
         break;
@@ -700,7 +700,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             else
                 rSh.SetAttrItem( aParaMargin );
 
-            if ( aParaMargin.GetTextFirstLineOfst() < 0 )
+            if ( aParaMargin.GetTextFirstLineOffset() < 0 )
             {
                 SfxItemSet aSet( GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{} );
 

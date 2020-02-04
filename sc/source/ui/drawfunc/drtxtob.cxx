@@ -929,7 +929,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             nId = EE_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
                 rItem.GetRight(), rItem.GetTextLeft(),
-                rItem.GetTextFirstLineOfst(), nId );
+                rItem.GetTextFirstLineOffset(), nId );
             aAttr.Put( aLRSpaceItem );
             pView->SetAttributes( aAttr );
         }
