@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abb48870_6d950fba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-04T17:26:12Z",
+      "side": 1,
+      "message": "(actually, it\u0027s the smaller of \u0027long\u0027 and \u0027long long\u0027 in which the number can be represented)",
+      "range": {
+        "startLine": 9,
+        "startChar": 75,
+        "endLine": 9,
+        "endChar": 84
+      },
+      "revId": "72f1447c72700e2c8b469dea51496d21e929157b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
