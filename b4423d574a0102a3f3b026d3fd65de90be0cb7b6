@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c4f285b_db5067c3",
+        "filename": "sw/source/core/txtnode/ndhints.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-04T09:56:06Z",
+      "side": 1,
+      "message": "why not use std::unordered_map?",
+      "revId": "b4423d574a0102a3f3b026d3fd65de90be0cb7b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "438ea7ce_c229a23e",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-04T09:56:06Z",
+      "side": 1,
+      "message": "why not use std::unordered_map?",
+      "revId": "b4423d574a0102a3f3b026d3fd65de90be0cb7b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
