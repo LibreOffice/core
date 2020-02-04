@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "49c9f0ac_851163c0",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-04T21:05:38Z",
+      "side": 1,
+      "message": "This looks like a better way to do it than via #if defined stuff below.\n\n@Onur: Please try to adjust your patch as per Mike\u0027s suggestion.",
+      "parentUuid": "9184389d_7b89f3fb",
+      "range": {
+        "startLine": 881,
+        "startChar": 30,
+        "endLine": 881,
+        "endChar": 34
+      },
+      "revId": "a501f56fe86ad1520a239a85469a0367338354f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54540036_9fcc2eb0",
         "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
         "patchSetId": 1
