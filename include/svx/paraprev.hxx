@@ -59,7 +59,7 @@ class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetControlle
 public:
     SvxParaPrevWindow();
 
-    void SetFirstLineOfst( short nNew )
+    void SetFirstLineOffset( short nNew )
     {
         nFirstLineOfst = nNew;
     }

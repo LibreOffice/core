@@ -894,7 +894,7 @@ void SvxStdParagraphTabPage::Init_Impl()
 
 void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
-    m_aExampleWin.SetFirstLineOfst( static_cast<short>(m_xFLineIndent->denormalize( m_xFLineIndent->get_value( FieldUnit::TWIP ) )) );
+    m_aExampleWin.SetFirstLineOffset( static_cast<short>(m_xFLineIndent->denormalize( m_xFLineIndent->get_value( FieldUnit::TWIP ) )) );
     m_aExampleWin.SetLeftMargin( static_cast<long>(m_xLeftIndent->denormalize( m_xLeftIndent->get_value( FieldUnit::TWIP ) ) ) );
     m_aExampleWin.SetRightMargin( static_cast<long>(m_xRightIndent->denormalize( m_xRightIndent->get_value( FieldUnit::TWIP ) ) ) );
     m_aExampleWin.SetUpper( static_cast<sal_uInt16>(m_xTopDist->denormalize( m_xTopDist->get_value( FieldUnit::TWIP ) )) );
