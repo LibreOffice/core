@@ -235,7 +235,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
             nRight = nLeft + 1; // einen goennen wir uns immer
     }
 
-    if( m_pFrame->IsFollow() && m_pFrame->GetOfst() )
+    if( m_pFrame->IsFollow() && m_pFrame->GetOffset() )
         nFirst = nLeft;
     else
     {

@@ -425,7 +425,7 @@ public:
     /// Methods to manage the FollowFrame
     void            SplitFrame(TextFrameIndex nTextPos);
     SwContentFrame *JoinFrame();
-    TextFrameIndex GetOfst() const { return mnOffset; }
+    TextFrameIndex GetOffset() const { return mnOffset; }
            void        SetOfst_(TextFrameIndex nNewOfst);
     inline void        SetOfst (TextFrameIndex nNewOfst);
     void ManipOfst(TextFrameIndex const nNewOfst) { mnOffset = nNewOfst; }
@@ -434,7 +434,7 @@ public:
     SwTextFrame&   GetFrameAtOfst(TextFrameIndex nOfst);
     /// If there's a Follow and we don't contain text ourselves
     bool IsEmptyMaster() const
-        { return GetFollow() && !GetFollow()->GetOfst(); }
+        { return GetFollow() && !GetFollow()->GetOffset(); }
 
     void SetMergedPara(std::unique_ptr<sw::MergedPara> p);
     sw::MergedPara      * GetMergedPara()       { return m_pMergedPara.get(); }
@@ -822,12 +822,12 @@ inline SwTwips SwTextFrame::GrowTst( const SwTwips nGrow )
 inline bool SwTextFrame::IsInside(TextFrameIndex const nPos) const
 {
     bool bRet = true;
-    if( nPos < GetOfst() )
+    if( nPos < GetOffset() )
         bRet = false;
     else
     {
         const SwTextFrame *pFoll = GetFollow();
-        if( pFoll && nPos >= pFoll->GetOfst() )
+        if( pFoll && nPos >= pFoll->GetOffset() )
             bRet = false;
     }
     return bRet;

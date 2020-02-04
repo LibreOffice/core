@@ -70,7 +70,7 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
     if( !bNoScroll || pFrame->GetFollow() )
     {
         pFrameAtPos = pFrame->GetFrameAtPos( rPos );
-        if (nOffset < pFrameAtPos->GetOfst() &&
+        if (nOffset < pFrameAtPos->GetOffset() &&
             !pFrameAtPos->IsFollow() )
         {
             assert(pFrameAtPos->MapModelToViewPos(rPos) == nOffset);
@@ -92,7 +92,7 @@ SwTextFrame *GetAdjFrameAtPos( SwTextFrame *pFrame, const SwPosition &rPos,
     if( nOffset && bRightMargin )
     {
         while (pFrameAtPos &&
-               pFrameAtPos->MapViewToModelPos(pFrameAtPos->GetOfst()) == rPos &&
+               pFrameAtPos->MapViewToModelPos(pFrameAtPos->GetOffset()) == rPos &&
                pFrameAtPos->IsFollow() )
         {
             pFrameAtPos->GetFormatted();
@@ -109,7 +109,7 @@ bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
 {
     // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrame->IsFollow(), "Illegal Scrolling by Follow!" );
-    if( pFrame->GetOfst() != nNew && !pFrame->IsInSct() )
+    if( pFrame->GetOffset() != nNew && !pFrame->IsInSct() )
     {
         SwFlyFrame *pFly = pFrame->FindFlyFrame();
         // Attention: if e.g. in a column frame the size is still invalid
@@ -124,7 +124,7 @@ bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
                 if( pVsh->GetRingContainer().size() > 1 ||
                     ( pFrame->GetDrawObjs() && pFrame->GetDrawObjs()->size() ) )
                 {
-                    if( !pFrame->GetOfst() )
+                    if( !pFrame->GetOffset() )
                         return false;
                     nNew = TextFrameIndex(0);
                 }
@@ -143,7 +143,7 @@ bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
 SwTextFrame& SwTextFrame::GetFrameAtOfst(TextFrameIndex const nWhere)
 {
     SwTextFrame* pRet = this;
-    while( pRet->HasFollow() && nWhere >= pRet->GetFollow()->GetOfst() )
+    while( pRet->HasFollow() && nWhere >= pRet->GetFollow()->GetOffset() )
         pRet = pRet->GetFollow();
     return *pRet;
 }
@@ -154,11 +154,11 @@ SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos )
     SwTextFrame *pFoll = this;
     while( pFoll->GetFollow() )
     {
-        if (nPos > pFoll->GetFollow()->GetOfst())
+        if (nPos > pFoll->GetFollow()->GetOffset())
             pFoll = pFoll->GetFollow();
         else
         {
-            if (nPos == pFoll->GetFollow()->GetOfst()
+            if (nPos == pFoll->GetFollow()->GetOffset()
                  && !SwTextCursor::IsRightMargin() )
                  pFoll = pFoll->GetFollow();
             else
@@ -293,7 +293,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
             if( pFrame->IsUndersized() && pCMS && !pFrame->GetNext() &&
                 aRectFnSet.GetBottom(rOrig) == nUpperMaxY &&
-                pFrame->GetOfst() < nOffset &&
+                pFrame->GetOffset() < nOffset &&
                 !pFrame->IsFollow() && !bNoScroll &&
                 TextFrameIndex(pFrame->GetText().getLength()) != nNextOfst)
             {
@@ -686,7 +686,7 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
 
         aLine.CharCursorToLine(pFrame->MapModelToViewPos(*pPam->GetPoint()));
         nIndx = aLine.GetStart();
-        if( pFrame->GetOfst() && !pFrame->IsFollow() && !aLine.GetPrev() )
+        if( pFrame->GetOffset() && !pFrame->IsFollow() && !aLine.GetPrev() )
         {
             sw_ChangeOffset(pFrame, TextFrameIndex(0));
             nIndx = TextFrameIndex(0);
@@ -796,9 +796,9 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
             bool bPrevLine = ( pPrevLine && pPrevLine != aLine.GetCurr() );
 
-            if( !pPrevLine && !bSecondOfDouble && GetOfst() && !IsFollow() )
+            if( !pPrevLine && !bSecondOfDouble && GetOffset() && !IsFollow() )
             {
-                nFormat = GetOfst();
+                nFormat = GetOffset();
                 TextFrameIndex nDiff = aLine.GetLength();
                 if( !nDiff )
                     nDiff = TextFrameIndex(MIN_OFFSET_STEP);
@@ -862,18 +862,18 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
     if ( IsFollow() )
     {
         const SwTextFrame *pTmpPrev = FindMaster();
-        TextFrameIndex nOffs = GetOfst();
+        TextFrameIndex nOffs = GetOffset();
         if( pTmpPrev )
         {
             SwViewShell *pSh = getRootFrame()->GetCurrShell();
             const bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTextFrame *pPrevPrev = pTmpPrev;
             // We skip protected frames and frames without content here
-            while( pPrevPrev && ( pPrevPrev->GetOfst() == nOffs ||
+            while( pPrevPrev && ( pPrevPrev->GetOffset() == nOffs ||
                    ( !bProtectedAllowed && pPrevPrev->IsProtected() ) ) )
             {
                 pTmpPrev = pPrevPrev;
-                nOffs = pTmpPrev->GetOfst();
+                nOffs = pTmpPrev->GetOffset();
                 if ( pPrevPrev->IsFollow() )
                     pPrevPrev = pTmpPrev->FindMaster();
                 else
@@ -1237,11 +1237,11 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 TextFrameIndex nTmpLen(aInf.GetText().getLength());
                 if( aLine.GetEnd() < nTmpLen )
                 {
-                    if( nFormat <= GetOfst() )
+                    if( nFormat <= GetOffset() )
                     {
-                        nFormat = std::min(GetOfst() + TextFrameIndex(MIN_OFFSET_STEP),
+                        nFormat = std::min(GetOffset() + TextFrameIndex(MIN_OFFSET_STEP),
                                        nTmpLen );
-                        if( nFormat <= GetOfst() )
+                        if( nFormat <= GetOffset() )
                             break;
                     }
                     continue;

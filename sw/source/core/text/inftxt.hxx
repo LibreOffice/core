@@ -736,7 +736,7 @@ inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
 
 inline SwTwips SwTextPaintInfo::GetPaintOfst() const
 {
-    return GetParaPortion()->GetRepaint().GetOfst();
+    return GetParaPortion()->GetRepaint().GetOffset();
 }
 
 inline void SwTextPaintInfo::SetPaintOfst( const SwTwips nNew )

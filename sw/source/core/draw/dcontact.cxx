@@ -1707,7 +1707,7 @@ static SwTextFrame* lcl_GetFlyInContentAnchor( SwTextFrame* _pProposedAnchorFram
         pTmp = pAct;
         pAct = pTmp->GetFollow();
     }
-    while (pAct && nTextOffset >= pAct->GetOfst());
+    while (pAct && nTextOffset >= pAct->GetOffset());
     return pTmp;
 }
 

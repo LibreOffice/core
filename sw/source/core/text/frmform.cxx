@@ -181,7 +181,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
     SwParaPortion *pPara = GetPara();
     const bool bFollowField = pPara && pPara->IsFollowField();
 
-    if( !pMyFollow->GetOfst() || pMyFollow->GetOfst() != nTextOfst ||
+    if( !pMyFollow->GetOffset() || pMyFollow->GetOffset() != nTextOfst ||
         bFollowField || pMyFollow->IsFieldFollow() ||
         ( pMyFollow->IsVertical() && !pMyFollow->getFramePrintArea().Width() ) ||
         ( ! pMyFollow->IsVertical() && !pMyFollow->getFramePrintArea().Height() ) )
@@ -365,7 +365,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     if( IsUndersized() )
     {
-        if( GetOfst() && !IsFollow() ) // A scrolled paragraph (undersized)
+        if( GetOffset() && !IsFollow() ) // A scrolled paragraph (undersized)
             return;
         SetUndersized( nChgHght == 0 || bHasToFit );
     }
@@ -596,7 +596,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
         // We steal text mass from our Follows
         // It can happen that we have to join some of them
         while( GetFollow() && GetFollow()->GetFollow() &&
-               nNewOfst >= GetFollow()->GetFollow()->GetOfst() )
+               nNewOfst >= GetFollow()->GetFollow()->GetOffset() )
         {
             JoinFrame();
         }
@@ -621,7 +621,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
     SwTextFrame *pNxt = pFoll->GetFollow();
 
     // All footnotes of the to-be-destroyed Follow are relocated to us
-    TextFrameIndex nStart = pFoll->GetOfst();
+    TextFrameIndex nStart = pFoll->GetOffset();
     if ( pFoll->HasFootnote() )
     {
         SwFootnoteBossFrame *pFootnoteBoss = nullptr;
@@ -941,7 +941,7 @@ bool SwTextFrame::CalcPreps()
                     {
                         // We delete a line before the Master, because the Follow
                         // could hand over a line
-                        const SwCharRange aFollowRg(GetFollow()->GetOfst(), TextFrameIndex(1));
+                        const SwCharRange aFollowRg(GetFollow()->GetOffset(), TextFrameIndex(1));
                         pPara->GetReformat() += aFollowRg;
                         // We should continue!
                         bRet = false;
@@ -990,9 +990,9 @@ bool SwTextFrame::CalcPreps()
 // We rewire the footnotes and the character bound objects
 void SwTextFrame::ChangeOffset( SwTextFrame* pFrame, TextFrameIndex nNew )
 {
-    if( pFrame->GetOfst() < nNew )
+    if( pFrame->GetOffset() < nNew )
         pFrame->MoveFlyInCnt( this, TextFrameIndex(0), nNew );
-    else if( pFrame->GetOfst() > nNew )
+    else if( pFrame->GetOffset() > nNew )
         MoveFlyInCnt( pFrame, nNew, TextFrameIndex(COMPLETE_STRING) );
 }
 
@@ -1092,7 +1092,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // Thus, the text frame introduced a follow by a
             // <SwTextFrame::SplitFrame(..)> - see below. The follow then shows
             // the numbering and must stay.
-            if ( GetFollow()->GetOfst() != nEnd ||
+            if ( GetFollow()->GetOffset() != nEnd ||
                  GetFollow()->IsFieldFollow() ||
                  (nStrLen == TextFrameIndex(0) && GetTextNodeForParaProps()->GetNumRule()))
             {
@@ -1263,7 +1263,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
         else
             nRght += ( std::max( nOldAscent, pNew->GetAscent() ) / 4);
         nRght += rLine.GetLeftMargin();
-        if( rRepaint.GetOfst() || rRepaint.GetRightOfst() < nRght )
+        if( rRepaint.GetOffset() || rRepaint.GetRightOfst() < nRght )
             rRepaint.SetRightOfst( nRght );
 
         // Finally we enlarge the repaint rectangle if we found an underscore
@@ -1328,7 +1328,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         rReformat.Len() = nStrLen - rReformat.Start();
 
     SwTwips nOldBottom;
-    if( GetOfst() && !IsFollow() )
+    if( GetOffset() && !IsFollow() )
     {
         rLine.Bottom();
         nOldBottom = rLine.Y();
@@ -1448,7 +1448,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     if ( bMaxHyph )
         rLine.InitCntHyph();
 
-    if( IsFollow() && IsFieldFollow() && rLine.GetStart() == GetOfst() )
+    if( IsFollow() && IsFieldFollow() && rLine.GetStart() == GetOffset() )
     {
         SwTextFrame *pMaster = FindMaster();
         OSL_ENSURE( pMaster, "SwTextFrame::Format: homeless follow" );
@@ -1465,11 +1465,11 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                 SwTextIter aMasterLine( pMaster, &aInf );
                 aMasterLine.Bottom();
                 pLine = aMasterLine.GetCurr();
-                assert(aMasterLine.GetEnd() == GetOfst());
+                assert(aMasterLine.GetEnd() == GetOffset());
             }
         }
         SwLinePortion* pRest = pLine ?
-            rLine.MakeRestPortion(pLine, GetOfst()) : nullptr;
+            rLine.MakeRestPortion(pLine, GetOffset()) : nullptr;
         if( pRest )
             rInf.SetRest( pRest );
         else
@@ -1858,7 +1858,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         SwTextLineAccess aAccess( this );
         const bool bNew = !aAccess.IsAvailable();
         const bool bSetOfst =
-            (GetOfst() && GetOfst() > TextFrameIndex(GetText().getLength()));
+            (GetOffset() && GetOffset() > TextFrameIndex(GetText().getLength()));
 
         if( CalcPreps() )
             ; // nothing
@@ -2009,9 +2009,9 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
     if( aLine.GetDropFormat() )
         return false;
 
-    TextFrameIndex nStart = GetOfst();
+    TextFrameIndex nStart = GetOffset();
     const TextFrameIndex nEnd = GetFollow()
-                  ? GetFollow()->GetOfst()
+                  ? GetFollow()->GetOffset()
                   : TextFrameIndex(aInf.GetText().getLength());
 
     int nLoopProtection = 0;
@@ -2040,12 +2040,12 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
         // Attention: This situation can occur due to FormatLevel==12. Don't panic!
-        TextFrameIndex const nStrt = GetOfst();
+        TextFrameIndex const nStrt = GetOffset();
         InvalidateRange_( SwCharRange( nStrt, nEnd - nStrt) );
         return false;
     }
 
-    if (m_pFollow && nStart != static_cast<SwTextFrame*>(m_pFollow)->GetOfst())
+    if (m_pFollow && nStart != static_cast<SwTextFrame*>(m_pFollow)->GetOffset())
         return false; // can be caused by e.g. Orphans
 
     // We made it!

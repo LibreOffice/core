@@ -1056,7 +1056,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     }
 
     // We can stand in the follow, it's crucial that
-    // pFrame->GetOfst() == 0!
+    // pFrame->GetOffset() == 0!
     if( rInf.GetIdx() )
     {
         // We now too can elongate FootnotePortions and ErgoSumPortions
@@ -1072,8 +1072,8 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         // 2. Arrow portions
         if( !pPor && !rInf.IsArrowDone() )
         {
-            if( m_pFrame->GetOfst() && !m_pFrame->IsFollow() &&
-                rInf.GetIdx() == m_pFrame->GetOfst() )
+            if( m_pFrame->GetOffset() && !m_pFrame->IsFollow() &&
+                rInf.GetIdx() == m_pFrame->GetOffset() )
                 pPor = new SwArrowPortion( *m_pCurr );
             rInf.SetArrowDone( true );
         }

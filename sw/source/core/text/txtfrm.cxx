@@ -1432,7 +1432,7 @@ void SwTextFrame::HideHidden()
     OSL_ENSURE( !GetFollow() && IsHiddenNow(),
             "HideHidden on visible frame of hidden frame has follow" );
 
-    HideFootnotes(GetOfst(), TextFrameIndex(COMPLETE_STRING));
+    HideFootnotes(GetOffset(), TextFrameIndex(COMPLETE_STRING));
     HideAndShowObjects();
 
     // format information is obsolete
@@ -1649,7 +1649,7 @@ bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nL
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-overflow"
 #endif
-    if (nLen != TextFrameIndex(COMPLETE_STRING) && GetOfst() > nPos + nLen) // the range preceded us
+    if (nLen != TextFrameIndex(COMPLETE_STRING) && GetOffset() > nPos + nLen) // the range preceded us
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
@@ -1658,7 +1658,7 @@ bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nL
     if( !GetFollow() ) // the range doesn't precede us,
         return true; // nobody follows us.
 
-    TextFrameIndex const nMax = GetFollow()->GetOfst();
+    TextFrameIndex const nMax = GetFollow()->GetOffset();
 
     // either the range overlap or our text has been deleted
     // sw_redlinehide: GetText() should be okay here because it has already
@@ -1859,10 +1859,10 @@ static void lcl_ModifyOfst(SwTextFrame & rFrame,
         TextFrameIndex (* op)(TextFrameIndex const&, TextFrameIndex const&))
 {
     assert(nLen != TextFrameIndex(COMPLETE_STRING));
-    if (rFrame.IsFollow() && nPos < rFrame.GetOfst())
+    if (rFrame.IsFollow() && nPos < rFrame.GetOffset())
     {
-        rFrame.ManipOfst( std::max(nPos, op(rFrame.GetOfst(), nLen)) );
-        assert(sal_Int32(rFrame.GetOfst()) <= rFrame.GetText().getLength());
+        rFrame.ManipOfst( std::max(nPos, op(rFrame.GetOffset(), nLen)) );
+        assert(sal_Int32(rFrame.GetOffset()) <= rFrame.GetText().getLength());
     }
 }
 
@@ -2685,14 +2685,14 @@ static bool lcl_ErgoVadis(SwTextFrame* pFrame, TextFrameIndex & rPos, const Prep
     {
         if( rFootnoteInfo.m_aErgoSum.isEmpty() )
             return false;
-        rPos = pFrame->GetOfst();
+        rPos = pFrame->GetOffset();
     }
     else
     {
         if( rFootnoteInfo.m_aQuoVadis.isEmpty() )
             return false;
         if( pFrame->HasFollow() )
-            rPos = pFrame->GetFollow()->GetOfst();
+            rPos = pFrame->GetFollow()->GetOffset();
         else
             rPos = TextFrameIndex(pFrame->GetText().getLength());
         if( rPos )
@@ -2798,7 +2798,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 IsUndersized() )
             {
                 InvalidateRange(SwCharRange(TextFrameIndex(0), TextFrameIndex(1)), 1);
-                if( GetOfst() && !IsFollow() )
+                if( GetOffset() && !IsFollow() )
                     SetOfst_(TextFrameIndex(0));
             }
             break;
@@ -2858,12 +2858,12 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 bool bOld = IsVertical();
                 SetInvalidVert( true );
                 if( bOld != IsVertical() )
-                    InvalidateRange(SwCharRange(GetOfst(), TextFrameIndex(COMPLETE_STRING)));
+                    InvalidateRange(SwCharRange(GetOffset(), TextFrameIndex(COMPLETE_STRING)));
             }
 
             if( HasFollow() )
             {
-                TextFrameIndex nNxtOfst = GetFollow()->GetOfst();
+                TextFrameIndex nNxtOfst = GetFollow()->GetOffset();
                 if( nNxtOfst )
                     --nNxtOfst;
                 InvalidateRange(SwCharRange( nNxtOfst, TextFrameIndex(1)), 1);
@@ -2880,11 +2880,11 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwTextNode const* pNode(nullptr);
             sw::MergedAttrIter iter(*this);
             TextFrameIndex const nEnd = GetFollow()
-                    ? GetFollow()->GetOfst() : TextFrameIndex(COMPLETE_STRING);
+                    ? GetFollow()->GetOffset() : TextFrameIndex(COMPLETE_STRING);
             for (SwTextAttr const* pHt = iter.NextAttr(&pNode); pHt; pHt = iter.NextAttr(&pNode))
             {
                 TextFrameIndex const nStart(MapModelToView(pNode, pHt->GetStart()));
-                if (nStart >= GetOfst())
+                if (nStart >= GetOffset())
                 {
                     if (nStart >= nEnd)
                         break;
@@ -2903,7 +2903,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( IsUndersized() )
             {
                 InvalidateSize_();
-                InvalidateRange(SwCharRange(GetOfst(), TextFrameIndex(1)), 1);
+                InvalidateRange(SwCharRange(GetOffset(), TextFrameIndex(1)), 1);
             }
             break;
         }
@@ -3023,8 +3023,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // Which had flowed to the next page to be together with the footnote (this is
                 // especially true for areas with columns)
                 OSL_ENSURE( GetFollow(), "PrepareHint::FootnoteInvalidationGone may only be called by Follow" );
-                TextFrameIndex nPos = GetFollow()->GetOfst();
-                if( IsFollow() && GetOfst() == nPos )       // If we don't have a mass of text, we call our
+                TextFrameIndex nPos = GetFollow()->GetOffset();
+                if( IsFollow() && GetOffset() == nPos )       // If we don't have a mass of text, we call our
                     FindMaster()->Prepare( PrepareHint::FootnoteInvalidationGone ); // Master's Prepare
                 if( nPos )
                     --nPos; // The char preceding our Follow
@@ -3058,10 +3058,10 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( PrepareHint::FlyFrameArrive == ePrep || PrepareHint::FlyFrameLeave == ePrep )
                 {
                     TextFrameIndex const nLen = (GetFollow()
-                                ? GetFollow()->GetOfst()
+                                ? GetFollow()->GetOffset()
                                 : TextFrameIndex(COMPLETE_STRING))
-                            - GetOfst();
-                    InvalidateRange( SwCharRange( GetOfst(), nLen ) );
+                            - GetOffset();
+                    InvalidateRange( SwCharRange( GetOffset(), nLen ) );
                 }
             }
             else
@@ -3070,7 +3070,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                     SetCompletePaint();
                 Init();
                 pPara = nullptr;
-                if( GetOfst() && !IsFollow() )
+                if( GetOffset() && !IsFollow() )
                     SetOfst_( TextFrameIndex(0) );
                 if ( bNotify )
                     InvalidateSize();
@@ -3333,7 +3333,7 @@ sal_uInt16 SwTextFrame::GetParHeight() const
 
     // Is this paragraph scrolled? Our height until now is at least
     // one line height too low then
-    if( GetOfst() && !IsFollow() )
+    if( GetOffset() && !IsFollow() )
         nHeight *= 2;
 
     while ( pLineLayout && pLineLayout->GetNext() )
@@ -3745,7 +3745,7 @@ sal_uInt16 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
             aLine.CharToLine( nPos );
         nRet = nRet + aLine.GetLineNr();
         pFrame = pFrame->GetFollow();
-    } while ( pFrame && pFrame->GetOfst() <= nPos );
+    } while ( pFrame && pFrame->GetOffset() <= nPos );
     return nRet;
 }
 
@@ -3865,7 +3865,7 @@ void SwTextFrame::VisitPortions( SwPortionHandler& rPH ) const
     if (pPara)
     {
         if ( IsFollow() )
-            rPH.Skip( GetOfst() );
+            rPH.Skip( GetOffset() );
 
         const SwLineLayout* pLine = pPara;
         while ( pLine )

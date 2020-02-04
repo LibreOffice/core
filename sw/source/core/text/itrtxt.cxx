@@ -334,7 +334,7 @@ void SwTextIter::TruncLines( bool bNoteFollow )
             // bug 88534: wrong positioning of flys
             SwTextFrame* pFollow = GetTextFrame()->GetFollow();
             if ( pFollow && ! pFollow->IsLocked() &&
-                 nEnd == pFollow->GetOfst() )
+                 nEnd == pFollow->GetOffset() )
             {
                 TextFrameIndex nRangeEnd = nEnd;
                 SwLineLayout* pLine = pDel;

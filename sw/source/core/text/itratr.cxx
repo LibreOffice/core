@@ -1242,7 +1242,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
 sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
         TextFrameIndex nStart, TextFrameIndex nEnd)
 {
-    assert(GetOfst() <= nStart && (!GetFollow() || nStart < GetFollow()->GetOfst()));
+    assert(GetOffset() <= nStart && (!GetFollow() || nStart < GetFollow()->GetOffset()));
     SwViewShell const*const pSh = getRootFrame()->GetCurrShell();
     assert(pSh);
     OutputDevice *const pOut = &pSh->GetRefDev();

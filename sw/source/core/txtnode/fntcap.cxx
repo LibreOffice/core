@@ -395,7 +395,7 @@ TextFrameIndex SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
 {
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
-    SwDoCapitalCursorOfst aDo( rInf, rInf.GetOfst() );
+    SwDoCapitalCursorOfst aDo( rInf, rInf.GetOffset() );
     rInf.SetPos( Point() );
     rInf.SetDrawSpace( false );
     DoOnCapitals( aDo );

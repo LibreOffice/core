@@ -203,7 +203,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                             nNdIdx -= nStartOfContent;
                             aIo.GetStream().WriteUInt32( nNdIdx );
                             if( bFollow )
-                                aIo.GetStream().WriteUInt32( sal_Int32(static_cast<SwTextFrame*>(pTmp)->GetOfst()) );
+                                aIo.GetStream().WriteUInt32( sal_Int32(static_cast<SwTextFrame*>(pTmp)->GetOffset()) );
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
                             aIo.CloseRec();
@@ -360,7 +360,7 @@ bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
                             SW_LAYCACHE_IO_REC_PARA !=
                             pImpl->GetBreakType( nIndex ) ||
                             (bFollow
-                              ? sal_Int32(static_cast<const SwTextFrame*>(pTmp)->GetOfst())
+                              ? sal_Int32(static_cast<const SwTextFrame*>(pTmp)->GetOffset())
                               : COMPLETE_STRING) != pImpl->GetBreakOfst(nIndex))
                         {
                             return false;

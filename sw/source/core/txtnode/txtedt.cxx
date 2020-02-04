@@ -224,11 +224,11 @@ static SwRect lcl_CalculateRepaintRect(
 
     const SwTextFrame* pStartFrame = &rTextFrame;
     while( pStartFrame->HasFollow() &&
-           iChgStart >= pStartFrame->GetFollow()->GetOfst())
+           iChgStart >= pStartFrame->GetFollow()->GetOffset())
         pStartFrame = pStartFrame->GetFollow();
     const SwTextFrame* pEndFrame = pStartFrame;
     while( pEndFrame->HasFollow() &&
-           iChgEnd >= pEndFrame->GetFollow()->GetOfst())
+           iChgEnd >= pEndFrame->GetFollow()->GetOffset())
         pEndFrame = pEndFrame->GetFollow();
 
     bool bSameFrame = true;
@@ -1655,8 +1655,8 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         pFrame = pFrame->GetFollow();
         if( pFrame )
         {
-            aHyphInfo.m_nEnd = aHyphInfo.m_nEnd - (pFrame->GetOfst() - aHyphInfo.m_nStart);
-            aHyphInfo.m_nStart = pFrame->GetOfst();
+            aHyphInfo.m_nEnd = aHyphInfo.m_nEnd - (pFrame->GetOffset() - aHyphInfo.m_nStart);
+            aHyphInfo.m_nStart = pFrame->GetOffset();
         }
     }
     return false;

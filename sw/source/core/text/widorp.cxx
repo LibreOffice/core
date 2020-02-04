@@ -367,7 +367,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     // If the first line of the Follow does not fit, the master
     // probably is full of Dummies. In this case a PrepareHint::Widows would be fatal.
-    if( pMaster->GetOfst() == pFrame->GetOfst() )
+    if( pMaster->GetOffset() == pFrame->GetOffset() )
         return false;
 
     // Remaining height of the master
