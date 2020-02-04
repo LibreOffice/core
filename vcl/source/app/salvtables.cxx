@@ -73,6 +73,8 @@
 #include <wizdlg.hxx>
 #include <vcl/salvtables.hxx>
 
+#include <boost/property_tree/ptree.hpp>
+
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
     , m_pProc(nullptr)
@@ -688,6 +690,11 @@ VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_drop_target()
 {
     return m_xWidget->GetDropTarget();
+}
+
+boost::property_tree::ptree SalInstanceWidget::get_property_tree() const
+{
+    return m_xWidget->DumpAsPropertyTree();
 }
 
 void SalInstanceWidget::set_stack_background()
@@ -5497,6 +5504,11 @@ void SalInstanceComboBoxWithoutEdit::insert_separator(int pos, const OUString& /
     m_xComboBox->AddSeparator(nInsertPos - 1);
 }
 
+bool SalInstanceComboBoxWithoutEdit::changed_by_menu() const
+{
+    return true;
+}
+
 bool SalInstanceComboBoxWithoutEdit::has_entry() const
 {
     return false;
@@ -5560,6 +5572,11 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithoutEdit, SelectHdl, ListBox&, void)
     bool SalInstanceComboBoxWithEdit::has_entry() const
     {
         return true;
+    }
+
+    bool SalInstanceComboBoxWithEdit::changed_by_menu() const
+    {
+        return m_xComboBox->IsModifyByMenu(); // && !m_xComboBox->IsTravelSelect();
     }
 
     void SalInstanceComboBoxWithEdit::set_entry_message_type(weld::EntryMessageType eType)
@@ -5662,6 +5679,7 @@ private:
     DECL_LINK(KeyPressListener, VclWindowEvent&, void);
     SalInstanceEntry* m_pEntry;
     SalInstanceTreeView* m_pTreeView;
+    bool m_bTreeChange;
 public:
     SalInstanceEntryTreeView(vcl::Window *pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                              std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
@@ -5669,6 +5687,7 @@ public:
         , SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
         , m_pEntry(dynamic_cast<SalInstanceEntry*>(m_xEntry.get()))
         , m_pTreeView(dynamic_cast<SalInstanceTreeView*>(m_xTreeView.get()))
+        , m_bTreeChange(false)
     {
         assert(m_pEntry && m_pTreeView);
 
@@ -5707,6 +5726,11 @@ public:
         m_xEntry->connect_focus_out(rLink);
     }
 
+    virtual bool changed_by_menu() const override
+    {
+        return m_bTreeChange;
+    }
+
     virtual ~SalInstanceEntryTreeView() override
     {
         Edit& rEntry = m_pEntry->getEntry();
@@ -5735,7 +5759,9 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         m_xEntry->set_text(m_xTreeView->get_selected_text());
         m_xEntry->select_region(0, -1);
         m_pTreeView->enable_notify_events();
+        m_bTreeChange = true;
         m_pEntry->fire_signal_changed();
+        m_bTreeChange = false;
     }
 }
 

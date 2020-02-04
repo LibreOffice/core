@@ -53,6 +53,7 @@ struct ComboBox::Impl
     sal_Unicode         m_cMultiSep;
     bool                m_isDDAutoSize        : 1;
     bool                m_isSyntheticModify   : 1;
+    bool                m_isMenuModify        : 1;
     bool                m_isMatchCase         : 1;
     sal_Int32           m_nMaxWidthChars;
     sal_Int32           m_nWidthInChars;
@@ -65,6 +66,7 @@ struct ComboBox::Impl
         , m_cMultiSep(0)
         , m_isDDAutoSize(false)
         , m_isSyntheticModify(false)
+        , m_isMenuModify(false)
         , m_isMatchCase(false)
         , m_nMaxWidthChars(0)
         , m_nWidthInChars(-1)
@@ -138,6 +140,7 @@ void ComboBox::Impl::ImplInitComboBoxData()
     m_nDDHeight         = 0;
     m_isDDAutoSize      = true;
     m_isSyntheticModify = false;
+    m_isMenuModify      = false;
     m_isMatchCase       = false;
     m_cMultiSep         = ';';
     m_nMaxWidthChars    = -1;
@@ -418,9 +421,8 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
     }
 
     // #84652# Call GrabFocus and EndPopupMode before calling Select/Modify, but after changing the text
-
-    if (bPopup && !m_pImplLB->IsTravelSelect() &&
-        (!m_rThis.IsMultiSelectionEnabled() || !m_pImplLB->GetSelectModifier()))
+    bool bMenuSelect = bPopup && !m_pImplLB->IsTravelSelect() && (!m_rThis.IsMultiSelectionEnabled() || !m_pImplLB->GetSelectModifier());
+    if (bMenuSelect)
     {
         m_pFloatWin->EndPopupMode();
         m_rThis.GrabFocus();
@@ -430,10 +432,17 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
     {
         m_pSubEdit->SetModifyFlag();
         m_isSyntheticModify = true;
+        m_isMenuModify = bMenuSelect;
         m_rThis.Modify();
+        m_isMenuModify = false;
         m_isSyntheticModify = false;
         m_rThis.Select();
     }
+}
+
+bool ComboBox::IsModifyByMenu() const
+{
+    return m_pImpl->m_isMenuModify;
 }
 
 IMPL_LINK_NOARG( ComboBox::Impl, ImplListItemSelectHdl, LinkParamNone*, void )
