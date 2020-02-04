@@ -222,7 +222,7 @@ SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
     return pPos;
 }
 
-TextFrameIndex SwLinePortion::GetCursorOfst(const sal_uInt16 nOfst) const
+TextFrameIndex SwLinePortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
 {
     if( nOfst > ( PrtWidth() / 2 ) )
         return GetLen();

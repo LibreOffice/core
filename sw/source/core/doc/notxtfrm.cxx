@@ -691,7 +691,7 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     return true;
 }
 
-bool SwNoTextFrame::GetCursorOfst(SwPosition* pPos, Point& ,
+bool SwNoTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& ,
                              SwCursorMoveState*, bool ) const
 {
     SwContentNode* pCNd = const_cast<SwContentNode*>(GetNode());

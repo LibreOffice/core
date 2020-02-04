@@ -6200,7 +6200,7 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
     Point aPt( rDocPos );
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
-    rSh.GetLayout()->GetCursorOfst( aPam.GetPoint(), aPt, nullptr, true );
+    rSh.GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aPt, nullptr, true );
 
     const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
     if ( pStartFly )

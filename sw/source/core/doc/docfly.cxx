@@ -810,7 +810,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         SwPosition aPos( GetNodes() );
                         Point aPoint( aPt );
                         aPoint.setX(aPoint.getX() - 1);
-                        getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( &aPos, aPoint, &aState );
+                        getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrame()> by left-top-corner
                         std::pair<Point, bool> const tmp(aPt, false);
@@ -877,7 +877,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.
                         SwCursorMoveState aState( MV_SETONLYTEXT );
-                        getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( &aPos, aPoint, &aState );
+                        getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
                     }
                     else
                     {

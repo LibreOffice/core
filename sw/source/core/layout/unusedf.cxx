@@ -43,9 +43,9 @@ bool SwFrame::FillSelection( SwSelectionList& , const SwRect& ) const
     return false;
 }
 
-bool SwFrame::GetCursorOfst( SwPosition *, Point&, SwCursorMoveState*, bool  ) const
+bool SwFrame::GetModelPositionForViewPoint( SwPosition *, Point&, SwCursorMoveState*, bool  ) const
 {
-    OSL_FAIL( "GetCursorOfst of the base class, hi!" );
+    OSL_FAIL( "GetModelPositionForViewPoint of the base class, hi!" );
     return false;
 }
 

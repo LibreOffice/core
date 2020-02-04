@@ -79,7 +79,7 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 
-    virtual bool GetCursorOfst( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     virtual void Cut() override;
@@ -87,7 +87,7 @@ public:
 
     /**
      * Finds the closest Content for the SPoint
-     * Is used for Pages, Flys and Cells if GetCursorOfst failed
+     * Is used for Pages, Flys and Cells if GetModelPositionForViewPoint failed
      */
     const SwContentFrame* GetContentPos( Point &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,

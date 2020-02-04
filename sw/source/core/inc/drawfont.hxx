@@ -78,7 +78,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     bool m_bSnapToGrid : 1;   // Does paragraph snap to grid?
     // Paint text as if text has LTR direction, used for line numbering
     bool m_bIgnoreFrameRTL : 1;
-    // GetCursorOfst should not return the next position if screen position is
+    // GetModelPositionForViewPoint should not return the next position if screen position is
     // inside second half of bound rect, used for Accessibility
     bool m_bPosMatchesBounds :1;
 

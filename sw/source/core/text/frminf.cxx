@@ -264,7 +264,7 @@ sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
         return 0;
 
     const Point aPoint( nNextIndent, aLine.Y() );
-    rFndPos = aLine.GetCursorOfst( nullptr, aPoint, false );
+    rFndPos = aLine.GetModelPositionForViewPoint( nullptr, aPoint, false );
     if (TextFrameIndex(1) >= rFndPos)
         return 0;
 

@@ -1359,7 +1359,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
 }
 
-TextFrameIndex SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
+TextFrameIndex SwSubFont::GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner() != reinterpret_cast<const void*>(m_nFontCacheId) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
@@ -1380,11 +1380,11 @@ TextFrameIndex SwSubFont::GetCursorOfst_( SwDrawTextInfo& rInf )
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
         if ( !IsCaseMap() )
-            nCursor = pLastFont->GetCursorOfst( rInf );
+            nCursor = pLastFont->GetModelPositionForViewPoint( rInf );
         else
         {
             rInf.SetText( CalcCaseMap( rInf.GetText() ) );
-            nCursor = pLastFont->GetCursorOfst( rInf );
+            nCursor = pLastFont->GetModelPositionForViewPoint( rInf );
         }
         rInf.SetKern( nOldKern );
         rInf.SetText(oldText);

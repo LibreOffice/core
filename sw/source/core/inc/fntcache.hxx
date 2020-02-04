@@ -130,7 +130,7 @@ public:
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
     Size  GetTextSize( SwDrawTextInfo &rInf );
-    TextFrameIndex GetCursorOfst(SwDrawTextInfo &rInf);
+    TextFrameIndex GetModelPositionForViewPoint(SwDrawTextInfo &rInf);
 
     void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );

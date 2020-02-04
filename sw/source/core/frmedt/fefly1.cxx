@@ -139,7 +139,7 @@ static bool lcl_FindAnchorPos(
                 // a content bound frame can be anchored
                 SwCursorMoveState aState( MV_SETONLYTEXT );
                 aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
-                if( !pNewAnch->GetCursorOfst( &aPos, aTmpPnt, &aState ) )
+                if( !pNewAnch->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState ) )
                 {
                     assert(pNewAnch->IsTextFrame()); // because AT_CHAR/AS_CHAR
                     SwTextFrame const*const pTextFrame(
@@ -173,7 +173,7 @@ static bool lcl_FindAnchorPos(
             SwCursorMoveState aState( MV_SETONLYTEXT );
             SwPosition aPos( rDoc.GetNodes() );
             aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
-            rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( &aPos, aTmpPnt, &aState );
+            rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
             pNewAnch = ::FindAnchor(
                 aPos.nNode.GetNode().GetContentNode()->getLayoutFrame(rFrame.getRootFrame(), nullptr, nullptr),
                 aTmpPnt )->FindFlyFrame();
@@ -353,7 +353,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         SwPosition aPos( aSwNodeIndex );
         Point aPoint( aTmpPos );
         aPoint.setX(aPoint.getX() - 1);                    //do not land in the fly!!
-        GetLayout()->GetCursorOfst( &aPos, aPoint, &aState );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
         // determine text frame by left-top-corner of object
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(aTmpPos, false);
@@ -477,7 +477,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         SwCursorMoveState aState( MV_SETONLYTEXT );
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
-        GetLayout()->GetCursorOfst( &aPos, aTmpPnt, &aState );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
         if (aPos.nNode != GetDoc()->GetNodes().GetEndOfExtras().GetIndex()
             && (nAnchorId != RndStdIds::FLY_AT_CHAR || !PosInsideInputField(aPos)))
         {
@@ -558,7 +558,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                         {
                             SwPosition pos = *aAnch.GetContentAnchor();
                             Point aTmpPnt( rAbsPos );
-                            if( pTextFrame->GetCursorOfst( &pos, aTmpPnt ) )
+                            if( pTextFrame->GetModelPositionForViewPoint( &pos, aTmpPnt ) )
                             {
                                 SwRect aTmpRect;
                                 pTextFrame->GetCharRect( aTmpRect, pos );
@@ -926,7 +926,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     {
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
-        GetLayout()->GetCursorOfst( aPam.GetPoint(), aTmpPt, &aState );
+        GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmpPt, &aState );
         const SwFrame* pFrame = aPam.GetContentNode()->getLayoutFrame(GetLayout(), nullptr, nullptr);
         const Point aRelPos( rInsertPosition.X() - pFrame->getFrameArea().Left(),
                              rInsertPosition.Y() - pFrame->getFrameArea().Top() );
@@ -1612,7 +1612,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromAnyObj( const Point& rPt ) const
     {
         SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( rPt );
-        GetLayout()->GetCursorOfst( &aPos, aPt );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(rPt, false);
         SwFrame* pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp)->FindFlyFrame();

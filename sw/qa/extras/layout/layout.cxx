@@ -3082,7 +3082,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     aPoint.setX(nSecondParaLeft + nSecondParaWidth / 2);
     aPoint.setY(nSecondParaTop + nSecondParaHeight - 100);
     SwCursorMoveState aState(MV_NONE);
-    pLayout->GetCursorOfst(&aPosition, aPoint, &aState);
+    pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
     CPPUNIT_ASSERT_EQUAL(aCellStart.nNode.GetIndex() + 1, aPosition.nNode.GetIndex());
     // Without the accompanying fix in place, this test would have failed: character position was 5,
     // i.e. cursor was at the end of the paragraph.
@@ -3229,7 +3229,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testImageComment)
 
     // Ask for the doc model pos of this layout point.
     SwPosition aPosition(*pTextFrame->GetTextNodeForFirstText());
-    pTextFrame->GetCursorOfst(&aPosition, aPoint);
+    pTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 5
@@ -3554,7 +3554,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     SwPosition aPosition = *pWrtShell->GetCursor()->Start();
     SwPosition aFirstRow(aPosition);
     SwCursorMoveState aState(MV_NONE);
-    pLayout->GetCursorOfst(&aPosition, aPoint, &aState);
+    pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
     // Second row is +3: end node, start node and the first text node in the 2nd row.
     sal_uLong nExpected = aFirstRow.nNode.GetIndex() + 3;
 

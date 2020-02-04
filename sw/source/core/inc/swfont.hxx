@@ -79,7 +79,7 @@ class SwSubFont : public SvxFont
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
     void DrawStretchText_( SwDrawTextInfo &rInf );
-    TextFrameIndex GetCursorOfst_( SwDrawTextInfo& rInf );
+    TextFrameIndex GetModelPositionForViewPoint_( SwDrawTextInfo& rInf );
     TextFrameIndex GetCapitalCursorOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
@@ -311,8 +311,8 @@ public:
 
     TextFrameIndex GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth );
 
-    TextFrameIndex GetCursorOfst_( SwDrawTextInfo& rInf )
-        { return m_aSub[m_nActual].GetCursorOfst_( rInf ); }
+    TextFrameIndex GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
+        { return m_aSub[m_nActual].GetModelPositionForViewPoint_( rInf ); }
 
     void DrawText_( SwDrawTextInfo &rInf )
         { m_aSub[m_nActual].DrawText_( rInf, IsGreyWave() ); }

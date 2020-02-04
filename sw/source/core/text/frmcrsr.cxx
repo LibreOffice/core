@@ -170,7 +170,7 @@ SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos )
 
 /*
  * GetCharRect() returns the char's char line described by aPos.
- * GetCursorOfst() does the reverse: It goes from a document coordinate to
+ * GetModelPositionForViewPoint() does the reverse: It goes from a document coordinate to
  * a Pam.
  * Both are virtual in the frame base class and thus are redefined here.
  */
@@ -546,10 +546,10 @@ struct SwFillData
     void SetOrient( const sal_Int16 eNew ){ pCMS->m_pFill->eOrient = eNew; }
 };
 
-bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
+bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& rPoint,
                     const bool bChgFrame, SwCursorMoveState* pCMS ) const
 {
-    // GetCursorOfst_ is called by GetCursorOfst and GetKeyCursorOfst.
+    // GetModelPositionForViewPoint_ is called by GetModelPositionForViewPoint and GetKeyCursorOfst.
     // Never just a return false.
 
     if( IsLocked() || IsHiddenNow() )
@@ -601,14 +601,14 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
             while( aLine.GetLineNr() > 1 )
                 aLine.Prev();
 
-        TextFrameIndex nOffset = aLine.GetCursorOfst(pPos, rPoint, bChgFrame, pCMS);
+        TextFrameIndex nOffset = aLine.GetModelPositionForViewPoint(pPos, rPoint, bChgFrame, pCMS);
 
         if( pCMS && pCMS->m_eState == MV_NONE && aLine.GetEnd() == nOffset )
             pCMS->m_eState = MV_RIGHTMARGIN;
 
     // pPos is a pure IN parameter and must not be evaluated.
-    // pIter->GetCursorOfst returns from a nesting with COMPLETE_STRING.
-    // If SwTextIter::GetCursorOfst calls GetCursorOfst further by itself
+    // pIter->GetModelPositionForViewPoint returns from a nesting with COMPLETE_STRING.
+    // If SwTextIter::GetModelPositionForViewPoint calls GetModelPositionForViewPoint further by itself
     // nNode changes the position.
     // In such cases, pPos must not be calculated.
         if (TextFrameIndex(COMPLETE_STRING) != nOffset)
@@ -658,11 +658,11 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
     return true;
 }
 
-bool SwTextFrame::GetCursorOfst(SwPosition* pPos, Point& rPoint,
+bool SwTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& rPoint,
                                SwCursorMoveState* pCMS, bool ) const
 {
     const bool bChgFrame = !(pCMS && MV_UPDOWN == pCMS->m_eState);
-    return GetCursorOfst_( pPos, rPoint, bChgFrame, pCMS );
+    return GetModelPositionForViewPoint_( pPos, rPoint, bChgFrame, pCMS );
 }
 
 /*
@@ -825,12 +825,12 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
                 aCharBox.Pos().setX( aCharBox.Pos().X() - 150 );
 
-                // See comment in SwTextFrame::GetCursorOfst()
+                // See comment in SwTextFrame::GetModelPositionForViewPoint()
 #if OSL_DEBUG_LEVEL > 0
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // The node should not be changed
-                TextFrameIndex nTmpOfst = aLine.GetCursorOfst(pPam->GetPoint(),
+                TextFrameIndex nTmpOfst = aLine.GetModelPositionForViewPoint(pPam->GetPoint(),
                                                          aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
@@ -1187,13 +1187,13 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
             {
                 aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
 #if OSL_DEBUG_LEVEL > 0
-                // See comment in SwTextFrame::GetCursorOfst()
+                // See comment in SwTextFrame::GetModelPositionForViewPoint()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
 
-                TextFrameIndex nTmpOfst = aLine.GetCursorOfst( pPam->GetPoint(),
+                TextFrameIndex nTmpOfst = aLine.GetModelPositionForViewPoint( pPam->GetPoint(),
                                  aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
                 OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),

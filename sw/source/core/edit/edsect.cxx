@@ -86,7 +86,7 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
     {
         SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( *pPt );
-        GetLayout()->GetCursorOfst( &aPos, aPt );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
         SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(*pPt, true);
         pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);

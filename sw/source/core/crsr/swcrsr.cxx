@@ -1398,7 +1398,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     {
         // set the cursor to the layout position
         Point aPt( *pPt );
-        pLayout->GetCursorOfst( GetPoint(), aPt );
+        pLayout->GetModelPositionForViewPoint( GetPoint(), aPt );
     }
 
     SwTextNode* pTextNd = GetNode().GetTextNode();
@@ -2022,7 +2022,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                     pFrame->Calc(rLayout.GetCurrShell()->GetOut());
                     aPt.setX(pFrame->getFrameArea().Left() + nUpDownX);
                 }
-                pFrame->GetCursorOfst( GetPoint(), aPt, &eTmpState );
+                pFrame->GetModelPositionForViewPoint( GetPoint(), aPt, &eTmpState );
             }
             bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         }

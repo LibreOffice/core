@@ -221,7 +221,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                 Point aPt = aRect.Pos();
                 SwCursorMoveState eTmpState(MV_SETONLYTEXT);
                 SwTextNode *pNode = nullptr;
-                if (m_pCursorShell->GetLayout()->GetCursorOfst(&aPos, aPt, &eTmpState))
+                if (m_pCursorShell->GetLayout()->GetModelPositionForViewPoint(&aPos, aPt, &eTmpState))
                     pNode = aPos.nNode.GetNode().GetTextNode();
                 if (pNode && !pNode->IsInProtectSect())
                 {

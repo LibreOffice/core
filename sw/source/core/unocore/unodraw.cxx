@@ -688,7 +688,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
-        pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( pPam->GetPoint(), aTmp, &aState );
+        pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
@@ -1267,7 +1267,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             {
                                 SwCursorMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1288,7 +1288,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             {
                                 SwCursorMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {

@@ -811,7 +811,7 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual bool    GetCursorOfst( SwPosition *, Point&,
+    virtual bool    GetModelPositionForViewPoint( SwPosition *, Point&,
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;

@@ -159,7 +159,7 @@ public:
     //   this assertion. Thus, delete it.
     void PlaceFly( SwFlyFrame* pFly, SwFlyFrameFormat* pFormat );
 
-    virtual bool GetCursorOfst( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     /// Get info from Client
     virtual bool GetInfo( SfxPoolItem& ) const override;

@@ -2081,7 +2081,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
-TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
+TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
 {
     long nSpaceAdd =       rInf.GetSpace() / SPACING_PRECISION_FACTOR;
     const long nSperren = -rInf.GetSperren() / SPACING_PRECISION_FACTOR;

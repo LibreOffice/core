@@ -32,11 +32,11 @@ SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
     SetWhichPor( PortionType::Glue );
 }
 
-TextFrameIndex SwGluePortion::GetCursorOfst(const sal_uInt16 nOfst) const
+TextFrameIndex SwGluePortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
 {
     // FIXME why nOfst > GetLen() ? is that supposed to be > Width() ?
     if( !GetLen() || nOfst > sal_Int32(GetLen()) || !Width() )
-        return SwLinePortion::GetCursorOfst( nOfst );
+        return SwLinePortion::GetModelPositionForViewPoint( nOfst );
     else
         return TextFrameIndex(nOfst / (Width() / sal_Int32(GetLen())));
 }

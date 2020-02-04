@@ -83,7 +83,7 @@ public:
             void PaintDrop( const SwTextPaintInfo &rInf ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
 
     sal_uInt16 GetLines() const { return nLines; }
     sal_uInt16 GetDistance() const { return nDistance; }

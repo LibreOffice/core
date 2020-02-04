@@ -1618,7 +1618,7 @@ const SwFrame* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) c
     const SwCellFrame *pFrame = nullptr;
     if ( pPage )
     {
-        // We cannot search the box by GetCursorOfst or GetContentPos.
+        // We cannot search the box by GetModelPositionForViewPoint or GetContentPos.
         // This would lead to a performance collapse for documents
         // with a lot of paragraphs/tables on one page
         //(BrowseMode!)

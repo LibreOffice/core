@@ -478,7 +478,7 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     return aPosSize;
 }
 
-TextFrameIndex SwDropPortion::GetCursorOfst(const sal_uInt16) const
+TextFrameIndex SwDropPortion::GetModelPositionForViewPoint(const sal_uInt16) const
 {
     return TextFrameIndex(0);
 }
