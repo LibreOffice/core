@@ -69,7 +69,7 @@ public:
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;
-    virtual bool GetCursorOfst(SwPosition* pPos, Point& aPoint,
+    virtual bool GetModelPositionForViewPoint(SwPosition* pPos, Point& aPoint,
                      SwCursorMoveState* = nullptr, bool bTestBackground = false) const override;
 
     void GetGrfArea( SwRect &rRect, SwRect * ) const;

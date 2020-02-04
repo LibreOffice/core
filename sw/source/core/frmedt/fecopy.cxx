@@ -338,7 +338,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     Point aPt( rInsPt );
                     aPt -= rSttPt - pObj->GetSnapRect().TopLeft();
                     SwCursorMoveState aState( MV_SETONLYTEXT );
-                    GetLayout()->GetCursorOfst( &aPos, aPt, &aState );
+                    GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                     const SwNode *pNd;
                     if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )
                         bRet = false;
@@ -485,7 +485,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 Point aPt( rInsPt );
                 aPt -= rSttPt - pFly->getFrameArea().Pos();
                 SwCursorMoveState aState( MV_SETONLYTEXT );
-                GetLayout()->GetCursorOfst( &aPos, aPt, &aState );
+                GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                 const SwNode *pNd;
                 if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )
                     bRet = false;
@@ -583,7 +583,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 // DocumentPosition passed
                 pDstPos.reset(new SwPosition( *GetCursor()->GetPoint() ));
                 Point aPt( rInsPt );
-                GetLayout()->GetCursorOfst( pDstPos.get(), aPt );
+                GetLayout()->GetModelPositionForViewPoint( pDstPos.get(), aPt );
                 if( !pDstPos->nNode.GetNode().IsNoTextNode() )
                     bRet = true;
             }
@@ -627,7 +627,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             // at the passed document position
             SwPosition aPos( *GetCursor()->GetPoint() );
             Point aPt( rInsPt );
-            GetLayout()->GetCursorOfst( &aPos, aPt );
+            GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
             bRet = !aPos.nNode.GetNode().IsNoTextNode();
         }
         else if( pDestShell->GetCursor()->GetNode().IsNoTextNode() )

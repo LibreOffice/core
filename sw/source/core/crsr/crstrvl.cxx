@@ -98,7 +98,7 @@ void SwCursorShell::MoveCursorToNum()
         aPt.setY(m_aCharRect.Center().getY());
         aPt.setX(pFrame->getFrameArea().Left() + GetUpDownX());
     }
-    pFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
+    pFrame->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
     if ( !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
                                 SwCursorSelOverFlags::ChangePos ))
     {
@@ -142,7 +142,7 @@ bool SwCursorShell::GotoHeaderText()
         SwCursorSaveState aSaveState( *pTmpCursor );
         pFrame->Calc(GetOut());
         Point aPt( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
-        pFrame->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
+        pFrame->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
         if( !pTmpCursor->IsSelOvr() )
             UpdateCursor();
         else
@@ -174,7 +174,7 @@ bool SwCursorShell::GotoFooterText()
             SwCursorSaveState aSaveState( *pTmpCursor );
             pLower->Calc(GetOut());
             Point aPt( pLower->getFrameArea().Pos() + pLower->getFramePrintArea().Pos() );
-            pLower->GetCursorOfst( pTmpCursor->GetPoint(), aPt );
+            pLower->GetModelPositionForViewPoint( pTmpCursor->GetPoint(), aPt );
             if( !pTmpCursor->IsSelOvr() )
                 UpdateCursor();
             else
@@ -964,7 +964,7 @@ bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
 {
     SwPosition aPos( *(GetCursor()->Start()) );
     Point aDocPt( rDocPt );
-    if ( GetLayout()->GetCursorOfst( &aPos, aDocPt ) )
+    if ( GetLayout()->GetModelPositionForViewPoint( &aPos, aDocPt ) )
     {
         return PosInsideInputField( aPos );
     }
@@ -1292,7 +1292,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         aTmpState.m_pSpecialPos = ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos ) ?
                                 &aSpecialPos : nullptr;
 
-        const bool bCursorFoundExact = GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState );
+        const bool bCursorFoundExact = GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState );
         pTextNd = aPos.nNode.GetNode().GetTextNode();
 
         const SwNodes& rNds = GetDoc()->GetNodes();
@@ -2026,7 +2026,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
         SwFillCursorPos aFPos( eFillMode );
         SwCursorMoveState aTmpState( &aFPos );
 
-        if( GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState ) &&
+        if( GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState ) &&
             !aPos.nNode.GetNode().IsProtect())
         {
             // start position in protected section?
@@ -2052,7 +2052,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
         SwFillCursorPos aFPos( eFillMode );
         SwCursorMoveState aTmpState( &aFPos );
 
-        if( GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState ) )
+        if( GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState ) )
         {
             SwCallLink aLk( *this ); // watch Cursor-Moves
             StartAction();

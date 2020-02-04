@@ -2499,7 +2499,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
 }
 
 // SwTextCursorSave notes the start and current line of a SwTextCursor,
-// sets them to the values for GetCursorOfst inside a multiportion
+// sets them to the values for GetModelPositionForViewPoint inside a multiportion
 // and restores them in the destructor.
 SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwMultiPortion* pMulti,

@@ -54,7 +54,7 @@
 #include <comphelper/lok.hxx>
 
 namespace {
-    bool lcl_GetCursorOfst_Objects( const SwPageFrame* pPageFrame, bool bSearchBackground,
+    bool lcl_GetModelPositionForViewPoint_Objects( const SwPageFrame* pPageFrame, bool bSearchBackground,
            SwPosition *pPos, Point const & rPoint, SwCursorMoveState* pCMS  )
     {
         bool bRet = false;
@@ -76,7 +76,7 @@ namespace {
             if ( pFly && bBackgroundMatches &&
                  ( ( pCMS && pCMS->m_bSetInReadOnly ) ||
                    !pFly->IsProtected() ) &&
-                 pFly->GetCursorOfst( pPos, aPoint, pCMS ) )
+                 pFly->GetModelPositionForViewPoint( pPos, aPoint, pCMS ) )
             {
                 bRet = true;
                 break;
@@ -107,7 +107,7 @@ namespace {
 
 namespace {
 
-//For SwFlyFrame::GetCursorOfst
+//For SwFlyFrame::GetModelPositionForViewPoint
 class SwCursorOszControl
 {
 public:
@@ -147,7 +147,7 @@ public:
 static SwCursorOszControl g_OszCtrl = { nullptr, nullptr, nullptr };
 
 /** Searches the ContentFrame owning the PrtArea containing the point. */
-bool SwLayoutFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
+bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                                SwCursorMoveState* pCMS, bool ) const
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
@@ -164,7 +164,7 @@ bool SwLayoutFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                                  pFrame->GetPaintArea() );
 
         if ( aPaintRect.IsInside( rPoint ) &&
-             ( bContentCheck || pFrame->GetCursorOfst( pPos, rPoint, pCMS ) ) )
+             ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) )
             bRet = true;
         else
             pFrame = pFrame->GetNext();
@@ -176,7 +176,7 @@ bool SwLayoutFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
 /** Searches the page containing the searched point. */
 
-bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
+bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool bTestBackground ) const
 {
     Point aPoint( rPoint );
@@ -196,7 +196,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     //all changes should be impossible.
     if ( GetSortedObjs() )
     {
-        bRet = lcl_GetCursorOfst_Objects( this, false, pPos, rPoint, pCMS );
+        bRet = lcl_GetModelPositionForViewPoint_Objects( this, false, pPos, rPoint, pCMS );
     }
 
     if ( !bRet )
@@ -207,7 +207,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         //We fix the StartPoint if no Content below the page 'answers' and then
         //start all over again one page before the current one.
         //However we can't use Flys in such a case.
-        if (!SwLayoutFrame::GetCursorOfst(&aTextPos, aPoint, pCMS))
+        if (!SwLayoutFrame::GetModelPositionForViewPoint(&aTextPos, aPoint, pCMS))
         {
             if ( pCMS && (pCMS->m_bStop || pCMS->m_bExactOnly) )
             {
@@ -224,9 +224,9 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
             OSL_ENSURE( pCnt, "Cursor is gone to a Black hole" );
             if( pCMS && pCMS->m_pFill && pCnt->IsTextFrame() )
-                bTextRet = pCnt->GetCursorOfst( &aTextPos, rPoint, pCMS );
+                bTextRet = pCnt->GetModelPositionForViewPoint( &aTextPos, rPoint, pCMS );
             else
-                bTextRet = pCnt->GetCursorOfst( &aTextPos, aPoint, pCMS );
+                bTextRet = pCnt->GetModelPositionForViewPoint( &aTextPos, aPoint, pCMS );
 
             if ( !bTextRet )
             {
@@ -263,7 +263,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         // Check objects in the background if nothing else matched
         if ( GetSortedObjs() )
         {
-            bBackRet = lcl_GetCursorOfst_Objects( this, true, &aBackPos, rPoint, pCMS );
+            bBackRet = lcl_GetModelPositionForViewPoint_Objects( this, true, &aBackPos, rPoint, pCMS );
         }
 
         if (bConsiderBackground && bTestBackground && bBackRet)
@@ -292,7 +292,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 comphelper::FlagRestorationGuard g(
                         pState->m_bPosMatchesBounds, true);
                 SwPosition prevTextPos(*pPos);
-                SwLayoutFrame::GetCursorOfst(&prevTextPos, aPoint, pState);
+                SwLayoutFrame::GetModelPositionForViewPoint(&prevTextPos, aPoint, pState);
 
                 SwRect aTextRect;
                 pTextFrame->GetCharRect(aTextRect, prevTextPos);
@@ -420,7 +420,7 @@ bool SwRootFrame::FillSelection( SwSelectionList& aSelList, const SwRect& rRect)
  *
  *  @return false, if the passed Point gets changed
  */
-bool SwRootFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
+bool SwRootFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool bTestBackground ) const
 {
     const bool bOldAction = IsCallbackActionEnabled();
@@ -447,7 +447,7 @@ bool SwRootFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     }
     if ( pPage )
     {
-        pPage->SwPageFrame::GetCursorOfst( pPos, rPoint, pCMS, bTestBackground );
+        pPage->SwPageFrame::GetModelPositionForViewPoint( pPos, rPoint, pCMS, bTestBackground );
     }
 
     const_cast<SwRootFrame*>(this)->SetCallbackActionEnabled( bOldAction );
@@ -467,7 +467,7 @@ bool SwRootFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
  *
  * There is no entry for protected cells.
  */
-bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
+bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool ) const
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
@@ -492,7 +492,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     if ( Lower() )
     {
         if ( Lower()->IsLayoutFrame() )
-            return SwLayoutFrame::GetCursorOfst( pPos, rPoint, pCMS );
+            return SwLayoutFrame::GetModelPositionForViewPoint( pPos, rPoint, pCMS );
         else
         {
             Calc(pRenderContext);
@@ -504,7 +504,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 pFrame->Calc(pRenderContext);
                 if ( pFrame->getFrameArea().IsInside( rPoint ) )
                 {
-                    bRet = pFrame->GetCursorOfst( pPos, rPoint, pCMS );
+                    bRet = pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
                     if ( pCMS && pCMS->m_bStop )
                         return false;
                 }
@@ -519,7 +519,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
                 {
                     rPoint = aPoint;
                 }
-                pCnt->GetCursorOfst( pPos, rPoint, pCMS );
+                pCnt->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
             }
             return true;
         }
@@ -534,8 +534,8 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 //fly which lies completely inside the current Fly we could trigger an endless
 //loop with the mentioned situation above.
 //Using the helper class SwCursorOszControl we prevent the recursion. During
-//a recursion GetCursorOfst picks the one which lies on top.
-bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
+//a recursion GetModelPositionForViewPoint picks the one which lies on top.
+bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                             SwCursorMoveState* pCMS, bool ) const
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
@@ -543,7 +543,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
     //If the Points lies inside the Fly, we try hard to set the Cursor inside it.
     //However if the Point sits inside a Fly which is completely located inside
-    //the current one, we call GetCursorOfst for it.
+    //the current one, we call GetModelPositionForViewPoint for it.
     Calc(pRenderContext);
     bool bInside = getFrameArea().IsInside( rPoint ) && Lower();
     bool bRet = false;
@@ -568,7 +568,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             {
                 if (g_OszCtrl.ChkOsz(pFly))
                     break;
-                bRet = pFly->GetCursorOfst( pPos, rPoint, pCMS );
+                bRet = pFly->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
                 if ( bRet )
                     break;
                 if ( pCMS && pCMS->m_bStop )
@@ -586,7 +586,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             pFrame->Calc(pRenderContext);
             if ( pFrame->getFrameArea().IsInside( rPoint ) )
             {
-                bRet = pFrame->GetCursorOfst( pPos, rPoint, pCMS );
+                bRet = pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
                 if ( pCMS && pCMS->m_bStop )
                     return false;
             }
@@ -603,7 +603,7 @@ bool SwFlyFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
             {
                 rPoint = aPoint;
             }
-            pCnt->GetCursorOfst( pPos, rPoint, pCMS );
+            pCnt->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
             bRet = true;
         }
     }
@@ -1459,7 +1459,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     else
     {
         SwCursorMoveState aTmpState( MV_SETONLYTEXT );
-        pAct->GetCursorOfst( &rPos, aAct, &aTmpState );
+        pAct->GetModelPositionForViewPoint( &rPos, aAct, &aTmpState );
     }
 }
 

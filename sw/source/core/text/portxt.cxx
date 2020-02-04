@@ -498,10 +498,10 @@ void SwTextPortion::FormatEOL( SwTextFormatInfo &rInf )
 
 }
 
-TextFrameIndex SwTextPortion::GetCursorOfst(const sal_uInt16 nOfst) const
+TextFrameIndex SwTextPortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
 {
-    OSL_ENSURE( false, "SwTextPortion::GetCursorOfst: don't use this method!" );
-    return SwLinePortion::GetCursorOfst( nOfst );
+    OSL_ENSURE( false, "SwTextPortion::GetModelPositionForViewPoint: don't use this method!" );
+    return SwLinePortion::GetModelPositionForViewPoint( nOfst );
 }
 
 // The GetTextSize() assumes that the own length is correct

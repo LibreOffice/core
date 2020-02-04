@@ -77,7 +77,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     SetWhichPor( PortionType::Break );
 }
 
-TextFrameIndex SwBreakPortion::GetCursorOfst(const sal_uInt16) const
+TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const sal_uInt16) const
 {
     return TextFrameIndex(0);
 }

@@ -86,7 +86,7 @@ void SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
                     aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
                 }
 
-                pCnt->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
+                pCnt->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
 
                 if( !m_pCurrentCursor->IsInProtectTable( true ) &&
                     !m_pCurrentCursor->IsSelOvr() )

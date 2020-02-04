@@ -1251,7 +1251,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
 }
 
 /**
- * Determines if SwTextCursor::GetCursorOfst() should consider the next portion when calculating the
+ * Determines if SwTextCursor::GetModelPositionForViewPoint() should consider the next portion when calculating the
  * doc model position from a Point.
  */
 static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uInt16 nWidth30, sal_uInt16 nX)
@@ -1272,7 +1272,7 @@ static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uI
 }
 
 // Return: Offset in String
-TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
+TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, const Point &rPoint,
                                     bool bChgNode, SwCursorMoveState* pCMS ) const
 {
     // If necessary, as catch up, do the adjustment
@@ -1556,7 +1556,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
     {
         if( pPor->IsMultiPortion() )
         {
-            // In a multi-portion we use GetCursorOfst()-function recursively
+            // In a multi-portion we use GetModelPositionForViewPoint()-function recursively
             SwTwips nTmpY = rPoint.Y() - m_pCurr->GetAscent() + pPor->GetAscent();
             // if we are in the first line of a double line portion, we have
             // to add a value to nTmpY for not staying in this line
@@ -1603,7 +1603,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                     nX = 0;
             }
 
-            return GetCursorOfst( pPos, Point( GetLineStart() + nX, rPoint.Y() ),
+            return GetModelPositionForViewPoint( pPos, Point( GetLineStart() + nX, rPoint.Y() ),
                                 bChgNode, pCMS );
         }
         if( pPor->InTextGrp() )
@@ -1689,7 +1689,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                     ! pPor->InFieldGrp() )
                     aDrawInf.SetKanaComp( nKanaComp );
 
-                nLength = aSizeInf.GetFont()->GetCursorOfst_( aDrawInf );
+                nLength = aSizeInf.GetFont()->GetModelPositionForViewPoint_( aDrawInf );
 
                 // get position inside field portion?
                 if ( pPor->InFieldGrp() && pCMS && pCMS->m_pSpecialPos )
@@ -1740,13 +1740,13 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                     // For comparison: Paint and new SwFlyCntPortion !
                     static_cast<SwTextSizeInfo*>(m_pInf)->SelectFont();
 
-                    // 6776: The pIter->GetCursorOfst is returning here
+                    // 6776: The pIter->GetModelPositionForViewPoint is returning here
                     // from a nesting with COMPLETE_STRING.
                     return TextFrameIndex(COMPLETE_STRING);
                 }
             }
             else
-                nLength = pPor->GetCursorOfst( nX );
+                nLength = pPor->GetModelPositionForViewPoint( nX );
         }
     }
     nOffset = nCurrStart + nLength;
@@ -1844,7 +1844,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                     // Looking for the position of the left border of the rectangle
                     // in this text line
                     SwCursorMoveState aState( MV_UPDOWN );
-                    if( GetCursorOfst( &aPosL, aPoint, &aState ) )
+                    if( GetModelPositionForViewPoint( &aPosL, aPoint, &aState ) )
                     {
                         if( aRectFnSet.IsVert() )
                         {
@@ -1860,7 +1860,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                         // is not the same like the left position of the line before
                         // which could happen e.g. for field portions or fly frames
                         // a SwPaM will be inserted with these positions
-                        if( GetCursorOfst( &aPosR, aPoint, &aState ) &&
+                        if( GetModelPositionForViewPoint( &aPosR, aPoint, &aState ) &&
                             aOld != aPosL)
                         {
                             SwPaM *pPam = new SwPaM( aPosL, aPosR );

@@ -1814,7 +1814,7 @@ bool SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt.getX(), aPt.getY() + rBound.GetHeight()/2 );
-        GetLayout()->GetCursorOfst( &aPos, aPoint, &aState );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
         // characterbinding not allowed in readonly-content
         if( !aPos.nNode.GetNode().IsProtect() )
@@ -1860,7 +1860,7 @@ bool SwFEShell::ImpEndCreate()
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt );
         SwPosition aPos( GetDoc()->GetNodes() );
-        GetLayout()->GetCursorOfst( &aPos, aPoint, &aState );
+        GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
         // do not set in ReadnOnly-content
         if (aPos.nNode.GetNode().IsProtect())

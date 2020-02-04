@@ -280,7 +280,7 @@ public:
         const long nMax = 0 );
     void GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
         const long nMax = 0 );
-    TextFrameIndex GetCursorOfst( SwPosition *pPos, const Point &rPoint,
+    TextFrameIndex GetModelPositionForViewPoint( SwPosition *pPos, const Point &rPoint,
                 bool bChgNode, SwCursorMoveState* = nullptr ) const;
     // Respects ambiguities: For the implementation see below
     const SwLineLayout *CharCursorToLine(TextFrameIndex const nPos);

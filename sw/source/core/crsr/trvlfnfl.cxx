@@ -361,7 +361,7 @@ void SwCursorShell::GotoFlyAnchor()
 
     const SwPageFrame* pPageFrame = pFrame->FindPageFrame();
     const SwContentFrame* pFndFrame = pPageFrame->GetContentPos( aPt, false, true );
-    pFndFrame->GetCursorOfst( m_pCurrentCursor->GetPoint(), aPt );
+    pFndFrame->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
 
     bool bRet = !m_pCurrentCursor->IsInProtectTable() && !m_pCurrentCursor->IsSelOvr();
     if( bRet )

@@ -41,7 +41,7 @@ protected:
 public:
     SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );
 
-    virtual bool GetCursorOfst( SwPosition *, Point&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
+    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;

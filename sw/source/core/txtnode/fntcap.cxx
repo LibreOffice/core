@@ -379,12 +379,12 @@ void SwDoCapitalCursorOfst::Do()
             if ( rInf.GetUpper() )
             {
                 aDrawInf.SetSpace( 0 );
-                nCursor = nCursor + pUpperFnt->GetCursorOfst( aDrawInf );
+                nCursor = nCursor + pUpperFnt->GetModelPositionForViewPoint( aDrawInf );
             }
             else
             {
                 aDrawInf.SetSpace( rInf.GetSpace() );
-                nCursor = nCursor + pLowerFnt->GetCursorOfst( aDrawInf );
+                nCursor = nCursor + pLowerFnt->GetModelPositionForViewPoint( aDrawInf );
             }
             nOfst = 0;
         }

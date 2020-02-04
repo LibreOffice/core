@@ -132,7 +132,7 @@ public:
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue

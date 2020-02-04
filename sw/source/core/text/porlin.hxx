@@ -140,7 +140,7 @@ public:
     SwLinePortion *FindLastPortion();
 
     /// the parameter is actually SwTwips apparently?
-    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const;
+    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 

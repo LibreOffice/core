@@ -1482,7 +1482,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     SetWhichPor( PortionType::ErgoSum );
 }
 
-TextFrameIndex SwErgoSumPortion::GetCursorOfst(const sal_uInt16) const
+TextFrameIndex SwErgoSumPortion::GetModelPositionForViewPoint(const sal_uInt16) const
 {
     return TextFrameIndex(0);
 }

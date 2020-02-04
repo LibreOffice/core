@@ -22,8 +22,8 @@
 #include "inftxt.hxx"
 #include "porexp.hxx"
 
-TextFrameIndex SwExpandPortion::GetCursorOfst(const sal_uInt16 nOfst) const
-{ return SwLinePortion::GetCursorOfst( nOfst ); }
+TextFrameIndex SwExpandPortion::GetModelPositionForViewPoint(const sal_uInt16 nOfst) const
+{ return SwLinePortion::GetModelPositionForViewPoint( nOfst ); }
 
 bool SwExpandPortion::GetExpText( const SwTextSizeInfo&, OUString &rText ) const
 {

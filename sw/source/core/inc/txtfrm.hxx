@@ -242,7 +242,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     bool IsIdxInside(TextFrameIndex nPos, TextFrameIndex nLen) const;
 
     // Changes the Frame or not (cf. FlyCnt)
-    bool GetCursorOfst_(SwPosition *pPos, const Point &rPoint,
+    bool GetModelPositionForViewPoint_(SwPosition *pPos, const Point &rPoint,
                       const bool bChgFrame, SwCursorMoveState* = nullptr ) const;
     void FillCursorPos( SwFillData &rFill ) const;
 
@@ -382,7 +382,7 @@ public:
      * @returns false if the SPoint is outside of the SSize else
      *          returns true
      */
-    virtual bool GetCursorOfst( SwPosition *, Point&,
+    virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                                   SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
     /**
@@ -390,7 +390,7 @@ public:
      * character-bound Frame)
      */
     bool GetKeyCursorOfst(SwPosition *pPos, const Point &rPoint ) const
-            { return GetCursorOfst_( pPos, rPoint, false ); }
+            { return GetModelPositionForViewPoint_( pPos, rPoint, false ); }
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect GetPaintSwRect();

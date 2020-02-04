@@ -202,7 +202,7 @@ private:
      * (via Find()) can be realised.
      */
     sal_uInt16 m_nCursorMove;
-    CursorMoveState m_eMvState;     ///< Status for Cursor-Travelling - GetCursorOfst
+    CursorMoveState m_eMvState;     ///< Status for Cursor-Travelling - GetModelPositionForViewPoint
     SwTable::SearchType m_eEnhancedTableSel; /// table rows or columns selected by not cell by cell
 
     OUString m_sMarkedListId;

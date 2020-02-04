@@ -154,7 +154,7 @@ static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
     }
     else
     {
-        pCFrame->GetCursorOfst( &rPos, rPt );
+        pCFrame->GetModelPositionForViewPoint( &rPos, rPt );
         pTextNode = rPos.nNode.GetNode().GetTextNode();
     }
     return pTextNode;

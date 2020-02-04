@@ -90,7 +90,7 @@ class SwErgoSumPortion : public SwFieldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
-    virtual TextFrameIndex GetCursorOfst(sal_uInt16 nOfst) const override;
+    virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // Field cloner for SplitGlue

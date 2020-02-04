@@ -2145,12 +2145,12 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     OSL_ENSURE( GetFrame() != nullptr, "The text frame has vanished!" );
     OSL_ENSURE( GetFrame()->IsTextFrame(), "The text frame has mutated!" );
     const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
-    // construct SwPosition (where GetCursorOfst() will put the result into)
+    // construct SwPosition (where GetModelPositionForViewPoint() will put the result into)
     SwTextNode* pNode = const_cast<SwTextNode*>(pFrame->GetTextNodeFirst());
     SwPosition aPos(*pNode, 0);
     SwCursorMoveState aMoveState;
     aMoveState.m_bPosMatchesBounds = true;
-    const bool bSuccess = pFrame->GetCursorOfst( &aPos, aCorePoint, &aMoveState );
+    const bool bSuccess = pFrame->GetModelPositionForViewPoint( &aPos, aCorePoint, &aMoveState );
 
     TextFrameIndex nIndex = pFrame->MapModelToViewPos(aPos);
     if (TextFrameIndex(0) < nIndex)

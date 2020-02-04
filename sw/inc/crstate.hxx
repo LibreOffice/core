@@ -117,7 +117,7 @@ struct SwSpecialPos
     {}
 };
 
-// CursorTravelling-States (for GetCursorOfst)
+// CursorTravelling-States (for GetModelPositionForViewPoint)
 enum CursorMoveState
 {
     MV_NONE,            ///< default
@@ -142,14 +142,14 @@ struct SwCursorMoveState
     bool m_bFieldInfo;            ///< should be fields recognized?
     bool m_bPosCorr;              ///< Point had to be corrected
     bool m_bFootnoteNoInfo;            ///< recognized footnote numbering
-    bool m_bExactOnly;            /**< let GetCursorOfst look for exact matches only,
+    bool m_bExactOnly;            /**< let GetModelPositionForViewPoint look for exact matches only,
                                          i.e. never let it run into GetContentPos */
     bool m_bFillRet;              ///< only used temporary in FillMode
     bool m_bSetInReadOnly;        ///< ReadOnly areas may be entered
     bool m_bRealWidth;            ///< Calculation of the width required
     bool m_b2Lines;               ///< Check 2line portions and fill p2Lines
     bool m_bNoScroll;             ///< No scrolling of undersized textframes
-    bool m_bPosMatchesBounds;         /**< GetCursorOfst should not return the next
+    bool m_bPosMatchesBounds;         /**< GetModelPositionForViewPoint should not return the next
                                        position if screen position is inside second
                                        have of bound rect */
 
