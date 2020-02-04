@@ -601,7 +601,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             [[fallthrough]];
 
         default:
-            pDstFormatField->ModifyNotification( nullptr, pMsgHint );
+            pDstFormatField->UpdateTextNode(nullptr, pMsgHint);
         }
 
         // The fields we can calculate here are being triggered for an update
@@ -798,7 +798,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     }
                     pCalc->SetCalcError( SwCalcError::NONE );
                 }
-                pFormatField->ModifyNotification( nullptr, pHt );
+                pFormatField->UpdateTextNode(nullptr, pHt);
         }
     }
 
@@ -1282,7 +1282,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                         pInputField->UnlockNotifyContentChange();
                     }
                 });
-            pFormatField->ModifyNotification(nullptr, nullptr); // trigger formatting
+            pFormatField->UpdateTextNode(nullptr, nullptr); // trigger formatting
         }
 
         if (pUpdateField == pTextField) // if only this one is updated
@@ -1537,7 +1537,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
 
                 // Trigger formatting
                 if( bChgd )
-                    pFormatField->ModifyNotification( nullptr, nullptr );
+                    pFormatField->UpdateTextNode(nullptr, nullptr);
             }
         }
     }
