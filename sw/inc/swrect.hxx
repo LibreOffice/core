@@ -26,6 +26,7 @@
 #include "swdllapi.h"
 
 class SvStream;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 /// *Of course* Writer needs its own rectangles.
 /// This is half-open so m_Point.X() + m_Size.getWidth() is *not* included.
@@ -104,7 +105,7 @@ public:
 
     // Output operator for debugging.
     friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
-
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
 
     void Top_(      const long nTop );
     void Bottom_(   const long nBottom );
