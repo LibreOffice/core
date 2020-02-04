@@ -138,7 +138,6 @@ SidebarController::SidebarController (
       msCurrentDeckId(gsDefaultDeckId),
       maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
       maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
-      maAsynchronousDeckSwitch(),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
       mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
@@ -304,8 +303,6 @@ void SAL_CALL SidebarController::disposing()
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();
-    maAsynchronousDeckSwitch.CancelRequest();
-
 }
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
@@ -321,7 +318,6 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     if (maRequestedContext != maCurrentContext)
     {
         mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
-        maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
         // TODO: this call is redundant but mandatory for unit test to update context on document loading
         UpdateConfigurations();
@@ -353,7 +349,6 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
             SwitchToDefaultDeck();
 
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
-        maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
     }
 }
@@ -494,7 +489,6 @@ void SidebarController::SyncUpdate()
 {
     maPropertyChangeForwarder.Sync();
     maContextChangeUpdate.Sync();
-    maAsynchronousDeckSwitch.Sync();
 }
 
 void SidebarController::UpdateConfigurations()
@@ -1000,7 +994,6 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 UpdateTitleBarIcons();
                 mpParentWindow->Invalidate();
                 mnRequestedForceFlags |= SwitchFlag_ForceNewDeck | SwitchFlag_ForceNewPanels;
-                maAsynchronousDeckSwitch.CancelRequest();
                 maContextChangeUpdate.RequestCall();
                 break;
 
