@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb041a0b_b38cec55",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-04T16:57:49Z",
+      "side": 1,
+      "message": "I guess you got what the error from clang means about this. This needs to be \"const auto\u0026\" instead of just \"auto\".",
+      "range": {
+        "startLine": 295,
+        "startChar": 9,
+        "endLine": 295,
+        "endChar": 13
+      },
+      "revId": "1c504c719d31233523b55290fbce71ab50dd1aa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f56969d7_fcfe3f4d",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-04T16:57:49Z",
+      "side": 1,
+      "message": "This represents a single member of the aEntries vector. So \"entry\" or \"aEntry\" might be a better fit instead of \"entries\" (plural).",
+      "range": {
+        "startLine": 295,
+        "startChar": 14,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "1c504c719d31233523b55290fbce71ab50dd1aa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
