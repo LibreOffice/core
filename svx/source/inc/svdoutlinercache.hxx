@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <vector>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 class SdrModel;
 class SdrOutliner;
@@ -34,7 +34,7 @@ private:
     SdrModel*                    mpModel;
     std::vector< std::unique_ptr<SdrOutliner> >  maModeOutline;
     std::vector< std::unique_ptr<SdrOutliner> >  maModeText;
-    std::set< SdrOutliner* >     maActiveOutliners;
+    o3tl::sorted_vector< SdrOutliner* >          maActiveOutliners;
 
 public:
     SdrOutlinerCache( SdrModel* pModel );

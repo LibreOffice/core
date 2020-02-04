@@ -24,7 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 #include <vector>
 
 class SfxObjectShell;
@@ -47,7 +47,7 @@ namespace sfx2
 
 typedef std::vector<tools::SvRef<SvBaseLink> > SvBaseLinks;
 
-typedef std::set<SvLinkSource*> SvLinkSources;
+typedef o3tl::sorted_vector<SvLinkSource*> SvLinkSources;
 
 class SFX2_DLLPUBLIC LinkManager
 {

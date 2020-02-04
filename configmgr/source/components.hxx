@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include "additions.hxx"
 #include "data.hxx"
@@ -139,7 +140,7 @@ private:
 
     int getExtensionLayer(bool shared) const;
 
-    typedef std::set< RootAccess * > WeakRootSet;
+    typedef o3tl::sorted_vector< RootAccess * > WeakRootSet;
 
     typedef
         config_map<
