@@ -365,6 +365,11 @@ bool isCharacterProperty( const PropertyIds eId )
     return eId > PROP_CHARACTER_STYLES && eId < PROP_CHARACTER_END;
 }
 
+bool isParagraphProperty( const PropertyIds eId )
+{
+    return eId >= PROP_PARA_ADJUST && eId <= PROP_PARA_WIDOWS;
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

@@ -362,6 +362,8 @@ OUString getPropertyName(PropertyIds eId);
 
 bool isCharacterProperty(const PropertyIds eId);
 
+bool isParagraphProperty(const PropertyIds eId);
+
 } //namespace dmapper
 } // namespace writerfilter
 #endif
