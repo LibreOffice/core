@@ -7,3 +7,85 @@ blacklist:
     toolkit/source/helper/servicenames.cxx:
     # Needed for extern array declarations
     - toolkit/helper/servicenames.hxx
+    toolkit/inc/awt/animatedimagespeer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XAnimation.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    - toolkit/awt/vclxwindow.hxx
+    toolkit/inc/awt/vclxpointer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPointer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    toolkit/inc/awt/vclxspinbutton.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XSpinValue.hpp
+    toolkit/inc/awt/vclxprinter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPrinterPropertySet.hpp
+    - com/sun/star/awt/XInfoPrinter.hpp
+    - com/sun/star/awt/XPrinterPropertySet.hpp
+    - com/sun/star/awt/XPrinterServer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    toolkit/inc/awt/vclxtabpagecontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageContainer.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - toolkit/awt/vclxcontainer.hxx
+    toolkit/inc/controls/accessiblecontrolcontext.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    toolkit/inc/controls/animatedimages.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XAnimatedImages.hpp
+    - toolkit/controls/unocontrolmodel.hxx
+    toolkit/inc/controls/controlmodelcontainerbase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageModel.hpp
+    - com/sun/star/awt/XTabControllerModel.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    - com/sun/star/util/XChangesNotifier.hpp
+    - toolkit/controls/unocontrolcontainer.hxx
+    toolkit/inc/controls/dialogcontrol.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/UnoControlDialog.hpp
+    toolkit/inc/controls/eventcontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    toolkit/inc/controls/geometrycontrolmodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/script/XScriptEventsSupplier.hpp
+    - com/sun/star/util/XCloneable.hpp
+    # Needed for template classes
+    - toolkit/controls/geometrycontrolmodel_impl.hxx
+    toolkit/inc/controls/roadmapcontrol.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XItemEventBroadcaster.hpp
+    - com/sun/star/awt/XItemListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    toolkit/inc/controls/roadmapentry.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    toolkit/inc/controls/tabpagecontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageContainer.hpp
+    - toolkit/controls/controlmodelcontainerbase.hxx
+    toolkit/inc/controls/tabpagemodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPage.hpp
+    - toolkit/controls/unocontrolcontainer.hxx
+    toolkit/inc/controls/unocontrolcontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XControlContainer.hpp
+    - com/sun/star/awt/XUnoControlContainer.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XIdentifierContainer.hpp
+    - toolkit/controls/unocontrolbase.hxx

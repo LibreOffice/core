@@ -18,7 +18,7 @@
  */
 
 
-#include <toolkit/awt/animatedimagespeer.hxx>
+#include <awt/animatedimagespeer.hxx>
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/awt/XAnimatedImages.hpp>

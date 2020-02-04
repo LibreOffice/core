@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <toolkit/awt/vclxprinter.hxx>
+#include <awt/vclxprinter.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 

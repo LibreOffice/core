@@ -20,10 +20,10 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <toolkit/controls/dialogcontrol.hxx>
-#include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <controls/dialogcontrol.hxx>
+#include <controls/geometrycontrolmodel.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

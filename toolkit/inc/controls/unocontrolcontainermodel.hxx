@@ -17,51 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXPOINTER_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXPOINTER_HXX
+#pragma once
 
 
-#include <com/sun/star/awt/XPointer.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
-
-#include <vcl/ptrstyle.hxx>
+#include <toolkit/controls/unocontrolmodel.hxx>
 
 
 
-
-class VCLXPointer final : public cppu::WeakImplHelper<
-    css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
+class UnoControlContainerModel final : public UnoControlModel
 {
-    ::osl::Mutex    maMutex;
-    PointerStyle    maPointer;
-
-    ::osl::Mutex&   GetMutex() { return maMutex; }
+    css::uno::Any                                                      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
+    ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper() override;
 
 public:
-    VCLXPointer();
-    virtual ~VCLXPointer() override;
+                        UnoControlContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
+                        UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {}
 
-    PointerStyle GetPointer() const { return maPointer; }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlContainerModel( *this ); }
 
-    // css::lang::XUnoTunnel
-    UNO3_GETIMPLEMENTATION_DECL(VCLXPointer)
+    // css::beans::XMultiPropertySet
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-    // css::awt::XPointer
-    void SAL_CALL setType( sal_Int32 nType ) override;
-    sal_Int32 SAL_CALL getType(  ) override;
+    // css::io::XPersistObject
+    OUString SAL_CALL getServiceName() override;
 
+    // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXPOINTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

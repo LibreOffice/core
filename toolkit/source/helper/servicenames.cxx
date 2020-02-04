@@ -18,7 +18,7 @@
  */
 
 #include <sal/types.h>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 
 const char szServiceName_Toolkit[] = "stardiv.vcl.VclToolkit";
 const char szServiceName2_Toolkit[] = "com.sun.star.awt.Toolkit";

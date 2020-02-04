@@ -19,7 +19,7 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <toolkit/controls/eventcontainer.hxx>
+#include <controls/eventcontainer.hxx>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 

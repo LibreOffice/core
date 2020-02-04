@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
+#pragma once
 
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerModel.hpp>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <toolkit/controls/controlmodelcontainerbase.hxx>
+#include <controls/controlmodelcontainerbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
@@ -121,7 +120,5 @@ private:
     virtual void        updateFromModel() override;
     TabPageListenerMultiplexer  m_aTabPageListeners;
 };
-
-#endif // _ INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

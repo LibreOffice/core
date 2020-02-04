@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/awt/vclxtabpagecontainer.hxx>
+#include <awt/vclxtabpagecontainer.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <sal/log.hxx>

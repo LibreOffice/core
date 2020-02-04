@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXGRAPHICS_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXGRAPHICS_HXX
+#pragma once
 
 
 #include <com/sun/star/awt/XGraphics2.hpp>
@@ -120,7 +119,5 @@ public:
     virtual void SAL_CALL drawTextArray( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text, const css::uno::Sequence< ::sal_Int32 >& Longs ) override;
     virtual void SAL_CALL drawImage( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 nHeight, ::sal_Int16 nStyle, const css::uno::Reference< css::graphic::XGraphic >& aGraphic ) override;
 };
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXGRAPHICS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

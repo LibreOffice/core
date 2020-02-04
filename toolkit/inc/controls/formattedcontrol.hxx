@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_FORMATTEDCONTROL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_FORMATTEDCONTROL_HXX
+#pragma once
 
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
@@ -119,7 +118,5 @@ namespace toolkit
 
 }   // namespace toolkit
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_FORMATTEDCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

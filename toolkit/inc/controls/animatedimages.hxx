@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
+#pragma once
 
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <com/sun/star/awt/XAnimatedImages.hpp>
@@ -85,7 +84,5 @@ namespace toolkit
 
 } // namespace toolkit
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

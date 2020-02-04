@@ -67,11 +67,11 @@
 #include <vcl/vclmedit.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/awt/vclxsystemdependentwindow.hxx>
-#include <toolkit/awt/vclxregion.hxx>
-#include <toolkit/awt/vclxtabpagecontainer.hxx>
+#include <awt/vclxsystemdependentwindow.hxx>
+#include <awt/vclxregion.hxx>
+#include <awt/vclxtabpagecontainer.hxx>
 
-#include <toolkit/awt/animatedimagespeer.hxx>
+#include <awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -118,7 +118,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
-#include <toolkit/awt/vclxspinbutton.hxx>
+#include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>

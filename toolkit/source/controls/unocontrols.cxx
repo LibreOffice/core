@@ -29,10 +29,10 @@
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <o3tl/safeint.hxx>
-#include <toolkit/controls/formattedcontrol.hxx>
+#include <controls/formattedcontrol.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/helper/property.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
 
 // for introspection

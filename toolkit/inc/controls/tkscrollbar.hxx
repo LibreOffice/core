@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
+#pragma once
 
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
@@ -109,7 +108,5 @@ namespace toolkit
 
 } // namespacetoolkit
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

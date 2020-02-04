@@ -24,7 +24,7 @@
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/awt/vclxbitmap.hxx>
+#include <awt/vclxbitmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>

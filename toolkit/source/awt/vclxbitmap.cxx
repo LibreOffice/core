@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/awt/vclxbitmap.hxx>
+#include <awt/vclxbitmap.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/stream.hxx>

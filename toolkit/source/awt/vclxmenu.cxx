@@ -19,7 +19,7 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

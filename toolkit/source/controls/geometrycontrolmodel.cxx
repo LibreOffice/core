@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <controls/geometrycontrolmodel.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <comphelper/sequence.hxx>
-#include <toolkit/controls/eventcontainer.hxx>
+#include <controls/eventcontainer.hxx>
 #include <toolkit/helper/property.hxx>
 #include <algorithm>
 #include <functional>

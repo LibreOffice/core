@@ -20,9 +20,9 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <toolkit/controls/stdtabcontrollermodel.hxx>
+#include <controls/stdtabcontrollermodel.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
+#include <helper/servicenames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
