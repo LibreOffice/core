@@ -857,6 +857,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
 FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )
 {
+    fprintf(stderr, "FontSizeBox ctor\n");
     EnableSelectAll();
     ImplInit();
 }

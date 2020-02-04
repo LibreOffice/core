@@ -20,29 +20,11 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARASPACINGWINDOW_HXX
 
 #include <editeng/ulspitem.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/relfld.hxx>
+#include <InterimItemWindow.hxx>
 
 using namespace com::sun::star;
-
-class InterimItemWindow : public Control
-{
-public:
-    virtual ~InterimItemWindow() override;
-    virtual void dispose() override;
-
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-
-protected:
-    InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
-
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
-};
 
 namespace svx {
 
