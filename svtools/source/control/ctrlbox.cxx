@@ -52,6 +52,8 @@
 
 #include <rtl/bootstrap.hxx>
 
+#include <boost/property_tree/ptree.hpp>
+
 #include <borderline.hrc>
 
 #include <stdio.h>
@@ -1039,7 +1041,12 @@ SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
     m_xComboBox->connect_changed(LINK(this, SvtFontSizeBox, ModifyHdl));
 }
 
-IMPL_LINK_NOARG(SvtFontSizeBox, ReformatHdl, weld::Widget&, void)
+boost::property_tree::ptree SvtFontSizeBox::get_property_tree() const
+{
+    return m_xComboBox->get_property_tree();
+}
+
+IMPL_LINK(SvtFontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
 {
     FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
     if (!bRelativeMode || !aFontSizeNames.IsEmpty())
@@ -1049,6 +1056,8 @@ IMPL_LINK_NOARG(SvtFontSizeBox, ReformatHdl, weld::Widget&, void)
     }
 
     set_value(get_value());
+
+    m_aFocusOutHdl.Call(rWidget);
 }
 
 IMPL_LINK(SvtFontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
