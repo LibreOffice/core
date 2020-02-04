@@ -433,6 +433,7 @@ public:
     // pointer style
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
+    virtual void                GrabFocus() override;
     virtual void                SetPointerPos( long nX, long nY ) override;
 
     // flush output buffer

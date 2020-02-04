@@ -1925,16 +1925,14 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
     if( m_pWindow )
     {
         if( isChild( false ) )
-        {
-            gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
-            gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
-        }
+            GrabFocus();
         else if( gtk_widget_get_mapped( m_pWindow ) )
         {
             if (!(nFlags & SalFrameToTop::GrabFocusOnly))
                 gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
             else
                 gdk_window_focus(gtk_widget_get_window(m_pWindow), GetLastInputEventTime());
+            GrabFocus();
         }
         else
         {
@@ -2478,6 +2476,12 @@ namespace
     }
 }
 
+void GtkSalFrame::GrabFocus()
+{
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
+    gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
+}
+
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -2498,10 +2502,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
 
         // focus on click
         if (!bDifferentEventWindow)
-        {
-            gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), true);
-            gtk_widget_grab_focus(GTK_WIDGET(pThis->m_pFixedContainer));
-        }
+            pThis->GrabFocus();
     }
 
     SalMouseEvent aEvent;
