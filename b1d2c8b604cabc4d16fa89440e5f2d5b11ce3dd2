@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "533fd2e7_b59a0a60",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002401
+      },
+      "writtenOn": "2020-02-04T15:25:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b7c7850_728d9eee",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a150435_7206e5ae",
         "filename": "antivirusDetection.vbs",
         "patchSetId": 6
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "e6445aaf_d4deb21a",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002401
+      },
+      "writtenOn": "2020-02-04T15:25:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a150435_7206e5ae",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 40
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00f17723_e927a5d9",
         "filename": "antivirusDetection.vbs",
         "patchSetId": 6
@@ -82,6 +130,30 @@
       "writtenOn": "2020-02-04T09:46:30Z",
       "side": 1,
       "message": "I suppose it\u0027s better to separate them by newlines and indents to stand out from the surrounding text.",
+      "range": {
+        "startLine": 14,
+        "startChar": 17,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6feb7d40_6e391d51",
+        "filename": "antivirusDetection.vbs",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002401
+      },
+      "writtenOn": "2020-02-04T15:25:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00f17723_e927a5d9",
       "range": {
         "startLine": 14,
         "startChar": 17,
