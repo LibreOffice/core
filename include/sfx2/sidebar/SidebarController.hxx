@@ -188,7 +188,6 @@ private:
     OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
-    AsynchronousCall maAsynchronousDeckSwitch;
 
     /** Two flags control whether the deck is displayed or if only the
         tab bar remains visible.
