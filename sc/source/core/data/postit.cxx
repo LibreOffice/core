@@ -142,7 +142,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc, 
     {
         /* Updates caption item set according to the passed item set while removing shadow items. */
 
-        aItemSet.MergeValues(*pExtraItemSet);
+        aItemSet.Put(*pExtraItemSet);
         // reset shadow items
         aItemSet.Put( makeSdrShadowItem( false ) );
         aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
