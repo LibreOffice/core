@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libxslt))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libxslt,$(LIBXSLT_TARBALL)))
@@ -16,7 +17,9 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libxslt))
 $(eval $(call gb_UnpackedTarball_add_patches,libxslt,\
 	external/libxslt/libxslt-config.patch.1 \
 	external/libxslt/libxslt-internal-symbols.patch.1 \
-	external/libxslt/libxslt-msvc.patch.2 \
+	$(if $(call gb_LinkTarget__symbols_enabled,libxslt),\
+		external/libxslt/libxslt-msvc-sym.patch.2, \
+ 		external/libxslt/libxslt-msvc.patch.2) \
 	external/libxslt/libxslt-1.1.26-memdump.patch \
 	external/libxslt/rpath.patch.0 \
 	external/libxslt/e2584eed1c84c18f16e42188c30d2c3d8e3e8853.patch.1 \
