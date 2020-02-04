@@ -124,7 +124,7 @@ public:
                     else if( pSh )
                         pSh->StartAction();
                 }
-                pLast->ModifyNotification( nullptr, &aUpdateDDE );
+                static_cast<SwFormatField*>(pLast)->UpdateTextNode( nullptr, &aUpdateDDE );
                 bCallModify = true;
             }
         }

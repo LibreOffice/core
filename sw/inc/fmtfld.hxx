@@ -47,7 +47,6 @@ class SW_DLLPUBLIC SwFormatField final
     std::unique_ptr<SwField> mpField;
     SwTextField* mpTextField; // the TextAttribute
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
 public:
@@ -105,6 +104,8 @@ public:
     SAL_DLLPRIVATE void SetXTextField(css::uno::Reference<css::text::XTextField> const& xTextField)
             { m_wXTextField = xTextField; }
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+    void UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew);
 };
 
 enum class SwFormatFieldHintWhich
