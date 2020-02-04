@@ -149,7 +149,7 @@ ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent)
     m_xAboveContainer->show();
     m_xBelowContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaAboveSpacingWindow::GetFocus()
@@ -165,7 +165,7 @@ ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent)
     m_xAboveContainer->hide();
     m_xBelowContainer->show();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaBelowSpacingWindow::GetFocus()
@@ -350,7 +350,7 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->hide();
     m_xFirstLineContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaLeftSpacingWindow::GetFocus()
@@ -367,7 +367,7 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->show();
     m_xFirstLineContainer->hide();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaRightSpacingWindow::GetFocus()
@@ -384,7 +384,7 @@ ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent)
     m_xAfterContainer->hide();
     m_xFirstLineContainer->show();
 
-    SetSizePixel(GetOptimalSize());
+    SetSizePixel(get_preferred_size());
 }
 
 void ParaFirstLineSpacingWindow::GetFocus()
