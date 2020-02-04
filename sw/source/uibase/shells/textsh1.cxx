@@ -1582,8 +1582,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         const SfxInt32Item* pAmount = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
         if (!pIndex || !pAmount)
             break;
-        SAL_INFO("sw.ui", "MoveTabstop(" << pIndex->GetValue() << "," << pAmount->GetValue() << ")");
-        // To be implemented
+        auto &rRuler = GetView().GetHRuler();
+        rRuler.MoveTabstop(pIndex->GetValue(), pAmount->GetValue());
+        rRuler.ForceUpdate();
     }
     break;
     default:

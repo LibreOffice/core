@@ -1671,6 +1671,20 @@ void SvxRuler::UpdateParaContents_Impl(
     SetIndents(INDENT_COUNT, mpIndents.data() + INDENT_GAP);
 }
 
+void SvxRuler::MoveTabstop(int nTabstop, int nAmount)
+{
+    SAL_INFO("svx", "MoveTabstop(" << nTabstop << "," << nAmount << ")");
+
+    if (nTabstop < 0 || nTabstop >= mxTabStopItem->Count())
+        return;
+
+    SvxTabStop aTabstop = mxTabStopItem->At(nTabstop);
+    mxTabStopItem->Remove(nTabstop);
+    aTabstop.GetTabPos() += nAmount;
+    mxTabStopItem->Insert(aTabstop);
+    pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABSTOP, SfxCallMode::RECORD, { mxTabStopItem.get() });
+}
+
 void SvxRuler::DragBorders()
 {
     /* Dragging of Borders (Tables and other columns) */
