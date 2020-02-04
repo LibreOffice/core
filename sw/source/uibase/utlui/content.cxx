@@ -423,7 +423,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
             m_bEdit = true;
             nOldMemberCount = m_nMemberCount;
-            m_bDelete = false;
+            m_bDelete = true;
         }
         break;
         case ContentTypeId::POSTIT:
@@ -3040,7 +3040,7 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
             if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
             {
-                if (static_cast<SwContentType*>(pEntry->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+                if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
                     DeleteOutlineSelections();
                 else
                     EditEntry(pEntry, EditEntryMode::DELETE);
@@ -3642,7 +3642,10 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         break;
 
         case ContentTypeId::URLFIELD:
-            nSlot = SID_EDIT_HYPERLINK;
+            if (nMode == EditEntryMode::DELETE)
+                nSlot = SID_REMOVE_HYPERLINK;
+            else
+                nSlot = SID_EDIT_HYPERLINK;
         break;
         case ContentTypeId::REFERENCE:
             nSlot = FN_EDIT_FIELD;
