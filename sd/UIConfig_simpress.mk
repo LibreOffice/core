@@ -128,6 +128,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/interactiondialog \
 	sd/uiconfig/simpress/ui/interactionpage \
 	sd/uiconfig/simpress/ui/layoutmenu \
+	sd/uiconfig/simpress/ui/layoutpanel \
 	sd/uiconfig/simpress/ui/layoutwindow \
 	sd/uiconfig/simpress/ui/masterlayoutdlg \
 	sd/uiconfig/simpress/ui/mastermenu \

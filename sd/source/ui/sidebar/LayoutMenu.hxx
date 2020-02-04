@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_LAYOUTMENU_HXX
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 
 #include <svtools/valueset.hxx>
 #include <vcl/transfer.hxx>
@@ -42,9 +43,10 @@ class EventMultiplexerEvent;
 
 namespace sd { namespace sidebar {
 
-class LayoutMenu
-    : public ValueSet,
-      public sfx2::sidebar::ILayoutableWindow
+class LayoutValueSet;
+
+class LayoutMenu : public PanelLayout
+                 , public sfx2::sidebar::ILayoutableWindow
 {
 public:
     /** Create a new layout menu.  Depending on the given flag it
@@ -85,9 +87,9 @@ public:
     */
     void InvalidateContent();
 
-    /** The context menu is requested over this Command() method.
+    /** The context menu is requested over this ShowContextMenu() method.
     */
-    virtual void Command (const CommandEvent& rEvent) override;
+    void ShowContextMenu(const Point* pPos);
 
     /** Call Fill() when switching to or from high contrast mode so that the
         correct set of icons is displayed.
@@ -98,6 +100,9 @@ public:
 
 private:
     ViewShellBase& mrBase;
+
+    std::unique_ptr<LayoutValueSet> mxLayoutValueSet;
+    std::unique_ptr<weld::CustomWeld> mxLayoutValueSetWin;
 
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
@@ -159,7 +164,7 @@ private:
 
     /** When clicked then set the current page of the view in the center pane.
     */
-    DECL_LINK(ClickHandler, ValueSet*, void);
+    DECL_LINK(ClickHandler, SvtValueSet*, void);
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
