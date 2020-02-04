@@ -1658,7 +1658,7 @@ void SwTOXBaseSection::UpdatePageNum()
                             ->MapModelToView(static_cast<SwTextNode const*>(rTOXSource.pNd),
                                 rTOXSource.nPos));
                         while( nullptr != ( pNext = static_cast<SwTextFrame*>(pFrame->GetFollow()) )
-                                && nPos >= pNext->GetOfst())
+                                && nPos >= pNext->GetOffset())
                             pFrame = pNext;
                     }
 

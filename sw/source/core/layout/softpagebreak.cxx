@@ -80,7 +80,7 @@ void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                         if( pFirst2 == pFrame )
                         {   // Here we are: a first content inside a cell
                             // inside the split row => soft page break
-                            auto const pos(pFrame->MapViewToModel(pFrame->GetOfst()));
+                            auto const pos(pFrame->MapViewToModel(pFrame->GetOffset()));
                             if (pos.first == this)
                             {
                                 rBreak.insert(pos.second);
@@ -94,7 +94,7 @@ void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
             else // No soft page break if there's a "hard" page break attribute
             if( pFirst2 == pFrame && !pFrame->IsPageBreak( true ) )
             {
-                auto const pos(pFrame->MapViewToModel(pFrame->GetOfst()));
+                auto const pos(pFrame->MapViewToModel(pFrame->GetOffset()));
                 if (pos.first == this)
                 {   // in the !Show case, we have to iterate over the merged
                     // SwTextFrame for every node

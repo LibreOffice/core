@@ -1107,7 +1107,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                 TextFrameIndex const nOfs(pAutoFrame->MapModelToViewPos(
                             *pFormat->GetAnchor().GetContentAnchor()));
                 while( pAutoFrame->GetFollow() &&
-                       pAutoFrame->GetFollow()->GetOfst() <= nOfs )
+                       pAutoFrame->GetFollow()->GetOffset() <= nOfs )
                 {
                     if( pAutoFrame == GetAnchorFrame() )
                         nTmpY += pAutoFrame->GetRelPos().Y();
@@ -1163,7 +1163,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
                         TextFrameIndex const nOfs(pAutoFrame->MapModelToViewPos(
                                     *pFormat->GetAnchor().GetContentAnchor()));
                         while( pAutoFrame->GetFollow() &&
-                               pAutoFrame->GetFollow()->GetOfst() <= nOfs )
+                               pAutoFrame->GetFollow()->GetOffset() <= nOfs )
                             pAutoFrame = pAutoFrame->GetFollow();
                     }
                     nTmpX -= static_cast<SwFlyAtContentFrame*>(this)->GetRelCharX(pAutoFrame);

@@ -270,7 +270,7 @@ public:
         return m_nLen;
     }
 
-    sal_Int32 GetOfst() const
+    sal_Int32 GetOffset() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bOfst, "DrawTextInfo: Undefined Offset" );

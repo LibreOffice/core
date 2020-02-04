@@ -71,7 +71,7 @@ bool SwTextFrame::IsFootnoteNumFrame_() const
 SwTextFrame *SwTextFrame::FindFootnoteRef( const SwTextFootnote *pFootnote )
 {
     SwTextFrame *pFrame = this;
-    const bool bFwd = MapModelToView(&pFootnote->GetTextNode(), pFootnote->GetStart()) >= GetOfst();
+    const bool bFwd = MapModelToView(&pFootnote->GetTextNode(), pFootnote->GetStart()) >= GetOffset();
     while( pFrame )
     {
         if( SwFootnoteBossFrame::FindFootnote( pFrame, pFootnote ) )
@@ -98,10 +98,10 @@ void SwTextFrame::CalcFootnoteFlag()
 #ifdef DBG_UTIL
     const TextFrameIndex nEnd = nStop != TextFrameIndex(COMPLETE_STRING)
         ? nStop
-        : GetFollow() ? GetFollow()->GetOfst() : TextFrameIndex(COMPLETE_STRING);
+        : GetFollow() ? GetFollow()->GetOffset() : TextFrameIndex(COMPLETE_STRING);
 #else
     const TextFrameIndex nEnd = GetFollow()
-        ? GetFollow()->GetOfst()
+        ? GetFollow()->GetOffset()
         : TextFrameIndex(COMPLETE_STRING);
 #endif
 
@@ -114,7 +114,7 @@ void SwTextFrame::CalcFootnoteFlag()
             TextFrameIndex const nIdx(MapModelToView(pNode, pHt->GetStart()));
             if ( nEnd < nIdx )
                 break;
-            if( GetOfst() <= nIdx )
+            if( GetOffset() <= nIdx )
             {
                 mbFootnote = true;
                 break;
@@ -458,10 +458,10 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
             // 1) There's neither Follow nor PrevFollow:
             //    -> RemoveFootnote() (maybe even a OSL_ENSURE(value))
             //
-            // 2) nStart > GetOfst, I have a Follow
+            // 2) nStart > GetOffset, I have a Follow
             //    -> Footnote moves into Follow
             //
-            // 3) nStart < GetOfst, I am a Follow
+            // 3) nStart < GetOffset, I am a Follow
             //    -> Footnote moves into the PrevFollow
             //
             // Both need to be on one Page/in one Column
@@ -483,7 +483,7 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
                 {
                     SwContentFrame *pDest = GetFollow();
                     while (pDest->GetFollow() && static_cast<SwTextFrame*>(pDest->
-                           GetFollow())->GetOfst() <= nIdx)
+                           GetFollow())->GetOffset() <= nIdx)
                         pDest = pDest->GetFollow();
                     OSL_ENSURE( !SwFootnoteBossFrame::FindFootnote(
                         pDest,pFootnote),"SwTextFrame::RemoveFootnote: footnote exists");
@@ -546,9 +546,9 @@ void SwTextFrame::RemoveFootnote(TextFrameIndex const nStart, TextFrameIndex con
     // it'll be set soon. CalcFntFlag depends on a correctly set Follow Offset.
     // Therefore we temporarily calculate the Follow Offset here
     TextFrameIndex nOldOfst(COMPLETE_STRING);
-    if( HasFollow() && nStart > GetOfst() )
+    if( HasFollow() && nStart > GetOffset() )
     {
-        nOldOfst = GetFollow()->GetOfst();
+        nOldOfst = GetFollow()->GetOffset();
         GetFollow()->ManipOfst(nStart + (bRollBack ? nLen : TextFrameIndex(0)));
     }
     pSource->CalcFootnoteFlag();
@@ -1000,7 +1000,7 @@ SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo const &rI
 {
     // We cannot assume we're a Follow
     if( !m_pFrame->IsInFootnote()  || m_pFrame->GetPrev() ||
-        rInf.IsErgoDone() || rInf.GetIdx() != m_pFrame->GetOfst() ||
+        rInf.IsErgoDone() || rInf.GetIdx() != m_pFrame->GetOffset() ||
         m_pFrame->ImplFindFootnoteFrame()->GetAttr()->GetFootnote().IsEndNote() )
         return nullptr;
 

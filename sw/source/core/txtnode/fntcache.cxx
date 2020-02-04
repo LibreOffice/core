@@ -2191,8 +2191,8 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
             nAvgWidthPerChar = i * nGridWidth;
 
 // stupid CLANG
-            nCnt = TextFrameIndex(rInf.GetOfst() / nAvgWidthPerChar);
-            if (2 * (rInf.GetOfst() - sal_Int32(nCnt) * nAvgWidthPerChar) > nAvgWidthPerChar)
+            nCnt = TextFrameIndex(rInf.GetOffset() / nAvgWidthPerChar);
+            if (2 * (rInf.GetOffset() - sal_Int32(nCnt) * nAvgWidthPerChar) > nAvgWidthPerChar)
                 ++nCnt;
 
             return nCnt;
@@ -2211,7 +2211,7 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
             for (TextFrameIndex j(0); j < rInf.GetLen(); j++)
             {
                 long nScr = pKernArray[sal_Int32(j)] + (nSpaceAdd + nGridWidthAdd) * (sal_Int32(j) + 1);
-                if( nScr >= rInf.GetOfst())
+                if( nScr >= rInf.GetOffset())
                 {
                     nCnt = j;
                     break;
@@ -2230,7 +2230,7 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
     // skip character cells for all script types
     LanguageType aLang = rInf.GetFont()->GetLanguage();
 
-    while ( ( nRight < long( rInf.GetOfst() ) ) && ( nIdx < nEnd ) )
+    while ( ( nRight < long( rInf.GetOffset() ) ) && ( nIdx < nEnd ) )
     {
         if (nSpaceAdd && CH_BLANK == rInf.GetText()[ sal_Int32(nIdx)])
             nSpaceSum += nSpaceAdd;
@@ -2255,8 +2255,8 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
     // or if we do not want to go to the next character
     if ( nIdx > rInf.GetIdx() &&
          ( rInf.IsPosMatchesBounds() ||
-           ( ( nRight > long( rInf.GetOfst() ) ) &&
-             ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) ) ) )
+           ( ( nRight > long( rInf.GetOffset() ) ) &&
+             ( nRight - rInf.GetOffset() > rInf.GetOffset() - nLeft ) ) ) )
         nCnt = nLastIdx - rInf.GetIdx(); // first half
     else
         nCnt = nIdx - rInf.GetIdx(); // second half

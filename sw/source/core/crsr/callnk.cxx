@@ -225,7 +225,7 @@ long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
         {
             TextFrameIndex const nPos(pFrame->MapModelToView(&rNd, nCntPos));
             while( nullptr != ( pNext = pFrame->GetFollow() ) &&
-                    nPos >= pNext->GetOfst())
+                    nPos >= pNext->GetOffset())
                 pFrame = pNext;
         }
 

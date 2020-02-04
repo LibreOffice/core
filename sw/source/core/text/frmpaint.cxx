@@ -425,8 +425,8 @@ SwRect SwTextFrame::GetPaintSwRect()
         if ( IsVertLR() && !IsVertLRBT()) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
             rRepaint.Chg( GetUpper()->getFrameArea().Pos() + GetUpper()->getFramePrintArea().Pos(), GetUpper()->getFramePrintArea().SSize() );
 
-        if( rRepaint.GetOfst() )
-            rRepaint.Left( rRepaint.GetOfst() );
+        if( rRepaint.GetOffset() )
+            rRepaint.Left( rRepaint.GetOffset() );
 
         l = rRepaint.GetRightOfst();
         if( l && l > rRepaint.Right() )
@@ -625,7 +625,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     // Switch off recycling when in the FlyContentFrame.
     // A DrawRect is called for repainting the line anyways.
-    if( rRepaint.GetOfst() )
+    if( rRepaint.GetOffset() )
     {
         const SwFlyFrame *pFly = FindFlyFrame();
         if( pFly && pFly->IsFlyInContentFrame() )

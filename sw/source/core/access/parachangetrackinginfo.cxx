@@ -71,10 +71,10 @@ namespace {
         // sw_redlinehide: rely on the Hide early return above & cast
         // TextFrameIndex to SwIndex directly
         const sal_Int32 nTextFrameTextStartPos = rTextFrame.IsFollow()
-            ? sal_Int32(rTextFrame.GetOfst())
+            ? sal_Int32(rTextFrame.GetOffset())
             : 0;
         const sal_Int32 nTextFrameTextEndPos = rTextFrame.HasFollow()
-            ? sal_Int32(rTextFrame.GetFollow()->GetOfst())
+            ? sal_Int32(rTextFrame.GetFollow()->GetOffset())
             : rTextFrame.GetText().getLength();
 
         // iteration over the redlines which overlap with the text node.

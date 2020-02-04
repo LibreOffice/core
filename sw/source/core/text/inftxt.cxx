@@ -145,7 +145,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
 void SwTextInfo::CtorInitTextInfo( SwTextFrame *pFrame )
 {
     m_pPara = pFrame->GetPara();
-    m_nTextStart = pFrame->GetOfst();
+    m_nTextStart = pFrame->GetOffset();
     if (!m_pPara)
     {
         SAL_WARN("sw.core", "+SwTextInfo::CTOR: missing paragraph information");

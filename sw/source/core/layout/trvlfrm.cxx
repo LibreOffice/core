@@ -1032,7 +1032,7 @@ sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
     {
         assert(pContent->IsTextFrame());
         SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pContent));
-        *pToSet->GetPoint() = pFrame->MapViewToModelPos(pFrame->GetOfst());
+        *pToSet->GetPoint() = pFrame->MapViewToModelPos(pFrame->GetOffset());
 
         SwShellCursor* pSCursor = dynamic_cast<SwShellCursor*>(pToSet);
         if( pSCursor )
@@ -1129,9 +1129,9 @@ bool GetFrameInPage( const SwContentFrame *pCnt, SwWhichPage fnWhichPage,
         assert(pCnt->IsTextFrame());
         SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pCnt));
         TextFrameIndex const nIdx((fnPosPage == GetFirstSub)
-            ? pFrame->GetOfst()
+            ? pFrame->GetOffset()
             : (pFrame->GetFollow())
-                ? pFrame->GetFollow()->GetOfst() - TextFrameIndex(1)
+                ? pFrame->GetFollow()->GetOffset() - TextFrameIndex(1)
                 : TextFrameIndex(pFrame->GetText().getLength()));
         *pPam->GetPoint() = pFrame->MapViewToModelPos(nIdx);
         return true;

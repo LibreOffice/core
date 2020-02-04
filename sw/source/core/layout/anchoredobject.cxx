@@ -545,7 +545,7 @@ bool SwAnchoredObject::HasClearedEnvironment() const
             const SwTextFrame* pTmpTextFrame = static_cast<const SwTextFrame*>(pTmpFrame);
             if ( pTmpTextFrame->IsUndersized() ||
                  ( pTmpTextFrame->GetFollow() &&
-                   pTmpTextFrame->GetFollow()->GetOfst() == TextFrameIndex(0)))
+                   pTmpTextFrame->GetFollow()->GetOffset() == TextFrameIndex(0)))
             {
                 bHasClearedEnvironment = true;
             }

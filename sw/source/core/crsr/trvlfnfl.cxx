@@ -109,7 +109,7 @@ bool SwCursorShell::GotoFootnoteText()
                             SwTextFrame const*const pTF(
                                     static_cast<const SwTextFrame*>(pCnt));
                             *GetCursor_()->GetPoint() =
-                                    pTF->MapViewToModelPos(pTF->GetOfst());
+                                    pTF->MapViewToModelPos(pTF->GetOffset());
                             UpdateCursor( SwCursorShell::SCROLLWIN |
                                 SwCursorShell::CHKRANGE | SwCursorShell::READONLY );
                             bRet = true;

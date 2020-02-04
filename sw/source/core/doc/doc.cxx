@@ -496,8 +496,8 @@ sal_uInt16 PostItField_::GetPageNo(
     {
         TextFrameIndex const nPos = pFrame->MapModelToView(
                 &GetTextField()->GetTextNode(), GetContent());
-        if( pFrame->GetOfst() > nPos ||
-            (pFrame->HasFollow() && pFrame->GetFollow()->GetOfst() <= nPos) )
+        if( pFrame->GetOffset() > nPos ||
+            (pFrame->HasFollow() && pFrame->GetFollow()->GetOffset() <= nPos) )
             continue;
         sal_uInt16 nPgNo = pFrame->GetPhyPageNum();
         if( rRangeEnum.hasValue( nPgNo, &rPossiblePages ))

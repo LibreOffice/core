@@ -784,7 +784,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
           !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
     {
         // create pam for selection
-        SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOfst()));
+        SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOffset()));
         SwPaM aPaM( aStartPos );
 
         // set PaM at cursor shell
@@ -2720,10 +2720,10 @@ public:
 SwHyperlinkIter_Impl::SwHyperlinkIter_Impl(const SwTextFrame & rTextFrame)
     : m_rFrame(rTextFrame)
     , m_Iter(rTextFrame)
-    , m_nStt(rTextFrame.GetOfst())
+    , m_nStt(rTextFrame.GetOffset())
 {
     const SwTextFrame *const pFollFrame = rTextFrame.GetFollow();
-    m_nEnd = pFollFrame ? pFollFrame->GetOfst() : TextFrameIndex(rTextFrame.GetText().getLength());
+    m_nEnd = pFollFrame ? pFollFrame->GetOffset() : TextFrameIndex(rTextFrame.GetText().getLength());
 }
 
 const SwTextAttr *SwHyperlinkIter_Impl::next(SwTextNode const** ppNode)
