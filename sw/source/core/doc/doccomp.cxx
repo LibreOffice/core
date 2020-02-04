@@ -1379,7 +1379,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 aCpyPam.SetMark();
                 aCpyPam.GetPoint()->nContent = nSrcTo;
                 aCpyPam.GetDoc()->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
-                    /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
+                    SwCopyFlags::CheckPosInFly);
                 pDstDoc->GetIDocumentUndoRedo().DoUndo( bUndo );
 
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing.get() );
@@ -1946,7 +1946,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
         pSrcRedl->GetDoc()->getIDocumentContentOperations().CopyRange(
                 *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
-                *pDestRedl->GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true, /*bCopyText=*/false );
+                *pDestRedl->GetPoint(), SwCopyFlags::CheckPosInFly);
 
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
