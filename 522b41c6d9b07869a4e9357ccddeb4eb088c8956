@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33b1326d_c9ec641a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-04T07:50:16Z",
+      "side": 1,
+      "message": "the default value in officecfg/registry/schema/org/openoffice/Office/Common.xcs that this overrides is also \"true\"?  (Though that appears to be the case for the other Enable* props here, too.  Odd.)",
+      "revId": "522b41c6d9b07869a4e9357ccddeb4eb088c8956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
