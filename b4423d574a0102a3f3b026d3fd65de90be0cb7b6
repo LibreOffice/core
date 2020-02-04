@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d7d66170_42047720",
+        "filename": "sw/source/core/txtnode/ndhints.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-04T10:02:34Z",
+      "side": 1,
+      "message": "unordered_map and unordered_set are pretty much the same thing internally, and are a hash/tree design.\n\nfor the specific use-case of pointers, I believe sorted_vector to be better than hash/tree designs because of better cache-density.\n\nAlso, we were using a set before, so it makes sense to use a set after (o3tl::sorted_vector is pretty much the same as boost::flat_set and the proposed std::flat_set)",
+      "parentUuid": "8c4f285b_db5067c3",
+      "revId": "b4423d574a0102a3f3b026d3fd65de90be0cb7b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "438ea7ce_c229a23e",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 1
