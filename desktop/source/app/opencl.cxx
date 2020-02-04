@@ -193,7 +193,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 
     SAL_INFO("opencl", "Initiating test of OpenCL device");
     OpenCLZone aZone;
-    OpenCLZone::enterInitialTest();
+    OpenCLInitialZone aInitialZone;
 
     OUString aDevice = officecfg::Office::Calc::Formula::Calculation::OpenCLDevice::get();
     OUString aSelectedCLDeviceVersionID;

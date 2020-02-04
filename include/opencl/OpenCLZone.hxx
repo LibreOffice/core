@@ -12,45 +12,19 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-#include <csignal>
-
 #include <opencl/opencldllapi.h>
 
-// FIXME: post back-port, templatize me and share with OpenGLZone.
-class OPENCL_DLLPUBLIC OpenCLZone
+#include <comphelper/crashzone.hxx>
+
+class OPENCL_DLLPUBLIC OpenCLZone : public CrashZone< OpenCLZone >
 {
-    /// how many times have we entered a CL zone and not yet left it
-    static volatile std::sig_atomic_t gnEnterCount;
-    static volatile bool gbInInitialTest;
-
 public:
-    OpenCLZone()
-    {
-        gnEnterCount = gnEnterCount + 1; //TODO: overflow
-    }
-
-    ~OpenCLZone()
-    {
-        // coverity[assert_side_effect]
-        assert(gnEnterCount > 0);
-        gnEnterCount = gnEnterCount - 1;
-        if (!isInZone())
-            gbInInitialTest = false;
-    }
-
-    static bool isInZone()
-    {
-        return gnEnterCount > 0;
-    }
-
-    static bool isInInitialTest()
-    {
-        return gbInInitialTest;
-    }
-
     static void hardDisable();
-    static void enterInitialTest();
+};
+
+// Used during initial testing of OpenCL.
+class OPENCL_DLLPUBLIC OpenCLInitialZone : public CrashZone< OpenCLInitialZone >
+{
 };
 
 #endif // INCLUDED_OPENCL_INC_OPENCL_ZONE_HXX

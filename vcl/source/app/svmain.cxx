@@ -88,7 +88,7 @@
 
 #include <opencl/OpenCLZone.hxx>
 #include <opengl/zone.hxx>
-#include <opengl/watchdog.hxx>
+#include <watchdog.hxx>
 
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <tools/diagnose_ex.h>
@@ -128,7 +128,7 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
         {
             OpenCLZone::hardDisable();
 #ifdef _WIN32
-            if (OpenCLZone::isInInitialTest())
+            if (OpenCLInitialZone::isInZone())
                 TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
 #endif
         }
@@ -212,9 +212,7 @@ int ImplSVMain()
         pSVData->mxAccessBridge.clear();
     }
 
-#if HAVE_FEATURE_OPENGL
-    OpenGLWatchdogThread::stop();
-#endif
+    WatchdogThread::stop();
     DeInitVCL();
 
     return nReturn;
