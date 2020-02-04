@@ -152,6 +152,9 @@ public:
     void            SetNoSelection();
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
+    // determine if Select was called due to something selected from the menu
+    bool            IsModifyByMenu() const;
+
     /** checks whether a certain point lies within the bounds of
         a list item and returns the item as well as the character position
         the point is at.
