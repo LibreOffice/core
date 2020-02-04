@@ -1282,7 +1282,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                         pInputField->UnlockNotifyContentChange();
                     }
                 });
-            pFormatField->ModifyNotification(nullptr, nullptr); // trigger formatting
+            pFormatField->TriggerFormatting(false, true, nullptr); // trigger formatting
         }
 
         if (pUpdateField == pTextField) // if only this one is updated
