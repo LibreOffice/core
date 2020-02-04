@@ -2615,7 +2615,7 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
         }
         else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())
 #ifdef IOS
-                 || true
+                 || (true)
 #endif
                  )
             aString = SdResId(STR_PRESOBJ_TITLE_MOBILE);
