@@ -89,3 +89,30 @@ sal_lib = shared_library('sal',
              '-DLIBO_INTERNAL_ONLY'],
   dependencies: [thread_dep, dl_dep]
   )
+
+unittester = executable('cppunittester', 'cppunittester/cppunittester.cxx',
+  include_directories: [main_inc],
+  cpp_args:  ['-DLIBO_INTERNAL_ONLY'],
+  link_with: sal_lib,
+  dependencies: [cppunit_dep]
+  )
+
+plib = shared_library('osl_test',
+  'qa/osl/thread/test_thread.cxx',
+  cpp_args:  ['-DLIBO_INTERNAL_ONLY'],
+  link_with: sal_lib,
+  dependencies: [cppunit_dep, thread_dep],
+  include_directories: [main_inc],
+)
+
+test('sal_test', unittester,
+  args: [plib])
+
+#pc = executable('process_child', 'qa/osl/process/osl_process_child.cxx',
+#  dependencies: [])
+
+test('osl_security', executable('osl_security', 'qa/osl/security/osl_Security.cxx',
+    include_directories: [main_inc],
+    cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+    link_with: sal_lib,
+    dependencies: [cppunit_dep]))

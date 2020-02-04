@@ -8,6 +8,7 @@ add_global_arguments('-DLINUX', language: 'c')
 
 thread_dep = dependency('threads')
 dl_dep = cpp.find_library('dl', required: false)
+cppunit_dep = dependency('cppunit')
 main_inc = include_directories('include', 'config_host')
 
 cdata = configuration_data()
