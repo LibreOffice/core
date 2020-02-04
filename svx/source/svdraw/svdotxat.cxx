@@ -351,7 +351,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         }
 
         // now convert the strings in the vector from names to StyleSheet*
-        std::set<SfxStyleSheet*> aStyleSheets;
+        o3tl::sorted_vector<SfxStyleSheet*> aStyleSheets;
         while (!aStyleNames.empty()) {
             OUString aName = aStyleNames.back();
             aStyleNames.pop_back();

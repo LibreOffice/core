@@ -50,6 +50,7 @@
 #include <tools/diagnose_ex.h>
 #include <svx/svdograf.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 using namespace ::com::sun::star;
 using namespace sdr::contact;
@@ -349,7 +350,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     // same time)
 
     // collect all views in which our old layer is visible
-    ::std::set< SdrView* > aPreviouslyVisible;
+    o3tl::sorted_vector< SdrView* > aPreviouslyVisible;
 
     {
         SdrViewIter aIter( this );
@@ -360,20 +361,13 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     SdrRectObj::NbcSetLayer( _nLayer );
 
     // collect all views in which our new layer is visible
-    ::std::set< SdrView* > aNewlyVisible;
+    o3tl::sorted_vector< SdrView* > aNewlyVisible;
 
     {
         SdrViewIter aIter( this );
         for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
         {
-            ::std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
-            if ( aPreviouslyVisible.end() != aPrevPos )
-            {   // in pView, we were visible _before_ the layer change, and are
-                // visible _after_ the layer change, too
-                // -> we're not interested in this view at all
-                aPreviouslyVisible.erase( aPrevPos );
-            }
-            else
+            if ( aPreviouslyVisible.erase(pView) == 0 )
             {
                 // in pView, we were visible _before_ the layer change, and are
                 // _not_ visible after the layer change
