@@ -179,7 +179,7 @@ public:
     */
     virtual SwFlyFrameFormat* InsertEmbObject(
         const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
-        const SfxItemSet* pFlyAttrSet) = 0;
+        SfxItemSet* pFlyAttrSet) = 0;
 
     virtual SwFlyFrameFormat* InsertOLE(
         const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect,
