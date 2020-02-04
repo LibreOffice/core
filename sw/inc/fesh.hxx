@@ -622,7 +622,7 @@ public:
     bool GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
-                const SfxItemSet* pFlyAttrSet );
+                SfxItemSet* pFlyAttrSet );
     bool    FinishOLEObj(); ///< Shutdown server.
 
     void GetTableAttr( SfxItemSet & ) const;
