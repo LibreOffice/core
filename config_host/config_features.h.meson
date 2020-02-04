@@ -1,0 +1,160 @@
+/* Configuration of high-level features that either 1) depend on the
+ * platform (but are common to several platforms so just checking for
+ * the feature is simpler than checking for several platforms), or 2)
+ * are build-time configurable.
+ */
+
+#ifndef CONFIG_FEATURES_H
+#define CONFIG_FEATURES_H
+
+/* X11
+ *
+ * Whether we are building code to run in an X11 environment.
+ */
+
+#mesondefine HAVE_FEATURE_X11
+
+/* AVMEDIA - Whether to have functionality to display and manipulate
+ * embedded AV media in documents
+ */
+
+#mesondefine HAVE_FEATURE_AVMEDIA
+
+/* DBCONNECTIVITY - Whether to have functionality to connect to
+ * databases.
+ */
+
+#mesondefine HAVE_FEATURE_DBCONNECTIVITY
+
+/* SCRIPTING - Whether we have any mechanism to execute user-provided scripts
+ *
+ * Primarily intended for the iOS App Store where the
+ * rules prohibit user-accessible scripting features.
+ * Sure, it would be nice to still be able to have internal features
+ * implemented in some scripting language. Later, if necessary.
+ */
+
+#mesondefine HAVE_FEATURE_SCRIPTING
+
+/* MULTIUSER_ENVIRONMENT - Whether running on a "normal" multi-user
+ * desktop (or server) OS
+ *
+ * Non-MULTIUSER implies that the OS makes sure that only one
+ * LibreOffice-based process at a time can be running that could
+ * access the same local documents, and that thus no locking of local
+ * documents is needed, and that no "shared documents" in Calc
+ * is meaningful.
+ *
+ * Non-MULTIUSER in practice means Android or iOS for now, so thus is
+ * work in progress.
+ */
+
+#mesondefine HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+
+/*
+ * Whether the OS has Avahi support,
+ * This library is used for zeroconf service publication on the local network
+ * for the Impress remote control, so that the remote can automatically
+ * discover the running libO instance and its IP address.
+ *
+ * This library should be present on most modern linux distributions
+ * but not on "all" of them. For now, you should add --enable-avahi for
+ * this to be taken into account. Otherwise the test of its presence
+ * will not take place.
+ */
+
+#mesondefine HAVE_FEATURE_AVAHI
+
+/* MACOSX_SANDBOX - whether LibreOffice runs in a macOS sandbox
+ *
+ * When building LibreOffice for distribution through the Mac App Store,
+ * it must be sandboxed.
+ */
+
+#mesondefine HAVE_FEATURE_MACOSX_SANDBOX
+
+/* READONLY_INSTALLSET - whether to treat the installation as read-only
+ *
+ * Prevents attempts by LibreOffice to write into its installation. That means
+ * at least that no "system-wide" extensions can be added, if the location for
+ * them is the traditional one right in the middle of the installation.
+ * Probably not completely implemented.
+ */
+
+#mesondefine HAVE_FEATURE_READONLY_INSTALLSET
+
+/*
+ * Whether FreeType has FT_Face_GetCharVariantIndex or not.
+ */
+#mesondefine HAVE_FT_FACE_GETCHARVARIANTINDEX
+
+/*
+ * Whether to use validation on files.
+ */
+#mesondefine HAVE_EXPORT_VALIDATION
+
+/*
+ * Whether to use export validation of binary formats (doc, xls, ppt)
+ *
+ * Requires installed Microsoft Office Binary File Format Validator
+ * https://www.microsoft.com/en-us/download/details.aspx?id=26794
+ */
+#mesondefine HAVE_BFFVALIDATOR
+
+/*
+ * Whether we support breakpad as crash reporting lib.
+ */
+#mesondefine HAVE_FEATURE_BREAKPAD
+
+/*
+ *  Whether OpenGL is enabled
+ */
+#mesondefine HAVE_FEATURE_OPENGL
+
+/*
+ * Whether Skia is enabled
+ */
+#mesondefine HAVE_FEATURE_SKIA
+
+/*
+ * Whether User Interface is available
+ */
+#mesondefine HAVE_FEATURE_UI
+
+/*
+ * Whether PDF import is available
+ */
+#mesondefine HAVE_FEATURE_PDFIMPORT
+
+/*
+ * Whether NSS is available
+ */
+#mesondefine HAVE_FEATURE_NSS
+
+/*
+ * Whether pdfium is available
+ */
+#mesondefine HAVE_FEATURE_PDFIUM
+
+/*
+ * Whether poppler is available
+ */
+#mesondefine HAVE_FEATURE_POPPLER
+
+/*
+ * Whether extra fonts are available
+ */
+#mesondefine HAVE_MORE_FONTS
+
+/*
+ * Whether the automatic online updater is available
+ */
+#mesondefine HAVE_FEATURE_UPDATE_MAR
+
+/*
+ * Whether we are avoiding the tweaks needed for the Android app from the
+ * android/ subdir.
+ */
+#mesondefine HAVE_FEATURE_ANDROID_LOK
+
+#endif

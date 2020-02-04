@@ -1,0 +1,19 @@
+/*
+
+   Alignments and sizes of types.
+
+*/
+
+#ifndef CONFIG_TYPESIZES_H
+#define CONFIG_TYPESIZES_H
+
+#mesondefine SAL_TYPES_ALIGNMENT2
+#mesondefine SAL_TYPES_ALIGNMENT4
+#mesondefine SAL_TYPES_ALIGNMENT8
+#mesondefine SAL_TYPES_SIZEOFSHORT
+#mesondefine SAL_TYPES_SIZEOFINT
+#mesondefine SAL_TYPES_SIZEOFLONG
+#mesondefine SAL_TYPES_SIZEOFLONGLONG
+#mesondefine SAL_TYPES_SIZEOFPOINTER
+
+#endif

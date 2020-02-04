@@ -1,0 +1,57 @@
+/* Configuration of restriction on supported locales, by the
+ * --with-locales option.
+ *
+ * (Note that this is totally unrelated to what UI language(s) were
+ * configured with the --with-lang option.)
+ *
+ * Normally, especially for desktop OSes, LibreOffice is built to
+ * support all the locales and character encodings that it has code
+ * (data) for in the source code. By using the --with-locales
+ * configure switch, this can be restricted.
+ *
+ * This file defines feature test macros for those languages for which
+ * at least one locale is to be supported. In some cases, a feature
+ * test macro for a script is provided in addition or instead.
+ *
+ * Only languages for which there exists separate code and/or data in
+ * the source code need to be mentioned here.
+ */
+
+#ifndef CONFIG_LOCALES_H
+#define CONFIG_LOCALES_H
+
+/* In the normal case WITH_LOCALE_ALL is one and this
+ * overrides the others which are zero.
+ */
+#mesondefine WITH_LOCALE_ALL
+
+/* When --with-locales was used, WITH_LOCALE_ALL is zero and some of
+ * these are one.
+ */
+#mesondefine WITH_LOCALE_ca
+#mesondefine WITH_LOCALE_cu
+#mesondefine WITH_LOCALE_dz
+#mesondefine WITH_LOCALE_el
+#mesondefine WITH_LOCALE_he
+#mesondefine WITH_LOCALE_hi
+#mesondefine WITH_LOCALE_hr
+#mesondefine WITH_LOCALE_hu
+#mesondefine WITH_LOCALE_is
+#mesondefine WITH_LOCALE_ja
+#mesondefine WITH_LOCALE_ko
+#mesondefine WITH_LOCALE_ku
+#mesondefine WITH_LOCALE_ln
+#mesondefine WITH_LOCALE_my
+#mesondefine WITH_LOCALE_ne
+#mesondefine WITH_LOCALE_ro
+#mesondefine WITH_LOCALE_ru
+#mesondefine WITH_LOCALE_sid
+#mesondefine WITH_LOCALE_th
+#mesondefine WITH_LOCALE_tr
+#mesondefine WITH_LOCALE_uk
+#mesondefine WITH_LOCALE_zh
+
+#mesondefine WITH_LOCALE_FOR_SCRIPT_Cyrl
+#mesondefine WITH_LOCALE_FOR_SCRIPT_Deva
+
+#endif

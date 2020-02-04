@@ -1,0 +1,16 @@
+/*
+ * General configuration settings for various options.
+ */
+
+#ifndef CONFIG_OPTIONS_H
+#define CONFIG_OPTIONS_H
+
+/*
+ * Whether we want to link as many object files as possible into one big object.
+ * True in case of --enable-lto or --enable-mergelibs.
+ */
+#mesondefine STATIC_LINKING
+
+#mesondefine ENABLE_RUNTIME_OPTIMIZATIONS
+
+#endif
