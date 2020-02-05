@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
     while (!bValidColorName)
     {
         aName = aNewName + " " + OUString::number( j++ );
-        bValidColorName = (FindInCustomColors(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidColorName = (FindInCustomColors(aName) == -1);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
     {
         pDlg->GetName( aName );
 
-        bValidColorName = (FindInCustomColors(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidColorName = (FindInCustomColors(aName) == -1);
         if (bValidColorName)
         {
             nError = 0;
@@ -610,7 +610,7 @@ sal_Int32 SvxColorTabPage::FindInCustomColors(OUString const & aColorName)
     css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     long nCount = aCustomColorNameList.getLength();
     bool bValidColorName = true;
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount && bValidColorName;i++)
     {
@@ -625,9 +625,7 @@ sal_Int32 SvxColorTabPage::FindInCustomColors(OUString const & aColorName)
 
 sal_Int32 SvxColorTabPage::FindInPalette( const Color& rColor )
 {
-    sal_Int32 nPos = pColorList->GetIndexOfColor( rColor );
-
-    return ( nPos == -1) ? LISTBOX_ENTRY_NOTFOUND : nPos;
+    return pColorList->GetIndexOfColor(rColor);
 }
 
 // A RGB value is converted to a CMYK value - not in an ideal way as

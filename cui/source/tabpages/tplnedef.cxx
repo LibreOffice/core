@@ -171,7 +171,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
             DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
             *pPageType = PageType::Area; // 2
-            *pPosDashLb = LISTBOX_ENTRY_NOTFOUND;
+            *pPosDashLb = -1;
         }
     }
 }

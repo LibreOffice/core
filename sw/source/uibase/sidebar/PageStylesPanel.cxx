@@ -149,7 +149,7 @@ void PageStylesPanel::dispose()
 
 void PageStylesPanel::Initialize()
 {
-    FillTypeLB::Fill(*mxBgFillType);
+    SvxFillTypeBox::Fill(*mxBgFillType);
 
     aCustomEntry = mxCustomEntry->get_label();
     mpBindings->Invalidate(SID_ATTR_PAGE_COLUMN);

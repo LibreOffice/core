@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
@@ -209,18 +208,6 @@ public:
     virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
-};
-
-/************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
-{
-public:
-    FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
-
-    void Fill();
-
-    static void Fill(weld::ComboBox& rListBox);
 };
 
 /************************************************************************/

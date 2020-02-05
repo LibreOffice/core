@@ -891,37 +891,6 @@ void SvxPixelCtl::Reset()
     Invalidate();
 }
 
-void FillTypeLB::Fill()
-{
-    SetUpdateMode( false );
-
-    InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
-    InsertEntry( SvxResId(RID_SVXSTR_COLOR) );
-    InsertEntry( SvxResId(RID_SVXSTR_GRADIENT) );
-    InsertEntry( SvxResId(RID_SVXSTR_HATCH) );
-    InsertEntry( SvxResId(RID_SVXSTR_BITMAP) );
-    InsertEntry( SvxResId(RID_SVXSTR_PATTERN) );
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
-void FillTypeLB::Fill(weld::ComboBox& rListBox)
-{
-    rListBox.freeze();
-
-    rListBox.append_text(SvxResId(RID_SVXSTR_INVISIBLE));
-    rListBox.append_text(SvxResId(RID_SVXSTR_COLOR));
-    rListBox.append_text(SvxResId(RID_SVXSTR_GRADIENT));
-    rListBox.append_text(SvxResId(RID_SVXSTR_HATCH));
-    rListBox.append_text(SvxResId(RID_SVXSTR_BITMAP));
-    rListBox.append_text(SvxResId(RID_SVXSTR_PATTERN));
-
-    rListBox.thaw();
-
-    rListBox.set_active(1); // solid color
-}
-
 SvxLineLB::SvxLineLB(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
     , mbAddStandardFields(true)
