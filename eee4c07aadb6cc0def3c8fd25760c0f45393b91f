@@ -16,6 +16,24 @@
       "revId": "eee4c07aadb6cc0def3c8fd25760c0f45393b91f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "409f9e10_c1df8612",
+        "filename": "ridljar/Jar_ridl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-02-05T15:23:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50332c92_e0c42b23",
+      "revId": "eee4c07aadb6cc0def3c8fd25760c0f45393b91f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
