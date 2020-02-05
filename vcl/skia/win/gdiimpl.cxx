@@ -12,6 +12,7 @@
 #include <win/saldata.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
+#include <skia/zone.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
@@ -27,6 +28,7 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 
 void WinSkiaSalGraphicsImpl::createWindowContext()
 {
+    SkiaZone zone;
     // When created, Init() gets called with size (0,0), which is invalid size
     // for Skia. Creating the actual surface is delayed, so the size should be always
     // valid here, but better check.
@@ -49,6 +51,7 @@ void WinSkiaSalGraphicsImpl::createWindowContext()
 
 void WinSkiaSalGraphicsImpl::DeInit()
 {
+    SkiaZone zone;
     SkiaSalGraphicsImpl::DeInit();
     mWindowContext.reset();
 }
@@ -57,6 +60,7 @@ void WinSkiaSalGraphicsImpl::freeResources() {}
 
 void WinSkiaSalGraphicsImpl::performFlush()
 {
+    SkiaZone zone;
     mPendingPixelsToFlush = 0;
     if (mWindowContext)
         mWindowContext->swapBuffers();
@@ -158,6 +162,7 @@ std::unique_ptr<CompatibleDC::Texture> SkiaCompatibleDC::getAsMaskTexture() cons
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
 {
+    SkiaZone zone;
     // mpData is in the BGRA format, with A unused (and set to 0), and RGB are grey,
     // so convert it to Skia format, then to 8bit and finally use as alpha mask
     SkBitmap tmpBitmap;
@@ -200,6 +205,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
 {
+    SkiaZone zone;
     SkBitmap tmpBitmap;
     if (!tmpBitmap.installPixels(SkImageInfo::Make(maRects.mnSrcWidth, maRects.mnSrcHeight,
                                                    kBGRA_8888_SkColorType, kUnpremul_SkAlphaType),
@@ -225,6 +231,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) const
 {
+    SkiaZone zone;
     assert(maRects.mnSrcWidth == white.maRects.mnSrcWidth
            || maRects.mnSrcHeight == white.maRects.mnSrcHeight);
     SkBitmap tmpBitmap;

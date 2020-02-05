@@ -88,6 +88,7 @@
 
 #include <opencl/OpenCLZone.hxx>
 #include <opengl/zone.hxx>
+#include <skia/zone.hxx>
 #include <watchdog.hxx>
 
 #include <basegfx/utils/systemdependentdata.hxx>
@@ -122,6 +123,10 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
 #if HAVE_FEATURE_OPENGL
         if (OpenGLZone::isInZone())
             OpenGLZone::hardDisable();
+#endif
+#if HAVE_FEATURE_SKIA
+        if (SkiaZone::isInZone())
+            SkiaZone::hardDisable();
 #endif
 #if HAVE_FEATURE_OPENCL
         if (OpenCLZone::isInZone())
