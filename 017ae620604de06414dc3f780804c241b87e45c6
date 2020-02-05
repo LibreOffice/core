@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f7acfc6_04db3cd3",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1001483
+      },
+      "writtenOn": "2020-02-05T20:02:59Z",
+      "side": 1,
+      "message": "Isn\u0027t nValue uninitialized ?",
+      "revId": "017ae620604de06414dc3f780804c241b87e45c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
