@@ -13,7 +13,7 @@ odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.lib.uno.helper \
 	com.sun.star.lib.unoloader \
 	com.sun.star.uno \
-	$(SRCDIR)/jurt/com/sun/star/lib/util/UrlToFileMapper.java
+	$(SRCDIR)/ridljar/com/sun/star/lib/util/UrlToFileMapper.java
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs/java/ref,\
 	javadoc_log.txt \
