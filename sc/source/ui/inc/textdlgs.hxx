@@ -31,7 +31,7 @@ private:
 
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 public:
-    ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell);
+    ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText);
 };
 
 class ScParagraphDlg : public SfxTabDialogController

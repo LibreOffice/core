@@ -532,7 +532,7 @@ public:
                                                              const SfxItemSet* pArgSet) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScCharDlg(weld::Window* pParent,
-        const SfxItemSet* pAttr, const SfxObjectShell* pDocShell) = 0;
+        const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScParagraphDlg(weld::Window* pParent,
         const SfxItemSet* pAttr) = 0;
