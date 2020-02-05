@@ -3051,7 +3051,7 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
             if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
             {
-                if (static_cast<SwContentType*>(pEntry->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+                if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
                     DeleteOutlineSelections();
                 else
                     EditEntry(pEntry, EditEntryMode::DELETE);
