@@ -1366,13 +1366,13 @@ SvtLineListBox::~SvtLineListBox()
 
 sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
 {
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
     --nListPos;
 
     sal_Int32 n = 0;
     size_t i = 0;
     size_t nCount = m_vLineList.size();
-    while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
+    while ( nPos == -1 && i < nCount )
     {
         if ( nListPos == n )
             nPos = static_cast<sal_Int32>(i);
@@ -1448,7 +1448,7 @@ void SvtLineListBox::UpdateEntries()
 Color SvtLineListBox::GetColorLine1( sal_Int32 nPos )
 {
     sal_Int32 nStyle = GetStylePos( nPos );
-    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+    if (nStyle == -1)
         return GetPaintColor( );
     auto& pData = m_vLineList[ nStyle ];
     return pData->GetColorLine1( GetColor( ) );
@@ -1457,7 +1457,7 @@ Color SvtLineListBox::GetColorLine1( sal_Int32 nPos )
 Color SvtLineListBox::GetColorLine2( sal_Int32 nPos )
 {
     sal_Int32 nStyle = GetStylePos(nPos);
-    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+    if (nStyle == -1)
         return GetPaintColor( );
     auto& pData = m_vLineList[ nStyle ];
     return pData->GetColorLine2( GetColor( ) );
@@ -1469,7 +1469,7 @@ Color SvtLineListBox::GetColorDist( sal_Int32 nPos )
     Color rResult = rSettings.GetFieldColor();
 
     sal_Int32 nStyle = GetStylePos( nPos );
-    if (nStyle == LISTBOX_ENTRY_NOTFOUND)
+    if (nStyle == -1)
         return rResult;
     auto& pData = m_vLineList[ nStyle ];
     return pData->GetColorDist( GetColor( ), rResult );

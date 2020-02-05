@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:59:03 using:
+ Generated on 2020-02-05 20:48:33 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -241,6 +241,7 @@
 #include <TypeSerializer.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <brdwin.hxx>
+#include <configsettings.hxx>
 #include <controldata.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
@@ -271,7 +272,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
