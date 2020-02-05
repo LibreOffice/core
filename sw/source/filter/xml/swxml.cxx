@@ -1001,14 +1001,17 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
         }
         catch( xml::sax::SAXParseException&  )
         {
+            TOOLS_WARN_EXCEPTION("sw", "");
             // re throw ?
         }
         catch( xml::sax::SAXException&  )
         {
+            TOOLS_WARN_EXCEPTION("sw", "");
             // re throw ?
         }
         catch( io::IOException& )
         {
+            TOOLS_WARN_EXCEPTION("sw", "");
             // re throw ?
         }
         catch( packages::WrongPasswordException& )
