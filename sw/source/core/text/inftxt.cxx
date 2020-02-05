@@ -1297,12 +1297,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             }
             break;
         case POR_BOOKMARK:
-            if (!GetOpt().IsPagePreview()
-                 && !GetOpt().IsReadonly()
-                 && GetOpt().IsViewMetaChars())
-            {
-                bDraw = true;
-            }
+            // no shading
             break;
         case POR_INPUTFLD:
             // input field shading also in read-only mode
