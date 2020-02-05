@@ -1320,7 +1320,17 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     {
         rInfo.m_nBreakType = m_nBreakType;
         if ( FloatingTableConversion( rDM_Impl, rInfo ) )
-            xBodyText->convertToTextFrame( rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties );
+        {
+            try
+            {
+                xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd,
+                                              rInfo.m_aFrameProperties);
+            }
+            catch (const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("writerfilter", "convertToTextFrame() failed");
+            }
+        }
     }
     rPendingFloatingTables.clear();
 
