@@ -392,7 +392,7 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 endef
 
 define gb_CppunitTest_use_jar
-$(call gb_CppunitTest__use_java_ure,$(1))
+$(call gb_CppunitTest_use_java_ure,$(1))
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Jar_get_target,$(2))
 
 endef
