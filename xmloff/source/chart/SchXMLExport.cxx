@@ -3188,10 +3188,12 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
     bool bVaryColorsByPoint = false;
     Sequence< sal_Int32 > aDataPointSeq;
+    Sequence<sal_Int32> deletedLegendEntriesSeq;
     if( xSeriesProperties.is())
     {
         xSeriesProperties->getPropertyValue("AttributedDataPoints") >>= aDataPointSeq;
         xSeriesProperties->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
+        xSeriesProperties->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
     }
 
     sal_Int32 nSize = aDataPointSeq.getLength();
@@ -3362,7 +3364,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // initialize so that it doesn't matter if
     // the element is counted in the first iteration
     aLastPoint.mnRepeat = 0;
-
+    sal_Int32 nIndex = 0;
     for( const auto& rPoint : aDataPointVector )
     {
         aPoint = rPoint;
@@ -3379,6 +3381,15 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                     OUString::number( ( aLastPoint.mnRepeat ) ));
 
+            for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+            {
+                if (nIndex == deletedLegendEntry)
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
+                    break;
+                }
+            }
+            nIndex++;
             SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
             exportCustomLabel(aLastPoint.mCustomLabelText);
         }
@@ -3393,6 +3404,15 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         if( aLastPoint.mnRepeat > 1 )
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                 OUString::number( ( aLastPoint.mnRepeat ) ));
+
+        for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+        {
+            if (nIndex == deletedLegendEntry)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
+                break;
+            }
+        }
 
         SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
         exportCustomLabel(aLastPoint.mCustomLabelText);
