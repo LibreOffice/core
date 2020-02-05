@@ -20,6 +20,7 @@
 #pragma once
 
 #include <Qt5FilePicker.hxx>
+#include <memory>
 
 class QGridLayout;
 
@@ -29,7 +30,7 @@ class KF5FilePicker final : public Qt5FilePicker
 
 private:
     //layout for extra custom controls
-    QGridLayout* _layout;
+    std::unique_ptr<QGridLayout> _layout;
 
 public:
     explicit KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,

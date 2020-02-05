@@ -57,7 +57,7 @@ KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> co
     _layout->setColumnStretch(2, 1);
 
     // set layout so custom widgets show up in our native file dialog
-    setCustomControlWidgetLayout(_layout);
+    setCustomControlWidgetLayout(_layout.get());
 
     m_pFileDialog->setSupportedSchemes({
         QStringLiteral("file"), QStringLiteral("ftp"), QStringLiteral("http"),
