@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "017af27d_0e984e08",
+        "filename": "ridljar/Module_ridljar.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-05T15:44:45Z",
+      "side": 1,
+      "message": "is this an accidental addition here?",
+      "revId": "a782a3f17629b95c71ef8225ef9e1e259ac69bbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
