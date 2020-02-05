@@ -3710,7 +3710,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
                 if( bNoTabCycling )
                     return DockingWindow::EventNotify( rNEvt );
                 else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() , bNoTabCycling ) )
-                    return false;
+                    return true;
                 else
                     return DockingWindow::EventNotify( rNEvt );
             }
