@@ -20,6 +20,7 @@
 #include <rtl/math.hxx>
 
 #include <opencl/openclwrapper.hxx>
+#include <opencl/OpenCLZone.hxx>
 
 #include "op_financial.hxx"
 #include "op_database.hxx"
@@ -259,6 +260,7 @@ OUString DebugPeekDoubles(const double* data, int size)
 /// Map the buffer used by an argument and do necessary argument setting
 size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 {
+    OpenCLZone zone;
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
     double* pHostBuffer = nullptr;
     size_t szHostBuffer = 0;
@@ -382,6 +384,7 @@ public:
     /// Pass the 32-bit hash of the string to the kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
+        OpenCLZone zone;
         FormulaToken* ref = mFormulaTree->GetFormulaToken();
         cl_uint hashCode = 0;
         if (ref->GetType() != formula::svString)
@@ -441,6 +444,7 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
+        OpenCLZone zone;
         double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
@@ -481,6 +485,7 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
+        OpenCLZone zone;
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp << " (PI)");
@@ -846,6 +851,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) override
     {
+        OpenCLZone zone;
         cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed << "(RANDOM)");
@@ -882,6 +888,7 @@ public:
 /// Marshal a string vector reference
 size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_program )
 {
+    OpenCLZone zone;
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
 
     openclwrapper::KernelEnv kEnv;
@@ -2172,6 +2179,7 @@ size_t ParallelReductionVectorRef<Base>::Marshal( cl_kernel k, int argno, int w,
 {
     assert(Base::mpClmem == nullptr);
 
+    OpenCLZone zone;
     openclwrapper::KernelEnv kEnv;
     openclwrapper::setKernelEnv(&kEnv);
     cl_int err;
@@ -2355,6 +2363,7 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) override
     {
+        OpenCLZone zone;
         unsigned i = 0;
         for (const auto& rxSubArgument : mvSubArguments)
         {
@@ -3957,6 +3966,7 @@ void DynamicKernel::CreateKernel()
     std::string kname = "DynamicKernel" + mKernelSignature;
     // Compile kernel here!!!
 
+    OpenCLZone zone;
     openclwrapper::KernelEnv kEnv;
     openclwrapper::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
@@ -4071,6 +4081,7 @@ void DynamicKernel::CreateKernel()
 
 void DynamicKernel::Launch( size_t nr )
 {
+    OpenCLZone zone;
     openclwrapper::KernelEnv kEnv;
     openclwrapper::setKernelEnv(&kEnv);
     cl_int err;
@@ -4249,6 +4260,8 @@ public:
         if (!isValid())
             return;
 
+        OpenCLZone zone;
+
         // Map results back
         mpCLResBuf = mpKernel->GetResultBuffer();
 
@@ -4275,6 +4288,8 @@ public:
     {
         if (!mpResBuf)
             return false;
+
+        OpenCLZone zone;
 
         rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
 
@@ -4377,6 +4392,7 @@ void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCo
 
 bool waitForResults()
 {
+    OpenCLZone zone;
     openclwrapper::KernelEnv kEnv;
     openclwrapper::setKernelEnv(&kEnv);
 
