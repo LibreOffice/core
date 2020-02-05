@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:25 using:
+ Generated on 2020-02-05 19:54:23 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,7 +108,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderpage.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>
@@ -122,7 +121,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -151,7 +149,6 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/split.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>

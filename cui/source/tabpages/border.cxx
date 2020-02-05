@@ -29,6 +29,7 @@
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/flagsdef.hxx>
