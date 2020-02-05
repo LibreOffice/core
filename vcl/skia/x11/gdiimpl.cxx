@@ -22,6 +22,7 @@
 #include <tools/sk_app/WindowContext.h>
 
 #include <vcl/skia/SkiaHelper.hxx>
+#include <skia/zone.hxx>
 
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
@@ -40,6 +41,7 @@ void X11SkiaSalGraphicsImpl::Init()
 
 void X11SkiaSalGraphicsImpl::createWindowContext()
 {
+    SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
     sk_app::window_context_factory::XlibWindowInfo winInfo;
@@ -99,6 +101,7 @@ bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
 
 void X11SkiaSalGraphicsImpl::DeInit()
 {
+    SkiaZone zone;
     SkiaSalGraphicsImpl::DeInit();
     mWindowContext.reset();
 }
@@ -107,6 +110,7 @@ void X11SkiaSalGraphicsImpl::freeResources() {}
 
 void X11SkiaSalGraphicsImpl::performFlush()
 {
+    SkiaZone zone;
     mPendingPixelsToFlush = 0;
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
     mWindowContext->swapBuffers();
