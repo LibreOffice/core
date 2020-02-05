@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50332c92_e0c42b23",
+        "filename": "ridljar/Jar_ridl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-05T12:37:34Z",
+      "side": 1,
+      "message": "I\u0027d re-sort the whole combined block lexicographically (given that each of the two original blocks was apparently sorted on its own)",
+      "revId": "eee4c07aadb6cc0def3c8fd25760c0f45393b91f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
