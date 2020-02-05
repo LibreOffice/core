@@ -12,6 +12,8 @@
 #include <vcl/svapp.hxx>
 #include <desktop/crashreport.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <watchdog.hxx>
+#include <skia/zone.hxx>
 
 #if !HAVE_FEATURE_SKIA
 
@@ -94,6 +96,9 @@ bool isVCLSkiaEnabled()
         bRet = bEnable;
     }
 
+    if (bRet)
+        WatchdogThread::start();
+
     CrashReporter::addKeyValue("UseSkia", OUString::boolean(bRet), CrashReporter::Write);
 
     return bRet;
@@ -135,6 +140,7 @@ static sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
 
 GrContext* getSharedGrContext()
 {
+    SkiaZone zone;
     assert(renderMethodToUse() == RenderVulkan);
     if (sharedGrContext)
         return sharedGrContext->getGrContext();
@@ -157,6 +163,7 @@ GrContext* getSharedGrContext()
 
 sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
 {
+    SkiaZone zone;
     assert(type == kN32_SkColorType || type == kAlpha_8_SkColorType);
     sk_sp<SkSurface> surface;
     switch (SkiaHelper::renderMethodToUse())
