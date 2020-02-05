@@ -22,7 +22,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxTableToolBoxControl final : public svt::PopupWindowController
+class SvxTableToolBoxControl final : public svt::PopupWindowController
 {
 public:
     SvxTableToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
@@ -42,7 +42,7 @@ public:
     void CloseAndShowTableDialog();
 };
 
-class SVX_DLLPUBLIC SvxColumnsToolBoxControl final : public svt::PopupWindowController
+class SvxColumnsToolBoxControl final : public svt::PopupWindowController
 {
 public:
     SvxColumnsToolBoxControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);

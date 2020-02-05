@@ -55,7 +55,7 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 };
 
-class SVX_DLLPUBLIC SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
+class SvxCTLTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
     SvxCTLTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
@@ -63,7 +63,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
 };
 
-class SVX_DLLPUBLIC SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
+class SvxVertTextTbxCtrl final : public SvxVertCTLTextTbxCtrl
 {
 public:
     SvxVertTextTbxCtrl(const css::uno::Reference<css::uno::XComponentContext>& rContext);

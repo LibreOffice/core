@@ -23,7 +23,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC CharmapPopup final : public svt::PopupWindowController
+class CharmapPopup final : public svt::PopupWindowController
 {
 public:
     CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);

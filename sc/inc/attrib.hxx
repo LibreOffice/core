@@ -333,7 +333,7 @@ public:
                                  const IntlWrapper& rIntl) const override;
 };
 
-class SC_DLLPUBLIC ScHyphenateCell final : public SfxBoolItem
+class ScHyphenateCell final : public SfxBoolItem
 {
 public:
     ScHyphenateCell(bool bHyphenate= false);

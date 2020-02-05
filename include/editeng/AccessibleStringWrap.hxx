@@ -37,10 +37,10 @@ class AccessibleStringWrap
 {
 public:
 
-    EDITENG_DLLPUBLIC AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText );
+    AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText );
 
-    EDITENG_DLLPUBLIC void GetCharacterBounds( sal_Int32 nIndex, tools::Rectangle& rRect );
-    EDITENG_DLLPUBLIC sal_Int32 GetIndexAtPoint( const Point& rPoint );
+    void GetCharacterBounds( sal_Int32 nIndex, tools::Rectangle& rRect );
+    sal_Int32 GetIndexAtPoint( const Point& rPoint );
 
 private:
 
