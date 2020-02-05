@@ -51,7 +51,7 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nGridAfter(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
-    m_bIsUnfloatTable(false),
+    m_bIsInShape(false),
     m_aTmpPosition(),
     m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
@@ -339,8 +339,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                    // Ignore <w:tblpPr> in shape text or in table-only header, those tables should be always non-floating ones.
-                    if (!m_bIsUnfloatTable && pProperties.get())
+                    // Ignore <w:tblpPr> in shape text, those tables should be always non-floating ones.
+                    if (!m_bIsInShape && pProperties.get())
                     {
                         TablePositionHandlerPtr pHandler = m_aTmpPosition.back();
                         if ( !pHandler )
@@ -430,9 +430,9 @@ TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
         return nullptr;
 }
 
-void DomainMapperTableManager::setIsUnfloatTable(bool bIsUnfloatTable)
+void DomainMapperTableManager::setIsInShape(bool bIsInShape)
 {
-    m_bIsUnfloatTable = bIsUnfloatTable;
+    m_bIsInShape = bIsInShape;
 }
 
 void DomainMapperTableManager::startLevel( )
