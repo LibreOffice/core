@@ -382,7 +382,7 @@ private:
     FontStyleBox& operator=(const FontStyleBox&) = delete;
 };
 
-class SVT_DLLPUBLIC SvtFontSizeBox
+class SVT_DLLPUBLIC FontSizeBox
 {
     FontMetric      aFontMetric;
     const FontList* pFontList;
@@ -419,7 +419,7 @@ class SVT_DLLPUBLIC SvtFontSizeBox
     DECL_LINK(ModifyHdl, weld::ComboBox&, void);
     DECL_LINK(ReformatHdl, weld::Widget&, void);
 public:
-    SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p);
+    FontSizeBox(std::unique_ptr<weld::ComboBox> p);
 
     void Fill(const FontMetric* pFontMetric, const FontList* pList);
 
@@ -456,8 +456,8 @@ public:
     boost::property_tree::ptree get_property_tree() const;
 
 private:
-    SvtFontSizeBox(const SvtFontSizeBox&) = delete;
-    SvtFontSizeBox& operator=(const SvtFontSizeBox&) = delete;
+    FontSizeBox(const FontSizeBox&) = delete;
+    FontSizeBox& operator=(const FontSizeBox&) = delete;
 };
 
 

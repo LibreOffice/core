@@ -856,7 +856,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
     m_xComboBox->thaw();
 }
 
-SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
+FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
     : pFontList(nullptr)
     , nSavedValue(0)
     , nMin(20)
@@ -877,16 +877,16 @@ SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
 {
     m_xComboBox->set_entry_width_chars(std::ceil(m_xComboBox->get_pixel_size(format_number(105)).Width() /
                                                  m_xComboBox->get_approximate_digit_width()));
-    m_xComboBox->connect_focus_out(LINK(this, SvtFontSizeBox, ReformatHdl));
-    m_xComboBox->connect_changed(LINK(this, SvtFontSizeBox, ModifyHdl));
+    m_xComboBox->connect_focus_out(LINK(this, FontSizeBox, ReformatHdl));
+    m_xComboBox->connect_changed(LINK(this, FontSizeBox, ModifyHdl));
 }
 
-boost::property_tree::ptree SvtFontSizeBox::get_property_tree() const
+boost::property_tree::ptree FontSizeBox::get_property_tree() const
 {
     return m_xComboBox->get_property_tree();
 }
 
-IMPL_LINK(SvtFontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
+IMPL_LINK(FontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
 {
     FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
     if (!bRelativeMode || !aFontSizeNames.IsEmpty())
@@ -900,7 +900,7 @@ IMPL_LINK(SvtFontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
     m_aFocusOutHdl.Call(rWidget);
 }
 
-IMPL_LINK(SvtFontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
+IMPL_LINK(FontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
 {
     if (bRelativeMode)
     {
@@ -951,7 +951,7 @@ IMPL_LINK(SvtFontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
     m_aChangeHdl.Call(rBox);
 }
 
-void SvtFontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
+void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 {
     // remember for relative mode
     pFontList = pList;
@@ -1040,7 +1040,7 @@ void SvtFontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList 
     m_xComboBox->thaw();
 }
 
-void SvtFontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax, sal_uInt16 nStep )
+void FontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax, sal_uInt16 nStep )
 {
     bRelativeMode = true;
     nRelMin       = nNewMin;
@@ -1049,7 +1049,7 @@ void SvtFontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax,
     SetUnit(FieldUnit::POINT);
 }
 
-void SvtFontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short nStep )
+void FontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short nStep )
 {
     bRelativeMode = true;
     nPtRelMin     = nNewMin;
@@ -1058,13 +1058,13 @@ void SvtFontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short n
     SetUnit(FieldUnit::POINT);
 }
 
-void SvtFontSizeBox::InsertValue(int i)
+void FontSizeBox::InsertValue(int i)
 {
     OUString sNumber(OUString::number(i));
     m_xComboBox->append(sNumber, format_number(i));
 }
 
-void SvtFontSizeBox::SetRelative( bool bNewRelative )
+void FontSizeBox::SetRelative( bool bNewRelative )
 {
     if ( !bRelativeMode )
         return;
@@ -1124,7 +1124,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
     m_xComboBox->select_entry_region(nSelectionStart, nSelectionEnd);
 }
 
-OUString SvtFontSizeBox::format_number(int nValue) const
+OUString FontSizeBox::format_number(int nValue) const
 {
     OUString sRet;
 
@@ -1152,7 +1152,7 @@ OUString SvtFontSizeBox::format_number(int nValue) const
     return sRet;
 }
 
-void SvtFontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
+void FontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
 {
     auto nTempValue = MetricField::ConvertValue(nNewValue, 0, GetDecimalDigits(), eInUnit, GetUnit());
     if (nTempValue < nMin)
@@ -1179,12 +1179,12 @@ void SvtFontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
         m_xComboBox->set_entry_text(aResult);
 }
 
-void SvtFontSizeBox::set_value(int nNewValue)
+void FontSizeBox::set_value(int nNewValue)
 {
     SetValue(nNewValue, eUnit);
 }
 
-int SvtFontSizeBox::get_value() const
+int FontSizeBox::get_value() const
 {
     OUString aStr = m_xComboBox->get_active_text();
     if (!bRelative)

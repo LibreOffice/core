@@ -72,7 +72,7 @@ private:
     std::unique_ptr<weld::Label> m_xWestFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xWestFontStyleLB;
     std::unique_ptr<weld::Label> m_xWestFontSizeFT;
-    std::unique_ptr<SvtFontSizeBox> m_xWestFontSizeLB;
+    std::unique_ptr<FontSizeBox> m_xWestFontSizeLB;
     std::unique_ptr<weld::Label> m_xWestFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xWestFontLanguageLB;
     std::unique_ptr<weld::Label> m_xWestFontTypeFT;
@@ -84,7 +84,7 @@ private:
     std::unique_ptr<weld::Label> m_xEastFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xEastFontStyleLB;
     std::unique_ptr<weld::Label> m_xEastFontSizeFT;
-    std::unique_ptr<SvtFontSizeBox> m_xEastFontSizeLB;
+    std::unique_ptr<FontSizeBox> m_xEastFontSizeLB;
     std::unique_ptr<weld::Label> m_xEastFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xEastFontLanguageLB;
     std::unique_ptr<weld::Label> m_xEastFontTypeFT;
@@ -96,7 +96,7 @@ private:
     std::unique_ptr<weld::Label> m_xCTLFontStyleFT;
     std::unique_ptr<FontStyleBox> m_xCTLFontStyleLB;
     std::unique_ptr<weld::Label> m_xCTLFontSizeFT;
-    std::unique_ptr<SvtFontSizeBox> m_xCTLFontSizeLB;
+    std::unique_ptr<FontSizeBox> m_xCTLFontSizeLB;
     std::unique_ptr<weld::Label> m_xCTLFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xCTLFontLanguageLB;
     std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
