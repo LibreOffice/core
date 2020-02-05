@@ -73,10 +73,6 @@ if [ ! -d "${INSTDIR}" -o ! -d "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not present - script expects calling after full build"
     exit 1
 fi
-which symstore.exe > /dev/null 2>&1 || {
-    echo "symstore.exe is expected in the PATH"
-    exit 1
-}
 
 # defaults
 MAX_KEEP=5
@@ -84,6 +80,7 @@ SYM_PATH=${WORKDIR}/symstore
 COMMENT=""
 COMCMD=""
 WITHEXEC=1
+DRYRUN=""
 
 USAGE="Usage: $0 [-h|-k <keep_num_versions>|-p <symbol_store_path>]
        -h:          this cruft
@@ -92,6 +89,8 @@ USAGE="Usage: $0 [-h|-k <keep_num_versions>|-p <symbol_store_path>]
        -k <int>:    keep this number of old symbol versions around
                     (default: ${MAX_KEEP}. Set to 0 for unlimited)
        -p <path>:   specify full path to symbol store tree
+       -d <file>:   made dry run, for test only, copy store data
+                    to file
 If no path is specified, defaults to ${SYM_PATH}.
 "
 
@@ -101,6 +100,7 @@ do
    case "$1" in
     -k|--keep) MAX_KEEP="$2"; shift 2;;
     -p|--path) SYM_PATH="$2"; shift 2;;
+    -d|--dryrun) DRYRUN="$2"; shift 2;;
     -c|--comment) COMCMD="/c"; COMMENT="$2"; shift 2;;
     -n|--noexec) WITHEXEC=0; shift ;;
     -h|--help) echo "${USAGE}"; exit 0;;
@@ -112,6 +112,14 @@ done
 if [ $# -gt 0 ]; then
     echo "${USAGE}" >&2
     exit 1
+fi
+
+# check is symstore.exe set in PATH
+if [ -z ${DRYRUN} ]; then
+    which symstore.exe > /dev/null 2>&1 || {
+        echo "symstore.exe is expected in the PATH"
+        exit 1
+    }
 fi
 
 # populate symbol store from here
@@ -126,8 +134,13 @@ add_pdb dll .pdb "${TMPFILE}"
 add_pdb exe .pdb "${TMPFILE}"
 add_pdb bin .bin.pdb "${TMPFILE}"
 
-# stick all of it into symbol store
-symstore.exe add /compress /f "@$(cygpath -w "${TMPFILE}")" /s "$(cygpath -w "${SYM_PATH}")" /t "${PRODUCTNAME}" /v "${LIBO_VERSION_MAJOR}.${LIBO_VERSION_MINOR}.${LIBO_VERSION_MICRO}.${LIBO_VERSION_PATCH}${LIBO_VERSION_SUFFIX}${LIBO_VERSION_SUFFIX_SUFFIX}" "${COMCMD}" "${COMMENT}"
+if [ -z ${DRYRUN} ]; then
+    # stick all of it into symbol store
+    symstore.exe add /compress /f "@$(cygpath -w "${TMPFILE}")" /s "$(cygpath -w "${SYM_PATH}")" /t "${PRODUCTNAME}" /v "${LIBO_VERSION_MAJOR}.${LIBO_VERSION_MINOR}.${LIBO_VERSION_MICRO}.${LIBO_VERSION_PATCH}${LIBO_VERSION_SUFFIX}${LIBO_VERSION_SUFFIX_SUFFIX}" "${COMCMD}" "${COMMENT}"
+else
+    cp "${TMPFILE}" ${DRYRUN}
+fi
+
 rm -f "${TMPFILE}"
 
 # Cleanup symstore, older revisions will be removed.  Unless the
