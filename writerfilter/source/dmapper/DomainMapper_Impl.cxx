@@ -1627,11 +1627,6 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 
     if (m_aTextAppendStack.empty())
         return;
-
-    // not a table-only header, don't avoid of floating tables
-    if (m_eInHeaderFooterImport == HeaderFooterImportState::header && !IsInShape() && hasTableManager() && !getTableManager().isInCell())
-        getTableManager().setIsUnfloatTable(false);
-
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
@@ -1972,10 +1967,6 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
     m_eInHeaderFooterImport
         = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
-
-    // ignore <w:tblpPr> in table-only header, that table is imported as non-floating one
-    if (bHeader && hasTableManager())
-        getTableManager().setIsUnfloatTable(true);
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
@@ -2495,7 +2486,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         uno::makeAny( true ) );
         }
         m_bParaChanged = true;
-        getTableManager().setIsUnfloatTable(true);
+        getTableManager().setIsInShape(true);
     }
     catch ( const uno::Exception& e )
     {
