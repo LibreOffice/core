@@ -149,15 +149,15 @@ class SwStdFontTabPage : public SfxTabPage
 
     std::unique_ptr<weld::Label> m_xLabelFT;
     std::unique_ptr<weld::ComboBox> m_xStandardBox;
-    std::unique_ptr<SvtFontSizeBox> m_xStandardHeightLB;
+    std::unique_ptr<FontSizeBox> m_xStandardHeightLB;
     std::unique_ptr<weld::ComboBox> m_xTitleBox;
-    std::unique_ptr<SvtFontSizeBox> m_xTitleHeightLB;
+    std::unique_ptr<FontSizeBox> m_xTitleHeightLB;
     std::unique_ptr<weld::ComboBox> m_xListBox;
-    std::unique_ptr<SvtFontSizeBox> m_xListHeightLB;
+    std::unique_ptr<FontSizeBox> m_xListHeightLB;
     std::unique_ptr<weld::ComboBox> m_xLabelBox;
-    std::unique_ptr<SvtFontSizeBox> m_xLabelHeightLB;
+    std::unique_ptr<FontSizeBox> m_xLabelHeightLB;
     std::unique_ptr<weld::ComboBox> m_xIdxBox;
-    std::unique_ptr<SvtFontSizeBox> m_xIndexHeightLB;
+    std::unique_ptr<FontSizeBox> m_xIndexHeightLB;
     std::unique_ptr<weld::Button> m_xStandardPB;
 
     DECL_LINK(StandardHdl, weld::Button&, void );

@@ -110,7 +110,7 @@ private:
     OUString                                   m_aCurText;
     bool                                       m_bRelease;
     uno::Reference< frame::XFrame >            m_xFrame;
-    std::unique_ptr<SvtFontSizeBox>            m_xWidget;
+    std::unique_ptr<FontSizeBox>            m_xWidget;
 
     void                ReleaseFocus_Impl();
 
@@ -132,7 +132,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     m_rCtrl             ( _rCtrl ),
     m_bRelease          ( true ),
     m_xFrame            ( _xFrame ),
-    m_xWidget(new SvtFontSizeBox(m_xBuilder->weld_combo_box("fontsize")))
+    m_xWidget(new FontSizeBox(m_xBuilder->weld_combo_box("fontsize")))
 {
     set_id("fontsizecombobox");
     m_xWidget->set_value(0);

@@ -221,7 +221,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
     , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
     , m_xEastFontSizeFT(m_xBuilder->weld_label("eastsizeft"))
-    , m_xEastFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
+    , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
     , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
     , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
     , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
@@ -232,7 +232,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
     , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
     , m_xCTLFontSizeFT(m_xBuilder->weld_label("ctlsizeft"))
-    , m_xCTLFontSizeLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
+    , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
     , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
     , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
@@ -258,7 +258,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
         m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-cjk");
 
         m_xWestFontStyleLB.reset(new FontStyleBox(m_xBuilder->weld_combo_box("weststylelb-cjk")));
-        m_xWestFontSizeLB.reset(new SvtFontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
+        m_xWestFontSizeLB.reset(new FontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
 
         m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-cjk");
         m_xWestFontLanguageLB.reset(new SvxLanguageBox(m_xBuilder->weld_combo_box("westlanglb-cjk")));
@@ -290,7 +290,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 
         m_xWestFontNameLB = std::move(xWestFontNameLB);
         m_xWestFontStyleLB.reset(new FontStyleBox(std::move(xWestFontStyleLB)));
-        m_xWestFontSizeLB.reset(new SvtFontSizeBox(std::move(xWestFontSizeLB)));
+        m_xWestFontSizeLB.reset(new FontSizeBox(std::move(xWestFontSizeLB)));
     }
 
     //In MacOSX the standard dialogs name font-name, font-style as
@@ -404,7 +404,7 @@ namespace
                     SvxCharNamePage const * _pPage,
                     const weld::ComboBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
-                    const SvtFontSizeBox* _pFontSizeLB,
+                    const FontSizeBox* _pFontSizeLB,
                     const SvxLanguageBox* _pLanguageLB,
                     const FontList* _pFontList,
                     sal_uInt16 _nFontWhich,
@@ -553,7 +553,7 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
     DBG_ASSERT( pFontList, "no fontlist" );
 
     FontStyleBox* pStyleBox = nullptr;
-    SvtFontSizeBox* pSizeBox = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
     OUString sFontName;
 
     if (m_xWestFontNameLB.get() == &rNameBox)
@@ -607,7 +607,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     weld::Label* pStyleLabel = nullptr;
     FontStyleBox* pStyleBox = nullptr;
     weld::Label* pSizeLabel = nullptr;
-    SvtFontSizeBox* pSizeBox = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
     weld::Label* pLangFT = nullptr;
     SvxLanguageBox* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
@@ -836,7 +836,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
     weld::ComboBox* pNameBox = nullptr;
     FontStyleBox* pStyleBox = nullptr;
-    SvtFontSizeBox* pSizeBox = nullptr;
+    FontSizeBox* pSizeBox = nullptr;
     SvxLanguageBox* pLangBox = nullptr;
     sal_uInt16 nWhich = 0;
     sal_uInt16 nSlot = 0;
@@ -1231,7 +1231,7 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 
 namespace
 {
-    void enableRelativeMode( SvxCharNamePage const * _pPage, SvtFontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
+    void enableRelativeMode( SvxCharNamePage const * _pPage, FontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
     {
         _pFontSizeLB->EnableRelativeMode( 5, 995 ); // min 5%, max 995%, step 5
 

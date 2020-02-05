@@ -497,15 +497,15 @@ SwStdFontTabPage::SwStdFontTabPage(weld::Container* pPage, weld::DialogControlle
     , m_sScriptComplex(SwResId(ST_SCRIPT_CTL))
     , m_xLabelFT(m_xBuilder->weld_label("label1"))
     , m_xStandardBox(m_xBuilder->weld_combo_box("standardbox"))
-    , m_xStandardHeightLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("standardheight")))
+    , m_xStandardHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("standardheight")))
     , m_xTitleBox(m_xBuilder->weld_combo_box("titlebox"))
-    , m_xTitleHeightLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("titleheight")))
+    , m_xTitleHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("titleheight")))
     , m_xListBox(m_xBuilder->weld_combo_box("listbox"))
-    , m_xListHeightLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("listheight")))
+    , m_xListHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("listheight")))
     , m_xLabelBox(m_xBuilder->weld_combo_box("labelbox"))
-    , m_xLabelHeightLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("labelheight")))
+    , m_xLabelHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("labelheight")))
     , m_xIdxBox(m_xBuilder->weld_combo_box("idxbox"))
-    , m_xIndexHeightLB(new SvtFontSizeBox(m_xBuilder->weld_combo_box("indexheight")))
+    , m_xIndexHeightLB(new FontSizeBox(m_xBuilder->weld_combo_box("indexheight")))
     , m_xStandardPB(m_xBuilder->weld_button("standard"))
 {
     m_xStandardBox->make_sorted();
@@ -948,7 +948,7 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, weld::ComboBox&, rBox, void )
 IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, weld::Widget&, rControl, void )
 {
     weld::ComboBox& rBox = dynamic_cast<weld::ComboBox&>(rControl);
-    SvtFontSizeBox* pHeightLB = nullptr;
+    FontSizeBox* pHeightLB = nullptr;
     const OUString sEntry = rBox.get_active_text();
     if (&rBox == m_xStandardBox.get())
     {
