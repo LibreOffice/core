@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a9e1cfb_e0b1b334",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 12762,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T21:37:31Z",
+      "side": 1,
+      "message": "SRC_ROOT is already set in the beginning of the file, so no need to re-define it here - just use it.",
+      "range": {
+        "startLine": 12762,
+        "startChar": 0,
+        "endLine": 12762,
+        "endChar": 8
+      },
+      "revId": "85e607a87b5506252cb4ad0005e68baab61997c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "903b16f5_434b8d1f",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 12770,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T21:37:31Z",
+      "side": 1,
+      "message": "Let\u0027s not warn here - you add the warning below. I realize it\u0027s me who mentioned AC_MSG_WARN, so forgive me for inconsistency.",
+      "range": {
+        "startLine": 12770,
+        "startChar": 2,
+        "endLine": 12770,
+        "endChar": 68
+      },
+      "revId": "85e607a87b5506252cb4ad0005e68baab61997c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

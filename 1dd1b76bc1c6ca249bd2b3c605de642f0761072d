@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11c58e56_8f6049d7",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 13057,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T21:37:31Z",
+      "side": 0,
+      "message": "Please restore the newlines as they were - to avoid touching what is unrelated.",
+      "range": {
+        "startLine": 13055,
+        "startChar": 0,
+        "endLine": 13057,
+        "endChar": 0
+      },
+      "revId": "1dd1b76bc1c6ca249bd2b3c605de642f0761072d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
