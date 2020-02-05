@@ -54,18 +54,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Font Size ListBox" name="svtlo-FontSizeBox"
-                        generic-name="Font Size ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-      <properties>
-        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
-          <parameter-spec>
-            <type>GParamBoolean</type>
-          </parameter-spec>
-        </property>
-      </properties>
-    </glade-widget-class>
-
     <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
