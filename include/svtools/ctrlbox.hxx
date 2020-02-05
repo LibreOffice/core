@@ -27,7 +27,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
@@ -381,31 +380,6 @@ public:
 private:
     FontStyleBox(const FontStyleBox& ) = delete;
     FontStyleBox& operator=(const FontStyleBox&) = delete;
-};
-
-class SVT_DLLPUBLIC FontSizeBox : public MetricBox
-{
-    bool             bStdSize:1;
-
-    using Window::ImplInit;
-    SVT_DLLPRIVATE void         ImplInit();
-
-protected:
-    virtual sal_Int64 GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const override;
-
-public:
-                    FontSizeBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    void            Reformat() override;
-
-    void            Fill( const FontMetric* pFontMetric, const FontList* pList );
-
-    virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit ) override;
-    virtual void    SetValue( sal_Int64 nNewValue  ) override;
-
-private:
-                    FontSizeBox( const FontSizeBox& ) = delete;
-    FontSizeBox&    operator =( const FontSizeBox& ) = delete;
 };
 
 class SVT_DLLPUBLIC SvtFontSizeBox
