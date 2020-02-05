@@ -1346,7 +1346,7 @@ static bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUStr
     return true;
 }
 
-// #i121863# factored out functinality
+// #i121863# factored out functionality
 static OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 {
     const OUString aBaseName(SdResId(STR_LAYOUT_DEFAULT_NAME));
