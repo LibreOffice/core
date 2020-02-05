@@ -150,3 +150,4 @@ public final class Acceptor implements XAcceptor {
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
