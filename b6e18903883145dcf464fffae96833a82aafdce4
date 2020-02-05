@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1185bc00_f0ba11cc",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T11:59:08Z",
+      "side": 1,
+      "message": "after being very confused about what this code is used for, i think that sal_uInt32 is a little bit better type for it, because it makes sure that you can store the same number of flags on every platform...",
+      "revId": "b6e18903883145dcf464fffae96833a82aafdce4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
