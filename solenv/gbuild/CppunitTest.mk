@@ -86,8 +86,6 @@ $(if $(URE),\
 	    "-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
     $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
-	$(if $(strip $(JAVA_URE)),\
-		-env:URE_MORE_JAVA_TYPES=$(call gb_Helper_make_url,$(call gb_Jar_get_target,unoil))) \
 	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
 	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_LIB_FOLDER)) \
 	-env:LO_JAVA_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)) \
@@ -184,7 +182,6 @@ $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_ta
 $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_ilibfilename,$(1)))
 $(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
-$(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : PYTHON_URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : VCL := $(false)
@@ -376,7 +373,6 @@ endif
 endef
 
 define gb_CppunitTest_use_java_ure
-$(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(true)
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(foreach jar,java_uno juh ridl unoloader,$(call gb_Jar_get_target,$(jar))) \
     $(call gb_Library_get_target,affine_uno_uno) \
