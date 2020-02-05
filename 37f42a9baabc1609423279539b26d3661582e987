@@ -1,0 +1,548 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6154ba1b_2696f5a9",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here - these are still available",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be146664_63aea304",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c86d58a1_24ee1193",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e670559_f23a1b10",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this comment is quite useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "821a2154_6471e444",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "also useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f728d6b_208c017a",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this one looks useful",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88b1b1b7_43c7d82d",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c978ae46_49d2dc10",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3351a68e_7b6b2b11",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this bug id is useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73093810_11a0b28a",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b111a2e_018cf388",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2563,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81b58b8_e89ce1dd",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40b19ace_2fca6d16",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fea39f8d_bd9e6f04",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd468527_3ec83a39",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this comment is quite useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d7cedbf_b7e0d85f",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this one also useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f6adf6_702bfdd6",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2090,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "typo \"Cconsider\"",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ea1940a_cb1892b7",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this comment is useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "173b6310_cf02c431",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3182,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this comment is useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e2684b7_23f9145a",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3244,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "i guess this should be 2 separate comments, one refers to previous line and other refers to following block",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "654941cf_5be4f157",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this \"new method\" also is a useless comment",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e02f8c_1b1058dc",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3855,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "this comment is useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "656577eb_7465c8c2",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3949,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b0434c9_d78ffef4",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3981,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "the line is useless, i don\u0027t know what GetTransChg would refer to",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4b4992_acd79a70",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4082,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "here the second line looks useless",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf0b9a59_fc845389",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4200,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad5b502d_9a6ab147",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a1ee2eb_13ea19ca",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6191,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "466c4f90_010cc20d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6233,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6602741e_48fcdbf6",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6843,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "it doesn\u0027t hurt to retain the #i...# bug-id here",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10c26d3_40361e2c",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "most useless comment ever",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984095b7_d1cecc73",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7450,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 1,
+      "message": "useless comment",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

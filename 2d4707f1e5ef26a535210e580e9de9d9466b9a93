@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "032c8f8a_ead4c97c",
+        "filename": "svx/source/unodraw/unopool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 0,
+      "message": "this deletes a bit too much",
+      "revId": "2d4707f1e5ef26a535210e580e9de9d9466b9a93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c57b9d6_ca7ff2fe",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2866,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-05T12:11:04Z",
+      "side": 0,
+      "message": "this is removing too much",
+      "revId": "2d4707f1e5ef26a535210e580e9de9d9466b9a93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
