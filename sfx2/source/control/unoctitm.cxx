@@ -1205,6 +1205,18 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
             }
         }
     }
+    else if (aEvent.FeatureURL.Path == "TableColumWidth" ||
+             aEvent.FeatureURL.Path == "TableRowHeight")
+    {
+        sal_Int32 nValue;
+        if (aEvent.State >>= nValue)
+        {
+            float nScaleValue = 1000.0;
+            nValue *= nScaleValue;
+            sal_Int32 nConvertedValue = OutputDevice::LogicToLogic(nValue, MapUnit::MapTwip, MapUnit::MapInch);
+            aBuffer.append(OUString::number(nConvertedValue / nScaleValue));
+        }
+    }
     else
     {
         // Try to send JSON state version
