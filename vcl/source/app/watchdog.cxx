@@ -15,9 +15,14 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
+#include <comphelper/debuggerinfo.hxx>
 #include <opengl/zone.hxx>
 
 #include <stdlib.h>
+
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
+#endif
 
 namespace
 {
@@ -117,6 +122,12 @@ void WatchdogThread::start()
     if (gxWatchdog != nullptr)
         return; // already running
     if (getenv("SAL_DISABLE_WATCHDOG"))
+        return;
+#if defined HAVE_VALGRIND_HEADERS
+    if (RUNNING_ON_VALGRIND)
+        return;
+#endif
+    if (comphelper::isDebuggerAttached())
         return;
     gpWatchdogExit = new osl::Condition();
     gxWatchdog.set(new WatchdogThread());
