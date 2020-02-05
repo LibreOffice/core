@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:53 using:
+ Generated on 2020-02-05 20:46:59 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -110,7 +110,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderpage.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
@@ -193,6 +192,7 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -246,6 +246,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -479,6 +480,7 @@
 #include <ColorChanger.hxx>
 #include <DesignView.hxx>
 #include <EndMarker.hxx>
+#include <IReportControllerObserver.hxx>
 #include <ReportController.hxx>
 #include <ReportSection.hxx>
 #include <ReportWindow.hxx>

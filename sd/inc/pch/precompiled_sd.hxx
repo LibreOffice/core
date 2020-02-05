@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:58:15 using:
+ Generated on 2020-02-05 20:47:11 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -93,7 +93,6 @@
 #include <vcl/image.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -216,7 +215,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -440,7 +438,6 @@
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
@@ -453,7 +450,6 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>
