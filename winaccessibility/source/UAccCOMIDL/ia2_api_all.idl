@@ -3686,7 +3686,7 @@ interface IAccessibleHypertext : IAccessibleText
 
 /** @brief This interface exposes information about hypertext in a document.
 
- The %IAccessibleHypertext2 interface extends the functinality of the
+ The %IAccessibleHypertext2 interface extends the functionality of the
  %IAccessibleHypertext interface.
 */
 [object, uuid(CF64D89F-8287-4B44-8501-A827453A6077)]
