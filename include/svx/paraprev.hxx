@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetControlle
     // indentation
     long                nLeftMargin;
     long                nRightMargin;
-    short               nFirstLineOfst;
+    short               nFirstLineOffset;
     // distances
     sal_uInt16          nUpper;
     sal_uInt16          nLower;
@@ -61,7 +61,7 @@ public:
 
     void SetFirstLineOffset( short nNew )
     {
-        nFirstLineOfst = nNew;
+        nFirstLineOffset = nNew;
     }
     void SetLeftMargin( long nNew )
     {

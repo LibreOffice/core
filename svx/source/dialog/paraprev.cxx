@@ -25,7 +25,7 @@
 SvxParaPrevWindow::SvxParaPrevWindow() :
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
-    nFirstLineOfst  ( 0 ),
+    nFirstLineOffset  ( 0 ),
     nUpper          ( 0 ),
     nLower          ( 0 ),
     eAdjust         ( SvxAdjust::Left ),
@@ -93,7 +93,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         if (3 <= i && 6 > i)
         {
             long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
-            long nFirst = nFirstLineOfst * aLineSiz.Width() / aSize.Width();
+            long nFirst = nFirstLineOffset * aLineSiz.Width() / aSize.Width();
             long nTmp = nLeft + nFirst;
 
             if (i == 3)

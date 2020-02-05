@@ -53,7 +53,7 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
     long    nRightMargin;       // The unproblematic right edge
 
     sal_uInt16  nPropFirstLineOffset, nPropLeftMargin, nPropRightMargin;
-    short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
+    short   nFirstLineOffset;     // First-line indent _always_ relative to nTxtLeft
     bool        bAutoFirst;    // Automatic calculation of the first line indent
     bool        bExplicitZeroMarginValRight;
     bool        bExplicitZeroMarginValLeft;
@@ -109,13 +109,13 @@ public:
     long GetTextLeft() const { return nTxtLeft; }
 
     inline void   SetTextFirstLineOffset( const short nF, const sal_uInt16 nProp = 100 );
-    short  GetTextFirstLineOffset() const { return nFirstLineOfst; }
+    short  GetTextFirstLineOffset() const { return nFirstLineOffset; }
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )
                     { nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue( const short nValue )
-                    { nFirstLineOfst = nValue; }
+                    { nFirstLineOffset = nValue; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual boost::property_tree::ptree dumpAsJSON() const override;
@@ -139,7 +139,7 @@ inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
 inline void SvxLRSpaceItem::SetTextFirstLineOffset( const short nF,
                                                  const sal_uInt16 nProp )
 {
-    nFirstLineOfst = short((long(nF) * nProp ) / 100);
+    nFirstLineOffset = short((long(nF) * nProp ) / 100);
     nPropFirstLineOffset = nProp;
     AdjustLeft();
 }
