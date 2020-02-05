@@ -189,6 +189,52 @@
     },
     {
       "key": {
+        "uuid": "9db1544f_18ae404e",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T16:30:44Z",
+      "side": 1,
+      "message": "Here\u0027s its definition",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 11
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b826bbb0_2defcc76",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 12650,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T16:30:44Z",
+      "side": 1,
+      "message": "and here\u0027s the last occurence",
+      "range": {
+        "startLine": 12650,
+        "startChar": 8,
+        "endLine": 12650,
+        "endChar": 19
+      },
+      "revId": "b1d2c8b604cabc4d16fa89440e5f2d5b11ce3dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9840ee0f_4a9acd49",
         "filename": "configure.ac",
         "patchSetId": 6
