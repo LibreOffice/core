@@ -33,7 +33,7 @@ extern "C" {
 typedef sal_uInt32 oslProfileOption;
 
 #define osl_Profile_DEFAULT     0x0000
-#define osl_Profile_SYSTEM      0x0001    /* use system depended functinality */
+#define osl_Profile_SYSTEM      0x0001    /* use system depended functionality */
 #define osl_Profile_READLOCK    0x0002    /* lock file for reading            */
 #define osl_Profile_WRITELOCK   0x0004    /* lock file for writing            */
 #define osl_Profile_FLUSHWRITE  0x0010    /* writing only with flush          */
