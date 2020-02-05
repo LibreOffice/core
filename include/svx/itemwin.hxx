@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_ITEMWIN_HXX
 
 #include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
@@ -75,10 +76,14 @@ public:
     void            RefreshDlgUnit();
 };
 
-class SVX_DLLPUBLIC SvxFillTypeBox final : public FillTypeLB
+class SVX_DLLPUBLIC SvxFillTypeBox final : public ListBox
 {
 public:
     SvxFillTypeBox( vcl::Window* pParent );
+
+    void Fill();
+
+    static void Fill(weld::ComboBox& rListBox);
 
     void            Selected() { bSelect = true; }
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;

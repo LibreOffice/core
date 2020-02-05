@@ -160,7 +160,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
     if ( !aItem.isPattern() )
     {
         nPos = SearchBitmapList( aItem.GetGraphicObject() );
-        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+        if (nPos == -1)
             return;
     }
     else
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
         {
             pDlg->GetName( aName );
             sal_Int32 nBitmapPos = SearchBitmapList( aName );
-            bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
 
             if(bValidBitmapName)
             {
@@ -792,7 +792,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 sal_Int32 SvxBitmapTabPage::SearchBitmapList(const GraphicObject& rGraphicObject)
 {
     long nCount = m_pBitmapList->Count();
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount;i++)
     {
@@ -809,7 +809,7 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(const OUString& rBitmapName)
 {
     long nCount = m_pBitmapList->Count();
     bool bValidBitmapName = true;
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount && bValidBitmapName;i++)
     {
