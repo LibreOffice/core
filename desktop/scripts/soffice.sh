@@ -169,8 +169,12 @@ AIX)
     ;;
 esac
 
-# restore locale setting
-LC_ALL="$LO_SAVE_LC_ALL"
+# restore locale setting, avoiding to export empty LC_ALL, s. tdf#130080
+if [ -n "$LO_SAVE_LC_ALL" ]; then
+    LC_ALL="$LO_SAVE_LC_ALL"
+else
+    unset LC_ALL
+fi
 
 # run soffice.bin directly when you want to get the backtrace
 if [ -n "$GDBTRACECHECK" ] ; then
