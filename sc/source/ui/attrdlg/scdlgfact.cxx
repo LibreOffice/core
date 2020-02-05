@@ -1225,9 +1225,9 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(w
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScCharDlg(
-    weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
+    weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScCharDlg>(pParent, pAttr, pDocShell));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScCharDlg>(pParent, pAttr, pDocShell, bDrawText));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(

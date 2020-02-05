@@ -43,7 +43,7 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
         pViewData->GetDialogParent(), &rArgs,
-        pViewData->GetSfxDocShell()));
+        pViewData->GetSfxDocShell(), true));
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
         pDlg->SetCurPageId("fonteffects");

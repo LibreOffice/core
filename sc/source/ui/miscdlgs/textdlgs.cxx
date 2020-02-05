@@ -30,13 +30,18 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 
-ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
+ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
     : SfxTabDialogController(pParent, "modules/scalc/ui/chardialog.ui", "CharDialog", pAttr)
     , rDocShell(*pDocShell)
 {
     AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
+
+    if (bDrawText)
+        AddTabPage("background", RID_SVXPAGE_BKG);
+    else
+        RemoveTabPage("background");
 }
 
 void ScCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -53,6 +58,11 @@ void ScCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     else if (rId == "fonteffects")
     {
         aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "background")
+    {
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
     }
 }
