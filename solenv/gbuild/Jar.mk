@@ -182,9 +182,8 @@ $(call gb_Jar_get_target,$(1)) : $(2)
 
 endef
 
-# URE jars are not added to manifest classpath; and neither is unoil.jar, which
-# is available at runtime via URE_MORE_JAVA_TYPES:
-gb_Jar_default_jars := $(gb_Jar_URE) unoil
+# URE jars are not added to manifest classpath:
+gb_Jar_default_jars := $(gb_Jar_URE)
 
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
