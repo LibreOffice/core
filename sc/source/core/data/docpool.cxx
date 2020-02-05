@@ -440,7 +440,7 @@ static bool lcl_HFPresentation
                         " " + EditResId(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim +
-                    // We don't have a nPropFirstLineOfst
+                    // We don't have a nPropFirstLineOffset
                     EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
