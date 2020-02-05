@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/process.h>
+#include <tools/diagnose_ex.h>
 
 using namespace ::comphelper;
 static sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
@@ -134,6 +135,7 @@ namespace connectivity
         }
         catch (Exception&)
         {
+            TOOLS_WARN_EXCEPTION("connectivity.commontools", "getJavaVM failed:");
         }
 
         return aRet;
