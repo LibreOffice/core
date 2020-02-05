@@ -290,7 +290,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    nFirstLineOfst  ( 0 ),
+    nFirstLineOffset  ( 0 ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)
@@ -309,7 +309,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    nFirstLineOfst  ( nOfset ),
+    nFirstLineOffset  ( nOfset ),
     bAutoFirst      ( false ),
     bExplicitZeroMarginValRight(false),
     bExplicitZeroMarginValLeft(false)
@@ -333,7 +333,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLRSpace.Right = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
             aLRSpace.ScaleLeft = static_cast<sal_Int16>(nPropLeftMargin);
             aLRSpace.ScaleRight = static_cast<sal_Int16>(nPropRightMargin);
-            aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
+            aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOffset) : nFirstLineOffset);
             aLRSpace.ScaleFirstLine = static_cast<sal_Int16>(nPropFirstLineOffset);
             aLRSpace.AutoFirstLine = IsAutoFirst();
             rVal <<= aLRSpace;
@@ -357,7 +357,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_FIRST_LINE_INDENT:
-            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOffset) : nFirstLineOffset);
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
@@ -454,8 +454,8 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 /// Adapt nLeftMargin and nTxtLeft.
 void SvxLRSpaceItem::AdjustLeft()
 {
-    if ( 0 > nFirstLineOfst )
-        nLeftMargin = nTxtLeft + nFirstLineOfst;
+    if ( 0 > nFirstLineOffset )
+        nLeftMargin = nTxtLeft + nFirstLineOffset;
     else
         nLeftMargin = nTxtLeft;
 }
@@ -468,7 +468,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
     return (
-        nFirstLineOfst == rOther.GetTextFirstLineOffset() &&
+        nFirstLineOffset == rOther.GetTextFirstLineOffset() &&
         nTxtLeft == rOther.GetTextLeft() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
@@ -512,7 +512,7 @@ bool SvxLRSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( static_cast<long>(nFirstLineOfst),
+                rText += GetMetricText( static_cast<long>(nFirstLineOffset),
                                         eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nRightMargin )
@@ -537,7 +537,7 @@ bool SvxLRSpaceItem::GetPresentation
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += OUString(cpDelim);
-            if ( 100 != nPropFirstLineOffset || nFirstLineOfst )
+            if ( 100 != nPropFirstLineOffset || nFirstLineOffset )
             {
                 rText += EditResId(RID_SVXITEMS_LRSPACE_FLINE);
                 if ( 100 != nPropFirstLineOffset )
@@ -545,7 +545,7 @@ bool SvxLRSpaceItem::GetPresentation
                                 Application::GetSettings().GetUILanguageTag());
                 else
                 {
-                    rText += GetMetricText( static_cast<long>(nFirstLineOfst),
+                    rText += GetMetricText( static_cast<long>(nFirstLineOffset),
                                             eCoreUnit, ePresUnit, &rIntl ) +
                             " " + EditResId(GetMetricId(ePresUnit));
                 }
@@ -571,7 +571,7 @@ bool SvxLRSpaceItem::GetPresentation
 
 void SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
 {
-    nFirstLineOfst = static_cast<short>(Scale( nFirstLineOfst, nMult, nDiv ));
+    nFirstLineOffset = static_cast<short>(Scale( nFirstLineOffset, nMult, nDiv ));
     nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
     nLeftMargin = Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = Scale( nRightMargin, nMult, nDiv );
@@ -588,7 +588,7 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOfst"), BAD_CAST(OString::number(nFirstLineOfst).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOffset"), BAD_CAST(OString::number(nFirstLineOffset).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
