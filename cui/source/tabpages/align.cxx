@@ -397,6 +397,7 @@ namespace
                 // SID_ATTR_ALIGN_LINEBREAK
                 // SID_ATTR_ALIGN_HYPHENATION
                 // SID_ATTR_ALIGN_SHRINKTOFIT
+                assert(false && "UNKNOWN cannot happen here");
                 break;
             case SfxItemState::DISABLED:
             case SfxItemState::READONLY:
@@ -436,6 +437,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_HOR_JUSTIFY:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -479,6 +481,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_INDENT:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -502,6 +505,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_VER_JUSTIFY:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -542,6 +546,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_DEGREES:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -566,6 +571,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_LOCKPOS:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -605,6 +611,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         default:
             //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_FRAMEDIRECTION:
+            assert(false && "UNKNOWN cannot happen here");
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
