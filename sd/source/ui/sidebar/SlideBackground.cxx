@@ -224,7 +224,7 @@ void SlideBackground::SetMarginsFieldUnit()
 
 void SlideBackground::Initialize()
 {
-    FillTypeLB::Fill(*mxFillStyle);
+    SvxFillTypeBox::Fill(*mxFillStyle);
 
     SetMarginsFieldUnit();
 

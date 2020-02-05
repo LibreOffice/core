@@ -39,7 +39,6 @@ merge ExcBoolRecord with Exc1904
 merge ExcelConverterBase with ExcelToSc
 merge ExportTyp with ExportBiff5
 merge FailTest with testMathMalformedXml
-merge FillTypeLB with SvxFillTypeBox
 merge FmGridListener with FmXGridPeer::GridListenerDelegator
 merge FmXDisposeListener with DisposeListenerGridBridge
 merge FmXFormShell_Base_Disambiguation with FmXFormShell

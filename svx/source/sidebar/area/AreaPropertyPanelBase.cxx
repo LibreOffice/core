@@ -146,7 +146,7 @@ void AreaPropertyPanelBase::dispose()
 
 void AreaPropertyPanelBase::Initialize()
 {
-    FillTypeLB::Fill(*mxLbFillType);
+    SvxFillTypeBox::Fill(*mxLbFillType);
 
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);

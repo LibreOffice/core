@@ -31,6 +31,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 
 #include <svx/xlnclit.hxx>
@@ -191,7 +193,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
-    FillTypeLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
+    ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
     nCurPos ( 0 ),
     bSelect ( false )
 {
@@ -220,13 +222,12 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return FillTypeLB::PreNotify( rNEvt );
+    return ListBox::PreNotify( rNEvt );
 }
-
 
 bool SvxFillTypeBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = FillTypeLB::EventNotify( rNEvt );
+    bool bHandled = ListBox::EventNotify( rNEvt );
 
     if (isDisposed())
         return false;
@@ -269,9 +270,40 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 
 boost::property_tree::ptree SvxFillTypeBox::DumpAsPropertyTree()
 {
-    boost::property_tree::ptree aTree = FillTypeLB::DumpAsPropertyTree();
+    boost::property_tree::ptree aTree = ListBox::DumpAsPropertyTree();
     aTree.put("command", ".uno:FillStyle");
     return aTree;
+}
+
+void SvxFillTypeBox::Fill()
+{
+    SetUpdateMode( false );
+
+    InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
+    InsertEntry( SvxResId(RID_SVXSTR_COLOR) );
+    InsertEntry( SvxResId(RID_SVXSTR_GRADIENT) );
+    InsertEntry( SvxResId(RID_SVXSTR_HATCH) );
+    InsertEntry( SvxResId(RID_SVXSTR_BITMAP) );
+    InsertEntry( SvxResId(RID_SVXSTR_PATTERN) );
+
+    AdaptDropDownLineCountToMaximum();
+    SetUpdateMode( true );
+}
+
+void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)
+{
+    rListBox.freeze();
+
+    rListBox.append_text(SvxResId(RID_SVXSTR_INVISIBLE));
+    rListBox.append_text(SvxResId(RID_SVXSTR_COLOR));
+    rListBox.append_text(SvxResId(RID_SVXSTR_GRADIENT));
+    rListBox.append_text(SvxResId(RID_SVXSTR_HATCH));
+    rListBox.append_text(SvxResId(RID_SVXSTR_BITMAP));
+    rListBox.append_text(SvxResId(RID_SVXSTR_PATTERN));
+
+    rListBox.thaw();
+
+    rListBox.set_active(1); // solid color
 }
 
 SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
