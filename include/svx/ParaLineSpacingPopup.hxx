@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
+class SvxLineSpacingToolBoxControl final : public svt::PopupWindowController
 {
 public:
     explicit SvxLineSpacingToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );

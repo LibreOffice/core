@@ -23,7 +23,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <sfx2/dllapi.h>
 
-class SFX2_DLLPUBLIC EmojiPopup final : public svt::PopupWindowController
+class EmojiPopup final : public svt::PopupWindowController
 {
 public:
     EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);

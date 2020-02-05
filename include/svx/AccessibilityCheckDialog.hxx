@@ -20,7 +20,7 @@
 
 namespace svx
 {
-class SVX_DLLPUBLIC AccessibilityCheckEntry final
+class AccessibilityCheckEntry final
 {
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;

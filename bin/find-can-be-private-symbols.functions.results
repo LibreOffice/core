@@ -1,25 +1,15 @@
-CheckNodesRange(SwNodeIndex const&, SwNodeIndex const&, bool)
 GrGLAssembleInterface(void*, void (*(*)(void*, char const*))())
-ImpPeekGraphicFormat(SvStream&, rtl::OUString&, bool)
 ImplCallPreNotify(NotifyEvent&)
+ImplDestroyHelpWindow(ImplSVHelpData&, bool)
 ImplDestroyHelpWindow(bool)
 ImplFastBitmapConversion(BitmapBuffer&, BitmapBuffer const&, SalTwoRect const&)
 ImplGetSalSystem()
 ImplHideSplash()
 ImplSVMain()
-IsDockingWindowVisible(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, rtl::OUString const&)
-RefreshToolbars(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
-SalGetDesktopEnvironment()
 ScFilterCreate
-ScResId(char const*, int)
 Simplify(SkPath const&, SkPath*)
-checkFormula(ScDocument&, ScAddress const&, char const*)
-checkFormulaPosition(ScDocument&, ScAddress const&)
-checkFormulaPositions(ScDocument&, short, short, int const*, unsigned long)
-clearErrorRecorder()
-clearFormulaCellChangedFlag(ScDocument&, ScRange const&)
+SvxUnogetInternalNameForItem(unsigned short, rtl::OUString const&)
 clewErrorString
-compileFormula(ScDocument*, rtl::OUString const&, formula::FormulaGrammar::Grammar)
 component_getImplementationEnvironment
 createLink
 ddot
@@ -27,17 +17,13 @@ dl_cairo_surface_set_device_scale(_cairo_surface*, double, double)
 endlu(SvStream&)
 explain
 fieldlen(char const*)
-getChartRangeRepresentations(SdrOle2Obj const&)
 getDataArea
 heuristics
 invert
 libreofficekit_hook
 libreofficekit_hook_2
-loadFile(rtl::OUString const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+limitWidthForSidebar(weld::SpinButton&)
 main
-makeMinimalTextForScript(UScriptCode)
-makeRepresentativeTextForLanguage(o3tl::strong_int<unsigned short, LanguageTypeTag>)
-makeRepresentativeTextForScript(UScriptCode)
 mod
 privateSnippetExecutor
 reg_closeKey(void*)
@@ -47,12 +33,9 @@ reg_openKey(void*, _rtl_uString*, void**)
 reg_openRegistry(_rtl_uString*, void**)
 reg_openRootKey(void*, void**)
 report
-sbxToUnoValue(SbxValue const*, com::sun::star::uno::Type const&, com::sun::star::beans::Property const*)
 scale
-setErrorRecorder()
 setLink
 set_column
 set_title
 spaces
-toBool(rtl::OUString const&)
 vcl_crc64

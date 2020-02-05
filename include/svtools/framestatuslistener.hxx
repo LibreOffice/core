@@ -35,7 +35,7 @@ namespace com :: sun :: star :: uno { class XComponentContext; }
 namespace svt
 {
 
-class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
+class FrameStatusListener : public css::frame::XStatusListener,
                             public css::frame::XFrameActionListener,
                             public css::lang::XComponent,
                             public ::cppu::BaseMutex,
