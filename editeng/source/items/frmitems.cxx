@@ -287,7 +287,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nTxtLeft        ( 0 ),
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
-    nPropFirstLineOfst( 100 ),
+    nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
     nFirstLineOfst  ( 0 ),
@@ -306,7 +306,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nTxtLeft        ( nTLeft ),
     nLeftMargin     ( nLeft ),
     nRightMargin    ( nRight ),
-    nPropFirstLineOfst( 100 ),
+    nPropFirstLineOffset( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
     nFirstLineOfst  ( nOfset ),
@@ -334,7 +334,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLRSpace.ScaleLeft = static_cast<sal_Int16>(nPropLeftMargin);
             aLRSpace.ScaleRight = static_cast<sal_Int16>(nPropRightMargin);
             aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
-            aLRSpace.ScaleFirstLine = static_cast<sal_Int16>(nPropFirstLineOfst);
+            aLRSpace.ScaleFirstLine = static_cast<sal_Int16>(nPropFirstLineOffset);
             aLRSpace.AutoFirstLine = IsAutoFirst();
             rVal <<= aLRSpace;
             break;
@@ -361,7 +361,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            rVal <<= static_cast<sal_Int16>(nPropFirstLineOfst);
+            rVal <<= static_cast<sal_Int16>(nPropFirstLineOffset);
             break;
 
         case MID_FIRST_AUTO:
@@ -472,7 +472,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nTxtLeft == rOther.GetTextLeft() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
-        nPropFirstLineOfst == rOther.GetPropTextFirstLineOffset() &&
+        nPropFirstLineOffset == rOther.GetPropTextFirstLineOffset() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
         bAutoFirst == rOther.IsAutoFirst() &&
@@ -506,9 +506,9 @@ bool SvxLRSpaceItem::GetPresentation
                 rText = GetMetricText( nLeftMargin,
                                        eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
-            if ( 100 != nPropFirstLineOfst )
+            if ( 100 != nPropFirstLineOffset )
             {
-                rText += unicode::formatPercent(nPropFirstLineOfst,
+                rText += unicode::formatPercent(nPropFirstLineOffset,
                     Application::GetSettings().GetUILanguageTag());
             }
             else
@@ -537,11 +537,11 @@ bool SvxLRSpaceItem::GetPresentation
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += OUString(cpDelim);
-            if ( 100 != nPropFirstLineOfst || nFirstLineOfst )
+            if ( 100 != nPropFirstLineOffset || nFirstLineOfst )
             {
                 rText += EditResId(RID_SVXITEMS_LRSPACE_FLINE);
-                if ( 100 != nPropFirstLineOfst )
-                    rText += unicode::formatPercent(nPropFirstLineOfst,
+                if ( 100 != nPropFirstLineOffset )
+                    rText += unicode::formatPercent(nPropFirstLineOffset,
                                 Application::GetSettings().GetUILanguageTag());
                 else
                 {
@@ -592,7 +592,7 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropFirstLineOfst"), BAD_CAST(OString::number(nPropFirstLineOfst).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropFirstLineOffset"), BAD_CAST(OString::number(nPropFirstLineOffset).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLeftMargin"), BAD_CAST(OString::number(nPropLeftMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropRightMargin"), BAD_CAST(OString::number(nPropRightMargin).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAutoFirst"), BAD_CAST(OString::number(int(bAutoFirst)).getStr()));
