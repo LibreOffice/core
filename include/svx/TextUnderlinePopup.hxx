@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC TextUnderlinePopup final : public svt::PopupWindowController
+class TextUnderlinePopup final : public svt::PopupWindowController
 {
 public:
     TextUnderlinePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);

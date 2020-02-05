@@ -66,7 +66,7 @@ namespace svx
         This default implementation queries the object which it is constructed with for the XPropertySet interface,
         and calls the getPropertyValue method.
     */
-    class SVXCORE_DLLPUBLIC PropertyValueProvider   :public IPropertyValueProvider
+    class PropertyValueProvider   :public IPropertyValueProvider
     {
     public:
         PropertyValueProvider( ::cppu::OWeakObject& _rContext, const char* _pAsciiPropertyName )

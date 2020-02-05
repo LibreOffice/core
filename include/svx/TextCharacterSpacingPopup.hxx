@@ -24,7 +24,7 @@
 
 namespace svx {
 
-class SVX_DLLPUBLIC TextCharacterSpacingPopup final : public svt::PopupWindowController
+class TextCharacterSpacingPopup final : public svt::PopupWindowController
 {
 public:
     TextCharacterSpacingPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext);

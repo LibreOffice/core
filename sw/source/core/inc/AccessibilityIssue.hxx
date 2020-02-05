@@ -25,7 +25,7 @@ enum class IssueObject
     TEXT,
 };
 
-class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue
+class AccessibilityIssue final : public sfx::AccessibilityIssue
 {
 private:
     IssueObject m_eIssueObject;

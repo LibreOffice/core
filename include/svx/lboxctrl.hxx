@@ -28,7 +28,7 @@
 class ToolBox;
 class SvxPopupWindowListBox;
 
-class SVX_DLLPUBLIC SvxUndoRedoControl final : public svt::PopupWindowController
+class SvxUndoRedoControl final : public svt::PopupWindowController
 {
     std::vector< OUString > aUndoRedoList;
     OUString                aDefaultTooltip;
