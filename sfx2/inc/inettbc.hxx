@@ -22,8 +22,8 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <vcl/combobox.hxx>
 
+class ComboBox;
 class SvtURLBox;
 
 class SfxURLToolBoxControl_Impl final : public SfxToolBoxControl
