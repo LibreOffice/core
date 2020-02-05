@@ -1181,7 +1181,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
         m_xRemoveButton->set_sensitive( false );
         m_xChangeButton->set_sensitive( false );
 
-        if (pEntry->m_bIsConfigurable)
+        if (pEntry && pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
                 m_xRemoveButton->set_sensitive(true);
