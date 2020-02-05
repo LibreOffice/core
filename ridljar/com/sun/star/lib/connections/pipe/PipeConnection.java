@@ -32,6 +32,8 @@ import com.sun.star.lib.util.NativeLibraryLoader;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  *
+ * The native implementation is in jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c
+ *
  * @see         com.sun.star.lib.connections.pipe.pipeAcceptor
  * @see         com.sun.star.lib.connections.pipe.pipeConnector
  * @see         com.sun.star.connection.XConnection
