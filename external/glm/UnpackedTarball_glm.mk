@@ -16,6 +16,9 @@ $(eval $(call gb_UnpackedTarball_set_patchflags,glm,$(if $(filter MSC,$(COM)),--
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glm,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,glm, \
+    external/glm/Wshadow-patch-fix.patch \
+    external/glm/Wsign-compare.patch.0 \
+    external/glm/Wunused-parameter.patch \
     external/glm/clang-cl.patch.0 \
     external/glm/c++20.patch.0 \
 ))
