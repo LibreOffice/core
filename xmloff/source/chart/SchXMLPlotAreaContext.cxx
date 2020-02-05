@@ -31,6 +31,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlstyle.hxx>
+#include <oox/helper/containerhelper.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -679,6 +680,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
+        bool bHideLegend = false;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
@@ -702,6 +704,23 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
             {
                 sCustomLabelField = xAttrList->getValueByIndex( i );
                 mDataPoint.mCustomLabels.push_back(sCustomLabelField);
+            }
+            else if (IsXMLToken(aLocalName, XML_HIDE_LEGEND))
+            {
+                bHideLegend = xAttrList->getValueByIndex(i).toBoolean();
+                if (bHideLegend)
+                {
+                    uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+                    Reference<beans::XPropertySet> xSeriesProp(mDataPoint.m_xSeries, uno::UNO_QUERY);
+                    xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+                    std::vector<sal_Int32> deletedLegendEntries;
+                    for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+                    {
+                        deletedLegendEntries.push_back(deletedLegendEntry);
+                    }
+                    deletedLegendEntries.push_back(mDataPoint.m_nPointIndex);
+                    xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(::oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
+                }
             }
         }
     }

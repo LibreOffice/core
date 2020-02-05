@@ -153,6 +153,7 @@ public:
     void testTdf115012();
     void testTdf123206_customLabelText();
     void testDeletedLegendEntries();
+    void testTdf130225();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
+    CPPUNIT_TEST(testTdf130225);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2467,6 +2469,20 @@ void Chart2ExportTest::testDeletedLegendEntries()
         CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
     }
+}
+
+void Chart2ExportTest::testTdf130225()
+{
+    load("/chart2/qa/extras/data/docx/", "piechart_deleted_legend_entry.docx");
+    reload("Office Open XML Text");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    Sequence<sal_Int32> deletedLegendEntriesSeq;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
