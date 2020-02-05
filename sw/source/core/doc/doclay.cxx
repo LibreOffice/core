@@ -1381,6 +1381,11 @@ OUString SwDoc::GetUniqueShapeName() const
     return lcl_GetUniqueFlyName(this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
 }
 
+OUString SwDoc::GetUniqueDrawObjectName() const
+{
+    return lcl_GetUniqueFlyName(this, "DrawObject", RES_DRAWFRMFMT);
+}
+
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType nNdTyp ) const
 {
     auto range = GetSpzFrameFormats()->rangeFind( RES_FLYFRMFMT, rName );

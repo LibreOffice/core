@@ -680,6 +680,7 @@ public:
     OUString GetUniqueOLEName() const;
     OUString GetUniqueFrameName() const;
     OUString GetUniqueShapeName() const;
+    OUString GetUniqueDrawObjectName() const;
 
     o3tl::sorted_vector<SwRootFrame*> GetAllLayouts();
 
