@@ -16,9 +16,7 @@ $(eval $(call gb_Module_add_targets,ridljar,\
     Jar_unoloader \
 ))
 
-# unfortunately, these tests depend on qadevOOo, which depends on
-# ridl.jar for build...
-$(eval $(call gb_Module_add_subsequentcheck_targets,ridljar,\
+$(eval $(call gb_Module_add_check_targets,ridljar,\
     JunitTest_typedesc \
     JunitTest_uno \
     JunitTest_util \
