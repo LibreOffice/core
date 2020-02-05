@@ -34,6 +34,7 @@
 #include <SkSurface.h>
 
 #include <skia/utils.hxx>
+#include <skia/zone.hxx>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -331,6 +332,7 @@ bool SkiaSalBitmap::ScalingSupported() const { return true; }
 
 bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)
 {
+    SkiaZone zone;
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
@@ -399,6 +401,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
     EnsureBitmapData();
     if (!mBitmap.isNull())
         return mBitmap;
+    SkiaZone zone;
     SkBitmap bitmap;
     if (mBuffer)
     {
@@ -452,6 +455,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 #endif
     if (mImage)
         return mImage;
+    SkiaZone zone;
     sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
     assert(surface);
     SkPaint paint;
@@ -469,6 +473,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 #endif
     if (mAlphaImage)
         return mAlphaImage;
+    SkiaZone zone;
     // TODO can we convert directly mImage -> mAlphaImage?
     EnsureBitmapData();
     SkBitmap alphaBitmap;
@@ -538,6 +543,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         return;
     if (!mImage)
         return;
+    SkiaZone zone;
     if (!CreateBitmapData())
         abort();
     if (!mBitmap.isNull())
@@ -627,6 +633,7 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
 
 void SkiaSalBitmap::ResetSkImages()
 {
+    SkiaZone zone;
     mAlphaImage.reset();
     mImage.reset();
 }
