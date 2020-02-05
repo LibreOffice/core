@@ -32,7 +32,7 @@ namespace osl {
     typedef oslProfileOption ProfileOption;
 
     const int Profile_DEFAULT   = osl_Profile_DEFAULT;
-    const int Profile_SYSTEM    = osl_Profile_SYSTEM;    /* use system depended functinality */
+    const int Profile_SYSTEM    = osl_Profile_SYSTEM;    /* use system depended functionality */
     const int Profile_READLOCK  = osl_Profile_READLOCK;  /* lock file for reading            */
     const int Profile_WRITELOCK = osl_Profile_WRITELOCK; /* lock file for writing            */
 
