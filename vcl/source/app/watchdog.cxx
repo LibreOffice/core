@@ -17,6 +17,7 @@
 #include <sal/log.hxx>
 #include <comphelper/debuggerinfo.hxx>
 #include <opengl/zone.hxx>
+#include <skia/zone.hxx>
 
 #include <stdlib.h>
 
@@ -107,11 +108,17 @@ void WatchdogThread::execute()
 #if HAVE_FEATURE_OPENGL
         WatchdogHelper<OpenGLZone>::setLastEnters();
 #endif
+#if HAVE_FEATURE_SKIA
+        WatchdogHelper<SkiaZone>::setLastEnters();
+#endif
 
         gpWatchdogExit->wait(&aQuarterSecond);
 
 #if HAVE_FEATURE_OPENGL
         WatchdogHelper<OpenGLZone>::check();
+#endif
+#if HAVE_FEATURE_SKIA
+        WatchdogHelper<SkiaZone>::check();
 #endif
 
     } while (!gpWatchdogExit->check());
