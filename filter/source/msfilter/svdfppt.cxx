@@ -2228,6 +2228,9 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
     {
         TSS_Type nDestinationInstance = pTextObj->GetDestinationInstance() ;
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
+        bool bUndoEnabled = rOutliner.IsUndoEnabled();
+        rOutliner.EnableUndo(false);
+
         if ( ( pText->GetObjInventor() == SdrInventor::Default ) && ( pText->GetObjIdentifier() == OBJ_TITLETEXT ) ) // Outliner-Style for Title-Text object?!? (->of DL)
             rOutliner.Init( OutlinerMode::TitleObject );             // Outliner reset
 
@@ -2343,6 +2346,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
         std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
         rOutliner.Clear();
         rOutliner.SetUpdateMode( bOldUpdateMode );
+        rOutliner.EnableUndo(bUndoEnabled);
         pText->SetOutlinerParaObject( std::move(pNewText) );
     }
     return pText;
