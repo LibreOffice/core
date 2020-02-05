@@ -545,7 +545,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             pFrame->RegisterToNode( *pNode );
             if (!pFrame->IsFollow() && pFrame->GetOffset())
             {
-                pFrame->SetOfst( TextFrameIndex(0) );
+                pFrame->SetOffset( TextFrameIndex(0) );
             }
         }
 

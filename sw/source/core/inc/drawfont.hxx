@@ -463,7 +463,7 @@ public:
         m_nLen = nNew;
     }
 
-    void SetOfst( sal_Int32 nNew )
+    void SetOffset( sal_Int32 nNew )
     {
         m_nOfst = nNew;
 #ifdef DBG_UTIL

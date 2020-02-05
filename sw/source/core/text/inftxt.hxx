@@ -741,7 +741,7 @@ inline SwTwips SwTextPaintInfo::GetPaintOfst() const
 
 inline void SwTextPaintInfo::SetPaintOfst( const SwTwips nNew )
 {
-    GetParaPortion()->GetRepaint().SetOfst( nNew );
+    GetParaPortion()->GetRepaint().SetOffset( nNew );
 }
 
 inline void SwTextPaintInfo::DrawText( const OUString &rText,

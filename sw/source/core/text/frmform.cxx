@@ -203,7 +203,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             bOldInvaContent  = pPage->IsInvalidContent();
         }
 
-        pMyFollow->SetOfst_( nTextOfst );
+        pMyFollow->SetOffset_( nTextOfst );
         pMyFollow->SetFieldFollow( bFollowField );
         if( HasFootnote() || pMyFollow->HasFootnote() )
         {
@@ -608,7 +608,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
         if ( nMode )
             GetFollow()->ManipOfst(TextFrameIndex(0));
 
-        if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOfst there
+        if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOffset there
             rLine.SetOnceMore( true );
     }
 }
@@ -751,16 +751,16 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
 
     MoveFlyInCnt( pNew, nTextPos, TextFrameIndex(COMPLETE_STRING) );
 
-    // No SetOfst or CalcFollow, because an AdjustFollow follows immediately anyways
+    // No SetOffset or CalcFollow, because an AdjustFollow follows immediately anyways
 
     pNew->ManipOfst( nTextPos );
 }
 
-void SwTextFrame::SetOfst_(TextFrameIndex const nNewOfst)
+void SwTextFrame::SetOffset_(TextFrameIndex const nNewOfst)
 {
     // We do not need to invalidate out Follow.
     // We are a Follow, get formatted right away and call
-    // SetOfst() from there
+    // SetOffset() from there
     mnOffset = nNewOfst;
     SwParaPortion *pPara = GetPara();
     if( pPara )
@@ -1383,7 +1383,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         rReformat.Start() = nNew;
     }
 
-    rRepaint.SetOfst( 0 );
+    rRepaint.SetOffset( 0 );
     rRepaint.SetRightOfst( 0 );
     rRepaint.Chg( getFrameArea().Pos() + getFramePrintArea().Pos(), getFramePrintArea().SSize() );
     if( pPara->IsMargin() )
@@ -1620,7 +1620,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
             rLine.Bottom();
             SwTwips nNewBottom = rLine.Y();
             if( nNewBottom < nOldBottom )
-                SetOfst_(TextFrameIndex(0));
+                SetOffset_(TextFrameIndex(0));
         }
     }
 }
@@ -1851,13 +1851,13 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
                 SwTextSizeInfo aInf( pMaster );
                 SwTextIter aMasterLine( pMaster, &aInf );
                 aMasterLine.Bottom();
-                SetOfst(aMasterLine.GetEnd());
+                SetOffset(aMasterLine.GetEnd());
             }
         }
 
         SwTextLineAccess aAccess( this );
         const bool bNew = !aAccess.IsAvailable();
-        const bool bSetOfst =
+        const bool bSetOffset =
             (GetOffset() && GetOffset() > TextFrameIndex(GetText().getLength()));
 
         if( CalcPreps() )
@@ -1874,7 +1874,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
             }
             SetWidow( false );
         }
-        else if( bSetOfst && IsFollow() )
+        else if( bSetOffset && IsFollow() )
         {
             SwTextFrame *pMaster = FindMaster();
             OSL_ENSURE( pMaster, "SwTextFrame::Format: homeless follow" );
@@ -1894,9 +1894,9 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         }
         else
         {
-            // bSetOfst here means that we have the "red arrow situation"
-            if ( bSetOfst )
-                SetOfst_(TextFrameIndex(0));
+            // bSetOffset here means that we have the "red arrow situation"
+            if ( bSetOffset )
+                SetOffset_(TextFrameIndex(0));
 
             const bool bOrphan = IsWidow();
             const SwFootnoteBossFrame* pFootnoteBoss = HasFootnote() ? FindFootnoteBossFrame() : nullptr;

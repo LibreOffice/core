@@ -2665,7 +2665,7 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
 
         if( bSplit )
         {
-            GetFollow()->SetOfst( aLine.GetEnd() );
+            GetFollow()->SetOffset( aLine.GetEnd() );
             aLine.TruncLines( true );
             if( pPara->IsFollowField() )
                 GetFollow()->SetFieldFollow( true );
@@ -2799,7 +2799,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 InvalidateRange(SwCharRange(TextFrameIndex(0), TextFrameIndex(1)), 1);
                 if( GetOffset() && !IsFollow() )
-                    SetOfst_(TextFrameIndex(0));
+                    SetOffset_(TextFrameIndex(0));
             }
             break;
         case PrepareHint::MustFit :
@@ -3071,7 +3071,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 Init();
                 pPara = nullptr;
                 if( GetOffset() && !IsFollow() )
-                    SetOfst_( TextFrameIndex(0) );
+                    SetOffset_( TextFrameIndex(0) );
                 if ( bNotify )
                     InvalidateSize();
                 else
