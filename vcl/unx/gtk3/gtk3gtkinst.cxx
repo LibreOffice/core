@@ -12135,7 +12135,9 @@ private:
         m_pMenu = GTK_MENU(pWidget);
 
         guint nSignalId = g_signal_lookup("key-press-event", GTK_TYPE_MENU);
-        gulong nOriginalMenuKeyPressEventId = g_signal_handler_find(m_pMenu, G_SIGNAL_MATCH_DATA, nSignalId, 0,
+        gulong nOriginalMenuKeyPressEventId = g_signal_handler_find(m_pMenu,
+                                                                    static_cast<GSignalMatchType>(G_SIGNAL_MATCH_DATA | G_SIGNAL_MATCH_ID),
+                                                                    nSignalId, 0,
                                                                     nullptr, nullptr, m_pComboBox);
 
         g_signal_handler_block(m_pMenu, nOriginalMenuKeyPressEventId);
