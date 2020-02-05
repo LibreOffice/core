@@ -1582,7 +1582,11 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
 }
 
 void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
+#if defined DBG_UTIL
+    environment->ExceptionDescribe();
+#else
     environment->ExceptionClear();
+#endif
     throw css::uno::RuntimeException(
         "JNI exception occurred",
         static_cast< cppu::OWeakObject * >(this));
