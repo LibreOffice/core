@@ -37,8 +37,8 @@
 
 #include <comphelper/random.hxx>
 
-#include "Operation.hxx"
 #include "TransitionImpl.hxx"
+#include "Operation.hxx"
 #include <math.h>
 
 TransitionScene::TransitionScene(TransitionScene const& rOther)

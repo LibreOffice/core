@@ -28,10 +28,10 @@
 
 #include <sal/config.h>
 
-#include <basegfx/numeric/ftools.hxx>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <basegfx/numeric/ftools.hxx>
 
 #include "Operation.hxx"
 
