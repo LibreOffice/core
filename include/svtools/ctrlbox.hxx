@@ -24,7 +24,6 @@
 
 #include <editeng/borderline.hxx>
 
-#include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/weld.hxx>
