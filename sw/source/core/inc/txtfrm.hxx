@@ -426,8 +426,8 @@ public:
     void            SplitFrame(TextFrameIndex nTextPos);
     SwContentFrame *JoinFrame();
     TextFrameIndex GetOffset() const { return mnOffset; }
-           void        SetOfst_(TextFrameIndex nNewOfst);
-    inline void        SetOfst (TextFrameIndex nNewOfst);
+           void        SetOffset_(TextFrameIndex nNewOfst);
+    inline void        SetOffset (TextFrameIndex nNewOfst);
     void ManipOfst(TextFrameIndex const nNewOfst) { mnOffset = nNewOfst; }
            SwTextFrame   *GetFrameAtPos ( const SwPosition &rPos);
     inline const SwTextFrame *GetFrameAtPos ( const SwPosition &rPos) const;
@@ -855,10 +855,10 @@ inline const SwTextFrame *SwTextFrame::GetFrameAtPos( const SwPosition &rPos) co
     return const_cast<SwTextFrame*>(this)->GetFrameAtPos( rPos );
 }
 
-inline void SwTextFrame::SetOfst(TextFrameIndex const nNewOfst)
+inline void SwTextFrame::SetOffset(TextFrameIndex const nNewOfst)
 {
     if ( mnOffset != nNewOfst )
-        SetOfst_( nNewOfst );
+        SetOffset_( nNewOfst );
 }
 
 inline void SwTextFrame::SetRepaint() const

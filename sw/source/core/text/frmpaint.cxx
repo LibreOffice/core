@@ -431,7 +431,7 @@ SwRect SwTextFrame::GetPaintSwRect()
         l = rRepaint.GetRightOfst();
         if( l && l > rRepaint.Right() )
              rRepaint.Right( l );
-        rRepaint.SetOfst( 0 );
+        rRepaint.SetOffset( 0 );
         aRet = rRepaint;
 
         // In case our left edge is the same as the body frame's left edge,
@@ -629,7 +629,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     {
         const SwFlyFrame *pFly = FindFlyFrame();
         if( pFly && pFly->IsFlyInContentFrame() )
-            rRepaint.SetOfst( 0 );
+            rRepaint.SetOffset( 0 );
     }
 
     // Ge the String for painting. The length is of special interest.

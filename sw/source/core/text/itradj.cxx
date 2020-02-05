@@ -107,7 +107,7 @@ void SwTextAdjuster::FormatBlock( )
     GetInfo().SetIdx( m_nStart );
     CalcNewBlock( m_pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
-    GetInfo().GetParaPortion()->GetRepaint().SetOfst(0);
+    GetInfo().GetParaPortion()->GetRepaint().SetOffset(0);
 }
 
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
@@ -666,7 +666,7 @@ void SwTextAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         case SvxAdjust::Center:
         {
             CalcFlyAdjust( pCurrent );
-            pPara->GetRepaint().SetOfst( 0 );
+            pPara->GetRepaint().SetOffset( 0 );
             break;
         }
         case SvxAdjust::Block:

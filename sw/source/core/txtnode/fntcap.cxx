@@ -370,7 +370,7 @@ void SwDoCapitalCursorOfst::Do()
                                      rInf.GetText(),
                                      rInf.GetIdx(),
                                      rInf.GetLen(), 0, false );
-            aDrawInf.SetOfst( nOfst );
+            aDrawInf.SetOffset( nOfst );
             aDrawInf.SetKern( rInf.GetKern() );
             aDrawInf.SetKanaComp( rInf.GetKanaComp() );
             aDrawInf.SetFrame( rInf.GetFrame() );

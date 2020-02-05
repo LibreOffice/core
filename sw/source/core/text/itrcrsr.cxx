@@ -1663,7 +1663,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }
 
-                aDrawInf.SetOfst( nX );
+                aDrawInf.SetOffset( nX );
 
                 if ( nSpaceAdd )
                 {
