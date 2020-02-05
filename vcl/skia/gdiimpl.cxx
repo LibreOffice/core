@@ -26,6 +26,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
+#include <skia/zone.hxx>
 
 #include <SkCanvas.h>
 #include <SkPath.h>
@@ -197,6 +198,7 @@ void SkiaSalGraphicsImpl::recreateSurface()
 
 void SkiaSalGraphicsImpl::createSurface()
 {
+    SkiaZone zone;
     if (isOffscreen())
         createOffscreenSurface();
     else
@@ -211,6 +213,7 @@ void SkiaSalGraphicsImpl::createSurface()
 
 void SkiaSalGraphicsImpl::createWindowSurface()
 {
+    SkiaZone zone;
     assert(!isOffscreen());
     assert(!mSurface);
     assert(!mWindowContext);
@@ -239,6 +242,7 @@ void SkiaSalGraphicsImpl::createWindowSurface()
 
 void SkiaSalGraphicsImpl::createOffscreenSurface()
 {
+    SkiaZone zone;
     assert(isOffscreen());
     assert(!mSurface);
     assert(!mWindowContext);
@@ -284,6 +288,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
 
 void SkiaSalGraphicsImpl::destroySurface()
 {
+    SkiaZone zone;
     if (mSurface)
     {
         // check setClipRegion() invariant
@@ -309,6 +314,7 @@ void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
 
 void SkiaSalGraphicsImpl::preDraw()
 {
+    SkiaZone::enter(); // matched in postDraw()
     checkSurface();
     assert(!mXorMode || mXorExtents.isEmpty()); // must be reset in postDraw()
 }
@@ -390,6 +396,7 @@ void SkiaSalGraphicsImpl::postDraw()
         mSurface->flush();
         mPendingPixelsToFlush = 0;
     }
+    SkiaZone::leave(); // matched in preDraw()
 }
 
 // VCL can sometimes resize us without telling us, update the surface if needed.
@@ -420,6 +427,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 {
     if (mClipRegion == region)
         return true;
+    SkiaZone zone;
     mClipRegion = region;
     checkSurface();
     SAL_INFO("vcl.skia", "setclipregion(" << this << "): " << region);
@@ -438,6 +446,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 
 void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region)
 {
+    SkiaZone zone;
     SkPath path;
     // Handle polygons last, since rectangle->polygon area conversions
     // are problematic (see addPolygonToPath() comment).
@@ -485,6 +494,7 @@ void SkiaSalGraphicsImpl::SetXORMode(bool set, bool)
 
 SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
 {
+    SkiaZone zone;
     assert(mXorMode);
     // Skia does not implement xor drawing, so we need to handle it manually by redirecting
     // to a temporary SkBitmap and then doing the xor operation on the data ourselves.
@@ -960,6 +970,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImag
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
                                                           long nHeight)
 {
+    SkiaZone zone;
     checkSurface();
     SAL_INFO("vcl.skia",
              "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
@@ -973,6 +984,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
 
 Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
+    SkiaZone zone;
     checkSurface();
     SAL_INFO("vcl.skia", "getpixel(" << this << "): " << Point(nX, nY));
     mSurface->getCanvas()->flush();
