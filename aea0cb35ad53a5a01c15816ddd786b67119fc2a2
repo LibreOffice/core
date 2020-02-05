@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc76ca7d_1a420a60",
+        "filename": "sc/inc/scabstdlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "const specifiers of by-val argument in function declarations are useless and are unnecessary noise. Please drop them.",
+      "range": {
+        "startLine": 437,
+        "startChar": 60,
+        "endLine": 437,
+        "endChar": 66
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce7239d_b514235c",
+        "filename": "sc/source/ui/attrdlg/scdlgfact.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "They might be useful in function *definitions*, though - so feel free to keep them in the definitions.",
+      "range": {
+        "startLine": 1017,
+        "startChar": 60,
+        "endLine": 1017,
+        "endChar": 65
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf13ea2e_ba960107",
+        "filename": "sc/source/ui/inc/filldlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "This is declaration, too - so remove here, too.",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 26
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bcd3896_c85d45a8",
+        "filename": "sc/source/ui/inc/filldlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "We have a convention to use m_ prefix in member names. Even if older code didn\u0027t include the prefix, please use it in new code (as in member names below).",
+      "range": {
+        "startLine": 66,
+        "startChar": 16,
+        "endLine": 66,
+        "endChar": 32
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6d69c4_d68f32bc",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "I suppose that it would be better to properly calculate the fIncrement value here. MAXDOUBLE is a special value for ScViewFunc::FillSeries that is called after the dialog executes. Returning MAXDOUBLE here, and then intercepting it below in Ok handler, seems redundant.\n\nAdditionally, note that the dialog has several modes: not only linear, but also growth, dates, .... I don\u0027t think the code is prepared for correct handling of \"increment by weeks/months\" mode; so possibly best is to handle empty increment in all modes other than linear as error.",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 31
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f46fd74_8474a35d",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-05T07:04:12Z",
+      "side": 1,
+      "message": "Why handle start value here? You didn\u0027t touch it elsewhere.",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 53
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
