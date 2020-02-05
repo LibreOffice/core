@@ -5011,7 +5011,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
             offset += nBytes;
     }
     nSource = mpOutStrm->TellEnd();
-    nToCopy = nSource - nCurPos;                        // increase the size of the tream by nBytes
+    nToCopy = nSource - nCurPos;                        // increase the size of the stream by nBytes
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
     while ( nToCopy )
     {
