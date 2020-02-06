@@ -24,6 +24,7 @@
 #define osl_File_OpenFlag_Trunc     0x00000010L
 #define osl_File_OpenFlag_NoExcl    0x00000020L
 #define osl_File_OpenFlag_Private   0x00000040L
+#define osl_File_OpenFlag_Temporary 0x00000080L
 
 /** @endcond */
 

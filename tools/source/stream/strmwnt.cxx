@@ -134,7 +134,7 @@ SvFileStream::~SvFileStream()
 }
 
 /// Does not check for EOF, makes isEof callable
-std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
+std::size_t SvFileLikeStream::GetData( void* pData, std::size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -149,7 +149,7 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     return nCount;
 }
 
-std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
+std::size_t SvFileLikeStream::PutData( const void* pData, std::size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -160,7 +160,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     return nCount;
 }
 
-sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
+sal_uInt64 SvFileLikeStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
     assert(nPos != SAL_MAX_UINT32);
@@ -184,7 +184,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
     return static_cast<sal_uInt64>(nNewPos);
 }
 
-void SvFileStream::FlushData()
+void SvFileLikeStream::FlushData()
 {
     if( IsOpen() )
     {
@@ -383,12 +383,12 @@ void SvFileStream::Close()
 }
 
 /// Reset filepointer to beginning of file
-void SvFileStream::ResetError()
+void SvFileLikeStream::ResetError()
 {
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize(sal_uInt64 const nSize)
+void SvFileLikeStream::SetSize(sal_uInt64 const nSize)
 {
 
     if( IsOpen() )
@@ -411,5 +411,72 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
             SetError(::GetSvError( GetLastError() ) );
     }
 }
+
+SvFileLikeStream::SvFileLikeStream() {}
+SvFileLikeStream::~SvFileLikeStream() {}
+
+class SvTempStream final : public SvFileLikeStream
+{
+public:
+    SvTempStream()
+    {
+        bIsOpen             = false;
+        m_isWritable        = false;
+        pInstanceData.reset( new StreamData );
+
+        SetBufferSize( 8192 );
+
+        WCHAR lpTempPathBuffer[MAX_PATH];
+         //  Gets the temp path env string (no guarantee it's a valid path).
+        DWORD dwRetVal = GetTempPathW(MAX_PATH, lpTempPathBuffer);
+        if (dwRetVal > MAX_PATH || (dwRetVal == 0))
+        {
+            SetError(::GetSvError( GetLastError() ) );
+            return;
+        }
+        //  Generates a temporary file name.
+        WCHAR szTempFileName[MAX_PATH];
+        UINT uRetVal = GetTempFileNameW((LPWSTR) lpTempPathBuffer, // directory for tmp files
+                                  L"LIBO",          // temp file name prefix
+                                  0,                // create unique name
+                                  szTempFileName);  // buffer for name
+        if (uRetVal == 0)
+        {
+            SetError(::GetSvError( GetLastError() ) );
+            return;
+        }
+
+        UINT    nOldErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX );
+
+        pInstanceData->hFile = CreateFileW(
+            szTempFileName,
+            GENERIC_READ | GENERIC_WRITE,
+            0, // share mode
+            nullptr,
+            CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS | FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
+            nullptr
+        );
+
+        if( GetLastError() != ERROR_SUCCESS )
+        {
+            bIsOpen = false;
+            SetError(::GetSvError( GetLastError() ) );
+        }
+        else
+        {
+            bIsOpen     = true;
+            m_isWritable = true;
+        }
+
+        SetErrorMode( nOldErrorMode );
+    }
+};
+
+std::unique_ptr<SvStream> SvStream::CreateTempFile()
+{
+    return std::make_unique<SvTempStream>();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
