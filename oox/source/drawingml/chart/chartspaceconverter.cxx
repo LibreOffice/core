@@ -176,7 +176,10 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     }
 
     // chart title
-    if( !mrModel.mbAutoTitleDel ) try
+    /* tdf#119138 autoTitleDeleted might be omitted by generators other than Excel
+       while providing custom title. mbAutoTitleDel is set only based on the attribute value
+       and the default also varies on whether MSO 2007 or newer is the generator, see tdf#78080 */
+    if( !mrModel.mbAutoTitleDel || mrModel.mxTitle.is() ) try
     {
         /*  If the title model is missing, but the chart shows exactly one
             series, the series title is shown as chart title. */
