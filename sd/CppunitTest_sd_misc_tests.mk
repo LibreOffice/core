@@ -126,4 +126,6 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sd_misc_tests,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_misc_tests))
 
+$(call gb_CppunitTest_get_target,sd_misc_tests): $(call gb_Package_get_target,postprocess_images)
+
 # vim: set noet sw=4 ts=4:
