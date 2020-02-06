@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <numeric>
 
 #include <svsys.h>
 
@@ -1987,18 +1988,19 @@ private:
     // all other values the triangulation is based on and
     // need to be compared with to check for data validity
     bool                                    mbNoLineJoin;
+    std::vector< double >                       maStroke;
 
 public:
     SystemDependentData_GraphicsPath(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
         std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
-        bool bNoLineJoin);
+        bool bNoLineJoin,
+        const std::vector< double >* pStroke); // MM01
 
-    // read access to Gdiplus::GraphicsPath
+    // read access
     std::shared_ptr<Gdiplus::GraphicsPath>& getGraphicsPath() { return mpGraphicsPath; }
-
-    // other data-validity access
     bool getNoLineJoin() const { return mbNoLineJoin; }
+    const std::vector< double >& getStroke() const { return maStroke; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
@@ -2008,11 +2010,17 @@ public:
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
     std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
-    bool bNoLineJoin)
+    bool bNoLineJoin,
+    const std::vector< double >* pStroke)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpGraphicsPath(rpGraphicsPath),
-    mbNoLineJoin(bNoLineJoin)
+    mbNoLineJoin(bNoLineJoin),
+    maStroke()
 {
+    if(nullptr != pStroke)
+    {
+        maStroke = *pStroke;
+    }
 }
 
 sal_Int64 SystemDependentData_GraphicsPath::estimateUsageInBytes() const
@@ -2136,7 +2144,8 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
             ImplGetSystemDependentDataManager(),
             pGraphicsPath,
-            false);
+            false,
+            nullptr);
     }
 
     if(mrParent.getAntiAliasB2DDraw())
@@ -2196,12 +2205,14 @@ bool WinSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
+    const std::vector< double >* pStroke, // MM01 todo - ok
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
     bool bPixelSnapHairline)
 {
-    if(!mbPen || 0 == rPolygon.count())
+    // MM01 check done for simple reasons
+    if(!mbPen || !rPolygon.count() || fTransparency < 0.0 || fTransparency > 1.0)
     {
         return true;
     }
@@ -2293,6 +2304,25 @@ bool WinSalGraphicsImpl::drawPolyLine(
     std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
         rPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
 
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+
+    if(pSystemDependentData_GraphicsPath)
+    {
+        // MM01 - check on stroke change. Used against not used, or if oth used,
+        // equal or different? Triangulation geometry creation depends heavily
+        // on stroke, independent of being transformation independent
+        const bool bStrokeWasUsed(!pSystemDependentData_GraphicsPath->getStroke().empty());
+
+        if(bStrokeWasUsed != bStrokeUsed
+        || (bStrokeUsed && *pStroke != pSystemDependentData_GraphicsPath->getStroke()))
+        {
+            // data invalid, forget
+            pSystemDependentData_GraphicsPath.reset();
+        }
+    }
+
     if(pSystemDependentData_GraphicsPath)
     {
         // check data validity
@@ -2314,17 +2344,47 @@ bool WinSalGraphicsImpl::drawPolyLine(
         // fill data of buffered data
         pGraphicsPath = std::make_shared<Gdiplus::GraphicsPath>();
 
-        impAddB2DPolygonToGDIPlusGraphicsPathReal(
-            *pGraphicsPath,
-            rPolygon,
-            rObjectToDevice,
-            bNoLineJoin,
-            bPixelSnapHairline);
-
-        if(rPolygon.isClosed() && !bNoLineJoin)
+        if(bStrokeUsed)
         {
-            // #i101491# needed to create the correct line joins
-            pGraphicsPath->CloseFigure();
+            // MM01 need to do line dashing as fallback stuff here now
+            basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+            // apply LineStyle
+            basegfx::utils::applyLineDashing(
+                rPolygon, // source
+                *pStroke, // pattern
+                &aPolyPolygonLine, // traget for lines
+                nullptr, // target for gaps
+                fDotDashLength); // full length if available
+
+            // MM01 checked/verified, ok
+            for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+            {
+                const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+                pGraphicsPath->StartFigure();
+                impAddB2DPolygonToGDIPlusGraphicsPathReal(
+                    *pGraphicsPath,
+                    aPolyLine,
+                    rObjectToDevice,
+                    bNoLineJoin,
+                    bPixelSnapHairline);
+            }
+        }
+        else
+        {
+            // no line dashing, just copy
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(
+                *pGraphicsPath,
+                rPolygon,
+                rObjectToDevice,
+                bNoLineJoin,
+                bPixelSnapHairline);
+
+            if(rPolygon.isClosed() && !bNoLineJoin)
+            {
+                // #i101491# needed to create the correct line joins
+                pGraphicsPath->CloseFigure();
+            }
         }
 
         // add to buffering mechanism
@@ -2333,7 +2393,8 @@ bool WinSalGraphicsImpl::drawPolyLine(
             rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
                 ImplGetSystemDependentDataManager(),
                 pGraphicsPath,
-                bNoLineJoin);
+                bNoLineJoin,
+                pStroke);
         }
     }
 
