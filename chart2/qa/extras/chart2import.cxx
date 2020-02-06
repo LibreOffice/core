@@ -151,6 +151,9 @@ public:
     void testTdf122765();
     void testTdf123206CustomLabelField();
     void testTdf125444PercentageCustomLabel();
+    void testDataPointLabelCustomPos();
+    void testTdf130032();
+    void testTdf119138MissingAutoTitleDeleted();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -251,6 +254,9 @@ public:
     CPPUNIT_TEST(testTdf122765);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
+    CPPUNIT_TEST(testDataPointLabelCustomPos);
+    CPPUNIT_TEST(testTdf130032);
+    CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2346,6 +2352,61 @@ void Chart2ImportTest::testTdf125444PercentageCustomLabel()
     // to assert the latter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aLabelFields.getLength());
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType_PERCENTAGE, aLabelFields[2]->getFieldType());
+}
+
+void Chart2ImportTest::testDataPointLabelCustomPos()
+{
+    // test CustomLabelPosition on Bar chart
+    load("/chart2/qa/extras/data/xlsx/", "testDataPointLabelCustomPos.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    chart2::RelativePosition aCustomLabelPosition;
+    xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.14621409921671025, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, -5.2887961029923464E-2, 1e-7);
+
+    sal_Int32 aPlacement;
+    xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
+    CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, aPlacement);
+}
+
+void Chart2ImportTest::testTdf130032()
+{
+    // test CustomLabelPosition on Line chart
+    load("/chart2/qa/extras/data/xlsx/", "testTdf130032.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    chart2::RelativePosition aCustomLabelPosition;
+    xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.0438333333333334, 1e-7);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, 0.086794050743657, 1e-7);
+
+    sal_Int32 aPlacement;
+    xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
+    CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::RIGHT, aPlacement);
+}
+
+void Chart2ImportTest::testTdf119138MissingAutoTitleDeleted()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf119138-missing-autotitledeleted.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("Missing autoTitleDeleted is implied to be True if title text is present",
+            !xTitled.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
