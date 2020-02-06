@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7f2b7fb_5ae300ad",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 3855,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-06T13:53:18Z",
+      "side": 1,
+      "message": "Tip: If you simply remove the whole \"TooltipLabel\" property, it will generate a tooltip based on \"Label\", with the same result. Leaving both just adds work for translators.",
+      "revId": "ddeafe96f3450c09bf5a4719c4df38290122263c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
