@@ -106,10 +106,10 @@ SfxBoolItem Polygon SID_DRAW_POLYGON
     GroupId = SfxGroupId::Drawing;
 ]
 
-SfxVoidItem AlignCenter SID_OBJECT_ALIGN_CENTER
+SfxBoolItem AlignCenter SID_OBJECT_ALIGN_CENTER
 ()
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -142,10 +142,10 @@ SfxVoidItem AlignDown SID_OBJECT_ALIGN_DOWN
 ]
 
 
-SfxVoidItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
+SfxBoolItem ObjectAlignLeft SID_OBJECT_ALIGN_LEFT
 ()
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -197,10 +197,10 @@ SfxVoidItem AlignMiddle SID_OBJECT_ALIGN_MIDDLE
 ]
 
 
-SfxVoidItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
+SfxBoolItem ObjectAlignRight SID_OBJECT_ALIGN_RIGHT
 ()
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,

@@ -808,7 +808,30 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                          bProtect ||
                          ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
                           bHtmlMode ))
+                    {
                         rSet.DisableItem( nWhich );
+                    }
+                    else
+                    {
+                        sal_Int16 nHoriOrient = -1;
+                        switch(nWhich)
+                        {
+                            case SID_OBJECT_ALIGN_LEFT:
+                                nHoriOrient = text::HoriOrientation::LEFT;
+                                break;
+                            case SID_OBJECT_ALIGN_CENTER:
+                                nHoriOrient = text::HoriOrientation::CENTER;
+                                break;
+                            case SID_OBJECT_ALIGN_RIGHT:
+                                nHoriOrient = text::HoriOrientation::RIGHT;
+                                break;
+                            default:
+                                break;
+                        }
+                        SwFormatHoriOrient aHOrient(aMgr.GetHoriOrient());
+                        if (nHoriOrient != -1)
+                            rSet.Put(SfxBoolItem(nWhich, nHoriOrient == aHOrient.GetHoriOrient()));
+                    }
                 break;
                 case FN_FRAME_ALIGN_VERT_ROW_TOP:
                 case FN_FRAME_ALIGN_VERT_ROW_CENTER:
