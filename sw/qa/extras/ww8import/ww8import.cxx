@@ -365,6 +365,11 @@ DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf130262, "tdf130262")
+{
+    // We had an infinite layout loop
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
