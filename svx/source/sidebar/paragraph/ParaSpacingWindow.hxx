@@ -21,8 +21,8 @@
 
 #include <editeng/ulspitem.hxx>
 #include <vcl/EnumContext.hxx>
+#include <svx/InterimItemWindow.hxx>
 #include <svx/relfld.hxx>
-#include <InterimItemWindow.hxx>
 
 using namespace com::sun::star;
 

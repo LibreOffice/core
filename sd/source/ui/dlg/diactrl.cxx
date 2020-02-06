@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/field.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -34,54 +35,95 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 
+namespace
+{
+    OUString format_number(int nSlides)
+    {
+        OUString aSlides(SdResId(STR_SLIDES, nSlides));
+        return aSlides.replaceFirst("%1", OUString::number(nSlides));
+    }
+}
+
 // SdPagesField
 SdPagesField::SdPagesField( vcl::Window* pParent,
-                            const uno::Reference< frame::XFrame >& rFrame ) :
-    SvxMetricField  ( pParent, rFrame ),
-    m_xFrame        ( rFrame )
+                            const uno::Reference< frame::XFrame >& rFrame )
+    : InterimItemWindow(pParent, "modules/simpress/ui/pagesfieldbox.ui", "PagesFieldBox")
+    , m_xWidget(m_xBuilder->weld_spin_button("pagesfield"))
+    , m_xFrame(rFrame)
 {
-    OUString aStr( SdResId( STR_SLIDE_PLURAL ) );
-    SetCustomUnitText( aStr );
-
-    // set size
-    aStr += "XXX";
-    Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
-
-    SetSizePixel( aSize );
-
     // set parameter of MetricFields
-    SetUnit( FieldUnit::CUSTOM );
-    SetMin( 1 );
-    SetFirst( 1 );
-    SetMax( 15 );
-    SetLast( 15 );
-    SetSpinSize( 1 );
-    SetDecimalDigits( 0 );
-    Show();
+    m_xWidget->set_digits(0);
+    m_xWidget->set_range(1, 15);
+    m_xWidget->set_increments(1, 5);
+    m_xWidget->connect_value_changed(LINK(this, SdPagesField, ModifyHdl));
+    m_xWidget->connect_output(LINK(this, SdPagesField, OutputHdl));
+    m_xWidget->connect_input(LINK(this, SdPagesField, spin_button_input));
+    m_xWidget->connect_key_press(LINK(this, SdPagesField, KeyInputHdl));
+
+    auto width = std::max(m_xWidget->get_pixel_size(format_number(1)).Width(),
+                          m_xWidget->get_pixel_size(format_number(15)).Width());
+    int chars = ceil(width / m_xWidget->get_approximate_digit_width());
+    m_xWidget->set_width_chars(chars);
+
+    SetSizePixel(m_xWidget->get_preferred_size());
+}
+
+IMPL_LINK(SdPagesField, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
+void SdPagesField::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
 }
 
 SdPagesField::~SdPagesField()
 {
+    disposeOnce();
+}
+
+void SdPagesField::set_sensitive(bool bSensitive)
+{
+    Enable(bSensitive);
+    m_xWidget->set_sensitive(bSensitive);
+    if (!bSensitive)
+        m_xWidget->set_text("");
 }
 
 void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
 {
-    if( pItem )
-    {
-        long nValue = static_cast<long>(pItem->GetValue());
-        SetValue( nValue );
-        if( nValue == 1 )
-            SetCustomUnitText( SdResId( STR_SLIDE_SINGULAR ) );
-        else
-            SetCustomUnitText( SdResId( STR_SLIDE_PLURAL ) );
-    }
+    if (pItem)
+        m_xWidget->set_value(pItem->GetValue());
     else
-        SetText( OUString() );
+        m_xWidget->set_text(OUString());
 }
 
-void SdPagesField::Modify()
+IMPL_STATIC_LINK(SdPagesField, OutputHdl, weld::SpinButton&, rSpinButton, void)
 {
-    SfxUInt16Item aItem( SID_PAGES_PER_ROW, static_cast<sal_uInt16>(GetValue()) );
+    rSpinButton.set_text(format_number(rSpinButton.get_value()));
+}
+
+IMPL_LINK(SdPagesField, spin_button_input, int*, result, bool)
+{
+    const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+    double fResult(0.0);
+    bool bRet = MetricFormatter::TextToValue(m_xWidget->get_text(), fResult, 0, m_xWidget->get_digits(), rLocaleData, FieldUnit::NONE);
+    if (bRet)
+    {
+        if (fResult > SAL_MAX_INT32)
+            fResult = SAL_MAX_INT32;
+        else if (fResult < SAL_MIN_INT32)
+            fResult = SAL_MIN_INT32;
+        *result = fResult;
+    }
+    return bRet;
+}
+
+IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)
+{
+    SfxUInt16Item aItem(SID_PAGES_PER_ROW, m_xWidget->get_value());
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
@@ -110,12 +152,11 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
 
     if ( eState == SfxItemState::DISABLED )
     {
-        pFld->Disable();
-        pFld->SetText( OUString() );
+        pFld->set_sensitive(false);
     }
     else
     {
-        pFld->Enable();
+        pFld->set_sensitive(true);
 
         const SfxUInt16Item* pItem = nullptr;
         if ( eState == SfxItemState::DEFAULT )
@@ -130,7 +171,10 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
 
 VclPtr<vcl::Window> SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
 {
-    return VclPtrInstance<SdPagesField>( pParent, m_xFrame ).get();
+    VclPtr<SdPagesField> pWindow = VclPtr<SdPagesField>::Create(pParent, m_xFrame);
+    pWindow->Show();
+
+    return pWindow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

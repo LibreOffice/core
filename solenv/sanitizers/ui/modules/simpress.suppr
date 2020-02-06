@@ -23,6 +23,7 @@ sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='formatgrouplabel']
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='slidegrouplabel'] orphan-label
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='insertgrouplabel'] orphan-label
 sd/uiconfig/simpress/ui/notebookbar_groups.ui://GtkLabel[@id='imagegrouplabel'] orphan-label
+sd/uiconfig/simpress/ui/pagesfieldbox.ui://GtkSpinButton[@id='pagesfield'] no-labelled-by
 sd/uiconfig/simpress/ui/presentationdialog.ui://GtkLabel[@id='externalmonitor_str'] orphan-label
 sd/uiconfig/simpress/ui/presentationdialog.ui://GtkLabel[@id='monitor_str'] orphan-label
 sd/uiconfig/simpress/ui/presentationdialog.ui://GtkLabel[@id='allmonitors_str'] orphan-label

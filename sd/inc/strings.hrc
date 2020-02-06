@@ -21,6 +21,7 @@
 #define INCLUDED_SD_INC_STRINGS_HRC
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
 #define STR_NULL                                        NC_("STR_NULL", "None")
 #define STR_INSERTPAGE                                  NC_("STR_INSERTPAGE", "Insert Slide")
@@ -149,10 +150,12 @@
 #define STR_EFFECTDLG_PROGRAM                           NC_("STR_EFFECTDLG_PROGRAM", "Program")
 #define STR_EFFECTDLG_MACRO                             NC_("STR_EFFECTDLG_MACRO", "Macro")
 #define STR_FULLSCREEN_SLIDESHOW                        NC_("STR_FULLSCREEN_SLIDESHOW", "Presenting: %s")
+
+// To translators: this is the spinbutton in the slidesorter toolbar to set the number of slides to show per row
+#define STR_SLIDES                                      NNC_("STR_SLIDES", "%1 slide", "%1 slides")
+
 // Strings for animation effects
 #define STR_INSERT_TEXT                                 NC_("STR_INSERT_TEXT", "Insert Text")
-#define STR_SLIDE_SINGULAR                              NC_("STR_SLIDE_SINGULAR", " Slide")
-#define STR_SLIDE_PLURAL                                NC_("STR_SLIDE_PLURAL", " Slides")
 #define STR_LOAD_PRESENTATION_LAYOUT                    NC_("STR_LOAD_PRESENTATION_LAYOUT", "Load Master Slide")
 #define STR_DRAGTYPE_URL                                NC_("STR_DRAGTYPE_URL", "Insert as Hyperlink")
 #define STR_DRAGTYPE_EMBEDDED                           NC_("STR_DRAGTYPE_EMBEDDED", "Insert as Copy")

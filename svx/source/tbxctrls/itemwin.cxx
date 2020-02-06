@@ -58,41 +58,56 @@ using namespace ::com::sun::star::beans;
 
 SvxMetricField::SvxMetricField(
     vcl::Window* pParent, const Reference< XFrame >& rFrame )
-    : MetricField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT)
-    , aCurTxt()
+    : InterimItemWindow(pParent, "svx/ui/metricfieldbox.ui", "MetricFieldBox")
+    , m_xWidget(m_xBuilder->weld_metric_spin_button("metricfield", FieldUnit::MM))
+    , nCurValue(0)
     , ePoolUnit(MapUnit::MapCM)
+    , eDlgUnit(SfxModule::GetModuleFieldUnit(rFrame))
     , mxFrame(rFrame)
 {
-    Size aSize( CalcMinimumSize() );
-    SetSizePixel( aSize );
-    aLogicalSize = PixelToLogic(aSize, MapMode(MapUnit::MapAppFont));
-    SetUnit( FieldUnit::MM );
-    SetDecimalDigits( 2 );
-    SetMax( 5000 );
-    SetMin( 0 );
-    SetLast( 5000 );
-    SetFirst( 0 );
+    m_xWidget->set_range(0, 5000, FieldUnit::NONE);
+    m_xWidget->connect_value_changed(LINK(this, SvxMetricField, ModifyHdl));
+    m_xWidget->connect_focus_in(LINK(this, SvxMetricField, FocusInHdl));
+    m_xWidget->get_widget().connect_key_press(LINK(this, SvxMetricField, KeyInputHdl));
 
-    eDlgUnit = SfxModule::GetModuleFieldUnit( mxFrame );
-    SetFieldUnit( *this, eDlgUnit );
-    Show();
+    SetFieldUnit(*m_xWidget, eDlgUnit);
+
+    SetSizePixel(m_xWidget->get_preferred_size());
+}
+
+void SvxMetricField::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
+SvxMetricField::~SvxMetricField()
+{
+    disposeOnce();
+}
+
+void SvxMetricField::set_sensitive(bool bSensitive)
+{
+    Enable(bSensitive);
+    m_xWidget->set_sensitive(bSensitive);
+    if (!bSensitive)
+        m_xWidget->set_text("");
 }
 
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
     {
-        if ( pItem->GetValue() != GetCoreValue( *this, ePoolUnit ) )
-            SetMetricValue( *this, pItem->GetValue(), ePoolUnit );
+        if (pItem->GetValue() != GetCoreValue(*m_xWidget, ePoolUnit))
+            SetMetricValue(*m_xWidget, pItem->GetValue(), ePoolUnit);
     }
     else
-        SetText( "" );
+        m_xWidget->set_text("");
 }
 
-void SvxMetricField::Modify()
+IMPL_LINK_NOARG(SvxMetricField, ModifyHdl, weld::MetricSpinButton&, void)
 {
-    MetricField::Modify();
-    long nTmp = GetCoreValue( *this, ePoolUnit );
+    auto nTmp = GetCoreValue(*m_xWidget, ePoolUnit);
     XLineWidthItem aLineWidthItem( nTmp );
 
     Any a;
@@ -126,59 +141,30 @@ void SvxMetricField::RefreshDlgUnit()
     if ( eDlgUnit != eTmpUnit )
     {
         eDlgUnit = eTmpUnit;
-        SetFieldUnit( *this, eDlgUnit );
+        SetFieldUnit(*m_xWidget, eDlgUnit);
     }
 }
 
-bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
+IMPL_LINK_NOARG(SvxMetricField, FocusInHdl, weld::Widget&, void)
 {
-    MouseNotifyEvent nType = rNEvt.GetType();
-
-    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        aCurTxt = GetText();
-
-    return MetricField::PreNotify( rNEvt );
+    nCurValue = m_xWidget->get_value(FieldUnit::NONE);
 }
 
-
-bool SvxMetricField::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(SvxMetricField, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    bool bHandled = MetricField::EventNotify( rNEvt );
+    bool bHandled = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+
+    if (nCode == KEY_ESCAPE)
     {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rKey = pKEvt->GetKeyCode();
-        SfxViewShell* pSh = SfxViewShell::Current();
-
-        if ( rKey.GetModifier() && rKey.GetGroup() != KEYGROUP_CURSOR && pSh )
-            (void)pSh->KeyInput( *pKEvt );
-        else
-        {
-            bool bHandledInside = false;
-
-            switch ( rKey.GetCode() )
-            {
-                case KEY_RETURN:
-                    Reformat();
-                    bHandledInside = true;
-                    break;
-
-                case KEY_ESCAPE:
-                    SetText( aCurTxt );
-                    bHandled = true;
-                    break;
-            }
-
-            if ( bHandledInside )
-            {
-                bHandled = true;
-                Modify();
-                ReleaseFocus_Impl();
-            }
-        }
+        m_xWidget->set_value(nCurValue, FieldUnit::NONE);
+        ModifyHdl(*m_xWidget);
+        ReleaseFocus_Impl();
+        bHandled = true;
     }
-    return bHandled;
+
+    return bHandled || ChildKeyInput(rKEvt);
 }
 
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
@@ -186,10 +172,10 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
+        SetSizePixel(m_xWidget->get_preferred_size());
     }
 
-    MetricField::DataChanged( rDCEvt );
+    InterimItemWindow::DataChanged( rDCEvt );
 }
 
 SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :

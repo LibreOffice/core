@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 
-#include <svx/itemwin.hxx>
+#include <svx/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
@@ -28,17 +28,22 @@ class SfxUInt16Item;
 
 // SdPagesField:
 
-class SdPagesField : public SvxMetricField
+class SdPagesField final : public InterimItemWindow
 {
 private:
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
-protected:
-    virtual void    Modify() override;
+    std::unique_ptr<weld::SpinButton> m_xWidget;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
+
+    DECL_LINK(ModifyHdl, weld::SpinButton&, void);
+    DECL_STATIC_LINK(SdPagesField, OutputHdl, weld::SpinButton&, void);
+    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-                    SdPagesField( vcl::Window* pParent,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame );
-                    virtual ~SdPagesField() override;
+    SdPagesField(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    virtual void dispose() override;
+    void set_sensitive(bool bSensitive);
+    virtual ~SdPagesField() override;
 
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };

@@ -23,5 +23,6 @@
 #include "sddllapi.h"
 
 SD_DLLPUBLIC OUString SdResId(const char* pId);
+SD_DLLPUBLIC OUString SdResId(const char* pId, int nCardinality);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
