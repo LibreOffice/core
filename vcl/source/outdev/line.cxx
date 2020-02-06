@@ -133,6 +133,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine,
             0.0,
             aB2DLineWidth,
+            nullptr, // MM01
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,
             basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
@@ -244,6 +245,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                     rB2DPolygon,
                     0.0,
                     basegfx::B2DVector(1.0,1.0),
+                    nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default

@@ -76,6 +76,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         aB2DPolyLine,
         0.0,
         aB2DLineWidth,
+        nullptr, // MM01
         basegfx::B2DLineJoin::NONE,
         css::drawing::LineCap_BUTT,
         basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
@@ -179,6 +180,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         rB2DPolygon,
         fLineWidth,
         0.0,
+        nullptr, // MM01
         eLineJoin,
         eLineCap,
         fMiterMinimumAngle))
@@ -235,6 +237,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                 rPolygon,
                 0.0,
                 0.0,
+                nullptr, // MM01
                 basegfx::B2DLineJoin::NONE,
                 css::drawing::LineCap_BUTT,
                 basegfx::deg2rad(15.0) /*default, not used*/,
@@ -306,6 +309,7 @@ bool OutputDevice::DrawPolyLineDirect(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
     double fTransparency,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -350,6 +354,7 @@ bool OutputDevice::DrawPolyLineDirect(
             rB2DPolygon,
             fTransparency,
             aB2DLineWidth,
+            pStroke, // MM01
             eLineJoin,
             eLineCap,
             fMiterMinimumAngle,
