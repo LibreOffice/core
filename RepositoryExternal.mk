@@ -90,12 +90,21 @@ endif # SYSTEM_MDDS
 
 ifneq ($(SYSTEM_GLM),)
 
-gb_LinkTarget__use_glm_headers :=
+define gb_LinkTarget__use_glm_headers
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DGLM_FORCE_CTOR_INIT \
+)
+
+endef
+
 gb_ExternalProject__use_glm_headers :=
 
 else
 
 define gb_LinkTarget__use_glm_headers
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DGLM_FORCE_CTOR_INIT \
+)
 $(call gb_LinkTarget_use_unpacked,$(1),glm)
 $(call gb_LinkTarget_set_include,$(1),\
 	$(GLM_CFLAGS) \
