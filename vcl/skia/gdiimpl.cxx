@@ -34,7 +34,9 @@
 #include <SkDashPathEffect.h>
 #include <GrBackendSurface.h>
 
+#include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 namespace
 {
@@ -622,6 +624,7 @@ void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAr
     aPolygon.setClosed(false);
 
     drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+                 nullptr, // MM01
                  basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
                  basegfx::deg2rad(15.0) /*default*/, false);
 }
@@ -706,34 +709,60 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                        const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                                       const basegfx::B2DVector& rLineWidths,
+                                       const basegfx::B2DVector& rLineWidth,
+                                       const std::vector<double>* pStroke, // MM01
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                        bool bPixelSnapHairline)
 {
-    if (rPolyLine.count() == 0 || fTransparency < 0.0 || fTransparency >= 1.0
+    // MM01 check done for simple reasons
+    if (!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0
         || mLineColor == SALCOLOR_NONE)
+    {
         return true;
+    }
 
     preDraw();
     SAL_INFO("vcl.skia", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    const basegfx::B2DVector aDeviceLineWidths(rObjectToDevice * rLineWidths);
-    const bool bCorrectLineWidth(aDeviceLineWidths.getX() < 1.0 && rLineWidths.getX() >= 1.0);
-    const basegfx::B2DVector aLineWidths(bCorrectLineWidth ? rLineWidths : aDeviceLineWidths);
+    const basegfx::B2DVector aDeviceLineWidth(rObjectToDevice * rLineWidth);
+    const bool bCorrectLineWidth(aDeviceLineWidth.getX() < 1.0 && rLineWidth.getX() >= 1.0);
+    const basegfx::B2DVector aLineWidth(bCorrectLineWidth ? rLineWidth : aDeviceLineWidth);
 
     // Skia does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation),
     // linejoin-mode and thus the above only applies to "fat" lines.
-    if ((basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3))
+    if ((basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidth.getX() > 1.3))
         return false;
 
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(
+        nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+    basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+    if (bStrokeUsed)
+    {
+        // apply LineStyle
+        basegfx::utils::applyLineDashing(rPolyLine, // source
+                                         *pStroke, // pattern
+                                         &aPolyPolygonLine, // traget for lines
+                                         nullptr, // target for gaps
+                                         fDotDashLength); // full length if available
+    }
+    else
+    {
+        // no line dashing, just copy
+        aPolyPolygonLine.append(rPolyLine);
+    }
+
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolygon aPolyLine(rPolyLine);
-    aPolyLine.transform(rObjectToDevice);
+    aPolyPolygonLine.transform(rObjectToDevice);
     if (bPixelSnapHairline)
-        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
+    {
+        aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine);
+    }
 
     // Setup Line Join
     SkPaint::Join eSkLineJoin = SkPaint::kMiter_Join;
@@ -776,11 +805,18 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeJoin(eSkLineJoin);
     aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
     aPaint.setStrokeMiter(fMiterLimit);
-    aPaint.setStrokeWidth(aLineWidths.getX());
+    aPaint.setStrokeWidth(aLineWidth.getX());
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
     SkPath aPath;
-    addPolygonToPath(aPolyLine, aPath);
+
+    // MM01 checked/verified for Skia (on Win)
+    for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+    {
+        const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+        addPolygonToPath(aPolyLine, aPath);
+    }
+
     aPath.setFillType(SkPathFillType::kEvenOdd);
     // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
     // case as it seems to produce better results.
