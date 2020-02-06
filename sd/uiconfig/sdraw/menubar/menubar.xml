@@ -613,6 +613,15 @@
           <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:RedactDoc">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:Rect"/>
+          <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+          <menu:menuitem menu:id=".uno:RedactedExportWhite"/>
+          <menu:menuitem menu:id=".uno:RedactedExportBlack"/>
+          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
