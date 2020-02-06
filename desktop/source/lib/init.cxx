@@ -6045,6 +6045,14 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             SfxApplication::GetOrCreate();
 #endif
 
+#ifdef ANDROID
+            // Register the bundled extensions - so that the dictionaries work
+            desktop::Desktop::SynchronizeExtensionRepositories(false);
+            bool bFailed = desktop::Desktop::CheckExtensionDependencies();
+            if (bFailed)
+                SAL_INFO("lok", "CheckExtensionDependencies failed");
+#endif
+
             if (eStage == PRE_INIT)
             {
                 {

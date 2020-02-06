@@ -40,6 +40,7 @@ core_factory_list = [
     ("libsrtrs1.a", "srtrs1_component_getFactory"),
     ("libstoragefdlo.a", "storagefd_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
+    ("libucpexpand1lo.a", "ucpexpand1_component_getFactory", "#ifdef ANDROID"),
     ("libucpfile1.a", "ucpfile_component_getFactory"),
     ("libucphier1.a", "ucphier1_component_getFactory"),
     ("libucptdoc1lo.a", "ucptdoc1_component_getFactory"),
@@ -137,6 +138,11 @@ core_constructor_list = [
     "com_sun_star_comp_util_OfficeInstallationDirectories",
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
+# extensions/source/logging/log.component
+    ("com_sun_star_comp_extensions_FileHandler", "#ifdef ANDROID"),
+    ("com_sun_star_comp_extensions_LoggerPool", "#ifdef ANDROID"),
+    ("com_sun_star_comp_extensions_PlainTextFormatter", "#ifdef ANDROID"),
+    ("com_sun_star_comp_extensions_SimpleTextFormatter", "#ifdef ANDROID"),
 # forms/util/frm.component
     ("com_sun_star_comp_forms_FormOperations_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
     ("com_sun_star_comp_forms_ODatabaseForm_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),

@@ -321,6 +321,14 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 ))
 
+else # DESKTOP
+
+$(eval $(call gb_Rdb_add_components,services,\
+	$(if $(filter ANDROID,$(OS)),\
+		extensions/source/logging/log \
+	) \
+))
+
 endif # DESKTOP
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
