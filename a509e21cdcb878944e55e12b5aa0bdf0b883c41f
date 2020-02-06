@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b718622d_3b2b0ce0",
+        "filename": "external/neon/neon_uri_escape_invalid.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-06T19:59:31Z",
+      "side": 1,
+      "message": "ne_uri_parse splits the URI into its parts. IIUC, the problem is unescaped characters in the path part of the URI, which is ne_strndup\u0027ed into ref.path in the function, so could be first unescaped using ne_path_unescape (thus putting all bytes from %20 into spaces in resulting string along with those umlauts unchanged), then escaped back using ne_path_escape (thus putting both previously-escaped spaces and previously-unescaped umlauts to escaped form). Could that solve the problem, if the two calls (and required cleanup) done between current lines 181 and 182 of src/ne_207.c? Would that avoid the need in more massive changes?",
+      "range": {
+        "startLine": 8,
+        "startChar": 17,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "a509e21cdcb878944e55e12b5aa0bdf0b883c41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
