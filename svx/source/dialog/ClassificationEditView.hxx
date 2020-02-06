@@ -35,13 +35,9 @@ public:
 
     virtual void makeEditEngine() override;
 
-    void SetCharAttributes();
-
     void InsertField(const SvxFieldItem& rField);
 
     void InvertSelectionWeight();
-
-    void SetNumType(SvxNumType eNumType);
 
     ClassificationEditEngine& getEditEngine()
     {

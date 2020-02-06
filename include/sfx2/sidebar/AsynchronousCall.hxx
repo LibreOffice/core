@@ -34,7 +34,6 @@ class AsynchronousCall
 public:
     typedef ::std::function<void()> Action;
 
-    AsynchronousCall();
     AsynchronousCall (const Action& rAction);
     ~AsynchronousCall();
 

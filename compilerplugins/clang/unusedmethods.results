@@ -84,12 +84,16 @@ cui/source/inc/cfgutil.hxx:143
     _Bool CuiConfigFunctionListBox::get_iter_first(class weld::TreeIter &) const
 cui/source/inc/cfgutil.hxx:145
     _Bool CuiConfigFunctionListBox::iter_next(class weld::TreeIter &) const
+cui/source/inc/cfgutil.hxx:146
+    _Bool CuiConfigFunctionListBox::iter_next_sibling(class weld::TreeIter &) const
 cui/source/inc/cfgutil.hxx:148
     class rtl::OUString CuiConfigFunctionListBox::get_text(const class weld::TreeIter &) const
 cui/source/inc/cfgutil.hxx:151
     class rtl::OUString CuiConfigFunctionListBox::get_id(int) const
 cui/source/inc/cfgutil.hxx:165
     int CuiConfigFunctionListBox::get_selected_index() const
+cui/source/inc/cfgutil.hxx:166
+    void CuiConfigFunctionListBox::select(const class weld::TreeIter &)
 cui/source/inc/CustomNotebookbarGenerator.hxx:31
      CustomNotebookbarGenerator::CustomNotebookbarGenerator()
 cui/source/inc/hangulhanjadlg.hxx:244
@@ -608,6 +612,8 @@ include/sfx2/lokcharthelper.hxx:42
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
+include/sfx2/sidebar/AsynchronousCall.hxx:37
+     sfx2::sidebar::AsynchronousCall::AsynchronousCall()
 include/svl/itempool.hxx:171
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
 include/svl/itempool.hxx:207
@@ -622,24 +628,32 @@ include/svtools/toolbarmenu.hxx:112
     class weld::Container * ToolbarPopupContainer::getContainer()
 include/svtools/toolbarmenu.hxx:129
     class weld::Container * InterimToolbarPopup::getContainer()
-include/svtools/valueset.hxx:251
-    _Bool ValueSet::ImplScroll(const class Point &)
-include/svtools/valueset.hxx:263
-    void ValueSet::LinkStubImplTimerHdl(void *,class Timer *)
+include/svtools/valueset.hxx:301
+    void ValueSet::RemoveItem(unsigned short)
+include/svtools/valueset.hxx:332
+    void ValueSet::SetItemImage(unsigned short,const class Image &)
+include/svtools/valueset.hxx:333
+    class Image ValueSet::GetItemImage(unsigned short) const
+include/svtools/valueset.hxx:335
+    void ValueSet::SetItemData(unsigned short,void *)
+include/svtools/valueset.hxx:336
+    void * ValueSet::GetItemData(unsigned short) const
+include/svtools/valueset.hxx:337
+    void ValueSet::SetItemText(unsigned short,const class rtl::OUString &)
+include/svtools/valueset.hxx:339
+    void ValueSet::SetColor(const class Color &)
+include/svtools/valueset.hxx:345
+    void ValueSet::SetExtraSpacing(unsigned short)
+include/svtools/valueset.hxx:347
+    void ValueSet::SetFormat()
 include/svx/autoformathelper.hxx:145
     _Bool AutoFormatBase::operator==(const class AutoFormatBase &)
 include/svx/ClassificationDialog.hxx:77
     void svx::ClassificationDialog::(anonymous)::__invoke()
-include/svx/ClassificationEditView.hxx:38
-    void svx::ClassificationEditView::SetCharAttributes()
-include/svx/ClassificationEditView.hxx:44
-    void svx::ClassificationEditView::SetNumType(enum SvxNumType)
 include/svx/ClassificationField.hxx:47
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:52
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/colorwindow.hxx:101
-    _Bool SvxColorWindow::IsNoSelection() const
 include/svx/DiagramDataInterface.hxx:33
     class rtl::OUString DiagramDataInterface::getString() const
 include/svx/dlgctrl.hxx:257
@@ -766,8 +780,6 @@ include/vcl/animate/AnimationBitmap.hxx:69
     _Bool AnimationBitmap::operator!=(const struct AnimationBitmap &) const
 include/vcl/BitmapColor.hxx:39
     void BitmapColor::SetAlpha(unsigned char)
-include/vcl/builder.hxx:410
-    enum FieldUnit BuilderUtils::detectUnit(const class rtl::OUString &)
 include/vcl/builderpage.hxx:36
     void BuilderPage::SetHelpId(const class rtl::OString &)
 include/vcl/ColorMask.hxx:113
@@ -986,10 +998,10 @@ libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:73
     void ::operator()(struct _GtkBuilder *) const
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:32
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:50
+    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-helpers.cxx:77
     void ::operator()(struct _GtkTargetList *) const
-libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx:183
-    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
@@ -1352,6 +1364,10 @@ svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_append_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:54
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
+svx/source/dialog/ClassificationEditView.hxx:38
+    void svx::ClassificationEditView::SetCharAttributes()
+svx/source/dialog/ClassificationEditView.hxx:44
+    void svx::ClassificationEditView::SetNumType(enum SvxNumType)
 svx/source/svdraw/svdpdf.hxx:89
     double ImpSdrPdfImport::Matrix::b() const
 svx/source/svdraw/svdpdf.hxx:91
@@ -1684,8 +1700,6 @@ vcl/inc/skia/salbmp.hxx:69
     void SkiaSalBitmap::dump(const char *) const
 vcl/inc/skia/utils.hxx:47
     void SkiaHelper::dump(const class SkBitmap &,const char *)
-vcl/inc/slider.hxx:97
-    void Slider::SetScrollTypeSet(_Bool)
 vcl/inc/unx/glyphcache.hxx:108
     void FreetypeManager::ClearFontOptions()
 vcl/inc/unx/gtk/gtkframe.hxx:216
