@@ -16,6 +16,24 @@
       "revId": "017ae620604de06414dc3f780804c241b87e45c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "151e1920_39c8c375",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2020-02-06T10:15:16Z",
+      "side": 1,
+      "message": "\u0027\u003e\u003e\u003d\u0027 operator sets nValue. So it\u0027s initialized right here.",
+      "parentUuid": "7f7acfc6_04db3cd3",
+      "revId": "017ae620604de06414dc3f780804c241b87e45c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
