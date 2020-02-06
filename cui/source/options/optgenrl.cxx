@@ -380,7 +380,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
             vFields.front()->xEdit->grab_focus();
     }
 
-    m_xUseDataCB->set_sensitive( SvtSaveOptions().IsUseUserData() );
+    m_xUseDataCB->set_active(SvtSaveOptions().IsUseUserData());
 }
 
 
