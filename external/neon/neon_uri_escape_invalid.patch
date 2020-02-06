@@ -1,0 +1,111 @@
+diff -ur src/ne_207.c src/ne_207.c
+--- src/ne_207.c	2006-01-02 12:43:19.000000000 +0100
++++ src/ne_207.c	2020-02-06 17:13:40.878700228 +0100
+@@ -178,13 +178,18 @@
+ 	if (p->start_response && HAVE_CDATA(p)) {
+             ne_uri ref, resolved;
+ 
+-            if (ne_uri_parse(cdata, &ref) == 0) {
++            char *escaped_uri = ne_uri_escape_invalid(cdata);
++            int res = ne_uri_parse(escaped_uri, &ref);
++            free(escaped_uri);
++            if (res == 0) {
+                 ne_uri_resolve(&p->base, &ref, &resolved);
+ 
+                 p->response = p->start_response(p->userdata, &resolved);
+                 p->in_response = 1;
+                 ne_uri_free(&resolved);
+             }
++            else
++                NE_DEBUG(NE_DBG_XML, "URI parse failed for %s\n", res, escaped_uri); 
+             ne_uri_free(&ref);
+ 	}
+ 	break;
+diff -ur src/ne_uri.c src/ne_uri.c
+--- src/ne_uri.c	2020-02-06 17:07:25.726196222 +0100
++++ src/ne_uri.c	2020-02-06 17:14:27.658272757 +0100
+@@ -94,7 +94,10 @@
+ #define URI_FRAGMENT URI_QUERY
+ 
+ /* any characters which should be path-escaped: */
+-#define URI_ESCAPE ((URI_GENDELIM & ~(FS)) | URI_SUBDELIM | OT | WS | PC)
++#define URI_ESCAPE_PATH ((URI_GENDELIM & ~(FS)) | URI_SUBDELIM | OT | WS | PC)
++
++/* any byte which is not valid in an URI */
++#define URI_ESCAPE_INVALID (OT | WS)
+ 
+ static const unsigned int uri_chars[256] = {
+ /* 0xXX    x0      x2      x4      x6      x8      xA      xC      xE     */
+@@ -477,18 +480,16 @@
+     return ret;
+ }
+ 
+-/* CH must be an unsigned char; evaluates to 1 if CH should be
+- * percent-encoded (note !!x == x ? 1 : 0). */
+-#define path_escape_ch(ch) (!!(uri_lookup(ch) & URI_ESCAPE))
++typedef int (*ne_escape_char_func)(const char byte);
+ 
+-char *ne_path_escape(const char *path) 
++static inline char *ne_escape_chars(const char *path, const ne_escape_char_func func) 
+ {
+     const unsigned char *pnt;
+     char *ret, *p;
+     size_t count = 0;
+ 
+     for (pnt = (const unsigned char *)path; *pnt != '\0'; pnt++) {
+-        count += path_escape_ch(*pnt);
++        count += func(*pnt);
+     }
+ 
+     if (count == 0) {
+@@ -497,7 +498,7 @@
+ 
+     p = ret = ne_malloc(strlen(path) + 2 * count + 1);
+     for (pnt = (const unsigned char *)path; *pnt != '\0'; pnt++) {
+-	if (path_escape_ch(*pnt)) {
++	if (func(*pnt)) {
+ 	    /* Escape it - %<hex><hex> */
+ 	    sprintf(p, "%%%02x", (unsigned char) *pnt);
+ 	    p += 3;
+@@ -509,7 +510,27 @@
+     return ret;
+ }
+ 
+-#undef path_escape_ch
++/* CH must be an unsigned char; evaluates to 1 if CH should be
++ * percent-encoded (note !!x == x ? 1 : 0). */
++static int path_escape_ch(const char ch)
++{
++    return !!(uri_lookup(ch) & URI_ESCAPE_PATH);
++}
++
++char *ne_path_escape(const char *path) 
++{
++    return ne_escape_chars(path, path_escape_ch);
++}
++
++static int uri_escape_invalid_ch(const char ch)
++{
++    return !!(uri_lookup(ch) & URI_ESCAPE_INVALID); 
++}
++
++char *ne_uri_escape_invalid(const char *uri)
++{
++    return ne_escape_chars(uri, uri_escape_invalid_ch);
++}
+ 
+ #define CMPWITH(field, func)                    \
+     do {                                        \
+diff -ur src/ne_uri.h src/ne_uri.h
+--- src/ne_uri.h	2008-08-05 17:32:47.000000000 +0200
++++ src/ne_uri.h	2020-02-06 17:02:28.865101735 +0100
+@@ -51,6 +51,9 @@
+ /* Returns non-zero if path has a trailing slash character */
+ int ne_path_has_trailing_slash(const char *path);
+ 
++/* Escapes all invalid bytes in an otherwise valid URI */
++char *ne_uri_escape_invalid(const char *uri);
++
+ /* Return the default port for the given scheme, or 0 if none is
+  * known. */
+ unsigned int ne_uri_defaultport(const char *scheme);

@@ -91,4 +91,10 @@ $(eval $(call gb_Library_add_libs,neon,\
 ))
 endif
 
+ifneq (,$(gb_ENABLE_DBGUTIL))
+$(eval $(call gb_Library_add_cflags,neon,\
+    -DNE_DEBUGGING=1 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
