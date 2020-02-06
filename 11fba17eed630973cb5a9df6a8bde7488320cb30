@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8d89fc3_dca9596c",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 2
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-06T19:16:33Z",
+      "side": 0,
+      "message": "It looks a bit fishy that while most of those pch files apparently happen to meet the clang-format criteria (and are thus removed from the blacklist), at least this one is not.  All of those files should ideally be fully generated, without manual editing.  So I think we should either ensure that the generation mechanism is guaranteed to generated clang-format\u0027ed output and remove all the pch files from the blacklist, or else keep all of them blacklisted.",
+      "revId": "11fba17eed630973cb5a9df6a8bde7488320cb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
