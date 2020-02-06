@@ -1471,33 +1471,6 @@ tools::Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
 }
 
-void ValueSet::RemoveItem( sal_uInt16 nItemId )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    if ( nPos < mItemList.size() ) {
-        mItemList.erase( mItemList.begin() + nPos );
-    }
-
-    // reset variables
-    if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
-    {
-        mnCurCol        = 0;
-        mnHighItemId    = 0;
-        mnSelItemId     = 0;
-        mbNoSelection   = true;
-    }
-
-    queue_resize();
-
-    mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
-}
-
 void ValueSet::Clear()
 {
     ImplDeleteItems();
@@ -1712,36 +1685,6 @@ void ValueSet::SetNoSelection()
         Invalidate();
 }
 
-void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->meType  = VALUESETITEM_IMAGE;
-    pItem->maImage = rImage;
-
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-    {
-        const tools::Rectangle aRect = ImplGetItemRect(nPos);
-        Invalidate(aRect);
-    }
-    else
-        mbFormat = true;
-}
-
-Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->maImage;
-    else
-        return Image();
-}
-
 Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );
@@ -1750,76 +1693,6 @@ Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
         return mItemList[nPos]->maColor;
     else
         return Color();
-}
-
-void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->mpData = pData;
-
-    if ( pItem->meType == VALUESETITEM_USERDRAW )
-    {
-        if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-        {
-            const tools::Rectangle aRect = ImplGetItemRect(nPos);
-            Invalidate(aRect);
-        }
-        else
-            mbFormat = true;
-    }
-}
-
-void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->mpData;
-    else
-        return nullptr;
-}
-
-void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-
-    ValueSetItem* pItem = mItemList[nPos].get();
-    if (pItem->maText == rText)
-        return;
-    // Remember old and new name for accessibility event.
-    Any aOldName;
-    Any aNewName;
-    aOldName <<= pItem->maText;
-    aNewName <<= rText;
-
-    pItem->maText = rText;
-
-    if (!mbFormat && IsReallyVisible() && IsUpdateMode())
-    {
-        sal_uInt16 nTempId = mnSelItemId;
-
-        if (mbHighlight)
-            nTempId = mnHighItemId;
-
-        if (nTempId == nItemId)
-            Invalidate();
-    }
-
-    if (ImplHasAccessibleListeners())
-    {
-        Reference<XAccessible> xAccessible(pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/));
-        ValueItemAcc* pValueItemAcc = static_cast<ValueItemAcc*>(xAccessible.get());
-        pValueItemAcc->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
-    }
 }
 
 OUString ValueSet::GetItemText( sal_uInt16 nItemId ) const
@@ -1832,27 +1705,6 @@ OUString ValueSet::GetItemText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-void ValueSet::SetColor( const Color& rColor )
-{
-    maColor  = rColor;
-    mbFormat = true;
-    if (IsReallyVisible() && IsUpdateMode())
-        Invalidate();
-}
-
-void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
-{
-    if ( GetStyle() & WB_ITEMBORDER )
-    {
-        mnSpacing = nNewSpacing;
-
-        mbFormat = true;
-        queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
-            Invalidate();
-    }
-}
-
 void ValueSet::EndSelection()
 {
     if ( mbHighlight )
@@ -1863,11 +1715,6 @@ void ValueSet::EndSelection()
         ImplHighlightItem( mnSelItemId );
         mbHighlight = false;
     }
-}
-
-void ValueSet::SetFormat()
-{
-    mbFormat = true;
 }
 
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,

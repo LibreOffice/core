@@ -298,7 +298,6 @@ public:
                                const OUString& rStr);
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-    void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
 
@@ -329,22 +328,12 @@ public:
         return mbNoSelection;
     }
 
-    void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-    Image           GetItemImage( sal_uInt16 nItemId ) const;
     Color           GetItemColor( sal_uInt16 nItemId ) const;
-    void            SetItemData( sal_uInt16 nItemId, void* pData );
-    void*           GetItemData( sal_uInt16 nItemId ) const;
-    void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
-    void            SetColor( const Color& rColor );
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
     }
-
-    void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-
-    void            SetFormat();
 
     void            EndSelection();
 
