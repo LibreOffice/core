@@ -22,8 +22,8 @@
 #include <sal/types.h>
 #include <vcl/seleng.hxx>
 
-#include <svtools/table/tabletypes.hxx>
-#include <svtools/table/tablemodel.hxx>
+#include <table/tabletypes.hxx>
+#include <table/tablemodel.hxx>
 
 
 namespace svt { namespace table
