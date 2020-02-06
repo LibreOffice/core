@@ -15,17 +15,18 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <vcl/vclptr.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/event.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <vcl/event.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -71,7 +72,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
     rtl::Reference<comphelper::ConfigurationListener> m_xListener;
     ClassificationPropertyListener m_aPropertyListener;
 
-    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
@@ -94,21 +95,32 @@ public:
 };
 
 /// Classification control is the parent of all widgets that belongs to ClassificationCategoriesController.
-class SAL_WARN_UNUSED ClassificationControl : public vcl::Window
+class SAL_WARN_UNUSED ClassificationControl final : public InterimItemWindow
 {
-    VclPtr<FixedText> m_pLabel;
-    VclPtr<ListBox> m_pCategory;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::ComboBox> m_xCategory;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
     void SetOptimalSize();
     void DataChanged(const DataChangedEvent& rEvent) override;
+    void GetFocus() override
+    {
+        m_xCategory->grab_focus();
+    }
 
 public:
     explicit ClassificationControl(vcl::Window* pParent);
     ~ClassificationControl() override;
     void dispose() override;
-    void Resize() override;
-    const VclPtr<ListBox>& getCategory() const
+    weld::ComboBox& getCategory()
     {
-        return m_pCategory;
+        return *m_xCategory;
+    }
+    void set_sensitive(bool bSensitive)
+    {
+        Enable(bSensitive);
+        m_xContainer->set_sensitive(bSensitive);
     }
     static sfx::ClassificationCreationOrigin getExistingClassificationOrigin();
     void toggleInteractivityOnOrigin();
@@ -175,13 +187,14 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     if (pToolbar)
     {
         m_pClassification = VclPtr<ClassificationControl>::Create(pToolbar);
-        m_pClassification->getCategory()->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
+        m_pClassification->getCategory().connect_changed(LINK(this, ClassificationCategoriesController, SelectHdl));
+        m_pClassification->Show();
     }
 
     return VCLUnoHelper::GetInterface(m_pClassification);
 }
 
-IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
+IMPL_LINK(ClassificationCategoriesController, SelectHdl, weld::ComboBox&, rCategory, void)
 {
     m_pClassification->toggleInteractivityOnOrigin();
 
@@ -195,7 +208,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, vo
     }
     else
     {
-        OUString aEntry = rCategory.GetSelectedEntry();
+        OUString aEntry = rCategory.get_active_text();
 
         const OUString& aType = getCategoryType();
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
@@ -223,14 +236,12 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     // check if classification was set via the advanced dialog
     if (ClassificationControl::getExistingClassificationOrigin() != sfx::ClassificationCreationOrigin::MANUAL)
     {
-        VclPtr<ListBox> pCategories = m_pClassification->getCategory();
-        if (pCategories->GetEntryCount() == 0)
+        weld::ComboBox& rCategories = m_pClassification->getCategory();
+        if (rCategories.get_count() == 0)
         {
             std::vector<OUString> aNames = aHelper.GetBACNames();
             for (const OUString& rName : aNames)
-                pCategories->InsertEntry(rName);
-            // Normally VclBuilder::makeObject() does this.
-            pCategories->EnableAutoSize(true);
+                rCategories.append_text(rName);
         }
     }
 
@@ -241,16 +252,19 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
 
 void ClassificationCategoriesController::removeEntries()
 {
-    m_pClassification->getCategory()->Clear();
+    m_pClassification->getCategory().clear();
 }
 
-// WB_NOLABEL means here that the control won't be replaced with a label
-// when it wouldn't fit the available space.
 ClassificationControl::ClassificationControl(vcl::Window* pParent)
-    : Window(pParent, WB_DIALOGCONTROL | WB_NOLABEL)
+    : InterimItemWindow(pParent, "sfx/ui/classificationbox.ui", "ClassificationBox")
+    , m_xLabel(m_xBuilder->weld_label("label"))
+    , m_xCategory(m_xBuilder->weld_combo_box("combobox"))
 {
-    m_pLabel = VclPtr<FixedText>::Create(this, WB_CENTER);
-    m_pCategory = VclPtr<ListBox>::Create(this, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
+    m_xCategory->connect_key_press(LINK(this, ClassificationControl, KeyInputHdl));
+
+    // WB_NOLABEL means here that the control won't be replaced with a label
+    // when it wouldn't fit the available space.
+    SetStyle(GetStyle() | WB_DIALOGCONTROL | WB_NOLABEL);
 
     OUString aText;
     switch (SfxClassificationHelper::getPolicyType())
@@ -265,17 +279,20 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
         aText = SfxResId(STR_CLASSIFIED_EXPORT_CONTROL);
         break;
     }
-    Size aTextSize(m_pLabel->GetTextWidth(aText), m_pLabel->GetTextHeight());
 
-    // Padding.
-    aTextSize.AdjustWidth(12 );
-    m_pLabel->SetText(aText);
-    m_pLabel->SetSizePixel(aTextSize);
-    m_pLabel->Show();
+    m_xLabel->set_label(aText);
 
-    m_pCategory->Show();
+    // Same as SvxColorDockingWindow.
+    const Size aLogicalAttrSize(150, 0);
+    Size aSize(LogicToPixel(aLogicalAttrSize, MapMode(MapUnit::MapAppFont)));
+    m_xCategory->set_size_request(aSize.Width() - m_xLabel->get_preferred_size().Width(), -1);
 
     SetOptimalSize();
+}
+
+IMPL_LINK(ClassificationControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 ClassificationControl::~ClassificationControl()
@@ -285,43 +302,14 @@ ClassificationControl::~ClassificationControl()
 
 void ClassificationControl::dispose()
 {
-    m_pLabel.disposeAndClear();
-    m_pCategory.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-void ClassificationControl::Resize()
-{
-    // Give the label what it wants, and the remaining size to the listbox.
-    Size aSize(GetOutputSizePixel());
-
-    long nWLabel = m_pLabel->GetOutputSizePixel().Width();
-    long nW = aSize.Width();
-    long nH = aSize.Height();
-
-    long nPrefHeight = m_pLabel->get_preferred_size().Height();
-    long nOffset = (nH - nPrefHeight) / 2;
-    m_pLabel->SetPosSizePixel(Point(0, nOffset), Size(nWLabel, nPrefHeight));
-
-    nPrefHeight = m_pCategory->get_preferred_size().Height();
-    nOffset = (nH - nPrefHeight) / 2;
-    m_pCategory->SetPosSizePixel(Point(0 + nWLabel, nOffset), Size(nW - nWLabel, nPrefHeight));
+    m_xLabel.reset();
+    m_xCategory.reset();
+    InterimItemWindow::dispose();
 }
 
 void ClassificationControl::SetOptimalSize()
 {
-    // Same as SvxColorDockingWindow.
-    const Size aLogicalAttrSize(150, 0);
-    Size aSize(LogicToPixel(aLogicalAttrSize, MapMode(MapUnit::MapAppFont)));
-
-    Point aPosition = m_pCategory->GetPosPixel();
-
-    aSize.setHeight( std::max(aSize.Height(), m_pLabel->get_preferred_size().Height()) );
-    aSize.setHeight( std::max(aSize.Height(), m_pCategory->get_preferred_size().Height()) );
-
-    aSize.setWidth( aPosition.X() + aSize.Width() );
-
-    SetSizePixel(aSize);
+    SetSizePixel(get_preferred_size());
 }
 
 void ClassificationControl::DataChanged(const DataChangedEvent& rEvent)
@@ -331,7 +319,7 @@ void ClassificationControl::DataChanged(const DataChangedEvent& rEvent)
 
     toggleInteractivityOnOrigin();
 
-    Window::DataChanged(rEvent);
+    InterimItemWindow::DataChanged(rEvent);
 }
 
 sfx::ClassificationCreationOrigin ClassificationControl::getExistingClassificationOrigin()
@@ -351,11 +339,11 @@ void ClassificationControl::toggleInteractivityOnOrigin()
 {
     if (getExistingClassificationOrigin() == sfx::ClassificationCreationOrigin::MANUAL)
     {
-        Disable();
+        set_sensitive(false);
     }
     else
     {
-        Enable();
+        set_sensitive(true);
     }
 }
 
@@ -364,7 +352,7 @@ void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHe
     const OUString& rCategoryName = rHelper.GetBACName(SfxClassificationHelper::getPolicyType());
     if (!rCategoryName.isEmpty())
     {
-        getCategory()->SelectEntry(rCategoryName);
+        getCategory().set_active_text(rCategoryName);
     }
 }
 

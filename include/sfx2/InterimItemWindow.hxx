@@ -9,11 +9,11 @@
 
 #pragma once
 
+#include <sfx2/dllapi.h>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
-#include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC InterimItemWindow : public Control
+class SFX2_DLLPUBLIC InterimItemWindow : public Control
 {
 public:
     virtual ~InterimItemWindow() override;
