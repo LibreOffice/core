@@ -223,10 +223,8 @@ SvFileStream::~SvFileStream()
     Close();
 }
 
-std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
+std::size_t SvFileLikeStream::GetData( void* pData, std::size_t nSize )
 {
-    SAL_INFO("tools", OString::number(static_cast<sal_Int64>(nSize)) << " Bytes from " << aFilename);
-
     sal_uInt64 nRead = 0;
     if ( IsOpen() )
     {
@@ -240,10 +238,8 @@ std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
     return static_cast<std::size_t>(nRead);
 }
 
-std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
+std::size_t SvFileLikeStream::PutData( const void* pData, std::size_t nSize )
 {
-    SAL_INFO("tools", OString::number(static_cast<sal_Int64>(nSize)) << " Bytes to " << aFilename);
-
     sal_uInt64 nWrite = 0;
     if ( IsOpen() )
     {
@@ -259,7 +255,7 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
     return static_cast<std::size_t>(nWrite);
 }
 
-sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
+sal_uInt64 SvFileLikeStream::SeekPos(sal_uInt64 const nPos)
 {
     // check if a truncated STREAM_SEEK_TO_END was passed
     assert(nPos != sal_uInt64(sal_uInt32(STREAM_SEEK_TO_END)));
@@ -286,7 +282,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
     return 0L;
 }
 
-void SvFileStream::FlushData()
+void SvFileLikeStream::FlushData()
 {
     // does not exist locally
 }
@@ -467,12 +463,12 @@ void SvFileStream::Close()
 }
 
 /// set filepointer to beginning of file
-void SvFileStream::ResetError()
+void SvFileLikeStream::ResetError()
 {
     SvStream::ClearError();
 }
 
-void SvFileStream::SetSize (sal_uInt64 const nSize)
+void SvFileLikeStream::SetSize (sal_uInt64 const nSize)
 {
     if (IsOpen())
     {
@@ -482,6 +478,39 @@ void SvFileStream::SetSize (sal_uInt64 const nSize)
             SetError ( ::GetSvError( rc ));
         }
     }
+}
+
+SvFileLikeStream::SvFileLikeStream() {}
+SvFileLikeStream::~SvFileLikeStream() {}
+
+class SvTempStream final : public SvFileLikeStream
+{
+public:
+    SvTempStream()
+    {
+        bIsOpen             = false;
+        m_isWritable        = false;
+        pInstanceData.reset(new StreamData);
+        SetBufferSize( 1024 );
+
+        oslFileHandle nHandleTmp;
+        sal_uInt32 uFlags = osl_File_OpenFlag_Temporary;
+
+        oslFileError rc = osl_openFile( nullptr, &nHandleTmp, uFlags );
+        if ( rc == osl_File_E_None )
+        {
+            pInstanceData->rHandle = nHandleTmp;
+            bIsOpen = true;
+            m_isWritable = true;
+        }
+        else
+            SetError( ::GetSvError( rc ) );
+    }
+};
+
+std::unique_ptr<SvStream> SvStream::CreateTempFile()
+{
+    return std::make_unique<SvTempStream>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

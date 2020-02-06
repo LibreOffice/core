@@ -1818,141 +1818,124 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
         sal_uInt32 nLen = aHd.nRecLen - 4;
         if ( static_cast<sal_Int32>(nLen) > 0 )
         {
-            bool bSuccess = false;
-
             rStCtrl.SeekRel( 4 );
 
-            ::utl::TempFile aTmpFile;
-            aTmpFile.EnableKillingFile();
-
-            if ( aTmpFile.IsValid() )
-            {
-                SvStream* pDest = aTmpFile.GetStream(StreamMode::TRUNC | StreamMode::WRITE);
-                if (pDest)
-                {
-                    bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
-                }
-                aTmpFile.CloseStream();
-            }
+            std::unique_ptr<SvStream> xTempStream = SvStream::CreateTempFile();
+            bool bSuccess = SdrPowerPointOLEDecompress( *xTempStream, rStCtrl, nLen );
             if ( bSuccess )
             {
-                SvStream* pDest = aTmpFile.GetStream(StreamMode::READ);
-                Storage* pObjStor = pDest ? new Storage( *pDest, true ) : nullptr;
-                if (pObjStor)
+                Storage* pObjStor = new Storage( *xTempStream, true );
+                tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
+                if ( xObjStor.is() && !xObjStor->GetError() )
                 {
-                    tools::SvRef<SotStorage> xObjStor( new SotStorage( pObjStor ) );
-                    if ( xObjStor.is() && !xObjStor->GetError() )
+                    if ( xObjStor->GetClassName() == SvGlobalName() )
                     {
-                        if ( xObjStor->GetClassName() == SvGlobalName() )
-                        {
-                            xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
+                        xObjStor->SetClass( SvGlobalName( pObjStor->GetClassId() ), pObjStor->GetFormat(), pObjStor->GetUserName() );
+                    }
+                    tools::SvRef<SotStorageStream> xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
+                    if ( xSrcTst.is() )
+                    {
+                        sal_uInt8 aTestA[ 10 ];
+                        bool bGetItAsOle = (sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
+                        if ( !bGetItAsOle )
+                        {   // maybe there is a contents stream in here
+                            xSrcTst = xObjStor->OpenSotStream( "Contents", StreamMode::READWRITE | StreamMode::NOCREATE );
+                            bGetItAsOle = (xSrcTst.is() &&
+                                sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                         }
-                        tools::SvRef<SotStorageStream> xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
-                        if ( xSrcTst.is() )
+                        if ( bGetItAsOle )
                         {
-                            sal_uInt8 aTestA[ 10 ];
-                            bool bGetItAsOle = (sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
-                            if ( !bGetItAsOle )
-                            {   // maybe there is a contents stream in here
-                                xSrcTst = xObjStor->OpenSotStream( "Contents", StreamMode::READWRITE | StreamMode::NOCREATE );
-                                bGetItAsOle = (xSrcTst.is() &&
-                                    sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
-                            }
-                            if ( bGetItAsOle )
+                            OUString aNm;
+                            // if ( nSvxMSDffOLEConvFlags )
                             {
-                                OUString aNm;
-                                // if ( nSvxMSDffOLEConvFlags )
+                                uno::Reference < embed::XStorage > xDestStorage( rOe.pShell->GetStorage() );
+                                uno::Reference < embed::XEmbeddedObject > xObj =
+                                    CheckForConvertToSOObj(nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea, maBaseURL);
+                                if( xObj.is() )
                                 {
-                                    uno::Reference < embed::XStorage > xDestStorage( rOe.pShell->GetStorage() );
-                                    uno::Reference < embed::XEmbeddedObject > xObj =
-                                        CheckForConvertToSOObj(nSvxMSDffOLEConvFlags, *xObjStor, xDestStorage, rGraf, rVisArea, maBaseURL);
-                                    if( xObj.is() )
-                                    {
-                                        rOe.pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
+                                    rOe.pShell->getEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNm );
 
-                                        svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
+                                    svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
 
-                                        // TODO/LATER: need MediaType for Graphic
-                                        aObj.SetGraphic( rGraf, OUString() );
-                                        pRet = new SdrOle2Obj(
-                                            *pSdrModel,
-                                            aObj,
-                                            aNm,
-                                            rBoundRect);
-                                    }
+                                    // TODO/LATER: need MediaType for Graphic
+                                    aObj.SetGraphic( rGraf, OUString() );
+                                    pRet = new SdrOle2Obj(
+                                        *pSdrModel,
+                                        aObj,
+                                        aNm,
+                                        rBoundRect);
                                 }
-                                if ( !pRet && ( rOe.nType == PPT_PST_ExControl ) )
-                                {
-                                    uno::Reference< frame::XModel > xModel( rOe.pShell->GetModel() );
-                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, m_eCurrentPageKind );
-                                    css::uno::Reference< css::drawing::XShape > xShape;
-                                    if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
-                                        pRet = GetSdrObjectFromXShape( xShape );
+                            }
+                            if ( !pRet && ( rOe.nType == PPT_PST_ExControl ) )
+                            {
+                                uno::Reference< frame::XModel > xModel( rOe.pShell->GetModel() );
+                                PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, m_eCurrentPageKind );
+                                css::uno::Reference< css::drawing::XShape > xShape;
+                                if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
+                                    pRet = GetSdrObjectFromXShape( xShape );
 
+                            }
+                            if ( !pRet )
+                            {
+                                aNm = rOe.pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
+
+                                // object is not an own object
+                                const css::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
+                                if (rStorage.is())
+                                {
+                                    tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
+                                    if (xObjStor.is() && xTarget.is())
+                                    {
+                                        xObjStor->CopyTo(xTarget.get());
+                                        if (!xTarget->GetError())
+                                            xTarget->Commit();
+                                    }
+                                    xTarget.clear();
                                 }
-                                if ( !pRet )
+
+                                uno::Reference < embed::XEmbeddedObject > xObj =
+                                    rOe.pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
+                                if ( xObj.is() )
                                 {
-                                    aNm = rOe.pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
-
-                                    // object is not an own object
-                                    const css::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
-                                    if (rStorage.is())
+                                    if ( rOe.nAspect != embed::Aspects::MSOLE_ICON )
                                     {
-                                        tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);
-                                        if (xObjStor.is() && xTarget.is())
+                                        //TODO/LATER: keep on hacking?!
+                                        // we don't want to be modified
+                                        //xInplaceObj->EnableSetModified( sal_False );
+                                        if ( rVisArea.IsEmpty() )
                                         {
-                                            xObjStor->CopyTo(xTarget.get());
-                                            if (!xTarget->GetError())
-                                                xTarget->Commit();
+                                            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rOe.nAspect ) );
+                                            Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                                aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
+
+                                            awt::Size aSz;
+                                            aSz.Width = aSize.Width();
+                                            aSz.Height = aSize.Height();
+                                            xObj->setVisualAreaSize( rOe.nAspect, aSz );
                                         }
-                                        xTarget.clear();
+                                        else
+                                        {
+                                            awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
+                                            xObj->setVisualAreaSize( rOe.nAspect, aSize );
+                                        }
+                                        //xInplaceObj->EnableSetModified( sal_True );
                                     }
 
-                                    uno::Reference < embed::XEmbeddedObject > xObj =
-                                        rOe.pShell->getEmbeddedObjectContainer().GetEmbeddedObject( aNm );
-                                    if ( xObj.is() )
-                                    {
-                                        if ( rOe.nAspect != embed::Aspects::MSOLE_ICON )
-                                        {
-                                            //TODO/LATER: keep on hacking?!
-                                            // we don't want to be modified
-                                            //xInplaceObj->EnableSetModified( sal_False );
-                                            if ( rVisArea.IsEmpty() )
-                                            {
-                                                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rOe.nAspect ) );
-                                                Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                                    aGraphic.GetPrefMapMode(), MapMode( aMapUnit ) ) );
+                                    svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
 
-                                                awt::Size aSz;
-                                                aSz.Width = aSize.Width();
-                                                aSz.Height = aSize.Height();
-                                                xObj->setVisualAreaSize( rOe.nAspect, aSz );
-                                            }
-                                            else
-                                            {
-                                                awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
-                                                xObj->setVisualAreaSize( rOe.nAspect, aSize );
-                                            }
-                                            //xInplaceObj->EnableSetModified( sal_True );
-                                        }
+                                    // TODO/LATER: need MediaType for Graphic
+                                    aObj.SetGraphic( aGraphic, OUString() );
 
-                                        svt::EmbeddedObjectRef aObj( xObj, rOe.nAspect );
-
-                                        // TODO/LATER: need MediaType for Graphic
-                                        aObj.SetGraphic( aGraphic, OUString() );
-
-                                        pRet = new SdrOle2Obj(
-                                            *pSdrModel,
-                                            aObj,
-                                            aNm,
-                                            rBoundRect);
-                                    }
+                                    pRet = new SdrOle2Obj(
+                                        *pSdrModel,
+                                        aObj,
+                                        aNm,
+                                        rBoundRect);
                                 }
                             }
                         }
                     }
                 }
-                aTmpFile.CloseStream();
             }
         }
     }
