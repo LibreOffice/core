@@ -581,9 +581,6 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 
 DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
-    //os: VCL doesn't take care of making the active widget
-    //in the dialog lose the focus
-    m_xNameED->grab_focus();
     //test the table name for spaces
     OUString sTableName = m_xNameED->get_text();
     if(sTableName.indexOf(' ') != -1)
