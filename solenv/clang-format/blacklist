@@ -49,8 +49,6 @@ accessibility/inc/helper/IComboListBoxHelper.hxx
 accessibility/inc/helper/accresmgr.hxx
 accessibility/inc/helper/characterattributeshelper.hxx
 accessibility/inc/helper/listboxhelper.hxx
-accessibility/inc/pch/precompiled_acc.cxx
-accessibility/inc/pch/precompiled_acc.hxx
 accessibility/inc/standard/accessiblemenubasecomponent.hxx
 accessibility/inc/standard/accessiblemenucomponent.hxx
 accessibility/inc/standard/accessiblemenuitemcomponent.hxx
@@ -169,7 +167,6 @@ avmedia/source/framework/mediaplayer.cxx
 avmedia/source/framework/mediatoolbox.cxx
 avmedia/source/framework/soundhandler.cxx
 avmedia/source/framework/soundhandler.hxx
-avmedia/source/gstreamer/gstcommon.hxx
 avmedia/source/gstreamer/gstframegrabber.cxx
 avmedia/source/gstreamer/gstframegrabber.hxx
 avmedia/source/gstreamer/gstmanager.cxx
@@ -197,8 +194,6 @@ avmedia/source/vlc/inc/wrapper/Instance.hxx
 avmedia/source/vlc/inc/wrapper/Media.hxx
 avmedia/source/vlc/inc/wrapper/Player.hxx
 avmedia/source/vlc/inc/wrapper/ThreadsafeQueue.hxx
-avmedia/source/vlc/inc/wrapper/Wrapper.hxx
-avmedia/source/vlc/vlccommon.hxx
 avmedia/source/vlc/vlcframegrabber.cxx
 avmedia/source/vlc/vlcframegrabber.hxx
 avmedia/source/vlc/vlcmanager.cxx
@@ -223,14 +218,11 @@ avmedia/source/win/manager.cxx
 avmedia/source/win/manager.hxx
 avmedia/source/win/player.cxx
 avmedia/source/win/player.hxx
-avmedia/source/win/wincommon.hxx
 avmedia/source/win/window.cxx
 avmedia/source/win/window.hxx
 avmedia/source/win/winuno.cxx
 basctl/inc/helpids.h
 basctl/inc/iderdll.hxx
-basctl/inc/pch/precompiled_basctl.cxx
-basctl/inc/pch/precompiled_basctl.hxx
 basctl/inc/strings.hxx
 basctl/qa/unit/basctl-dialogs-test.cxx
 basctl/source/accessibility/accessibledialogcontrolshape.cxx
@@ -317,8 +309,6 @@ basctl/source/inc/managelang.hxx
 basctl/source/inc/propbrw.hxx
 basctl/source/inc/sbxitem.hxx
 basctl/source/inc/scriptdocument.hxx
-basegfx/inc/pch/precompiled_basegfx.cxx
-basegfx/inc/pch/precompiled_basegfx.hxx
 basegfx/source/color/bcolormodifier.cxx
 basegfx/source/color/bcolortools.cxx
 basegfx/source/curve/b2dbeziertools.cxx
@@ -380,8 +370,6 @@ basegfx/test/boxclipper.hxx
 basegfx/test/clipstate.cxx
 basegfx/test/genericclipper.cxx
 basic/inc/global.hxx
-basic/inc/pch/precompiled_sb.cxx
-basic/inc/pch/precompiled_sb.hxx
 basic/inc/sb.hxx
 basic/inc/sbobjmod.hxx
 basic/inc/sbprop.hxx
@@ -531,7 +519,6 @@ binaryurp/source/writer.hxx
 binaryurp/source/writerstate.hxx
 bridges/inc/bridge.hxx
 bridges/inc/cppinterfaceproxy.hxx
-bridges/inc/except.hxx
 bridges/inc/types.hxx
 bridges/inc/unointerfaceproxy.hxx
 bridges/inc/vtablefactory.hxx
@@ -834,10 +821,6 @@ canvas/workben/canvasdemo.cxx
 chart2/inc/ChartModel.hxx
 chart2/inc/ChartView.hxx
 chart2/inc/SpecialCharacters.hxx
-chart2/inc/pch/precompiled_chartcontroller.cxx
-chart2/inc/pch/precompiled_chartcontroller.hxx
-chart2/inc/pch/precompiled_chartcore.cxx
-chart2/inc/pch/precompiled_chartcore.hxx
 chart2/inc/unonames.hxx
 chart2/qa/extras/PivotChartTest.cxx
 chart2/qa/extras/chart2_trendcalculators.cxx
@@ -878,7 +861,6 @@ chart2/source/controller/chartapiwrapper/LegendWrapper.cxx
 chart2/source/controller/chartapiwrapper/LegendWrapper.hxx
 chart2/source/controller/chartapiwrapper/MinMaxLineWrapper.cxx
 chart2/source/controller/chartapiwrapper/MinMaxLineWrapper.hxx
-chart2/source/controller/chartapiwrapper/ReferenceSizePropertyProvider.hxx
 chart2/source/controller/chartapiwrapper/TitleWrapper.cxx
 chart2/source/controller/chartapiwrapper/TitleWrapper.hxx
 chart2/source/controller/chartapiwrapper/UpDownBarWrapper.cxx
@@ -1211,14 +1193,11 @@ chart2/source/inc/WrappedIgnoreProperty.hxx
 chart2/source/inc/WrappedProperty.hxx
 chart2/source/inc/WrappedPropertySet.hxx
 chart2/source/inc/XMLRangeHelper.hxx
-chart2/source/inc/charttoolsdllapi.hxx
 chart2/source/inc/chartview/ChartSfxItemIds.hxx
 chart2/source/inc/chartview/DataPointSymbolSupplier.hxx
 chart2/source/inc/chartview/DrawModelWrapper.hxx
 chart2/source/inc/chartview/ExplicitScaleValues.hxx
 chart2/source/inc/chartview/ExplicitValueProvider.hxx
-chart2/source/inc/chartview/chartviewdllapi.hxx
-chart2/source/inc/defines.hxx
 chart2/source/inc/servicenames.hxx
 chart2/source/inc/servicenames_charttypes.hxx
 chart2/source/inc/servicenames_coosystems.hxx
@@ -1527,8 +1506,6 @@ codemaker/source/javamaker/javaoptions.cxx
 codemaker/source/javamaker/javaoptions.hxx
 codemaker/source/javamaker/javatype.cxx
 codemaker/source/javamaker/javatype.hxx
-comphelper/inc/pch/precompiled_comphelper.cxx
-comphelper/inc/pch/precompiled_comphelper.hxx
 comphelper/qa/container/comphelper_ifcontainer.cxx
 comphelper/qa/container/testifcontainer.cxx
 comphelper/qa/string/test_string.cxx
@@ -1538,7 +1515,6 @@ comphelper/qa/unit/test_hash.cxx
 comphelper/qa/unit/threadpooltest.cxx
 comphelper/qa/unit/variadictemplates.cxx
 comphelper/qa/weakbag/test_weakbag.cxx
-comphelper/qa/weakbag/test_weakbag_noadditional.cxx
 comphelper/source/compare/AnyCompareFactory.cxx
 comphelper/source/container/IndexedPropertyValuesContainer.cxx
 comphelper/source/container/NamedPropertyValuesContainer.cxx
@@ -1551,7 +1527,6 @@ comphelper/source/container/interfacecontainer2.cxx
 comphelper/source/container/namecontainer.cxx
 comphelper/source/eventattachermgr/eventattachermgr.cxx
 comphelper/source/inc/comphelper_module.hxx
-comphelper/source/inc/comphelper_services.hxx
 comphelper/source/misc/SelectionMultiplex.cxx
 comphelper/source/misc/accessiblecomponenthelper.cxx
 comphelper/source/misc/accessiblecontexthelper.cxx
@@ -1799,9 +1774,7 @@ compilerplugins/clang/test/redundantcast.hxx
 compilerplugins/clang/test/redundantinline.cxx
 compilerplugins/clang/test/redundantinline.hxx
 compilerplugins/clang/test/redundantpointerops.cxx
-compilerplugins/clang/test/refcounting.cxx
 compilerplugins/clang/test/salunicodeliteral.cxx
-compilerplugins/clang/test/salunicodeliteral.hxx
 compilerplugins/clang/test/stringconcatauto.cxx
 compilerplugins/clang/test/stringconstant.cxx
 compilerplugins/clang/test/unnecessarycatchthrow.cxx
@@ -1829,8 +1802,6 @@ compilerplugins/clang/unusedvariablecheck.hxx
 compilerplugins/clang/useuniqueptr.cxx
 compilerplugins/clang/vclwidgets.cxx
 compilerplugins/clang/weakobject.cxx
-configmgr/inc/pch/precompiled_configmgr.cxx
-configmgr/inc/pch/precompiled_configmgr.hxx
 configmgr/qa/unit/test.cxx
 configmgr/source/access.cxx
 configmgr/source/access.hxx
@@ -1902,26 +1873,7 @@ configmgr/source/xcuparser.cxx
 configmgr/source/xcuparser.hxx
 configmgr/source/xmldata.cxx
 configmgr/source/xmldata.hxx
-connectivity/inc/pch/precompiled_ado.cxx
 connectivity/inc/pch/precompiled_ado.hxx
-connectivity/inc/pch/precompiled_calc.cxx
-connectivity/inc/pch/precompiled_calc.hxx
-connectivity/inc/pch/precompiled_dbase.cxx
-connectivity/inc/pch/precompiled_dbase.hxx
-connectivity/inc/pch/precompiled_dbpool2.cxx
-connectivity/inc/pch/precompiled_dbpool2.hxx
-connectivity/inc/pch/precompiled_dbtools.cxx
-connectivity/inc/pch/precompiled_dbtools.hxx
-connectivity/inc/pch/precompiled_file.cxx
-connectivity/inc/pch/precompiled_file.hxx
-connectivity/inc/pch/precompiled_firebird_sdbc.cxx
-connectivity/inc/pch/precompiled_firebird_sdbc.hxx
-connectivity/inc/pch/precompiled_flat.cxx
-connectivity/inc/pch/precompiled_flat.hxx
-connectivity/inc/pch/precompiled_odbc.cxx
-connectivity/inc/pch/precompiled_odbc.hxx
-connectivity/inc/pch/precompiled_postgresql-sdbc-impl.cxx
-connectivity/inc/pch/precompiled_postgresql-sdbc-impl.hxx
 connectivity/inc/strings.hxx
 connectivity/qa/connectivity/ado/DriverTest.cxx
 connectivity/qa/connectivity/commontools/FValue_test.cxx
@@ -2253,12 +2205,10 @@ connectivity/source/drivers/mork/MTables.cxx
 connectivity/source/drivers/mork/MTables.hxx
 connectivity/source/drivers/mork/MorkParser.cxx
 connectivity/source/drivers/mork/MorkParser.hxx
-connectivity/source/drivers/mork/dllapi.h
 connectivity/source/drivers/mork/mork_helper.cxx
 connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.cxx
 connectivity/source/drivers/mozab/bootstrap/MMozillaBootstrap.hxx
 connectivity/source/drivers/mozab/bootstrap/MNSFolders.cxx
-connectivity/source/drivers/mozab/bootstrap/MNSFolders.hxx
 connectivity/source/drivers/mozab/bootstrap/MNSINIParser.cxx
 connectivity/source/drivers/mozab/bootstrap/MNSINIParser.hxx
 connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.cxx
@@ -2436,7 +2386,6 @@ connectivity/source/inc/file/FTables.hxx
 connectivity/source/inc/file/fanalyzer.hxx
 connectivity/source/inc/file/fcode.hxx
 connectivity/source/inc/file/fcomp.hxx
-connectivity/source/inc/file/filedllapi.hxx
 connectivity/source/inc/file/quotedstring.hxx
 connectivity/source/inc/flat/ECatalog.hxx
 connectivity/source/inc/flat/EColumns.hxx
@@ -2512,7 +2461,6 @@ connectivity/source/inc/odbc/OResultSet.hxx
 connectivity/source/inc/odbc/OResultSetMetaData.hxx
 connectivity/source/inc/odbc/OStatement.hxx
 connectivity/source/inc/odbc/OTools.hxx
-connectivity/source/inc/odbc/odbcbasedllapi.hxx
 connectivity/source/inc/propertyids.hxx
 connectivity/source/inc/resource/sharedresources.hxx
 connectivity/source/manager/mdrivermanager.cxx
@@ -2538,8 +2486,6 @@ connectivity/source/sdbcx/VView.cxx
 connectivity/workben/iniParser/main.cxx
 connectivity/workben/little/main.cxx
 connectivity/workben/skeleton/SResultSet.hxx
-cppcanvas/inc/pch/precompiled_cppcanvas.cxx
-cppcanvas/inc/pch/precompiled_cppcanvas.hxx
 cppcanvas/qa/extras/emfplus/emfplus.cxx
 cppcanvas/qa/unit/test.cxx
 cppcanvas/source/inc/action.hxx
@@ -2631,8 +2577,6 @@ cppu/source/uno/loadmodule.cxx
 cppu/source/uno/loadmodule.hxx
 cppu/source/uno/prim.hxx
 cppu/source/uno/sequence.cxx
-cppuhelper/inc/pch/precompiled_cppuhelper.cxx
-cppuhelper/inc/pch/precompiled_cppuhelper.hxx
 cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx
 cppuhelper/qa/propertysetmixin/comp_propertysetmixin.cxx
 cppuhelper/qa/propertysetmixin/test_propertysetmixin.cxx
@@ -2670,8 +2614,6 @@ cppuhelper/source/unourl.cxx
 cppuhelper/source/weak.cxx
 cpputools/source/sp2bv/sp2bv.cxx
 cpputools/source/unoexe/unoexe.cxx
-cui/inc/pch/precompiled_cui.cxx
-cui/inc/pch/precompiled_cui.hxx
 cui/inc/strings.hxx
 cui/qa/unit/cui-dialogs-test.cxx
 cui/qa/unit/cui-dialogs-test_2.cxx
@@ -2756,7 +2698,6 @@ cui/source/inc/cuioptgenrl.hxx
 cui/source/inc/cuisrchdlg.hxx
 cui/source/inc/cuitabarea.hxx
 cui/source/inc/cuitabline.hxx
-cui/source/inc/cuitbxform.hxx
 cui/source/inc/dbregister.hxx
 cui/source/inc/defdlgname.hxx
 cui/source/inc/dialmgr.hxx
@@ -2765,7 +2706,6 @@ cui/source/inc/dstribut.hxx
 cui/source/inc/grfpage.hxx
 cui/source/inc/hangulhanjadlg.hxx
 cui/source/inc/headertablistbox.hxx
-cui/source/inc/helpids.h
 cui/source/inc/hldocntp.hxx
 cui/source/inc/hldoctp.hxx
 cui/source/inc/hlinettp.hxx
@@ -2776,7 +2716,6 @@ cui/source/inc/hltpbase.hxx
 cui/source/inc/hyphen.hxx
 cui/source/inc/iconcdlg.hxx
 cui/source/inc/insdlg.hxx
-cui/source/inc/insrc.hxx
 cui/source/inc/labdlg.hxx
 cui/source/inc/linkdlg.hxx
 cui/source/inc/macroass.hxx
@@ -2910,16 +2849,7 @@ cui/source/tabpages/tptrans.cxx
 cui/source/tabpages/transfrm.cxx
 cui/source/uno/services.cxx
 dbaccess/inc/core_resource.hxx
-dbaccess/inc/dbadllapi.hxx
 dbaccess/inc/helpids.h
-dbaccess/inc/pch/precompiled_dba.cxx
-dbaccess/inc/pch/precompiled_dba.hxx
-dbaccess/inc/pch/precompiled_dbaxml.cxx
-dbaccess/inc/pch/precompiled_dbaxml.hxx
-dbaccess/inc/pch/precompiled_dbu.cxx
-dbaccess/inc/pch/precompiled_dbu.hxx
-dbaccess/inc/pch/precompiled_sdbt.cxx
-dbaccess/inc/pch/precompiled_sdbt.hxx
 dbaccess/inc/strings.hxx
 dbaccess/qa/extras/dialog-save.cxx
 dbaccess/qa/extras/empty-stdlib-save.cxx
@@ -3048,7 +2978,6 @@ dbaccess/source/core/inc/datasettings.hxx
 dbaccess/source/core/inc/definitioncolumn.hxx
 dbaccess/source/core/inc/definitioncontainer.hxx
 dbaccess/source/core/inc/documentevents.hxx
-dbaccess/source/core/inc/object.hxx
 dbaccess/source/core/inc/objectnameapproval.hxx
 dbaccess/source/core/inc/preparedstatement.hxx
 dbaccess/source/core/inc/querycomposer.hxx
@@ -3109,7 +3038,6 @@ dbaccess/source/filter/xml/xmlDatabaseDescription.cxx
 dbaccess/source/filter/xml/xmlDatabaseDescription.hxx
 dbaccess/source/filter/xml/xmlDocuments.cxx
 dbaccess/source/filter/xml/xmlDocuments.hxx
-dbaccess/source/filter/xml/xmlEnums.hxx
 dbaccess/source/filter/xml/xmlExport.cxx
 dbaccess/source/filter/xml/xmlExport.hxx
 dbaccess/source/filter/xml/xmlFileBasedDatabase.cxx
@@ -3529,15 +3457,6 @@ desktop/inc/dp_misc.h
 desktop/inc/dp_shared.hxx
 desktop/inc/lib/init.hxx
 desktop/inc/migration.hxx
-desktop/inc/pch/precompiled_deployment.cxx
-desktop/inc/pch/precompiled_deployment.hxx
-desktop/inc/pch/precompiled_deploymentgui.cxx
-desktop/inc/pch/precompiled_deploymentgui.hxx
-desktop/inc/pch/precompiled_deploymentmisc.cxx
-desktop/inc/pch/precompiled_deploymentmisc.hxx
-desktop/inc/pch/precompiled_sofficeapp.cxx
-desktop/inc/pch/precompiled_sofficeapp.hxx
-desktop/inc/strings.hxx
 desktop/qa/deployment_misc/test_dp_version.cxx
 desktop/qa/desktop_app/test_desktop_app.cxx
 desktop/qa/desktop_lib/test_desktop_lib.cxx
@@ -3562,7 +3481,6 @@ desktop/source/app/officeipcthread.cxx
 desktop/source/app/officeipcthread.hxx
 desktop/source/app/opencl.cxx
 desktop/source/app/sofficemain.cxx
-desktop/source/app/sofficemain.h
 desktop/source/app/updater.cxx
 desktop/source/app/updater.hxx
 desktop/source/app/userinstall.cxx
@@ -3594,7 +3512,6 @@ desktop/source/deployment/inc/dp_dependencies.hxx
 desktop/source/deployment/inc/dp_descriptioninfoset.hxx
 desktop/source/deployment/inc/dp_identifier.hxx
 desktop/source/deployment/inc/dp_interact.h
-desktop/source/deployment/inc/dp_misc_api.hxx
 desktop/source/deployment/inc/dp_package.hxx
 desktop/source/deployment/inc/dp_persmap.h
 desktop/source/deployment/inc/dp_platform.hxx
@@ -3676,13 +3593,11 @@ desktop/source/migration/services/oo3extensionmigration.hxx
 desktop/source/migration/services/wordbookmigration.cxx
 desktop/source/migration/services/wordbookmigration.hxx
 desktop/source/minidump/minidump.cxx
-desktop/source/minidump/minidump_upload.cxx
 desktop/source/offacc/acceptor.cxx
 desktop/source/offacc/acceptor.hxx
 desktop/source/pkgchk/unopkg/unopkg_app.cxx
 desktop/source/pkgchk/unopkg/unopkg_cmdenv.cxx
 desktop/source/pkgchk/unopkg/unopkg_main.c
-desktop/source/pkgchk/unopkg/unopkg_main.h
 desktop/source/pkgchk/unopkg/unopkg_misc.cxx
 desktop/source/pkgchk/unopkg/unopkg_shared.h
 desktop/source/splash/services_spl.cxx
@@ -3700,26 +3615,15 @@ desktop/unx/source/file_image_unx.c
 desktop/unx/source/pagein.c
 desktop/unx/source/pagein.h
 desktop/unx/source/splashx.c
-desktop/unx/source/splashx.h
 desktop/unx/source/start.c
 desktop/win32/source/QuickStart/QuickStart.cxx
 desktop/win32/source/QuickStart/resource.h
 desktop/win32/source/applauncher/launcher.cxx
-desktop/win32/source/applauncher/launcher.hxx
-desktop/win32/source/applauncher/sbase.cxx
-desktop/win32/source/applauncher/scalc.cxx
-desktop/win32/source/applauncher/sdraw.cxx
-desktop/win32/source/applauncher/simpress.cxx
-desktop/win32/source/applauncher/smath.cxx
-desktop/win32/source/applauncher/sweb.cxx
-desktop/win32/source/applauncher/swriter.cxx
 desktop/win32/source/loader.cxx
 desktop/win32/source/loader.hxx
 desktop/win32/source/unoinfo.cxx
 drawinglayer/inc/converters.hxx
 drawinglayer/inc/emfplushelper.hxx
-drawinglayer/inc/pch/precompiled_drawinglayer.cxx
-drawinglayer/inc/pch/precompiled_drawinglayer.hxx
 drawinglayer/inc/wmfemfhelper.hxx
 drawinglayer/qa/unit/border.cxx
 drawinglayer/source/animation/animationtiming.cxx
@@ -3881,7 +3785,6 @@ dtrans/source/generic/dtrans.cxx
 dtrans/source/generic/generic_clipboard.cxx
 dtrans/source/generic/generic_clipboard.hxx
 dtrans/source/inc/DtObjFactory.hxx
-dtrans/source/inc/WinClip.hxx
 dtrans/source/test/test_dtrans.cxx
 dtrans/source/win32/clipb/APNDataObject.hxx
 dtrans/source/win32/clipb/MtaOleClipb.cxx
@@ -3953,8 +3856,6 @@ editeng/inc/editxml.hxx
 editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
 editeng/inc/helpids.h
-editeng/inc/pch/precompiled_editeng.cxx
-editeng/inc/pch/precompiled_editeng.hxx
 editeng/inc/unomodel.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
@@ -3971,7 +3872,6 @@ editeng/source/accessibility/AccessibleSelectionBase.cxx
 editeng/source/accessibility/AccessibleStaticTextBase.cxx
 editeng/source/accessibility/AccessibleStringWrap.cxx
 editeng/source/editeng/editattr.cxx
-editeng/source/editeng/editdata.cxx
 editeng/source/editeng/editdbg.cxx
 editeng/source/editeng/editdbg.hxx
 editeng/source/editeng/editdoc.cxx
@@ -4147,7 +4047,6 @@ embedserv/source/inc/embservconst.h
 embedserv/source/inc/iipaobj.hxx
 embedserv/source/inc/intercept.hxx
 embedserv/source/inc/servprov.hxx
-embedserv/source/inc/stdafx.h
 embedserv/source/inc/syswinwrapper.hxx
 embedserv/source/inprocserv/advisesink.cxx
 embedserv/source/inprocserv/advisesink.hxx
@@ -4158,8 +4057,6 @@ embedserv/source/inprocserv/smartpointer.hxx
 emfio/inc/emfiodllapi.h
 emfio/inc/emfreader.hxx
 emfio/inc/mtftools.hxx
-emfio/inc/pch/precompiled_emfio.cxx
-emfio/inc/pch/precompiled_emfio.hxx
 emfio/inc/wmfreader.hxx
 emfio/qa/cppunit/emf/EmfImportTest.cxx
 emfio/qa/cppunit/wmf/wmfimporttest.cxx
@@ -4206,7 +4103,6 @@ extensions/source/activex/SOComWindowPeer.cxx
 extensions/source/activex/SOComWindowPeer.h
 extensions/source/activex/SODispatchInterceptor.cxx
 extensions/source/activex/SODispatchInterceptor.h
-extensions/source/activex/StdAfx2.cxx
 extensions/source/activex/StdAfx2.h
 extensions/source/activex/com_uno_helper.h
 extensions/source/activex/resource.h
@@ -4220,8 +4116,6 @@ extensions/source/bibliography/bibcont.hxx
 extensions/source/bibliography/bibload.cxx
 extensions/source/bibliography/bibmod.cxx
 extensions/source/bibliography/bibmod.hxx
-extensions/source/bibliography/bibprop.hxx
-extensions/source/bibliography/bibresid.hxx
 extensions/source/bibliography/bibshortcuthandler.hxx
 extensions/source/bibliography/bibtools.hxx
 extensions/source/bibliography/bibview.cxx
@@ -4300,7 +4194,6 @@ extensions/source/ole/unoobjw.cxx
 extensions/source/ole/unoobjw.hxx
 extensions/source/ole/unotypewrapper.cxx
 extensions/source/ole/unotypewrapper.hxx
-extensions/source/ole/wincrap.hxx
 extensions/source/ole/windata.hxx
 extensions/source/propctrlr/MasterDetailLinkDialog.cxx
 extensions/source/propctrlr/MasterDetailLinkDialog.hxx
@@ -4430,12 +4323,10 @@ extensions/source/update/check/actionlistener.hxx
 extensions/source/update/check/download.cxx
 extensions/source/update/check/download.hxx
 extensions/source/update/check/onlinecheck.cxx
-extensions/source/update/check/onlinecheck.hxx
 extensions/source/update/check/updatecheck.cxx
 extensions/source/update/check/updatecheck.hxx
 extensions/source/update/check/updatecheckconfig.cxx
 extensions/source/update/check/updatecheckconfig.hxx
-extensions/source/update/check/updatecheckconfiglistener.hxx
 extensions/source/update/check/updatecheckjob.cxx
 extensions/source/update/check/updatehdl.cxx
 extensions/source/update/check/updatehdl.hxx
@@ -4451,14 +4342,10 @@ extensions/test/ole/AxTestComponents/Basic.cpp
 extensions/test/ole/AxTestComponents/Basic.h
 extensions/test/ole/AxTestComponents/Foo.cpp
 extensions/test/ole/AxTestComponents/Foo.h
-extensions/test/ole/AxTestComponents/StdAfx.cpp
-extensions/test/ole/AxTestComponents/StdAfx.h
 extensions/test/ole/AxTestComponents/resource.h
 extensions/test/ole/EventListenerSample/EventListener/EventListener.cpp
 extensions/test/ole/EventListenerSample/EventListener/EvtListener.cpp
 extensions/test/ole/EventListenerSample/EventListener/EvtListener.h
-extensions/test/ole/EventListenerSample/EventListener/StdAfx.cpp
-extensions/test/ole/EventListenerSample/EventListener/StdAfx.h
 extensions/test/ole/EventListenerSample/EventListener/resource.h
 extensions/test/ole/MfcControl/MfcControl.cpp
 extensions/test/ole/MfcControl/MfcControl.h
@@ -4467,7 +4354,6 @@ extensions/test/ole/MfcControl/MfcControlCtl.h
 extensions/test/ole/MfcControl/MfcControlPpg.cpp
 extensions/test/ole/MfcControl/MfcControlPpg.h
 extensions/test/ole/MfcControl/Resource.h
-extensions/test/ole/MfcControl/StdAfx.cpp
 extensions/test/ole/MfcControl/StdAfx.h
 extensions/test/ole/OleClient/axhost.cxx
 extensions/test/ole/OleClient/axhost.hxx
@@ -4479,15 +4365,12 @@ extensions/test/ole/cpnt/cpnt.cxx
 extensions/test/ole/cppToUno/testcppuno.cxx
 extensions/test/ole/cpptest/cpptest.cxx
 extensions/test/ole/unloading/unloadTest.cxx
-extensions/test/ole/unoTocomCalls/Test/StdAfx.cpp
 extensions/test/ole/unoTocomCalls/Test/StdAfx.h
 extensions/test/ole/unoTocomCalls/Test/Test.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Callback.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Callback.h
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Simple.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/Simple.h
-extensions/test/ole/unoTocomCalls/XCallback_Impl/StdAfx.cpp
-extensions/test/ole/unoTocomCalls/XCallback_Impl/StdAfx.h
 extensions/test/ole/unoTocomCalls/XCallback_Impl/XCallback_Impl.cpp
 extensions/test/ole/unoTocomCalls/XCallback_Impl/resource.h
 external/bluez_bluetooth/inc/bluetooth/bluetooth.h
@@ -4504,7 +4387,6 @@ external/clucene/configs/_clucene-config-generic.h
 external/clucene/configs/clucene-config-GCC-atomic.h
 external/clucene/configs/clucene-config-MSVC.h
 external/clucene/configs/clucene-config-generic.h
-external/libpng/configs/pnglibconf.h
 external/mariadb-connector-c/configs/linux_my_config.h
 external/mariadb-connector-c/configs/mac_my_config.h
 external/mariadb-connector-c/configs/mysql_version.h
@@ -4705,8 +4587,6 @@ filter/source/xsltfilter/LibXSLTTransformer.hxx
 filter/source/xsltfilter/OleHandler.cxx
 filter/source/xsltfilter/OleHandler.hxx
 filter/source/xsltfilter/XSLTFilter.cxx
-forms/inc/pch/precompiled_frm.cxx
-forms/inc/pch/precompiled_frm.hxx
 forms/source/component/BaseListBox.hxx
 forms/source/component/Button.cxx
 forms/source/component/Button.hxx
@@ -5006,7 +4886,6 @@ framework/inc/classes/actiontriggerpropertyset.hxx
 framework/inc/classes/actiontriggerseparatorpropertyset.hxx
 framework/inc/classes/converter.hxx
 framework/inc/classes/framecontainer.hxx
-framework/inc/classes/fwkresid.hxx
 framework/inc/classes/imagewrapper.hxx
 framework/inc/classes/protocolhandlercache.hxx
 framework/inc/classes/resource.hxx
@@ -5052,14 +4931,6 @@ framework/inc/macros/registration.hxx
 framework/inc/macros/xinterface.hxx
 framework/inc/macros/xserviceinfo.hxx
 framework/inc/macros/xtypeprovider.hxx
-framework/inc/pch/precompiled_fwe.cxx
-framework/inc/pch/precompiled_fwe.hxx
-framework/inc/pch/precompiled_fwi.cxx
-framework/inc/pch/precompiled_fwi.hxx
-framework/inc/pch/precompiled_fwk.cxx
-framework/inc/pch/precompiled_fwk.hxx
-framework/inc/pch/precompiled_fwl.cxx
-framework/inc/pch/precompiled_fwl.hxx
 framework/inc/properties.h
 framework/inc/protocols.h
 framework/inc/recording/dispatchrecorder.hxx
@@ -5071,7 +4942,6 @@ framework/inc/services/mediatypedetectionhelper.hxx
 framework/inc/services/uriabbreviation.hxx
 framework/inc/stdtypes.h
 framework/inc/targets.h
-framework/inc/taskcreatordefs.hxx
 framework/inc/threadhelp/gate.hxx
 framework/inc/threadhelp/transactionguard.hxx
 framework/inc/threadhelp/transactionmanager.hxx
@@ -5339,8 +5209,6 @@ helpcompiler/source/HelpLinker_main.cxx
 helpcompiler/source/HelpSearch.cxx
 helpcompiler/source/LuceneHelper.cxx
 helpcompiler/source/LuceneHelper.hxx
-hwpfilter/inc/pch/precompiled_hwp.cxx
-hwpfilter/inc/pch/precompiled_hwp.hxx
 hwpfilter/qa/cppunit/test_hwpfilter.cxx
 hwpfilter/source/attributes.cxx
 hwpfilter/source/attributes.hxx
@@ -5904,7 +5772,6 @@ include/connectivity/dbconversion.hxx
 include/connectivity/dbexception.hxx
 include/connectivity/dbmetadata.hxx
 include/connectivity/dbtools.hxx
-include/connectivity/dbtoolsdllapi.hxx
 include/connectivity/filtermanager.hxx
 include/connectivity/formattedcolumnvalue.hxx
 include/connectivity/internalnode.hxx
@@ -5941,7 +5808,6 @@ include/cppcanvas/bitmapcanvas.hxx
 include/cppcanvas/canvas.hxx
 include/cppcanvas/canvasgraphic.hxx
 include/cppcanvas/color.hxx
-include/cppcanvas/cppcanvasdllapi.h
 include/cppcanvas/customsprite.hxx
 include/cppcanvas/font.hxx
 include/cppcanvas/polypolygon.hxx
@@ -5980,7 +5846,6 @@ include/cppuhelper/component_context.hxx
 include/cppuhelper/cppuhelperdllapi.h
 include/cppuhelper/exc_hlp.hxx
 include/cppuhelper/factory.hxx
-include/cppuhelper/findsofficepath.h
 include/cppuhelper/implbase.hxx
 include/cppuhelper/implbase1.hxx
 include/cppuhelper/implbase10.hxx
@@ -6046,7 +5911,6 @@ include/drawinglayer/attribute/sdrobjectattribute3d.hxx
 include/drawinglayer/attribute/sdrsceneattribute3d.hxx
 include/drawinglayer/attribute/sdrshadowattribute.hxx
 include/drawinglayer/attribute/strokeattribute.hxx
-include/drawinglayer/drawinglayerdllapi.h
 include/drawinglayer/geometry/viewinformation2d.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
 include/drawinglayer/primitive2d/cropprimitive2d.hxx
@@ -6197,7 +6061,6 @@ include/editeng/legacyitem.hxx
 include/editeng/lineitem.hxx
 include/editeng/lrspitem.hxx
 include/editeng/lspcitem.hxx
-include/editeng/macros.hxx
 include/editeng/measfld.hxx
 include/editeng/memberids.h
 include/editeng/misspellrange.hxx
@@ -6259,7 +6122,6 @@ include/editeng/widwitem.hxx
 include/editeng/writingmodeitem.hxx
 include/editeng/wrlmitem.hxx
 include/editeng/xmlcnitm.hxx
-include/filter/dllapi.h
 include/filter/msfilter/classids.hxx
 include/filter/msfilter/countryid.hxx
 include/filter/msfilter/dffpropset.hxx
@@ -6267,7 +6129,6 @@ include/filter/msfilter/dffrecordheader.hxx
 include/filter/msfilter/escherex.hxx
 include/filter/msfilter/mscodec.hxx
 include/filter/msfilter/msdffimp.hxx
-include/filter/msfilter/msfilterdllapi.h
 include/filter/msfilter/msocximex.hxx
 include/filter/msfilter/msoleexp.hxx
 include/filter/msfilter/mstoolbar.hxx
@@ -6314,7 +6175,6 @@ include/framework/undomanagerhelper.hxx
 include/helpcompiler/HelpIndexer.hxx
 include/helpcompiler/HelpSearch.hxx
 include/helpcompiler/compilehelp.hxx
-include/helpcompiler/dllapi.h
 include/i18nlangtag/applelangid.hxx
 include/i18nlangtag/i18nlangtagdllapi.h
 include/i18nlangtag/lang.h
@@ -6390,7 +6250,6 @@ include/oox/crypto/CryptoEngine.hxx
 include/oox/crypto/DocumentDecryption.hxx
 include/oox/crypto/DocumentEncryption.hxx
 include/oox/crypto/Standard2007Engine.hxx
-include/oox/dllapi.h
 include/oox/drawingml/chart/chartconverter.hxx
 include/oox/drawingml/chart/datasourcemodel.hxx
 include/oox/drawingml/chart/modelbase.hxx
@@ -6501,7 +6360,6 @@ include/osl/detail/component-mapping.h
 include/osl/detail/file.h
 include/osl/diagnose.h
 include/osl/diagnose.hxx
-include/osl/doublecheckedlocking.h
 include/osl/endian.h
 include/osl/file.h
 include/osl/file.hxx
@@ -6532,9 +6390,6 @@ include/osl/time.h
 include/package/Deflater.hxx
 include/package/Inflater.hxx
 include/package/packagedllapi.hxx
-include/postmac.h
-include/postwin.h
-include/premac.h
 include/prewin.h
 include/registry/reader.hxx
 include/registry/refltype.hxx
@@ -6590,7 +6445,6 @@ include/sal/main.h
 include/sal/mathconf.h
 include/sal/saldllapi.h
 include/sal/types.h
-include/sal/typesizes.h
 include/salhelper/condition.hxx
 include/salhelper/dynload.hxx
 include/salhelper/linkhelper.hxx
@@ -6602,9 +6456,7 @@ include/salhelper/thread.hxx
 include/salhelper/timer.hxx
 include/sax/fastattribs.hxx
 include/sax/fastparser.hxx
-include/sax/fastsaxdllapi.h
 include/sax/fshelper.hxx
-include/sax/saxdllapi.h
 include/sax/tools/converter.hxx
 include/sax/tools/documenthandleradapter.hxx
 include/sfx2/DocumentMetadataAccess.hxx
@@ -6621,14 +6473,12 @@ include/sfx2/chalign.hxx
 include/sfx2/charmapcontrol.hxx
 include/sfx2/charmappopup.hxx
 include/sfx2/charwin.hxx
-include/sfx2/checkin.hxx
 include/sfx2/childwin.hxx
 include/sfx2/classificationhelper.hxx
 include/sfx2/ctrlitem.hxx
 include/sfx2/dialoghelper.hxx
 include/sfx2/dinfdlg.hxx
 include/sfx2/dispatch.hxx
-include/sfx2/dllapi.h
 include/sfx2/docfac.hxx
 include/sfx2/docfile.hxx
 include/sfx2/docfilt.hxx
@@ -6689,7 +6539,6 @@ include/sfx2/sfxdlg.hxx
 include/sfx2/sfxhelp.hxx
 include/sfx2/sfxhtml.hxx
 include/sfx2/sfxmodelfactory.hxx
-include/sfx2/sfxresid.hxx
 include/sfx2/sfxstatuslistener.hxx
 include/sfx2/sfxuno.hxx
 include/sfx2/shell.hxx
@@ -6748,7 +6597,6 @@ include/sfx2/templdlg.hxx
 include/sfx2/thumbnailview.hxx
 include/sfx2/thumbnailviewitem.hxx
 include/sfx2/titledockwin.hxx
-include/sfx2/toolbarids.hxx
 include/sfx2/tplpitem.hxx
 include/sfx2/unoctitm.hxx
 include/sfx2/userinputinterception.hxx
@@ -6839,7 +6687,6 @@ include/svl/stylepool.hxx
 include/svl/stylesheetuser.hxx
 include/svl/svdde.hxx
 include/svl/svldllapi.h
-include/svl/svlresid.hxx
 include/svl/undo.hxx
 include/svl/urihelper.hxx
 include/svl/urlbmk.hxx
@@ -6849,7 +6696,6 @@ include/svl/zforlist.hxx
 include/svl/zformat.hxx
 include/svtools/DocumentInfoPreview.hxx
 include/svtools/DocumentToGraphicRenderer.hxx
-include/svtools/HtmlWriter.hxx
 include/svtools/PlaceEditDialog.hxx
 include/svtools/acceleratorexecute.hxx
 include/svtools/accessibilityoptions.hxx
@@ -6909,7 +6755,6 @@ include/svtools/popupwindowcontroller.hxx
 include/svtools/printoptions.hxx
 include/svtools/prnsetup.hxx
 include/svtools/restartdialog.hxx
-include/svtools/rtfkeywd.hxx
 include/svtools/rtfout.hxx
 include/svtools/rtftoken.h
 include/svtools/ruler.hxx
@@ -6924,7 +6769,6 @@ include/svtools/stringtransfer.hxx
 include/svtools/svmedit.hxx
 include/svtools/svparser.hxx
 include/svtools/svtdllapi.h
-include/svtools/svtresid.hxx
 include/svtools/tabbar.hxx
 include/svtools/table/tableinputhandler.hxx
 include/svtools/table/tablemodel.hxx
@@ -6973,8 +6817,6 @@ include/svx/SmartTagItem.hxx
 include/svx/SmartTagMgr.hxx
 include/svx/SpellDialogChildWindow.hxx
 include/svx/SvxColorChildWindow.hxx
-include/svx/SvxColorValueSet.hxx
-include/svx/SvxNumOptionsTabPageHelper.hxx
 include/svx/SvxPresetListBox.hxx
 include/svx/SvxShapeTypes.hxx
 include/svx/TextCharacterSpacingPopup.hxx
@@ -7009,12 +6851,10 @@ include/svx/dbcharsethelper.hxx
 include/svx/def3d.hxx
 include/svx/deflt3d.hxx
 include/svx/dialcontrol.hxx
-include/svx/dialmgr.hxx
 include/svx/dlgctl3d.hxx
 include/svx/dlgctrl.hxx
 include/svx/dlgutil.hxx
 include/svx/drawitem.hxx
-include/svx/dstribut_enum.hxx
 include/svx/e3ditem.hxx
 include/svx/e3dsceneupdater.hxx
 include/svx/e3dundo.hxx
@@ -7079,7 +6919,6 @@ include/svx/layctrl.hxx
 include/svx/lboxctrl.hxx
 include/svx/legacyitem.hxx
 include/svx/linectrl.hxx
-include/svx/linkwarn.hxx
 include/svx/measctrl.hxx
 include/svx/modctrl.hxx
 include/svx/msdffdef.hxx
@@ -7211,7 +7050,6 @@ include/svx/sidebar/ValueSetWithTextControl.hxx
 include/svx/spacinglistbox.hxx
 include/svx/sphere3d.hxx
 include/svx/srchdlg.hxx
-include/svx/strarray.hxx
 include/svx/svdcrtv.hxx
 include/svx/svddef.hxx
 include/svx/svddrag.hxx
@@ -7300,7 +7138,6 @@ include/svx/textchaincursor.hxx
 include/svx/textchainflow.hxx
 include/svx/transfrmhelper.hxx
 include/svx/txencbox.hxx
-include/svx/txenctab.hxx
 include/svx/ucsubset.hxx
 include/svx/uiobject.hxx
 include/svx/unoapi.hxx
@@ -7386,8 +7223,6 @@ include/systools/win32/comtools.hxx
 include/systools/win32/qswin32.h
 include/systools/win32/uwinapi.h
 include/test/bootstrapfixture.hxx
-include/test/calc_unoapi_test.hxx
-include/test/callgrind.hxx
 include/test/container/xnamed.hxx
 include/test/htmltesttools.hxx
 include/test/screenshot_test.hxx
@@ -7431,11 +7266,9 @@ include/test/sheet/xusedareacursor.hxx
 include/test/sheet/xviewfreezable.hxx
 include/test/sheet/xviewpane.hxx
 include/test/sheet/xviewsplitable.hxx
-include/test/testdllapi.hxx
 include/test/testinteractionhandler.hxx
 include/test/text/xtext.hxx
 include/test/text/xtextcontent.hxx
-include/test/text/xtextfield.hxx
 include/test/unoapi_test.hxx
 include/test/util/xreplaceable.hxx
 include/test/util/xsearchable.hxx
@@ -7453,7 +7286,6 @@ include/toolkit/controls/unocontrol.hxx
 include/toolkit/controls/unocontrolbase.hxx
 include/toolkit/controls/unocontrolmodel.hxx
 include/toolkit/controls/unocontrols.hxx
-include/toolkit/dllapi.h
 include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/convert.hxx
 include/toolkit/helper/emptyfontdescriptor.hxx
@@ -7476,7 +7308,6 @@ include/tools/datetimeutils.hxx
 include/tools/debug.hxx
 include/tools/diagnose_ex.h
 include/tools/extendapplicationenvironment.hxx
-include/tools/fldunit.hxx
 include/tools/fontenum.hxx
 include/tools/fract.hxx
 include/tools/gen.hxx
@@ -7493,7 +7324,6 @@ include/tools/multisel.hxx
 include/tools/pathutils.hxx
 include/tools/poly.hxx
 include/tools/ref.hxx
-include/tools/resary.hxx
 include/tools/solar.h
 include/tools/stream.hxx
 include/tools/svborder.hxx
@@ -7554,7 +7384,6 @@ include/uno/threadpool.h
 include/unoidl/detail/dllapi.hxx
 include/unoidl/unoidl.hxx
 include/unotest/bootstrapfixturebase.hxx
-include/unotest/detail/unotestdllapi.hxx
 include/unotest/directories.hxx
 include/unotest/filters-test.hxx
 include/unotest/gettestargument.hxx
@@ -7691,7 +7520,6 @@ include/vcl/ctrl.hxx
 include/vcl/cursor.hxx
 include/vcl/cvtgrf.hxx
 include/vcl/decoview.hxx
-include/vcl/devicecoordinate.hxx
 include/vcl/dialog.hxx
 include/vcl/dibtools.hxx
 include/vcl/dllapi.h
@@ -7790,7 +7618,6 @@ include/vcl/status.hxx
 include/vcl/stdtext.hxx
 include/vcl/svapp.hxx
 include/vcl/svlbitm.hxx
-include/vcl/svmain.hxx
 include/vcl/svtabbx.hxx
 include/vcl/svtaccessiblefactory.hxx
 include/vcl/syschild.hxx
@@ -7821,11 +7648,9 @@ include/vcl/toolkit/unowrap.hxx
 include/vcl/transfer.hxx
 include/vcl/treelist.hxx
 include/vcl/treelistbox.hxx
-include/vcl/treelistentries.hxx
 include/vcl/treelistentry.hxx
 include/vcl/txtattr.hxx
 include/vcl/uitest/factory.hxx
-include/vcl/uitest/logger.hxx
 include/vcl/uitest/uiobject.hxx
 include/vcl/uitest/uitest.hxx
 include/vcl/unohelp.hxx
@@ -7887,7 +7712,6 @@ include/xmloff/attrlist.hxx
 include/xmloff/autolayout.hxx
 include/xmloff/contextid.hxx
 include/xmloff/controlpropertyhdl.hxx
-include/xmloff/dllapi.h
 include/xmloff/families.hxx
 include/xmloff/formlayerexport.hxx
 include/xmloff/formlayerimport.hxx
@@ -7940,7 +7764,6 @@ include/xmloff/xmltkmap.hxx
 include/xmloff/xmltoken.hxx
 include/xmloff/xmltypes.hxx
 include/xmloff/xmluconv.hxx
-include/xmlreader/detail/xmlreaderdllapi.hxx
 include/xmlreader/pad.hxx
 include/xmlreader/span.hxx
 include/xmlreader/xmlreader.hxx
@@ -7948,7 +7771,6 @@ include/xmlscript/xml_helper.hxx
 include/xmlscript/xmldlg_imexp.hxx
 include/xmlscript/xmllib_imexp.hxx
 include/xmlscript/xmlmod_imexp.hxx
-include/xmlscript/xmlns.h
 include/xmlscript/xmlscriptdllapi.h
 io/qa/textinputstream.cxx
 io/source/TextInputStream/TextInputStream.cxx
@@ -7994,7 +7816,6 @@ jvmaccess/source/classpath.cxx
 jvmaccess/source/unovirtualmachine.cxx
 jvmaccess/source/virtualmachine.cxx
 jvmaccess/workbench/exceptiontest1.cxx
-jvmaccess/workbench/exceptiontest2.cxx
 jvmaccess/workbench/javainfo/javainfotest.cxx
 jvmfwk/inc/elements.hxx
 jvmfwk/inc/fwkbase.hxx
@@ -8003,7 +7824,6 @@ jvmfwk/inc/libxmlutil.hxx
 jvmfwk/inc/vendorbase.hxx
 jvmfwk/inc/vendorplugin.hxx
 jvmfwk/plugins/sunmajor/javaenvsetup/javaldx.cxx
-jvmfwk/plugins/sunmajor/pluginlib/diagnostics.h
 jvmfwk/plugins/sunmajor/pluginlib/gnujre.cxx
 jvmfwk/plugins/sunmajor/pluginlib/gnujre.hxx
 jvmfwk/plugins/sunmajor/pluginlib/otherjre.cxx
@@ -8039,7 +7859,6 @@ l10ntools/inc/treemerge.hxx
 l10ntools/inc/xmlparse.hxx
 l10ntools/inc/xrmlex.hxx
 l10ntools/inc/xrmmerge.hxx
-l10ntools/source/cfg_yy_wrapper.c
 l10ntools/source/cfgmerge.cxx
 l10ntools/source/common.cxx
 l10ntools/source/helper.cxx
@@ -8054,11 +7873,9 @@ l10ntools/source/po.cxx
 l10ntools/source/pocheck.cxx
 l10ntools/source/propex.cxx
 l10ntools/source/propmerge.cxx
-l10ntools/source/src_yy_wrapper.c
 l10ntools/source/treemerge.cxx
 l10ntools/source/treex.cxx
 l10ntools/source/xmlparse.cxx
-l10ntools/source/xrm_yy_wrapper.c
 l10ntools/source/xrmmerge.cxx
 libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx
@@ -8076,13 +7893,10 @@ libreofficekit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.cxx
 libreofficekit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.hxx
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx
-libreofficekit/qa/gtktiledviewer/gtv-main.cxx
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx
 libreofficekit/qa/tilebench/tilebench.cxx
-libreofficekit/qa/unit/checkapi.cxx
 libreofficekit/qa/unit/compile_test.c
-libreofficekit/qa/unit/test.h
 libreofficekit/qa/unit/tiledrendering.cxx
 libreofficekit/source/gtk/lokdocview.cxx
 libreofficekit/source/gtk/tilebuffer.cxx
@@ -8156,7 +7970,6 @@ lotuswordpro/inc/lwpfont.hxx
 lotuswordpro/inc/lwpfoundry.hxx
 lotuswordpro/inc/lwpfrib.hxx
 lotuswordpro/inc/lwpglobalmgr.hxx
-lotuswordpro/inc/lwpheader.hxx
 lotuswordpro/inc/lwpidxmgr.hxx
 lotuswordpro/inc/lwpobj.hxx
 lotuswordpro/inc/lwpobjfactory.hxx
@@ -8167,8 +7980,6 @@ lotuswordpro/inc/lwpobjtags.hxx
 lotuswordpro/inc/lwpoverride.hxx
 lotuswordpro/inc/lwpsvstream.hxx
 lotuswordpro/inc/lwptools.hxx
-lotuswordpro/inc/pch/precompiled_lwpft.cxx
-lotuswordpro/inc/pch/precompiled_lwpft.hxx
 lotuswordpro/inc/xfilter/ixfattrlist.hxx
 lotuswordpro/inc/xfilter/ixfstream.hxx
 lotuswordpro/inc/xfilter/ixfstyle.hxx
@@ -8567,7 +8378,6 @@ odk/examples/OLE/activex/SOActiveX.cpp
 odk/examples/OLE/activex/SOActiveX.h
 odk/examples/OLE/activex/SOComWindowPeer.cpp
 odk/examples/OLE/activex/SOComWindowPeer.h
-odk/examples/OLE/activex/StdAfx2.cpp
 odk/examples/OLE/activex/StdAfx2.h
 odk/examples/OLE/activex/resource.h
 odk/examples/OLE/activex/so_activex.cpp
@@ -8598,7 +8408,6 @@ odk/source/unowinreg/win/unowinreg.cxx
 officecfg/qa/cppheader.cxx
 onlineupdate/inc/Char16.h
 onlineupdate/inc/bspatch.h
-onlineupdate/inc/types.hxx
 onlineupdate/source/libmar/sign/mar_sign.c
 onlineupdate/source/libmar/sign/nss_secutil.c
 onlineupdate/source/libmar/sign/nss_secutil.h
@@ -8653,7 +8462,6 @@ onlineupdate/source/update/updater/updater.cxx
 onlineupdate/source/update/updater/win_dirent.cxx
 onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator.cxx
 onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator.h
-onlineupdate/workben/test_dialog.cxx
 oox/inc/drawingml/ThemeOverrideFragmentHandler.hxx
 oox/inc/drawingml/chart/axiscontext.hxx
 oox/inc/drawingml/chart/axisconverter.hxx
@@ -8730,8 +8538,6 @@ oox/inc/drawingml/textrun.hxx
 oox/inc/drawingml/textspacing.hxx
 oox/inc/drawingml/themeelementscontext.hxx
 oox/inc/drawingml/transform2dcontext.hxx
-oox/inc/pch/precompiled_oox.cxx
-oox/inc/pch/precompiled_oox.hxx
 oox/qa/token/tokenmap-test.cxx
 oox/qa/unit/vba_compression.cxx
 oox/qa/unit/vba_encryption.cxx
@@ -8995,7 +8801,6 @@ package/inc/EncryptedDataHeader.hxx
 package/inc/EncryptionData.hxx
 package/inc/HashMaps.hxx
 package/inc/PackageConstants.hxx
-package/inc/ZipEntry.hxx
 package/inc/ZipEnumeration.hxx
 package/inc/ZipFile.hxx
 package/inc/ZipOutputEntry.hxx
@@ -9005,10 +8810,6 @@ package/inc/ZipPackageBuffer.hxx
 package/inc/ZipPackageEntry.hxx
 package/inc/ZipPackageFolder.hxx
 package/inc/ZipPackageStream.hxx
-package/inc/pch/precompiled_package2.cxx
-package/inc/pch/precompiled_package2.hxx
-package/inc/pch/precompiled_xstor.cxx
-package/inc/pch/precompiled_xstor.hxx
 package/inc/zipfileaccess.hxx
 package/qa/cppunit/test_package.cxx
 package/source/manifest/ManifestDefines.hxx
@@ -9122,15 +8923,8 @@ reportdesign/inc/RptPage.hxx
 reportdesign/inc/UndoActions.hxx
 reportdesign/inc/UndoEnv.hxx
 reportdesign/inc/conditionalexpression.hxx
-reportdesign/inc/core_resource.hxx
 reportdesign/inc/dllapi.h
 reportdesign/inc/helpids.h
-reportdesign/inc/pch/precompiled_rpt.cxx
-reportdesign/inc/pch/precompiled_rpt.hxx
-reportdesign/inc/pch/precompiled_rptui.cxx
-reportdesign/inc/pch/precompiled_rptui.hxx
-reportdesign/inc/pch/precompiled_rptxml.cxx
-reportdesign/inc/pch/precompiled_rptxml.hxx
 reportdesign/inc/reportformula.hxx
 reportdesign/inc/strings.hxx
 reportdesign/qa/unit/reportdesign-dialogs-test.cxx
@@ -9331,11 +9125,6 @@ sal/android/uthash.h
 sal/cppunittester/cppunittester.cxx
 sal/inc/backtraceasstring.hxx
 sal/inc/oslmemory.h
-sal/inc/oslrandom.h
-sal/inc/pch/precompiled_sal.cxx
-sal/inc/pch/precompiled_sal.hxx
-sal/inc/rtllifecycle.h
-sal/inc/salusesyslog.hxx
 sal/inc/signalshared.hxx
 sal/osl/all/compat.cxx
 sal/osl/all/debugbase.cxx
@@ -9351,7 +9140,6 @@ sal/osl/unx/conditn.cxx
 sal/osl/unx/createfilehandlefromfd.hxx
 sal/osl/unx/file.cxx
 sal/osl/unx/file_error_transl.cxx
-sal/osl/unx/file_error_transl.hxx
 sal/osl/unx/file_impl.hxx
 sal/osl/unx/file_misc.cxx
 sal/osl/unx/file_path_helper.cxx
@@ -9375,7 +9163,6 @@ sal/osl/unx/random.cxx
 sal/osl/unx/readwrite_helper.cxx
 sal/osl/unx/readwrite_helper.hxx
 sal/osl/unx/salinit.cxx
-sal/osl/unx/saltime.hxx
 sal/osl/unx/secimpl.hxx
 sal/osl/unx/security.cxx
 sal/osl/unx/signal.cxx
@@ -9399,8 +9186,6 @@ sal/osl/w32/file_error.hxx
 sal/osl/w32/file_url.cxx
 sal/osl/w32/file_url.hxx
 sal/osl/w32/filetime.hxx
-sal/osl/w32/gmutex.hxx
-sal/osl/w32/interlck.cxx
 sal/osl/w32/memory.cxx
 sal/osl/w32/module.cxx
 sal/osl/w32/mutex.cxx
@@ -9423,9 +9208,7 @@ sal/osl/w32/sockimpl.hxx
 sal/osl/w32/system.h
 sal/osl/w32/tempfile.cxx
 sal/osl/w32/thread.cxx
-sal/osl/w32/thread.hxx
 sal/osl/w32/time.cxx
-sal/osl/w32/time.hxx
 sal/qa/ByteSequence/ByteSequence.cxx
 sal/qa/OStringBuffer/rtl_OStringBuffer.cxx
 sal/qa/OStringBuffer/rtl_String_Const.h
@@ -9443,7 +9226,6 @@ sal/qa/osl/module/osl_Module.cxx
 sal/qa/osl/module/osl_Module_Const.h
 sal/qa/osl/module/osl_Module_DLL.cxx
 sal/qa/osl/mutex/osl_Mutex.cxx
-sal/qa/osl/mutex/osl_Mutex_Const.h
 sal/qa/osl/pipe/osl_Pipe.cxx
 sal/qa/osl/process/osl_Thread.cxx
 sal/qa/osl/process/osl_process.cxx
@@ -9526,8 +9308,6 @@ sal/rtl/uri.cxx
 sal/rtl/ustrbuf.cxx
 sal/rtl/ustring.cxx
 sal/rtl/uuid.cxx
-sal/test/test_salmain.cxx
-sal/test/test_salmainwithargs.cxx
 sal/test/testbootstrap.cxx
 sal/textenc/context.cxx
 sal/textenc/context.hxx
@@ -9701,7 +9481,6 @@ sc/inc/dpshttab.hxx
 sc/inc/dptabdat.hxx
 sc/inc/dptabres.hxx
 sc/inc/dptabsrc.hxx
-sc/inc/dptypes.hxx
 sc/inc/dputil.hxx
 sc/inc/dragdata.hxx
 sc/inc/drawpage.hxx
@@ -9757,7 +9536,6 @@ sc/inc/miscuno.hxx
 sc/inc/mtvcellfunc.hxx
 sc/inc/mtvelements.hxx
 sc/inc/mtvfunctions.hxx
-sc/inc/mutexhlp.hxx
 sc/inc/nameuno.hxx
 sc/inc/navicfg.hxx
 sc/inc/notesuno.hxx
@@ -9771,14 +9549,6 @@ sc/inc/pagepar.hxx
 sc/inc/pageuno.hxx
 sc/inc/paramisc.hxx
 sc/inc/patattr.hxx
-sc/inc/pch/precompiled_sc.cxx
-sc/inc/pch/precompiled_sc.hxx
-sc/inc/pch/precompiled_scfilt.cxx
-sc/inc/pch/precompiled_scfilt.hxx
-sc/inc/pch/precompiled_scui.cxx
-sc/inc/pch/precompiled_scui.hxx
-sc/inc/pch/precompiled_vbaobj.cxx
-sc/inc/pch/precompiled_vbaobj.hxx
 sc/inc/pivot.hxx
 sc/inc/postit.hxx
 sc/inc/printopt.hxx
@@ -9811,7 +9581,6 @@ sc/inc/scitems.hxx
 sc/inc/scmatrix.hxx
 sc/inc/scmod.hxx
 sc/inc/scopetools.hxx
-sc/inc/scresid.hxx
 sc/inc/segmenttree.hxx
 sc/inc/servuno.hxx
 sc/inc/shapeuno.hxx
@@ -9833,7 +9602,6 @@ sc/inc/stylehelper.hxx
 sc/inc/styleuno.hxx
 sc/inc/subtotal.hxx
 sc/inc/subtotalparam.hxx
-sc/inc/tabbgcolor.hxx
 sc/inc/table.hxx
 sc/inc/tablink.hxx
 sc/inc/tabopparams.hxx
@@ -9871,14 +9639,9 @@ sc/qa/extras/regression-test.cxx
 sc/qa/extras/scannotationsobj.cxx
 sc/qa/extras/scarealinkobj.cxx
 sc/qa/extras/sccellcursorobj.cxx
-sc/qa/extras/sccellobj.cxx
-sc/qa/extras/sccellrangeobj.cxx
 sc/qa/extras/sccellrangesobj.cxx
 sc/qa/extras/scdatabaserangeobj.cxx
-sc/qa/extras/scdatapilotitemobj.cxx
 sc/qa/extras/scdatapilottableobj.cxx
-sc/qa/extras/sceditfieldobj-cell.cxx
-sc/qa/extras/sceditfieldobj-header.cxx
 sc/qa/extras/scmodelobj.cxx
 sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/scoutlineobj.cxx
@@ -10317,7 +10080,6 @@ sc/source/filter/inc/rtfparse.hxx
 sc/source/filter/inc/scenariobuffer.hxx
 sc/source/filter/inc/scenariocontext.hxx
 sc/source/filter/inc/scfobj.hxx
-sc/source/filter/inc/scmem.h
 sc/source/filter/inc/sharedformulagroups.hxx
 sc/source/filter/inc/sharedstringsbuffer.hxx
 sc/source/filter/inc/sharedstringsfragment.hxx
@@ -10536,7 +10298,6 @@ sc/source/filter/xml/celltextparacontext.hxx
 sc/source/filter/xml/datastreamimport.cxx
 sc/source/filter/xml/datastreamimport.hxx
 sc/source/filter/xml/editattributemap.cxx
-sc/source/filter/xml/editattributemap.hxx
 sc/source/filter/xml/importcontext.cxx
 sc/source/filter/xml/importcontext.hxx
 sc/source/filter/xml/pivotsource.cxx
@@ -10807,7 +10568,6 @@ sc/source/ui/inc/attrdlg.hxx
 sc/source/ui/inc/auditsh.hxx
 sc/source/ui/inc/autofmt.hxx
 sc/source/ui/inc/autostyl.hxx
-sc/source/ui/inc/cbnumberformat.hxx
 sc/source/ui/inc/cbutton.hxx
 sc/source/ui/inc/cellmergeoption.hxx
 sc/source/ui/inc/cellsh.hxx
@@ -10846,7 +10606,6 @@ sc/source/ui/inc/datatransformation.hxx
 sc/source/ui/inc/dbdocfun.hxx
 sc/source/ui/inc/dbfunc.hxx
 sc/source/ui/inc/dbnamdlg.hxx
-sc/source/ui/inc/delcldlg.hxx
 sc/source/ui/inc/delcodlg.hxx
 sc/source/ui/inc/docfunc.hxx
 sc/source/ui/inc/docfuncutil.hxx
@@ -10883,7 +10642,6 @@ sc/source/ui/inc/futext.hxx
 sc/source/ui/inc/graphsh.hxx
 sc/source/ui/inc/gridmerg.hxx
 sc/source/ui/inc/gridwin.hxx
-sc/source/ui/inc/groupdlg.hxx
 sc/source/ui/inc/hdrcont.hxx
 sc/source/ui/inc/hfedtdlg.hxx
 sc/source/ui/inc/highred.hxx
@@ -10892,7 +10650,6 @@ sc/source/ui/inc/imoptdlg.hxx
 sc/source/ui/inc/impex.hxx
 sc/source/ui/inc/inputhdl.hxx
 sc/source/ui/inc/inputwin.hxx
-sc/source/ui/inc/inscldlg.hxx
 sc/source/ui/inc/inscodlg.hxx
 sc/source/ui/inc/instbdlg.hxx
 sc/source/ui/inc/invmerge.hxx
@@ -10973,7 +10730,6 @@ sc/source/ui/inc/tabvwsh.hxx
 sc/source/ui/inc/target.hxx
 sc/source/ui/inc/tbzoomsliderctrl.hxx
 sc/source/ui/inc/textdlgs.hxx
-sc/source/ui/inc/textimportoptions.hxx
 sc/source/ui/inc/tpcalc.hxx
 sc/source/ui/inc/tpcompatibility.hxx
 sc/source/ui/inc/tpdefaults.hxx
@@ -11453,23 +11209,14 @@ sd/inc/createunocustomshow.hxx
 sd/inc/createunopageimpl.hxx
 sd/inc/cusshow.hxx
 sd/inc/customshowlist.hxx
-sd/inc/diadef.h
 sd/inc/drawdoc.hxx
-sd/inc/fadedef.h
 sd/inc/glob.hxx
 sd/inc/helper/simplereferencecomponent.hxx
 sd/inc/helpids.h
 sd/inc/misc/scopelock.hxx
 sd/inc/notifydocumentevent.hxx
-sd/inc/pch/precompiled_sd.cxx
-sd/inc/pch/precompiled_sd.hxx
-sd/inc/pch/precompiled_sdui.cxx
-sd/inc/pch/precompiled_sdui.hxx
 sd/inc/pglink.hxx
-sd/inc/pres.hxx
-sd/inc/prlayout.hxx
 sd/inc/randomnode.hxx
-sd/inc/resltn.hxx
 sd/inc/sdabstdlg.hxx
 sd/inc/sdattr.hxx
 sd/inc/sdcgmfilter.hxx
@@ -11485,7 +11232,6 @@ sd/inc/sdiocmpt.hxx
 sd/inc/sdmod.hxx
 sd/inc/sdpage.hxx
 sd/inc/sdpptwrp.hxx
-sd/inc/sdresid.hxx
 sd/inc/sdundo.hxx
 sd/inc/sdxmlwrp.hxx
 sd/inc/shapelist.hxx
@@ -11572,7 +11318,6 @@ sd/source/filter/html/htmlattr.cxx
 sd/source/filter/html/htmlattr.hxx
 sd/source/filter/html/htmlex.cxx
 sd/source/filter/html/htmlex.hxx
-sd/source/filter/html/htmlpublishmode.hxx
 sd/source/filter/html/pubdlg.cxx
 sd/source/filter/html/sdhtmlfilter.cxx
 sd/source/filter/ppt/ppt97animations.cxx
@@ -11712,7 +11457,6 @@ sd/source/ui/framework/configuration/ResourceFactoryManager.hxx
 sd/source/ui/framework/configuration/ResourceId.cxx
 sd/source/ui/framework/configuration/UpdateRequest.cxx
 sd/source/ui/framework/configuration/UpdateRequest.hxx
-sd/source/ui/framework/configuration/debugtrace.hxx
 sd/source/ui/framework/factories/BasicPaneFactory.cxx
 sd/source/ui/framework/factories/BasicPaneFactory.hxx
 sd/source/ui/framework/factories/BasicToolBarFactory.cxx
@@ -11950,7 +11694,6 @@ sd/source/ui/inc/fuvect.hxx
 sd/source/ui/inc/fuzoom.hxx
 sd/source/ui/inc/gluectrl.hxx
 sd/source/ui/inc/headerfooterdlg.hxx
-sd/source/ui/inc/ins_paste.hxx
 sd/source/ui/inc/inspagob.hxx
 sd/source/ui/inc/layeroptionsdlg.hxx
 sd/source/ui/inc/masterlayoutdlg.hxx
@@ -11958,7 +11701,6 @@ sd/source/ui/inc/morphdlg.hxx
 sd/source/ui/inc/navigatr.hxx
 sd/source/ui/inc/optsitem.hxx
 sd/source/ui/inc/paragr.hxx
-sd/source/ui/inc/pgjump.hxx
 sd/source/ui/inc/present.hxx
 sd/source/ui/inc/prltempl.hxx
 sd/source/ui/inc/prntopts.hxx
@@ -12308,10 +12050,6 @@ sd/source/ui/view/viewshel.cxx
 sd/source/ui/view/zoomlist.cxx
 sd/workben/custompanel/ctp_panel.cxx
 sd/workben/custompanel/ctp_panel.hxx
-sdext/inc/pch/precompiled_PresentationMinimizer.cxx
-sdext/inc/pch/precompiled_PresentationMinimizer.hxx
-sdext/inc/pch/precompiled_PresenterScreen.cxx
-sdext/inc/pch/precompiled_PresenterScreen.hxx
 sdext/source/minimizer/configurationaccess.cxx
 sdext/source/minimizer/configurationaccess.hxx
 sdext/source/minimizer/fileopendialog.cxx
@@ -12453,13 +12191,11 @@ sdext/source/presenter/PresenterWindowManager.cxx
 sdext/source/presenter/PresenterWindowManager.hxx
 setup_native/source/win32/customactions/indexingfilter/restartindexingservice.cxx
 setup_native/source/win32/customactions/quickstarter/quickstarter.cxx
-setup_native/source/win32/customactions/quickstarter/quickstarter.hxx
 setup_native/source/win32/customactions/quickstarter/remove_quickstart_link.cxx
 setup_native/source/win32/customactions/quickstarter/shutdown_quickstart.cxx
 setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsi.cxx
 setup_native/source/win32/customactions/regactivex/regactivex.cxx
 setup_native/source/win32/customactions/sellang/sellang.cxx
-setup_native/source/win32/customactions/sellang/sorttree.cxx
 setup_native/source/win32/customactions/shellextensions/checkdirectory.cxx
 setup_native/source/win32/customactions/shellextensions/checkpatches.cxx
 setup_native/source/win32/customactions/shellextensions/completeinstallpath.cxx
@@ -12477,8 +12213,6 @@ sfx2/inc/bluthsndapi.hxx
 sfx2/inc/fwkhelper.hxx
 sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
-sfx2/inc/pch/precompiled_sfx.cxx
-sfx2/inc/pch/precompiled_sfx.hxx
 sfx2/inc/preventduplicateinteraction.hxx
 sfx2/inc/sfxbasecontroller_internal.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
@@ -12667,7 +12401,6 @@ sfx2/source/doc/templatedlg.cxx
 sfx2/source/doc/watermarkitem.cxx
 sfx2/source/doc/zoomitem.cxx
 sfx2/source/explorer/nochaos.cxx
-sfx2/source/inc/alienwarn.hxx
 sfx2/source/inc/appbaslib.hxx
 sfx2/source/inc/appdata.hxx
 sfx2/source/inc/appopen.hxx
@@ -12685,7 +12418,6 @@ sfx2/source/inc/macroloader.hxx
 sfx2/source/inc/nochaos.hxx
 sfx2/source/inc/objshimp.hxx
 sfx2/source/inc/openflag.hxx
-sfx2/source/inc/openuriexternally.hxx
 sfx2/source/inc/openurlhint.hxx
 sfx2/source/inc/partwnd.hxx
 sfx2/source/inc/preview.hxx
@@ -12881,8 +12613,6 @@ shell/source/win32/workbench/TestSysShExec.cxx
 shell/source/win32/zipfile/zipexcptn.cxx
 shell/source/win32/zipfile/zipexcptn.hxx
 shell/source/win32/zipfile/zipfile.cxx
-slideshow/inc/pch/precompiled_slideshow.cxx
-slideshow/inc/pch/precompiled_slideshow.hxx
 slideshow/source/engine/activities/accumulation.hxx
 slideshow/source/engine/activities/activitiesfactory.cxx
 slideshow/source/engine/activities/activitybase.cxx
@@ -13133,17 +12863,11 @@ slideshow/test/testview.cxx
 slideshow/test/views.cxx
 smoketest/libtest.cxx
 smoketest/smoketest.cxx
-smoketest/smoketest_too.cxx
 solenv/bin/concat-deps.c
-solenv/clang-cl/config_global.h
 solenv/gbuildtojson/gbuildtojson.cxx
 solenv/gcc-wrappers/g++.cxx
 solenv/gcc-wrappers/gcc.cxx
 solenv/gcc-wrappers/wrapper.cxx
-solenv/gcc-wrappers/wrapper.hxx
-solenv/qa/python/selftest/selftestdepobject.cxx
-solenv/qa/python/selftest/selftestexeobject.cxx
-solenv/qa/python/selftest/selftestobject.cxx
 soltools/cpp/_cpp.c
 soltools/cpp/_eval.c
 soltools/cpp/_getopt.c
@@ -13167,8 +12891,6 @@ soltools/mkdepend/include.c
 soltools/mkdepend/main.c
 soltools/mkdepend/parse.c
 soltools/mkdepend/pr.c
-sot/inc/pch/precompiled_sot.cxx
-sot/inc/pch/precompiled_sot.hxx
 sot/inc/sysformats.hxx
 sot/qa/cppunit/test_sot.cxx
 sot/source/base/exchange.cxx
@@ -13207,11 +12929,8 @@ starmath/inc/format.hxx
 starmath/inc/helpids.h
 starmath/inc/node.hxx
 starmath/inc/parse.hxx
-starmath/inc/pch/precompiled_sm.cxx
-starmath/inc/pch/precompiled_sm.hxx
 starmath/inc/rect.hxx
 starmath/inc/smdll.hxx
-starmath/inc/smdllapi.hxx
 starmath/inc/smmod.hxx
 starmath/inc/strings.hxx
 starmath/inc/symbol.hxx
@@ -13268,7 +12987,6 @@ starmath/source/smmod.cxx
 starmath/source/symbol.cxx
 starmath/source/tmpdevice.cxx
 starmath/source/tmpdevice.hxx
-starmath/source/typemap.cxx
 starmath/source/uiobject.cxx
 starmath/source/uiobject.hxx
 starmath/source/unodoc.cxx
@@ -13355,8 +13073,6 @@ store/source/storpage.cxx
 store/source/storpage.hxx
 store/source/stortree.cxx
 store/source/stortree.hxx
-svgio/inc/pch/precompiled_svgio.cxx
-svgio/inc/pch/precompiled_svgio.hxx
 svgio/inc/svganode.hxx
 svgio/inc/svgcharacternode.hxx
 svgio/inc/svgcirclenode.hxx
@@ -13405,7 +13121,6 @@ svgio/source/svgreader/svglinenode.cxx
 svgio/source/svgreader/svgmarkernode.cxx
 svgio/source/svgreader/svgmasknode.cxx
 svgio/source/svgreader/svgnode.cxx
-svgio/source/svgreader/svgpaint.cxx
 svgio/source/svgreader/svgpathnode.cxx
 svgio/source/svgreader/svgpatternnode.cxx
 svgio/source/svgreader/svgpolynode.cxx
@@ -13425,8 +13140,6 @@ svgio/source/svgreader/svgusenode.cxx
 svgio/source/svguno/svguno.cxx
 svgio/source/svguno/xsvgparser.cxx
 svgio/source/svguno/xsvgparser.hxx
-svl/inc/pch/precompiled_svl.cxx
-svl/inc/pch/precompiled_svl.hxx
 svl/qa/unit/items/test_IndexedStyleSheets.cxx
 svl/qa/unit/items/test_itempool.cxx
 svl/qa/unit/notify/test_SfxBroadcaster.cxx
@@ -13533,8 +13246,6 @@ svl/source/svsql/converter.cxx
 svl/source/undo/undo.cxx
 svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx
-svtools/inc/pch/precompiled_svt.cxx
-svtools/inc/pch/precompiled_svt.hxx
 svtools/inc/strings.hxx
 svtools/inc/svmedit2.hxx
 svtools/inc/table/defaultinputhandler.hxx
@@ -13693,13 +13404,8 @@ svx/inc/dragmt3d.hxx
 svx/inc/extrusiondepthdialog.hxx
 svx/inc/galbrws2.hxx
 svx/inc/galobj.hxx
-svx/inc/getallcharpropids.hxx
 svx/inc/helpids.h
 svx/inc/palettes.hxx
-svx/inc/pch/precompiled_svx.cxx
-svx/inc/pch/precompiled_svx.hxx
-svx/inc/pch/precompiled_svxcore.cxx
-svx/inc/pch/precompiled_svxcore.hxx
 svx/inc/sdr/attribute/sdrfilltextattribute.hxx
 svx/inc/sdr/attribute/sdrformtextoutlineattribute.hxx
 svx/inc/sdr/contact/viewcontactofe3dcube.hxx
@@ -13849,7 +13555,6 @@ svx/source/dialog/contimp.hxx
 svx/source/dialog/contwnd.cxx
 svx/source/dialog/contwnd.hxx
 svx/source/dialog/crashreportdlg.cxx
-svx/source/dialog/crashreportdlg.hxx
 svx/source/dialog/crashreportui.cxx
 svx/source/dialog/ctredlin.cxx
 svx/source/dialog/databaseregistrationui.cxx
@@ -13879,7 +13584,6 @@ svx/source/dialog/linkwarn.cxx
 svx/source/dialog/measctrl.cxx
 svx/source/dialog/optgrid.cxx
 svx/source/dialog/pagectrl.cxx
-svx/source/dialog/pagenumberlistbox.cxx
 svx/source/dialog/papersizelistbox.cxx
 svx/source/dialog/paraprev.cxx
 svx/source/dialog/passwd.cxx
@@ -13979,7 +13683,6 @@ svx/source/form/sdbdatacolumn.cxx
 svx/source/form/sqlparserclient.cxx
 svx/source/form/tabwin.cxx
 svx/source/form/tbxform.cxx
-svx/source/form/typemap.cxx
 svx/source/form/xfm_addcondition.cxx
 svx/source/gallery2/GalleryControl.cxx
 svx/source/gallery2/codec.cxx
@@ -13991,7 +13694,6 @@ svx/source/gallery2/galctrl.cxx
 svx/source/gallery2/galexpl.cxx
 svx/source/gallery2/galini.cxx
 svx/source/gallery2/gallery1.cxx
-svx/source/gallery2/gallerydrawmodel.hxx
 svx/source/gallery2/galmisc.cxx
 svx/source/gallery2/galobj.cxx
 svx/source/gallery2/galtheme.cxx
@@ -14238,7 +13940,6 @@ svx/source/sidebar/tools/ValueSetWithTextControl.cxx
 svx/source/smarttags/SmartTagMgr.cxx
 svx/source/stbctrls/insctrl.cxx
 svx/source/stbctrls/modctrl.cxx
-svx/source/stbctrls/modctrl_internal.hxx
 svx/source/stbctrls/pszctrl.cxx
 svx/source/stbctrls/selctrl.cxx
 svx/source/stbctrls/stbctrls.h
@@ -14550,7 +14251,6 @@ sw/inc/finalthreadmanager.hxx
 sw/inc/fldbas.hxx
 sw/inc/flddat.hxx
 sw/inc/flddropdown.hxx
-sw/inc/fldupde.hxx
 sw/inc/flyenum.hxx
 sw/inc/flypos.hxx
 sw/inc/fmtanchr.hxx
@@ -14603,7 +14303,6 @@ sw/inc/istyleaccess.hxx
 sw/inc/itabenum.hxx
 sw/inc/legacyitem.hxx
 sw/inc/lineinfo.hxx
-sw/inc/linkenum.hxx
 sw/inc/list.hxx
 sw/inc/mdiexp.hxx
 sw/inc/modcfg.hxx
@@ -14623,14 +14322,6 @@ sw/inc/pagepreviewlayout.hxx
 sw/inc/pam.hxx
 sw/inc/paratr.hxx
 sw/inc/pausethreadstarting.hxx
-sw/inc/pch/precompiled_msword.cxx
-sw/inc/pch/precompiled_msword.hxx
-sw/inc/pch/precompiled_sw.cxx
-sw/inc/pch/precompiled_sw.hxx
-sw/inc/pch/precompiled_swui.cxx
-sw/inc/pch/precompiled_swui.hxx
-sw/inc/pch/precompiled_vbaswobj.cxx
-sw/inc/pch/precompiled_vbaswobj.hxx
 sw/inc/poolfmt.hxx
 sw/inc/postithelper.hxx
 sw/inc/printdata.hxx
@@ -15058,7 +14749,6 @@ sw/source/core/inc/acorrect.hxx
 sw/source/core/inc/anchoredobjectposition.hxx
 sw/source/core/inc/annotationmark.hxx
 sw/source/core/inc/ascharanchoredobjectposition.hxx
-sw/source/core/inc/attrhint.hxx
 sw/source/core/inc/blink.hxx
 sw/source/core/inc/bodyfrm.hxx
 sw/source/core/inc/bookmrk.hxx
@@ -15393,10 +15083,8 @@ sw/source/filter/docx/swdocxreader.hxx
 sw/source/filter/html/SwAppletImpl.cxx
 sw/source/filter/html/css1atr.cxx
 sw/source/filter/html/css1atr.hxx
-sw/source/filter/html/css1kywd.cxx
 sw/source/filter/html/css1kywd.hxx
 sw/source/filter/html/htmlatr.cxx
-sw/source/filter/html/htmlatr.hxx
 sw/source/filter/html/htmlbas.cxx
 sw/source/filter/html/htmlcss1.cxx
 sw/source/filter/html/htmlctxt.cxx
@@ -15893,7 +15581,6 @@ sw/source/uibase/inc/SwSpellDialogChildWindow.hxx
 sw/source/uibase/inc/SwXFilterOptions.hxx
 sw/source/uibase/inc/abstract.hxx
 sw/source/uibase/inc/actctrl.hxx
-sw/source/uibase/inc/addrdlg.hxx
 sw/source/uibase/inc/annotsh.hxx
 sw/source/uibase/inc/ascfldlg.hxx
 sw/source/uibase/inc/barcfg.hxx
@@ -15937,7 +15624,6 @@ sw/source/uibase/inc/drpcps.hxx
 sw/source/uibase/inc/drwbassh.hxx
 sw/source/uibase/inc/drwtxtsh.hxx
 sw/source/uibase/inc/dselect.hxx
-sw/source/uibase/inc/edtdd.hxx
 sw/source/uibase/inc/edtwin.hxx
 sw/source/uibase/inc/envimg.hxx
 sw/source/uibase/inc/envlop.hxx
@@ -15951,7 +15637,6 @@ sw/source/uibase/inc/frmdlg.hxx
 sw/source/uibase/inc/frmmgr.hxx
 sw/source/uibase/inc/frmpage.hxx
 sw/source/uibase/inc/frmsh.hxx
-sw/source/uibase/inc/globals.h
 sw/source/uibase/inc/glosbib.hxx
 sw/source/uibase/inc/glosdoc.hxx
 sw/source/uibase/inc/gloshdl.hxx
@@ -15974,7 +15659,6 @@ sw/source/uibase/inc/labimg.hxx
 sw/source/uibase/inc/labimp.hxx
 sw/source/uibase/inc/labrec.hxx
 sw/source/uibase/inc/langhelper.hxx
-sw/source/uibase/inc/linenum.hxx
 sw/source/uibase/inc/listsh.hxx
 sw/source/uibase/inc/macassgn.hxx
 sw/source/uibase/inc/mailconfigpage.hxx
@@ -16003,7 +15687,6 @@ sw/source/uibase/inc/optload.hxx
 sw/source/uibase/inc/optpage.hxx
 sw/source/uibase/inc/outline.hxx
 sw/source/uibase/inc/pardlg.hxx
-sw/source/uibase/inc/pattern.hxx
 sw/source/uibase/inc/pgfnote.hxx
 sw/source/uibase/inc/pggrid.hxx
 sw/source/uibase/inc/prcntfld.hxx
@@ -16056,7 +15739,6 @@ sw/source/uibase/inc/unotools.hxx
 sw/source/uibase/inc/unotxvw.hxx
 sw/source/uibase/inc/usrpref.hxx
 sw/source/uibase/inc/viewlayoutctrl.hxx
-sw/source/uibase/inc/watermarkdialog.hxx
 sw/source/uibase/inc/wformsh.hxx
 sw/source/uibase/inc/wfrmsh.hxx
 sw/source/uibase/inc/wgrfsh.hxx
@@ -16109,7 +15791,6 @@ sw/source/uibase/shells/listsh.cxx
 sw/source/uibase/shells/mediash.cxx
 sw/source/uibase/shells/navsh.cxx
 sw/source/uibase/shells/olesh.cxx
-sw/source/uibase/shells/slotadd.cxx
 sw/source/uibase/shells/tabsh.cxx
 sw/source/uibase/shells/textdrw.cxx
 sw/source/uibase/shells/textfld.cxx
@@ -16232,7 +15913,6 @@ sw/source/uibase/wrtsh/wrtsh4.cxx
 sw/source/uibase/wrtsh/wrtundo.cxx
 test/source/bootstrapfixture.cxx
 test/source/calc_unoapi_test.cxx
-test/source/callgrind.cxx
 test/source/container/xnamed.cxx
 test/source/diff/diff.cxx
 test/source/htmltesttools.cxx
@@ -16282,7 +15962,6 @@ test/source/sheet/xviewpane.cxx
 test/source/sheet/xviewsplitable.cxx
 test/source/text/xtext.cxx
 test/source/text/xtextcontent.cxx
-test/source/text/xtextfield.cxx
 test/source/unoapi_test.cxx
 test/source/util/xreplaceable.cxx
 test/source/util/xsearchable.cxx
@@ -16294,7 +15973,6 @@ testtools/source/bridgetest/constructors.cxx
 testtools/source/bridgetest/cppobj.cxx
 testtools/source/bridgetest/currentcontextchecker.cxx
 testtools/source/bridgetest/currentcontextchecker.hxx
-testtools/source/bridgetest/dllapi.hxx
 testtools/source/bridgetest/multi.cxx
 testtools/source/bridgetest/multi.hxx
 testtools/source/performance/pseudo.cxx
@@ -16404,8 +16082,6 @@ toolkit/source/helper/tkresmgr.cxx
 toolkit/source/helper/unopropertyarrayhelper.cxx
 toolkit/source/helper/unowrapper.cxx
 toolkit/source/helper/vclunohelper.cxx
-tools/inc/pch/precompiled_tl.cxx
-tools/inc/pch/precompiled_tl.hxx
 tools/inc/poly.h
 tools/qa/cppunit/test_bigint.cxx
 tools/qa/cppunit/test_color.cxx
@@ -16556,7 +16232,6 @@ ucb/source/ucp/file/filtask.cxx
 ucb/source/ucp/file/filtask.hxx
 ucb/source/ucp/file/prov.cxx
 ucb/source/ucp/file/prov.hxx
-ucb/source/ucp/ftp/curl.hxx
 ucb/source/ucp/ftp/ftpcfunc.cxx
 ucb/source/ucp/ftp/ftpcfunc.hxx
 ucb/source/ucp/ftp/ftpcontainer.hxx
@@ -16839,8 +16514,6 @@ unotest/source/cpp/officeconnection.cxx
 unotest/source/cpp/toabsolutefileurl.cxx
 unotest/source/cpp/unobootstrapprotector/unobootstrapprotector.cxx
 unotest/source/cpp/unoexceptionprotector/unoexceptionprotector.cxx
-unotools/inc/pch/precompiled_utl.cxx
-unotools/inc/pch/precompiled_utl.hxx
 unotools/inc/unotoolsservices.hxx
 unotools/qa/unit/testGetEnglishSearchName.cxx
 unotools/source/accessibility/accessiblerelationsethelper.cxx
@@ -16878,7 +16551,6 @@ unotools/source/config/syslocaleoptions.cxx
 unotools/source/config/useroptions.cxx
 unotools/source/config/viewoptions.cxx
 unotools/source/i18n/calendarwrapper.cxx
-unotools/source/i18n/caserotate.cxx
 unotools/source/i18n/charclass.cxx
 unotools/source/i18n/collatorwrapper.cxx
 unotools/source/i18n/intlwrapper.cxx
@@ -16918,8 +16590,6 @@ unoxml/inc/eventdispatcher.hxx
 unoxml/inc/mouseevent.hxx
 unoxml/inc/mutationevent.hxx
 unoxml/inc/node.hxx
-unoxml/inc/pch/precompiled_unoxml.cxx
-unoxml/inc/pch/precompiled_unoxml.hxx
 unoxml/inc/uievent.hxx
 unoxml/qa/unit/domtest.cxx
 unoxml/source/dom/attr.cxx
@@ -16985,8 +16655,6 @@ unoxml/source/xpath/xpathapi.hxx
 unoxml/source/xpath/xpathobject.cxx
 unoxml/source/xpath/xpathobject.hxx
 uui/inc/ids.hxx
-uui/inc/pch/precompiled_uui.cxx
-uui/inc/pch/precompiled_uui.hxx
 uui/qa/unit/uui-dialogs-test.cxx
 uui/source/alreadyopen.cxx
 uui/source/alreadyopen.hxx
@@ -17014,7 +16682,6 @@ uui/source/logindlg.cxx
 uui/source/logindlg.hxx
 uui/source/loginerr.hxx
 uui/source/masterpasscrtdlg.cxx
-uui/source/masterpasscrtdlg.hxx
 uui/source/masterpassworddlg.cxx
 uui/source/masterpassworddlg.hxx
 uui/source/nameclashdlg.cxx
@@ -17036,10 +16703,6 @@ uui/source/trylater.cxx
 uui/source/trylater.hxx
 uui/source/unknownauthdlg.cxx
 uui/source/unknownauthdlg.hxx
-vbahelper/inc/pch/precompiled_msforms.cxx
-vbahelper/inc/pch/precompiled_msforms.hxx
-vbahelper/inc/pch/precompiled_vbahelper.cxx
-vbahelper/inc/pch/precompiled_vbahelper.hxx
 vbahelper/source/msforms/service.cxx
 vbahelper/source/msforms/service.hxx
 vbahelper/source/msforms/vbabutton.cxx
@@ -17155,14 +16818,12 @@ vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/accel.h
 vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
-vcl/inc/android/svsys.h
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/canvasbitmap.hxx
 vcl/inc/configsettings.hxx
 vcl/inc/controldata.hxx
 vcl/inc/debugevent.hxx
-vcl/inc/dbggui.hxx
 vcl/inc/displayconnectiondispatch.hxx
 vcl/inc/dndeventdispatcher.hxx
 vcl/inc/dndlistenercontainer.hxx
@@ -17175,7 +16836,6 @@ vcl/inc/graphic/UnoGraphic.hxx
 vcl/inc/graphic/UnoGraphicDescriptor.hxx
 vcl/inc/graphic/UnoGraphicTransformer.hxx
 vcl/inc/headless/svpbmp.hxx
-vcl/inc/headless/svpcairotextrender.hxx
 vcl/inc/headless/svpdummies.hxx
 vcl/inc/headless/svpframe.hxx
 vcl/inc/headless/svpgdi.hxx
@@ -17196,13 +16856,11 @@ vcl/inc/impfontmetricdata.hxx
 vcl/inc/impgraph.hxx
 vcl/inc/implimagetree.hxx
 vcl/inc/ios/iosinst.hxx
-vcl/inc/ios/svsys.h
 vcl/inc/jobdata.hxx
 vcl/inc/jobset.h
 vcl/inc/langboost.hxx
 vcl/inc/listbox.hxx
 vcl/inc/opengl/BufferObject.hxx
-vcl/inc/opengl/DeviceInfo.hxx
 vcl/inc/opengl/FixedTextureAtlas.hxx
 vcl/inc/opengl/LineRenderUtils.hxx
 vcl/inc/opengl/PackedTextureAtlas.hxx
@@ -17217,11 +16875,9 @@ vcl/inc/opengl/salbmp.hxx
 vcl/inc/opengl/texture.hxx
 vcl/inc/opengl/watchdog.hxx
 vcl/inc/opengl/win/WinDeviceInfo.hxx
-vcl/inc/opengl/win/blocklist_parser.hxx
 vcl/inc/opengl/win/gdiimpl.hxx
 vcl/inc/opengl/x11/X11DeviceInfo.hxx
 vcl/inc/opengl/x11/gdiimpl.hxx
-vcl/inc/opengl/x11/glxtest.hxx
 vcl/inc/opengl/x11/salvd.hxx
 vcl/inc/opengl/zone.hxx
 vcl/inc/osx/a11yfactory.h
@@ -17229,7 +16885,6 @@ vcl/inc/osx/a11yfocustracker.hxx
 vcl/inc/osx/a11ylistener.hxx
 vcl/inc/osx/a11ywrapper.h
 vcl/inc/osx/keyboardfocuslistener.hxx
-vcl/inc/osx/osxvcltypes.h
 vcl/inc/osx/printview.h
 vcl/inc/osx/runinmain.hxx
 vcl/inc/osx/saldata.hxx
@@ -17244,12 +16899,9 @@ vcl/inc/osx/salobj.h
 vcl/inc/osx/salprn.h
 vcl/inc/osx/salsys.h
 vcl/inc/osx/saltimer.h
-vcl/inc/osx/svsys.h
 vcl/inc/osx/vclnsapp.h
 vcl/inc/outdata.hxx
 vcl/inc/outdev.h
-vcl/inc/pch/precompiled_vcl.cxx
-vcl/inc/pch/precompiled_vcl.hxx
 vcl/inc/ppdparser.hxx
 vcl/inc/print.h
 vcl/inc/printdlg.hxx
@@ -17289,11 +16941,9 @@ vcl/inc/sft.hxx
 vcl/inc/slider.hxx
 vcl/inc/spin.hxx
 vcl/inc/strhelper.hxx
-vcl/inc/strings.hxx
 vcl/inc/svdata.hxx
 vcl/inc/svimpbox.hxx
 vcl/inc/svmconverter.hxx
-vcl/inc/svsys.h
 vcl/inc/test/outputdevice.hxx
 vcl/inc/textlayout.hxx
 vcl/inc/textlineinfo.hxx
@@ -17313,7 +16963,6 @@ vcl/inc/unx/genprn.h
 vcl/inc/unx/genpspgraphics.h
 vcl/inc/unx/gensys.h
 vcl/inc/unx/glyphcache.hxx
-vcl/inc/unx/gtk/atkbridge.hxx
 vcl/inc/unx/gtk/gloactiongroup.h
 vcl/inc/unx/gtk/glomenu.h
 vcl/inc/unx/gtk/gtkdata.hxx
@@ -17332,7 +16981,6 @@ vcl/inc/unx/i18n_ic.hxx
 vcl/inc/unx/i18n_im.hxx
 vcl/inc/unx/i18n_keysym.hxx
 vcl/inc/unx/i18n_xkb.hxx
-vcl/inc/unx/nativewindowhandleprovider.hxx
 vcl/inc/unx/printergfx.hxx
 vcl/inc/unx/printerjob.hxx
 vcl/inc/unx/salbmp.h
@@ -17349,9 +16997,7 @@ vcl/inc/unx/salunxtime.h
 vcl/inc/unx/salvd.h
 vcl/inc/unx/screensaverinhibitor.hxx
 vcl/inc/unx/sm.hxx
-vcl/inc/unx/svsys.h
 vcl/inc/unx/wmadaptor.hxx
-vcl/inc/unx/x11/x11cairotextrender.hxx
 vcl/inc/unx/x11/x11gdiimpl.h
 vcl/inc/unx/x11/x11sys.hxx
 vcl/inc/unx/x11/xlimits.hxx
@@ -17453,8 +17099,6 @@ vcl/inc/unx/x11_cursors/movepoint_curs.h
 vcl/inc/unx/x11_cursors/movepoint_mask.h
 vcl/inc/unx/x11_cursors/nodrop_curs.h
 vcl/inc/unx/x11_cursors/nodrop_mask.h
-vcl/inc/unx/x11_cursors/null_curs.h
-vcl/inc/unx/x11_cursors/null_mask.h
 vcl/inc/unx/x11_cursors/pivotcol_curs.h
 vcl/inc/unx/x11_cursors/pivotcol_mask.h
 vcl/inc/unx/x11_cursors/pivotdel_curs.h
@@ -17465,7 +17109,6 @@ vcl/inc/unx/x11_cursors/pivotrow_curs.h
 vcl/inc/unx/x11_cursors/pivotrow_mask.h
 vcl/inc/unx/x11_cursors/rotate_curs.h
 vcl/inc/unx/x11_cursors/rotate_mask.h
-vcl/inc/unx/x11_cursors/salcursors.h
 vcl/inc/unx/x11_cursors/tblsele_curs.h
 vcl/inc/unx/x11_cursors/tblsele_mask.h
 vcl/inc/unx/x11_cursors/tblsels_curs.h
@@ -17485,7 +17128,6 @@ vcl/inc/unx/x11_cursors/wshide_mask.h
 vcl/inc/unx/x11_cursors/wsshow_curs.h
 vcl/inc/unx/x11_cursors/wsshow_mask.h
 vcl/inc/vcleventlisteners.hxx
-vcl/inc/vclpluginapi.h
 vcl/inc/vclstatuslistener.hxx
 vcl/inc/wall2.hxx
 vcl/inc/win/DWriteTextRenderer.hxx
@@ -17500,7 +17142,6 @@ vcl/inc/win/salprn.h
 vcl/inc/win/salsys.h
 vcl/inc/win/saltimer.h
 vcl/inc/win/salvd.h
-vcl/inc/win/svsys.h
 vcl/inc/win/wincomp.hxx
 vcl/inc/win/winlayout.hxx
 vcl/inc/window.h
@@ -17529,7 +17170,6 @@ vcl/opengl/x11/salvd.cxx
 vcl/osx/DataFlavorMapping.cxx
 vcl/osx/DataFlavorMapping.hxx
 vcl/osx/DragActionConversion.cxx
-vcl/osx/DragActionConversion.hxx
 vcl/osx/DragSource.cxx
 vcl/osx/DragSource.hxx
 vcl/osx/DragSourceContext.cxx
@@ -17537,7 +17177,6 @@ vcl/osx/DragSourceContext.hxx
 vcl/osx/DropTarget.cxx
 vcl/osx/DropTarget.hxx
 vcl/osx/HtmlFmtFlt.cxx
-vcl/osx/HtmlFmtFlt.hxx
 vcl/osx/OSXTransferable.cxx
 vcl/osx/OSXTransferable.hxx
 vcl/osx/PictToBmpFlt.cxx
@@ -17725,7 +17364,6 @@ vcl/source/filter/jpeg/jpeg.cxx
 vcl/source/filter/jpeg/jpeg.h
 vcl/source/filter/jpeg/jpeg.hxx
 vcl/source/filter/jpeg/jpegc.cxx
-vcl/source/filter/jpeg/jpegcomp.h
 vcl/source/filter/jpeg/transupp.c
 vcl/source/filter/jpeg/transupp.h
 vcl/source/filter/png/pngread.cxx
@@ -17831,7 +17469,6 @@ vcl/source/image/ImageRepository.cxx
 vcl/source/image/ImageTree.cxx
 vcl/source/image/ImplImage.cxx
 vcl/source/image/ImplImageTree.cxx
-vcl/source/opengl/GLMHelper.hxx
 vcl/source/opengl/OpenGLContext.cxx
 vcl/source/opengl/OpenGLHelper.cxx
 vcl/source/outdev/bitmap.cxx
@@ -18025,11 +17662,9 @@ vcl/unx/generic/window/salframe.cxx
 vcl/unx/generic/window/salobj.cxx
 vcl/unx/generic/window/screensaverinhibitor.cxx
 vcl/unx/glxtest.cxx
-vcl/unx/gtk3/a11y/atkfactory.hxx
 vcl/unx/gtk3/a11y/atklistener.hxx
 vcl/unx/gtk3/a11y/atkregistry.hxx
 vcl/unx/gtk3/a11y/atktextattributes.hxx
-vcl/unx/gtk3/a11y/atkutil.hxx
 vcl/unx/gtk3/a11y/atkwrapper.hxx
 vcl/unx/gtk3/a11y/gtk3atkaction.cxx
 vcl/unx/gtk3/a11y/gtk3atkbridge.cxx
@@ -18069,7 +17704,6 @@ vcl/unx/gtk3/gtk3gtksys.cxx
 vcl/unx/gtk3/gtk3hudawareness.cxx
 vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx
 vcl/unx/gtk3/gtk3salprn-gtk.cxx
-vcl/unx/gtk3/gtkprintwrapper.hxx
 vcl/unx/x11/x11sys.cxx
 vcl/unx/x11/xlimits.cxx
 vcl/win/app/saldata.cxx
@@ -18176,7 +17810,6 @@ winaccessibility/inc/AccTopWindowListener.hxx
 winaccessibility/inc/AccTreeEventListener.hxx
 winaccessibility/inc/AccWindowEventListener.hxx
 winaccessibility/inc/ResIDGenerator.hxx
-winaccessibility/inc/UAccCOMdllapi.h
 winaccessibility/inc/accHelper.hxx
 winaccessibility/inc/unomsaaevent.hxx
 winaccessibility/source/UAccCOM/AccAction.cxx
@@ -18211,7 +17844,6 @@ winaccessibility/source/UAccCOM/EnumVariant.h
 winaccessibility/source/UAccCOM/MAccessible.cxx
 winaccessibility/source/UAccCOM/MAccessible.h
 winaccessibility/source/UAccCOM/Resource.h
-winaccessibility/source/UAccCOM/StdAfx.cxx
 winaccessibility/source/UAccCOM/UAccCOM.cxx
 winaccessibility/source/UAccCOM/UNOXWrapper.cxx
 winaccessibility/source/UAccCOM/UNOXWrapper.h
@@ -18242,8 +17874,6 @@ writerfilter/inc/dmapper/GraphicZOrderHelper.hxx
 writerfilter/inc/dmapper/resourcemodel.hxx
 writerfilter/inc/ooxml/OOXMLDocument.hxx
 writerfilter/inc/ooxml/QNameToString.hxx
-writerfilter/inc/pch/precompiled_writerfilter.cxx
-writerfilter/inc/pch/precompiled_writerfilter.hxx
 writerfilter/qa/cppunittests/misc/misc.cxx
 writerfilter/source/dmapper/BorderHandler.cxx
 writerfilter/source/dmapper/BorderHandler.hxx
@@ -18434,10 +18064,6 @@ xmloff/inc/fasttokenhandler.hxx
 xmloff/inc/forms/form_handler_factory.hxx
 xmloff/inc/forms/property_handler.hxx
 xmloff/inc/forms/property_ids.hxx
-xmloff/inc/pch/precompiled_xo.cxx
-xmloff/inc/pch/precompiled_xo.hxx
-xmloff/inc/pch/precompiled_xof.cxx
-xmloff/inc/pch/precompiled_xof.hxx
 xmloff/inc/propimp0.hxx
 xmloff/inc/prstylecond.hxx
 xmloff/inc/xmltabe.hxx
@@ -18533,7 +18159,6 @@ xmloff/source/core/nmspmap.cxx
 xmloff/source/core/unoatrcn.cxx
 xmloff/source/core/unointerfacetouniqueidentifiermapper.cxx
 xmloff/source/core/xmlcnimp.cxx
-xmloff/source/core/xmlenums.hxx
 xmloff/source/core/xmlerror.cxx
 xmloff/source/core/xmlexp.cxx
 xmloff/source/core/xmlictxt.cxx
@@ -18916,8 +18541,6 @@ xmloff/source/text/txtsecte.cxx
 xmloff/source/text/txtstyle.cxx
 xmloff/source/text/txtstyli.cxx
 xmloff/source/text/txtvfldi.cxx
-xmloff/source/transform/ActionMapTypesOASIS.hxx
-xmloff/source/transform/ActionMapTypesOOo.hxx
 xmloff/source/transform/AttrTransformerAction.hxx
 xmloff/source/transform/ChartOASISTContext.cxx
 xmloff/source/transform/ChartOASISTContext.hxx
@@ -18946,7 +18569,6 @@ xmloff/source/transform/EventOASISTContext.cxx
 xmloff/source/transform/EventOASISTContext.hxx
 xmloff/source/transform/EventOOoTContext.cxx
 xmloff/source/transform/EventOOoTContext.hxx
-xmloff/source/transform/FamilyType.hxx
 xmloff/source/transform/FlatTContext.cxx
 xmloff/source/transform/FlatTContext.hxx
 xmloff/source/transform/FormPropOASISTContext.cxx
@@ -19027,8 +18649,6 @@ xmloff/source/xforms/xformsimport.cxx
 xmlreader/source/pad.cxx
 xmlreader/source/span.cxx
 xmlreader/source/xmlreader.cxx
-xmlscript/inc/pch/precompiled_xmlscript.cxx
-xmlscript/inc/pch/precompiled_xmlscript.hxx
 xmlscript/source/inc/misc.hxx
 xmlscript/source/inc/unoservices.hxx
 xmlscript/source/inc/xml_import.hxx
@@ -19070,21 +18690,13 @@ xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx
 xmlsecurity/inc/gpg/SEInitializer.hxx
 xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
-xmlsecurity/inc/pch/precompiled_xmlsecurity.cxx
-xmlsecurity/inc/pch/precompiled_xmlsecurity.hxx
-xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
-xmlsecurity/inc/xmlsec-wrapper.h
-xmlsecurity/inc/xmlsec/errorcallback.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
 xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
-xmlsecurity/inc/xmlsec/xmlsec_init.hxx
 xmlsecurity/inc/xmlsec/xmlstreamio.hxx
-xmlsecurity/inc/xmlsecuritydllapi.h
 xmlsecurity/inc/xmlsignaturehelper.hxx
 xmlsecurity/inc/xmlsignaturehelper2.hxx
 xmlsecurity/inc/xsecctl.hxx
-xmlsecurity/inc/xsecxmlsecdllapi.h
 xmlsecurity/qa/certext/SanCertExt.cxx
 xmlsecurity/qa/unit/xmlsecurity-dialogs-test.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
@@ -19122,7 +18734,6 @@ xmlsecurity/source/gpg/XMLSecurityContext.hxx
 xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx
 xmlsecurity/source/helper/documentsignaturehelper.cxx
 xmlsecurity/source/helper/ooxmlsecexporter.cxx
-xmlsecurity/source/helper/ooxmlsecexporter.hxx
 xmlsecurity/source/helper/ooxmlsecparser.cxx
 xmlsecurity/source/helper/ooxmlsecparser.hxx
 xmlsecurity/source/helper/xmlsignaturehelper.cxx
@@ -19157,7 +18768,6 @@ xmlsecurity/source/xmlsec/nss/digestcontext.cxx
 xmlsecurity/source/xmlsec/nss/digestcontext.hxx
 xmlsecurity/source/xmlsec/nss/nssinitializer.cxx
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx
-xmlsecurity/source/xmlsec/nss/nssrenam.h
 xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.cxx
 xmlsecurity/source/xmlsec/nss/sanextension_nssimpl.hxx
 xmlsecurity/source/xmlsec/nss/secerror.cxx
