@@ -18,6 +18,7 @@
  */
 
 #include <i18nutil/unicode.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -700,42 +701,54 @@ VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent
 
 namespace {
 
-class SwJumpToSpecificBox_Impl : public NumericField
+class SwJumpToSpecificBox_Impl final : public InterimItemWindow
 {
+    std::unique_ptr<weld::Entry> m_xWidget;
+
     sal_uInt16 const nSlotId;
 
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(SelectHdl, weld::Entry&, bool);
 public:
     SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot);
-
-protected:
-    void            Select();
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+    virtual ~SwJumpToSpecificBox_Impl() override
+    {
+        disposeOnce();
+    }
 };
 
 }
 
-SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
-    : NumericField(pParent, WB_HIDE | WB_BORDER)
-    , nSlotId(nSlot)
+IMPL_LINK(SwJumpToSpecificBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    SetSizePixel(LogicToPixel(Size(16, 12), MapMode(MapUnit::MapAppFont)));
+    return ChildKeyInput(rKEvt);
 }
 
-void SwJumpToSpecificBox_Impl::Select()
+SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
+    : InterimItemWindow(pParent, "modules/swriter/ui/jumpposbox.ui", "JumpPosBox")
+    , m_xWidget(m_xBuilder->weld_entry("jumppos"))
+    , nSlotId(nSlot)
 {
-    OUString sEntry(GetText());
+    m_xWidget->connect_key_press(LINK(this, SwJumpToSpecificBox_Impl, KeyInputHdl));
+    m_xWidget->connect_activate(LINK(this, SwJumpToSpecificBox_Impl, SelectHdl));
+
+    SetSizePixel(m_xWidget->get_preferred_size());
+}
+
+IMPL_LINK_NOARG(SwJumpToSpecificBox_Impl, SelectHdl, weld::Entry&, bool)
+{
+    OUString sEntry(m_xWidget->get_text());
     SfxUInt16Item aPageNum(nSlotId);
     aPageNum.SetValue(static_cast<sal_uInt16>(sEntry.toInt32()));
     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
     pCurrentShell->GetDispatcher()->ExecuteList(nSlotId, SfxCallMode::ASYNCHRON,
             { &aPageNum });
-}
-
-bool SwJumpToSpecificBox_Impl::EventNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-        Select();
-    return NumericField::EventNotify(rNEvt);
+    return true;
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SwJumpToSpecificPageControl, SfxUInt16Item);
