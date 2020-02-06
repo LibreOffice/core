@@ -1217,6 +1217,13 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
             }
             if ( bSetProperty )
             {
+                if ( nContent & 0x8000'0000u )
+                {
+                    // nContent is signed: see [MS-ODRAW], e.g., 2.3.4.12 dyWrapDistBottom
+                    // ignore negative values
+                    break;
+                }
+
                 mpPropSetEntries[ nRecType ].nContent = nContent;
                 mpPropSetEntries[ nRecType ].aFlags = aPropFlag;
             }
