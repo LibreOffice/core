@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svtools/table/tabletypes.hxx>
+#include <table/tabletypes.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 

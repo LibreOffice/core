@@ -392,7 +392,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <svtools/table/tabletypes.hxx>
+#include <table/tabletypes.hxx>
 #include <svtools/valueset.hxx>
 #endif // PCH_LEVEL >= 4
 

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <svtools/table/tablemodel.hxx>
+#include <table/tablemodel.hxx>
 #include <vcl/accessibletable.hxx>
 
 #include <vcl/ctrl.hxx>

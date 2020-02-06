@@ -20,7 +20,7 @@
 
 #include "cellvalueconversion.hxx"
 #include <table/gridtablerenderer.hxx>
-#include <svtools/table/tablesort.hxx>
+#include <table/tablesort.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 

@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
-#define INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
+#pragma once
 
 #include <svtools/svtdllapi.h>
-#include <svtools/table/tabletypes.hxx>
-#include <svtools/table/tablerenderer.hxx>
-#include <svtools/table/tableinputhandler.hxx>
+#include <table/tabletypes.hxx>
+#include <table/tablerenderer.hxx>
+#include <table/tableinputhandler.hxx>
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
@@ -451,7 +450,5 @@ namespace svt { namespace table
 
 } } // namespace svt::table
 
-
-#endif // INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

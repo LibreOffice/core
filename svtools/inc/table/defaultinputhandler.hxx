@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svtools/table/tableinputhandler.hxx>
+#include <table/tableinputhandler.hxx>
 
 #include <memory>
 

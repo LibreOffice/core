@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svtools/table/tablemodel.hxx>
+#include <table/tablemodel.hxx>
 #include <vcl/image.hxx>
 
 #include <memory>

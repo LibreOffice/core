@@ -20,7 +20,7 @@
 
 #include "mousefunction.hxx"
 #include <table/tablecontrolinterface.hxx>
-#include <svtools/table/tablesort.hxx>
+#include <table/tablesort.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>

@@ -6761,11 +6761,6 @@ include/svtools/svmedit.hxx
 include/svtools/svparser.hxx
 include/svtools/svtdllapi.h
 include/svtools/tabbar.hxx
-include/svtools/table/tableinputhandler.hxx
-include/svtools/table/tablemodel.hxx
-include/svtools/table/tablerenderer.hxx
-include/svtools/table/tablesort.hxx
-include/svtools/table/tabletypes.hxx
 include/svtools/templatefoldercache.hxx
 include/svtools/textwindowpeer.hxx
 include/svtools/toolbarmenu.hxx
@@ -13243,6 +13238,11 @@ svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx
 svtools/inc/table/tablecontrolinterface.hxx
+svtools/inc/table/tableinputhandler.hxx
+svtools/inc/table/tablemodel.hxx
+svtools/inc/table/tablerenderer.hxx
+svtools/inc/table/tablesort.hxx
+svtools/inc/table/tabletypes.hxx
 svtools/langsupport/langsupport.cxx
 svtools/qa/unit/GraphicObjectTest.cxx
 svtools/qa/unit/svtools-dialogs-test.cxx

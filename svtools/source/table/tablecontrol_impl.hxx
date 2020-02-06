@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svtools/table/tablemodel.hxx>
+#include <table/tablemodel.hxx>
 #include <table/tablecontrolinterface.hxx>
 
 #include <vcl/svtaccessiblefactory.hxx>
