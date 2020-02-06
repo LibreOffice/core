@@ -72,10 +72,13 @@
       </node>
       <node oor:name=".uno:FontworkGalleryFloater" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fontwork Style</value>
+          <value xml:lang="en-US">Insert Fontwork</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Fontwork...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Fontwork Text</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -3847,9 +3850,6 @@
       <node oor:name=".uno:FontWork" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">F~ontwork</value>
-        </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Fontwork Text</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
