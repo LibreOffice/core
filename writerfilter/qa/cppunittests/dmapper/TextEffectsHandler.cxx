@@ -24,7 +24,6 @@ namespace
 class Test : public test::BootstrapFixture, public unotest::MacrosTest
 {
 private:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
 
 public:
@@ -37,7 +36,6 @@ void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 

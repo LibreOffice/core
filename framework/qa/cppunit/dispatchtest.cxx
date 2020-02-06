@@ -131,7 +131,6 @@ uno::Reference<frame::XDispatch> MyInterceptor::queryDispatch(const util::URL& r
 class DispatchTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 protected:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues);
 
@@ -144,7 +143,6 @@ void DispatchTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 

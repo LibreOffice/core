@@ -39,8 +39,6 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/pdfsigning/data/";
 class PDFSigningTest : public test::BootstrapFixture
 {
 protected:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
-
     /**
      * Sign rInURL once and save the result as rOutURL, asserting that rInURL
      * had nOriginalSignatureCount signatures.
@@ -63,8 +61,6 @@ PDFSigningTest::PDFSigningTest() {}
 void PDFSigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
-
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
 
 #ifndef _WIN32
     // Set up cert8.db and key3.db in workdir/CppunitTest/

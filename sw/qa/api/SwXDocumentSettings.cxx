@@ -38,7 +38,6 @@ class SwXDocumentSettings final : public test::BootstrapFixture,
                                   public apitest::XServiceInfo
 {
 private:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
 
 public:
@@ -63,7 +62,6 @@ void SwXDocumentSettings::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 

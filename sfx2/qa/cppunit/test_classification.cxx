@@ -26,7 +26,6 @@ namespace
 /// Tests the handling of the .uno:ClassificationApply command in various applications.
 class ClassificationTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues);
     void testClassification();
@@ -49,7 +48,6 @@ void ClassificationTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
