@@ -29,7 +29,6 @@
 #define SLIDER_STATE_THUMB_DOWN     (sal_uInt16(0x0004))
 
 #define SLIDER_THUMB_SIZE           9
-#define SLIDER_CHANNEL_OFFSET       0
 #define SLIDER_CHANNEL_SIZE         4
 #define SLIDER_CHANNEL_HALFSIZE     2
 
@@ -43,7 +42,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;    // between mnThumbPixOffset and mnThumbPixOffset+mnThumbPixRange
     mnThumbSize         = SLIDER_THUMB_SIZE;
-    mnChannelPixOffset  = 0;
     mnChannelPixRange   = 0;
     mnChannelPixTop     = 0;
     mnChannelPixBottom  = 0;
@@ -108,19 +106,19 @@ void Slider::ImplUpdateRects( bool bUpdate )
         {
             maThumbRect.SetLeft(mnThumbPixPos - (mnThumbSize / 2));
             maThumbRect.SetRight(maThumbRect.Left() + mnThumbSize - 1);
-            if ( mnChannelPixOffset < maThumbRect.Left() )
+            if ( 0 < maThumbRect.Left() )
             {
-                maChannel1Rect.SetLeft( mnChannelPixOffset );
+                maChannel1Rect.SetLeft( 0 );
                 maChannel1Rect.SetRight( maThumbRect.Left()-1 );
                 maChannel1Rect.SetTop( mnChannelPixTop );
                 maChannel1Rect.SetBottom( mnChannelPixBottom );
             }
             else
                 maChannel1Rect.SetEmpty();
-            if ( mnChannelPixOffset+mnChannelPixRange-1 > maThumbRect.Right() )
+            if ( mnChannelPixRange-1 > maThumbRect.Right() )
             {
                 maChannel2Rect.SetLeft( maThumbRect.Right()+1 );
-                maChannel2Rect.SetRight( mnChannelPixOffset+mnChannelPixRange-1 );
+                maChannel2Rect.SetRight( mnChannelPixRange-1 );
                 maChannel2Rect.SetTop( mnChannelPixTop );
                 maChannel2Rect.SetBottom( mnChannelPixBottom );
             }
@@ -142,19 +140,19 @@ void Slider::ImplUpdateRects( bool bUpdate )
         {
             maThumbRect.SetTop( mnThumbPixPos - (mnThumbSize / 2));
             maThumbRect.SetBottom( maThumbRect.Top() + mnThumbSize - 1);
-            if ( mnChannelPixOffset < maThumbRect.Top() )
+            if ( 0 < maThumbRect.Top() )
             {
-                maChannel1Rect.SetTop( mnChannelPixOffset );
+                maChannel1Rect.SetTop( 0 );
                 maChannel1Rect.SetBottom( maThumbRect.Top()-1 );
                 maChannel1Rect.SetLeft( mnChannelPixTop );
                 maChannel1Rect.SetRight( mnChannelPixBottom );
             }
             else
                 maChannel1Rect.SetEmpty();
-            if ( mnChannelPixOffset+mnChannelPixRange-1 > maThumbRect.Bottom() )
+            if ( mnChannelPixRange-1 > maThumbRect.Bottom() )
             {
                 maChannel2Rect.SetTop( maThumbRect.Bottom()+1 );
-                maChannel2Rect.SetBottom( mnChannelPixOffset+mnChannelPixRange-1 );
+                maChannel2Rect.SetBottom( mnChannelPixRange-1 );
                 maChannel2Rect.SetLeft( mnChannelPixTop );
                 maChannel2Rect.SetRight( mnChannelPixBottom );
             }
@@ -265,7 +263,6 @@ void Slider::ImplCalc( bool bUpdate )
             }
         }
 
-        long nOldChannelPixOffset   = mnChannelPixOffset;
         long nOldChannelPixRange    = mnChannelPixRange;
         long nOldChannelPixTop      = mnChannelPixTop;
         long nOldChannelPixBottom   = mnChannelPixBottom;
@@ -297,8 +294,7 @@ void Slider::ImplCalc( bool bUpdate )
             mnThumbPixOffset    = mnThumbSize / 2;
             mnThumbPixRange     = nCalcWidth - mnThumbSize;
             mnThumbPixPos       = 0;
-            mnChannelPixOffset  = SLIDER_CHANNEL_OFFSET;
-            mnChannelPixRange   = nCalcWidth-(SLIDER_CHANNEL_OFFSET*2);
+            mnChannelPixRange   = nCalcWidth;
             mnChannelPixTop     = (nCalcHeight/2)-SLIDER_CHANNEL_HALFSIZE;
             mnChannelPixBottom  = mnChannelPixTop+SLIDER_CHANNEL_SIZE-1;
         }
@@ -308,8 +304,7 @@ void Slider::ImplCalc( bool bUpdate )
             mnChannelPixRange = 0;
         }
 
-        if ( (nOldChannelPixOffset != mnChannelPixOffset) ||
-             (nOldChannelPixRange != mnChannelPixRange) ||
+        if ( (nOldChannelPixRange != mnChannelPixRange) ||
              (nOldChannelPixTop != mnChannelPixTop) ||
              (nOldChannelPixBottom != mnChannelPixBottom) )
             bInvalidateAll = true;
