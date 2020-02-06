@@ -274,6 +274,22 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFootnoteSeparator, "footnotesep.fodt")
+{
+    // foontote separator definitions - taken from default page style
+    xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "id", "0");
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "type", "separator");
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]/w:p[1]/w:r[1]/w:separator", 0);
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]", "id", "1");
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]", "type", "continuationSeparator");
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]/w:p[1]/w:r[1]/w:continuationSeparator", 0);
+
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    assertXPath(pXmlSettings, "/w:settings[1]/w:footnotePr[1]/w:footnote[1]", "id", "0");
+    assertXPath(pXmlSettings, "/w:settings[1]/w:footnotePr[1]/w:footnote[2]", "id", "1");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77812, "fdo77812.docx")
 {
     /* Additional sectPr was getting inserted and hence Column properties
