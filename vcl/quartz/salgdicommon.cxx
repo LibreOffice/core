@@ -22,9 +22,11 @@
 
 #include <cassert>
 #include <cstring>
+#include <numeric>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <sal/types.h>
@@ -851,15 +853,18 @@ bool AquaSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidths,
+    const basegfx::B2DVector& rLineWidth,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
     bool bPixelSnapHairline)
 {
-    // short circuit if there is nothing to do
-    if(0 == rPolyLine.count())
+    // MM01 check done for simple reasons
+    if(!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0)
+    {
         return true;
+    }
 
 #ifdef IOS
     if( !CheckContext() )
@@ -867,20 +872,40 @@ bool AquaSalGraphics::drawPolyLine(
 #endif
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    const basegfx::B2DVector aDeviceLineWidths(rObjectToDevice * rLineWidths);
-    const bool bCorrectLineWidth(aDeviceLineWidths.getX() < 1.0 && rLineWidths.getX() >= 1.0);
-    const basegfx::B2DVector aLineWidths(bCorrectLineWidth ? rLineWidths : aDeviceLineWidths);
+    const basegfx::B2DVector aDeviceLineWidth(rObjectToDevice * rLineWidth);
+    const bool bCorrectLineWidth(aDeviceLineWidth.getX() < 1.0 && rLineWidth.getX() >= 1.0);
+    const basegfx::B2DVector aLineWidth(bCorrectLineWidth ? rLineWidth : aDeviceLineWidth);
 
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidths.getX() > 1.3) )
+    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidth.getX() > 1.3) )
         return false;
 
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+    basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+    if(bStrokeUsed)
+    {
+        // apply LineStyle
+        basegfx::utils::applyLineDashing(
+            rPolyLine, // source
+            *pStroke, // pattern
+            &aPolyPolygonLine, // traget for lines
+            nullptr, // target for gaps
+            fDotDashLength); // full length if available
+    }
+    else
+    {
+        // no line dashing, just copy
+        aPolyPolygonLine.append(rPolyLine);
+    }
+
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolygon aPolyLine(rPolyLine);
-    aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    aPolyPolygonLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine); }
 
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
@@ -918,12 +943,19 @@ bool AquaSalGraphics::drawPolyLine(
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
-    AddPolygonToPath(
-        xPath,
-        aPolyLine,
-        aPolyLine.isClosed(),
-        !getAntiAliasB2DDraw(),
-        true);
+
+    // MM01 todo - I assume that this is OKAY to be done in one run for quartz
+    // but this NEEDS to be checked/verified
+    for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+    {
+        const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+        AddPolygonToPath(
+            xPath,
+            aPolyLine,
+            aPolyLine.isClosed(),
+            !getAntiAliasB2DDraw(),
+            true);
+    }
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     SAL_INFO( "vcl.cg", "CGPathGetBoundingBox(" << xPath << ") = " << aRefreshRect );
