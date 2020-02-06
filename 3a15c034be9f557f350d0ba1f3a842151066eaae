@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dc9d8d1_364c7cdd",
+        "filename": "cui/source/options/optgenrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-06T12:46:10Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right?",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 63
+      },
+      "revId": "3a15c034be9f557f350d0ba1f3a842151066eaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
