@@ -22,19 +22,6 @@ $(eval $(call gb_Module_add_targets,jurt,\
 ))
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    CustomTarget_test_urp \
-    InternalUnoApi_test_urp \
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-))
-
 endif
 
 # vim:set noet sw=4 ts=4:
