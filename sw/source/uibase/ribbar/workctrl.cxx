@@ -42,7 +42,6 @@
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -535,34 +534,61 @@ void SwScrollNaviPopup::CheckItem(sal_uInt16 nNaviId, bool bOn)
 
 namespace {
 
-class SwZoomBox_Impl : public ComboBox
+class SwZoomBox_Impl final : public InterimItemWindow
 {
+    std::unique_ptr<weld::ComboBox> m_xWidget;
     sal_uInt16 const nSlotId;
     bool             bRelease;
 
-public:
-    SwZoomBox_Impl(
-        vcl::Window* pParent,
-        sal_uInt16 nSlot );
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+    DECL_LINK(FocusOutHdl, weld::Widget&, void);
 
-protected:
-    virtual void    Select() override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    void Select();
 
     void ReleaseFocus();
 
+public:
+    SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot);
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    void save_value()
+    {
+        m_xWidget->save_value();
+    }
+
+    void set_entry_text(const OUString& rText)
+    {
+        m_xWidget->set_entry_text(rText);
+    }
+
+    virtual ~SwZoomBox_Impl() override
+    {
+        disposeOnce();
+    }
 };
 
 }
 
 SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
-    : ComboBox(pParent, WB_HIDE | WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
+    : InterimItemWindow(pParent, "modules/swriter/ui/zoombox.ui", "ZoomBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("zoom"))
     , nSlotId(nSlot)
     , bRelease(true)
 {
-    SetHelpId(HID_PVIEW_ZOOM_LB);
-    SetSizePixel(LogicToPixel(Size(30, 86), MapMode(MapUnit::MapAppFont)));
-    EnableAutocomplete( false );
+    m_xWidget->set_help_id(HID_PVIEW_ZOOM_LB);
+    m_xWidget->set_entry_completion(false);
+    m_xWidget->connect_changed(LINK(this, SwZoomBox_Impl, SelectHdl));
+    m_xWidget->connect_key_press(LINK(this, SwZoomBox_Impl, KeyInputHdl));
+    m_xWidget->connect_entry_activate(LINK(this, SwZoomBox_Impl, ActivateHdl));
+    m_xWidget->connect_focus_out(LINK(this, SwZoomBox_Impl, FocusOutHdl));
+
     const char* const aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
@@ -572,15 +598,34 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     for(const char* pZoomValue : aZoomValues)
     {
         OUString sEntry = SvxResId(pZoomValue);
-        InsertEntry(sEntry);
+        m_xWidget->append_text(sEntry);
     }
+
+    int nWidth = m_xWidget->get_pixel_size(SvxResId(RID_SVXSTR_ZOOM_200)).Width();
+    m_xWidget->set_entry_width_chars(std::ceil(nWidth / m_xWidget->get_approximate_digit_width()));
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-void    SwZoomBox_Impl::Select()
+IMPL_LINK(SwZoomBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    if ( !IsTravelSelect() )
+    if (rComboBox.changed_by_menu())  // only when picked from the list
+        Select();
+}
+
+IMPL_LINK_NOARG(SwZoomBox_Impl, ActivateHdl, weld::ComboBox&, bool)
+{
+    Select();
+    return true;
+}
+
+void SwZoomBox_Impl::Select()
+{
+    if( FN_PREVIEW_ZOOM == nSlotId )
     {
-        OUString sEntry = GetText().replaceAll("%", "");
+        bool bNonNumeric = true;
+
+        OUString sEntry = m_xWidget->get_active_text().replaceAll("%", "");
         SvxZoomItem aZoom(SvxZoomType::PERCENT,100);
         if(sEntry == SvxResId( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
             aZoom.SetType(SvxZoomType::PAGEWIDTH);
@@ -590,6 +635,8 @@ void    SwZoomBox_Impl::Select()
             aZoom.SetType(SvxZoomType::WHOLEPAGE);
         else
         {
+            bNonNumeric = false;
+
             sal_uInt16 nZoom = static_cast<sal_uInt16>(sEntry.toInt32());
             if(nZoom < MINZOOM)
                 nZoom = MINZOOM;
@@ -597,52 +644,50 @@ void    SwZoomBox_Impl::Select()
                 nZoom = MAXZOOM;
             aZoom.SetValue(nZoom);
         }
-        if( FN_PREVIEW_ZOOM == nSlotId )
-        {
-            SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
 
-            pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM,
-                    SfxCallMode::ASYNCHRON, { &aZoom });
+        if (bNonNumeric)
+        {
+            // put old value back, in case its effectively the same
+            // as the picked option and no update to number comes
+            // back from writer
+            m_xWidget->set_entry_text(m_xWidget->get_saved_value());
         }
-        ReleaseFocus();
+
+        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+
+        pCurrentShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM,
+                SfxCallMode::ASYNCHRON, { &aZoom });
     }
+    ReleaseFocus();
 }
 
-bool SwZoomBox_Impl::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(SwZoomBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
-        switch ( nCode )
-        {
-            case KEY_RETURN:
-            case KEY_TAB:
-            {
-                if ( KEY_TAB == nCode )
-                    bRelease = false;
-                else
-                    bHandled = true;
-                Select();
-                break;
-            }
-
-            case KEY_ESCAPE:
-                SetText( GetSavedValue() );
-                ReleaseFocus();
-                break;
-        }
-    }
-    else if ( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
+    switch (nCode)
     {
-        vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if ( !HasFocus() && GetSubEdit() != pFocusWin )
-            SetText( GetSavedValue() );
+        case KEY_TAB:
+            bRelease = false;
+            Select();
+            break;
+
+        case KEY_ESCAPE:
+            m_xWidget->set_entry_text(m_xWidget->get_saved_value());
+            ReleaseFocus();
+            bHandled = true;
+            break;
     }
 
-    return bHandled || ComboBox::EventNotify(rNEvt);
+    return bHandled || ChildKeyInput(rKEvt);
+}
+
+IMPL_LINK_NOARG(SwZoomBox_Impl, FocusOutHdl, weld::Widget&, void)
+{
+    if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidget so double-check if none of those has focus
+        m_xWidget->set_entry_text(m_xWidget->get_saved_value());
 }
 
 void SwZoomBox_Impl::ReleaseFocus()
@@ -688,8 +733,8 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     {
         OUString sZoom(unicode::formatPercent(static_cast<const SfxUInt16Item*>(pState)->GetValue(),
             Application::GetSettings().GetUILanguageTag()));
-        pBox->SetText(sZoom);
-        pBox->SaveValue();
+        pBox->set_entry_text(sZoom);
+        pBox->save_value();
     }
 }
 
