@@ -439,6 +439,13 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::completeFunction().
     void (*completeFunction) (LibreOfficeKitDocument* pThis, int nIndex);
 
+    /// @see lok::Document::setWindowTextSelection
+    void (*setWindowTextSelection) (LibreOfficeKitDocument* pThis,
+                                    unsigned nWindowId,
+                                    bool bSwap,
+                                    int nX,
+                                    int nY);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

@@ -119,7 +119,9 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         return false;
 
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
-    if ( nModifier & KEY_MOD2 )
+    bool nSwap = comphelper::LibreOfficeKit::isActive() && (nModifier & KEY_MOD1) && (nModifier & KEY_MOD2);
+
+    if ( !nSwap && (nModifier & KEY_MOD2) )
         return false;
     // in SingleSelection: filter Control-Key,
     // so that a D&D can be also started with a Ctrl-Click
@@ -137,6 +139,13 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         nModifier = 0;
+    }
+
+    if (nSwap)
+    {
+        pFunctionSet->CreateAnchor();
+        pFunctionSet->SetCursorAtPoint( aPos );
+        return true;
     }
 
     switch ( nModifier )

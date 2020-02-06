@@ -1040,6 +1040,11 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
                                bool bNotifyWhenFinished);
+static void doc_setWindowTextSelection(LibreOfficeKitDocument* pThis,
+                                       unsigned nLOKWindowId,
+                                       bool swap,
+                                       int nX,
+                                       int nY);
 static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -1204,6 +1209,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->sendDialogEvent = doc_sendDialogEvent;
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
+        m_pDocumentClass->setWindowTextSelection = doc_setWindowTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
         m_pDocumentClass->getSelectionType = doc_getSelectionType;
         m_pDocumentClass->getClipboard = doc_getClipboard;
@@ -3932,6 +3938,31 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     }
 
     pDoc->setTextSelection(nType, nX, nY);
+}
+
+static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, bool swap, int nX, int nY)
+{
+    comphelper::ProfileZone aZone("doc_setWindowTextSelection");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    if (!pWindow)
+    {
+        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        return;
+    }
+
+
+    Size aOffset(pWindow->GetOutOffXPixel(), pWindow->GetOutOffYPixel());
+    Point aCursorPos(nX, nY);
+    aCursorPos.Move(aOffset);
+    sal_uInt16 nModifier = swap ? KEY_MOD1 + KEY_MOD2 : KEY_SHIFT;
+
+    MouseEvent aCursorEvent(aCursorPos, 1, MouseEventModifiers::SIMPLECLICK, 0, nModifier);
+    Application::PostMouseEvent(VclEventId::WindowMouseButtonDown, pWindow, &aCursorEvent);
+    Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aCursorEvent);
 }
 
 static bool getFromTransferrable(

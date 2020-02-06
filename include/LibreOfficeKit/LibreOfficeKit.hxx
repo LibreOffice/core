@@ -767,6 +767,19 @@ public:
         mpDoc->pClass->completeFunction(mpDoc, nIndex);
     }
 
+    /**
+     * Sets the start or end of a text selection for a dialog.
+     *
+     * @param nWindowId
+     * @param bSwap swap anchor and cursor position of current selection
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    void setWindowTextSelection(unsigned nWindowId, bool bSwap, int nX, int nY)
+    {
+        mpDoc->pClass->setWindowTextSelection(mpDoc, nWindowId, bSwap, nX, nY);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
