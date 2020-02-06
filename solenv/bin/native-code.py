@@ -498,7 +498,6 @@ custom_widgets = [
     'DataTreeListBox',
     'DropdownBox',
     'EmojiView',
-    'FontNameBox',
     'IndexBox',
     'IndexBox',
     'ManagedMenuButton',
