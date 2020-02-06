@@ -1080,7 +1080,7 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
     Thus, by invoking ReleaseObjectShell() and  SetObjectShell() the
     SfxObjectShell can be replaced.
 
-    Between RealeaseObjectShell() and SetObjectShell() can the control not
+    Between ReleaseObjectShell() and SetObjectShell() the control cannot
     be handed over to the system.
 
     [Cross-reference]
