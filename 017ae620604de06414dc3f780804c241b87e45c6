@@ -34,6 +34,24 @@
       "revId": "017ae620604de06414dc3f780804c241b87e45c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e802fc7f_ff8d1f1b",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1001483
+      },
+      "writtenOn": "2020-02-06T10:37:04Z",
+      "side": 1,
+      "message": "You sure ? For me,\naEvent.State \u003e\u003e\u003d nValue\nmeans\naEvent.State \u003d aEvent.State \u003e\u003e nValue\nSo it\u0027s modifying aEvent.State not nValue",
+      "parentUuid": "151e1920_39c8c375",
+      "revId": "017ae620604de06414dc3f780804c241b87e45c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
