@@ -79,6 +79,11 @@ void SdPagesField::dispose()
     InterimItemWindow::dispose();
 }
 
+void SdPagesField::GetFocus()
+{
+    m_xWidget->grab_focus();
+}
+
 SdPagesField::~SdPagesField()
 {
     disposeOnce();

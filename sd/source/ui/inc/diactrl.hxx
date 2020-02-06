@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 
-#include <svx/InterimItemWindow.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
@@ -44,6 +44,8 @@ public:
     virtual void dispose() override;
     void set_sensitive(bool bSensitive);
     virtual ~SdPagesField() override;
+
+    virtual void GetFocus() override;
 
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };

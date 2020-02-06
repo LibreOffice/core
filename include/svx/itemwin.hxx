@@ -21,9 +21,9 @@
 
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
-#include <svx/InterimItemWindow.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineWidthItem;
@@ -65,6 +65,8 @@ private:
     static void     ReleaseFocus_Impl();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+
+    virtual void GetFocus() override;
 
 public:
     SvxMetricField( vcl::Window* pParent,

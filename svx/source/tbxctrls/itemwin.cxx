@@ -178,6 +178,11 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     InterimItemWindow::DataChanged( rDCEvt );
 }
 
+void SvxMetricField::GetFocus()
+{
+    m_xWidget->grab_focus();
+}
+
 SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
     nCurPos ( 0 ),
