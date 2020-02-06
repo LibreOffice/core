@@ -23,6 +23,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
+#include <svx/InterimItemWindow.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineWidthItem;
@@ -48,32 +49,39 @@ public:
     virtual ~SvxLineBox() override;
 };
 
-class SVX_DLLPUBLIC SvxMetricField : public MetricField
+class SVX_DLLPUBLIC SvxMetricField : public InterimItemWindow
 {
-    using Window::Update;
+protected:
+    std::unique_ptr<weld::MetricSpinButton> m_xWidget;
 
-    OUString        aCurTxt;
+private:
+    int             nCurValue;
     MapUnit         ePoolUnit;
     FieldUnit       eDlgUnit;
-    Size            aLogicalSize;
     css::uno::Reference< css::frame::XFrame > mxFrame;
+
+    DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
 
     static void     ReleaseFocus_Impl();
 
 protected:
-    virtual void    Modify() override;
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void    Modify();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
     SvxMetricField( vcl::Window* pParent,
                     const css::uno::Reference< css::frame::XFrame >& rFrame );
+    virtual void dispose() override;
+    virtual ~SvxMetricField() override;
 
     void            Update( const XLineWidthItem* pItem );
     void            SetCoreUnit( MapUnit eUnit );
     void            RefreshDlgUnit();
+
+    void            set_sensitive(bool bSensitive);
 };
 
 class SVX_DLLPUBLIC SvxFillTypeBox final : public ListBox

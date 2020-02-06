@@ -41,23 +41,15 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     m_xFrame        ( rFrame )
 {
     OUString aStr( SdResId( STR_SLIDE_PLURAL ) );
-    SetCustomUnitText( aStr );
-
-    // set size
-    aStr += "XXX";
-    Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
-
-    SetSizePixel( aSize );
+//TODO    SetCustomUnitText( aStr );
 
     // set parameter of MetricFields
-    SetUnit( FieldUnit::CUSTOM );
-    SetMin( 1 );
-    SetFirst( 1 );
-    SetMax( 15 );
-    SetLast( 15 );
-    SetSpinSize( 1 );
-    SetDecimalDigits( 0 );
-    Show();
+    m_xWidget->set_digits(0);
+    m_xWidget->set_unit(FieldUnit::CUSTOM);
+    m_xWidget->set_range(1, 15, FieldUnit::CUSTOM);
+    m_xWidget->set_increments(1, 5, FieldUnit::CUSTOM);
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
 SdPagesField::~SdPagesField()
@@ -69,19 +61,21 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
     if( pItem )
     {
         long nValue = static_cast<long>(pItem->GetValue());
-        SetValue( nValue );
+        m_xWidget->set_value(nValue, FieldUnit::CUSTOM);
+#if 0
         if( nValue == 1 )
             SetCustomUnitText( SdResId( STR_SLIDE_SINGULAR ) );
         else
             SetCustomUnitText( SdResId( STR_SLIDE_PLURAL ) );
+#endif
     }
     else
-        SetText( OUString() );
+        m_xWidget->set_text(OUString());
 }
 
 void SdPagesField::Modify()
 {
-    SfxUInt16Item aItem( SID_PAGES_PER_ROW, static_cast<sal_uInt16>(GetValue()) );
+    SfxUInt16Item aItem(SID_PAGES_PER_ROW, m_xWidget->get_value(FieldUnit::CUSTOM));
 
     ::uno::Any a;
     ::uno::Sequence< ::beans::PropertyValue > aArgs( 1 );
@@ -110,12 +104,11 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
 
     if ( eState == SfxItemState::DISABLED )
     {
-        pFld->Disable();
-        pFld->SetText( OUString() );
+        pFld->set_sensitive(false);
     }
     else
     {
-        pFld->Enable();
+        pFld->set_sensitive(true);
 
         const SfxUInt16Item* pItem = nullptr;
         if ( eState == SfxItemState::DEFAULT )
@@ -130,7 +123,10 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
 
 VclPtr<vcl::Window> SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
 {
-    return VclPtrInstance<SdPagesField>( pParent, m_xFrame ).get();
+    VclPtr<SdPagesField> pWindow = VclPtr<SdPagesField>::Create(pParent, m_xFrame);
+    pWindow->Show();
+
+    return pWindow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,8 +10,10 @@
 #pragma once
 
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
+#include <svx/svxdllapi.h>
 
-class InterimItemWindow : public Control
+class SVX_DLLPUBLIC InterimItemWindow : public Control
 {
 public:
     virtual ~InterimItemWindow() override;
