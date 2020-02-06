@@ -110,6 +110,7 @@ sw/uiconfig/swriter/ui/insertscript.ui://GtkLabel[@id='label1'] orphan-label
 sw/uiconfig/swriter/ui/insertscript.ui://GtkEntry[@id='scripttype'] no-labelled-by
 sw/uiconfig/swriter/ui/insertscript.ui://GtkEntry[@id='urlentry'] no-labelled-by
 sw/uiconfig/swriter/ui/insertscript.ui://GtkTextView[@id='textentry'] no-labelled-by
+sw/uiconfig/swriter/ui/jumpposbox.ui://GtkEntry[@id='jumppos'] no-labelled-by
 sw/uiconfig/swriter/ui/labelformatpage.ui://GtkSpinButton[@id='top'] duplicate-mnemonic
 sw/uiconfig/swriter/ui/labelformatpage.ui://GtkDrawingArea[@id='preview'] no-labelled-by
 sw/uiconfig/swriter/ui/linenumbering.ui://GtkLabel[@id='format'] orphan-label
