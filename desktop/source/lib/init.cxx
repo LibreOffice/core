@@ -2649,7 +2649,10 @@ static void doc_iniUnoCommands ()
         OUString(".uno:OnlineAutoFormat"),
         OUString(".uno:InsertSymbol"),
         OUString(".uno:EditRegion"),
-        OUString(".uno:ThesaurusDialog")
+        OUString(".uno:ThesaurusDialog"),
+        OUString(".uno:ObjectAlignLeft"),
+        OUString(".uno:ObjectAlignRight"),
+        OUString(".uno:AlignCenter")
     };
 
     util::URL aCommandURL;
