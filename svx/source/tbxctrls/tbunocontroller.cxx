@@ -41,7 +41,7 @@
 
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <boost/property_tree/ptree.hpp>
-#include <InterimItemWindow.hxx>
+#include <svx/InterimItemWindow.hxx>
 
 using namespace ::com::sun::star;
 

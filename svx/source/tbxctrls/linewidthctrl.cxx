@@ -83,12 +83,11 @@ void SvxLineWidthToolBoxControl::StateChanged(
     {
         if ( eState == SfxItemState::DISABLED )
         {
-            pFld->Disable();
-            pFld->SetText( "" );
+            pFld->set_sensitive(false);
         }
         else
         {
-            pFld->Enable();
+            pFld->set_sensitive(true);
 
             if ( eState == SfxItemState::DEFAULT )
             {
@@ -107,10 +106,12 @@ void SvxLineWidthToolBoxControl::StateChanged(
     }
 }
 
-
-VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow(vcl::Window *pParent)
 {
-    return VclPtr<SvxMetricField>::Create( pParent, m_xFrame ).get();
+    VclPtr<SvxMetricField> pWindow = VclPtr<SvxMetricField>::Create(pParent, m_xFrame);
+    pWindow->Show();
+
+    return pWindow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
