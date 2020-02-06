@@ -1,0 +1,6 @@
+#ifndef CONFIG_LIBLANGTAG_H
+#define CONFIG_LIBLANGTAG_H
+
+#mesondefine LIBLANGTAG_INLINE_FIX
+
+#endif

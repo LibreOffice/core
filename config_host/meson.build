@@ -43,12 +43,14 @@ cdata.set10('ENABLE_RUNTIME_OPTIMIZATIONS', false)
 
 cdata.set10('WITH_LOCALE_ALL', true)
 
-
 cdata.set('LIBO_VERSION_MAJOR', major_version)
 cdata.set('LIBO_VERSION_MINOR', minor_version)
 cdata.set('LIBO_VERSION_MICRO', micro_version)
 cdata.set('LIBO_VERSION_PATCH', patch_version)
 cdata.set('LIBO_THIS_YEAR', this_year)
+
+
+cdata.set10('LIBLANGTAG_INLINE_FIX', true)
 
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
@@ -80,4 +82,8 @@ configure_file(input: 'config_locales.h.meson',
 
 configure_file(input: 'config_version.h.meson',
   output: 'config_version.h',
+  configuration: cdata)
+
+configure_file(input: 'config_liblangtag.h.meson',
+  output: 'config_liblangtag.h',
   configuration: cdata)
