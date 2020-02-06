@@ -135,7 +135,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -175,7 +175,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -231,7 +231,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -270,7 +270,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -308,7 +308,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -344,7 +344,7 @@ namespace drawinglayer
             virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

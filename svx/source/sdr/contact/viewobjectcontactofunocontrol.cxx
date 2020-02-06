@@ -817,7 +817,7 @@ namespace sdr::contact {
         virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
         // declare unique ID for this primitive class
-        DeclPrimitive2DIDBlock()
+        virtual sal_uInt32 getPrimitive2DID() const override;
 
         static void getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation );
 

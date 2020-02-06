@@ -181,7 +181,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& getOuterRange() const { return maOuterRange; }
 
             /// provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
 
         }
