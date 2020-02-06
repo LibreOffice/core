@@ -1217,6 +1217,17 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
             }
             if ( bSetProperty )
             {
+                // tdf#130262: ignore negative values for distances (maybe this list needs to be extended)
+                // LO does not allow negative values but [MS-ODRAW] does not forbit them
+                if (    nRecType == DFF_Prop_dxWrapDistLeft || nRecType == DFF_Prop_dxWrapDistRight
+                     || nRecType == DFF_Prop_dyWrapDistTop  || nRecType == DFF_Prop_dyWrapDistBottom )
+                {
+                    if ( static_cast<sal_Int32>(nContent) < 0 )
+                    {
+                        break;
+                    }
+                }
+
                 mpPropSetEntries[ nRecType ].nContent = nContent;
                 mpPropSetEntries[ nRecType ].aFlags = aPropFlag;
             }
