@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libetonyek,0))
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libetonyek))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
+	external/libetonyek/glm-force-dmat3-initialization-needed-from-v0.9.9.0.patch.1 \
 	external/libetonyek/win_build.patch.1 \
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
