@@ -420,8 +420,8 @@ namespace vcl
             }
         }
         ImplCalcSize( aDlgSize );
-        SetOutputSizePixel( aDlgSize );
         SetMinOutputSizePixel( aDlgSize );
+        SetOutputSizePixel( aDlgSize );
     }
 
     void RoadmapWizard::StateChanged( StateChangedType nType )
