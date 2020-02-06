@@ -5,6 +5,8 @@ cpp = meson.get_compiler('cpp')
 
 add_global_arguments('-DLINUX', language: 'cpp')
 add_global_arguments('-DLINUX', language: 'c')
+add_global_arguments('-DUNX', language: 'cpp')
+add_global_arguments('-DUNX', language: 'c')
 
 thread_dep = dependency('threads')
 dl_dep = cpp.find_library('dl', required: false)
@@ -17,3 +19,4 @@ subdir('config_host')
 subdir('sal')
 subdir('salhelper')
 subdir('store')
+subdir('registry')
