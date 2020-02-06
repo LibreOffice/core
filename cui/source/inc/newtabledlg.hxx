@@ -40,5 +40,4 @@ public:
 
 #endif // INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

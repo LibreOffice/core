@@ -77,7 +77,7 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
 // Dialog for editing Object Title and Description
 
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle,
-    const OUString& rDescription)
+                                                   const OUString& rDescription)
     : GenericDialogController(pParent, "cui/ui/objecttitledescdialog.ui", "ObjectTitleDescDialog")
     , m_xEdtTitle(m_xBuilder->weld_entry("object_title_entry"))
     , m_xEdtDescription(m_xBuilder->weld_text_view("desc_entry"))

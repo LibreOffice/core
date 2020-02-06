@@ -28,7 +28,6 @@
 
 namespace
 {
-
 const sal_uInt16 SPECIAL_FACTOR = 0xFFFF;
 
 } // anonymous namespace
@@ -50,7 +49,7 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId)
 
     if (nButtonId == ZoomButtonId::NONE)
     {
-        if ( nNewFactor == 100 )
+        if (nNewFactor == 100)
         {
             m_x100Btn->set_active(true);
             m_x100Btn->grab_focus();
@@ -66,7 +65,7 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId)
     else
     {
         m_xUserEdit->set_value(nNewFactor, FieldUnit::PERCENT);
-        switch(nButtonId)
+        switch (nButtonId)
         {
             case ZoomButtonId::OPTIMAL:
             {
@@ -86,7 +85,8 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, ZoomButtonId nButtonId)
                 m_xWholePageBtn->grab_focus();
                 break;
             }
-            default: break;
+            default:
+                break;
         }
     }
 }
@@ -108,7 +108,7 @@ void SvxZoomDialog::HideButton(ZoomButtonId nButtonId)
             break;
 
         default:
-            OSL_FAIL("Wrong button number!" );
+            OSL_FAIL("Wrong button number!");
     }
 }
 
@@ -118,10 +118,7 @@ void SvxZoomDialog::SetLimits(sal_uInt16 nMin, sal_uInt16 nMax)
     m_xUserEdit->set_range(nMin, nMax, FieldUnit::PERCENT);
 }
 
-const SfxItemSet* SvxZoomDialog::GetOutputItemSet() const
-{
-    return m_pOutSet.get();
-}
+const SfxItemSet* SvxZoomDialog::GetOutputItemSet() const { return m_pOutSet.get(); }
 
 SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     : SfxDialogController(pParent, "cui/ui/zoomdialog.ui", "ZoomDialog")
@@ -141,22 +138,24 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     , m_xBookModeChk(m_xBuilder->weld_check_button("bookmode"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    Link<weld::ToggleButton&,void> aLink = LINK(this, SvxZoomDialog, UserHdl);
+    Link<weld::ToggleButton&, void> aLink = LINK(this, SvxZoomDialog, UserHdl);
     m_x100Btn->connect_toggled(aLink);
     m_xOptimalBtn->connect_toggled(aLink);
     m_xPageWidthBtn->connect_toggled(aLink);
     m_xWholePageBtn->connect_toggled(aLink);
     m_xUserBtn->connect_toggled(aLink);
 
-    Link<weld::ToggleButton&,void> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
+    Link<weld::ToggleButton&, void> aViewLayoutLink = LINK(this, SvxZoomDialog, ViewLayoutUserHdl);
     m_xAutomaticBtn->connect_toggled(aViewLayoutLink);
     m_xSingleBtn->connect_toggled(aViewLayoutLink);
     m_xColumnsBtn->connect_toggled(aViewLayoutLink);
 
-    Link<weld::SpinButton&,void> aViewLayoutSpinLink = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
+    Link<weld::SpinButton&, void> aViewLayoutSpinLink
+        = LINK(this, SvxZoomDialog, ViewLayoutSpinHdl);
     m_xColumnsEdit->connect_value_changed(aViewLayoutSpinLink);
 
-    Link<weld::ToggleButton&,void> aViewLayoutCheckLink = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
+    Link<weld::ToggleButton&, void> aViewLayoutCheckLink
+        = LINK(this, SvxZoomDialog, ViewLayoutCheckHdl);
     m_xBookModeChk->connect_toggled(aViewLayoutCheckLink);
 
     m_xOKBtn->connect_clicked(LINK(this, SvxZoomDialog, OKHdl));
@@ -188,7 +187,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
 
     const SfxPoolItem& rItem = m_rSet.Get(m_rSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
 
-    if (nullptr != dynamic_cast<const SvxZoomItem*>( &rItem))
+    if (nullptr != dynamic_cast<const SvxZoomItem*>(&rItem))
     {
         const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(rItem);
         const sal_uInt16 nZoom = rZoomItem.GetValue();
@@ -233,9 +232,10 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     const SfxPoolItem* pPoolViewLayoutItem = nullptr;
     if (SfxItemState::SET == m_rSet.GetItemState(SID_ATTR_VIEWLAYOUT, false, &pPoolViewLayoutItem))
     {
-        const SvxViewLayoutItem* pViewLayoutItem = static_cast<const SvxViewLayoutItem*>(pPoolViewLayoutItem);
+        const SvxViewLayoutItem* pViewLayoutItem
+            = static_cast<const SvxViewLayoutItem*>(pPoolViewLayoutItem);
         const sal_uInt16 nColumns = pViewLayoutItem->GetValue();
-        const bool bBookMode  = pViewLayoutItem->IsBookMode();
+        const bool bBookMode = pViewLayoutItem->IsBookMode();
 
         if (0 == nColumns)
         {
@@ -346,7 +346,8 @@ IMPL_LINK_NOARG(SvxZoomDialog, OKHdl, weld::Button&, void)
     if (m_bModified)
     {
         SvxZoomItem aZoomItem(SvxZoomType::PERCENT, 0, m_rSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
-        SvxViewLayoutItem aViewLayoutItem(0, false, m_rSet.GetPool()->GetWhich(SID_ATTR_VIEWLAYOUT));
+        SvxViewLayoutItem aViewLayoutItem(0, false,
+                                          m_rSet.GetPool()->GetWhich(SID_ATTR_VIEWLAYOUT));
 
         sal_uInt16 nFactor = GetFactor();
 
@@ -392,14 +393,14 @@ IMPL_LINK_NOARG(SvxZoomDialog, OKHdl, weld::Button&, void)
 
         if (pShell)
         {
-            sal_uInt16 nZoomValue = static_cast<sal_uInt16>(m_xUserEdit->get_value(FieldUnit::PERCENT));
+            sal_uInt16 nZoomValue
+                = static_cast<sal_uInt16>(m_xUserEdit->get_value(FieldUnit::PERCENT));
             pShell->PutItem(SfxUInt16Item(SID_ATTR_ZOOM_USER, nZoomValue));
         }
         m_xDialog->response(RET_OK);
     }
     else
         m_xDialog->response(RET_CANCEL);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

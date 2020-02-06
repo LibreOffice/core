@@ -32,7 +32,7 @@ private:
 
     std::set<OUString> m_aURLs;
 
-    void AddTSAURL(const OUString &rURL);
+    void AddTSAURL(const OUString& rURL);
 
 public:
     explicit TSAURLsDialog(weld::Window* pParent);

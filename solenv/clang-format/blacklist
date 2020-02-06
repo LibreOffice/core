@@ -2640,7 +2640,6 @@ cui/source/dialogs/cuigrfflt.cxx
 cui/source/dialogs/cuihyperdlg.cxx
 cui/source/dialogs/cuiimapwnd.cxx
 cui/source/dialogs/cuitbxform.cxx
-cui/source/dialogs/dlgname.cxx
 cui/source/dialogs/hangulhanjadlg.cxx
 cui/source/dialogs/hldocntp.cxx
 cui/source/dialogs/hldoctp.cxx
@@ -2665,7 +2664,6 @@ cui/source/dialogs/showcols.cxx
 cui/source/dialogs/splitcelldlg.cxx
 cui/source/dialogs/srchxtra.cxx
 cui/source/dialogs/thesdlg.cxx
-cui/source/dialogs/zoom.cxx
 cui/source/factory/cuiexp.cxx
 cui/source/factory/cuiresmgr.cxx
 cui/source/factory/dlgfact.cxx
@@ -2676,7 +2674,6 @@ cui/source/inc/SpellDialog.hxx
 cui/source/inc/SvxConfigPageHelper.hxx
 cui/source/inc/SvxMenuConfigPage.hxx
 cui/source/inc/SvxToolbarConfigPage.hxx
-cui/source/inc/about.hxx
 cui/source/inc/acccfg.hxx
 cui/source/inc/align.hxx
 cui/source/inc/autocdlg.hxx
@@ -2699,7 +2696,6 @@ cui/source/inc/cuitabarea.hxx
 cui/source/inc/cuitabline.hxx
 cui/source/inc/dbregister.hxx
 cui/source/inc/defdlgname.hxx
-cui/source/inc/dialmgr.hxx
 cui/source/inc/dlgname.hxx
 cui/source/inc/dstribut.hxx
 cui/source/inc/grfpage.hxx
@@ -2721,7 +2717,6 @@ cui/source/inc/macroass.hxx
 cui/source/inc/macropg.hxx
 cui/source/inc/measure.hxx
 cui/source/inc/multipat.hxx
-cui/source/inc/newtabledlg.hxx
 cui/source/inc/numfmt.hxx
 cui/source/inc/numpages.hxx
 cui/source/inc/optasian.hxx
@@ -2736,7 +2731,6 @@ cui/source/inc/postdlg.hxx
 cui/source/inc/screenshotannotationdlg.hxx
 cui/source/inc/scriptdlg.hxx
 cui/source/inc/sdrcelldlg.hxx
-cui/source/inc/showcols.hxx
 cui/source/inc/splitcelldlg.hxx
 cui/source/inc/srchxtra.hxx
 cui/source/inc/swpossizetabpage.hxx
@@ -2748,7 +2742,6 @@ cui/source/inc/transfrm.hxx
 cui/source/inc/treeopt.hxx
 cui/source/inc/zoom.hxx
 cui/source/options/certpath.cxx
-cui/source/options/certpath.hxx
 cui/source/options/cfgchart.cxx
 cui/source/options/cfgchart.hxx
 cui/source/options/connpoolconfig.cxx
@@ -2808,7 +2801,6 @@ cui/source/options/securityoptions.cxx
 cui/source/options/securityoptions.hxx
 cui/source/options/treeopt.cxx
 cui/source/options/tsaurls.cxx
-cui/source/options/tsaurls.hxx
 cui/source/options/webconninfo.cxx
 cui/source/options/webconninfo.hxx
 cui/source/tabpages/align.cxx
