@@ -179,6 +179,7 @@
                           <item id="1" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Comma</item>
                           <item id="2" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Semicolon</item>
                           <item id="3" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">New line</item>
+                          <item id="4" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Period</item>
                         </items>
                       </object>
                       <packing>
