@@ -75,7 +75,7 @@ public class _XMultiServiceFactory extends MultiMethodTest {
             log.println("Service" + i + ": " + services[i]);
         }
 
-        tRes.tested("getAvailableServiceNames()", services != null);
+        tRes.tested("getAvailableServiceNames()", true);
     }
 
     /**
