@@ -1,0 +1,40 @@
+lex_bin = find_program('flex')
+bison_bin = find_program('bison')
+
+lgen = custom_target('idlc_lex',
+  output : 'scanner.yy.cxx',
+  input: 'source/scanner.l',
+  command : [lex_bin, '-o', '@OUTPUT@', '@INPUT@'])
+
+pgen = custom_target('idlc_bison',
+  output : ['parser.cxx', 'parser.hxx'],
+  input: 'source/parser.y',
+  command : [bison_bin, '@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'])
+
+idlc = executable('idlc',
+  'source/astconstant.cxx',
+  'source/astdeclaration.cxx',
+  'source/astdump.cxx',
+  'source/astenum.cxx',
+  'source/astexpression.cxx',
+  'source/astinterface.cxx',
+  'source/astoperation.cxx',
+  'source/astscope.cxx',
+  'source/astservice.cxx',
+  'source/aststack.cxx',
+  'source/aststruct.cxx',
+  'source/aststructinstance.cxx',
+  'source/errorhandler.cxx',
+  'source/fehelper.cxx',
+  'source/idlc.cxx',
+  'source/idlccompile.cxx',
+  'source/idlcmain.cxx',
+  'source/idlcproduce.cxx',
+  'source/options.cxx',
+  lgen, pgen,
+  include_directories: [main_inc, 'inc', 'source'],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             '-DSYSTEM_UCPP',
+             '-DUCPP="file:///usr/bin/ucpp"'],
+  link_with: [registry_lib, sal_lib],
+)

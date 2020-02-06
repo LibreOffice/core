@@ -3,6 +3,8 @@ cdata.set('SAL_TYPES_SIZEOFINT', cpp.sizeof('int'))
 cdata.set('SAL_TYPES_SIZEOFLONG', cpp.sizeof('long'))
 cdata.set('SAL_TYPES_SIZEOFLONGLONG', cpp.sizeof('long long'))
 cdata.set('SAL_TYPES_SIZEOFPOINTER', cpp.sizeof('void*'))
+# FIXME: don't know where these should be measured from.
+cdata.set('SAL_TYPES_ALIGNMENT8', 8)
 
 cdata.set10('HAVE_FEATURE_X11', true)
 cdata.set10('HAVE_FEATURE_SCRIPTING', true)
