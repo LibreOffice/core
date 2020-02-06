@@ -7,19 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,jurt/test/com/sun/star/lib/uno/protocols/urp))
+$(eval $(call gb_CustomTarget_CustomTarget,ridljar/test/com/sun/star/lib/uno/protocols/urp))
 
-jurt_TESTURP := $(call gb_CustomTarget_get_workdir,jurt/test/com/sun/star/lib/uno/protocols/urp)
+ridljar_TESTURP := $(call gb_CustomTarget_get_workdir,ridljar/test/com/sun/star/lib/uno/protocols/urp)
 
-$(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) : $(jurt_TESTURP)/done
+$(call gb_CustomTarget_get_target,ridljar/test/com/sun/star/lib/uno/protocols/urp) : $(ridljar_TESTURP)/done
 
-$(jurt_TESTURP)/done : \
+$(ridljar_TESTURP)/done : \
 		$(call gb_UnoApiTarget_get_target,test_urp) \
 		$(call gb_UnoApi_get_target,udkapi) \
 		$(call gb_Executable_get_runtime_dependencies,javamaker)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
-	rm -rf $(jurt_TESTURP) && \
-	$(call gb_Helper_execute,javamaker -O$(jurt_TESTURP) -nD $< \
+	rm -rf $(ridljar_TESTURP) && \
+	$(call gb_Helper_execute,javamaker -O$(ridljar_TESTURP) -nD $< \
 		-X$(call gb_UnoApi_get_target,udkapi)) && \
 	touch $@
 
