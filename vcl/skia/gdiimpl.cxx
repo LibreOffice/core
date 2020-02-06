@@ -250,21 +250,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     {
         case SkiaHelper::RenderVulkan:
         {
-            GrContext* grContext = SkiaHelper::getSharedGrContext();
-            // We may not get a GrContext if called before any onscreen window is created.
-            if (!grContext)
-            {
-                SAL_INFO("vcl.skia",
-                         "creating Vulkan offscreen GPU surface before any window exists");
-                // Create temporary WindowContext with no window. That will fail,
-                // but it will initialize the shared GrContext.
-                createWindowContext();
-                // This will use the temporarily created context.
-                grContext = SkiaHelper::getSharedGrContext();
-                // Destroy the temporary WindowContext.
-                destroySurface();
-            }
-            if (grContext)
+            if (SkiaHelper::getSharedGrContext())
             {
                 mSurface = SkiaHelper::createSkSurface(GetWidth(), GetHeight());
                 assert(mSurface);
