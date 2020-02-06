@@ -160,7 +160,6 @@ sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='documentindex'] orpha
 sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='femalefi'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='clipboardgrouplabel'] orphan-label
-sw/uiconfig/swriter/ui/notebookbar_groups.ui://svtlo-FontNameBox[@id='fontnamelist'] no-labelled-by
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='formatgrouplabel'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='insertgrouplabel'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='tablegrouplabel'] orphan-label

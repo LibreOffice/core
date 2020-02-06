@@ -98,7 +98,6 @@ sc/uiconfig/scalc/ui/integerdialog.ui://GtkSpinButton[@id='value'] no-labelled-b
 sc/uiconfig/scalc/ui/namerangesdialog.ui://GtkEntry[@id='edassign'] no-labelled-by
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='clipboardgrouplabel'] orphan-label
-sc/uiconfig/scalc/ui/notebookbar_groups.ui://svtlo-FontNameBox[@id='fontnamelist'] no-labelled-by
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='formatgrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='tablegrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='insertgrouplabel'] orphan-label
