@@ -16,6 +16,24 @@
       "revId": "ddeafe96f3450c09bf5a4719c4df38290122263c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c26bf42d_4f743d69",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 3855,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-06T18:56:24Z",
+      "side": 1,
+      "message": "I had wondered about that, so I looked to see if there were other tooltips that matched, and immediately found an example, so I just left it...  although I think in that case it was an exact match where this one has a ~ in it (and the previous Fontworks tooltip was generated from \"Fontwork..., so they aren\u0027t exact matches and thus would need re-translation.\").   I removed the whole thing as you suggested.",
+      "parentUuid": "c7f2b7fb_5ae300ad",
+      "revId": "ddeafe96f3450c09bf5a4719c4df38290122263c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
