@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <svtools/table/tablemodel.hxx>
-#include <svtools/table/tablesort.hxx>
+#include <table/tablemodel.hxx>
+#include <table/tablesort.hxx>
 
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
