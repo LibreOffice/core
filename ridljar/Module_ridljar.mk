@@ -18,9 +18,18 @@ $(eval $(call gb_Module_add_targets,ridljar,\
 
 # unfortunately, these tests depend on qadevOOo, which depends on
 # ridl.jar for build...
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,ridljar,\
+    CustomTarget_test_urp \
+    InternalUnoApi_test_urp \
+    JunitTest_bridgefactory \
+    JunitTest_connections \
+    JunitTest_java \
+    JunitTest_java_remote \
+    JunitTest_remote \
     JunitTest_typedesc \
     JunitTest_uno \
+    JunitTest_urp \
     JunitTest_util \
 ))
 endif
