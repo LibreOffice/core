@@ -1,0 +1,24 @@
+codemaker_st_lib = static_library('codemaker_static',
+  'source/commoncpp/commoncpp.cxx',
+  'source/codemaker/exceptiontree.cxx',
+  'source/codemaker/global.cxx',
+  'source/codemaker/options.cxx',
+  'source/codemaker/typemanager.cxx',
+  'source/codemaker/unotype.cxx',
+  'source/codemaker/codemaker.cxx',
+  include_directories: [main_inc],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+)
+
+cppumaker = executable('cppumaker',
+  'source/cppumaker/cppumaker.cxx',
+  'source/cppumaker/cppuoptions.cxx',
+  'source/cppumaker/cpputype.cxx',
+  'source/cppumaker/dependencies.cxx',
+  'source/cppumaker/dumputils.cxx',
+  'source/cppumaker/includes.cxx',
+  include_directories: [main_inc],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  link_with: [codemaker_st_lib, unoidl_lib, salhelper_lib, sal_lib],
+)
+
