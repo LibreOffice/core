@@ -34,7 +34,7 @@ public:
     }
 
     // Deliberately drop RecursiveASTVisitor::TraverseBinEQ's DataRecursionQueue
-    // parameter; TraveseBinEQ must use stack instead of data recursion for any
+    // parameter; TraverseBinEQ must use stack instead of data recursion for any
     // children's VisitBinaryOperator to see changes to occurrence_ by a parent
     // VisitBinaryOperator:
     bool TraverseBinEQ(BinaryOperator * S)
@@ -46,7 +46,7 @@ public:
     }
 
     // Deliberately drop RecursiveASTVisitor::TraverseBinNE's DataRecursionQueue
-    // parameter; TraveseBinNE must use stack instead of data recursion for any
+    // parameter; TraverseBinNE must use stack instead of data recursion for any
     // children's VisitBinaryOperator to see changes to occurrence_ by a parent
     // VisitBinaryOperator:
     bool TraverseBinNE(BinaryOperator * S)
