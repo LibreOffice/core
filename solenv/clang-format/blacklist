@@ -1873,7 +1873,6 @@ configmgr/source/xcuparser.cxx
 configmgr/source/xcuparser.hxx
 configmgr/source/xmldata.cxx
 configmgr/source/xmldata.hxx
-connectivity/inc/pch/precompiled_ado.hxx
 connectivity/inc/strings.hxx
 connectivity/qa/connectivity/ado/DriverTest.cxx
 connectivity/qa/connectivity/commontools/FValue_test.cxx
@@ -18690,7 +18689,6 @@ xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx
 xmlsecurity/inc/gpg/SEInitializer.hxx
 xmlsecurity/inc/gpg/xmlsignature_gpgimpl.hxx
 xmlsecurity/inc/macrosecurity.hxx
-xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
 xmlsecurity/inc/xmlsec/saxhelper.hxx
 xmlsecurity/inc/xmlsec/xmldocumentwrapper_xmlsecimpl.hxx
 xmlsecurity/inc/xmlsec/xmlstreamio.hxx

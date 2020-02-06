@@ -891,8 +891,8 @@ def generate(includes, libname, filename, module):
             ado_define = """
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)
-#   include <postwin.h>
-#   undef RGB
+#include <postwin.h>
+#undef RGB
 #endif
 """
             f.write(ado_define)

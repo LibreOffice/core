@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:18:01 using:
+ Generated on 2020-02-07 00:16:39 using:
  ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -136,8 +136,8 @@
 
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)
-#   include <postwin.h>
-#   undef RGB
+#include <postwin.h>
+#undef RGB
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
