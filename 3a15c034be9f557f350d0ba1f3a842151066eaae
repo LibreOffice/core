@@ -22,6 +22,30 @@
       "revId": "3a15c034be9f557f350d0ba1f3a842151066eaae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e7299b_fd8c7257",
+        "filename": "cui/source/options/optgenrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-02-06T14:33:01Z",
+      "side": 1,
+      "message": "yeah, that\u0027s totally wrong. See https://gerrit.libreoffice.org/c/core/+/88108 for fix",
+      "parentUuid": "9dc9d8d1_364c7cdd",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 63
+      },
+      "revId": "3a15c034be9f557f350d0ba1f3a842151066eaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
