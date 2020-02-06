@@ -42,7 +42,7 @@
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <vcl/field.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
