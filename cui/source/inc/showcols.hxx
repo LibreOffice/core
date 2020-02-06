@@ -31,13 +31,13 @@ class FmShowColsDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::TreeView> m_xList;
     std::unique_ptr<weld::Button> m_xOK;
 
-    css::uno::Reference< css::container::XIndexAccess >   m_xColumns;
+    css::uno::Reference<css::container::XIndexAccess> m_xColumns;
 
 public:
     FmShowColsDialog(weld::Window* pParent);
     virtual ~FmShowColsDialog() override;
 
-    void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
+    void SetColumns(const css::uno::Reference<css::container::XIndexContainer>& xCols);
 
 private:
     DECL_LINK(OnClickedOk, weld::Button&, void);

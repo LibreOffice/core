@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
-OUString CuiResId(const char *pKey);
+OUString CuiResId(const char* pKey);
 
 #endif
 

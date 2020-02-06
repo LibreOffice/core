@@ -33,8 +33,8 @@ private:
     std::unique_ptr<weld::Button> m_xReleaseNotesButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
 
-    BitmapEx           aLogoBitmap;
-    BitmapEx           aBackgroundBitmap;
+    BitmapEx aLogoBitmap;
+    BitmapEx aBackgroundBitmap;
 
     OUString m_buildIdLinkString;
 
