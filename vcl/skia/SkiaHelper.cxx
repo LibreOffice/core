@@ -14,6 +14,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <watchdog.hxx>
 #include <skia/zone.hxx>
+#include <sal/log.hxx>
 
 #if !HAVE_FEATURE_SKIA
 
@@ -28,7 +29,6 @@ bool isVCLSkiaEnabled() { return false; }
 #include <skia/utils.hxx>
 
 #include <SkSurface.h>
-#include <tools/sk_app/VulkanWindowContext.h>
 
 #ifdef DBG_UTIL
 #include <fstream>
@@ -36,13 +36,54 @@ bool isVCLSkiaEnabled() { return false; }
 
 namespace SkiaHelper
 {
-static bool supportsVCLSkia()
+static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
 {
-    static bool bDisableSkia = !!getenv("SAL_DISABLESKIA");
-    bool bBlacklisted = false; // TODO isDeviceBlacklisted();
-
-    return !bDisableSkia && !bBlacklisted;
+    static const char* const types[]
+        = { "other", "integrated", "discrete", "virtual", "cpu", "??" }; // VkPhysicalDeviceType
+    SAL_INFO("vcl.skia",
+             "Vulkan API version: "
+                 << (props.apiVersion >> 22) << "." << ((props.apiVersion >> 12) & 0x3ff) << "."
+                 << (props.apiVersion & 0xfff) << ", driver version: " << std::hex
+                 << props.driverVersion << ", vendor:" << props.vendorID
+                 << ", device: " << props.deviceID << std::dec
+                 << ", type: " << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types))]
+                 << ", name: " << props.deviceName);
+    return false;
 }
+
+static void checkDeviceBlacklisted()
+{
+    static bool done = false;
+    if (!done)
+    {
+        SkiaZone zone;
+
+        switch (renderMethodToUse())
+        {
+            case RenderVulkan:
+            {
+                GrContext* grContext = SkiaHelper::getSharedGrContext();
+                bool blacklisted = true; // assume the worst
+                if (grContext) // Vulkan was initialized properly
+                {
+                    blacklisted = isVulkanBlacklisted(
+                        sk_app::VulkanWindowContext::getPhysDeviceProperties());
+                    SAL_INFO("vcl.skia", "Vulkan blacklisted: " << blacklisted);
+                }
+                else
+                    SAL_INFO("vcl.skia", "Vulkan could not be initialized");
+                if (blacklisted)
+                    disableRenderMethod(RenderVulkan);
+                break;
+            }
+            case RenderRaster:
+                return; // software, never blacklisted
+        }
+        done = true;
+    }
+}
+
+static bool supportsVCLSkia() { return !getenv("SAL_DISABLESKIA"); }
 
 bool isVCLSkiaEnabled()
 {
@@ -93,6 +134,9 @@ bool isVCLSkiaEnabled()
         if (Application::IsSafeModeEnabled())
             bEnable = false;
 
+        if (bEnable)
+            checkDeviceBlacklisted(); // switch to raster if driver is blacklisted
+
         bRet = bEnable;
     }
 
@@ -138,6 +182,12 @@ void disableRenderMethod(RenderMethod method)
 
 static sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
 
+static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)() = nullptr;
+void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)())
+{
+    createVulkanWindowContextFunction = function;
+}
+
 GrContext* getSharedGrContext()
 {
     SkiaZone zone;
@@ -145,7 +195,7 @@ GrContext* getSharedGrContext()
     if (sharedGrContext)
         return sharedGrContext->getGrContext();
     // TODO mutex?
-    // Setup the shared GrContext from Skia's (patched) VulkanWindowContext, if it's been
+    // Set up the shared GrContext from Skia's (patched) VulkanWindowContext, if it's been
     // already set up.
     sk_app::VulkanWindowContext::SharedGrContext context
         = sk_app::VulkanWindowContext::getSharedGrContext();
@@ -155,9 +205,22 @@ GrContext* getSharedGrContext()
         sharedGrContext = new sk_app::VulkanWindowContext::SharedGrContext(context);
         return grContext;
     }
-    // TODO
-    // SkiaSalGraphicsImpl::createOffscreenSurface() creates the shared context using a dummy window,
-    // but we do not have a window here. Is it worth it to try to do it here?
+    static bool done = false;
+    if (done)
+        return nullptr;
+    done = true;
+    if (!createVulkanWindowContextFunction)
+        return nullptr;
+    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction();
+    // Set up using the shared context created by the call above, if successful.
+    context = sk_app::VulkanWindowContext::getSharedGrContext();
+    grContext = context.getGrContext();
+    if (grContext)
+    {
+        sharedGrContext = new sk_app::VulkanWindowContext::SharedGrContext(context);
+        return grContext;
+    }
+    disableRenderMethod(RenderVulkan);
     return nullptr;
 }
 
