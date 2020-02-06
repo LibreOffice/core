@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,test_urp,jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,test_urp,ridljar/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl))
 
 $(eval $(call gb_InternalUnoApi_use_api,test_urp,\
     udkapi \
