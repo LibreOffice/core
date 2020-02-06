@@ -406,6 +406,15 @@ public:
     */
     bool good() const { return !(eof() || bad()); }
 
+
+    /**
+     * Creates an operating system specific temp file, that is optimised for short duration
+     * temporary files. These files have no name (and therefore cannot be used where we need to
+     * pass around a URL), these files are deleted the moment the last handle is closed, and these
+     * files may never even hit disk if the machine has enough memory.
+     */
+    static std::unique_ptr<SvStream> CreateTempFile();
+
 private:
     template<typename T>
     void readNumberWithoutSwap(T& rDataDest)
@@ -566,24 +575,14 @@ inline std::size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
 
 [[nodiscard]] TOOLS_DLLPUBLIC bool checkSeek(SvStream &rSt, sal_uInt64 nOffset);
 
-// FileStream
+/** Shared base class for temporary and normal file streams */
 
-class TOOLS_DLLPUBLIC SvFileStream final : public SvStream
+class TOOLS_DLLPUBLIC SvFileLikeStream : public SvStream
 {
-private:
+protected:
     std::unique_ptr<StreamData>
                     pInstanceData;
-    OUString        aFilename;
-#if defined(_WIN32)
-    sal_uInt16      nLockCounter;
-#endif
     bool            bIsOpen;
-
-    SvFileStream (const SvFileStream&) = delete;
-    SvFileStream & operator= (const SvFileStream&) = delete;
-
-    bool LockFile();
-    void UnlockFile();
 
     virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
     virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
@@ -592,16 +591,35 @@ private:
     virtual void    FlushData() override;
 
 public:
+    virtual void    ResetError() override;
+
+    bool            IsOpen() const { return bIsOpen; }
+};
+
+// FileStream
+
+class TOOLS_DLLPUBLIC SvFileStream final : public SvFileLikeStream
+{
+private:
+    OUString        aFilename;
+#if defined(_WIN32)
+    sal_uInt16      nLockCounter;
+#endif
+
+    SvFileStream (const SvFileStream&) = delete;
+    SvFileStream & operator= (const SvFileStream&) = delete;
+
+    bool LockFile();
+    void UnlockFile();
+
+public:
                     // Switches to Read StreamMode on failed attempt of Write opening
                     SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
                     SvFileStream();
                     virtual ~SvFileStream() override;
 
-    virtual void    ResetError() override;
-
     void            Open( const OUString& rFileName, StreamMode eOpenMode );
     void            Close();
-    bool            IsOpen() const { return bIsOpen; }
 
     const OUString& GetFileName() const { return aFilename; }
 };

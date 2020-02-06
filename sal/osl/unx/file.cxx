@@ -1124,6 +1124,28 @@ oslFileError SAL_CALL osl_openFile(rtl_uString* ustrFileURL, oslFileHandle* pHan
 
 oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt32 uFlags, mode_t mode)
 {
+    // magic sequence of params that indicates a temporary file request from strmunx.cxx in tools/
+    if (ustrFileURL == nullptr && uFlags == osl_File_OpenFlag_Temporary)
+    {
+        if (!pHandle)
+            return osl_File_E_INVAL;
+
+        // Need to extract the fd and duplicate it, then close the FILE* since there is no fd-level tempfile
+        // API.
+        FILE* pFile = tmpfile();
+        int fd = dup(fileno(pFile));
+        fclose(pFile);
+
+        /* allocate memory for impl structure */
+        FileHandle_Impl *pImpl = new FileHandle_Impl(fd, FileHandle_Impl::KIND_FD, nullptr);
+        pImpl->m_state |= State::Writeable;
+        pImpl->m_size = 0;
+
+        *pHandle = static_cast<oslFileHandle>(pImpl);
+
+        return osl_File_E_None;
+    }
+
     oslFileError eRet;
 
     if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pHandle))

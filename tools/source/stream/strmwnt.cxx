@@ -412,4 +412,10 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
     }
 }
 
+std::unique_ptr<SvStream> SvStream::CreateTempFile()
+{
+    // TODO
+    return std::make_unique<SvStream>();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
