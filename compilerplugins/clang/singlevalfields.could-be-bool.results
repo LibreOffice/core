@@ -11,7 +11,7 @@ dbaccess/source/ui/inc/tabletree.hxx:149
     dbaui::TableTreeListBox m_nTextColumn
     int
 desktop/source/app/main.c:29
-    /media/disk2/libo7/desktop/source/app/main.c g_Exiting
+    /home/noel/libo2/desktop/source/app/main.c g_Exiting
     int
 editeng/source/misc/hangulhanja.cxx:78
     editeng::HangulHanjaConversion_Impl m_eConvType
@@ -74,10 +74,10 @@ sd/qa/unit/tiledrendering/tiledrendering.cxx:959
     (anonymous namespace)::ViewCallback m_nPart
     int
 soltools/cpp/_tokens.c:35
-    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    /home/noel/libo2/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
     int
 soltools/cpp/_tokens.c:36
-    /media/disk2/libo7/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
+    /home/noel/libo2/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
     int
 soltools/cpp/cpp.h:121
     includelist always
@@ -110,13 +110,13 @@ vcl/unx/generic/app/saldata.cxx:502
     X11SalData::XError bOnce
     int
 vcl/unx/generic/app/sm.cxx:184
-    /media/disk2/libo7/vcl/unx/generic/app/sm.cxx nSmDel
+    /home/noel/libo2/vcl/unx/generic/app/sm.cxx nSmDel
     int
 vcl/workben/icontest.cxx:147
     (anonymous namespace)::IconTestApp nRet
     int
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
-    /media/disk2/libo7/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
+    /home/noel/libo2/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:53
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
