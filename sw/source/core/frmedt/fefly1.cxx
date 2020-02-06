@@ -935,8 +935,8 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     }
     // insert drawing object into the document creating a new <SwDrawFrameFormat> instance
     SwDrawFrameFormat* pFormat = GetDoc()->getIDocumentContentOperations().InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
-    pFormat->SetName(GetDoc()->GetUniqueShapeName());
-    rDrawObj.SetName(pFormat->GetName());
+    OUString sShapeName = GetDoc()->GetUniqueShapeName();
+    rDrawObj.SetName(sShapeName);
 
     // move object to visible layer
     SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
@@ -945,8 +945,9 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         pContact->MoveObjToVisibleLayer( &rDrawObj );
     }
 
-    if ( pFormat )
+    if (pFormat)
     {
+        pFormat->SetName(sShapeName);
         // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView() );
     }
