@@ -7580,6 +7580,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     sal_Int32 nIndex = 0;
 
     // separator
+    // note: can only be defined for the whole document, not per section
     m_pSerializer->startElementNS( XML_w, nItem,
             FSNS( XML_w, XML_id ), OString::number(nIndex++),
             FSNS( XML_w, XML_type ), "separator" );
@@ -7590,8 +7591,10 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     if (bFootnotes)
     {
         const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_pDoc->GetPageDesc(0).GetFootnoteInfo();
-        // Request a separator only in case the width is larger than zero.
-        bSeparator = double(rFootnoteInfo.GetWidth()) > 0;
+        // Request separator only if both width and thickness are non-zero.
+        bSeparator = rFootnoteInfo.GetLineStyle() != SvxBorderLineStyle::NONE
+                  && rFootnoteInfo.GetLineWidth() > 0
+                  && double(rFootnoteInfo.GetWidth()) > 0;
     }
 
     if (bSeparator)
@@ -7606,7 +7609,10 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSNS( XML_w, XML_type ), "continuationSeparator" );
     m_pSerializer->startElementNS(XML_w, XML_p);
     m_pSerializer->startElementNS(XML_w, XML_r);
-    m_pSerializer->singleElementNS(XML_w, XML_continuationSeparator);
+    if (bSeparator)
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_continuationSeparator);
+    }
     m_pSerializer->endElementNS( XML_w, XML_r );
     m_pSerializer->endElementNS( XML_w, XML_p );
     m_pSerializer->endElementNS( XML_w, nItem );
