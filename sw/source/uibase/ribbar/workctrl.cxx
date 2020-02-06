@@ -42,7 +42,6 @@
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -535,34 +534,56 @@ void SwScrollNaviPopup::CheckItem(sal_uInt16 nNaviId, bool bOn)
 
 namespace {
 
-class SwZoomBox_Impl : public ComboBox
+class SwZoomBox_Impl final : public InterimItemWindow
 {
+    std::unique_ptr<weld::ComboBox> m_xWidget;
     sal_uInt16 const nSlotId;
     bool             bRelease;
+
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+
+//TODO    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+
+    void ReleaseFocus();
 
 public:
     SwZoomBox_Impl(
         vcl::Window* pParent,
         sal_uInt16 nSlot );
 
-protected:
-    virtual void    Select() override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
 
-    void ReleaseFocus();
+    void save_value()
+    {
+        m_xWidget->save_value();
+    }
 
+    void set_entry_text(const OUString& rText)
+    {
+        m_xWidget->set_entry_text(rText);
+    }
+
+    virtual ~SwZoomBox_Impl() override
+    {
+        disposeOnce();
+    }
 };
 
 }
 
 SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
-    : ComboBox(pParent, WB_HIDE | WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
+    : InterimItemWindow(pParent, "modules/swriter/ui/zoombox.ui", "ZoomBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("zoom"))
     , nSlotId(nSlot)
     , bRelease(true)
 {
-    SetHelpId(HID_PVIEW_ZOOM_LB);
-    SetSizePixel(LogicToPixel(Size(30, 86), MapMode(MapUnit::MapAppFont)));
-    EnableAutocomplete( false );
+    m_xWidget->set_help_id(HID_PVIEW_ZOOM_LB);
+    m_xWidget->set_entry_completion(false);
+    m_xWidget->connect_changed(LINK(this, SwZoomBox_Impl, SelectHdl));
     const char* const aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
@@ -572,15 +593,21 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     for(const char* pZoomValue : aZoomValues)
     {
         OUString sEntry = SvxResId(pZoomValue);
-        InsertEntry(sEntry);
+        m_xWidget->append_text(sEntry);
     }
+
+    int nWidth = m_xWidget->get_pixel_size(SvxResId(RID_SVXSTR_ZOOM_200)).Width();
+    m_xWidget->set_entry_width_chars(std::ceil(nWidth / m_xWidget->get_approximate_digit_width()));
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-void    SwZoomBox_Impl::Select()
+IMPL_LINK_NOARG(SwZoomBox_Impl, SelectHdl, weld::ComboBox&, void)
 {
-    if ( !IsTravelSelect() )
+//TODO    if ( !IsTravelSelect() )
     {
-        OUString sEntry = GetText().replaceAll("%", "");
+        OUString sEntry = m_xWidget->get_active_text().replaceAll("%", "");
+        fprintf(stderr, "changed to %s\n", sEntry.toUtf8().getStr());
         SvxZoomItem aZoom(SvxZoomType::PERCENT,100);
         if(sEntry == SvxResId( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
             aZoom.SetType(SvxZoomType::PAGEWIDTH);
@@ -608,6 +635,7 @@ void    SwZoomBox_Impl::Select()
     }
 }
 
+#if 0
 bool SwZoomBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
@@ -630,7 +658,7 @@ bool SwZoomBox_Impl::EventNotify( NotifyEvent& rNEvt )
             }
 
             case KEY_ESCAPE:
-                SetText( GetSavedValue() );
+                m_xWidget->set_entry_text(m_xWidget->get_saved_value());
                 ReleaseFocus();
                 break;
         }
@@ -639,11 +667,12 @@ bool SwZoomBox_Impl::EventNotify( NotifyEvent& rNEvt )
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )
-            SetText( GetSavedValue() );
+            m_xWidget->set_entry_text(m_xWidget->get_saved_value());
     }
 
     return bHandled || ComboBox::EventNotify(rNEvt);
 }
+#endif
 
 void SwZoomBox_Impl::ReleaseFocus()
 {
@@ -688,8 +717,9 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     {
         OUString sZoom(unicode::formatPercent(static_cast<const SfxUInt16Item*>(pState)->GetValue(),
             Application::GetSettings().GetUILanguageTag()));
-        pBox->SetText(sZoom);
-        pBox->SaveValue();
+        fprintf(stderr, "change to %s\n", sZoom.toUtf8().getStr());
+        pBox->set_entry_text(sZoom);
+        pBox->save_value();
     }
 }
 
