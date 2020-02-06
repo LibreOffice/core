@@ -110,8 +110,10 @@ public class _XMultiComponentFactory extends MultiMethodTest {
         }
 
         log.println("Available service names:");
-        for(int i = 0; i < availableServiceNames.length; i++) {
-            log.println("   " + availableServiceNames[i]);
+        if (availableServiceNames == null) {
+            for(int i = 0; i < availableServiceNames.length; i++) {
+                log.println("   " + availableServiceNames[i]);
+            }
         }
 
         tRes.tested("getAvailableServiceNames()", result);
