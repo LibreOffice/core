@@ -51,7 +51,7 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
 
     /* if the native widget has focus, then no vcl window has focus.
 
-       We want to grab focus to this vcl widget so that pressing tab will travese
+       We want to grab focus to this vcl widget so that pressing tab will traverse
        to the next vcl widget.
 
        But just using GrabFocus will, because no vcl widget has focus, trigger
