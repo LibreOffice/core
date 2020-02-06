@@ -499,7 +499,6 @@ custom_widgets = [
     'DropdownBox',
     'EmojiView',
     'IndexBox',
-    'IndexBox',
     'ManagedMenuButton',
     'OptionalBox',
     'PriorityHBox',
