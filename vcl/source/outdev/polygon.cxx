@@ -98,6 +98,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                     rPolygon,
                     0.0,
                     aB2DLineWidth,
+                    nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
@@ -216,6 +217,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
                 aB2DPolygon,
                 0.0,
                 aB2DLineWidth,
+                nullptr, // MM01
                 basegfx::B2DLineJoin::NONE,
                 css::drawing::LineCap_BUTT,
                 basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
@@ -326,6 +328,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     rPolygon,
                     0.0,
                     aB2DLineWidth,
+                    nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default

@@ -96,7 +96,7 @@ namespace drawinglayer::processor2d
 
         void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
         {
-            if(!rSource.getB2DPolyPolygon().count())
+            if(!rSource.getB2DPolyPolygon().count() || fTransparency < 0.0 || fTransparency >= 1.0)
             {
                 // no geometry, done
                 return;
@@ -116,7 +116,7 @@ namespace drawinglayer::processor2d
         {
             const basegfx::B2DPolygon& rLocalPolygon(rSource.getB2DPolygon());
 
-            if(!rLocalPolygon.count())
+            if(!rLocalPolygon.count() || fTransparency < 0.0 || fTransparency >= 1.0)
             {
                 // no geometry, done
                 return true;
@@ -138,41 +138,47 @@ namespace drawinglayer::processor2d
 
         bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
         {
-            if(!rSource.getB2DPolygon().count())
+            const basegfx::B2DPolygon& rLocalPolygon(rSource.getB2DPolygon());
+
+            if(!rLocalPolygon.count() || fTransparency < 0.0 || fTransparency >= 1.0)
             {
                 // no geometry, done
                 return true;
             }
 
+            // MM01: Radically change here - no dismantle/applyLineDashing
+            // here, let that happen low-level at DrawPolyLineDirect
+            const bool bStrokeAttributeNotUsed(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen());
+
             // get geometry data, prepare hairline data
-            const basegfx::B2DPolygon& aLocalPolygon(rSource.getB2DPolygon());
-            basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+            // const basegfx::B2DPolygon& aLocalPolygon(rSource.getB2DPolygon());
+            // basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
             // simplify curve segments
             // moved to PolygonStrokePrimitive2D::PolygonStrokePrimitive2D
             // aLocalPolygon = basegfx::utils::simplifyCurveSegments(aLocalPolygon);
 
-            if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
-            {
-                // no line dashing, just copy
-                aHairLinePolyPolygon.append(aLocalPolygon);
-            }
-            else
-            {
-                // apply LineStyle
-                basegfx::utils::applyLineDashing(
-                    aLocalPolygon,
-                    rSource.getStrokeAttribute().getDotDashArray(),
-                    &aHairLinePolyPolygon,
-                    nullptr,
-                    rSource.getStrokeAttribute().getFullDotDashLen());
-            }
+            // if(bStrokeAttributeNotUsed)
+            // {
+            //     // no line dashing, just copy
+            //     aHairLinePolyPolygon.append(aLocalPolygon);
+            // }
+            // else
+            // {
+            //     // apply LineStyle
+            //     basegfx::utils::applyLineDashing(
+            //         aLocalPolygon,
+            //         rSource.getStrokeAttribute().getDotDashArray(),
+            //         &aHairLinePolyPolygon,
+            //         nullptr,
+            //         rSource.getStrokeAttribute().getFullDotDashLen());
+            // }
 
-            if(!aHairLinePolyPolygon.count())
-            {
-                // no geometry, done
-                return true;
-            }
+            // if(!aHairLinePolyPolygon.count())
+            // {
+            //     // no geometry, done
+            //     return true;
+            // }
 
             // check if LineWidth can be simplified in world coordinates
             double fLineWidth(rSource.getLineAttribute().getWidth());
@@ -201,42 +207,55 @@ namespace drawinglayer::processor2d
             mpOutputDevice->SetFillColor();
             mpOutputDevice->SetLineColor(Color(aLineColor));
 
+            // MM01 draw direct, hand over dash data if available
+            return mpOutputDevice->DrawPolyLineDirect(
+                maCurrentTransformation,
+                rLocalPolygon,
+                fLineWidth,
+                fTransparency,
+                bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(),
+                rSource.getLineAttribute().getLineJoin(),
+                rSource.getLineAttribute().getLineCap(),
+                rSource.getLineAttribute().getMiterMinimumAngle()
+                /* false bBypassAACheck, default*/);
+
             // do not transform self
             // aHairLinePolyPolygon.transform(maCurrentTransformation);
 
-            bool bHasPoints(false);
-            bool bTryWorked(false);
+            // bool bHasPoints(false);
+            // bool bTryWorked(false);
 
-            for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
-            {
-                const basegfx::B2DPolygon& aSingle(aHairLinePolyPolygon.getB2DPolygon(a));
+            // for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
+            // {
+                // const basegfx::B2DPolygon& aSingle(aHairLinePolyPolygon.getB2DPolygon(a));
 
-                if(aSingle.count())
-                {
-                    bHasPoints = true;
+                // if(aSingle.count())
+                // {
+                    // bHasPoints = true;
 
-                    if(mpOutputDevice->DrawPolyLineDirect(
-                        maCurrentTransformation,
-                        aSingle,
-                        fLineWidth,
-                        fTransparency,
-                        rSource.getLineAttribute().getLineJoin(),
-                        rSource.getLineAttribute().getLineCap(),
-                        rSource.getLineAttribute().getMiterMinimumAngle()
-                        /* false bBypassAACheck, default*/))
-                    {
-                        bTryWorked = true;
-                    }
-                }
-            }
+                    // if(mpOutputDevice->DrawPolyLineDirect(
+                    //     maCurrentTransformation,
+                    //     aSingle,
+                    //     fLineWidth,
+                    //     fTransparency,
+                    //     bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(), // MM01
+                    //     rSource.getLineAttribute().getLineJoin(),
+                    //     rSource.getLineAttribute().getLineCap(),
+                    //     rSource.getLineAttribute().getMiterMinimumAngle()
+                    //     /* false bBypassAACheck, default*/))
+                    // {
+                    //     bTryWorked = true;
+                    // }
+                // }
+            // }
 
-            if(!bTryWorked && !bHasPoints)
-            {
-                // no geometry despite try
-                bTryWorked = true;
-            }
+            // if(!bTryWorked && !bHasPoints)
+            // {
+            //     // no geometry despite try
+            //     bTryWorked = true;
+            // }
 
-            return bTryWorked;
+            // return bTryWorked;
         }
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)

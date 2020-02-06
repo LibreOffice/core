@@ -270,6 +270,7 @@ void OutputDevice::DrawTransparent(
                     rPolygon,
                     fTransparency,
                     aHairlineWidth,
+                    nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
@@ -392,6 +393,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     rPolygon,
                     fTransparency,
                     aLineWidths,
+                    nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default

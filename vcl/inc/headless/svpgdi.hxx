@@ -114,6 +114,7 @@ public:
         const basegfx::B2DPolygon& rPolyLine,
         double fTransparency,
         const basegfx::B2DVector& rLineWidths,
+        const std::vector< double >* pStroke, // MM01
         basegfx::B2DLineJoin eLineJoin,
         css::drawing::LineCap eLineCap,
         double fMiterMinimumAngle,
@@ -211,6 +212,7 @@ public:
                                 const basegfx::B2DPolygon&,
                                 double fTransparency,
                                 const basegfx::B2DVector& rLineWidths,
+                                const std::vector< double >* pStroke, // MM01
                                 basegfx::B2DLineJoin,
                                 css::drawing::LineCap,
                                 double fMiterMinimumAngle,
