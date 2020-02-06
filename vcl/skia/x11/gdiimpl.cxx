@@ -19,9 +19,8 @@
 #include <skia/x11/gdiimpl.hxx>
 
 #include <tools/sk_app/unix/WindowContextFactory_unix.h>
-#include <tools/sk_app/WindowContext.h>
 
-#include <vcl/skia/SkiaHelper.hxx>
+#include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
@@ -41,18 +40,32 @@ void X11SkiaSalGraphicsImpl::Init()
 
 void X11SkiaSalGraphicsImpl::createWindowContext()
 {
+    assert(mX11Parent.GetDrawable() != None);
+    mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
+                                         &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
+                                         SkiaHelper::renderMethodToUse());
+    if (mWindowContext && SkiaHelper::renderMethodToUse() == SkiaHelper::RenderVulkan)
+        mIsGPU = true;
+    else
+        mIsGPU = false;
+}
+
+std::unique_ptr<sk_app::WindowContext>
+X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
+                                            const SalVisual* visual, int width, int height,
+                                            SkiaHelper::RenderMethod renderMethod)
+{
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
     sk_app::window_context_factory::XlibWindowInfo winInfo;
-    winInfo.fDisplay = mX11Parent.GetXDisplay();
-    winInfo.fWindow = mX11Parent.GetDrawable();
-    assert(winInfo.fDisplay);
-    // Allow window being None if offscreen, this is used to temporarily create GrContext
-    // for an offscreen surface.
-    assert(winInfo.fWindow != None || isOffscreen());
+    assert(display);
+    winInfo.fDisplay = display;
+    winInfo.fWindow = drawable;
     winInfo.fFBConfig = nullptr; // not used
-    winInfo.fVisualInfo = const_cast<SalVisual*>(&mX11Parent.GetVisual());
+    winInfo.fVisualInfo = const_cast<SalVisual*>(visual);
+    winInfo.fWidth = width;
+    winInfo.fHeight = height;
 #ifdef DBG_UTIL
     // Our patched Skia has VulkanWindowContext that shares GrContext, which requires
     // that the X11 visual is always the same. Ensure it is so.
@@ -60,25 +73,18 @@ void X11SkiaSalGraphicsImpl::createWindowContext()
     assert(checkVisualID == -1U || winInfo.fVisualInfo->visualid == checkVisualID);
     checkVisualID = winInfo.fVisualInfo->visualid;
 #endif
-    winInfo.fWidth = GetWidth();
-    winInfo.fHeight = GetHeight();
-    switch (SkiaHelper::renderMethodToUse())
+    switch (renderMethod)
     {
         case SkiaHelper::RenderRaster:
             // TODO The Skia Xlib code actually requires the non-native color type to work properly.
             displayParams.fColorType
                 = (displayParams.fColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType
                                                                       : kBGRA_8888_SkColorType);
-            mWindowContext
-                = sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
-            mIsGPU = false;
-            break;
+            return sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
         case SkiaHelper::RenderVulkan:
-            mWindowContext
-                = sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
-            mIsGPU = true;
-            break;
+            return sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
     }
+    abort();
 }
 
 bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
@@ -114,6 +120,23 @@ void X11SkiaSalGraphicsImpl::performFlush()
     mPendingPixelsToFlush = 0;
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
     mWindowContext->swapBuffers();
+}
+
+std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
+{
+    SalDisplay* salDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    return X11SkiaSalGraphicsImpl::createWindowContext(
+        salDisplay->GetDisplay(), None, &salDisplay->GetVisual(salDisplay->GetDefaultXScreen()), 1,
+        1, SkiaHelper::RenderVulkan);
+}
+
+namespace
+{
+struct SetFunction
+{
+    SetFunction() { SkiaHelper::setCreateVulkanWindowContext(createVulkanWindowContext); }
+};
+SetFunction setFunction;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
