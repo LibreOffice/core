@@ -419,6 +419,7 @@ bool GenPspGraphics::drawPolyLine(
     const basegfx::B2DPolygon&,
     double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
+    const std::vector< double >* /*pStroke*/, // MM01
     basegfx::B2DLineJoin /*eJoin*/,
     css::drawing::LineCap /*eLineCap*/,
     double /*fMiterMinimumAngle*/,

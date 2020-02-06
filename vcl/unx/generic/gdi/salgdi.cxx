@@ -706,6 +706,7 @@ bool X11SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -742,6 +743,7 @@ bool X11SalGraphics::drawPolyLine(
                 rPolygon,
                 fTransparency,
                 rLineWidth,
+                pStroke, // MM01
                 eLineJoin,
                 eLineCap,
                 fMiterMinimumAngle,
@@ -761,6 +763,7 @@ bool X11SalGraphics::drawPolyLine(
         rPolygon,
         fTransparency,
         rLineWidth,
+        pStroke, // MM01
         eLineJoin,
         eLineCap,
         fMiterMinimumAngle,
