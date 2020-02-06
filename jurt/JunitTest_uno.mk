@@ -14,8 +14,6 @@ $(eval $(call gb_JunitTest_use_jars,jurt_uno,\
     ridl \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_uno,jurt))
-
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_uno,\
     jurt/test/com/sun/star/uno/AnyConverter_Test \
     jurt/test/com/sun/star/uno/UnoRuntime_EnvironmentTest \

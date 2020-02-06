@@ -13,8 +13,6 @@ $(eval $(call gb_JunitTest_use_jars,jurt_util,\
     ridl \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,jurt_util,jurt))
-
 $(eval $(call gb_JunitTest_add_sourcefiles,jurt_util,\
     jurt/test/com/sun/star/lib/util/NativeLibraryLoader_Test \
 ))
