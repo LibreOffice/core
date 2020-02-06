@@ -154,6 +154,7 @@ public:
     void testTdf125444PercentageCustomLabel();
     void testDataPointLabelCustomPos();
     void testTdf130032();
+    void testTdf119138MissingAutoTitleDeleted();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
     CPPUNIT_TEST(testDataPointLabelCustomPos);
     CPPUNIT_TEST(testTdf130032);
+    CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2395,6 +2397,17 @@ void Chart2ImportTest::testTdf130032()
     sal_Int32 aPlacement;
     xPropertySet->getPropertyValue("LabelPlacement") >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::RIGHT, aPlacement);
+}
+
+void Chart2ImportTest::testTdf119138MissingAutoTitleDeleted()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf119138-missing-autotitledeleted.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT_MESSAGE("Missing autoTitleDeleted is implied to be True if title text is present", xTitle.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
