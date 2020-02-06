@@ -337,20 +337,6 @@ FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     InitFontMRUEntriesFile();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFontNameBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeFontNameBox)>);
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    VclPtrInstance<FontNameBox> pListBox(pParent, nWinBits);
-    if (bDropdown)
-        pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 FontNameBox::~FontNameBox()
 {
     disposeOnce();
