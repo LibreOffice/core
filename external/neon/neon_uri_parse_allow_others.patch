@@ -1,0 +1,49 @@
+diff -ur src/ne_uri.c
+--- src/ne_uri.c	2020-02-07 09:53:05.619652694 +0000
++++ src/ne_uri.c	2020-02-07 09:54:40.558883324 +0000
+@@ -74,7 +74,8 @@
+ #define URI_DIGIT (DG)
+ 
+ /* unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~" */
+-#define URI_UNRESERVED (AL | DG | DS | DT | US | TD)
++/* also allow OT characters to parse SharePoint 2016 href URIs with unescaped UTF8 */
++#define URI_UNRESERVED (AL | DG | DS | DT | US | TD | OT)
+ /* scheme = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." ) */
+ #define URI_SCHEME (AL | DG | PS | DS | DT)
+ /* real sub-delims definition, including "+" */
+@@ -188,7 +189,7 @@
+         /* => pa = path-abempty */
+         
+         p = s;
+-        while (p < pa && uri_lookup(*p) & URI_USERINFO)
++        while (p < pa && uri_lookup(*p) & URI_USERINFO && *p != '\0')
+             p++;
+ 
+         if (*p == '@') {
+@@ -237,7 +238,7 @@
+ 
+     p = s;
+ 
+-    while (uri_lookup(*p) & URI_SEGCHAR)
++    while (uri_lookup(*p) & URI_SEGCHAR && *p != '\0')
+         p++;
+ 
+     /* => p = [ "?" query ] [ "#" fragment ] */
+@@ -247,7 +248,7 @@
+     if (*p != '\0') {
+         s = p++;
+ 
+-        while (uri_lookup(*p) & URI_QUERY)
++        while (uri_lookup(*p) & URI_QUERY && *p != '\0')
+             p++;
+ 
+         /* => p = [ "#" fragment ] */
+@@ -259,7 +260,7 @@
+             if (*p != '\0') {
+                 s = p++;
+ 
+-                while (uri_lookup(*p) & URI_FRAGMENT)
++                while (uri_lookup(*p) & URI_FRAGMENT && *p != '\0')
+                     p++;
+             }
+         }
