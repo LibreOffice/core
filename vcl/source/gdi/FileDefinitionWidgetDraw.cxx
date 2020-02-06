@@ -296,9 +296,15 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     rGraphics.SetLineColor(Color(*rRectangle.mpStrokeColor));
                     rGraphics.SetFillColor();
                     rGraphics.DrawPolyLine(
-                        basegfx::B2DHomMatrix(), aB2DPolygon, 1.0 - rRectangle.mnOpacity,
+                        basegfx::B2DHomMatrix(),
+                        aB2DPolygon,
+                        1.0 - rRectangle.mnOpacity,
                         basegfx::B2DVector(rRectangle.mnStrokeWidth, rRectangle.mnStrokeWidth),
-                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
+                        nullptr, // MM01
+                        basegfx::B2DLineJoin::Round,
+                        css::drawing::LineCap_ROUND,
+                        0.0f,
+                        false,
                         nullptr);
                 }
             }
@@ -343,9 +349,15 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     for (auto const& rPolygon : aPolyPolygon)
                     {
                         rGraphics.DrawPolyLine(
-                            basegfx::B2DHomMatrix(), rPolygon, 1.0 - rPath.mnOpacity,
+                            basegfx::B2DHomMatrix(),
+                            rPolygon,
+                            1.0 - rPath.mnOpacity,
                             basegfx::B2DVector(rPath.mnStrokeWidth, rPath.mnStrokeWidth),
-                            basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false,
+                            nullptr, // MM01
+                            basegfx::B2DLineJoin::Round,
+                            css::drawing::LineCap_ROUND,
+                            0.0f,
+                            false,
                             nullptr);
                     }
                 }
@@ -385,9 +397,16 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 rGraphics.SetLineColor(rWidgetDraw.maStrokeColor);
                 rGraphics.SetFillColor();
                 rGraphics.DrawPolyLine(
-                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    basegfx::B2DHomMatrix(),
+                    aB2DPolygon,
+                    0.0f,
                     basegfx::B2DVector(rWidgetDraw.mnStrokeWidth, rWidgetDraw.mnStrokeWidth),
-                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
+                    nullptr, // MM01
+                    basegfx::B2DLineJoin::Round,
+                    css::drawing::LineCap_ROUND,
+                    0.0f,
+                    false,
+                    nullptr);
             }
             break;
             case WidgetDrawActionType::LINE:
@@ -408,9 +427,16 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 };
 
                 rGraphics.DrawPolyLine(
-                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    basegfx::B2DHomMatrix(),
+                    aB2DPolygon,
+                    0.0f,
                     basegfx::B2DVector(rWidgetDraw.mnStrokeWidth, rWidgetDraw.mnStrokeWidth),
-                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
+                    nullptr, // MM01
+                    basegfx::B2DLineJoin::Round,
+                    css::drawing::LineCap_ROUND,
+                    0.0f,
+                    false,
+                    nullptr);
             }
             break;
             case WidgetDrawActionType::IMAGE:

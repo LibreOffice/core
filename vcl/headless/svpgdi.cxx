@@ -20,6 +20,8 @@
 #include <config_features.h>
 
 #include <memory>
+#include <numeric>
+
 #ifndef IOS
 #include <headless/svpgdi.hxx>
 #endif
@@ -783,6 +785,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         aPoly,
         0.0,
         basegfx::B2DVector(1.0, 1.0),
+        nullptr, // MM01
         basegfx::B2DLineJoin::Miter,
         css::drawing::LineCap_BUTT,
         basegfx::deg2rad(15.0) /*default*/,
@@ -1064,6 +1067,7 @@ private:
     // need to be compared with to check for data validity
     bool                mbNoJoin;
     bool                mbAntiAliasB2DDraw;
+    std::vector< double >                       maStroke;
 
 public:
     SystemDependentData_CairoPath(
@@ -1071,12 +1075,15 @@ public:
         size_t nSizeMeasure,
         cairo_t* cr,
         bool bNoJoin,
-        bool bAntiAliasB2DDraw);
+        bool bAntiAliasB2DDraw,
+        const std::vector< double >* pStroke); // MM01
     virtual ~SystemDependentData_CairoPath() override;
 
+    // read access
     cairo_path_t* getCairoPath() { return mpCairoPath; }
     bool getNoJoin() const { return mbNoJoin; }
     bool getAntiAliasB2DDraw() const { return mbAntiAliasB2DDraw; }
+    const std::vector< double >& getStroke() const { return maStroke; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
@@ -1088,17 +1095,24 @@ SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     size_t nSizeMeasure,
     cairo_t* cr,
     bool bNoJoin,
-    bool bAntiAliasB2DDraw)
+    bool bAntiAliasB2DDraw,
+    const std::vector< double >* pStroke)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpCairoPath(nullptr),
     mbNoJoin(bNoJoin),
-    mbAntiAliasB2DDraw(bAntiAliasB2DDraw)
+    mbAntiAliasB2DDraw(bAntiAliasB2DDraw),
+    maStroke()
 {
     // tdf#129845 only create a copy of the path when nSizeMeasure is
     // bigger than some decent threshold
     if(nSizeMeasure > 50)
     {
         mpCairoPath = cairo_copy_path(cr);
+
+        if(nullptr != pStroke)
+        {
+            maStroke = *pStroke;
+        }
     }
 }
 
@@ -1134,7 +1148,8 @@ bool SvpSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidths,
+    const basegfx::B2DVector& rLineWidth,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -1165,7 +1180,8 @@ bool SvpSalGraphics::drawPolyLine(
             rObjectToDevice,
             rPolyLine,
             fTransparency,
-            rLineWidths,
+            rLineWidth,
+            pStroke, // MM01
             eLineJoin,
             eLineCap,
             fMiterMinimumAngle,
@@ -1184,7 +1200,8 @@ bool SvpSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidths,
+    const basegfx::B2DVector& rLineWidth,
+    const std::vector< double >* pStroke, // MM01 todo - ok
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -1197,10 +1214,10 @@ bool SvpSalGraphics::drawPolyLine(
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    basegfx::B2DVector aLineWidths(rLineWidths);
+    basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    const basegfx::B2DVector aDeviceLineWidths(bObjectToDeviceIsIdentity ? rLineWidths : rObjectToDevice * rLineWidths);
-    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0 && aLineWidths.getX() >= 1.0);
+    const basegfx::B2DVector aDeviceLineWidth(bObjectToDeviceIsIdentity ? rLineWidth : rObjectToDevice * rLineWidth);
+    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidth.getX() < 1.0 && aLineWidth.getX() >= 1.0);
 
     // on-demand inverse of ObjectToDevice transformation
     basegfx::B2DHomMatrix aObjectToDeviceInv;
@@ -1214,7 +1231,7 @@ bool SvpSalGraphics::drawPolyLine(
         }
 
         // calculate-back logical LineWidth for a hairline
-        aLineWidths = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+        aLineWidth = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
     }
 
     // PixelOffset used: Need to reflect in linear transformation
@@ -1245,7 +1262,7 @@ bool SvpSalGraphics::drawPolyLine(
     // set linear transformation
     cairo_set_matrix(cr, &aMatrix);
 
-    const bool bNoJoin((basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(aLineWidths.getX(), 0.0)));
+    const bool bNoJoin((basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(aLineWidth.getX(), 0.0)));
 
     // setup line attributes
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
@@ -1297,12 +1314,30 @@ bool SvpSalGraphics::drawPolyLine(
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
-    cairo_set_line_width(cr, aLineWidths.getX());
+    cairo_set_line_width(cr, aLineWidth.getX());
     cairo_set_miter_limit(cr, fMiterLimit);
 
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPath> pSystemDependentData_CairoPath(
         rPolyLine.getSystemDependentData<SystemDependentData_CairoPath>());
+
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+
+    if(pSystemDependentData_CairoPath)
+    {
+        // MM01 - check on stroke change. Used against not used, or if both used,
+        // equal or different?
+        const bool bStrokeWasUsed(!pSystemDependentData_CairoPath->getStroke().empty());
+
+        if(bStrokeWasUsed != bStrokeUsed
+        || (bStrokeUsed && *pStroke != pSystemDependentData_CairoPath->getStroke()))
+        {
+            // data invalid, forget
+            pSystemDependentData_CairoPath.reset();
+        }
+    }
 
     if(pSystemDependentData_CairoPath)
     {
@@ -1327,42 +1362,68 @@ bool SvpSalGraphics::drawPolyLine(
         // create data
         size_t nSizeMeasure(0);
 
-        if (!bNoJoin)
+        // MM01 need to do line dashing as fallback stuff here now
+        basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+        if(bStrokeUsed)
         {
-            // PixelOffset now reflected in linear transformation used
-            nSizeMeasure += AddPolygonToPath(
-                cr,
-                rPolyLine,
-                rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
-                !bAntiAliasB2DDraw,
-                bPixelSnapHairline);
+            // apply LineStyle
+            basegfx::utils::applyLineDashing(
+                rPolyLine, // source
+                *pStroke, // pattern
+                &aPolyPolygonLine, // traget for lines
+                nullptr, // target for gaps
+                fDotDashLength); // full length if available
         }
         else
         {
-            const sal_uInt32 nPointCount(rPolyLine.count());
-            const sal_uInt32 nEdgeCount(rPolyLine.isClosed() ? nPointCount : nPointCount - 1);
-            basegfx::B2DPolygon aEdge;
+            // no line dashing, just copy
+            aPolyPolygonLine.append(rPolyLine);
+        }
 
-            aEdge.append(rPolyLine.getB2DPoint(0));
-            aEdge.append(basegfx::B2DPoint(0.0, 0.0));
+        // MM01 todo - I assume that this is OKAY to be done in one run for Cairo,
+        // but this NEEDS to be checked/verified
+        for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+        {
+            const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
 
-            for (sal_uInt32 i(0); i < nEdgeCount; i++)
+            if (!bNoJoin)
             {
-                const sal_uInt32 nNextIndex((i + 1) % nPointCount);
-                aEdge.setB2DPoint(1, rPolyLine.getB2DPoint(nNextIndex));
-                aEdge.setNextControlPoint(0, rPolyLine.getNextControlPoint(i));
-                aEdge.setPrevControlPoint(1, rPolyLine.getPrevControlPoint(nNextIndex));
-
                 // PixelOffset now reflected in linear transformation used
                 nSizeMeasure += AddPolygonToPath(
                     cr,
-                    aEdge,
+                    aPolyLine,
                     rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
                     !bAntiAliasB2DDraw,
                     bPixelSnapHairline);
+            }
+            else
+            {
+                const sal_uInt32 nPointCount(aPolyLine.count());
+                const sal_uInt32 nEdgeCount(aPolyLine.isClosed() ? nPointCount : nPointCount - 1);
+                basegfx::B2DPolygon aEdge;
 
-                // prepare next step
-                aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+                aEdge.append(aPolyLine.getB2DPoint(0));
+                aEdge.append(basegfx::B2DPoint(0.0, 0.0));
+
+                for (sal_uInt32 i(0); i < nEdgeCount; i++)
+                {
+                    const sal_uInt32 nNextIndex((i + 1) % nPointCount);
+                    aEdge.setB2DPoint(1, aPolyLine.getB2DPoint(nNextIndex));
+                    aEdge.setNextControlPoint(0, aPolyLine.getNextControlPoint(i));
+                    aEdge.setPrevControlPoint(1, aPolyLine.getPrevControlPoint(nNextIndex));
+
+                    // PixelOffset now reflected in linear transformation used
+                    nSizeMeasure += AddPolygonToPath(
+                        cr,
+                        aEdge,
+                        rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
+                        !bAntiAliasB2DDraw,
+                        bPixelSnapHairline);
+
+                    // prepare next step
+                    aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
+                }
             }
         }
 
@@ -1374,7 +1435,8 @@ bool SvpSalGraphics::drawPolyLine(
                 nSizeMeasure,
                 cr,
                 bNoJoin,
-                bAntiAliasB2DDraw);
+                bAntiAliasB2DDraw,
+                pStroke);
         }
     }
 
@@ -1454,7 +1516,8 @@ namespace
                 nSizeMeasure,
                 cr,
                 false,
-                false);
+                false,
+                nullptr);
         }
     }
 }
