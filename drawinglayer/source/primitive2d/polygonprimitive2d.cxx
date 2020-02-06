@@ -278,6 +278,7 @@ namespace drawinglayer
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
         {
+            // MM01: keep these - these are no curve-decompposers but just checks
             // simplify curve segments: moved here to not need to use it
             // at VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect
             maPolygon = basegfx::utils::simplifyCurveSegments(maPolygon);
@@ -291,6 +292,7 @@ namespace drawinglayer
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
         {
+            // MM01: keep these - these are no curve-decompposers but just checks
             // simplify curve segments: moved here to not need to use it
             // at VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect
             maPolygon = basegfx::utils::simplifyCurveSegments(maPolygon);

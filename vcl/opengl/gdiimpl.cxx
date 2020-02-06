@@ -27,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
@@ -43,6 +44,7 @@
 
 #include <cmath>
 #include <vector>
+#include <numeric>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
@@ -1559,6 +1561,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         aPoly,
         0.0,
         basegfx::B2DVector(1.0, 1.0),
+        nullptr, // MM01
         basegfx::B2DLineJoin::Miter,
         css::drawing::LineCap_BUTT,
         basegfx::deg2rad(15.0) /*default*/,
@@ -1636,6 +1639,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidth,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -1643,28 +1647,60 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
 {
     VCL_GL_INFO("::drawPolyLine " << rPolygon.getB2DRange());
 
+    // MM01 check done for simple reasons
+    if(!rPolygon.count() || fTransparency < 0.0 || fTransparency > 1.0)
+    {
+        return true;
+    }
+
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+    basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+    if(bStrokeUsed)
+    {
+        // apply LineStyle
+        basegfx::utils::applyLineDashing(
+            rPolygon, // source
+            *pStroke, // pattern
+            &aPolyPolygonLine, // traget for lines
+            nullptr, // target for gaps
+            fDotDashLength); // full length if available
+    }
+    else
+    {
+        // no line dashing, just copy
+        aPolyPolygonLine.append(rPolygon);
+    }
+
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolygon aPolyLine(rPolygon);
-    aPolyLine.transform(rObjectToDevice);
-    if(bPixelSnapHairline) { aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine); }
+    aPolyPolygonLine.transform(rObjectToDevice);
+    if(bPixelSnapHairline) { aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine); }
     const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
 
-    // addDrawPolyLine() assumes that there are no duplicate points in the
-    // polygon.
-    // basegfx::B2DPolygon aPolygon(rPolygon);
-    aPolyLine.removeDoublePoints();
+    for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+    {
+        // addDrawPolyLine() assumes that there are no duplicate points in the polygon
+        basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+        basegfx::utils::simplifyCurveSegments(aPolyLine);
+        aPolyLine.removeDoublePoints();
 
-    mpRenderList->addDrawPolyLine(
-        aPolyLine,
-        fTransparency,
-        aLineWidth,
-        eLineJoin,
-        eLineCap,
-        fMiterMinimumAngle,
-        mnLineColor,
-        mrParent.getAntiAliasB2DDraw());
+        mpRenderList->addDrawPolyLine(
+            aPolyLine,
+            fTransparency,
+            aLineWidth,
+            eLineJoin,
+            eLineCap,
+            fMiterMinimumAngle,
+            mnLineColor,
+            mrParent.getAntiAliasB2DDraw());
 
-    PostBatchDraw();
+        // MM01: not sure - maybe this can be moved out of this loop, but to
+        // keep on the safe side for now, do not relly change something for now
+        PostBatchDraw();
+    }
+
     return true;
 }
 
