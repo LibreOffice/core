@@ -16,6 +16,24 @@
       "revId": "11fba17eed630973cb5a9df6a8bde7488320cb30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f76b0f3b_884f6778",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 2
+      },
+      "lineNbr": 1906,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-06T19:36:09Z",
+      "side": 0,
+      "message": "There are actually only 2 files like this:\nxmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx\nconnectivity/inc/pch/precompiled_ado.hxx\n\nAnd they have the same kind of odd lines (only 2 lines):\n#   include \u003cpostwin.h\u003e\n#   undef RGB\n\nI wonder if that\u0027s an accidental change after generation or some issue of the generator code.",
+      "parentUuid": "e8d89fc3_dca9596c",
+      "revId": "11fba17eed630973cb5a9df6a8bde7488320cb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
