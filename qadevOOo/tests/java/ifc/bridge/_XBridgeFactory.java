@@ -128,7 +128,7 @@ public class _XBridgeFactory extends MultiMethodTest {
 
         if (bridges.length > 0) bridgeName = bridges[0].getName() ;
 
-        tRes.tested("getExistingBridges()", bridges != null) ;
+        tRes.tested("getExistingBridges()", true) ;
     }
 
     /**
