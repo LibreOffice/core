@@ -63,7 +63,6 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/signing/data/";
 class SigningTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 protected:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
@@ -140,7 +139,6 @@ void SigningTest::setUp()
 #endif
 
     // Initialize crypto after setting up the environment variables.
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());

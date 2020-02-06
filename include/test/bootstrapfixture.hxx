@@ -45,6 +45,9 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
   bool const m_bNeedUCB;
   bool const m_bAssertOnDialog;
 
+protected:
+  css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+
 public:
   DECL_STATIC_LINK( BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool );
 

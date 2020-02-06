@@ -39,7 +39,6 @@ class EPUBExportTest : public test::BootstrapFixture,
                        public XmlTestTools
 {
 protected:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
     xmlDocPtr mpXmlDoc = nullptr;
@@ -64,7 +63,6 @@ void EPUBExportTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 

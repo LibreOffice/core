@@ -45,7 +45,6 @@ class SwXDocumentIndex final : public test::BootstrapFixture,
                                public apitest::XServiceInfo,
                                public apitest::XComponent
 {
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<text::XTextDocument> mxTextDocument;
     uno::Reference<text::XTextRange> mxTextRange;
     uno::Reference<text::XTextContent> mxTextContent;
@@ -81,7 +80,6 @@ void SwXDocumentIndex::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mxTextDocument = uno::Reference<text::XTextDocument>(
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),

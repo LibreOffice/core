@@ -81,7 +81,6 @@ using PageHolder =
 /// Tests the PDF export filter.
 class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
@@ -212,7 +211,6 @@ void PdfExportTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 
     FPDF_LIBRARY_CONFIG config;

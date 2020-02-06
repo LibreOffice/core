@@ -37,7 +37,6 @@ public:
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 
 private:
-    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
 };
 
@@ -45,7 +44,6 @@ void LotusWordProTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
