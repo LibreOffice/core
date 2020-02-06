@@ -54,7 +54,7 @@ public:
     // compare operator
     virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-    DeclPrimitive2DIDBlock()
+    virtual sal_uInt32 getPrimitive2DID() const override;
 };
 
 }} // end of namespace drawinglayer::primitive2d
@@ -107,7 +107,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -147,7 +147,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -198,7 +198,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -251,7 +251,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -293,7 +293,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

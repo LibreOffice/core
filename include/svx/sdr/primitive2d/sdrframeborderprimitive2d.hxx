@@ -122,7 +122,7 @@ namespace drawinglayer
             bool doForceToSingleDiscreteUnit() const { return mbForceToSingleDiscreteUnit; }
 
             // provide unique ID
-            DeclPrimitive2DIDBlock()
+            virtual sal_uInt32 getPrimitive2DID() const override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
