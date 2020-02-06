@@ -16,9 +16,11 @@ $(eval $(call gb_JunitTest_use_jars,ridljar_util,\
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_util,\
     ridljar/test/com/sun/star/lib/util/WeakMap_Test \
+    ridljar/test/com/sun/star/lib/util/NativeLibraryLoader_Test \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,ridljar_util,\
+    com.sun.star.lib.util.NativeLibraryLoader_Test \
     com.sun.star.lib.util.WeakMap_Test \
 ))
 
