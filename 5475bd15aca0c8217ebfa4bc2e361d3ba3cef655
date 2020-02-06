@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0facb0d7_a10ffc73",
+        "filename": "qadevOOo/tests/java/ifc/lang/_XMultiComponentFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-02-06T09:58:19Z",
+      "side": 1,
+      "message": "I suppose you meant !\u003d ?",
+      "range": {
+        "startLine": 113,
+        "startChar": 34,
+        "endLine": 113,
+        "endChar": 36
+      },
+      "revId": "5475bd15aca0c8217ebfa4bc2e361d3ba3cef655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
