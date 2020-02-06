@@ -36,7 +36,6 @@ private:
     long            mnThumbPixRange;
     long            mnThumbPixPos;
     long            mnThumbSize;
-    long            mnChannelPixOffset;
     long            mnChannelPixRange;
     long            mnChannelPixTop;
     long            mnChannelPixBottom;
