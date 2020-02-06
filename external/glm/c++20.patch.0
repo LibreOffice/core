@@ -1,11 +1,11 @@
---- glm/core/type_half.inl
-+++ glm/core/type_half.inl
-@@ -40,7 +40,7 @@
+--- glm/detail/type_half.inl
++++ glm/detail/type_half.inl
+@@ -6,7 +6,7 @@
  		volatile float f = 1e10;
  
- 		for(int i = 0; i < 10; ++i)	
--			f *= f;             // this will overflow before
-+			f = f * f;          // this will overflow before
- 								// the for­loop terminates
+ 		for(int i = 0; i < 10; ++i)
+-			f *= f; // this will overflow before the for loop terminates
++			f = f * f; // this will overflow before the for loop terminates
  		return f;
  	}
+ 
