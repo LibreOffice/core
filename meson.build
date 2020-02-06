@@ -15,3 +15,4 @@ cdata = configuration_data()
 
 subdir('config_host')
 subdir('sal')
+subdir('salhelper')
