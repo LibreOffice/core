@@ -6233,6 +6233,8 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
             xEmbeddedProps->setPropertyValue("VertOrient", xShapeProps->getPropertyValue("VertOrient"));
             xEmbeddedProps->setPropertyValue("VertOrientPosition", xShapeProps->getPropertyValue("VertOrientPosition"));
             xEmbeddedProps->setPropertyValue("VertOrientRelation", xShapeProps->getPropertyValue("VertOrientRelation"));
+            //tdf123873 fix missing textwrap import
+            xEmbeddedProps->setPropertyValue("TextWrap", xShapeProps->getPropertyValue("TextWrap"));
         }
     }
     //insert it into the document at the current cursor position
