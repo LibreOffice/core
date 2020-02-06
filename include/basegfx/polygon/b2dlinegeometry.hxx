@@ -123,6 +123,9 @@ namespace basegfx
             the usual fallback to bevel is used. Allowed range is cropped
             to [F_PI .. 0.01 * F_PI].
 
+            Commit 51b5b93092d6231615de470c62494c24e54828a1 needs
+            revert, we need the triangulation for X11 fat line drawing
+
             @param pTriangles
             If given, the method will additionally add the created geometry as
             B2DTriangle's

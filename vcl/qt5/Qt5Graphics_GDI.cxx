@@ -29,7 +29,9 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
+#include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 static const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
 
@@ -323,37 +325,67 @@ bool Qt5Graphics::drawPolyPolygonBezier(sal_uInt32 /*nPoly*/, const sal_uInt32* 
 
 bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                               const basegfx::B2DVector& rLineWidths,
+                               const basegfx::B2DVector& rLineWidth,
+                               const std::vector<double>* pStroke, // MM01
                                basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                                double fMiterMinimumAngle, bool bPixelSnapHairline)
 {
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
-        return true;
-
-    // short circuit if there is nothing to do
-    if (0 == rPolyLine.count())
     {
         return true;
+    }
+
+    // MM01 check done for simple reasons
+    if (!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0)
+    {
+        return true;
+    }
+
+    // MM01 need to do line dashing as fallback stuff here now
+    const double fDotDashLength(
+        nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
+    const bool bStrokeUsed(0.0 != fDotDashLength);
+    basegfx::B2DPolyPolygon aPolyPolygonLine;
+
+    if (bStrokeUsed)
+    {
+        // apply LineStyle
+        basegfx::utils::applyLineDashing(rPolyLine, // source
+                                         *pStroke, // pattern
+                                         &aPolyPolygonLine, // traget for lines
+                                         nullptr, // target for gaps
+                                         fDotDashLength); // full length if available
+    }
+    else
+    {
+        // no line dashing, just copy
+        aPolyPolygonLine.append(rPolyLine);
     }
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolygon aPolyLine(rPolyLine);
-    aPolyLine.transform(rObjectToDevice);
+    aPolyPolygonLine.transform(rObjectToDevice);
     if (bPixelSnapHairline)
     {
-        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
+        aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine);
     }
-    const basegfx::B2DVector aLineWidths(rObjectToDevice * rLineWidths);
+    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
 
     // setup poly-polygon path
     QPainterPath aPath;
-    AddPolygonToPath(aPath, aPolyLine, aPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+
+    // MM01 todo - I assume that this is OKAY to be done in one run for Qt5,
+    // but this NEEDS to be checked/verified
+    for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+    {
+        const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+        AddPolygonToPath(aPath, aPolyLine, aPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+    }
 
     Qt5Painter aPainter(*this, false, 255 * (1.0 - fTransparency));
 
     // setup line attributes
     QPen aPen = aPainter.pen();
-    aPen.setWidth(aLineWidths.getX());
+    aPen.setWidth(aLineWidth.getX());
 
     switch (eLineJoin)
     {

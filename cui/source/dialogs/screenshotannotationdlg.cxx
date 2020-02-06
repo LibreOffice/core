@@ -407,6 +407,7 @@ void ScreenshotAnnotationDlg_Impl::PaintScreenShotEntry(
             aPolygon,
             fLineWidth,
             fTransparency,
+            nullptr, // MM01
             basegfx::B2DLineJoin::Round))
         {
             // no transparency, draw without

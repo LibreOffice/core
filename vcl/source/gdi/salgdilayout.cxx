@@ -573,6 +573,7 @@ bool SalGraphics::DrawPolyLine(
     const basegfx::B2DPolygon& i_rPolygon,
     double i_fTransparency,
     const basegfx::B2DVector& i_rLineWidth,
+    const std::vector< double >* i_pStroke, // MM01
     basegfx::B2DLineJoin i_eLineJoin,
     css::drawing::LineCap i_eLineCap,
     double i_fMiterMinimumAngle,
@@ -601,6 +602,7 @@ bool SalGraphics::DrawPolyLine(
                     i_rPolygon,
                     i_fTransparency,
                     i_rLineWidth,
+                    i_pStroke, // MM01
                     i_eLineJoin,
                     i_eLineCap,
                     i_fMiterMinimumAngle,
@@ -628,6 +630,7 @@ bool SalGraphics::DrawPolyLine(
                     i_rPolygon,
                     i_fTransparency,
                     i_rLineWidth,
+                    i_pStroke, // MM01
                     i_eLineJoin,
                     i_eLineCap,
                     i_fMiterMinimumAngle,
@@ -642,6 +645,7 @@ bool SalGraphics::DrawPolyLine(
         i_rPolygon,
         i_fTransparency,
         i_rLineWidth,
+        i_pStroke, // MM01
         i_eLineJoin,
         i_eLineCap,
         i_fMiterMinimumAngle,

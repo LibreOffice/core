@@ -1008,9 +1008,16 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
 
     mpGraphics->SetLineColor(GetLineColor());
     mpGraphics->DrawPolyLine(
-            aRotationMatrix, aWaveLinePolygon, 0.0, aLineWidth,
-            basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT,
-            basegfx::deg2rad(15.0), bPixelSnapHairline, this);
+            aRotationMatrix,
+            aWaveLinePolygon,
+            0.0,
+            aLineWidth,
+            nullptr, // MM01
+            basegfx::B2DLineJoin::NONE,
+            css::drawing::LineCap_BUTT,
+            basegfx::deg2rad(15.0),
+            bPixelSnapHairline,
+            this);
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );

@@ -42,6 +42,7 @@ bool WinSalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
+    const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle,
@@ -52,6 +53,7 @@ bool WinSalGraphics::drawPolyLine(
         rPolygon,
         fTransparency,
         rLineWidths,
+        pStroke, // MM01
         eLineJoin,
         eLineCap,
         fMiterMinimumAngle,
