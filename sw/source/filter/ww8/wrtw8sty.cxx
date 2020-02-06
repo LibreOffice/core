@@ -29,6 +29,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <doc.hxx>
 #include "wrtww8.hxx"
 #include <docary.hxx>
@@ -55,6 +56,7 @@
 #include <redline.hxx>
 #include <msfilter.hxx>
 #include <swmodule.hxx>
+#include <charatr.hxx>
 
 #include "sprmids.hxx"
 
@@ -1517,6 +1519,76 @@ void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     pSepx->OutHeaderFooter( *this, false, rFirstPageFormat, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST, nBreakCode );
 }
 
+namespace
+{
+/**
+ * Find a node near the section start that has a page break, it may have a follow header/footer for
+ * us.
+ */
+bool WriteNextStyleHeaderFooter(sal_uInt8 nBreakCode, sal_uInt8 nHeadFootFlags,
+                                const SwPageDesc* pPd, const WW8_SepInfo& rSepInfo)
+{
+    if (nBreakCode != 0)
+    {
+        // Not a continuous section break.
+        return false;
+    }
+
+    if (nHeadFootFlags != 0)
+    {
+        // Would write some header/footer anyway.
+        return false;
+    }
+
+    if (!pPd->GetFollow())
+    {
+        // Page style has no follow style.
+        return false;
+    }
+
+    // We start a continuous section break without headers/footers. Possibly the importer had
+    // headers/footers for this section break and put them to the closest page break's page style's
+    // next page style. See "find a node in the section that has a page break" in writerfilter/.
+    // Try the last-in-practice paragraph of the previous section.
+    const SwSectionFormat* pSection = rSepInfo.pSectionFormat;
+    if (pSection == reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)))
+    {
+        return false;
+    }
+
+    const SwNodeIndex* pSectionStart = pSection->GetContent().GetContentIdx();
+    if (!pSectionStart)
+    {
+        return false;
+    }
+
+    SwPaM aPaM(*pSectionStart);
+    aPaM.Move(fnMoveBackward);
+    if (!aPaM.GetNode().IsTextNode())
+    {
+        return false;
+    }
+
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    const SwAttrSet* pParaProps = &pTextNode->GetSwAttrSet();
+    sal_uInt32 nCharHeight = pParaProps->GetSize().GetHeight();
+    if (nCharHeight > 20)
+    {
+        return false;
+    }
+
+    aPaM.Move(fnMoveBackward);
+    if (!aPaM.GetNode().IsTextNode())
+    {
+        return false;
+    }
+
+    pTextNode = aPaM.GetNode().GetTextNode();
+    pParaProps = &pTextNode->GetSwAttrSet();
+    return pParaProps->HasItem(RES_PAGEDESC);
+}
+}
+
 void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAttrDesc* pA )
 {
     const SwPageDesc* pPd = rSepInfo.pPageDesc;
@@ -1767,6 +1839,14 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     const SwTextNode *pOldPageRoot = GetHdFtPageRoot();
     SetHdFtPageRoot( rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTextNode() : nullptr );
+
+    if (GetExportFormat() == ExportFormat::DOCX
+        && WriteNextStyleHeaderFooter(nBreakCode, nHeadFootFlags, pPd, rSepInfo))
+    {
+        pPdFormat = &pPd->GetFollow()->GetMaster();
+        MSWordSections::SetHeaderFlag(nHeadFootFlags, *pPdFormat, WW8_HEADER_ODD);
+        MSWordSections::SetFooterFlag(nHeadFootFlags, *pPdFormat, WW8_FOOTER_ODD);
+    }
 
     WriteHeadersFooters( nHeadFootFlags, *pPdFormat, *pPdLeftFormat, *pPdFirstPgFormat, nBreakCode );
 

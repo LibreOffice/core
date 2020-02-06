@@ -446,7 +446,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
 }
 
-DECLARE_OOXMLIMPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
+DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
 {
     // Load a document with a continuous section break on page 2.
     CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 1"),
@@ -470,6 +470,11 @@ DECLARE_OOXMLIMPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     // the own footer text.
     CPPUNIT_ASSERT_EQUAL(OUString("Footer, section 3"),
                          parseDump("/root/page[3]/footer/txt/text()"));
+
+    // Without the export fix in place, the import-export-import test would have failed with:
+    // - Expected: Header, section 2
+    // - Actual  : First page header, section 2
+    // i.e. both the header and the footer on page 3 was wrong.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
