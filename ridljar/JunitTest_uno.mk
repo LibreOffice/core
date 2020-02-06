@@ -10,19 +10,26 @@
 $(eval $(call gb_JunitTest_JunitTest,ridljar_uno))
 
 $(eval $(call gb_JunitTest_use_jars,ridljar_uno,\
+    OOoRunner \
     ridl \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ridljar_uno,\
+    ridljar/test/com/sun/star/uno/AnyConverter_Test \
     ridljar/test/com/sun/star/uno/Any_Test \
     ridljar/test/com/sun/star/uno/Type_Test \
+    ridljar/test/com/sun/star/uno/UnoRuntime_EnvironmentTest \
     ridljar/test/com/sun/star/uno/UnoRuntime_Test \
+    ridljar/test/com/sun/star/uno/WeakReference_Test \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,ridljar_uno,\
+    com.sun.star.uno.AnyConverter_Test \
     com.sun.star.uno.Any_Test \
     com.sun.star.uno.Type_Test \
+    com.sun.star.uno.UnoRuntime_EnvironmentTest \
     com.sun.star.uno.UnoRuntime_Test \
+    com.sun.star.uno.WeakReference_Test \
 ))
 
 # vim:set noet sw=4 ts=4:
