@@ -1,6 +1,3 @@
-lex_bin = find_program('flex')
-bison_bin = find_program('bison')
-
 lgen = custom_target('idlc_lex',
   output : 'scanner.yy.cxx',
   input: 'source/scanner.l',
