@@ -421,6 +421,7 @@ LwpTableLayout::LwpTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm
     , m_nRows(0)
     , m_nCols(0)
     , m_pDefaultCellLayout(nullptr)
+    , m_bConverted(false)
 {
 }
 
@@ -782,6 +783,7 @@ void LwpTableLayout::ParseTable()
 
     // set name of object
     m_pXFTable.set(new XFTable);
+
     m_pXFTable->SetTableName(pSuper->GetName().str());
     // set table style
     m_pXFTable->SetStyleName(m_StyleName);
@@ -837,8 +839,12 @@ void LwpTableLayout::XFConvert(XFContentContainer* pCont)
 {
     if (!m_pXFTable)
         return;
+    if (m_bConverted)
+        throw std::runtime_error("already added to a container");
     pCont->Add(m_pXFTable.get());
+    m_bConverted = true;
 }
+
 /**
  * @short   convert heading row
  * @param  pXFTable - pointer of table

@@ -163,6 +163,7 @@ private:
     std::map<sal_uInt16,LwpRowLayout*> m_RowsMap;
     void SplitConflictCells();
     rtl::Reference<XFTable> m_pXFTable;
+    bool m_bConverted;
     std::map<std::pair<sal_uInt16,sal_uInt8>,XFCell*> m_CellsMap;
 
     void PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID);
