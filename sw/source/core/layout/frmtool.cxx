@@ -93,8 +93,8 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
 {
     if ( pF->IsTextFrame() )
     {
-        mnFlyAnchorOfst = static_cast<SwTextFrame*>(pF)->GetBaseOfstForFly( true );
-        mnFlyAnchorOfstNoWrap = static_cast<SwTextFrame*>(pF)->GetBaseOfstForFly( false );
+        mnFlyAnchorOfst = static_cast<SwTextFrame*>(pF)->GetBaseOffsetForFly( true );
+        mnFlyAnchorOfstNoWrap = static_cast<SwTextFrame*>(pF)->GetBaseOffsetForFly( false );
     }
     else
     {
@@ -114,8 +114,8 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
     const bool bChgHeight =
             aRectFnSet.GetHeight(maFrame)!=aRectFnSet.GetHeight(mpFrame->getFrameArea());
     const bool bChgFlyBasePos = mpFrame->IsTextFrame() &&
-       ( ( mnFlyAnchorOfst != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( true ) ) ||
-         ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrame*>(mpFrame)->GetBaseOfstForFly( false ) ) );
+       ( ( mnFlyAnchorOfst != static_cast<SwTextFrame*>(mpFrame)->GetBaseOffsetForFly( true ) ) ||
+         ( mnFlyAnchorOfstNoWrap != static_cast<SwTextFrame*>(mpFrame)->GetBaseOffsetForFly( false ) ) );
 
     if ( mpFrame->IsFlowFrame() && !mpFrame->IsInFootnote() )
     {

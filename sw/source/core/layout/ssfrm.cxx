@@ -296,7 +296,7 @@ Point SwFrame::GetFrameAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
     if ( IsTextFrame() )
     {
         SwTwips nBaseOfstForFly =
-            static_cast<const SwTextFrame*>(this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
+            static_cast<const SwTextFrame*>(this)->GetBaseOffsetForFly( bIgnoreFlysAnchoredAtThisFrame );
         if ( IsVertical() )
             aAnchor.AdjustY(nBaseOfstForFly );
         else
