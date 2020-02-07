@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e47e46f5_196844dd",
+        "filename": "ridljar/JunitTest_util.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-07T12:23:58Z",
+      "side": 1,
+      "message": "I\u0027d sort these lines lexicographically (as is done everywhere else)",
+      "revId": "7a2848bd946f777728bc8d5981aeac981ea22327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a39bb08_3feddd76",
+        "filename": "ridljar/Module_ridljar.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-07T12:23:58Z",
+      "side": 1,
+      "message": "In jurt/Module_jurt.mk, the corresponding tests were gb_Module_add_subsequentcheck_targets since \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/e14700edc0ebb194392b53e19d02be9f5c7e3e6f%5E!/\u003e \"Move all jurt JunitTests back to subsequentcheck for now\".  But that should be an obsolete reason with gbuild now anyway, so probably good to have them as gb_Module_add_check_targets instead.  (Also cf. \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/333435087cdbdbff7e91315604f0a8390c16387e%5E!/\u003e \"These JunitTests can be plain check, not subsequentcheck\".)",
+      "revId": "7a2848bd946f777728bc8d5981aeac981ea22327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
