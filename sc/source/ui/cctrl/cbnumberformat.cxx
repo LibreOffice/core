@@ -22,40 +22,63 @@
 #include <scresid.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
 #include <sc.hrc>
 
-ScNumberFormat::ScNumberFormat(vcl::Window* pParent, WinBits nStyle) :
-    ListBox(pParent, nStyle | WB_DROPDOWN|WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
+ScNumberFormat::ScNumberFormat(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/scalc/ui/numberbox.ui", "NumberBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("numbertype"))
 {
-    SetSelectHdl(LINK(this, ScNumberFormat, NumFormatSelectHdl));
-    AdaptDropDownLineCountToMaximum();
+    m_xWidget->append_text(ScResId(STR_GENERAL));
+    m_xWidget->append_text(ScResId(STR_NUMBER));
+    m_xWidget->append_text(ScResId(STR_PERCENT));
+    m_xWidget->append_text(ScResId(STR_CURRENCY));
+    m_xWidget->append_text(ScResId(STR_DATE));
+    m_xWidget->append_text(ScResId(STR_TIME));
+    m_xWidget->append_text(ScResId(STR_SCIENTIFIC));
+    m_xWidget->append_text(ScResId(STR_FRACTION));
+    m_xWidget->append_text(ScResId(STR_BOOLEAN_VALUE));
+    m_xWidget->append_text(ScResId(STR_TEXT));
 
-    InsertEntry(ScResId(STR_GENERAL));
-    InsertEntry(ScResId(STR_NUMBER));
-    InsertEntry(ScResId(STR_PERCENT));
-    InsertEntry(ScResId(STR_CURRENCY));
-    InsertEntry(ScResId(STR_DATE));
-    InsertEntry(ScResId(STR_TIME));
-    InsertEntry(ScResId(STR_SCIENTIFIC));
-    InsertEntry(ScResId(STR_FRACTION));
-    InsertEntry(ScResId(STR_BOOLEAN_VALUE));
-    InsertEntry(ScResId(STR_TEXT));
+    m_xWidget->connect_changed(LINK(this, ScNumberFormat, NumFormatSelectHdl));
+    m_xWidget->connect_key_press(LINK(this, ScNumberFormat, KeyInputHdl));
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, ListBox&, rBox, void)
+void ScNumberFormat::dispose()
 {
-    if(SfxViewFrame::Current())
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
+ScNumberFormat::~ScNumberFormat()
+{
+    disposeOnce();
+}
+
+IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void)
+{
+    auto* pCurSh = SfxViewFrame::Current();
+    if (pCurSh)
     {
-        SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
-        if(pDisp)
+        SfxDispatcher* pDisp = pCurSh->GetBindings().GetDispatcher();
+        if (pDisp)
         {
-            const sal_Int32 nVal = rBox.GetSelectedEntryPos();
+            const sal_Int32 nVal = rBox.get_active();
             SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
             pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT,
                     SfxCallMode::RECORD, {&aItem});
+
+            pCurSh->GetWindow().GrabFocus();
         }
     }
+}
+
+IMPL_LINK(ScNumberFormat, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

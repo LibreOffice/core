@@ -57,7 +57,7 @@ void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
         {
             const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
             sal_uInt16 nVal = pItem->GetValue();
-            pComboBox->SelectEntryPos(nVal);
+            pComboBox->set_active(nVal);
             break;
         }
 
@@ -68,8 +68,9 @@ void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
 
 VclPtr<vcl::Window> ScNumberFormatControl::CreateItemWindow( vcl::Window *pParent )
 {
-    VclPtr<ScNumberFormat> pControl = VclPtr<ScNumberFormat>::Create(pParent, WB_DROPDOWN);
-    pControl->SetSizePixel(pControl->GetOptimalSize());
+    VclPtr<ScNumberFormat> pControl = VclPtr<ScNumberFormat>::Create(pParent);
+    pControl->Show();
+
     return pControl;
 }
 
