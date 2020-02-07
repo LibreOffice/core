@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2353fa2_34222c2f",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 12767,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-07T16:05:56Z",
+      "side": 1,
+      "message": "Here - see all these » markers :-)",
+      "range": {
+        "startLine": 12767,
+        "startChar": 0,
+        "endLine": 12767,
+        "endChar": 1
+      },
+      "revId": "2a3d98ce662de0e6ca18fdec87bcf3c94173d9d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
