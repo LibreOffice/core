@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_LINKAREA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_LINKAREA_HXX
 
-#include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/solar.h>
+#include <vcl/weld.hxx>
 
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }

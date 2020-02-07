@@ -25,45 +25,12 @@
 #include <svtools/svtdllapi.h>
 #include <tools/urlobj.hxx>
 
-#include <vcl/combobox.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
 class MatchContext_Impl;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
-class SVT_DLLPUBLIC SvtURLBox final : public ComboBox
-{
-friend class SvtMatchContext_Impl;
-friend class SvtURLBox_Impl;
-    Link<SvtURLBox*,void>           aOpenHdl;
-    rtl::Reference< SvtMatchContext_Impl > pCtx;
-    std::unique_ptr<SvtURLBox_Impl> pImpl;
-    INetProtocol                    eSmartProtocol;
-    bool                            bAutoCompleteMode   : 1;
-
-    SVT_DLLPRIVATE bool             ProcessKey( const vcl::KeyCode& rCode );
-    SVT_DLLPRIVATE void             TryAutoComplete();
-    SVT_DLLPRIVATE void             UpdatePicklistForSmartProtocol_Impl();
-    DECL_DLLPRIVATE_LINK(     AutoCompleteHdl_Impl, Edit&, void );
-    SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
-
-    virtual bool                    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void                    Select() override;
-    virtual bool                    PreNotify( NotifyEvent& rNEvt ) override;
-
-public:
-                                    SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
-                                    virtual ~SvtURLBox() override;
-    virtual void                    dispose() override;
-
-    void                            SetOpenHdl( const Link<SvtURLBox*,void>& rLink ) { aOpenHdl = rLink; }
-    const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
-    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
-    OUString                        GetURL();
-
-    static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
-};
 
 class SVT_DLLPUBLIC URLBox
 {
