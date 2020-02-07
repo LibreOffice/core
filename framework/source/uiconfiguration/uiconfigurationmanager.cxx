@@ -21,9 +21,9 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <framework/statusbarconfiguration.hxx>
-#include <framework/toolboxconfiguration.hxx>
+#include <menuconfiguration.hxx>
+#include <statusbarconfiguration.hxx>
+#include <toolboxconfiguration.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>

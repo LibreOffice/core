@@ -19,8 +19,8 @@
 
 #include <uielement/menubarmanager.hxx>
 #include <uielement/styletoolbarcontroller.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <framework/addonmenu.hxx>
+#include <menuconfiguration.hxx>
+#include <addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>

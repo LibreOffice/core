@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/addonmenu.hxx>
+#include <addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
-#include <framework/menuconfiguration.hxx>
+#include <menuconfiguration.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

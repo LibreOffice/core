@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/menuconfiguration.hxx>
+#include <menuconfiguration.hxx>
 
-#include <framework/addonmenu.hxx>
+#include <addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 

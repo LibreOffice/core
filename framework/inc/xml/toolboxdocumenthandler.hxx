@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_TOOLBOXDOCUMENTHANDLER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_TOOLBOXDOCUMENTHANDLER_HXX
 
-#include <framework/toolboxconfiguration.hxx>
+#include <toolboxconfiguration.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 

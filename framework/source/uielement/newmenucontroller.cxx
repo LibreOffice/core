@@ -18,7 +18,7 @@
  */
 
 #include <uielement/newmenucontroller.hxx>
-#include <framework/menuconfiguration.hxx>
+#include <menuconfiguration.hxx>
 
 #include <services.h>
 

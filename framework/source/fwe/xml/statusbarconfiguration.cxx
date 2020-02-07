@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <framework/statusbarconfiguration.hxx>
+#include <statusbarconfiguration.hxx>
 #include <xml/statusbardocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 

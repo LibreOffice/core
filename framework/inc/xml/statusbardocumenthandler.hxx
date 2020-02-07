@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_STATUSBARDOCUMENTHANDLER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_STATUSBARDOCUMENTHANDLER_HXX
 
-#include <framework/statusbarconfiguration.hxx>
+#include <statusbarconfiguration.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 

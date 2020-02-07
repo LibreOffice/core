@@ -22,10 +22,10 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <framework/toolboxconfiguration.hxx>
+#include <menuconfiguration.hxx>
+#include <toolboxconfiguration.hxx>
 
-#include <framework/statusbarconfiguration.hxx>
+#include <statusbarconfiguration.hxx>
 
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
