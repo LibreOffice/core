@@ -449,7 +449,7 @@
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <fmundo.hxx>
-#include <svx/XPropertyTable.hxx>
+#include <XPropertyTable.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/extrud3d.hxx>

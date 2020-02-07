@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DEXTRUDE_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DEXTRUDE_HXX
 
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
-#include <svx/extrud3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
+#include <extrud3d.hxx>
 
 
 namespace sdr

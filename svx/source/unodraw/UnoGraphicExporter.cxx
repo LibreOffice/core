@@ -47,7 +47,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <svl/outstrm.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

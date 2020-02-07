@@ -18,8 +18,8 @@
  */
 
 
-#include <svx/sdr/attribute/sdrtextattribute.hxx>
-#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
+#include <sdr/attribute/sdrformtextattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>

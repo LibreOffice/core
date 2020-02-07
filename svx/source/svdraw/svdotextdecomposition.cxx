@@ -23,8 +23,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/textchain.hxx>
-#include <svx/textchainflow.hxx>
+#include <textchain.hxx>
+#include <textchainflow.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtayitm.hxx>
 #include <svx/sdtaiitm.hxx>

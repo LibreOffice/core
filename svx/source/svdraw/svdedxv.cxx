@@ -65,8 +65,8 @@
 #include <svx/strings.hrc>
 #include <svx/svddrgv.hxx>
 #include <svx/svdviter.hxx>
-#include <svx/textchain.hxx>
-#include <svx/textchaincursor.hxx>
+#include <textchain.hxx>
+#include <textchaincursor.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
