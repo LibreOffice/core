@@ -379,11 +379,13 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (!pTableLayout)
         return;
+    LwpTable* pTable = pTableLayout->GetTable();
+    if (!pTable)
+        return;
 
     rtl::Reference<XFRow> xRow(new XFRow);
     xRow->SetStyleName(m_StyleName);
 
-    LwpTable* pTable = pTableLayout->GetTable();
     sal_uInt8 nCellStartCol,nCellEndCol;
 
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)
