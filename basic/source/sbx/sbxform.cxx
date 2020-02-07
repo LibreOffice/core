@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 
-#include <basic/sbxform.hxx>
+#include <sbxform.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/character.hxx>

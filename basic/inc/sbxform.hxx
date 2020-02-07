@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXFORM_HXX
-#define INCLUDED_BASIC_SBXFORM_HXX
+#pragma once
 
 
 // Implementation class for Basic command: Format$( d,formatStr )
@@ -69,7 +68,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <basic/basicdllapi.h>
 
 class SbxBasicFormater {
   public:
@@ -152,7 +150,5 @@ class SbxBasicFormater {
     short   nNumExp;        // the exponent of the number
     short   nExpExp;        // the number of digits in the exponent
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

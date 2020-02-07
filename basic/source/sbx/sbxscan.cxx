@@ -33,7 +33,7 @@
 
 #include <sbxbase.hxx>
 #include <sbintern.hxx>
-#include <basic/sbxform.hxx>
+#include <sbxform.hxx>
 
 #include <date.hxx>
 #include <runtime.hxx>

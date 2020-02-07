@@ -27,7 +27,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbxmeth.hxx>
-#include <basic/sbxprop.hxx>
+#include <sbxprop.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "sbxres.hxx"
 
