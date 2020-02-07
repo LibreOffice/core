@@ -16,6 +16,24 @@
       "revId": "522b41c6d9b07869a4e9357ccddeb4eb088c8956",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0523979_ed46cb0b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-02-07T21:19:53Z",
+      "side": 1,
+      "message": "As said, noticed that too but did it like the others. Of course, could be fixed in a follow-up commit...",
+      "parentUuid": "33b1326d_c9ec641a",
+      "revId": "522b41c6d9b07869a4e9357ccddeb4eb088c8956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
