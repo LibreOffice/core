@@ -10,7 +10,12 @@
 # we link all object files from these libraries into one, merged library
 MERGE_LIBRARY_LIST := \
 	avmedia \
+	$(call gb_Helper_optional,SCRIPTING, \
+        basctl \
+        basprov \
+    ) \
 	basegfx \
+	canvasfactory \
 	canvastools \
 	comphelper \
 	configmgr \
@@ -35,14 +40,17 @@ MERGE_LIBRARY_LIST := \
 	localebe1 \
 	mcnttype \
 	msfilter \
+	mtfrenderer \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
 	sax \
 	sb \
+	simplecanvas \
 	sfx \
 	sofficeapp \
 	sot \
 	$(if $(DISABLE_GUI),,spl) \
+	stringresource \
 	svl \
 	svt \
 	svx \
