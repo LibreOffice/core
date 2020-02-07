@@ -13,12 +13,20 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/gdimtf.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
 #include <fmtanchr.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
 
@@ -67,6 +75,45 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
     // - Expression: !pItem
     // i.e. comment insertion was enabled for an at-para anchored image.
     CPPUNIT_ASSERT(!pItem);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
+{
+    // Create a document with a rectangle in it.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    Point aStartPos(1000, 1000);
+    pWrtShell->BeginCreate(static_cast<sal_uInt16>(OBJ_RECT), aStartPos);
+    Point aMovePos(2000, 2000);
+    pWrtShell->MoveCreate(aMovePos);
+    pWrtShell->EndCreate(SdrCreateCmd::ForceEnd);
+
+    // Start shape text edit.
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    // Select the shape.
+    pView->GetViewFrame()->GetDispatcher()->Execute(FN_CNTNT_TO_NEXT_FRAME, SfxCallMode::SYNCHRON);
+    pView->StopShellTimer();
+    // Start the actual text edit.
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+    SdrObject* pObject = pPage->GetObj(0);
+    pView->EnterShapeDrawTextMode(pObject);
+    pView->AttrChangedNotify(nullptr);
+
+    // Change paragraph adjustment to center.
+    pView->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_PARA_ADJUST_CENTER,
+                                                    SfxCallMode::SYNCHRON);
+
+    // End shape text edit.
+    pWrtShell->EndTextEdit();
+
+    const OutlinerParaObject* pOutliner = pObject->GetOutlinerParaObject();
+    // Without the accompanying fix in place, this test would have failed, because the shape had no
+    // text or text formatting. In other words the paragraph adjustment command was ignored.
+    CPPUNIT_ASSERT(pOutliner);
+    const SfxItemSet& rParaAttribs = pOutliner->GetTextObject().GetParaAttribs(0);
+    SvxAdjust eAdjust = rParaAttribs.GetItem(EE_PARA_JUST)->GetAdjust();
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, eAdjust);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

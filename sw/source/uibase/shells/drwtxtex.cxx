@@ -132,7 +132,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     const sal_uInt16 nSlot = rReq.GetSlot();
 
     const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
-    const SfxItemSet *pNewAttrs = rReq.GetArgs();
+    std::unique_ptr<SfxItemSet> pNewAttrs(rReq.GetArgs() ? rReq.GetArgs()->Clone() : nullptr);
 
     bool bRestoreSelection = false;
     ESelection aOldSelection;
@@ -630,20 +630,14 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             assert(false && "wrong dispatcher");
             return;
     }
-
-    std::unique_ptr<SfxItemSet> pNewArgs = pNewAttrs ? pNewAttrs->Clone() : nullptr;
-    if (pNewArgs)
+    if (nEEWhich && pNewAttrs)
     {
-        lcl_convertStringArguments(nSlot, pNewArgs);
+        lcl_convertStringArguments(nSlot, pNewAttrs);
 
-        if (nEEWhich)
-        {
-            std::unique_ptr<SfxPoolItem> pNewItem(pNewArgs->Get(nWhich).CloneSetWhich(nEEWhich));
-            pNewArgs->Put(*pNewItem);
-        }
-
-        SetAttrToMarked(*pNewArgs);
+        aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
+
+    SetAttrToMarked(aNewAttr);
 
     GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
 
