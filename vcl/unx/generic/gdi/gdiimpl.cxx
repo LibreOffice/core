@@ -1749,7 +1749,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
             basegfx::utils::applyLineDashing(
                 rPolygon, // source
                 *pStroke, // pattern
-                &aPolyPolygonLine, // traget for lines
+                &aPolyPolygonLine, // target for lines
                 nullptr, // target for gaps
                 fDotDashLength); // full length if available
         }
