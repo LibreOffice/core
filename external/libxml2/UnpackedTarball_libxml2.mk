@@ -18,7 +18,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	external/libxml2/libxml2-global-symbols.patch \
 	external/libxml2/libxml2-vc10.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
-	external/libxml2/libxml2-icu.patch.0 \
+	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
+		external/libxml2/libxml2-icu-sym.patch.0, \
+		external/libxml2/libxml2-icu.patch.0) \
 	external/libxml2/ubsan.patch.0 \
 ))
 
