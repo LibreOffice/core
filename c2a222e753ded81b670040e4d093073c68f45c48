@@ -16,6 +16,24 @@
       "revId": "c2a222e753ded81b670040e4d093073c68f45c48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d58e4565_8e3c7e79",
+        "filename": "solenv/bin/create-tags",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-07T15:28:39Z",
+      "side": 1,
+      "message": "urgh, how terrible, i have no idea how to quote that so it works... does the new version work?",
+      "parentUuid": "ea48bdb9_9772637c",
+      "revId": "c2a222e753ded81b670040e4d093073c68f45c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
