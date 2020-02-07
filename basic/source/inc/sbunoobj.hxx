@@ -21,8 +21,8 @@
 
 #include <basic/sbxobj.hxx>
 #include <basic/sbxmeth.hxx>
-#include <basic/sbxprop.hxx>
-#include <basic/sbxfac.hxx>
+#include <sbxprop.hxx>
+#include <sbxfac.hxx>
 #include <basic/sbx.hxx>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
