@@ -742,12 +742,14 @@ OUString URIHelper::resolveIdnaHost(OUString const & url) {
     if (auth.isEmpty())
         return url;
     sal_Int32 hostStart = auth.indexOf('@') + 1;
-    sal_Int32 hostEnd = auth.getLength() - 1;
-    while (hostEnd > hostStart && rtl::isAsciiDigit(auth[hostEnd])) {
+    sal_Int32 hostEnd = auth.getLength();
+    while (hostEnd > hostStart && rtl::isAsciiDigit(auth[hostEnd - 1])) {
         --hostEnd;
     }
-    if (!(hostEnd > hostStart && auth[hostEnd] == ':')) {
-        hostEnd = auth.getLength() - 1;
+    if (hostEnd > hostStart && auth[hostEnd - 1] == ':') {
+        --hostEnd;
+    } else {
+        hostEnd = auth.getLength();
     }
     auto asciiOnly = true;
     for (auto i = hostStart; i != hostEnd; ++i) {
