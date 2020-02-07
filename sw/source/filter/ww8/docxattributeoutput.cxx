@@ -2159,35 +2159,14 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
             m_pSerializer->singleElementNS(XML_w, XML_webHidden);
         }
 
-        // 2. output color
-        if ( m_pColorAttrList.is() )
-        {
-            XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
-            m_pColorAttrList.clear();
-
-            m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
-        }
-
-        // 3. output all other character properties
+        // 2. find all active character properties
         SwWW8AttrIter aAttrIt( m_rExport, *pNode );
         aAttrIt.OutAttr( nPos, bWriteCombChars );
 
-        // 4. explicitly write the font-properties, to ensure all runs in the field have them
-        // see tdf#66401
-        if ( m_pFontsAttrList.is() )
-        {
-            XFastAttributeListRef xAttrList( m_pFontsAttrList.get() );
-            m_pFontsAttrList.clear();
-
-            m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
-        }
+        // 3. write the character properties
+        WriteCollectedRunProperties();
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
-
-        // During SwWW8AttrIter::OutAttr() call the new value of the text color could be set into [m_pColorAttrList].
-        // But we do not need to keep it any more and should clean up,
-        // While the next run could define a new color that is different to current one.
-        m_pColorAttrList.clear();
     }
 
     m_bPreventDoubleFieldsHandling = false;

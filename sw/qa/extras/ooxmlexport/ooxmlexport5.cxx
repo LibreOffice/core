@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -272,6 +273,17 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[2]", 0);
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFieldRotation, "field-rotated.fodt")
+{
+    uno::Reference<text::XTextRange> const xRun(getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
+    uno::Reference<text::XTextField> const xField(getProperty<uno::Reference<text::XTextField>>(xRun, "TextField"));
+    CPPUNIT_ASSERT(xField.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title"), xField->getPresentation(true));
+    CPPUNIT_ASSERT_EQUAL(OUString("Rotationeering"), xField->getPresentation(false));
+    // problem was that the rotation wasn't applied to all runs of the field
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(900), getProperty<sal_Int16>(xRun, "CharRotation"));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFootnoteSeparator, "footnotesep.fodt")
