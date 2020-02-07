@@ -1104,6 +1104,9 @@
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
         </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:OutlineBullet</value>
+        </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
             DrawImpress,    DrawText,   visible ;
