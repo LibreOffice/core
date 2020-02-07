@@ -276,7 +276,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFootnoteSeparator, "footnotesep.fodt")
 {
-    // foontote separator definitions - taken from default page style
+    // footnote separator definitions - taken from default page style
     xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "id", "0");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "type", "separator");
