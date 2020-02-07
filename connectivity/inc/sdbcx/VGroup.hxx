@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
-#define INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
+#pragma once
 
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
@@ -93,8 +92,6 @@ namespace connectivity
         };
     }
 }
-
-#endif // INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

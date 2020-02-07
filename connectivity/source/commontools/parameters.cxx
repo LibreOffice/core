@@ -35,7 +35,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <connectivity/ParameterCont.hxx>
+#include <ParameterCont.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

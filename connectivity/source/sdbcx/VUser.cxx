@@ -18,7 +18,7 @@
  */
 
 
-#include <connectivity/sdbcx/VUser.hxx>
+#include <sdbcx/VUser.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>

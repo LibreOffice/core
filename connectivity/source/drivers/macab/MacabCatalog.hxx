@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

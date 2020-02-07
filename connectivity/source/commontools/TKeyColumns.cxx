@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <connectivity/TKeyColumns.hxx>
-#include <connectivity/TKey.hxx>
-#include <connectivity/sdbcx/VKeyColumn.hxx>
+#include <TKeyColumns.hxx>
+#include <TKey.hxx>
+#include <sdbcx/VKeyColumn.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

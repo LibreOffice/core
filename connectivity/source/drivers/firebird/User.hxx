@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
 
-#include <connectivity/sdbcx/VUser.hxx>
+#include <sdbcx/VUser.hxx>
 
 namespace connectivity
 {

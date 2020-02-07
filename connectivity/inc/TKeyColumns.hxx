@@ -17,32 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_TINDEX_HXX
-#define INCLUDED_CONNECTIVITY_TINDEX_HXX
+#pragma once
 
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/sdbcx/VIndex.hxx>
 
 namespace connectivity
 {
-    class OTableHelper;
-    class OIndexHelper final : public connectivity::sdbcx::OIndex
+    class OTableKeyHelper;
+    class OKeyColumnsHelper final : public connectivity::sdbcx::OCollection
     {
-        OTableHelper*   m_pTable;
+        OTableKeyHelper* m_pKey;
+        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual void impl_refresh() override;
     public:
-        virtual void refreshColumns() override;
-    public:
-        OIndexHelper(   OTableHelper* _pTable);
-        OIndexHelper(   OTableHelper* _pTable,
-                const OUString& Name,
-                const OUString& Catalog,
-                bool _isUnique,
-                bool _isPrimaryKeyIndex,
-                bool _isClustered
-            );
-        OTableHelper* getTable() const { return m_pTable; }
+        OKeyColumnsHelper(  OTableKeyHelper* _pKey,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< OUString> &_rVector);
     };
 }
-#endif // INCLUDED_CONNECTIVITY_TINDEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
