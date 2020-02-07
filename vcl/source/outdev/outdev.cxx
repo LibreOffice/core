@@ -579,6 +579,11 @@ void OutputDevice::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoR
         mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
 }
 
+tools::Rectangle OutputDevice::SetBackgroundComponentBounds()
+{
+    return tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+}
+
 // Layout public functions
 
 void OutputDevice::EnableRTL( bool bEnable )
