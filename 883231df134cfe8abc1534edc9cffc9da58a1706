@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35242d3f_d2ceda3e",
+        "filename": "ridljar/com/sun/star/lib/connections/pipe/PipeConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-02-07T06:02:44Z",
+      "side": 1,
+      "message": "@Stephan: is this what you meant?",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 35,
+        "endChar": 102
+      },
+      "revId": "883231df134cfe8abc1534edc9cffc9da58a1706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
