@@ -22,6 +22,30 @@
       "revId": "a509e21cdcb878944e55e12b5aa0bdf0b883c41f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f821fe00_31e53625",
+        "filename": "external/neon/neon_uri_escape_invalid.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-07T09:19:04Z",
+      "side": 1,
+      "message": "\u003e ne_uri_parse splits the URI into its parts.\n\nyes\n\n\u003e IIUC, the problem is unescaped characters in the path part of the URI\n\nNo - that\u0027s the point where it fails. ne_uri_parse returns from -1 from the last \"return -1\" (line 277 with my patch), because \n\n  while (uri_lookup(*p) \u0026 URI_SEGCHAR)\n    p++;\n\nreturns too early, when it hits the OT / umlaut byte in the file name\n\n  if (*p !\u003d \u0027\\0\u0027) {\n\nis then true and also immediately fails in\n\n  while (uri_lookup(*p) \u0026 URI_QUERY)\n    p++;\n\nfor the same reason and then hits the return -1.\n\n\u003e, which is ne_strndup\u0027ed into ref.path in the function, so could be first unescaped using ne_path_unescape (thus putting all bytes from %20 into spaces in resulting string along with those umlauts unchanged), then escaped back using ne_path_escape (thus putting both previously-escaped spaces and previously-unescaped umlauts to escaped form).\n\nNo. The ne_path_unescape works with the path only, but I can\u0027t correctly parse that path in ne_uri_parse. Well, actually I could, if I add OT to URI_PCHAR, but that crashes LO (just tested). I didn\u0027t dig deeper into this, but I guess some functions don\u0027t work with OT chars.\n\n\u003e Could that solve the problem, if the two calls (and required cleanup) done between current lines 181 and 182 of src/ne_207.c? Would that avoid the need in more massive changes?\n\nNope, as ne_uri_parse already fails.\n\nThanks for the lengthy comment, which made me think about (and test) the URI_PCHAR adaption.",
+      "parentUuid": "b718622d_3b2b0ce0",
+      "range": {
+        "startLine": 8,
+        "startChar": 17,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "a509e21cdcb878944e55e12b5aa0bdf0b883c41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
