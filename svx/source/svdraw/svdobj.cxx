@@ -63,7 +63,7 @@
 
 #include <svx/fmmodel.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <sdr/properties/emptyproperties.hxx>

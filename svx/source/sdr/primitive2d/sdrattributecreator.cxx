@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -57,7 +57,7 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <svx/svdotext.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
@@ -74,10 +74,10 @@
 #include <editeng/editstat.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
-#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
-#include <svx/sdr/attribute/sdrformtextattribute.hxx>
-#include <svx/sdr/attribute/sdrlinefillshadowtextattribute.hxx>
+#include <sdr/attribute/sdrshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdrformtextattribute.hxx>
+#include <sdr/attribute/sdrlinefillshadowtextattribute.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>

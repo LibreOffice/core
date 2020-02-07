@@ -29,7 +29,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xftshtit.hxx>
+#include <xftshtit.hxx>
 #include <svx/xgrscit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbmpit.hxx>
@@ -43,7 +43,7 @@
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
-#include <svx/AffineMatrixItem.hxx>
+#include <AffineMatrixItem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

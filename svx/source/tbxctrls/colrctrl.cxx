@@ -30,7 +30,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
 
-#include <svx/colrctrl.hxx>
+#include <colrctrl.hxx>
 
 #include <svx/svdview.hxx>
 #include <svx/drawitem.hxx>

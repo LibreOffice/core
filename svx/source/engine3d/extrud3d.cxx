@@ -22,7 +22,7 @@
 #include <svx/deflt3d.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/globl3d.hxx>
-#include <svx/extrud3d.hxx>
+#include <extrud3d.hxx>
 
 #include <svx/svdopath.hxx>
 #include <svx/svdmodel.hxx>

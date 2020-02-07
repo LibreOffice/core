@@ -21,7 +21,7 @@
 
 #include <svx/svddef.hxx>
 
-#include <svx/sxfiitm.hxx>
+#include <sxfiitm.hxx>
 
 class SdrResizeXAllItem: public SdrFractionItem {
 public:

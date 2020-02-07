@@ -52,11 +52,11 @@
 #include <svx/svdtrans.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcolor.hxx>
-#include <svx/sdgcoitm.hxx>
+#include <sdgcoitm.hxx>
 #include <svx/sdggaitm.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
+#include <sdgtritm.hxx>
 #include <bitmaps.hlst>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
