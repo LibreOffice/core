@@ -61,10 +61,15 @@ OUString getLibreOfficeMajorMinorMicro() {
 }
 
 OUString getReferenceOpenOfficeOrgMajorMinor() {
+#ifdef ANDROID
+    // just hardcode the version
+    OUString v("4.1");
+#else
     OUString v(
             "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
             ":Version:ReferenceOOoMajorMinor}");
     rtl::Bootstrap::expandMacros(v); //TODO: check for failure
+#endif
     return v;
 }
 
