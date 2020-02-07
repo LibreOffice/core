@@ -16,6 +16,24 @@
       "revId": "d4e1e65aa6fb974e4b1051b81741def6c54912e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18fda7f0_487c0749",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-07T12:34:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55d367cc_f65935e6",
+      "revId": "d4e1e65aa6fb974e4b1051b81741def6c54912e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
