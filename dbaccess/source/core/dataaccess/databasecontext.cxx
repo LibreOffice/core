@@ -276,7 +276,8 @@ void ODatabaseContext::disposing()
 
     // dispose the data sources
     // disposing seems to remove elements, so work on copy for valid iterators
-    ObjectCache objCopy(m_aDatabaseObjects);
+    ObjectCache objCopy;
+    objCopy.swap(m_aDatabaseObjects);
     for (auto const& elem : objCopy)
     {
         rtl::Reference< ODatabaseModelImpl > obj(elem.second);
@@ -284,7 +285,6 @@ void ODatabaseContext::disposing()
             // dispose()
         obj->dispose();
     }
-    m_aDatabaseObjects.clear();
 }
 
 // XNamingService

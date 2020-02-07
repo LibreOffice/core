@@ -338,12 +338,13 @@ sal_Bool SAL_CALL Desktop::terminate()
             xPipeTerminator->notifyTermination( aEvent );
 
         // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
-        std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
+        std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
+        xComponentDllListeners.swap(m_xComponentDllListeners);
         for (auto& xListener : xComponentDllListeners)
         {
             xListener->notifyTermination(aEvent);
         }
-        m_xComponentDllListeners.clear();
+        xComponentDllListeners.clear();
 
         // Must be really the last listener to be called.
         // Because it shutdown the whole process asynchronous !
@@ -1104,13 +1105,13 @@ void SAL_CALL Desktop::disposing()
     m_xSWThreadManager.clear();
 
     // we need a copy because the disposing might call the removeEventListener method
-    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
+    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
+    xComponentDllListeners.swap(m_xComponentDllListeners);
     for (auto& xListener: xComponentDllListeners)
     {
         xListener->disposing(aEvent);
     }
     xComponentDllListeners.clear();
-    m_xComponentDllListeners.clear();
     m_xSfxTerminator.clear();
     m_xCommandOptions.reset();
 
