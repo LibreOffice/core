@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/internalnode.hxx>
+#include <internalnode.hxx>
 
 using namespace connectivity;
 

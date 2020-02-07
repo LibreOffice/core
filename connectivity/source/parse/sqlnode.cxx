@@ -20,12 +20,12 @@
 #include <sal/macros.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <connectivity/sqlbison_exports.hxx>
-#include <connectivity/internalnode.hxx>
+#include <sqlbison_exports.hxx>
+#include <internalnode.hxx>
 #define YYBISON   1
 #include <sqlbison.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/sqlscan.hxx>
+#include <sqlscan.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <connectivity/sdbcx/VIndex.hxx>
+#include <sdbcx/VIndex.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>

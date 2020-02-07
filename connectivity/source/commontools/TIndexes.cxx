@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/TIndexes.hxx>
-#include <connectivity/TIndex.hxx>
+#include <TIndex.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdb/tools/XIndexAlteration.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
