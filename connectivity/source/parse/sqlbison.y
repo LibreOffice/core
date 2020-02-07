@@ -24,9 +24,9 @@
 
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/sqlbison_exports.hxx>
-#include <connectivity/sqlscan.hxx>
-#include <connectivity/internalnode.hxx>
+#include <sqlbison_exports.hxx>
+#include <sqlscan.hxx>
+#include <internalnode.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/Date.hpp>

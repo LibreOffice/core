@@ -194,7 +194,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/filtermanager.hxx>
-#include <connectivity/internalnode.hxx>
+#include <internalnode.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>

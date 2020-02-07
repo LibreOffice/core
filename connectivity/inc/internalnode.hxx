@@ -16,28 +16,33 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#ifndef INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
-
-#include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sqlnode.hxx>
 
 namespace connectivity
 {
-    class OIndexHelper;
-    class OIndexColumns final : public sdbcx::OCollection
+
+    //= OSQLInternalNode
+
+    /** special node for avoiding memory leaks
+    */
+    class OSQLInternalNode final : public OSQLParseNode
     {
-        OIndexHelper* m_pIndex;
-        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual void impl_refresh() override;
     public:
-        OIndexColumns(  OIndexHelper* _pIndex,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
+        OSQLInternalNode(const char* pNewValue,
+                         SQLNodeType eNodeType,
+                         sal_uInt32 nNodeID = 0);
+        OSQLInternalNode(const OString& _rNewValue,
+                         SQLNodeType eNodeType,
+                         sal_uInt32 nNodeID = 0);
+        OSQLInternalNode(const OUString& _rNewValue,
+                         SQLNodeType eNodeType,
+                         sal_uInt32 nNodeID = 0);
+
+        virtual ~OSQLInternalNode() override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

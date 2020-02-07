@@ -16,36 +16,22 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
-#define INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 
-#include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/sqlnode.hxx>
+#pragma once
+
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 namespace connectivity
 {
-
-    //= OSQLInternalNode
-
-    /** special node for avoiding memory leaks
-    */
-    class OSQLInternalNode final : public OSQLParseNode
+    namespace sdbcx
     {
-    public:
-        OSQLInternalNode(const char* pNewValue,
-                         SQLNodeType eNodeType,
-                         sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const OString& _rNewValue,
-                         SQLNodeType eNodeType,
-                         sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const OUString& _rNewValue,
-                         SQLNodeType eNodeType,
-                         sal_uInt32 nNodeID = 0);
-
-        virtual ~OSQLInternalNode() override;
-    };
+        typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
+                                                  css::container::XNamed,
+                                                  css::lang::XServiceInfo> ODescriptor_BASE;
+    }
 }
-
-#endif // INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@
 // The flex-generated workdir/LexTarget/idlc/source/scanner.cxx defines them prior to these includes
 #pragma warning ( disable : 4005 )
 #endif
-#include <connectivity/internalnode.hxx>
+#include <internalnode.hxx>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -54,7 +54,7 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <connectivity/sqlscan.hxx>
+#include <sqlscan.hxx>
 
 #if defined _MSC_VER
 /**/
