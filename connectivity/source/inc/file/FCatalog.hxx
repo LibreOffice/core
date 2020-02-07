@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 
 #include <file/filedllapi.hxx>
 

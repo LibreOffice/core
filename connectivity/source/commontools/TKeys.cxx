@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/TKeys.hxx>
-#include <connectivity/TKey.hxx>
+#include <TKey.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

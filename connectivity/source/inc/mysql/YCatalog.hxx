@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YCATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

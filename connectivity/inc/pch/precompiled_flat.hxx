@@ -201,7 +201,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #endif // PCH_LEVEL >= 4
 

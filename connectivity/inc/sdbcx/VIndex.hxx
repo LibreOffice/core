@@ -17,72 +17,62 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
-#define INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
+#pragma once
 
-
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/sdbcx/VTypeDef.hxx>
+#include <sdbcx/VTypeDef.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <memory>
 
 namespace connectivity
 {
     namespace sdbcx
     {
-
-        struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
-        {
-            ::std::vector< OUString> m_aKeyColumnNames;
-            OUString m_ReferencedTable;
-            sal_Int32       m_Type;
-            sal_Int32       m_UpdateRule;
-            sal_Int32       m_DeleteRule;
-            KeyProperties(const OUString& ReferencedTable,
-                          sal_Int32     Type,
-                          sal_Int32     UpdateRule,
-                          sal_Int32     DeleteRule)
-                          :m_ReferencedTable(ReferencedTable),
-                          m_Type(Type),
-                          m_UpdateRule(UpdateRule),
-                          m_DeleteRule(DeleteRule)
-            {}
-            KeyProperties():m_Type(0),m_UpdateRule(0),m_DeleteRule(0){}
-        };
-        typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
+        class OIndex;
+        typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
 
-        class OOO_DLLPUBLIC_DBTOOLS OKey :
-                                public cppu::BaseMutex,
-                                public ODescriptor_BASE,
-                                public IRefreshableColumns,
-                                public ::comphelper::OIdPropertyArrayUsageHelper<OKey>,
-                                public ODescriptor,
-                                public OKey_BASE
+        class OOO_DLLPUBLIC_DBTOOLS OIndex :
+                                    public cppu::BaseMutex,
+                                    public ODescriptor_BASE,
+                                    public IRefreshableColumns,
+                                    public OIndex_PROP,
+                                    public ODescriptor,
+                                    public OIndex_BASE
         {
         protected:
-            std::shared_ptr<KeyProperties>   m_aProps;
+            OUString        m_Catalog;
+            bool            m_IsUnique;
+            bool            m_IsPrimaryKeyIndex;
+            bool            m_IsClustered;
+
             // no Reference! see OCollection::acquire
             std::unique_ptr<OCollection> m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
+            virtual void refreshColumns() override;
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
-            OKey(bool _bCase);
-            OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps,bool _bCase);
+            OIndex(bool _bCase);
+            OIndex( const OUString& Name,
+                    const OUString& Catalog,
+                    bool _isUnique,
+                    bool _isPrimaryKeyIndex,
+                    bool _isClustered,
+                    bool _bCase);
 
-            virtual ~OKey( ) override;
+            virtual ~OIndex( ) override;
 
             DECLARE_SERVICE_INFO();
+
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             virtual void SAL_CALL acquire() throw() override;
@@ -91,7 +81,6 @@ namespace connectivity
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             // ODescriptor
             virtual void construct() override;
-
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XPropertySet
@@ -107,8 +96,5 @@ namespace connectivity
         };
     }
 }
-
-#endif // INCLUDED_CONNECTIVITY_SDBCX_VKEY_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
