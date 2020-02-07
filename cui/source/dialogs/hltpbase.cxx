@@ -74,7 +74,7 @@ OUString CreateUiNameFromURL( const OUString& aStrURL )
 
 // ComboBox-Control for URL's with History and Autocompletion
 SvxHyperURLBox::SvxHyperURLBox(std::unique_ptr<weld::ComboBox> xControl)
-    : URLBox(std::move(xControl))
+    : SvtURLBox(std::move(xControl))
     , DropTargetHelper(getWidget()->get_drop_target())
 {
     SetSmartProtocol(INetProtocol::Http);

@@ -54,7 +54,7 @@ namespace svx
     public:
         DatabaseLocationInputController_Impl(
             const Reference<XComponentContext>&     _rContext,
-            URLBox& _rLocationInput,
+            SvtURLBox& _rLocationInput,
             weld::Button& _rBrowseButton,
             weld::Window& _rDialog
         );
@@ -72,7 +72,7 @@ namespace svx
 
     private:
         const Reference<XComponentContext>      m_xContext;
-        URLBox& m_rLocationInput;
+        SvtURLBox& m_rLocationInput;
         weld::Window& m_rDialog;
         Sequence< OUString >             m_aFilterExtensions;
         OUString                         m_sFilterUIName;
@@ -80,7 +80,7 @@ namespace svx
     };
 
     DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl(const Reference<XComponentContext>& _rContext,
-            URLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog)
+            SvtURLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog)
         :m_xContext( _rContext )
         ,m_rLocationInput( _rLocationInput )
         ,m_rDialog( _rDialog )
@@ -221,7 +221,7 @@ namespace svx
     }
 
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
-            URLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog )
+            SvtURLBox& _rLocationInput, weld::Button& _rBrowseButton, weld::Window& _rDialog )
         :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton, _rDialog ) )
     {
     }

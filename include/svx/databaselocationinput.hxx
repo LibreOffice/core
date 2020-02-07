@@ -25,9 +25,7 @@
 
 #include <memory>
 
-class PushButton;
-
-class URLBox;
+class SvtURLBox;
 namespace weld { class Button; class Window; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -49,7 +47,7 @@ namespace svx
     public:
         DatabaseLocationInputController(
             const css::uno::Reference<css::uno::XComponentContext>& _rContext,
-            URLBox& _rLocationInput,
+            SvtURLBox& _rLocationInput,
             weld::Button& _rBrowseButton,
             weld::Window& _rDialog
         );

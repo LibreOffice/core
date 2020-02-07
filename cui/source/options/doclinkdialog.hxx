@@ -34,7 +34,7 @@ namespace svx
         std::unique_ptr<weld::Entry> m_xName;
         std::unique_ptr<weld::Button> m_xOK;
         std::unique_ptr<weld::Label> m_xAltTitle;
-        std::unique_ptr<URLBox> m_xURL;
+        std::unique_ptr<SvtURLBox> m_xURL;
 
     public:
         ODocumentLinkDialog(weld::Window* pParent, bool bCreateNew);

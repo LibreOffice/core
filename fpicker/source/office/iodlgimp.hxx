@@ -100,7 +100,7 @@ private:
     DECL_LINK(ClickHdl, const OString&, void);
 };
 
-class URLBox;
+class SvtURLBox;
 class SvtExpFileDlg_Impl
 {
 private:
@@ -114,7 +114,7 @@ public:
     std::unique_ptr<SvtFileDialogFilter_Impl> m_xUserFilter;
 
     std::unique_ptr<weld::Label> m_xFtFileName;
-    std::unique_ptr<URLBox> m_xEdFileName;
+    std::unique_ptr<SvtURLBox> m_xEdFileName;
 
     std::unique_ptr<weld::Label> m_xFtFileVersion;
     std::unique_ptr<weld::ComboBox> m_xLbFileVersion;
@@ -137,7 +137,7 @@ public:
     std::unique_ptr<weld::Button> m_xBtnNewFolder;
     std::unique_ptr<weld::CheckButton> m_xCbPassword;
     std::unique_ptr<weld::CheckButton> m_xCbGPGEncrypt;
-    std::unique_ptr<URLBox> m_xEdCurrentPath;
+    std::unique_ptr<SvtURLBox> m_xEdCurrentPath;
     std::unique_ptr<weld::CheckButton> m_xCbAutoExtension;
     std::unique_ptr<weld::CheckButton> m_xCbOptions;
 

@@ -44,7 +44,7 @@ namespace svx
         , m_xName(m_xBuilder->weld_entry("name"))
         , m_xOK(m_xBuilder->weld_button("ok"))
         , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
-        , m_xURL(new URLBox(m_xBuilder->weld_combo_box("url")))
+        , m_xURL(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
     {
         if (!_bCreateNew)
             m_xDialog->set_title(m_xAltTitle->get_label());

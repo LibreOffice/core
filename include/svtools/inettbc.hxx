@@ -28,19 +28,18 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
-class MatchContext_Impl;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
 
-class SVT_DLLPUBLIC URLBox
+class SVT_DLLPUBLIC SvtURLBox
 {
-    friend class MatchContext_Impl;
+    friend class SvtMatchContext_Impl;
     friend class SvtURLBox_Impl;
 
     Idle                            aChangedIdle;
     OUString                        aBaseURL;
     OUString                        aPlaceHolder;
-    rtl::Reference< MatchContext_Impl > pCtx;
+    rtl::Reference<SvtMatchContext_Impl> pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
     bool                            bOnlyDirectories    : 1;
@@ -61,8 +60,8 @@ class SVT_DLLPUBLIC URLBox
     SVT_DLLPRIVATE void             Init();
 
 public:
-    URLBox(std::unique_ptr<weld::ComboBox> xWidget);
-    ~URLBox();
+    SvtURLBox(std::unique_ptr<weld::ComboBox> xWidget);
+    ~SvtURLBox();
 
     void                set_entry_text(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
     void                show() { m_xWidget->show(); }

@@ -292,10 +292,10 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
 {
     m_xImpl->m_xCbOptions = m_xBuilder->weld_check_button("options");
     m_xImpl->m_xFtFileName = m_xBuilder->weld_label("file_name_label");
-    m_xImpl->m_xEdFileName.reset(new URLBox(m_xBuilder->weld_combo_box("file_name")));
+    m_xImpl->m_xEdFileName.reset(new SvtURLBox(m_xBuilder->weld_combo_box("file_name")));
     m_xImpl->m_xFtFileType = m_xBuilder->weld_label("file_type_label");
     m_xImpl->m_xLbFilter = m_xBuilder->weld_combo_box("file_type");
-    m_xImpl->m_xEdCurrentPath.reset(new URLBox(m_xBuilder->weld_combo_box("current_path")));
+    m_xImpl->m_xEdCurrentPath.reset(new SvtURLBox(m_xBuilder->weld_combo_box("current_path")));
     m_xImpl->m_xBtnFileOpen = m_xBuilder->weld_button("open");
     m_xImpl->m_xBtnCancel = m_xBuilder->weld_button("cancel");
     m_xImpl->m_xBtnHelp = m_xBuilder->weld_button("help");
@@ -713,7 +713,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
         INetURLObject aFileObject( aFileName );
         if ( ( aFileObject.GetProtocol() == INetProtocol::NotValid ) && !aFileName.isEmpty() )
         {
-            OUString sCompleted = URLBox::ParseSmart( aFileName, m_xFileView->GetViewURL() );
+            OUString sCompleted = SvtURLBox::ParseSmart( aFileName, m_xFileView->GetViewURL() );
             if ( !sCompleted.isEmpty() )
                 aFileName = sCompleted;
         }

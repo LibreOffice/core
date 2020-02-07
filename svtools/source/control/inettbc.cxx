@@ -82,7 +82,7 @@ public:
     }
 };
 
-class MatchContext_Impl: public salhelper::Thread
+class SvtMatchContext_Impl: public salhelper::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
@@ -91,7 +91,7 @@ class MatchContext_Impl: public salhelper::Thread
     std::vector<OUString>           aURLs;
     svtools::AsynchronLink          aLink;
     OUString const                  aText;
-    URLBox*                         pBox;
+    SvtURLBox*                      pBox;
     bool const                      bOnlyDirectories;
     bool const                      bNoSelection;
 
@@ -102,7 +102,7 @@ class MatchContext_Impl: public salhelper::Thread
 
     DECL_LINK(                Select_Impl, void*, void );
 
-    virtual                         ~MatchContext_Impl() override;
+    virtual                         ~SvtMatchContext_Impl() override;
     virtual void                    execute() override;
     void                            doExecute();
     void                            Insert( const OUString& rCompletion, const OUString& rURL, bool bForce = false);
@@ -110,7 +110,7 @@ class MatchContext_Impl: public salhelper::Thread
     static void                     FillPicklist(std::vector<OUString>& rPickList);
 
 public:
-                                    MatchContext_Impl( URLBox* pBoxP, const OUString& rText );
+                                    SvtMatchContext_Impl( SvtURLBox* pBoxP, const OUString& rText );
     void                            Stop();
 };
 
@@ -121,9 +121,9 @@ namespace
         : public rtl::Static< ::osl::Mutex, theSvtMatchContextMutex > {};
 }
 
-MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
+SvtMatchContext_Impl::SvtMatchContext_Impl(SvtURLBox* pBoxP, const OUString& rText)
     : Thread( "MatchContext_Impl" )
-    , aLink( LINK( this, MatchContext_Impl, Select_Impl ) )
+    , aLink( LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aText( rText )
     , pBox( pBoxP )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
@@ -136,12 +136,12 @@ MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
     FillPicklist( aPickList );
 }
 
-MatchContext_Impl::~MatchContext_Impl()
+SvtMatchContext_Impl::~SvtMatchContext_Impl()
 {
     aLink.ClearPendingCall();
 }
 
-void MatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
+void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
 {
     // Read the history of picks
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
@@ -165,7 +165,7 @@ void MatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
     }
 }
 
-void MatchContext_Impl::Stop()
+void SvtMatchContext_Impl::Stop()
 {
     css::uno::Reference< css::ucb::XCommandProcessor > proc;
     sal_Int32 id(0);
@@ -183,7 +183,7 @@ void MatchContext_Impl::Stop()
     terminate();
 }
 
-void MatchContext_Impl::execute( )
+void SvtMatchContext_Impl::execute( )
 {
     doExecute();
     aLink.Call( this );
@@ -196,7 +196,7 @@ void MatchContext_Impl::execute( )
 // Cancellable does not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
-IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
+IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
 {
     // avoid recursion through cancel button
     {
@@ -246,7 +246,7 @@ IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
     pBox->pCtx.clear();
 }
 
-void MatchContext_Impl::Insert( const OUString& rCompletion,
+void SvtMatchContext_Impl::Insert( const OUString& rCompletion,
                                    const OUString& rURL,
                                    bool bForce )
 {
@@ -262,7 +262,7 @@ void MatchContext_Impl::Insert( const OUString& rCompletion,
 }
 
 
-void MatchContext_Impl::ReadFolder( const OUString& rURL,
+void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                                        const OUString& rMatch,
                                        bool bSmart )
 {
@@ -424,7 +424,7 @@ void MatchContext_Impl::ReadFolder( const OUString& rURL,
     }
 }
 
-void MatchContext_Impl::doExecute()
+void SvtMatchContext_Impl::doExecute()
 {
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
     {
@@ -463,7 +463,7 @@ void MatchContext_Impl::doExecute()
         if( schedule() )
         {
             if ( eProt == INetProtocol::NotValid )
-                aMatch = URLBox::ParseSmart( aText, pBox->aBaseURL );
+                aMatch = SvtURLBox::ParseSmart( aText, pBox->aBaseURL );
             else
                 aMatch = aText;
             if ( !aMatch.isEmpty() )
@@ -472,9 +472,9 @@ void MatchContext_Impl::doExecute()
                 OUString aMainURL( aURLObject.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 // Disable autocompletion for anything but the (local) file
                 // system (for which access is hopefully fast), as the logic of
-                // how MatchContext_Impl is used requires this code to run to
+                // how SvtMatchContext_Impl is used requires this code to run to
                 // completion before further user input is processed, and even
-                // MatchContext_Impl::Stop does not guarantee a speedy
+                // SvtMatchContext_Impl::Stop does not guarantee a speedy
                 // return:
                 if ( !aMainURL.isEmpty()
                      && aURLObject.GetProtocol() == INetProtocol::File )
@@ -770,7 +770,7 @@ bool SvtURLBox_Impl::TildeParsing(
 
 //--
 
-OUString URLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )
+OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )
 {
     OUString aMatch;
     OUString aText = _aText;
@@ -849,7 +849,7 @@ OUString URLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL )
     return aMatch;
 }
 
-IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
+IMPL_LINK_NOARG(SvtURLBox, TryAutoComplete, Timer *, void)
 {
     OUString aCurText = m_xWidget->get_active_text();
     int nStartPos, nEndPos;
@@ -867,14 +867,14 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
             pCtx->join();
             pCtx.clear();
         }
-        pCtx = new MatchContext_Impl(this, aCurText);
+        pCtx = new SvtMatchContext_Impl(this, aCurText);
         pCtx->launch();
     }
     else
         m_xWidget->clear();
 }
 
-URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
+SvtURLBox::SvtURLBox(std::unique_ptr<weld::ComboBox> pWidget)
     : eSmartProtocol(INetProtocol::NotValid)
     , bOnlyDirectories( false )
     , bHistoryDisabled( false )
@@ -887,15 +887,15 @@ URLBox::URLBox(std::unique_ptr<weld::ComboBox> pWidget)
 
     Init();
 
-    m_xWidget->connect_focus_in(LINK(this, URLBox, FocusInHdl));
-    m_xWidget->connect_focus_out(LINK(this, URLBox, FocusOutHdl));
-    m_xWidget->connect_changed(LINK(this, URLBox, ChangedHdl));
+    m_xWidget->connect_focus_in(LINK(this, SvtURLBox, FocusInHdl));
+    m_xWidget->connect_focus_out(LINK(this, SvtURLBox, FocusOutHdl));
+    m_xWidget->connect_changed(LINK(this, SvtURLBox, ChangedHdl));
 
-    aChangedIdle.SetInvokeHandler(LINK(this, URLBox, TryAutoComplete));
+    aChangedIdle.SetInvokeHandler(LINK(this, SvtURLBox, TryAutoComplete));
     aChangedIdle.SetDebugName("svtools::URLBox aChangedIdle");
 }
 
-void URLBox::Init()
+void SvtURLBox::Init()
 {
     pImpl.reset( new SvtURLBox_Impl );
 
@@ -904,7 +904,7 @@ void URLBox::Init()
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-URLBox::~URLBox()
+SvtURLBox::~SvtURLBox()
 {
     if (pCtx.is())
     {
@@ -913,7 +913,7 @@ URLBox::~URLBox()
     }
 }
 
-void URLBox::SetSmartProtocol(INetProtocol eProt)
+void SvtURLBox::SetSmartProtocol(INetProtocol eProt)
 {
     if ( eSmartProtocol != eProt )
     {
@@ -922,7 +922,7 @@ void URLBox::SetSmartProtocol(INetProtocol eProt)
     }
 }
 
-void URLBox::UpdatePicklistForSmartProtocol_Impl()
+void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     m_xWidget->clear();
     if ( bHistoryDisabled )
@@ -978,13 +978,13 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
     }
 }
 
-IMPL_LINK_NOARG(URLBox, ChangedHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(SvtURLBox, ChangedHdl, weld::ComboBox&, void)
 {
     aChangeHdl.Call(*m_xWidget);
     aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
 }
 
-IMPL_LINK_NOARG(URLBox, FocusInHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(SvtURLBox, FocusInHdl, weld::Widget&, void)
 {
 #ifndef UNX
     // pb: don't select automatically on unix #93251#
@@ -993,7 +993,7 @@ IMPL_LINK_NOARG(URLBox, FocusInHdl, weld::Widget&, void)
     aFocusInHdl.Call(*m_xWidget);
 }
 
-IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(SvtURLBox, FocusOutHdl, weld::Widget&, void)
 {
     if (pCtx.is())
     {
@@ -1004,19 +1004,19 @@ IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
     aFocusOutHdl.Call(*m_xWidget);
 }
 
-void URLBox::SetOnlyDirectories( bool bDir )
+void SvtURLBox::SetOnlyDirectories( bool bDir )
 {
     bOnlyDirectories = bDir;
     if ( bOnlyDirectories )
         m_xWidget->clear();
 }
 
-void URLBox::SetNoURLSelection( bool bSet )
+void SvtURLBox::SetNoURLSelection( bool bSet )
 {
     bNoSelection = bSet;
 }
 
-OUString URLBox::GetURL()
+OUString SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
@@ -1094,7 +1094,7 @@ OUString URLBox::GetURL()
     return aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
-void URLBox::SetBaseURL( const OUString& rURL )
+void SvtURLBox::SetBaseURL( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
@@ -1105,13 +1105,13 @@ void URLBox::SetBaseURL( const OUString& rURL )
     aBaseURL = rURL;
 }
 
-void URLBox::DisableHistory()
+void SvtURLBox::DisableHistory()
 {
     bHistoryDisabled = true;
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-void URLBox::SetFilter(const OUString& _sFilter)
+void SvtURLBox::SetFilter(const OUString& _sFilter)
 {
     pImpl->m_aFilters.clear();
     FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);

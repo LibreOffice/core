@@ -38,7 +38,7 @@ namespace weld { class Widget; }
 namespace weld { class Window; }
 
 class ImageMap;
-class URLBox;
+class SvtURLBox;
 
 /*************************************************************************
 |*
@@ -93,7 +93,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
     std::unique_ptr<IMapWindow> m_xIMapWnd;
     std::unique_ptr<weld::Toolbar> m_xTbxIMapDlg1;
     std::unique_ptr<weld::Label> m_xFtURL;
-    std::unique_ptr<URLBox> m_xURLBox;
+    std::unique_ptr<SvtURLBox> m_xURLBox;
     std::unique_ptr<weld::Label> m_xFtText;
     std::unique_ptr<weld::Entry> m_xEdtText;
     std::unique_ptr<weld::Label> m_xFtTarget;

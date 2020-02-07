@@ -28,7 +28,7 @@ namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
 class ScDocShell;
-class URLBox;
+class SvtURLBox;
 
 class ScLinkedAreaDlg : public weld::GenericDialogController
 {
@@ -37,7 +37,7 @@ private:
     std::unique_ptr<sfx2::DocumentInserter> m_xDocInserter;
     SfxObjectShellRef   aSourceRef;
 
-    std::unique_ptr<URLBox> m_xCbUrl;
+    std::unique_ptr<SvtURLBox> m_xCbUrl;
     std::unique_ptr<weld::Button> m_xBtnBrowse;
     std::unique_ptr<weld::TreeView> m_xLbRanges;
     std::unique_ptr<weld::CheckButton> m_xBtnReload;

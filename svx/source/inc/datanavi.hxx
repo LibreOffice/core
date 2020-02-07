@@ -584,7 +584,7 @@ namespace svxform
 
         std::unique_ptr<weld::Entry> m_xNameED;
         std::unique_ptr<weld::Label> m_xURLFT;
-        std::unique_ptr<URLBox> m_xURLED;
+        std::unique_ptr<SvtURLBox> m_xURLED;
         std::unique_ptr<weld::Button> m_xFilePickerBtn;
         std::unique_ptr<weld::CheckButton> m_xLinkInstanceCB;
         std::unique_ptr<weld::Label> m_xAltTitle;

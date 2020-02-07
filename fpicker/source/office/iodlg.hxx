@@ -38,7 +38,7 @@
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
 class SvtExpFileDlg_Impl;
-class URLBox;
+class SvtURLBox;
 
 enum class AdjustFilterFlags {
     NONE            = 0x0000,

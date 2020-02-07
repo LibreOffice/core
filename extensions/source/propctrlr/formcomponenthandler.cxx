@@ -998,7 +998,7 @@ namespace pcr
         case PROPERTY_ID_IMAGE_URL:
         {
             std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/urlcontrol.ui", m_xContext));
-            auto pControl = new OFileUrlControl(std::make_unique<URLBox>(xBuilder->weld_combo_box("urlcontrol")), std::move(xBuilder), false);
+            auto pControl = new OFileUrlControl(std::make_unique<SvtURLBox>(xBuilder->weld_combo_box("urlcontrol")), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
