@@ -458,6 +458,19 @@ void Test::testResolveIdnaHost() {
     CPPUNIT_ASSERT_EQUAL(
         OUString("foo://xn--mnchen-3ya.de"),
         URIHelper::resolveIdnaHost(u"foo://Mu\u0308nchen.de"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("foo://example.xn--m-eha"), URIHelper::resolveIdnaHost(u"foo://example.mü"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("foo://example.xn--m-eha:0"), URIHelper::resolveIdnaHost(u"foo://example.mü:0"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("foo://xn--e1afmkfd.xn--p1ai"), URIHelper::resolveIdnaHost(u"foo://пример.рф"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("foo://xn--e1afmkfd.xn--p1ai:0"),
+        URIHelper::resolveIdnaHost(u"foo://пример.рф:0"));
 }
 
 css::uno::Reference< css::uno::XComponentContext > Test::m_context;
