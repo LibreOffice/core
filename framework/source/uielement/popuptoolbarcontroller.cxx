@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <framework/menuconfiguration.hxx>
+#include <menuconfiguration.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/toolboxcontroller.hxx>

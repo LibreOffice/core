@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FRAMEWORK_TOOLBOXCONFIGURATION_HXX
-#define INCLUDED_FRAMEWORK_TOOLBOXCONFIGURATION_HXX
+#pragma once
 
 #include <framework/fwedllapi.h>
 
@@ -46,7 +45,5 @@ class FWE_DLLPUBLIC ToolBoxConfiguration
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_TOOLBOXCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
