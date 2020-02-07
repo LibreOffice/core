@@ -117,6 +117,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xForceOpenGL;
     std::unique_ptr<weld::CheckButton> m_xUseSkia;
     std::unique_ptr<weld::CheckButton> m_xForceSkia;
+    std::unique_ptr<weld::CheckButton> m_xForceSkiaRaster;
 
     std::unique_ptr<weld::Label> m_xOpenGLStatusEnabled;
     std::unique_ptr<weld::Label> m_xOpenGLStatusDisabled;
@@ -131,6 +132,7 @@ private:
 #endif
     DECL_LINK(OnForceOpenGLToggled, weld::ToggleButton&, void);
     DECL_LINK(OnForceSkiaToggled, weld::ToggleButton&, void);
+    DECL_LINK(OnForceSkiaRasterToggled, weld::ToggleButton&, void);
     void UpdateOGLStatus();
     void UpdateSkiaStatus();
 
