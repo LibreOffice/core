@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_INC_SXMSITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svx/sxsiitm.hxx>
+#include "sxsiitm.hxx"
 
 // Measure scale setting
 // We do not overwrite a measure scale (UIScale), If the model already has one set.

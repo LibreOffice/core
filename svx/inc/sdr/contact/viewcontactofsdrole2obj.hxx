@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 
-#include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
+#include <sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 

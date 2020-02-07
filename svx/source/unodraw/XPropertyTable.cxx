@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <svx/XPropertyTable.hxx>
+#include <XPropertyTable.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>

@@ -21,7 +21,7 @@
 #include <sdr/contact/viewcontactofe3dsphere.hxx>
 #include <svx/sphere3d.hxx>
 #include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <memory>
 

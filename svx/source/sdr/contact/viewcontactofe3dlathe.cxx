@@ -21,7 +21,7 @@
 #include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <svx/lathe3d.hxx>
 #include <drawinglayer/primitive3d/sdrlatheprimitive3d.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <memory>

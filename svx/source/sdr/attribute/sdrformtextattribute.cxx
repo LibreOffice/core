@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <sdr/attribute/sdrformtextattribute.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xftdiit.hxx>
 #include <svx/xftstit.hxx>
 #include <svx/xftshxy.hxx>
-#include <svx/xftshtit.hxx>
+#include <xftshtit.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/xftadit.hxx>
 #include <svx/xftshit.hxx>

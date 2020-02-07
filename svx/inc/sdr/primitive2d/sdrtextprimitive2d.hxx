@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <editeng/outlobj.hxx>
 #include <tools/color.hxx>
-#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.h>
 #include <svx/sdtaitm.hxx>
 

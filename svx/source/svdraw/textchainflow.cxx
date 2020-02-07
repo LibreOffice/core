@@ -23,7 +23,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/overflowingtxt.hxx>
-#include <svx/textchainflow.hxx>
+#include <textchainflow.hxx>
 #include <sal/log.hxx>
 
 TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)

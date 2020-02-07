@@ -38,8 +38,8 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/textchain.hxx>
-#include <svx/textchainflow.hxx>
+#include <textchain.hxx>
+#include <textchainflow.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>
@@ -60,7 +60,7 @@
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>
-#include <svx/sdr/contact/viewcontactoftextobj.hxx>
+#include <sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

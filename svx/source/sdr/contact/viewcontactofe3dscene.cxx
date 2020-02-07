@@ -23,12 +23,12 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
