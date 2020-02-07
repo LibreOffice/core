@@ -20,15 +20,22 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
 
-#include <vcl/lstbox.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 
-class ScNumberFormat : public ListBox
+class ScNumberFormat final : public InterimItemWindow
 {
 public:
-    explicit ScNumberFormat(vcl::Window* pParent, WinBits nStyle);
+    explicit ScNumberFormat(vcl::Window* pParent);
+    virtual void dispose() override;
+    virtual ~ScNumberFormat() override;
+
+    void set_active(int nPos) { m_xWidget->set_active(nPos); }
 
 private:
-    DECL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, ListBox&, void);
+    std::unique_ptr<weld::ComboBox> m_xWidget;
+
+    DECL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 };
 
 #endif
