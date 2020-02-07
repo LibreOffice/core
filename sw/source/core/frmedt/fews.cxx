@@ -1124,7 +1124,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         }
 
         const SwTwips nBaseOfstForFly = ( pFrame->IsTextFrame() && pFly ) ?
-                                        static_cast<const SwTextFrame*>(pFrame)->GetBaseOfstForFly( !bWrapThrough ) :
+                                        static_cast<const SwTextFrame*>(pFrame)->GetBaseOffsetForFly( !bWrapThrough ) :
                                          0;
         if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
         {

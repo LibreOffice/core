@@ -748,7 +748,7 @@ public:
         mbFollowFormatAllowed = false;
     }
 
-    SwTwips GetBaseOfstForFly( bool bIgnoreFlysAnchoredAtThisFrame ) const
+    SwTwips GetBaseOffsetForFly( bool bIgnoreFlysAnchoredAtThisFrame ) const
     {
         return ( bIgnoreFlysAnchoredAtThisFrame ?
                  mnFlyAnchorOfst :
