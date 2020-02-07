@@ -332,99 +332,108 @@ void ImplGrafControl::Resize()
 
 namespace {
 
-class ImplGrafModeControl : public ListBox
+class ImplGrafModeControl final : public InterimItemWindow
 {
-    using Window::Update;
 private:
-    sal_uInt16              mnCurPos;
+    sal_uInt16 mnCurPos;
     Reference< XFrame > mxFrame;
+    std::unique_ptr<weld::ComboBox> m_xWidget;
 
-    virtual void    Select() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
+
     static void     ImplReleaseFocus();
 
 public:
-                    ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
+    ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
+    virtual void dispose() override;
+    virtual ~ImplGrafModeControl() override;
+
+    virtual void GetFocus() override
+    {
+        m_xWidget->grab_focus();
+    }
+
+    void set_sensitive(bool bSensitive)
+    {
+        Enable(bSensitive);
+        m_xWidget->set_sensitive(true);
+    }
+
+    void set_active(int nActive)
+    {
+        m_xWidget->set_active(nActive);
+    }
 
     void            Update( const SfxPoolItem* pItem );
 };
 
 }
 
-ImplGrafModeControl::ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
-    ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),
-    mnCurPos( 0 ),
-    mxFrame( rFrame )
+ImplGrafModeControl::ImplGrafModeControl(vcl::Window* pParent, const Reference<XFrame>& rFrame)
+    : InterimItemWindow(pParent, "svx/ui/grafmodebox.ui", "GrafModeBox")
+    , mnCurPos(0)
+    , mxFrame(rFrame)
+    , m_xWidget(m_xBuilder->weld_combo_box("grafmode"))
 {
-    SetSizePixel( Size( 100, 260 ) );
+    m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_STANDARD  ) );
+    m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_GREYS     ) );
+    m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_MONO      ) );
+    m_xWidget->append_text( SvxResId( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
-    InsertEntry( SvxResId( RID_SVXSTR_GRAFMODE_STANDARD  ) );
-    InsertEntry( SvxResId( RID_SVXSTR_GRAFMODE_GREYS     ) );
-    InsertEntry( SvxResId( RID_SVXSTR_GRAFMODE_MONO      ) );
-    InsertEntry( SvxResId( RID_SVXSTR_GRAFMODE_WATERMARK ) );
+    m_xWidget->connect_changed(LINK(this, ImplGrafModeControl, SelectHdl));
+    m_xWidget->connect_key_press(LINK(this, ImplGrafModeControl, KeyInputHdl));
+    m_xWidget->connect_focus_in(LINK(this, ImplGrafModeControl, FocusInHdl));
 
-    Show();
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
-void ImplGrafModeControl::Select()
+void ImplGrafModeControl::dispose()
 {
-    if ( !IsTravelSelect() )
-    {
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "GrafMode";
-        aArgs[0].Value <<= sal_Int16( GetSelectedEntryPos() );
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
 
-        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-            This instance may be deleted in the meantime (i.e. when a dialog is opened
-            while in Dispatch()), accessing members will crash in this case. */
+ImplGrafModeControl::~ImplGrafModeControl()
+{
+    disposeOnce();
+}
+
+IMPL_LINK(ImplGrafModeControl, SelectHdl, weld::ComboBox&, rBox, void)
+{
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[0].Name = "GrafMode";
+    aArgs[0].Value <<= sal_Int16(rBox.get_active());
+
+    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+        This instance may be deleted in the meantime (i.e. when a dialog is opened
+        while in Dispatch()), accessing members will crash in this case. */
+    ImplReleaseFocus();
+
+    SfxToolBoxControl::Dispatch(
+        Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+        ".uno:GrafMode",
+        aArgs );
+}
+
+IMPL_LINK(ImplGrafModeControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    bool bHandled(false);
+
+    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    {
+        m_xWidget->set_active(mnCurPos);
         ImplReleaseFocus();
-
-        SfxToolBoxControl::Dispatch(
-            Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-            ".uno:GrafMode",
-            aArgs );
-    }
-}
-
-bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
-{
-    MouseNotifyEvent nType = rNEvt.GetType();
-
-    if( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        mnCurPos = GetSelectedEntryPos();
-
-    return ListBox::PreNotify( rNEvt );
-}
-
-bool ImplGrafModeControl::EventNotify( NotifyEvent& rNEvt )
-{
-    bool bHandled = ListBox::EventNotify( rNEvt );
-
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-        switch( pKEvt->GetKeyCode().GetCode() )
-        {
-            case KEY_RETURN:
-            {
-                Select();
-                bHandled = true;
-            }
-            break;
-
-            case KEY_ESCAPE:
-            {
-                SelectEntryPos( mnCurPos );
-                ImplReleaseFocus();
-                bHandled = true;
-            }
-            break;
-        }
+        bHandled = true;
     }
 
-    return bHandled;
+    return bHandled || ChildKeyInput(rKEvt);
+}
+
+IMPL_LINK_NOARG(ImplGrafModeControl, FocusInHdl, weld::Widget&, void)
+{
+    mnCurPos = m_xWidget->get_active();
 }
 
 void ImplGrafModeControl::ImplReleaseFocus()
@@ -441,9 +450,9 @@ void ImplGrafModeControl::ImplReleaseFocus()
 void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
 {
     if( pItem )
-        SelectEntryPos( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+        m_xWidget->set_active(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
     else
-        SetNoSelection();
+        m_xWidget->set_active(-1);
 }
 
 SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :
@@ -552,12 +561,12 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
 
     if( eState == SfxItemState::DISABLED )
     {
-        pCtrl->Disable();
-        pCtrl->SetText( OUString() );
+        pCtrl->set_sensitive(false);
+        pCtrl->set_active(-1);
     }
     else
     {
-        pCtrl->Enable();
+        pCtrl->set_sensitive(true);
 
         if( eState == SfxItemState::DEFAULT )
             pCtrl->Update( pState );
