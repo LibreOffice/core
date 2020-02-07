@@ -611,7 +611,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
             if ( _rHoriOrientFrame.IsTextFrame() )
             {
                 // consider movement of text frame left
-                nOffset += static_cast<const SwTextFrame&>(_rHoriOrientFrame).GetBaseOfstForFly( !_bObjWrapThrough );
+                nOffset += static_cast<const SwTextFrame&>(_rHoriOrientFrame).GetBaseOffsetForFly( !_bObjWrapThrough );
             }
             else if ( _rHoriOrientFrame.IsPageFrame() && aRectFnSet.IsVert() )
             {
@@ -733,7 +733,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
 
             bool bIgnoreFlysAnchoredAtFrame = !bWrapThrough;
             nOffset = _rHoriOrientFrame.IsTextFrame() ?
-                   static_cast<const SwTextFrame&>(_rHoriOrientFrame).GetBaseOfstForFly( bIgnoreFlysAnchoredAtFrame ) :
+                   static_cast<const SwTextFrame&>(_rHoriOrientFrame).GetBaseOffsetForFly( bIgnoreFlysAnchoredAtFrame ) :
                    0;
             break;
         }
