@@ -11,8 +11,13 @@ ctags="ctags $@"
 saloptions="-ISAL_DELETED_FUNCTION -ISAL_OVERRIDE -ISAL_FINAL"
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 
+if LC_ALL=C ${ctags} -D "foo=bar" --license 2>&1 >/dev/null | grep -q -- 'ctags: Unknown option: -D'; then
+    echo "note: your ctags does not support defining macros with -D"
+    no_defines=" "
+fi
+
 $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $saloptions $omnicppoptions \
-      -D "CPPUNIT_TEST_FIXTURE(TestClass, TestName)=class TestName : public TestClass {};" \
+      ${no_defines:-"-D CPPUNIT_TEST_FIXTURE(TestClass, TestName)=class TestName : public TestClass {};"} \
       --languages=-HTML,Java,JavaScript \
       --langdef=UNOIDL \
       --langmap=UNOIDL:.idl \
