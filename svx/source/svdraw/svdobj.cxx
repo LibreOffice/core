@@ -206,13 +206,11 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
 struct SdrObject::Impl
 {
     sdr::ObjectUserVector maObjectUsers;
-
-    o3tl::optional<double> mnRelativeWidth;
-    sal_Int16               meRelativeWidthRelation;
-    o3tl::optional<double> mnRelativeHeight;
-    sal_Int16               meRelativeHeightRelation;
-
     std::shared_ptr<DiagramDataInterface> mpDiagramData;
+    o3tl::optional<double> mnRelativeWidth;
+    o3tl::optional<double> mnRelativeHeight;
+    sal_Int16               meRelativeWidthRelation;
+    sal_Int16               meRelativeHeightRelation;
 
     Impl() :
         meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME),

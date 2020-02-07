@@ -77,10 +77,10 @@ class ImportExcel : public ImportTyp, protected XclImpRoot
 protected:
     struct LastFormula
     {
+        sal_uInt16 mnXF;
         SCCOL mnCol;
         SCROW mnRow;
         double mfValue;
-        sal_uInt16 mnXF;
         ScFormulaCell* mpCell;
     };
     typedef std::unordered_map<SCCOL, LastFormula> LastFormulaMapType;

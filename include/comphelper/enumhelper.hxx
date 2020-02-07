@@ -73,8 +73,8 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex final : private OEnumerationLock
                           , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                            css::lang::XEventListener    >
 {
-    sal_Int32                                         m_nPos;
     css::uno::Reference< css::container::XIndexAccess > m_xAccess;
+    sal_Int32                                         m_nPos;
     bool                                          m_bListening;
 
 public:
