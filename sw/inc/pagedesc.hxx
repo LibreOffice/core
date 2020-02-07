@@ -160,7 +160,7 @@ class SW_DLLPUBLIC SwPageDesc
     bool        m_IsHidden;
 
     /// Footnote information.
-    SwPageFootnoteInfo m_IsFootnoteInfo;
+    SwPageFootnoteInfo m_FootnoteInfo;
 
     /// Backref to the assigned SwPageDescs list to handle renames.
     SwPageDescs  *m_pdList;
@@ -193,9 +193,9 @@ public:
     const SvxNumberType &GetNumType() const { return m_NumType; }
     void  SetNumType(const SvxNumberType& rNew) { m_NumType = rNew; }
 
-    const SwPageFootnoteInfo &GetFootnoteInfo() const { return m_IsFootnoteInfo; }
-          SwPageFootnoteInfo &GetFootnoteInfo()       { return m_IsFootnoteInfo; }
-    void  SetFootnoteInfo(const SwPageFootnoteInfo &rNew) { m_IsFootnoteInfo = rNew; }
+    const SwPageFootnoteInfo &GetFootnoteInfo() const { return m_FootnoteInfo; }
+          SwPageFootnoteInfo &GetFootnoteInfo()       { return m_FootnoteInfo; }
+    void  SetFootnoteInfo(const SwPageFootnoteInfo &rNew) { m_FootnoteInfo = rNew; }
 
     inline bool IsHeaderShared() const;
     inline bool IsFooterShared() const;
