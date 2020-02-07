@@ -25,67 +25,66 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/GraphicObject.hxx>
 
-
 namespace drawinglayer
 {
-    namespace primitive2d
-    {
-        /** GraphicPrimitive2D class
+namespace primitive2d
+{
+/** GraphicPrimitive2D class
 
-            Primitive to hold graphics defined by GraphicObject and GraphicAttr
-            combination. This includes MetaFiles and diverse pixel-oriented graphic
-            formats. It even includes animated GIFs, Croppings and other changes
-            defined in GraphicAttr.
+    Primitive to hold graphics defined by GraphicObject and GraphicAttr
+    combination. This includes MetaFiles and diverse pixel-oriented graphic
+    formats. It even includes animated GIFs, Croppings and other changes
+    defined in GraphicAttr.
 
-            This makes the decomposition contain a wide variety of possibilities,
-            too. From a simple BitmapPrimitive over AnimatedSwitchPrimitive2D,
-            MetafilePrimitive2D (with and without embedding in a masking when e.g.
-            the Metafile is bigger than the geometry) and embeddings in
-            TransformPrimitive2D and MaskPrimitive2D for croppings.
+    This makes the decomposition contain a wide variety of possibilities,
+    too. From a simple BitmapPrimitive over AnimatedSwitchPrimitive2D,
+    MetafilePrimitive2D (with and without embedding in a masking when e.g.
+    the Metafile is bigger than the geometry) and embeddings in
+    TransformPrimitive2D and MaskPrimitive2D for croppings.
 
-            The primitive geometry area is defined by Transform.
-         */
-        class DRAWINGLAYER_DLLPUBLIC GraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the geometric definition
-            basegfx::B2DHomMatrix                       maTransform;
+    The primitive geometry area is defined by Transform.
+ */
+class DRAWINGLAYER_DLLPUBLIC GraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the geometric definition
+    basegfx::B2DHomMatrix maTransform;
 
-            /// the GraphicObject with all its content possibilities
-            GraphicObject                               maGraphicObject;
+    /// the GraphicObject with all its content possibilities
+    GraphicObject maGraphicObject;
 
-            /// The GraphicAttr with all its modification possibilities
-            GraphicAttr                                 maGraphicAttr;
+    /// The GraphicAttr with all its modification possibilities
+    GraphicAttr maGraphicAttr;
 
-            /// local decomposition
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+    /// local decomposition
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
 
-        public:
-            /// constructor(s)
-            GraphicPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
-                const GraphicObject& rGraphicObject,
-                const GraphicAttr& rGraphicAttr);
-            GraphicPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
-                const GraphicObject& rGraphicObject);
+public:
+    /// constructor(s)
+    GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform, const GraphicObject& rGraphicObject,
+                       const GraphicAttr& rGraphicAttr);
+    GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
+                       const GraphicObject& rGraphicObject);
 
-            /// data read access
-            const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const GraphicObject& getGraphicObject() const { return maGraphicObject; }
-            const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
+    /// data read access
+    const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+    const GraphicObject& getGraphicObject() const { return maGraphicObject; }
+    const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-    } // end of namespace primitive2d
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+} // end of namespace primitive2d
 } // end of namespace drawinglayer
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

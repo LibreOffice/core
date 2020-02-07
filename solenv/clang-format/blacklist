@@ -3656,7 +3656,6 @@ drawinglayer/source/primitive2d/epsprimitive2d.cxx
 drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx
 drawinglayer/source/primitive2d/fillgraphicprimitive2d.cxx
 drawinglayer/source/primitive2d/fillhatchprimitive2d.cxx
-drawinglayer/source/primitive2d/graphicprimitive2d.cxx
 drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx
 drawinglayer/source/primitive2d/gridprimitive2d.cxx
 drawinglayer/source/primitive2d/groupprimitive2d.cxx
@@ -5913,7 +5912,6 @@ include/drawinglayer/primitive2d/epsprimitive2d.hxx
 include/drawinglayer/primitive2d/fillgradientprimitive2d.hxx
 include/drawinglayer/primitive2d/fillgraphicprimitive2d.hxx
 include/drawinglayer/primitive2d/fillhatchprimitive2d.hxx
-include/drawinglayer/primitive2d/graphicprimitive2d.hxx
 include/drawinglayer/primitive2d/graphicprimitivehelper2d.hxx
 include/drawinglayer/primitive2d/gridprimitive2d.hxx
 include/drawinglayer/primitive2d/groupprimitive2d.hxx
