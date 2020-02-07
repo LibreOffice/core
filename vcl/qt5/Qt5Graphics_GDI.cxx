@@ -352,7 +352,7 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
         // apply LineStyle
         basegfx::utils::applyLineDashing(rPolyLine, // source
                                          *pStroke, // pattern
-                                         &aPolyPolygonLine, // traget for lines
+                                         &aPolyPolygonLine, // target for lines
                                          nullptr, // target for gaps
                                          fDotDashLength); // full length if available
     }
