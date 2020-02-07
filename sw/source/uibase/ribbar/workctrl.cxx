@@ -558,6 +558,11 @@ public:
         InterimItemWindow::dispose();
     }
 
+    virtual void GetFocus() override
+    {
+        m_xWidget->grab_focus();
+    }
+
     void save_value()
     {
         m_xWidget->save_value();
@@ -760,6 +765,10 @@ public:
     {
         m_xWidget.reset();
         InterimItemWindow::dispose();
+    }
+    virtual void GetFocus() override
+    {
+        m_xWidget->grab_focus();
     }
     virtual ~SwJumpToSpecificBox_Impl() override
     {

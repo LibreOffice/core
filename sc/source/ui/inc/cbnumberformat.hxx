@@ -29,6 +29,8 @@ public:
     virtual void dispose() override;
     virtual ~ScNumberFormat() override;
 
+    virtual void GetFocus() override;
+
     void set_active(int nPos) { m_xWidget->set_active(nPos); }
 
 private:

@@ -101,6 +101,7 @@ public:
     void                show() { m_xWidget->show(); }
     void                clear() { m_xWidget->clear(); }
     void                connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
+    void                connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xWidget->connect_key_press(rLink); }
     void                connect_changed(const Link<weld::ComboBox&, void>& rLink) { aChangeHdl = rLink; }
     void                trigger_changed() { aChangeHdl.Call(*m_xWidget); }
     void                connect_focus_in(const Link<weld::Widget&, void>& rLink) { aFocusInHdl = rLink; }
@@ -112,6 +113,7 @@ public:
     void                set_sensitive(bool bSensitive) { m_xWidget->set_sensitive(bSensitive); }
     void                set_help_id(const OString& rHelpId) { m_xWidget->set_help_id(rHelpId); }
     void                select_entry_region(int nStartPos, int nEndPos) { m_xWidget->select_entry_region(nStartPos, nEndPos); }
+    Size                get_preferred_size() const { return m_xWidget->get_preferred_size(); }
 
     void                EnableAutocomplete(bool bEnable = true) { m_xWidget->set_entry_completion(bEnable); }
     void                SetBaseURL( const OUString& rURL );
