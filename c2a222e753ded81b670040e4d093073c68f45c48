@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea48bdb9_9772637c",
+        "filename": "solenv/bin/create-tags",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-07T14:08:42Z",
+      "side": 1,
+      "message": "I get this:\n\n ctags: Warning: cannot open input file \"TestName)\u003dclass\" : No such file or directory\n ctags: Warning: cannot open input file \"TestName\" : No such file or directory\n ctags: Warning: cannot open input file \":\" : No such file or directory\n ctags: Warning: cannot open input file \"public\" : No such file or directory\n ctags: Warning: cannot open input file \"TestClass\" : No such file or directory\n ctags: Warning: cannot open input file \"{};\"\" : No such file or directory\n\nI guess the problem is bash now passes this variable as a single argument to ctags, while it was 2 previously.",
+      "revId": "c2a222e753ded81b670040e4d093073c68f45c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
