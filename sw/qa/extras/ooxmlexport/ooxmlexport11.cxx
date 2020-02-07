@@ -1052,6 +1052,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77417, "tdf77417.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130494, "tdf130494.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
+    // keep direct formatting of table cell paragraph with removed highlighting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
