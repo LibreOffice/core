@@ -11,6 +11,7 @@
 MERGE_LIBRARY_LIST := \
 	avmedia \
 	basegfx \
+	canvasfactory \
 	canvastools \
 	comphelper \
 	configmgr \
@@ -23,6 +24,7 @@ MERGE_LIBRARY_LIST := \
 	$(if $(USING_X11),desktop_detector) \
 	drawinglayer \
 	editeng \
+	expwrap \
 	filterconfig \
 	fsstorage \
 	fwe \
@@ -35,14 +37,17 @@ MERGE_LIBRARY_LIST := \
 	localebe1 \
 	mcnttype \
 	msfilter \
+	mtfrenderer \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
 	sax \
 	sb \
+	simplecanvas \
 	sfx \
 	sofficeapp \
 	sot \
 	$(if $(DISABLE_GUI),,spl) \
+	stringresource \
 	svl \
 	svt \
 	svx \
