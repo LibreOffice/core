@@ -1133,6 +1133,24 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf88496, "tdf88496.docx")
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
+<<<<<<< HEAD   (28c8c7 Weekly version bump: N7)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77417, "tdf77417.docx")
+{
+    // MSO 2010 compatibility mode: terminating white spaces are ignored in tables.
+    // This was 3 pages with the first invisible blank page.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130494, "tdf130494.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
+    // keep direct formatting of table cell paragraph with removed highlighting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
+}
+
+>>>>>>> CHANGE (abb9c7 tdf#130494: DOCX import: limit paragraph-level character pro)
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
