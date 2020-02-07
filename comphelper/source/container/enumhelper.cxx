@@ -135,8 +135,8 @@ void OEnumerationByName::impl_stopDisposeListening()
 }
 
 OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess)
-    :m_nPos(0)
-    ,m_xAccess(_rxAccess)
+    :m_xAccess(_rxAccess)
+    ,m_nPos(0)
     ,m_bListening(false)
 {
     impl_startDisposeListening();
