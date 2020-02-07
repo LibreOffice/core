@@ -455,6 +455,9 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
         }
     }
 
+    if (m_pWrtShell->GetSelectionType() == SelectionType::DrawObject)
+        return true; // Complex
+
     // Simple
     return false;
 }
