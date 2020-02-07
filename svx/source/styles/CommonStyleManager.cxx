@@ -9,7 +9,7 @@
  */
 
 #include <svx/CommonStyleManager.hxx>
-#include <svx/CommonStylePreviewRenderer.hxx>
+#include <CommonStylePreviewRenderer.hxx>
 
 namespace svx
 {
