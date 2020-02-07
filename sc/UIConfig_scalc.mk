@@ -155,6 +155,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/notebookbar_groups \
 	sc/uiconfig/scalc/ui/notebookbar_groupedbar_full \
 	sc/uiconfig/scalc/ui/notebookbar_groupedbar_compact \
+	sc/uiconfig/scalc/ui/numberbox \
 	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/mergecellsdialog \
 	sc/uiconfig/scalc/ui/mergecolumnentry \
