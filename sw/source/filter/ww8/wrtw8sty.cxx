@@ -1510,21 +1510,15 @@ void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 namespace
 {
 /**
- * Find a node near the section start that has a page break, it may have a follow header/footer for
- * us.
+ * Determines if the continuous section break we start should use page style properties (header,
+ * footer, margins) from the next page style of the previous section.
  */
-bool WriteNextStyleHeaderFooter(sal_uInt8 nBreakCode, sal_uInt8 nHeadFootFlags,
-                                const SwPageDesc* pPd, const WW8_SepInfo& rSepInfo)
+bool UsePrevSectionNextStyle(sal_uInt8 nBreakCode, const SwPageDesc* pPd,
+                             const WW8_SepInfo& rSepInfo)
 {
     if (nBreakCode != 0)
     {
         // Not a continuous section break.
-        return false;
-    }
-
-    if (nHeadFootFlags != 0)
-    {
-        // Would write some header/footer anyway.
         return false;
     }
 
@@ -1611,6 +1605,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     bool bOutPgDscSet = true, bLeftRightPgChain = false, bOutputStyleItemSet = false;
     bool bEnsureHeaderFooterWritten = rSepInfo.pSectionFormat && rSepInfo.bIsFirstParagraph;
     const SwFrameFormat* pPdFormat = &pPd->GetMaster();
+    bool bUsePrevSectionNextStyle = false;
     if ( rSepInfo.pSectionFormat )
     {
         // if pSectionFormat is set, then there is a SectionNode
@@ -1636,6 +1631,15 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             // produce Itemset, which inherits PgDesk-Attr-Set:
             // as child also the parent is searched if 'deep'-OutputItemSet
             const SfxItemSet* pPdSet = &pPdFormat->GetAttrSet();
+
+            bUsePrevSectionNextStyle = GetExportFormat() == ExportFormat::DOCX
+                                       && UsePrevSectionNextStyle(nBreakCode, pPd, rSepInfo);
+            if (bUsePrevSectionNextStyle)
+            {
+                // Take page margins from the previous section's next style.
+                pPdSet = &pPd->GetFollow()->GetMaster().GetAttrSet();
+            }
+
             SfxItemSet aSet( *pPdSet->GetPool(), pPdSet->GetRanges() );
             aSet.SetParent( pPdSet );
 
@@ -1828,9 +1832,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     const SwTextNode *pOldPageRoot = GetHdFtPageRoot();
     SetHdFtPageRoot( rSepInfo.pPDNd ? rSepInfo.pPDNd->GetTextNode() : nullptr );
 
-    if (GetExportFormat() == ExportFormat::DOCX
-        && WriteNextStyleHeaderFooter(nBreakCode, nHeadFootFlags, pPd, rSepInfo))
+    if (bUsePrevSectionNextStyle && nHeadFootFlags == 0)
     {
+        // Take headers/footers from the previous section's next style.
         pPdFormat = &pPd->GetFollow()->GetMaster();
         MSWordSections::SetHeaderFlag(nHeadFootFlags, *pPdFormat, WW8_HEADER_ODD);
         MSWordSections::SetFooterFlag(nHeadFootFlags, *pPdFormat, WW8_FOOTER_ODD);
