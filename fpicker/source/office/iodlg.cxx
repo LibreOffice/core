@@ -713,7 +713,7 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
         INetURLObject aFileObject( aFileName );
         if ( ( aFileObject.GetProtocol() == INetProtocol::NotValid ) && !aFileName.isEmpty() )
         {
-            OUString sCompleted = SvtURLBox::ParseSmart( aFileName, m_xFileView->GetViewURL() );
+            OUString sCompleted = URLBox::ParseSmart( aFileName, m_xFileView->GetViewURL() );
             if ( !sCompleted.isEmpty() )
                 aFileName = sCompleted;
         }
