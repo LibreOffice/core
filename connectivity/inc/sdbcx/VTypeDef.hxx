@@ -17,27 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
+#pragma once
 
-#include <connectivity/sdbcx/VCollection.hxx>
-#include <connectivity/dbtoolsdllapi.hxx>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 namespace connectivity
 {
-    class OIndexHelper;
-    class OIndexColumns final : public sdbcx::OCollection
+    namespace sdbcx
     {
-        OIndexHelper* m_pIndex;
-        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual void impl_refresh() override;
-    public:
-        OIndexColumns(  OIndexHelper* _pIndex,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
-    };
+        typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
+                                                  css::container::XNamed,
+                                                  css::lang::XServiceInfo> ODescriptor_BASE;
+    }
 }
-#endif // INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
