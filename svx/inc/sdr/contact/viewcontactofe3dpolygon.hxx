@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
 
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
-#include <svx/polygn3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
+#include <polygn3d.hxx>
 
 namespace sdr
 {

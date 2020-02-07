@@ -54,12 +54,12 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/sdgcoitm.hxx>
+#include <sdgcoitm.hxx>
 #include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
+#include <sdginitm.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
+#include <sdgtritm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
@@ -75,7 +75,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svxids.hrc>
 #include <sxallitm.hxx>
-#include <svx/sxcaitm.hxx>
+#include <sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>
 #include <svx/sxciaitm.hxx>
@@ -85,11 +85,11 @@
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
-#include <svx/sxfiitm.hxx>
+#include <sxfiitm.hxx>
 #include <sxlayitm.hxx>
 #include <sxlogitm.hxx>
 #include <svx/sxmbritm.hxx>
-#include <svx/sxmfsitm.hxx>
+#include <sxmfsitm.hxx>
 #include <sxmkitm.hxx>
 #include <svx/sxmlhitm.hxx>
 #include <sxmoitm.hxx>
@@ -108,7 +108,7 @@
 #include <sxrooitm.hxx>
 #include <sxsaitm.hxx>
 #include <sxsalitm.hxx>
-#include <svx/sxsiitm.hxx>
+#include <sxsiitm.hxx>
 #include <sxsoitm.hxx>
 #include <sxtraitm.hxx>
 #include <svx/xfillit0.hxx>

@@ -34,7 +34,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/helperhittest3d.hxx>
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
