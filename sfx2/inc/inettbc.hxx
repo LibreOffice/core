@@ -23,18 +23,21 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-class ComboBox;
-class SvtURLBox;
+namespace weld { class ComboBox; };
+class URLBoxItemWindow;
+class URLBox;
 
 class SfxURLToolBoxControl_Impl final : public SfxToolBoxControl
 {
 private:
+    bool                    m_bModified;
 
-    SvtURLBox*              GetURLBox() const;
+    URLBox*                 GetURLBox() const;
+    URLBoxItemWindow*       GetURLBoxItemWindow() const;
     void                    OpenURL( const OUString& rName ) const;
 
-    DECL_LINK(        OpenHdl, SvtURLBox*, void );
-    DECL_LINK(        SelectHdl, ComboBox&, void );
+    DECL_LINK(OpenHdl, weld::ComboBox&, bool);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
     struct ExecuteInfo
     {

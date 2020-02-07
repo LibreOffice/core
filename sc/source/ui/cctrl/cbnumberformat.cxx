@@ -58,6 +58,11 @@ ScNumberFormat::~ScNumberFormat()
     disposeOnce();
 }
 
+void ScNumberFormat::GetFocus()
+{
+    m_xWidget->grab_focus();
+}
+
 IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void)
 {
     auto* pCurSh = SfxViewFrame::Current();

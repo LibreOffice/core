@@ -70,6 +70,11 @@ void GlueEscDirLB::dispose()
     InterimItemWindow::dispose();
 }
 
+void GlueEscDirLB::GetFocus()
+{
+    m_xWidget->grab_focus();
+}
+
 GlueEscDirLB::~GlueEscDirLB()
 {
     disposeOnce();

@@ -86,7 +86,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         css::awt::FontDescriptor m_aCurrentFont;
 };
 
-class SvxFontSizeBox_Impl : public InterimItemWindow
+class SvxFontSizeBox_Impl final : public InterimItemWindow
 {
 public:
                         SvxFontSizeBox_Impl( vcl::Window* pParent,
@@ -101,7 +101,6 @@ public:
 
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 
-protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        GetFocus() override;
 
