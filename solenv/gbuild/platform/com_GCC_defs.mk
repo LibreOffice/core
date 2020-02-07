@@ -145,7 +145,7 @@ gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 
 gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 
-ifneq ($(ENABLE_PCH),)
+ifneq ($(gb_ENABLE_PCH),)
 ifeq ($(COM_IS_CLANG),TRUE)
 # Clang by default includes in the PCH timestamps of the files it was
 # generated from, which would make the PCH be a "new" file for ccache
@@ -293,7 +293,7 @@ endef
 
 gb_Helper_get_rcfile = $(1)rc
 
-ifneq ($(ENABLE_PCH),)
+ifneq ($(gb_ENABLE_PCH),)
 # Enable use of .sum files for PCHs.
 gb_COMPILER_SETUP += CCACHE_PCH_EXTSUM=1
 # CCACHE_SLOPPINESS should contain pch_defines,time_macros for PCHs.

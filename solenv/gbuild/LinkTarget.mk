@@ -1532,8 +1532,6 @@ endef
 define gb_LinkTarget__set_precompiled_header_variables
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_LINKTARGETMAKEFILENAME := $(4)
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3),$(4)))
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4)) $(gb_LinkTarget_EXCEPTIONFLAGS)
@@ -1556,14 +1554,22 @@ $(call gb_LinkTarget_get_pch_timestamp,$(4)) : $(call gb_PrecompiledHeader_get_t
 
 $(call gb_LinkTarget__set_precompiled_header_variables,$(1),$(2),$(3),$(4))
 
+ifeq ($(gb_FULLDEPS),$(true))
+-include $(call gb_PrecompiledHeader_get_dep_target,$(3),$(4))
+endif
+
+endef
+
+# call gb_LinkTarget__add_precompiled_header_object,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+define gb_LinkTarget__add_precompiled_header_object
+# Clang-style
 ifneq ($(BUILDING_PCH_WITH_OBJ),)
 $(call gb_LinkTarget_add_exception_object,$(1),$(2),,$(4))
 $(call gb_CxxObject_get_target,$(2)) : T_PCH_EXTRA_CXXFLAGS += $(gb_PrecompiledHeader_pch_with_obj)
 endif
-
-ifeq ($(gb_FULLDEPS),$(true))
--include $(call gb_PrecompiledHeader_get_dep_target,$(3),$(4))
-endif
+# MSVC-style
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3),$(4)))
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 endef
 
@@ -1572,6 +1578,9 @@ define gb_LinkTarget_set_precompiled_header
 ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 $(call gb_PrecompiledHeader_generate_rules,$(notdir $(2)),$(1),$(4),$(2))
+endif
+ifneq ($(gb_ENABLE_PCH)$(BLOCK_PCH),)
+$(call gb_LinkTarget__add_precompiled_header_object,$(1),$(2),$(notdir $(2)),$(4))
 endif
 
 endef
@@ -1591,14 +1600,21 @@ $(call gb_LinkTarget_get_pch_reuse_timestamp,$(4)) : $(call gb_PrecompiledHeader
 	$$(call gb_PrecompiledHeader__copy_reuse_files,$(1),$(3),$(4))
 	mkdir -p $$(dir $$@) && touch $$@
 
+endef
+
+# call gb_LinkTarget__add_reuse_precompiled_header_object,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
+define gb_LinkTarget__add_reuse_precompiled_header_object
+# Clang-style
 ifneq ($(BUILDING_PCH_WITH_OBJ),)
 # We need to link in also the PCH's object file. Again, rely on a special for_reuse target for dependencies.
 $(if $(wildcard $(call gb_CxxObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_CxxObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 endif
+# MSVC-style
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_objectfile, $(call gb_PrecompiledHeader_get_target,$(3),$(4)))
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 endef
-
 
 # call gb_LinkTarget__reuse_precompiled_header_workarounds,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
 define gb_LinkTarget__reuse_precompiled_header_workarounds
@@ -1610,10 +1626,13 @@ endef
 
 # call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
 define gb_LinkTarget_reuse_precompiled_header
-ifneq ($(gb_ENABLE_PCH),)
 ifeq ($(gb_DISABLE_PCH_REUSE),$(false))
+ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget__reuse_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 $(call gb_LinkTarget__reuse_precompiled_header_workarounds,$(1),$(2),$(notdir $(2)),$(4))
+endif
+ifneq ($(gb_ENABLE_PCH)$(BLOCK_PCH),)
+$(call gb_LinkTarget__add_reuse_precompiled_header_object,$(1),$(2),$(notdir $(2)),$(4))
 endif
 endif
 
@@ -1621,9 +1640,7 @@ endef
 
 # call gb_LinkTarget_use_common_precompiled_header,linktarget,,,linktargetmakefilename
 define gb_LinkTarget_use_common_precompiled_header
-ifneq ($(gb_ENABLE_PCH),)
 $(call gb_LinkTarget_reuse_precompiled_header,$(1),pch/inc/pch/precompiled_system,,$(4))
-endif
 
 endef
 

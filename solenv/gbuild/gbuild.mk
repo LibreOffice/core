@@ -142,7 +142,14 @@ ifeq ($(gb_ENABLE_SYMBOLS_FOR),no)
 gb_ENABLE_SYMBOLS_FOR :=
 endif
 
+ifeq ($(BLOCK_PCH),)
 gb_ENABLE_PCH := $(ENABLE_PCH)
+else
+# Setting BLOCK_PCH effectively disables PCH, but the extra object file will be still linked in.
+# This is useful for rebuilding only some files with PCH disabled, e.g. to check #include's,
+# disabling the whole ENABLE_PCH would lead to unresolved symbols at link time.
+gb_ENABLE_PCH :=
+endif
 
 ifneq ($(nodep)$(ENABLE_PRINT_DEPS),)
 gb_FULLDEPS := $(false)
