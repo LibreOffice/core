@@ -122,6 +122,12 @@ bool isVCLSkiaEnabled()
     {
         bRet = true;
     }
+    else if (getenv("SAL_FORCEGL"))
+    {
+        // Skia usage is checked before GL usage, so if GL is forced (and Skia is not), do not
+        // enable Skia in order to allow GL.
+        bRet = false;
+    }
     else if (bSupportsVCLSkia)
     {
         static bool bEnableSkiaEnv = !!getenv("SAL_ENABLESKIA");
