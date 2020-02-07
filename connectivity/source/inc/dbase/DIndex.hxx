@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
 
-#include <connectivity/sdbcx/VIndex.hxx>
+#include <sdbcx/VIndex.hxx>
 #include <dbase/DTable.hxx>
 #include <dbase/dindexnode.hxx>
 
