@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
+#include <sdr/attribute/sdrshadowtextattribute.hxx>
 
 
 namespace drawinglayer::attribute

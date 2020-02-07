@@ -448,10 +448,10 @@
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <fmundo.hxx>
-#include <svx/XPropertyTable.hxx>
+#include <XPropertyTable.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <svx/extrud3d.hxx>
+#include <extrud3d.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
@@ -472,7 +472,7 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
@@ -481,8 +481,8 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -527,7 +527,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/textchain.hxx>
+#include <textchain.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomid.hxx>

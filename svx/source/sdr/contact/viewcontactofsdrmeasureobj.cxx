@@ -20,7 +20,7 @@
 
 #include <sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <svx/svdomeas.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmlhitm.hxx>

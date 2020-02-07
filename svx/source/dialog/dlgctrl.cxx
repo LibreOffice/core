@@ -39,7 +39,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/BitmapTools.hxx>
 

@@ -30,7 +30,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
 #include <sdr/properties/pageproperties.hxx>
-#include <svx/sdr/contact/viewcontactofpageobj.hxx>
+#include <sdr/contact/viewcontactofpageobj.hxx>
 
 
 // BaseProperties section
