@@ -40,6 +40,7 @@ svx/uiconfig/ui/findreplacedialog.ui://GtkLabel[@id='searchdir'] orphan-label
 svx/uiconfig/ui/floatingcontour.ui://GtkLabel[@id='statuspos'] orphan-label
 svx/uiconfig/ui/floatingcontour.ui://GtkLabel[@id='statussize'] orphan-label
 svx/uiconfig/ui/fontworkgallerydialog.ui://GtkLabel[@id='label1'] orphan-label
+svx/uiconfig/ui/grafctrlbox.ui://GtkSpinButton[@id='spinfield'] no-labelled-by
 svx/uiconfig/ui/headfootformatpage.ui://GtkLabel[@id='labelHeaderFormat'] orphan-label
 svx/uiconfig/ui/headfootformatpage.ui://GtkLabel[@id='labelFooterFormat'] orphan-label
 svx/uiconfig/ui/imapdialog.ui://GtkLabel[@id='statusurl'] orphan-label
