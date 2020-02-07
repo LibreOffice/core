@@ -1448,7 +1448,7 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
                 chart2::XDiagram >& xDiagram )
 {
     //pies and donuts currently do not support this because of wrong files from older versions
-    //todo: allow this in future again, if fileversion are available for ole objects (metastream)
+    //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
     //thus the wrong bottom can be removed on import
 
     Sequence< Reference< chart2::XChartType > > aTypes(
