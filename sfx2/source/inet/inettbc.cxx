@@ -63,20 +63,20 @@ SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
 class URLBoxItemWindow final : public InterimItemWindow
 {
 private:
-    std::unique_ptr<URLBox> m_xWidget;
+    std::unique_ptr<SvtURLBox> m_xWidget;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 public:
     URLBoxItemWindow(vcl::Window* pParent)
         : InterimItemWindow(pParent, "sfx/ui/urlbox.ui", "URLBox")
-        , m_xWidget(new URLBox(m_xBuilder->weld_combo_box("urlbox")))
+        , m_xWidget(new SvtURLBox(m_xBuilder->weld_combo_box("urlbox")))
     {
         m_xWidget->connect_key_press(LINK(this, URLBoxItemWindow, KeyInputHdl));
 
         SetSizePixel(m_xWidget->get_preferred_size());
     }
 
-    URLBox* GetURLBox()
+    SvtURLBox* GetURLBox()
     {
         return m_xWidget.get();
     }
@@ -114,7 +114,7 @@ URLBoxItemWindow* SfxURLToolBoxControl_Impl::GetURLBoxItemWindow() const
     return static_cast<URLBoxItemWindow*>(GetToolBox().GetItemWindow(GetId()));
 }
 
-URLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
+SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 {
     return GetURLBoxItemWindow()->GetURLBox();
 }
@@ -127,7 +127,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     INetURLObject aObj( rName );
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        aName = URLBox::ParseSmart( rName, "" );
+        aName = SvtURLBox::ParseSmart( rName, "" );
     }
     else
         aName = rName;
@@ -190,7 +190,7 @@ IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
 VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
 {
     VclPtrInstance<URLBoxItemWindow> xURLBox(pParent);
-    URLBox* pURLBox = xURLBox->GetURLBox();
+    SvtURLBox* pURLBox = xURLBox->GetURLBox();
     pURLBox->connect_changed(LINK(this, SfxURLToolBoxControl_Impl, SelectHdl));
     pURLBox->connect_entry_activate(LINK(this, SfxURLToolBoxControl_Impl, OpenHdl));
     return xURLBox;
@@ -200,7 +200,7 @@ IMPL_LINK(SfxURLToolBoxControl_Impl, SelectHdl, weld::ComboBox&, rComboBox, void
 {
     m_bModified = true;
 
-    URLBox* pURLBox = GetURLBox();
+    SvtURLBox* pURLBox = GetURLBox();
     OUString aName( pURLBox->GetURL() );
 
     if (rComboBox.changed_by_menu() && !aName.isEmpty())
@@ -209,7 +209,7 @@ IMPL_LINK(SfxURLToolBoxControl_Impl, SelectHdl, weld::ComboBox&, rComboBox, void
 
 IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, weld::ComboBox&, bool)
 {
-    URLBox* pURLBox = GetURLBox();
+    SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL() );
 
     Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
@@ -250,7 +250,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
     }
     else if ( !m_bModified && SfxItemState::DEFAULT == eState )
     {
-        URLBox* pURLBox = GetURLBox();
+        SvtURLBox* pURLBox = GetURLBox();
         pURLBox->clear();
 
         const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(ePICKLIST);

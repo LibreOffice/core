@@ -15,7 +15,7 @@
 #include <vcl/weld.hxx>
 
 class ScDocShell;
-class URLBox;
+class SvtURLBox;
 class ScRange;
 
 namespace sc {
@@ -26,7 +26,7 @@ class DataStreamDlg : public weld::GenericDialogController
 {
     ScDocShell *m_pDocShell;
 
-    std::unique_ptr<URLBox> m_xCbUrl;
+    std::unique_ptr<SvtURLBox> m_xCbUrl;
     std::unique_ptr<weld::Button> m_xBtnBrowse;
     std::unique_ptr<weld::RadioButton> m_xRBValuesInLine;
     std::unique_ptr<weld::RadioButton> m_xRBAddressValue;

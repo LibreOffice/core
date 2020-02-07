@@ -33,7 +33,7 @@
 #include "iconcdlg.hxx"
 
 /// ComboBox-Control for URL's with History and Autocompletion
-class SvxHyperURLBox : public URLBox, public DropTargetHelper
+class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;

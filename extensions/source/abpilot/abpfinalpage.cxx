@@ -45,7 +45,7 @@ namespace abp
     FinalPage::FinalPage(weld::Container* pPage, OAddressBookSourcePilot* pWizard)
         : AddressBookSourcePage(pPage, pWizard, "modules/sabpilot/ui/datasourcepage.ui",
                                 "DataSourcePage")
-        , m_xLocation(new URLBox(m_xBuilder->weld_combo_box("location")))
+        , m_xLocation(new SvtURLBox(m_xBuilder->weld_combo_box("location")))
         , m_xBrowse(m_xBuilder->weld_button("browse"))
         , m_xRegisterName(m_xBuilder->weld_check_button("available"))
         , m_xEmbed(m_xBuilder->weld_check_button("embed"))

@@ -3191,7 +3191,7 @@ namespace svxform
         : GenericDialogController(pParent, "svx/ui/addinstancedialog.ui", "AddInstanceDialog")
         , m_xNameED(m_xBuilder->weld_entry("name"))
         , m_xURLFT(m_xBuilder->weld_label("urlft"))
-        , m_xURLED(new URLBox(m_xBuilder->weld_combo_box("url")))
+        , m_xURLED(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
         , m_xFilePickerBtn(m_xBuilder->weld_button("browse"))
         , m_xLinkInstanceCB(m_xBuilder->weld_check_button("link"))
         , m_xAltTitle(m_xBuilder->weld_label("alttitle"))

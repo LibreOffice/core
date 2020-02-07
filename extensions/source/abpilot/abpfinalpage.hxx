@@ -31,7 +31,7 @@ namespace abp
 
     class FinalPage final : public AddressBookSourcePage
     {
-        std::unique_ptr<URLBox> m_xLocation;
+        std::unique_ptr<SvtURLBox> m_xLocation;
         std::unique_ptr<weld::Button> m_xBrowse;
         std::unique_ptr<weld::CheckButton> m_xRegisterName;
         std::unique_ptr<weld::CheckButton> m_xEmbed;

@@ -36,11 +36,11 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT(weld::Widget* pPage, weld::Dialog* pD
     , m_xBuilder(Application::CreateBuilder(pPage, "filter/ui/xmlfiltertabpagetransformation.ui"))
     , m_xContainer(m_xBuilder->weld_widget("XmlFilterTabPageTransformation"))
     , m_xEDDocType(m_xBuilder->weld_entry("doc"))
-    , m_xEDExportXSLT(new URLBox(m_xBuilder->weld_combo_box("xsltexport")))
+    , m_xEDExportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box("xsltexport")))
     , m_xPBExprotXSLT(m_xBuilder->weld_button("browseexport"))
-    , m_xEDImportXSLT(new URLBox(m_xBuilder->weld_combo_box("xsltimport")))
+    , m_xEDImportXSLT(new SvtURLBox(m_xBuilder->weld_combo_box("xsltimport")))
     , m_xPBImportXSLT(m_xBuilder->weld_button("browseimport"))
-    , m_xEDImportTemplate(new URLBox(m_xBuilder->weld_combo_box("tempimport")))
+    , m_xEDImportTemplate(new SvtURLBox(m_xBuilder->weld_combo_box("tempimport")))
     , m_xPBImportTemplate(m_xBuilder->weld_button("browsetemp"))
     , m_xCBNeedsXSLT2(m_xBuilder->weld_check_button("filtercb"))
 {
@@ -81,7 +81,7 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
     }
 }
 
-void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
+void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
 {
     OUString aPath;
 
@@ -114,7 +114,7 @@ void XMLFilterTabPageXSLT::SetURL( URLBox& rURLBox, const OUString& rURL )
     }
 }
 
-OUString XMLFilterTabPageXSLT::GetURL(const URLBox& rURLBox)
+OUString XMLFilterTabPageXSLT::GetURL(const SvtURLBox& rURLBox)
 {
     OUString aURL;
     OUString aStrPath(rURLBox.get_active_text());
@@ -134,7 +134,7 @@ OUString XMLFilterTabPageXSLT::GetURL(const URLBox& rURLBox)
 
 IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, weld::Button&, rButton, void )
 {
-    URLBox* pURLBox;
+    SvtURLBox* pURLBox;
 
     if( &rButton == m_xPBExprotXSLT.get() )
     {

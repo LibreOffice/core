@@ -28,8 +28,8 @@ class filter_info_impl;
 class XMLFilterTabPageXSLT
 {
 private:
-    void SetURL(URLBox& rURLBox, const OUString& rURL);
-    static OUString GetURL(const URLBox& rURLBox);
+    void SetURL(SvtURLBox& rURLBox, const OUString& rURL);
+    static OUString GetURL(const SvtURLBox& rURLBox);
 
     OUString sInstPath;
 
@@ -46,11 +46,11 @@ public:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget>  m_xContainer;
     std::unique_ptr<weld::Entry>   m_xEDDocType;
-    std::unique_ptr<URLBox>        m_xEDExportXSLT;
+    std::unique_ptr<SvtURLBox>     m_xEDExportXSLT;
     std::unique_ptr<weld::Button>  m_xPBExprotXSLT;
-    std::unique_ptr<URLBox>        m_xEDImportXSLT;
+    std::unique_ptr<SvtURLBox>     m_xEDImportXSLT;
     std::unique_ptr<weld::Button>  m_xPBImportXSLT;
-    std::unique_ptr<URLBox>        m_xEDImportTemplate;
+    std::unique_ptr<SvtURLBox>     m_xEDImportTemplate;
     std::unique_ptr<weld::Button>  m_xPBImportTemplate;
     std::unique_ptr<weld::CheckButton> m_xCBNeedsXSLT2;
 };

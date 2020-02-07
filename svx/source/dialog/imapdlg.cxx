@@ -106,7 +106,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, weld::Windo
     , m_xIMapWnd(new IMapWindow(_pBindings->GetActiveFrame(), m_xDialog.get()))
     , m_xTbxIMapDlg1(m_xBuilder->weld_toolbar("toolbar"))
     , m_xFtURL(m_xBuilder->weld_label("urlft"))
-    , m_xURLBox(new URLBox(m_xBuilder->weld_combo_box("url")))
+    , m_xURLBox(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
     , m_xFtText(m_xBuilder->weld_label("textft"))
     , m_xEdtText(m_xBuilder->weld_entry("text"))
     , m_xFtTarget(m_xBuilder->weld_label("targetft"))

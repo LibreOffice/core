@@ -220,7 +220,7 @@ namespace pcr
     }
 
     //= OFileUrlControl
-    OFileUrlControl::OFileUrlControl(std::unique_ptr<URLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+    OFileUrlControl::OFileUrlControl(std::unique_ptr<SvtURLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OFileUrlControl_Base(PropertyControlType::Unknown, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
         getTypedControlWindow()->DisableHistory();

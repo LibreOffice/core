@@ -25,14 +25,14 @@
 
 namespace weld { class ComboBox; };
 class URLBoxItemWindow;
-class URLBox;
+class SvtURLBox;
 
 class SfxURLToolBoxControl_Impl final : public SfxToolBoxControl
 {
 private:
     bool                    m_bModified;
 
-    URLBox*                 GetURLBox() const;
+    SvtURLBox*              GetURLBox() const;
     URLBoxItemWindow*       GetURLBoxItemWindow() const;
     void                    OpenURL( const OUString& rName ) const;
 

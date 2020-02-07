@@ -115,11 +115,11 @@ namespace pcr
     };
 
     //= OFileUrlControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, URLBox> OFileUrlControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, SvtURLBox> OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:
-        OFileUrlControl(std::unique_ptr<URLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
+        OFileUrlControl(std::unique_ptr<SvtURLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
