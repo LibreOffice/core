@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 #include <basic/sbx.hxx>
 #include <sb.hxx>
-#include <basic/sbxprop.hxx>
+#include <sbxprop.hxx>
 #include <string.h>
 #include <image.hxx>
 #include <codegen.hxx>
