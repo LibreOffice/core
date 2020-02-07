@@ -943,6 +943,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf130494, "tdf130494.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+    {
+        return;
+    }
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
+    // keep direct formatting of table cell paragraph with removed highlighting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
