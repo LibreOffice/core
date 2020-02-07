@@ -37,7 +37,7 @@ namespace framework{
             Delegating of the ownership can be influenced from
             outside. If closing isn't possible (because the
             needed interface isn't available) dispose() is tried instead.
-            Al possible exception are handled inside.
+            All possible exception are handled inside.
             So the user of this method has to look for the return value only.
 
     @attention  The given resource will not be cleared.
