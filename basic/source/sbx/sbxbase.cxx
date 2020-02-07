@@ -23,10 +23,10 @@
 #include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
-#include <basic/sbxfac.hxx>
-#include <basic/sbxform.hxx>
+#include <sbxfac.hxx>
+#include <sbxform.hxx>
 #include <basic/sbxmeth.hxx>
-#include <basic/sbxprop.hxx>
+#include <sbxprop.hxx>
 #include <sbxbase.hxx>
 
 #include <rtl/ustring.hxx>
