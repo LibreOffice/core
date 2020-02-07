@@ -661,7 +661,10 @@ void SwFrame::MakePos()
 
                 if( GetUpper()->IsFlyFrame() )
                 {
-                    aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+                    SwFlyFrame& rFly = static_cast<SwFlyFrame&>(*GetUpper());
+                    aFrm.Pos() += rFly.ContentPos();
+                    if (rFly.GetFrameFormat().getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION))
+                        rFly.InvalidatePos();
                 }
                 else
                 {
