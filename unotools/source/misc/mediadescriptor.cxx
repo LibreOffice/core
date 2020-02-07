@@ -222,6 +222,12 @@ const OUString& MediaDescriptor::PROP_REFERRER()
     return sProp;
 }
 
+const OUString& MediaDescriptor::PROP_REPLACEABLE()
+{
+    static const OUString sProp("Replaceable");
+    return sProp;
+}
+
 const OUString& MediaDescriptor::PROP_STATUSINDICATOR()
 {
     static const OUString sProp("StatusIndicator");
