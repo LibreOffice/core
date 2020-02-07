@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0e3eb84_c044a5c6",
+        "filename": "filter/source/msfilter/dffpropset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-07T08:35:38Z",
+      "side": 1,
+      "message": "In many cases, negative value means an exact value and a positive one means an \"at least\" value (or the other way around), but reading the spec, there is nothing like that here. The UI does not allow setting negative values, either. So I think the approach is fair enough.\n\nThough, wouldn\u0027t it be readable to (instead) write:\n\n if (static_cast\u003csal_Int32\u003e(nContent) \u003c 0)\n\n?",
+      "revId": "a14718caccef4d55a6ffa8ba6a22db895a0ab3aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
