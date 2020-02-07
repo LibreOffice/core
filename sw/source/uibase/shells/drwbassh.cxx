@@ -695,18 +695,53 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case SID_OBJECT_ALIGN_MIDDLE:
             case SID_OBJECT_ALIGN_DOWN:
             case SID_OBJECT_ALIGN:
-                if ( !rSh.IsAlignPossible() || bProtected )
-                    rSet.DisableItem( nWhich );
-                else if ( rSh.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                 {
+                    bool bDisableThis = false;
+                    bool bDisableHoriz = false;
+                    bool bHoriz = (nWhich == SID_OBJECT_ALIGN_LEFT || nWhich == SID_OBJECT_ALIGN_CENTER ||
+                            nWhich == SID_OBJECT_ALIGN_RIGHT);
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    //if only one object is selected it can only be vertically
-                    // aligned because it is character bound
-                    if( rMarkList.GetMarkCount() == 1 )
+                    if ( !rSh.IsAlignPossible() || bProtected )
                     {
-                        rSet.DisableItem(SID_OBJECT_ALIGN_LEFT);
-                        rSet.DisableItem(SID_OBJECT_ALIGN_CENTER);
-                        rSet.DisableItem(SID_OBJECT_ALIGN_RIGHT);
+                        bDisableThis = true;
+                        rSet.DisableItem( nWhich );
+                    }
+                    else if ( rSh.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
+                    {
+                        //if only one object is selected it can only be vertically
+                        // aligned because it is character bound
+                        if( rMarkList.GetMarkCount() == 1 )
+                        {
+                            bDisableHoriz = true;
+                            rSet.DisableItem(SID_OBJECT_ALIGN_LEFT);
+                            rSet.DisableItem(SID_OBJECT_ALIGN_CENTER);
+                            rSet.DisableItem(SID_OBJECT_ALIGN_RIGHT);
+                        }
+                    }
+
+                    if (bHoriz && !bDisableThis && !bDisableHoriz &&
+                        rMarkList.GetMarkCount() == 1)
+                    {
+                        sal_Int16 nHoriOrient = -1;
+                        switch(nWhich)
+                        {
+                            case SID_OBJECT_ALIGN_LEFT:
+                                nHoriOrient = text::HoriOrientation::LEFT;
+                                break;
+                            case SID_OBJECT_ALIGN_CENTER:
+                                nHoriOrient = text::HoriOrientation::CENTER;
+                                break;
+                            case SID_OBJECT_ALIGN_RIGHT:
+                                nHoriOrient = text::HoriOrientation::RIGHT;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat(pObj);
+                        SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
+                        rSet.Put(SfxBoolItem(nWhich, aHOrient.GetHoriOrient() == nHoriOrient));
                     }
                 }
                 break;
