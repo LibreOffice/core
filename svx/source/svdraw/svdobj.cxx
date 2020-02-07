@@ -394,17 +394,16 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 
 SdrObject::~SdrObject()
 {
-    // tell all the registered ObjectUsers that the page is in destruction
-    sdr::ObjectUserVector aListCopy(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end());
-    for(sdr::ObjectUser* pObjectUser : aListCopy)
+    // Tell all the registered ObjectUsers that the page is in destruction.
+    // And clear the vector. This means that user do not need to call RemoveObjectUser()
+    // when they get called from ObjectInDestruction().
+    sdr::ObjectUserVector aList;
+    aList.swap(mpImpl->maObjectUsers);
+    for(sdr::ObjectUser* pObjectUser : aList)
     {
         DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
         pObjectUser->ObjectInDestruction(*this);
     }
-
-    // Clear the vector. This means that user do not need to call RemoveObjectUser()
-    // when they get called from ObjectInDestruction().
-    mpImpl->maObjectUsers.clear();
 
     // UserCall
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
