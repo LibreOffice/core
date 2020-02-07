@@ -21,9 +21,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_shells, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     svl \
+    svx \
+    svxcore \
     sw \
     test \
     unotest \
