@@ -73,10 +73,10 @@ void LibBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const SfxPoolI
         return;
 
     if (eState != SfxItemState::DEFAULT)
-        pBox->Disable();
+        pBox->set_sensitive(false);
     else
     {
-        pBox->Enable();
+        pBox->set_sensitive(true);
         pBox->Update(dynamic_cast<SfxStringItem const*>(pState));
     }
 }
@@ -87,17 +87,36 @@ VclPtr<vcl::Window> LibBoxControl::CreateItemWindow(vcl::Window* pParent)
 }
 
 DocListenerBox::DocListenerBox(vcl::Window* pParent)
-    : ListBox(pParent, WinBits(WB_BORDER | WB_DROPDOWN))
+    : InterimItemWindow(pParent, "modules/BasicIDE/ui/combobox.ui", "ComboBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     , maNotifier(*this)
 {
+    m_xWidget->connect_changed(LINK(this, DocListenerBox, SelectHdl));
+    m_xWidget->connect_key_press(LINK(this, DocListenerBox, KeyInputHdl));
 }
+
+void DocListenerBox::set_sensitive(bool bSensitive)
+{
+    Enable(bSensitive);
+    m_xWidget->set_sensitive(bSensitive);
+}
+
+IMPL_LINK(DocListenerBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return HandleKeyInput(rKEvt);
+}
+
+bool DocListenerBox::HandleKeyInput(const KeyEvent& rKEvt) { return ChildKeyInput(rKEvt); }
+
+IMPL_LINK_NOARG(DocListenerBox, SelectHdl, weld::ComboBox&, void) { Select(); }
 
 DocListenerBox::~DocListenerBox() { disposeOnce(); }
 
 void DocListenerBox::dispose()
 {
     maNotifier.dispose();
-    ListBox::dispose();
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
 }
 
 /// Only calls FillBox(). Parameter is not used.
@@ -133,10 +152,14 @@ LibBox::LibBox(vcl::Window* pParent)
     FillBox();
     mbIgnoreSelect = true; // do not yet transfer select of 0
     mbFillBox = true;
-    SelectEntryPos(0);
-    maCurrentText = GetEntry(0);
-    SetSizePixel(Size(250, 200));
+    m_xWidget->set_active(0);
+    maCurrentText = m_xWidget->get_text(0);
     mbIgnoreSelect = false;
+
+    m_xWidget->connect_focus_in(LINK(this, LibBox, FocusInHdl));
+    m_xWidget->connect_focus_out(LINK(this, LibBox, FocusOutHdl));
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
 LibBox::~LibBox() { disposeOnce(); }
@@ -159,8 +182,8 @@ void LibBox::Update(const SfxStringItem* pItem)
             maCurrentText = IDEResId(RID_STR_ALL);
     }
 
-    if (GetSelectedEntry() != maCurrentText)
-        SelectEntry(maCurrentText);
+    if (m_xWidget->get_active_text() != maCurrentText)
+        m_xWidget->set_active_text(maCurrentText);
 }
 
 void LibBox::ReleaseFocus()
@@ -180,18 +203,20 @@ void LibBox::ReleaseFocus()
 
 void LibBox::FillBox()
 {
-    SetUpdateMode(false);
+    m_xWidget->freeze();
     mbIgnoreSelect = true;
 
-    maCurrentText = GetSelectedEntry();
+    maCurrentText = m_xWidget->get_active_text();
 
-    SelectEntryPos(0);
+    m_xWidget->set_active(0);
     ClearBox();
 
     // create list box entries
-    sal_Int32 nPos = InsertEntry(IDEResId(RID_STR_ALL));
-    SetEntryData(nPos, new LibEntry(ScriptDocument::getApplicationScriptDocument(),
-                                    LIBRARY_LOCATION_UNKNOWN, OUString()));
+    LibEntry* pEntry = new LibEntry(ScriptDocument::getApplicationScriptDocument(),
+                                    LIBRARY_LOCATION_UNKNOWN, OUString());
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    m_xWidget->append(sId, IDEResId(RID_STR_ALL));
+
     InsertEntries(ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER);
     InsertEntries(ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE);
 
@@ -202,14 +227,10 @@ void LibBox::FillBox()
         InsertEntries(doc, LIBRARY_LOCATION_DOCUMENT);
     }
 
-    SetUpdateMode(true);
+    m_xWidget->thaw();
 
-    SelectEntry(maCurrentText);
-    if (!GetSelectedEntryCount())
-    {
-        SelectEntryPos(GetEntryCount());
-        maCurrentText = GetSelectedEntry();
-    }
+    m_xWidget->set_active_text(maCurrentText);
+    maCurrentText = m_xWidget->get_active_text();
     mbIgnoreSelect = false;
 }
 
@@ -227,71 +248,71 @@ void LibBox::InsertEntries(const ScriptDocument& rDocument, LibraryLocation eLoc
         {
             OUString aName(rDocument.getTitle(eLocation));
             OUString aEntryText(CreateMgrAndLibStr(aName, aLibName));
-            sal_Int32 nPos = InsertEntry(aEntryText);
-            SetEntryData(nPos, new LibEntry(rDocument, eLocation, aLibName));
+            LibEntry* pEntry = new LibEntry(rDocument, eLocation, aLibName);
+            m_xWidget->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), aEntryText);
         }
     }
 }
 
-bool LibBox::PreNotify(NotifyEvent& rNEvt)
+bool LibBox::HandleKeyInput(const KeyEvent& rKEvt)
 {
     bool bDone = false;
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+
+    sal_uInt16 nKeyCode = rKEvt.GetKeyCode().GetCode();
+    switch (nKeyCode)
     {
-        KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        sal_uInt16 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
-        switch (nKeyCode)
+        case KEY_RETURN:
         {
-            case KEY_RETURN:
-            {
-                NotifyIDE();
-                bDone = true;
-            }
-            break;
-            case KEY_ESCAPE:
-            {
-                SelectEntry(maCurrentText);
-                ReleaseFocus();
-                bDone = true;
-            }
-            break;
+            NotifyIDE();
+            bDone = true;
         }
-    }
-    else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
-    {
-        if (mbFillBox)
+        break;
+        case KEY_ESCAPE:
         {
-            FillBox();
-            mbFillBox = false;
+            m_xWidget->set_active_text(maCurrentText);
+            ReleaseFocus();
+            bDone = true;
         }
-    }
-    else if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
-    {
-        if (!HasChildPathFocus(true))
-        {
-            mbIgnoreSelect = true;
-            mbFillBox = true;
-        }
+        break;
     }
 
-    return bDone || ListBox::PreNotify(rNEvt);
+    return bDone || DocListenerBox::HandleKeyInput(rKEvt);
+}
+
+IMPL_LINK_NOARG(LibBox, FocusInHdl, weld::Widget&, void)
+{
+    if (mbFillBox)
+    {
+        FillBox();
+        mbFillBox = false;
+    }
+}
+
+IMPL_LINK_NOARG(LibBox, FocusOutHdl, weld::Widget&, void)
+{
+    if (!m_xWidget
+             ->has_focus()) // comboboxes can be comprised of multiple widgets, ensure all have lost focus
+    {
+        mbIgnoreSelect = true;
+        mbFillBox = true;
+    }
 }
 
 void LibBox::Select()
 {
-    if (!IsTravelSelect())
+    if (m_xWidget->changed_by_menu())
     {
         if (!mbIgnoreSelect)
             NotifyIDE();
         else
-            SelectEntry(maCurrentText); // since 306... (Select after Escape)
+            m_xWidget->set_active_text(maCurrentText); // (Select after Escape)
     }
 }
 
 void LibBox::NotifyIDE()
 {
-    sal_Int32 nSelPos = GetSelectedEntryPos();
-    if (LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(nSelPos)))
+    LibEntry* pEntry = reinterpret_cast<LibEntry*>(m_xWidget->get_active_id().toInt64());
+    if (pEntry)
     {
         const ScriptDocument& aDocument(pEntry->GetDocument());
         SfxUnoAnyItem aDocumentItem(SID_BASICIDE_ARG_DOCUMENT_MODEL,
@@ -307,13 +328,13 @@ void LibBox::NotifyIDE()
 
 void LibBox::ClearBox()
 {
-    sal_Int32 nCount = GetEntryCount();
+    sal_Int32 nCount = m_xWidget->get_count();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(i));
+        LibEntry* pEntry = reinterpret_cast<LibEntry*>(m_xWidget->get_id(i).toInt64());
         delete pEntry;
     }
-    ListBox::Clear();
+    m_xWidget->clear();
 }
 
 // class LanguageBoxControl ----------------------------------------------
@@ -346,10 +367,10 @@ void LanguageBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const Sfx
     if (LanguageBox* pBox = static_cast<LanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {
         if (eState != SfxItemState::DEFAULT)
-            pBox->Disable();
+            pBox->set_sensitive(false);
         else
         {
-            pBox->Enable();
+            pBox->set_sensitive(true);
             pBox->Update(dynamic_cast<SfxStringItem const*>(pItem));
         }
     }
@@ -367,8 +388,9 @@ LanguageBox::LanguageBox(vcl::Window* pParent)
     , msDefaultLanguageStr(IDEResId(RID_STR_TRANSLATION_DEFAULT))
     , mbIgnoreSelect(false)
 {
-    SetSizePixel(Size(210, 200));
     FillBox();
+
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
 LanguageBox::~LanguageBox() { disposeOnce(); }
@@ -381,21 +403,21 @@ void LanguageBox::dispose()
 
 void LanguageBox::FillBox()
 {
-    SetUpdateMode(false);
+    m_xWidget->freeze();
     mbIgnoreSelect = true;
-    msCurrentText = GetSelectedEntry();
+    msCurrentText = m_xWidget->get_active_text();
     ClearBox();
 
     std::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
     if (pCurMgr->isLibraryLocalized())
     {
-        Enable();
+        set_sensitive(true);
         Locale aDefaultLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
         Locale aCurrentLocale = pCurMgr->getStringResourceManager()->getCurrentLocale();
         Sequence<Locale> aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
         sal_Int32 i, nCount = aLocaleSeq.getLength();
-        sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
+        sal_Int32 nSelPos = -1;
         for (i = 0; i < nCount; ++i)
         {
             bool bIsDefault = localesAreEqual(aDefaultLocale, pLocale[i]);
@@ -406,44 +428,45 @@ void LanguageBox::FillBox()
             {
                 sLanguage += " " + msDefaultLanguageStr;
             }
-            sal_Int32 nPos = InsertEntry(sLanguage);
-            SetEntryData(nPos, new LanguageEntry(pLocale[i], bIsDefault));
+            LanguageEntry* pEntry = new LanguageEntry(pLocale[i], bIsDefault);
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+            m_xWidget->append(sId, sLanguage);
 
             if (bIsCurrent)
-                nSelPos = nPos;
+                nSelPos = i;
         }
 
-        if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
+        if (nSelPos != -1)
         {
-            SelectEntryPos(nSelPos);
-            msCurrentText = GetSelectedEntry();
+            m_xWidget->set_active(nSelPos);
+            msCurrentText = m_xWidget->get_active_text();
         }
     }
     else
     {
-        InsertEntry(msNotLocalizedStr);
-        SelectEntryPos(0);
-        Disable();
+        m_xWidget->append_text(msNotLocalizedStr);
+        m_xWidget->set_active(0);
+        set_sensitive(false);
     }
 
-    SetUpdateMode(true);
+    m_xWidget->thaw();
     mbIgnoreSelect = false;
 }
 
 void LanguageBox::ClearBox()
 {
-    sal_Int32 nCount = GetEntryCount();
+    sal_Int32 nCount = m_xWidget->get_count();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        LanguageEntry* pEntry = static_cast<LanguageEntry*>(GetEntryData(i));
+        LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xWidget->get_id(i).toInt64());
         delete pEntry;
     }
-    ListBox::Clear();
+    m_xWidget->clear();
 }
 
 void LanguageBox::SetLanguage()
 {
-    LanguageEntry* pEntry = static_cast<LanguageEntry*>(GetSelectedEntryData());
+    LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xWidget->get_active_id().toInt64());
     if (pEntry)
         GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale(pEntry->m_aLocale);
 }
@@ -453,33 +476,31 @@ void LanguageBox::Select()
     if (!mbIgnoreSelect)
         SetLanguage();
     else
-        SelectEntry(msCurrentText); // Select after Escape
+        m_xWidget->set_active_text(msCurrentText); // Select after Escape
 }
 
-bool LanguageBox::PreNotify(NotifyEvent& rNEvt)
+bool LanguageBox::HandleKeyInput(const KeyEvent& rKEvt)
 {
     bool bDone = false;
-    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+
+    sal_uInt16 nKeyCode = rKEvt.GetKeyCode().GetCode();
+    switch (nKeyCode)
     {
-        sal_uInt16 nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-        switch (nKeyCode)
+        case KEY_RETURN:
         {
-            case KEY_RETURN:
-            {
-                SetLanguage();
-                bDone = true;
-            }
-            break;
-            case KEY_ESCAPE:
-            {
-                SelectEntry(msCurrentText);
-                bDone = true;
-            }
-            break;
+            SetLanguage();
+            bDone = true;
         }
+        break;
+        case KEY_ESCAPE:
+        {
+            m_xWidget->set_active_text(msCurrentText);
+            bDone = true;
+        }
+        break;
     }
 
-    return bDone || ListBox::PreNotify(rNEvt);
+    return bDone || DocListenerBox::HandleKeyInput(rKEvt);
 }
 
 void LanguageBox::Update(const SfxStringItem* pItem)
@@ -489,8 +510,8 @@ void LanguageBox::Update(const SfxStringItem* pItem)
     if (pItem && !pItem->GetValue().isEmpty())
     {
         msCurrentText = pItem->GetValue();
-        if (GetSelectedEntry() != msCurrentText)
-            SelectEntry(msCurrentText);
+        if (m_xWidget->get_active_text() != msCurrentText)
+            m_xWidget->set_active_text(msCurrentText);
     }
 }
 

@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/BasicIDE,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/basicmacrodialog \
 	basctl/uiconfig/basicide/ui/breakpointmenus \
+	basctl/uiconfig/basicide/ui/combobox \
 	basctl/uiconfig/basicide/ui/defaultlanguage \
 	basctl/uiconfig/basicide/ui/deletelangdialog \
 	basctl/uiconfig/basicide/ui/dialogpage \
