@@ -84,6 +84,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static const OUString& PROP_PREVIEW();
         static const OUString& PROP_READONLY();
         static const OUString& PROP_REFERRER();
+        static const OUString& PROP_REPLACEABLE();
         static const OUString& PROP_SALVAGEDFILE();
         static const OUString& PROP_STATUSINDICATOR();
         static const OUString& PROP_STREAM();

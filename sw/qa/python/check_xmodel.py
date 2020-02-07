@@ -37,7 +37,8 @@ class TestXModel(unittest.TestCase):
         p5 = PropertyValue(Name="LockPrint", Value=True)
         p6 = PropertyValue(Name="LockSave", Value=True)
         p7 = PropertyValue(Name="LockEditDoc", Value=True)
-        xDoc.setArgs([p1, p2, p3, p4, p5, p6, p7])
+        p8 = PropertyValue(Name="Replaceable", Value=True)
+        xDoc.setArgs([p1, p2, p3, p4, p5, p6, p7, p8])
 
         # Make sure that all properties are returned with getArgs()
         args = xDoc.getArgs()
@@ -48,6 +49,7 @@ class TestXModel(unittest.TestCase):
         self.assertTrue(p5 in args)
         self.assertTrue(p6 in args)
         self.assertTrue(p7 in args)
+        self.assertTrue(p8 in args)
 
         xDoc.close(True)
 
