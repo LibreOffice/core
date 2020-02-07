@@ -79,7 +79,6 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCore
     if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {
         RemoveTabPage("hyperlink");
-        RemoveTabPage("background");
         RemoveTabPage("asianlayout");
     }
     else
@@ -128,7 +127,10 @@ void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
     else if (rId == "background")
     {
-        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
+        SvxBackgroundTabFlags eFlags(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
+        if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
+            eFlags = SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(eFlags)));
         rPage.PageCreated(aSet);
     }
 }
