@@ -1664,7 +1664,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         basegfx::utils::applyLineDashing(
             rPolygon, // source
             *pStroke, // pattern
-            &aPolyPolygonLine, // traget for lines
+            &aPolyPolygonLine, // target for lines
             nullptr, // target for gaps
             fDotDashLength); // full length if available
     }
@@ -1697,7 +1697,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             mrParent.getAntiAliasB2DDraw());
 
         // MM01: not sure - maybe this can be moved out of this loop, but to
-        // keep on the safe side for now, do not relly change something for now
+        // keep on the safe side for now, do not really change something for now
         PostBatchDraw();
     }
 
