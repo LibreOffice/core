@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 #include <ado/Awrapadox.hxx>
 
 namespace connectivity

@@ -16,36 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
-#define INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
 
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#include <comphelper/interaction.hxx>
+#pragma once
+
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-namespace dbtools
+namespace connectivity
 {
-
-    //= OParameterContinuation
-
-    class OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
+    class OIndexHelper;
+    class OIndexColumns final : public sdbcx::OCollection
     {
-        css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
-
+        OIndexHelper* m_pIndex;
+        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual void impl_refresh() override;
     public:
-        OParameterContinuation() { }
-
-        const css::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
-
-        // XInteractionSupplyParameters
-        virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
-
-    private:
-        virtual ~OParameterContinuation() override { }
-        OParameterContinuation(const OParameterContinuation&) = delete;
-        void operator =(const OParameterContinuation&) = delete;
+        OIndexColumns(  OIndexHelper* _pIndex,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< OUString> &_rVector);
     };
-} // dbtools
-#endif // INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

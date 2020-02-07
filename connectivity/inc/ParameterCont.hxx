@@ -16,28 +16,34 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#ifndef INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
-
-#include <connectivity/sdbcx/VCollection.hxx>
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#include <comphelper/interaction.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-namespace connectivity
+namespace dbtools
 {
-    class OTableKeyHelper;
-    class OKeyColumnsHelper final : public connectivity::sdbcx::OCollection
+
+    //= OParameterContinuation
+
+    class OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
     {
-        OTableKeyHelper* m_pKey;
-        virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual void impl_refresh() override;
+        css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
+
     public:
-        OKeyColumnsHelper(  OTableKeyHelper* _pKey,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
+        OParameterContinuation() { }
+
+        const css::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
+
+        // XInteractionSupplyParameters
+        virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
+
+    private:
+        virtual ~OParameterContinuation() override { }
+        OParameterContinuation(const OParameterContinuation&) = delete;
+        void operator =(const OParameterContinuation&) = delete;
     };
-}
-#endif // INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
+} // dbtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

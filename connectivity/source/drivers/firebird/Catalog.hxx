@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {
