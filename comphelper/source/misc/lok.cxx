@@ -188,6 +188,10 @@ bool isWhitelistedLanguage(const OUString& lang)
     if (!isActive())
         return true;
 
+#ifdef ANDROID
+    (void) lang;
+    return true;
+#else
     static bool bInitialized = false;
     static std::vector<OUString> aWhitelist;
     if (!bInitialized)
@@ -228,6 +232,7 @@ bool isWhitelistedLanguage(const OUString& lang)
     }
 
     return false;
+#endif
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);
