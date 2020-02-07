@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0663819_9fa8cdd2",
+        "filename": "external/neon/neon_uri_parse_allow_others.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-07T10:21:58Z",
+      "side": 1,
+      "message": "So it seems it also fails elsewhere after passing the ne_uri_parse, so that it needs wider change than only in URI_SEGCHAR?",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "774fa7cafe38bdc685b824cec4e2d29b96c3d386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
