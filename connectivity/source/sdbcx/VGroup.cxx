@@ -18,7 +18,7 @@
  */
 
 
-#include <connectivity/sdbcx/VGroup.hxx>
+#include <sdbcx/VGroup.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 

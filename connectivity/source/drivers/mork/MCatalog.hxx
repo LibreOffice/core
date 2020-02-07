@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MCATALOG_HXX
 
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

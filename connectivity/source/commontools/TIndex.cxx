@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <connectivity/TIndex.hxx>
-#include <connectivity/TIndexColumns.hxx>
+#include <TIndex.hxx>
+#include <TIndexColumns.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/TTableHelper.hxx>

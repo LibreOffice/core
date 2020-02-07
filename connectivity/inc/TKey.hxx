@@ -17,24 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
-#define INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
+#pragma once
 
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XNamed.hpp>
+#include <connectivity/dbtoolsdllapi.hxx>
+#include "sdbcx/VKey.hxx"
 
 namespace connectivity
 {
-    namespace sdbcx
+    class OTableHelper;
+    class OTableKeyHelper final : public connectivity::sdbcx::OKey
     {
-        typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
-                                                  css::container::XNamed,
-                                                  css::lang::XServiceInfo> ODescriptor_BASE;
-    }
+        OTableHelper*   m_pTable;
+    public:
+        virtual void refreshColumns() override;
+    public:
+        OTableKeyHelper(    OTableHelper* _pTable);
+        OTableKeyHelper(    OTableHelper* _pTable
+                ,const OUString& Name
+                ,const std::shared_ptr<sdbcx::KeyProperties>& _rProps
+            );
+        OTableHelper* getTable() const { return m_pTable; }
+    };
 }
 
-#endif // INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
