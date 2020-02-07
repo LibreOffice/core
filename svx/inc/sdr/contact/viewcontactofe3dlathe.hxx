@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DLATHE_HXX
 
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
 #include <svx/lathe3d.hxx>
 
 

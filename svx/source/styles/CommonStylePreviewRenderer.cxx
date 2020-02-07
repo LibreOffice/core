@@ -9,7 +9,7 @@
  */
 
 #include <memory>
-#include <svx/CommonStylePreviewRenderer.hxx>
+#include <CommonStylePreviewRenderer.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>

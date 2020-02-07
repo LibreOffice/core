@@ -24,11 +24,11 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <editeng/borderline.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
