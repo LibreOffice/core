@@ -43,17 +43,19 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || ENABLE_MERGELIBS
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
 #define aSfxDocumentInfoItem_Impl basctl_source_basicide_basidesh_aSfxDocumentInfoItem_Impl
+#define aSfxUnoAnyItem_Impl basctl_source_basicide_basidesh_aSfxUnoAnyItem_Impl
 #endif
 
 #define ShellClass_basctl_Shell
 #define SFX_TYPEMAP
 #include <basslots.hxx>
 
-#ifdef DISABLE_DYNLOADING
+#if defined(DISABLE_DYNLOADING) || ENABLE_MERGELIBS
 #undef aSfxDocumentInfoItem_Impl
+#undef aSfxUnoAnyItem_Impl
 #endif
 
 #include <iderdll.hxx>
