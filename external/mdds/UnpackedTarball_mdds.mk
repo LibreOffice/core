@@ -11,10 +11,11 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mdds))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-    external/mdds/Wdeprecated-copy.patch \
+    external/mdds/remove-warnings.diff \
+    external/mdds/delta-signed-int.diff \
 ))
 
 # vim: set noet sw=4 ts=4:
