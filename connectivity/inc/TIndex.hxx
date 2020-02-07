@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_TKEY_HXX
-#define INCLUDED_CONNECTIVITY_TKEY_HXX
+#pragma once
 
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <connectivity/sdbcx/VKey.hxx>
+#include "sdbcx/VIndex.hxx"
 
 namespace connectivity
 {
     class OTableHelper;
-    class OTableKeyHelper final : public connectivity::sdbcx::OKey
+    class OIndexHelper final : public connectivity::sdbcx::OIndex
     {
         OTableHelper*   m_pTable;
     public:
         virtual void refreshColumns() override;
     public:
-        OTableKeyHelper(    OTableHelper* _pTable);
-        OTableKeyHelper(    OTableHelper* _pTable
-                ,const OUString& Name
-                ,const std::shared_ptr<sdbcx::KeyProperties>& _rProps
+        OIndexHelper(   OTableHelper* _pTable);
+        OIndexHelper(   OTableHelper* _pTable,
+                const OUString& Name,
+                const OUString& Catalog,
+                bool _isUnique,
+                bool _isPrimaryKeyIndex,
+                bool _isClustered
             );
         OTableHelper* getTable() const { return m_pTable; }
     };
 }
-#endif // INCLUDED_CONNECTIVITY_TKEY_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

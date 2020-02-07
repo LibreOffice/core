@@ -19,7 +19,7 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <TConnection.hxx>
-#include <connectivity/ParameterCont.hxx>
+#include <ParameterCont.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

@@ -19,7 +19,7 @@
 
 #include <dbase/DIndexColumns.hxx>
 #include <dbase/DTable.hxx>
-#include <connectivity/sdbcx/VIndexColumn.hxx>
+#include <sdbcx/VIndexColumn.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;

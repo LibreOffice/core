@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/types.hxx>
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <connectivity/sdbcx/VDescriptor.hxx>

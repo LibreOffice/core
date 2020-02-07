@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SQLSCAN_HXX
-#define INCLUDED_CONNECTIVITY_SQLSCAN_HXX
+#pragma once
 
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -65,7 +64,5 @@ namespace connectivity
         sal_Int32 GetCurrentPos() const { return m_nCurrentPos; }
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

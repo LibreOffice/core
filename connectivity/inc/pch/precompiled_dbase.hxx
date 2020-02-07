@@ -219,7 +219,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <connectivity/sdbcx/VCatalog.hxx>
+#include <sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <propertyids.hxx>
