@@ -10,7 +10,7 @@
  LD = link.exe
  LDFLAGS = /nologo
  LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
-+LDFLAGS = $(LDFLAGS) /DEBUG 
++LDFLAGS = $(LDFLAGS) /DEBUG /OPT:REF
  LIBS =
  
  # The archiver and its options.
