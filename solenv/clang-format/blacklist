@@ -375,6 +375,9 @@ basic/inc/sbobjmod.hxx
 basic/inc/sbprop.hxx
 basic/inc/sbstdobj.hxx
 basic/inc/sbxbase.hxx
+basic/inc/sbxfac.hxx
+basic/inc/sbxform.hxx
+basic/inc/sbxprop.hxx
 basic/qa/cppunit/basic_coverage.cxx
 basic/qa/cppunit/basictest.cxx
 basic/qa/cppunit/basictest.hxx
@@ -5577,11 +5580,8 @@ include/basic/sbuno.hxx
 include/basic/sbx.hxx
 include/basic/sbxcore.hxx
 include/basic/sbxdef.hxx
-include/basic/sbxfac.hxx
-include/basic/sbxform.hxx
 include/basic/sbxmeth.hxx
 include/basic/sbxobj.hxx
-include/basic/sbxprop.hxx
 include/basic/sbxvar.hxx
 include/basic/vbahelper.hxx
 include/canvas/base/basemutexhelper.hxx

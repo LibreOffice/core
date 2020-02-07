@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBXPROP_HXX
-#define INCLUDED_BASIC_SBXPROP_HXX
+#pragma once
 
 #include <basic/sbxvar.hxx>
-#include <basic/basicdllapi.h>
 
 class SbxProperty : public SbxVariable
 {
@@ -35,7 +33,5 @@ public:
     virtual SbxClassType GetClass() const override;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
