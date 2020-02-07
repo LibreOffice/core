@@ -1122,6 +1122,14 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
                 ok = true;
             }
         }
+        else if (rArg.Name == "Replaceable")
+        {
+            if (rArg.Value >>= bValue)
+            {
+                pMedium->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bValue));
+                ok = true;
+            }
+        }
         if (!ok)
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,

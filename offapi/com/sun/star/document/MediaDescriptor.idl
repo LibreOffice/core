@@ -596,6 +596,19 @@ service MediaDescriptor
         @since LibreOffice 6.4
      */
     [optional,property] boolean LockEditDoc;
+
+    /** Mark the document as replaceable / a placeholder
+
+        <p>Normally a document is always opened in a new frame. If this property is
+        set to true, this document just acts as a placeholder while it's unmodified.
+        I.e. the next opened document from its frame will close and replace it.</p>
+
+        <p>This defaults to false, except for the default template of a LibreOffice
+        module, referenced as "private:factory/&lt;module&gt;".</p>
+
+        @since LibreOffice 7.0
+     */
+    [optional,property] boolean Replaceable;
 };
 
 
