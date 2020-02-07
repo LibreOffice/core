@@ -20,10 +20,17 @@
 
 # PrecompiledHeader class
 
-ifneq ($(gb_ENABLE_PCH),)
-
 # Use different PCH file depending on whether we use debugging symbols.
 gb_PrecompiledHeader__get_debugdir = $(if $(call gb_LinkTarget__symbols_enabled,$(1)),debug,nodebug)
+
+# $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
+define gb_PrecompiledHeader_generate_timestamp_rule
+$(call gb_LinkTarget_get_pch_timestamp,$(1)) :
+	mkdir -p $$(dir $$@) && touch $$@
+
+endef
+
+ifneq ($(gb_ENABLE_PCH),)
 
 # IMPORTANT: Since these defines get expanded, every $ needs to be doubled to $$, except
 # for $(1)'s and things that are constant.
@@ -69,15 +76,6 @@ $(call gb_PrecompiledHeader_get_clean_target,$(1)) :
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).flags \
 			$$(call gb_PrecompiledHeader_get_target,$(1),$(3)).reuse \
 			$$(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)))
-
-endef
-
-endif
-
-# $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
-define gb_PrecompiledHeader_generate_timestamp_rule
-$(call gb_LinkTarget_get_pch_timestamp,$(1)) :
-	mkdir -p $$(dir $$@) && touch $$@
 
 endef
 
@@ -159,5 +157,7 @@ $(if $(filter-out $(2),$(1)),$(filter-out $(2),$(1)), \
 	,) \
 )
 endef
+
+endif
 
 # vim: set noet sw=4:
