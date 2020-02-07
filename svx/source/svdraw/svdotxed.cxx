@@ -29,7 +29,7 @@
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
-#include <svx/textchain.hxx>
+#include <textchain.hxx>
 
 
 bool SdrTextObj::HasTextEdit() const

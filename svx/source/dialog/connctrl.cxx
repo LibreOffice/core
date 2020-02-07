@@ -23,7 +23,7 @@
 #include <svx/dlgutil.hxx>
 
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdpage.hxx>

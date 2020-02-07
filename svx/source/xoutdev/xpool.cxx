@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <svx/xflbckit.hxx>
-#include <svx/xftshtit.hxx>
+#include <xftshtit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflclit.hxx>

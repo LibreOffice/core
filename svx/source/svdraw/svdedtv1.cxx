@@ -34,7 +34,7 @@
 #include <svx/svditer.hxx>
 #include <svx/strings.hrc>
 
-#include <svx/AffineMatrixItem.hxx>
+#include <AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/rectenum.hxx>

@@ -25,7 +25,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
 
