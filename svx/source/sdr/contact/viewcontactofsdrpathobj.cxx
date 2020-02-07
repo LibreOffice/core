@@ -22,7 +22,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>

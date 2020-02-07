@@ -19,7 +19,7 @@
 
 #include <sdr/properties/e3dextrudeproperties.hxx>
 #include <svl/itemset.hxx>
-#include <svx/extrud3d.hxx>
+#include <extrud3d.hxx>
 
 
 namespace sdr::properties

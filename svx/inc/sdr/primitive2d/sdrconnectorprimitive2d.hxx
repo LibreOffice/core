@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <svx/sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 

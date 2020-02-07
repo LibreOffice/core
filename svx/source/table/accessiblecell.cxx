@@ -26,7 +26,7 @@
 #include "accessiblecell.hxx"
 #include <cell.hxx>
 
-#include <svx/DescriptionGenerator.hxx>
+#include <DescriptionGenerator.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

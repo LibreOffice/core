@@ -21,7 +21,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/hatch.hxx>
-#include <svx/sdr/overlay/overlayobjectcell.hxx>
+#include <sdr/overlay/overlayobjectcell.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

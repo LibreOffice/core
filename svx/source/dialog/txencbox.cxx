@@ -23,7 +23,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/txenctab.hxx>
 #if HAVE_FEATURE_DBCONNECTIVITY
-#include <svx/dbcharsethelper.hxx>
+#include <dbcharsethelper.hxx>
 #endif
 #include <unotools/syslocale.hxx>
 #include <rtl/tencinfo.h>
