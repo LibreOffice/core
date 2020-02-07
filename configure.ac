@@ -2568,7 +2568,7 @@ fi
 
 if test -z "$enable_extensions"; then
     # For iOS and Android disable extensions unless specifically overridden with --enable-extensions.
-    if test $_os != iOS -a $_os != Android; then
+    if test $_os != iOS; then
         enable_extensions=yes
     fi
 fi
