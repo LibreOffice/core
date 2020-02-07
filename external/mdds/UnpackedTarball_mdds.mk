@@ -11,12 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mdds))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,1))
 
-# external/mdds/Wdeprecated-copy.patch upstream at <https://gitlab.com/mdds/mdds/merge_requests/21>
-# "Remove redundantly user-declared private_data copy constructor":
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-    external/mdds/Wdeprecated-copy.patch \
+    external/mdds/remove-warnings.diff \
 ))
 
 # vim: set noet sw=4 ts=4:
