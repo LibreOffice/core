@@ -22,6 +22,30 @@
       "revId": "774fa7cafe38bdc685b824cec4e2d29b96c3d386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6975f11_fd5178d1",
+        "filename": "external/neon/neon_uri_parse_allow_others.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-07T10:42:50Z",
+      "side": 1,
+      "message": "My previous approach would have simply encoded all the OT chars in the whole URI and this is basically the same (except for the scheme, where we just accept http and https anyway). I didn\u0027t see any URI yet, which would use UTF8 in USERINFO, QUERY or FRAGMENT, but generally this could be handled the same. But I don\u0027t have a real preference to limit the change to the path only / just SEGCHAR, or not.",
+      "parentUuid": "c0663819_9fa8cdd2",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "774fa7cafe38bdc685b824cec4e2d29b96c3d386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
