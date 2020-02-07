@@ -662,6 +662,7 @@ void SwFrame::MakePos()
                 if( GetUpper()->IsFlyFrame() )
                 {
                     aFrm.Pos() += static_cast<SwFlyFrame*>(GetUpper())->ContentPos();
+                    GetUpper()->InvalidatePrt();
                 }
                 else
                 {
