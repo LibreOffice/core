@@ -79,7 +79,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_eUse( rCpy.ReadUseOn() )
     , m_IsLandscape( rCpy.GetLandscape() )
     , m_IsHidden( rCpy.IsHidden() )
-    , m_IsFootnoteInfo( rCpy.GetFootnoteInfo() )
+    , m_FootnoteInfo( rCpy.GetFootnoteInfo() )
     , m_pdList( nullptr )
 {
     if (rCpy.m_pTextFormatColl && rCpy.m_aDepends.IsListeningTo(rCpy.m_pTextFormatColl))
