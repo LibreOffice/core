@@ -788,6 +788,20 @@ weld::Window* PrinterController::getWindow() const
 
 void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
+    VclPtr<Printer> xPrinter = mpImplData->mxPrinter;
+
+    Size aPaperSize;          // Save current paper size
+    Orientation eOrientation = Orientation::Portrait; // Save current paper orientation
+    bool bSavedSizeOrientation = false;
+
+    // #tdf 126744 Transfer paper size and orientation settings to newly selected printer
+    if ( xPrinter.get() )
+    {
+        aPaperSize = xPrinter->GetPaperSize();
+        eOrientation = xPrinter->GetOrientation();
+        bSavedSizeOrientation = true;
+    }
+
     mpImplData->mxPrinter = i_rPrinter;
     setValue( "Name",
               css::uno::makeAny( i_rPrinter->GetName() ) );
@@ -795,6 +809,13 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
+
+    if ( bSavedSizeOrientation )
+    {
+          mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
+          mpImplData->mxPrinter->SetOrientation(eOrientation);
+    }
+
     mpImplData->mbPapersizeFromUser = false;
     mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
