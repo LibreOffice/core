@@ -1780,8 +1780,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     for( const auto& rProp : std::as_const(aValues) )
                     {
-                        if ( rProp.Name.startsWith("Char") && rProp.Name != "CharStyleName" && rProp.Name != "CharInteropGrabBag" )
-                            xParaProps->setPropertyValue( rProp.Name, rProp.Value );
+                        if ( m_pLastCharacterContext.get() && rProp.Name.startsWith("Char") && rProp.Name != "CharStyleName" && rProp.Name != "CharInteropGrabBag" )
+                        {
+                            for( const auto& rCurrentCharProp : m_pLastCharacterContext->GetPropertyValues() )
+                            {
+                                if ( rCurrentCharProp == rProp )
+                                {
+                                    xParaProps->setPropertyValue( rProp.Name, rProp.Value );
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
