@@ -485,6 +485,18 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     // - Expected: Header, section 2
     // - Actual  : First page header, section 2
     // i.e. both the header and the footer on page 3 was wrong.
+
+    // Additional problem: top margin on page 3 was wrong.
+    if (mbExported)
+    {
+        xmlDocPtr pXml = parseExport("word/document.xml");
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2200
+        // - Actual  : 2574
+        // i.e. the top margin on page 3 was too large and now matches the value from the input
+        // document.
+        assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar", "top", "2200");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
