@@ -52,13 +52,13 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
-#include <svx/sdgcoitm.hxx>
+#include <sdgcoitm.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdggaitm.hxx>
-#include <svx/sdginitm.hxx>
+#include <sdginitm.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/sdgtritm.hxx>
+#include <sdgtritm.hxx>
 #include <editeng/eeitem.hxx>
 #include <sdr/properties/graphicproperties.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>

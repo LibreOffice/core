@@ -20,7 +20,7 @@
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrellipseprimitive2d.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sxciaitm.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DCUBE_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DCUBE_HXX
 
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
 #include <svx/cube3d.hxx>
 
 namespace sdr

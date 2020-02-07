@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/contact/viewcontactofpageobj.hxx>
+#include <sdr/contact/viewcontactofpageobj.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/sdr/contact/viewobjectcontactofpageobj.hxx>
+#include <sdr/contact/viewobjectcontactofpageobj.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 

@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <algorithm>
-#include <svx/xftshtit.hxx>
+#include <xftshtit.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

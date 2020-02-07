@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <svx/XPropertyTable.hxx>
+#include <XPropertyTable.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 
