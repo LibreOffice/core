@@ -611,7 +611,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     const OUString sURL = aDescriptor.getOrDefault( "URL", OUString() );
     const bool bIsFactoryURL = sURL.startsWith( "private:factory/" );
     bool bInitNewModel = bIsFactoryURL;
-    if ( bIsFactoryURL && !bExternalModel )
+    const bool bIsDefault = bIsFactoryURL && !bExternalModel;
+    aDescriptor.put("Replaceable", bIsDefault);
+    if (bIsDefault)
     {
         const OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
         // special handling for some weird factory URLs a la private:factory/swriter?slot=21053

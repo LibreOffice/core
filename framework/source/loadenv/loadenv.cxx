@@ -1093,10 +1093,11 @@ bool LoadEnv::impl_loadContent()
     bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
     bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), false);
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
-    css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
     if (!bHidden && !bMinimized && !bPreview)
     {
+        css::uno::Reference<css::task::XStatusIndicator> xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference<css::task::XStatusIndicator>());
         if (!xProgress.is())
         {
             // Note: it's an optional interface!
@@ -1519,12 +1520,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (xOldDoc.is())
     {
         utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
-        bool bFromTemplate = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false);
-        OUString sReferrer = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString());
 
-        // tdf#83722: valid but unmodified document, either from template
-        // or opened by the user (via File > New, referrer is set to private:user)
-        if (bFromTemplate || (sReferrer == "private:user"))
+        // replaceable document
+        if (!lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REPLACEABLE(), false))
             return css::uno::Reference< css::frame::XFrame >();
 
         bReactivateOldControllerOnError = xOldDoc->suspend(true);

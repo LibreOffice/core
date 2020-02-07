@@ -269,8 +269,8 @@ class SvxSearchItem;
 #define SID_LOCK_PRINT                      (SID_SFX_START + 1736)
 #define SID_LOCK_SAVE                       (SID_SFX_START + 1737)
 #define SID_LOCK_EDITDOC                    (SID_SFX_START + 1738)
+#define SID_REPLACEABLE                     (SID_SFX_START + 1739)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1739)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)

@@ -153,6 +153,7 @@ static char const sLockExport[] = "LockExport";
 static char const sLockPrint[] = "LockPrint";
 static char const sLockSave[] = "LockSave";
 static char const sLockEditDoc[] = "LockEditDoc";
+static char const sReplaceable[] = "Replaceable";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -865,6 +866,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxBoolItem( SID_LOCK_EDITDOC, bVal ) );
             }
+            else if (aName == sReplaceable)
+            {
+                bool bVal = false;
+                bool bOK = (rProp.Value >>= bVal);
+                DBG_ASSERT(bOK, "invalid type for Replaceable");
+                if (bOK)
+                    rSet.Put(SfxBoolItem(SID_REPLACEABLE, bVal));
+            }
 #ifdef DBG_UTIL
             else
                 --nFoundArgs;
@@ -1092,6 +1101,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_LOCK_EDITDOC ) == SfxItemState::SET )
                 nAdditional++;
+            if (rSet.GetItemState(SID_REPLACEABLE) == SfxItemState::SET)
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1258,6 +1269,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_LOCK_SAVE )
                         continue;
                     if ( nId == SID_LOCK_EDITDOC )
+                        continue;
+                    if (nId == SID_REPLACEABLE)
                         continue;
                }
 
@@ -1674,6 +1687,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_LOCK_EDITDOC, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sLockEditDoc;
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        }
+        if (rSet.GetItemState(SID_REPLACEABLE, false, &pItem) == SfxItemState::SET)
+        {
+            pValue[nActProp].Name = sReplaceable;
             pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
     }
