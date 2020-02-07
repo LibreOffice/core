@@ -26,7 +26,7 @@
 #include <svx/lathe3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sphere3d.hxx>
-#include <svx/extrud3d.hxx>
+#include <extrud3d.hxx>
 #include <svx/view3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/xlineit0.hxx>

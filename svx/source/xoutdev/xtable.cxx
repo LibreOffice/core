@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <svx/XPropertyTable.hxx>
+#include <XPropertyTable.hxx>
 #include <xmlxtexp.hxx>
 #include <xmlxtimp.hxx>
 #include <o3tl/safeint.hxx>

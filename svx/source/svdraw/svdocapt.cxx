@@ -49,7 +49,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sxcaitm.hxx>
+#include <sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>
 #include <svx/sxcllitm.hxx>

@@ -34,7 +34,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svx/extrud3d.hxx>
+#include <extrud3d.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdasitm.hxx>
@@ -46,7 +46,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <svx/xlnwtit.hxx>
