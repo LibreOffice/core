@@ -619,8 +619,7 @@ void SAL_CALL ValueSetAcc::disposing()
         // Make a copy of the list and clear the original.
         const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
-        aListenerListCopy = mxEventListeners;
-        mxEventListeners.clear();
+        aListenerListCopy.swap(mxEventListeners);
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
@@ -1943,8 +1942,7 @@ void SAL_CALL SvtValueSetAcc::disposing()
         // Make a copy of the list and clear the original.
         const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
-        aListenerListCopy = mxEventListeners;
-        mxEventListeners.clear();
+        aListenerListCopy.swap(mxEventListeners);
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.

@@ -374,11 +374,9 @@ void AccessibleBase::KillAllChildren()
 {
     ClearableMutexGuard aGuard( m_aMutex );
 
-    // make local copy for notification
-    ChildListVectorType aLocalChildList( m_aChildList );
-
-    // remove all children
-    m_aChildList.clear();
+    // make local copy for notification, and remove all children
+    ChildListVectorType aLocalChildList;
+    aLocalChildList.swap( m_aChildList );
     m_aChildOIDMap.clear();
 
     aGuard.clear();

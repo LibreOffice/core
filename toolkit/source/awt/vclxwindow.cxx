@@ -269,8 +269,7 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
     CallbackArray aCallbacksCopy;
     {
         SolarMutexGuard aGuard;
-        aCallbacksCopy = maCallbackEvents;
-        maCallbackEvents.clear();
+        aCallbacksCopy.swap(maCallbackEvents);
 
         // we acquired our VCLXWindow once before posting the event, release this one ref now
         mrAntiImpl.release();
