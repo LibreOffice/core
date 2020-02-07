@@ -1909,7 +1909,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
             mxOKButton->set_label(maPrintText);
             updatePrinterText();
             setPaperSizes();
-            preparePreview(false);
+            preparePreview(true);
         }
         else // print to file
         {
@@ -1964,7 +1964,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         checkPaperSize( aPaperSize );
         maPController->setPaperSizeFromUser( aPaperSize );
 
-        preparePreview(false);
+        preparePreview(true);
     }
 }
 
