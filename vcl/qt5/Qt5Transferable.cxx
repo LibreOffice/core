@@ -300,7 +300,10 @@ QVariant Qt5MimeData::retrieveData(const QString& mimeType, QVariant::Type) cons
 
     try
     {
-        aValue = m_aContents->getTransferData(aFlavor);
+        // tdf#129809 take a reference in case m_aContents is replaced during this call
+        css::uno::Reference<com::sun::star::datatransfer::XTransferable> xCurrentContents(
+            m_aContents);
+        aValue = xCurrentContents->getTransferData(aFlavor);
     }
     catch (...)
     {
