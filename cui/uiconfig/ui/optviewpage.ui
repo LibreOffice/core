@@ -599,6 +599,23 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="forceskiaraster">
+                        <property name="label" translatable="yes" context="optviewpage|forceskiaraster">Force Skia software rendering</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this will prevent the use of graphics drivers.</property>
+                        <property name="margin_left">12</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">8</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkLabel" id="skiaenabled">
                         <property name="can_focus">False</property>
                         <property name="margin_left">12</property>
@@ -607,7 +624,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">8</property>
+                        <property name="top_attach">9</property>
                       </packing>
                     </child>
                     <child>
@@ -619,7 +636,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">9</property>
+                        <property name="top_attach">10</property>
                       </packing>
                     </child>
                   </object>

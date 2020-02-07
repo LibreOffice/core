@@ -880,6 +880,14 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="ForceSkiaRaster" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if Skia rendering should be used in VCL backends
+               supporting it. This one forces the use of Skia software rendering
+               instead of trying to use the graphics driver.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="AnimationsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Defines if the user interface animations (like "walking ant"

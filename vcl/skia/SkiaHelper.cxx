@@ -77,6 +77,7 @@ static void checkDeviceBlacklisted()
                 break;
             }
             case RenderRaster:
+                SAL_INFO("vcl.skia", "Using Skia raster mode");
                 return; // software, never blacklisted
         }
         done = true;
@@ -159,6 +160,11 @@ static bool initRenderMethodToUse()
             methodToUse = RenderRaster;
             return true;
         }
+    }
+    if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
+    {
+        methodToUse = RenderRaster;
+        return true;
     }
     methodToUse = RenderVulkan;
     return true;
