@@ -421,13 +421,13 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         RowInfo* pThisRowInfo = &rTabInfo.mpRowInfo[nArrY];
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
-            const CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
+            CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
             if (!rCellInfo.bEmptyCellText)
                 if (rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet).GetHidePrint())
                 {
-                    pThisRowInfo->pCellInfo[nX+1].maCell.clear();
-                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = true;
+                    rCellInfo.maCell.clear();
+                    rCellInfo.bEmptyCellText = true;
                 }
         }
     }
