@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#include <svx/sdr/contact/viewcontactofe3d.hxx>
+#include <sdr/contact/viewcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>

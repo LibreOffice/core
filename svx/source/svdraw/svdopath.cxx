@@ -46,10 +46,10 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <svx/sdr/attribute/sdrtextattribute.hxx>
-#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <sdr/attribute/sdrformtextattribute.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <memory>
 #include <sal/log.hxx>

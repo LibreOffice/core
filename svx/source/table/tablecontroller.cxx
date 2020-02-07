@@ -41,7 +41,7 @@
 #include <sfx2/request.hxx>
 
 #include <svx/svdotable.hxx>
-#include <svx/sdr/overlay/overlayobjectcell.hxx>
+#include <sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outlobj.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -30,7 +30,7 @@
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

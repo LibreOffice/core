@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/textchain.hxx>
-#include <svx/textchaincursor.hxx>
+#include <textchain.hxx>
+#include <textchaincursor.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/event.hxx>

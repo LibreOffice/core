@@ -39,7 +39,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <sdr/properties/rectangleproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
+#include <sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/ptrstyle.hxx>
