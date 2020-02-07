@@ -109,7 +109,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbxfac.hxx>
+#include <sbxfac.hxx>
 #include <basic/sbxform.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>

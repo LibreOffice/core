@@ -22,7 +22,7 @@
 
 #include <basic/basicdllapi.h>
 #include <basic/sbstar.hxx>
-#include <basic/sbxfac.hxx>
+#include <sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/errcode.hxx>
 
