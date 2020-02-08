@@ -361,6 +361,9 @@ public:
     ToolBoxItemBits     GetItemBits( sal_uInt16 nItemId ) const;
 
     void                SetItemExpand( sal_uInt16 nItemId, bool bExpand );
+    // e.g. a label used as an itemwindow
+    void                SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteractive);
+
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;

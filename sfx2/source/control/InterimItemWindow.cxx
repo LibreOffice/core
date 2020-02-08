@@ -17,6 +17,8 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     m_xVclContentArea->Show();
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
     m_xContainer = m_xBuilder->weld_container(rID);
+
+    SetBackground(Wallpaper(COL_TRANSPARENT));
 }
 
 InterimItemWindow::~InterimItemWindow() { disposeOnce(); }
