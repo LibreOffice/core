@@ -80,14 +80,8 @@ OUString SwTableField::GetFieldName() const
 /// search TextNode containing this field
 const SwNode* SwTableField::GetNodeOfFormula() const
 {
-    if( !GetTyp()->HasWriterListeners() )
-        return nullptr;
-
-    SwIterator<SwFormatField,SwFieldType> aIter( *GetTyp() );
-    for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
-            if( this == pFormatField->GetField() )
-                return &pFormatField->GetTextField()->GetTextNode();
-    return nullptr;
+    auto pFormat = GetTyp()->FindFormatForField(this);
+    return pFormat ? &pFormat->GetTextField()->GetTextNode() : nullptr;
 }
 
 OUString SwTableField::GetCommand()
