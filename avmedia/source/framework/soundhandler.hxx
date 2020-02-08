@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_FRAMEWORK_SOUNDHANDLER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_FRAMEWORK_SOUNDHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -117,7 +116,5 @@ class SoundHandler  :   // interfaces
 };      //  class SoundHandler
 
 }       //  namespace avmedia
-
-#endif // INCLUDED_AVMEDIA_SOURCE_FRAMEWORK_SOUNDHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
