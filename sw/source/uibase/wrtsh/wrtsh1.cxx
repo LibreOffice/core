@@ -1978,17 +1978,8 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
     if (pPostIt)
     {
         SwFieldType* pType = GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
-        SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-        SwFormatField* pSwFormatField = aIter.First();
-        while( pSwFormatField )
-        {
-            if ( pSwFormatField->GetField() == pPostIt )
-            {
-                pSwFormatField->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
-                break;
-            }
-            pSwFormatField = aIter.Next();
-        }
+        if(auto pFormat = pType->FindFormatForField(pPostIt))
+            pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
     }
 }
 

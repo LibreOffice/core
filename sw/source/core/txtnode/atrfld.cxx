@@ -223,11 +223,11 @@ void SwFormatField::InvalidateField()
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    if( !mpTextField )
-        return;
-
     if (const SwFieldHint* pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
+        if( !mpTextField )
+            return;
+
         // replace field content by text
         SwPaM* pPaM = pFieldHint->m_pPaM;
         SwDoc* pDoc = pPaM->GetDoc();
@@ -242,7 +242,13 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     } else if (const sw::LegacyModifyHint* pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
+        if( !mpTextField )
+            return;
         UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    } else if (const sw::FindFormatForFieldHint* pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
+    {
+        if(pFindForFieldHint->m_rpFormat == nullptr && pFindForFieldHint->m_pField == GetField())
+            pFindForFieldHint->m_rpFormat = this;
     }
 }
 
