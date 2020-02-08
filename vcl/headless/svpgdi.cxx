@@ -1322,7 +1322,16 @@ bool SvpSalGraphics::drawPolyLine(
     const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
     const bool bStrokeUsed(0.0 != fDotDashLength);
 
-    if(pSystemDependentData_CairoPath)
+    // MM01 decide if to stroke direcly
+    static bool bDoDirectCairoStroke(true);
+
+    // MM01 activate to stroke direcly
+    if(bDoDirectCairoStroke && bStrokeUsed)
+    {
+        cairo_set_dash(cr, &((*pStroke)[0]), pStroke->size(), 0.0);
+    }
+
+    if(!bDoDirectCairoStroke && pSystemDependentData_CairoPath)
     {
         // MM01 - check on stroke change. Used against not used, or if both used,
         // equal or different?
@@ -1366,7 +1375,7 @@ bool SvpSalGraphics::drawPolyLine(
         // MM01 need to do line dashing as fallback stuff here now
         basegfx::B2DPolyPolygon aPolyPolygonLine;
 
-        if(bStrokeUsed)
+        if(!bDoDirectCairoStroke && bStrokeUsed)
         {
             // apply LineStyle
             basegfx::utils::applyLineDashing(
@@ -1378,7 +1387,7 @@ bool SvpSalGraphics::drawPolyLine(
         }
         else
         {
-            // no line dashing, just copy
+            // no line dashing or direct stroke, just copy
             aPolyPolygonLine.append(rPolyLine);
         }
 
