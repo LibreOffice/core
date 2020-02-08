@@ -243,6 +243,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     } else if (const sw::LegacyModifyHint* pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
         UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    } else if (const sw::FindFormatForFieldHint* pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
+    {
+        if(pFindForFieldHint->m_rpFormat == nullptr && pFindForFieldHint->m_pField == GetField())
+            pFindForFieldHint->m_rpFormat = this;
     }
 }
 

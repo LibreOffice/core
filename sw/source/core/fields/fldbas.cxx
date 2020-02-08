@@ -156,6 +156,12 @@ void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+SwFormatField* SwFieldType::FindFormatForField(const SwField* pField) const {
+    SwFormatField* pFormat;
+    const_cast<SwFieldType*>(this)->SwClientNotify(*this, sw::FindFormatForFieldHint(pField, pFormat));
+    return pFormat;
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
