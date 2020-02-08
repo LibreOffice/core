@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "560e5c72_d73d70ec",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "These functions that are only used once in respective sorts are better implemented as lambdas in place of their use",
+      "range": {
+        "startLine": 1278,
+        "startChar": 12,
+        "endLine": 1278,
+        "endChar": 35
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5647b7fe_ed2cb108",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "This typedef is only ever used in one (next) line, so is not actually needed. Please drop it and just use full type in the vector below.",
+      "range": {
+        "startLine": 1310,
+        "startChar": 4,
+        "endLine": 1310,
+        "endChar": 48
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88604fd9_0c2dccbd",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "This is a local variable; prefix \"m_\" is for members, so please drop it",
+      "range": {
+        "startLine": 1311,
+        "startChar": 24,
+        "endLine": 1311,
+        "endChar": 26
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87090b1c_78d59cb2",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "To avoid explicit std::make_pair, use emplace_back instead of push_back.",
+      "range": {
+        "startLine": 1347,
+        "startChar": 41,
+        "endLine": 1347,
+        "endChar": 65
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c46e9c8_bb995822",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "Please note that we use a set of clang-format rules for uniform code formatting. Some files are excluded from the clang-format checks, because re-formatting them would bring too much git log noise; yet, for *new* code, the rules should still be followed.\n\nIn particular, this line is longer that 100 characters (max limit). You may either split it to two, or (which is what I usually do) consider shortening your variable mane to something like \"aUILanguages\". Also many IDEs allow selective application of clang-format rules (e.g., VS IDE allows using Ctrl+K, Ctrl+F).",
+      "range": {
+        "startLine": 1351,
+        "startChar": 8,
+        "endLine": 1351,
+        "endChar": 109
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f0300f1_410518f8",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "Note that modern C++ allows using structured binding ( https://en.cppreference.com/w/cpp/language/structured_binding ) to simplify this:\n\n    for (const auto\u0026 [nGroupID, sGroupName] : aUILanguages\n    {\n        m_xUserInterfaceLB-\u003eappend(OUString::number(nGroupID), sGroupName);\n    }\n\nNote how to use prefixes properly. See also \"Code Conventions\" at https://wiki.documentfoundation.org/Development",
+      "range": {
+        "startLine": 1353,
+        "startChar": 13,
+        "endLine": 1353,
+        "endChar": 27
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "179d2cac_6c92f2f7",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "I suppose that it\u0027s better to move set_active after filling the listbox.",
+      "range": {
+        "startLine": 1400,
+        "startChar": 4,
+        "endLine": 1400,
+        "endChar": 33
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b216a06_457de7d5",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "This is also better done using lambda right inside std::sort",
+      "range": {
+        "startLine": 188,
+        "startChar": 12,
+        "endLine": 188,
+        "endChar": 33
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bfee682_54ea8499",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "This function is almost complete duplication of its older version below. It\u0027s better to not introduce an overload, but extend the older function\u0027s optional arguments to specify if there\u0027s a default entry, and just add what\u0027s missing there in the function to add the entry: see \"bHasLangNone\" here as an example.",
+      "range": {
+        "startLine": 193,
+        "startChar": 5,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290bfd2d_8566873d",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "As mentioned in gerrit build failure, please use for (const auto\u0026 ...)",
+      "range": {
+        "startLine": 295,
+        "startChar": 9,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c938d5a_ec01f130",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "Is it actually needed here? I mean, have you checked that in every place where this function is used, it\u0027s OK to add the separator? Can\u0027t it be in the middle?",
+      "range": {
+        "startLine": 426,
+        "startChar": 4,
+        "endLine": 427,
+        "endChar": 0
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec8da372_f3b1e4d0",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 1,
+      "message": "Please don\u0027t comment out unnecessary code; just remove it if needed. We have git history if we need to know what was here before.",
+      "range": {
+        "startLine": 557,
+        "startChar": 4,
+        "endLine": 557,
+        "endChar": 32
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

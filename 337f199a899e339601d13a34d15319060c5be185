@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57c34e2b_3afc5e20",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 0,
+      "message": "Why remove this comment?",
+      "range": {
+        "startLine": 1380,
+        "startChar": 4,
+        "endLine": 1380,
+        "endChar": 21
+      },
+      "revId": "337f199a899e339601d13a34d15319060c5be185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "436191a7_fe067d08",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 0,
+      "message": "And this?",
+      "range": {
+        "startLine": 1383,
+        "startChar": 4,
+        "endLine": 1383,
+        "endChar": 37
+      },
+      "revId": "337f199a899e339601d13a34d15319060c5be185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a10b115a_37bc1d29",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T08:17:55Z",
+      "side": 0,
+      "message": "Why is this removed? Is it not necessary to update default entry here?",
+      "range": {
+        "startLine": 1892,
+        "startChar": 4,
+        "endLine": 1899,
+        "endChar": 49
+      },
+      "revId": "337f199a899e339601d13a34d15319060c5be185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
