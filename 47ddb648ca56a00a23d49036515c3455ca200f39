@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8cf7142b_586d2e28",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-02-08T16:58:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c907d521_b21d9985",
+      "range": {
+        "startLine": 618,
+        "startChar": 10,
+        "endLine": 618,
+        "endChar": 46
+      },
+      "revId": "47ddb648ca56a00a23d49036515c3455ca200f39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36f263e2_e6ab5e95",
         "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "47ddb648ca56a00a23d49036515c3455ca200f39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37fa3d96_2b04a502",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-02-08T16:58:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36f263e2_e6ab5e95",
+      "range": {
+        "startLine": 619,
+        "startChar": 10,
+        "endLine": 619,
+        "endChar": 59
+      },
+      "revId": "47ddb648ca56a00a23d49036515c3455ca200f39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
