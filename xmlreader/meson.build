@@ -1,0 +1,10 @@
+xmlreader_lib = shared_library('xmlreader',
+  'source/pad.cxx',
+  'source/span.cxx',
+  'source/xmlreader.cxx',
+  udk_fake_h,
+  include_directories: [main_inc, udkh_inc],
+  link_with: [cppu_lib, sal_lib],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+
+)
