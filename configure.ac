@@ -12757,6 +12757,26 @@ fi
 AC_SUBST(ENABLE_FORMULA_LOGGER)
 
 dnl ===================================================================
+dnl Checking for active Antivirus software.
+dnl ===================================================================
+
+if test $_os = WINNT ; then
+    AC_MSG_CHECKING([for active Antivirus software])
+    ANTIVIRUS_LIST=`cscript.exe //Nologo $SRC_ROOT/antivirusDetection.vbs`
+    if [ [ "$ANTIVIRUS_LIST" != "NOT_FOUND" ] ]; then
+        AC_MSG_RESULT([found])
+        $SRC_ROOT/eicarTest.sh
+        EICAR_TEST_STATUS=$?
+        if [ [ $EICAR_TEST_STATUS -ne 0 ] ]; then
+            AC_MSG_ERROR([Exclude the build directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST])
+        fi
+        add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST"
+    else
+        AC_MSG_RESULT([not found])
+    fi
+fi
+
+dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
 AC_MSG_NOTICE([setting up the build environment variables...])
