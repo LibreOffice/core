@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "284ecf8a_48005c08",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T10:50:38Z",
+      "side": 1,
+      "message": "Please *don\u0027t* use funny reverts as a substitution for normal comments. This is what people will read later, with different native languages and language skills, and they will not be looking for entertaining reading, but for understanding what is going on. If the comment is unnecessary for understanding what\u0027s happening here, it should be eliminated; if it is desirable, it should be clear. Period.",
+      "range": {
+        "startLine": 15,
+        "startChar": 21,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "7874d2277100044fa2965980ab26ce1da8ae2587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
