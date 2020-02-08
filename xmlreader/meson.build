@@ -6,5 +6,4 @@ xmlreader_lib = shared_library('xmlreader',
   include_directories: [main_inc, udkh_inc],
   link_with: [cppu_lib, sal_lib],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
-
 )
