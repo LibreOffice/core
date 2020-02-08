@@ -84,16 +84,19 @@ void lcl_MaybeResetAlignToDistro(
     }
 }
 
-void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const weld::ComboBox& rLB, sal_uInt16 nListPos)
+void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, const SfxItemSet& rOldSet, sal_uInt16 nWhichJM, const weld::ComboBox& rLB, sal_uInt16 nListPos)
 {
     SvxCellJustifyMethod eJM = SvxCellJustifyMethod::Auto;
     if (rLB.get_active() == nListPos)
         eJM = SvxCellJustifyMethod::Distribute;
 
     // tdf#129300 If it would create no change, don't force it
-    const SvxJustifyMethodItem& rOldItem = static_cast<const SvxJustifyMethodItem&>(rSet.Get(nWhichJM));
+    const SvxJustifyMethodItem& rOldItem = static_cast<const SvxJustifyMethodItem&>(rOldSet.Get(nWhichJM));
     if (rOldItem.GetValue() == eJM)
+    {
+        rSet.InvalidateItem(nWhichJM);
         return;
+    }
 
     SvxJustifyMethodItem aItem(eJM, nWhichJM);
     rSet.Put(aItem);
@@ -371,12 +374,12 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
     // Special treatment for distributed alignment; we need to set the justify
     // method to 'distribute' to distinguish from the normal justification.
     sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(*rSet, nWhichHorJM, *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(*rSet, rOldSet, nWhichHorJM, *m_xLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(*rSet, nWhichHorJM);
 
     sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(*rSet, nWhichVerJM, *m_xLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(*rSet, rOldSet, nWhichVerJM, *m_xLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(*rSet, nWhichVerJM);
 
