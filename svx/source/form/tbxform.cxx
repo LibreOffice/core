@@ -21,13 +21,13 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 #include <formtoolbars.hxx>
-
 
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
@@ -191,8 +191,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
 
 SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
-    :SfxToolBoxControl( nSlotId, nId, rTbx )
-    ,pFixedText( nullptr )
+    : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -201,23 +200,52 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 {
 }
 
+class LabelItemWindow final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::Label> m_xLabel;
+public:
+    LabelItemWindow(vcl::Window *pParent)
+        : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
+        , m_xLabel(m_xBuilder->weld_label("label"))
+    {
+        OUString const aSample("123456");
+        m_xLabel->set_label(aSample);
+        Size aSize(m_xLabel->get_preferred_size());
+        aSize.AdjustWidth(12);
+        m_xLabel->set_size_request(aSize.Width(), -1);
+        m_xLabel->set_label(OUString());
+
+        SetSizePixel(m_xLabel->get_preferred_size());
+    }
+
+    void set_label(const OUString& rLabel)
+    {
+        m_xLabel->set_label(rLabel);
+    }
+
+    virtual void dispose() override
+    {
+        m_xLabel.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual ~LabelItemWindow() override
+    {
+        disposeOnce();
+    }
+};
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
-    pFixedText.reset(VclPtr<FixedText>::Create( pParent ));
-    OUString const aSample("123456");
-    Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
-    aSize.AdjustWidth(12 );
-    pFixedText->SetSizePixel( aSize );
-    pFixedText->SetBackground();
-    pFixedText->SetPaintTransparent(true);
-    return pFixedText;
-}
+    m_xFixedText.reset(VclPtr<LabelItemWindow>::Create( pParent ));
+    m_xFixedText->Show();
 
+    return m_xFixedText;
+}
 
 void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-
     // setting the FixedText
     if (GetSlotId() != SID_FM_RECORD_TOTAL)
         return;
@@ -228,9 +256,7 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     else
         aText = "?";
 
-    pFixedText->SetText( aText );
-    pFixedText->Update();
-    pFixedText->Flush();
+    m_xFixedText->set_label(aText);
 
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
