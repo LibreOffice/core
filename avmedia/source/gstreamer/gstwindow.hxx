@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTWINDOW_HXX
-#define INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTWINDOW_HXX
+#pragma once
 
 #include "gstcommon.hxx"
 #include <cppuhelper/implbase.hxx>
@@ -80,7 +79,5 @@ private:
 
 } // namespace gstreamer
 } // namespace avmedia
-
-#endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

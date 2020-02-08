@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
-#define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
+#pragma once
 
 #include <unotools/resmgr.hxx>
 
@@ -42,7 +41,5 @@ inline OUString AvmResId(const char* pId)
 {
     return Translate::get(pId, Translate::Create("avmedia"));
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
