@@ -376,27 +376,18 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (pIdItem && !pIdItem->GetValue().isEmpty())
                 {
                     SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
-                    SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-                    SwFormatField* pSwFormatField = aIter.First();
-                    while( pSwFormatField )
+                    if(auto pFormat = pType->FindFormatForPostItId(pIdItem->GetValue().toUInt32()))
                     {
-                        if ( static_cast<SwPostItField*>(pSwFormatField->GetField())->GetPostItId() == pIdItem->GetValue().toUInt32() )
+                        auto pMgr = GetView().GetPostItMgr();
+                        auto pWin = pMgr->GetAnnotationWin(pIdItem->GetValue().toUInt32());
+                        if(pWin)
                         {
-                            sw::annotation::SwAnnotationWin* pWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
-                            if (pWin)
-                            {
-                                const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
-                                OUString sText;
-                                if ( pTextItem )
-                                    sText = pTextItem->GetValue();
-
-                                GetView().GetPostItMgr()->RegisterAnswerText(sText);
-                                pWin->ExecuteCommand(nSlot);
-                            }
-
-                            break;
+                            OUString sText;
+                            if(const auto pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT))
+                                sText = pTextItem->GetValue();
+                            pMgr->RegisterAnswerText(sText);
+                            pWin->ExecuteCommand(nSlot);
                         }
-                        pSwFormatField = aIter.Next();
                     }
                 }
             }
