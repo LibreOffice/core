@@ -1322,10 +1322,10 @@ bool SvpSalGraphics::drawPolyLine(
     const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
     const bool bStrokeUsed(0.0 != fDotDashLength);
 
-    // MM01 decide if to stroke direcly
+    // MM01 decide if to stroke directly
     static bool bDoDirectCairoStroke(true);
 
-    // MM01 activate to stroke direcly
+    // MM01 activate to stroke directly
     if(bDoDirectCairoStroke && bStrokeUsed)
     {
         cairo_set_dash(cr, pStroke->data(), pStroke->size(), 0.0);
