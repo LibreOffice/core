@@ -2885,6 +2885,11 @@ public:
         set_background(&sColor);
     }
 
+    virtual void set_toolbar_background() override
+    {
+        // no-op
+    }
+
     virtual ~GtkInstanceWidget() override
     {
         if (m_pFocusInEvent)

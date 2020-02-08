@@ -262,6 +262,8 @@ public:
     virtual void set_stack_background() = 0;
     //make this widget look like it has a highlighted background
     virtual void set_highlight_background() = 0;
+    //make this widget suitable for use in a toolbar
+    virtual void set_toolbar_background() = 0;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 
