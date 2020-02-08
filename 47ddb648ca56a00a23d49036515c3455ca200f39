@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c907d521_b21d9985",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-08T15:46:17Z",
+      "side": 1,
+      "message": "This is not \"Rectangle Redaction\". It just draws a regular rectangle, without the transparence and grey color.",
+      "range": {
+        "startLine": 618,
+        "startChar": 10,
+        "endLine": 618,
+        "endChar": 46
+      },
+      "revId": "47ddb648ca56a00a23d49036515c3455ca200f39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36f263e2_e6ab5e95",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-08T15:46:17Z",
+      "side": 1,
+      "message": "And this is definitely not \"Freeform Redaction\", but just the regular freeform drawing tool, lacking the transparency, grey color, and thickness.",
+      "range": {
+        "startLine": 619,
+        "startChar": 10,
+        "endLine": 619,
+        "endChar": 59
+      },
+      "revId": "47ddb648ca56a00a23d49036515c3455ca200f39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
