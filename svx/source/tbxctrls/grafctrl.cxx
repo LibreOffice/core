@@ -22,7 +22,6 @@
 #include <i18nutil/unicode.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
@@ -215,11 +214,6 @@ ImplGrafControl::ImplGrafControl(
 {
     OUString sResId(ImplGetRID(rCmd));
     mxImage->set_from_icon_name(sResId);
-#if 0
-    // we want to see the background of the toolbox, not of the FixedImage or Control
-    maImage->SetBackground( Wallpaper( COL_TRANSPARENT ) );
-    SetBackground( Wallpaper( COL_TRANSPARENT ) );
-#endif
 
     SetBackground( Wallpaper() ); // transparent background
 

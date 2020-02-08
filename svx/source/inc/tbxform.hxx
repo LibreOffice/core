@@ -77,10 +77,11 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
 
+class LabelItemWindow;
 
 class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 {
-    VclPtr<FixedText> pFixedText;
+    VclPtr<LabelItemWindow> m_xFixedText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
