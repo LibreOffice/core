@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bd5ee9e0_21919220",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "If I use that sort function, I think I can\u0027t use lambdas, because the function is too long. Am I right?",
+      "parentUuid": "8a13c851_42a4ce6f",
+      "range": {
+        "startLine": 1280,
+        "startChar": 11,
+        "endLine": 1280,
+        "endChar": 46
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5647b7fe_ed2cb108",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 7
@@ -68,6 +92,30 @@
       "revId": "ee6f9473efff6ced394627749484046d165b0a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82575beb_787d3918",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5647b7fe_ed2cb108",
+      "range": {
+        "startLine": 1310,
+        "startChar": 4,
+        "endLine": 1310,
+        "endChar": 48
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "6f30e97d_1d367389",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88604fd9_0c2dccbd",
+      "range": {
+        "startLine": 1311,
+        "startChar": 24,
+        "endLine": 1311,
+        "endChar": 26
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87090b1c_78d59cb2",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 7
@@ -114,6 +186,30 @@
       "revId": "ee6f9473efff6ced394627749484046d165b0a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd37eb8e_eab2ef06",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87090b1c_78d59cb2",
+      "range": {
+        "startLine": 1347,
+        "startChar": 41,
+        "endLine": 1347,
+        "endChar": 65
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "02f2b0e6_5c5de604",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f0300f1_410518f8",
+      "range": {
+        "startLine": 1353,
+        "startChar": 13,
+        "endLine": 1353,
+        "endChar": 27
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "179d2cac_6c92f2f7",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 7
@@ -183,6 +303,30 @@
       "revId": "ee6f9473efff6ced394627749484046d165b0a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdcf4b00_ed78628d",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "179d2cac_6c92f2f7",
+      "range": {
+        "startLine": 1400,
+        "startChar": 4,
+        "endLine": 1400,
+        "endChar": 33
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "47cd2d26_ecc01d90",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Can I use the default parameter to avoid problems where this function is used? For example, \n\nvoid SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,\n        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail,\n        const LanguageType defaultLangType \u003d NULL, sal_Int16 defaultType \u003d 0,\n        bool existDefaultLanguage \u003d false       \n)\n\nOtherwise, I should edit all functions which call SetLanguageList due to difference of parameter number.",
+      "parentUuid": "4bfee682_54ea8499",
+      "range": {
+        "startLine": 193,
+        "startChar": 5,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5045cccc_411754e6",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 7
@@ -252,6 +420,30 @@
       "revId": "ee6f9473efff6ced394627749484046d165b0a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb81a97_b37e7daa",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5045cccc_411754e6",
+      "range": {
+        "startLine": 289,
+        "startChar": 37,
+        "endLine": 289,
+        "endChar": 49
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +470,30 @@
     },
     {
       "key": {
+        "uuid": "4438713a_ca2418b8",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "290bfd2d_8566873d",
+      "range": {
+        "startLine": 295,
+        "startChar": 9,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c938d5a_ec01f130",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 7
@@ -301,6 +517,30 @@
     },
     {
       "key": {
+        "uuid": "653595b5_3b73e7a7",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c938d5a_ec01f130",
+      "range": {
+        "startLine": 426,
+        "startChar": 4,
+        "endLine": 427,
+        "endChar": 0
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec8da372_f3b1e4d0",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 7
@@ -321,6 +561,30 @@
       "revId": "ee6f9473efff6ced394627749484046d165b0a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "626ec633_1d30a1df",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-08T20:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec8da372_f3b1e4d0",
+      "range": {
+        "startLine": 557,
+        "startChar": 4,
+        "endLine": 557,
+        "endChar": 32
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
