@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b2b21eae_52069a35",
+        "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1002304
+      },
+      "writtenOn": "2020-02-08T09:23:30Z",
+      "side": 1,
+      "message": "Thanks for your review and information :)",
+      "parentUuid": "49c9f0ac_851163c0",
+      "range": {
+        "startLine": 881,
+        "startChar": 30,
+        "endLine": 881,
+        "endChar": 34
+      },
+      "revId": "a501f56fe86ad1520a239a85469a0367338354f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54540036_9fcc2eb0",
         "filename": "sd/source/ui/dlg/BulletAndPositionDlg.cxx",
         "patchSetId": 1
