@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16a52a8c_25a4d405",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-02-08T12:50:49Z",
+      "side": 1,
+      "message": "When I changed the \"Rect\" and \"Freeline_Unfilled\" string, they aren\u0027t appare in the menu.",
+      "parentUuid": "2133ffd7_37d39484",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d5447f6_b7fb0272",
         "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-08T00:17:18Z",
       "side": 1,
       "message": "And here",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "955a7a2d_9cffe6bf",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-02-08T12:50:49Z",
+      "side": 1,
+      "message": "like previous status",
+      "parentUuid": "5d5447f6_b7fb0272",
       "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9db40c6f_0ecfa2cb",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-02-08T12:50:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d4bdfa_c3b90469",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
