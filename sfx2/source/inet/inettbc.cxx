@@ -73,7 +73,8 @@ public:
     {
         m_xWidget->connect_key_press(LINK(this, URLBoxItemWindow, KeyInputHdl));
 
-        SetSizePixel(m_xWidget->get_preferred_size());
+        int nWidth = GetDesktopRectPixel().GetWidth() > 800 ? 300 : 225;
+        SetSizePixel(Size(nWidth, m_xWidget->get_preferred_size().Height()));
     }
 
     SvtURLBox* GetURLBox()
@@ -193,6 +194,7 @@ VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pP
     SvtURLBox* pURLBox = xURLBox->GetURLBox();
     pURLBox->connect_changed(LINK(this, SfxURLToolBoxControl_Impl, SelectHdl));
     pURLBox->connect_entry_activate(LINK(this, SfxURLToolBoxControl_Impl, OpenHdl));
+    xURLBox->Show();
     return xURLBox;
 }
 
