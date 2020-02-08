@@ -1295,27 +1295,15 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
     return bScrollbars;
  }
 
-void SwPostItMgr::AddPostIts(bool bCheckExistence, bool bFocus)
+void SwPostItMgr::AddPostIts(const bool bCheckExistence, const bool bFocus)
 {
-    bool bEmpty = mvPostItFields.empty();
+    const bool bEmpty = mvPostItFields.empty();
+    IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
     SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(),false);
-    SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-    SwFormatField* pSwFormatField = aIter.First();
-    while(pSwFormatField)
-    {
-        if ( pSwFormatField->GetTextField())
-        {
-            IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
-            if (pSwFormatField->IsFieldInDoc()
-                && (!mpWrtShell->GetLayout()->IsHideRedlines()
-                    || !sw::IsFieldDeletedInModel(rIDRA, *pSwFormatField->GetTextField())))
-            {
-                InsertItem(pSwFormatField,bCheckExistence,bFocus);
-            }
-        }
-        pSwFormatField = aIter.Next();
-    }
-
+    std::vector<SwFormatField*> vFormatFields;
+    pType->CollectPostIts(vFormatFields, rIDRA, mpWrtShell->GetLayout()->IsHideRedlines());
+    for(auto pFormatField : vFormatFields)
+        InsertItem(pFormatField, bCheckExistence, bFocus);
     // if we just added the first one we have to update the view for centering
     if (bEmpty && !mvPostItFields.empty())
         PrepareView(true);

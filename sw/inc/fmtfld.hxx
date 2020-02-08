@@ -32,6 +32,7 @@ class SwTextField;
 class SwView;
 class SwFieldType;
 class SwFormatField;
+class IDocumentRedlineAccess;
 namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
 
 namespace sw {
@@ -39,6 +40,17 @@ namespace sw {
         const SwField* m_pField;
         SwFormatField*& m_rpFormat;
         FindFormatForFieldHint(const SwField* pField, SwFormatField*& rpFormat) : m_pField(pField), m_rpFormat(rpFormat) {};
+    };
+    struct FindFormatForPostItIdHint final : SfxHint {
+        const sal_uInt32 m_nPostItId;
+        SwFormatField*& m_rpFormat;
+        FindFormatForPostItIdHint(const sal_uInt32 nPostItId, SwFormatField*& rpFormat) : m_nPostItId(nPostItId), m_rpFormat(rpFormat) {};
+    };
+    struct CollectPostItsHint final : SfxHint {
+        std::vector<SwFormatField*>& m_rvFormatFields;
+        IDocumentRedlineAccess const& m_rIDRA;
+        const bool m_bHideRedlines;
+        CollectPostItsHint(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool bHideRedlines) : m_rvFormatFields(rvFormatFields), m_rIDRA(rIDRA), m_bHideRedlines(bHideRedlines) {};
     };
 }
 

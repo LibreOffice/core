@@ -32,6 +32,7 @@ class SwField;
 class SwFormatField;
 class SwRootFrame;
 class SvNumberFormatter;
+class IDocumentRedlineAccess;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
@@ -270,6 +271,8 @@ public:
     inline  void            UpdateFields() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     SwFormatField* FindFormatForField(const SwField*) const;
+    SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
+    void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
 };
 
 inline void SwFieldType::UpdateFields() const
