@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
+#include <svtools/htmlcfg.hxx>
 #include <swmodule.hxx>
 #include <swdll.hxx>
 #include <usrpref.hxx>
@@ -776,6 +777,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
     };
+
+    // Prevent parseXmlStream guess incompatible encoding and complaint.
+    SvxHtmlOptions& rOptions = SvxHtmlOptions::Get();
+    rtl_TextEncoding eOldEncoding = rOptions.GetTextEncoding();
+    rOptions.SetTextEncoding(RTL_TEXTENCODING_UTF8);
+
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
@@ -784,6 +791,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
     CPPUNIT_ASSERT(pDoc);
+    rOptions.SetTextEncoding(eOldEncoding);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
