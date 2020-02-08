@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2133ffd7_37d39484",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1002304
+      },
+      "writtenOn": "2020-02-08T00:17:18Z",
+      "side": 1,
+      "message": "It looks wrong. It could be better if you do it like redactionbar.xml. You can check https://opengrok.libreoffice.org/xref/core/sd/uiconfig/sdraw/toolbar/redactionbar.xml?r\u003dc266e4c8#21",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d5447f6_b7fb0272",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1002304
+      },
+      "writtenOn": "2020-02-08T00:17:18Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d4bdfa_c3b90469",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1002304
+      },
+      "writtenOn": "2020-02-08T00:17:18Z",
+      "side": 1,
+      "message": "\u003cmenu:menuseparator/\u003e can be added between lines 619 and 620. It might look better and may be more suitable for bug report.",
+      "revId": "0af15ea69efa32e1bf40356e63ea76d4cf189986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
