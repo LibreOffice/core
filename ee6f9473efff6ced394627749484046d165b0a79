@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "8a13c851_42a4ce6f",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T09:49:28Z",
+      "side": 1,
+      "message": "This simple comparison might not be appropriate for a natural order of used languages. Take a look at how sorting is implemented for ImplEntryList::InsertEntry in vcl/source/control/imp_listbox.cxx.",
+      "range": {
+        "startLine": 1280,
+        "startChar": 11,
+        "endLine": 1280,
+        "endChar": 46
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5647b7fe_ed2cb108",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 7
