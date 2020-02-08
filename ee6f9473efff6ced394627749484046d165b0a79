@@ -209,6 +209,29 @@
     },
     {
       "key": {
+        "uuid": "5045cccc_411754e6",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T09:21:05Z",
+      "side": 1,
+      "message": "Please note that simply using aEntries::insert or emplace to add an item to front (if not modifying the sort function to automatically put default and none entries to the top) would be more efficient than adding another vector and iterating through older one to transfer to new one. It would likely use block move, which couldn\u0027t be beaten manually. A closer match could be using std::copy instead of iteration.",
+      "range": {
+        "startLine": 289,
+        "startChar": 37,
+        "endLine": 289,
+        "endChar": 49
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "290bfd2d_8566873d",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 7
