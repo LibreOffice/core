@@ -22,6 +22,30 @@
       "revId": "0475030c46107356d7258e09ebad428b113ad40a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bc84d85_6345c47c",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T11:54:51Z",
+      "side": 1,
+      "message": "\u003e if the Option statement had executed\n\nSorry, a thinko, must had been \"if the Property statement had executed\"",
+      "parentUuid": "660f512d_b22e7992",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0475030c46107356d7258e09ebad428b113ad40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
