@@ -35,7 +35,7 @@ executable('unoidl-read',
   link_with: [unoidl_lib, salhelper_lib, sal_lib],
 )
 
-executable('unoidl-write',
+unoidl_write_exe = executable('unoidl-write',
   'source/unoidl-write.cxx',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],

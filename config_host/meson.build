@@ -50,7 +50,7 @@ cdata.set('LIBO_VERSION_PATCH', patch_version)
 cdata.set('LIBO_THIS_YEAR', this_year)
 
 
-cdata.set10('LIBLANGTAG_INLINE_FIX', true)
+cdata.set10('LIBLANGTAG_INLINE_FIX', false)
 
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',

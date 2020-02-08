@@ -10,7 +10,7 @@ codemaker_st_lib = static_library('codemaker_static',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
 )
 
-cppumaker = executable('cppumaker',
+cppumaker_exe = executable('cppumaker',
   'source/cppumaker/cppumaker.cxx',
   'source/cppumaker/cppuoptions.cxx',
   'source/cppumaker/cpputype.cxx',
