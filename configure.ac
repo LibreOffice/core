@@ -12980,8 +12980,16 @@ dnl ===================================================================
 if test $_os = WINNT ; then
     AC_MSG_CHECKING([for active Antivirus software])
     ANTIVIRUS_LIST=`cscript.exe //Nologo $SRC_ROOT/antivirusDetection.vbs`
+    EICAR_TEST_STATUS=1
     if [ [ "$ANTIVIRUS_LIST" != "NOT_FOUND" ] ]; then
         AC_MSG_RESULT([found])
+        echo 'X5O!P%@AP@<:@4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > eicar
+        cat eicar > eicar
+        EICAR_TEST_STATUS=$?
+        rm $SRC_ROOT/eicar
+        if [ [ $EICAR_TEST_STATUS -ne 0 ] ]; then
+            AC_MSG_ERROR([Exclude the build directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST])
+        fi
         add_warning "To speed up builds and avoid failures in unit tests, it is highly recommended that you exclude the build directories associated with LibreOffice in the following Antivirus software: $ANTIVIRUS_LIST"
     else
         AC_MSG_RESULT([not found])
