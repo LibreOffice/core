@@ -223,7 +223,7 @@ void SwFormatField::InvalidateField()
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    if (const SwFieldHint* pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
+    if (const auto pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
         if( !mpTextField )
             return;
@@ -240,15 +240,24 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pPaM->Move( fnMoveForward );
         pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
         pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
-    } else if (const sw::LegacyModifyHint* pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
+    } else if (const auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
         if( !mpTextField )
             return;
         UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-    } else if (const sw::FindFormatForFieldHint* pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
+    } else if (const auto pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
     {
         if(pFindForFieldHint->m_rpFormat == nullptr && pFindForFieldHint->m_pField == GetField())
             pFindForFieldHint->m_rpFormat = this;
+    } else if (const auto pFindForPostItIdHint = dynamic_cast<const sw::FindFormatForPostItIdHint*>( &rHint ))
+    {
+        auto pPostItField = dynamic_cast<SwPostItField*>(mpField.get());
+        if(pPostItField && pFindForPostItIdHint->m_rpFormat == nullptr && pFindForPostItIdHint->m_nPostItId == pPostItField->GetPostItId())
+            pFindForPostItIdHint->m_rpFormat = this;
+    } else if (const auto pCollectPostItsHint = dynamic_cast<const sw::CollectPostItsHint*>( &rHint ))
+    {
+        if(GetTextField() && IsFieldInDoc() && (!pCollectPostItsHint->m_bHideRedlines || !sw::IsFieldDeletedInModel(pCollectPostItsHint->m_rIDRA, *GetTextField())))
+            pCollectPostItsHint->m_rvFormatFields.push_back(this);
     }
 }
 
