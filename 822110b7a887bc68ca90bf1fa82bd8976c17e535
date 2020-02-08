@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd1abfbe_d44dedc4",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T14:45:07Z",
+      "side": 1,
+      "message": "By the way, I suppose that you could find a bug. According to https://www.openoffice.org/api/docs/common/ref/com/sun/star/frame/Desktop.html , service Desktop includes service Frame. But its implementation only returns one \"com.sun.star.frame.Desktop\" in its supported service (see https://opengrok.libreoffice.org/xref/core/framework/source/services/desktop.cxx?r\u003d0f506617#82 ).\n\nBut I\u0027m not sure if that\u0027s actually a bug.",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "822110b7a887bc68ca90bf1fa82bd8976c17e535",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
