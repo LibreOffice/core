@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "32443228_6abc9159",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T20:25:10Z",
+      "side": 1,
+      "message": "Well - that depends. The longest part there is the initialization of static theSorter, which uses an obsolete (\u003dpre-thread-safe-statics C++) rtl::StaticWithInit idiom. You may introduce the sorter somewhere in the module like this:\n\n    namespace {\n    const auto\u0026 GetSorter()\n    {\n        static const auto aSorter \u003d comphelper::string::NaturalStringSorter(\n                ::comphelper::getProcessComponentContext(),\n                Application::GetSettings().GetLanguageTag().getLocale());\n        return aSorter;\n    }\n    } // unnamed namespace\n\n... and then use `return GetSorter().compare()` in your lambdas.\n\nThat would, of course, need to introduce that local function in both CXX files here, because you compare strings in both, but I don\u0027t think that\u0027s a problem. I\u0027m not sure it\u0027s OK to introduce a static in a lambda - but you are welcome to try and use it there if that\u0027s OK (and is not some implementation-dependent behaviour or UB) - then you wouldn\u0027t need even a single function, and will only add 1 line to the lambdas comparing strings (1 in each CXX).",
+      "parentUuid": "bd5ee9e0_21919220",
+      "range": {
+        "startLine": 1280,
+        "startChar": 11,
+        "endLine": 1280,
+        "endChar": 46
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5647b7fe_ed2cb108",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 7
@@ -388,6 +412,30 @@
       "side": 1,
       "message": "Can I use the default parameter to avoid problems where this function is used? For example, \n\nvoid SvxLanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,\n        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail,\n        const LanguageType defaultLangType \u003d NULL, sal_Int16 defaultType \u003d 0,\n        bool existDefaultLanguage \u003d false       \n)\n\nOtherwise, I should edit all functions which call SetLanguageList due to difference of parameter number.",
       "parentUuid": "4bfee682_54ea8499",
+      "range": {
+        "startLine": 193,
+        "startChar": 5,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "ee6f9473efff6ced394627749484046d165b0a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "718b9825_d403b57d",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T20:25:10Z",
+      "side": 1,
+      "message": "Quoting myself:\n\n\u003e ... but extend the older function\u0027s *optional* arguments\n\n... so of course, please append new *optional* (\u003dhaving default values) arguments :-)",
+      "parentUuid": "47cd2d26_ecc01d90",
       "range": {
         "startLine": 193,
         "startChar": 5,

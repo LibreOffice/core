@@ -140,6 +140,30 @@
       "revId": "337f199a899e339601d13a34d15319060c5be185",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c17b7885_35273c74",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T20:25:10Z",
+      "side": 0,
+      "message": "\u003e Why do I need to update default entry?\n\nIt looks like it might be needed in some circumstances - I don\u0027t know exactly where, but look at what it does: it replaces one default currency with another - maybe as a result of a change in settings, when now default currency changed. Removing this will regress somewhere, like \"I changed my currency in settings, but Calc still inserts old currency using a button, until I relaunch\".\n\n\u003e When I use this function, this disrupts the order of sequence. Default entry will be the last element due to append function. Without this block, order of currency is correct.\n\nThen just replace append with insert?",
+      "parentUuid": "efc829d0_d4ce4a9e",
+      "range": {
+        "startLine": 1892,
+        "startChar": 4,
+        "endLine": 1899,
+        "endChar": 49
+      },
+      "revId": "337f199a899e339601d13a34d15319060c5be185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
