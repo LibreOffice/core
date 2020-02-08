@@ -46,6 +46,7 @@ svx/uiconfig/ui/headfootformatpage.ui://GtkLabel[@id='labelFooterFormat'] orphan
 svx/uiconfig/ui/imapdialog.ui://GtkLabel[@id='statusurl'] orphan-label
 svx/uiconfig/ui/imapdialog.ui://GtkLabel[@id='statuspos'] orphan-label
 svx/uiconfig/ui/imapdialog.ui://GtkLabel[@id='statussize'] orphan-label
+svx/uiconfig/ui/labelbox.ui://GtkLabel[@id='label'] orphan-label
 svx/uiconfig/ui/mediaplayback.ui://GtkEntry[@id='timeedit'] no-labelled-by
 svx/uiconfig/ui/medialine.ui://GtkEntry[@id='timeedit'] no-labelled-by
 svx/uiconfig/ui/medialine.ui://GtkLabel[@id='url'] orphan-label

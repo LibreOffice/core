@@ -755,7 +755,6 @@ void LayoutMenu::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
     Fill();
     mxLayoutValueSet->StyleUpdated();
-//TODO    SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
     mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
 }
 

@@ -75,6 +75,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/imapmenu \
 	svx/uiconfig/ui/interimdockparent \
 	svx/uiconfig/ui/interimparent \
+	svx/uiconfig/ui/labelbox \
 	svx/uiconfig/ui/lightingwindow \
 	svx/uiconfig/ui/linkwarndialog \
 	svx/uiconfig/ui/measurewidthbar \

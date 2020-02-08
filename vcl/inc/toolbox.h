@@ -35,6 +35,7 @@ namespace vcl { class Window; }
 struct ImplToolItem
 {
     VclPtr<vcl::Window> mpWindow; //don't dispose mpWindow - we get copied around
+    bool                mbNonInteractiveWindow;
     void*               mpUserData;
     Image               maImage;
     long                mnImageAngle;

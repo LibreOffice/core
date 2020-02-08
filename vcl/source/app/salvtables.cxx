@@ -734,6 +734,11 @@ public:
         set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
     }
 
+    virtual void set_toolbar_background() override
+    {
+        m_xWidget->SetBackground(Wallpaper(COL_TRANSPARENT));
+    }
+
     virtual void set_highlight_background() override
     {
         set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());

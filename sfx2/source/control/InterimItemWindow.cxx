@@ -17,6 +17,8 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     m_xVclContentArea->Show();
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
     m_xContainer = m_xBuilder->weld_container(rID);
+
+    SetBackground(Wallpaper(COL_TRANSPARENT));
 }
 
 InterimItemWindow::~InterimItemWindow() { disposeOnce(); }
@@ -64,16 +66,18 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
     SetFakeFocus(true);
     GrabFocus();
 
-    /* let toolbox know we have focus so it updates its mnHighItemId to point
+    /* now give focus to our toolbox parent */
+    vcl::Window* pToolBox = GetParent();
+    pToolBox->GrabFocus();
+
+    /* let toolbox know this item window has focus so it updates its mnHighItemId to point
        to this toolitem in case tab means to move to another toolitem within
        the toolbox
     */
     NotifyEvent aNEvt(MouseNotifyEvent::GETFOCUS, this);
-    vcl::Window* pToolBox = GetParent();
     pToolBox->EventNotify(aNEvt);
 
-    /* now give focus to our toolbox parent and send it the tab */
-    pToolBox->GrabFocus();
+    /* send parent the tab */
     pToolBox->KeyInput(rKEvt);
 
     return true;

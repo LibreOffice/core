@@ -609,7 +609,8 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 static bool ImplIsFixedControl( const ImplToolItem *pItem )
 {
     return ( pItem->mpWindow &&
-            (pItem->mpWindow->GetType() == WindowType::FIXEDTEXT ||
+            (pItem->mbNonInteractiveWindow ||
+             pItem->mpWindow->GetType() == WindowType::FIXEDTEXT ||
              pItem->mpWindow->GetType() == WindowType::FIXEDLINE ||
              pItem->mpWindow->GetType() == WindowType::GROUPBOX) );
 }

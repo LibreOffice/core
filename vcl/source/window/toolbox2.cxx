@@ -79,6 +79,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
 {
     mnId            = nItemId;
     mpWindow        = nullptr;
+    mbNonInteractiveWindow = false;
     mpUserData      = nullptr;
     meType          = ToolBoxItemType::BUTTON;
     mnBits          = nItemBits;
@@ -875,6 +876,16 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
         bool bFormat = ToolBoxItemBits(nBits & ToolBoxItemBits::DROPDOWN) != ToolBoxItemBits(nOldBits & ToolBoxItemBits::DROPDOWN);
         if ( nBits != nOldBits )
             ImplInvalidate( true, bFormat );
+    }
+}
+
+void ToolBox::SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteractive)
+{
+    ImplToolItems::size_type nPos = GetItemPos( nItemId );
+
+    if ( nPos < GetItemCount() )
+    {
+        mpData->m_aItems[nPos].mbNonInteractiveWindow = bNonInteractive;
     }
 }
 
