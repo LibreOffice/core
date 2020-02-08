@@ -102,7 +102,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Select">
+                      <object class="VclOptionalBox" id="Default-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -166,7 +166,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Page">
+                      <object class="VclOptionalBox" id="Default-Section-Page">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -233,7 +233,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Page1">
+                      <object class="VclOptionalBox" id="Default-Section-Page1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -285,7 +285,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Home-Section-Insert">
+                      <object class="VclOptionalBox" id="Home-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -353,7 +353,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Home-Section-Insert1">
+                      <object class="VclOptionalBox" id="Home-Section-Insert1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -405,7 +405,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-TextBox">
+                      <object class="VclOptionalBox" id="Default-Section-TextBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -474,7 +474,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Line">
+                      <object class="VclOptionalBox" id="Default-Section-Line">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -546,7 +546,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-LineToolbox">
+                      <object class="VclOptionalBox" id="Default-Section-LineToolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -623,7 +623,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-BasicShapes">
+                      <object class="VclOptionalBox" id="Default-Section-BasicShapes">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -700,7 +700,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-FlowChartShapes">
+                      <object class="VclOptionalBox" id="Default-Section-FlowChartShapes">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -789,7 +789,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Zoom1">
+                      <object class="VclOptionalBox" id="Default-Section-Zoom1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -854,7 +854,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Zoom2">
+                      <object class="VclOptionalBox" id="Default-Section-Zoom2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -904,7 +904,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Home-Section-Slideshow">
+                      <object class="VclOptionalBox" id="Home-Section-Slideshow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -957,7 +957,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Home-Section-Slideshow1">
+                      <object class="VclOptionalBox" id="Home-Section-Slideshow1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -993,7 +993,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Default-Section-Extension">
+                      <object class="VclOptionalBox" id="Default-Section-Extension">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1092,7 +1092,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Paintbrush">
+                      <object class="VclOptionalBox" id="Table-Section-Paintbrush">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1157,7 +1157,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Area3">
+                      <object class="VclOptionalBox" id="Text-Section-Area3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1209,7 +1209,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Area4">
+                      <object class="VclOptionalBox" id="Text-Section-Area4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1249,7 +1249,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-AutoForma">
+                      <object class="VclOptionalBox" id="Table-Section-AutoForma">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1288,7 +1288,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-AreaDialog1">
+                      <object class="VclOptionalBox" id="Text-Section-AreaDialog1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1326,7 +1326,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Border1">
+                      <object class="VclOptionalBox" id="Table-Section-Border1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1366,7 +1366,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Border2">
+                      <object class="VclOptionalBox" id="Table-Section-Border2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1405,7 +1405,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Border3">
+                      <object class="VclOptionalBox" id="Table-Section-Border3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1444,7 +1444,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Border4">
+                      <object class="VclOptionalBox" id="Table-Section-Border4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1480,7 +1480,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-BorderDialog1">
+                      <object class="VclOptionalBox" id="Table-Section-BorderDialog1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1518,7 +1518,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-FontName">
+                      <object class="VclOptionalBox" id="Table-Section-FontName">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1573,7 +1573,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-FontHeight">
+                      <object class="VclOptionalBox" id="Table-Section-FontHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1613,7 +1613,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-GrawShrink">
+                      <object class="VclOptionalBox" id="Table-Section-GrawShrink">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1665,7 +1665,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-BoldItalic">
+                      <object class="VclOptionalBox" id="Table-Section-BoldItalic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1760,7 +1760,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-SubSuperScript">
+                      <object class="VclOptionalBox" id="Table-Section-SubSuperScript">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1809,7 +1809,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-FontColor">
+                      <object class="VclOptionalBox" id="Table-Section-FontColor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1885,7 +1885,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-FontDialog">
+                      <object class="VclOptionalBox" id="Table-Section-FontDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1923,7 +1923,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-BulletNumbering">
+                      <object class="VclOptionalBox" id="Table-Section-BulletNumbering">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -1995,7 +1995,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-IncrementDecrement">
+                      <object class="VclOptionalBox" id="Table-Section-IncrementDecrement">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2042,7 +2042,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Para1">
+                      <object class="VclOptionalBox" id="Table-Section-Para1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2129,7 +2129,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Para2">
+                      <object class="VclOptionalBox" id="Table-Section-Para2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2210,7 +2210,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-LTR">
+                      <object class="VclOptionalBox" id="Table-Section-LTR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2261,7 +2261,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Spacing">
+                      <object class="VclOptionalBox" id="Table-Section-Spacing">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2311,7 +2311,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-ParagraphDialog">
+                      <object class="VclOptionalBox" id="Table-Section-ParagraphDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2352,7 +2352,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Tabl-Section-Styles">
+                      <object class="VclOptionalBox" id="Tabl-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2407,7 +2407,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Merge">
+                      <object class="VclOptionalBox" id="Table-Section-Merge">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2483,7 +2483,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-AutoFormat">
+                      <object class="VclOptionalBox" id="Table-Section-AutoFormat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2524,7 +2524,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Column">
+                      <object class="VclOptionalBox" id="Table-Section-Column">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2612,7 +2612,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Row">
+                      <object class="VclOptionalBox" id="Table-Section-Row">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2685,7 +2685,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-TableDialog">
+                      <object class="VclOptionalBox" id="Table-Section-TableDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2726,7 +2726,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Table-Section-Insert">
+                      <object class="VclOptionalBox" id="Table-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2794,7 +2794,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Select">
+                      <object class="VclOptionalBox" id="Graphic-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2858,7 +2858,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Area1">
+                      <object class="VclOptionalBox" id="Graphic-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2910,7 +2910,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Area2">
+                      <object class="VclOptionalBox" id="Graphic-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2950,7 +2950,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-FillShadow">
+                      <object class="VclOptionalBox" id="Graphic-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2989,7 +2989,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="Graphic-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3027,7 +3027,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Line1">
+                      <object class="VclOptionalBox" id="Graphic-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3064,7 +3064,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Line2">
+                      <object class="VclOptionalBox" id="Graphic-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3103,7 +3103,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Line3">
+                      <object class="VclOptionalBox" id="Graphic-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3142,7 +3142,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Line4">
+                      <object class="VclOptionalBox" id="Graphic-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3182,7 +3182,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-LineDialog">
+                      <object class="VclOptionalBox" id="Graphic-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3220,7 +3220,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Rotate">
+                      <object class="VclOptionalBox" id="Graphic-Section-Rotate">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3282,7 +3282,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Flip">
+                      <object class="VclOptionalBox" id="Graphic-Section-Flip">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3329,7 +3329,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-TransformDialog">
+                      <object class="VclOptionalBox" id="Graphic-Section-TransformDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3367,7 +3367,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="Graphic-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3419,7 +3419,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Align1">
+                      <object class="VclOptionalBox" id="Graphic-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3469,7 +3469,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Align2">
+                      <object class="VclOptionalBox" id="Graphic-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3530,7 +3530,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="Graphic-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3582,7 +3582,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Arrange1">
+                      <object class="VclOptionalBox" id="Graphic-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3621,7 +3621,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Arrange2">
+                      <object class="VclOptionalBox" id="Graphic-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3671,7 +3671,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Arrange3">
+                      <object class="VclOptionalBox" id="Graphic-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3736,7 +3736,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Arrange4">
+                      <object class="VclOptionalBox" id="Graphic-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3775,7 +3775,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Styles">
+                      <object class="VclOptionalBox" id="Graphic-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3830,7 +3830,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-Crop">
+                      <object class="VclOptionalBox" id="Graphic-Section-Crop">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3882,7 +3882,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-SaveReplace">
+                      <object class="VclOptionalBox" id="Graphic-Section-SaveReplace">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3940,7 +3940,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-GraphicDialog">
+                      <object class="VclOptionalBox" id="Graphic-Section-GraphicDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3978,7 +3978,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-GraphicFilterToolbox">
+                      <object class="VclOptionalBox" id="Graphic-Section-GraphicFilterToolbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4034,7 +4034,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-ColorSettings">
+                      <object class="VclOptionalBox" id="Graphic-Section-ColorSettings">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4074,7 +4074,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-GrafMode">
+                      <object class="VclOptionalBox" id="Graphic-Section-GrafMode">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4113,7 +4113,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Graphic-Section-GrafTransparence">
+                      <object class="VclOptionalBox" id="Graphic-Section-GrafTransparence">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4166,7 +4166,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Select">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4230,7 +4230,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Area1">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4282,7 +4282,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Area2">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4322,7 +4322,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-FillShadow">
+                      <object class="VclOptionalBox" id="MultiObject-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4361,7 +4361,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="MultiObject-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4399,7 +4399,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Line1">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4436,7 +4436,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Line2">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4472,7 +4472,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Line3">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4511,7 +4511,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Line4">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4551,7 +4551,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Line5">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Line5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4590,7 +4590,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-LineDialog">
+                      <object class="VclOptionalBox" id="MultiObject-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4628,7 +4628,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Rotate">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Rotate">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4690,7 +4690,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Flip">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Flip">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4737,7 +4737,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-TransformDialog">
+                      <object class="VclOptionalBox" id="MultiObject-Section-TransformDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4775,7 +4775,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="MultiObject-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4827,7 +4827,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Align1">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4877,7 +4877,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Align2">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4938,7 +4938,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="MultiObject-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4990,7 +4990,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Arrange1">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5029,7 +5029,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Arrange2">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5079,7 +5079,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Arrange3">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5144,7 +5144,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Arrange4">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5183,7 +5183,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Styles">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5238,7 +5238,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Combine">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Combine">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5303,7 +5303,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-Merge">
+                      <object class="VclOptionalBox" id="MultiObject-Section-Merge">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5364,7 +5364,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="MultiObject-Section-DistributeSelection">
+                      <object class="VclOptionalBox" id="MultiObject-Section-DistributeSelection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5416,7 +5416,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Select">
+                      <object class="VclOptionalBox" id="Media-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5481,7 +5481,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Area1">
+                      <object class="VclOptionalBox" id="Media-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5534,7 +5534,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Area2">
+                      <object class="VclOptionalBox" id="Media-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5574,7 +5574,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-FillShadow">
+                      <object class="VclOptionalBox" id="Media-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5613,7 +5613,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="Media-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5651,7 +5651,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Line1">
+                      <object class="VclOptionalBox" id="Media-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5688,7 +5688,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Line2">
+                      <object class="VclOptionalBox" id="Media-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5724,7 +5724,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Line3">
+                      <object class="VclOptionalBox" id="Media-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5763,7 +5763,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Line4">
+                      <object class="VclOptionalBox" id="Media-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5803,7 +5803,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-LineDialog">
+                      <object class="VclOptionalBox" id="Media-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5841,7 +5841,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-AVMediaPlayer">
+                      <object class="VclOptionalBox" id="Media-Section-AVMediaPlayer">
                         <property name="width_request">122</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -5895,7 +5895,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-TransformDialog">
+                      <object class="VclOptionalBox" id="Media-Section-TransformDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5933,7 +5933,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="Media-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5985,7 +5985,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Align1">
+                      <object class="VclOptionalBox" id="Media-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6035,7 +6035,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Align2">
+                      <object class="VclOptionalBox" id="Media-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6096,7 +6096,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="Media-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6148,7 +6148,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Arrange1">
+                      <object class="VclOptionalBox" id="Media-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6187,7 +6187,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Arrange2">
+                      <object class="VclOptionalBox" id="Media-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6237,7 +6237,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Arrange3">
+                      <object class="VclOptionalBox" id="Media-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6303,7 +6303,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Arrange4">
+                      <object class="VclOptionalBox" id="Media-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6342,7 +6342,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-Styles">
+                      <object class="VclOptionalBox" id="Media-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6397,7 +6397,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Media-Section-AVMediaToolBox">
+                      <object class="VclOptionalBox" id="Media-Section-AVMediaToolBox">
                         <property name="width_request">167</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -6464,7 +6464,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Select">
+                      <object class="VclOptionalBox" id="Object-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6529,7 +6529,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Area1">
+                      <object class="VclOptionalBox" id="Object-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6582,7 +6582,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Area2">
+                      <object class="VclOptionalBox" id="Object-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6622,7 +6622,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-FillShadow">
+                      <object class="VclOptionalBox" id="Object-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6661,7 +6661,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="Object-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6699,7 +6699,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Line1">
+                      <object class="VclOptionalBox" id="Object-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6736,7 +6736,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Line2">
+                      <object class="VclOptionalBox" id="Object-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6772,7 +6772,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Line3">
+                      <object class="VclOptionalBox" id="Object-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6811,7 +6811,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Line4">
+                      <object class="VclOptionalBox" id="Object-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6851,7 +6851,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-LineDialog">
+                      <object class="VclOptionalBox" id="Object-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6889,7 +6889,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Rotate">
+                      <object class="VclOptionalBox" id="Object-Section-Rotate">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6952,7 +6952,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Flip">
+                      <object class="VclOptionalBox" id="Object-Section-Flip">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6999,7 +6999,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-TransformDialog">
+                      <object class="VclOptionalBox" id="Object-Section-TransformDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7037,7 +7037,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="Object-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7089,7 +7089,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Align1">
+                      <object class="VclOptionalBox" id="Object-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7139,7 +7139,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Align2">
+                      <object class="VclOptionalBox" id="Object-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7200,7 +7200,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="Object-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7252,7 +7252,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Arrange1">
+                      <object class="VclOptionalBox" id="Object-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7291,7 +7291,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Arrange2">
+                      <object class="VclOptionalBox" id="Object-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7341,7 +7341,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Arrange3">
+                      <object class="VclOptionalBox" id="Object-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7407,7 +7407,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Arrange4">
+                      <object class="VclOptionalBox" id="Object-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7446,7 +7446,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Object-Section-Styles">
+                      <object class="VclOptionalBox" id="Object-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7516,7 +7516,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Label">
+                      <object class="VclOptionalBox" id="Form-Section-Label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7581,7 +7581,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-ControlProperties">
+                      <object class="VclOptionalBox" id="Form-Section-ControlProperties">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7637,7 +7637,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Properties">
+                      <object class="VclOptionalBox" id="Form-Section-Properties">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7677,7 +7677,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-ShowFmExplorer">
+                      <object class="VclOptionalBox" id="Form-Section-ShowFmExplorer">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7717,7 +7717,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-TabDialog">
+                      <object class="VclOptionalBox" id="Form-Section-TabDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7757,7 +7757,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Labels">
+                      <object class="VclOptionalBox" id="Form-Section-Labels">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7834,7 +7834,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-RadioButton">
+                      <object class="VclOptionalBox" id="Form-Section-RadioButton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7895,7 +7895,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Pushbutton">
+                      <object class="VclOptionalBox" id="Form-Section-Pushbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7961,7 +7961,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-OpenReadOnly">
+                      <object class="VclOptionalBox" id="Form-Section-OpenReadOnly">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8016,7 +8016,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-AutoControlFocus">
+                      <object class="VclOptionalBox" id="Form-Section-AutoControlFocus">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8055,7 +8055,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="Form-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8107,7 +8107,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Align1">
+                      <object class="VclOptionalBox" id="Form-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8168,7 +8168,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Align2">
+                      <object class="VclOptionalBox" id="Form-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8218,7 +8218,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="Form-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8270,7 +8270,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Arrange1">
+                      <object class="VclOptionalBox" id="Form-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8309,7 +8309,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Arrange2">
+                      <object class="VclOptionalBox" id="Form-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8359,7 +8359,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Arrange3">
+                      <object class="VclOptionalBox" id="Form-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8425,7 +8425,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-Arrange4">
+                      <object class="VclOptionalBox" id="Form-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8464,7 +8464,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-FormattedField">
+                      <object class="VclOptionalBox" id="Form-Section-FormattedField">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8574,7 +8574,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-GroupBox">
+                      <object class="VclOptionalBox" id="Form-Section-GroupBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8629,7 +8629,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-FormattedField1">
+                      <object class="VclOptionalBox" id="Form-Section-FormattedField1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8679,7 +8679,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Form-Section-FormattedField2">
+                      <object class="VclOptionalBox" id="Form-Section-FormattedField2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8743,7 +8743,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Paintbrush">
+                      <object class="VclOptionalBox" id="Text-Section-Paintbrush">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8808,7 +8808,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Area1">
+                      <object class="VclOptionalBox" id="Text-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8863,7 +8863,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Area2">
+                      <object class="VclOptionalBox" id="Text-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8903,7 +8903,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-FillShadow">
+                      <object class="VclOptionalBox" id="Text-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8942,7 +8942,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="Text-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8983,7 +8983,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Line1">
+                      <object class="VclOptionalBox" id="Text-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9023,7 +9023,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Line2">
+                      <object class="VclOptionalBox" id="Text-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9062,7 +9062,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Line3">
+                      <object class="VclOptionalBox" id="Text-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9101,7 +9101,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Line4">
+                      <object class="VclOptionalBox" id="Text-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9141,7 +9141,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-LineDialog">
+                      <object class="VclOptionalBox" id="Text-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9182,7 +9182,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-FontName">
+                      <object class="VclOptionalBox" id="Text-Section-FontName">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9236,7 +9236,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-FontHeight">
+                      <object class="VclOptionalBox" id="Text-Section-FontHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9276,7 +9276,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-GrawShrink">
+                      <object class="VclOptionalBox" id="Text-Section-GrawShrink">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9324,7 +9324,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-BoldItalic">
+                      <object class="VclOptionalBox" id="Text-Section-BoldItalic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9419,7 +9419,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-SubSuperScript">
+                      <object class="VclOptionalBox" id="Text-Section-SubSuperScript">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9468,7 +9468,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-FontColor">
+                      <object class="VclOptionalBox" id="Text-Section-FontColor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9544,7 +9544,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-FontDialog">
+                      <object class="VclOptionalBox" id="Text-Section-FontDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9585,7 +9585,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-BulletNumbering">
+                      <object class="VclOptionalBox" id="Text-Section-BulletNumbering">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9660,7 +9660,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-IncrementDecrement">
+                      <object class="VclOptionalBox" id="Text-Section-IncrementDecrement">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9710,7 +9710,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Para1">
+                      <object class="VclOptionalBox" id="Text-Section-Para1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9797,7 +9797,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Para2">
+                      <object class="VclOptionalBox" id="Text-Section-Para2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9878,7 +9878,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-LTR">
+                      <object class="VclOptionalBox" id="Text-Section-LTR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9929,7 +9929,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Spacing">
+                      <object class="VclOptionalBox" id="Text-Section-Spacing">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9988,7 +9988,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-ParagraphDialog">
+                      <object class="VclOptionalBox" id="Text-Section-ParagraphDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10029,7 +10029,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-Styles">
+                      <object class="VclOptionalBox" id="Text-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10084,7 +10084,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Text-Section-TextBox">
+                      <object class="VclOptionalBox" id="Text-Section-TextBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10169,7 +10169,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Select">
+                      <object class="VclOptionalBox" id="3dObject-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10234,7 +10234,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Area1">
+                      <object class="VclOptionalBox" id="3dObject-Section-Area1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10287,7 +10287,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Area2">
+                      <object class="VclOptionalBox" id="3dObject-Section-Area2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10327,7 +10327,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-FillShadow">
+                      <object class="VclOptionalBox" id="3dObject-Section-FillShadow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10366,7 +10366,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-AreaDialog">
+                      <object class="VclOptionalBox" id="3dObject-Section-AreaDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10404,7 +10404,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Line1">
+                      <object class="VclOptionalBox" id="3dObject-Section-Line1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10441,7 +10441,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Line2">
+                      <object class="VclOptionalBox" id="3dObject-Section-Line2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10477,7 +10477,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Line3">
+                      <object class="VclOptionalBox" id="3dObject-Section-Line3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10516,7 +10516,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Line4">
+                      <object class="VclOptionalBox" id="3dObject-Section-Line4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10556,7 +10556,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-LineDialog">
+                      <object class="VclOptionalBox" id="3dObject-Section-LineDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10594,7 +10594,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Rotate">
+                      <object class="VclOptionalBox" id="3dObject-Section-Rotate">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10646,7 +10646,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Window3D">
+                      <object class="VclOptionalBox" id="3dObject-Section-Window3D">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10683,7 +10683,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-TransformDialog">
+                      <object class="VclOptionalBox" id="3dObject-Section-TransformDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10721,7 +10721,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3DObject-Section-ObjectAlign">
+                      <object class="VclOptionalBox" id="3DObject-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10773,7 +10773,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Align1">
+                      <object class="VclOptionalBox" id="3dObject-Section-Align1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10823,7 +10823,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Align2">
+                      <object class="VclOptionalBox" id="3dObject-Section-Align2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10884,7 +10884,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-ObjectPosition">
+                      <object class="VclOptionalBox" id="3dObject-Section-ObjectPosition">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10936,7 +10936,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Arrange1">
+                      <object class="VclOptionalBox" id="3dObject-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10975,7 +10975,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Arrange2">
+                      <object class="VclOptionalBox" id="3dObject-Section-Arrange2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11025,7 +11025,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Arrange3">
+                      <object class="VclOptionalBox" id="3dObject-Section-Arrange3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11091,7 +11091,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Arrange4">
+                      <object class="VclOptionalBox" id="3dObject-Section-Arrange4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11130,7 +11130,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="3dObject-Section-Styles">
+                      <object class="VclOptionalBox" id="3dObject-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11199,7 +11199,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-DrawingLayout">
+                      <object class="VclOptionalBox" id="Master-Section-DrawingLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11255,7 +11255,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-Insert">
+                      <object class="VclOptionalBox" id="Master-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11292,7 +11292,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-DeleteMasterPage">
+                      <object class="VclOptionalBox" id="Master-Section-DeleteMasterPage">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11332,7 +11332,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-Rename">
+                      <object class="VclOptionalBox" id="Master-Section-Rename">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11372,7 +11372,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-Dialog">
+                      <object class="VclOptionalBox" id="Master-Section-Dialog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11413,7 +11413,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-SelectBackground">
+                      <object class="VclOptionalBox" id="Master-Section-SelectBackground">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11470,7 +11470,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-SaveBackground">
+                      <object class="VclOptionalBox" id="Master-Section-SaveBackground">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11510,7 +11510,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-View">
+                      <object class="VclOptionalBox" id="Master-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11568,7 +11568,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-DisplayMasterBackground">
+                      <object class="VclOptionalBox" id="Master-Section-DisplayMasterBackground">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11608,7 +11608,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-DisplayMasterObjects">
+                      <object class="VclOptionalBox" id="Master-Section-DisplayMasterObjects">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11649,7 +11649,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-MasterLayouts">
+                      <object class="VclOptionalBox" id="Master-Section-MasterLayouts">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11690,7 +11690,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-PageMode">
+                      <object class="VclOptionalBox" id="Master-Section-PageMode">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11731,7 +11731,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="Master-Section-Close">
+                      <object class="VclOptionalBox" id="Master-Section-Close">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

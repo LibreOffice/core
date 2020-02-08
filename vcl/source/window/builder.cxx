@@ -54,6 +54,7 @@
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 #include <messagedialog.hxx>
+#include <OptionalBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
@@ -2074,6 +2075,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (eUnit == FieldUnit::CUSTOM)
             xBox->SetCustomUnitText(sUnit);
         xWindow = xBox;
+    }
+    else if (name == "VclOptionalBox")
+    {
+        xWindow = VclPtr<OptionalBox>::Create(pParent);
     }
     else if (name == "GtkIconView")
     {
