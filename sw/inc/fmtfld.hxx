@@ -31,7 +31,17 @@ class SwField;
 class SwTextField;
 class SwView;
 class SwFieldType;
+class SwFormatField;
 namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
+
+namespace sw {
+    struct FindFormatForFieldHint final : SfxHint {
+        const SwField* m_pField;
+        SwFormatField*& m_rpFormat;
+        FindFormatForFieldHint(const SwField* pField, SwFormatField*& rpFormat) : m_pField(pField), m_rpFormat(rpFormat) {};
+    };
+}
+
 
 // ATT_FLD
 class SW_DLLPUBLIC SwFormatField final

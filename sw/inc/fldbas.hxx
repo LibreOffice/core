@@ -28,6 +28,8 @@
 #include <climits>
 
 class SwDoc;
+class SwField;
+class SwFormatField;
 class SwRootFrame;
 class SvNumberFormatter;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
@@ -267,6 +269,7 @@ public:
 
     inline  void            UpdateFields() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    SwFormatField* FindFormatForField(const SwField*) const;
 };
 
 inline void SwFieldType::UpdateFields() const
