@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
 #include <OptionalBox.hxx>
 
@@ -60,7 +59,5 @@ void OptionalBox::ShowContent()
 }
 
 bool OptionalBox::IsHidden() { return !m_bInFullView; }
-
-VCL_BUILDER_FACTORY(OptionalBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
