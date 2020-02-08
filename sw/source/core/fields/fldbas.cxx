@@ -162,6 +162,17 @@ SwFormatField* SwFieldType::FindFormatForField(const SwField* pField) const {
     return pFormat;
 }
 
+SwFormatField* SwFieldType::FindFormatForPostItId(sal_uInt32 nPostItId) const {
+    SwFormatField* pFormat = nullptr;
+    CallSwClientNotify(sw::FindFormatForPostItIdHint(nPostItId, pFormat));
+    return pFormat;
+}
+
+void SwFieldType::CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, const bool bHideRedlines)
+{
+    CallSwClientNotify(sw::CollectPostItsHint(rvFormatFields, rIDRA, bHideRedlines));
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
