@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "660f512d_b22e7992",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-08T11:46:07Z",
+      "side": 1,
+      "message": "I\u0027m afraid this does not test property set/get. In case when following Property statements are just ignored, this will still work, making anObject a variant variable (because Option Explicit is not used); I would imagine a true test would be having *two* properties with different names, one to set the _obj variable, *another* to get it. Thus it would be unambiguous if the Option statement had executed, or not.",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0475030c46107356d7258e09ebad428b113ad40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
