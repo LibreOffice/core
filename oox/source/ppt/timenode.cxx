@@ -93,7 +93,7 @@ namespace oox::ppt {
                 sServiceName = "com.sun.star.animations.Audio";
                 break;
             default:
-                SAL_INFO("oox.ppt","OOX: uhandled type " << nNodeType );
+                SAL_INFO("oox.ppt","OOX: unhandled type " << nNodeType );
                 break;
             }
             return sServiceName;
