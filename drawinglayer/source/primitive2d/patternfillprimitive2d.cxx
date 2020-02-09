@@ -251,7 +251,7 @@ namespace drawinglayer::primitive2d
 
         void PatternFillPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            // The existing bufferd decomposition uses a buffer in the remembered
+            // The existing buffered decomposition uses a buffer in the remembered
             // size or none if sizes are zero. Get new needed sizes which depend on
             // the given ViewInformation
             bool bResetBuffering = false;
