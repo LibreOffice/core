@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3774b87_4cc5c85e",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T16:35:08Z",
+      "side": 1,
+      "message": "Again a change that is irrelevant to the task (a whitespace-only change) on a line otherwise not modified. And out clang-format rules mandate to not have these whitespaces ... I wonder if you have some IDE that automatically does such changes? (and two lines above I see the same whitespace change)",
+      "range": {
+        "startLine": 1331,
+        "startChar": 67,
+        "endLine": 1331,
+        "endChar": 68
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143aff5f_84e01a62",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T16:35:08Z",
+      "side": 1,
+      "message": "Using emplace_back, you don\u0027t need the make_pair - just pass the two arguments that a pair ctor takes to the emplace_back directly.",
+      "range": {
+        "startLine": 1335,
+        "startChar": 43,
+        "endLine": 1335,
+        "endChar": 74
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "090d046c_15736ea0",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T16:35:08Z",
+      "side": 1,
+      "message": "Why? The page should reset to the previous values here, not to default?",
+      "range": {
+        "startLine": 1201,
+        "startChar": 27,
+        "endLine": 1201,
+        "endChar": 41
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d390e364_93bbcf06",
+        "filename": "include/svx/langbox.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T16:35:08Z",
+      "side": 1,
+      "message": "Please don\u0027t modify more than required for your task! Specifically here, you should not modify lines 78 and 79: just make this look like\n\n    SvxLanguageBox(std::unique_ptr\u003cweld::ComboBox\u003e pControl);\n    void            SetLanguageList( SvxLanguageListFlags nLangList,\n                            bool bHasLangNone, bool bLangNoneIsLangAll \u003d false,\n                            bool bCheckSpellAvail \u003d false, bool bDefaultLangExist \u003d false,\n                            LanguageType eDefaultLangType \u003d LANGUAGE_NONE,\n                            sal_Int16 nDefaultType \u003d 0 );\n\nThis also moves the bDefaultLangExist before eDefaultLangType and nDefaultType",
+      "range": {
+        "startLine": 78,
+        "startChar": 57,
+        "endLine": 81,
+        "endChar": 82
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d95ee94e_3a03f8b6",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T16:35:08Z",
+      "side": 1,
+      "message": "A typo: nSep*e*ratorPosition",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 300,
+        "endChar": 26
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
