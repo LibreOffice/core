@@ -1657,6 +1657,11 @@ bool OApplicationController::onContainerSelect(ElementType _eType)
                 return false;
             }
         }
+        else if ( _eType == E_QUERY )
+        {
+            // tdf#126578: retrieve connection to be able to call "Create as View"
+            ensureConnection();
+        }
         Reference< XLayoutManager > xLayoutManager = getLayoutManager( getFrame() );
         if ( xLayoutManager.is() )
         {
