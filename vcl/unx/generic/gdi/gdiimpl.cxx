@@ -1688,6 +1688,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     // MM01 need to do line dashing as fallback stuff here now
     const double fDotDashLength(nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
     const bool bStrokeUsed(0.0 != fDotDashLength);
+    assert(!bStrokeUsed || (bStrokeUsed && pStroke));
 
     if(pSystemDependentData_Triangulation)
     {
