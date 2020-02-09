@@ -36,7 +36,7 @@ namespace drawinglayer
             for 2D objects. It decomposes to a TransformPrimitive2D embedded
             into a ModifiedColorPrimitive2D.
 
-            It's for primtive usage convenience, so that not everyone has
+            It's for primitive usage convenience, so that not everyone has
             to implement the generic shadow construction by himself.
 
             The same geometry as sequence of primitives is used as geometry and
