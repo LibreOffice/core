@@ -77,7 +77,7 @@ protected:
      * a collection of Uri binding.
      *
      * the m_vUris is used to hold the Uri strings, and the m_vXInputStreams is used
-     * to hold corresponding binded XInputStream interface.
+     * to hold corresponding bound XInputStream interface.
      */
     std::vector< OUString > m_vUris;
     std::vector< css::uno::Reference< css::io::XInputStream > > m_vXInputStreams;
