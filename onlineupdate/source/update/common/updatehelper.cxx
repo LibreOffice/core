@@ -686,7 +686,7 @@ WaitForProcessExit(LPCWSTR filename, DWORD maxSeconds)
     DWORD applicationRunningError = WAIT_TIMEOUT;
     for (DWORD i = 0; i < maxSeconds; i++)
     {
-        DWORD applicationRunningError = IsProcessRunning(filename);
+        applicationRunningError = IsProcessRunning(filename);
         if (ERROR_NOT_FOUND == applicationRunningError)
         {
             return ERROR_SUCCESS;
