@@ -449,21 +449,6 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertTool
     return aPropSeq;
 }
 
-bool SvxConfigPageHelper::showKeyConfigTabPage(
-    const css::uno::Reference< css::frame::XFrame >& xFrame )
-{
-    if (!xFrame.is())
-    {
-        return false;
-    }
-    OUString sModuleId(
-        css::frame::ModuleManager::create(
-            comphelper::getProcessComponentContext())
-        ->identify(xFrame));
-    return !sModuleId.isEmpty()
-        && sModuleId != "com.sun.star.frame.StartModule";
-}
-
 bool SvxConfigPageHelper::EntrySort( SvxConfigEntry const * a, SvxConfigEntry const * b )
 {
     return a->GetName().compareTo( b->GetName() ) < 0;
