@@ -444,7 +444,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     SwNodeRange aOrigInsPos( aIdx, -1, aIdx ); // original insertion position
 
-    // call DelFrames/MakeFrames for the upmost SectionNode
+    // call DelFrames/MakeFrames for the utmost SectionNode
     int nSectNdCnt = 0;
     bool bSaveNewFrames = bNewFrames;
 
