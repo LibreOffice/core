@@ -453,6 +453,24 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 }
             }
             break;
+        case SID_GETUNDOSTRINGS:
+        case SID_GETREDOSTRINGS:
+            {
+                size_t ( SfxUndoManager::*retrieveCount )( bool const ) const =
+                    ( _nId == SID_GETUNDOSTRINGS ) ? &SfxUndoManager::GetUndoActionCount : &SfxUndoManager::GetRedoActionCount;
+
+                OUString ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
+                    ( _nId == SID_GETUNDOSTRINGS ) ? &SfxUndoManager::GetUndoActionComment : &SfxUndoManager::GetRedoActionComment;
+
+                SfxUndoManager& rUndoManager( getUndoManager() );
+                size_t nCount(( rUndoManager.*retrieveCount )( SfxUndoManager::TopLevel ));
+                Sequence<OUString> aSeq(nCount);
+                for (size_t n = 0; n < nCount; ++n)
+                    aSeq[n] = (rUndoManager.*retrieveComment)( n, SfxUndoManager::TopLevel );
+                aReturn.aValue <<= aSeq;
+                aReturn.bEnabled = true;
+            }
+            break;
         case SID_OBJECT_RESIZING:
         case SID_OBJECT_SMALLESTWIDTH:
         case SID_OBJECT_SMALLESTHEIGHT:
@@ -1016,9 +1034,13 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             const OXUndoEnvironment::OUndoMode aLock( m_aReportModel->GetUndoEnv() );
             bool ( SfxUndoManager::*doXDo )() =
                 ( _nId == SID_UNDO ) ? &SfxUndoManager::Undo : &SfxUndoManager::Redo;
-
             SfxUndoManager& rUndoManager( getUndoManager() );
-            (rUndoManager.*doXDo)();
+
+            sal_Int16 nCount(1);
+            if (aArgs.size() && aArgs[0].Name != "KeyModifier")
+                aArgs[0].Value >>= nCount;
+            while (nCount--)
+                (rUndoManager.*doXDo)();
             InvalidateAll();
             if (m_xGroupsFloater && m_xGroupsFloater->getDialog()->get_visible())
                 m_xGroupsFloater->UpdateData();
@@ -2022,6 +2044,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
     implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
     implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
+    implDescribeSupportedFeature( ".uno:GetUndoStrings",            SID_GETUNDOSTRINGS);
+    implDescribeSupportedFeature( ".uno:GetRedoStrings",            SID_GETREDOSTRINGS);
 }
 
 void OReportController::impl_onModifyChanged()

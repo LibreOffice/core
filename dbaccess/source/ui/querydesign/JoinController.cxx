@@ -307,6 +307,8 @@ void OJoinController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Undo",      ID_BROWSER_UNDO,    CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:AddTable",  ID_BROWSER_ADDTABLE,CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:EditDoc",   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:GetUndoStrings", SID_GETUNDOSTRINGS );
+    implDescribeSupportedFeature( ".uno:GetRedoStrings", SID_GETREDOSTRINGS );
 }
 
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend)
