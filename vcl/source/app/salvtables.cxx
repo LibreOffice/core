@@ -736,7 +736,8 @@ public:
 
     virtual void set_toolbar_background() override
     {
-        m_xWidget->SetBackground(Wallpaper(COL_TRANSPARENT));
+        m_xWidget->SetBackground();
+        m_xWidget->SetPaintTransparent(true);
     }
 
     virtual void set_highlight_background() override

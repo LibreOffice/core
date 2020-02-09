@@ -180,7 +180,9 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxMetricField::GetFocus()
 {
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :

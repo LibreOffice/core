@@ -20,25 +20,31 @@
 #define INCLUDED_SVX_SOURCE_INC_TBXFORM_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <vcl/field.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 
-class SvxFmAbsRecWin final : public NumericField
+class SvxFmAbsRecWin final : public InterimItemWindow
 {
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
+    virtual void dispose() override;
+    virtual ~SvxFmAbsRecWin() override;
 
-    virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
-    virtual void LoseFocus() override;
+    void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
+
+    virtual void GetFocus() override;
 
 private:
+    std::unique_ptr<weld::Entry> m_xWidget;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ActivatedHdl, weld::Entry&, bool);
+    DECL_LINK(FocusOutHdl, weld::Widget&, void); // for invalidating our content when losing the focus
+
     void FirePosition( bool _bForce );
 
     SfxToolBoxControl*  m_pController;
-        // for invalidating our content when losing the focus
 };
 
-
-class FixedText;
 class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 {
 public:
@@ -53,7 +59,6 @@ public:
                                   const SfxPoolItem* pState ) override;
 };
 
-
 class SvxFmTbxCtlRecText : public SfxToolBoxControl
 {
 public:
@@ -64,7 +69,6 @@ public:
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
-
 
 class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
 {

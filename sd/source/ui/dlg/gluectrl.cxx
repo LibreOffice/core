@@ -72,7 +72,9 @@ void GlueEscDirLB::dispose()
 
 void GlueEscDirLB::GetFocus()
 {
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 GlueEscDirLB::~GlueEscDirLB()

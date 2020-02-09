@@ -157,7 +157,9 @@ SvxFontSizeBox_Impl::~SvxFontSizeBox_Impl()
 
 void SvxFontSizeBox_Impl::GetFocus()
 {
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()

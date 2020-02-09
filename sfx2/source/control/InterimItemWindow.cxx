@@ -18,7 +18,8 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
     m_xContainer = m_xBuilder->weld_container(rID);
 
-    SetBackground(Wallpaper(COL_TRANSPARENT));
+    SetBackground();
+    SetPaintTransparent(true);
 }
 
 InterimItemWindow::~InterimItemWindow() { disposeOnce(); }
@@ -43,6 +44,17 @@ void InterimItemWindow::Resize()
 Size InterimItemWindow::GetOptimalSize() const
 {
     return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+}
+
+void InterimItemWindow::GetFocus()
+{
+    /* let toolbox know this item window has focus so it updates its mnHighItemId to point
+       to this toolitem in case tab means to move to another toolitem within
+       the toolbox
+    */
+    vcl::Window* pToolBox = GetParent();
+    NotifyEvent aNEvt(MouseNotifyEvent::GETFOCUS, this);
+    pToolBox->EventNotify(aNEvt);
 }
 
 bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)

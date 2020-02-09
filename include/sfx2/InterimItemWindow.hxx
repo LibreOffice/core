@@ -21,6 +21,7 @@ public:
 
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
+    virtual void GetFocus() override;
 
 protected:
     InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);

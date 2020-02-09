@@ -81,7 +81,9 @@ void SdPagesField::dispose()
 
 void SdPagesField::GetFocus()
 {
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 SdPagesField::~SdPagesField()
