@@ -1617,7 +1617,7 @@ bool SwContentNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
         else
             nDel = AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, nWhich1, nWhich2, nullptr, nullptr );
 
-        if( !GetpSwAttrSet()->Count() ) // Empt? Delete
+        if( !GetpSwAttrSet()->Count() ) // Empty? Delete
             mpAttrSet.reset();
         return 0 != nDel;
     }
