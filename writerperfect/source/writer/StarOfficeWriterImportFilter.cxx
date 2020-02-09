@@ -8,7 +8,6 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
 
 #include <libstaroffice/libstaroffice.hxx>
 

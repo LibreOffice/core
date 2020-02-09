@@ -12,7 +12,6 @@
 #include <libetonyek/libetonyek.h>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
 
 #include "NumbersImportFilter.hxx"
 

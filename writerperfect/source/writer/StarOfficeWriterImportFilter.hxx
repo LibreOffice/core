@@ -10,7 +10,6 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_STAROFFICEWRITERIMPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_STAROFFICEWRITERIMPORTFILTER_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <ImportFilter.hxx>

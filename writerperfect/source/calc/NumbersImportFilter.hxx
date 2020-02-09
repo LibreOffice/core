@@ -10,7 +10,6 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_NUMBERSIMPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_NUMBERSIMPORTFILTER_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <DocumentHandlerForOds.hxx>

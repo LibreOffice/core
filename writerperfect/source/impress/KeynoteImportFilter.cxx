@@ -8,28 +8,21 @@
  */
 
 #include <memory>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <iostream>
 #include <libetonyek/libetonyek.h>
-#include <libodfgen/libodfgen.hxx>
-#include <rtl/tencinfo.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
 
 #include <DirectoryStream.hxx>
 #include <DocumentHandler.hxx>
 #include <WPXSvInputStream.hxx>
-
-#include <xmloff/attrlist.hxx>
 
 #include "KeynoteImportFilter.hxx"
 

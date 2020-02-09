@@ -14,7 +14,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include "writerperfectdllapi.h"
 #include <memory>
-#include <climits>
 
 namespace com
 {

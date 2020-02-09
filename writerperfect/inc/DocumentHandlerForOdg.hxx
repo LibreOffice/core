@@ -12,6 +12,8 @@
 
 #include "DocumentHandlerFor.hxx"
 
+#include <rtl/ustring.hxx>
+
 namespace writerperfect
 {
 template <> struct DocumentHandlerFor<OdgGenerator>
