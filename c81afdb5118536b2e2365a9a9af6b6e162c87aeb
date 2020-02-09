@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58655a7e_41a0f194",
+        "filename": "svx/source/sidebar/text/TextUnderlinePopup.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-09T17:25:42Z",
+      "side": 1,
+      "message": "Hi Caolán,\n\nWas this change from DROPDOWN to DROPDOWNONLY intentional?",
+      "range": {
+        "startLine": 42,
+        "startChar": 35,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "c81afdb5118536b2e2365a9a9af6b6e162c87aeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
