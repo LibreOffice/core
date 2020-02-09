@@ -52,7 +52,7 @@ public class _XShapeBinder extends MultiMethodTest {
     * Retrieves draw page collection from relation and binds them. <p>
     *
     * Has <b> OK </b> status if the shape group returned is not null
-    * number of shapes in collection is 1 (shapes are binded into a single
+    * number of shapes in collection is 1 (shapes are bound into a single
     * shape). <p>
     */
     public void _bind () {
