@@ -317,7 +317,7 @@ private:
         double fValue,          /// float content; possibly invalid
         bool bExportValue,  /// export value attribute?
         bool bExportValueType,  /// export value-type attribute?
-        bool bExportStyle,  /// export style-sttribute?
+        bool bExportStyle,  /// export style-attribute?
         bool bForceSystemLanguage, /// no style language export
         bool bTimeStyle = false); /// exporting a time style?
 
