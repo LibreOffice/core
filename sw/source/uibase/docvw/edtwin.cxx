@@ -5356,7 +5356,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( m_pQuickHlpData->m_bIsDisplayed )
                 m_pQuickHlpData->Stop( rSh );
 
-            OUString sWord;
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
                 bCallBase = false;
@@ -5367,7 +5366,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
                 if( pData )
                 {
-                    sWord = pData->GetText();
                     bCallBase = false;
                     rSh.SetExtTextInputData( *pData );
                 }
