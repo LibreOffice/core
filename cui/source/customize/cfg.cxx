@@ -227,18 +227,15 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 void SvxConfigDialog::SetFrame(const css::uno::Reference<css::frame::XFrame>& xFrame)
 {
     m_xFrame = xFrame;
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext(),
-                                                    uno::UNO_SET_THROW);
-
     OUString aModuleId = SvxConfigPage::GetFrameWithDefaultAndIdentify(m_xFrame);
-    uno::Reference<css::frame::XModuleManager2> xModuleManager(
-        css::frame::ModuleManager::create(xContext));
-    OUString aModuleName = SvxConfigPageHelper::GetUIModuleName(aModuleId, xModuleManager);
-    if (aModuleName != "Writer" && aModuleName != "Calc" && aModuleName != "Impress"
-        && aModuleName != "Draw")
+
+    if (aModuleId != "com.sun.star.text.TextDocument" &&
+        aModuleId != "com.sun.star.sheet.SpreadsheetDocument" &&
+        aModuleId != "com.sun.star.presentation.PresentationDocument" &&
+        aModuleId != "com.sun.star.drawing.DrawingDocument")
         RemoveTabPage("notebookbar");
 
-    if (!SvxConfigPageHelper::showKeyConfigTabPage(xFrame))
+    if (aModuleId == "com.sun.star.frame.StartModule")
         RemoveTabPage("keyboard");
 }
 
