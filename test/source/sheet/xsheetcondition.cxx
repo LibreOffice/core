@@ -46,7 +46,7 @@ void XSheetCondition::testGetSetFormula2()
 void XSheetCondition::testGetSetOperator()
 {
     uno::Reference<sheet::XSheetCondition> xSheetCondition(init(), UNO_QUERY_THROW);
-    sheet::ConditionOperator aOperator = sheet::ConditionOperator_NONE;
+    sheet::ConditionOperator aOperator;
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to get Operator",
                                     aOperator = xSheetCondition->getOperator());
 
