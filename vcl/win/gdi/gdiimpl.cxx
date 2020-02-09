@@ -2438,7 +2438,7 @@ static void paintToGdiPlus(
     Gdiplus::PointF aDestPoints[3];
     Gdiplus::ImageAttributes aAttributes;
 
-    // define target region as paralellogram
+    // define target region as parallelogram
     aDestPoints[0].X = Gdiplus::REAL(rTR.mnDestX);
     aDestPoints[0].Y = Gdiplus::REAL(rTR.mnDestY);
     aDestPoints[1].X = Gdiplus::REAL(rTR.mnDestX + rTR.mnDestWidth);
@@ -2610,7 +2610,7 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
                     nSrcHeight,
                     nDestHeight);
 
-                // this mode is only capable of drawing the whole bitmap to a paralellogram
+                // this mode is only capable of drawing the whole bitmap to a parallelogram
                 aDestPoints[0].X = Gdiplus::REAL(rNull.getX());
                 aDestPoints[0].Y = Gdiplus::REAL(rNull.getY());
                 aDestPoints[1].X = Gdiplus::REAL(rX.getX());
