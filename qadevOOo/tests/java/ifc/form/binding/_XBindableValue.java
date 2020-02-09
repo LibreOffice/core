@@ -52,7 +52,7 @@ public class _XBindableValue extends MultiMethodTest {
         boolean res = rightOne.equals("MyValueBinding");
 
         if (!res) {
-            log.println("Excepted: MyValueBinding");
+            log.println("Expected: MyValueBinding");
             log.println("getting: " + rightOne);
         }
 
