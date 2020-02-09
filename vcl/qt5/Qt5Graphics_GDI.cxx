@@ -345,6 +345,7 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     const double fDotDashLength(
         nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
     const bool bStrokeUsed(0.0 != fDotDashLength);
+    assert(!bStrokeUsed || (bStrokeUsed && pStroke));
     basegfx::B2DPolyPolygon aPolyPolygonLine;
 
     if (bStrokeUsed)
