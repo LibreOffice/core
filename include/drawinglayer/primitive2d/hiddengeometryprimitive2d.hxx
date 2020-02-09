@@ -31,7 +31,7 @@ namespace drawinglayer
         // This primitive is used to represent geometry for non-visible objects,
         // e.g. a PresObj's outline. To still be able to use primitives for HitTest
         // functionality, the 2d decompositions will produce an as much as possible
-        // simplified line geometry encapsulated in this primtive when there is no
+        // simplified line geometry encapsulated in this primitive when there is no
         // line geometry. In a further enhanced version this may change to 'if neither
         // filled nor lines' creation criteria. The whole primitive decomposes to nothing,
         // so no one not knowing it will be influenced. Only helper processors for hit test
