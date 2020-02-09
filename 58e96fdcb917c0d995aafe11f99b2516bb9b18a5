@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9091a1b_fd01f0a1",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 12998,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T19:10:03Z",
+      "side": 1,
+      "message": "The only improvement possible is removing the \"else\" clause: AC_MSG_ERROR will terminate the execution, so we can safely just end the if after the AC_MSG_ERROR. So the second test could appear at the same level with the previous. But that\u0027s just a formatting issue, not critical; I am fine with it as is.",
+      "range": {
+        "startLine": 12991,
+        "startChar": 8,
+        "endLine": 12998,
+        "endChar": 10
+      },
+      "revId": "58e96fdcb917c0d995aafe11f99b2516bb9b18a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
