@@ -221,15 +221,13 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
                                                     weld::TreeView& rTreeView,
                                                     weld::TreeIter& rIter, int nStartCol)
 {
-    css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap,
-        m_xGlobalCommandToLabelMap;
+    css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap;
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<container::XNameAccess> xNameAccess(
         css::frame::theUICommandDescription::get(xContext));
 
-    uno::Sequence<beans::PropertyValue> aPropSeq, aGlobalPropSeq;
+    uno::Sequence<beans::PropertyValue> aPropSeq;
 
-    xNameAccess->getByName("com.sun.star.text.GlobalDocument") >>= m_xGlobalCommandToLabelMap;
     xNameAccess->getByName(getModuleId(m_sAppName)) >>= m_xCommandToLabelMap;
 
     try
@@ -242,23 +240,10 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
     {
     }
 
-    try
-    {
-        uno::Any aGlobalVal = m_xGlobalCommandToLabelMap->getByName(sUIItemCommand);
-        aGlobalVal >>= aGlobalPropSeq;
-    }
-    catch (container::NoSuchElementException&)
-    {
-    }
-
     OUString aLabel;
     for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
         if (aPropSeq[i].Name == "Name")
             aPropSeq[i].Value >>= aLabel;
-    if (aLabel.isEmpty())
-        for (sal_Int32 i = 0; i < aGlobalPropSeq.getLength(); ++i)
-            if (aGlobalPropSeq[i].Name == "Name")
-                aGlobalPropSeq[i].Value >>= aLabel;
 
     OUString aName = SvxConfigPageHelper::stripHotKey(aLabel);
 
