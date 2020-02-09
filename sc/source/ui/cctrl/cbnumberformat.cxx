@@ -60,7 +60,9 @@ ScNumberFormat::~ScNumberFormat()
 
 void ScNumberFormat::GetFocus()
 {
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void)

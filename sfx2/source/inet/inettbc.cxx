@@ -90,7 +90,9 @@ public:
 
     virtual void GetFocus() override
     {
-        m_xWidget->grab_focus();
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
     }
 
     void set_sensitive(bool bSensitive)

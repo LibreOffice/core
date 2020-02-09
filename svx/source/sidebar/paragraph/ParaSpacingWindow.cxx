@@ -118,7 +118,9 @@ ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent)
 
 void ParaAboveSpacingWindow::GetFocus()
 {
-    m_xAboveSpacing->grab_focus();
+    if (m_xAboveSpacing)
+        m_xAboveSpacing->grab_focus();
+    ParaULSpacingWindow::GetFocus();
 }
 
 // ParaBelowSpacingWindow
@@ -134,7 +136,9 @@ ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent)
 
 void ParaBelowSpacingWindow::GetFocus()
 {
-    m_xBelowSpacing->grab_focus();
+    if (m_xBelowSpacing)
+        m_xBelowSpacing->grab_focus();
+    ParaULSpacingWindow::GetFocus();
 }
 
 // ParaLRSpacingWindow
@@ -319,7 +323,9 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent)
 
 void ParaLeftSpacingWindow::GetFocus()
 {
-    m_xBeforeSpacing->grab_focus();
+    if (m_xBeforeSpacing)
+        m_xBeforeSpacing->grab_focus();
+    ParaLRSpacingWindow::GetFocus();
 }
 
 // ParaRightSpacingWindow
@@ -336,7 +342,9 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent)
 
 void ParaRightSpacingWindow::GetFocus()
 {
-    m_xAfterSpacing->grab_focus();
+    if (m_xAfterSpacing)
+        m_xAfterSpacing->grab_focus();
+    ParaLRSpacingWindow::GetFocus();
 }
 
 // ParaFirstLineSpacingWindow
@@ -353,7 +361,9 @@ ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent)
 
 void ParaFirstLineSpacingWindow::GetFocus()
 {
-    m_xFLSpacing->grab_focus();
+    if (m_xFLSpacing)
+        m_xFLSpacing->grab_focus();
+    ParaLRSpacingWindow::GetFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

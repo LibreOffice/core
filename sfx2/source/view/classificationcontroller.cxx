@@ -106,7 +106,9 @@ class SAL_WARN_UNUSED ClassificationControl final : public InterimItemWindow
     void DataChanged(const DataChangedEvent& rEvent) override;
     void GetFocus() override
     {
-        m_xCategory->grab_focus();
+        if (m_xCategory)
+            m_xCategory->grab_focus();
+        InterimItemWindow::GetFocus();
     }
 
 public:

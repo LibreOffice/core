@@ -39,30 +39,44 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController )
-    :NumericField( _pParent, WB_BORDER )
-    ,m_pController(_pController)
+SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pController)
+    : InterimItemWindow(pParent, "svx/ui/absrecbox.ui", "AbsRecBox")
+    , m_xWidget(m_xBuilder->weld_entry("entry"))
+    , m_pController(pController)
 {
-    SetMin(1);
-    SetFirst(1);
-    SetSpinSize(1);
-    SetSizePixel( Size(70,19) );
+    m_xWidget->connect_key_press(LINK(this, SvxFmAbsRecWin, KeyInputHdl));
+    m_xWidget->connect_activate(LINK(this, SvxFmAbsRecWin, ActivatedHdl));
+    m_xWidget->connect_focus_out(LINK(this, SvxFmAbsRecWin, FocusOutHdl));
 
-    SetDecimalDigits(0);
-    SetStrictFormat(true);
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
+void SvxFmAbsRecWin::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
+void SvxFmAbsRecWin::GetFocus()
+{
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
+}
+
+SvxFmAbsRecWin::~SvxFmAbsRecWin()
+{
+    disposeOnce();
+}
 
 void SvxFmAbsRecWin::FirePosition( bool _bForce )
 {
-    if ( !_bForce && !IsValueChangedFromSaved() )
+    if (!_bForce && !m_xWidget->get_value_changed_from_saved())
         return;
 
-    sal_Int64 nRecord = GetValue();
-    if (nRecord < GetMin() || nRecord > GetMax())
-    {
-        return;
-    }
+    sal_Int64 nRecord = m_xWidget->get_text().toInt64();
+    if (nRecord < 1)
+        nRecord = 1;
 
     SfxInt32Item aPositionParam( FN_PARAM_1, static_cast<sal_Int32>(nRecord) );
 
@@ -75,24 +89,25 @@ void SvxFmAbsRecWin::FirePosition( bool _bForce )
                              aArgs );
     m_pController->updateStatus();
 
-    SaveValue();
+    m_xWidget->save_value();
 }
 
-
-void SvxFmAbsRecWin::LoseFocus()
+IMPL_LINK_NOARG(SvxFmAbsRecWin, FocusOutHdl, weld::Widget&, void)
 {
     FirePosition( false );
 }
 
-
-void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
+IMPL_LINK(SvxFmAbsRecWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
-        FirePosition( true );
-    else
-        NumericField::KeyInput( rKeyEvent );
+    return ChildKeyInput(rKEvt);
 }
 
+IMPL_LINK_NOARG(SvxFmAbsRecWin, ActivatedHdl, weld::Entry&, bool)
+{
+    if (!m_xWidget->get_text().isEmpty())
+        FirePosition( true );
+    return true;
+}
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 
@@ -106,7 +121,6 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 {
 }
 
-
 void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     sal_uInt16              nId = GetId();
@@ -119,12 +133,12 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     {
         const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >( pState );
         DBG_ASSERT( pItem, "SvxFmTbxCtlAbsRec::StateChanged: invalid item!" );
-        pWin->SetValue( pItem ? pItem->GetValue() : -1 );
+        pWin->set_text(OUString::number(pItem ? pItem->GetValue() : -1));
     }
 
     bool bEnable = SfxItemState::DISABLED != eState && pState;
     if (!bEnable)
-        pWin->SetText(OUString());
+        pWin->set_text(OUString());
 
 
     // enabling/disabling of the window
