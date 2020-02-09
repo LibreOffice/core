@@ -39,7 +39,7 @@ void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
-        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
+        pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
 }
 
 std::unique_ptr<WeldToolbarPopup> TextUnderlinePopup::weldPopupWindow()
