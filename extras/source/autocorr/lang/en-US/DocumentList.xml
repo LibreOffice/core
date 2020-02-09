@@ -250,6 +250,8 @@
   <block-list:block block-list:abbreviated-name="developors" block-list:name="developers"/>
   <block-list:block block-list:abbreviated-name="develpment" block-list:name="development"/>
   <block-list:block block-list:abbreviated-name="diaplay" block-list:name="display"/>
+  <block-list:block block-list:abbreviated-name="dident" block-list:name="didn’t"/>
+  <block-list:block block-list:abbreviated-name="diden’t" block-list:name="didn’t"/>
   <block-list:block block-list:abbreviated-name="didnot" block-list:name="did not"/>
   <block-list:block block-list:abbreviated-name="difefrent" block-list:name="different"/>
   <block-list:block block-list:abbreviated-name="diferences" block-list:name="differences"/>
@@ -492,6 +494,8 @@
   <block-list:block block-list:abbreviated-name="neccessary" block-list:name="necessary"/>
   <block-list:block block-list:abbreviated-name="necesarily" block-list:name="necessarily"/>
   <block-list:block block-list:abbreviated-name="necesary" block-list:name="necessary"/>
+  <block-list:block block-list:abbreviated-name="needent" block-list:name="needn’t"/>
+  <block-list:block block-list:abbreviated-name="needen’t" block-list:name="needn’t"/>
   <block-list:block block-list:abbreviated-name="negotiaing" block-list:name="negotiating"/>
   <block-list:block block-list:abbreviated-name="nkow" block-list:name="know"/>
   <block-list:block block-list:abbreviated-name="nothign" block-list:name="nothing"/>
@@ -663,6 +667,7 @@
   <block-list:block block-list:abbreviated-name="speach" block-list:name="speech"/>
   <block-list:block block-list:abbreviated-name="specificaly" block-list:name="specifically"/>
   <block-list:block block-list:abbreviated-name="specificalyl" block-list:name="specifically"/>
+  <block-list:block block-list:abbreviated-name="speeking" block-list:name="speaking"/>
   <block-list:block block-list:abbreviated-name="statment" block-list:name="statement"/>
   <block-list:block block-list:abbreviated-name="statments" block-list:name="statements"/>
   <block-list:block block-list:abbreviated-name="stnad" block-list:name="stand"/>
@@ -804,6 +809,7 @@
   <block-list:block block-list:abbreviated-name="would of had" block-list:name="would have had"/>
   <block-list:block block-list:abbreviated-name="wouldbe" block-list:name="would be"/>
   <block-list:block block-list:abbreviated-name="wriet" block-list:name="write"/>
+  <block-list:block block-list:abbreviated-name="writen" block-list:name="written"/>
   <block-list:block block-list:abbreviated-name="writting" block-list:name="writing"/>
   <block-list:block block-list:abbreviated-name="wrod" block-list:name="word"/>
   <block-list:block block-list:abbreviated-name="wroet" block-list:name="wrote"/>
