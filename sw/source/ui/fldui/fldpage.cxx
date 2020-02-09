@@ -204,20 +204,12 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 aData.nCommandType = rPar1.getToken(0, DB_DELIM, nIdx).toInt32();
                 OUString sColumn = rPar1.getToken(0, DB_DELIM, nIdx);
 
-                SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pTmpField->GetTyp());
-                SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pSh->InsertFieldType(
-                        SwDBFieldType(pSh->GetDoc(), sColumn, aData)));
-
-                SwIterator<SwFormatField,SwFieldType> aIter( *pOldTyp );
-
-                for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+                auto pOldType = static_cast<SwDBFieldType*>(pTmpField->GetTyp());
+                auto pType = static_cast<SwDBFieldType*>(pSh->InsertFieldType(SwDBFieldType(pSh->GetDoc(), sColumn, aData)));
+                if(auto pFormatField = pOldType->FindFormatForField(m_pCurField))
                 {
-                    if( pFormatField->GetField() == m_pCurField)
-                    {
-                        pFormatField->RegisterToFieldType(*pTyp);
-                        pTmpField->ChgTyp(pTyp);
-                        break;
-                    }
+                    pFormatField->RegisterToFieldType(*pType);
+                    pTmpField->ChgTyp(pType);
                 }
             }
             break;
