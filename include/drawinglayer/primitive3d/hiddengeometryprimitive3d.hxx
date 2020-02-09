@@ -33,7 +33,7 @@ namespace drawinglayer
         // e.g. a 3D cube without fill attributes. To still be able to use
         // primitives for HitTest functionality, the 3d decompositions produce
         // an as much as possible simplified fill geometry encapsulated in this
-        // primtive when there is no fill geometry. Currently, the 3d hit test
+        // primitive when there is no fill geometry. Currently, the 3d hit test
         // uses only areas, so maybe in a further enhanced version this will change
         // to 'if neither filled nor lines' creation criteria. The whole primitive
         // decomposes to nothing, so no one not knowing it will be influenced. Only
