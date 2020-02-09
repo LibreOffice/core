@@ -212,11 +212,11 @@ PyRef PyUNOStruct_new (
     const css::uno::Any &targetInterface,
     const  css::uno::Reference<css::lang::XSingleServiceFactory> &ssf );
 
-typedef struct
+struct PyUNOInternals
 {
     css::uno::Reference <css::script::XInvocation2> xInvocation;
     css::uno::Any wrappedObject;
-} PyUNOInternals;
+};
 
 typedef struct
 {
@@ -227,10 +227,10 @@ typedef struct
 PyObject* PyUNO_iterator_new (
     const css::uno::Reference<css::container::XEnumeration>& xEnumeration);
 
-typedef struct
+struct PyUNO_iterator_Internals
 {
     css::uno::Reference <css::container::XEnumeration> xEnumeration;
-} PyUNO_iterator_Internals;
+};
 
 typedef struct
 {
@@ -241,11 +241,11 @@ typedef struct
 PyObject* PyUNO_list_iterator_new (
     const css::uno::Reference<css::container::XIndexAccess> &xIndexAccess);
 
-typedef struct
+struct PyUNO_list_iterator_Internals
 {
     css::uno::Reference <css::container::XIndexAccess> xIndexAccess;
     int index;
-} PyUNO_list_iterator_Internals;
+};
 
 typedef struct
 {

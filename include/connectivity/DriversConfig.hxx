@@ -31,14 +31,14 @@
 
 namespace connectivity
 {
-    typedef struct
+    struct TInstalledDriver
     {
         ::comphelper::NamedValueCollection aProperties;
         ::comphelper::NamedValueCollection aFeatures;
         ::comphelper::NamedValueCollection aMetaData;
         OUString sDriverFactory;
         OUString sDriverTypeDisplayName;
-    } TInstalledDriver;
+    };
     typedef std::map<OUString, TInstalledDriver> TInstalledDrivers;
 
     class DriversConfigImpl
