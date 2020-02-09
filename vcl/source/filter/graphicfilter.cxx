@@ -1998,7 +1998,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 if ( nVersion )
                     rOStm.SetVersion( nVersion );
 
-                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                 GDIMetaFile aMTF(aGraphic.GetGDIMetaFile());
 
                 aMTF.Write( rOStm );
@@ -2031,7 +2031,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
                 if (!bDone)
                 {
-                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                     if (!ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem))
                         nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
@@ -2064,7 +2064,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
                 if (!bDone)
                 {
-                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                     if (!ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), rOStm))
                         nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
