@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a7846c8_f1b4123c",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 12983,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T15:59:19Z",
+      "side": 1,
+      "message": "Why is it needed here?",
+      "range": {
+        "startLine": 12983,
+        "startChar": 4,
+        "endLine": 12983,
+        "endChar": 23
+      },
+      "revId": "3f2c10cd16ec0a495636c8e2cdb611dffd6f5c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c25f24d_4b524d8b",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 12987,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T15:59:19Z",
+      "side": 1,
+      "message": "This might succeed even in case of AV blocking read from ./eicar - then eicar will be rewritten by an empty file.\n\nI suppose that we need a variable with the EICAR content; write it to the file; then *read that file into another variable* (like you did with ANTIVIRUS_LIST), and compare the two variables for equality (and not depend on operation result $?).",
+      "range": {
+        "startLine": 12987,
+        "startChar": 8,
+        "endLine": 12987,
+        "endChar": 25
+      },
+      "revId": "3f2c10cd16ec0a495636c8e2cdb611dffd6f5c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39f1190d_58a2b9a7",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 12989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T15:59:19Z",
+      "side": 1,
+      "message": "You write into eicar file in the current directory (\u003dbuilddir), but try to delete from source directory.",
+      "range": {
+        "startLine": 12989,
+        "startChar": 8,
+        "endLine": 12989,
+        "endChar": 26
+      },
+      "revId": "3f2c10cd16ec0a495636c8e2cdb611dffd6f5c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
