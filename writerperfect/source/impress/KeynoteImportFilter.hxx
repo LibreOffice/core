@@ -8,7 +8,6 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_KEYNOTEIMPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_IMPRESS_KEYNOTEIMPORTFILTER_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <ImportFilter.hxx>

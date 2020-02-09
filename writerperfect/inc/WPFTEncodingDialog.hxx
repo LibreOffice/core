@@ -12,8 +12,6 @@
 #ifndef INCLUDED_WRITERPERFECT_WPFTENCODINGDIALOG_HXX
 #define INCLUDED_WRITERPERFECT_WPFTENCODINGDIALOG_HXX
 
-#include <sal/types.h>
-
 #include <vcl/weld.hxx>
 
 #include "writerperfectdllapi.h"

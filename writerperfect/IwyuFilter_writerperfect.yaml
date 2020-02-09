@@ -1,0 +1,200 @@
+---
+assumeFilename: writerperfect/source/common/WPXSvInputStream.cxx
+blacklist:
+    writerperfect/inc/DocumentHandler.hxx:
+    # Wrapper header for external library
+    - libodfgen/libodfgen.hxx
+    writerperfect/inc/DocumentHandlerForOdt.hxx:
+    # Wrapper header for external library
+    - libodfgen/libodfgen.hxx
+    writerperfect/inc/DocumentHandlerForOdg.hxx:
+    # Wrapper header for external library
+    - libodfgen/libodfgen.hxx
+    writerperfect/inc/DocumentHandlerForOds.hxx:
+    # Wrapper header for external library
+    - libodfgen/libodfgen.hxx
+    writerperfect/inc/DocumentHandlerForOdp.hxx:
+    # Wrapper header for external library
+    - libodfgen/libodfgen.hxx
+    writerperfect/inc/DirectoryStream.hxx:
+    # Wrapper header for external library
+    - librevenge-stream/librevenge-stream.h
+    writerperfect/inc/WPXSvInputStream.hxx:
+    # Wrapper header for external library
+    - librevenge-stream/librevenge-stream.h
+    writerperfect/source/calc/NumbersImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOds.hxx
+    writerperfect/source/calc/MWAWCalcImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOds.hxx
+    writerperfect/source/calc/StarOfficeCalcImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOds.hxx
+    writerperfect/source/calc/MSWorksCalcImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOds.hxx
+    writerperfect/source/draw/CDRImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/StarOfficeDrawImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/PageMakerImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/ZMFImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/CMXImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/QXPImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/MWAWDrawImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/WPGImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/MSPUBImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/VisioImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/draw/FreehandImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/source/impress/MWAWPresentationImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdp.hxx
+    writerperfect/source/impress/StarOfficePresentationImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdp.hxx
+    writerperfect/source/impress/KeynoteImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdp.hxx
+    writerperfect/source/writer/EBookImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/writer/MSWorksImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/writer/StarOfficeWriterImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/writer/PagesImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/writer/AbiWordImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/writer/MWAWImportFilter.hxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/qa/unit/WpftLoader.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/frame/XDesktop2.hpp
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    # Needed for UnoType template instatiation
+    - com/sun/star/ucb/XContent.hpp
+    writerperfect/qa/unit/DrawingImportTest.cxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdg.hxx
+    writerperfect/qa/unit/SpreadsheetImportTest.cxx:
+    # Needed for direct member access
+    - DocumentHandlerForOds.hxx
+    writerperfect/qa/unit/PresentationImportTest.cxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdp.hxx
+    writerperfect/qa/unit/TextImportTest.cxx:
+    # Needed for direct member access
+    - DocumentHandlerForOdt.hxx
+    writerperfect/source/common/DocumentHandler.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    writerperfect/source/calc/NumbersImportFilter.cxx:
+    # Wrapper header for external library
+    - libetonyek/libetonyek.h
+    writerperfect/source/calc/MWAWCalcImportFilter.cxx:
+    # Wrapper header for external library
+    - libmwaw/libmwaw.hxx
+    writerperfect/source/calc/StarOfficeCalcImportFilter.cxx:
+    # Wrapper header for external library
+    - libstaroffice/libstaroffice.hxx
+    writerperfect/source/calc/MSWorksCalcImportFilter.cxx:
+    # Wrapper header for external library
+    - libwps/libwps.h
+    writerperfect/source/draw/CDRImportFilter.cxx:
+    # Wrapper header for external library
+    - libcdr/libcdr.h
+    writerperfect/source/draw/CMXImportFilter.cxx:
+    # Wrapper header for external library
+    - libcdr/libcdr.h
+    writerperfect/source/draw/FreehandImportFilter.cxx:
+    # Wrapper header for external library
+    - libfreehand/libfreehand.h
+    writerperfect/source/draw/MWAWDrawImportFilter.cxx:
+    # Wrapper header for external library
+    - libmwaw/libmwaw.hxx
+    writerperfect/source/draw/MSPUBImportFilter.cxx:
+    # Wrapper header for external library
+    - libmspub/libmspub.h
+    writerperfect/source/draw/PageMakerImportFilter.cxx:
+    # Wrapper header for external library
+    - libpagemaker/libpagemaker.h
+    writerperfect/source/draw/StarOfficeDrawImportFilter.cxx:
+    # Wrapper header for external library
+    - libstaroffice/libstaroffice.hxx
+    writerperfect/source/draw/VisioImportFilter.cxx:
+    # Wrapper header for external library
+    - libvisio/libvisio.h
+    writerperfect/source/draw/QXPImportFilter.cxx:
+    # Wrapper header for external library
+    - libqxp/libqxp.h
+    writerperfect/source/draw/WPGImportFilter.cxx:
+    # Wrapper header for external library
+    - libwpg/libwpg.h
+    writerperfect/source/draw/ZMFImportFilter.cxx:
+    # Wrapper header for external library
+    - libzmf/libzmf.h
+    writerperfect/source/impress/MWAWPresentationImportFilter.cxx:
+    # Wrapper header for external library
+    - libmwaw/libmwaw.hxx
+    writerperfect/source/impress/StarOfficePresentationImportFilter.cxx:
+    # Wrapper header for external library
+    - libstaroffice/libstaroffice.hxx
+    writerperfect/source/impress/KeynoteImportFilter.cxx:
+    # Wrapper header for external library
+    - libetonyek/libetonyek.h
+    writerperfect/source/writer/PagesImportFilter.cxx:
+    # Wrapper header for external library
+    - libetonyek/libetonyek.h
+    writerperfect/source/writer/MWAWImportFilter.cxx:
+    # Wrapper header for external library
+    - libmwaw/libmwaw.hxx
+    writerperfect/source/writer/MSWorksImportFilter.cxx:
+    # Wrapper header for external library
+    - libwps/libwps.h
+    writerperfect/source/writer/WordPerfectImportFilter.cxx:
+    # Wrapper header for external library
+    - libwpd/libwpd.h
+    - libwpg/libwpg.h
+    writerperfect/source/writer/StarOfficeWriterImportFilter.cxx:
+    # Wrapper header for external library
+    - libstaroffice/libstaroffice.hxx
+    writerperfect/source/writer/AbiWordImportFilter.cxx:
+    # Wrapper header for external library
+    - libabw/libabw.h
+    writerperfect/source/writer/EBookImportFilter.cxx:
+    # Wrapper header for external library
+    - libe-book/libe-book.h
+    writerperfect/source/writer/EPUBExportFilter.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp

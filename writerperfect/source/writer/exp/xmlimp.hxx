@@ -22,6 +22,8 @@
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 
+#include "xmlictxt.hxx"
+
 namespace com
 {
 namespace sun

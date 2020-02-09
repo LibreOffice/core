@@ -13,11 +13,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <libodfgen/libodfgen.hxx>
 
 #include <libwpg/libwpg.h>
 

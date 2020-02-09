@@ -22,8 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include <rtl/ref.hxx>
-
 #include <test/bootstrapfixture.hxx>
 
 #include <WPXSvInputStream.hxx>

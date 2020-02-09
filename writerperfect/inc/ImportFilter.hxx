@@ -8,23 +8,16 @@
 #ifndef INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_IMPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_IMPORTFILTER_HXX
 
-#include <libodfgen/libodfgen.hxx>
-
-#include <librevenge/librevenge.h>
-
-#include <librevenge-stream/librevenge-stream.h>
-
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <osl/diagnose.h>
@@ -36,8 +29,6 @@
 
 #include "DocumentHandler.hxx"
 #include "WPXSvInputStream.hxx"
-
-#include <xmloff/attrlist.hxx>
 
 #include "DocumentHandlerFor.hxx"
 

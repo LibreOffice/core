@@ -26,8 +26,6 @@
 
 #include "writerperfectdllapi.h"
 
-#include <climits>
-
 namespace com
 {
 namespace sun

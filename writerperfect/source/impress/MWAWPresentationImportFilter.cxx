@@ -10,10 +10,8 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
 
 #include <libmwaw/libmwaw.hxx>
-#include <libodfgen/libodfgen.hxx>
 
 #include "MWAWPresentationImportFilter.hxx"
 

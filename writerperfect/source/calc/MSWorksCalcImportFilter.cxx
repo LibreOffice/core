@@ -24,6 +24,7 @@
 
 #include <libwps/libwps.h>
 
+#include <DocumentHandlerForOds.hxx>
 #include <WPFTEncodingDialog.hxx>
 #include <WPFTResMgr.hxx>
 #include "MSWorksCalcImportFilter.hxx"

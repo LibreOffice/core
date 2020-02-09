@@ -9,25 +9,20 @@
  */
 
 #include <osl/diagnose.h>
-#include <rtl/tencinfo.h>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <DocumentHandler.hxx>
 #include <WPXSvInputStream.hxx>
 
-#include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 
-#include <libodfgen/libodfgen.hxx>
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
 
