@@ -2657,7 +2657,7 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart )
             pSav = pSav->GetUpper();
 
     if( pSav->IsInSct() )
-    { // search the upmost section inside of pLay
+    { // search the utmost section inside of pLay
         SwFrame* pSect = pLay->FindSctFrame();
         SwFrame *pTmp = pSav;
         do
