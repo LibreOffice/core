@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         /** MarkerArrayPrimitive2D class
 
-            This primtive defines an array of markers. Their size is defined
+            This primitive defines an array of markers. Their size is defined
             in pixels and independent from the view transformation which makes
             this primitive highly view-dependent. It is also transformation
             invariant, so that the bitmap is always visualized unscaled and
