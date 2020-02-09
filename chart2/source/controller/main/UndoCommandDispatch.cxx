@@ -64,23 +64,30 @@ void UndoCommandDispatch::fireStatusEvent(
     if( m_xUndoManager.is() )
     {
         const bool bFireAll = rURL.isEmpty();
-        uno::Any aUndoState, aRedoState;
+        uno::Any aUndoState, aRedoState, aUndoStrings, aRedoStrings;
         if( m_xUndoManager->isUndoPossible())
             aUndoState <<= SvtResId( STR_UNDO ) + m_xUndoManager->getCurrentUndoActionTitle();
         if( m_xUndoManager->isRedoPossible())
             aRedoState <<= SvtResId( STR_REDO ) + m_xUndoManager->getCurrentRedoActionTitle();
 
+        aUndoStrings <<= m_xUndoManager->getAllUndoActionTitles();
+        aRedoStrings <<= m_xUndoManager->getAllRedoActionTitles();
+
         if( bFireAll || rURL == ".uno:Undo" )
             fireStatusEventForURL( ".uno:Undo", aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );
         if( bFireAll || rURL == ".uno:Redo" )
             fireStatusEventForURL( ".uno:Redo", aRedoState, m_xUndoManager->isRedoPossible(), xSingleListener );
+        if( bFireAll || rURL == ".uno:GetUndoStrings" )
+            fireStatusEventForURL( ".uno:GetUndoStrings", aUndoStrings, true, xSingleListener );
+        if( bFireAll || rURL == ".uno:GetRedoStrings" )
+            fireStatusEventForURL( ".uno:GetRedoStrings", aRedoStrings, true, xSingleListener );
     }
 }
 
 // ____ XDispatch ____
 void SAL_CALL UndoCommandDispatch::dispatch(
     const util::URL& URL,
-    const Sequence< beans::PropertyValue >& /* Arguments */ )
+    const Sequence< beans::PropertyValue >& Arguments )
 {
     if( m_xUndoManager.is() )
     {
@@ -88,10 +95,17 @@ void SAL_CALL UndoCommandDispatch::dispatch(
         SolarMutexGuard aSolarGuard;
         try
         {
-            if ( URL.Path == "Undo" )
-                m_xUndoManager->undo();
-            else
-                m_xUndoManager->redo();
+            sal_Int16 nCount( 1 );
+            if ( Arguments.hasElements() && Arguments[0].Name == URL.Path )
+                Arguments[0].Value >>= nCount;
+
+            while ( nCount-- )
+            {
+                if ( URL.Path == "Undo" )
+                    m_xUndoManager->undo();
+                else
+                    m_xUndoManager->redo();
+            }
         }
         catch( const document::UndoFailedException& )
         {

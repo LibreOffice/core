@@ -120,6 +120,28 @@ namespace dbaui
                 }
                 break;
 
+            case SID_GETUNDOSTRINGS:
+            {
+                size_t nCount(GetUndoManager().GetUndoActionCount());
+                Sequence<OUString> aSeq(nCount);
+                for (size_t n = 0; n < nCount; ++n)
+                    aSeq[n] = GetUndoManager().GetUndoActionComment(n);
+                aReturn.aValue <<= aSeq;
+                aReturn.bEnabled = true;
+                break;
+            }
+
+            case SID_GETREDOSTRINGS:
+            {
+                size_t nCount(GetUndoManager().GetRedoActionCount());
+                Sequence<OUString> aSeq(nCount);
+                for (size_t n = 0; n < nCount; ++n)
+                    aSeq[n] = GetUndoManager().GetRedoActionComment(n);
+                aReturn.aValue <<= aSeq;
+                aReturn.bEnabled = true;
+                break;
+            }
+
             default:
                 aReturn = OSingleDocumentController_Base::GetState(_nId);
         }
@@ -130,16 +152,24 @@ namespace dbaui
         switch ( _nId )
         {
             case ID_BROWSER_UNDO:
-                GetUndoManager().Undo();
-                InvalidateFeature( ID_BROWSER_UNDO );
-                InvalidateFeature( ID_BROWSER_REDO );
-                break;
-
             case ID_BROWSER_REDO:
-                GetUndoManager().Redo();
+            {
+                sal_Int16 nCount(1);
+                if (_rArgs.hasElements() && _rArgs[0].Name != "KeyModifier")
+                    _rArgs[0].Value >>= nCount;
+
+                while (nCount--)
+                {
+                    if (_nId == ID_BROWSER_UNDO)
+                        GetUndoManager().Undo();
+                    else
+                        GetUndoManager().Redo();
+                }
+
                 InvalidateFeature( ID_BROWSER_UNDO );
                 InvalidateFeature( ID_BROWSER_REDO );
                 break;
+            }
 
             default:
                 OSingleDocumentController_Base::Execute( _nId, _rArgs );

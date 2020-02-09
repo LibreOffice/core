@@ -84,13 +84,16 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     {
         uno::Reference< frame::XModel > xModel( m_xModel );
 
-        if( xModel.is() && ( rURL.Path == "Undo" || rURL.Path == "Redo" ) )
+        if( xModel.is() && ( rURL.Path == "Undo" || rURL.Path == "Redo" ||
+                             rURL.Path == "GetUndoStrings" || rURL.Path == "GetRedoStrings" ) )
         {
             CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ ".uno:Undo" ].set( xResult );
             m_aCachedDispatches[ ".uno:Redo" ].set( xResult );
+            m_aCachedDispatches[ ".uno:GetUndoStrings" ].set( xResult );
+            m_aCachedDispatches[ ".uno:GetRedoStrings" ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( xModel.is() && ( rURL.Path == "Context" || rURL.Path == "ModifiedStatus" ) )
