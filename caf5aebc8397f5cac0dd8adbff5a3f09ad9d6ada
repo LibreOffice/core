@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "449b20c9_213c2409",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 12986,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T17:01:55Z",
+      "side": 1,
+      "message": "You are testing it in source directory. I suppose that the old way testing it in build directory makes more sense: it\u0027s the build directory where the build-time failure likely happens, because source directory is not modified while building, and if something suspicious was there, antivirus would already broken it there...\n\nBut I could be wrong and both directories may suffer from AV. So possibly two successive tests would be necessary: one in $SRC_DIR/eicar (with error if failed), then immediately one in current directory\u0027s eicar.",
+      "range": {
+        "startLine": 12986,
+        "startChar": 29,
+        "endLine": 12986,
+        "endChar": 38
+      },
+      "revId": "caf5aebc8397f5cac0dd8adbff5a3f09ad9d6ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
