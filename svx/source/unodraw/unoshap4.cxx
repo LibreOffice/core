@@ -242,7 +242,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                 }
                 if ( !bIsWMF )
                 {
-                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                     GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
