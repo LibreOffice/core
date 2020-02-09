@@ -532,7 +532,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
             {
                 Graphic aGraphic( pGrafObj->GetTransformedGraphic() );
 
-                // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                // #119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                 aMtf = aGraphic.GetGDIMetaFile();
             }
         }
