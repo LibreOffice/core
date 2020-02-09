@@ -22,6 +22,30 @@
       "revId": "c81afdb5118536b2e2365a9a9af6b6e162c87aeb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44004a4b_2af6ce8b",
+        "filename": "svx/source/sidebar/text/TextUnderlinePopup.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-02-09T19:30:16Z",
+      "side": 1,
+      "message": "no, a copy and paste error I imagine. I\u0027ll fix it with https://gerrit.libreoffice.org/c/core/+/88346",
+      "parentUuid": "58655a7e_41a0f194",
+      "range": {
+        "startLine": 42,
+        "startChar": 35,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "c81afdb5118536b2e2365a9a9af6b6e162c87aeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
