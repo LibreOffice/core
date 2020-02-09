@@ -2355,7 +2355,7 @@ void XMLTextFieldExport::ProcessValueAndType(
     double fValue,          /// float content; possibly invalid
     bool bExportValue,  /// export value attribute?
     bool bExportValueType,  /// export value-type attribute?
-    bool bExportStyle,  /// export style-sttribute?
+    bool bExportStyle,  /// export style-attribute?
     bool bForceSystemLanguage, /// export language attributes?
     bool bTimeStyle)    // exporting a time style?
 {
