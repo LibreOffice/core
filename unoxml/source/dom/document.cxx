@@ -326,10 +326,10 @@ namespace DOM
     namespace {
 
     // IO context functions for libxml2 interaction
-    typedef struct {
+    struct IOContext {
         Reference< XOutputStream > stream;
         bool const allowClose;
-    } IOContext;
+    };
 
     }
 

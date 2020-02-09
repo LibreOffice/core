@@ -61,11 +61,11 @@ namespace connectivity
     typedef std::vector< css::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
 
      // contains the currently pooled connections
-    typedef struct
+    struct TConnectionPool
     {
         TPooledConnections  aConnections;
         sal_Int32           nALiveCount; // will be decremented every time a time says to, when will reach zero the pool will be deleted
-    } TConnectionPool;
+    };
 
     struct TDigestHolder
     {
@@ -93,11 +93,11 @@ namespace connectivity
     typedef std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
 
     // contains additional information about an activeconnection which is needed to put it back to the pool
-    typedef struct
+    struct TActiveConnectionInfo
     {
         TConnectionMap::iterator aPos;
         css::uno::Reference< css::sdbc::XPooledConnection> xPooledConnection;
-    } TActiveConnectionInfo;
+    };
 
     typedef std::map< css::uno::Reference< css::sdbc::XConnection>,
                         TActiveConnectionInfo> TActiveConnectionMap;
