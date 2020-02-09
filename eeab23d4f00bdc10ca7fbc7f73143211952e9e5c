@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7631300_62d04b4f",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12985,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:01:05Z",
+      "side": 1,
+      "message": "Maybe just inline the test here, instead of creating a two-line shell script (which would otherwise need a shebang and also a license header)?",
+      "range": {
+        "startLine": 12985,
+        "startChar": 8,
+        "endLine": 12985,
+        "endChar": 30
+      },
+      "revId": "eeab23d4f00bdc10ca7fbc7f73143211952e9e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd18e62c_72182410",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:01:05Z",
+      "side": 1,
+      "message": "The test file \"eicar\" should be removed here.",
+      "range": {
+        "startLine": 12989,
+        "startChar": 8,
+        "endLine": 12989,
+        "endChar": 10
+      },
+      "revId": "eeab23d4f00bdc10ca7fbc7f73143211952e9e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
