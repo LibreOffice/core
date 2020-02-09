@@ -37,7 +37,7 @@ import com.sun.star.uno.XInterface;
 * <ul>
 *  <li> <code>'Connectable'</code> (supports the <code>XConnectable</code>
 *   interface):
-*   another 0bject to connect </li>
+*   another object to connect </li>
 * </ul>
 * After test completion object environment has to be recreated.
 * @see com.sun.star.io.XConnectable
