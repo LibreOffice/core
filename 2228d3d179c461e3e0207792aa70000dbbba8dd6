@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd037153_62795b30",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "What has changed here? A line end?",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 80
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8912d81a_21ba7136",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "How is this change related to the solved task? Please don\u0027t make unrelated changes. You are welcome to do this change later as a separate cleanup commit.\n\nAlso note that you may use generic lambdas with auto arguments, like this:\n\n    [](const auto\u0026 rInfo1, const auto\u0026 rInfo2)\n    {\n        return rInfo1.GetDisplayName().compareTo(rInfo2.GetDisplayName()) \u003c 0;\n    }\n\n(sometimes that allows for shorter expressions, though not actually relevant in this case).",
+      "range": {
+        "startLine": 797,
+        "startChar": 14,
+        "endLine": 800,
+        "endChar": 15
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa3db15_c34edf53",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "Honestly, I\u0027d still move this to the lambda to avoid the namespace and function declaration lines... it\u0027s used only in a single place after all. Unless, of course, you want it to be used later in other comparisons, like the unrelated one you turned to lambda above? Then maybe move this to the beginning of the file - to avoid moving it later?",
+      "range": {
+        "startLine": 1283,
+        "startChar": 8,
+        "endLine": 1285,
+        "endChar": 73
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ce3f77e_a648788d",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "This comment is not useful here. Although the lines below are indeed added to fix tdf#114694 (note the # in the reference!), the comment will not give much to anyone reading this. And the actual fix is not in the place where the variables are declared, but in the place where proper order is defined.",
+      "range": {
+        "startLine": 1311,
+        "startChar": 4,
+        "endLine": 1311,
+        "endChar": 16
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35bcfca6_2ee3c81f",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "why sal_Int16?",
+      "range": {
+        "startLine": 1312,
+        "startChar": 27,
+        "endLine": 1312,
+        "endChar": 36
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124105f8_921bf1e6",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "why int? it doesn\u0027t match both type of getLength() here, nor the type of aUILanguages\u0027 element\u0027s first element.\n\nI would assume that using sal_Int32 both here and in aUILanguages\u0027 element is a better choice. Does it make sense?",
+      "range": {
+        "startLine": 1342,
+        "startChar": 13,
+        "endLine": 1342,
+        "endChar": 16
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f523e0c3_5ca0294e",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "You are welcome to create a comment above this line like this:\n\n    // tdf#114694: append the sorted list after the default entry and separator.\n\nThis comment will make your intent clear, will establish a proper relation to the bug report with more context, and allow the reader to understand why it\u0027s wrong to just make the control sorted (if reader would want to \"optimize\" this).",
+      "range": {
+        "startLine": 1359,
+        "startChar": 8,
+        "endLine": 1359,
+        "endChar": 63
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc307a5_cac89d58",
+        "filename": "include/svx/langbox.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "Here you make two strange things: 1. Modify a line that is unrelated to the change (whatever you add is below this line), and 2. make the line non-conformant to the clang-format rules.",
+      "range": {
+        "startLine": 79,
+        "startChar": 89,
+        "endLine": 79,
+        "endChar": 119
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e581bd_4d5faa37",
+        "filename": "include/svx/langbox.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "Please make the bool telling if the default lang is specified *before* the specification. Also - please follow the prefix conventions I linked last time ie. using b before booleans, n before numbers, etc.",
+      "range": {
+        "startLine": 81,
+        "startChar": 42,
+        "endLine": 81,
+        "endChar": 66
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9daaab3_d5ab94cb",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-09T09:37:20Z",
+      "side": 1,
+      "message": "You only sort the entries when you have defaultLangExist?\n\nIMO, your processing here should be like this:\n\n1. Unconditional sort of entries.\n2. Assuming that separator position is 0 (no separator)\n3. If defaultLangExist then insert relevant entry and increase separator position\n4. If bHasLangNone then insert relevant entry and increase separator position\n5. m_xControl-\u003einsert_vector\n6. if separator position \u003e 0 then insert separator.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 27
+      },
+      "revId": "2228d3d179c461e3e0207792aa70000dbbba8dd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
