@@ -1025,7 +1025,7 @@ namespace oox::ppt {
 
         default:
             nNodeType = AnimationNodeType::CUSTOM;
-            SAL_INFO("oox.ppt", "uhandled token " << aElementToken);
+            SAL_INFO("oox.ppt", "unhandled token " << aElementToken);
             break;
         }
 
