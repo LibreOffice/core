@@ -6121,7 +6121,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
         if (!ReadCommonRecordHeader(rSt, nVer, nInst, nFbt, nLength))
             return;
         nReadDg += DFF_COMMON_RECORD_HEADER_SIZE;
-        // Patriarch found (the upmost shape group container) ?
+        // Patriarch found (the utmost shape group container) ?
         if (DFF_msofbtSpgrContainer == nFbt)
         {
             if (!GetShapeGroupContainerData(rSt, nLength, true, nDrawingContainerId))
