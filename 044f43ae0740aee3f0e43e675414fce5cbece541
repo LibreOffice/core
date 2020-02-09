@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ed88849_21c90468",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-09T19:34:10Z",
+      "side": 1,
+      "message": "better include \u003ccassert\u003e",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af4b50cf_87ad7e76",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-09T19:34:10Z",
+      "side": 1,
+      "message": "what is the rationale for using assert here?",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248d08e4_146dcefc",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-09T19:34:10Z",
+      "side": 1,
+      "message": "this does not make sense; if it is guaranteed that pData cannot be null here, the following \"if\" should be removed",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
