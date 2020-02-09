@@ -606,6 +606,8 @@ void OTableController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SaveAs",        ID_BROWSER_SAVEASDOC,   CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBIndexDesign", SID_INDEXDESIGN,        CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:EditDoc",       ID_BROWSER_EDITDOC,     CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:GetUndoStrings", SID_GETUNDOSTRINGS );
+    implDescribeSupportedFeature( ".uno:GetRedoStrings", SID_GETREDOSTRINGS );
 }
 
 void OTableController::impl_onModifyChanged()
