@@ -32,7 +32,7 @@ namespace drawinglayer
     {
         /** WallpaperBitmapPrimitive2D class
 
-            This is a specialized primtive for the Wallpaper definitions included in
+            This is a specialized primitive for the Wallpaper definitions included in
             VCL and Metafiles. The extraordinary about the bitmap definition part of
             the Wallpaper is that it uses PIXEL size of the given Bitmap and not
             the logic and/or discrete size derived by PrefMapMode/PrefSize methods.
