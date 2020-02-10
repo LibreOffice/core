@@ -43,9 +43,10 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
     SAL_INFO("vcl.skia",
              "Vulkan API version: "
                  << (props.apiVersion >> 22) << "." << ((props.apiVersion >> 12) & 0x3ff) << "."
-                 << (props.apiVersion & 0xfff) << ", driver version: " << std::hex
-                 << props.driverVersion << ", vendor:" << props.vendorID
-                 << ", device: " << props.deviceID << std::dec
+                 << (props.apiVersion & 0xfff) << ", driver version: "
+                 << (props.driverVersion >> 22) << "." << ((props.driverVersion >> 12) & 0x3ff)
+                 << "." << (props.driverVersion & 0xfff) << std::hex << ", vendor: 0x"
+                 << props.vendorID << ", device: 0x" << props.deviceID << std::dec
                  << ", type: " << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types))]
                  << ", name: " << props.deviceName);
     return false;
