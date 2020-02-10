@@ -4001,10 +4001,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // so, table_spacing + table_spacing_to_content = tblInd
 
             // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
-            // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
+            // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
             sal_Int32 nMode = lcl_getWordCompatibilityMode( *m_rExport.m_pDoc );
 
-            if ( nMode > 0 && nMode <= 14 && m_tableReference->m_nTableDepth == 0 )
+            if (((nMode < 0) || (0 < nMode && nMode <= 14)) && m_tableReference->m_nTableDepth == 0)
             {
                 const SwTableBox*    pTabBox = pTableTextNodeInfoInner->getTableBox();
                 const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();

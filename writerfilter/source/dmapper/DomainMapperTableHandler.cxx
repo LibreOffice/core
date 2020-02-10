@@ -608,10 +608,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_adjustBorderDistance(rInfo, aLeftBorder, aRightBorder);
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
-        // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
+        // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
         sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
 
-        if ( nMode > 0 && nMode <= 14 && rInfo.nNestLevel == 1 )
+        if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ) );
         }

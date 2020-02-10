@@ -1171,6 +1171,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
+{
+    // Writer, (new) Word: margin 0 means table border starts at 0
+    // (old) Word: margin 0 means paragraph in table starts at 0
+
+    auto const xTable(getParagraphOrTable(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    // currently no compatibilityMode is generated, it's only round-tripped if
+    // it exists in the input; if it doesn't exist, the default is "12" (old)
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "55");
+}
+
 DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 {
     sal_Int32 const cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
