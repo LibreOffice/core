@@ -28,9 +28,9 @@
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/spritesurface.hxx>
-#include <canvas/base/canvascustomspritebase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/spritesurface.hxx>
+#include <base/canvascustomspritebase.hxx>
 
 #include "sprite.hxx"
 #include "canvashelper.hxx"

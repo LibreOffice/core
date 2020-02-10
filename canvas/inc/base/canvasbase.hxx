@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_CANVASBASE_HXX
-#define INCLUDED_CANVAS_BASE_CANVASBASE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <canvas/verifyinput.hxx>
+#include <verifyinput.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::geometry { class XMapping2D; }
@@ -448,7 +447,5 @@ namespace canvas
         CanvasBase& operator=( const CanvasBase& ) = delete;
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_CANVASBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

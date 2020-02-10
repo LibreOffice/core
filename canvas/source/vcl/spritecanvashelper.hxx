@@ -27,7 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
-#include <canvas/spriteredrawmanager.hxx>
+#include <spriteredrawmanager.hxx>
 #include <canvas/elapsedtime.hxx>
 #include "canvashelper.hxx"
 

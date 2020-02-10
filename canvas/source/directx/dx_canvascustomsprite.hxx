@@ -33,7 +33,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
+#include <base/basemutexhelper.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
 #include "dx_sprite.hxx"

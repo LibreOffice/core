@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_SPRITESURFACE_HXX
-#define INCLUDED_CANVAS_BASE_SPRITESURFACE_HXX
+#pragma once
 
-#include <canvas/base/sprite.hxx>
+#include <base/sprite.hxx>
 
 namespace canvas
 {
@@ -64,7 +63,5 @@ namespace canvas
         ~SpriteSurface() {}
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_SPRITESURFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

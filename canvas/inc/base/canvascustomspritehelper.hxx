@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
-#define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
+#pragma once
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <canvas/base/spritesurface.hxx>
+#include <base/spritesurface.hxx>
 #include <canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::geometry { struct AffineMatrix2D; }
@@ -214,7 +213,5 @@ namespace canvas
         mutable bool                                        mbTransformDirty;
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

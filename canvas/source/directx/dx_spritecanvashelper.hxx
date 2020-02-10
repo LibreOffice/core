@@ -24,8 +24,8 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <canvas/spriteredrawmanager.hxx>
-#include <canvas/rendering/isurfaceproxy.hxx>
-#include <canvas/rendering/isurfaceproxymanager.hxx>
+#include <rendering/isurfaceproxy.hxx>
+#include <rendering/isurfaceproxymanager.hxx>
 
 #include "dx_bitmapcanvashelper.hxx"
 #include "dx_impltools.hxx"

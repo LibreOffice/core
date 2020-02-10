@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEBITMAP_HXX
 
-#include <canvas/rendering/isurfaceproxy.hxx>
-#include <canvas/rendering/isurfaceproxymanager.hxx>
+#include <rendering/isurfaceproxy.hxx>
+#include <rendering/isurfaceproxymanager.hxx>
 #include "dx_ibitmap.hxx"
 #include "dx_canvasfont.hxx"
 #include "dx_gdiplususer.hxx"

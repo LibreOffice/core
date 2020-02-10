@@ -36,7 +36,7 @@
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <canvas/parametricpolypolygon.hxx>
+#include <parametricpolypolygon.hxx>
 
 #include "dx_canvashelper.hxx"
 #include "dx_impltools.hxx"

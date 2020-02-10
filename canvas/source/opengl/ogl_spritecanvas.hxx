@@ -24,9 +24,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/canvasbase.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
-#include <canvas/base/bufferedgraphicdevicebase.hxx>
+#include <base/canvasbase.hxx>
+#include <base/disambiguationhelper.hxx>
+#include <base/bufferedgraphicdevicebase.hxx>
 
 #include "ogl_spritedevicehelper.hxx"
 #include "ogl_canvashelper.hxx"

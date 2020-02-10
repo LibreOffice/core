@@ -23,7 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 
-#include <canvas/vclwrapper.hxx>
+#include <vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
 #include <memory>

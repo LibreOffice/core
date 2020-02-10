@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CANVAS_SOURCE_TOOLS_SURFACEPROXY_HXX
 #define INCLUDED_CANVAS_SOURCE_TOOLS_SURFACEPROXY_HXX
 
-#include <canvas/rendering/isurfaceproxy.hxx>
-#include <canvas/rendering/icolorbuffer.hxx>
+#include <rendering/isurfaceproxy.hxx>
+#include <rendering/icolorbuffer.hxx>
 
 #include "pagemanager.hxx"
 #include "surface.hxx"
