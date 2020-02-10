@@ -1654,8 +1654,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         (isNumberingViaStyle || itNumberingRules != aProperties.end()))
                     {
                         assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
+                        // Use lcl_getListId(), so we find the list ID in parent styles as well.
+                        bool bNumberingFromBaseStyle = false;
                         sal_Int32 const nListId( isNumberingViaStyle
-                            ? pStyleSheetProperties->GetListId()
+                            ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle)
                             : static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
                         if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
                         {   // styles could refer to non-existing lists...
