@@ -725,7 +725,9 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         }
     }
 
-    const auto nSelectionMin = aSelection.Min();
+    auto nSelectionMin = aSelection.Min();
+    if (nSelectionMin < 0)
+        nSelectionMin = 0;
     maText.remove( static_cast<sal_Int32>(nSelectionMin), static_cast<sal_Int32>(aSelection.Len()) );
     maSelection.Min() = nSelectionMin;
     maSelection.Max() = nSelectionMin;
