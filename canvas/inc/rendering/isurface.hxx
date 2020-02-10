@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
-#define INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
+#pragma once
 
 namespace basegfx
 {
@@ -66,7 +65,5 @@ namespace canvas
                              IColorBuffer&              rSource ) = 0;
     };
 }
-
-#endif // INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

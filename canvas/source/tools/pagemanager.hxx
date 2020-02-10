@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_TOOLS_PAGEMANAGER_HXX
 
 #include <basegfx/vector/b2isize.hxx>
-#include <canvas/rendering/irendermodule.hxx>
+#include <rendering/irendermodule.hxx>
 
 #include "page.hxx"
 

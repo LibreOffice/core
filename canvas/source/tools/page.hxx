@@ -22,9 +22,9 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/range/b2irectangle.hxx>
-#include <canvas/rendering/icolorbuffer.hxx>
-#include <canvas/rendering/irendermodule.hxx>
-#include <canvas/rendering/isurface.hxx>
+#include <rendering/icolorbuffer.hxx>
+#include <rendering/irendermodule.hxx>
+#include <rendering/isurface.hxx>
 
 #include <memory>
 #include <vector>

@@ -22,9 +22,9 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <canvas/base/canvascustomspritehelper.hxx>
-#include <canvas/base/spritesurface.hxx>
-#include <canvas/vclwrapper.hxx>
+#include <base/canvascustomspritehelper.hxx>
+#include <base/spritesurface.hxx>
+#include <vclwrapper.hxx>
 
 #include "backbuffer.hxx"
 

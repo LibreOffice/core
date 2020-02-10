@@ -22,7 +22,7 @@
 
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 
-#include <canvas/base/canvascustomspritehelper.hxx>
+#include <base/canvascustomspritehelper.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2isize.hxx>

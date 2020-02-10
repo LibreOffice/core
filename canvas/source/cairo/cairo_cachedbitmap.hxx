@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CACHEDBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CACHEDBITMAP_HXX
 
-#include <canvas/base/cachedprimitivebase.hxx>
+#include <base/cachedprimitivebase.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 
 #include <vcl/cairo.hxx>

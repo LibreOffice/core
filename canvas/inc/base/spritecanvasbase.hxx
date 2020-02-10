@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_SPRITECANVASBASE_HXX
-#define INCLUDED_CANVAS_BASE_SPRITECANVASBASE_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
-#include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/bitmapcanvasbase.hxx>
-#include <canvas/spriteredrawmanager.hxx>
+#include <base/integerbitmapbase.hxx>
+#include <base/bitmapcanvasbase.hxx>
+#include <spriteredrawmanager.hxx>
 
 namespace com::sun::star::rendering { class XAnimation; }
 namespace com::sun::star::rendering { class XAnimatedSprite; }
@@ -187,7 +186,5 @@ namespace canvas
         SpriteRedrawManager maRedrawManager;
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_SPRITECANVASBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

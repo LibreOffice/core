@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
-#include <canvas/rendering/isurfaceproxy.hxx>
-#include <canvas/rendering/isurfaceproxymanager.hxx>
+#include <rendering/isurfaceproxy.hxx>
+#include <rendering/isurfaceproxymanager.hxx>
 
 #include "surfaceproxy.hxx"
 

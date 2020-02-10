@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <canvas/base/cachedprimitivebase.hxx>
+#include <base/cachedprimitivebase.hxx>
 
 
 using namespace ::com::sun::star;
