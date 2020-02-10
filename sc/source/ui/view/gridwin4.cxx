@@ -293,7 +293,7 @@ void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 
     if(pTabViewShell)
     {
-        SdrView* pDrawView = pTabViewShell->GetSdrView();
+        SdrView* pDrawView = pTabViewShell->GetScDrawView();
 
         if (pDrawView)
         {
@@ -661,7 +661,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         {
             MapMode aCurrentMapMode(pContentDev->GetMapMode());
             pContentDev->SetMapMode(aDrawMode);
-            SdrView* pDrawView = pTabViewShell->GetSdrView();
+            SdrView* pDrawView = pTabViewShell->GetScDrawView();
 
             if(pDrawView)
             {
@@ -903,7 +903,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 rDevice.SetMapMode(aNew);
             }
 
-            SdrView* pDrawView = pTabViewShell->GetSdrView();
+            SdrView* pDrawView = pTabViewShell->GetScDrawView();
 
             if(pDrawView)
             {

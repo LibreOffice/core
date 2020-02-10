@@ -2934,7 +2934,7 @@ void ScViewFunc::MoveTable(
                 // Make sure to clear the cached page view after sheet
                 // deletion, which still points to the sdr page belonging to
                 // the deleted sheet.
-                SdrView* pSdrView = pDestViewSh->GetSdrView();
+                SdrView* pSdrView = pDestViewSh->GetScDrawView();
                 if (pSdrView)
                     pSdrView->ClearPageView();
 

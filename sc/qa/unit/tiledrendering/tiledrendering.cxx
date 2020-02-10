@@ -646,7 +646,7 @@ void ScTiledRenderingTest::testViewLock()
     SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
     SdrPage* pDrawPage = pDrawModel->GetPage(0);
     SdrObject* pObject = pDrawPage->GetObj(0);
-    SdrView* pView = pViewShell->GetSdrView();
+    SdrView* pView = pViewShell->GetScDrawView();
     aView1.m_bViewLock = false;
     pView->SdrBeginTextEdit(pObject);
     CPPUNIT_ASSERT(aView1.m_bViewLock);
@@ -829,7 +829,7 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
     SdrPage* pDrawPage = pDrawModel->GetPage(0);
     SdrObject* pObject = pDrawPage->GetObj(0);
-    SdrView* pView = pViewShell->GetSdrView();
+    SdrView* pView = pViewShell->GetScDrawView();
     aView1.m_bGraphicSelection = false;
     aView1.m_bGraphicViewSelection = false;
     pView->MarkObj(pObject, pView->GetSdrPageView());

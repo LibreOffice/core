@@ -2766,7 +2766,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         if (!bEditView)
         {
             //  only if no cell editview is active, look at drawview
-            SdrView* pSdrView = pViewData->GetView()->GetSdrView();
+            SdrView* pSdrView = pViewData->GetView()->GetScDrawView();
             if ( pSdrView )
             {
                 OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
@@ -2992,7 +2992,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             {
                 //  Is a draw object selected?
 
-                SdrView* pDrawView = pViewSh->GetSdrView();
+                SdrView* pDrawView = pViewSh->GetScDrawView();
                 if (pDrawView && pDrawView->AreObjectsMarked())
                 {
                     // #100442#; the context menu should open in the middle of the selected objects
@@ -4425,7 +4425,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
 
     // If the mouse down was inside a visible note window, ignore it and
     // leave it up to the ScPostIt to handle it
-    SdrView* pDrawView = pViewData->GetViewShell()->GetSdrView();
+    SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
     if (pDrawView)
     {
         const size_t nCount = pDrawView->GetMarkedObjectCount();

@@ -60,7 +60,7 @@ void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
                 // In both cases, first select in the visible View
 
                 OUString aName;
-                SdrView* pDrView = GetSdrView();
+                SdrView* pDrView = GetScDrawView();
                 if (pDrView)
                 {
                     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
@@ -94,7 +94,7 @@ void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
 
                     //! convert from something into 1/100mm ??????
 
-                    SdrView* pDrView = GetSdrView();
+                    SdrView* pDrView = GetScDrawView();
                     if ( pDrView )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
@@ -160,7 +160,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
             case SID_ACTIVE_OBJ_NAME:
                 {
                     OUString aName;
-                    uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetSdrView() );
+                    uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetScDrawView() );
                     if (xOLE.is())
                     {
                         aName = GetViewData().GetSfxDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
@@ -173,7 +173,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
             case SID_OBJECT_WIDTH:
             case SID_OBJECT_HEIGHT:
                 {
-                    SdrView* pDrView = GetSdrView();
+                    SdrView* pDrView = GetScDrawView();
                     if ( pDrView )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
