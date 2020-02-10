@@ -140,6 +140,7 @@ gb_PrecompiledHeader_ignore_flags_system := \
 -DOOO_DLLIMPLEMENTATION_TEST \
 -DSK_USER_CONFIG_HEADER=% \
 -DSKIA_DLL \
+-DGLM_FORCE_CTOR_INIT \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.
