@@ -52,6 +52,10 @@ namespace sw {
         const bool m_bHideRedlines;
         CollectPostItsHint(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool bHideRedlines) : m_rvFormatFields(rvFormatFields), m_rIDRA(rIDRA), m_bHideRedlines(bHideRedlines) {};
     };
+    struct HasHiddenInformationNotesHint final : SfxHint {
+        bool& m_rbHasHiddenInformationNotes;
+        HasHiddenInformationNotesHint(bool& rbHasHiddenInformationNotes) : m_rbHasHiddenInformationNotes(rbHasHiddenInformationNotes) {};
+    };
 }
 
 
