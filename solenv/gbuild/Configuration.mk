@@ -69,7 +69,6 @@ gb_XcsTarget_XSLT_SchemaTrim := $(SRCDIR)/officecfg/util/schema_trim.xsl
 gb_XcsTarget_DTD_Schema := $(SRCDIR)/officecfg/registry/component-schema.dtd
 
 define gb_XcsTarget__command
-$(call gb_Output_announce,$(2),$(true),XCS,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -95,7 +94,10 @@ $(call gb_XcsTarget_get_target,%) : \
 	    $(gb_XcsTarget_XSLT_SchemaVal) $(gb_XcsTarget_XSLT_Sanity) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) $(gb_XcsTarget_DTD_Schema) \
 		| $(gb_Configuration_XSLTCOMMAND_DEPS)
+	$(call gb_Output_announce,$*,$(true),XCS,1)
+	$(call gb_Trace_StartRange,$*,XCS)
 	$(call gb_XcsTarget__command,$@,$*,$(filter %.xcs,$^))
+	$(call gb_Trace_EndRange,$*,XCS)
 
 $(call gb_XcsTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCS,1)
@@ -109,7 +111,6 @@ gb_XcuDataTarget_XSLT_DataVal := $(SRCDIR)/officecfg/util/data_val.xsl
 gb_XcuDataTarget_DTD_ComponentUpdate := $(SRCDIR)/officecfg/registry/component-update.dtd
 
 define gb_XcuDataTarget__command
-$(call gb_Output_announce,$(2),$(true),XCU,2)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -133,7 +134,10 @@ endef
 $(call gb_XcuDataTarget_get_target,%) : $(gb_XcuDataTarget_XSLT_DataVal) \
 		$(gb_XcuTarget_XSLT_AllLang) $(gb_XcuDataTarget_DTD_ComponentUpdate) \
 		| $(gb_Configuration_XSLTCOMMAND_DEPS)
+	$(call gb_Output_announce,$*,$(true),XCU,2)
+	$(call gb_Trace_StartRange,$*,XCU)
 	$(call gb_XcuDataTarget__command,$@,$*,$(filter %.xcu,$^))
+	$(call gb_Trace_EndRange,$*,XCU)
 
 $(call gb_XcuDataTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,2)
@@ -152,7 +156,6 @@ $(call gb_XcsTarget_get_target,$(basename $(subst -,.,$(basename $(1)))).xcs)
 endef
 
 define gb_XcuModuleTarget__command
-$(call gb_Output_announce,$(2),$(true),XCM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -169,7 +172,10 @@ endef
 $(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
 		| $(gb_Configuration_XSLTCOMMAND_DEPS)
 	$(if $(filter %.xcu,$^),,$(error There is no target $(call gb_XcuModuleTarget_get_target,$*)))
+	$(call gb_Output_announce,$*,$(true),XCM,3)
+	$(call gb_Trace_StartRange,$*,XCM)
 	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
+	$(call gb_Trace_EndRange,$*,XCM)
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCM,3)
@@ -187,7 +193,6 @@ gb_XcuLangpackTarget__get_target_with_lang = \
 gb_XcuLangpackTarget_SED_delcomment := $(SRCDIR)/officecfg/util/delcomment.sed
 
 define gb_XcuLangpackTarget__command
-$(call gb_Output_announce,$(2),$(true),XCL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	sed -e "s/__LANGUAGE__/$(LANGUAGE)/" -f $(gb_XcuLangpackTarget_SED_delcomment)\
@@ -196,7 +201,10 @@ endef
 
 $(call gb_XcuLangpackTarget_get_target,%) : \
 		$(gb_XcuLangpackTarget_SED_delcomment)
+	$(call gb_Output_announce,$*,$(true),XCL,1)
+	$(call gb_Trace_StartRange,$*,XCL)
 	$(call gb_XcuLangpackTarget__command,$@,$*,$(filter %.tmpl,$^))
+	$(call gb_Trace_EndRange,$*,XCL)
 
 $(call gb_XcuLangpackTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCL,1)
@@ -211,7 +219,6 @@ gb_XcuMergeTarget_CFGEXDEPS := $(call gb_Executable_get_runtime_dependencies,cfg
 gb_XcuMergeTarget_CFGEXCOMMAND := $(call gb_Executable_get_command,cfgex)
 
 define gb_XcuMergeTarget__command
-$(call gb_Output_announce,$(2),$(true),XCX,1)
 MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
@@ -226,7 +233,10 @@ endef
 
 $(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS)
 	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
+		$(call gb_Output_announce,$*,$(true),XCX,1) \
+		$(call gb_Trace_StartRange,$*,XCX) \
 		$(call gb_XcuMergeTarget__command,$@,$*,$(filter %.xcu,$^)),\
+		$(call gb_Trace_EndRange,$*,XCX) \
 		mkdir -p $(dir $@) && cp $(filter %.xcu,$^) $@)
 
 $(call gb_XcuMergeTarget_get_clean_target,%) :
@@ -249,7 +259,6 @@ endef
 
 # locale is extracted from the stem (parameter $(2))
 define gb_XcuResTarget__command
-$(call gb_Output_announce,$(2),$(true),XCR,2)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -266,7 +275,10 @@ endef
 
 $(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
 		| $(gb_Configuration_XSLTCOMMAND_DEPS)
+	$(call gb_Output_announce,$*,$(true),XCR,2)
+	$(call gb_Trace_StartRange,$*,XCR)
 	$(call gb_XcuResTarget__command,$@,$*,$(filter %.xcu,$^))
+	$(call gb_Trace_EndRange,$*,XCR)
 
 $(call gb_XcuResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCR,2)
@@ -298,6 +310,7 @@ $(call gb_Configuration_get_clean_target,%) :
 
 $(call gb_Configuration_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),CFG,4)
+	$(call gb_Trace_MakeMark,$*,CFG)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 

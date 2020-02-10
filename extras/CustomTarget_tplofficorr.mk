@@ -37,40 +37,56 @@ $(call gb_CustomTarget_get_target,extras/source/templates/officorr) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%/mimetype : $(SRCDIR)/extras/source/templates/officorr/%/mimetype
 	$(call gb_Output_announce,templates/officorr/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.jpg : $(SRCDIR)/extras/source/templates/officorr/%.jpg
 	$(call gb_Output_announce,templates/officorr/$*.jpg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.jpg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*.jpg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.rdf : $(SRCDIR)/extras/source/templates/officorr/%.rdf
 	$(call gb_Output_announce,templates/officorr/$*.rdf,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.rdf,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*.rdf,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.png : $(SRCDIR)/extras/source/templates/officorr/%.png
 	$(call gb_Output_announce,templates/officorr/$*.png,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.png,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*.png,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.svg : $(SRCDIR)/extras/source/templates/officorr/%.svg
 	$(call gb_Output_announce,templates/officorr/$*.svg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.svg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*.svg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.svm : $(SRCDIR)/extras/source/templates/officorr/%.svm
 	$(call gb_Output_announce,templates/officorr/$*.svm,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.svm,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/officorr/$*.svm,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.xml : $(SRCDIR)/extras/source/templates/officorr/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,templates/officorr/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,templates/officorr/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,templates/officorr/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)/%.ott :
 	$(call gb_Output_announce,templates/officorr/$*.ott,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,templates/officorr/$*.ott,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_OFFICORR_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_OFFICORR_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_OFFICORR_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,templates/officorr/$*.ott,ZIP)
 
 define extras_Tplofficorr_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \

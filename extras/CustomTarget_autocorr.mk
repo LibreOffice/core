@@ -240,20 +240,26 @@ $(call gb_CustomTarget_get_target,extras/source/autocorr) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype : $(SRCDIR)/extras/source/autocorr/lang/%/mimetype
 	$(call gb_Output_announce,autocorr/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autocorr/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,autocorr/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,autocorr/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,autocorr/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,autocorr/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.dat :
 	$(call gb_Output_announce,autocorr/$*.dat,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,autocorr/$*.dat,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_AUTOCORR_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_AUTOCORR_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_AUTOCORR_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,autocorr/$*.dat,ZIP)
 
 define extras_Autocorr_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/lang/$(2) \

@@ -24,6 +24,7 @@ $(eval $(call gb_ExternalProject_use_externals,libzmf,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libzmf,build) :
+	$(call gb_Trace_StartRange,libzmf,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
@@ -42,5 +43,6 @@ $(call gb_ExternalProject_get_state_target,libzmf,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libzmf,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

@@ -21,6 +21,7 @@ $(dir $(call gb_Pyuno_get_target,%))%/.dir :
 
 $(call gb_Pyuno_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PYU,3)
+	$(call gb_Trace_MakeMark,$*,PYU)
 	touch $@
 
 $(call gb_Pyuno_get_final_target,%) :

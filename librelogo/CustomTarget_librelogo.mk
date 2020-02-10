@@ -36,6 +36,7 @@ $(librelogo_DIR)/LibreLogo_%.properties : \
 		$(call gb_Executable_get_runtime_dependencies,propex) \
 		| $(librelogo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRP,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRP)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(if $(filter-out qtz,$(LANGUAGE)), \
 			MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
@@ -53,6 +54,7 @@ $(librelogo_DIR)/LibreLogo_%.properties : \
 				-l $(LANGUAGE) \
 		) \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRP)
 
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

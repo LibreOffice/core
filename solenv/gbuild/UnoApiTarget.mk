@@ -26,7 +26,6 @@ gb_UnoApiTarget_UNOIDLCHECKDEPS := $(call gb_Executable_get_runtime_dependencies
 gb_UnoApiTarget_UNOIDLCHECKCOMMAND := $(call gb_Executable_get_command,unoidl-check)
 
 define gb_UnoApiTarget__command
-$(call gb_Output_announce,$(2),$(true),UNO,4)
 mkdir -p $(dir $(1)) \
 $(if $(UNOAPI_ENTITIES), \
 	&& RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(UNOAPI_ENTITIES))) \
@@ -42,7 +41,10 @@ $(if $(UNOAPI_REFERENCE), \
 endef
 
 $(call gb_UnoApiTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),UNO,4)
+	$(call gb_Trace_StartRange,$*,UNO)
 	$(call gb_UnoApiTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,UNO)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
@@ -139,17 +141,23 @@ endef
 $(call gb_UnoApiHeadersTarget_get_real_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPB,3) \
+	$(call gb_Trace_StartRange,$*,HPB)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
+	$(call gb_Trace_EndRange,$*,HPB)
 
 $(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPC,3)
+	$(call gb_Trace_StartRange,$*,HPC)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*),-C)
+	$(call gb_Trace_EndRange,$*,HPC)
 
 $(call gb_UnoApiHeadersTarget_get_real_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERDEPS)
 	$(call gb_Output_announce,$*,$(true),HPP,3) \
+	$(call gb_Trace_StartRange,$*,HPP)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
+	$(call gb_Trace_EndRange,$*,HPP)
 
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :

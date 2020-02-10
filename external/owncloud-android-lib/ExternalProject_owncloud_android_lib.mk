@@ -14,8 +14,10 @@ $(eval $(call gb_ExternalProject_register_targets,owncloud_android_lib,\
 ))
 
 $(call gb_ExternalProject_get_state_target,owncloud_android_lib,build) :
+	$(call gb_Trace_StartRange,owncloud_android_lib,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	ANDROID_HOME=$(ANDROID_SDK_HOME) $(SRCDIR)/android/source/gradlew assemble \
 	)
+	$(call gb_Trace_EndRange,owncloud_android_lib,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

@@ -30,6 +30,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_liblayout,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
+	$(call gb_Trace_StartRange,jfreereport_liblayout,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -53,5 +54,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
 			-Dbuild.id="10682" \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
+	$(call gb_Trace_EndRange,jfreereport_liblayout,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

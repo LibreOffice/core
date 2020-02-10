@@ -216,36 +216,50 @@ $(call gb_CustomTarget_get_target,extras/source/templates/presnt) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%/mimetype : $(SRCDIR)/extras/source/templates/presnt/%/mimetype
 	$(call gb_Output_announce,templates/presnt/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/presnt/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.jpg : $(SRCDIR)/extras/source/templates/presnt/%.jpg
 	$(call gb_Output_announce,templates/presnt/$*.jpg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*.jpg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/presnt/$*.jpg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svg : $(SRCDIR)/extras/source/templates/presnt/%.svg
 	$(call gb_Output_announce,templates/presnt/$*.svg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*.svg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/presnt/$*.svg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.png : $(SRCDIR)/extras/source/templates/presnt/%.png
 	$(call gb_Output_announce,templates/presnt/$*.png,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*.png,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/presnt/$*.png,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svm : $(SRCDIR)/extras/source/templates/presnt/%.svm
 	$(call gb_Output_announce,templates/presnt/$*.svm,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*.svm,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/presnt/$*.svm,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.xml : $(SRCDIR)/extras/source/templates/presnt/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,templates/presnt/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,templates/presnt/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp :
 	$(call gb_Output_announce,templates/presnt/$*.otp,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,templates/presnt/$*.otp,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_PRESENTATIONS_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_PRESENTATIONS_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_PRESENTATIONS_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,templates/presnt/$*.otp,ZIP)
 
 define extras_Tplpresnt_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \

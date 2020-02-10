@@ -91,6 +91,7 @@ endif
 endif
 
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
+	$(call gb_Trace_StartRange,liborcus,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(liborcus_LIBS),LIBS='$(liborcus_LIBS)') \
 		$(if $(liborcus_CXXFLAGS),CXXFLAGS='$(liborcus_CXXFLAGS)') \
@@ -126,5 +127,6 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				$(EXTERNAL_WORKDIR)/src/parser/.libs/liborcus-parser-0.15.0.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,liborcus,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

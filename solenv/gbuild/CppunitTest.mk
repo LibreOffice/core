@@ -109,6 +109,7 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$*,$(true),CUT,2)
+	$(call gb_Trace_StartRange,$*,CUT)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && cp -r $(WORKDIR)/unittest $@.user && \
@@ -143,6 +144,7 @@ else
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
 				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*)))
+	$(call gb_Trace_EndRange,$*,CUT)
 endif
 
 define gb_CppunitTest_CppunitTest

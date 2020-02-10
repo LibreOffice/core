@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_use_nmake,serf,build))
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,serf,build):
+	$(call gb_Trace_StartRange,serf,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		APR_SRC="..\apr" \
 		APRUTIL_SRC="..\apr_util" \
@@ -29,10 +30,12 @@ $(call gb_ExternalProject_get_state_target,serf,build):
 		nmake -nologo -f serf.mak \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),DEBUG_BUILD=T Debug,Release)/serf-1.lib \
 	)
+	$(call gb_Trace_EndRange,serf,EXTERNAL)
 
 else
 # serf is using SERF_LIBS variable, so pass it empty
 $(call gb_ExternalProject_get_state_target,serf,build):
+	$(call gb_Trace_StartRange,serf,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		./configure SERF_LIBS= \
 			--enable-option-checking=fatal \
@@ -42,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,serf,build):
 			$(if $(SYSTEM_OPENSSL),,--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl)) \
 		&& $(MAKE) libserf-1.la \
 	)
+	$(call gb_Trace_EndRange,serf,EXTERNAL)
 
 endif
 

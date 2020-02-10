@@ -15,7 +15,6 @@ gb_CliNativeLibrary_EXT := $(gb_CliAssembly_POLICYEXT)
 gb_CliNativeLibrary__get_library = $(call gb_CliAssembly_get_dll,$(1))
 
 define gb_CliNativeLibrary__command
-$(call gb_Output_announce,$(2),$(true),SN ,4)
 $(call gb_Helper_abbreviate_dirs,\
 	$(GNUCOPY) $(CLI_NATIVE_LIBRARY) $(1).tmp && \
 	sn -R $(1).tmp $(CLI_NATIVE_KEYFILE) && \
@@ -57,8 +56,10 @@ $$(eval $$(call gb_Module_register_target,$(call gb_CliNativeLibrary_get_target,
 $(call gb_Helper_make_userfriendly_targets,$(1),CliNativeLibrary)
 
 $(call gb_CliNativeLibrary_get_target,$(1)) :
+	$$(call gb_Output_announce,$(1),$(true),SN ,4)
+	$$(call gb_Trace_StartRange,$(1),SN )
 	$$(call gb_CliNativeLibrary__command,$$@,$(1))
-
+	$$(call gb_Trace_EndRange,$(1),SN )
 
 endef
 

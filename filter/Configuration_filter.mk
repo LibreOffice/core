@@ -36,6 +36,7 @@ filter_XcuFilterTypesTarget_get_clean_target = \
 
 $(call gb_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIT,1)
+	$(call gb_Trace_StartRange,$*,FIT)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -46,6 +47,7 @@ $(call gb_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 		 	fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=Types tcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
+	$(call gb_Trace_EndRange,$*,FIT)
 
 $(call filter_XcuFilterTypesTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIT,1)
@@ -77,6 +79,7 @@ filter_XcuFilterFiltersTarget_get_clean_target = \
 
 $(call gb_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIF,1)
+	$(call gb_Trace_StartRange,$*,FIF)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -87,6 +90,7 @@ $(call gb_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
+	$(call gb_Trace_EndRange,$*,FIF)
 
 $(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIF,1)
@@ -108,6 +112,7 @@ filter_XcuFilterOthersTarget_get_clean_target = \
 
 $(call gb_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIO,1)
+	$(call gb_Trace_StartRange,$*,FIO)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -122,6 +127,7 @@ $(call gb_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 			outdir=$(dir $@) pkg=$@ xmlpackage=Misc \
 			lcfg=$${RESPONSEFILE} ccfg=$${RESPONSEFILE2} && \
 		rm -f $${RESPONSEFILE} $${RESPONSEFILE2})
+	$(call gb_Trace_EndRange,$*,FIO)
 
 $(call filter_XcuFilterOthersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIO,1)
@@ -142,6 +148,7 @@ filter_XcuFilterInternalTarget_get_clean_target = \
 
 $(call gb_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FII,1)
+	$(call gb_Trace_StartRange,$*,FII)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -153,6 +160,7 @@ $(call gb_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 			outdir=$(dir $@) pkg=$@ xmlpackage=GraphicFilter \
 			fcfg=$${RESPONSEFILE} subdir_filters=internalgraphicfilters && \
 		rm -f $${RESPONSEFILE})
+	$(call gb_Trace_EndRange,$*,FII)
 
 $(call filter_XcuFilterInternalTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FII,1)
@@ -188,6 +196,7 @@ filter_XcuResTarget_get_clean_target = \
 
 $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),FIU,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),FIU)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
@@ -198,6 +207,7 @@ $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} languagepack=true \
 		&& rm -f $${RESPONSEFILE})
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),FIU)
 
 $(filter_XcuFilterUiCleanTarget) :
 	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(false),FIU,1)
@@ -215,11 +225,13 @@ $$(call filter_XcuResTarget_get_target,$(1)) : \
 		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget) \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$$(call gb_Output_announce,$(1),$(true),XCU,1)
+	$$(call gb_Trace_StartRange,$(1),XCU)
 	$$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $$(dir $$@) && \
 		$(subst $$,$$$$,$(call gb_ExternalExecutable_get_command,xsltproc)) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
 			$(filter_XcuFilterUiTarget) > $$@)
+	$$(call gb_Trace_EndRange,$(1),XCU)
 
 endef
 

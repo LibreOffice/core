@@ -18,6 +18,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalProject_use_nmake,libxslt,build))
 
 $(call gb_ExternalProject_get_state_target,libxslt,build):
+	$(call gb_Trace_StartRange,libxslt,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
@@ -26,8 +27,10 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
 		&& nmake \
 	,win32)
+	$(call gb_Trace_EndRange,libxslt,EXTERNAL)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxslt,build):
+	$(call gb_Trace_StartRange,libxslt,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-crypto --without-python \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -46,6 +49,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 				$(EXTERNAL_WORKDIR)/libxslt/.libs/libxslt.1.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libxslt,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:

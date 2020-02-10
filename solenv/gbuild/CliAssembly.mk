@@ -13,7 +13,6 @@ gb_CliConfigTarget_TARGET := $(SRCDIR)/solenv/bin/clipatchconfig.pl
 gb_CliConfigTarget_COMMAND := $(PERL) -w $(gb_CliConfigTarget_TARGET)
 
 define gb_CliConfigTarget__command
-$(call gb_Output_announce,$(2),$(true),CPA,1)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CliConfigTarget_COMMAND) $(3) $(CLI_CONFIG_VERSIONFILE) $(1) \
 )
@@ -23,7 +22,10 @@ $(dir $(call gb_CliConfigTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CliConfigTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),CPA,1)
+	$(call gb_Trace_StartRange,$*,CPA)
 	$(call gb_CliConfigTarget__command,$@,$*,$<)
+	$(call gb_Trace_EndRange,$*,CPA)
 
 $(call gb_CliConfigTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CPA,1)
@@ -51,7 +53,6 @@ endef
 gb_CliAssemblyTarget_KEYFILE_DEFAULT := $(SRCDIR)/cli_ure/source/cliuno.snk
 
 define gb_CliAssemblyTarget__command
-$(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
 	$(GNUCOPY) $(CLI_ASSEMBLY_KEYFILE) $(1).tmp.snk && \
 	al \
@@ -76,7 +77,10 @@ $(call gb_CliAssemblyTarget_get_target,%) :
 	$(if $(strip $(CLI_ASSEMBLY_VERSION)),,$(call gb_Output_error,assembly version not set))
 	$(if $(strip $(CLI_ASSEMBLY_CONFIGFILE)),,$(call gb_Output_error,assembly configuration file not set))
 	$(if $(strip $(CLI_ASSEMBLY_OUTFILE)),,$(call gb_Output_error,assembly name not set))
+	$(call gb_Output_announce,$*,$(true),AL ,2)
+	$(call gb_Trace_StartRange,$*,AL )
 	$(call gb_CliAssemblyTarget__command,$@,$*,$<)
+	$(call gb_Trace_EndRange,$*,AL )
 
 $(call gb_CliAssemblyTarget_get_assembly_target,%) :
 	touch $@
@@ -142,6 +146,7 @@ gb_CliAssembly_get_dll = $(call gb_CliAssemblyTarget_get_dll,$(1))
 
 $(call gb_CliAssembly_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),CLA,3)
+	$(call gb_Trace_MakeMark,$*,CLA)
 	mkdir -p $(dir $@) && touch $@
 
 .PHONY : $(call gb_CliAssembly_get_clean_target,%)

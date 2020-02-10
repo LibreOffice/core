@@ -25,7 +25,6 @@ endef
 gb_ScpTemplateTarget_get_source = $(SRCDIR)/$(1).sct
 
 define gb_ScpTemplateTarget__command
-$(call gb_Output_announce,$(2),$(true),SCT,1)
 $(call gb_Helper_abbreviate_dirs,\
 	export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
 	$(gb_ScpTemplateTarget_COMMAND) \
@@ -41,7 +40,10 @@ $(dir $(call gb_ScpTemplateTarget_get_target,%))%/.dir :
 # depend on configure output to rebuild everything
 $(call gb_ScpTemplateTarget_get_target,%) : \
 		$(gb_ScpTemplateTarget_TARGET) $(BUILDDIR)/config_$(gb_Side).mk
+	$(call gb_Output_announce,$*,$(true),SCT,1)
+	$(call gb_Trace_StartRange,$*,SCT)
 	$(call gb_ScpTemplateTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,SCT)
 
 .PHONY : $(call gb_ScpTemplateTarget_get_clean_target,%)
 $(call gb_ScpTemplateTarget_get_clean_target,%) :
@@ -64,7 +66,6 @@ gb_ScpPreprocessTarget_COMMAND := $(call gb_Executable_get_command,cpp)
 gb_ScpPreprocessTarget_get_source = $(SRCDIR)/$(1).scp
 
 define gb_ScpPreprocessTarget__command
-$(call gb_Output_announce,$(2),$(true),SPP,2)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpPreprocessTarget_COMMAND) \
 		-+ -P \
@@ -81,7 +82,10 @@ $(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
 # depend on configure output to rebuild everything
 $(call gb_ScpPreprocessTarget_get_target,%) : \
 		$(gb_ScpPreprocessTarget_DEPS) $(BUILDDIR)/config_$(gb_Side).mk
+	$(call gb_Output_announce,$*,$(true),SPP,2)
+	$(call gb_Trace_StartRange,$*,SPP)
 	$(call gb_ScpPreprocessTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,SPP)
 
 .PHONY : $(call gb_ScpPreprocessTarget_get_clean_target,%)
 $(call gb_ScpPreprocessTarget_get_clean_target,%) :
@@ -133,7 +137,6 @@ gb_ScpTarget_TARGET := $(SRCDIR)/solenv/bin/pre2par.pl
 gb_ScpTarget_COMMAND := $(PERL) $(gb_ScpTarget_TARGET)
 
 define gb_ScpTarget__command
-$(call gb_Output_announce,$(2),$(true),SCP,2)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ScpTarget_COMMAND) -l $(SCP_ULF) -s $(SCP_SOURCE) -o $(1) \
 )
@@ -143,7 +146,10 @@ $(dir $(call gb_ScpTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ScpTarget_get_target,%) : $(gb_ScpTarget_TARGET)
+	$(call gb_Output_announce,$*,$(true),SCP,2)
+	$(call gb_Trace_StartRange,$*,SCP)
 	$(call gb_ScpTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,SCP)
 
 $(call gb_ScpTarget_get_external_target,%) :
 	touch $@
@@ -188,7 +194,6 @@ endef
 #  gb_InstallModuleTarget_InstallModuleTarget_platform
 
 define gb_InstallModuleTarget__command
-$(call gb_Output_announce,$(2),$(true),INM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) \
 	$(foreach scpfile,$(SCP_FILES),&& echo $(scpfile) >> $(1)) \
@@ -199,7 +204,10 @@ $(dir $(call gb_InstallModuleTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_InstallModuleTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),INM,3)
+	$(call gb_Trace_StartRange,$*,INM)
 	$(call gb_InstallModuleTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,INM)
 
 $(call gb_InstallModuleTarget_get_external_target,%) :
 	touch $@

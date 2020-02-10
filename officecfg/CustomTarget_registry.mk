@@ -23,6 +23,7 @@ endef
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_allheaders.hxx: \
 		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
+	$(call gb_Trace_StartRange,officecfg_qa_allheaders.hxx,CAT)
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	mkdir -p $(dir $@) && \
 	rm -f $@ \
@@ -31,6 +32,7 @@ ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 else
 	mv $(call var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
 endif
+	$(call gb_Trace_EndRange,officecfg_qa_allheaders.hxx,CAT)
 
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
 officecfg_xsltparams=$(if $(filter-out $(lastword $1),$1),$(call officecfg_xsltparams,$(filter-out $(lastword $1),$1))) --stringparam ns$(words $1) $(lastword $1)
@@ -40,9 +42,11 @@ $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/%.hxx: \
             $(SRCDIR)/officecfg/registry/cppheader.xsl\
 	    | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XSL)
 	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet $(call officecfg_xsltparams,$(subst /, ,$*)) \
 	    -o $@ $(SRCDIR)/officecfg/registry/cppheader.xsl $<)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XSL)
 
 # vim: set noet sw=4 ts=4:

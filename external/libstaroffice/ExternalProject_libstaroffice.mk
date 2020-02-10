@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,libstaroffice,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libstaroffice,build) :
+	$(call gb_Trace_StartRange,libstaroffice,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& ./configure \
@@ -48,5 +49,6 @@ $(call gb_ExternalProject_get_state_target,libstaroffice,build) :
 				$(EXTERNAL_WORKDIR)/src/lib/.libs/libstaroffice-0.0.0.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libstaroffice,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

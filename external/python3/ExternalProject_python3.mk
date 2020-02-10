@@ -33,6 +33,7 @@ ifeq ($(OS),WNT)
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
+	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
@@ -45,6 +46,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,PCBuild)
+	$(call gb_Trace_EndRange,python3,EXTERNAL)
 
 else
 
@@ -69,6 +71,7 @@ ifneq (,$(ENABLE_VALGRIND))
 endif
 
 $(call gb_ExternalProject_get_state_target,python3,build) :
+	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter 10.8 10.9 10.10 10.11,$(MACOSX_DEPLOYMENT_TARGET)), \
@@ -117,6 +120,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_ZLIB),,ZLIB_INCDIR=$(WORKDIR)/UnpackedTarball/zlib) \
 		&& ln -s build/lib.* LO_lib \
 	)
+	$(call gb_Trace_EndRange,python3,EXTERNAL)
 
 endif
 

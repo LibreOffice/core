@@ -32,40 +32,56 @@ $(call gb_CustomTarget_get_target,extras/source/templates/offimisc) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%/mimetype : $(SRCDIR)/extras/source/templates/offimisc/%/mimetype
 	$(call gb_Output_announce,templates/offimisc/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.jpg : $(SRCDIR)/extras/source/templates/offimisc/%.jpg
 	$(call gb_Output_announce,templates/offimisc/$*.jpg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.jpg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*.jpg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.png : $(SRCDIR)/extras/source/templates/offimisc/%.png
 	$(call gb_Output_announce,templates/offimisc/$*.png,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.png,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*.png,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.rdf : $(SRCDIR)/extras/source/templates/offimisc/%.rdf
 	$(call gb_Output_announce,templates/offimisc/$*.rdf,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.rdf,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*.rdf,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svg : $(SRCDIR)/extras/source/templates/offimisc/%.svg
 	$(call gb_Output_announce,templates/offimisc/$*.svg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.svg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*.svg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svm : $(SRCDIR)/extras/source/templates/offimisc/%.svm
 	$(call gb_Output_announce,templates/offimisc/$*.svm,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.svm,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/offimisc/$*.svm,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.xml : $(SRCDIR)/extras/source/templates/offimisc/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,templates/offimisc/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,templates/offimisc/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.ott :
 	$(call gb_Output_announce,templates/offimisc/$*.ott,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,templates/offimisc/$*.ott,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_OFFIMISC_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_OFFIMISC_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_OFFIMISC_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,templates/offimisc/$*.ott,ZIP)
 
 define extras_Tploffimisc_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \

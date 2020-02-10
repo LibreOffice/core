@@ -28,7 +28,6 @@ $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
 endef
 
 define gb_InstallScript__command
-$(call gb_Output_announce,$(2),$(true),INS,4)
 $(call gb_Helper_abbreviate_dirs,\
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 		$(call gb_InstallScript__make_arglist,\
@@ -50,7 +49,10 @@ $(dir $(call gb_InstallScript_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_InstallScript_get_target,%) : $(gb_InstallScript_TARGET)
+	$(call gb_Output_announce,$*,$(true),INS,4)
+	$(call gb_Trace_StartRange,$*,INS)
 	$(call gb_InstallScript__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,INS)
 
 .PHONY : $(call gb_InstallScript_get_clean_target,%)
 $(call gb_InstallScript_get_clean_target,%) :

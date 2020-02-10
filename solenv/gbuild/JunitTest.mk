@@ -36,6 +36,7 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$*,$(true),JUT,2)
+	$(call gb_Trace_StartRange,$*,JUT)
 	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*)/user && \
@@ -56,6 +57,7 @@ else
 		&& echo \
 		&& false)))
 	$(CLEAN_CMD)
+	$(call gb_Trace_EndRange,$*,JUT)
 endif
 
 define gb_JunitTest_JunitTest

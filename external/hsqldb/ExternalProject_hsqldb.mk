@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_register_targets,hsqldb,\
 ))
 
 $(call gb_ExternalProject_get_state_target,hsqldb,build) :
+	$(call gb_Trace_StartRange,hsqldb,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -24,5 +25,6 @@ $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 			$(if $(debug),-Dbuild.debug="on") \
 			jar \
 	)
+	$(call gb_Trace_EndRange,hsqldb,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

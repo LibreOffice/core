@@ -34,6 +34,7 @@ $(odk_allheaders_DIR)/allheaders.hxx : \
 			  $(call gb_Package_get_target,odk_headers_generated) \
             | $(odk_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	printf '// Generated list of sal includes\n' > $@ && \
 	printf '#ifdef _WIN32\n' >> $@ && \
@@ -49,5 +50,6 @@ else
 		$(call odk_genincludesheader) \
 		$(foreach file,$(shell cat $^),$(call odk_geninclude,$(file),$(findstring /win32/,$(file)))))
 endif
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_register_targets,beanshell,\
 ))
 
 $(call gb_ExternalProject_get_state_target,beanshell,build) :
+	$(call gb_Trace_StartRange,beanshell,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	$(ICECREAM_RUN) "$(ANT)" \
 		$(if $(verbose),-v,-q) \
@@ -23,5 +24,6 @@ $(call gb_ExternalProject_get_state_target,beanshell,build) :
 		-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		$(if $(debug),-Dbuild.debug="on") \
 	)
+	$(call gb_Trace_EndRange,beanshell,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

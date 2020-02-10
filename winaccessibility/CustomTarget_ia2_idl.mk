@@ -25,6 +25,7 @@ $(call gb_CustomTarget_get_target,winaccessibility/ia2/idl) : \
 $(wina11y_COMIDLDIR)/%.h : $(wina11y_SOURCE)/%.idl \
 		| $(wina11y_COMIDLDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),IDL)
 	$(call gb_Helper_abbreviate_dirs, \
 	midl.exe \
 		-tlb $(wina11y_COMIDLDIR)/$*.tlb \
@@ -36,5 +37,6 @@ $(wina11y_COMIDLDIR)/%.h : $(wina11y_SOURCE)/%.idl \
 		$(SOLARINC) \
 		-I $(wina11y_SOURCE) \
 		$<)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),IDL)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

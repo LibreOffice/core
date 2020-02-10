@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,liblangtag,\
 # liblangtag uses (-DBUILDDIR="\"$(abs_top_builddir)\"" and similar).
 # Results in "cl : Command line error D8003 : missing source filename"
 $(call gb_ExternalProject_get_state_target,liblangtag,build):
+	$(call gb_Trace_StartRange,liblangtrag,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
 		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
@@ -49,4 +50,6 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,liblangtrag,EXTERNAL)
+
 # vim: set noet sw=4 ts=4:

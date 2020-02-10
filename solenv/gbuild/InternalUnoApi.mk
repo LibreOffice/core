@@ -15,6 +15,7 @@ $(dir $(call gb_InternalUnoApi_get_target,%))%/.dir :
 
 $(call gb_InternalUnoApi_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),UNI,5) \
+	$(call gb_Trace_MakeMark,$*,UNI)
 	touch $@
 
 .PHONY : $(call gb_InternalUnoApi_get_clean_target,%)

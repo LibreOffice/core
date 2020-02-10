@@ -18,6 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_flow_engine,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
+	$(call gb_Trace_StartRange,jfreereport_flow_engine,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -36,5 +37,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
+	$(call gb_Trace_EndRange,jfreereport_flow_engine,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

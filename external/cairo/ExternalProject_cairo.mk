@@ -29,9 +29,11 @@ $(eval $(call gb_ExternalProject_register_targets,cairo,\
 ifeq ($(OS),WNT)
 
 $(call gb_ExternalProject_get_state_target,cairo,build) :
+	$(call gb_Trace_StartRange,cairo,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	$(MAKE) -f Makefile.win32 CFG=release ZLIB3RDLIB=zlib.lib \
 	)
+	$(call gb_Trace_EndRange,cairo,EXTERNAL)
 
 
 else
@@ -40,6 +42,7 @@ else
 # from cairo.h in non-overridable way
 
 $(call gb_ExternalProject_get_state_target,cairo,build) :
+	$(call gb_Trace_StartRange,cairo,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	./configure \
 		$(if $(debug),STRIP=" ") \
@@ -69,6 +72,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	&& cp cairo-version.h src/cairo-version.h \
 	&& cd src && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,cairo,EXTERNAL)
 
 endif
 

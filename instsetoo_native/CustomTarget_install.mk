@@ -100,6 +100,7 @@ endef
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	rm -rf $(instsetoo_OUT)
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
@@ -130,6 +131,7 @@ ifneq (WNT,$(OS))
 endif
 endif # LIBO_TEST_INSTALL
 	touch $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_signing.done: \
@@ -137,7 +139,9 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_signing.done: \
         $(if $(filter ODK,$(BUILD_TYPE)),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done) \
         $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	touch $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done \
@@ -146,6 +150,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(verbose),-v) \
@@ -155,9 +160,11 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
 			$(WORKDIR)/installation/$(PRODUCTNAME)/msi/install/*/*.msi \
 	&& touch $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(verbose),-v) \
@@ -167,9 +174,11 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
 			$(WORKDIR)/installation/$(PRODUCTNAME)_helppack/msi/install/*/*.msi \
 	&& touch $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-l $(subst .done,_log.txt,$@) \
 			$(if $(verbose),-v) \
@@ -179,5 +188,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.don
 			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
 			$(WORKDIR)/installation/$(PRODUCTNAME)_SDK/msi/install/*/*.msi \
 	&& touch $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 # vim: set noet sw=4 ts=4:

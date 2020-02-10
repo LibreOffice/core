@@ -17,7 +17,9 @@ $(call gb_CustomTarget_get_workdir,wizards/share)/%.xlc: \
     $(SRCDIR)/wizards/source/configshare/%.xlc \
     | $(call gb_CustomTarget_get_workdir,wizards/share)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
 	sed -e 's/@LIBO_SHARE_FOLDER@/$(LIBO_SHARE_FOLDER)/' $< > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
 

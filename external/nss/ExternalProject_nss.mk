@@ -17,6 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
@@ -31,11 +32,13 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
 	,nss)
+	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
 else # OS!=WNT
 # make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
 # OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
@@ -76,6 +79,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 				$(EXTERNAL_WORKDIR)/dist/out/lib/libsoftokn3.dylib \
 				$(EXTERNAL_WORKDIR)/dist/out/lib/libssl3.dylib) \
 	,nss)
+	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
 endif
 

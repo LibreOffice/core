@@ -39,6 +39,7 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$*,$(true),PYT,2)
+	$(call gb_Trace_StartRange,$*,PYT)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_PythonTest_get_target,$*)) && \
 		mkdir -p $(dir $(call gb_PythonTest_get_target,$*))user/user/autotext && \
@@ -65,6 +66,7 @@ else
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
 				cat $@.log; $(gb_PythonTest_UNITTESTFAILED) Python $*))))
+	$(call gb_Trace_EndRange,$*,PYT)
 endif
 
 # always use udkapi and URE services
