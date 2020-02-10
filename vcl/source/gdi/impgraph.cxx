@@ -69,41 +69,6 @@ struct ImpSwapFile
     ~ImpSwapFile();
 };
 
-class ReaderData
-{
-public:
-    Size    maPreviewSize;
-};
-
-GraphicReader::GraphicReader()
-{
-}
-
-GraphicReader::~GraphicReader()
-{
-}
-
-void GraphicReader::DisablePreviewMode()
-{
-    if( mpReaderData )
-        mpReaderData->maPreviewSize = Size( 0, 0 );
-}
-
-void GraphicReader::SetPreviewSize( const Size& rSize )
-{
-    if( !mpReaderData )
-        mpReaderData.reset( new ReaderData );
-    mpReaderData->maPreviewSize = rSize;
-}
-
-Size GraphicReader::GetPreviewSize() const
-{
-    Size aSize( 0, 0 );
-    if( mpReaderData )
-        aSize = mpReaderData->maPreviewSize;
-    return aSize;
-}
-
 GraphicID::GraphicID(ImpGraphic const & rGraphic)
 {
     rGraphic.ensureAvailable();
