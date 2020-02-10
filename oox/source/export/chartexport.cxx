@@ -3416,6 +3416,25 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbl));
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nIdx));
 
+        // export custom position of data label
+        if( eChartType != chart::TYPEID_PIE )
+        {
+            chart2::RelativePosition aCustomLabelPosition;
+            if( xLabelPropSet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition )
+            {
+                pFS->startElement(FSNS(XML_c, XML_layout));
+                pFS->startElement(FSNS(XML_c, XML_manualLayout));
+
+                pFS->singleElement(FSNS(XML_c, XML_x), XML_val, OString::number(aCustomLabelPosition.Primary));
+                pFS->singleElement(FSNS(XML_c, XML_y), XML_val, OString::number(aCustomLabelPosition.Secondary));
+
+                SAL_WARN_IF(aCustomLabelPosition.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
+
+                pFS->endElement(FSNS(XML_c, XML_manualLayout));
+                pFS->endElement(FSNS(XML_c, XML_layout));
+            }
+        }
+
         if( xLabelPropSet->getPropertyValue("Label") >>= aLabel )
             bLabelIsNumberFormat = aLabel.ShowNumber;
         else
