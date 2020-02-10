@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25861622_088590e5",
+        "filename": "xmlscript/source/xmllib_imexp/xmllib_import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2020-02-10T19:39:48Z",
+      "side": 1,
+      "message": "Line 179 has same string and use \"of\".",
+      "revId": "381c4d15e54205a6c8791696f6abfe6928c4899b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
