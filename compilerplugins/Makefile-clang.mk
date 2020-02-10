@@ -127,7 +127,7 @@ CLANGSRCOUTDIR=$(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx
 CLANGSRC+=$(CLANGSRCOUTDIR)
 endif
 # The list of source files, generated automatically (all files in clang/, but not subdirs).
-CLANGSRCINDIR=$(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src)))
+CLANGSRCINDIR=$(sort $(foreach src,$(wildcard $(CLANGINDIR)/*.cxx), $(notdir $(src))))
 CLANGSRC+=$(CLANGSRCINDIR)
 
 # Remember the sources and if they have changed, force plugin relinking.
@@ -234,7 +234,7 @@ $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang$(CLANG_EXE_EXT) $(BUILDDIR
 
 
 ifdef LO_CLANG_SHARED_PLUGINS
-SHARED_SOURCES := $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx)
+SHARED_SOURCES := $(sort $(shell grep -l "LO_CLANG_SHARED_PLUGINS" $(CLANGINDIR)/*.cxx))
 SHARED_SOURCE_INFOS := $(foreach source,$(SHARED_SOURCES),$(patsubst $(CLANGINDIR)/%.cxx,$(CLANGOUTDIR)/sharedvisitor/%.plugininfo,$(source)))
 
 $(CLANGOUTDIR)/sharedvisitor/%.plugininfo: $(CLANGINDIR)/%.cxx \
