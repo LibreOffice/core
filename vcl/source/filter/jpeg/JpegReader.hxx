@@ -23,6 +23,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bitmap.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <graphic/GraphicReader.hxx>
 
 enum class GraphicFilterImportFlags;
 
