@@ -170,12 +170,16 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
     const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
     std::vector<EECharAttrib> rLst;
     aEdit.GetCharAttribs(0, rLst);
-    for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+    size_t index = rLst.size() - 1;
+    for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it, --index)
     {
-        const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
-        if (pAttrib)
+        if ( index != 1 )
         {
-            CPPUNIT_ASSERT_EQUAL( nVal, static_cast<ItemValue>(pAttrib->GetValue()));
+            const ItemType* pAttrib = dynamic_cast<const ItemType *>((*it).pAttr);
+            if (pAttrib)
+            {
+                CPPUNIT_ASSERT_EQUAL( nVal, static_cast<ItemValue>(pAttrib->GetValue()));
+            }
         }
     }
 }

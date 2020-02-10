@@ -180,8 +180,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     }
     // TODO If bUnderlineFillFollowText uFillTx (CT_TextUnderlineFillFollowText) is set, fill color of the underline should be the same color as the text
 
-    if( maHighlightColor.isUsed() )
-        rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
+    rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
+
 }
 
 static void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVectorOfProperyValues )
