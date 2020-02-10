@@ -20,6 +20,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
+#include <graphic/GraphicReader.hxx>
 #include "rgbtable.hxx"
 #include "xpmread.hxx"
 #include <cstring>

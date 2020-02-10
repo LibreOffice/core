@@ -71,6 +71,7 @@
 #include "graphicfilter_internal.hxx"
 
 #include <graphic/GraphicFormatDetector.hxx>
+#include <graphic/GraphicReader.hxx>
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 

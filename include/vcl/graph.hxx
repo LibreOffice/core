@@ -32,7 +32,6 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 
-
 enum class GraphicType
 {
     NONE,
@@ -49,28 +48,7 @@ class GDIMetaFile;
 class SvStream;
 class ImpGraphic;
 class OutputDevice;
-class ReaderData;
-
-class GraphicReader
-{
-public:
-    virtual         ~GraphicReader();
-
-    const OUString& GetUpperFilterName() const { return maUpperName; }
-
-    // TODO: when incompatible changes are possible again
-    // the preview size hint should be redone
-    void            DisablePreviewMode();
-    void            SetPreviewSize( const Size& );
-    Size            GetPreviewSize() const;
-
-protected:
-    OUString        maUpperName;
-
-                    GraphicReader();
-private:
-    std::unique_ptr<ReaderData>   mpReaderData;
-};
+class GraphicReader;
 
 class VCL_DLLPUBLIC GraphicConversionParameters
 {
