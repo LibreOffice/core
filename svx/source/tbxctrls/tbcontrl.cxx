@@ -2025,9 +2025,12 @@ IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
 
     maSelectedLink.Call(aNamedColor);
 
-    maColorSelectFunction(maCommand, aNamedColor);
+    ColorSelectFunction aColorSelectFunction(maColorSelectFunction);
+    OUString sCommand(maCommand);
 
     maMenuButton.set_inactive();
+
+    aColorSelectFunction(sCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
