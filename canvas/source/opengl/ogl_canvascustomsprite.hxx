@@ -17,7 +17,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
+#include <base/basemutexhelper.hxx>
 
 #include "ogl_spritecanvas.hxx"
 #include "ogl_canvashelper.hxx"

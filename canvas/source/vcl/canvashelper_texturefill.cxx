@@ -40,7 +40,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <canvas/parametricpolypolygon.hxx>
+#include <parametricpolypolygon.hxx>
 
 #include "canvashelper.hxx"
 #include "impltools.hxx"

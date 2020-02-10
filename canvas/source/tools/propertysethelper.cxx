@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <canvas/propertysethelper.hxx>
+#include <propertysethelper.hxx>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 

@@ -16,7 +16,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
-#include <canvas/verifyinput.hxx>
+#include <verifyinput.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "ogl_canvascustomsprite.hxx"

@@ -38,7 +38,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
-#include <canvas/verifyinput.hxx>
+#include <verifyinput.hxx>
 
 #include "dx_canvas.hxx"
 #include "dx_canvasbitmap.hxx"

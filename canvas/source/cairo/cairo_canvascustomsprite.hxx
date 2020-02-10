@@ -30,8 +30,8 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/canvascustomspritebase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/canvascustomspritebase.hxx>
 
 #include <vcl/cairo.hxx>
 

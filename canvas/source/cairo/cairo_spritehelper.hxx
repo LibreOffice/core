@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 
-#include <canvas/base/canvascustomspritehelper.hxx>
+#include <base/canvascustomspritehelper.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 

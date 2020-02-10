@@ -28,9 +28,9 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/bitmapcanvasbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/integerbitmapbase.hxx>
+#include <base/bitmapcanvasbase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/integerbitmapbase.hxx>
 
 #include "cairo_canvashelper.hxx"
 #include "cairo_repainttarget.hxx"

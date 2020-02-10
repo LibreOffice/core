@@ -31,10 +31,10 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/bitmapcanvasbase.hxx>
-#include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/graphicdevicebase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/bitmapcanvasbase.hxx>
+#include <base/integerbitmapbase.hxx>
+#include <base/graphicdevicebase.hxx>
 
 #include "canvashelper.hxx"
 #include "impltools.hxx"

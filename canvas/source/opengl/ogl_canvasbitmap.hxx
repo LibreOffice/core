@@ -15,9 +15,9 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
-#include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/bitmapcanvasbase.hxx>
+#include <base/integerbitmapbase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/bitmapcanvasbase.hxx>
 
 #include "ogl_bitmapcanvashelper.hxx"
 #include "ogl_spritecanvas.hxx"

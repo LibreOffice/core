@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SPRITEREDRAWMANAGER_HXX
-#define INCLUDED_CANVAS_SPRITEREDRAWMANAGER_HXX
+#pragma once
 
 #include <basegfx/range/b2dconnectedranges.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -29,7 +28,7 @@
 #include <vector>
 #include <algorithm>
 
-#include <canvas/base/sprite.hxx>
+#include "base/sprite.hxx"
 #include <canvas/canvastoolsdllapi.h>
 
 /* Definition of SpriteRedrawManager class */
@@ -403,7 +402,5 @@ namespace canvas
                                                          // call
     };
 }
-
-#endif /* INCLUDED_CANVAS_SPRITEREDRAWMANAGER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

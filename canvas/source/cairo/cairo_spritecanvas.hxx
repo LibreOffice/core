@@ -33,10 +33,10 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/spritecanvasbase.hxx>
-#include <canvas/base/spritesurface.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
-#include <canvas/base/bufferedgraphicdevicebase.hxx>
+#include <base/spritecanvasbase.hxx>
+#include <base/spritesurface.hxx>
+#include <base/disambiguationhelper.hxx>
+#include <base/bufferedgraphicdevicebase.hxx>
 
 #include "cairo_spritedevicehelper.hxx"
 #include "cairo_repainttarget.hxx"

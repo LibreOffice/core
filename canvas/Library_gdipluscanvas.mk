@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,gdipluscanvas))
 
+$(eval $(call gb_Library_set_include,gdipluscanvas,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/canvas/inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,gdipluscanvas,canvas/source/directx/gdipluscanvas))
 
 $(eval $(call gb_Library_use_external,gdipluscanvas,boost_headers))

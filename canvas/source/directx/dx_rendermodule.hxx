@@ -22,7 +22,7 @@
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>
-#include <canvas/rendering/irendermodule.hxx>
+#include <rendering/irendermodule.hxx>
 #include <memory>
 #include "dx_winstuff.hxx"
 
