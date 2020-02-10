@@ -134,6 +134,7 @@ public:
     void testAxisCrossBetweenXSLX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
+    void testCustomPositionofDataLabel();
     void testCustomDataLabelMultipleSeries();
     void testNumberFormatExportPPTX();
     void testLabelSeparatorExportDOCX();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
+    CPPUNIT_TEST(testCustomPositionofDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testNumberFormatExportPPTX);
     CPPUNIT_TEST(testLabelSeparatorExportDOCX);
@@ -2168,6 +2170,23 @@ void Chart2ExportTest::testCustomDataLabel()
 
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT, aFields[1]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(OUString(" <CELLREF"), aFields[1]->getString());
+}
+
+void Chart2ExportTest::testCustomPositionofDataLabel()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testCustomPosDataLabels.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test custom position of data label
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:idx", "val", "2");
+    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:x", "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.11027682973075476, nX, 1e-7);
+
+    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:y", "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0742140311063737, nY, 1e-7);
 }
 
 void Chart2ExportTest::testCustomDataLabelMultipleSeries()
