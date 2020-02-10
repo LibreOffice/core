@@ -15,12 +15,15 @@ $(eval $(call gb_ExternalProject_register_targets,freetype,\
 
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,freetype,build) :
+	$(call gb_Trace_StartRange,freetype,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cd ../builds/win32/vc2010/ && \
 		msbuild.exe freetype.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 	,objs)
+	$(call gb_Trace_EndRange,freetype,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,freetype,build) :
+	$(call gb_Trace_StartRange,freetype,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--disable-shared \
@@ -32,6 +35,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
 		&& $(MAKE) install \
 		&& touch $@	)
+	$(call gb_Trace_EndRange,freetype,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:

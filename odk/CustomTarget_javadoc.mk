@@ -31,6 +31,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
 $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		$(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),JDC)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(JAVADOC) -source $(JAVA_SOURCE_VER) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
@@ -44,5 +45,6 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
 		> $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),JDC)
 
 # vim: set noet sw=4 ts=4:

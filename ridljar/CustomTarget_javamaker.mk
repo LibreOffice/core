@@ -17,8 +17,10 @@ $(ridljar_DIR)/done : $(call gb_UnoApi_get_target,udkapi) \
 		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(ridljar_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),JVM)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(ridljar_DIR) && \
 	$(call gb_Helper_execute,javamaker -O$(ridljar_DIR) $<) && touch $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),JVM)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

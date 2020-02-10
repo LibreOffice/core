@@ -29,6 +29,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 		$(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XRM)
 	$(call gb_Helper_abbreviate_dirs, \
         MERGEINPUT=`$(gb_MKTEMP)` && \
         echo $(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
@@ -38,6 +39,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 			-m $${MERGEINPUT} \
 			-l all && \
         rm -rf $${MERGEINPUT})
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XRM)
 
 endif
 
@@ -51,6 +53,7 @@ $(readlicense_oo_DIR)/$(call gb_README,%) : \
 		| $(readlicense_oo_DIR)/.dir \
 		  $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XSL)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@.out \
 			--stringparam com1 $(COM) \
@@ -67,5 +70,6 @@ $(readlicense_oo_DIR)/$(call gb_README,%) : \
 		&& sed $(readlicense_oo_README_SED) $@.out > $@ \
 		&& rm $@.out \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XSL)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

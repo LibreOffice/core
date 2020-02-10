@@ -21,6 +21,7 @@ $(extensions_AXIDLDIR)/so_activex.tlb : \
 		$(SRCDIR)/extensions/source/activex/so_activex.idl \
 		| $(extensions_AXIDLDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),IDL)
 	$(call gb_Helper_abbreviate_dirs, \
 	midl.exe \
 		-tlb $@ \
@@ -31,5 +32,6 @@ $(extensions_AXIDLDIR)/so_activex.tlb : \
 		-Oicf \
 		$(INCLUDE) \
 		$<)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),IDL)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

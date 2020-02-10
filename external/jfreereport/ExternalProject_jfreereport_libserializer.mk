@@ -17,6 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_libserializer,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_libserializer,build) :
+	$(call gb_Trace_StartRange,jfreereport_libserializer,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -29,5 +30,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_libserializer,build) :
 			-Dproject.revision="$(LIBSERIALIZER_VERSION)" \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
+	$(call gb_Trace_EndRange,jfreereport_libserializer,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

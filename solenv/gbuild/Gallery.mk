@@ -15,7 +15,6 @@ gb_Gallery_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.pl
 gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 define gb_Gallery__command
-$(call gb_Output_announce,$(2),$(true),GAL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
 	RESPONSEFILE=$(call var2file,$(shell $(call gb_MKTEMP)),100,$(GALLERY_FILES)) && \
@@ -34,7 +33,6 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 define gb_Gallery__command_str
-$(call gb_Output_announce,$(2),$(true),STR,1)
 cp -f $(GALLERY_STRFILE) $@ && \
 $(PERL) $(gb_Gallery_TRANSLATE) \
 		--ext "str" --key "name" \
@@ -52,7 +50,10 @@ $(dir $(call gb_Gallery_get_target,$(1)))%/.dir :
 
 $(call gb_Gallery_get_target,%) : \
 		$(call gb_Executable_get_runtime_dependencies,gengal)
+	$(call gb_Output_announce,$*,$(true),GAL,1)
+	$(call gb_Trace_StartRange,$*,GAL)
 	$(call gb_Gallery__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,GAL)
 
 $(call gb_Gallery__get_final_target,%) :
 	touch $@
@@ -65,7 +66,10 @@ $(call gb_Gallery_get_workdir,%).ulf : \
 			$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po))
 
 $(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE)
+	$(call gb_Output_announce,$*,$(true),STR,1)
+	$(call gb_Trace_StartRange,$*,STR)
 	$(call gb_Gallery__command_str,$@,$*)
+	$(call gb_Trace_EndRange,$*,STR)
 
 # there must be a rule for these since they are targets due to Package
 $(call gb_Gallery_get_workdir,%).sdg :

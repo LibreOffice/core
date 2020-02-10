@@ -17,6 +17,7 @@ $(call gb_CustomTarget_get_workdir,pyuno/pythonloader_ini)/$(call gb_Helper_get_
 			$(BUILDDIR)/config_$(gb_Side)/config_python.h \
             $(SRCDIR)/pyuno/CustomTarget_pyuno_pythonloader_ini.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	(   printf '[Bootstrap]\n' && \
             $(if $(SYSTEM_PYTHON),, \
                 printf 'PYUNO_LOADER_PYTHONHOME=%s\n' \
@@ -32,5 +33,6 @@ $(call gb_CustomTarget_get_workdir,pyuno/pythonloader_ini)/$(call gb_Helper_get_
                         '$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
                         '$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) '))) \
         ) > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,fontconfig,\
 ))
 
 $(call gb_ExternalProject_get_state_target,fontconfig,build) :
+	$(call gb_Trace_StartRange,fontconfig,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		./configure \
@@ -30,5 +31,6 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		&& $(MAKE) -C src \
 	)
+	$(call gb_Trace_EndRange,fontconfig,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

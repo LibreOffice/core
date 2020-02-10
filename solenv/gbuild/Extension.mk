@@ -72,12 +72,15 @@ $(call gb_Extension__get_preparation_target,%) :
 ifeq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),CPY,3)
+	$(call gb_Trace_StartRange,$*/description.xml,CPY)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		cp -f $(LOCATION)/description.xml $@)
+	$(call gb_Trace_EndRange,$*/description.xml,CPY)
 else
 $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS) $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
+	$(call gb_Trace_StartRange,$*/description.xml,XRM)
 	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
@@ -87,6 +90,7 @@ $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS) $
 			-m $${MERGEINPUT} \
 			-l all) && \
 	rm -rf $${MERGEINPUT}
+	$(call gb_Trace_EndRange,$*/description.xml,XRM)
 
 endif
 
@@ -95,6 +99,7 @@ endif
 $(call gb_Extension_get_target,%) : \
 		$(call gb_Extension_get_workdir,%)/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
+	$(call gb_Trace_StartRange,$*,OXT)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_Extension_get_rootdir,$*)/registration) && \
@@ -107,6 +112,7 @@ $(call gb_Extension_get_target,%) : \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync --must-match \
 			$(call gb_Extension_get_target,$*) \
 			`cat $${ZIPFILES} | tr -d '\r'` && rm $${ZIPFILES})
+	$(call gb_Trace_EndRange,$*,OXT)
 
 # set file list and location of manifest and description files
 # register target and clean target
@@ -304,6 +310,7 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) \
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_Extension_PROPMERGEDEPS)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
+	$$(call gb_Trace_StartRange,$(2),PRP)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(4)), \
@@ -319,6 +326,7 @@ $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3) \
 			) \
 		) \
 	)
+	$$(call gb_Trace_EndRange,$(2),PRP)
 
 endef
 
@@ -354,6 +362,7 @@ $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
 $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),XHP,3)
+	$$(call gb_Trace_StartRange,$(1) $(3) $(5),XHP)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(5)), \
@@ -371,6 +380,7 @@ $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
 		) && \
 		touch $(call gb_Extension_get_rootdir,$(1))/help/$(5)-xhp.done \
 	)
+	$$(call gb_Trace_EndRange,$(1) $(3) $(5),XHP)
 
 endef
 
@@ -405,6 +415,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
 $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
+	$$(call gb_Trace_StartRange,$(1) $(3) $(5),TRE)
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(5)), \
@@ -424,6 +435,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(5)/$(3) : \
 			) \
 		) \
 	)
+	$$(call gb_Trace_EndRange,$(1) $(3) $(5),XHP)
 
 endef
 
@@ -442,6 +454,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
         $(SRCDIR)/xmlhelp/util/idxcontent.xsl | \
         $(call gb_Extension_get_rootdir,$(1))/help/.dir
 	$$(call gb_Output_announce,$(1) $(2),$(true),XHC,3)
+	$$(call gb_Trace_StartRange,$(1) $(2),XHC)
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(basename $$@) && \
         $$(gb_Extension_HELPLINKERCOMMAND) -mod help \
@@ -458,6 +471,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
             -dir $$(basename $$@) && \
             rm -fr $$(basename $$@)/caption $$(basename $$@)/content && \
         touch $$@)
+	$$(call gb_Trace_EndRange,$(1) $(2),XHC)
 
 endef
 

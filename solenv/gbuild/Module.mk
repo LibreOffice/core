@@ -65,6 +65,7 @@ gb_Module_CURRENTMAKEFILE :=
 
 $(call gb_Module_get_nonl10n_target,%) :
 	$(call gb_Output_announce,$*,$(true),BIN,5)
+	$(call gb_Trace_MakeMark,$*,BIN)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
@@ -78,6 +79,7 @@ $(call gb_Module_get_clean_target,%) :
 
 $(call gb_Module_get_l10n_target,%) :
 	$(call gb_Output_announce,$*,$(true),LOC,5)
+	$(call gb_Trace_MakeMark,$*,LOC)
 	$(call gb_Output_announce_title,module $* done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -85,6 +87,7 @@ $(call gb_Module_get_l10n_target,%) :
 
 $(call gb_Module_get_check_target,%) :
 	$(call gb_Output_announce,$*,$(true),CHK,5)
+	$(call gb_Trace_MakeMark,$*,CHK)
 	$(call gb_Output_announce_title,module $* checks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -92,6 +95,7 @@ $(call gb_Module_get_check_target,%) :
 
 $(call gb_Module_get_slowcheck_target,%) :
 	$(call gb_Output_announce,$*,$(true),SLC,5)
+	$(call gb_Trace_MakeMark,$*,SLC)
 	$(call gb_Output_announce_title,module $* slowchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -99,6 +103,7 @@ $(call gb_Module_get_slowcheck_target,%) :
 
 $(call gb_Module_get_screenshot_target,%) :
 	$(call gb_Output_announce,$*,$(true),SCR,5)
+	$(call gb_Trace_MakeMark,$*,SCR)
 	$(call gb_Output_announce_title,module $* screenshots done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -106,6 +111,7 @@ $(call gb_Module_get_screenshot_target,%) :
 
 $(call gb_Module_get_subsequentcheck_target,%) :
 	$(call gb_Output_announce,$*,$(true),SCK,5)
+	$(call gb_Trace_MakeMark,$*,SCK)
 	$(call gb_Output_announce_title,module $* subsequentchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -113,6 +119,7 @@ $(call gb_Module_get_subsequentcheck_target,%) :
 
 $(call gb_Module_get_stagingcheck_target,%) :
 	$(call gb_Output_announce,$*,$(true),STC,5)
+	$(call gb_Trace_MakeMark,$*,STC)
 	$(call gb_Output_announce_title,module $* stagingchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -120,6 +127,7 @@ $(call gb_Module_get_stagingcheck_target,%) :
 
 $(call gb_Module_get_perfcheck_target,%) :
 	$(call gb_Output_announce,$*,$(true),PFC,5)
+	$(call gb_Trace_MakeMark,$*,PFC)
 	$(call gb_Output_announce_title,module $* perfchecks done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -127,6 +135,7 @@ $(call gb_Module_get_perfcheck_target,%) :
 
 $(call gb_Module_get_uicheck_target,%) :
 	$(call gb_Output_announce,$*,$(true),UIT,5)
+	$(call gb_Trace_MakeMark,$*,UIT)
 	$(call gb_Output_announce_title,module $* uicheck done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -134,6 +143,7 @@ $(call gb_Module_get_uicheck_target,%) :
 
 $(call gb_Module_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),MOD,5)
+	$(call gb_Trace_MakeMark,$*,MOD)
 	$(call gb_Output_announce_title,module $* done.)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -147,24 +157,28 @@ all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowche
 ifeq ($(gb_Side),build)
 build-tools : $(gb_BUILD_TOOLS)
 	$(call gb_Output_announce,loaded tools: $(gb_BUILD_TOOLS),$(true),ALL,6)
+	$(call gb_Trace_MakeMark,$(gb_BUILD_TOOLS),ALL)
 	$(call gb_Output_announce_title,build-tools done.)
 	$(call gb_Output_announce_bell)
 endif
 
 build :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
+	$(call gb_Trace_MakeMark,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),ALL)
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6))
 	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
 
 build-l10n-only :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),LOC,6)
+	$(call gb_Trace_MakeMark,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),LOC)
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),LOC,6))
 	$(call gb_Output_announce_title,l10n done.)
 	$(call gb_Output_announce_bell)
 
 build-non-l10n-only :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),BIN,6)
+	$(call gb_Trace_MakeMark,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),BIN)
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),BIN,6))
 	$(call gb_Output_announce_title,non-l10n done.)
 	$(call gb_Output_announce_bell)
@@ -233,6 +247,7 @@ translations : $(WORKDIR)/pot.done
 $(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex treex, \
 							$(call gb_Executable_get_target_for_build,$(exec)))
 	$(call gb_Output_announce,$(subst .pot,,$(subst $(WORKDIR)/,,$@)),$(true),POT,1)
+	$(call gb_Trace_MakeMark,$(subst .pot,,$(subst $(WORKDIR)/,,$@)),POT)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && $(call gb_Helper_execute,localize) $(SRCDIR) $(dir $@)/pot \
 		&& $(FIND) $(dir $@)/pot -type f -printf "%P\n" | sed -e "s/\.pot/.po/" | LC_ALL=C $(SORT) > $(dir $@)/LIST \

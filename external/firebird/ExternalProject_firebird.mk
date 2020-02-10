@@ -38,6 +38,7 @@ MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.0)
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
+	$(call gb_Trace_StartRange,firebird,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
 		&& FB_CPU_ARG='$(filter --jobserver-fds=%,$(MAKEFLAGS))' \
@@ -110,4 +111,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				$(MAKE_POST); \
 			fi \
 	)
+	$(call gb_Trace_EndRange,firebird,EXTERNAL)
+
 # vim: set noet sw=4 ts=4:

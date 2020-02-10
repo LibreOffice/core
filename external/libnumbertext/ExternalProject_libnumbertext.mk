@@ -25,6 +25,7 @@ endif
 endif
 
 $(call gb_ExternalProject_get_state_target,libnumbertext,build):
+	$(call gb_Trace_StartRange,libnumbertext,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		$(SHELL) ./configure --disable-shared --with-pic \
@@ -36,5 +37,6 @@ $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 			CXXFLAGS="$(libnumbertext_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
 		&& cd src && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libnumbertext,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

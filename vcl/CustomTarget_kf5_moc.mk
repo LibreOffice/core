@@ -16,6 +16,8 @@ $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/%.moc : \
 		$(SRCDIR)/vcl/unx/kf5/%.hxx \
 		| $(call gb_CustomTarget_get_workdir,vcl/unx/kf5)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MOC)
 	$(MOC5) $< -o $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),MOC)
 
 # vim: set noet sw=4:

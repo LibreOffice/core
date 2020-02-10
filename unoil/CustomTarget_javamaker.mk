@@ -19,11 +19,13 @@ $(unoil_JAVADIR)/done : \
 		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(unoil_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),JVM)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(unoil_JAVADIR) && \
 	$(call gb_Helper_execute,javamaker -O$(unoil_JAVADIR) \
 		$(call gb_UnoApi_get_target,offapi) \
 		-X$(call gb_UnoApi_get_target,udkapi)) && \
 	touch $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),JVM)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

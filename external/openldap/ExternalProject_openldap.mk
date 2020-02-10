@@ -27,6 +27,7 @@ openldap_LDFLAGS += -pthread
 endif
 
 $(call gb_ExternalProject_get_state_target,openldap,build) :
+	$(call gb_Trace_StartRange,openldap,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--disable-slapd \
@@ -49,6 +50,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,openldap,EXTERNAL)
 
 
 # vim: set noet sw=4 ts=4:

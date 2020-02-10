@@ -18,10 +18,12 @@ $(call gb_CustomTarget_get_workdir,extras/source/glade)/libreoffice-catalog.xml 
         $(SRCDIR)/extras/source/glade/makewidgetgroup.xslt \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,4)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XSL)
 	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		-o $@ $(SRCDIR)/extras/source/glade/makewidgetgroup.xslt $< \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XSL)
 
 # vim: set noet sw=4 ts=4:

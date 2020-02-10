@@ -157,8 +157,10 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
+	$(call gb_Trace_StartRange,$(2),LNK)
 $(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+	$(call gb_Trace_EndRange,$(2),LNK)
 endef
 
 
@@ -343,7 +345,9 @@ endif
 
 define gb_UIMenubarTarget__command
 $(call gb_Output_announce,$(2),$(true),UIM,1)
+$(call gb_Trace_StartRange,$(2),UIM)
 cp $(3) $(1)
+$(call gb_Trace_EndRange,$(2),UIM)
 
 endef
 

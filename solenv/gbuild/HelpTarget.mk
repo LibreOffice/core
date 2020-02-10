@@ -37,7 +37,6 @@ gb_HelpTranslatePartTarget_DEPS := $(call gb_Executable_get_runtime_dependencies
 gb_HelpTranslatePartTarget_COMMAND := $(call gb_Executable_get_command,helpex)
 
 define gb_HelpTranslatePartTarget__command
-$(call gb_Output_announce,$(2),$(true),HPX,1)
 HELPFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(filter %.xhp,$(3)))) && \
 $(call gb_Helper_abbreviate_dirs, \
 	$(if $(filter-out qtz,$(HELP_LANG)), \
@@ -65,7 +64,10 @@ $(dir $(call gb_HelpTranslatePartTarget_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_HelpTranslatePartTarget_get_target,%) : $(gb_HelpTranslatePartTarget_DEPS)
+	$(call gb_Output_announce,$*,$(true),HPX,1)
+	$(call gb_Trace_StartRange,$*,HPX)
 	$(call gb_HelpTranslatePartTarget__command,$@,$*,$^)
+	$(call gb_Trace_EndRange,$*,HPX)
 
 .PHONY : $(call gb_HelpTranslatePartTarget_get_clean_target,%)
 $(call gb_HelpTranslatePartTarget_get_clean_target,%) :
@@ -116,6 +118,7 @@ $(dir $(call gb_HelpTranslateTarget_get_target,%))%/.dir :
 
 $(call gb_HelpTranslateTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),XHP,2)
+	$(call gb_Trace_MakeMark,$*,XHP)
 	touch $@
 
 $(call gb_HelpTranslateTarget__get_any_translated_target,%) :
@@ -186,7 +189,6 @@ gb_HelpTreeTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,treex)
 gb_HelpTreeTarget_COMMAND := $(call gb_Executable_get_command,treex)
 
 define gb_HelpTreeTarget__command
-$(call gb_Output_announce,$(2),$(true),TRE,1)
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter-out qtz,$(HELP_LANG)), \
 		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
@@ -218,7 +220,10 @@ $(dir $(call gb_HelpTreeTarget_get_target,%))%/.dir :
 $(call gb_HelpTreeTarget_get_target,%) : $(gb_HelpTreeTarget_DEPS)
 	$(if $(HELP_TEXTDIR),,$(call gb_Output_error,HelpTreeTarget: no help text dir for .tree was set))
 	$(if $(HELP_TREE),,$(call gb_Output_error,HelpTreeTarget: no .tree file to translate was set))
+	$(call gb_Output_announce,$*,$(true),TRE,1)
+	$(call gb_Trace_StartRange,$*,TRE)
 	$(call gb_HelpTreeTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,TRE)
 
 .PHONY : $(call gb_HelpTreeTarget_get_clean_target,%)
 $(call gb_HelpTreeTarget_get_clean_target,%) :
@@ -284,7 +289,6 @@ gb_HelpLinkTarget_DEPS := \
 # the index files in the .idxl dir are created by HelpIndexer,
 # the ones outside the dir by HelpLinker
 define gb_HelpLinkTarget__command
-$(call gb_Output_announce,$(2),$(true),HLK,3)
 	$(if $(HELP_INDEXED),rm -rf $(addprefix $(HELP_WORKDIR)/,$(HELP_INDEXED)) && \)
 RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	-lang $(HELP_LANG) \
@@ -320,7 +324,10 @@ $(dir $(call gb_HelpLinkTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_HelpLinkTarget_get_target,%) : $(gb_HelpLinkTarget_DEPS)
+	$(call gb_Output_announce,$*,$(true),HLK,3)
+	$(call gb_Trace_StartRange,$*,HLK)
 	$(call gb_HelpLinkTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,HLK)
 
 .PHONY : $(call gb_HelpLinkTarget_get_clean_target,%)
 $(call gb_HelpLinkTarget_get_clean_target,%) :
@@ -428,7 +435,6 @@ gb_HelpIndexTarget_COMMAND := $(call gb_Executable_get_command,HelpIndexer)
 # first delete the index stuff since when it is generated an existing _0.cfs
 # will not be overwritten; instead a new _1.cfs etc. created until disk is full
 define gb_HelpIndexTarget__command
-$(call gb_Output_announce,$*,$(true),HIX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	(\
 		rm -rf $(HELP_WORKDIR)/$(HELP_MODULE).idxl \
@@ -449,7 +455,10 @@ $(dir $(call gb_HelpIndexTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_HelpIndexTarget_get_target,%) : $(gb_HelpIndexTarget_DEPS)
+	$(call gb_Output_announce,$*,$(true),HIX,3)
+	$(call gb_Trace_StartRange,$*,HIX)
 	$(call gb_HelpIndexTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,HIX)
 
 .PHONY : $(call gb_HelpIndexTarget_get_clean_target,%)
 $(call gb_HelpIndexTarget_get_clean_target,%) :
@@ -475,7 +484,6 @@ endef
 gb_HelpJarTarget_COMMAND := zip
 
 define gb_HelpJarTarget__get_command
-$(call gb_Output_announce,$*,$(true),HEJ,3)
 cd $(HELP_WORKDIR) && \
 $(gb_HelpJarTarget_COMMAND) -q -0 -rX --filesync --must-match $(HELP_MODULE).jar text/$(HELP_MODULE) && \
 touch $@
@@ -488,7 +496,10 @@ $(dir $(call gb_HelpJarTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_HelpJarTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),HEJ,3)
+	$(call gb_Trace_StartRange,$*,HEJ)
 	$(call gb_HelpJarTarget__get_command,$@,$*)
+	$(call gb_Trace_EndRange,$*,HEJ)
 
 $(call gb_HelpJarTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HEJ,3)
@@ -543,6 +554,7 @@ endef
 
 define gb_HelpTarget__command
 $(if $(ENABLE_HTMLHELP),,$(call gb_Output_announce,$(2),$(true),HLP,4))
+$(if $(ENABLE_HTMLHELP),,$(call gb_Trace_MakeMark,$(2),HLP))
 touch $@
 endef
 

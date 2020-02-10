@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,rasqal,\
 # note: this can intentionally only build against internal raptor (not system)
 
 $(call gb_ExternalProject_get_state_target,rasqal,build):
+	$(call gb_Trace_StartRange,rasqal,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 		LDFLAGS=" \
@@ -48,5 +49,6 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(EXTERNAL_WORKDIR)/src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib) \
 	)
+	$(call gb_Trace_EndRange,rasqal,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

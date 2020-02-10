@@ -26,6 +26,7 @@ $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libetonyek,build) :
+	$(call gb_Trace_StartRange,libetonyek,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
@@ -61,5 +62,6 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 				$(EXTERNAL_WORKDIR)/src/lib/.libs/libetonyek-0.1.1.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libetonyek,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

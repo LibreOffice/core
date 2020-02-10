@@ -37,40 +37,56 @@ $(call gb_CustomTarget_get_target,extras/source/templates/personal) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%/mimetype : $(SRCDIR)/extras/source/templates/personal/%/mimetype
 	$(call gb_Output_announce,templates/personal/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.jpg : $(SRCDIR)/extras/source/templates/personal/%.jpg
 	$(call gb_Output_announce,templates/personal/$*.jpg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.jpg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*.jpg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.png : $(SRCDIR)/extras/source/templates/personal/%.png
 	$(call gb_Output_announce,templates/personal/$*.png,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.png,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*.png,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.rdf : $(SRCDIR)/extras/source/templates/personal/%.rdf
 	$(call gb_Output_announce,templates/personal/$*.rdf,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.rdf,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*.rdf,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.svg : $(SRCDIR)/extras/source/templates/personal/%.svg
 	$(call gb_Output_announce,templates/personal/$*.svg,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.svg,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*.svg,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.svm : $(SRCDIR)/extras/source/templates/personal/%.svm
 	$(call gb_Output_announce,templates/personal/$*.svm,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.svm,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,templates/personal/$*.svm,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.xml : $(SRCDIR)/extras/source/templates/personal/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,templates/personal/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,templates/personal/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,templates/personal/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/personal)/%.ott :
 	$(call gb_Output_announce,templates/personal/$*.ott,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,templates/personal/$*.ott,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_PERSONAL_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_PERSONAL_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_PERSONAL_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,templates/personal/$*.ott,ZIP)
 
 define extras_Tplpersonal_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \

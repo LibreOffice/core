@@ -33,6 +33,7 @@ $(dir $(call gb_AllLangHelp_get_target,%))%/.dir :
 $(call gb_AllLangHelp_get_target,%) :
 ifeq ($(ENABLE_HTMLHELP),)
 	$(call gb_Output_announce,$*,$(true),ALH,5)
+	$(call gb_Trace_MakeMark,$*,ALH)
 endif
 	touch $@
 

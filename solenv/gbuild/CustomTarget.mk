@@ -23,6 +23,7 @@ $(call gb_CustomTarget_get_workdir,%)/.dir :
 
 $(call gb_CustomTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),CUS,3)
+	$(call gb_Trace_MakeMark,$*,CUS)
 	touch $@
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
@@ -55,10 +56,12 @@ ifneq ($(WITH_LANG),)
 # $(call gb_CustomTarget_ulfex__command,ulftarget,ulfsource,pofiles)
 define gb_CustomTarget_ulfex__command
 $(call gb_Output_announce,$(1),$(true),ULF,1)
+	$(call gb_Trace_StartRange,$(1),ULF)
 MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(3)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_command,ulfex) -i $(2) -o $(1) -m $${MERGEINPUT} -l all) && \
 rm -rf $${MERGEINPUT}
+	$(call gb_Trace_EndRange,$(1),ULF)
 endef
 
 else
@@ -103,6 +106,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
 		$(SRCDIR)/$(3)/$(4).hxx.head \
 		$(SRCDIR)/$(3)/$(4).hxx.tail
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,PRL,1)
+	$$(call gb_Trace_StartRange,$$(subst $(WORKDIR)/,,$$@),PRL)
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(1))/misc \
 	    	$(call gb_CustomTarget_get_workdir,$(1)) \
 		$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token
@@ -118,6 +122,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
 		$(SRCDIR)/$(3)/$(4).hxx.tail \
 		> $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx \
 	&& touch $$@
+	$$(call gb_Trace_EndRange,$$(subst $(WORKDIR)/,,$$@),PRL)
 
 $(call gb_CustomTarget_get_target,$(1)) : \
     $(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \

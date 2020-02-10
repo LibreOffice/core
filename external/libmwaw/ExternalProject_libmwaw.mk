@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,libmwaw,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libmwaw,build) :
+	$(call gb_Trace_StartRange,libmwaw,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& ./configure \
@@ -48,5 +49,6 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 				$(EXTERNAL_WORKDIR)/src/lib/.libs/libmwaw-0.3.3.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libmwaw,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

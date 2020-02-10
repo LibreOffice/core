@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,libodfgen,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libodfgen,build) :
+	$(call gb_Trace_StartRange,libodfgen,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& ./configure \
@@ -48,5 +49,6 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 				$(EXTERNAL_WORKDIR)/src/.libs/libodfgen-0.1.1.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libodfgen,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

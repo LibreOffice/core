@@ -23,6 +23,7 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
+	$(call gb_Trace_StartRange,libmspub,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
@@ -40,5 +41,6 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libmspub,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

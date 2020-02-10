@@ -22,6 +22,7 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalProject_use_nmake,xmlsec,build))
 
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
+	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js crypto=mscng xslt=no iconv=no static=no \
 			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
@@ -29,10 +30,12 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			cflags="-arch:SSE $(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
 		&& nmake \
 	,win32)
+	$(call gb_Trace_EndRange,xmlsec,EXTERNAL)
 
 else
 
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
+	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter iOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
@@ -51,6 +54,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),",-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,xmlsec,EXTERNAL)
 
 endif
 

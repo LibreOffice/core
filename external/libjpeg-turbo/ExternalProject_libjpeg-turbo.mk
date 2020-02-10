@@ -18,11 +18,14 @@ $(eval $(call gb_ExternalProject_register_targets,libjpeg-turbo,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libjpeg-turbo,build) : $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure)
+	$(call gb_Trace_StartRange,libjpeg-turbo,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		$(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libjpeg-turbo,EXTERNAL)
 
 $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
+	$(call gb_Trace_StartRange,libjpeg-turbo,EXTERNAL)
 	$(call gb_ExternalProject_run,configure,\
 		MAKE=$(MAKE) ./configure \
 			--build=$(if $(filter WNT,$(OS)),$(if $(filter INTEL,$(CPUNAME)),i686-pc-cygwin,x86_64-pc-cygwin),$(BUILD_PLATFORM)) \
@@ -35,5 +38,6 @@ $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
 			$(if $(NASM),,--without-simd) \
 			CFLAGS='$(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(CFLAGS) $(gb_VISIBILITY_FLAGS)' \
 	)
+	$(call gb_Trace_EndRange,libjpeg-turbo,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

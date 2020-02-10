@@ -23,6 +23,7 @@ ifeq ($(COM),MSC)
 gb_ExternalProject_libassuan_host := $(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32)
 gb_ExternalProject_libassuan_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
 $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executable_get_target,cpp)
+	$(call gb_Trace_StartRange,libassuan,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	  autoreconf \
 	  && ./configure \
@@ -38,8 +39,10 @@ $(call gb_ExternalProject_get_state_target,libassuan,build): $(call gb_Executabl
 		MAKE=$(MAKE) \
 	  && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libassuan,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,libassuan,build):
+	$(call gb_Trace_StartRange,libassuan,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
@@ -58,6 +61,7 @@ $(call gb_ExternalProject_get_state_target,libassuan,build):
 			  $(EXTERNAL_WORKDIR)/src/.libs/libassuan.0.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libassuan,EXTERNAL)
 
 endif
 # vim: set noet sw=4 ts=4:

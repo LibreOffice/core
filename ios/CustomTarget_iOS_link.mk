@@ -48,6 +48,7 @@ $(IOSOBJ): $(IOSSRC) $(call gb_CustomTarget_get_target,ios/iOS_setup)
 
 $(IOSKIT): $(IOSOBJ) $(IOSLIBS)
 	$(call gb_Output_announce,iOS dylib,$(true),LNK,2)
+	$(call gb_Trace_StartRange,iOS dylib,LNK)
 	$(gb_CC) -dynamiclib \
 	    -Xlinker -rpath -Xlinker @executable_path/Frameworks \
 	    -Xlinker -rpath -Xlinker @loader_path/Frameworks \
@@ -77,6 +78,7 @@ ifeq ($(origin IOS_CODEID),undefined)
 else
 	codesign -s "$(IOS_CODEID)" $(IOSKIT)
 endif
+	$(call gb_Trace_EndRange,iOS dylib,LNK)
 
 
 #- clean ios  -----------------------------------------------------------------

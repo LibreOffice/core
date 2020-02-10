@@ -39,6 +39,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 		$(SRCDIR)/odk/docs/cpp/Doxyfile \
 		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
 	sed -e 's!^INPUT = %$$!INPUT = $(call odk_cygwin_path,$(odk_cpp_DOXY_INPUT))!' \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_cpp_DOXY_WORKDIR))!' \
 		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"!' \
@@ -46,6 +47,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 		-e 's!^QUIET = %$$!QUIET = $(if $(verbose),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_cpp_PREFIX))!' \
 		$< > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
 $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
 		$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile \
@@ -54,7 +56,9 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
 		$(call gb_Package_get_target,odk_headers) \
 		$(call gb_Package_get_target,odk_headers_generated)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GEN)
 	rm -rf $(odk_cpp_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),GEN)
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 	idl/Doxyfile \
@@ -78,6 +82,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 		$(call gb_UnoApi_get_target,offapi) \
 		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),SED)
 	sed -e 's!^INPUT = %$$!INPUT = $(call odk_cygwin_path,$(odk_idl_DOXY_INPUT))!' \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(call odk_cygwin_path,$(odk_idl_DOXY_WORKDIR))!' \
 		-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = "$(PRODUCTNAME) $(PRODUCTVERSION) SDK API Reference"!' \
@@ -86,11 +91,14 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_idl_PREFIX))!' \
 		-e 's!^SHORT_NAMES = %$$!SHORT_NAMES = $(if $(filter WNT,$(OS)),YES,NO)!' \
 		$< > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),SED)
 
 $(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \
 		$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile \
 		$(SRCDIR)/odk/docs/idl/main.dox
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),GEN)
 	rm -rf $(odk_idl_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),GEN)
 
 # vim: set noet sw=4 ts=4:

@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libffi,\
 # set prefix so that it ends up in libffi.pc so that pkg-config in python3 works
 
 $(call gb_ExternalProject_get_state_target,libffi,build):
+	$(call gb_Trace_StartRange,libffi,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--enable-option-checking=fatal \
@@ -29,5 +30,6 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 			--disable-docs \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libffi,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

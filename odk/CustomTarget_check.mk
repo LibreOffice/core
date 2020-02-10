@@ -43,12 +43,14 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CHK)
 	$(call gb_Helper_print_on_error,\
 		$(PERL) $< \
 			$(INSTDIR)/$(SDKDIRNAME) \
 			$(odk_PLATFORM) '$(gb_Executable_EXT)' \
 		,$@.log \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CHK)
 endif
 
 # vim: set noet sw=4 ts=4:

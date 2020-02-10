@@ -15,7 +15,6 @@ gb_ThesaurusIndexTarget_INDEX_DEPS := $(call gb_Executable_get_runtime_dependenc
 gb_ThesaurusIndexTarget_INDEX_COMMAND := $(call gb_Executable_get_command,idxdict)
 
 define gb_ThesaurusIndexTarget__command
-$(call gb_Output_announce,$(2),$(true),THI,1)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_ThesaurusIndexTarget_INDEX_COMMAND) -o $(1) < $(THESAURUS_FILE) \
 )
@@ -29,7 +28,10 @@ $(dir $(call gb_ThesaurusIndexTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ThesaurusIndexTarget_get_target,%) : $(gb_ThesaurusIndexTarget_INDEX_DEPS) | $(gb_ThesaurusIndexTarget_CHECK_TARGET)
+	$(call gb_Output_announce,$*,$(true),THI,1)
+	$(call gb_Trace_StartRange,$*,THI)
 	$(call gb_ThesaurusIndexTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,THI)
 
 .PHONY : $(call gb_ThesaurusIndexTarget_get_clean_target,%)
 $(call gb_ThesaurusIndexTarget_get_clean_target,%) :
@@ -58,7 +60,6 @@ gb_PropertiesTranslateTarget_COMMAND := $(call gb_Executable_get_command,propex)
 gb_PropertiesTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,propex)
 
 define gb_PropertiesTranslateTarget__command
-$(call gb_Output_announce,$(2),$(true),PRP,1)
 $(call gb_Helper_abbreviate_dirs, \
 	$(if $(filter-out qtz,$(LANGUAGE)), \
 		MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
@@ -85,7 +86,10 @@ $(dir $(call gb_PropertiesTranslateTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_PropertiesTranslateTarget_get_target,%) : $(gb_PropertiesTranslateTarget_DEPS)
+	$(call gb_Output_announce,$*,$(true),PRP,1)
+	$(call gb_Trace_StartRange,$*,PRP)
 	$(call gb_PropertiesTranslateTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,PRP)
 
 .PHONY : $(call gb_PropertiesTranslateTarget_get_clean_target,%)
 $(call gb_PropertiesTranslateTarget_get_clean_target,%) :
@@ -122,7 +126,6 @@ gb_DescriptionTranslateTarget_COMMAND := $(call gb_Executable_get_command,xrmex)
 gb_DescriptionTranslateTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,xrmex)
 
 define gb_DescriptionTranslateTarget__command
-$(call gb_Output_announce,$(2),$(true),XRM,1)
 $(call gb_Helper_abbreviate_dirs,\
 	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 	$(gb_DescriptionTranslateTarget_COMMAND) \
@@ -141,7 +144,10 @@ $(dir $(call gb_DescriptionTranslateTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_DescriptionTranslateTarget_get_target,%) : $(gb_DescriptionTranslateTarget_DEPS)
+	$(call gb_Output_announce,$*,$(true),XRM,1)
+	$(call gb_Trace_StartRange,$*,XRM)
 	$(call gb_DescriptionTranslateTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,XRM)
 
 .PHONY : $(call gb_DescriptionTranslateTarget_get_clean_target,%)
 $(call gb_DescriptionTranslateTarget_get_clean_target,%) :
@@ -195,6 +201,7 @@ $(dir $(call gb_Dictionary_get_target,%))%/.dir :
 
 $(call gb_Dictionary_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),DIC,3)
+	$(call gb_Trace_MakeMark,$*,DIC)
 	touch $@
 
 .PHONY : $(call gb_Dictionary_get_clean_target,%)

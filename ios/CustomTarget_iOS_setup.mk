@@ -33,7 +33,9 @@ $(call gb_CustomTarget_get_target,ios/iOS_setup): $(IOSGEN)/native-code.h
 #- create directories  --------------------------------------------------------
 $(IOSDIRS):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MKD,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MKD)
 	mkdir -p $(IOSDIRS)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),MKD)
 
 
 #- Generate resources  --------------------------------------------------------
@@ -43,6 +45,8 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	                 $(IOSGEN) \
 	                 $(IOSDIRS)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),EN2,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),EN2)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),EN2)
 
 	# generate native-code.h (used by LibreOffice.c)
 	$(SRCDIR)/solenv/bin/native-code.py \

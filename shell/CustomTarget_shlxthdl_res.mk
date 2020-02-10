@@ -21,6 +21,7 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 		$(SRCDIR)/shell/source/win32/shlxthandler/res/rctmpl.txt \
 		$(call gb_Executable_get_runtime_dependencies,lngconvex)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),LCX)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(SRCDIR)/shell/source/win32/shlxthandler/res && \
 		BRAND_BASE_DIR=$(call gb_Helper_make_url,$(INSTROOT)) \
@@ -30,6 +31,7 @@ $(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl
 			-rct rctmpl.txt \
 			-rch rcheader.txt \
 			-rcf rcfooter.txt)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),LCX)
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
 	$(call gb_CustomTarget_get_workdir,shell/source/win32/shlxthandler/res)/shlxthdl.ulf,\

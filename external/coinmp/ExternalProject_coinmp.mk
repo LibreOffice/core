@@ -15,6 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,coinmp,\
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
+	$(call gb_Trace_StartRange,coinmp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe CoinMP.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
@@ -23,9 +24,11 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,CoinMP/MSVisualStudio/v9)
+	$(call gb_Trace_EndRange,coinmp,EXTERNAL)
 
 else
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
+	$(call gb_Trace_StartRange,coinmp,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		./configure COIN_SKIP_PROJECTS="Data/Sample" \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
@@ -50,6 +53,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 			$(EXTERNAL_WORKDIR)/CoinUtils/src/.libs/libCoinUtils.3.9.11.dylib \
 			$(EXTERNAL_WORKDIR)/Osi/src/Osi/.libs/libOsi.1.11.5.dylib) \
 	)
+	$(call gb_Trace_EndRange,coinmp,EXTERNAL)
 
 endif
 

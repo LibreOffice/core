@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_register_targets,rhino,\
 ))
 
 $(call gb_ExternalProject_get_state_target,rhino,build) :
+	$(call gb_Trace_StartRange,rhino,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -25,5 +26,6 @@ $(call gb_ExternalProject_get_state_target,rhino,build) :
 			$(if $(debug),-Dbuild.debug="on") \
 			jar \
 	)
+	$(call gb_Trace_EndRange,rhino,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

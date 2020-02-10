@@ -24,7 +24,9 @@ endef
 
 $(call gb_Rdb_get_target,%) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*,$(true),RDB,1)
+	$(call gb_Trace_StartRange,$*,RDB)
 	$(call gb_Rdb__command,$@,$*,$?,$^)
+	$(call gb_Trace_EndRange,$*,RDB)
 
 .PHONY : $(call gb_Rdb_get_clean_target,%)
 $(call gb_Rdb_get_clean_target,%) :

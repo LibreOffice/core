@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 ))
 
 $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
+	$(call gb_Trace_StartRange,harfbuzz,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(CROSS_COMPILING),ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
 		$(if $(SYSTEM_ICU),,ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
@@ -53,5 +54,6 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			MAKE=$(MAKE) \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
+	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

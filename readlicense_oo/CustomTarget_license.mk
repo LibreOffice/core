@@ -26,6 +26,7 @@ $(readlicense_oo_DIR)/LICENSE.html : \
 		| $(readlicense_oo_DIR)/.dir \
 		  $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XSL)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@ \
 			--stringparam build_type "$(BUILD_TYPE)" \
@@ -39,6 +40,7 @@ $(readlicense_oo_DIR)/LICENSE.html : \
 			&& mv $@.tmp $@ \
 		) \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XSL)
 
 $(readlicense_oo_DIR)/LICENSE : \
 		$(SRCDIR)/readlicense_oo/license/license_plain_text.xsl \
@@ -46,6 +48,7 @@ $(readlicense_oo_DIR)/LICENSE : \
 		| $(readlicense_oo_DIR)/.dir \
 		  $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),XSL)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@ \
 			--stringparam build_type "$(BUILD_TYPE)" \
@@ -55,15 +58,18 @@ $(readlicense_oo_DIR)/LICENSE : \
 			$< \
 			$(readlicense_oo_LICENSE_xml) \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),XSL)
 
 ifeq ($(OS),WNT)
 $(readlicense_oo_DIR)/license.txt : \
 		$(readlicense_oo_DIR)/LICENSE \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),AWK)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(gb_AWK) 'sub("$$","\r")' $< > $@.tmp && mv $@.tmp $@ \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 endif
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -26,7 +26,6 @@ gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 # is a mapping from library filenames to direct pointers to the
 # corresponding PREFIX_component_getFactory functions.
 define gb_ComponentTarget__command
-$(call gb_Output_announce,$(2),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 	mkdir -p $(dir $(1)) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
@@ -47,7 +46,10 @@ $(call gb_ComponentTarget_get_target,%) : \
 		$(SRCDIR)/Repository.mk \
 		$(SRCDIR)/RepositoryFixes.mk \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+	$(call gb_Output_announce,$*,$(true),CMP,1)
+	$(call gb_Trace_StartRange,$*,CMP)
 	$(call gb_ComponentTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,CMP)
 
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)

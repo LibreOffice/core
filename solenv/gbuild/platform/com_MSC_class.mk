@@ -91,6 +91,7 @@ gb_PrecompiledHeader_get_objectfile = $(1).obj
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
+	$(call gb_Trace_StartRange,$(2),PCH)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
@@ -104,6 +105,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(6) \
 		-c $(3) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7)),$(1),$(3))
+	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
 # No ccache with MSVC, no need to create a checksum for it.
@@ -190,6 +192,7 @@ MSC_SUBSYSTEM_VERSION=$(COMMA)6.01
 # length in check - otherwise the dupes easily hit the limit when linking mergedlib
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
+	$(call gb_Trace_StartRange,$(2),LNK)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
@@ -243,7 +246,9 @@ $(call gb_Helper_abbreviate_dirs,\
 			-dump -exports $(ILIBTARGET) \
 			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$(WORKDIR)/LinkTarget/$(2).exports.tmp,$(WORKDIR)/LinkTarget/$(2).exports,$(1))) \
-	; exit $$RC)
+	; \
+	$(call gb_Trace_EndRange,$(2),LNK) $(if $(gb_TRACE),;) \
+	exit $$RC)
 endef
 
 define gb_MSVCRT_subst
@@ -538,6 +543,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 gb_WinResTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
+	$(call gb_Trace_StartRange,RC:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(call gb_Executable_get_target,makedepend) \
@@ -547,6 +553,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o .res \
 		-p $(dir $(3)) \
 		-f $(1))
+	$(call gb_Trace_EndRange,RC:$(2),DEP)
 endef
 else
 gb_WinResTarget__command_target =
@@ -658,7 +665,9 @@ endef
 
 define gb_UIMenubarTarget__command
 $(call gb_Output_announce,$(2),$(true),UIM,1)
+$(call gb_Trace_StartRange,$(2),UIM)
 cp $(3) $(1)
+$(call gb_Trace_EndRange,$(2),UIM)
 
 endef
 

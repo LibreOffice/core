@@ -15,6 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,cppunit,\
 
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
+	$(call gb_Trace_StartRange,cppunit,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 	    PROFILEFLAGS="$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 		/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
@@ -25,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		&& cd ../DllPlugInTester \
 		&& msbuild.exe DllPlugInTester.vcxproj /p:Configuration=$${PROFILEFLAGS} \
 	,src/cppunit)
+	$(call gb_Trace_EndRange,cppunit,EXTERNAL)
 else
 
 cppunit_CXXFLAGS=$(CXXFLAGS)
@@ -40,6 +42,7 @@ cppunit_CXXFLAGS+=-g
 endif
 
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
+	$(call gb_Trace_StartRange,cppunit,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--disable-dependency-tracking \
@@ -57,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		&& cd src \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,cppunit,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:

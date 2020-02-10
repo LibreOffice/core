@@ -17,14 +17,17 @@ $(eval $(call gb_ExternalProject_use_nmake,apr,build))
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,apr,build):
+	$(call gb_Trace_StartRange,apr,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -nologo -f apr.mak \
 			CFG="apr - Win32 $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)" \
 			RECURSE=0 \
 	)
+	$(call gb_Trace_EndRange,apr,EXTERNAL)
 
 else
 $(call gb_ExternalProject_get_state_target,apr,build):
+	$(call gb_Trace_StartRange,apr,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		 $(if $(ENABLE_MACOSX_SANDBOX),ac_cv_func_fdatasync=no) \
 		./configure \
@@ -33,6 +36,7 @@ $(call gb_ExternalProject_get_state_target,apr,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 		&& $(MAKE) libapr-1.la \
 	)
+	$(call gb_Trace_EndRange,apr,EXTERNAL)
 
 endif
 

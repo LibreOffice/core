@@ -38,6 +38,7 @@ endif
 # use --with-darwinssl on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
 # use --with-nss only on platforms other than macOS and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
+	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			$(if $(filter iOS MACOSX,$(OS)),\
@@ -67,12 +68,14 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		&& cd lib \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
 else ifeq ($(COM),MSC)
 
 $(eval $(call gb_ExternalProject_use_nmake,curl,build))
 
 $(call gb_ExternalProject_get_state_target,curl,build):
+	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -f Makefile.vc \
 			mode=dll \
@@ -84,6 +87,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			ENABLE_SSPI=yes \
 			ENABLE_WINSSL=yes \
 	,winbuild)
+	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
 endif
 

@@ -19,14 +19,17 @@ $(call gb_ExternalProject_use_external_project,libxml2,icu)
 $(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
 
 $(call gb_ExternalProject_get_state_target,libxml2,build):
+	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
 		&& nmake \
 	,win32)
+	$(call gb_Trace_EndRange,libxml2,EXTERNAL)
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
+	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 			--without-lzma \
@@ -38,6 +41,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libxml2,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:
