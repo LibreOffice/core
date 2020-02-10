@@ -281,6 +281,30 @@
       "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a010571b_6313ab9b",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-10T19:36:34Z",
+      "side": 1,
+      "message": "I suppose that you should introduce a dedicated function to validate all values; it would check if at least two values are set; if yes, then it would calculate the third if necessary, and if failed, return e.g. the pointer to the control with invalid value (to focus).",
+      "parentUuid": "4f6cd0bf_608a3fbc",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 53
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
