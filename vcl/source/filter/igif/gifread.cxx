@@ -23,6 +23,7 @@
 #include "gifread.hxx"
 #include <memory>
 #include <bitmapwriteaccess.hxx>
+#include <graphic/GraphicReader.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
