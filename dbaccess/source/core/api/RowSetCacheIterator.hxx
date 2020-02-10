@@ -28,11 +28,11 @@
 namespace dbaccess
 {
     class ORowSetBase;
-    typedef struct
+    struct ORowSetCacheIterator_Helper
     {
         ORowSetMatrix::iterator     aIterator;
         ORowSetBase*                pRowSet;
-    } ORowSetCacheIterator_Helper;
+    };
 
     typedef std::map<sal_Int32, ORowSetCacheIterator_Helper> ORowSetCacheMap;
 
