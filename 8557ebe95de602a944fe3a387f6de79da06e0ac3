@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba6fa654_7cea3dc3",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-10T16:28:48Z",
+      "side": 1,
+      "message": "best document here that this protects against a use-after-free, or helpful people who have not already made the mistakes I have will inline use :-(",
+      "revId": "8557ebe95de602a944fe3a387f6de79da06e0ac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
