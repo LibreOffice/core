@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_ITEMWIN_HXX
 #define INCLUDED_SVX_ITEMWIN_HXX
 
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/InterimItemWindow.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
@@ -81,52 +79,18 @@ public:
     void            set_sensitive(bool bSensitive);
 };
 
-class SVX_DLLPUBLIC SvxFillTypeBox final : public ListBox
+namespace SvxFillTypeBox
 {
-public:
-    SvxFillTypeBox( vcl::Window* pParent );
+    SVX_DLLPUBLIC void Fill(weld::ComboBox& rListBox);
+}
 
-    void Fill();
-
-    static void Fill(weld::ComboBox& rListBox);
-
-    void            Selected() { bSelect = true; }
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
-
-private:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    sal_uInt16      nCurPos;
-    bool            bSelect;
-
-    static void     ReleaseFocus_Impl();
-};
-
-class SVX_DLLPUBLIC SvxFillAttrBox final : public ListBox
+namespace SvxFillAttrBox
 {
-public:
-    SvxFillAttrBox( vcl::Window* pParent );
-
-    void Fill( const XHatchListRef    &pList );
-    void Fill( const XGradientListRef &pList );
-    void Fill( const XBitmapListRef   &pList );
-    void Fill( const XPatternListRef  &pList );
-
-    static void Fill(weld::ComboBox&, const XHatchListRef &pList);
-    static void Fill(weld::ComboBox&, const XGradientListRef &pList);
-    static void Fill(weld::ComboBox&, const XBitmapListRef &pList);
-    static void Fill(weld::ComboBox&, const XPatternListRef &pList);
-
-private:
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    sal_uInt16      nCurPos;
-    BitmapEx        maBitmapEx;
-
-    static void     ReleaseFocus_Impl();
-};
+    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XHatchListRef &pList);
+    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XGradientListRef &pList);
+    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XBitmapListRef &pList);
+    SVX_DLLPUBLIC void Fill(weld::ComboBox&, const XPatternListRef &pList);
+}
 
 #endif // INCLUDED_SVX_ITEMWIN_HXX
 
