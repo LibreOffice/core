@@ -1,14 +1,13 @@
-No use for applink.c OPENSSL_Applink, everything is compiled with the same MSVC
-
 --- python3/PCbuild/_ssl.vcxproj.orig2	2019-12-23 15:54:19.254298900 +0100
 +++ python3/PCbuild/_ssl.vcxproj	2019-12-23 15:54:24.693251200 +0100
-@@ -67,9 +67,6 @@
+@@ -67,9 +67,9 @@
    </ItemDefinitionGroup>
    <ItemGroup>
      <ClCompile Include="..\Modules\_ssl.c" />
 -    <ClCompile Include="$(opensslIncludeDir)\applink.c">
--      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;$(PreprocessorDefinitions)</PreprocessorDefinitions>
--    </ClCompile>
++    <ClCompile Include="$(opensslIncludeDir)\openssl\applink.c">
+       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;$(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
    </ItemGroup>
    <ItemGroup>
      <ResourceCompile Include="..\PC\python_nt.rc" />
