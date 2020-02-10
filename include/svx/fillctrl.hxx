@@ -21,7 +21,9 @@
 #define INCLUDED_SVX_FILLCTRL_HXX
 
 #include <memory>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
@@ -31,9 +33,6 @@ class XFillGradientItem;
 class XFillHatchItem;
 class XFillBitmapItem;
 class FillControl;
-class SvxFillTypeBox;
-class SvxFillAttrBox;
-class ListBox;
 
 /*************************************************************************
 |*
@@ -50,18 +49,18 @@ private:
     std::unique_ptr< XFillHatchItem >    mpHatchItem;
     std::unique_ptr< XFillBitmapItem >   mpBitmapItem;
 
-    VclPtr<FillControl>        mpFillControl;
-    VclPtr<SvxFillTypeBox>     mpLbFillType;
-    VclPtr<ToolBox>            mpToolBoxColor;
-    VclPtr<SvxFillAttrBox>     mpLbFillAttr;
+    VclPtr<FillControl> mxFillControl;
+    weld::ComboBox* mpLbFillType;
+    weld::Toolbar* mpToolBoxColor;
+    weld::ComboBox* mpLbFillAttr;
 
     css::drawing::FillStyle    meLastXFS;
     sal_Int32           mnLastPosGradient;
     sal_Int32           mnLastPosHatch;
     sal_Int32           mnLastPosBitmap;
 
-    DECL_LINK(SelectFillTypeHdl, ListBox&, void);
-    DECL_LINK(SelectFillAttrHdl, ListBox&, void);
+    DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -74,25 +73,37 @@ public:
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-class SAL_WARN_UNUSED FillControl : public vcl::Window
+class SAL_WARN_UNUSED FillControl final : public InterimItemWindow
 {
 private:
     friend class SvxFillToolBoxControl;
 
-    VclPtr<SvxFillTypeBox>     mpLbFillType;
-    VclPtr<ToolBox>            mpToolBoxColor;
-    VclPtr<SvxFillAttrBox>     mpLbFillAttr;
+    std::unique_ptr<weld::ComboBox> mxLbFillType;
+    std::unique_ptr<weld::Toolbar> mxToolBoxColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxColorDispatch;
+    std::unique_ptr<weld::ComboBox> mxLbFillAttr;
+    int mnTypeCurPos;
+    int mnAttrCurPos;
+
+    DECL_LINK(AttrKeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(TypeKeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ColorKeyInputHdl, const KeyEvent&, bool);
+    DECL_STATIC_LINK(FillControl, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
+    DECL_LINK(AttrFocusHdl, weld::Widget&, void);
+    DECL_LINK(TypeFocusHdl, weld::Widget&, void);
 
     void SetOptimalSize();
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
-public:
-    FillControl(vcl::Window* pParent);
-    virtual ~FillControl() override;
-    virtual void dispose() override;
+    static void ReleaseFocus_Impl();
 
-    virtual void Resize() override;
+public:
+    FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    virtual void dispose() override;
+    virtual ~FillControl() override;
+
+    virtual void GetFocus() override;
 };
 
 #endif // INCLUDED_SVX_FILLCTRL_HXX
