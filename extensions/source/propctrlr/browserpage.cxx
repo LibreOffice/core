@@ -32,7 +32,9 @@ namespace pcr
 
     OBrowserPage::~OBrowserPage()
     {
-        m_pParent->move(m_xContainer.get(), nullptr);
+        if (m_pParent)
+            detach();
+        assert(!m_pParent);
     }
 } // namespace pcr
 
