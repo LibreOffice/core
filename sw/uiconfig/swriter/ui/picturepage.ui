@@ -5,6 +5,7 @@
   <object class="GtkGrid" id="PicturePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="valign">start</property>
     <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">18</property>
@@ -42,7 +43,6 @@
                   <object class="GtkEntry" id="entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
@@ -104,8 +104,8 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row_spacing">3</property>
+                <property name="column_spacing">24</property>
                 <child>
                   <object class="GtkCheckButton" id="vert">
                     <property name="label" translatable="yes" context="picturepage|vert">_Vertically</property>
@@ -188,19 +188,29 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box1">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkDrawingArea" id="preview">
+                      <object class="GtkViewport">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="preview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                          </object>
+                        </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -227,6 +237,7 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">2</property>
       </packing>
     </child>
     <child>
@@ -246,13 +257,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
-                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkBox" id="box5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
-                    <property name="spacing">12</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="FT_ANGLE">
                         <property name="visible">True</property>
@@ -296,12 +306,12 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="FT_ANGLEPRESETS">
+                      <object class="GtkDrawingArea" id="CTL_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="picturepage|FT_ANGLEPRESETS">Default _settings:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">CTL_ANGLE</property>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="tooltip_text" translatable="yes" context="picturepage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
+                        <property name="halign">center</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -310,12 +320,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkDrawingArea" id="CTL_ANGLE">
+                      <object class="GtkLabel" id="FT_ANGLEPRESETS">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="tooltip_text" translatable="yes" context="picturepage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
-                        <property name="halign">center</property>
+                        <property name="label" translatable="yes" context="picturepage|FT_ANGLEPRESETS">Default _settings:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">CTL_ANGLE</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -351,5 +361,23 @@
         <property name="top_attach">2</property>
       </packing>
     </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="entry"/>
+      <widget name="box5"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="box6"/>
+      <widget name="browse"/>
+    </widgets>
   </object>
 </interface>
