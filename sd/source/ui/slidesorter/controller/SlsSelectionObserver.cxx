@@ -121,16 +121,13 @@ void SelectionObserver::EndObservation()
         }
         maInsertedPages.clear();
     }
-    else
-    {
-        // tdf#129346 nothing currently selected, select something, if possible
-        if (rSelector.GetPageCount())
-            rSelector.SelectPage(0);
-    }
 
     aUpdateLock.Release();
-    mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
-
+    bool bSuccess = mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
+    // tdf#129346 nothing currently selected, select something, if possible
+    // but (tdf#129346) only if setting focus to current page failed
+    if (!bSuccess && rSelector.GetPageCount())
+        rSelector.SelectPage(0);
 }
 
 } // end of namespace ::sd::slidesorter::controller
