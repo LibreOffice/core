@@ -52,6 +52,24 @@
       "revId": "017ae620604de06414dc3f780804c241b87e45c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c19b26e_f60c3750",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2020-02-10T20:41:14Z",
+      "side": 1,
+      "message": "Do you familiar with LO code?\nIn LO, this operator is overridden and it means a conversion from Any to a concrete type and sets the right argument.\nJust read the code above these lines and you\u0027ll find a lot of this kind of conversion.",
+      "parentUuid": "e802fc7f_ff8d1f1b",
+      "revId": "017ae620604de06414dc3f780804c241b87e45c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
