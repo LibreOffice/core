@@ -24,28 +24,31 @@ chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
-cmd/32/insertmenulegend.png cmd/32/legend.png
-cmd/32/insertmenuaxes.png cmd/32/diagramaxis.png
-cmd/32/insertmenugrids.png cmd/32/togglegridhorizontal.png
 cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
 cmd/32/diagramaxismenu.png cmd/32/diagramaxis.png
 cmd/32/diagramgridmenu.png cmd/32/togglegridhorizontal.png
+cmd/32/insertmenuaxes.png cmd/32/diagramaxis.png
+cmd/32/insertmenugrids.png cmd/32/togglegridhorizontal.png
+cmd/32/insertmenulegend.png cmd/32/legend.png
+cmd/32/toggleaxisdescr.png cmd/32/helplinesvisible.png
 
 cmd/lc_charttitlemenu.png cmd/lc_toggletitle.png
-cmd/lc_insertmenulegend.png cmd/lc_legend.png
-cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
-cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
 cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
 cmd/lc_diagramaxismenu.png cmd/lc_diagramaxis.png
 cmd/lc_diagramgridmenu.png cmd/lc_togglegridhorizontal.png
+cmd/lc_insertmenuaxes.png cmd/lc_diagramaxis.png
+cmd/lc_insertmenugrids.png cmd/lc_togglegridhorizontal.png
+cmd/lc_insertmenulegend.png cmd/lc_legend.png
+cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
 
 cmd/sc_charttitlemenu.png cmd/sc_toggletitle.png
-cmd/sc_insertmenulegend.png cmd/sc_legend.png
-cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
-cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
 cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
 cmd/sc_diagramgridmenu.png cmd/sc_togglegridhorizontal.png
+cmd/sc_insertmenuaxes.png cmd/sc_diagramaxis.png
+cmd/sc_insertmenugrids.png cmd/sc_togglegridhorizontal.png
+cmd/sc_insertmenulegend.png cmd/sc_legend.png
+cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # cmd
 # ==============================================
@@ -239,9 +242,14 @@ cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_zoom100percent.png cmd/sc_view100.png
 
 # Save
+cmd/32/savebasicas.png cmd/32/saveas.png
+cmd/32/savegraphic.png cmd/32/save.png
+cmd/32/recsave.png cmd/32/save.png
+
 cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
 cmd/lc_recsave.png cmd/lc_save.png
+
 cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 cmd/sc_recsave.png cmd/sc_save.png
@@ -699,12 +707,26 @@ cmd/sc_modifypage.png cmd/sc_pagedialog.png
 cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
 
 # Outline
-cmd/32/outlineup.png cmd/32/moveup.png
+cmd/32/decrementlevel.png cmd/32/nextrecord.png
+cmd/32/incrementlevel.png cmd/32/prevrecord.png
 cmd/32/outlinedown.png cmd/32/movedown.png
-cmd/lc_outlineup.png cmd/lc_moveup.png
+cmd/32/outlineleft.png cmd/32/prevrecord.png
+cmd/32/outlineright.png cmd/32/nextrecord.png
+cmd/32/outlineup.png cmd/32/moveup.png
+
+cmd/lc_decrementlevel.png cmd/lc_nextrecord.png
+cmd/lc_incrementlevel.png cmd/lc_prevrecord.png
 cmd/lc_outlinedown.png cmd/lc_movedown.png
-cmd/sc_outlineup.png cmd/sc_moveup.png
+cmd/lc_outlineleft.png cmd/lc_prevrecord.png
+cmd/lc_outlineright.png cmd/lc_nextrecord.png
+cmd/lc_outlineup.png cmd/lc_moveup.png
+
+cmd/sc_decrementlevel.png cmd/sc_nextrecord.png
+cmd/sc_incrementlevel.png cmd/sc_prevrecord.png
 cmd/sc_outlinedown.png cmd/sc_movedown.png
+cmd/sc_outlineleft.png cmd/sc_prevrecord.png
+cmd/sc_outlineright.png cmd/sc_nextrecord.png
+cmd/sc_outlineup.png cmd/sc_moveup.png
 
 # Line
 cmd/32/xlinestyle.png cmd/32/linestyle.png
@@ -1133,14 +1155,6 @@ cmd/32/fontworkshapetype.png cmd/32/fontwork.png
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
-# Axis
-cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
-cmd/32/toggleaxisdescr.png cmd/32/helplinesvisible.png
-cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
-cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
-cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
-cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
-
 # Crop
 cmd/32/grafattrcrop.png cmd/32/crop.png
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
@@ -1184,18 +1198,6 @@ cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
-
-
-
-# Outline
-cmd/32/outlineright.png cmd/32/decrementlevel.png
-cmd/32/outlineleft.png cmd/32/decrementindent.png
-
-cmd/lc_outlineright.png cmd/lc_decrementlevel.png
-cmd/lc_outlineleft.png cmd/lc_decrementindent.png
-
-cmd/sc_outlineright.png cmd/sc_decrementlevel.png
-cmd/sc_outlineleft.png cmd/sc_decrementindent.png
 
 # Mirror
 cmd/32/mirrorhorz.png cmd/32/fliphorizontal.png
@@ -1372,25 +1374,11 @@ cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 
 # Help
 cmd/32/absoluterecord.png cmd/32/helpindex.png
+cmd/32/questionanswers.png cmd/32/browseview.png
 cmd/lc_absoluterecord.png cmd/lc_helpindex.png
+cmd/lc_questionanswers.png cmd/lc_browseview.png
 cmd/sc_absoluterecord.png cmd/sc_helpindex.png
-
-# language support for rtl
-# doesn't work for all other languages
-#cmd/lc_redo.png cmd/ar/lc_undo.png
-#cmd/lc_undo.png cmd/ar/lc_redo.png
-#cmd/sc_redo.png cmd/ar/sc_undo.png
-#cmd/sc_undo.png cmd/ar/sc_redo.png
-
-#cmd/lc_redo.png cmd/fa/lc_undo.png
-#cmd/lc_undo.png cmd/fa/lc_redo.png
-#cmd/sc_redo.png cmd/fa/sc_undo.png
-#cmd/sc_undo.png cmd/fa/sc_redo.png
-
-#cmd/lc_redo.png cmd/he/lc_undo.png
-#cmd/lc_undo.png cmd/he/lc_redo.png
-#cmd/sc_redo.png cmd/he/sc_undo.png
-#cmd/sc_undo.png cmd/he/sc_redo.png
+cmd/sc_questionanswers.png cmd/sc_browseview.png
 
 # text background colour Impress/Draw
 cmd/32/charbackcolor.png cmd/32/backcolor.png
@@ -1728,7 +1716,6 @@ res/lx03129.png res/odb_32_8.png
 res/lx03130.png res/odp_32_8.png
 res/lx03139.png cmd/32/newhtmldoc.png
 res/lx03144.png res/odf_32_8.png
-res/lx03145.png res/odf_32_8.png
 res/lx03145.png res/odf_32_8.png
 res/lx03162.png res/odt_32_8.png
 res/lx03160.png res/odg_32_8.png
@@ -2205,7 +2192,6 @@ svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
 svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
-svx/res/reloads.png cmd/sc_reload.png
 
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
@@ -2442,7 +2428,6 @@ cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
 cmd/lc_insertfootnotesmenu.png cmd/lc_insertfootnote.png
 cmd/lc_insertformmenu.png cmd/lc_choosecontrols.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
-cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
@@ -2453,7 +2438,6 @@ cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
 cmd/sc_insertfootnotesmenu.png cmd/sc_insertfootnote.png
 cmd/sc_insertformmenu.png cmd/sc_choosecontrols.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
-cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
@@ -2584,10 +2568,6 @@ cmd/sc_neutralcellstyles.png cmd/sc_neutralcellstyle.png
 cmd/sc_notecellstyles.png cmd/sc_shownote.png
 
 # Other
-cmd/32/questionanswers.png cmd/32/browseview.png
-cmd/lc_questionanswers.png cmd/lc_browseview.png
-cmd/sc_questionanswers.png cmd/sc_browseview.png
-
 cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
