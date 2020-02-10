@@ -38,10 +38,10 @@ using namespace ::com::sun::star;
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
     : SwPaM( *rPam.GetPoint(), static_cast<SwPaM*>(pRing) ),
-    eInputLanguage(LANGUAGE_DONTKNOW)
+    m_eInputLanguage(LANGUAGE_DONTKNOW)
 {
-    bIsOverwriteCursor = false;
-    bInsText = true;
+    m_bIsOverwriteCursor = false;
+    m_bInsText = true;
 }
 
 SwExtTextInput::~SwExtTextInput()
@@ -69,17 +69,17 @@ SwExtTextInput::~SwExtTextInput()
             // we need to go through the Doc interface
             rIdx = nSttCnt;
             const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
-            if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
+            if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )
             {
                 const sal_Int32 nLen = sText.getLength();
-                const sal_Int32 nOWLen = sOverwriteText.getLength();
+                const sal_Int32 nOWLen = m_sOverwriteText.getLength();
                 if( nLen > nOWLen )
                 {
                     rIdx += nOWLen;
                     pTNd->EraseText( rIdx, nLen - nOWLen );
                     rIdx = nSttCnt;
-                    pTNd->ReplaceText( rIdx, nOWLen, sOverwriteText );
-                    if( bInsText )
+                    pTNd->ReplaceText( rIdx, nOWLen, m_sOverwriteText );
+                    if( m_bInsText )
                     {
                         rIdx = nSttCnt;
                         pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::OVERWRITE, nullptr );
@@ -90,8 +90,8 @@ SwExtTextInput::~SwExtTextInput()
                 }
                 else
                 {
-                    pTNd->ReplaceText( rIdx, nLen, sOverwriteText.copy( 0, nLen ));
-                    if( bInsText )
+                    pTNd->ReplaceText( rIdx, nLen, m_sOverwriteText.copy( 0, nLen ));
+                    if( m_bInsText )
                     {
                         rIdx = nSttCnt;
                         pDoc->getIDocumentContentOperations().Overwrite( *this, sText );
@@ -102,16 +102,16 @@ SwExtTextInput::~SwExtTextInput()
             {
                 pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
 
-                if( bInsText )
+                if( m_bInsText )
                 {
                     pDoc->getIDocumentContentOperations().InsertString( *this, sText );
                 }
             }
             pDoc->GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
-            if (eInputLanguage != LANGUAGE_DONTKNOW)
+            if (m_eInputLanguage != LANGUAGE_DONTKNOW)
             {
                 sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
-                sal_Int16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eInputLanguage);
+                sal_Int16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage(m_eInputLanguage);
                 switch(nScriptType)
                 {
                     case  i18n::ScriptType::ASIAN:
@@ -120,9 +120,9 @@ SwExtTextInput::~SwExtTextInput()
                         nWhich = RES_CHRATR_CTL_LANGUAGE; break;
                 }
                 // #i41974# Only set language attribute for CJK/CTL scripts.
-                if (RES_CHRATR_LANGUAGE != nWhich && pTNd->GetLang( nSttCnt, nEndCnt-nSttCnt, nScriptType) != eInputLanguage)
+                if (RES_CHRATR_LANGUAGE != nWhich && pTNd->GetLang( nSttCnt, nEndCnt-nSttCnt, nScriptType) != m_eInputLanguage)
                 {
-                    SvxLanguageItem aLangItem( eInputLanguage, nWhich );
+                    SvxLanguageItem aLangItem( m_eInputLanguage, nWhich );
                     rIdx = nSttCnt;
                     GetMark()->nContent = nEndCnt;
                     pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
@@ -148,7 +148,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         SwIndex aIdx( pTNd, nSttCnt );
         const OUString& rNewStr = rData.GetText();
 
-        if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
+        if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )
         {
             sal_Int32 nReplace = nEndCnt - nSttCnt;
             const sal_Int32 nNewLen = rNewStr.getLength();
@@ -158,13 +158,13 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
                 nReplace -= nNewLen;
                 aIdx += nNewLen;
                 pTNd->ReplaceText( aIdx, nReplace,
-                            sOverwriteText.copy( nNewLen, nReplace ));
+                            m_sOverwriteText.copy( nNewLen, nReplace ));
                 aIdx = nSttCnt;
                 nReplace = nNewLen;
             }
             else
             {
-                const sal_Int32 nOWLen = sOverwriteText.getLength();
+                const sal_Int32 nOWLen = m_sOverwriteText.getLength();
                 if( nOWLen < nReplace )
                 {
                     aIdx += nOWLen;
@@ -198,19 +198,19 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 
         GetPoint()->nContent = nSttCnt;
 
-        aAttrs.clear();
+        m_aAttrs.clear();
         if( rData.GetTextAttr() )
         {
             const ExtTextInputAttr *pAttrs = rData.GetTextAttr();
-            aAttrs.insert( aAttrs.begin(), pAttrs, pAttrs + rData.GetText().getLength() );
+            m_aAttrs.insert( m_aAttrs.begin(), pAttrs, pAttrs + rData.GetText().getLength() );
         }
     }
 }
 
 void SwExtTextInput::SetOverwriteCursor( bool bFlag )
 {
-    bIsOverwriteCursor = bFlag;
-    if (!bIsOverwriteCursor)
+    m_bIsOverwriteCursor = bFlag;
+    if (!m_bIsOverwriteCursor)
         return;
 
     const SwTextNode *const pTNd = GetPoint()->nNode.GetNode().GetTextNode();
@@ -218,11 +218,11 @@ void SwExtTextInput::SetOverwriteCursor( bool bFlag )
     {
         const sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
         const sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
-        sOverwriteText = pTNd->GetText().copy( std::min(nSttCnt, nEndCnt) );
-        if( !sOverwriteText.isEmpty() )
+        m_sOverwriteText = pTNd->GetText().copy( std::min(nSttCnt, nEndCnt) );
+        if( !m_sOverwriteText.isEmpty() )
         {
-            const sal_Int32 nInPos = sOverwriteText.indexOf( CH_TXTATR_INWORD );
-            const sal_Int32 nBrkPos = sOverwriteText.indexOf( CH_TXTATR_BREAKWORD );
+            const sal_Int32 nInPos = m_sOverwriteText.indexOf( CH_TXTATR_INWORD );
+            const sal_Int32 nBrkPos = m_sOverwriteText.indexOf( CH_TXTATR_BREAKWORD );
 
             // Find the first attr found, if any.
             sal_Int32 nPos = std::min(nInPos, nBrkPos);
@@ -232,7 +232,7 @@ void SwExtTextInput::SetOverwriteCursor( bool bFlag )
             }
             if (nPos>=0)
             {
-                sOverwriteText = sOverwriteText.copy( 0, nPos );
+                m_sOverwriteText = m_sOverwriteText.copy( 0, nPos );
             }
         }
     }

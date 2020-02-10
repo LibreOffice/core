@@ -26,21 +26,21 @@
 
 class SwExtTextInput final : public SwPaM
 {
-    std::vector<ExtTextInputAttr> aAttrs;
-    OUString sOverwriteText;
-    bool bInsText : 1;
-    bool bIsOverwriteCursor : 1;
-    LanguageType eInputLanguage;
+    std::vector<ExtTextInputAttr> m_aAttrs;
+    OUString m_sOverwriteText;
+    bool m_bInsText : 1;
+    bool m_bIsOverwriteCursor : 1;
+    LanguageType m_eInputLanguage;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing );
     virtual ~SwExtTextInput() override;
 
     void SetInputData( const CommandExtTextInputData& rData );
-    const std::vector<ExtTextInputAttr>& GetAttrs() const { return aAttrs; }
-    void SetInsText( bool bFlag )       { bInsText = bFlag; }
-    bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
+    const std::vector<ExtTextInputAttr>& GetAttrs() const { return m_aAttrs; }
+    void SetInsText( bool bFlag )       { m_bInsText = bFlag; }
+    bool IsOverwriteCursor() const      { return m_bIsOverwriteCursor; }
     void SetOverwriteCursor( bool bFlag );
-    void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
+    void SetLanguage(LanguageType eSet) { m_eInputLanguage = eSet;}
 
     SwExtTextInput* GetNext()             { return static_cast<SwExtTextInput *>(GetNextInRing()); }
     const SwExtTextInput* GetNext() const { return static_cast<SwExtTextInput const *>(GetNextInRing()); }

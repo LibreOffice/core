@@ -687,37 +687,37 @@ SwReaderType StgReader::GetReaderType()
  */
 
 SwWriter::SwWriter(SvStream& rStrm, SwCursorShell &rShell, bool bInWriteAll)
-    : pStrm(&rStrm), pMedium(nullptr), pOutPam(nullptr), pShell(&rShell),
-    rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
+    : m_pStrm(&rStrm), m_pMedium(nullptr), m_pOutPam(nullptr), m_pShell(&rShell),
+    m_rDoc(*rShell.GetDoc()), m_bWriteAll(bInWriteAll)
 {
 }
 
 SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDocument)
-    : pStrm(&rStrm), pMedium(nullptr), pOutPam(nullptr), pShell(nullptr), rDoc(rDocument),
-    bWriteAll(true)
+    : m_pStrm(&rStrm), m_pMedium(nullptr), m_pOutPam(nullptr), m_pShell(nullptr), m_rDoc(rDocument),
+    m_bWriteAll(true)
 {
 }
 
 SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, bool bInWriteAll)
-    : pStrm(&rStrm), pMedium(nullptr), pOutPam(&rPam), pShell(nullptr),
-    rDoc(*rPam.GetDoc()), bWriteAll(bInWriteAll)
+    : m_pStrm(&rStrm), m_pMedium(nullptr), m_pOutPam(&rPam), m_pShell(nullptr),
+    m_rDoc(*rPam.GetDoc()), m_bWriteAll(bInWriteAll)
 {
 }
 
 SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg, SwDoc &rDocument)
-    : pStrm(nullptr), xStg( rStg ), pMedium(nullptr), pOutPam(nullptr), pShell(nullptr), rDoc(rDocument), bWriteAll(true)
+    : m_pStrm(nullptr), m_xStg( rStg ), m_pMedium(nullptr), m_pOutPam(nullptr), m_pShell(nullptr), m_rDoc(rDocument), m_bWriteAll(true)
 {
 }
 
 SwWriter::SwWriter(SfxMedium& rMedium, SwCursorShell &rShell, bool bInWriteAll)
-    : pStrm(nullptr), pMedium(&rMedium), pOutPam(nullptr), pShell(&rShell),
-    rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
+    : m_pStrm(nullptr), m_pMedium(&rMedium), m_pOutPam(nullptr), m_pShell(&rShell),
+    m_rDoc(*rShell.GetDoc()), m_bWriteAll(bInWriteAll)
 {
 }
 
 SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
-    : pStrm(nullptr), pMedium(&rMedium), pOutPam(nullptr), pShell(nullptr), rDoc(rDocument),
-    bWriteAll(true)
+    : m_pStrm(nullptr), m_pMedium(&rMedium), m_pOutPam(nullptr), m_pShell(nullptr), m_rDoc(rDocument),
+    m_bWriteAll(true)
 {
 }
 
@@ -732,9 +732,9 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 
     rtl::Reference<SwDoc> xDoc;
 
-    if ( pShell && !bWriteAll && pShell->IsTableMode() )
+    if ( m_pShell && !m_bWriteAll && m_pShell->IsTableMode() )
     {
-        bWriteAll = true;
+        m_bWriteAll = true;
         xDoc = new SwDoc;
 
         // Copy parts of a table:
@@ -743,7 +743,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 
         // search the layout for cells
         SwSelBoxes aBoxes;
-        GetTableSel( *pShell, aBoxes );
+        GetTableSel( *m_pShell, aBoxes );
         const SwTableNode* pTableNd = static_cast<const SwTableNode*>(aBoxes[0]->GetSttNd()->StartOfSectionNode());
         SwNodeIndex aIdx( xDoc->GetNodes().GetEndOfExtras(), 2 );
         SwContentNode *pNd = aIdx.GetNode().GetContentNode();
@@ -752,12 +752,12 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         pTableNd->GetTable().MakeCopy( xDoc.get(), aPos, aBoxes );
     }
 
-    if( !bWriteAll && ( pShell || pOutPam ))
+    if( !m_bWriteAll && ( m_pShell || m_pOutPam ))
     {
-        if( pShell )
-            pPam = pShell->GetCursor();
+        if( m_pShell )
+            pPam = m_pShell->GetCursor();
         else
-            pPam = pOutPam;
+            pPam = m_pOutPam;
 
         SwPaM *pEnd = pPam;
 
@@ -773,12 +773,12 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         // if there is no selection, select the whole document
         if(!bHasMark)
         {
-            if( pShell )
+            if( m_pShell )
             {
-                pShell->Push();
-                pShell->SttEndDoc(true);
-                pShell->SetMark();
-                pShell->SttEndDoc(false);
+                m_pShell->Push();
+                m_pShell->SttEndDoc(true);
+                m_pShell->SetMark();
+                m_pShell->SttEndDoc(false);
             }
             else
             {
@@ -793,7 +793,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     else
     {
         // no Shell or write-everything -> create a Pam
-        SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
+        SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &m_rDoc;
         pTempCursor = pOutDoc->CreateUnoCursor(
                 SwPosition(pOutDoc->GetNodes().GetEndOfContent()), false);
         pPam = pTempCursor.get();
@@ -810,8 +810,8 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         }
     }
 
-    rxWriter->m_bWriteAll = bWriteAll;
-    SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
+    rxWriter->m_bWriteAll = m_bWriteAll;
+    SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &m_rDoc;
 
     // If the default PageDesc has still the initial value,
     // (e.g. if no printer was set) then set it to DIN A4.
@@ -849,12 +849,12 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 
     pOutDoc->SetInWriting(true);
     ErrCode nError = ERRCODE_NONE;
-    if( pMedium )
-        nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
-    else if( pStrm )
-        nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
-    else if( xStg.is() )
-        nError = rxWriter->Write( *pPam, xStg, pRealFileName );
+    if( m_pMedium )
+        nError = rxWriter->Write( *pPam, *m_pMedium, pRealFileName );
+    else if( m_pStrm )
+        nError = rxWriter->Write( *pPam, *m_pStrm, pRealFileName );
+    else if( m_xStg.is() )
+        nError = rxWriter->Write( *pPam, m_xStg, pRealFileName );
     pOutDoc->SetInWriting(false);
 
     xGuard.reset();
@@ -866,12 +866,12 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     }
 
     // If the selection was only created for printing, reset the old cursor before returning
-    if( !bWriteAll && ( pShell || pOutPam ))
+    if( !m_bWriteAll && ( m_pShell || m_pOutPam ))
     {
         if(!bHasMark)
         {
-            if( pShell )
-                pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+            if( m_pShell )
+                m_pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             else
                 delete pPam;
         }
@@ -881,16 +881,16 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         // Everything was written successfully? Tell the document!
         if ( !nError.IsError() && !xDoc.is() )
         {
-            rDoc.getIDocumentState().ResetModified();
+            m_rDoc.getIDocumentState().ResetModified();
             // #i38810# - reset also flag, that indicates updated links
-            rDoc.getIDocumentLinksAdministration().SetLinksUpdated( false );
+            m_rDoc.getIDocumentLinksAdministration().SetLinksUpdated( false );
         }
     }
 
     if ( xDoc.is() )
     {
         xDoc.clear();
-        bWriteAll = false;
+        m_bWriteAll = false;
     }
 
     return nError;
