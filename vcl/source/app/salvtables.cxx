@@ -724,9 +724,9 @@ public:
         return m_xWidget->GetDropTarget();
     }
 
-    virtual boost::property_tree::ptree get_property_tree() const override
+    virtual void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) override
     {
-        return m_xWidget->DumpAsPropertyTree();
+        m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
     }
 
     virtual void set_stack_background() override

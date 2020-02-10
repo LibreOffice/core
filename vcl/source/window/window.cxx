@@ -1787,6 +1787,14 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
 
+void Window::SetDumpAsPropertyTreeHdl(const Link<boost::property_tree::ptree&, void>& rLink)
+{
+    if (mpWindowImpl) // may be called after dispose
+    {
+        mpWindowImpl->maDumpAsPropertyTreeHdl = rLink;
+    }
+}
+
 void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)
 {
     ImplGetFrame()->SetModalHierarchyHdl(rLink);
@@ -3422,6 +3430,8 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
         }
         aTree.add_child("children", aChildren);
     }
+
+    mpWindowImpl->maDumpAsPropertyTreeHdl.Call(aTree);
 
     return aTree;
 }
