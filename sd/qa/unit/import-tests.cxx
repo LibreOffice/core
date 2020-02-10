@@ -1457,6 +1457,19 @@ void SdImportTest::testTdf127129()
     xPropSet->getPropertyValue( "CharBackColor" ) >>= nCharBackColor;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00), nCharBackColor );
 
+    // tdf#130498: Second paragraph has no highlight.
+    // Check it's reset to auto
+    xParagraph.set( getParagraphFromShape( 1, xShape ) );
+    xRun.set( getRunFromParagraph( 0, xParagraph ) );
+    xPropSet.set( xRun, uno::UNO_QUERY_THROW );
+
+    xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x000000), nCharColor );
+
+    // Without the accompanying fix in place, the highlight would be 65280
+    xPropSet->getPropertyValue( "CharBackColor" ) >>= nCharBackColor;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(COL_AUTO), nCharBackColor );
+
     xDocShRef->DoClose();
 }
 void SdImportTest::testTdf93097()
