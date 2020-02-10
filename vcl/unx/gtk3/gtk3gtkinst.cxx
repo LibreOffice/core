@@ -12297,9 +12297,6 @@ public:
     virtual void set_size_request(int nWidth, int nHeight) override
     {
         // tweak the cell render to get a narrower size to stick
-        GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
-        GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
-
         if (nWidth != -1)
         {
             // this bit isn't great, I really want to be able to ellipse the text in the comboboxtext itself and let
@@ -12309,8 +12306,8 @@ public:
             // to find out how much of the width of the combobox belongs to the cell, set
             // the cell and widget to the min cell width and see what the difference is
             int min;
-            gtk_cell_renderer_get_preferred_width(cell, m_pWidget, &min, nullptr);
-            gtk_cell_renderer_set_fixed_size(cell, min, -1);
+            gtk_cell_renderer_get_preferred_width(m_pTextRenderer, m_pWidget, &min, nullptr);
+            gtk_cell_renderer_set_fixed_size(m_pTextRenderer, min, -1);
             gtk_widget_set_size_request(m_pWidget, min, -1);
             int nNonCellWidth = get_preferred_size().Width() - min;
 
@@ -12319,16 +12316,14 @@ public:
             {
                 // now set the cell to the max width which it can be within the
                 // requested widget width
-                gtk_cell_renderer_set_fixed_size(cell, nWidth - nNonCellWidth, -1);
+                gtk_cell_renderer_set_fixed_size(m_pTextRenderer, nWidth - nNonCellWidth, -1);
             }
         }
         else
         {
             g_object_set(G_OBJECT(m_pTextRenderer), "ellipsize", PANGO_ELLIPSIZE_NONE, nullptr);
-            gtk_cell_renderer_set_fixed_size(cell, -1, -1);
+            gtk_cell_renderer_set_fixed_size(m_pTextRenderer, -1, -1);
         }
-
-        g_list_free(cells);
 
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
