@@ -258,6 +258,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     {
         if(GetTextField() && IsFieldInDoc() && (!pCollectPostItsHint->m_bHideRedlines || !sw::IsFieldDeletedInModel(pCollectPostItsHint->m_rIDRA, *GetTextField())))
             pCollectPostItsHint->m_rvFormatFields.push_back(this);
+    } else if (const auto pHasHiddenInfoHint = dynamic_cast<const sw::HasHiddenInformationNotesHint*>( &rHint ))
+    {
+        if(!pHasHiddenInfoHint->m_rbHasHiddenInformationNotes && GetTextField() && IsFieldInDoc())
+            pHasHiddenInfoHint->m_rbHasHiddenInformationNotes = true;
     }
 }
 

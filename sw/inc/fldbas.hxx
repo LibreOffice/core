@@ -273,6 +273,7 @@ public:
     SwFormatField* FindFormatForField(const SwField*) const;
     SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
     void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
+    bool HasHiddenInformationNotes();
 };
 
 inline void SwFieldType::UpdateFields() const

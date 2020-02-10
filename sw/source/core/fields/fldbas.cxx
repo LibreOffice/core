@@ -173,6 +173,13 @@ void SwFieldType::CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, ID
     CallSwClientNotify(sw::CollectPostItsHint(rvFormatFields, rIDRA, bHideRedlines));
 }
 
+bool SwFieldType::HasHiddenInformationNotes()
+{
+    bool bHasHiddenInformationNotes = false;
+    CallSwClientNotify(sw::HasHiddenInformationNotesHint(bHasHiddenInformationNotes));
+    return bHasHiddenInformationNotes;
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));
