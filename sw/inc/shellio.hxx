@@ -106,7 +106,7 @@ class Reader;
 
 class SwgReaderOption
 {
-    SwAsciiOptions aASCIIOpts;
+    SwAsciiOptions m_aASCIIOpts;
     bool m_bFrameFormats;
     bool m_bPageDescs;
     bool m_bTextFormats;
@@ -132,9 +132,9 @@ public:
     bool IsMerge() const { return m_bMerge; }
     void SetMerge( const bool bNew ) { m_bMerge = bNew; }
 
-    const SwAsciiOptions& GetASCIIOpts() const { return aASCIIOpts; }
-    void SetASCIIOpts( const SwAsciiOptions& rOpts ) { aASCIIOpts = rOpts; }
-    void ResetASCIIOpts() { aASCIIOpts.Reset(); }
+    const SwAsciiOptions& GetASCIIOpts() const { return m_aASCIIOpts; }
+    void SetASCIIOpts( const SwAsciiOptions& rOpts ) { m_aASCIIOpts = rOpts; }
+    void ResetASCIIOpts() { m_aASCIIOpts.Reset(); }
 
     css::uno::Reference<css::io::XInputStream>& GetInputStream() { return m_xInputStream; }
     void SetInputStream(css::uno::Reference<css::io::XInputStream>& xInputStream)
@@ -143,7 +143,7 @@ public:
     }
 
     SwgReaderOption()
-        { ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
+        { ResetAllFormatsOnly(); m_aASCIIOpts.Reset(); }
 };
 
 // Calls reader with its options, document, cursor etc.
@@ -504,15 +504,15 @@ public:
 
 class SW_DLLPUBLIC SwWriter
 {
-    SvStream* pStrm;
-    css::uno::Reference < css::embed::XStorage > xStg;
-    SfxMedium* pMedium;
+    SvStream* m_pStrm;
+    css::uno::Reference < css::embed::XStorage > m_xStg;
+    SfxMedium* m_pMedium;
 
-    SwPaM* const pOutPam;
-    SwCursorShell *pShell;
-    SwDoc &rDoc;
+    SwPaM* const m_pOutPam;
+    SwCursorShell *m_pShell;
+    SwDoc &m_rDoc;
 
-    bool bWriteAll;
+    bool m_bWriteAll;
 
 public:
     ErrCode Write( WriterRef const & rxWriter, const OUString* = nullptr);

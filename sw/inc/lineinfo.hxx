@@ -37,17 +37,17 @@ enum LineNumberPosition
 class SW_DLLPUBLIC SwLineNumberInfo final : public SwClient /**< purpose of derivation from SwClient:
                                                          character style for displaying the numbers. */
 {
-    SvxNumberType       aType;                  ///< e.g. roman linenumbers
-    OUString            aDivider;               ///< String for additional interval (vert. lines user defined)
-    sal_uInt16              nPosFromLeft;       ///< Position for paint
-    sal_uInt16              nCountBy;           ///< Paint only for every n line
-    sal_uInt16              nDividerCountBy;    /**< Interval for display of an user defined
+    SvxNumberType       m_aType;                  ///< e.g. roman linenumbers
+    OUString            m_aDivider;               ///< String for additional interval (vert. lines user defined)
+    sal_uInt16              m_nPosFromLeft;       ///< Position for paint
+    sal_uInt16              m_nCountBy;           ///< Paint only for every n line
+    sal_uInt16              m_nDividerCountBy;    /**< Interval for display of an user defined
                                                        string every n lines */
-    LineNumberPosition  ePos;                   ///< Where should the display occur (number and divider)
-    bool                bPaintLineNumbers;      ///< Should anything be displayed?
-    bool                bCountBlankLines;       ///< Count empty lines?
-    bool                bCountInFlys;           ///< Count also within FlyFrames?
-    bool                bRestartEachPage;       /**< Restart counting at the first paragraph of each page
+    LineNumberPosition  m_ePos;                   ///< Where should the display occur (number and divider)
+    bool                m_bPaintLineNumbers;      ///< Should anything be displayed?
+    bool                m_bCountBlankLines;       ///< Count empty lines?
+    bool                m_bCountInFlys;           ///< Count also within FlyFrames?
+    bool                m_bRestartEachPage;       /**< Restart counting at the first paragraph of each page
                                                        (even on follows when paragraphs are split) */
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
@@ -60,34 +60,34 @@ public:
     SwCharFormat *GetCharFormat( IDocumentStylePoolAccess& rIDSPA ) const;
     void SetCharFormat( SwCharFormat* );
 
-    const SvxNumberType &GetNumType() const             { return aType; }
-    void                SetNumType( SvxNumberType aNew ){ aType = aNew; }
+    const SvxNumberType &GetNumType() const             { return m_aType; }
+    void                SetNumType( SvxNumberType aNew ){ m_aType = aNew; }
 
-    const OUString& GetDivider() const           { return aDivider; }
-    void SetDivider( const OUString &r )  { aDivider = r; }
-    sal_uInt16 GetDividerCountBy() const    { return nDividerCountBy; }
-    void SetDividerCountBy( sal_uInt16 n )  { nDividerCountBy = n; }
+    const OUString& GetDivider() const           { return m_aDivider; }
+    void SetDivider( const OUString &r )  { m_aDivider = r; }
+    sal_uInt16 GetDividerCountBy() const    { return m_nDividerCountBy; }
+    void SetDividerCountBy( sal_uInt16 n )  { m_nDividerCountBy = n; }
 
-    sal_uInt16 GetPosFromLeft() const       { return nPosFromLeft; }
-    void   SetPosFromLeft( sal_uInt16 n)    { nPosFromLeft = n;    }
+    sal_uInt16 GetPosFromLeft() const       { return m_nPosFromLeft; }
+    void   SetPosFromLeft( sal_uInt16 n)    { m_nPosFromLeft = n;    }
 
-    sal_uInt16 GetCountBy() const           { return nCountBy; }
-    void   SetCountBy( sal_uInt16 n)        { nCountBy = n;    }
+    sal_uInt16 GetCountBy() const           { return m_nCountBy; }
+    void   SetCountBy( sal_uInt16 n)        { m_nCountBy = n;    }
 
-    LineNumberPosition GetPos() const   { return ePos; }
-    void SetPos( LineNumberPosition eP ){ ePos = eP;   }
+    LineNumberPosition GetPos() const   { return m_ePos; }
+    void SetPos( LineNumberPosition eP ){ m_ePos = eP;   }
 
-    bool   IsPaintLineNumbers() const   { return bPaintLineNumbers; }
-    void   SetPaintLineNumbers( bool b ){ bPaintLineNumbers = b;    }
+    bool   IsPaintLineNumbers() const   { return m_bPaintLineNumbers; }
+    void   SetPaintLineNumbers( bool b ){ m_bPaintLineNumbers = b;    }
 
-    bool   IsCountBlankLines() const    { return bCountBlankLines;  }
-    void   SetCountBlankLines( bool b ) { bCountBlankLines = b;     }
+    bool   IsCountBlankLines() const    { return m_bCountBlankLines;  }
+    void   SetCountBlankLines( bool b ) { m_bCountBlankLines = b;     }
 
-    bool   IsCountInFlys() const        { return bCountInFlys;      }
-    void   SetCountInFlys( bool b )     { bCountInFlys = b;         }
+    bool   IsCountInFlys() const        { return m_bCountInFlys;      }
+    void   SetCountInFlys( bool b )     { m_bCountInFlys = b;         }
 
-    bool   IsRestartEachPage() const    { return bRestartEachPage;  }
-    void   SetRestartEachPage( bool b ) { bRestartEachPage = b;     }
+    bool   IsRestartEachPage() const    { return m_bRestartEachPage;  }
+    void   SetRestartEachPage( bool b ) { m_bRestartEachPage = b;     }
 
     bool   HasCharFormat() const { return GetRegisteredIn() != nullptr; }
 };
