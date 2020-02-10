@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f4c2a01_bfb42555",
+        "filename": "accessibility/source/extended/accessibletablistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-10T13:04:38Z",
+      "side": 1,
+      "message": "that\u0027s a local variable of the function, so this doesn\u0027t really tell the caller anything useful.\n\nthere are 2 expected children, so if we have one message for both of them something like \"cannot get header or table\" might do?",
+      "revId": "67e7ec9ca22ec93ae1357419737bd9b8996ec6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad0a2ed6_02d50c41",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-10T13:04:38Z",
+      "side": 1,
+      "message": "again, pMethod is a local variable that the caller has no idea about.\n\napparently the parameter aFunctionName is used to locate a method, so how about something like \"cannot find method: \" + aMethodName",
+      "revId": "67e7ec9ca22ec93ae1357419737bd9b8996ec6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1bd990e_2cfa5385",
+        "filename": "dbaccess/source/core/api/query.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-10T13:04:38Z",
+      "side": 1,
+      "message": "but rebuildColumns is the current function, and if it throws an exception it won\u0027t be able to return null.\n\nhow about \"cannot create columns\", not ideal but i don\u0027t know what this code does...",
+      "revId": "67e7ec9ca22ec93ae1357419737bd9b8996ec6c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
