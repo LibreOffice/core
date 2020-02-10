@@ -297,8 +297,8 @@
                         <items>
                           <item id="0" translatable="yes" context="tabletextflowpage|liststore1">Horizontal</item>
                           <item id="2" translatable="yes" context="tabletextflowpage|liststore1">Vertical (top to bottom)</item>
-                          <item id="4" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</item>
                           <item id="5" translatable="yes" context="tabletextflowpage|liststore1">Vertical (bottom to top)</item>
+                          <item id="4" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</item>
                         </items>
                       </object>
                       <packing>
