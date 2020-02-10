@@ -41,7 +41,7 @@
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 
-#include <canvas/verifyinput.hxx>
+#include <verifyinput.hxx>
 
 
 using namespace ::com::sun::star;

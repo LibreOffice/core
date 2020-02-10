@@ -9,6 +9,11 @@
 
 $(eval $(call gb_Library_Library,oglcanvas))
 
+$(eval $(call gb_Library_set_include,oglcanvas,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/canvas/inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,oglcanvas,canvas/source/opengl/oglcanvas))
 
 $(eval $(call gb_Library_use_sdk_api,oglcanvas))

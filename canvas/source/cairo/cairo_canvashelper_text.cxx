@@ -28,7 +28,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <canvas/verifyinput.hxx>
+#include <verifyinput.hxx>
 #include <cairo.h>
 
 #include "cairo_canvasfont.hxx"

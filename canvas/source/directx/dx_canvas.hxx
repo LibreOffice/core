@@ -34,11 +34,11 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/graphicdevicebase.hxx>
-#include <canvas/base/canvasbase.hxx>
-#include <canvas/base/bitmapcanvasbase.hxx>
+#include <base/integerbitmapbase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/graphicdevicebase.hxx>
+#include <base/canvasbase.hxx>
+#include <base/bitmapcanvasbase.hxx>
 
 #include "dx_bitmapprovider.hxx"
 #include "dx_canvashelper.hxx"

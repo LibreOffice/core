@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
-#define INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
+#pragma once
 
 #include <memory>
 
@@ -130,7 +129,5 @@ namespace canvas
         const std::shared_ptr<IRenderModule> mpRenderModule;
     };
 }
-
-#endif // INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,7 @@
 #include "dx_surfacebitmap.hxx"
 #include "dx_devicehelper.hxx"
 
-#include <canvas/rendering/isurfaceproxymanager.hxx>
+#include <rendering/isurfaceproxymanager.hxx>
 
 
 namespace dxcanvas

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
-#define INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
+#pragma once
 
 #include <com/sun/star/rendering/XBufferController.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
@@ -28,9 +27,9 @@
 
 #include <rtl/ref.hxx>
 
-#include <canvas/parametricpolypolygon.hxx>
-#include <canvas/propertysethelper.hxx>
-#include <canvas/verifyinput.hxx>
+#include <parametricpolypolygon.hxx>
+#include <propertysethelper.hxx>
+#include <verifyinput.hxx>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
@@ -345,7 +344,5 @@ namespace canvas
         GraphicDeviceBase& operator=( const GraphicDeviceBase& ) = delete;
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_GRAPHICDEVICEBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

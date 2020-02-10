@@ -26,9 +26,9 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <basegfx/vector/b2isize.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/bitmapcanvasbase.hxx>
-#include <canvas/base/integerbitmapbase.hxx>
+#include <base/basemutexhelper.hxx>
+#include <base/bitmapcanvasbase.hxx>
+#include <base/integerbitmapbase.hxx>
 
 #include "dx_bitmapprovider.hxx"
 #include "dx_bitmapcanvashelper.hxx"

@@ -30,7 +30,7 @@
 
 #include <vcl/font.hxx>
 
-#include <canvas/vclwrapper.hxx>
+#include <vclwrapper.hxx>
 
 #include "cairo_surfaceprovider.hxx"
 

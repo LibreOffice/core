@@ -38,9 +38,9 @@
 
 #include <canvas/elapsedtime.hxx>
 #include <canvas/canvastools.hxx>
-#include <canvas/rendering/icolorbuffer.hxx>
-#include <canvas/rendering/irendermodule.hxx>
-#include <canvas/rendering/isurface.hxx>
+#include <rendering/icolorbuffer.hxx>
+#include <rendering/irendermodule.hxx>
+#include <rendering/isurface.hxx>
 
 #include "dx_config.hxx"
 #include "dx_impltools.hxx"

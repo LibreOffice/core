@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_SPRITE_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_SPRITE_HXX
 
-#include <canvas/base/sprite.hxx>
+#include <base/sprite.hxx>
 
 class OutputDevice;
 

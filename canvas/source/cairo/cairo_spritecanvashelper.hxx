@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XAnimation.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 
-#include <canvas/spriteredrawmanager.hxx>
+#include <spriteredrawmanager.hxx>
 
 #include <vcl/cairo.hxx>
 #include "cairo_canvashelper.hxx"

@@ -27,7 +27,7 @@
 #include "dx_rendermodule.hxx"
 #include "dx_bitmap.hxx"
 
-#include <canvas/rendering/isurfaceproxymanager.hxx>
+#include <rendering/isurfaceproxymanager.hxx>
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;
