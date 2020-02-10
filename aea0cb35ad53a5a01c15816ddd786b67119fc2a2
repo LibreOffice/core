@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d588d1ff_3e31fc30",
+        "filename": "sc/inc/scabstdlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc76ca7d_1a420a60",
+      "range": {
+        "startLine": 437,
+        "startChar": 60,
+        "endLine": 437,
+        "endChar": 66
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cce7239d_b514235c",
         "filename": "sc/source/ui/attrdlg/scdlgfact.cxx",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a89ff68_59156734",
+        "filename": "sc/source/ui/attrdlg/scdlgfact.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cce7239d_b514235c",
+      "range": {
+        "startLine": 1017,
+        "startChar": 60,
+        "endLine": 1017,
+        "endChar": 65
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "efb9449a_bacd0234",
+        "filename": "sc/source/ui/inc/filldlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bf13ea2e_ba960107",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 26
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bcd3896_c85d45a8",
         "filename": "sc/source/ui/inc/filldlg.hxx",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a413a5d_630c25bd",
+        "filename": "sc/source/ui/inc/filldlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bcd3896_c85d45a8",
+      "range": {
+        "startLine": 66,
+        "startChar": 16,
+        "endLine": 66,
+        "endChar": 32
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "03d5816a_19a66fea",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "I didn\u0027t calculate fIncrement and fStartVal in their corresponding check functions since fEndVal is actually set to the value in its box after these functions execute(in its own check function).\n\nUsing MAXDOUBLE appears to be redundant, I\u0027ll fix that.\n\nI will limit calculation of the empty value to the linear mode.",
+      "parentUuid": "ce6d69c4_d68f32bc",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 31
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f46fd74_8474a35d",
         "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
         "patchSetId": 6
@@ -128,6 +248,30 @@
       "writtenOn": "2020-02-05T07:04:12Z",
       "side": 1,
       "message": "Why handle start value here? You didn\u0027t touch it elsewhere.",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 307,
+        "endChar": 53
+      },
+      "revId": "aea0cb35ad53a5a01c15816ddd786b67119fc2a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6cd0bf_608a3fbc",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-10T17:21:13Z",
+      "side": 1,
+      "message": "I did calculations after bAllOk so that values for fIncrement and fEndVal were set to the values in their corresponding boxes and they were valid.\n\nI wasn\u0027t able to find a neat way of calculating fStartVal and fIncrement in their corresponding check functions without introducing unnecessary repeated code.\n\nIn which function should I calculate these?\nOr any other tips for a neat solution?\n\nThanks a lot for your detailed review! :)",
+      "parentUuid": "0f46fd74_8474a35d",
       "range": {
         "startLine": 306,
         "startChar": 8,
