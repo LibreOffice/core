@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "9e100683_359f1a51",
+        "filename": "include/svx/langbox.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-10T20:58:48Z",
+      "side": 1,
+      "message": "In this specific case, when you only change part of a function signature, just add a comma to the last line, and continue writing keeping the original style. Don\u0027t change the definition\u0027s lines that are above your changes, even if clang-format wants that, because that changes lines that are otherwise not necessary to touch. Remember, each change may make it more difficult to search git history for any given line.",
+      "parentUuid": "dbc54f4f_145239bd",
+      "range": {
+        "startLine": 78,
+        "startChar": 57,
+        "endLine": 81,
+        "endChar": 82
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d95ee94e_3a03f8b6",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 11
