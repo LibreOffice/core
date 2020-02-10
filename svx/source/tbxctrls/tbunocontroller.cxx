@@ -99,8 +99,6 @@ public:
     void                UpdateFont( const css::awt::FontDescriptor& rCurrentFont );
     void                SetOptimalSize();
 
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
-
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        GetFocus() override;
 
@@ -119,6 +117,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
     DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, boost::property_tree::ptree&, void);
 };
 
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
@@ -131,9 +130,8 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     m_rCtrl             ( _rCtrl ),
     m_bRelease          ( true ),
     m_xFrame            ( _xFrame ),
-    m_xWidget(new FontSizeBox(m_xBuilder->weld_combo_box("fontsize")))
+    m_xWidget(new FontSizeBox(m_xBuilder->weld_combo_box("fontsizecombobox")))
 {
-    set_id("fontsizecombobox");
     m_xWidget->set_value(0);
     m_xWidget->set_active_text("");
     m_xWidget->disable_entry_completion();
@@ -142,6 +140,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     m_xWidget->connect_key_press(LINK(this, SvxFontSizeBox_Impl, KeyInputHdl));
     m_xWidget->connect_entry_activate(LINK(this, SvxFontSizeBox_Impl, ActivateHdl));
     m_xWidget->connect_focus_out(LINK(this, SvxFontSizeBox_Impl, FocusOutHdl));
+    m_xWidget->connect_get_property_tree(LINK(this, SvxFontSizeBox_Impl, DumpAsPropertyTreeHdl));
 }
 
 void SvxFontSizeBox_Impl::dispose()
@@ -291,10 +290,8 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
+IMPL_LINK(SvxFontSizeBox_Impl, DumpAsPropertyTreeHdl, boost::property_tree::ptree&, rTree, void)
 {
-    boost::property_tree::ptree aTree(m_xWidget->get_property_tree());
-
     boost::property_tree::ptree aEntries;
 
     for (int i = 0, nCount = m_xWidget->get_count(); i < nCount; ++i)
@@ -304,7 +301,7 @@ boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
         aEntries.push_back(std::make_pair("", aEntry));
     }
 
-    aTree.add_child("entries", aEntries);
+    rTree.add_child("entries", aEntries);
 
     boost::property_tree::ptree aSelected;
 
@@ -316,12 +313,10 @@ boost::property_tree::ptree SvxFontSizeBox_Impl::DumpAsPropertyTree()
         aSelected.push_back(std::make_pair("", aEntry));
     }
 
-    aTree.put("selectedCount", nActive == -1 ? 0 : 1);
-    aTree.add_child("selectedEntries", aSelected);
+    rTree.put("selectedCount", nActive == -1 ? 0 : 1);
+    rTree.add_child("selectedEntries", aSelected);
 
-    aTree.put("command", ".uno:FontHeight");
-
-    return aTree;
+    rTree.put("command", ".uno:FontHeight");
 }
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )

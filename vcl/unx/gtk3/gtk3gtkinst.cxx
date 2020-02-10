@@ -2867,10 +2867,9 @@ public:
         return m_xDropTarget.get();
     }
 
-    virtual boost::property_tree::ptree get_property_tree() const override
+    virtual void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& /*rLink*/) override
     {
         //not implemented for the gtk variant
-        return boost::property_tree::ptree();
     }
 
     virtual void set_stack_background() override

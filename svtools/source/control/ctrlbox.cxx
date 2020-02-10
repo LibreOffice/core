@@ -867,11 +867,6 @@ FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
     m_xComboBox->connect_changed(LINK(this, FontSizeBox, ModifyHdl));
 }
 
-boost::property_tree::ptree FontSizeBox::get_property_tree() const
-{
-    return m_xComboBox->get_property_tree();
-}
-
 IMPL_LINK(FontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
 {
     FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());

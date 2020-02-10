@@ -267,7 +267,8 @@ public:
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 
-    virtual boost::property_tree::ptree get_property_tree() const = 0;
+    virtual void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink)
+        = 0;
 
     virtual ~Widget() {}
 };

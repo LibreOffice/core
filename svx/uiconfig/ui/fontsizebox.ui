@@ -8,7 +8,7 @@
     <property name="hexpand">True</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkComboBoxText" id="fontsize">
+      <object class="GtkComboBoxText" id="fontsizecombobox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>

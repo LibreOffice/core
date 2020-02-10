@@ -452,7 +452,7 @@ public:
     bool has_focus() const { return m_xComboBox->has_focus(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
     void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }
-    boost::property_tree::ptree get_property_tree() const;
+    void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
 
 private:
     FontSizeBox(const FontSizeBox&) = delete;
