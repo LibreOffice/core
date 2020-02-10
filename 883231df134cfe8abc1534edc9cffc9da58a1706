@@ -22,6 +22,30 @@
       "revId": "883231df134cfe8abc1534edc9cffc9da58a1706",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e3ddc52_d0d446e6",
+        "filename": "ridljar/com/sun/star/lib/connections/pipe/PipeConnection.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-10T08:51:12Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "35242d3f_d2ceda3e",
+      "range": {
+        "startLine": 35,
+        "startChar": 3,
+        "endLine": 35,
+        "endChar": 102
+      },
+      "revId": "883231df134cfe8abc1534edc9cffc9da58a1706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
