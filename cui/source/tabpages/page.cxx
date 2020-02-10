@@ -410,8 +410,16 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
          aPaperSize.Width() > aPaperSize.Height() )
         bLandscape = true;
 
+    // tdf#130548 disable callbacks on the other of a pair of the radiogroup
+    // when toggling its partner
+    m_xLandscapeBtn->connect_clicked(Link<weld::Button&, void>());
+    m_xPortraitBtn->connect_clicked(Link<weld::Button&, void>());
+
     m_xLandscapeBtn->set_active(bLandscape);
     m_xPortraitBtn->set_active(!bLandscape);
+
+    m_xLandscapeBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
+    m_xPortraitBtn->connect_clicked(LINK(this, SvxPageDescPage, SwapOrientation_Impl));
 
     m_aBspWin.SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
