@@ -772,7 +772,10 @@ void VclGtkClipboard::ClipboardGet(GtkSelectionData *selection_data, guint info)
 {
     if (!m_aContents.is())
         return;
-    m_aConversionHelper.setSelectionData(m_aContents, selection_data, info);
+    // tdf#129809 take a reference in case m_aContents is replaced during this
+    // call
+    Reference<datatransfer::XTransferable> xCurrentContents(m_aContents);
+    m_aConversionHelper.setSelectionData(xCurrentContents, selection_data, info);
 }
 
 namespace

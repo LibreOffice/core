@@ -23,7 +23,7 @@
       <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" style:font-name="Noto Sans Regular" fo:font-size="24pt"/>
+      <style:text-properties style:use-window-font-color="true" style:font-name="Noto Sans Regular" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0cm" svg:stroke-color="#808080" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="none" draw:fill-color="#cfe7f5" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" fo:padding-top="0.1cm" fo:padding-bottom="0.1cm" fo:padding-left="0.1cm" fo:padding-right="0.1cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080">
@@ -71,7 +71,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwitharrow" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.7cm" draw:marker-start-center="true" draw:marker-end-width="0.3cm"/>
@@ -87,12 +87,12 @@
     </style:style>
     <style:style style:name="textbody" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_1" draw:fill="none" draw:fill-gradient-name="Gradient_20_9" draw:fill-hatch-name="Hatching_20_92" draw:fill-image-name="Bitmape_20_2"/>
-      <style:text-properties style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="16pt"/>
+      <style:text-properties style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
     </style:style>
     <style:style style:name="textbodyjustfied" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-gradient-name="Gradient_20_9" draw:fill-hatch-name="Hatching_20_92" draw:fill-image-name="Bitmape_20_2"/>
       <style:paragraph-properties fo:text-align="justify"/>
-      <style:text-properties fo:font-size="16pt"/>
+      <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
     </style:style>
     <style:style style:name="textbodyindent" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -100,36 +100,36 @@
     </style:style>
     <style:style style:name="title" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:text-properties fo:color="#04617b" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="66pt" fo:font-weight="200"/>
+      <style:text-properties fo:color="#04617b" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="66pt" style:font-size-asian="66pt" style:font-size-complex="66pt" fo:font-weight="200" style:font-weight-asian="200" style:font-weight-complex="200"/>
     </style:style>
     <style:style style:name="title1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#008080" draw:fill-gradient-name="Gradient_20_15" draw:fill-hatch-name="Hatching_20_93" draw:fill-image-name="Bitmape_20_2" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-size="22pt" fo:font-weight="bold"/>
+      <style:text-properties fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="title2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties svg:stroke-width="0.05cm" draw:fill-color="#ffcc99" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0.2cm" fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="36pt"/>
+      <style:text-properties fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt"/>
     </style:style>
     <style:style style:name="headline" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="headline1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm" fo:text-align="center"/>
-      <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="headline2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="14pt" fo:font-style="italic" fo:font-weight="bold"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="measure" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="solid" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:fill="none" draw:show-unit="true"/>
-      <style:text-properties fo:font-size="12pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Vivid-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="background" style:repeat="stretch"/>
@@ -137,12 +137,12 @@
     </style:style>
     <style:style style:name="Vivid-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#dbf5f9" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#dbf5f9" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Vivid-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -190,39 +190,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.435cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid-outline2" style:family="presentation" style:parent-style-name="Vivid-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="22pt"/>
+      <style:text-properties fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt"/>
     </style:style>
     <style:style style:name="Vivid-outline3" style:family="presentation" style:parent-style-name="Vivid-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid-outline4" style:family="presentation" style:parent-style-name="Vivid-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-outline5" style:family="presentation" style:parent-style-name="Vivid-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-outline6" style:family="presentation" style:parent-style-name="Vivid-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-outline7" style:family="presentation" style:parent-style-name="Vivid-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-outline8" style:family="presentation" style:parent-style-name="Vivid-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-outline9" style:family="presentation" style:parent-style-name="Vivid-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" svg:stroke-width="0cm" svg:stroke-color="#808080" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" svg:stroke-opacity="100%" draw:stroke-linejoin="round" draw:fill="none" draw:fill-color="#ffffff" draw:secondary-fill-color="#99ccff" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="true" draw:auto-grow-width="false" draw:fit-to-size="false" draw:fit-to-contour="false" fo:max-height="0cm" fo:max-width="0cm" fo:min-height="1.27cm" fo:min-width="0cm" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:padding-left="0cm" fo:padding-right="0cm" fo:wrap-option="no-wrap" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#000000" draw:shadow-opacity="100%" text:animation="none" text:animation-direction="left" text:animation-start-inside="false" text:animation-stop-inside="false" text:animation-repeat="0" text:animation-delay="P0D" text:animation-steps="0cm">
@@ -272,7 +272,7 @@
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="36pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
+      <style:text-properties fo:color="#dbf5f9" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt" fo:letter-spacing="normal" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
     </style:style>
     <style:style style:name="Vivid-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:min-height="3.306cm" fo:wrap-option="no-wrap">
@@ -322,7 +322,7 @@
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="start" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="80pt" fo:letter-spacing="normal" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="80pt" style:font-size-asian="80pt" style:font-size-complex="80pt" fo:letter-spacing="normal" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:font-weight-asian="200" style:font-weight-complex="200" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:letter-kerning="true" style:text-emphasize="none" style:text-scale="100%" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" fo:hyphenate="false"/>
     </style:style>
     <style:style style:name="Vivid1-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Bitmap_20_2" style:repeat="stretch"/>
@@ -330,12 +330,12 @@
     </style:style>
     <style:style style:name="Vivid1-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Vivid1-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid1-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -383,39 +383,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.497cm" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid1-outline2" style:family="presentation" style:parent-style-name="Vivid1-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="28pt"/>
+      <style:text-properties fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline3" style:family="presentation" style:parent-style-name="Vivid1-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline4" style:family="presentation" style:parent-style-name="Vivid1-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline5" style:family="presentation" style:parent-style-name="Vivid1-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline6" style:family="presentation" style:parent-style-name="Vivid1-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline7" style:family="presentation" style:parent-style-name="Vivid1-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline8" style:family="presentation" style:parent-style-name="Vivid1-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="22pt"/>
+      <style:text-properties fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt"/>
     </style:style>
     <style:style style:name="Vivid1-outline9" style:family="presentation" style:parent-style-name="Vivid1-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="22pt"/>
+      <style:text-properties fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt"/>
     </style:style>
     <style:style style:name="Vivid1-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -463,7 +463,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="no-wrap">
@@ -513,7 +513,7 @@
       <style:paragraph-properties fo:text-align="start">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" style:font-size-asian="60pt" style:font-size-complex="60pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:font-weight-asian="200" style:font-weight-complex="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Bitmape_20_11" style:repeat="stretch"/>
@@ -521,12 +521,12 @@
     </style:style>
     <style:style style:name="Vivid2-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#484848" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Vivid2-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="110%" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans Regular" fo:font-family="'Noto Sans Regular'" style:font-family-generic="system" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
@@ -574,39 +574,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.498cm" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro" fo:font-family="'Source Sans Pro'" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-outline2" style:family="presentation" style:parent-style-name="Vivid2-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.396cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="28pt"/>
+      <style:text-properties fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline3" style:family="presentation" style:parent-style-name="Vivid2-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline4" style:family="presentation" style:parent-style-name="Vivid2-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline5" style:family="presentation" style:parent-style-name="Vivid2-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline6" style:family="presentation" style:parent-style-name="Vivid2-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline7" style:family="presentation" style:parent-style-name="Vivid2-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline8" style:family="presentation" style:parent-style-name="Vivid2-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid2-outline9" style:family="presentation" style:parent-style-name="Vivid2-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="20pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Vivid2-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -654,7 +654,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-style-name="Negra" style:font-pitch="variable" fo:font-size="40pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="'Source Sans Pro Black'" style:font-style-name="Negra" style:font-pitch="variable" fo:font-size="40pt" style:font-size-asian="40pt" style:font-size-complex="40pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:font-weight-asian="900" style:font-weight-complex="900" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="no-wrap">
@@ -704,7 +704,7 @@
       <style:paragraph-properties fo:text-align="start">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#04617b" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Light" fo:font-family="'Source Sans Pro Light'" style:font-style-name="Ligera" style:font-pitch="variable" fo:font-size="60pt" style:font-size-asian="60pt" style:font-size-complex="60pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="200" style:font-weight-asian="200" style:font-weight-complex="200" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T24">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="6.104cm" svg:height="3.507cm"/>
@@ -779,20 +779,20 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
     </style:style>
     <style:style style:name="MP1" style:family="paragraph">
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP3" style:family="paragraph">
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP5" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center"/>
@@ -801,7 +801,7 @@
       <style:paragraph-properties fo:text-align="end"/>
     </style:style>
     <style:style style:name="MT1" style:family="text">
-      <style:text-properties fo:font-size="14pt"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <text:list-style style:name="ML1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">

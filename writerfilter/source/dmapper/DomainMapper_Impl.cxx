@@ -685,6 +685,13 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         deferredCharacterProperties.clear();
     }
 
+    if (!IsInFootOrEndnote() && IsInCustomFootnote() && !m_aPropertyStacks[eId].empty())
+    {
+        PropertyMapPtr pRet = m_aPropertyStacks[eId].top();
+        if (pRet->GetFootnote().is() && m_pFootnoteContext.is())
+            EndCustomFootnote();
+    }
+
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
     if(!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())

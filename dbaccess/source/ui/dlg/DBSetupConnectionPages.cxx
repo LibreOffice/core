@@ -738,7 +738,6 @@ using namespace ::com::sun::star;
         , m_xFTFinalText(m_xBuilder->weld_label("finishText"))
     {
         m_xCBOpenAfterwards->connect_toggled(LINK(this, OFinalDBPageSetup, OnOpenSelected));
-        m_xCBStartTableWizard->connect_toggled(LINK(this,OGenericAdministrationPage,OnControlModifiedButtonClick));
         m_xRBRegisterDataSource->set_active(true);
         pController->SetFinalPage(this);
     }
@@ -796,7 +795,6 @@ using namespace ::com::sun::star;
     IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, weld::ToggleButton&, rBox, void)
     {
         m_xCBStartTableWizard->set_sensitive(rBox.get_sensitive() && rBox.get_active());
-        callModifiedHdl();
     }
 }
 

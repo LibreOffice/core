@@ -24,7 +24,7 @@
       <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="14cm"/>
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
-      <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+      <style:text-properties fo:color="#ffffff" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>

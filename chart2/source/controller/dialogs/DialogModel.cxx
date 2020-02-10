@@ -547,7 +547,7 @@ void DialogModel::moveSeries(
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
     Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
-    DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Up );
+    DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Down );
 }
 
 Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(

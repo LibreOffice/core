@@ -97,7 +97,7 @@
                       <object class="GtkImage" id="step_center_x_img">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="pixbuf">chart2/res/step_center_x_30.png</property>
+                        <property name="icon_name">chart2/res/step_center_x_30.png</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -108,7 +108,7 @@
                       <object class="GtkImage" id="step_end_img">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="pixbuf">chart2/res/step_end_30.png</property>
+                        <property name="icon_name">chart2/res/step_end_30.png</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -119,7 +119,7 @@
                       <object class="GtkImage" id="step_center_y_img">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="pixbuf">chart2/res/step_center_y_30.png</property>
+                        <property name="icon_name">chart2/res/step_center_y_30.png</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -197,7 +197,7 @@
                       <object class="GtkImage" id="step_start_img">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="pixbuf">chart2/res/step_start_30.png</property>
+                        <property name="icon_name">chart2/res/step_start_30.png</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

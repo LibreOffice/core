@@ -50,11 +50,11 @@
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="18pt"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="19.7999992370605pt"/>
+      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>

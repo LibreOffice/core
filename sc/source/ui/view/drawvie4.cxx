@@ -569,8 +569,10 @@ void ScDrawView::FitToCellSize()
     }
 
     pUndoGroup->AddAction( std::make_unique<SdrUndoGeoObj>( *pObj ) );
-
-    pObj->SetSnapRect(aCellRect);
+    if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+        pObj->AdjustToMaxRect(aCellRect);
+    else
+        pObj->SetSnapRect(aCellRect);
 
     pUndoGroup->SetComment(ScResId( STR_UNDO_FITCELLSIZE ));
     ScDocShell* pDocSh = pViewData->GetDocShell();
