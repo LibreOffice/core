@@ -24,6 +24,7 @@ ifeq ($(COM),MSC)
 gb_ExternalProject_gpgmepp_host := $(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32)
 gb_ExternalProject_gpgmepp_target := $(if $(filter INTEL,$(CPUNAME)),pe-i386,pe-x86-64)
 $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_get_target,cpp)
+	$(call gb_Trace_StartRange,gpgmepp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
@@ -43,8 +44,10 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   MAKE=$(MAKE) \
 	    && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,gpgmepp,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,gpgmepp,build):
+	$(call gb_Trace_StartRange,gpgmepp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
@@ -76,6 +79,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 			  $(EXTERNAL_WORKDIR)/src/.libs/libgpgme.11.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,gpgmepp,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:

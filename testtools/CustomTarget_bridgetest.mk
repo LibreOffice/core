@@ -26,6 +26,7 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 
 $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo \
 		"$(call gb_Executable_get_target_for_build,uno)" \
@@ -37,12 +38,14 @@ $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 
 testtools_MY_CLASSPATH := $(call gb_Jar_get_target,ridl)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,java_uno)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,juh)
 
 $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo \
 		"URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
@@ -54,9 +57,11 @@ $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testto
 		"singleaccept" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
 		"$(call gb_Executable_get_target_for_build,uno)" \
@@ -67,9 +72,11 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo \
 		"$(call gb_Executable_get_target_for_build,uno)" \
@@ -80,5 +87,6 @@ $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

@@ -21,6 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,libwpg,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libwpg,build) :
+	$(call gb_Trace_StartRange,libwpg,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
@@ -45,5 +46,6 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwpg-0.3.3.dylib \
 		) \
 	)
+	$(call gb_Trace_EndRange,libwpg,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

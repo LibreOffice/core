@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,lcms2,\
 ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,lcms2,build):
+	$(call gb_Trace_StartRange,lcms2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe lcms2_DLL.vcxproj \
 			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
@@ -24,8 +25,10 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:TargetName=lcms2 \
 	,Projects/VC2017/lcms2_DLL)
+	$(call gb_Trace_EndRange,lcms2,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):
+	$(call gb_Trace_StartRange,lcms2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-jpeg --without-tiff --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
@@ -41,5 +44,6 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 		&& cd src \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,lcms2,EXTERNAL)
 endif
 # vim: set noet sw=4 ts=4:

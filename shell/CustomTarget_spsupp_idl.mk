@@ -18,6 +18,7 @@ $(spsupp_IDLDIR)/spsupp.tlb : \
 		$(SRCDIR)/shell/source/win32/spsupp/spsupp.idl \
 		| $(spsupp_IDLDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),IDL)
 	$(call gb_Helper_abbreviate_dirs, \
 	midl.exe \
 		-tlb $@ \
@@ -27,5 +28,6 @@ $(spsupp_IDLDIR)/spsupp.tlb : \
 		$(SOLARINC) \
 		-Oicf \
 		$<)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),IDL)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

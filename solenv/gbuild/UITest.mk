@@ -54,6 +54,7 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$*,$(true),UIT,2)
+	$(call gb_Trace_StartRange,$*,UIT)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
 		mkdir -p $(dir $(call gb_UITest_get_target,$*))/user/user && \
@@ -88,6 +89,7 @@ else
                     cat $(dir $(call gb_UITest_get_target,$*))/soffice.out.log; \
                     printf ' >>>\n\n';) \
 			    cat $@.log; $(gb_UITest_UNITTESTFAILED) UI $*))))
+	$(call gb_Trace_EndRange,$*,UIT)
 endif
 
 # always use udkapi and URE services

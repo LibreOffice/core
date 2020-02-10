@@ -18,7 +18,9 @@ $(call gb_CustomTarget_get_workdir,postprocess/check_dynamic_objects)/check.done
 		$(call gb_Postprocess_get_target,AllExecutables) \
 		$(call gb_Postprocess_get_target,AllPackages)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CHK)
 	# currently we only check ELF objects
 	$(SRCDIR)/bin/check-elf-dynamic-objects -p
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CHK)
 
 # vim: set noet sw=4 ts=4:

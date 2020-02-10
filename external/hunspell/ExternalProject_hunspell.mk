@@ -22,6 +22,7 @@ endif
 endif
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
+	$(call gb_Trace_StartRange,hunspell,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-shared --disable-nls --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
@@ -30,5 +31,6 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 			CXXFLAGS="$(CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS))" \
 		&& cd src/hunspell && $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,hunspell,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

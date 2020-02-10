@@ -43,6 +43,7 @@ $(dir $(call gb_Zip_get_target,%))%/.dir :
 # if there are no files, zip fails; copy empty zip file to target in that case
 $(call gb_Zip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ZIP,3)
+	$(call gb_Trace_StartRange,$*,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(if $(FILES),\
 			RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
@@ -56,6 +57,7 @@ $(call gb_Zip_get_target,%) :
 		,	cp $(SRCDIR)/solenv/gbuild/empty.zip $@)\
 		$(if $(INSTALL_NAME),&& cp $(call gb_Zip_get_target,$*) $(INSTALL_NAME)) \
 	)
+	$(call gb_Trace_EndRange,$*,ZIP)
 
 # the preparation target is here to ensure proper ordering of actions in cases
 # when we want to, e.g., create a zip from files created by a custom target

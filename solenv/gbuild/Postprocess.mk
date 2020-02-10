@@ -12,6 +12,7 @@ $(dir $(call gb_Postprocess_get_target,%)).dir :
 
 $(call gb_Postprocess_get_target,%) :
 	$(call gb_Output_announce,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),$(true),ALL,6)
+	$(call gb_Trace_MakeMark,$(POSTPROCESS_INFO): $(if $(POSTPROCESS_PREFIX),$(subst $(POSTPROCESS_PREFIX),,$^),$^),ALL)
 	touch $@
 
 .PHONY : $(call gb_Postprocess_get_clean_target,%)

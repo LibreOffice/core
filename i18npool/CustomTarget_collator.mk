@@ -55,13 +55,17 @@ $(i18npool_CODIR)/collator_%.cxx : \
 		$(call gb_Executable_get_runtime_dependencies,gencoll_rule) \
 		| $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLR,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CLR)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,gencoll_rule) $< $@ $*)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CLR)
 
 $(i18npool_CODIR)/lrl_include.hxx : $(SRCDIR)/i18npool/CustomTarget_collator.mk \
 		$(SRCDIR)/i18npool/source/collator/data | $(i18npool_CODIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(i18npool_COTXTS), \
 		$(firstword $(subst _, ,$(txt)))))"' > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

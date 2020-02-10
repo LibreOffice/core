@@ -19,11 +19,12 @@ $(dir $(call gb_AllLangPackage_get_target,%)).dir :
 
 $(call gb_AllLangPackage_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ALP,3)
+	$(call gb_Trace_MakeMark,$*,ALP)
 	touch $@
 
 .PHONY : $(call gb_AllLangPackage_get_clean_target,%)
 $(call gb_AllLangPackage_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(true),ALP,3)
+	$(call gb_Output_announce,$*,$(false),ALP,3)
 	rm -f $(call gb_AllLangPackage_get_target,$*)
 
 # Define a new package group.

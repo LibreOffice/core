@@ -19,10 +19,12 @@ ifeq ($(COM),MSC)
 else # !ifeq($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,breakpad,build) :
+	$(call gb_Trace_StartRange,breakpad,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure CXXFLAGS="-O2 $(gb_VISIBILITY_FLAGS)" \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,breakpad,EXTERNAL)
 
 endif
 

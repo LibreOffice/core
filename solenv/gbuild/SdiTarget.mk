@@ -23,6 +23,7 @@ gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)
 
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 	$(call gb_Output_announce,$*,$(true),SDI,1)
+	$(call gb_Trace_StartRange,$*,SDI)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@))
 	$(call gb_Helper_abbreviate_dirs,\
@@ -35,6 +36,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 			$(if $(gb_FULLDEPS),-fM$(call gb_SdiTarget_get_dep_target,$*)) \
 			$< \
 		&& touch $@.hxx)
+	$(call gb_Trace_EndRange,$*,SDI)
 # touch the hxx file so it's newer than the target - the .hxx only occurs in
 # generated .d files, so it's not a target yet when building from scratch!
 

@@ -21,7 +21,8 @@ $(eval $(call gb_ExternalProject_register_targets,lxml,\
 lxml_PYTHON := $(call gb_ExternalExecutable_get_command,python)
 
 $(call gb_ExternalProject_get_state_target,lxml,build): \
-	$(call gb_ExternalExecutable_get_dependencies,python)
+    $(call gb_ExternalExecutable_get_dependencies,python)
+	$(call gb_Trace_StartRange,lxml,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		PYPATH=$${PYPATH:+$$PYPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install && \
 		$(if $(PYTHON_FOR_BUILD), \
@@ -39,5 +40,6 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
 		$(lxml_PYTHON) setup.py install \
 			--install-lib install \
 	)
+	$(call gb_Trace_EndRange,lxml,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

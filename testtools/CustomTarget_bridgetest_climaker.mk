@@ -21,11 +21,13 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(testtools_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),CLM)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ -r $(call gb_CliUnoApi_get_target,cli_uretypes) \
 		-X $(call gb_UnoApiTarget_get_target,udkapi) \
 		$(call gb_UnoApiTarget_get_target,bridgetest) > /dev/null)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CLM)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_sac,\
 ))
 
 $(call gb_ExternalProject_get_state_target,jfreereport_sac,build) :
+	$(call gb_Trace_StartRange,jfreereport_sac,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
@@ -24,5 +25,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_sac,build) :
 			-Dantcontrib.available="true" \
 			$(if $(debug),-Dbuild.debug="on") all \
 	)
+	$(call gb_Trace_EndRange,jfreereport_sac,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

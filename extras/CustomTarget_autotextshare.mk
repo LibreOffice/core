@@ -4463,32 +4463,44 @@ $(call gb_CustomTarget_get_target,extras/source/autotext) : \
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR)/extras/source/autotext/lang/%/mimetype
 	$(call gb_Output_announce,autotext/$*/mimetype,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autotext/$*/mimetype,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,autotext/$*/mimetype,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.rdf : $(SRCDIR)/extras/source/autotext/lang/%.rdf
 	$(call gb_Output_announce,autotext/$*.rdf,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autotext/$*.rdf,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,autotext/$*.rdf,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.svm : $(SRCDIR)/extras/source/autotext/lang/%.svm
 	$(call gb_Output_announce,autotext/$*.svm,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autotext/$*.svm,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,autotext/$*.svm,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.png : $(SRCDIR)/extras/source/autotext/lang/%.png
 	$(call gb_Output_announce,autotext/$*.png,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autotext/$*.png,CPY)
 	cp $< $@
+	$(call gb_Trace_EndRange,autotext/$*.png,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,autotext/$*.xml,$(true),XSL,1)
+	$(call gb_Trace_StartRange,autotext/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_Trace_EndRange,autotext/$*.xml,XSL)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.bau :
 	$(call gb_Output_announce,autotext/$*.bau,$(true),ZIP,2)
+	$(call gb_Trace_StartRange,autotext/$*.bau,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_AUTOTEXTSHARE_DIR) && \
 		zip -q0X --filesync --must-match $@ $(EXTRAS_AUTOTEXTSHARE_MIMEFILES_FILTER) && \
 		zip -qrX --must-match $@ $(EXTRAS_AUTOTEXTSHARE_XMLFILES_FILTER) \
 	)
+	$(call gb_Trace_EndRange,autotext/$*.bau,ZIP)
 
 define extras_Autotextshare_make_file_deps
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/lang/$(2) \

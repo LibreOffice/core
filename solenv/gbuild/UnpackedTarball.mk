@@ -40,12 +40,14 @@ endef
 
 define gb_UnpackedTarget__command
 $(call gb_Output_announce,$(notdir $(2)),$(true),UPK,1)
+	$(call gb_Trace_StartRange,$(notdir $(2)),UPK)
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(wildcard $(UNPACKED_DIR)),rm -rf $(UNPACKED_DIR) &&) \
 	mkdir -p $(UNPACKED_DIR) && \
 	$(call gb_UnpackedTarget__command_$(1),$(2),$(3),$(4)) && \
 	touch $(2) \
 )
+	$(call gb_Trace_EndRange,$(notdir $(2)),UPK)
 endef
 
 $(dir $(call gb_UnpackedTarget_get_target,%)).dir :
@@ -120,7 +122,6 @@ $(call gb_UnpackedTarball__copy_files_fix,$(call gb_UnpackedTarball__copy_files_
 endef
 
 define gb_UnpackedTarball__command
-$(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	( \
 		cd $(3) \
@@ -169,7 +170,10 @@ $(call gb_UnpackedTarball_get_preparation_target,%) :
 	touch $@
 
 $(call gb_UnpackedTarball_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),PAT,2)
+	$(call gb_Trace_StartRange,$*,PAT)
 	$(call gb_UnpackedTarball__command,$@,$*,$(call gb_UnpackedTarball_get_dir,$*))
+	$(call gb_Trace_EndRange,$*,PAT)
 
 $(call gb_UnpackedTarball_get_final_target,%) :
 	touch $@
@@ -242,7 +246,10 @@ $(call gb_ExternalProject_get_state_target,$(1),%) : UNPACKED_IS_BIN_TARBALL := 
 $(if $(findstring out,$(5)),$(call gb_Module_get_target,$(4)) : $(TARFILE_LOCATION)/$(6)
 $(TARFILE_LOCATION)/$(6) : $(call gb_Module_get_nonl10n_target,$(4))
 	$$(call gb_Output_announce,$(6),$(true),PKB,3)
-	if test ! -f "$$@" ; then cd $(call gb_UnpackedTarball_get_dir,) && $(GNUTAR) -czf "$$@" $(1)/ || $(GNUTAR) -czf "$$@" $(1)/ ; else touch "$$@" ; fi)
+	$$(call gb_Trace_StartRange,$(6),PKB)
+	if test ! -f "$$@" ; then cd $(call gb_UnpackedTarball_get_dir,) && $(GNUTAR) -czf "$$@" $(1)/ || $(GNUTAR) -czf "$$@" $(1)/ ; else touch "$$@" ; fi
+	$$(call gb_Trace_EndRange,$(6),PKB)
+)
 
 endef
 

@@ -23,7 +23,9 @@ $(dir $(call gb_PackageSet_get_target,%))%/.dir :
 
 $(call gb_PackageSet_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKS,2)
+	$(call gb_Trace_StartRange,$*,PKS)
 	cat $(sort $(FILELISTS)) > $@
+	$(call gb_Trace_EndRange,$*,PKS)
 
 .PHONY : $(call gb_PackageSet_get_clean_target,%)
 $(call gb_PackageSet_get_clean_target,%) :

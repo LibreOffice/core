@@ -19,6 +19,7 @@ ifeq ($(OS),WNT)
 
 # Note: runConfigureICU ignores everything following the platform name!
 $(call gb_ExternalProject_get_state_target,icu,build) :
+	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
 		&& CFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" \
@@ -28,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			Cygwin/MSVC --disable-extras \
 		&& $(MAKE) \
 	,source)
+	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
 else # $(OS)
 
@@ -59,6 +61,7 @@ icu_LDFLAGS:=" \
 # data directory/doesn't build the requested library in that case (icu/source/Makefile.in)
 # so we need to add it back to the list of subdirectories to build
 $(call gb_ExternalProject_get_state_target,icu,build) :
+	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
@@ -84,6 +87,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				OOO \
 				$(EXTERNAL_WORKDIR)/source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)) \
 	,source)
+	$(call gb_Trace_EndRange,icu,EXTERNAL)
 
 endif
 

@@ -14,10 +14,12 @@ $(eval $(call gb_ExternalProject_register_targets,expat,\
 ))
 
 $(call gb_ExternalProject_get_state_target,expat,configure) :
+	$(call gb_Trace_StartRange,expat,EXTERNAL)
 	$(call gb_ExternalProject_run,configure,\
 		./configure --without-docbook \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
+	$(call gb_Trace_EndRange,expat,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

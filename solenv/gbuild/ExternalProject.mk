@@ -57,6 +57,7 @@ $(call gb_ExternalProject_get_preparation_target,%) :
 
 $(call gb_ExternalProject_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PRJ,3)
+	$(call gb_Trace_MakeMark,$*,PRJ)
 	touch $@
 
 .PHONY : $(call gb_ExternalProject_get_clean_target,%)

@@ -111,6 +111,7 @@ gb_PrecompiledHeader_get_objectfile =
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
+	$(call gb_Trace_StartRange,$(2),PCH)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	cd $(BUILDDIR)/ && \
@@ -130,6 +131,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o$(1) \
 		$(call gb_cxx_dep_copy,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2),$(7))) \
 		)
+	$(call gb_Trace_EndRange,$(2),PCH)
 endef
 
 ifeq ($(COM_IS_CLANG),TRUE)

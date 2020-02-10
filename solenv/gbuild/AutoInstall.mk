@@ -18,6 +18,7 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 		$(GBUILDDIR)/gen-autoinstall.py \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),AIN,3)
+	$(call gb_Trace_StartRange,$*,AIN)
 	SDKLIBFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	   $(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
 			$(lib) \
@@ -41,6 +42,7 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 			$${SDKLIBFILE} $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE} \
 			> $@ \
 	&& rm -f $${SDKLIBFILE} $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE}
+	$(call gb_Trace_EndRange,$*,AIN)
 
 
 $(call gb_AutoInstall_get_clean_target,%) :

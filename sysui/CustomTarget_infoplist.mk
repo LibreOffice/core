@@ -23,7 +23,9 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/infoplist,\
 
 $(info_WORKDIR)/PkgInfo:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	echo "APPLLIBO" > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 $(info_WORKDIR)/Info.plist: $(info_BUILDDIR)/Info.plist
 	cp $< $@
@@ -32,8 +34,10 @@ $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings: \
 		$(info_WORKDIR)/Info.plist $(info_WORKDIR)/documents.ulf
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) -w $(info_SRCDIR)/gen_strings.pl -l $* -p $^ | \
 	iconv -f UTF-8 -t UTF-16 >$@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(eval $(call gb_CustomTarget_ulfex_rule,\
 	$(info_WORKDIR)/documents.ulf,\

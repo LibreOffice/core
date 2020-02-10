@@ -161,8 +161,10 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
+	$(call gb_Trace_StartRange,$(2),LNK)
 $(if $(filter Library Bundle CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
+	$(call gb_Trace_EndRange,$(2),LNK)
 endef
 
 define gb_LinkTarget_use_system_darwin_frameworks
@@ -351,7 +353,9 @@ endif
 
 define gb_UIMenubarTarget__command
 $(call gb_Output_announce,$(2),$(true),UIM,1)
+$(call gb_Trace_StartRange,$(2),UIM)
 $(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) $(UI_MENUBAR_XSLT) $(3)
+$(call gb_Trace_EndRange,$(2),UIM)
 
 endef
 

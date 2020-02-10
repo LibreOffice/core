@@ -58,6 +58,7 @@ ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalProject_use_nmake,openssl,build))
 
 $(call gb_ExternalProject_get_state_target,openssl,build):
+	$(call gb_Trace_StartRange,openssl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PERL="$(shell cygpath -w $(PERL))" \
 		&& $(PERL) Configure $(OPENSSL_PLATFORM) no-idea \
@@ -65,9 +66,11 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		&& nmake -f "ms\ntdll.mak" \
 		&& mv inc32/* include/ \
 	)
+	$(call gb_Trace_EndRange,openssl,EXTERNAL)
 
 else
 $(call gb_ExternalProject_get_state_target,openssl,build):
+	$(call gb_Trace_StartRange,openssl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS && \
 		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS iOS,$(OS)), \
@@ -86,6 +89,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
 		&& ln -s . lib \
 	)
+	$(call gb_Trace_EndRange,openssl,EXTERNAL)
 # symlink lib dir for python3
 endif
 

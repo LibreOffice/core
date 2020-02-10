@@ -79,9 +79,11 @@ $(call gb_Package_get_preparation_target,%) :
 # Package_foo makefiles.
 $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
+	$(call gb_Trace_StartRange,$*,PKG)
 	$(if $(PACKAGE_DEFINED),,$(call gb_Output_error,Something depends on package $* which does not exist.))
 	rm -f $@ && \
 	mv $(call var2file,$@.tmp,100,$(sort $(FILES))) $@
+	$(call gb_Trace_EndRange,$*,PKG)
 
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal

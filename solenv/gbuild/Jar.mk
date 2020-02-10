@@ -54,7 +54,6 @@ gb_Jar_get_install_target = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_
 # the archive with the main class hierarchy and then updating it from
 # the other one(s), which seems to work .-)
 define gb_Jar__command
-	$(call gb_Output_announce,$(1),$(true),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
@@ -79,7 +78,10 @@ $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(ca
 
 # rule for creating the jar file using the command defined above
 $(WORKDIR)/Jar/%.jar :
+	$(call gb_Output_announce,$*,$(true),JAR,3)
+	$(call gb_Trace_StartRange,$*,JAR)
 	$(call gb_Jar__command,$*,$@)
+	$(call gb_Trace_EndRange,$*,JAR)
 
 # call gb_Jar__make_installed_rule,jar
 define gb_Jar__make_installed_rule

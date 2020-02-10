@@ -17,7 +17,6 @@ $(if $(call gb_Pagein__is_library,$(1)),$(call gb_Pagein__make_library_path,$(1)
 gb_Pagein__get_install_target = $(INSTROOT)/$(LIBO_BIN_FOLDER)/pagein-$(1)
 
 define gb_Pagein__command
-$(call gb_Output_announce,$(2),$(true),PAG,5)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && rm -f $(1) \
     && touch $(1) \
@@ -32,7 +31,10 @@ $(call gb_Pagein_get_clean_target,%) :
         rm -f $(call gb_Pagein__get_install_target,$*) $(call gb_Pagein_get_target,$*))
 
 $(call gb_Pagein_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),PAG,5)
+	$(call gb_Trace_StartRange,$*,PAG)
 	$(call gb_Pagein__command,$@,$*,$^)
+	$(call gb_Trace_EndRange,$*,PAG)
 
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=

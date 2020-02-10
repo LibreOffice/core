@@ -20,6 +20,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 		$(SRCDIR)/i18npool/source/localedata/data/$(1).xml \
 		$(call gb_Executable_get_runtime_dependencies,saxparser)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
+	$$(call gb_Trace_StartRange,$$(subst $(WORKDIR)/,,$$@),SAX)
 	$$(call gb_Helper_abbreviate_dirs, \
 		$$(call gb_Helper_print_on_error, \
 			$$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
@@ -27,6 +28,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 				-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,saxparser))) && \
 		sed 's/\(^.*get[^;]*$$$$\)/SAL_DLLPUBLIC_EXPORT \1/' $$@.tmp > $$@ && \
 		rm $$@.tmp)
+	$$(call gb_Trace_EndRange,$$(subst $(WORKDIR)/,,$$@),SAX)
 
 endef
 

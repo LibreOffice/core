@@ -51,7 +51,6 @@ gb_UIImageListTarget_XSLTFILE := $(SRCDIR)/solenv/bin/uiimagelist.xsl
 # NOTE: for some reason xsltproc does not produce any file if there is
 # no output, so we touch the target to make sure it exists.
 define gb_UIImageListTarget__command
-$(call gb_Output_announce,$(2),$(true),UIL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UIImageListTarget_COMMAND) --nonet -o $@ $(gb_UIImageListTarget_XSLTFILE) $(UIFILE) && \
 	touch $@ \
@@ -65,7 +64,10 @@ $(dir $(call gb_UIImageListTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UIImageListTarget_get_target,%) : $(gb_UIImageListTarget_DEPS) $(gb_UIImageListTarget_XSLTFILE)
+	$(call gb_Output_announce,$*,$(true),UIL,1)
+	$(call gb_Trace_StartRange,$*,UIL)
 	$(call gb_UIImageListTarget__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,UIL)
 
 .PHONY : $(call gb_UIImageListTarget_get_clean_target,%)
 $(call gb_UIImageListTarget_get_clean_target,%) :
@@ -109,9 +111,11 @@ $(dir $(call gb_UIConfig_get_target,%))%/.dir :
 
 $(call gb_UIConfig_get_target,%) : $(call gb_UIConfig_get_imagelist_target,%) $(call gb_UIConfig_get_a11yerrors_target,%)
 	$(call gb_Output_announce,$*,$(true),UIC,2)
+	$(call gb_Trace_StartRange,$*,UIC)
 	$(call gb_Helper_abbreviate_dirs,\
 		touch $@ \
 	)
+	$(call gb_Trace_EndRange,$*,UIC)
 
 $(call gb_UIConfig_get_imagelist_target,%) :
 	$(call gb_UIConfig__command)
@@ -146,12 +150,14 @@ gb_UIConfig_gla11y_PARAMETERS += --widgets-button +svtlo-ManagedMenuButton
 gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type duplicate-mnemonic --not-fatal-type labelled-by-and-mnemonic --not-fatal-type orphan-label
 
 define gb_UIConfig_a11yerrors__command
-$(call gb_Output_announce,$(2),$(true),UIA,1)
 $(call gb_UIConfig__gla11y_command)
 endef
 
 $(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_LXML_TARGET) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
+	$(call gb_Output_announce,$*,$(true),UIA,1)
+	$(call gb_Trace_StartRange,$*,UIA)
 	$(call gb_UIConfig_a11yerrors__command,$@,$*)
+	$(call gb_Trace_EndRange,$*,UIA)
 
 gb_UIConfig_get_packagename = UIConfig/$(1)
 gb_UIConfig_get_packagesetname = UIConfig/$(1)

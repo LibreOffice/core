@@ -23,12 +23,14 @@ $(call gb_ExtensionPackage_get_preparation_target,%) :
 
 $(call gb_ExtensionPackage_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),OXP,3)
+	$(call gb_Trace_StartRange,$*,OXP)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) \
 		&& rm -rf $(INSTROOT)/$(LIBO_SHARE_FOLDER)/extensions/$* \
 		&& unzip -q $(ZIPFILE) -d $(INSTROOT)/$(LIBO_SHARE_FOLDER)/extensions/$* \
 		&& zipinfo -1 $(ZIPFILE) | grep -v '/$$' \
 			| sed s+^+$(INSTROOT)/$(LIBO_SHARE_FOLDER)/extensions/$*/+ > $@)
+	$(call gb_Trace_EndRange,$*,OXP)
 
 # call gb_ExtensionPackage_ExtensionPackage_internal,package,oxt
 define gb_ExtensionPackage_ExtensionPackage_internal
@@ -69,6 +71,7 @@ $(call gb_ExtensionPackageSet_get_clean_target,%) :
 
 $(call gb_ExtensionPackageSet_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),OXS,3)
+	$(call gb_Trace_MakeMark,$*,OXS)
 	mkdir -p $(dir $@) && touch $@
 
 # call gb_ExtensionPackageSet_ExtensionPackageSet,set

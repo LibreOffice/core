@@ -49,6 +49,7 @@ $(packimages_DIR)/images_%.zip : \
 		$(call gb_Helper_get_imagelists) \
 		| $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
 		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
 		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/pack_images.py \
@@ -61,6 +62,7 @@ $(packimages_DIR)/images_%.zip : \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null) && \
 		rm -rf $${ILSTFILE})
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 # turn the #defines foo "resource.png" of hlst into the final ilst format
 $(packimages_DIR)/sourceimagelist.ilst : \
@@ -94,19 +96,23 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 
 $(packimages_DIR)/commandimagelist.ilst :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(FIND) $(SRCDIR)/icon-themes -name "*.png" -o -name "*.svg" | \
 			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | \
 			sed "s#^#%MODULE%#" | \
 			LC_ALL=C $(SORT) -u > $@.tmp && \
 		$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@))
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(packimages_DIR)/sorted.lst : \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
 			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 # vim: set noet sw=4 ts=4:

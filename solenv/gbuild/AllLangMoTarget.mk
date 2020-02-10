@@ -37,6 +37,7 @@ $(call gb_MoTarget_get_target,%) : \
 		$(gb_Helper_MISCDUMMY) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),MO ,2)
+	$(call gb_Trace_StartRange,$*,MO )
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		if test -e $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po; then \
@@ -45,6 +46,7 @@ $(call gb_MoTarget_get_target,%) : \
 			echo missing $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po && \
 			$(MSGUNIQ) --force-po $(SRCDIR)/solenv/bin/dummy.po | $(MSGFMT) - -o $@; \
 	        fi)
+	$(call gb_Trace_EndRange,$*,MO )
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget

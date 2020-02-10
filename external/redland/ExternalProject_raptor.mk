@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,raptor,\
 ))
 
 $(call gb_ExternalProject_get_state_target,raptor,build):
+	$(call gb_Trace_StartRange,raptor,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter iOS,$(OS)),LIBS="-liconv") \
 		CFLAGS="$(CFLAGS) $(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
@@ -39,5 +40,6 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(SYSTEM_LIBXML),$(if $(filter-out MACOSX,$(OS)),--without-xml2-config),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,raptor,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

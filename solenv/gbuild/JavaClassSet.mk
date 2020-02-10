@@ -50,7 +50,9 @@ endef
 
 $(call gb_JavaClassSet_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JCS,3)
+	$(call gb_Trace_StartRange,$*,JCS)
 	$(call gb_JavaClassSet__command,$@,$*,$?,$^)
+	$(call gb_Trace_EndRange,$*,JCS)
 
 $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),JCS,3)

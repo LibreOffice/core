@@ -27,6 +27,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 
 $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)
 	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
@@ -55,5 +56,6 @@ endif
 else
 	@echo "Nothing to do, signing is Windows (MSC) only."
 endif
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 # vim: set noet sw=4 ts=4:

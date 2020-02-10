@@ -102,9 +102,11 @@ gb_CppunitTest_get_filename = libtest_$(1).a
 # static archives), they are just a waste of disk space.
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
+	$(call gb_Trace_StartRange,$(2),LNK)
 $(if $(filter CppunitTest,$(TARGETTYPE)), \
 	touch $(1), \
 	$(call gb_LinkTarget__command_staticlink,$(1)))
+	$(call gb_Trace_EndRange,$(2),LNK)
 endef
 
 endif

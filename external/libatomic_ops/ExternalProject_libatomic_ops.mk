@@ -16,11 +16,13 @@ $(eval $(call gb_ExternalProject_register_targets,libatomic_ops,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libatomic_ops,build) :
+	$(call gb_Trace_StartRange,libatomic_ops,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))") \
 		./configure \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libatomic_ops,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

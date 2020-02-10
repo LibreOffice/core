@@ -14,6 +14,7 @@ $(dir $(call gb_InstallModule_get_target,%))%/.dir :
 
 $(call gb_InstallModule_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),IMO,3)
+	$(call gb_Trace_MakeMark,$*,IMO)
 	$(if $(INSTALL_MODULE_DEFINED),,$(call gb_Output_error,Something depends on install module $* which does not exist.))
 	touch $@
 

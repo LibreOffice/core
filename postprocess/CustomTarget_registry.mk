@@ -567,6 +567,7 @@ $(call gb_XcdTarget_get_target,main.xcd) \
 		: $(BUILDDIR)/config_host.mk.stamp \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,main,$(true),XCD,3)
+	$(call gb_Trace_StartRange,main,XCD)
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
@@ -574,25 +575,31 @@ $(call gb_XcdTarget_get_target,main.xcd) \
 			$(call gb_CustomTarget_get_workdir,postprocess/registry)/main.list \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
+	$(call gb_Trace_EndRange,main,XCD)
 
 $(call gb_XcdTarget_get_target,%.xcd) : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*,$(true),XCD,3)
+	$(call gb_Trace_StartRange,$*,XCD)
 	$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 			-o $@ $(SRCDIR)/solenv/bin/packregistry.xslt $< \
 	)
+	$(call gb_Trace_EndRange,$*,XCD)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_target,Langpack-$*.xcu)</filename></list>' > $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # It can happen that localized fcfg_langpack_*.zip contains
 # zero-sized org/openoffice/TypeDetection/Filter.xcu; filter them out in the
 # find shell command below (see issue 110041):
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),AWK)
 	$(call gb_Helper_abbreviate_dirs,\
 	    $(FIND) $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) \
 	         -name *.xcu -size +0c \
@@ -601,9 +608,11 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AWK,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),AWK)
 	$(call gb_Helper_abbreviate_dirs,\
 	    $(FIND) $(call gb_XcuResTarget_get_target,registry/$*/) \
 	         $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),\
@@ -617,12 +626,15 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 	                    {print "<filename>"$$0"</filename>"} \
 	               END  {print "</list>"}' > $@ \
 	)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
 	mv $(call var2file,$@.tmp,70,<list> $(foreach i,$(postprocess_DEPS_$*), <dependency file='$i'/>) \
 		   $(foreach i,$(postprocess_OPTDEPS_$*), <dependency file='$i' optional='true'/>) \
 		   $(foreach i,$(postprocess_FILES_$*), <filename>$(i)</filename>) </list>) \
 	   $@
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
 # vim: set noet sw=4 ts=4:

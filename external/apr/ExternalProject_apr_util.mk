@@ -19,14 +19,17 @@ $(eval $(call gb_ExternalProject_use_nmake,apr_util,build))
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,apr_util,build):
+	$(call gb_Trace_StartRange,apr_util,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -nologo -f aprutil.mak \
 			CFG="aprutil - Win32 $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)" \
 			RECURSE=0 \
 	)
+	$(call gb_Trace_EndRange,apr_util,EXTERNAL)
 
 else
 $(call gb_ExternalProject_get_state_target,apr_util,build):
+	$(call gb_Trace_StartRange,apr_util,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		./configure \
 			--enable-static --disable-shared \
@@ -35,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,apr_util,build):
 			--with-apr=$(call gb_UnpackedTarball_get_dir,apr)/apr-1-config \
 		&& $(MAKE) libaprutil-1.la \
 	)
+	$(call gb_Trace_EndRange,apr_util,EXTERNAL)
 
 endif
 

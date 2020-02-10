@@ -24,9 +24,11 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalProject_use_nmake,postgresql,build))
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
+	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
 	,src)
+	$(call gb_Trace_EndRange,postgresql,EXTERNAL)
 
 else
 
@@ -57,6 +59,7 @@ endif
 
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
+	$(call gb_Trace_StartRange,postgresql,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--without-readline --disable-shared --with-ldap \
@@ -70,6 +73,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(ENABLE_LDAP),EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
 		&& cd src/interfaces/libpq \
 		&& MAKEFLAGS= && $(MAKE) all-static-lib)
+	$(call gb_Trace_EndRange,postgresql,EXTERNAL)
 
 endif
 

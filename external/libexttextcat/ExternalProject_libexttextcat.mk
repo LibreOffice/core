@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_register_targets,libexttextcat,\
 ))
 
 $(call gb_ExternalProject_get_state_target,libexttextcat,build):
+	$(call gb_Trace_StartRange,libexttextcat,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-shared --with-pic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
@@ -24,5 +25,6 @@ $(call gb_ExternalProject_get_state_target,libexttextcat,build):
 			$(if $(filter AIX,$(OS)),-D_LINUX_SOURCE_COMPAT)" \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,libexttextcat,EXTERNAL)
 
 # vim: set noet sw=4 ts=4:

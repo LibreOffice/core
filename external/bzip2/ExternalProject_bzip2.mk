@@ -17,14 +17,18 @@ $(eval $(call gb_ExternalProject_use_nmake,bzip2,build))
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,bzip2,build):
+	$(call gb_Trace_StartRange,bzip2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -nologo -f makefile.msc \
 	)
+	$(call gb_Trace_EndRange,bzip2,EXTERNAL)
 else
 $(call gb_ExternalProject_get_state_target,bzip2,build):
+	$(call gb_Trace_StartRange,bzip2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(MAKE) \
 	)
+	$(call gb_Trace_EndRange,bzip2,EXTERNAL)
 endif
 
 # vim: set noet sw=4 ts=4:

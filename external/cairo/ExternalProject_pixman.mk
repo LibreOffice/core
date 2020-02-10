@@ -16,9 +16,11 @@ $(eval $(call gb_ExternalProject_register_targets,pixman,\
 ifeq ($(OS),WNT)
 
 $(call gb_ExternalProject_get_state_target,pixman,build) :
+	$(call gb_Trace_StartRange,pixman,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(MAKE) -f Makefile.win32 MMX=on SSE2=on CFG=release \
 	,pixman)
+	$(call gb_Trace_EndRange,pixman,EXTERNAL)
 
 else
 
@@ -30,6 +32,7 @@ else
 # pixman-cpu.c to be hardcoded as TRUE and patch out the run-time
 # check?
 $(call gb_ExternalProject_get_state_target,pixman,build) :
+	$(call gb_Trace_StartRange,pixman,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,$(if $(filter ANDROID,$(OS)),--disable-shared,--disable-static)) \
@@ -38,6 +41,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 		&& $(MAKE) \
 	)
+	$(call gb_Trace_EndRange,pixman,EXTERNAL)
 
 endif
 

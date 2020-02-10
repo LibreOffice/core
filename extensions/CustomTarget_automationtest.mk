@@ -17,11 +17,13 @@ extensions_AUTOMATIONTESTLOG2 := $(extensions_AUTOMATIONTESTDIR)/automationtest.
 $(call gb_CustomTarget_get_target,extensions/automationtest) : \
 		$(SRCDIR)/extensions/qa/ole/automationtest.vbs \
 		| $(extensions_AUTOMATIONTESTDIR)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),VBS,1) \
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),VBS,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),VBS)
 	SAL_LOG=+INFO.extensions.olebridge+WARN $(INSTDIR)/program/soffice 2>$(extensions_AUTOMATIONTESTLOG1) &
 	sleep 10
 	$(call gb_Helper_abbreviate_dirs, \
 	cscript -nologo $(SRCDIR)/extensions/qa/ole/automationtest.vbs $(SRCDIR)) >$(extensions_AUTOMATIONTESTLOG2) || \
             (cat $(extensions_AUTOMATIONTESTLOG1) $(extensions_AUTOMATIONTESTLOG2) && exit 1)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),VBS)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -30,6 +30,7 @@ $(dir $(call gb_ExternalPackage_get_target,%))%/.dir :
 
 $(call gb_ExternalPackage_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),EPK,2)
+	$(call gb_Trace_MakeMark,$*,EPK)
 	touch $@
 
 $(call gb_ExternalPackage_get_clean_target,%) :
