@@ -953,21 +953,8 @@ HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStat
     if ( nStates & HiddenInformation::NOTES )
     {
         OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
-        if ( GetWrtShell() )
-        {
-            SwFieldType* pType = GetWrtShell()->GetFieldType(SwFieldIds::Postit, OUString());
-            SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-            SwFormatField* pFirst = aIter.First();
-            while( pFirst )
-            {
-                if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
-                {
-                    nState |= HiddenInformation::NOTES;
-                    break;
-                }
-                pFirst = aIter.Next();
-            }
-        }
+        if(GetWrtShell() && GetWrtShell()->GetFieldType(SwFieldIds::Postit, OUString())->HasHiddenInformationNotes())
+                nState |= HiddenInformation::NOTES;
     }
 
     return nState;
