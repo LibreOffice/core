@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b516d91a_b1ac4591",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-10T20:53:41Z",
+      "side": 1,
+      "message": "Actually, I\u0027ve seen lots of lines something like this with 1 space from brackets. But I think these are wrong at the moment.. Yesterday, I\u0027ve installed clang-format my QT Creator IDE. I will write codes correct from now on.",
+      "parentUuid": "f3774b87_4cc5c85e",
+      "range": {
+        "startLine": 1331,
+        "startChar": 67,
+        "endLine": 1331,
+        "endChar": 68
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "143aff5f_84e01a62",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 11
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "84142b73_2be4902d",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-10T20:53:41Z",
+      "side": 1,
+      "message": "On \"Format-\u003eCharacter-\u003eFont\" tab, default languages are written without \"Default - \" tag. When I set_active(1), they are selected \"Default -\" tag initially. But you\u0027re right. This may cause UI Error. I\u0027ll try remove these commands next patch.",
+      "parentUuid": "090d046c_15736ea0",
+      "range": {
+        "startLine": 1201,
+        "startChar": 27,
+        "endLine": 1201,
+        "endChar": 41
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d390e364_93bbcf06",
         "filename": "include/svx/langbox.hxx",
         "patchSetId": 11
@@ -82,6 +130,30 @@
       "writtenOn": "2020-02-09T16:35:08Z",
       "side": 1,
       "message": "Please don\u0027t modify more than required for your task! Specifically here, you should not modify lines 78 and 79: just make this look like\n\n    SvxLanguageBox(std::unique_ptr\u003cweld::ComboBox\u003e pControl);\n    void            SetLanguageList( SvxLanguageListFlags nLangList,\n                            bool bHasLangNone, bool bLangNoneIsLangAll \u003d false,\n                            bool bCheckSpellAvail \u003d false, bool bDefaultLangExist \u003d false,\n                            LanguageType eDefaultLangType \u003d LANGUAGE_NONE,\n                            sal_Int16 nDefaultType \u003d 0 );\n\nThis also moves the bDefaultLangExist before eDefaultLangType and nDefaultType",
+      "range": {
+        "startLine": 78,
+        "startChar": 57,
+        "endLine": 81,
+        "endChar": 82
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbc54f4f_145239bd",
+        "filename": "include/svx/langbox.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-10T20:53:41Z",
+      "side": 1,
+      "message": "Clang-format make it \"void SetLanguageList........\" instead of \"void            SetLanguageList...\" Which one is correct? Should I put 1 space after void or align to other functions?",
+      "parentUuid": "d390e364_93bbcf06",
       "range": {
         "startLine": 78,
         "startChar": 57,
@@ -114,6 +186,30 @@
       "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5248044e_ff9664eb",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-10T20:53:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d95ee94e_3a03f8b6",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 300,
+        "endChar": 26
+      },
+      "revId": "f56f7ff6051bc55e546685fb37ff07577318c998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
