@@ -148,6 +148,8 @@ void AreaPropertyPanelBase::Initialize()
 {
     SvxFillTypeBox::Fill(*mxLbFillType);
 
+    mxLbFillAttr->set_size_request(42, -1);
+
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);
     maGradientLinear.SetAngle(DEFAULT_ANGLE);
