@@ -174,7 +174,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
         //  also have to store the TabView's DesignMode state
         //  (only if draw view exists)
-        SdrView* pDrawView = pTabViewShell->GetSdrView();
+        SdrView* pDrawView = pTabViewShell->GetScDrawView();
         if ( pDrawView )
             nSourceDesignMode
                 = pDrawView->IsDesignMode() ? TRISTATE_TRUE : TRISTATE_FALSE;

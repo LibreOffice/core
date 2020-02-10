@@ -300,7 +300,7 @@ namespace
                                 rViewData.GetActivePart() :
                                 static_cast<ScSplitPos>(_nPane);
         _rpWindow = _pViewShell->GetWindowByPos( eWhich );
-        _rpSdrView = _pViewShell->GetSdrView();
+        _rpSdrView = _pViewShell->GetScDrawView();
         _rpFormShell = _pViewShell->GetFormShell();
         return ( _rpFormShell != nullptr ) && ( _rpSdrView != nullptr )&& ( _rpWindow != nullptr );
     }
@@ -825,7 +825,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 uno::Reference<drawing::XShapes> ScTabViewShell::getSelectedXShapes()
 {
     uno::Reference<drawing::XShapes> xShapes;
-    SdrView* pSdrView = GetSdrView();
+    SdrView* pSdrView = GetScDrawView();
     if (pSdrView)
     {
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -1093,7 +1093,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
                 pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
 
-            SdrView* pDrawView = GetViewShell()->GetSdrView();
+            SdrView* pDrawView = GetViewShell()->GetScDrawView();
 
             if (pDrawPage && pDrawView && pDrawView->GetSdrPageView())
             {

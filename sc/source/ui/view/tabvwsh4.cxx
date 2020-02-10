@@ -550,7 +550,7 @@ void ScTabViewShell::UpdateDrawShell()
     // Called after user interaction that may delete the selected drawing object.
     // Remove DrawShell if nothing is selected.
 
-    SdrView* pDrView = GetSdrView();
+    SdrView* pDrView = GetScDrawView();
     if ( pDrView && !pDrView->AreObjectsMarked() && !IsDrawSelMode() )
         SetDrawShell( false );
 }

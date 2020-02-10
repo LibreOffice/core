@@ -74,7 +74,7 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
     {
-        pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
+        pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
         tools::Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
@@ -151,7 +151,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
-            pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
+            pClient = new ScClient( this, pWin, GetScDrawView()->GetModel(), pObj );
 
         if ( (sal_uInt32(nErr) & ERRCODE_ERROR_MASK) == 0 && xObj.is() )
         {
@@ -247,9 +247,9 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
         ErrorHandler::HandleError(nErr);
 
     // #i118524# refresh handles to suppress for activated OLE
-    if(GetSdrView())
+    if(GetScDrawView())
     {
-        GetSdrView()->AdjustMarkHdl();
+        GetScDrawView()->AdjustMarkHdl();
     }
     //! SetDocumentName should already happen in Sfx ???
     //TODO/LATER: how "SetDocumentName"?
@@ -258,7 +258,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
 ErrCode ScTabViewShell::DoVerb(long nVerb)
 {
-    SdrView* pView = GetSdrView();
+    SdrView* pView = GetScDrawView();
     if (!pView)
         return ERRCODE_SO_NOTIMPL;          // should not be
 
@@ -491,7 +491,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     bool bTabProt = GetViewData().GetDocument()->IsTabProtected(GetViewData().GetTabNo());
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
-    SdrView* pSdrView = GetSdrView();
+    SdrView* pSdrView = GetScDrawView();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -576,7 +576,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
 bool ScTabViewShell::IsSignatureLineSelected()
 {
-    SdrView* pSdrView = GetSdrView();
+    SdrView* pSdrView = GetScDrawView();
     if (!pSdrView)
         return false;
 
@@ -596,7 +596,7 @@ bool ScTabViewShell::IsSignatureLineSelected()
 
 bool ScTabViewShell::IsQRCodeSelected()
 {
-    SdrView* pSdrView = GetSdrView();
+    SdrView* pSdrView = GetScDrawView();
     if (!pSdrView)
         return false;
 
@@ -622,7 +622,7 @@ bool ScTabViewShell::IsQRCodeSelected()
 
 bool ScTabViewShell::IsSignatureLineSigned()
 {
-    SdrView* pSdrView = GetSdrView();
+    SdrView* pSdrView = GetScDrawView();
     if (!pSdrView)
         return false;
 

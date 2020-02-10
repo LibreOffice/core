@@ -76,7 +76,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         {
             ScSelectionTransferMode eMode = SC_SELTRANS_INVALID;
 
-            SdrView* pSdrView = pView->GetSdrView();
+            SdrView* pSdrView = pView->GetScDrawView();
             if ( pSdrView )
             {
                 //  handle selection on drawing layer

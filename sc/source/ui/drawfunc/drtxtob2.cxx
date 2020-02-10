@@ -41,7 +41,7 @@ sal_uInt16 ScGetFontWorkId()
 
 bool ScDrawTextObjectBar::IsNoteEdit() const
 {
-    return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
+    return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetScDrawView()->GetTextEditObject() );
 }
 
 //  if no text edited, functions like in drawsh

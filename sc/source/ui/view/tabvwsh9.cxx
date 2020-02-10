@@ -105,7 +105,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                 SvxIMapDlg* pDlg = GetIMapDlg();
                 if ( pDlg )
                 {
-                    SdrView* pDrView = GetSdrView();
+                    SdrView* pDrView = GetScDrawView();
                     if ( pDrView )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
@@ -121,7 +121,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
         case SID_IMAP_EXEC:
         {
-            SdrView* pDrView = GetSdrView();
+            SdrView* pDrView = GetScDrawView();
             SdrMark* pMark = pDrView ? pDrView->GetMarkedObjectList().GetMark(0) : nullptr;
 
             if ( pMark )
@@ -183,7 +183,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                 {
                     bool bDisable = true;
 
-                    SdrView* pDrView = GetSdrView();
+                    SdrView* pDrView = GetScDrawView();
                     if ( pDrView )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
