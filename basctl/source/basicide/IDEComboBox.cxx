@@ -208,7 +208,6 @@ void LibBox::FillBox()
 
     maCurrentText = m_xWidget->get_active_text();
 
-    m_xWidget->set_active(0);
     ClearBox();
 
     // create list box entries
@@ -229,7 +228,11 @@ void LibBox::FillBox()
 
     m_xWidget->thaw();
 
-    m_xWidget->set_active_text(maCurrentText);
+    int nIndex = m_xWidget->find_text(maCurrentText);
+    if (nIndex != -1)
+        m_xWidget->set_active(nIndex);
+    else
+        m_xWidget->set_active(0);
     maCurrentText = m_xWidget->get_active_text();
     mbIgnoreSelect = false;
 }
@@ -290,12 +293,9 @@ IMPL_LINK_NOARG(LibBox, FocusInHdl, weld::Widget&, void)
 
 IMPL_LINK_NOARG(LibBox, FocusOutHdl, weld::Widget&, void)
 {
-    if (!m_xWidget
-             ->has_focus()) // comboboxes can be comprised of multiple widgets, ensure all have lost focus
-    {
-        mbIgnoreSelect = true;
+    // comboboxes can be comprised of multiple widgets, ensure all have lost focus
+    if (!m_xWidget->has_focus())
         mbFillBox = true;
-    }
 }
 
 void LibBox::Select()
