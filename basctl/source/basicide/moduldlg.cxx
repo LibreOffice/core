@@ -38,6 +38,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/debug.hxx>
