@@ -136,6 +136,28 @@ std::type_info * getRtti(typelib_TypeDescription const & type) {
 extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     __cxxabiv1::__cxa_exception * header =
         static_cast<__cxxabiv1::__cxa_exception *>(exception) - 1;
+#if defined _LIBCPPABI_VERSION // detect libc++abi
+    // The libcxxabi commit
+    // <http://llvm.org/viewvc/llvm-project?view=revision&revision=303175>
+    // "[libcxxabi] Align unwindHeader on a double-word boundary" towards
+    // LLVM 5.0 changed the size of __cxa_exception by adding
+    //
+    //   __attribute__((aligned))
+    //
+    // to the final member unwindHeader, on x86-64 effectively adding a hole of
+    // size 8 in front of that member (changing its offset from 88 to 96,
+    // sizeof(__cxa_exception) from 120 to 128, and alignof(__cxa_exception)
+    // from 8 to 16); a hack to dynamically determine whether we run against a
+    // new libcxxabi is to look at the exceptionDestructor member, which must
+    // point to this function (the use of __cxa_exception in fillUnoException is
+    // unaffected, as it only accesses members towards the start of the struct,
+    // through a pointer known to actually point at the start):
+    if (header->exceptionDestructor != &deleteException) {
+        header = reinterpret_cast<__cxa_exception const *>(
+            reinterpret_cast<char const *>(header) - 8);
+        assert(header->exceptionDestructor == &deleteException);
+    }
+#endif
     OUString unoName(toUnoName(header->exceptionType->name()));
     typelib_TypeDescription * td = 0;
     typelib_typedescription_getByName(&td, unoName.pData);
