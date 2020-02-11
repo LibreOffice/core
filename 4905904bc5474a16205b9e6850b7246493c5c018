@@ -22,6 +22,30 @@
       "revId": "4905904bc5474a16205b9e6850b7246493c5c018",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d556355_96b37bf1",
+        "filename": "offapi/com/sun/star/document/MediaDescriptor.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-11T18:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01f6408b_7594d73b",
+      "range": {
+        "startLine": 607,
+        "startChar": 27,
+        "endLine": 607,
+        "endChar": 30
+      },
+      "revId": "4905904bc5474a16205b9e6850b7246493c5c018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
