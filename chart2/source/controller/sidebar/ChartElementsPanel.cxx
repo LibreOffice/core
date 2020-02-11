@@ -586,7 +586,7 @@ void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bV
     }
     else
     {
-        TitleHelper::hideTitle(eTitle, mxModel);
+        TitleHelper::removeTitle(eTitle, mxModel);
     }
 }
 
