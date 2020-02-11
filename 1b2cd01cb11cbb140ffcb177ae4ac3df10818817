@@ -353,6 +353,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8cf1dae0_4c6cd570",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T12:06:38Z",
+      "side": 1,
+      "message": "I expected this line to be\n\n    int nSeparatorPosition \u003d 0;\n\nIt\u0027s OK if you want to change this - I just didn\u0027t want to block your great work based on this. I\u0027ll just re-set the +2, no problem.",
+      "parentUuid": "0b913f53_a300c16d",
+      "range": {
+        "startLine": 296,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
