@@ -46,7 +46,7 @@ void ConfigurationControllerBroadcaster::AddListener(
             mxConfigurationController,
             0);
 
-    maListenerMap.try_emplace(rsEventType, ListenerList());
+    maListenerMap.try_emplace(rsEventType);
 
     ListenerDescriptor aDescriptor;
     aDescriptor.mxListener = rxListener;
