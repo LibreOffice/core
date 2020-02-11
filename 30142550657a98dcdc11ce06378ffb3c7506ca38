@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83857512_136e6272",
+        "filename": "writerperfect/IwyuFilter_writerperfect.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-11T10:17:13Z",
+      "side": 1,
+      "message": "You may want to handle this centrally in bin/find-unneeded-includes, libepubgen and librevenge is handled there already. Just for consistency. Fine to do that in a follow-up patch, though. :-)",
+      "revId": "30142550657a98dcdc11ce06378ffb3c7506ca38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
