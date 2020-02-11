@@ -60,12 +60,12 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         {
             const IDocumentOutlineNodes* pIDoc( rSh.getIDocumentOutlineNodesAccess() );
             const int nActLevel = pIDoc->getOutlineLevel( nActPos );
-            SwOutlineNodes::size_type nActEndPos = nActPos + 1;
             SwOutlineNodes::difference_type nDir = 0;
 
             if ( !bUp )
             {
                 // Move down with subpoints:
+                SwOutlineNodes::size_type nActEndPos = nActPos + 1;
                 while ( nActEndPos < pIDoc->getOutlineNodesCount() &&
                        (!pIDoc->isOutlineInLayout(nActEndPos, *rSh.GetLayout())
                         || nActLevel < pIDoc->getOutlineLevel(nActEndPos)))
@@ -94,7 +94,6 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                 // Move up with subpoints:
                 if ( nActPos > 0 )
                 {
-                    nActEndPos = nActPos;
                     SwOutlineNodes::size_type nDest = nActPos - 1;
                     while (nDest > 0 &&
                            (!pIDoc->isOutlineInLayout(nDest, *rSh.GetLayout())

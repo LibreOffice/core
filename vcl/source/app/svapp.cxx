@@ -259,6 +259,9 @@ void Application::Abort( const OUString& rErrorText )
     //HACK: Dump core iff --norestore command line argument is given (assuming
     // this process is run by developers who are interested in cores, vs. end
     // users who are not):
+#if OSL_DEBUG_LEVEL > 0
+    bool dumpCore = true;
+#else
     bool dumpCore = false;
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i) {
@@ -267,8 +270,6 @@ void Application::Abort( const OUString& rErrorText )
             break;
         }
     }
-#if OSL_DEBUG_LEVEL > 0
-    dumpCore = true;
 #endif
 
     SalAbort( rErrorText, dumpCore );

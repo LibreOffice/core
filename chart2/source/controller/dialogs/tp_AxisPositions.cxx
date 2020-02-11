@@ -120,10 +120,6 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         for( sal_Int32 nN=0; nN<m_aCategories.getLength(); nN++ )
             m_xED_CrossesAtCategory->append_text(m_aCategories[nN]);
-
-        sal_Int32 nCount = m_xED_CrossesAtCategory->get_count();
-        if( nCount>30 )
-            nCount=30;
     }
 
     if( m_xLB_CrossesAt->get_count() > 3 )

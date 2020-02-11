@@ -349,7 +349,6 @@ void SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 
 void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 {
-    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
@@ -381,8 +380,7 @@ void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_LOCALE:
         {
             css::lang::Locale aLocale;
-            bRet = rAny >>= aLocale;
-            if( bRet )
+            if( rAny >>= aLocale )
                 SetLanguage( LanguageTag::convertToLanguageType( aLocale ));
         }
         break;
@@ -390,8 +388,7 @@ void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_PROP_SEQ:
         {
             Sequence<PropertyValues> aSeq;
-            bRet = rAny >>= aSeq;
-            if( bRet )
+            if( rAny >>= aSeq )
             {
                 m_SortKeyArr.clear();
                 const PropertyValues* pValues = aSeq.getConstArray();
@@ -409,8 +406,6 @@ void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                             sal_Int16 nVal = -1; rValue.Value >>= nVal;
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
                                 aSortKey.eField = static_cast<ToxAuthorityField>(nVal);
-                            else
-                                bRet = false;
                         }
                         else if(rValue.Name == UNO_NAME_IS_SORT_ASCENDING)
                         {

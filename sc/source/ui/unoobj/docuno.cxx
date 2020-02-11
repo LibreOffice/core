@@ -1756,7 +1756,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
         aRange.aStart = ScAddress(nStartCol, nStartRow, nTab);
         aRange.aEnd = ScAddress(nEndCol, nEndRow, nTab);
-        pSelRange = &aRange;
 
         table::CellRangeAddress aRangeAddress( nTab,
                         aRange.aStart.Col(), aRange.aStart.Row(),

@@ -1848,7 +1848,7 @@ namespace accessibility
                 sal_Int32 nCurIndex=0, nLastIndex=0, nCurLineLen=0;
                 sal_Int32 nLastLineLen = 0, nBulletLen = 0;
                 // get the line before the line the index points into
-                for( nLine=0, nCurIndex=0, nLastIndex=0; nLine<nLineCount; ++nLine )
+                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
                 {
                     nLastIndex = nCurIndex;
                     if (nLine == 0)

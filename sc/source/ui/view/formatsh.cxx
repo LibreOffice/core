@@ -1169,19 +1169,17 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
                 //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY/SCIENTIFIC/FRACTION
                 //In sidebar, users can fire SID_NUMBER_FORMAT command by operating the related UI controls before they are disable
-                if(eType == SvNumFormatType::ALL
-                    || eType == SvNumFormatType::NUMBER
-                    || eType == (SvNumFormatType::NUMBER | SvNumFormatType::DEFINED)
-                    || eType == SvNumFormatType::PERCENT
-                    || eType == (SvNumFormatType::PERCENT | SvNumFormatType::DEFINED)
-                    || eType == SvNumFormatType::CURRENCY
-                    || eType == (SvNumFormatType::CURRENCY | SvNumFormatType::DEFINED)
-                    || eType == SvNumFormatType::SCIENTIFIC
-                    || eType == (SvNumFormatType::SCIENTIFIC | SvNumFormatType::DEFINED)
-                    || eType == SvNumFormatType::FRACTION
-                    || eType == (SvNumFormatType::FRACTION | SvNumFormatType::DEFINED))
-                    eType = SvNumFormatType::ALL;
-                else
+                if(!(eType == SvNumFormatType::ALL
+                     || eType == SvNumFormatType::NUMBER
+                     || eType == (SvNumFormatType::NUMBER | SvNumFormatType::DEFINED)
+                     || eType == SvNumFormatType::PERCENT
+                     || eType == (SvNumFormatType::PERCENT | SvNumFormatType::DEFINED)
+                     || eType == SvNumFormatType::CURRENCY
+                     || eType == (SvNumFormatType::CURRENCY | SvNumFormatType::DEFINED)
+                     || eType == SvNumFormatType::SCIENTIFIC
+                     || eType == (SvNumFormatType::SCIENTIFIC | SvNumFormatType::DEFINED)
+                     || eType == SvNumFormatType::FRACTION
+                     || eType == (SvNumFormatType::FRACTION | SvNumFormatType::DEFINED)))
                     pEntry = nullptr;
 
                 if(SfxItemState::SET == pReqArgs->GetItemState(nSlot, true, &pItem) && pEntry)

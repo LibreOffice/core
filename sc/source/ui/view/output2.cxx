@@ -2958,8 +2958,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
                             aRepeated.append(aCellStr);
 
-                        nEngineWidth = SetEngineTextAndGetWidth( rParam, aRepeated.makeStringAndClear(),
-                                                        nNeededPixel, (nLeftM + nRightM ) );
+                        SetEngineTextAndGetWidth( rParam, aRepeated.makeStringAndClear(),
+                                                  nNeededPixel, (nLeftM + nRightM ) );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
                     }
@@ -2970,7 +2970,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
+            SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
 
             //  No clip marks if "###" doesn't fit (same as in DrawStrings)
         }
