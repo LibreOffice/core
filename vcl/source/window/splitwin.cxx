@@ -845,22 +845,6 @@ static void ImplCalcLogSize( std::vector< ImplSplitItem > & rItems, size_t nItem
     }
 }
 
-void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet)
-{
-    std::vector< ImplSplitItem >& rItems = pSet->mvItems;
-
-    for ( const auto& rItem : rItems )
-    {
-        pSet = rItem.mpSet.get();
-    }
-
-    for ( auto& rItem : rItems )
-    {
-        if (rItem.mpSet)
-            ImplDrawBack(rRenderContext, rItem.mpSet.get());
-    }
-}
-
 static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bDown)
 {
     if (pSet->mvItems.empty())
@@ -2112,9 +2096,6 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     ImplDrawBorderLine(rRenderContext);
     ImplDrawFadeOut(rRenderContext);
     ImplDrawFadeIn(rRenderContext);
-
-    // draw FrameSet-backgrounds
-    ImplDrawBack(rRenderContext, mpMainSet.get());
 
     // draw splitter
     if (!(mnWinStyle & WB_NOSPLITDRAW))
