@@ -102,7 +102,7 @@ blacklist:
     - com/sun/star/frame/XDesktop2.hpp
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/uno/XComponentContext.hpp
-    # Needed for UnoType template instatiation
+    # Needed for UnoType template instantiation
     - com/sun/star/ucb/XContent.hpp
     writerperfect/qa/unit/DrawingImportTest.cxx:
     # Needed for direct member access
