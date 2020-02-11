@@ -2111,6 +2111,8 @@ void SwTable::CheckConsistency() const
     SwTwips nLineWidth = 0;
     std::list< RowSpanCheck > aRowSpanCells;
     std::list< RowSpanCheck >::iterator aIter = aRowSpanCells.end();
+    SwNodeIndex index(*GetTableNode());
+    ++index;
     for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
     {
         SwTwips nWidth = 0;
@@ -2121,7 +2123,11 @@ void SwTable::CheckConsistency() const
         for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-            SAL_WARN_IF( !pBox, "sw.core", "Missing Table Box" );
+            assert(pBox);
+            SAL_WARN_IF(GetTableNode()->EndOfSectionIndex() <= index.GetIndex(), "sw.core", "Box not in table nodes");
+            SAL_WARN_IF(!index.GetNode().IsStartNode(), "sw.core", "No box start node");
+            index = *index.GetNode().EndOfSectionNode();
+            ++index;
             SwTwips nNewWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth() + nWidth;
             long nRowSp = pBox->getRowSpan();
             if( nRowSp < 0 )
@@ -2170,6 +2176,7 @@ void SwTable::CheckConsistency() const
     }
     bool bEmpty = aRowSpanCells.empty();
     SAL_WARN_IF( !bEmpty, "sw.core", "Open row span detected" );
+    SAL_WARN_IF(GetTableNode()->EndOfSectionNode() != &index.GetNode(), "sw.core", "table end node not found");
 }
 
 #endif
