@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	external/neon/neon_fix_lock_timeout_windows.patch \
 	external/neon/neon_fix_sspi_session_timeout.patch \
 	external/neon/neon_uri_parse_allow_others.patch \
+	$(if $(filter WNT,$(OS)),external/neon/neon_fix_no_OPENSSL_Applink.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
