@@ -192,6 +192,11 @@ published service Shape
         @since LibreOffice 6.4
     */
     [optional, property] boolean AllowOverlap;
+
+    /** This defines if the shape is layout in a table cell (o:allowincell).
+        @since LibreOffice 6.4
+    */
+    [optional, property ] boolean LayoutInTableCell;
 };
 
 

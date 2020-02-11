@@ -2684,8 +2684,10 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         SdrObject::Free(pObject);
         return nullptr;
     }
-
-    const bool bLayoutInTableCell =
+    const uno::Reference<beans::XPropertySet> xShapePropSet( pObject->getUnoShape(), uno::UNO_QUERY);
+    bool bAllowInCell = true;
+    xShapePropSet->getPropertyValue("LayoutInTableCell") >>= bAllowInCell;
+    const bool bLayoutInTableCell = bAllowInCell ||
         m_nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
 
     // #i18732# - Switch on 'follow text flow', if object is laid out

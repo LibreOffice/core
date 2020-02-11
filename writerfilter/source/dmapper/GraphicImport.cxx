@@ -876,6 +876,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         //tdf#109411 If anchored object is in table, Word calculates its position from cell border
                         //instead of page (what is set in the sample document)
+                        xShapeProps->setPropertyValue("LayoutInTableCell",
+                                                      uno::Any(m_pImpl->bLayoutInCell));
                         if (m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell &&
                             m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && IsGraphic())
                         {

@@ -31,7 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
-
+#include <frmfmt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
 using namespace com::sun::star;
@@ -465,7 +465,17 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_distR, OString::number(nDistR).getStr());
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
-        attrList->add(XML_layoutInCell, "1");
+
+        uno::Reference<drawing::XShape> xShape((const_cast<SdrObject*>(pObj)->getUnoShape()),
+                                               uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+        bool bLclInTabCell = false;
+        xShapePropSet->getPropertyValue("LayoutInTableCell") >>= bLclInTabCell;
+        if (bLclInTabCell)
+            attrList->add(XML_layoutInCell, "1");
+        else
+            attrList->add(XML_layoutInCell, "0");
+
         bool bAllowOverlap = pFrameFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap();
         attrList->add(XML_allowOverlap, bAllowOverlap ? "1" : "0");
         if (pObj != nullptr)

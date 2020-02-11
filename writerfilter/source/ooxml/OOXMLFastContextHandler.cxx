@@ -1670,15 +1670,18 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             //tdf#87569: Fix table layout with correcting anchoring
             //If anchored object is in table, Word calculates its position from cell border
             //instead of page (what is set in the sample document)
+            uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+            xShapePropSet->setPropertyValue("LayoutInTableCell", uno::Any(mbLayoutInCell));
             if (mnTableDepth > 0 && mbLayoutInCell) //if we had a table
             {
-                uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
                 sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
                 xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
                 //and the correction:
                 if (nCurrentHorOriRel == com::sun::star::text::RelOrientation::PAGE_FRAME)
+                {
                     xShapePropSet->setPropertyValue("HoriOrientRelation",
                                                     uno::makeAny(text::RelOrientation::FRAME));
+                }
             }
 
             // Notify the dmapper that the shape is ready to use
