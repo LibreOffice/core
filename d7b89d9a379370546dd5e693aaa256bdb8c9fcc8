@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06411673_31fade5b",
+        "filename": "writerfilter/qa/cppunittests/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-11T10:13:35Z",
+      "side": 1,
+      "message": "meh... why do we need tests in writerfilter now that can\u0027t run without sw, when all the existing tests are in sw/qa? that seems a bit pointless to me...",
+      "revId": "d7b89d9a379370546dd5e693aaa256bdb8c9fcc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
