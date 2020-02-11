@@ -153,6 +153,7 @@ public:
     void testTdf115012();
     void testTdf123206_customLabelText();
     void testDeletedLegendEntries();
+    void testTdf126076();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
+    CPPUNIT_TEST(testTdf126076);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2467,6 +2469,15 @@ void Chart2ExportTest::testDeletedLegendEntries()
         CPPUNIT_ASSERT(xPropertySet2->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
     }
+}
+
+void Chart2ExportTest::testTdf126076()
+{
+    load("/chart2/qa/extras/data/xlsx/", "auto_marker_excel10.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathChildren(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]", 8);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
