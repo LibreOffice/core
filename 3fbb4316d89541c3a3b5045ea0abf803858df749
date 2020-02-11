@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b17e8414_54cd0c27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T12:10:11Z",
+      "side": 1,
+      "message": "Oops! My bad - I didn\u0027t check the commit message, that obviously is outdated now... Could you please update the message - it won\u0027t interrupt the check, and will allow us to have a proper message?",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 63
+      },
+      "revId": "3fbb4316d89541c3a3b5045ea0abf803858df749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
