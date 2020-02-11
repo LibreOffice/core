@@ -305,6 +305,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66835493_041fe634",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T12:01:23Z",
+      "side": 1,
+      "message": "Again: why sal_Int32? insert_separator takes *int*, so why not use int?\n\nbut now it\u0027s a minor issue, let\u0027s not block on this.",
+      "parentUuid": "40064684_5b41953d",
+      "range": {
+        "startLine": 296,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
