@@ -6166,7 +6166,7 @@ public:
         return false;
     }
 
-    virtual bool changed_by_menu() const override
+    virtual bool changed_by_direct_pick() const override
     {
         return true;
     }
@@ -6227,6 +6227,7 @@ class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
 private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, bool);
+    DECL_LINK(SelectHdl, ::ComboBox&, void);
     WeldTextFilter m_aTextFilter;
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -6234,6 +6235,7 @@ public:
         , m_aTextFilter(m_aEntryInsertTextHdl)
     {
         m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
+        m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithEdit, SelectHdl));
         m_xComboBox->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxWithEdit, EntryActivateHdl));
         m_xComboBox->SetTextFilter(&m_aTextFilter);
     }
@@ -6243,9 +6245,9 @@ public:
         return true;
     }
 
-    virtual bool changed_by_menu() const override
+    virtual bool changed_by_direct_pick() const override
     {
-        return m_xComboBox->IsModifyByMenu(); // && !m_xComboBox->IsTravelSelect();
+        return !m_xComboBox->IsModifyByKeyboard();
     }
 
     virtual void set_entry_message_type(weld::EntryMessageType eType) override
@@ -6329,12 +6331,19 @@ public:
         m_xComboBox->SetTextFilter(nullptr);
         m_xComboBox->SetEntryActivateHdl(Link<Edit&, bool>());
         m_xComboBox->SetModifyHdl(Link<Edit&, void>());
+        m_xComboBox->SetSelectHdl(Link<::ComboBox&, void>());
     }
 };
 
 }
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
+{
+    if (!m_xComboBox->IsSyntheticModify()) // SelectHdl will be called
+        signal_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, SelectHdl, ::ComboBox&, void)
 {
     signal_changed();
 }
@@ -6398,7 +6407,7 @@ public:
         m_xEntry->connect_focus_out(rLink);
     }
 
-    virtual bool changed_by_menu() const override
+    virtual bool changed_by_direct_pick() const override
     {
         return m_bTreeChange;
     }

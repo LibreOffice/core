@@ -207,7 +207,7 @@ IMPL_LINK(SfxURLToolBoxControl_Impl, SelectHdl, weld::ComboBox&, rComboBox, void
     SvtURLBox* pURLBox = GetURLBox();
     OUString aName( pURLBox->GetURL() );
 
-    if (rComboBox.changed_by_menu() && !aName.isEmpty())
+    if (rComboBox.changed_by_direct_pick() && !aName.isEmpty())
         OpenURL( aName );
 }
 

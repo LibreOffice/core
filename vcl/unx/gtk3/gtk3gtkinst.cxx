@@ -12645,7 +12645,7 @@ public:
         return gtk_widget_has_focus(m_pToggleButton) || GtkInstanceWidget::has_focus();
     }
 
-    virtual bool changed_by_menu() const override
+    virtual bool changed_by_direct_pick() const override
     {
         return m_bChangedByMenu;
     }
@@ -12870,7 +12870,7 @@ public:
         GtkInstanceContainer::disable_notify_events();
     }
 
-    virtual bool changed_by_menu() const override
+    virtual bool changed_by_direct_pick() const override
     {
         return m_bTreeChange;
     }

@@ -175,7 +175,7 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 
 IMPL_LINK(SvxFontSizeBox_Impl, SelectHdl, weld::ComboBox&, rCombo, void)
 {
-    if (rCombo.changed_by_menu()) // only when picked from the list
+    if (rCombo.changed_by_direct_pick()) // only when picked from the list
         Select();
 }
 
