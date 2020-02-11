@@ -329,6 +329,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b913f53_a300c16d",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T12:04:42Z",
+      "side": 1,
+      "message": "I can\u0027t understand where I should use sal_Int32 instead of int? Would it be a problem if I change this after you reviewed?",
+      "parentUuid": "66835493_041fe634",
+      "range": {
+        "startLine": 296,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
