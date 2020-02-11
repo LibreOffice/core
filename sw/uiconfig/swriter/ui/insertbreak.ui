@@ -168,7 +168,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">6</property>
-                        <property name="label" translatable="yes" context="insertbreak|styleft">Style:</property>
+                        <property name="label" translatable="yes" context="insertbreak|styleft">Page Style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">stylelb</property>
                         <property name="xalign">0</property>
