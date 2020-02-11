@@ -81,6 +81,7 @@ class DockingWindow : public ::DockingWindow
 {
 public:
     DockingWindow (vcl::Window* pParent);
+    DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     DockingWindow (Layout* pParent);
     virtual ~DockingWindow() override;
     virtual void dispose() override;
