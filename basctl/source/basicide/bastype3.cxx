@@ -246,6 +246,10 @@ void TreeListBox::ScanAllEntries()
 
 void SbTreeListBox::ScanAllEntries()
 {
+    // instead of always freezing, freeze on the first add/remove, which keeps gtk
+    // from relayouting the tree if its not necessary
+    m_bFreezeOnFirstAddRemove = true;
+
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
@@ -255,6 +259,11 @@ void SbTreeListBox::ScanAllEntries()
         if ( doc.isAlive() )
             ScanEntry(doc, LIBRARY_LOCATION_DOCUMENT);
     }
+
+    if (!m_bFreezeOnFirstAddRemove)
+        m_xControl->thaw(); // m_bFreezeOnFirstAddRemove was changed, so control was frozen
+    else
+        m_bFreezeOnFirstAddRemove = false;
 }
 
 SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)

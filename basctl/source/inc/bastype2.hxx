@@ -245,6 +245,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xControl;
     std::unique_ptr<weld::TreeIter> m_xIter;
     weld::Window* m_pTopLevel;
+    bool m_bFreezeOnFirstAddRemove;
     BrowseMode nMode;
     DocumentEventNotifier m_aNotifier;
     void            SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage);
