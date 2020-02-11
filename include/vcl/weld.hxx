@@ -654,12 +654,12 @@ public:
        to the user selecting a different item from the list or while typing
        into the entry of a combo box with an entry.
 
-       Use changed_by_menu() to discover whether an item was actually selected
-       from the menu.
+       Use changed_by_direct_pick() to discover whether an item was actually explicitly
+       selected, e.g. from the menu.
      */
     void connect_changed(const Link<ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
 
-    virtual bool changed_by_menu() const = 0;
+    virtual bool changed_by_direct_pick() const = 0;
 
     virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink)
     {
