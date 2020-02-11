@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da553e80_14e6d99c",
+        "filename": "solenv/gbuild/extensions/pre_MergedLibsList.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2020-02-11T18:24:40Z",
+      "side": 1,
+      "message": "I guess this must be the problem here. If SCRIPTING is enabled, then stringresource is added twice to this list.",
+      "revId": "40fe721462df5bedacddc8829cefc3d739cf940f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
