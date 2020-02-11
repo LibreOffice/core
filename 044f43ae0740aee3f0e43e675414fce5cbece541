@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2f05e72f_40f54657",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-11T17:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ed88849_21c90468",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af4b50cf_87ad7e76",
         "filename": "cui/source/dialogs/iconcdlg.cxx",
         "patchSetId": 3
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "b470c56a_9530d250",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-11T17:17:59Z",
+      "side": 1,
+      "message": "No, ActivatePageImpl should not legitimately be called with maPageList being empty.\nTherefore, I will use assert here (Will not go to the places in the code, where it is not meant to).\nThanks for a clear insight look.",
+      "parentUuid": "4c11ab06_ee930419",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "248d08e4_146dcefc",
         "filename": "cui/source/dialogs/iconcdlg.cxx",
         "patchSetId": 3
@@ -86,6 +122,24 @@
       "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65f58977_f5569af6",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-11T17:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "248d08e4_146dcefc",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
