@@ -157,6 +157,7 @@ public:
                 bHidePrint = rProtection.bHidePrint;
                 return *this;
             }
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 // page format item: contents of header and footer
@@ -189,6 +190,7 @@ public:
     void SetLeftArea( const EditTextObject& rNew );
     void SetCenterArea( const EditTextObject& rNew );
     void SetRightArea( const EditTextObject& rNew );
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 // page format item: contents of header and footer
@@ -254,6 +256,7 @@ public:
 
     virtual bool                QueryValue( css::uno::Any& rAny, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool                PutValue( const css::uno::Any& rAny, sal_uInt8 nMemberId ) override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
     sal_uInt16                  mnWidth;
@@ -360,3 +363,4 @@ public:
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
