@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "6660d63e_8dcca886",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:40:53Z",
+      "side": 1,
+      "message": "By the way, always declare variables const when you are not going to modify them. So please make aDefaultID const.",
+      "parentUuid": "d62c0951_8262acd4",
+      "range": {
+        "startLine": 1931,
+        "startChar": 4,
+        "endLine": 1931,
+        "endChar": 36
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28ef600e_9e239596",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 14
