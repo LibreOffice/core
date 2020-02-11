@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4c11ab06_ee930419",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-11T12:35:42Z",
+      "side": 1,
+      "message": "The question still is whether or not ActivatePageImpl can legitimately be called with maPageList being empty.  (The answer to this question is an input when deciding whether the checks for pData being non-null on lines 138 and 139 are checking for something that can legitimately happen or not.)",
+      "parentUuid": "efe5a27f_737d44ea",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "248d08e4_146dcefc",
         "filename": "cui/source/dialogs/iconcdlg.cxx",
         "patchSetId": 3
