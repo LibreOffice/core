@@ -156,6 +156,7 @@ public:
     void testTdf123206_customLabelText();
     void testDeletedLegendEntries();
     void testTdf130225();
+    void testTdf126076();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -275,6 +276,7 @@ public:
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
     CPPUNIT_TEST(testTdf130225);
+    CPPUNIT_TEST(testTdf126076);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2514,6 +2516,18 @@ void Chart2ExportTest::testTdf130225()
     Sequence<sal_Int32> deletedLegendEntriesSeq;
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
+}
+
+void Chart2ExportTest::testTdf126076()
+{
+    load("/chart2/qa/extras/data/xlsx/", "auto_marker_excel10.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 12: all series exported with square markers
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
+    // instead of skipping markers
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
