@@ -16,6 +16,24 @@
       "revId": "d7b89d9a379370546dd5e693aaa256bdb8c9fcc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c08626e_b3866254",
+        "filename": "writerfilter/qa/cppunittests/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-11T10:25:31Z",
+      "side": 1,
+      "message": "I think there is some benefit if the fix and its test is close to each other, i.e. in the same module. If we don\u0027t do that, some call it the butterfly effect, when you change something in writerfilter and tests in other modules start to fail.\n\nI understand there is value in not touching existing tests, but at least we could do that for new tests.\n\nIt also helps with the problem that we put all DOCX tests in a single testsuite (usually sw_ooxmlexport, even import ones!), and now we are at sw_ooxmlexport14... always appending at the end, resulting in pointless conflicts.\n\nLast, if we put fixes done in foo/source into foo/qa, newbies won\u0027t ask where to put it, we could have a systematic answer.\n\nDoes that address your concerns? Hopefully the benefit of doing this is more than the cost of bootstrapping new test suites in modules other than sw, sc, sd.",
+      "parentUuid": "06411673_31fade5b",
+      "revId": "d7b89d9a379370546dd5e693aaa256bdb8c9fcc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
