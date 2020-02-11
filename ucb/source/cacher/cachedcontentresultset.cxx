@@ -167,7 +167,7 @@ sal_Int32 CachedContentResultSet::CCRS_Cache
         return 0;
     sal_Int32 nEnd = m_pResult->StartIndex;
     if( m_pResult->Orientation )
-        return nEnd += m_pResult->Rows.getLength() - 1;
+        return nEnd + m_pResult->Rows.getLength() - 1;
     else
         return nEnd;
 }

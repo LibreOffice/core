@@ -2432,9 +2432,7 @@ Label_RetryWithNewSep:
         sal_Int32 nQuotes = 0;
         while (!rStream.eof() && aStr.getLength() < nArbitraryLineLengthLimit)
         {
-            const sal_Unicode *p, *pStart;
-            p = pStart = aStr.getStr();
-            p += nLastOffset;
+            const sal_Unicode * p = aStr.getStr() + nLastOffset;
             while (*p)
             {
                 if (nQuotes)

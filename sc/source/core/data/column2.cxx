@@ -1748,7 +1748,7 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
         // Specified range not found. Bail out.
         return;
 
-    size_t nBlockEnd = nBlockStart + itBlk->size;
+    size_t nBlockEnd;
     size_t nOffsetInBlock = nRowPos - nBlockStart;
 
     nRowPos = static_cast<size_t>(nRow2); // End row position.

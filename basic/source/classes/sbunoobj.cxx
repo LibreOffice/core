@@ -4661,9 +4661,9 @@ void SbUnoStructRefObject::initMemberCache()
         return;
     typelib_TypeDescription * pTD = nullptr;
     maMemberInfo.getType().getDescription(&pTD);
-    typelib_CompoundTypeDescription * pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD);
-    for ( pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD); pCompTypeDescr;
-        pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
+    for ( typelib_CompoundTypeDescription * pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD);
+          pCompTypeDescr;
+          pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
     {
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompTypeDescr->ppTypeRefs;
         rtl_uString ** ppNames                         = pCompTypeDescr->ppMemberNames;

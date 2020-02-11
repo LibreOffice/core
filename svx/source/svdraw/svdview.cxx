@@ -327,7 +327,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     if (bTextEditHit || bTextEditSel)
     {
         eHit=SdrHitKind::TextEdit;
-        bTextEditHit=true;
     }
     else if (pHdl!=nullptr)
     {

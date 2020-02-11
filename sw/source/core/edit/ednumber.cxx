@@ -126,7 +126,6 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
 // paragraphs without numbering, with indentations
 void SwEditShell::NoNum()
 {
-    bool bRet = true;
     StartAllAction();
 
     SwPaM* pCursor = GetCursor();
@@ -136,12 +135,12 @@ void SwEditShell::NoNum()
         SwPamRanges aRangeArr( *pCursor );
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
-            bRet = bRet && GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
+            GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     else
         // sw_redlinehide: leave cursor as is, will be split at Point & apply to new node
-        bRet = GetDoc()->NoNum( *pCursor );
+        GetDoc()->NoNum( *pCursor );
 
     EndAllAction();
 }
@@ -308,17 +307,16 @@ void SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
-    bool bRet = true;
     SwPaM* pCursor = GetCursor();
     if( !pCursor->IsMultiSelection() )
-        bRet = GetDoc()->NumUpDown(*pCursor, bDown, GetLayout());
+        GetDoc()->NumUpDown(*pCursor, bDown, GetLayout());
     else
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
         SwPamRanges aRangeArr( *pCursor );
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
-            bRet = bRet && GetDoc()->NumUpDown(aRangeArr.SetPam( n, aPam ), bDown, GetLayout());
+            GetDoc()->NumUpDown(aRangeArr.SetPam( n, aPam ), bDown, GetLayout());
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
     GetDoc()->getIDocumentState().SetModified();

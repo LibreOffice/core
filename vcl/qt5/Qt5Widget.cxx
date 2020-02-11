@@ -604,13 +604,11 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
         TOOLS_WARN_EXCEPTION("vcl.qt5", "Exception in getting input method surrounding text");
     }
 
-    bool result = false;
     if (xText.is())
     {
         rPosition = xText->getCaretPosition();
         if (rPosition != -1)
         {
-            result = true;
             if (pText)
                 *pText = toQString(xText->getText());
 
@@ -619,8 +617,6 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
             if (nSelStart == nSelEnd)
             {
                 rAnchor = rPosition;
-                if (pSelection)
-                    result = false;
             }
             else
             {
@@ -635,7 +631,7 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
         }
     }
 
-    return result;
+    return false;
 }
 
 QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const

@@ -538,13 +538,11 @@ void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValu
     else
     {
         unsigned int nSub = m_aSubElements.size();
-        bool bFound = false;
-        for( unsigned int i = 0; i < nSub && !bFound; i++ )
+        for( unsigned int i = 0; i < nSub; i++ )
             if( m_aSubElements[i].get() == it->second )
             {
                 m_aSubElements[i] = std::move(pValue);
                 pValueTmp = m_aSubElements[i].get();
-                bFound = true;
                 break;
             }
     }

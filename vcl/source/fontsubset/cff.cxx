@@ -524,7 +524,7 @@ void CffSubsetterContext::readDictOp()
             mbCIDFont = true;
             } break;
         case 't':   // CharstringType
-            nInt = popInt();
+            popInt();
             break;
         }
     } else if( (c >= 32) || (c == 28) ) {

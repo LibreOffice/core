@@ -1402,7 +1402,7 @@ namespace svt::table
         case cursorSelectRow:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
-                return bSuccess = false;
+                return false;
             //pos is the position of the current row in the vector of selected rows, if current row is selected
             int pos = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
             //if current row is selected, it should be deselected, when ALT+SPACE are pressed
@@ -1423,7 +1423,7 @@ namespace svt::table
         case cursorSelectRowUp:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
-                return bSuccess = false;
+                return false;
             else if(m_pSelEngine->GetSelectionMode() == SelectionMode::Single)
             {
                 //if there are other selected rows, deselect them
@@ -1454,7 +1454,7 @@ namespace svt::table
                             if(m_nCurRow>0)
                                  m_nCurRow--;
                             else
-                                 return bSuccess = true;
+                                 return true;
                              //if nextRow already selected, deselect it, otherwise select it
                             if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                             {
@@ -1537,7 +1537,7 @@ namespace svt::table
                              if(m_nCurRow<m_nRowCount-1)
                                  m_nCurRow++;
                              else
-                                return bSuccess = true;
+                                return true;
                              //if next row already selected, deselect it, otherwise select it
                              if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
                              {
@@ -1618,9 +1618,9 @@ namespace svt::table
         case cursorSelectRowAreaBottom:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
-                return bSuccess = false;
+                return false;
             else if(m_pSelEngine->GetSelectionMode() == SelectionMode::Single)
-                return bSuccess = false;
+                return false;
             //select the region between the current and the last row
             RowPos iter = m_nCurRow;
             invalidateSelectedRegion( m_nCurRow, m_nRowCount-1 );

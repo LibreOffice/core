@@ -29,8 +29,6 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     : mbUseExtension(true)
     , mnEventBase(0)
 {
-    sal_uInt32 nDefaultGroup = 0;
-
     // allow user to set the default keyboard group idx or to disable the usage
     // of x keyboard extension at all:
     //      setenv SAL_XKEYBOARDGROUP       disables keyboard extension
@@ -40,10 +38,6 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     if ( pUseKeyboardExtension != nullptr )
     {
         mbUseExtension = pUseKeyboardExtension[0] != '\0' ;
-        if ( mbUseExtension )
-            nDefaultGroup = strtol( pUseKeyboardExtension, nullptr, 0 );
-        if ( nDefaultGroup > XkbMaxKbdGroup )
-            nDefaultGroup = 0;
     }
 
     // query XServer support for XKB Extension,

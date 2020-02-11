@@ -276,8 +276,7 @@ Reference< XAccessibleRelationSet > AccFrameSelectorChild::getAccessibleRelation
 {
     SolarMutexGuard aGuard;
     IsValid();
-    utl::AccessibleRelationSetHelper* pHelper;
-    Reference< XAccessibleRelationSet > xRet = pHelper = new utl::AccessibleRelationSetHelper;
+    Reference< XAccessibleRelationSet > xRet = new utl::AccessibleRelationSetHelper;
     return xRet;
 }
 

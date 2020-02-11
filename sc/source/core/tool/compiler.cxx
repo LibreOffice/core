@@ -4043,8 +4043,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 sal_Int32 nLen1 = aTmp1.getLength();
                 OUStringBuffer aSym;
                 OUString aTmp2;
-                bool bLastAlp, bNextNum;
-                bLastAlp = bNextNum = true;
+                bool bLastAlp = true;
                 sal_Int32 nStrip = 0;
                 sal_Int32 nCount = nRefs;
                 for ( sal_Int32 j=1; j<nCount; j++ )
@@ -4060,7 +4059,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         }
                         if ( nLen2 )
                         {
-                            bNextNum = CharClass::isAsciiNumeric( aTmp2 );
+                            bool bNextNum = CharClass::isAsciiNumeric( aTmp2 );
                             if ( bLastAlp == bNextNum && nStrip < 1 )
                             {
                                 // Must be alternating number/string, only

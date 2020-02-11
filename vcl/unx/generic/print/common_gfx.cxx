@@ -986,14 +986,14 @@ PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
     {
         if (nChar >= (nMaxTextColumn - 1))
         {
-            nChar += psp::appendStr ("\n", pHexString);
+            psp::appendStr ("\n", pHexString);
             WritePS (mpPageBody, pHexString.makeStringAndClear());
             nChar = 0;
         }
         nChar += psp::getHexValueOf (static_cast<sal_Int32>(pString[i]), pHexString);
     }
 
-    nChar += psp::appendStr (">\n", pHexString);
+    psp::appendStr (">\n", pHexString);
     WritePS (mpPageBody, pHexString.makeStringAndClear());
 }
 

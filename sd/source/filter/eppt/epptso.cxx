@@ -92,13 +92,9 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {
-            Size aNewSize;
-            bool changed = false;
             if (aPrefSize.Width() == 0 || aPrefSize.Height() == 0)
             {
                 aBmpEx.Scale(aPrefSize);
-                aNewSize = aPrefSize;
-                changed = true;
             }
             else
             {
@@ -115,14 +111,8 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
                 if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
                 {
                     aBmpEx.Scale( fXScale, fYScale );
-                    aNewSize = Size( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
+                    rGraphicSize = Size( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
                                      static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
-                    changed = true;
-                }
-
-                if (changed)
-                {
-                    rGraphicSize = aNewSize;
 
                     aMappedGraphic = Graphic( aBmpEx );
                     xGraphicObject.reset(new GraphicObject(aMappedGraphic));

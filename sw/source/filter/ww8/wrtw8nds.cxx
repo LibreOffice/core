@@ -3491,12 +3491,6 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
         m_nRubyHeight = rHeight.GetHeight();
     }
 
-    if (pRubyText)
-        nRubyScript
-            = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(), pRubyText->GetStart());
-    else
-        nRubyScript = i18n::ScriptType::ASIAN;
-
     const OUString &rText = rNode.GetText();
     sal_uInt16 nScript = i18n::ScriptType::LATIN;
 
