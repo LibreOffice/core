@@ -34,6 +34,9 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
+#include <dmapper/PropertyIds.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -1671,15 +1674,28 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             //tdf#87569: Fix table layout with correcting anchoring
             //If anchored object is in table, Word calculates its position from cell border
             //instead of page (what is set in the sample document)
+            uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+            if(xShapePropSet && bIsPicture) //TODO make grabbag for textboxes as well
+            {
+                uno::Sequence<beans::PropertyValue> aShapeGrabBag;
+                xShapePropSet->getPropertyValue("InteropGrabBag") >>= aShapeGrabBag;
+                beans::PropertyValue aLayInCell;
+                aLayInCell.Name = "LayoutInCell";
+                aLayInCell.Value <<= mbLayoutInCell;
+                aShapeGrabBag.realloc(1+aShapeGrabBag.size());
+                aShapeGrabBag[aShapeGrabBag.size() -1] = aLayInCell;
+                xShapePropSet->setPropertyValue("InteropGrabBag", uno::makeAny(aShapeGrabBag));
+            }
             if (mnTableDepth > 0 && mbLayoutInCell) //if we had a table
             {
-                uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
                 sal_Int16 nCurrentHorOriRel; //A temp variable for storaging the current setting
                 xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
                 //and the correction:
                 if (nCurrentHorOriRel == com::sun::star::text::RelOrientation::PAGE_FRAME)
+                {
                     xShapePropSet->setPropertyValue("HoriOrientRelation",
                                                     uno::makeAny(text::RelOrientation::FRAME));
+                }
             }
 
             // Notify the dmapper that the shape is ready to use
@@ -1755,6 +1771,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                                                            this);
 
                     //tdf129888 store allowincell attribute of the VML shape
+                    mbLayoutInCell = true;
                     if (Attribs->hasAttribute(NMSP_vmlOffice | XML_allowincell))
                         mbLayoutInCell
                             = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");

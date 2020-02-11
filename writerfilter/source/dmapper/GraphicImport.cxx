@@ -67,6 +67,8 @@
 #include "WrapPolygonHandler.hxx"
 #include "util.hxx"
 
+#include <comphelper/propertysequence.hxx>
+
 using namespace css;
 
 namespace
@@ -872,6 +874,18 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         //tdf#109411 If anchored object is in table, Word calculates its position from cell border
                         //instead of page (what is set in the sample document)
+                        if (xShapeProps)
+                        {
+                            uno::Sequence<beans::PropertyValue> aShapeGrabBag;
+                            xShapeProps->getPropertyValue("InteropGrabBag") >>= aShapeGrabBag;
+                            beans::PropertyValue aLayInCell;
+                            aLayInCell.Name = "LayoutInCell";
+                            aLayInCell.Value <<= m_pImpl->bLayoutInCell;
+                            aShapeGrabBag.realloc(1 + aShapeGrabBag.size());
+                            aShapeGrabBag[aShapeGrabBag.size() - 1] = aLayInCell;
+                            xShapeProps->setPropertyValue("InteropGrabBag",
+                                                            uno::makeAny(aShapeGrabBag));
+                        }
                         if (m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell &&
                             m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && IsGraphic())
                         {
