@@ -84,6 +84,13 @@ sub read_args($)
                     print STDERR "  $opt\n";
                 }
             }
+        } elsif ( /^INCLUDE:(.*)/ ) {
+            # include another .conf into this one
+            my $config = "$src_path/distro-configs/$1.conf";
+            if (! -f $config) {
+                invalid_distro ($config, $1);
+            }
+            push @lst, read_args ($config);
         } elsif ( substr($_, 0, 1) eq "#" ) {
             # comment
         } elsif ( length == 0 ) {
