@@ -222,8 +222,7 @@ GrContext* getSharedGrContext()
     if (done)
         return nullptr;
     done = true;
-    if (!createVulkanWindowContextFunction)
-        return nullptr;
+    assert(createVulkanWindowContextFunction);
     std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction();
     // Set up using the shared context created by the call above, if successful.
     context = sk_app::VulkanWindowContext::getSharedGrContext();

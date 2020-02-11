@@ -291,4 +291,20 @@ SkiaControlCacheType& SkiaControlsCache::get()
     return data->m_pSkiaControlsCache->cache;
 }
 
+std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
+{
+    SkiaZone zone;
+    sk_app::DisplayParams displayParams;
+    return sk_app::window_context_factory::MakeVulkanForWin(0, displayParams);
+}
+
+namespace
+{
+struct SetFunction
+{
+    SetFunction() { SkiaHelper::setCreateVulkanWindowContext(createVulkanWindowContext); }
+};
+SetFunction setFunction;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
