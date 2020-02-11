@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ebe70c1_0806df1d",
+        "filename": "offapi/com/sun/star/text/Shape.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-11T10:57:29Z",
+      "side": 1,
+      "message": "I\u0027ll change it to 7.0",
+      "range": {
+        "startLine": 197,
+        "startChar": 9,
+        "endLine": 197,
+        "endChar": 30
+      },
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7351ccb7_f85b2c96",
+        "filename": "offapi/com/sun/star/text/Shape.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-11T10:57:29Z",
+      "side": 1,
+      "message": "This will be the new property",
+      "range": {
+        "startLine": 199,
+        "startChar": 1,
+        "endLine": 199,
+        "endChar": 52
+      },
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cfd501e_80e392d6",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-11T10:57:29Z",
+      "side": 1,
+      "message": "Here, i want to read the bool value from the property",
+      "range": {
+        "startLine": 473,
+        "startChar": 7,
+        "endLine": 473,
+        "endChar": 79
+      },
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "348b7191_d788e862",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-11T10:57:29Z",
+      "side": 1,
+      "message": "there is a sax exeption thrown...",
+      "range": {
+        "startLine": 879,
+        "startChar": 24,
+        "endLine": 880,
+        "endChar": 88
+      },
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d0e5a8_35488e2f",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-11T10:57:29Z",
+      "side": 1,
+      "message": "there is also a sax exeption...",
+      "range": {
+        "startLine": 1674,
+        "startChar": 10,
+        "endLine": 1674,
+        "endChar": 91
+      },
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
