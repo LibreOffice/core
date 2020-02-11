@@ -26,13 +26,11 @@
 
 #include "doceventnotifier.hxx"
 
-#include <vcl/treelistbox.hxx>
 #include <vcl/weld.hxx>
 #include "sbxitem.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 class SbModule;
-class SvTreeListEntry;
 class SbxVariable;
 
 enum class BrowseMode
@@ -173,71 +171,6 @@ public:
     OBJ_TYPE_METHOD          Entry
 
 */
-
-class TreeListBox : public SvTreeListBox, public DocumentEventListener
-{
-private:
-    DocumentEventNotifier m_aNotifier;
-    void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
-    virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
-
-protected:
-    virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
-    virtual void            ExpandedHdl() override;
-    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) override;
-    virtual bool            ExpandingHdl() override;
-    virtual void            KeyInput( const KeyEvent& rEvt ) override;
-
-    bool                    OpenCurrent();
-    void                    ImpCreateLibEntries( SvTreeListEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    void                    ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
-    SvTreeListEntry*            ImpFindEntry( SvTreeListEntry* pParent, const OUString& rText );
-
-    // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
-
-public:
-    TreeListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~TreeListBox() override;
-    virtual void    dispose() override;
-
-    void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void            ScanAllEntries();
-    void            UpdateEntries();
-
-    SvTreeListEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    SvTreeListEntry*    FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType );
-
-    EntryDescriptor GetEntryDescriptor( SvTreeListEntry* pEntry );
-
-    static ItemType ConvertType (EntryType eType);
-    bool            IsValidEntry( SvTreeListEntry* pEntry );
-
-    void FillTreeListBox( SvTreeListEntry* pRootEntry, const Sequence< OUString >& rNames,
-                          const EntryType& eType, const OUString& aBmpMacro );
-    SvTreeListEntry*    AddEntry(
-        const OUString& rText, const Image& rImage,
-        SvTreeListEntry* pParent, bool bChildrenOnDemand,
-        std::unique_ptr<Entry> && aUserData
-    );
-    void            RemoveEntry (SvTreeListEntry const *);
-    void            RemoveEntry (ScriptDocument const&);
-
-    static OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    static void     GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
-
-    void            SetCurrentEntry (EntryDescriptor const &);
-};
 
 class SbTreeListBox : public DocumentEventListener
 {
