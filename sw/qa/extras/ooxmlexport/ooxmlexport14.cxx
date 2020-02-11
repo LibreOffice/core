@@ -91,6 +91,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
                                  text::RelOrientation::PAGE_FRAME, nValue);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130120, "tdf130120.docx")
+{
+   //Text for exporting the allowincell attribute:
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
+                          "mc:Choice/w:drawing/wp:anchor","layoutInCell","0");
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...
