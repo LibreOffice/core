@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e37e0cac_c53d5936",
+        "filename": "writerfilter/source/filter/WriterFilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T12:57:14Z",
+      "side": 1,
+      "message": "This indeed is a hack.\n\nThe problem here is that in case of opening the document normally, the password gets asked long before WriterFilter::filter is invoked, in filter detection; so the encryption data is already in media descriptor in SfxObjectShell::ImportFrom. When recovering, no filter detection happens, so the encryption data is not there.\n\nThe magic happens in FilterDetect::extractUnencryptedPackage, where utl::MediaDescriptor::requestAndVerifyDocPassword is called, and then its result is added back to the media descriptor. Possibly we could do that somewhere up the call stack in the recovery case?",
+      "range": {
+        "startLine": 267,
+        "startChar": 9,
+        "endLine": 267,
+        "endChar": 75
+      },
+      "revId": "9d1bb9df76591834e37ba0c2227ad4ae12b8a061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
