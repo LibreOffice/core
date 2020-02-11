@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "efe5a27f_737d44ea",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-11T11:27:08Z",
+      "side": 1,
+      "message": "In the next line, GetPageData will return IconChoicePageData* from maPageList vector, if the vector is empty the pData in line 138 is a nullptr.\nHowever, that is asserted in line 139.\n\nSo, I may use SAL_WARN_IF to warn only?",
+      "parentUuid": "af4b50cf_87ad7e76",
+      "revId": "044f43ae0740aee3f0e43e675414fce5cbece541",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "248d08e4_146dcefc",
         "filename": "cui/source/dialogs/iconcdlg.cxx",
         "patchSetId": 3
