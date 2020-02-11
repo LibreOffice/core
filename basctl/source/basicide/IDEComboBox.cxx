@@ -300,7 +300,7 @@ IMPL_LINK_NOARG(LibBox, FocusOutHdl, weld::Widget&, void)
 
 void LibBox::Select()
 {
-    if (m_xWidget->changed_by_menu())
+    if (m_xWidget->changed_by_direct_pick())
     {
         if (!mbIgnoreSelect)
             NotifyIDE();

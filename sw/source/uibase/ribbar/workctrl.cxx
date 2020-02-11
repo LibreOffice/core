@@ -616,7 +616,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
 
 IMPL_LINK(SwZoomBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    if (rComboBox.changed_by_menu())  // only when picked from the list
+    if (rComboBox.changed_by_direct_pick())  // only when picked from the list
         Select();
 }
 

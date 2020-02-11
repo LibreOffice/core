@@ -152,8 +152,17 @@ public:
     void            SetNoSelection();
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
-    // determine if Select was called due to something selected from the menu
-    bool            IsModifyByMenu() const;
+    // determine if Select was called due to typing or cursoring in the
+    // combobox, as opposed to something selected from the menu or via some
+    // other route.  e.g. the toolbar fontsize combobox wants to immediately
+    // change size only if something is picked from the combobox menu, other
+    // changes don't auto-apply until the user presses return
+    bool            IsModifyByKeyboard() const;
+
+    // determine if Edit::Modify was called due to the ComboBox changing the edit area
+    // itself
+    bool            IsSyntheticModify() const;
+
 
     /** checks whether a certain point lies within the bounds of
         a list item and returns the item as well as the character position

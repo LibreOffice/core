@@ -57,7 +57,7 @@ struct ComboBox::Impl
     sal_Unicode         m_cMultiSep;
     bool                m_isDDAutoSize        : 1;
     bool                m_isSyntheticModify   : 1;
-    bool                m_isMenuModify        : 1;
+    bool                m_isKeyBoardModify    : 1;
     bool                m_isMatchCase         : 1;
     sal_Int32           m_nMaxWidthChars;
     sal_Int32           m_nWidthInChars;
@@ -70,7 +70,7 @@ struct ComboBox::Impl
         , m_cMultiSep(0)
         , m_isDDAutoSize(false)
         , m_isSyntheticModify(false)
-        , m_isMenuModify(false)
+        , m_isKeyBoardModify(false)
         , m_isMatchCase(false)
         , m_nMaxWidthChars(0)
         , m_nWidthInChars(-1)
@@ -144,7 +144,7 @@ void ComboBox::Impl::ImplInitComboBoxData()
     m_nDDHeight         = 0;
     m_isDDAutoSize      = true;
     m_isSyntheticModify = false;
-    m_isMenuModify      = false;
+    m_isKeyBoardModify  = false;
     m_isMatchCase       = false;
     m_cMultiSep         = ';';
     m_nMaxWidthChars    = -1;
@@ -434,19 +434,24 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
 
     if ( bCallSelect )
     {
+        m_isKeyBoardModify = !bMenuSelect;
         m_pSubEdit->SetModifyFlag();
         m_isSyntheticModify = true;
-        m_isMenuModify = bMenuSelect;
         m_rThis.Modify();
-        m_isMenuModify = false;
         m_isSyntheticModify = false;
         m_rThis.Select();
+        m_isKeyBoardModify = false;
     }
 }
 
-bool ComboBox::IsModifyByMenu() const
+bool ComboBox::IsSyntheticModify() const
 {
-    return m_pImpl->m_isMenuModify;
+    return m_pImpl->m_isSyntheticModify;
+}
+
+bool ComboBox::IsModifyByKeyboard() const
+{
+    return m_pImpl->m_isKeyBoardModify;
 }
 
 IMPL_LINK_NOARG( ComboBox::Impl, ImplListItemSelectHdl, LinkParamNone*, void )
