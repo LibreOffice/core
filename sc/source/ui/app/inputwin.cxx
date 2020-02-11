@@ -32,6 +32,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
@@ -819,7 +820,9 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     maButton->Enable();
     maButton->SetSymbol(SymbolType::SPIN_DOWN);
     maButton->SetQuickHelpText(ScResId(SCSTR_QHELP_EXPAND_FORMULA));
-    maButton->Show();
+    // disable the multiline toggle on the mobile phones
+    if (!comphelper::LibreOfficeKit::isActive() || !comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        maButton->Show();
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -869,7 +872,8 @@ void ScInputBarGroup::Resize()
     aSize.setHeight(maTextWndGroup->GetPixelHeightForLines(maTextWndGroup->GetNumLines()));
     SetSizePixel(aSize);
 
-    aSize.setWidth(aSize.Width() - maButton->GetSizePixel().Width() - BUTTON_OFFSET);
+    long nButtonWidth = maButton->IsVisible()? maButton->GetSizePixel().Width() + BUTTON_OFFSET: 0;
+    aSize.setWidth(aSize.Width() - nButtonWidth);
     maTextWndGroup->SetSizePixel(aSize);
     maTextWndGroup->Resize();
 
