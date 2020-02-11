@@ -34,6 +34,24 @@
       "revId": "d7b89d9a379370546dd5e693aaa256bdb8c9fcc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d311ec9_e7b343a5",
+        "filename": "writerfilter/qa/cppunittests/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-11T17:47:42Z",
+      "side": 1,
+      "message": "\u003e It also helps with the problem that we put all DOCX tests in a single testsuite (usually sw_ooxmlexport, even import ones!)\n\nif the testcase happens to work after export too already, then it\u0027s better to do an export test because it covers 2 things for the price of 1.\n\n\u003e and now we are at sw_ooxmlexport14... always appending at the end, resulting in pointless conflicts.\n\nwell i just pick one of the existing files where git grep says it has a test i could copy-paste from and insert at a random position, so i get not that many conflicts :)",
+      "parentUuid": "1c08626e_b3866254",
+      "revId": "d7b89d9a379370546dd5e693aaa256bdb8c9fcc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
