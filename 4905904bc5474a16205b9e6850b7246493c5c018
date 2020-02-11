@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01f6408b_7594d73b",
+        "filename": "offapi/com/sun/star/document/MediaDescriptor.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-02-11T11:39:40Z",
+      "side": 1,
+      "message": "7.0 is the next version",
+      "range": {
+        "startLine": 607,
+        "startChar": 27,
+        "endLine": 607,
+        "endChar": 30
+      },
+      "revId": "4905904bc5474a16205b9e6850b7246493c5c018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
