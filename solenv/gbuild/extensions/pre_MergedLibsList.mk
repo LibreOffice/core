@@ -49,7 +49,6 @@ MERGE_LIBRARY_LIST := \
 	sot \
 	$(if $(DISABLE_GUI),,spl) \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
-	stringresource \
 	svl \
 	svt \
 	svx \
