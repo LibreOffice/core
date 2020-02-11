@@ -90,6 +90,23 @@ CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
     xShape->getPropertyValue("PageToggle") >>= bPageToggle;
     CPPUNIT_ASSERT(bPageToggle);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDrawShapeInlineEffect)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "draw-shape-inline-effect.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nBottomMargin = 0;
+    xShape->getPropertyValue("BottomMargin") >>= nBottomMargin;
+    // 273 in mm100 is 98425 EMUs from the file.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 273
+    // - Actual  : 0
+    // i.e. the layout result had less pages than expected (compared to Word).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(273), nBottomMargin);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
