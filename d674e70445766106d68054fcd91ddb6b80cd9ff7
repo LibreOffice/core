@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fb4af2bb_a38307d9",
+        "filename": "offapi/com/sun/star/text/Shape.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-11T11:36:22Z",
+      "side": 1,
+      "message": "Attila: It\u0027s not clear for me, that we really need this new option. But the previous one is similar, so we can ask Miklós.\n\nfrom OOXML: layoutInCell \t\n\n\"Specifies how the object behaves when it is anchored in a table cell and its position would cause it to intersect with a table cell. The value can be either true or false. If it is true, then the object is positioned within the cell and the cell is resized, with all positioning relative to the cell and not the line on which the table appears. When false, the object is positioned as specified, and the table is resized or relocated to accommodate the object.\"",
+      "revId": "d674e70445766106d68054fcd91ddb6b80cd9ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ebe70c1_0806df1d",
         "filename": "offapi/com/sun/star/text/Shape.idl",
         "patchSetId": 1
