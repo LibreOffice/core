@@ -3188,17 +3188,16 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
         SalKeyModEvent aModEvt;
         aModEvt.mbDown = pEvent->type == GDK_KEY_PRESS;
-        aModEvt.mnCode = nModCode;
 
         if( pEvent->type == GDK_KEY_RELEASE )
         {
             aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
-            nModCode &= ~nModMask;
+            aModEvt.mnCode = nModCode & ~nModMask;
             pThis->m_nKeyModifiers &= ~nExtModMask;
         }
         else
         {
-            nModCode |= nModMask;
+            aModEvt.mnCode = nModCode | nModMask;
             pThis->m_nKeyModifiers |= nExtModMask;
             aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
         }
