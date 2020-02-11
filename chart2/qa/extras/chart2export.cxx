@@ -150,8 +150,14 @@ public:
     void testTdf122031();
     void testTdf115012();
     void testTdf123206_customLabelText();
+<<<<<<< HEAD   (acc1bd tdf#127167 Do not reset Draw/Impress page size)
     void testCustomLabelText();
     void testTdf131979();
+=======
+    void testDeletedLegendEntries();
+    void testTdf130225();
+    void testTdf126076();
+>>>>>>> CHANGE (bae73c tdf#126076 XLSX export: fix automatic line chart markers)
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -265,8 +271,14 @@ public:
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
+<<<<<<< HEAD   (acc1bd tdf#127167 Do not reset Draw/Impress page size)
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testTdf131979);
+=======
+    CPPUNIT_TEST(testDeletedLegendEntries);
+    CPPUNIT_TEST(testTdf130225);
+    CPPUNIT_TEST(testTdf126076);
+>>>>>>> CHANGE (bae73c tdf#126076 XLSX export: fix automatic line chart markers)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2465,6 +2477,18 @@ void Chart2ExportTest::testTdf131979()
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= blinknumberformattosource);
         CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", blinknumberformattosource);
     }
+}
+
+void Chart2ExportTest::testTdf126076()
+{
+    load("/chart2/qa/extras/data/xlsx/", "auto_marker_excel10.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was 12: all series exported with square markers
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
+    // instead of skipping markers
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
