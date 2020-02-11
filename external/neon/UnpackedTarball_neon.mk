@@ -17,6 +17,10 @@ $(eval $(call gb_UnpackedTarball_add_files,neon,src,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,neon,0))
 
+# For the upstream discussion of neon_uri_parse_allow_others.patch see
+# http://lists.manyfish.co.uk/pipermail/neon/2020-February/001629.html
+# or thread "RfC: Accept SharePoint href IRIs"
+
 $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	external/neon/neon.patch \
 	external/neon/neon_ne_set_request_flag.patch \
