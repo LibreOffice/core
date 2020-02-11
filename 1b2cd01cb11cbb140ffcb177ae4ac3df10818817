@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d5893ef3_3cf3b623",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "Done, I changed the name of vCurrency with aCurrency. Also I moved both of them to correct place as far as I know.",
+      "parentUuid": "84e7ba59_d0771ad7",
+      "range": {
+        "startLine": 1300,
+        "startChar": 4,
+        "endLine": 1301,
+        "endChar": 52
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de932b0e_33d53d5b",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 14
@@ -45,6 +69,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d09875_c94fccc2",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "Done, you are absolutely right :)",
+      "parentUuid": "de932b0e_33d53d5b",
+      "range": {
+        "startLine": 1341,
+        "startChar": 16,
+        "endLine": 1341,
+        "endChar": 18
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c1ff8278_ad310a7f",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "Done, also clang make this [ nGroupID, sGroupName ]. I think this is correct due to clang-format.",
+      "parentUuid": "818ab141_3b22d31e",
+      "range": {
+        "startLine": 1349,
+        "startChar": 39,
+        "endLine": 1349,
+        "endChar": 40
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d123ae6_66e219a4",
         "filename": "cui/source/options/optgdlg.cxx",
         "patchSetId": 14
@@ -91,6 +163,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de43dfb7_3c066dbc",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d123ae6_66e219a4",
+      "range": {
+        "startLine": 1408,
+        "startChar": 46,
+        "endLine": 1408,
+        "endChar": 47
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "8f278a74_0d1cc5fc",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "I made it const. Also, I used aDefaultID instead of \"default\" where it is needed.",
+      "parentUuid": "6660d63e_8dcca886",
+      "range": {
+        "startLine": 1931,
+        "startChar": 4,
+        "endLine": 1931,
+        "endChar": 36
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28ef600e_9e239596",
         "filename": "svx/source/dialog/langbox.cxx",
         "patchSetId": 14
@@ -161,6 +281,30 @@
       "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40064684_5b41953d",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-02-11T11:53:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28ef600e_9e239596",
+      "range": {
+        "startLine": 296,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
