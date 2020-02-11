@@ -62,6 +62,7 @@
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -688,10 +689,14 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             {
                 i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Min(),
                         GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
-                if ( aBoundary.startPos == aSelection.Min() )
+                auto startPos = aBoundary.startPos;
+                if ( startPos == aSelection.Min() )
+                {
                     aBoundary = xBI->previousWord( maText.toString(), aSelection.Min(),
                             GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-                aSelection.Min() = aBoundary.startPos;
+                    startPos = std::max(aBoundary.startPos, sal_Int32(0));
+                }
+                aSelection.Min() = startPos;
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
                {
