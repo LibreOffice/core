@@ -261,6 +261,12 @@ DockingWindow::DockingWindow (vcl::Window* pParent) :
     nShowCount(0)
 { }
 
+DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription) :
+    ::DockingWindow(pParent, rID, rUIXMLDescription),
+    pLayout(nullptr),
+    nShowCount(0)
+{ }
+
 DockingWindow::DockingWindow (Layout* pParent) :
     ::DockingWindow(pParent, StyleBits),
     pLayout(pParent),
