@@ -4794,6 +4794,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
+        --enable-icecream="$enable_icecream" \
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         --without-java \
