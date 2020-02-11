@@ -19,6 +19,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -53,6 +54,38 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
     xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
                                  text::RelOrientation::FRAME, nValue);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
+{
+    // check character properties
+    {
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles("CharacterStyles")->getByName("WollMuxRoemischeZiffer"),
+            uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+    }
+
+    // check paragraph properties
+    {
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles("ParagraphStyles")->getByName("WollMuxVerfuegungspunkt"),
+            uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+    }
+
+    // check inline text properties
+    {
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParagraphAccess->createEnumeration();
+        CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+        xParagraphs->nextElement();
+        CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+        uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 1), "CharWeight"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
