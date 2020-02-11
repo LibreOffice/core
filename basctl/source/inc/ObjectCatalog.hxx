@@ -23,7 +23,7 @@
 #include "bastype2.hxx"
 #include "bastypes.hxx"
 
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
@@ -42,23 +42,22 @@ public:
     virtual void dispose() override;
 
     ///  Update the entries of Object Catalog Treelist
-    void UpdateEntries() { aTree->UpdateEntries(); }
+    void UpdateEntries() { m_xTree->UpdateEntries(); }
     void SetCurrentEntry(BaseWindow* pCurWin);
 
 private:
-    VclPtr<FixedText> aTitle; ///< Title of the Object Catalog window
-    VclPtr<TreeListBox> aTree; ///< The Treelist of the objects in window
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
 
-    /// Function is called by Window. Use only for arranging the controls.
-    virtual void Resize() override;
+    std::unique_ptr<weld::Label> m_xTitle; ///< Title of the Object Catalog window
+    std::unique_ptr<SbTreeListBox> m_xTree; ///< The Treelist of the objects in window
+
     /*!
      *  Function for resize by DockingWindow.
      *  It is called by DockingWindow when IsFloatingMode() changes.
      */
     virtual void ToggleFloatingMode() override;
-
-    /// Uses by Resize() and ToggleFloatingMode() functions for resizing
-    void ArrangeWindows();
 };
 
 } // namespace basctl

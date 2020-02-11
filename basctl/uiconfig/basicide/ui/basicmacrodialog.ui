@@ -201,7 +201,6 @@
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="libraries">
-                                <property name="width_request">-1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -210,7 +209,6 @@
                                 <property name="model">liststore1</property>
                                 <property name="headers_visible">False</property>
                                 <property name="search_column">1</property>
-                                <property name="show_expanders">True</property>
                                 <property name="enable_tree_lines">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
