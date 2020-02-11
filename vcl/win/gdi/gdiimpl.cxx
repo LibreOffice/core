@@ -2309,7 +2309,62 @@ bool WinSalGraphicsImpl::drawPolyLine(
     const bool bStrokeUsed(0.0 != fDotDashLength);
     assert(!bStrokeUsed || (bStrokeUsed && pStroke));
 
-    if(pSystemDependentData_GraphicsPath)
+    // MM01 decide if to stroke directly
+    static bool bDoDirectGDIPlusStroke(true);
+
+    // activate to stroke directly
+    if(bDoDirectGDIPlusStroke && bStrokeUsed)
+    {
+        // tdf#130478
+        // Unfortunately GDIPlus wants to have the dash pattern relative to line width
+        // which gets problematic due to the good old office's hairline definition. This
+        // means that we do not *have* the real line width here, but 0.0 - or in the case
+        // of GDIPlus (here) 1.0.
+        // This is 'corrected' in several locations, e.g. OutputDevice::DrawPolyLineDirect
+        // to 1.0 and VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect to 0.0.
+        // This would need some cleanup what will be highly problematic due to the usage
+        // of hairlines with line width of 0.0 being a pixel always and leading to different
+        // visualizations. More bad - the potential of having pretty 'invisible' lines
+        // in unexpected places when zooming far out. Another problematic aspect of that hairline
+        // definition is that this makes hairlines per definition view-transformation dependent
+        // regarding their 'core' line width and the area they cover - handled in Primitives,
+        // but not easy to do.
+        // The way out here is to calculate back a single pixel from device to logic
+        // (Object coordinates) to have the 'logic', view-dependent line width and use it.
+        // That works for the cost of a matrix inversion - sigh.
+        std::vector<Gdiplus::REAL> aDashArray(pStroke->size());
+        double fFactor(1.0);
+
+        if(rLineWidths.getX() <= 1.0)
+        {
+            // no 'real' line width, need to calculate back the logic line width
+            // for a one pixel hairline
+            basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            aObjectToDeviceInv.invert();
+            const basegfx::B2DVector aOnePixel(aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0));
+
+            if(aOnePixel.getX() > 0.0)
+            {
+                fFactor = 1.0 / aOnePixel.getX();
+            }
+        }
+        else
+        {
+            // use logic line width
+            fFactor = 1.0 / rLineWidths.getX();
+        }
+
+        for(size_t a(0); a < pStroke->size(); a++)
+        {
+            aDashArray[a] = Gdiplus::REAL((*pStroke)[a] * fFactor);
+        }
+
+        aPen.SetDashCap(Gdiplus::DashCapFlat);
+        aPen.SetDashOffset(Gdiplus::REAL(0.0));
+        aPen.SetDashPattern(aDashArray.data(), aDashArray.size());
+    }
+
+    if(!bDoDirectGDIPlusStroke && pSystemDependentData_GraphicsPath)
     {
         // MM01 - check on stroke change. Used against not used, or if oth used,
         // equal or different? Triangulation geometry creation depends heavily
@@ -2345,7 +2400,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
         // fill data of buffered data
         pGraphicsPath = std::make_shared<Gdiplus::GraphicsPath>();
 
-        if(bStrokeUsed)
+        if(!bDoDirectGDIPlusStroke && bStrokeUsed)
         {
             // MM01 need to do line dashing as fallback stuff here now
             basegfx::B2DPolyPolygon aPolyPolygonLine;
@@ -2373,7 +2428,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
         else
         {
-            // no line dashing, just copy
+            // no line dashing or direct stroke, just copy
             impAddB2DPolygonToGDIPlusGraphicsPathReal(
                 *pGraphicsPath,
                 rPolygon,
