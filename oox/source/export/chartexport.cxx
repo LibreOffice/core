@@ -3711,7 +3711,7 @@ void ChartExport::exportMarker(const Reference< XPropertySet >& xPropSet)
     if( GetProperty( xPropSet, "Symbol" ) )
         mAny >>= aSymbol;
 
-    if(aSymbol.Style != chart2::SymbolStyle_STANDARD && aSymbol.Style != chart2::SymbolStyle_AUTO && aSymbol.Style != chart2::SymbolStyle_NONE)
+    if(aSymbol.Style != chart2::SymbolStyle_STANDARD && aSymbol.Style != chart2::SymbolStyle_NONE)
         return;
 
     FSHelperPtr pFS = GetFS();
