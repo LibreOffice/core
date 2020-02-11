@@ -1983,11 +1983,10 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     if( !m_pCursor )
         m_pCursor = m_pStartEntry;
-    SvTreeListEntry* pEntry = GetEntry( aPos );
     m_nFlags &= ~LBoxFlags::Filling;
     m_pView->GrabFocus();
     //fdo#82270 Grabbing focus can invalidate the entries, re-fetch
-    pEntry = GetEntry(aPos);
+    SvTreeListEntry* pEntry = GetEntry(aPos);
     // the entry can still be invalid!
     if( !pEntry || !m_pView->GetViewData( pEntry ))
         return;

@@ -279,7 +279,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         }
         if ( nPos != STREAM_SEEK_TO_END )
             return nPos;
-        rc = osl_getFilePos( pInstanceData->rHandle, &nNewPos );
+        osl_getFilePos( pInstanceData->rHandle, &nNewPos );
         return nNewPos;
     }
     SetError( SVSTREAM_GENERALERROR );
@@ -438,7 +438,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
 
         if ( !LockFile() ) // whole file
         {
-            rc = osl_closeFile( nHandleTmp );
+            osl_closeFile( nHandleTmp );
             bIsOpen = false;
             m_isWritable = false;
             pInstanceData->rHandle = nullptr;

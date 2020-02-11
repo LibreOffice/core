@@ -310,8 +310,7 @@ static const double roundArray[] = {
 |*
  */
 
-static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
-                    sal_Unicode cForceThousandSep )
+static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth )
 {
 
     short nExp = 0;
@@ -321,8 +320,6 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
 
     sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
     ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
-    if( cForceThousandSep )
-        cThousandSep = cForceThousandSep;
 
     // compute exponent
     nExp = 0;
@@ -442,8 +439,7 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
         *p++ = '-';
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
-    myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
-        cDecimalSep );
+    myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0 );
     // remove trailing zeros
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
     q = p; p--;

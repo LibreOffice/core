@@ -494,7 +494,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
             else if ( mnDrawMode & DrawModeFlags::NoFill )
             {
                 aTextFillColor = COL_TRANSPARENT;
-                bTransFill = true;
             }
 
             aFont.SetFillColor( aTextFillColor );

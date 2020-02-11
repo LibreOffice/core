@@ -1863,7 +1863,7 @@ void ScRange::ParseRows( const ScDocument* pDoc,
         {
             if( p[0] == ':')
             {
-                p = lcl_a1_get_row( pDoc, p+1, &aEnd, &ignored, nullptr);
+                lcl_a1_get_row( pDoc, p+1, &aEnd, &ignored, nullptr);
             }
             else
             {
@@ -1880,7 +1880,7 @@ void ScRange::ParseRows( const ScDocument* pDoc,
             {
                 if( p[1] == 'R' || p[1] == 'r' )
                 {
-                    p = lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored );
+                    lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored );
                 }
             }
             else

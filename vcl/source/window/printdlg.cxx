@@ -171,15 +171,13 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
 
     // horizontal line
     {
-        auto nTop = aOffset.Y() - nTextHeight;
-
         auto nWidth = rRenderContext.GetTextWidth(maHorzText);
 
         auto nStart = aOffset.X() + (maPreviewSize.Width() - nWidth) / 2;
         rRenderContext.DrawText(Point(nStart, aOffset.Y() - nTextHeight), maHorzText, 0, maHorzText.getLength());
 
         DecorationView aDecoView(&rRenderContext);
-        nTop = aOffset.Y() - (nTextHeight / 2);
+        auto nTop = aOffset.Y() - (nTextHeight / 2);
         aDecoView.DrawSeparator(Point(aOffset.X(), nTop), Point(nStart - 2, nTop), false);
         aDecoView.DrawSeparator(Point(nStart + nWidth + 2, nTop), Point(aOffset.X() + maPreviewSize.Width(), nTop), false);
     }

@@ -2342,7 +2342,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
                 if(bHorz)
                     lWidth = GetMargin2() - lWidth;
                 mxRulerImpl->nTotalDist = lWidth;
-                lPos = lOrigLPos = mpBorders[nIdx].nPos;
+                lPos = mpBorders[nIdx].nPos;
 
                 for(sal_uInt16 i = nStartBorder; i < nEndBorder; ++i)
                 {

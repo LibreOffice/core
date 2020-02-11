@@ -1446,7 +1446,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
             sal_Int32 failedPrereq = dbData.failedPrerequisites.toInt32();
             //If the installation failed for other reason then the license then we
             //ignore it.
-            if (failedPrereq ^= deployment::Prerequisites::LICENSE)
+            if (failedPrereq ^ deployment::Prerequisites::LICENSE)
                 continue;
 
             //Prepare the URL to the extension

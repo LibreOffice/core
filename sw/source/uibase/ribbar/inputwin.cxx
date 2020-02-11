@@ -520,7 +520,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
-                if( cClose == (cCh = aActText[ nEndPos ]))
+                if( cClose == aActText[ nEndPos ] )
                 {
                     bFound = true;
                     break;

@@ -153,7 +153,6 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
 //printf("@@ gz_read : len : %d\t",len);
     gz_stream *s = file;
     Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
-    Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
     if (s == nullptr)
         return 0;
 
@@ -162,7 +161,7 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
     if (s->z_err == Z_STREAM_END)
         return 0;                                 /* EOF */
 
-    s->stream.next_out = next_out = static_cast<Bytef *>(buf);
+    s->stream.next_out = static_cast<Bytef *>(buf);
     s->stream.avail_out = len;
 
     while (s->stream.avail_out != 0)

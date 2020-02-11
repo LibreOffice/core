@@ -713,7 +713,6 @@ bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
                         sw::Extent const& rExtentEnd(m_pMergedPara->extents[i]);
                         if (rExtentEnd.pNode != rExtent.pNode)
                         {
-                            nInLen = 0;
                             break;
                         }
                         // add gap too
@@ -721,7 +720,6 @@ bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
                         if (nInLen <= rExtentEnd.nEnd - rExtentEnd.nStart)
                         {
                             nLen += nInLen;
-                            nInLen = 0;
                             break;
                         }
                         nLen += rExtentEnd.nEnd - rExtentEnd.nStart;

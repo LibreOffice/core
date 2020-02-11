@@ -351,7 +351,7 @@ static bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
                 break;
             case oslCheckMode::WriteAccess:
                 ((aUString += str) += aSlashURL) += aTmpName2;
-                if ((rc = Directory::create(aUString)) == osl::FileBase::E_None)
+                if (Directory::create(aUString) == osl::FileBase::E_None)
                 {
                     bCheckResult = true;
                     rc = Directory::remove(aUString);

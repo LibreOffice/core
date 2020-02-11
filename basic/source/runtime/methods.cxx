@@ -3389,7 +3389,7 @@ void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
 
     if (nNumDigitsAfterDecimal > 0)
     {
-        sal_Int32 nActualDigits = nNumDigitsAfterDecimal;
+        sal_Int32 nActualDigits;
         const sal_Int32 nSepPos = aResult.indexOf(decSep);
         if (nSepPos == -1)
             nActualDigits = 0;
