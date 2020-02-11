@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84e7ba59_d0771ad7",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "1. You had addressed my comment about correct naming (prefix) for aUILanguages, but unfortunately not about vCurrency that is still using non-standard \"v\" prefix.\n2. In C++, variables should be declared immediately where they are used. It means: put declaration of aUILanguages right before ln 1329, and of aCurrencies before ln 1408. Among other things, that will slightly decrease memory footprint (both in heap and on stack), because of reuse of memory from aUILanguages after its block.",
+      "range": {
+        "startLine": 1300,
+        "startChar": 4,
+        "endLine": 1301,
+        "endChar": 52
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de932b0e_33d53d5b",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "Please drop this unnecessary top-level namespace specification: it\u0027s not needed for disambiguation, and is only syntactical noise - and see how it\u0027s inconsistent with usage of the same namespace a line above (yes I remember using it in my comment, but that was just a copy-paste - which is how some unnecessary stuff spreads across the codebase :-))",
+      "range": {
+        "startLine": 1341,
+        "startChar": 16,
+        "endLine": 1341,
+        "endChar": 18
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "818ab141_3b22d31e",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "Those unneeded and inconsistent (with clang-format) spaces in new code (or even introduced in old code) again ;-)",
+      "range": {
+        "startLine": 1349,
+        "startChar": 39,
+        "endLine": 1349,
+        "endChar": 40
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d123ae6_66e219a4",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "This line was reformatted without need: only whitespace edits - please revert",
+      "range": {
+        "startLine": 1408,
+        "startChar": 46,
+        "endLine": 1408,
+        "endChar": 47
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d62c0951_8262acd4",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "You are rightfully using an OUString because you need an address of the variable. So we can take an advantage from already created/constructed variable, and avoid calling ctor/dtor of a temporary two lines above: just move creation of this variable before ln 1929, and use it instead of the literal in that line.",
+      "range": {
+        "startLine": 1931,
+        "startChar": 4,
+        "endLine": 1931,
+        "endChar": 36
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28ef600e_9e239596",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-11T06:04:43Z",
+      "side": 1,
+      "message": "Why sal_uInt32? This does not match the argument in insert_separator (int pos) where it is used. Additionally, there is a concept that unsigned types should generally not be used (unless are required by external API), so I ask you to avoid using unsigned types where possible.",
+      "range": {
+        "startLine": 296,
+        "startChar": 4,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "1b2cd01cb11cbb140ffcb177ae4ac3df10818817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
