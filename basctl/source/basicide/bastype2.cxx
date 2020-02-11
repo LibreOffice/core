@@ -851,6 +851,7 @@ SbTreeListBox::SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Win
     : m_xControl(std::move(xControl))
     , m_xIter(m_xControl->make_iterator())
     , m_pTopLevel(pTopLevel)
+    , m_bFreezeOnFirstAddRemove(false)
     , m_aNotifier(*this)
 {
     m_xControl->connect_row_activated(LINK(this, SbTreeListBox, OpenCurrentHdl));
@@ -880,7 +881,6 @@ void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation 
     // can be called multiple times for updating!
 
     // actually test if basic's in the tree already?!
-    m_xControl->freeze();
     // level 1: BasicManager (application, document, ...)
     bool bDocumentRootEntry = FindRootEntry(rDocument, eLocation, *m_xIter);
     if (bDocumentRootEntry && m_xControl->get_row_expanded(*m_xIter))
@@ -891,7 +891,6 @@ void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation 
         OUString aImage(GetRootEntryBitmaps(rDocument));
         AddEntry(aRootName, aImage, nullptr, true, std::make_unique<DocumentEntry>(rDocument, eLocation));
     }
-    m_xControl->thaw();
 }
 
 void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const ScriptDocument& rDocument, LibraryLocation eLocation)
@@ -1259,6 +1258,12 @@ void SbTreeListBox::UpdateEntries()
 // Removes the entry from the tree.
 void SbTreeListBox::RemoveEntry(const weld::TreeIter& rIter)
 {
+    if (m_bFreezeOnFirstAddRemove)
+    {
+        m_xControl->freeze();
+        m_bFreezeOnFirstAddRemove = false;
+    }
+
     // removing the associated user data
     Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(rIter).toInt64());
     delete pBasicEntry;
@@ -1329,6 +1334,11 @@ void SbTreeListBox::AddEntry(
     std::unique_ptr<Entry>&& rUserData,
     weld::TreeIter* pRet)
 {
+    if (m_bFreezeOnFirstAddRemove)
+    {
+        m_xControl->freeze();
+        m_bFreezeOnFirstAddRemove= false;
+    }
     OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(rUserData.release())));
     m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, &rImage, bChildrenOnDemand, pRet);
 }
