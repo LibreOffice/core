@@ -984,7 +984,7 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
                         bool bModuleEntry = FindEntry(aModName, OBJ_TYPE_MODULE, *xTreeIter);
                         if (!bModuleEntry)
                         {
-                            AddEntry(aModName, RID_BMP_MODULE, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
+                            AddEntry(aModName, RID_BMP_MODULE, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_MODULE), xTreeIter.get());
                         }
 
                         // methods
