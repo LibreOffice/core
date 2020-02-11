@@ -1283,12 +1283,9 @@ sal_Int8 DrawViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* /*pTargetWindow*/,
-    sal_uInt16 nPage,
+    sal_uInt16 /*nPage*/,
     SdrLayerID nLayer )
 {
-    if( nPage != SDRPAGE_NOTFOUND )
-        nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();
-
     if( SlideShow::IsRunning( GetViewShellBase() ) )
         return DND_ACTION_NONE;
 

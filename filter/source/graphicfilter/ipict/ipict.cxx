@@ -743,7 +743,6 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
     nWidth = nWidth - nBndX;
     if (nWidth == 0)
         return 0xffffffff;
-    sal_uInt16 nDstBitCount = 1;
 
     std::vector<Color> aPalette;
     const bool bNotMonoChrome = (nRowBytes & 0x8000) != 0;
@@ -759,12 +758,6 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
 
         pPict->SeekRel( 8 );
         nDataSize += 46;
-
-        nDstBitCount = nPixelSize;
-        if ( nDstBitCount > 8 )
-            nDstBitCount = 24;
-        else if ( nDstBitCount == 2 )
-            nDstBitCount = 4;
 
         if ( bColorTable )
         {

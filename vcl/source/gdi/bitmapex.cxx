@@ -1396,7 +1396,7 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
                     {
                         nXTmp = nX;
 
-                        nSum2 = lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
+                        nSum2 = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
                         nSum1 = -nSum2;
                         nSum2 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
                         lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );

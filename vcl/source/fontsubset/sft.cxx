@@ -2431,7 +2431,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         info->linegap   = XUnits(UPEm, GetInt16(table, HHEA_lineGap_offset));
     }
 
-    table = getTable(ttf, O_vhea);
+    getTable(ttf, O_vhea);
 }
 
 GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)

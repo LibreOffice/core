@@ -88,9 +88,9 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
     m_xSeek.set(m_xOut, uno::UNO_QUERY_THROW );
 
     oslFileError aErr = osl_File_E_None;
-    if( (aErr=osl_openFile( rOrigFile.pData,
-                            &m_aReadHandle,
-                            osl_File_OpenFlag_Read )) == osl_File_E_None )
+    if( osl_openFile( rOrigFile.pData,
+                      &m_aReadHandle,
+                      osl_File_OpenFlag_Read ) == osl_File_E_None )
     {
         if( (aErr=osl_setFilePos( m_aReadHandle,
                                   osl_Pos_End,
@@ -437,10 +437,9 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     ::std::vector<unsigned char> nChecksum;
     ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
     oslFileHandle aRead = nullptr;
-    oslFileError aErr = osl_File_E_None;
-    if( (aErr = osl_openFile(rInPDFFileURL.pData,
-                             &aRead,
-                             osl_File_OpenFlag_Read )) == osl_File_E_None )
+    if( osl_openFile(rInPDFFileURL.pData,
+                     &aRead,
+                     osl_File_OpenFlag_Read ) == osl_File_E_None )
     {
         sal_uInt8 aBuf[4096];
         sal_uInt32 nCur = 0;
@@ -448,7 +447,7 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
         while( nCur < nBytes )
         {
             sal_uInt32 nPass = std::min<sal_uInt32>(nBytes - nCur, sizeof( aBuf ));
-            if( (aErr = osl_readFile( aRead, aBuf, nPass, &nBytesRead)) != osl_File_E_None
+            if( osl_readFile( aRead, aBuf, nPass, &nBytesRead) != osl_File_E_None
                 || nBytesRead == 0 )
             {
                 break;

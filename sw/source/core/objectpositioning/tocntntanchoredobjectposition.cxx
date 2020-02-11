@@ -188,7 +188,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
     // determine frame the object position has to be oriented at.
     const SwTextFrame* pOrientFrame = &rAnchorTextFrame;
-    const SwTextFrame* pAnchorFrameForVertPos = &rAnchorTextFrame;
+    const SwTextFrame* pAnchorFrameForVertPos;
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.

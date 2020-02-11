@@ -359,17 +359,17 @@ OUString NativeToAscii(const OUString& inStr,
             } else {
                 if ((index = numberChar.indexOf(str[i])) >= 0)
                     newStr[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
-                else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
+                else if (separatorChar.indexOf(str[i]) >= 0 &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
                     newStr[count] = SeparatorChar[NumberChar_HalfWidth];
-                else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
+                else if (decimalChar.indexOf(str[i]) >= 0 &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
                     // Only when decimal point is followed by numbers,
                     // it will be convert to ASCII decimal point
                     newStr[count] = DecimalChar[NumberChar_HalfWidth];
-                else if ((index = minusChar.indexOf(str[i])) >= 0 &&
+                else if (minusChar.indexOf(str[i]) >= 0 &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
                     // Only when minus is followed by numbers,

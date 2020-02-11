@@ -373,27 +373,6 @@ void ScDocument::FillInfo(
 
     bool bTabProtect = IsTabProtected(nTab);
 
-                                                // for block marks of merged cells
-                                                // with hidden first row/column
-    bool bPaintMarks = false;
-    SCCOL nBlockStartX = 0, nBlockEndX = 0;
-    SCROW nBlockEndY = 0, nBlockStartY = 0;
-    if (pMarkData && pMarkData->IsMarked())
-    {
-        ScRange aTmpRange;
-        pMarkData->GetMarkArea(aTmpRange);
-        if ( nTab >= aTmpRange.aStart.Tab() && nTab <= aTmpRange.aEnd.Tab() )
-        {
-            nBlockStartX = aTmpRange.aStart.Col();
-            nBlockStartY = aTmpRange.aStart.Row();
-            nBlockEndX = aTmpRange.aEnd.Col();
-            nBlockEndY = aTmpRange.aEnd.Row();
-            ExtendHidden( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY, nTab );   //? needed ?
-            if (!pMarkData->IsMarkNegative())
-                bPaintMarks = true;
-        }
-    }
-
     // first only the entries for the entire column
 
     nArrRow=0;
@@ -750,22 +729,6 @@ void ScDocument::FillInfo(
                     pInfo->pShadowAttr = static_cast<const SvxShadowItem*>(pItem);
                     if (pInfo->pShadowAttr != pDefShadow)
                         bAnyShadow = true;
-
-                    // Block marks - again with the original merge values
-
-                    bool bCellMarked = false;
-                    if (bPaintMarks)
-                        bCellMarked = ( nStartX >= nBlockStartX
-                                    && nStartX <= nBlockEndX
-                                    && nStartY >= nBlockStartY
-                                    && nStartY <= nBlockEndY );
-                    if (pMarkData && pMarkData->IsMultiMarked() && !bCellMarked)
-                    {
-                        ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nStartX ));
-                        SCSIZE nIndex;
-                        if ( aThisMarkArr.Search( nStartY, nIndex ) )
-                            bCellMarked=aThisMarkArr.mvData[nIndex].bMarked;
-                    }
                 }
             }
         }

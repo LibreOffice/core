@@ -204,7 +204,7 @@ int SvRTFParser::GetNextToken_()
                                         cAnsi = GetNextChar();
 
                                     if( '\\' == cAnsi &&
-                                        '\'' == ( cAnsi = GetNextChar() ))
+                                        '\'' == GetNextChar() )
                                         // skip HexValue
                                         GetHexValue();
                                     nNextCh = GetNextChar();
@@ -441,7 +441,7 @@ void SvRTFParser::ScanText()
                                     cAnsi = GetNextChar();
 
                                 if( '\\' == cAnsi &&
-                                    '\'' == ( cAnsi = GetNextChar() ))
+                                    '\'' == GetNextChar() )
                                     // skip HexValue
                                     GetHexValue();
                                 nNextCh = GetNextChar();

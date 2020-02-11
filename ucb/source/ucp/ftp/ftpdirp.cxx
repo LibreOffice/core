@@ -845,7 +845,7 @@ bool FTPDirectoryParser::parseUNIX (
     const char  *pBuffer)
 {
     const char *p1, *p2;
-    p1 = p2 = pBuffer;
+    p1 = pBuffer;
 
     if (!((*p1 == '-') || (*p1 == 'd') || (*p1 == 'l')))
         return false;

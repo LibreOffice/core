@@ -722,11 +722,11 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 if(bIsGrowing) // cell is growing larger
                 {
                     // To actually grow the image, we need to take the max
-                    fWidthFactor = fHeightFactor = std::max(fWidthFactor, fHeightFactor);
+                    fWidthFactor = std::max(fWidthFactor, fHeightFactor);
                 }
                 else if(bIsShrinking) // cell is growing smaller, take the min
                 {
-                    fWidthFactor = fHeightFactor = std::min(fWidthFactor, fHeightFactor);
+                    fWidthFactor = std::min(fWidthFactor, fHeightFactor);
                 }
 
                 // We don't want the image to become larger than the current cell

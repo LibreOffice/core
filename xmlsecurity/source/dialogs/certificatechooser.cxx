@@ -182,8 +182,7 @@ void CertificateChooser::ImplInitialize()
         {
         }
 
-        sal_Int32 nCertificates = xCerts.getLength();
-        for( sal_Int32 nCert = nCertificates; nCert; )
+        for( sal_Int32 nCert = xCerts.getLength(); nCert; )
         {
             uno::Reference< security::XCertificate > xCert = xCerts[ --nCert ];
             // Check if we have a private key for this...
@@ -192,7 +191,6 @@ void CertificateChooser::ImplInitialize()
             if (!(nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY))
             {
                 ::comphelper::removeElementAt( xCerts, nCert );
-                nCertificates = xCerts.getLength();
             }
         }
 

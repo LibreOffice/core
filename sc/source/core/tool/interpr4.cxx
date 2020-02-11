@@ -3454,7 +3454,7 @@ void ScInterpreter::ScMacro()
                 {   // array( cols )  one line, several columns
                     pDimArray->GetDim32( 1, nCs, nCe );
                     nC = static_cast<SCSIZE>(nCe - nCs + 1);
-                    nRs = nRe = 0;
+                    nRs = 0;
                     nR = 1;
                     nColIdx = 0;
                     nRowIdx = 1;

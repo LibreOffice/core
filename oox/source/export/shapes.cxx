@@ -1217,13 +1217,13 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     pFS->startElementNS(mnXmlNamespace, XML_nvPicPr);
 
     OUString sName, sDescr, sURL;
-    bool bHaveName, bHaveDesc, bHaveURL;
+    bool bHaveName, bHaveDesc;
 
     if ( ( bHaveName= GetProperty( xShapeProps, "Name" ) ) )
         mAny >>= sName;
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
-    if ( ( bHaveURL = GetProperty( xShapeProps, "URL" ) ) )
+    if ( GetProperty( xShapeProps, "URL" ) )
         mAny >>= sURL;
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,

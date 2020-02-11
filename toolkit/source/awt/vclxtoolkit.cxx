@@ -267,7 +267,6 @@ void MessBox::ImplPosControls()
     Size            aMEditSize;
     long            nTitleWidth;
     long            nButtonSize = ImplGetButtonSize();
-    long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
     long            nMaxLineWidth;
     long            nWidth;
     WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
@@ -280,7 +279,7 @@ void MessBox::ImplPosControls()
     OUString aMessText(maMessText.replaceAll("\t", "    "));
 
     //If window too small, we make dialog box be wider
-    nMaxWidth = 630 * GetDPIScaleFactor();
+    long nMaxWidth = 630 * GetDPIScaleFactor();
 
     // MessagBox should be at least as wide as to see the title
     // Extra-Width for Close button, because Close button is set after this call

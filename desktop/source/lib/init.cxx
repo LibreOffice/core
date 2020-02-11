@@ -2459,7 +2459,6 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             aFilterOptions = temp + aFilterOptions.copy(bIndex+12);
         }
 
-        aIndex = -1;
         if ((aIndex = aFilterOptions.indexOf(",FullSheetPreview=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("FULLSHEETPREVEND");
