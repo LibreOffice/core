@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "089c6441_de050cf0",
+        "filename": "i18npool/source/localedata/data/it_IT.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-12T16:32:20Z",
+      "side": 1,
+      "message": "This one should be kept \"true\".\n\nShort explanation: we have three types of date and time formats, short, medium and long; each type should have one default\u003d\"true\". For *the* default date format the default\u003d\"true\" type\u003d\"medium\" format is used.",
+      "range": {
+        "startLine": 107,
+        "startChar": 52,
+        "endLine": 107,
+        "endChar": 57
+      },
+      "revId": "0c16210de127a2ea09d7f41ff3b0909e06ee32d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49061980_6e52fc93",
+        "filename": "i18npool/source/localedata/data/it_IT.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-12T16:32:20Z",
+      "side": 1,
+      "message": "Just note this also changes the time display from HH:MM to HH:MM:SS, which may or may not be wanted.. to properly solve that it would also be needed to change some internals in the number formatter\u0027s predefined indexes and then add a format with 4-digit year but only HH:MM. I can do that later.\n\nFor now just do the default swap as you did here.",
+      "revId": "0c16210de127a2ea09d7f41ff3b0909e06ee32d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
