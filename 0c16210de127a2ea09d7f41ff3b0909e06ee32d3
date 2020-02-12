@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2bb10e29_ee5520a1",
+        "filename": "i18npool/source/localedata/data/it_IT.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001128
+      },
+      "writtenOn": "2020-02-12T17:39:33Z",
+      "side": 1,
+      "message": "Thanks for the explanation",
+      "parentUuid": "089c6441_de050cf0",
+      "range": {
+        "startLine": 107,
+        "startChar": 52,
+        "endLine": 107,
+        "endChar": 57
+      },
+      "revId": "0c16210de127a2ea09d7f41ff3b0909e06ee32d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49061980_6e52fc93",
         "filename": "i18npool/source/localedata/data/it_IT.xml",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "0c16210de127a2ea09d7f41ff3b0909e06ee32d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b43c53_04503ebf",
+        "filename": "i18npool/source/localedata/data/it_IT.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001128
+      },
+      "writtenOn": "2020-02-12T17:39:33Z",
+      "side": 1,
+      "message": "For the moment I reverted this change. your approach is indeed better. Thanks :)",
+      "parentUuid": "49061980_6e52fc93",
+      "revId": "0c16210de127a2ea09d7f41ff3b0909e06ee32d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
