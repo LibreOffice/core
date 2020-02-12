@@ -128,7 +128,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
 void SbTreeListBox::ScanAllEntries()
 {
     // instead of always freezing, freeze on the first add/remove, which keeps gtk
-    // from relayouting the tree if its not necessary
+    // from relayouting the tree if it's not necessary
     m_bFreezeOnFirstAddRemove = true;
 
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
