@@ -782,8 +782,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         if (pFieldType->nMaximumScale)
         {
             ActivateAggregate( tpScale );
-            m_xScale->set_range(std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()),
-                                pFieldType->nMinimumScale);
+            m_xScale->set_range(pFieldType->nMinimumScale,
+                                std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             m_xScale->set_editable(!pFieldType->aCreateParams.isEmpty() && pFieldType->aCreateParams != "PRECISION");
         }
         else
