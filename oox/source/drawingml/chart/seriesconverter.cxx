@@ -340,6 +340,9 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
             // Import baseline border properties for these data labels.
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
     }
+    // import leaderline of data labels
+    if( !mrModel.mbShowLeaderLines )
+        aPropSet.setProperty( PROP_ShowLeaderLines, false );
 
     // data point label settings
     for (auto const& pointLabel : mrModel.maPointLabels)
