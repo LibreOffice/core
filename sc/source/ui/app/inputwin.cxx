@@ -38,6 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <stdlib.h>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -65,6 +66,7 @@
 #include <appoptio.hxx>
 #include <rangenam.hxx>
 #include <formula/compiler.hxx>
+#include <formula/formulahelper.hxx>
 #include <dbdata.hxx>
 #include <rangeutl.hxx>
 #include <docfunc.hxx>
@@ -80,6 +82,9 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <helpids.h>
 #include <output.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 
 #define THESIZE             1000000 // Should be more than enough!
 #define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
@@ -352,7 +357,7 @@ void ScInputWindow::Select()
 
                     // The Toolbox will be disabled anyways, so we don't need to switch here,
                     // regardless whether it succeeded or not!
-//                  SetOkCancelMode();
+                    // SetOkCancelMode();
                 }
             }
             break;
