@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2ec343a_8b34288d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-12T12:38:28Z",
+      "side": 1,
+      "message": "problem is, the test runs successfully without the fix... i think you need to check the document.xml with XPath to see if the bold is really written in the DOCX, i don\u0027t see how it can be checked with the API.",
+      "revId": "7e4a1b3fbc67ecf752ea1f93316009d7e98c5fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
