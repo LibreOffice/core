@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0850a9f1_55e856a9",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-12T12:48:08Z",
+      "side": 1,
+      "message": "so this would change the meaning of values already stored in the configuration?",
+      "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
