@@ -86,6 +86,7 @@ p14                     http://schemas.microsoft.com/office/powerpoint/2010/main
 
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
 x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
+c15                     http://schemas.microsoft.com/office/drawing/2012/chart
 
 # extlst namespaces
 

@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <VSeriesPlotter.hxx>
+#include <BaseGFXHelper.hxx>
 #include <VLineProperties.hxx>
 #include <ShapeFactory.hxx>
 
@@ -86,6 +87,7 @@
 namespace chart {
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -721,7 +723,41 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             awt::Point aRelPos = rDataSeries.getLabelPosition(aTextShapePos, nPointIndex);
             if( aRelPos.X != -1 )
+            {
                 xTextShape->setPosition(aRelPos);
+                if( !m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+                {
+                    sal_Int32 nX1 = rScreenPosition2D.X;
+                    sal_Int32 nY1 = rScreenPosition2D.Y;
+                    sal_Int32 nX2 = nX1;
+                    sal_Int32 nY2 = nY1;
+                    ::basegfx::B2IRectangle aRect(BaseGFXHelper::makeRectangle(aRelPos, xTextShape->getSize()));
+                    if (nX1 < aRelPos.X)
+                        nX2 = aRelPos.X;
+                    else if (nX1 > aRect.getMaxX())
+                        nX2 = aRect.getMaxX();
+
+                    if (nY1 < aRect.getMinY())
+                        nY2 = aRect.getMinY();
+                    else if (nY1 > aRect.getMaxY())
+                        nY2 = aRect.getMaxY();
+
+                    //when the line is very short compared to the page size don't create one
+                    ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
+                    double fPageDiagonaleLength = sqrt(double(m_aPageReferenceSize.Width)*double(m_aPageReferenceSize.Width) + double(m_aPageReferenceSize.Height)*double(m_aPageReferenceSize.Height));
+                    if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
+                    {
+                        drawing::PointSequenceSequence aPoints(1);
+                        aPoints[0].realloc(2);
+                        aPoints[0][0].X = nX1;
+                        aPoints[0][0].Y = nY1;
+                        aPoints[0][1].X = nX2;
+                        aPoints[0][1].Y = nY2;
+
+                        m_pShapeFactory->createLine2D(xTarget, aPoints, new VLineProperties);
+                    }
+                }
+            }
         }
 
         // in case legend symbol has to be displayed, text shape position is
