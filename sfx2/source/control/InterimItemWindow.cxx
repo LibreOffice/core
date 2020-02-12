@@ -11,7 +11,7 @@
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID)
-    : Control(pParent, WB_TABSTOP)
+    : Control(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();

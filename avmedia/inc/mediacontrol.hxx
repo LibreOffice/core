@@ -21,7 +21,7 @@
 
 #include <avmedia/mediaitem.hxx>
 
-#include <vcl/ctrl.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
@@ -34,14 +34,12 @@ namespace avmedia
 
 class MediaItem;
 
-class MediaControl : public Control, public MediaControlBase
+class MediaControl : public InterimItemWindow, public MediaControlBase
 {
 public:
                         MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
     virtual             ~MediaControl() override;
     virtual void        dispose() override;
-
-    Size                getMinSizePixel() const;
 
     void                setState( const MediaItem& rItem );
     void                UpdateURLField( MediaItem const & maItem );
@@ -51,7 +49,6 @@ protected:
     virtual void        update() = 0;
     virtual void        execute( const MediaItem& rItem ) = 0;
 
-    virtual void        Resize() override;
     virtual void        InitializeWidgets() override;
     std::unique_ptr<weld::Label> mxMediaPath;
 
@@ -63,10 +60,6 @@ private:
                         DECL_LINK(implSelectHdl, const OString&, void);
                         DECL_LINK(implZoomSelectHdl, weld::ComboBox&, void);
                         DECL_LINK(implTimeoutHdl, Timer*, void);
-
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
 
     Idle                maIdle;
     Idle                maChangeTimeIdle;
