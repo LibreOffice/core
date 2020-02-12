@@ -3648,6 +3648,18 @@ private:
         return m_xTreeView->GetEntryText(pEntry).trim() == "<dummy>";
     }
 
+    SvTreeListEntry* GetPlaceHolderChild(SvTreeListEntry* pEntry) const
+    {
+        if (pEntry->HasChildren())
+        {
+            auto pChild = m_xTreeView->FirstChild(pEntry);
+            assert(pChild);
+            if (IsDummyEntry(pChild))
+                return pChild;
+        }
+        return nullptr;
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -4516,6 +4528,12 @@ public:
         return m_xTreeView->IsExpanded(rVclIter.iter);
     }
 
+    virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override
+    {
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        return GetPlaceHolderChild(rVclIter.iter) != nullptr;
+    }
+
     virtual void expand_row(const weld::TreeIter& rIter) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't expand when frozen");
@@ -4983,23 +5001,15 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
 
     // if there's a preexisting placeholder child, required to make this
     // potentially expandable in the first place, now we remove it
-    bool bPlaceHolder = false;
-    if (pEntry->HasChildren())
-    {
-        auto pChild = m_xTreeView->FirstChild(pEntry);
-        assert(pChild);
-        if (IsDummyEntry(pChild))
-        {
-            m_xTreeView->RemoveEntry(pChild);
-            bPlaceHolder = true;
-        }
-    }
+    SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(pEntry);
+    if (pPlaceHolder)
+        m_xTreeView->RemoveEntry(pPlaceHolder);
 
     SalInstanceTreeIter aIter(pEntry);
     bool bRet = signal_expanding(aIter);
 
     //expand disallowed, restore placeholder
-    if (!bRet && bPlaceHolder)
+    if (!bRet && pPlaceHolder)
     {
         m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
     }

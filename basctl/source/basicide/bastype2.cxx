@@ -253,7 +253,9 @@ void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const Scrip
             if (bLibRootEntry)
             {
                 SetEntryBitmaps(*xLibRootEntry, sId);
-                if (m_xControl->get_row_expanded(*xLibRootEntry))
+                bool bRowExpanded = m_xControl->get_row_expanded(*xLibRootEntry);
+                bool bRowExpandAttempted = !m_xControl->get_children_on_demand(*xLibRootEntry);
+                if (bRowExpanded || bRowExpandAttempted)
                     ImpCreateLibSubEntries(*xLibRootEntry, rDocument, aLibName);
             }
             else

@@ -8697,25 +8697,32 @@ private:
         return !pThis->signal_test_expand_row(*iter);
     }
 
-    bool signal_test_expand_row(GtkTreeIter& iter)
+    bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
-        disable_notify_events();
-        GtkInstanceTreeIter aIter(nullptr);
-
-        // if there's a preexisting placeholder child, required to make this
-        // potentially expandable in the first place, now we remove it
         bool bPlaceHolder = false;
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
-        if (gtk_tree_model_iter_children(pModel, &tmp, &iter))
+        if (gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter))
         {
-            aIter.iter = tmp;
-            if (get_text(aIter, -1) == "<dummy>")
+            rGtkIter.iter = tmp;
+            if (get_text(rGtkIter, -1) == "<dummy>")
             {
-                gtk_tree_store_remove(m_pTreeStore, &tmp);
                 bPlaceHolder = true;
             }
         }
+        return bPlaceHolder;
+    }
+
+    bool signal_test_expand_row(GtkTreeIter& iter)
+    {
+        disable_notify_events();
+
+        // if there's a preexisting placeholder child, required to make this
+        // potentially expandable in the first place, now we remove it
+        GtkInstanceTreeIter aIter(iter);
+        bool bPlaceHolder = child_is_placeholder(aIter);
+        if (bPlaceHolder)
+            gtk_tree_store_remove(m_pTreeStore, &aIter.iter);
 
         aIter.iter = iter;
         bool bRet = signal_expanding(aIter);
@@ -10006,6 +10013,13 @@ public:
         bool ret = gtk_tree_view_row_expanded(m_pTreeView, path);
         gtk_tree_path_free(path);
         return ret;
+    }
+
+    virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkInstanceTreeIter aIter(&rGtkIter);
+        return child_is_placeholder(aIter);
     }
 
     virtual void expand_row(const weld::TreeIter& rIter) override
