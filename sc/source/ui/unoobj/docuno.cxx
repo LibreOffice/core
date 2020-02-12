@@ -954,6 +954,9 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     // set the PgUp/PgDown offset
     pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
+
+    // Store the visible area so that we can use at places like shape insertion
+    pViewData->setLOKVisibleArea(rRectangle);
 }
 
 void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
