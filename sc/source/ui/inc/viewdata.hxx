@@ -333,6 +333,7 @@ private:
     bool                bGrowing;
 
     long                m_nLOKPageUpDownOffset;
+    tools::Rectangle    maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
 
     DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
 
@@ -553,6 +554,10 @@ public:
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
     long GetPageUpDownOffset() const { return m_nLOKPageUpDownOffset; }
+
+    /// The visible area in the client (set by setClientVisibleArea).
+    const tools::Rectangle& getLOKVisibleArea() const { return maLOKVisibleArea; }
+    void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
 
     void            KillEditView();
     void            ResetEditView();
