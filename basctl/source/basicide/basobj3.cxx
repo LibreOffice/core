@@ -250,19 +250,22 @@ BasicManager* FindBasicManager( StarBASIC const * pLib )
 
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
+    Shell* pShell = GetShell();
+
     // does not have to come from a document...
     if ( rDocument.isApplication() )
     {
-        if (Shell* pShell = GetShell())
-        {
+        if (pShell)
             pShell->SetAppBasicModified(true);
-            pShell->UpdateObjectCatalog();
-        }
     }
     else
     {
         rDocument.setDocumentModified();
     }
+
+    // tdf#130161 in all cases call UpdateObjectCatalog
+    if (pShell)
+        pShell->UpdateObjectCatalog();
 
     if (SfxBindings* pBindings = GetBindingsPtr())
     {
