@@ -18,10 +18,10 @@
  */
 
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/PanelDescriptor.hxx>
+#include <sidebar/PanelTitleBar.hxx>
+#include <sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/Paint.hxx>
+#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>

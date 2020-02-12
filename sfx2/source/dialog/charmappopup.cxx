@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/charmappopup.hxx>
-#include <sfx2/charmapcontrol.hxx>
+#include <charmapcontrol.hxx>
 #include <vcl/toolbox.hxx>
 
 CharmapPopup::CharmapPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)

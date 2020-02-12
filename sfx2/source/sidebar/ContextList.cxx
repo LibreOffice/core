@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sidebar/ContextList.hxx>
+#include <sidebar/ContextList.hxx>
 #include <sfx2/sidebar/Context.hxx>
 
 namespace sfx2::sidebar {

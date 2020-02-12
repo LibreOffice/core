@@ -25,9 +25,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocalview.hxx>
-#include <sfx2/templatecontaineritem.hxx>
-#include <sfx2/templateviewitem.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <templatecontaineritem.hxx>
+#include <templateviewitem.hxx>
+#include <thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/langhelp.hxx>

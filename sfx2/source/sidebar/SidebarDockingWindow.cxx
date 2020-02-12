@@ -19,7 +19,7 @@
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/PanelDescriptor.hxx>
+#include <sidebar/PanelDescriptor.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>

@@ -16,38 +16,51 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_PANELDESCRIPTOR_HXX
+#pragma once
 
-#include <sfx2/sidebar/ContextList.hxx>
+#include <sfx2/sidebar/Context.hxx>
+#include <rtl/ustring.hxx>
+
+#include <vector>
 
 namespace sfx2 { namespace sidebar {
 
-class PanelDescriptor
+/** Per context data for deck and panel descriptors.
+*/
+class ContextList
 {
 public:
-    OUString msTitle;
-    bool mbIsTitleBarOptional;
-    OUString msId;
-    OUString msDeckId;
-    OUString msTitleBarIconURL;
-    OUString msHighContrastTitleBarIconURL;
-    ContextList maContextList;
-    OUString msImplementationURL;
-    sal_Int32 mnOrderIndex;
-    bool mbShowForReadOnlyDocuments;
-    bool mbWantsCanvas;
-    bool mbExperimental;
+    ContextList();
 
-    OUString msNodeName; // some impress panel nodes names are different from their Id
+    class Entry
+    {
+    public:
+        Context maContext;
+        bool mbIsInitiallyVisible;
+        OUString msMenuCommand;
+    };
 
-    PanelDescriptor();
-    PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
-    ~PanelDescriptor();
+    /** Return <TRUE/> when the given context matches any of the stored contexts.
+    */
+    const Entry* GetMatch (
+        const Context& rContext) const;
+    Entry* GetMatch (
+        const Context& rContext);
+
+    void AddContextDescription (
+        const Context& rContext,
+        const bool bIsInitiallyVisible,
+        const OUString& rsMenuCommand);
+
+    void ToggleVisibilityForContext( const Context& rContext,const bool bIsInitiallyVisible );
+    const ::std::vector<Entry>& GetEntries() const {return maEntries;};
+
+private:
+    ::std::vector<Entry> maEntries;
+
+    ::std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
 };
 
 } } // end of namespace sfx2::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

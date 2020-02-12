@@ -50,7 +50,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/userinputinterception.hxx>
 
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sfxresid.hxx>
