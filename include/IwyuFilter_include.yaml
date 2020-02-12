@@ -616,9 +616,6 @@ blacklist:
     include/sfx2/mieclip.hxx:
     # Needed for implicit dtor
     - tools/stream.hxx
-    include/sfx2/recentdocsview.hxx:
-    # Needed for struct declaration
-    - com/sun/star/beans/PropertyValue.hpp
     include/sfx2/sfxbasecontroller.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XController2.hpp
@@ -682,12 +679,6 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
     - com/sun/star/lang/XComponent.hpp
-    include/sfx2/sidebar/Accessible.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessible.hpp
-    include/sfx2/sidebar/Paint.hxx:
-    # Needed for boost::variant
-    - vcl/gradient.hxx
     include/sfx2/sidebar/SidebarController.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XContextChangeEventListener.hpp
@@ -705,25 +696,9 @@ blacklist:
     include/sfx2/sidebar/Theme.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
-    include/sfx2/sidebar/UnoDeck.hxx:
-    # base class has to be a complete type
-    - com/sun/star/ui/XDeck.hpp
-    include/sfx2/sidebar/UnoDecks.hxx:
-    # base class has to be a complete type
-    - com/sun/star/ui/XDecks.hpp
-    include/sfx2/sidebar/UnoPanel.hxx:
-    # base class has to be a complete type
-    - com/sun/star/ui/XPanel.hpp
-    include/sfx2/sidebar/UnoPanels.hxx:
-    # base class has to be a complete type
-    - com/sun/star/ui/XPanels.hpp
     include/sfx2/sidebar/UnoSidebar.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XSidebarProvider.hpp
-    include/sfx2/unoctitm.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XNotifyingDispatch.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     include/sfx2/viewsh.hxx:
     # Needed for macro 
     - class SfxViewFactory

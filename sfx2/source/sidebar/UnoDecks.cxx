@@ -11,8 +11,8 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <sfx2/sidebar/UnoDecks.hxx>
-#include <sfx2/sidebar/UnoDeck.hxx>
+#include <sidebar/UnoDecks.hxx>
+#include <sidebar/UnoDeck.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>

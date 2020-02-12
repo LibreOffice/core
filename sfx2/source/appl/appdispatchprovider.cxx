@@ -36,7 +36,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

@@ -1,6 +1,31 @@
 ---
 assumeFilename: sfx2/source/appl/app.cxx
 blacklist:
+    sfx2/inc/sidebar/Accessible.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    sfx2/inc/sidebar/Paint.hxx:
+    # Needed for boost::variant
+    - vcl/gradient.hxx
+    sfx2/inc/sidebar/UnoDeck.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDeck.hpp
+    sfx2/inc/sidebar/UnoDecks.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XDecks.hpp
+    sfx2/inc/sidebar/UnoPanel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanel.hpp
+    sfx2/inc/sidebar/UnoPanels.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XPanels.hpp
+    sfx2/inc/recentdocsview.hxx:
+    # Needed for struct declaration
+    - com/sun/star/beans/PropertyValue.hpp
+    sfx2/inc/unoctitm.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XNotifyingDispatch.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
     sfx2/source/doc/syspathw32.hxx:
     # Needed on WIN32
     - sal/types.h

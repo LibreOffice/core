@@ -8,15 +8,15 @@
  *
  */
 
-#include <sfx2/sidebar/UnoDeck.hxx>
+#include <sidebar/UnoDeck.hxx>
 
-#include <sfx2/sidebar/UnoPanels.hxx>
+#include <sidebar/UnoPanels.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
-#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sidebar/DeckDescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 

@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/templatedefaultview.hxx>
+#include <templatedefaultview.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/templateviewitem.hxx>
+#include <templateviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>

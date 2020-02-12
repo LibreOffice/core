@@ -16,36 +16,30 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_DECKLAYOUTER_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_DECKLAYOUTER_HXX
+#pragma once
 
-#include <sfx2/sidebar/Panel.hxx>
-
-class ScrollBar;
-namespace vcl { class Window; }
-namespace tools { class Rectangle; }
+#include <vcl/button.hxx>
 
 namespace sfx2 { namespace sidebar {
 
-/** Helper for layouting the direct and indirect children of a
-    deck like title bars, panels, and scroll bars.
-*/
-namespace DeckLayouter
+class MenuButton final
+    : public CheckBox
 {
-    void LayoutDeck (
-        const tools::Rectangle& rContentArea,
-        sal_Int32& rMinimalWidth,
-        sal_Int32& rMinimalHeight,
-        SharedPanelContainer& rPanels,
-        vcl::Window& pDeckTitleBar,
-        vcl::Window& pScrollClipWindow,
-        vcl::Window& pScrollContainer,
-        vcl::Window& pFiller,
-        ScrollBar& pVerticalScrollBar);
-}
+public:
+    MenuButton (vcl::Window* pParentWindow);
+
+    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rUpdateArea) override;
+    virtual void MouseMove (const MouseEvent& rEvent) override;
+    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) override;
+    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) override;
+
+protected:
+    using CheckBox::FillLayoutData;
+
+private:
+    bool mbIsLeftButtonDown;
+};
 
 } } // end of namespace sfx2::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,34 +16,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
-#define INCLUDED_SFX2_SOURCE_SIDEBAR_TABITEM_HXX
+#pragma once
 
-#include <vcl/button.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-namespace vcl { class Window; }
+namespace com::sun::star::accessibility { class XAccessible; }
 
 namespace sfx2 { namespace sidebar {
 
-/** A single button in the tab bar.
-*/
-class TabItem final
-    : public RadioButton
+class TitleBar;
+
+class AccessibleTitleBar final
+    : public VCLXAccessibleComponent
 {
 public:
-    TabItem (vcl::Window* pParentWindow);
-
-    virtual void Paint (vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
-    virtual void MouseMove (const MouseEvent& rEvent) override;
-    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) override;
-    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) override;
+    static css::uno::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
 
 private:
-    bool mbIsLeftButtonDown;
+    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
+
+    explicit AccessibleTitleBar (VCLXWindow* pWindow);
+    virtual ~AccessibleTitleBar() override;
 };
 
 } } // end of namespace sfx2::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
