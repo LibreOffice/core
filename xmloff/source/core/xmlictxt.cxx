@@ -34,7 +34,6 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
     , maLocalName(rLName)
     , mbPrefixAndLocalNameFilledIn(true)
 {
-    assert(!rLName.isEmpty());
 }
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
