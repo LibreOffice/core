@@ -695,14 +695,11 @@ void ModulWindow::BasicAddWatch()
     bool bAdd = true;
     if ( !GetEditView()->HasSelection() )
     {
-        TextPaM aWordStart;
-        OUString aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
+        // tdf#57307 - expand selection to include connector punctuations
+        TextSelection aSel;
+        OUString aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aSel.GetStart(), &aSel.GetEnd() );
         if ( !aWord.isEmpty() )
-        {
-            TextSelection aSel( aWordStart );
-            aSel.GetEnd().GetIndex() += aWord.getLength();
             GetEditView()->SetSelection( aSel );
-        }
         else
             bAdd = false;
     }
