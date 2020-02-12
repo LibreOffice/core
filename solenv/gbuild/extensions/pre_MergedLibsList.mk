@@ -10,20 +10,25 @@
 # we link all object files from these libraries into one, merged library
 MERGE_LIBRARY_LIST := \
 	avmedia \
+	$(if $(filter WNT,$(OS)),avmediawin) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
+		basprov \
 	) \
 	basegfx \
+	canvasfactory \
 	canvastools \
 	comphelper \
 	configmgr \
 	cppcanvas \
 	$(call gb_Helper_optional,BREAKPAD,crashreport) \
+	ctl \
 	dbtools \
 	deployment \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(USING_X11),desktop_detector) \
+	$(if $(filter WNT,$(OS)),directx9canvas) \
 	drawinglayer \
 	editeng \
 	filterconfig \
