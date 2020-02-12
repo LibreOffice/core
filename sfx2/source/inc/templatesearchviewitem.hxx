@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX
 #define INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX
 
-#include <sfx2/templateviewitem.hxx>
+#include <templateviewitem.hxx>
 
 struct TemplateSearchViewItem : public TemplateViewItem
 {

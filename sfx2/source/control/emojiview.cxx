@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/emojiview.hxx>
-#include <sfx2/emojiviewitem.hxx>
+#include <emojiview.hxx>
+#include <emojiviewitem.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 #include <config_folders.h>

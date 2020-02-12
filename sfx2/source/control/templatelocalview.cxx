@@ -13,8 +13,8 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/inputdlg.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/templatecontaineritem.hxx>
-#include <sfx2/templateviewitem.hxx>
+#include <templatecontaineritem.hxx>
+#include <templateviewitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>

@@ -16,23 +16,33 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sidebar/ControlFactory.hxx>
+#pragma once
 
-#include <sidebar/MenuButton.hxx>
-#include <sidebar/TabItem.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 
-namespace sfx2::sidebar {
+class ScrollBar;
+namespace vcl { class Window; }
+namespace tools { class Rectangle; }
 
-VclPtr<CheckBox> ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
+namespace sfx2 { namespace sidebar {
+
+/** Helper for layouting the direct and indirect children of a
+    deck like title bars, panels, and scroll bars.
+*/
+namespace DeckLayouter
 {
-    return VclPtr<MenuButton>::Create(pParentWindow);
+    void LayoutDeck (
+        const tools::Rectangle& rContentArea,
+        sal_Int32& rMinimalWidth,
+        sal_Int32& rMinimalHeight,
+        SharedPanelContainer& rPanels,
+        vcl::Window& pDeckTitleBar,
+        vcl::Window& pScrollClipWindow,
+        vcl::Window& pScrollContainer,
+        vcl::Window& pFiller,
+        ScrollBar& pVerticalScrollBar);
 }
 
-VclPtr<RadioButton> ControlFactory::CreateTabItem (vcl::Window* pParentWindow)
-{
-    return VclPtr<TabItem>::Create(pParentWindow);
-}
-
-} // end of namespace sfx2::sidebar
+} } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
