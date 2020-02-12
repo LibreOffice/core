@@ -4183,30 +4183,25 @@
                 </enumeration>
                 <enumeration oor:value="2">
                   <info>
-                    <desc>1 bit, 1 bit dithered</desc>
+                    <desc>4 bit, 4 bit grayscale</desc>
                   </info>
                 </enumeration>
                 <enumeration oor:value="3">
                   <info>
-                    <desc>4 bit, 4 bit grayscale</desc>
+                    <desc>4 bit, 4 bit color palette</desc>
                   </info>
                 </enumeration>
                 <enumeration oor:value="4">
                   <info>
-                    <desc>4 bit, 4 bit color palette</desc>
+                    <desc>8 bit, 8 bit grayscale color</desc>
                   </info>
                 </enumeration>
                 <enumeration oor:value="5">
                   <info>
-                    <desc>8 bit, 8 bit grayscale color</desc>
-                  </info>
-                </enumeration>
-                <enumeration oor:value="6">
-                  <info>
                     <desc>8 bit, 8 bit color palette</desc>
                   </info>
                 </enumeration>
-                <enumeration oor:value="7">
+                <enumeration oor:value="6">
                   <info>
                     <desc>24 bit, 24 bit true color</desc>
                   </info>

@@ -56,7 +56,6 @@ private:
     OUString const            msEstimatedSizeVec;
 
     OUString const            ms1BitThreshold;
-    OUString const            ms1BitDithered;
     OUString const            ms4BitGrayscale;
     OUString const            ms4BitColorPalette;
     OUString const            ms8BitGrayscale;

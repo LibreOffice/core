@@ -515,8 +515,6 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
         OUString aEntry(mxLbColorDepth->get_active_text());
         if ( ms1BitThreshold == aEntry )
             nBitsPerPixel = 1;
-        else if ( ms1BitDithered == aEntry )
-            nBitsPerPixel = 1;
         else if ( ms4BitGrayscale == aEntry )
             nBitsPerPixel = 4;
         else if ( ms4BitColorPalette == aEntry )
@@ -561,7 +559,6 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , msEstimatedSizePix2(SvtResId(STR_SVT_ESTIMATED_SIZE_PIX_2))
     , msEstimatedSizeVec(SvtResId(STR_SVT_ESTIMATED_SIZE_VEC))
     , ms1BitThreshold(SvtResId(STR_SVT_1BIT_THRESHOLD))
-    , ms1BitDithered(SvtResId(STR_SVT_1BIT_DITHERED))
     , ms4BitGrayscale(SvtResId(STR_SVT_4BIT_GRAYSCALE))
     , ms4BitColorPalette(SvtResId(STR_SVT_4BIT_COLOR_PALETTE))
     , ms8BitGrayscale(SvtResId(STR_SVT_8BIT_GRAYSCALE))
@@ -797,11 +794,10 @@ void ExportDialog::createFilterOptions()
         {
             sal_Int32 nColor = mpFilterOptionsItem->ReadInt32("Color", 0);
             if ( nColor == 0 )
-                nColor = 6;
+                nColor = 5;
             else
                 nColor--;
             mxLbColorDepth->append_text( ms1BitThreshold );
-            mxLbColorDepth->append_text( ms1BitDithered );
             mxLbColorDepth->append_text( ms4BitGrayscale );
             mxLbColorDepth->append_text( ms4BitColorPalette );
             mxLbColorDepth->append_text( ms8BitGrayscale );
