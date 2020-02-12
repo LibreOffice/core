@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b88bb77_d83c738a",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-12T11:44:42Z",
+      "side": 1,
+      "message": "-\u003e Clang error: one space missing ! It will be fixed in the next upload.",
+      "range": {
+        "startLine": 480,
+        "startChar": 19,
+        "endLine": 480,
+        "endChar": 20
+      },
+      "revId": "bc97daefeb09b8dfd6952cf055a6174d6f7f40b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
