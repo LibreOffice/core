@@ -434,9 +434,11 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_FUNCTION:
         {
-            // dialog checks, what is in the cell
-
-            pResult = VclPtr<ScFormulaDlg>::Create( pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
+            if (!comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            {
+                // dialog checks, what is in the cell
+                pResult = VclPtr<ScFormulaDlg>::Create( pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
+            }
         }
         break;
 
