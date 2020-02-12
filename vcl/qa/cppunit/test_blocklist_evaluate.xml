@@ -10,7 +10,7 @@
 <!--
     entry attributes:
     os - "all", "7", "8", "8_1", "10"
-    vendor - "all", "intel", "ati", "amd", "nvidia", "microsoft"
+    vendor - "all", "intel", "amd", "nvidia", "microsoft"
     compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
     version
     minVersion

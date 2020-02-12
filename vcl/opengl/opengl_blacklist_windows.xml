@@ -10,7 +10,7 @@
 <!--
     entry attributes:
     os - "all", "7", "8", "8_1", "10"
-    vendor - "all", "intel", "ati", "amd", "nvidia", "microsoft"
+    vendor - "all", "intel", "amd", "nvidia", "microsoft"
     compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
     version
     minVersion
@@ -45,9 +45,6 @@
             <device id="0x0166"/>
         </entry>
         <entry os="10" vendor="intel" compare="between_inclusive_start" minVersion="26.20.100.6861" maxVersion="26.20.100.7584"><!-- tdf#125516 -->
-            <device id="all"/>
-        </entry>
-        <entry os="all" vendor="ati" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
             <device id="all"/>
         </entry>
         <entry os="all" vendor="amd" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->

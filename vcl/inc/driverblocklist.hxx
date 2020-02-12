@@ -65,7 +65,6 @@ enum DeviceVendor
     VendorIntel,
     VendorNVIDIA,
     VendorAMD,
-    VendorATI,
     VendorMicrosoft,
 };
 const int DeviceVendorMax = VendorMicrosoft + 1;
