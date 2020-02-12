@@ -394,8 +394,11 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_OPENDLG_FUNCTION:
         {
-            // dialog checks, what is in the cell
-            xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()));
+            if (!isLOKMobilePhone())
+            {
+                // dialog checks, what is in the cell
+                xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()));
+            }
             break;
         }
         case WID_CONDFRMT_REF:
