@@ -2050,10 +2050,6 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::ToggleButton&, i_rBtn, void )
             sal_Int32 nVal = it->second;
             pVal->Value <<= nVal;
 
-            // tdf#63905 use paper size set in printer properties
-            if (pVal->Name == "PageOptions")
-                maPController->resetPaperToLastConfigured();
-
             updateOrientationBox();
 
             checkOptionalControlDependencies();
