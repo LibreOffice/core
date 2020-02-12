@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4c9522d_e287bbba",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3196,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-12T19:29:50Z",
+      "side": 1,
+      "message": "It must be optional for ODF 1.2(3?) or newer versions:\n\nconst SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );\nif( nCurrentODFVersion \u003e\u003d SvtSaveOptions::ODFVER_012 )\n    xSeriesProperties-\u003egetPropertyValue(\"DeletedLegendEntries\") \u003e\u003e\u003d deletedLegendEntriesSeq;",
+      "range": {
+        "startLine": 3196,
+        "startChar": 3,
+        "endLine": 3196,
+        "endChar": 96
+      },
+      "revId": "0e34e24374d7032b70df3e7ab54d6acf4618cdfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
