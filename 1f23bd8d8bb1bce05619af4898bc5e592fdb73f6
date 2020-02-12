@@ -16,6 +16,24 @@
       "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12d60f3e_6818d07c",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-12T12:57:06Z",
+      "side": 1,
+      "message": "Yeah, alternatives welcome. The thing, I broke this in 5.4, so anybody who changed anything here between 5.4 and now is already getting weird results, i.e. the thing they chose was doing something different. Clearly this is not frequently used functionality.",
+      "parentUuid": "0850a9f1_55e856a9",
+      "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
