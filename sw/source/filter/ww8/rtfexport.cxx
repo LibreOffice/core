@@ -711,16 +711,9 @@ ErrCode RtfExport::ExportDocument_Impl()
         .WriteCharPtr(SAL_NEWLINE_STRING);
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
-    // Use the setting from the default style.
-    SwTextFormatColl* pTextFormatColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-        RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
-    const SfxPoolItem* pItem;
-    if (pTextFormatColl
-        && pTextFormatColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem) == SfxItemState::SET)
-    {
-        Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_HYPHAUTO);
-        OutULong(int(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()));
-    }
+    // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
+    Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_HYPHAUTO);
+    OutULong(1);
 
     // Zoom
     SwViewShell* pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());

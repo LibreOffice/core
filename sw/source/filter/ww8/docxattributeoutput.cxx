@@ -4586,7 +4586,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxTabStopItem& >(rHt).Count() != 0;
             break;
         case RES_PARATR_HYPHENZONE:
-            bMustWrite = static_cast< const SvxHyphenZoneItem& >(rHt).IsHyphen();
+            bMustWrite = true;
             break;
         case RES_PARATR_NUMRULE:
             bMustWrite = !static_cast< const SwNumRuleItem& >(rHt).GetValue().isEmpty();
