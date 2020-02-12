@@ -66,7 +66,7 @@ void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
     }
 }
 
-VclPtr<vcl::Window> ScNumberFormatControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> ScNumberFormatControl::CreateItemWindow( vcl::Window *pParent )
 {
     VclPtr<ScNumberFormat> pControl = VclPtr<ScNumberFormat>::Create(pParent);
     pControl->Show();

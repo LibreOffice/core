@@ -49,6 +49,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/globname.hxx>
 
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
@@ -560,9 +561,9 @@ void SfxToolBoxControl::CreatePopupWindow()
 {
 }
 
-VclPtr<vcl::Window> SfxToolBoxControl::CreateItemWindow( vcl::Window * )
+VclPtr<InterimItemWindow> SfxToolBoxControl::CreateItemWindow(vcl::Window*)
 {
-    return VclPtr<vcl::Window>();
+    return VclPtr<InterimItemWindow>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

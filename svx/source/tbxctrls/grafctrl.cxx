@@ -417,7 +417,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     }
 }
 
-VclPtr<vcl::Window> SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return VclPtr<ImplGrafControl>::Create( pParent, m_aCommandURL, m_xFrame ).get();
 }
@@ -504,7 +504,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     }
 }
 
-VclPtr<vcl::Window> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return VclPtr<ImplGrafModeControl>::Create( pParent, m_xFrame ).get();
 }

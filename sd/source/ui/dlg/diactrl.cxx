@@ -176,7 +176,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     }
 }
 
-VclPtr<vcl::Window> SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SdTbxCtlDiaPages::CreateItemWindow( vcl::Window* pParent )
 {
     VclPtr<SdPagesField> pWindow = VclPtr<SdPagesField>::Create(pParent, m_xFrame);
     pWindow->Show();

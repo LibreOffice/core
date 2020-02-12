@@ -70,7 +70,7 @@ public:
      * @param pParent -- parent window
      * @return ComboBox of macro and dialog Library
      */
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };
 
 /*!
@@ -223,7 +223,7 @@ public:
      * @param pParent
      * @return LanguageBox ComboBox
      */
-    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
 };
 
 /*!
