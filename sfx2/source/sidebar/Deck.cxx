@@ -18,12 +18,12 @@
  */
 
 #include <sfx2/sidebar/Deck.hxx>
-#include <sfx2/sidebar/DeckDescriptor.hxx>
-#include <sfx2/sidebar/DeckLayouter.hxx>
-#include <sfx2/sidebar/DrawHelper.hxx>
-#include <sfx2/sidebar/DeckTitleBar.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/Paint.hxx>
+#include <sidebar/DeckDescriptor.hxx>
+#include <sidebar/DeckLayouter.hxx>
+#include <sidebar/DrawHelper.hxx>
+#include <sidebar/DeckTitleBar.hxx>
+#include <sidebar/PanelTitleBar.hxx>
+#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/lokhelper.hxx>

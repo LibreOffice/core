@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/Accessible.hxx>
+#include <sidebar/Accessible.hxx>
 
 using namespace css;
 using namespace css::uno;

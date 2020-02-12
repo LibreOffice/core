@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/emojicontrol.hxx>
+#include <emojicontrol.hxx>
 #include <sfx2/emojipopup.hxx>
-#include <sfx2/emojiview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <emojiview.hxx>
+#include <thumbnailviewitem.hxx>
 #include <vcl/tabpage.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>

@@ -19,9 +19,9 @@
 
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/DeckTitleBar.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/TitleBar.hxx>
+#include <sidebar/DeckTitleBar.hxx>
+#include <sidebar/PanelTitleBar.hxx>
+#include <sidebar/TitleBar.hxx>
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/DeckLayouter.hxx>
+#include <sidebar/DeckLayouter.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <comphelper/lok.hxx>

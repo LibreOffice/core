@@ -13,7 +13,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <i18nutil/paper.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/recentdocsview.hxx>
+#include <recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
