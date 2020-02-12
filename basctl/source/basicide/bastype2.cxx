@@ -1501,6 +1501,11 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
     bool bValidIter = m_xControl->get_cursor(m_xIter.get());
     if (!bValidIter)
         return true;
+    if (!m_xControl->get_row_expanded(*m_xIter))
+        m_xControl->expand_row(*m_xIter);
+    else
+        m_xControl->collapse_row(*m_xIter);
+
     EntryDescriptor aDesc = GetEntryDescriptor(m_xIter.get());
     switch (aDesc.GetType())
     {
@@ -1518,15 +1523,10 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
                     SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
                     { &aSbxItem }
                 );
-                return true;
             }
             break;
 
         default:
-            if (!m_xControl->get_row_expanded(*m_xIter))
-                m_xControl->expand_row(*m_xIter);
-            else
-                m_xControl->collapse_row(*m_xIter);
             break;
     }
     return true;
