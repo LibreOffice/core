@@ -16,6 +16,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -84,6 +85,22 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawShapeInlineEffect)
     // - Actual  : 0
     // i.e. the layout result had less pages than expected (compared to Word).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(273), nBottomMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
+{
+    // Load a document which has two shapes: an inline one and an anchored one. The inline has no
+    // explicit ZOrder, the anchored one has, and it's set to a value so it's visible.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "inline-anchored-zorder.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Oval 2
+    // - Actual  :
+    // i.e. the rectangle (with no name) was on top of the oval one, not the other way around.
+    CPPUNIT_ASSERT_EQUAL(OUString("Oval 2"), xOval->getName());
 }
 }
 
