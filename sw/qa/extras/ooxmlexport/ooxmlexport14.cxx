@@ -528,6 +528,24 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
+{
+    // Explicitly set hyphenation=auto on document level
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlSettings);
+    assertXPath(pXmlSettings, "/w:settings/w:autoHyphenation", "val", "true");
+
+    // Second paragraph has explicitly enabled hyphenation
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "/w:document/w:body/w:p[2]/w:pPr/w:suppressAutoHyphens", "val", "false");
+
+    // Default paragraph style explicitly disables hyphens
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlStyles);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
