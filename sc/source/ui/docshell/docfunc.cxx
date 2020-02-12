@@ -1370,7 +1370,7 @@ ScPostIt* ScDocFunc::ImportNote( const ScAddress& rPos, const OUString& rNoteTex
     ScDocument& rDoc = rDocShell.GetDocument();
 
     std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
-    assert(!pOldNote && "imported data has >1 notes on same cell?");
+    SAL_WARN_IF(pOldNote, "sc.ui", "imported data has >1 notes on same cell? at pos " << rPos);
 
     // create new note
     ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, /*nNoteId*/0 );
