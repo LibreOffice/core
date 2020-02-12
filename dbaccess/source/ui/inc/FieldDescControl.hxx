@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCCONTROL_HXX
 
+#include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/weld.hxx>
 #include "QEnumTypes.hxx"
@@ -66,6 +67,7 @@ namespace dbaui
     class OFieldDescControl : public TabPage
     {
     private:
+        VclPtr<VclVBox> m_xVclContentArea;
         std::unique_ptr<weld::Builder> m_xBuilder;
         std::unique_ptr<weld::Container> m_xContainer;
 

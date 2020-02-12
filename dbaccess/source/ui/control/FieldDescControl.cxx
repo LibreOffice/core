@@ -75,9 +75,6 @@ namespace
 
 OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
     :TabPage(pPage ? Application::GetDefDialogParent() : pParent, WB_3DLOOK | WB_DIALOGCONTROL)
-    ,m_xBuilder(pPage ? Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui")
-                      : Application::CreateInterimBuilder(this, "dbaccess/ui/fielddescpage.ui"))
-    ,m_xContainer(m_xBuilder->weld_container("FieldDescPage"))
     ,pHelp( pHelpBar )
     ,m_pLastFocusWindow(nullptr)
     ,m_pActFocusWindow(nullptr)
@@ -89,6 +86,16 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParen
     ,m_bAdded(false)
     ,pActFieldDescr(nullptr)
 {
+    if (pPage)
+        m_xBuilder.reset(Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui"));
+    else
+    {
+        m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+        m_xVclContentArea->Show();
+        m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "dbaccess/ui/fielddescpage.ui"));
+    }
+
+    m_xContainer = m_xBuilder->weld_container("FieldDescPage");
 }
 
 OFieldDescControl::~OFieldDescControl()
@@ -144,6 +151,7 @@ void OFieldDescControl::dispose()
     m_xFormat.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
     TabPage::dispose();
 }
 
@@ -597,6 +605,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_xBoolDefault->show();
         break;
     }
+
+    queue_resize();
 }
 
 void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
@@ -692,6 +702,8 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
         lcl_HideAndDeleteControl(m_nPos,m_xBoolDefault,m_xBoolDefaultText);
         break;
     }
+
+    queue_resize();
 }
 
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
