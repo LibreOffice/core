@@ -501,11 +501,11 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
     getParagraphOfText(1, xHeaderText, "This is a header.");
 
     // Picture was missing.
-    uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getShapeByName("Picture 2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
 
     // SmartArt was missing.
-    xServiceInfo.set(getShape(2), uno::UNO_QUERY);
+    xServiceInfo.set(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
 
     // Chart was missing.
