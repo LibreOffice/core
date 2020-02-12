@@ -506,7 +506,6 @@ custom_widgets = [
     'EmojiView',
     'IndexBox',
     'ManagedMenuButton',
-    'OptionalBox',
     'PriorityHBox',
     'PriorityMergedHBox',
     'PropertyControl',
