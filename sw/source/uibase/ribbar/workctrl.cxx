@@ -745,7 +745,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     }
 }
 
-VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent )
 {
     VclPtrInstance<SwZoomBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();
@@ -821,7 +821,7 @@ SwJumpToSpecificPageControl::SwJumpToSpecificPageControl(
 SwJumpToSpecificPageControl::~SwJumpToSpecificPageControl()
 {}
 
-VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *pParent )
 {
     VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();

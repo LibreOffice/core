@@ -146,7 +146,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-VclPtr<vcl::Window> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
 {
     return VclPtrInstance<SvxFmAbsRecWin>(pParent, this);
 }
@@ -199,7 +199,7 @@ public:
     }
 };
 
-VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SvxResId(RID_STR_REC_TEXT));
     VclPtrInstance<LabelItemWindow> xFixedText(pParent, aText);
@@ -221,7 +221,7 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 {
 }
 
-VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
 {
     OUString aText(SvxResId(RID_STR_REC_FROM_TEXT));
     VclPtrInstance<LabelItemWindow> xFixedText(pParent, aText);
@@ -243,7 +243,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 {
 }
 
-VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
     OUString const aSample("123456");
     m_xFixedText.reset(VclPtr<LabelItemWindow>::Create(pParent, aSample));

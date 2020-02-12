@@ -190,7 +190,7 @@ IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
     delete pExecuteInfo;
 }
 
-VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
+VclPtr<InterimItemWindow> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pParent )
 {
     VclPtrInstance<URLBoxItemWindow> xURLBox(pParent);
     SvtURLBox* pURLBox = xURLBox->GetURLBox();

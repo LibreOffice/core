@@ -106,7 +106,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
     }
 }
 
-VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow(vcl::Window *pParent)
+VclPtr<InterimItemWindow> SvxLineWidthToolBoxControl::CreateItemWindow(vcl::Window *pParent)
 {
     VclPtr<SvxMetricField> pWindow = VclPtr<SvxMetricField>::Create(pParent, m_xFrame);
     pWindow->Show();

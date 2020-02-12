@@ -57,7 +57,7 @@ class SdTbxCtlDiaPages : public SfxToolBoxControl
 public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) override;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 
     SFX_DECL_TOOLBOX_CONTROL();
 

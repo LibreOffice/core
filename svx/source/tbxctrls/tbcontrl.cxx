@@ -39,6 +39,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
@@ -3153,8 +3154,10 @@ void SvxStyleToolBoxControl::StateChanged(
         Update();
 }
 
-VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
+    return nullptr; //TODO
+#if 0
     VclPtrInstance<SvxStyleBox_Impl> pBox( pParent,
                                            OUString( ".uno:StyleApply" ),
                                            SfxStyleFamily::Para,
@@ -3169,6 +3172,7 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
 
     return pBox.get();
+#endif
 }
 
 namespace {

@@ -105,18 +105,15 @@ void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const S
     }
 }
 
-
-VclPtr<vcl::Window> MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
+VclPtr<InterimItemWindow> MediaToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {
     return ( pParent ? VclPtr<MediaToolBoxControl_Impl>::Create( *pParent, *this ) : nullptr );
 }
-
 
 void MediaToolBoxControl::implUpdateMediaControl()
 {
     updateStatus( ".uno:AVMediaToolBox" );
 }
-
 
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {
