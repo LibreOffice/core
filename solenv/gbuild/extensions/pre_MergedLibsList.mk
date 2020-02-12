@@ -31,11 +31,20 @@ MERGE_LIBRARY_LIST := \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
 	drawinglayer \
 	editeng \
+	emfio \
+	$(if $(filter WNT,$(OS)),emser) \
+	evtatt \
 	filterconfig \
+	for \
+	forui \
+	fps_office \
+	frm \
 	fsstorage \
 	fwe \
 	fwi \
 	fwk \
+	fwl \
+	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	i18npool \
 	i18nutil \
