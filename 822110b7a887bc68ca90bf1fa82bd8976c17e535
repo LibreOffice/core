@@ -22,6 +22,30 @@
       "revId": "822110b7a887bc68ca90bf1fa82bd8976c17e535",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "955f6f26_925fdcaa",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2020-02-12T12:49:12Z",
+      "side": 1,
+      "message": "I\u0027ll x-checking that script on my Linux/MacOS VMs. I don\u0027t understand why the win tbox would fail here!",
+      "parentUuid": "cd1abfbe_d44dedc4",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "822110b7a887bc68ca90bf1fa82bd8976c17e535",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

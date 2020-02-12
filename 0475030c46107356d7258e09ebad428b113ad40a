@@ -46,6 +46,30 @@
       "revId": "0475030c46107356d7258e09ebad428b113ad40a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "108d8946_4b447197",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2020-02-12T12:49:12Z",
+      "side": 1,
+      "message": "The \u0027Property Set\u0027 assigns a sub-object intentionnally, and \u0027Property Get\u0027 sends it back for the \u0027If\u0027 statement to challenge the sub-object supportedServices to make sure both routines ran properly.\nAm I missing your point here?",
+      "parentUuid": "6bc84d85_6345c47c",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0475030c46107356d7258e09ebad428b113ad40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
