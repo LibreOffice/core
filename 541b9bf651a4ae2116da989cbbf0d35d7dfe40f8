@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78cf9ae3_a976ec5f",
+        "filename": "tools/source/stream/strmwnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-12T08:47:45Z",
+      "side": 1,
+      "message": "Is this cast necessary?",
+      "range": {
+        "startLine": 439,
+        "startChar": 40,
+        "endLine": 439,
+        "endChar": 48
+      },
+      "revId": "541b9bf651a4ae2116da989cbbf0d35d7dfe40f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "925ca81d_b60c390d",
+        "filename": "tools/source/stream/strmwnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-12T08:47:45Z",
+      "side": 1,
+      "message": "Is this a variant of abort()?",
+      "range": {
+        "startLine": 471,
+        "startChar": 22,
+        "endLine": 471,
+        "endChar": 40
+      },
+      "revId": "541b9bf651a4ae2116da989cbbf0d35d7dfe40f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
