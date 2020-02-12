@@ -410,13 +410,9 @@ bool DataPointItemConverter::ApplySpecialItem(
             try
             {
                 sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
-                sal_Int32 nOld =0;
+                sal_Int32 nOld = -1;
                 RelativePosition aCustomLabelPosition;
-                if( !(GetPropertySet()->getPropertyValue( "LabelPlacement" ) >>= nOld) )
-                {
-                    if( m_aAvailableLabelPlacements.hasElements() )
-                        nOld = m_aAvailableLabelPlacements[0];
-                }
+                GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld;
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
