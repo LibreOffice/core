@@ -287,7 +287,12 @@ public:
         ,m_rPositionOffsets(rPositionOffsets)
         ,m_rAligns(rAligns)
         ,m_rPositivePercentages(rPositivePercentages)
-    {}
+    {
+        if (eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE)
+        {
+            zOrder = 0;
+        }
+    }
 
     void setXSize(sal_Int32 _nXSize)
     {
@@ -358,7 +363,8 @@ public:
         if (zOrder >= 0)
         {
             GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
+            bool bOldStyle = eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE;
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder, bOldStyle)));
             pZOrderHelper->addItem(xGraphicObjectProperties, zOrder);
         }
     }
@@ -897,6 +903,11 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                     else if (bUseShape && m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                     {
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
+<<<<<<< HEAD   (e70069 tdf#126744 Transfer paper size and orientation to new printe)
+=======
+                        m_pImpl->applyMargins(xShapeProps);
+                        m_pImpl->applyZOrder(xShapeProps);
+>>>>>>> CHANGE (99847d DOCX import: fix ZOrder of inline vs anchored shapes)
                         comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
                         aInteropGrabBag.update(m_pImpl->getInteropGrabBag());
                         xShapeProps->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag.getAsConstPropertyValueList()));

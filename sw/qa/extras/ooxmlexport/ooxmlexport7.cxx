@@ -584,9 +584,13 @@ DECLARE_OOXMLEXPORT_TEST(test76317, "test76317.docx")
 DECLARE_OOXMLEXPORT_TEST(fdo76591, "fdo76591.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+<<<<<<< HEAD   (e70069 tdf#126744 Transfer paper size and orientation to new printe)
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "relativeHeight", "3");
+=======
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "relativeHeight", "4");
+>>>>>>> CHANGE (99847d DOCX import: fix ZOrder of inline vs anchored shapes)
 }
 
 DECLARE_OOXMLEXPORT_TEST(test76317_2K10, "test76317_2K10.docx")
