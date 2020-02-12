@@ -136,6 +136,7 @@ public:
     void testCustomDataLabel();
     void testCustomPositionofDataLabel();
     void testCustomDataLabelMultipleSeries();
+    void testLeaderLines();
     void testNumberFormatExportPPTX();
     void testLabelSeparatorExportDOCX();
     void testChartTitlePropertiesColorFillPPTX();
@@ -254,6 +255,7 @@ public:
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomPositionofDataLabel);
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
+    CPPUNIT_TEST(testLeaderLines);
     CPPUNIT_TEST(testNumberFormatExportPPTX);
     CPPUNIT_TEST(testLabelSeparatorExportDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
@@ -349,7 +351,8 @@ void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { "office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" },
         { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
         { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
-        { "xlink", "http://www.w3c.org/1999/xlink" }
+        { "xlink", "http://www.w3c.org/1999/xlink" },
+        { "c15", "http://schemas.microsoft.com/office/drawing/2012/chart" }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -2244,6 +2247,15 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
 
+}
+
+void Chart2ExportTest::testLeaderLines()
+{
+    load("/chart2/qa/extras/data/xlsx/", "testTdf90749.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
 }
 
 void Chart2ExportTest::testNumberFormatExportPPTX()

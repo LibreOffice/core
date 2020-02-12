@@ -3464,6 +3464,15 @@ void ChartExport::exportDataLabels(
 
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, "0");
 
+    // Export leader line
+    if( eChartType != chart::TYPEID_PIE )
+    {
+        pFS->startElement(FSNS(XML_c, XML_extLst));
+        pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15), GetFB()->getNamespaceURL(OOX_NS(c15)).toUtf8());
+        pFS->singleElement(FSNS(XML_c15, XML_showLeaderLines), XML_val, "1");
+        pFS->endElement(FSNS(XML_c, XML_ext));
+        pFS->endElement(FSNS(XML_c, XML_extLst));
+    }
     pFS->endElement(FSNS(XML_c, XML_dLbls));
 }
 
