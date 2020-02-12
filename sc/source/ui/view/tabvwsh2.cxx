@@ -342,7 +342,17 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         }
         else
         {
+<<<<<<< HEAD   (2ce99d nModCode assigned but not used)
             aInsertPos = GetInsertPos();
+=======
+            aInsertPos = GetViewData().getLOKVisibleArea().Center();
+
+            aInsertPos.setX(sc::TwipsToHMM(aInsertPos.X()));
+            aInsertPos.setY(sc::TwipsToHMM(aInsertPos.Y()));
+
+            aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
+            aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
+>>>>>>> CHANGE (0f974f lok: Center shape on insert also for Desktop view)
         }
 
         tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
