@@ -34,6 +34,24 @@
       "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60740cfb_488b9b6d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-12T13:05:14Z",
+      "side": 1,
+      "message": "You mean, \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/b5699cd01b6a52906880c107bac6f3802ea7353d%5E!/\u003e in LO 5.4 dropped\n\n  BMP_CONVERSION_1BIT_THRESHOLD \u003d 1,\n\nso that values stored for this prop started to get a different meaning, and failed to update this \u003cconstraints\u003e documentation accordingly?  And this change now merely adapts the documentation to the new reality established back then with LO 5.4?",
+      "parentUuid": "12d60f3e_6818d07c",
+      "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
