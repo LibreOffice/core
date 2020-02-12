@@ -30,6 +30,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 #include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/BitmapMonochromeMatrixFilter.hxx>
 
 #include <BitmapScaleSuperFilter.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
@@ -251,6 +252,14 @@ bool Bitmap::Convert( BmpConversion eConversion )
         {
             BitmapEx aBmpEx(*this);
             bRet = BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(128));
+            *this = aBmpEx.GetBitmap();
+        }
+        break;
+
+        case BmpConversion::N1BitMatrix:
+        {
+            BitmapEx aBmpEx(*this);
+            bRet = BitmapFilter::Filter(aBmpEx, BitmapMonochromeMatrixFilter());
             *this = aBmpEx.GetBitmap();
         }
         break;
