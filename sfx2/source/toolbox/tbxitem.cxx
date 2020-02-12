@@ -56,7 +56,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;

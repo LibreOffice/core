@@ -40,7 +40,7 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <appdata.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>

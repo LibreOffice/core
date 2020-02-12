@@ -22,7 +22,7 @@
 #include <vcl/notebookbar.hxx>
 #include <vcl/tabpage.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/notebookbar/NotebookbarTabControl.hxx>
+#include <notebookbar/NotebookbarTabControl.hxx>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>

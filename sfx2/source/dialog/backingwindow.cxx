@@ -31,7 +31,7 @@
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
-#include <sfx2/templateviewitem.hxx>
+#include <templateviewitem.hxx>
 
 #include <vcl/menubtn.hxx>
 

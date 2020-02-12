@@ -8,14 +8,14 @@
  *
  */
 
-#include <sfx2/sidebar/UnoPanels.hxx>
+#include <sidebar/UnoPanels.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
-#include <sfx2/sidebar/UnoPanel.hxx>
+#include <sidebar/UnoPanel.hxx>
 
 #include <vcl/svapp.hxx>
 

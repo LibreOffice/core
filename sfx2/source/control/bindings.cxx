@@ -44,7 +44,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
 #include <workwin.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>

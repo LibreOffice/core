@@ -49,7 +49,7 @@
 #include <vcl/uitest/logger.hxx>
 
 #include <sfx2/app.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/ctrlitem.hxx>

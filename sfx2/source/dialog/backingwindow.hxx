@@ -28,8 +28,8 @@
 
 #include <vcl/menubtn.hxx>
 
-#include <sfx2/recentdocsview.hxx>
-#include <sfx2/templatedefaultview.hxx>
+#include <recentdocsview.hxx>
+#include <templatedefaultview.hxx>
 
 #include <svtools/acceleratorexecute.hxx>
 

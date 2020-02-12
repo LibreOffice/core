@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/emojipopup.hxx>
-#include <sfx2/emojicontrol.hxx>
+#include <emojicontrol.hxx>
 #include <vcl/toolbox.hxx>
 
 EmojiPopup::EmojiPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)

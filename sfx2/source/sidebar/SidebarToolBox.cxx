@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <sfx2/sidebar/ControllerFactory.hxx>
+#include <sidebar/ControllerFactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <vcl/commandinfoprovider.hxx>

@@ -35,7 +35,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 

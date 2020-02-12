@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/AccessibleTitleBar.hxx>
-#include <sfx2/sidebar/Accessible.hxx>
-#include <sfx2/sidebar/TitleBar.hxx>
+#include <sidebar/AccessibleTitleBar.hxx>
+#include <sidebar/Accessible.hxx>
+#include <sidebar/TitleBar.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
