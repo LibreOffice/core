@@ -153,7 +153,7 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
     // unaffected, as it only accesses members towards the start of the struct,
     // through a pointer known to actually point at the start):
     if (header->exceptionDestructor != &deleteException) {
-        header = reinterpret_cast<__cxa_exception const *>(
+        header = reinterpret_cast<__cxxabiv1::__cxa_exception *>(
             reinterpret_cast<char const *>(header) - 8);
         assert(header->exceptionDestructor == &deleteException);
     }
