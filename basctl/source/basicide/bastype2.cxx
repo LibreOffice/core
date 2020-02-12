@@ -28,7 +28,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <svtools/imagemgr.hxx>
-#include <vcl/treelistentry.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
