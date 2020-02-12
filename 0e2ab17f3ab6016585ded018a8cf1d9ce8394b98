@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b618e817_b717051d",
+        "filename": "sc/inc/scabstdlg.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-12T16:55:00Z",
+      "side": 1,
+      "message": "As these \"int\" seem to be used with either/both column and row numbers/amounts, please use the typedef\u0027ed SCCOLROW instead of int. Here and in all other places where it was introduced.",
+      "revId": "0e2ab17f3ab6016585ded018a8cf1d9ce8394b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
