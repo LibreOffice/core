@@ -27,6 +27,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
     UIConfig_vcl \
 	$(if $(filter WNT,$(OS)), \
 		Package_opengl_blacklist ) \
+	$(if $(filter SKIA,$(BUILD_TYPE)), \
+		Package_skia_blacklist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \
@@ -204,6 +206,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_png_test \
 	CppunitTest_vcl_widget_definition_reader_test \
 	CppunitTest_vcl_backend_test \
+	CppunitTest_vcl_blocklistparser_test \
 ))
 
 ifeq ($(USING_X11),TRUE)
@@ -222,7 +225,6 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
-	CppunitTest_vcl_blocklistparser_test \
 ))
 endif
 

@@ -209,7 +209,7 @@ namespace
         return OUStringToOString(aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8) +
             OUStringToOString(aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8) +
             OUStringToOString(aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8) +
-            OString::number(aInfo.GetWindowsVersion());
+            OString::number(DriverBlocklist::GetWindowsVersion());
 #else
         return rtl::OStringView(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
             reinterpret_cast<const char*>(glGetString(GL_RENDERER)) +
@@ -767,7 +767,7 @@ bool OpenGLHelper::isDeviceBlacklisted()
         WinOpenGLDeviceInfo aInfo;
         bBlacklisted = aInfo.isDeviceBlocked();
 
-        if (aInfo.GetWindowsVersion() == 0x00060001 && /* Windows 7 */
+        if (DriverBlocklist::GetWindowsVersion() == 0x00060001 && /* Windows 7 */
             (aInfo.GetAdapterVendorID() == "0x1002" || aInfo.GetAdapterVendorID() == "0x1022")) /* AMD */
         {
             SAL_INFO("vcl.opengl", "Relaxing watchdog timings.");
