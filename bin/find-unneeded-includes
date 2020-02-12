@@ -64,7 +64,10 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         "functional": "bits/std_function.h",
         "cmath": "bits/std_abs.h",
         "ctime": "bits/types/clock_t.h",
-        "cstdint": "bits/stdint-uintn.h"
+        "cstdint": "bits/stdint-uintn.h",
+        # Keep using the o3tl wrapper for <optional>.
+        # Works around <https://github.com/include-what-you-use/include-what-you-use/issues/752>.
+        "o3tl/optional.hxx": "optional",
     }
     for k, v in bits.items():
         if include == k and v in toAdd:
