@@ -226,9 +226,11 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xSpacesCB;
     std::unique_ptr<weld::CheckButton> m_xHSpacesCB;
     std::unique_ptr<weld::CheckButton> m_xTabCB;
+    std::unique_ptr<weld::Label> m_xTabLabel;
     std::unique_ptr<weld::CheckButton> m_xBreakCB;
     std::unique_ptr<weld::CheckButton> m_xCharHiddenCB;
     std::unique_ptr<weld::CheckButton> m_xBookmarkCB;
+    std::unique_ptr<weld::Label> m_xBookmarkLabel;
 
     std::unique_ptr<weld::Frame> m_xDirectCursorFrame;
     std::unique_ptr<weld::CheckButton> m_xOnOffCB;

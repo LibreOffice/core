@@ -1204,9 +1204,11 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xSpacesCB(m_xBuilder->weld_check_button("spaces"))
     , m_xHSpacesCB(m_xBuilder->weld_check_button("nonbreak"))
     , m_xTabCB(m_xBuilder->weld_check_button("tabs"))
+    , m_xTabLabel(m_xBuilder->weld_label("tabs_label"))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
     , m_xCharHiddenCB(m_xBuilder->weld_check_button("hiddentext"))
     , m_xBookmarkCB(m_xBuilder->weld_check_button("bookmarks"))
+    , m_xBookmarkLabel(m_xBuilder->weld_label("bookmarks_label"))
     , m_xDirectCursorFrame(m_xBuilder->weld_frame("directcrsrframe"))
     , m_xOnOffCB(m_xBuilder->weld_check_button("cursoronoff"))
     , m_xFillMarginRB(m_xBuilder->weld_radio_button("fillmargin"))
@@ -1241,8 +1243,10 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
         return;
 
     m_xTabCB->hide();
+    m_xTabLabel->hide();
     m_xCharHiddenCB->hide();
     m_xBookmarkCB->hide();
+    m_xBookmarkLabel->hide();
 
     m_xDirectCursorFrame->hide();
     m_xOnOffCB->hide();
