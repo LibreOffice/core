@@ -913,6 +913,7 @@ public:
     virtual void select(const TreeIter& rIter) = 0;
     virtual void unselect(const TreeIter& rIter) = 0;
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
+    virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
     virtual void expand_row(const TreeIter& rIter) = 0;
     virtual void collapse_row(const TreeIter& rIter) = 0;
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
