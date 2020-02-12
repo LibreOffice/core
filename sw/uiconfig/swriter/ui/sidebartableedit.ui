@@ -35,8 +35,8 @@
             <property name="adjustment">adjustment1</property>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">5</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -232,38 +232,8 @@
             <property name="mnemonic_widget">columnwidth</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="opt_row_size_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">center</property>
-            <property name="label" translatable="yes" context="sidebartableedit|opt_row_size_label">Optimize a row:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">rowsizing</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="opt_column_size_label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">center</property>
-            <property name="label" translatable="yes" context="sidebartableedit|opt_column_size_label">Optimize a column:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">columnsizing</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -308,8 +278,8 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">8</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -355,7 +325,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -479,16 +449,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSeparator">
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkToolbar" id="misc">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -532,7 +492,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">11</property>
+            <property name="top_attach">9</property>
           </packing>
         </child>
         <child>
@@ -546,7 +506,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">11</property>
+            <property name="top_attach">9</property>
           </packing>
         </child>
         <child>
@@ -556,7 +516,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">10</property>
+            <property name="top_attach">8</property>
             <property name="width">2</property>
           </packing>
         </child>
