@@ -66,6 +66,7 @@ enum class BmpConversion
 {
     NNONE,
     N1BitThreshold,
+    N1BitMatrix, // aka Dithered, used in export to bitmap
     N4BitGreys,
     N4BitColors,
     N8BitGreys,
