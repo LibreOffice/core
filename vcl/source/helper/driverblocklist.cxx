@@ -107,10 +107,6 @@ static OUString GetVendorId(const OString& rString)
     }
     else if (rString == "amd")
     {
-        return "0x1022";
-    }
-    else if (rString == "ati")
-    {
         return "0x1002";
     }
     else if (rString == "microsoft")
@@ -137,8 +133,6 @@ OUString GetVendorId(DeviceVendor id)
         case VendorNVIDIA:
             return "0x10de";
         case VendorAMD:
-            return "0x1022";
-        case VendorATI:
             return "0x1002";
         case VendorMicrosoft:
             return "0x1414";
