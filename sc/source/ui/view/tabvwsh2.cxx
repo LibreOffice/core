@@ -19,7 +19,6 @@
 
 #include <comphelper/lok.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -321,7 +320,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
         // calc position and size
         bool bLOKIsActive = comphelper::LibreOfficeKit::isActive();
-        bool bIsMobile = comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
         Point aInsertPos;
         if(!bLOKIsActive)
         {
@@ -330,7 +328,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
             aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
         }
-        else if (bIsMobile)
+        else
         {
             aInsertPos = GetViewData().getLOKVisibleArea().Center();
 
@@ -339,10 +337,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
             aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
             aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
-        }
-        else
-        {
-            aInsertPos = GetInsertPos();
         }
 
         tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
