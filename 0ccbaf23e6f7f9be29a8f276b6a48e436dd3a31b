@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "756e6364_4fd1f18a",
+        "filename": "basctl/source/basicide/bastype3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-02-12T13:53:14Z",
+      "side": 1,
+      "message": "here",
+      "revId": "0ccbaf23e6f7f9be29a8f276b6a48e436dd3a31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
