@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bf48975_5a1df0e3",
+        "filename": "i18npool/source/nativenumber/data/numberchar.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-12T16:46:13Z",
+      "side": 1,
+      "message": "This is odd, as 0x56DB, 0x4E94 and 0x516D are PrimaryNumeric, but 0x4F0D now is AccountingNumeric.\nAre you sure? I mean, I have no clue about Korean, just saying..",
+      "range": {
+        "startLine": 69,
+        "startChar": 46,
+        "endLine": 69,
+        "endChar": 52
+      },
+      "revId": "80e0b5b7dbef63df3d79210057b803b9feb55847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a002c6ed_412f7078",
+        "filename": "i18npool/source/nativenumber/data/numberchar.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-12T16:46:13Z",
+      "side": 1,
+      "message": "In numbers the ASCII comma is used instead of the ideographic comma?",
+      "revId": "80e0b5b7dbef63df3d79210057b803b9feb55847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
