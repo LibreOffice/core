@@ -52,6 +52,24 @@
       "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36c42c1b_3628b9ce",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-12T18:56:50Z",
+      "side": 1,
+      "message": "Exactly. Alternatively, I could restore the functionality and the old meaning of this property",
+      "parentUuid": "60740cfb_488b9b6d",
+      "revId": "1f23bd8d8bb1bce05619af4898bc5e592fdb73f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
