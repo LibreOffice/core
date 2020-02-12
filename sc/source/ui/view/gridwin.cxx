@@ -2657,7 +2657,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
             MouseButtonUp( aUpEvt );
         }
     }
-    else
+    else if ( !comphelper::LibreOfficeKit::isActive() )
         MouseMove( rMEvt );
 }
 
