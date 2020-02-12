@@ -616,6 +616,8 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         if( aAvailablePlacements.hasElements() )
         {
             nLabelPlacement = aAvailablePlacements[0];
+            if( xPointProps.is() )
+                xPointProps->setPropertyValue("LabelPlacement", uno::Any(nLabelPlacement));
             return nLabelPlacement;
         }
 

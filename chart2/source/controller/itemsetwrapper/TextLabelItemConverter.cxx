@@ -371,13 +371,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             try
             {
                 sal_Int32 nNew = static_cast<const SfxInt32Item&>(rItemSet.Get(nWhichId)).GetValue();
-                sal_Int32 nOld = 0;
+                sal_Int32 nOld = -1;
                 RelativePosition aCustomLabelPosition;
-                if (!(GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld))
-                {
-                    if (maAvailableLabelPlacements.hasElements())
-                        nOld = maAvailableLabelPlacements[0];
-                }
+                GetPropertySet()->getPropertyValue("LabelPlacement") >>= nOld;
                 if (mbDataSeries)
                 {
                     Reference<chart2::XDataSeries> xSeries(GetPropertySet(), uno::UNO_QUERY);
