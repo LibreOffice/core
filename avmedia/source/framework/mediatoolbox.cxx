@@ -46,14 +46,12 @@ private:
     MediaToolBoxControl*    mpToolBoxControl;
 };
 
-
 MediaToolBoxControl_Impl::MediaToolBoxControl_Impl( vcl::Window& rParent, MediaToolBoxControl& rControl ) :
     MediaControl( &rParent, MEDIACONTROLSTYLE_SINGLELINE ),
     mpToolBoxControl( &rControl )
 {
-    SetSizePixel( getMinSizePixel() );
+    SetSizePixel(m_xContainer->get_preferred_size());
 }
-
 
 void MediaToolBoxControl_Impl::update()
 {

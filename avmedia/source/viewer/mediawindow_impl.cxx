@@ -125,7 +125,7 @@ MediaWindowImpl::MediaWindowImpl(vcl::Window* pParent, MediaWindow* pMediaWindow
 {
     if (mpMediaWindowControl)
     {
-        mpMediaWindowControl->SetSizePixel(mpMediaWindowControl->getMinSizePixel());
+        mpMediaWindowControl->SetSizePixel(mpMediaWindowControl->GetOptimalSize());
         mpMediaWindowControl->Show();
     }
 }

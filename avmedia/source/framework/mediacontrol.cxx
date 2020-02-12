@@ -36,7 +36,12 @@ namespace avmedia
 {
 
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
-    Control( pParent ),
+    // MEDIACONTROLSTYLE_MULTILINE is the normal docking windows of tools->media player
+    // MEDIACONTROLSTYLE_SINGLELINE is the toolbar of view->toolbar->media playback
+    InterimItemWindow(pParent, eControlStyle == MEDIACONTROLSTYLE_MULTILINE ?
+                                   OUString("svx/ui/mediawindow.ui") :
+                                   OUString("svx/ui/medialine.ui"),
+                               "MediaWindow"),
     MediaControlBase(),
     maIdle( "avmedia MediaControl Idle" ),
     maChangeTimeIdle( "avmedia MediaControl Change Time Idle" ),
@@ -45,18 +50,6 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     meControlStyle( eControlStyle ),
     mfTime(0.0)
 {
-    SetStyle(GetStyle() | WB_DIALOGCONTROL);
-
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    // MEDIACONTROLSTYLE_MULTILINE is the normal docking windows of tools->media player
-    // MEDIACONTROLSTYLE_SINGLELINE is the toolbar of view->toolbar->media playback
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
-                eControlStyle == MEDIACONTROLSTYLE_MULTILINE ?
-                    OUString("svx/ui/mediawindow.ui") :
-                    OUString("svx/ui/medialine.ui")));
-    m_xContainer = m_xBuilder->weld_container("MediaWindow");
-
     mxPlayToolBox = m_xBuilder->weld_toolbar("playtoolbox");
     mxTimeSlider = m_xBuilder->weld_scale("timeslider");
     mxMuteToolBox = m_xBuilder->weld_toolbar("mutetoolbox");
@@ -65,9 +58,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mxTimeEdit = m_xBuilder->weld_entry("timeedit");
     mxMediaPath = m_xBuilder->weld_label("url");
 
-    SetBackground();
-    SetPaintTransparent( true );
-    SetParentClipMode( ParentClipMode::NoClip );
+    // TODO SetParentClipMode( ParentClipMode::NoClip );
 
     InitializeWidgets();
 
@@ -123,29 +114,13 @@ void MediaControl::dispose()
 {
     disposeWidgets();
     mxMediaPath.reset();
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-    Control::dispose();
-}
-
-Size MediaControl::getMinSizePixel() const
-{
-    return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+    InterimItemWindow::dispose();
 }
 
 void MediaControl::UpdateURLField(MediaItem const & tempItem)
 {
     const OUString aURL( AvmResId(AVMEDIA_MEDIA_PATH) + ":  " + tempItem.getURL() ) ;
     mxMediaPath->set_label(aURL);
-}
-
-void MediaControl::Resize()
-{
-    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-    assert(pChild);
-    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
-    Control::Resize();
 }
 
 void MediaControl::setState( const MediaItem& rItem )
