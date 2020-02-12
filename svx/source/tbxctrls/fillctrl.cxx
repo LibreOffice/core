@@ -537,7 +537,7 @@ void SvxFillToolBoxControl::Update()
 
 }
 
-VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
+VclPtr<InterimItemWindow> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent)
 {
     if(GetSlotId() == SID_ATTR_FILL_STYLE)
     {
@@ -553,7 +553,7 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
 
         return mxFillControl;
     }
-    return VclPtr<vcl::Window>();
+    return VclPtr<InterimItemWindow>();
 }
 
 FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)

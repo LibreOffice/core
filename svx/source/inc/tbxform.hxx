@@ -53,7 +53,7 @@ public:
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlAbsRec() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window* pParent ) override;
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) override;
@@ -67,7 +67,7 @@ public:
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecText() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window* pParent ) override;
 };
 
 class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
@@ -78,7 +78,7 @@ public:
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecFromText() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window* pParent ) override;
 };
 
 class LabelItemWindow;
@@ -93,7 +93,7 @@ public:
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxFmTbxCtlRecTotal() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window* pParent ) override;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) override;
 };

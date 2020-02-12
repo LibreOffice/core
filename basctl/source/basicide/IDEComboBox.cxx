@@ -81,7 +81,7 @@ void LibBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const SfxPoolI
     }
 }
 
-VclPtr<vcl::Window> LibBoxControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> LibBoxControl::CreateItemWindow(vcl::Window* pParent)
 {
     return VclPtr<LibBox>::Create(pParent);
 }
@@ -376,7 +376,7 @@ void LanguageBoxControl::StateChanged(sal_uInt16, SfxItemState eState, const Sfx
     }
 }
 
-VclPtr<vcl::Window> LanguageBoxControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> LanguageBoxControl::CreateItemWindow(vcl::Window* pParent)
 {
     return VclPtr<LanguageBox>::Create(pParent);
 }

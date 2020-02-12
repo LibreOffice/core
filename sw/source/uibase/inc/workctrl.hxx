@@ -76,7 +76,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };
 
 class SwJumpToSpecificPageControl : public SfxToolBoxControl
@@ -87,7 +87,7 @@ public:
     SwJumpToSpecificPageControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwJumpToSpecificPageControl() override;
 
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };
 #endif
 

@@ -87,7 +87,7 @@ ParaAboveSpacingControl::ParaAboveSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 {
 }
 
-VclPtr<vcl::Window> ParaAboveSpacingControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> ParaAboveSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
     VclPtr<ParaAboveSpacingWindow> pWindow = VclPtr<ParaAboveSpacingWindow>::Create(pParent);
     pWindow->Show();
@@ -102,7 +102,7 @@ ParaBelowSpacingControl::ParaBelowSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 {
 }
 
-VclPtr<vcl::Window> ParaBelowSpacingControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> ParaBelowSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
     VclPtr<ParaBelowSpacingWindow> pWindow = VclPtr<ParaBelowSpacingWindow>::Create(pParent);
     pWindow->Show();
@@ -216,7 +216,7 @@ ParaLeftSpacingControl::ParaLeftSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nI
 {
 }
 
-VclPtr<vcl::Window> ParaLeftSpacingControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> ParaLeftSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
     VclPtr<ParaLeftSpacingWindow> pWindow = VclPtr<ParaLeftSpacingWindow>::Create(pParent);
     pWindow->Show();
@@ -231,7 +231,7 @@ ParaRightSpacingControl::ParaRightSpacingControl(sal_uInt16 nSlotId, sal_uInt16 
 {
 }
 
-VclPtr<vcl::Window> ParaRightSpacingControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> ParaRightSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
     VclPtr<ParaRightSpacingWindow> pWindow = VclPtr<ParaRightSpacingWindow>::Create(pParent);
     pWindow->Show();
@@ -246,7 +246,7 @@ ParaFirstLineSpacingControl::ParaFirstLineSpacingControl(sal_uInt16 nSlotId, sal
 {
 }
 
-VclPtr<vcl::Window> ParaFirstLineSpacingControl::CreateItemWindow(vcl::Window* pParent)
+VclPtr<InterimItemWindow> ParaFirstLineSpacingControl::CreateItemWindow(vcl::Window* pParent)
 {
     VclPtr<ParaFirstLineSpacingWindow> pWindow = VclPtr<ParaFirstLineSpacingWindow>::Create(pParent);
     pWindow->Show();
