@@ -464,6 +464,7 @@ ShowFormulas
 ShowGrid
 ShowHighLow
 ShowInputMessage
+ShowLeaderLines
 ShowLegendEntry
 ShowList
 ShowNegativeError
