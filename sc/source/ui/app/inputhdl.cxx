@@ -1309,6 +1309,10 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
         SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && rFuncStrVec.size())
         {
+            auto aPos = pFormulaData->begin();
+            sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
+            const sal_uInt32 nSize = pFormulaData->size();
+
             OUString aFuncNameStr;
             OUString aDescFuncNameStr;
             OStringBuffer aPayload;
@@ -1335,6 +1339,9 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                     if ( !ppFDesc->getFunctionName().isEmpty() )
                     {
                         aPayload.append("{");
+                        aPayload.append("\"index\": ");
+                        aPayload.append(OString::number(nCurIndex));
+                        aPayload.append(", ");
                         aPayload.append("\"signature\": \"");
                         aPayload.append(escapeJSON(ppFDesc->getSignature()));
                         aPayload.append("\", ");
@@ -1343,6 +1350,9 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                         aPayload.append("\"}, ");
                     }
                 }
+                ++nCurIndex;
+                if (nCurIndex == nSize)
+                    nCurIndex = 0;
             }
             sal_Int32 nLen = aPayload.getLength();
             aPayload[nLen - 2] = ' ';
@@ -1514,15 +1524,36 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
         pView->SetSelection(aSel);
         pView->SelectCurrentWord();
 
+        bool bNoInitialLetter = false;
+        OUString aSelectedText = pView->GetSelected();
+        OUString aOld = pView->GetEditEngine()->GetText(0);
+        // in case we want just insert a function and not completing
+        if ( comphelper::LibreOfficeKit::isActive() )
+        {
+            if ( aOld == "=" )
+            {
+                bNoInitialLetter = true;
+                aSel.nStartPos = 1;
+                aSel.nEndPos = 1;
+                pView->SetSelection(aSel);
+            }
+            else if ( aSelectedText.startsWith("()") )
+            {
+                bNoInitialLetter = true;
+                ++aSel.nStartPos;
+                ++aSel.nEndPos;
+                pView->SetSelection(aSel);
+            }
+        }
         // a dot and underscore are word separators so we need special
         // treatment for any formula containing a dot or underscore
-        if(rInsert.indexOf(".") != -1 || rInsert.indexOf("_") != -1)
+        if(!bNoInitialLetter && (rInsert.indexOf(".") != -1 || rInsert.indexOf("_") != -1))
         {
             // need to make sure that we replace also the part before the dot
             // go through the word to find the match with the insert string
             aSel = pView->GetSelection();
             ESelection aOldSelection = aSel;
-            OUString aSelectedText = pView->GetSelected();
+
             if ( needToExtendSelection( aSelectedText, rInsert ) )
             {
                 while(needToExtendSelection(aSelectedText, rInsert))
@@ -1553,7 +1584,6 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
             // Do not insert parentheses after function names if there already are some
             // (e.g. if the function name was edited).
             ESelection aWordSel = pView->GetSelection();
-            OUString aOld = pView->GetEditEngine()->GetText(0);
 
             // aWordSel.EndPos points one behind string if word at end
             if (aWordSel.nEndPos < aOld.getLength())
@@ -1612,16 +1642,34 @@ void ScInputHandler::PasteFunctionData()
 
 void ScInputHandler::LOKPasteFunctionData( sal_uInt32 nIndex )
 {
-    if (pFormulaData  && miAutoPosFormula != pFormulaData->end() && nIndex < pFormulaData->size())
+    if (pActiveViewSh && (pTopView || pTableView))
     {
-        auto aPos = pFormulaData->begin();
-        sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
-        nIndex += nCurIndex;
-        if (nIndex >= pFormulaData->size())
-            nIndex -= pFormulaData->size();
-        std::advance(aPos, nIndex);
-        miAutoPosFormula = aPos;
-        PasteFunctionData();
+        bool bEdit = false;
+        OUString aFormula;
+        EditView* pEditView = pTopView ? pTopView : pTableView;
+        const EditEngine* pEditEngine = pEditView->GetEditEngine();
+        if (pEditEngine)
+        {
+            aFormula = pEditEngine->GetText(0);
+            bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
+        }
+
+        if ( !bEdit )
+        {
+            OUString aNewFormula('=');
+            if ( aFormula.startsWith("=") )
+                aNewFormula = aFormula;
+
+            InputReplaceSelection( aNewFormula );
+        }
+
+        if (pFormulaData && nIndex < pFormulaData->size())
+        {
+            auto aPos = pFormulaData->begin();
+            std::advance(aPos, nIndex);
+            miAutoPosFormula = aPos;
+            PasteFunctionData();
+        }
     }
 }
 
