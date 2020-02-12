@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f689b398_5f9049dc",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-12T14:48:41Z",
+      "side": 1,
+      "message": "You could use DECLARE_OOXMLEXPORT_EXPORTONLY_TEST() and then your test code will be invoked only after export, so no such early return is needed. This speeds up the test as well.",
+      "revId": "e654dee0262ea14913ccb45356da5f460e517962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
