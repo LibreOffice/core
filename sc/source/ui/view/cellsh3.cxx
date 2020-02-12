@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <formula/formulahelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -42,6 +43,7 @@
 #include <cellsh.hxx>
 #include <inputhdl.hxx>
 #include <editable.hxx>
+#include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
 #include <columnspanset.hxx>
@@ -55,6 +57,103 @@
 
 using sc::HMMToTwips;
 using sc::TwipsToEvenHMM;
+
+namespace
+{
+/// Rid ourselves of unwanted " quoted json characters.
+OString escapeJSON(const OUString &aStr)
+{
+    OUString aEscaped = aStr;
+    aEscaped = aEscaped.replaceAll("\n", " ");
+    aEscaped = aEscaped.replaceAll("\"", "'");
+    return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
+}
+
+void lcl_lokGetWholeFunctionList()
+{
+    if (comphelper::LibreOfficeKit::isActive()
+        && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+    {
+        const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
+        sal_uInt32 nListCount = pFuncList->GetCount();
+        std::set<OUString> aFuncNameOrderedSet;
+        for(sal_uInt32 i = 0; i < nListCount; ++i)
+        {
+            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
+            if ( pDesc->mxFuncName )
+            {
+                aFuncNameOrderedSet.insert(*pDesc->mxFuncName);
+            }
+        }
+        ScFunctionMgr* pFuncManager = ScGlobal::GetStarCalcFunctionMgr();
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && pFuncManager && aFuncNameOrderedSet.size())
+        {
+            OStringBuffer aPayload;
+            aPayload.append("{ \"wholeList\": true, ");
+            aPayload.append("\"categories\": [ ");
+
+            formula::FormulaHelper aHelper(pFuncManager);
+            sal_uInt32 nCategoryCount = pFuncManager->getCount();
+            for (sal_uInt32 i = 0; i < nCategoryCount; ++i)
+            {
+                OUString sCategoryName = pFuncManager->GetCategoryName(i);
+                aPayload.append("{");
+                aPayload.append("\"name\": \"");
+                aPayload.append(escapeJSON(sCategoryName));
+                aPayload.append("\"}, ");
+            }
+            sal_Int32 nLen = aPayload.getLength();
+            aPayload[nLen - 2] = ' ';
+            aPayload[nLen - 1] = ']';
+            aPayload.append(", ");
+
+            OUString aDescFuncNameStr;
+            aPayload.append("\"functions\": [ ");
+            sal_uInt32 nCurIndex = 0;
+            for (const OUString& aFuncNameStr : aFuncNameOrderedSet)
+            {
+                aDescFuncNameStr = aFuncNameStr + "()";
+                sal_Int32 nNextFStart = 0;
+                const formula::IFunctionDescription* ppFDesc;
+                ::std::vector< OUString > aArgs;
+                OUString eqPlusFuncName = "=" + aDescFuncNameStr;
+                if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
+                {
+                    if ( ppFDesc && !ppFDesc->getFunctionName().isEmpty() )
+                    {
+                        if (ppFDesc->getCategory())
+                        {
+                            aPayload.append("{");
+                            aPayload.append("\"index\": ");
+                            aPayload.append(OString::number(nCurIndex));
+                            aPayload.append(", ");
+                            aPayload.append("\"category\": ");
+                            aPayload.append(OString::number(ppFDesc->getCategory()->getNumber()));
+                            aPayload.append(", ");
+                            aPayload.append("\"signature\": \"");
+                            aPayload.append(escapeJSON(ppFDesc->getSignature()));
+                            aPayload.append("\", ");
+                            aPayload.append("\"description\": \"");
+                            aPayload.append(escapeJSON(ppFDesc->getDescription()));
+                            aPayload.append("\"}, ");
+                        }
+                    }
+                }
+                ++nCurIndex;
+            }
+            nLen = aPayload.getLength();
+            aPayload[nLen - 2] = ' ';
+            aPayload[nLen - 1] = ']';
+            aPayload.append(" }");
+
+            OString s = aPayload.makeStringAndClear();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
+        }
+    }
+}
+
+} // end namespace
 
 void ScCellShell::Execute( SfxRequest& rReq )
 {
@@ -316,11 +415,22 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_OPENDLG_FUNCTION:
             {
-                sal_uInt16 nId = SID_OPENDLG_FUNCTION;
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-                bool bVis = comphelper::LibreOfficeKit::isActive() || pWnd == nullptr;
-                pScMod->SetRefDialog( nId, bVis );
+                if (comphelper::LibreOfficeKit::isActive()
+                    && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+                {
+                    // not set the dialog id in the mobile case or we would
+                    // not be able to get cell address pasted in the edit view
+                    // by just tapping on them
+                    lcl_lokGetWholeFunctionList();
+                }
+                else
+                {
+                    sal_uInt16 nId = SID_OPENDLG_FUNCTION;
+                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                    bool bVis = comphelper::LibreOfficeKit::isActive() || pWnd == nullptr;
+                    pScMod->SetRefDialog( nId, bVis );
+                }
                 rReq.Ignore();
             }
             break;
