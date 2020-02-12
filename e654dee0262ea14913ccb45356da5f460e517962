@@ -16,6 +16,24 @@
       "revId": "e654dee0262ea14913ccb45356da5f460e517962",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb7d3d2_ef99f979",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-12T14:54:39Z",
+      "side": 1,
+      "message": "Thanks your advice, the fix coming soon.",
+      "parentUuid": "f689b398_5f9049dc",
+      "revId": "e654dee0262ea14913ccb45356da5f460e517962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
