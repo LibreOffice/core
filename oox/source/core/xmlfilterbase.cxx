@@ -151,6 +151,8 @@ struct NamespaceIds: public rtl::StaticWithInit<
              NMSP_p15},
             {"http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac",
              NMSP_x12ac},
+            {"http://schemas.microsoft.com/office/drawing/2012/chart",
+             NMSP_c15},
         };
     }
 };
