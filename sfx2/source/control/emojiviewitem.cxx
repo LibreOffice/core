@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/emojiviewitem.hxx>
+#include <emojiviewitem.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

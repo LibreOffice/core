@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/checkin.hxx>
+#include <checkin.hxx>
 
 SfxCheckinDialog::SfxCheckinDialog(weld::Window* pParent)
     : GenericDialogController( pParent, "sfx/ui/checkin.ui", "CheckinDialog")

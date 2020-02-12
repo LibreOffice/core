@@ -82,7 +82,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/checkin.hxx>
+#include <checkin.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxsids.hrc>

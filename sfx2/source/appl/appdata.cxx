@@ -25,7 +25,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <appbaslib.hxx>
 #include <svl/svdde.hxx>
 

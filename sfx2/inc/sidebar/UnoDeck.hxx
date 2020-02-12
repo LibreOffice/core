@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_SIDEBAR_UNODECK_HXX
-#define INCLUDED_SFX2_SIDEBAR_UNODECK_HXX
+#pragma once
 
 
 #include <com/sun/star/ui/XDeck.hpp>
@@ -59,7 +58,5 @@ private:
     sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

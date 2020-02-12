@@ -19,7 +19,7 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/charmapcontrol.hxx>
+#include <charmapcontrol.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
 

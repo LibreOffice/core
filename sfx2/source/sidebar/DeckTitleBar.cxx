@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>

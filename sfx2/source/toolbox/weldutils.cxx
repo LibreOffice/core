@@ -8,7 +8,7 @@
  */
 
 #include <com/sun/star/frame/XSubToolbarController.hpp>
-#include <sfx2/sidebar/ControllerFactory.hxx>
+#include <sidebar/ControllerFactory.hxx>
 #include <sfx2/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>

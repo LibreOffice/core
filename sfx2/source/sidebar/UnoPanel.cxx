@@ -8,16 +8,16 @@
  *
  */
 
-#include <sfx2/sidebar/UnoPanel.hxx>
+#include <sidebar/UnoPanel.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
-#include <sfx2/sidebar/PanelDescriptor.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sidebar/PanelDescriptor.hxx>
+#include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Deck.hxx>
-#include <sfx2/sidebar/DeckDescriptor.hxx>
+#include <sidebar/DeckDescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 

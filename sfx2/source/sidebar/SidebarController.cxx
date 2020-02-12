@@ -18,11 +18,11 @@
  */
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/Deck.hxx>
-#include <sfx2/sidebar/DeckDescriptor.hxx>
-#include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sidebar/DeckDescriptor.hxx>
+#include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sfx2/sidebar/PanelDescriptor.hxx>
-#include <sfx2/sidebar/PanelTitleBar.hxx>
+#include <sidebar/PanelDescriptor.hxx>
+#include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>

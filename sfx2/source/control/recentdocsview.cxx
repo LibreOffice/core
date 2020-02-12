@@ -19,7 +19,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
-#include <sfx2/recentdocsview.hxx>
+#include <recentdocsview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>

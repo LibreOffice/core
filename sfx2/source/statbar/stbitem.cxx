@@ -38,7 +38,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <unoctitm.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <comphelper/processfactory.hxx>
