@@ -369,6 +369,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/canvastools \
     vcl/source/helper/commandinfoprovider \
     vcl/source/helper/displayconnectiondispatch \
+    vcl/source/helper/driverblocklist \
     vcl/source/helper/errcode \
     vcl/source/helper/evntpost \
     vcl/source/helper/lazydelete \
@@ -702,7 +703,6 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/win/WinDeviceInfo \
-    vcl/opengl/win/blocklist_parser \
     vcl/source/app/salplug \
 ))
 

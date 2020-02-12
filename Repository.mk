@@ -951,6 +951,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		vcl_opengl_blacklist \
 	) \
 	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
+	$(if $(filter SKIA,$(BUILD_TYPE)), \
+		vcl_skia_blacklist ) \
 	$(if $(DISABLE_PYTHON),,$(if $(filter-out AIX,$(OS)), \
 		Pyuno/commonwizards \
 		Pyuno/fax \

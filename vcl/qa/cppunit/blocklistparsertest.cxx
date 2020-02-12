@@ -16,7 +16,9 @@
 
 #include <unotest/bootstrapfixturebase.hxx>
 
-#include <opengl/win/blocklist_parser.hxx>
+#include <driverblocklist.hxx>
+
+using namespace DriverBlocklist;
 
 namespace
 {
@@ -34,9 +36,9 @@ class BlocklistParserTest : public test::BootstrapFixtureBase
 
 void BlocklistParserTest::testParse()
 {
-    std::vector<wgl::DriverInfo> aDriveInfos;
+    std::vector<DriverInfo> aDriveInfos;
 
-    WinBlocklistParser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_parse.xml", aDriveInfos);
+    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_parse.xml", aDriveInfos);
     aBlocklistParser.parse();
 
     size_t const n = aDriveInfos.size();
@@ -46,91 +48,87 @@ void BlocklistParserTest::testParse()
 
     for (bool bIsWhitelisted : {true, false})
     {
-        wgl::DriverInfo& aDriveInfo = aDriveInfos[i++];
+        DriverInfo& aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAll), aDriveInfo.maAdapterVendor); // "all"
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_LESS_THAN, aDriveInfo.meComparisonOp);
-        CPPUNIT_ASSERT_EQUAL(wgl::V(10,20,30,40), aDriveInfo.mnDriverVersion);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor); // "all"
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_LESS_THAN, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(V(10,20,30,40), aDriveInfo.mnDriverVersion);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorNVIDIA), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_EQUAL, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorNVIDIA), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorMicrosoft), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorMicrosoft), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
         CPPUNIT_ASSERT_EQUAL(OUString("0xcafe"), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAll), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_BETWEEN_EXCLUSIVE, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_EXCLUSIVE, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAll), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAll), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE_START, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_BETWEEN_INCLUSIVE_START, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
-        CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAll), aDriveInfo.maAdapterVendor);
-        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_COMPARISON_IGNORED, aDriveInfo.meComparisonOp);
+        CPPUNIT_ASSERT_EQUAL(GetVendorId(VendorAll), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(VersionComparisonOp::DRIVER_COMPARISON_IGNORED, aDriveInfo.meComparisonOp);
     }
 }
 
 void BlocklistParserTest::testEvaluate()
 {
-    std::vector<wgl::DriverInfo> aDriveInfos;
+    std::vector<DriverInfo> aDriveInfos;
 
-    WinBlocklistParser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_evaluate.xml", aDriveInfos);
+    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_evaluate.xml", aDriveInfos);
     aBlocklistParser.parse();
 
-    OUString vendorAMD = WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorAMD);
-    OUString vendorNVIDIA = WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorNVIDIA);
-    OUString vendorIntel = WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorIntel);
-    OUString vendorMicrosoft = WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorMicrosoft);
-
-    uint32_t const osWindows7 = 0x00060001;
-    uint32_t const osWindows8 = 0x00060002;
-    uint32_t const osWindows10 = 0x000A0000;
+    OUString vendorAMD = GetVendorId(VendorAMD);
+    OUString vendorNVIDIA = GetVendorId(VendorNVIDIA);
+    OUString vendorIntel = GetVendorId(VendorIntel);
+    OUString vendorMicrosoft = GetVendorId(VendorMicrosoft);
 
     // Check OS
-    CPPUNIT_ASSERT_EQUAL(false, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", osWindows7));
-    CPPUNIT_ASSERT_EQUAL(false, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", osWindows8));
-    CPPUNIT_ASSERT_EQUAL(false, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", osWindows10));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", DRIVER_OS_WINDOWS_7));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", DRIVER_OS_WINDOWS_8));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorNVIDIA, "all", DRIVER_OS_WINDOWS_10));
 
 
     // Check Vendors
-    CPPUNIT_ASSERT_EQUAL(true, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorMicrosoft, "all", osWindows7));
-    CPPUNIT_ASSERT_EQUAL(true, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorMicrosoft, "all", osWindows10));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorMicrosoft, "all", DRIVER_OS_WINDOWS_7));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorMicrosoft, "all", DRIVER_OS_WINDOWS_10));
 
     // Check Versions
-    CPPUNIT_ASSERT_EQUAL(true, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.39", vendorAMD, "all", osWindows7));
-    CPPUNIT_ASSERT_EQUAL(false, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.40", vendorAMD, "all", osWindows7));
-    CPPUNIT_ASSERT_EQUAL(false, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "10.20.30.41", vendorAMD, "all", osWindows7));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.39", vendorAMD, "all", DRIVER_OS_WINDOWS_7));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.40", vendorAMD, "all", DRIVER_OS_WINDOWS_7));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "10.20.30.41", vendorAMD, "all", DRIVER_OS_WINDOWS_7));
 
     // Check
-    CPPUNIT_ASSERT_EQUAL(true, WinOpenGLDeviceInfo::FindBlocklistedDeviceInList(
-                                    aDriveInfos, "9.17.10.4229", vendorIntel, "all", osWindows7));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, "9.17.10.4229", vendorIntel, "all", DRIVER_OS_WINDOWS_7));
 
 
 }

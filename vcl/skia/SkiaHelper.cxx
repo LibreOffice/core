@@ -9,13 +9,6 @@
 
 #include <vcl/skia/SkiaHelper.hxx>
 
-#include <vcl/svapp.hxx>
-#include <desktop/crashreport.hxx>
-#include <officecfg/Office/Common.hxx>
-#include <watchdog.hxx>
-#include <skia/zone.hxx>
-#include <sal/log.hxx>
-
 #if !HAVE_FEATURE_SKIA
 
 namespace SkiaHelper
@@ -26,7 +19,16 @@ bool isVCLSkiaEnabled() { return false; }
 
 #else
 
+#include <rtl/bootstrap.hxx>
+#include <vcl/svapp.hxx>
+#include <desktop/crashreport.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <watchdog.hxx>
+#include <skia/zone.hxx>
+#include <sal/log.hxx>
+#include <driverblocklist.hxx>
 #include <skia/utils.hxx>
+#include <config_folders.h>
 
 #include <SkSurface.h>
 
@@ -36,20 +38,31 @@ bool isVCLSkiaEnabled() { return false; }
 
 namespace SkiaHelper
 {
+static OUString getBlacklistFile()
+{
+    OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
+    rtl::Bootstrap::expandMacros(url);
+
+    return url + "/skia/skia_blacklist_vulkan.xml";
+}
+
 static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
 {
     static const char* const types[]
         = { "other", "integrated", "discrete", "virtual", "cpu", "??" }; // VkPhysicalDeviceType
+    OUString driverVersion = OUString::number(props.driverVersion >> 22) + "."
+                             + OUString::number((props.driverVersion >> 12) & 0x3ff) + "."
+                             + OUString::number(props.driverVersion & 0xfff);
+    OUString vendorId = "0x" + OUString::number(props.vendorID, 16);
+    OUString deviceId = "0x" + OUString::number(props.deviceID, 16);
     SAL_INFO("vcl.skia",
              "Vulkan API version: "
                  << (props.apiVersion >> 22) << "." << ((props.apiVersion >> 12) & 0x3ff) << "."
-                 << (props.apiVersion & 0xfff) << ", driver version: "
-                 << (props.driverVersion >> 22) << "." << ((props.driverVersion >> 12) & 0x3ff)
-                 << "." << (props.driverVersion & 0xfff) << std::hex << ", vendor: 0x"
-                 << props.vendorID << ", device: 0x" << props.deviceID << std::dec
-                 << ", type: " << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types))]
+                 << (props.apiVersion & 0xfff) << ", driver version: " << driverVersion
+                 << ", vendor: " << vendorId << ", device: " << deviceId << ", type: "
+                 << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)]
                  << ", name: " << props.deviceName);
-    return false;
+    return DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersion, vendorId, deviceId);
 }
 
 static void checkDeviceBlacklisted()
