@@ -24,6 +24,9 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
+#include <vcl/floatwin.hxx>
+#include <window.h>
+
 Qt5Menu::Qt5Menu(bool bMenuBar)
     : mpVCLMenu(nullptr)
     , mpParentSalMenu(nullptr)
@@ -77,8 +80,15 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                     [pSalMenuItem] { slotMenuAboutToHide(pSalMenuItem); });
         }
     }
-    else if (mpQMenu)
+    else
     {
+        if (!mpQMenu)
+        {
+            // no QMenu set, instantiate own one
+            mpOwnedQMenu.reset(new QMenu);
+            mpQMenu = mpOwnedQMenu.get();
+        }
+
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
@@ -148,7 +158,9 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
 
                 UpdateActionGroupItem(pSalMenuItem);
 
-                pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
+                const Qt5Frame* pFrame = GetFrame();
+                if (pFrame)
+                    pAction->setShortcut(toQString(nAccelKey.GetName(pFrame->GetWindow())));
 
                 connect(pAction, &QAction::triggered, this,
                         [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
@@ -442,6 +454,11 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
         InsertMenuItem(pSalMenuItem, nItem);
         SetItemImage(nItem, pSalMenuItem, pSalMenuItem->maImage);
+        const bool bShowDisabled
+            = bool(pMenuBar->GetMenuFlags() & MenuFlags::AlwaysShowDisabledEntries)
+              || !bool(pMenuBar->GetMenuFlags() & MenuFlags::HideDisabledEntries);
+        const bool bVisible = bShowDisabled || mpVCLMenu->IsItemEnabled(pSalMenuItem->mnId);
+        pSalMenuItem->getAction()->setVisible(bVisible);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
@@ -649,6 +666,19 @@ void Qt5Menu::ShowCloseButton(bool bShow)
         pButton->show();
     else
         pButton->hide();
+}
+
+bool Qt5Menu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&,
+                                  FloatWinPopupFlags nFlags)
+{
+    assert(mpQMenu);
+    DoFullMenuUpdate(mpVCLMenu);
+    mpQMenu->setTearOffEnabled(bool(nFlags & FloatWinPopupFlags::AllowTearOff));
+
+    const QPoint aPos = QCursor::pos();
+    mpQMenu->exec(aPos);
+
+    return true;
 }
 
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
