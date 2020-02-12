@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c27f345e_ec05b6ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-12T05:40:06Z",
+      "side": 1,
+      "message": "Please describe which problem *this specific patch* solves. The name of the bug might sometimes be a proper commit message - but actually rarely. So this would better be like\n\ntdf#84553: correctly handle failures getting WMI object\n\n... as seen in \u003cfailed test build URL\u003e\nwith output \"what is shown there when testing AV\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "09300b53c894a94af76ecd84d18428d4494f10cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
