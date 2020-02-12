@@ -26,7 +26,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <deque>
-#include <vcl/treelistentry.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
@@ -35,8 +34,6 @@ namespace basctl
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-
-typedef std::deque< SvTreeListEntry* > EntryArray;
 
 IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool)
 {
