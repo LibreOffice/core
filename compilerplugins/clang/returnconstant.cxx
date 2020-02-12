@@ -118,14 +118,12 @@ bool ReturnConstant::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
         return true;
 
     // ignore LINK macro stuff
-    std::string aImmediateMacro = "";
     if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(functionDecl))
         || compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(functionDecl)))
     {
         StringRef name{ Lexer::getImmediateMacroName(compat::getBeginLoc(functionDecl),
                                                      compiler.getSourceManager(),
                                                      compiler.getLangOpts()) };
-        aImmediateMacro = name.str();
         if (name.find("IMPL_LINK") != StringRef::npos
             || name.find("IMPL_STATIC_LINK") != StringRef::npos
             || name.find("DECL_LINK") != StringRef::npos
