@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "812cc352_2fd9b006",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-12T19:13:17Z",
+      "side": 1,
+      "message": "Let\u0027s also change this to \"tdf#124176: Use pragma once instead of include guards\" as a single line commit message.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 41
+      },
+      "revId": "9bc497d0e34c7e38851f7f12ed291271f4a4a58d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "edb3cb9d_765045bc",
         "filename": "avmedia/source/win/manager.hxx",
         "patchSetId": 2
