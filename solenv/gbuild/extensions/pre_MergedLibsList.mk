@@ -45,9 +45,15 @@ MERGE_LIBRARY_LIST := \
 	fwk \
 	fwl \
 	$(if $(filter WNT,$(OS)),gdipluscanvas) \
+	guesslang \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
+	hyphen \
+	i18nsearch \
 	i18npool \
 	i18nutil \
+	io \
+	$(if $(ENABLE_JAVA),javaloader) \
+	$(if $(ENABLE_JAVA),javavm) \
 	lng \
 	localebe1 \
 	mcnttype \
