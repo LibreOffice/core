@@ -14,7 +14,9 @@
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <messagedialog.hxx>
@@ -2734,6 +2736,24 @@ void VclDrawingArea::StartDrag(sal_Int8, const Point&)
         return;
 
     xContainer->StartDrag(this, m_nDragAction);
+}
+
+VclHPaned::~VclHPaned()
+{
+}
+
+VclVPaned::~VclVPaned()
+{
+}
+
+VclPaned::~VclPaned()
+{
+    disposeOnce();
+}
+
+VclScrolledWindow::~VclScrolledWindow()
+{
+    disposeOnce();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

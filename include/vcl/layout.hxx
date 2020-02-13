@@ -11,9 +11,8 @@
 #define INCLUDED_VCL_LAYOUT_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/ctrl.hxx>
 #include <vcl/help.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
@@ -23,6 +22,11 @@
 #include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
 #include <set>
+
+class ScrollBar;
+class ScrollBar;
+class ScrollBarBox;
+class Splitter;
 
 class VCL_DLLPUBLIC VclContainer : public vcl::Window,
                                    public vcl::IContext
@@ -378,7 +382,7 @@ protected:
 
     VclPaned(vcl::Window *pParent, bool bVertical);
 public:
-    virtual ~VclPaned() override { disposeOnce(); }
+    virtual ~VclPaned() override;
     virtual void dispose() override;
     long get_position() const { return m_nPosition; }
     void set_position(long nPosition) { m_nPosition = nPosition; }
@@ -392,6 +396,7 @@ private:
 
 public:
     VclVPaned(vcl::Window *pParent);
+    virtual ~VclVPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
 };
@@ -404,6 +409,7 @@ private:
 
 public:
     VclHPaned(vcl::Window *pParent);
+    virtual ~VclHPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
 };
@@ -488,7 +494,7 @@ class VCL_DLLPUBLIC VclScrolledWindow final : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent );
-    virtual ~VclScrolledWindow() override { disposeOnce(); }
+    virtual ~VclScrolledWindow() override;
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
