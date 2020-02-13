@@ -222,7 +222,7 @@ public:
 //  ListBox in a FloatingWindow (pParent)
 ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                   SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode ) :
-    ListBox( pParent, WB_AUTOHSCROLL ),
+    ListBox( pParent, WB_AUTOHSCROLL | WB_LISTBOX_POPUP ),
     pGridWin( pGrid ),
     nCol( nNewCol ),
     nRow( nNewRow ),
