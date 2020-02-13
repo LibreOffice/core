@@ -12,7 +12,7 @@
 #include <o3tl/enumrange.hxx>
 #include <vcl/button.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

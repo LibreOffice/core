@@ -12,7 +12,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/vclmedit.hxx>
 

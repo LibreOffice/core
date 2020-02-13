@@ -46,7 +46,7 @@
 #include <vcl/calendar.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/fmtfield.hxx>
