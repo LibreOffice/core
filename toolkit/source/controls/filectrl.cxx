@@ -17,17 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <filectrl.hxx>
+#include <controls/filectrl.hxx>
 
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
 #include <osl/diagnose.h>
-#include <svtools/svtresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/strings.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -38,7 +36,7 @@ FileControl::FileControl( vcl::Window* pParent, WinBits nStyle ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
     maButton( VclPtr<PushButton>::Create( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
-    maButtonText( SvtResId(STR_FILECTRL_BUTTONTEXT) ),
+    maButtonText( /*SvtResId(STR_FILECTRL_BUTTONTEXT)*/ ), // TODO
     mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
     maButton->SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
