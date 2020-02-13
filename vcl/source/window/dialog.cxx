@@ -50,6 +50,7 @@
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -1135,18 +1136,39 @@ void Dialog::EndDialog( long nResult )
     }
 }
 
-void Dialog::EndAllDialogs( vcl::Window const * pParent )
+namespace vcl
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
-
-    for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
+    void EndAllDialogs( vcl::Window const * pParent )
     {
-        if (!pParent || pParent->IsWindowOrChild(*it, true))
+        ImplSVData* pSVData = ImplGetSVData();
+        auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
+
+        for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
         {
-            (*it)->EndDialog();
-            (*it)->PostUserEvent(Link<void*, void>());
+            if (!pParent || pParent->IsWindowOrChild(*it, true))
+            {
+                (*it)->EndDialog();
+                (*it)->PostUserEvent(Link<void*, void>());
+            }
         }
+    }
+
+    void EnableDialogInput(vcl::Window* pWindow)
+    {
+        if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow))
+        {
+            pDialog->EnableInput();
+        }
+    }
+
+    bool CloseDialog(vcl::Window* pWindow)
+    {
+        if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow))
+        {
+            pDialog->Close();
+            return true;
+        }
+        return false;
     }
 }
 

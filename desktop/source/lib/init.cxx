@@ -126,7 +126,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <unicode/uchar.h>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -3813,10 +3813,7 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     const Point aPos(nX, nY);
     MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
-    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
-    {
-        pDialog->EnableInput();
-    }
+    vcl::EnableDialogInput(pWindow);
 
     switch (nType)
     {
@@ -3865,10 +3862,7 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsign
         PanningOrientation::Vertical,
     };
 
-    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
-    {
-        pDialog->EnableInput();
-    }
+    vcl::EnableDialogInput(pWindow);
 
     Application::PostGestureEvent(VclEventId::WindowGestureEvent, pWindow, &aEvent);
 }
@@ -5174,10 +5168,12 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
 
     if (nAction == LOK_WINDOW_CLOSE)
     {
-        if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
-            pDialog->Close();
-        else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
-            pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+        bool bWasDialog = vcl::CloseDialog(pWindow);
+        if (!bWasDialog)
+        {
+            if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
+                pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+        }
     }
     else if (nAction == LOK_WINDOW_PASTE)
     {

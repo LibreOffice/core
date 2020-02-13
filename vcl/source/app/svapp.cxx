@@ -33,6 +33,7 @@
 #include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/dialog.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
@@ -300,7 +301,7 @@ IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
     vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
     while (pAppWindow)
     {
-        Dialog::EndAllDialogs(pAppWindow);
+        vcl::EndAllDialogs(pAppWindow);
         pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
     }
 }

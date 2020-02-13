@@ -30,7 +30,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/dialoghelper.hxx>
+#include <vcl/window.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -115,8 +116,8 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
             xWinPeer->setProperty( "PluginParent", uno::makeAny( sal_Int64(0) ) );
 
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow )
-                Dialog::EndAllDialogs( pWindow );
+            if (pWindow)
+                vcl::EndAllDialogs(pWindow);
         }
         catch( uno::Exception& )
         {
