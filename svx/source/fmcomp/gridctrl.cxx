@@ -47,6 +47,8 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>

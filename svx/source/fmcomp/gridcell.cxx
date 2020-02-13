@@ -62,6 +62,7 @@
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>

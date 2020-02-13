@@ -17,10 +17,10 @@
  */
 
 #include <svtools/editbrowsebox.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
-
 
 namespace svt
 {

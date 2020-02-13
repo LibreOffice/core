@@ -20,10 +20,8 @@
 #define INCLUDED_SVX_GRIDCTRL_HXX
 
 #include <com/sun/star/util/Date.hpp>
-#include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 
-#include <vcl/button.hxx>
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <osl/mutex.hxx>
@@ -39,6 +37,10 @@ namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class XRowsChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
+
+class Button;
+class ImageButton;
+class FixedText;
 
 class CursorWrapper;
 

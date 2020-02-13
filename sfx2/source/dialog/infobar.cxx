@@ -19,6 +19,8 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

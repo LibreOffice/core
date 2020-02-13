@@ -29,12 +29,13 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/spinfld.hxx>
 
-#include <vcl/button.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <svtools/svmedit.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+class Button;
+class CheckBox;
 
 // EditBrowseBoxFlags (EBBF)
 

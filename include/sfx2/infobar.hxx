@@ -12,11 +12,14 @@
 #include <vector>
 
 #include <basegfx/color/bcolor.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/dllapi.h>
+
+class FixedImage;
+class FixedText;
+class Button;
+class PushButton;
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-13 15:23:10 using:
+ Generated on 2020-02-13 21:38:09 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -68,6 +68,9 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
@@ -87,7 +90,6 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
-#include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
@@ -97,7 +99,6 @@
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>

@@ -22,6 +22,7 @@
 #include <sbagrid.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/split.hxx>
 #include "dbtreeview.hxx"
 #include <stringconstants.hxx>
