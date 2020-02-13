@@ -272,6 +272,7 @@
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
 
 #define FN_PROTECT_FIELDS               (FN_INSERT2 + 26)
+#define FN_PROTECT_BOOKMARKS            (FN_INSERT2 + 27)
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

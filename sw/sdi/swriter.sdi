@@ -7668,3 +7668,21 @@ SfxBoolItem ProtectFields FN_PROTECT_FIELDS
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Controls;
 ]
+
+SfxBoolItem ProtectBookmarks FN_PROTECT_BOOKMARKS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Controls;
+]
