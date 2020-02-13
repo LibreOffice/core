@@ -1740,5 +1740,11 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+    FN_PROTECT_FIELDS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
 }  // end of interface text
 

@@ -1434,6 +1434,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
     }
     break;
+    case FN_PROTECT_FIELDS:
+    {
+        IDocumentSettingAccess& rIDSA = rWrtSh.getIDocumentSettingAccess();
+        rIDSA.set(DocumentSettingId::PROTECT_FIELDS, !rIDSA.get(DocumentSettingId::PROTECT_FIELDS));
+        // Invalidate so that toggle state gets updated
+        SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+        pViewFrame->GetBindings().Invalidate(nSlot);
+        pViewFrame->GetBindings().Update(nSlot);
+    }
+    break;
     default:
         OSL_ENSURE(false, "wrong dispatcher");
         return;
@@ -2023,6 +2033,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 break;
             }
+            break;
+            case FN_PROTECT_FIELDS:
+            {
+                bool bProtected
+                    = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS);
+                rSet.Put(SfxBoolItem(nWhich, bProtected));
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
