@@ -300,6 +300,11 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl);
 int derivedFromCount(clang::QualType subclassType, clang::QualType baseclassType);
 int derivedFromCount(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* baseRecord);
 
+// It looks like Clang wrongly implements DR 4
+// (<http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#4>) and treats
+// a variable declared in an 'extern "..." {...}'-style linkage-specification as
+// if it contained the 'extern' specifier:
+bool hasExternalLinkage(VarDecl const * decl);
 
 } // namespace
 

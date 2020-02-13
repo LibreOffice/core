@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 #include <set>
 #include <stack>
@@ -18,31 +19,6 @@
 // loplugin:stringconstant findings).
 
 namespace {
-
-// It looks like Clang wrongly implements DR 4
-// (<http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#4>) and treats
-// a variable declared in an 'extern "..." {...}'-style linkage-specification as
-// if it contained the 'extern' specifier:
-bool hasExternalLinkage(VarDecl const * decl) {
-    if (decl->getLinkageAndVisibility().getLinkage() != ExternalLinkage) {
-        return false;
-    }
-    for (auto ctx = decl->getLexicalDeclContext();
-         ctx->getDeclKind() != Decl::TranslationUnit;
-         ctx = ctx->getLexicalParent())
-    {
-        if (auto ls = dyn_cast<LinkageSpecDecl>(ctx)) {
-            if (!ls->hasBraces()) {
-                return true;
-            }
-            if (auto prev = decl->getPreviousDecl()) {
-                return hasExternalLinkage(prev);
-            }
-            return !decl->isInAnonymousNamespace();
-        }
-    }
-    return true;
-}
 
 class ConstStringVar:
     public loplugin::FilteringPlugin<ConstStringVar>
@@ -65,7 +41,7 @@ public:
         }
     }
 
-    bool TraverseImplicitCastExpr(ImplicitCastExpr * expr) {
+    bool PreTraverseImplicitCastExpr(ImplicitCastExpr * expr) {
         bool match;
         switch (expr->getCastKind()) {
         case CK_NoOp:
@@ -94,11 +70,25 @@ public:
                 }
             }
         }
-        bool b = RecursiveASTVisitor::TraverseImplicitCastExpr(expr);
+        pushed_.push(pushed);
+        return true;
+    }
+    bool PostTraverseImplicitCastExpr(ImplicitCastExpr *, bool) {
+        bool pushed = pushed_.top();
+        pushed_.pop();
         if (pushed) {
             casted_.pop();
         }
-        return b;
+        return true;
+    }
+    bool TraverseImplicitCastExpr(ImplicitCastExpr * expr) {
+        bool ret = true;
+        if (PreTraverseImplicitCastExpr(expr))
+        {
+            ret = FilteringPlugin::TraverseImplicitCastExpr(expr);
+            PostTraverseImplicitCastExpr(expr, ret);
+        }
+       return ret;
     }
 
     bool VisitVarDecl(VarDecl const * decl) {
@@ -108,7 +98,7 @@ public:
         if (decl != decl->getCanonicalDecl()) {
             return true;
         }
-        if (isa<ParmVarDecl>(decl) || hasExternalLinkage(decl)) {
+        if (isa<ParmVarDecl>(decl) || loplugin::hasExternalLinkage(decl)) {
             return true;
         }
         if (!loplugin::TypeCheck(decl->getType()).NonConstVolatile().Pointer()
@@ -147,10 +137,13 @@ public:
 private:
     std::set<VarDecl const *> vars_;
     std::stack<DeclRefExpr const *> casted_;
+    std::stack<bool> pushed_;
 };
 
-loplugin::Plugin::Registration<ConstStringVar> X("conststringvar");
+loplugin::Plugin::Registration<ConstStringVar> conststringvar("conststringvar");
 
 }
+
+#endif // LO_CLANG_SHARED_PLUGINS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
