@@ -179,7 +179,6 @@
 #define STR_SVT_FONTMAP_STYLENOTAVAILABLE       NC_("STR_SVT_FONTMAP_STYLENOTAVAILABLE", "This font style will be simulated or the closest matching style will be used.")
 #define STR_SVT_FONTMAP_NOTAVAILABLE            NC_("STR_SVT_FONTMAP_NOTAVAILABLE", "This font has not been installed. The closest available font will be used.")
 
-#define STR_FILECTRL_BUTTONTEXT                 NC_("STR_FILECTRL_BUTTONTEXT", "Browse...")
 #define STR_TABBAR_PUSHBUTTON_MOVET0HOME        NC_("STR_TABBAR_PUSHBUTTON_MOVET0HOME", "Move To Home")
 #define STR_TABBAR_PUSHBUTTON_MOVELEFT          NC_("STR_TABBAR_PUSHBUTTON_MOVELEFT", "Move Left")
 #define STR_TABBAR_PUSHBUTTON_MOVERIGHT         NC_("STR_TABBAR_PUSHBUTTON_MOVERIGHT", "Move Right")
