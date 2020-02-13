@@ -903,7 +903,7 @@ void GtkSalFrame::InitCommon()
 
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
-    if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if its a GtkEventBox which doesn't have the signal
+    if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
         g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
