@@ -1676,5 +1676,11 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";  // e.g. disable for read-only documents
     ]
 
+    FN_PROTECT_FIELDS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
 }  //ende interface text
 

@@ -7650,3 +7650,21 @@ SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+SfxBoolItem ProtectFields FN_PROTECT_FIELDS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Controls;
+]

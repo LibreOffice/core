@@ -271,6 +271,8 @@
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
 
+#define FN_PROTECT_FIELDS               (FN_INSERT2 + 26)
+
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */
 #define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* apply autoformat during user input */
