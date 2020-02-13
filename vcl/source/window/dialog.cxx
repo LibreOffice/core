@@ -49,7 +49,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

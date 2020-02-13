@@ -37,7 +37,7 @@
 #include <salframe.hxx>
 #include <scrwnd.hxx>
 #include <helpwin.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>

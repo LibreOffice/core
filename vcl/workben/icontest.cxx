@@ -33,7 +33,7 @@
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

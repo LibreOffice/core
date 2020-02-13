@@ -82,7 +82,7 @@
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
