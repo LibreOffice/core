@@ -35,7 +35,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/help.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>

@@ -23,7 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/calendar.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/fmtfield.hxx>

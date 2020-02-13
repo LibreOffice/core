@@ -16,7 +16,7 @@
 #include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/XWindow.hpp>

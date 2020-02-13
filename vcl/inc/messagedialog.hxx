@@ -10,7 +10,7 @@
 #ifndef INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
 #define INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/fixed.hxx>
 

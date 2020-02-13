@@ -15,7 +15,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>

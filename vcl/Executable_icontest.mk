@@ -25,6 +25,10 @@ $(eval $(call gb_Executable_add_defs,icontest,\
 ))
 endif
 
+$(eval $(call gb_Executable_add_defs,icontest,\
+    -DVCL_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Executable_use_api,icontest,\
     offapi \
     udkapi \

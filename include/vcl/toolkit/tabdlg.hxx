@@ -25,7 +25,7 @@
 #endif
 
 #include <vcl/dllapi.h>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 
 class FixedLine;
 
