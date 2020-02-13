@@ -55,8 +55,7 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
         // chart oasis import
-        SINGLEFACTORY( SchXMLImport )
-        else SINGLEFACTORY( SchXMLImport_Meta )
+        SINGLEFACTORY( SchXMLImport_Meta )
         else SINGLEFACTORY( SchXMLImport_Styles )
         else SINGLEFACTORY( SchXMLImport_Content )
 
