@@ -22,7 +22,7 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <sal/log.hxx>
 
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>

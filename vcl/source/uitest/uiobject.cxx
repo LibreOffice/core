@@ -16,7 +16,7 @@
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>

@@ -25,7 +25,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/salnativewidgets.hxx>

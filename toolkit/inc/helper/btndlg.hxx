@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_BTNDLG_HXX
 #define INCLUDED_VCL_BTNDLG_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>

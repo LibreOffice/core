@@ -32,7 +32,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-#include <vcl/dialog.hxx>
+#include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/floatwin.hxx>
