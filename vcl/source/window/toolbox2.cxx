@@ -881,10 +881,12 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
 
 void ToolBox::SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteractive)
 {
+    fprintf(stderr, "attempt\n");
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
     if ( nPos < GetItemCount() )
     {
+        fprintf(stderr, "success\n");
         mpData->m_aItems[nPos].mbNonInteractiveWindow = bNonInteractive;
     }
 }

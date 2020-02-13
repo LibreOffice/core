@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-06 17:39:06 using:
+ Generated on 2020-02-13 17:43:02 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -51,7 +51,6 @@
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
@@ -393,6 +392,7 @@
 #include <openflag.hxx>
 #include <openuriexternally.hxx>
 #include <openurlhint.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
