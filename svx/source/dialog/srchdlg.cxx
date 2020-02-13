@@ -74,6 +74,7 @@
 #include <memory>
 
 #include <findtextfield.hxx>
+#include <labelitemwindow.hxx>
 
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -2400,13 +2401,13 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
         sal_uInt16 id = pToolBox->GetItemId(i);
         if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
         {
-            vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
+            LabelItemWindow* pSearchLabel = dynamic_cast<LabelItemWindow*>(pToolBox->GetItemWindow(id));
             assert(pSearchLabel);
-            pSearchLabel->SetText(rStr);
+            pSearchLabel->set_label(rStr);
             if (rStr.isEmpty())
-                pSearchLabel->SetSizePixel(Size(16, pSearchLabel->get_preferred_size().Height()));
+                pSearchLabel->SetSizePixel(Size(16, pSearchLabel->GetSizePixel().Height()));
             else
-                pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
+                pSearchLabel->SetOptimalSize();
         }
 
         if (pToolBox->GetItemCommand(id) == ".uno:FindText")
@@ -2445,8 +2446,8 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
         sal_uInt16 id = pToolBox->GetItemId(i);
         if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
         {
-            vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
-            return pSearchLabel ? pSearchLabel->GetText() : OUString();
+            LabelItemWindow* pSearchLabel = dynamic_cast<LabelItemWindow*>(pToolBox->GetItemWindow(id));
+            return pSearchLabel ? pSearchLabel->get_label() : OUString();
         }
     }
     return OUString();

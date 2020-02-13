@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-13 17:41:02 using:
+ Generated on 2020-02-13 20:23:51 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -368,6 +368,7 @@
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <helpids.h>
+#include <labelitemwindow.hxx>
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
