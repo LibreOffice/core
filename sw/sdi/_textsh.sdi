@@ -1746,6 +1746,12 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+    FN_PROTECT_BOOKMARKS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_FM_CTL_PROPERTIES
     [
         ExecMethod = Execute ;

@@ -285,6 +285,7 @@
 #define FN_INSERT_DATE_FORMFIELD        (FN_INSERT2 + 25)
 
 #define FN_PROTECT_FIELDS               (FN_INSERT2 + 26)
+#define FN_PROTECT_BOOKMARKS            (FN_INSERT2 + 27)
 
 // clipboard table content
 #define FN_PASTE_NESTED_TABLE       (FN_INSERT2 + 30)  /* instead of the cell-by-cell copy between source and target tables */

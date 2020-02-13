@@ -1385,9 +1385,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     case FN_PROTECT_FIELDS:
+    case FN_PROTECT_BOOKMARKS:
     {
         IDocumentSettingAccess& rIDSA = rWrtSh.getIDocumentSettingAccess();
-        rIDSA.set(DocumentSettingId::PROTECT_FIELDS, !rIDSA.get(DocumentSettingId::PROTECT_FIELDS));
+        DocumentSettingId aSettingId = nSlot == FN_PROTECT_FIELDS
+                                           ? DocumentSettingId::PROTECT_FIELDS
+                                           : DocumentSettingId::PROTECT_BOOKMARKS;
+        rIDSA.set(aSettingId, !rIDSA.get(aSettingId));
         // Invalidate so that toggle state gets updated
         SfxViewFrame* pViewFrame = GetView().GetViewFrame();
         pViewFrame->GetBindings().Invalidate(nSlot);
@@ -2171,9 +2175,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 break;
             }
             case FN_PROTECT_FIELDS:
+            case FN_PROTECT_BOOKMARKS:
             {
-                bool bProtected
-                    = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS);
+                DocumentSettingId aSettingId = nWhich == FN_PROTECT_FIELDS
+                                                   ? DocumentSettingId::PROTECT_FIELDS
+                                                   : DocumentSettingId::PROTECT_BOOKMARKS;
+                bool bProtected = rSh.getIDocumentSettingAccess().get(aSettingId);
                 rSet.Put(SfxBoolItem(nWhich, bProtected));
             }
             break;

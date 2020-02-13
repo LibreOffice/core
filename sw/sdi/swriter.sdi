@@ -7935,6 +7935,24 @@ SfxBoolItem ProtectFields FN_PROTECT_FIELDS
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxBoolItem ProtectBookmarks FN_PROTECT_BOOKMARKS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxUInt32Item TableRowHeight SID_ATTR_TABLE_ROW_HEIGHT
 
 [
