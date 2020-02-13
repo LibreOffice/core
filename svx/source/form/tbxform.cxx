@@ -21,12 +21,12 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <formtoolbars.hxx>
+#include <labelitemwindow.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
@@ -163,41 +163,45 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 {
 }
 
-class LabelItemWindow final : public InterimItemWindow
+LabelItemWindow::LabelItemWindow(vcl::Window *pParent, const OUString& rLabel)
+    : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
+    , m_xLabel(m_xBuilder->weld_label("label"))
 {
-private:
-    std::unique_ptr<weld::Label> m_xLabel;
-public:
-    LabelItemWindow(vcl::Window *pParent, const OUString& rLabel)
-        : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
-        , m_xLabel(m_xBuilder->weld_label("label"))
-    {
-        m_xLabel->set_label(rLabel);
-        Size aSize(m_xLabel->get_preferred_size());
-        aSize.AdjustWidth(12);
-        m_xLabel->set_size_request(aSize.Width(), -1);
+    m_xLabel->set_label(rLabel);
 
-        SetSizePixel(m_xLabel->get_preferred_size());
+    SetOptimalSize();
 
-        m_xLabel->set_toolbar_background();
-    }
+    m_xLabel->set_toolbar_background();
+}
 
-    void set_label(const OUString& rLabel)
-    {
-        m_xLabel->set_label(rLabel);
-    }
+void LabelItemWindow::SetOptimalSize()
+{
+    Size aSize(m_xLabel->get_preferred_size());
+    aSize.AdjustWidth(12);
 
-    virtual void dispose() override
-    {
-        m_xLabel.reset();
-        InterimItemWindow::dispose();
-    }
+    SetSizePixel(aSize);
+}
 
-    virtual ~LabelItemWindow() override
-    {
-        disposeOnce();
-    }
-};
+void LabelItemWindow::set_label(const OUString& rLabel)
+{
+    m_xLabel->set_label(rLabel);
+}
+
+OUString LabelItemWindow::get_label() const
+{
+    return m_xLabel->get_label();
+}
+
+void LabelItemWindow::dispose()
+{
+    m_xLabel.reset();
+    InterimItemWindow::dispose();
+}
+
+LabelItemWindow::~LabelItemWindow()
+{
+    disposeOnce();
+}
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
