@@ -17,31 +17,6 @@
 
 namespace {
 
-// It looks like Clang wrongly implements DR 4
-// (<http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#4>) and treats
-// a variable declared in an 'extern "..." {...}'-style linkage-specification as
-// if it contained the 'extern' specifier:
-bool hasExternalLinkage(VarDecl const * decl) {
-    if (decl->getLinkageAndVisibility().getLinkage() != ExternalLinkage) {
-        return false;
-    }
-    for (auto ctx = decl->getLexicalDeclContext();
-         ctx->getDeclKind() != Decl::TranslationUnit;
-         ctx = ctx->getLexicalParent())
-    {
-        if (auto ls = dyn_cast<LinkageSpecDecl>(ctx)) {
-            if (!ls->hasBraces()) {
-                return true;
-            }
-            if (auto prev = decl->getPreviousDecl()) {
-                return hasExternalLinkage(prev);
-            }
-            return !decl->isInAnonymousNamespace();
-        }
-    }
-    return true;
-}
-
 class ExternVar: public loplugin::FilteringPlugin<ExternVar>
 {
 public:
@@ -60,7 +35,7 @@ public:
         }
         if (!(decl->isFirstDecl()
               && compiler.getSourceManager().isInMainFile(decl->getLocation())
-              && hasExternalLinkage(decl)))
+              && loplugin::hasExternalLinkage(decl)))
         {
             return true;
         }
