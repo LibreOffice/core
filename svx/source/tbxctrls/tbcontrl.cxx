@@ -133,7 +133,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 
 class SvxStyleBox_Impl : public ComboBox
 {
@@ -3644,30 +3643,6 @@ com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
     css::uno::Sequence<css::uno::Any> const & )
 {
     return cppu::acquire( new SvxFrameToolBoxControl( rContext ) );
-}
-
-SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  )
-    :SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    aDefaultText = rTbx.GetItemText( nId );
-}
-
-SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
-{
-}
-
-void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
-{
-    const SfxStringItem* pItem = dynamic_cast<const SfxStringItem*>( pState  );
-    ToolBox& rBox = GetToolBox();
-    if ( pItem && eState != SfxItemState::DISABLED )
-    {
-        OUString aNewText( MnemonicGenerator::EraseAllMnemonicChars( pItem->GetValue() ) );
-        rBox.SetQuickHelpText( GetId(), aNewText );
-    }
-    if ( eState == SfxItemState::DISABLED )
-        rBox.SetQuickHelpText( GetId(), aDefaultText );
-    rBox.EnableItem( GetId(), eState != SfxItemState::DISABLED );
 }
 
 SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
