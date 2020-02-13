@@ -24,6 +24,7 @@
 //  Internet Media Type Presentations
 
 #define STR_SVT_MIMETYPE_CNT_FSYSBOX            NC_("STR_SVT_MIMETYPE_CNT_FSYSBOX", "Workplace")
+#define STR_FILECTRL_BUTTONTEXT                 NC_("STR_FILECTRL_BUTTONTEXT", "Browse...")
 
 #endif
 

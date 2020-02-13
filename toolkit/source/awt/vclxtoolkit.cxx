@@ -78,6 +78,7 @@
 #include <toolkit/helper/property.hxx>
 
 #include <toolkit/helper/convert.hxx>
+#include <controls/filectrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
@@ -1801,6 +1802,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXProgressBar;
+                }
+                else if (aServiceName == "filecontrol")
+                {
+                    pNewWindow = VclPtr<FileControl>::Create( pParent, nWinBits );
+                    *ppNewComp = new VCLXFileControl;
                 }
             break;
             default:

@@ -13247,7 +13247,6 @@ svtools/source/control/calendar.cxx
 svtools/source/control/collatorres.cxx
 svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
-svtools/source/control/filectrl.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
 svtools/source/control/managedmenubutton.cxx
@@ -13281,7 +13280,6 @@ svtools/source/hatchwindow/hatchwindow.cxx
 svtools/source/hatchwindow/hatchwindowfactory.cxx
 svtools/source/hatchwindow/ipwin.cxx
 svtools/source/hatchwindow/ipwin.hxx
-svtools/source/inc/filectrl.hxx
 svtools/source/inc/hatchwindow.hxx
 svtools/source/inc/unoiface.hxx
 svtools/source/java/javacontext.cxx
@@ -15981,6 +15979,7 @@ toolkit/inc/controls/animatedimages.hxx
 toolkit/inc/controls/controlmodelcontainerbase.hxx
 toolkit/inc/controls/dialogcontrol.hxx
 toolkit/inc/controls/eventcontainer.hxx
+toolkit/inc/controls/filectrl.hxx
 toolkit/inc/controls/formattedcontrol.hxx
 toolkit/inc/controls/geometrycontrolmodel.hxx
 toolkit/inc/controls/geometrycontrolmodel_impl.hxx
@@ -16031,6 +16030,7 @@ toolkit/source/controls/controlmodelcontainerbase.cxx
 toolkit/source/controls/controlmodelcontainerbase_internal.hxx
 toolkit/source/controls/dialogcontrol.cxx
 toolkit/source/controls/eventcontainer.cxx
+toolkit/source/controls/filectrl.cxx
 toolkit/source/controls/formattedcontrol.cxx
 toolkit/source/controls/geometrycontrolmodel.cxx
 toolkit/source/controls/grid/defaultgridcolumnmodel.cxx
