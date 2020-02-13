@@ -22,15 +22,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
 #include <filter/msfilter/msvbahelper.hxx>
@@ -39,9 +32,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
 
-#include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
-#include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/vbahelper.hxx>

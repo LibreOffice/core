@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/msforms/XLineFormat.hpp>
 #include "vbacolorformat.hxx"
 
 using namespace ooo::vba;

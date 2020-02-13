@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <cppuhelper/bootstrap.hxx>
+
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -35,15 +35,13 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-
-#include <ooo/vba/msforms/XShape.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
 
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -57,19 +55,13 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfac.hxx>
 
-#include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
-#include <rtl/math.hxx>
 #include <sfx2/viewsh.hxx>
-#include <math.h>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

@@ -20,10 +20,6 @@
 #define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBAR_HXX
 
 #include <ooo/vba/XCommandBar.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbacommandbarhelper.hxx"

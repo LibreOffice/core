@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <ooo/vba/office/MsoArrowheadStyle.hpp>
-#include <ooo/vba/office/MsoArrowheadLength.hpp>
-#include <ooo/vba/office/MsoArrowheadWidth.hpp>
 #include <ooo/vba/office/MsoLineDashStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>

@@ -23,7 +23,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 
-#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashaperange.hxx>
 #include <vbahelper/vbashape.hxx>
 using namespace ::ooo::vba;

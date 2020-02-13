@@ -18,7 +18,6 @@
  */
 #include "vbacommandbar.hxx"
 #include "vbacommandbarcontrols.hxx"
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

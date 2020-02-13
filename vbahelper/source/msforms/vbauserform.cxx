@@ -23,14 +23,10 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <basic/sbx.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbmeth.hxx>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 #include "vbacontrols.hxx"
 #include <sal/log.hxx>
 

@@ -19,7 +19,6 @@
 
 #include "vbalistbox.hxx"
 #include "vbanewfont.hxx"
-#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <comphelper/sequence.hxx>
 #include <ooo/vba/msforms/fmMultiSelect.hpp>
 

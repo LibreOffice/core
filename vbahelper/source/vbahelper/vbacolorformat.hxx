@@ -21,7 +21,6 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooo/vba/msforms/XColorFormat.hpp>
-#include <ooo/vba/msforms/XFillFormat.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbafillformat.hxx"
 

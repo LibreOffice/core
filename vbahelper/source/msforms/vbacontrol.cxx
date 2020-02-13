@@ -20,7 +20,6 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -56,9 +54,9 @@
 #include "vbaspinbutton.hxx"
 #include "vbasystemaxcontrol.hxx"
 #include "vbaimage.hxx"
-#include <vbahelper/helperdecl.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <comphelper/servicedecl.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svdobj.hxx>

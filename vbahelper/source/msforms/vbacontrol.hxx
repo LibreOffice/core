@@ -21,7 +21,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>

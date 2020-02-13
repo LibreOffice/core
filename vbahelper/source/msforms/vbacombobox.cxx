@@ -18,9 +18,6 @@
  */
 
 #include "vbacombobox.hxx"
-#include <filter/msfilter/msvbahelper.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbmod.hxx>
 #include <comphelper/sequence.hxx>
 #include "vbanewfont.hxx"
 #include <ooo/vba/msforms/fmStyle.hpp>
