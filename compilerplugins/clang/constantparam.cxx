@@ -275,7 +275,7 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         std::string callValue = getCallValue(valExpr);
         std::string paramName = i < functionDecl->getNumParams()
                                 ? functionDecl->getParamDecl(i)->getName().str()
-                                : llvm::StringRef("###" + std::to_string(i)).str();
+                                : "###" + std::to_string(i);
         addToCallSet(functionDecl, i, paramName, callValue);
     }
     return true;
@@ -299,7 +299,7 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
         std::string callValue = getCallValue(valExpr);
         std::string paramName = i < constructorDecl->getNumParams()
                                 ? constructorDecl->getParamDecl(i)->getName().str()
-                                : llvm::StringRef("###" + std::to_string(i)).str();
+                                : "###" + std::to_string(i);
         addToCallSet(constructorDecl, i, paramName, callValue);
     }
     return true;

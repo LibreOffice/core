@@ -296,12 +296,12 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
 }
 
 template<typename T>
-bool any_equal(std::string const & needle, T first) {
+bool any_equal(StringRef needle, T first) {
   return needle == first;
 }
 
 template<typename T, typename... Args>
-bool any_equal(std::string const & needle, T first, Args... args) {
+bool any_equal(StringRef needle, T first, Args... args) {
   return needle == first || any_equal(needle, args...);
 }
 
@@ -500,18 +500,19 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (parentName == "ScBroadcastAreaSlot")
         return;
     // complicated
-    if (any_equal(parentName.str(), "SwFormatField", "FontPropertyBox", "SdFontPropertyBox",
+    if (any_equal(parentName, "SwFormatField", "FontPropertyBox", "SdFontPropertyBox",
         "SwHTMLParser", "PDFWriterImpl", "SbiParser", "DictionaryList", "SwGlossaryHdl", "SwGlossaryGroupDlg"))
         return;
     // ok
-    if (any_equal(parentName.str(), "SbTreeListBox"))
+    if (any_equal(parentName, "SbTreeListBox"))
         return;
 
     if (functionDecl->getIdentifier())
     {
-        std::string name = functionDecl->getName().str();
+        auto name = functionDecl->getName();
+        SmallString<256> buf;
         if (!parentName.empty())
-            name = std::string(parentName) + "::" + name;
+            name = (parentName + "::" + name).toStringRef(buf);
 
         // custom deleters
         if (name == "Proxy_free" || name == "s_free" || name == "binuno_proxy_free")
