@@ -70,6 +70,30 @@
       "revId": "0475030c46107356d7258e09ebad428b113ad40a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68bbb037_281a77c8",
+        "filename": "basic/qa/basic_coverage/test_Property.GetSet.vb",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-13T14:34:55Z",
+      "side": 1,
+      "message": "\u003e Am I missing your point here?\n\nYes.\n\n    Function doUnitTest as Integer\n      Set anObject \u003d CreateUnoService( \"com.sun.star.frame.Desktop\" )\n      If ( anObject.SupportedServiceNames(0) \u003c\u003e \"com.sun.star.frame.Frame\") Then\n        doUnitTest \u003d 0 \u0027 not Ok\n      Else\n        doUnitTest \u003d 1 \u0027 Ok\n      End If\n    End Function\n\nThis code will also succeed, without any additional code below. Thus, your unit test might also falsely succeed when property machinery is broken completely and is not working.\n\nBut this code may only succeed *only* when property machinery is operational:\n\n    Function doUnitTest as Integer\n      Set anObjectSetter \u003d CreateUnoService( \"com.sun.star.frame.Desktop\" )\n      If ( anObjectGetter.SupportedServiceNames(0) \u003c\u003e \"com.sun.star.frame.Frame\") Then\n        doUnitTest \u003d 0 \u0027 not Ok\n      Else\n        doUnitTest \u003d 1 \u0027 Ok\n      End If\n    End Function\n\n    Private _obj As Object\n\n    Property Get anObjectGetter As Object\n      Set anObject \u003d _obj\n    End Property\n\n    Property Set anObjectSetter(value As Object)\n      Set _obj \u003d value.CurrentFrame\n    End Property\n\nSee the difference in setter/getter names: anObject*G*etter vs anObject*S*etter.",
+      "parentUuid": "108d8946_4b447197",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0475030c46107356d7258e09ebad428b113ad40a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
