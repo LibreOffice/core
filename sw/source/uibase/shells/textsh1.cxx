@@ -1384,6 +1384,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         GetView().UpdateWordCount(this, nSlot);
     }
     break;
+    case FN_PROTECT_FIELDS:
+    {
+        IDocumentSettingAccess& rIDSA = rWrtSh.getIDocumentSettingAccess();
+        rIDSA.set(DocumentSettingId::PROTECT_FIELDS, !rIDSA.get(DocumentSettingId::PROTECT_FIELDS));
+        // Invalidate so that toggle state gets updated
+        SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+        pViewFrame->GetBindings().Invalidate(nSlot);
+        pViewFrame->GetBindings().Update(nSlot);
+    }
+    break;
     case SID_FM_CTL_PROPERTIES:
     {
         SwPosition aPos(*GetShell().GetCursor()->GetPoint());
@@ -2160,6 +2170,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 break;
             }
+            case FN_PROTECT_FIELDS:
+            {
+                bool bProtected
+                    = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS);
+                rSet.Put(SfxBoolItem(nWhich, bProtected));
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
