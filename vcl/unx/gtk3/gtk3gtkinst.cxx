@@ -4015,7 +4015,7 @@ struct DialogRunner
        , m_nModalDepth(0)
     {
         GtkWindow* pParent = gtk_window_get_transient_for(m_pDialog);
-        GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
+        GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(GTK_WIDGET(pParent)) : nullptr;
         m_xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
     }
 

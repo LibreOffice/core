@@ -495,7 +495,7 @@ public:
     virtual bool                HidePopover(void* nId) override;
     virtual weld::Window*       GetFrameWeld() const override;
 
-    static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
+    static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 
     sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
     virtual sal_uIntPtr         GetNativeWindowHandle() override;

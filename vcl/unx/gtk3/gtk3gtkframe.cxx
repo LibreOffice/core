@@ -997,7 +997,7 @@ void GtkSalFrame::InitCommon()
     SetIcon(SV_ICON_ID_OFFICE);
 }
 
-GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
+GtkSalFrame *GtkSalFrame::getFromWindow( GtkWidget *pWindow )
 {
     return static_cast<GtkSalFrame *>(g_object_get_data( G_OBJECT( pWindow ), "SalFrame" ));
 }
