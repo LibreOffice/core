@@ -79,8 +79,6 @@ void UnusedVariableMore::run()
         return;
     if (fn == SRCDIR "/i18nlangtag/source/languagetag/languagetag.cxx")
         return;
-    if (fn == SRCDIR "/vcl/workben/outdevgrind.cxx")
-        return;
     // unordered_set of Reference to delay destruction
     if (fn == SRCDIR "/stoc/source/servicemanager/servicemanager.cxx")
         return;
