@@ -154,7 +154,7 @@ void SvxUndoRedoControl::initialize( const css::uno::Sequence< css::uno::Any >& 
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if (getToolboxId(nId, &pToolBox))
+    if (getToolboxId(nId, &pToolBox) && getModuleName() != "com.sun.star.script.BasicIDE")
     {
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
         aDefaultTooltip = pToolBox->GetQuickHelpText(nId);

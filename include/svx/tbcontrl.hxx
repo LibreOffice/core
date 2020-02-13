@@ -245,20 +245,6 @@ public:
     void EnsurePaletteManager();
 };
 
-class SVXCORE_DLLPUBLIC SvxSimpleUndoRedoController final : public SfxToolBoxControl
-{
-private:
-    OUString aDefaultText;
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxSimpleUndoRedoController(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
-    virtual ~SvxSimpleUndoRedoController() override;
-
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
-};
-
 class SVXCORE_DLLPUBLIC SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
 private:

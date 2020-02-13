@@ -62,7 +62,6 @@
 #include <svx/pszctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/tbcontrl.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <svx/xmlsecctrl.hxx>
@@ -177,8 +176,6 @@ void Shell::Init()
     SvxPosSizeStatusBarControl::RegisterControl();
     SvxInsertStatusBarControl::RegisterControl();
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE );
-    SvxSimpleUndoRedoController::RegisterControl( SID_UNDO );
-    SvxSimpleUndoRedoController::RegisterControl( SID_REDO );
 
     SvxSearchDialogWrapper::RegisterChildWindow();
 
