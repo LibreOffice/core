@@ -220,7 +220,8 @@ private:
     bool mbCenter : 1;           ///< center Text output
     bool mbRight : 1;            ///< right align Text output
     bool mbEdgeBlending : 1;
-    bool mbIsComboboxDropdown : 1;
+    /// Listbox is actually a dropdown (either combobox, or popup window treated as dropdown)
+    bool mbIsDropdown : 1;
 
     Link<ImplListBoxWindow*,void>  maScrollHdl;
     Link<LinkParamNone*,void>      maSelectHdl;
