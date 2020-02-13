@@ -393,14 +393,9 @@ namespace
         SfxItemState eState = pSet->GetItemState(nWhich);
         switch (eState)
         {
-            default:
-                // tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is (see below):
-                // SID_ATTR_ALIGN_STACKED
-                // SID_ATTR_ALIGN_ASIANVERTICAL
-                // SID_ATTR_ALIGN_LINEBREAK
-                // SID_ATTR_ALIGN_HYPHENATION
-                // SID_ATTR_ALIGN_SHRINKTOFIT
-                assert(false && "UNKNOWN cannot happen here");
+            case SfxItemState::UNKNOWN:
+                rBtn.hide();
+                rTriState.bTriStateEnabled = false;
                 break;
             case SfxItemState::DISABLED:
             case SfxItemState::READONLY:
@@ -438,9 +433,8 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     SfxItemState eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_HOR_JUSTIFY:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xLbHorAlign->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -482,9 +476,9 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_INDENT:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xEdIndent->hide();
+            m_xFtIndent->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -506,9 +500,9 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_VER_JUSTIFY:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xLbVerAlign->hide();
+            m_xFtVerAlign->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -547,9 +541,9 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_DEGREES:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xNfRotate->hide();
+            m_xCtrlDialWin->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -572,9 +566,8 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_ALIGN_LOCKPOS:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xVsRefEdge->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -612,9 +605,8 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     eState = pCoreAttrs->GetItemState(nWhich);
     switch (eState)
     {
-        default:
-            //tdf#130428 SfxItemState::UNKNOWN cannot happen here, see s_pRanges. Input is SID_ATTR_FRAMEDIRECTION:
-            assert(false && "UNKNOWN cannot happen here");
+        case SfxItemState::UNKNOWN:
+            m_xLbFrameDir->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
