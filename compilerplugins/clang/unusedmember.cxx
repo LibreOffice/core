@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#ifndef LO_CLANG_SHARED_PLUGINS
 
 // A more aggressive check for unused C struct/C++ class members than what plain Clang offers.  On
 // the one hand, unlike -Wunused-private-field, it warns about all members regardless of access
@@ -61,10 +62,15 @@ public:
 
 #if CLANG_VERSION < 60000
 
+    bool PreTraverseAlignedAttr(AlignedAttr* attr) { return true; }
+
     bool TraverseAlignedAttr(AlignedAttr* attr)
     {
+        if (!PreTraverseAlignedAttr(attr))
+            return false;
         bool ret = FilteringPlugin::TraverseAlignedAttr(attr);
-        PostTraverseAlignedAttr(attr, ret);
+        if (!PostTraverseAlignedAttr(attr, ret))
+            return false;
         return ret;
     }
 
@@ -386,15 +392,16 @@ public:
         }
     }
 
-private:
-    void run() override
+    virtual bool preRun() override { return true; }
+
+    virtual void run() override
     {
-        if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
-        {
-            postRun();
-        }
+        if (preRun())
+            if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
+                postRun();
     }
 
+private:
     bool isWarnWhenUnusedType(QualType type)
     {
         auto t = type;
@@ -449,4 +456,5 @@ private:
 loplugin::Plugin::Registration<UnusedMember> unusedmember("unusedmember");
 }
 
+#endif // LO_CLANG_SHARED_PLUGINS
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
