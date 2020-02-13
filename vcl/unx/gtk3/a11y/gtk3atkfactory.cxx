@@ -116,7 +116,7 @@ wrapper_factory_create_accessible( GObject *obj )
     if (!pTopLevel)
         return atk_noop_object_wrapper_new();
 
-    GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(GTK_WINDOW(pTopLevel));
+    GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
     g_return_val_if_fail( pFrame != nullptr, nullptr );
 
     vcl::Window* pFrameWindow = pFrame->GetWindow();
