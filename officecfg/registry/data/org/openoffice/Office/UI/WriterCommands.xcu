@@ -3596,6 +3596,14 @@
           <value xml:lang="en-US">Content Controls</value>
         </prop>
       </node>
+      <node oor:name=".uno:ProtectMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Protect Document</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ProtectFields" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Protect Fields</value>
