@@ -3507,6 +3507,11 @@ public:
         weld::Entry::connect_cursor_position(rLink);
     }
 
+    virtual void set_placeholder_text(const OUString& rText) override
+    {
+        m_xEntry->SetPlaceholderText(rText);
+    }
+
     Edit& getEntry()
     {
         return *m_xEntry;
@@ -6217,6 +6222,11 @@ public:
         assert(false);
     }
 
+    virtual void set_entry_placeholder_text(const OUString&) override
+    {
+        assert(false);
+    }
+
     virtual ~SalInstanceComboBoxWithoutEdit() override
     {
         m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
@@ -6323,6 +6333,11 @@ public:
         m_xComboBox->EnableAutocomplete(bEnable, bCaseSensitive);
     }
 
+    virtual void set_entry_placeholder_text(const OUString& rText) override
+    {
+        m_xComboBox->SetPlaceholderText(rText);
+    }
+
     virtual void select_entry_region(int nStartPos, int nEndPos) override
     {
         m_xComboBox->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
@@ -6403,6 +6418,12 @@ public:
         assert(!bEnable && "not implemented yet"); (void) bEnable;
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetAutocompleteHdl(Link<Edit&, void>());
+    }
+
+    virtual void set_entry_placeholder_text(const OUString& rText) override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.SetPlaceholderText(rText);
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }

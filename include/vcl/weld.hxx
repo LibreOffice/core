@@ -675,6 +675,7 @@ public:
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) = 0;
+    virtual void set_entry_placeholder_text(const OUString& rText) = 0;
 
     virtual bool get_popup_shown() const = 0;
 
@@ -1336,6 +1337,7 @@ public:
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
     virtual void set_message_type(EntryMessageType eType) = 0;
+    virtual void set_placeholder_text(const OUString& rText) = 0;
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;

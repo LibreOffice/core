@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-08 20:53:08 using:
+ Generated on 2020-02-13 15:12:26 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -82,7 +82,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -270,6 +269,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -357,6 +357,7 @@
 #include <unotools/viewoptions.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <DescriptionGenerator.hxx>
 #include <cell.hxx>
 #include <celltypes.hxx>
 #include <charmapacc.hxx>
@@ -368,7 +369,6 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <DescriptionGenerator.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>

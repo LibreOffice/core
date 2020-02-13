@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-11 09:36:54 using:
+ Generated on 2020-02-13 15:10:47 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -62,7 +62,6 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -448,10 +447,8 @@
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <fmundo.hxx>
-#include <XPropertyTable.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <extrud3d.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
@@ -472,22 +469,17 @@
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <sdr/primitive2d/sdrattributecreator.hxx>
-#include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/sdtakitm.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/selectioncontroller.hxx>
@@ -527,7 +519,6 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <textchain.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomid.hxx>
@@ -536,7 +527,6 @@
 #include <svx/unoshprp.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xenum.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>

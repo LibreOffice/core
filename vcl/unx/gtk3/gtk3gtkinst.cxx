@@ -8311,6 +8311,11 @@ public:
         gtk_editable_paste_clipboard(GTK_EDITABLE(m_pEntry));
     }
 
+    virtual void set_placeholder_text(const OUString& rText) override
+    {
+        gtk_entry_set_placeholder_text(m_pEntry, rText.toUtf8().getStr());
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nActivateSignalId);
@@ -12563,6 +12568,14 @@ public:
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
+    virtual void set_entry_placeholder_text(const OUString& rText) override
+    {
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
+        assert(pChild && GTK_IS_ENTRY(pChild));
+        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        gtk_entry_set_placeholder_text(pEntry, rText.toUtf8().getStr());
+    }
+
     virtual void disable_notify_events() override
     {
         if (GtkEntry* pEntry = get_entry())
@@ -12851,6 +12864,11 @@ public:
     {
         assert(!bEnable && "not implemented yet"); (void)bEnable;
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
+    }
+
+    virtual void set_entry_placeholder_text(const OUString& rText) override
+    {
+        m_xEntry->set_placeholder_text(rText);
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
