@@ -25,6 +25,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/naturalsort.hxx>
 
 #include <listbox.hxx>
 #include <controldata.hxx>
@@ -110,10 +111,13 @@ namespace
     };
 }
 
-sal_Int32 ListBox::NaturalSortCompare(const OUString &rA, const OUString &rB)
+namespace vcl
 {
-    const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
-    return rSorter.compare(rA, rB);
+    sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB)
+    {
+        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
+        return rSorter.compare(rA, rB);
+    }
 }
 
 sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort )

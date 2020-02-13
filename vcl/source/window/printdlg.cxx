@@ -23,7 +23,7 @@
 #include <bitmaps.hlst>
 
 #include <vcl/commandevent.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/naturalsort.hxx>
 #include <vcl/print.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/decoview.hxx>
@@ -57,7 +57,7 @@ enum
 namespace {
    bool lcl_ListBoxCompare( const OUString& rStr1, const OUString& rStr2 )
    {
-       return ListBox::NaturalSortCompare( rStr1, rStr2 ) < 0;
+       return vcl::NaturalSortCompare( rStr1, rStr2 ) < 0;
    }
 }
 

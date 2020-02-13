@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWCONT_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/naturalsort.hxx>
 
 class SwContentType;
 
@@ -92,7 +92,7 @@ public:
         // at first sort by position and then by name
         if (nYPosition != rCont.nYPosition)
             return nYPosition < rCont.nYPosition;
-        return ListBox::NaturalSortCompare(sContentName, rCont.sContentName) < 0;
+        return vcl::NaturalSortCompare(sContentName, rCont.sContentName) < 0;
     }
 
     bool        IsInvisible() const {return bInvisible;}
