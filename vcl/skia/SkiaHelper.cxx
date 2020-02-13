@@ -180,6 +180,13 @@ static bool initRenderMethodToUse()
             methodToUse = RenderRaster;
             return true;
         }
+        if (strcmp(env, "vulkan") == 0)
+        {
+            methodToUse = RenderVulkan;
+            return true;
+        }
+        SAL_WARN("vcl.skia", "Unrecognized value of SAL_SKIA");
+        abort();
     }
     if (officecfg::Office::Common::VCL::ForceSkiaRaster::get())
     {
