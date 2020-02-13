@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,tk,\
     sal \
     salhelper \
 	i18nlangtag \
+    svl \
     tl \
     utl \
     vcl \
@@ -82,6 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
     toolkit/source/controls/eventcontainer \
+    toolkit/source/controls/filectrl \
     toolkit/source/controls/formattedcontrol \
     toolkit/source/controls/geometrycontrolmodel \
     toolkit/source/controls/grid/defaultgridcolumnmodel \

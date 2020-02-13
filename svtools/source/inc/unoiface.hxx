@@ -27,8 +27,6 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <tools/lineend.hxx>
-#include <vcl/edit.hxx>
-
 
 namespace com { namespace sun { namespace star { namespace util {
     class XNumberFormatsSupplier;
@@ -99,61 +97,6 @@ public:
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
-
-
-
-class VCLXFileControl final : public css::awt::XTextComponent, public css::awt::XTextLayoutConstrains, public VCLXWindow
-{
-    DECL_LINK(ModifyHdl, Edit&, void);
-    void ModifyHdl();
-    TextListenerMultiplexer maTextListeners;
-
-public:
-                    VCLXFileControl();
-                    virtual ~VCLXFileControl() override;
-
-    virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                           SAL_CALL acquire() throw() override  { VCLXWindow::acquire(); }
-    void                           SAL_CALL release() throw() override  { VCLXWindow::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
-
-    // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL setText( const OUString& aText ) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    OUString SAL_CALL getSelectedText(  ) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
-    css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
-
-    // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
-
-    // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
-
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value) override;
-
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
-
-
-
 
 class SVTXFormattedField : public VCLXSpinField
 {

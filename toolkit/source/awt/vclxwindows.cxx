@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 
+#include <controls/filectrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lstbox.hxx>
@@ -6877,6 +6878,294 @@ void VCLXProgressBar::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_PROGRESSVALUE_MIN,
                      BASEPROPERTY_PROGRESSVALUE_MAX,
                      BASEPROPERTY_FILLCOLOR,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
+}
+
+VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
+{
+}
+
+VCLXFileControl::~VCLXFileControl()
+{
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( pControl )
+        pControl->GetEdit().SetModifyHdl( Link<Edit&,void>() );
+}
+
+css::uno::Any VCLXFileControl::queryInterface( const css::uno::Type & rType )
+{
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        static_cast< css::awt::XTextComponent* >(this),
+                                        static_cast< css::awt::XTextLayoutConstrains* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
+    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+}
+
+IMPL_IMPLEMENTATION_ID( VCLXFileControl )
+
+// css::lang::XTypeProvider
+css::uno::Sequence< css::uno::Type > VCLXFileControl::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTextComponent>::get(),
+        cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
+
+namespace
+{
+    void lcl_setWinBits( vcl::Window* _pWindow, WinBits _nBits, bool _bSet )
+    {
+        WinBits nStyle = _pWindow->GetStyle();
+        if ( _bSet )
+            nStyle |= _nBits;
+        else
+            nStyle &= ~_nBits;
+        _pWindow->SetStyle( nStyle );
+    }
+}
+
+void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( !pControl )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+    case BASEPROPERTY_HIDEINACTIVESELECTION:
+    {
+        bool bValue(false);
+        OSL_VERIFY( Value >>= bValue );
+
+        lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
+        lcl_setWinBits( &pControl->GetEdit(), WB_NOHIDESELECTION, !bValue );
+    }
+    break;
+
+    default:
+        VCLXWindow::setProperty( PropertyName, Value );
+        break;
+    }
+}
+
+void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
+{
+    VclPtr< FileControl > pPrevFileControl = GetAsDynamic< FileControl >();
+    if ( pPrevFileControl )
+        pPrevFileControl->SetEditModifyHdl( Link<Edit&,void>() );
+
+    FileControl* pNewFileControl = dynamic_cast<FileControl*>( pWindow.get() );
+    if ( pNewFileControl )
+        pNewFileControl->SetEditModifyHdl( LINK( this, VCLXFileControl, ModifyHdl ) );
+
+    VCLXWindow::SetWindow( pWindow );
+}
+
+void VCLXFileControl::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
+{
+    maTextListeners.addInterface( l );
+}
+
+void VCLXFileControl::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
+{
+    maTextListeners.removeInterface( l );
+}
+
+void VCLXFileControl::setText( const OUString& aText )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr<vcl::Window> pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->SetText( aText );
+
+        // also in Java a textChanged is triggered, not in VCL.
+        // css::awt::Toolkit should be JAVA-compliant...
+        ModifyHdl();
+    }
+}
+
+void VCLXFileControl::insertText( const css::awt::Selection& rSel, const OUString& aText )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl )
+    {
+        pFileControl->GetEdit().SetSelection( Selection( rSel.Min, rSel.Max ) );
+        pFileControl->GetEdit().ReplaceSelected( aText );
+    }
+}
+
+OUString VCLXFileControl::getText()
+{
+    SolarMutexGuard aGuard;
+
+    OUString aText;
+    VclPtr<vcl::Window> pWindow = GetWindow();
+    if ( pWindow )
+        aText = pWindow->GetText();
+    return aText;
+}
+
+OUString VCLXFileControl::getSelectedText()
+{
+    SolarMutexGuard aGuard;
+
+    OUString aText;
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl)
+        aText = pFileControl->GetEdit().GetSelected();
+    return aText;
+
+}
+
+void VCLXFileControl::setSelection( const css::awt::Selection& aSelection )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl )
+        pFileControl->GetEdit().SetSelection( Selection( aSelection.Min, aSelection.Max ) );
+}
+
+css::awt::Selection VCLXFileControl::getSelection()
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Selection aSel;
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl )
+    {
+        aSel.Min = pFileControl->GetEdit().GetSelection().Min();
+        aSel.Max = pFileControl->GetEdit().GetSelection().Max();
+    }
+    return aSel;
+}
+
+sal_Bool VCLXFileControl::isEditable()
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    return pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled();
+}
+
+void VCLXFileControl::setEditable( sal_Bool bEditable )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl )
+        pFileControl->GetEdit().SetReadOnly( !bEditable );
+}
+
+void VCLXFileControl::setMaxTextLen( sal_Int16 nLen )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    if ( pFileControl )
+        pFileControl->GetEdit().SetMaxTextLen( nLen );
+}
+
+sal_Int16 VCLXFileControl::getMaxTextLen()
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< FileControl > pFileControl = GetAs< FileControl >();
+    return pFileControl ? pFileControl->GetEdit().GetMaxTextLen() : 0;
+}
+
+
+IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl, Edit&, void)
+{
+    ModifyHdl();
+}
+
+void VCLXFileControl::ModifyHdl()
+{
+    css::awt::TextEvent aEvent;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    maTextListeners.textChanged( aEvent );
+}
+
+css::awt::Size VCLXFileControl::getMinimumSize()
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz;
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( pControl )
+    {
+        Size aTmpSize = pControl->GetEdit().CalcMinimumSize();
+        aTmpSize.AdjustWidth(pControl->GetButton().CalcMinimumSize().Width() );
+        aSz = AWTSize(pControl->CalcWindowSize( aTmpSize ));
+    }
+    return aSz;
+}
+
+css::awt::Size VCLXFileControl::getPreferredSize()
+{
+    css::awt::Size aSz = getMinimumSize();
+    aSz.Height += 4;
+    return aSz;
+}
+
+css::awt::Size VCLXFileControl::calcAdjustedSize( const css::awt::Size& rNewSize )
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz =rNewSize;
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( pControl )
+    {
+        css::awt::Size aMinSz = getMinimumSize();
+        if ( aSz.Height != aMinSz.Height )
+            aSz.Height = aMinSz.Height;
+    }
+    return aSz;
+}
+
+css::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 )
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz;
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( pControl )
+    {
+        aSz = AWTSize(pControl->GetEdit().CalcSize( nCols ));
+        aSz.Width += pControl->GetButton().CalcMinimumSize().Width();
+    }
+    return aSz;
+}
+
+void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
+{
+    SolarMutexGuard aGuard;
+
+    nCols = 0;
+    nLines = 1;
+    VclPtr< FileControl > pControl = GetAs< FileControl >();
+    if ( pControl )
+        nCols = pControl->GetEdit().GetMaxVisChars();
+}
+
+void VCLXFileControl::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     // FIXME: elide duplication ?
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
