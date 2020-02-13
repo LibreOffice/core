@@ -17,6 +17,7 @@
 #include <clang/Lex/Lexer.h>
 
 #include <fstream>
+#include <functional>
 #include <set>
 
 namespace
@@ -49,7 +50,7 @@ class SalLogAreas
         void readLogAreas();
         const FunctionDecl* inFunction;
         SourceLocation lastSalDetailLogStreamMacro;
-        std::set< std::string > logAreas;
+        std::set< std::string, std::less<> > logAreas;
 #if 0
         std::string firstSeenLogArea;
         SourceLocation firstSeenLocation;
@@ -146,7 +147,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
     {
     if( logAreas.empty())
         readLogAreas();
-    if( !logAreas.count( area.str() ))
+    if( !logAreas.count( area ))
         {
         report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend include/sal/log-areas.dox)",
             location ) << area;

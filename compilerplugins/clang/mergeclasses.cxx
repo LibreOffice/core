@@ -80,15 +80,11 @@ public:
     bool VisitCXXRecordDecl( const CXXRecordDecl* decl);
 };
 
-bool startsWith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
-    if (startsWith(s.str(), "rtl::") || startsWith(s.str(), "sal::") || startsWith(s.str(), "com::sun::")
-        || startsWith(s.str(), "std::") || startsWith(s.str(), "boost::")
+    if (s.startswith("rtl::") || s.startswith("sal::") || s.startswith("com::sun::")
+        || s.startswith("std::") || s.startswith("boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {
         return true;
@@ -149,12 +145,12 @@ bool MergeClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (decl->isThisDeclarationADefinition())
     {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
-        std::string filename = getFilenameOfLocation(spellingLocation).str();
+        auto filename = getFilenameOfLocation(spellingLocation);
         filename = filename.substr(strlen(SRCDIR));
         std::string s = decl->getQualifiedNameAsString();
         if (ignoreClass(s))
             return true;
-        definitionMap.insert( std::pair<std::string,std::string>(s, filename) );
+        definitionMap.insert( std::pair<std::string,std::string>(s, filename.str()) );
         for (auto it = decl->bases_begin(); it != decl->bases_end(); ++it)
         {
             const CXXBaseSpecifier spec = *it;
