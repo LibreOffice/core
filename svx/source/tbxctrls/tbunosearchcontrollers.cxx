@@ -80,21 +80,13 @@ static const sal_Int32       REMEMBER_SIZE = 10;
 class CheckButtonItemWindow final : public InterimItemWindow
 {
 public:
-    CheckButtonItemWindow(vcl::Window* pParent)
+    CheckButtonItemWindow(vcl::Window* pParent, const OUString& rLabel)
         : InterimItemWindow(pParent, "svx/ui/checkbuttonbox.ui", "CheckButtonBox")
         , m_xWidget(m_xBuilder->weld_check_button("checkbutton"))
     {
         m_xWidget->connect_key_press(LINK(this, CheckButtonItemWindow, KeyInputHdl));
-    }
-
-    void SetOptimalSize()
-    {
+        m_xWidget->set_label(rLabel);
         SetSizePixel(m_xWidget->get_preferred_size());
-    }
-
-    void set_label(const OUString& rText)
-    {
-        m_xWidget->set_label(rText);
     }
 
     bool get_active() const
@@ -926,9 +918,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
-        m_xMatchCaseControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar);
-        m_xMatchCaseControl->set_label(SvxResId(RID_SVXSTR_FINDBAR_MATCHCASE));
-        m_xMatchCaseControl->SetOptimalSize();
+        m_xMatchCaseControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar, SvxResId(RID_SVXSTR_FINDBAR_MATCHCASE));
     }
     xItemWindow = VCLUnoHelper::GetInterface(m_xMatchCaseControl);
 
@@ -1044,9 +1034,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxControll
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
-        m_xSearchFormattedControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar);
-        m_xSearchFormattedControl->set_label(SvxResId(RID_SVXSTR_FINDBAR_SEARCHFORMATTED));
-        m_xSearchFormattedControl->SetOptimalSize();
+        m_xSearchFormattedControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar, SvxResId(RID_SVXSTR_FINDBAR_SEARCHFORMATTED));
     }
     xItemWindow = VCLUnoHelper::GetInterface(m_xSearchFormattedControl);
 
