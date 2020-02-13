@@ -147,7 +147,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 class FindTextFieldControl : public ComboBox
 {
 public:
-    FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
+    FindTextFieldControl( vcl::Window* pParent,
         css::uno::Reference< css::frame::XFrame > const & xFrame,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
@@ -163,10 +163,10 @@ private:
     std::unique_ptr<svt::AcceleratorExecute> m_pAcc;
 };
 
-FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
+FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
     css::uno::Reference< css::frame::XFrame > const & xFrame,
     const css::uno::Reference< css::uno::XComponentContext >& xContext) :
-    ComboBox( pParent, nStyle ),
+    ComboBox(pParent, WB_DROPDOWN | WB_VSCROLL),
     m_xFrame(xFrame),
     m_xContext(xContext),
     m_pAcc(svt::AcceleratorExecute::createAcceleratorHelper())
@@ -542,7 +542,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
-        m_pFindTextFieldControl = VclPtr<FindTextFieldControl>::Create( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xContext  );
+        m_pFindTextFieldControl = VclPtr<FindTextFieldControl>::Create(pToolbar, m_xFrame, m_xContext);
 
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
