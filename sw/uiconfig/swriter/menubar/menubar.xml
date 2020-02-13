@@ -760,6 +760,12 @@
           <menu:menuitem menu:id=".uno:UpdateCharts"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:ProtectMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ProtectFields"/>
+          <menu:menuitem menu:id=".uno:ProtectBookmarks"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuitem menu:id=".uno:CalculateSel" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SortDialog" menu:style="text"/>
       <menu:menuseparator/>
