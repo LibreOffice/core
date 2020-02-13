@@ -3600,6 +3600,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Protect Fields</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Protect fields in current document</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -3607,6 +3610,9 @@
       <node oor:name=".uno:ProtectBookmarks" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Protect Bookmarks</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Protect bookarks in current document</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
