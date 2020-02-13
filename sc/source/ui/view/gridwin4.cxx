@@ -69,7 +69,6 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <drwlayer.hxx>
-#include <printfun.hxx>
 
 static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {
@@ -561,28 +560,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
 
     bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS ) && !bIsTiledRendering;
-    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
-    // is enabled, breaks should be visible. If the document is opened the first
-    // time, the breaks are not calculated yet, so this initialization is
-    // done here.
-    if (bPage)
-    {
-        std::set<SCCOL> aColBreaks;
-        std::set<SCROW> aRowBreaks;
-        rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
-        rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
-        if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
-        {
-            ScDocShell* pDocSh = pViewData->GetDocShell();
-            ScPrintFunc aPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab);
-            if (aPrintFunc.HasPrintRange())
-            {
-                // We have a non-empty print range, so we can assume that calling UpdatePages() will
-                // result in non-empty col/row breaks next time we get here.
-                aPrintFunc.UpdatePages();
-            }
-        }
-    }
 
     bool bPageMode = pViewData->IsPagebreakMode();
     if (bPageMode)                                      // after FindChanged
