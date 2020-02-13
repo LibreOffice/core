@@ -1746,5 +1746,10 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
-}  // end of interface text
+    FN_PROTECT_BOOKMARKS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 
+}  // end of interface text
