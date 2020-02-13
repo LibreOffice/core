@@ -97,7 +97,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -482,8 +481,13 @@ void OfaTreeOptionsDialog::InitWidgets()
     xTabBox = m_xBuilder->weld_container("box");
     Size aSize(xTreeLB->get_approximate_digit_width() * 82, xTreeLB->get_height_rows(30));
 #if HAVE_FEATURE_GPGME
-    // tdf#115015: make enough space for crypto settings (approx. 14 text edits + padding)
-    aSize.setHeight((Edit::GetMinimumEditSize().Height() + 6) * 14);
+    {
+        // load this little .ui just to measure the height of an Entry
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "cui/ui/namedialog.ui"));
+        std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry("name_entry"));
+        // tdf#115015: make enough space for crypto settings (approx. 14 text edits + padding)
+        aSize.setHeight((xEntry->get_preferred_size().Height() + 6) * 14);
+    }
 #endif
     xTabBox->set_size_request(aSize.Width(), aSize.Height());
     xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 30, aSize.Height());
