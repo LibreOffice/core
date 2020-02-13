@@ -7917,6 +7917,24 @@ SfxVoidItem DatePickerFormField FN_INSERT_DATE_FORMFIELD
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxBoolItem ProtectFields FN_PROTECT_FIELDS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxUInt32Item TableRowHeight SID_ATTR_TABLE_ROW_HEIGHT
 
 [

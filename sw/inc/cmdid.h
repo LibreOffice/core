@@ -284,6 +284,8 @@
 // MSO content controls
 #define FN_INSERT_DATE_FORMFIELD        (FN_INSERT2 + 25)
 
+#define FN_PROTECT_FIELDS               (FN_INSERT2 + 26)
+
 // clipboard table content
 #define FN_PASTE_NESTED_TABLE       (FN_INSERT2 + 30)  /* instead of the cell-by-cell copy between source and target tables */
 #define FN_TABLE_PASTE_ROW_BEFORE   (FN_INSERT2 + 31)  /* paste table as new table rows */
