@@ -69,10 +69,11 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <vcl/combobox.hxx>
 
 #include <cstdlib>
 #include <memory>
+
+#include <findtextfield.hxx>
 
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -2410,13 +2411,12 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
 
         if (pToolBox->GetItemCommand(id) == ".uno:FindText")
         {
-            ComboBox* pFindText = dynamic_cast<ComboBox*>(pToolBox->GetItemWindow(id));
+            FindTextFieldControl* pFindText = dynamic_cast<FindTextFieldControl*>(pToolBox->GetItemWindow(id));
             assert(pFindText);
-            Edit* pEdit = pFindText->GetSubEdit();
             if (bNotFound)
-                pEdit->SetControlForeground(COL_LIGHTRED);
+                pFindText->set_entry_message_type(weld::EntryMessageType::Error);
             else
-                pEdit->SetControlForeground();
+                pFindText->set_entry_message_type(weld::EntryMessageType::Normal);
         }
     }
     xLayoutManager->doLayout();

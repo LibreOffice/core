@@ -49,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/extrustiondepthdialog \
 	svx/uiconfig/ui/fillctrlbox \
 	svx/uiconfig/ui/filtermenu \
+	svx/uiconfig/ui/findbox \
 	svx/uiconfig/ui/findreplacedialog \
 	svx/uiconfig/ui/floatingareastyle \
 	svx/uiconfig/ui/floatingcontour \
