@@ -33,6 +33,10 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_lifecycle, \
 	vcl \
 ))
 
+$(eval $(call gb_CppunitTest_add_defs,vcl_lifecycle,\
+    -DVCL_WORKBEN \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_lifecycle))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_lifecycle))

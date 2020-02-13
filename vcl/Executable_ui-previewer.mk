@@ -34,6 +34,10 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
 ))
 
+$(eval $(call gb_Executable_add_defs,ui-previewer,\
+    -DVCL_WORKBEN \
+))
+
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
 	-lm $(DLOPEN_LIBS) \
