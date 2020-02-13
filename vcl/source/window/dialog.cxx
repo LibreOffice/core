@@ -1150,15 +1150,6 @@ void Dialog::EndAllDialogs( vcl::Window const * pParent )
     }
 }
 
-VclPtr<Dialog> Dialog::GetMostRecentExecutingDialog()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    auto& rExecuteDialogs = pSVData->mpWinData->mpExecuteDialogs;
-    if (!rExecuteDialogs.empty())
-        return rExecuteDialogs.back();
-    return nullptr;
-}
-
 void Dialog::SetModalInputMode( bool bModal )
 {
     if ( bModal == mbModalMode )

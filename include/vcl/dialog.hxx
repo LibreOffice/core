@@ -133,9 +133,6 @@ public:
     void            EndDialog( long nResult = RET_CANCEL );
     static void     EndAllDialogs( vcl::Window const * pParent );
 
-    // returns the most recent of the currently executing modal dialogs
-    static VclPtr<Dialog> GetMostRecentExecutingDialog();
-
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
 
