@@ -16,6 +16,24 @@
       "revId": "0e2ab17f3ab6016585ded018a8cf1d9ce8394b98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf2f607a_e8d1ba1e",
+        "filename": "sc/inc/scabstdlg.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-13T15:11:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b618e817_b717051d",
+      "revId": "0e2ab17f3ab6016585ded018a8cf1d9ce8394b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
