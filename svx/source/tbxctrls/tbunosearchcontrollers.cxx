@@ -58,7 +58,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
 #include <svx/srchdlg.hxx>
-#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/window.hxx>
@@ -158,14 +157,14 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
                     sFindText = pItemWin->get_active_text();
             } else if ( sItemCommand == COMMAND_MATCHCASE )
             {
-                CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>( pToolBox->GetItemWindow(id) );
+                CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));
                 if (pItemWin)
                     aMatchCase = pItemWin->get_active();
             } else if ( sItemCommand == COMMAND_SEARCHFORMATTED )
             {
-                CheckBox* pItemWin = static_cast<CheckBox*>( pToolBox->GetItemWindow(id) );
+                CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));
                 if (pItemWin)
-                    bSearchFormatted = pItemWin->IsChecked();
+                    bSearchFormatted = pItemWin->get_active();
             }
         }
     }
@@ -970,14 +969,14 @@ public:
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
 private:
-    VclPtr<CheckBox> m_pSearchFormattedControl;
+    VclPtr<CheckButtonItemWindow> m_xSearchFormattedControl;
 };
 
 SearchFormattedToolboxController::SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
         COMMAND_SEARCHFORMATTED )
-    , m_pSearchFormattedControl(nullptr)
+    , m_xSearchFormattedControl(nullptr)
 {
 }
 
@@ -1026,7 +1025,7 @@ void SAL_CALL SearchFormattedToolboxController::dispose()
 
     svt::ToolboxController::dispose();
 
-    m_pSearchFormattedControl.disposeAndClear();
+    m_xSearchFormattedControl.disposeAndClear();
 }
 
 // XInitialization
@@ -1045,12 +1044,11 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxControll
     if ( pParent )
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
-        m_pSearchFormattedControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
-        m_pSearchFormattedControl->SetText( SvxResId( RID_SVXSTR_FINDBAR_SEARCHFORMATTED ) );
-        Size aSize( m_pSearchFormattedControl->GetOptimalSize() );
-        m_pSearchFormattedControl->SetSizePixel( aSize );
+        m_xSearchFormattedControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar);
+        m_xSearchFormattedControl->set_label(SvxResId(RID_SVXSTR_FINDBAR_SEARCHFORMATTED));
+        m_xSearchFormattedControl->SetOptimalSize();
     }
-    xItemWindow = VCLUnoHelper::GetInterface( m_pSearchFormattedControl );
+    xItemWindow = VCLUnoHelper::GetInterface(m_xSearchFormattedControl);
 
     return xItemWindow;
 }
