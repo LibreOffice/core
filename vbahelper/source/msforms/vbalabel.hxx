@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 #include <ooo/vba/msforms/XLabel.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>

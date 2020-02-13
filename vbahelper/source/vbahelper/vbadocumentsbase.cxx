@@ -28,23 +28,16 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/PropertyVetoException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unordered_map>
 
-#include <vbahelper/vbahelper.hxx>
-#include <vbahelper/vbaapplicationbase.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
+#include <ooo/vba/XApplicationBase.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XTextBox.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 

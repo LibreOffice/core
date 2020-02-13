@@ -21,6 +21,7 @@
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPROGRESSBAR_HXX
 
 #include <ooo/vba/msforms/XProgressBar.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>

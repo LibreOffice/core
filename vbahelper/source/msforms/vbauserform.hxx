@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 
-#include <vbahelper/vbahelperinterface.hxx>
 #include "vbacontrol.hxx"
 
 //typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XUserForm > ScVbaUserForm_BASE;

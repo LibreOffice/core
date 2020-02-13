@@ -18,8 +18,8 @@
  */
 
 #include <vbahelper/vbadocumentbase.hxx>
-#include <vbahelper/helperdecl.hxx>
 
+#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -31,8 +31,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/XApplicationBase.hpp>
 
 #include <comphelper/automationinvokedzone.hxx>

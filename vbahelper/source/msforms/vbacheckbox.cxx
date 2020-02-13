@@ -19,7 +19,6 @@
 
 #include "vbacheckbox.hxx"
 #include "vbanewfont.hxx"
-#include <vbahelper/helperdecl.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

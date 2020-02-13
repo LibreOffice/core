@@ -1,0 +1,19 @@
+---
+assumeFilename: vbahelper/source/vbahelper/vbahelper.cxx
+blacklist:
+    vbahelper/source/vbahelper/vbaglobalbase.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    vbahelper/source/vbahelper/vbapagesetupbase.cxx:
+    # Needed for direct member access
+    - com/sun/star/beans/XPropertySet.hpp
+    vbahelper/source/msforms/vbalistcontrolhelper.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    vbahelper/source/msforms/vbacontrol.cxx:
+    # Actually used
+    - com/sun/star/frame/XModel.hpp
+    vbahelper/source/msforms/vbauserform.cxx:
+    # Needed for extern declaration
+    - service.hxx

@@ -18,15 +18,13 @@
  */
 #include <ooo/vba/office/MsoZOrderCmd.hpp>
 #include <ooo/vba/office/MsoScaleFrom.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -38,8 +36,6 @@
 #include <basic/sberrors.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/unopage.hxx>
-#include <svx/unoshape.hxx>
 #include <sal/log.hxx>
 
 #include <vbahelper/vbashape.hxx>

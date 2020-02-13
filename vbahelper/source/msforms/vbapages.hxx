@@ -19,9 +19,6 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPAGES_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPAGES_HXX
 
-#include <ooo/vba/office/MsoShapeType.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/msforms/XPages.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>

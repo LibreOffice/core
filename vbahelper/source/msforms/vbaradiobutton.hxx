@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBARADIOBUTTON_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBARADIOBUTTON_HXX
 #include <ooo/vba/msforms/XRadioButton.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <cppuhelper/implbase.hxx>

@@ -20,6 +20,7 @@
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XCheckBox.hpp>
+#include <com/sun/star/script/XDefaultProperty.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>

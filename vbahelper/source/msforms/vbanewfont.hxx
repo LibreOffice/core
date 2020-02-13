@@ -21,7 +21,7 @@
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBANEWFONT_HXX
 
 #include <ooo/vba/msforms/XNewFont.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbahelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

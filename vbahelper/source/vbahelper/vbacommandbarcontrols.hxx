@@ -20,8 +20,6 @@
 #define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROLS_HXX
 
 #include <ooo/vba/XCommandBarControls.hpp>
-#include <com/sun/star/awt/XMenu.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include "vbacommandbarhelper.hxx"
 
