@@ -16,7 +16,7 @@ class Window;
 /* cancel dialogs that are a child of pParent
    this is used by com.sun.star.embed.DocumentCloser which itself is only used by
    extensions/source/activex/SOActiveX.cxx see extensions/source/activex/README.txt
-   posibly dubious if this actually works as expected
+   possibly dubious if this actually works as expected
 */
 
 VCL_DLLPUBLIC void EndAllDialogs(vcl::Window const* pParent);
