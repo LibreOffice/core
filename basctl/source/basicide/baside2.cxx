@@ -53,7 +53,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/dialog.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/print.hxx>
@@ -631,13 +631,12 @@ void ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 
     // tdf#118572 make a currently running dialog, regardless of what its modal
     // to, insensitive to user input until after this error dialog goes away.
-    auto xDialog = Dialog::GetMostRecentExecutingDialog();
-    const bool bToggleEnableInput = xDialog && xDialog->IsInputEnabled();
-    if (bToggleEnableInput)
-        xDialog->EnableInput(false);
+    TopLevelWindowLocker aBusy;
+    aBusy.incBusy(nullptr);
+
     ErrorHandler::HandleError(StarBASIC::GetErrorCode(), GetFrameWeld());
-    if (bToggleEnableInput)
-        xDialog->EnableInput(true);
+
+    aBusy.decBusy();
 
     // #i47002#
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
