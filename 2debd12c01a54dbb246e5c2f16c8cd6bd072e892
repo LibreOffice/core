@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb7cb0b6_16228022",
+        "filename": "basic/qa/basic_coverage/test_literals.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-13T19:10:58Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace marked red - both here and in line 39",
+      "range": {
+        "startLine": 10,
+        "startChar": 54,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "2debd12c01a54dbb246e5c2f16c8cd6bd072e892",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "282d7425_9d345deb",
+        "filename": "basic/qa/basic_coverage/test_literals.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-13T19:10:58Z",
+      "side": 1,
+      "message": "Why is Long code present, but commented out? It\u0027s not clear why is it so: doesn\u0027t it work? Are there some preconditions to enable this? If there are, please mention them in the code comments (like \"this need fixed tdf#XXX; commented out till then...\")",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 43
+      },
+      "revId": "2debd12c01a54dbb246e5c2f16c8cd6bd072e892",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
