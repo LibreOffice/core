@@ -2641,7 +2641,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
                                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                                if( nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
                                 {
                                     if (xPropSet.is())
                                     {
@@ -3195,7 +3195,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         xSeriesProperties->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
 
         const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-        if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+        if( nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
             xSeriesProperties->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
     }
 
