@@ -2091,6 +2091,7 @@ private:
         }
 
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
+        // strip out which buttons are involved from the nModCode and replace with m_nLastMouseButton
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, m_nLastMouseClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
 
@@ -2135,8 +2136,7 @@ private:
         if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
-        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nCode, nCode);
+        MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nModCode, nModCode);
 
         m_aMouseMotionHdl.Call(aMEvt);
         return true;
@@ -2158,10 +2158,9 @@ private:
         if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
-        sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEventModifiers eModifiers = ImplGetMouseMoveMode(nModCode);
         eModifiers = eModifiers | (pEvent->type == GDK_ENTER_NOTIFY ? MouseEventModifiers::ENTERWINDOW : MouseEventModifiers::LEAVEWINDOW);
-        MouseEvent aMEvt(aPos, 0, eModifiers, nCode, nCode);
+        MouseEvent aMEvt(aPos, 0, eModifiers, nModCode, nModCode);
 
         m_aMouseMotionHdl.Call(aMEvt);
         return true;
