@@ -38,6 +38,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
