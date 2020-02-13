@@ -17755,7 +17755,6 @@ vcl/workben/lwpfuzzer.cxx
 vcl/workben/metfuzzer.cxx
 vcl/workben/mtfdemo.cxx
 vcl/workben/olefuzzer.cxx
-vcl/workben/outdevgrind.cxx
 vcl/workben/pcdfuzzer.cxx
 vcl/workben/pctfuzzer.cxx
 vcl/workben/pcxfuzzer.cxx

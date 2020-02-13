@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 			$(if $(DISABLE_GUI),, \
 				Executable_ui-previewer)) \
 		$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
-			Executable_outdevgrind \
 			$(if $(DISABLE_GUI),, \
 				Executable_vcldemo \
 				Executable_icontest \

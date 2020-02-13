@@ -69,8 +69,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svptest \
         svpclient ) \
 	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
-	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest \
-	    outdevgrind) \
+	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest) \
 	vcldemo \
 	tiledrendering \
     mtfdemo \
