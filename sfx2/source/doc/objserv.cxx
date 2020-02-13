@@ -55,6 +55,7 @@
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -35,6 +35,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/button.hxx>
 #include <vcl/wrkwin.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>

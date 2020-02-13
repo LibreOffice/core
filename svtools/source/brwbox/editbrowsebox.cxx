@@ -23,6 +23,7 @@
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 
+#include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/settings.hxx>
 

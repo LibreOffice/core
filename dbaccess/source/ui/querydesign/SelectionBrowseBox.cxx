@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <stringconstants.hxx>
 #include "QTableWindow.hxx"
+#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
