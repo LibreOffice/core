@@ -22,6 +22,7 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/editview.hxx>

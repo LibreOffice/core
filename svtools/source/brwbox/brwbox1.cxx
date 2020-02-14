@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
+#include <vcl/scrbar.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
