@@ -55,6 +55,8 @@ cdata.set10('LIBLANGTAG_INLINE_FIX', false)
 
 cdata.set10('USE_TLS_OPENSSL', true)
 
+cdata.set10('HAVE_LIBCXX', false)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -97,4 +99,8 @@ configure_file(input: 'config_gpgme.h.meson',
 
 configure_file(input: 'config_oox.h.meson',
   output: 'config_oox.h',
+  configuration: cdata)
+
+configure_file(input: 'config_libcxx.h.meson',
+  output: 'config_libcxx.h',
   configuration: cdata)

@@ -35,6 +35,11 @@ icu18_dep = dependency('icu-i18n')
 openssl_dep = dependency('openssl')
 zlib_dep = dependency('zlib')
 libxml_dep = dependency('libxml-2.0')
+boost_locale_dep = dependency('boost', modules: 'locale')
+
+# The version in Ubuntu eoan is too old.
+#mdds_dep = dependency('mdds-1.5')
+mdds_dep = declare_dependency(include_directories: 'mdds')
 
 cdata = configuration_data()
 
@@ -71,3 +76,4 @@ subdir('io')
 subdir('jvmfwk')
 subdir('i18nutil')
 subdir('sot')
+subdir('svl')

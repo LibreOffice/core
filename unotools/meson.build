@@ -65,9 +65,12 @@ utl_lib = shared_library('utl',
   'source/ucbhelper/ucblockbytes.cxx',
   'source/ucbhelper/ucbstreamhelper.cxx',
   'source/ucbhelper/xtempfile.cxx',
+  # NOTE: see corresponding Library file.
+  'source/i18n/resmgr.cxx',
   udk_fake_h, off_fake_h, setup_hxx, recovery_hxx, common_hxx,
   cpp_args: ['-DUNOTOOLS_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, setup_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, i18nlangtag_lib, tl_lib, ucbhelper_lib, tl_lib, salhelper_lib, sal_lib],
+  dependencies:[boost_locale_dep],
 )
