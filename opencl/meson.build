@@ -1,0 +1,13 @@
+opencl_lib = shared_library('opencl',
+  'source/openclconfig.cxx',
+  'source/openclwrapper.cxx',
+  'source/opencl_device.cxx',
+  'source/platforminfo.cxx',
+  'source/OpenCLZone.cxx',
+  udk_fake_h, off_fake_h, common_hxx,
+  cpp_args: ['-DOPENCL_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc,udkh_inc, offapi_inc, 'inc', setup_inc],
+  link_with: [comphelper_lib, cppu_lib, salhelper_lib, sal_lib, tl_lib],
+  dependencies: [icuuc_dep, icu18_dep, clew_dep],
+)

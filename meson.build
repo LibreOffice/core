@@ -36,6 +36,7 @@ openssl_dep = dependency('openssl')
 zlib_dep = dependency('zlib')
 libxml_dep = dependency('libxml-2.0')
 boost_locale_dep = dependency('boost', modules: 'locale')
+dl_dep = cpp.find_library('dl', required: false)
 
 # The version in Ubuntu eoan is too old.
 #mdds_dep = dependency('mdds-1.5')
@@ -77,3 +78,5 @@ subdir('jvmfwk')
 subdir('i18nutil')
 subdir('sot')
 subdir('svl')
+subdir('external')
+subdir('opencl')
