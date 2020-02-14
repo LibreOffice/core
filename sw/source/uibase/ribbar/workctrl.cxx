@@ -652,11 +652,14 @@ NavElementBox_Impl::NavElementBox_Impl(
     , m_bRelease(true)
     , m_xFrame(_xFrame)
 {
+    m_xWidget->set_size_request(42, -1); // set to something small so the size set at the .ui takes precedence
+
     for (sal_uInt16 i = 0; i < NID_COUNT; ++i)
         m_xWidget->append("", SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
     m_xWidget->connect_changed(LINK(this, NavElementBox_Impl, SelectHdl));
     m_xWidget->connect_key_press(LINK(this, NavElementBox_Impl, KeyInputHdl));
-    SetSizePixel(m_xWidget->get_preferred_size());
+
+    SetSizePixel(m_xContainer->get_preferred_size());
 }
 
 void NavElementBox_Impl::ReleaseFocus_Impl()
