@@ -344,16 +344,16 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
 
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TABLE_TABLE:
+    case XmlStyleFamily::TABLE_TABLE:
         xItemMap = m_xTableItemMap;
         break;
-    case XML_STYLE_FAMILY_TABLE_COLUMN:
+    case XmlStyleFamily::TABLE_COLUMN:
         xItemMap = m_xTableColItemMap;
         break;
-    case XML_STYLE_FAMILY_TABLE_ROW:
+    case XmlStyleFamily::TABLE_ROW:
         xItemMap = m_xTableRowItemMap;
         break;
-    case XML_STYLE_FAMILY_TABLE_CELL:
+    case XmlStyleFamily::TABLE_CELL:
         xItemMap = m_xTableCellItemMap;
         break;
     }

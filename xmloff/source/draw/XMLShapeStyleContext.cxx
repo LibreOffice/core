@@ -201,13 +201,13 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
     };
     static const sal_uInt16 aFamilies[] =
     {
-        XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
-        XML_STYLE_FAMILY_SD_MARKER_ID,
-        XML_STYLE_FAMILY_SD_MARKER_ID,
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_HATCH_ID,
-        XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+        XmlStyleFamily::SD_STROKE_DASH_ID,
+        XmlStyleFamily::SD_MARKER_ID,
+        XmlStyleFamily::SD_MARKER_ID,
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_HATCH_ID,
+        XmlStyleFamily::SD_FILL_IMAGE_ID
     };
 
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =

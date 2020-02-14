@@ -740,7 +740,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             if( nullptr == GetImport().GetShapeImport()->GetAutoStylesContext())
                 break;
 
-            const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
+            const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XmlStyleFamily::TEXT_PARAGRAPH, maTextStyleName);
             XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext*>( pTempStyle ) ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
             if( pStyle == nullptr )
                 break;

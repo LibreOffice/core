@@ -679,7 +679,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
             sal_Int32 nStart(-1);
             sal_Int32 nEnd(-1);
-            if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
+            if (nFamily == XmlStyleFamily::PAGE_MASTER)
             {
                 nStart = 0;
                 sal_Int32 nIndex = 0;

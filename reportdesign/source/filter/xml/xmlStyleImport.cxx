@@ -90,18 +90,18 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
 {
     if ( !IsDefaultStyle() )
     {
-        if ( GetFamily() == XML_STYLE_FAMILY_TABLE_CELL )
+        if ( GetFamily() == XmlStyleFamily::TABLE_CELL )
         {
             if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
                 SvXMLNumFormatContext* pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast<const SvXMLNumFormatContext*>(pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName)));
+                    XmlStyleFamily::DATA_STYLE, m_sDataStyleName)));
                 if ( !pStyle )
                 {
                     OReportStylesContext* pMyStyles = dynamic_cast< OReportStylesContext *>(m_rImport.GetAutoStyles());
                     if ( pMyStyles )
                         pStyle = const_cast<SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext *>(pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
+                            FindStyleChildContext(XmlStyleFamily::DATA_STYLE, m_sDataStyleName, true)));
                     else {
                         OSL_FAIL("not possible to get style");
                     }
@@ -190,7 +190,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
         ORptFilter& rImport = GetOwnImport();
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
             {
                 if( !m_xCellImpPropMapper.is() )
                 {
@@ -202,7 +202,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = m_xCellImpPropMapper;
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
             {
                 if( !m_xColumnImpPropMapper.is() )
                     m_xColumnImpPropMapper =
@@ -211,14 +211,14 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = m_xColumnImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_ROW:
+            case XmlStyleFamily::TABLE_ROW:
             {
                 if( !m_xRowImpPropMapper.is() )
                     m_xRowImpPropMapper =new OSpecialHanldeXMLImportPropertyMapper( rImport.GetRowStylesPropertySetMapper(), m_rImport );
                 xMapper = m_xRowImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
             {
                 if( !m_xTableImpPropMapper.is() )
                 {
@@ -270,10 +270,10 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_TABLE:
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
-        case XML_STYLE_FAMILY_TABLE_ROW:
-        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XmlStyleFamily::TABLE_TABLE:
+        case XmlStyleFamily::TABLE_COLUMN:
+        case XmlStyleFamily::TABLE_ROW:
+        case XmlStyleFamily::TABLE_CELL:
             pStyle = new OControlStyleContext( GetOwnImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
             break;
@@ -295,7 +295,7 @@ Reference < XNameContainer >
         OUString sName;
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
             {
                 if( m_xTableStyles.is() )
                     xStyles.set(m_xTableStyles);
@@ -303,7 +303,7 @@ Reference < XNameContainer >
                     sName = "TableStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
             {
                 if( m_xCellStyles.is() )
                     xStyles.set(m_xCellStyles);
@@ -311,7 +311,7 @@ Reference < XNameContainer >
                     sName = "CellStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
             {
                 if( m_xColumnStyles.is() )
                     xStyles.set(m_xColumnStyles);
@@ -319,7 +319,7 @@ Reference < XNameContainer >
                     sName = "ColumnStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_ROW:
+            case XmlStyleFamily::TABLE_ROW:
             {
                 if( m_xRowStyles.is() )
                     xStyles.set(m_xRowStyles);
@@ -345,16 +345,16 @@ Reference < XNameContainer >
                 xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
                 switch( nFamily )
                 {
-                case XML_STYLE_FAMILY_TABLE_TABLE:
+                case XmlStyleFamily::TABLE_TABLE:
                     m_xTableStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_CELL:
+                case XmlStyleFamily::TABLE_CELL:
                     m_xCellStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_COLUMN:
+                case XmlStyleFamily::TABLE_COLUMN:
                     m_xColumnStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_ROW:
+                case XmlStyleFamily::TABLE_ROW:
                     m_xRowStyles.set(xStyles);
                     break;
                     default:
@@ -375,16 +375,16 @@ OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     {
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
                 sServiceName = g_sTableStyleFamilyName;
                 break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
                 sServiceName = g_sColumnStyleFamilyName;
                 break;
-            case XML_STYLE_FAMILY_TABLE_ROW:
+            case XmlStyleFamily::TABLE_ROW:
                 sServiceName = g_sRowStyleFamilyName;
                 break;
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
                 sServiceName = g_sCellStyleFamilyName;
                 break;
             default:
@@ -401,7 +401,7 @@ sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
     {
         if (m_nNumberFormatIndex == -1)
             m_nNumberFormatIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return m_nNumberFormatIndex;
     }
     return -1;

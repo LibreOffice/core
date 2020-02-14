@@ -76,7 +76,7 @@ void ScSheetSaveData::HandleNoteStyles( const OUString& rStyleName, const OUStri
 
 void ScSheetSaveData::AddNoteContentStyle( sal_uInt16 nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
 {
-    if ( nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
+    if ( nFamily == XmlStyleFamily::TEXT_PARAGRAPH )
         maNoteParaStyles.emplace_back( rName, rCellPos, rSelection );
     else
         maNoteTextStyles.emplace_back( rName, rCellPos, rSelection );

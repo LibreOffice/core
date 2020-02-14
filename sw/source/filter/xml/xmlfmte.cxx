@@ -293,7 +293,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap);
 
-    if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
+    if( XmlStyleFamily::TEXT_PARAGRAPH == nFamily )
     {
         for( const auto& rProperty : rProperties )
         {

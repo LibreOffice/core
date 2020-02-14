@@ -1033,13 +1033,13 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         OUString( XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX ));
     // register paragraph family also for shapes
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+        XmlStyleFamily::TEXT_PARAGRAPH,
         GetXMLToken( XML_PARAGRAPH ),
         mxExpPropMapper.get(),
         OUString( 'P' ));
     // register text family also for shapes
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_TEXT_TEXT,
+        XmlStyleFamily::TEXT_TEXT,
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
         OUString( 'T' ));

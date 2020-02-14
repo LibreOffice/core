@@ -55,7 +55,7 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_MASTER_PAGE ) &&
-         InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+         InsertStyleFamily( XmlStyleFamily::MASTER_PAGE ) )
         pContext = new XMLTextMasterPageContext(
                         GetImport(), nPrefix, rLocalName,
                           xAttrList,

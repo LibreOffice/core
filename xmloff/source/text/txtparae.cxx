@@ -534,19 +534,19 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_TEXT:
+    case XmlStyleFamily::TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_FRAME:
+    case XmlStyleFamily::TEXT_FRAME:
         xPropMapper = GetAutoFramePropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_SECTION:
+    case XmlStyleFamily::TEXT_SECTION:
         xPropMapper = GetSectionPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_RUBY:
+    case XmlStyleFamily::TEXT_RUBY:
         xPropMapper = GetRubyPropMapper();
         break;
     }
@@ -571,7 +571,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         sal_uInt16 nIgnoreProps = 0;
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        case XmlStyleFamily::TEXT_PARAGRAPH:
             if( xPropSetInfo->hasPropertyByName( gsParaStyleName ) )
             {
                 rPropSet->getPropertyValue( gsParaStyleName ) >>= sParent;
@@ -617,7 +617,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 }
             }
             break;
-        case XML_STYLE_FAMILY_TEXT_TEXT:
+        case XmlStyleFamily::TEXT_TEXT:
             {
                 // Get parent and remove hyperlinks (they aren't of interest)
                 rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
@@ -645,14 +645,14 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 }
             }
             break;
-        case XML_STYLE_FAMILY_TEXT_FRAME:
+        case XmlStyleFamily::TEXT_FRAME:
             if( xPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
             {
                 rPropSet->getPropertyValue( gsFrameStyleName ) >>= sParent;
             }
             break;
-        case XML_STYLE_FAMILY_TEXT_SECTION:
-        case XML_STYLE_FAMILY_TEXT_RUBY:
+        case XmlStyleFamily::TEXT_SECTION:
+        case XmlStyleFamily::TEXT_RUBY:
             ; // section styles have no parents
             break;
         }
@@ -677,7 +677,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
         break;
     }
@@ -728,7 +728,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         OUString sParent, sCondParent;
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        case XmlStyleFamily::TEXT_PARAGRAPH:
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
             {
                 rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
@@ -762,16 +762,16 @@ OUString XMLTextParagraphExport::Find(
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_FRAME:
+    case XmlStyleFamily::TEXT_FRAME:
         xPropMapper = GetAutoFramePropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_SECTION:
+    case XmlStyleFamily::TEXT_SECTION:
         xPropMapper = GetSectionPropMapper();
         break;
-    case XML_STYLE_FAMILY_TEXT_RUBY:
+    case XmlStyleFamily::TEXT_RUBY:
         xPropMapper = GetRubyPropMapper();
         break;
     }
@@ -863,7 +863,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             aPropStates.erase( aFirstDel );
         }
         sName = GetAutoStylePool().Find(
-            XML_STYLE_FAMILY_TEXT_TEXT,
+            XmlStyleFamily::TEXT_TEXT,
             OUString(), // AutoStyles should not have parents!
             aPropStates );
         rbHasAutoStyle = true;
@@ -1257,7 +1257,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     OUString aPrefix(u'P');
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
+    rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_PARAGRAPH, sFamily,
                               xParaPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::TEXT, true );
@@ -1265,7 +1265,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                              GetExport() );
     sFamily = GetXMLToken(XML_TEXT);
     aPrefix = "T";
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
+    rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_TEXT, sFamily,
                               xTextPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::AUTO_FRAME, true );
@@ -1273,7 +1273,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                                   GetExport() );
     sFamily = XML_STYLE_FAMILY_SD_GRAPHICS_NAME;
     aPrefix = "fr";
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_FRAME, sFamily,
+    rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_FRAME, sFamily,
                               xAutoFramePropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::SECTION, true );
@@ -1281,14 +1281,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                              GetExport() );
     sFamily = GetXMLToken( XML_SECTION );
     aPrefix = "Sect" ;
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
+    rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_SECTION, sFamily,
                               xSectionPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::RUBY, true );
     xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
     sFamily = GetXMLToken( XML_RUBY );
     aPrefix = "Ru";
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_RUBY, sFamily,
+    rAutoStylePool.AddFamily( XmlStyleFamily::TEXT_RUBY, sFamily,
                               xRubyPropMapper, aPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TextPropMap::FRAME, true );
@@ -1449,17 +1449,17 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             if ( 0 == i )
             {
                 sName = "CharacterStyles" ;
-                nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+                nFamily = XmlStyleFamily::TEXT_TEXT;
             }
             else if ( 1 == i )
             {
                 sName = "RubyStyles" ;
-                nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
+                nFamily = XmlStyleFamily::TEXT_RUBY;
             }
             else
             {
                 sName = "ParagraphStyles" ;
-                nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
+                nFamily = XmlStyleFamily::TEXT_PARAGRAPH;
             }
 
             Any aAny = xAutoStyleFamilies->getByName( sName );
@@ -1566,7 +1566,7 @@ void XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                 Any aAny = xSections->getByIndex( i );
                 Reference< XTextSection > xSection = *o3tl::doAccess<Reference<XTextSection>>(aAny);
                 Reference < XPropertySet > xPSet( xSection, uno::UNO_QUERY );
-                Add( XML_STYLE_FAMILY_TEXT_SECTION, xPSet );
+                Add( XmlStyleFamily::TEXT_SECTION, xPSet );
             }
         }
     }
@@ -1903,7 +1903,7 @@ void XMLTextParagraphExport::exportParagraph(
     {
         if( bAutoStyles )
         {
-            Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, rPropSetHelper, xPropSet );
+            Add( XmlStyleFamily::TEXT_PARAGRAPH, rPropSetHelper, xPropSet );
         }
         else
         {
@@ -1940,7 +1940,7 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            OUString sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
+            OUString sAutoStyle = Find( XmlStyleFamily::TEXT_PARAGRAPH, xPropSet, sStyle );
             if ( sAutoStyle.isEmpty() )
                 sAutoStyle = sStyle;
             if( !sAutoStyle.isEmpty() )
@@ -1958,7 +1958,7 @@ void XMLTextParagraphExport::exportParagraph(
                                                      xPropSet ) >>= sCondStyle;
                 if( sCondStyle != sStyle )
                 {
-                    sCondStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet,
+                    sCondStyle = Find( XmlStyleFamily::TEXT_PARAGRAPH, xPropSet,
                                           sCondStyle );
                     if( !sCondStyle.isEmpty() )
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -2794,11 +2794,11 @@ void XMLTextParagraphExport::exportAnyTextFrame(
             _collectTextEmbeddedAutoStyles( xPropSet );
         // No text frame style for shapes (#i28745#)
         else if ( FrameType::Shape != eType )
-            Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+            Add( XmlStyleFamily::TEXT_FRAME, xPropSet );
 
         if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
                                             xPropSet->getPropertySetInfo() ) )
-            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
+            Add( XmlStyleFamily::TEXT_TEXT, *pRangePropSet );
 
         switch( eType )
         {
@@ -2907,7 +2907,7 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     OUString aMinHeightValue;
     OUString sMinWidthValue;
-    OUString sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+    OUString sAutoStyle = Find( XmlStyleFamily::TEXT_FRAME, rPropSet, sStyle );
     if ( sAutoStyle.isEmpty() )
         sAutoStyle = sStyle;
     if( !sAutoStyle.isEmpty() )
@@ -3068,7 +3068,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         rPropSet->getPropertyValue( gsFrameStyleName ) >>= sStyle;
     }
 
-    OUString sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+    OUString sAutoStyle = Find( XmlStyleFamily::TEXT_FRAME, rPropSet, sStyle );
     if ( sAutoStyle.isEmpty() )
         sAutoStyle = sStyle;
     if( !sAutoStyle.isEmpty() )
@@ -3437,7 +3437,7 @@ void XMLTextParagraphExport::exportTextRange(
     Reference< XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     if ( bAutoStyles )
     {
-        Add( XML_STYLE_FAMILY_TEXT_TEXT, xPropSet );
+        Add( XmlStyleFamily::TEXT_TEXT, xPropSet );
     }
     else
     {
@@ -3681,15 +3681,15 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
+    GetAutoStylePool().exportXML( XmlStyleFamily::TEXT_PARAGRAPH );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT );
+    GetAutoStylePool().exportXML( XmlStyleFamily::TEXT_TEXT );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME );
+    GetAutoStylePool().exportXML( XmlStyleFamily::TEXT_FRAME );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION );
+    GetAutoStylePool().exportXML( XmlStyleFamily::TEXT_SECTION );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY );
+    GetAutoStylePool().exportXML( XmlStyleFamily::TEXT_RUBY );
 
     maListAutoPool.exportXML();
 }
@@ -3709,7 +3709,7 @@ void XMLTextParagraphExport::exportRuby(
     {
         // ruby auto styles
         if (bStart)
-            Add( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet );
+            Add( XmlStyleFamily::TEXT_RUBY, rPropSet );
     }
     else
     {
@@ -3728,7 +3728,7 @@ void XMLTextParagraphExport::exportRuby(
 
             // ruby style
             GetExport().CheckAttrList();
-            OUString sStyleName(Find(XML_STYLE_FAMILY_TEXT_RUBY, rPropSet, ""));
+            OUString sStyleName(Find(XmlStyleFamily::TEXT_RUBY, rPropSet, ""));
             SAL_WARN_IF(sStyleName.isEmpty(), "xmloff", "Can't find ruby style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_STYLE_NAME, sStyleName);

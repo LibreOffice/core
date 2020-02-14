@@ -66,7 +66,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         const SvXMLNamespaceMap&
         ) const
 {
-    if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
+    if ( XmlStyleFamily::CONTROL_ID == nFamily )
     {   // it's a control-related style
         const rtl::Reference< XMLPropertySetMapper >& aPropertyMapper = rPropExp.getPropertySetMapper();
 
@@ -137,7 +137,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 
-    if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
+    if( nFamily == XmlStyleFamily::PAGE_MASTER )
     {
         for( const auto& rProp : rProperties )
         {
@@ -176,7 +176,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         const SvXMLNamespaceMap&
         ) const
 {
-    if( nFamily != XML_STYLE_FAMILY_PAGE_MASTER )
+    if( nFamily != XmlStyleFamily::PAGE_MASTER )
         return;
 
     sal_Int32       nHeaderStartIndex(-1);

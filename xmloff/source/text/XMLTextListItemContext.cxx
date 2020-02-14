@@ -75,7 +75,7 @@ XMLTextListItemContext::XMLTextListItemContext(
             if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(
-                        GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                        GetImport().GetStyleDisplayName( XmlStyleFamily::TEXT_LIST,
                                                          sListStyleOverrideName ) );
                 const Reference < container::XNameContainer >& rNumStyles =
                                                     rTxtImp.GetNumberingStyles();
