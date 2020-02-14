@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08edb24b_0a3ff7c7",
+        "filename": "sw/source/core/layout/calcmove.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-14T14:20:04Z",
+      "side": 1,
+      "message": "hmm... it seems dubious to invalidate the upper\u0027s pos when we want to validate our own pos - doesn\u0027t that require the upper\u0027s pos to be valid?",
+      "revId": "e22271da7a2e57c030c37ee81381a36e019ea026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
