@@ -30,6 +30,8 @@ cppunit_dep = dependency('cppunit')
 main_inc = include_directories('include', 'config_host')
 langtag_dep = dependency('liblangtag')
 icuuc_dep = dependency('icu-uc')
+openssl_dep = dependency('openssl')
+zlib_dep = dependency('zlib')
 
 cdata = configuration_data()
 
@@ -49,3 +51,4 @@ subdir('xmlreader')
 subdir('cppuhelper')
 subdir('basegfx')
 subdir('ucbhelper')
+subdir('comphelper')
