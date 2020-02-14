@@ -74,19 +74,6 @@ using namespace ::com::sun::star;
 
 // General list of string pointer
 
-// Switch metric
-
-void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
-{
-    SwTwips nMin = static_cast< SwTwips >(rCtrl.GetMin(FieldUnit::TWIP));
-    SwTwips nMax = static_cast< SwTwips >(rCtrl.GetMax(FieldUnit::TWIP));
-
-    rCtrl.SetUnit(eUnit);
-
-    rCtrl.SetMin(nMin, FieldUnit::TWIP);
-    rCtrl.SetMax(nMax, FieldUnit::TWIP);
-}
-
 // Set boxinfo attribute
 
 void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)

@@ -21,9 +21,6 @@
 
 #include <vcl/weld.hxx>
 
-#define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
-#define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)
-
 inline int getfldval(const weld::MetricSpinButton& rField)
 {
     return rField.denormalize(rField.get_value(FieldUnit::TWIP));
