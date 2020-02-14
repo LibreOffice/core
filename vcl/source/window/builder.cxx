@@ -311,7 +311,7 @@ namespace weld
     {
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
         double fResult(0.0);
-        bool bRet = MetricFormatter::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
+        bool bRet = vcl::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
         if (bRet)
         {
             if (fResult > SAL_MAX_INT32)

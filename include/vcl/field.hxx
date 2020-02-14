@@ -219,9 +219,6 @@ public:
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
-    static FieldUnit        StringToMetric(const OUString &rMetricString);
-    static bool             TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit);
-
 protected:
     FieldUnit               meUnit;
 

@@ -21,11 +21,19 @@
 #define INCLUDED_VCL_FIELDVALUES_HXX
 
 #include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 
+class LocaleDataWrapper;
+
 namespace vcl
 {
+VCL_DLLPUBLIC FieldUnit StringToMetric(const OUString& rMetricString);
+VCL_DLLPUBLIC bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+                               sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
+                               FieldUnit eUnit);
+
 VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit);
 VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_uInt16 nDecDigits, MapUnit eInUnit,
