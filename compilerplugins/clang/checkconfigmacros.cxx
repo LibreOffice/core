@@ -9,6 +9,7 @@
  *
  */
 
+#include <functional>
 #include <memory>
 #include <set>
 
@@ -44,7 +45,7 @@ class CheckConfigMacros
         enum { isPPCallback = true };
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
-        std::set< std::string > configMacros;
+        std::set< std::string, std::less<> > configMacros;
     };
 
 CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )
@@ -93,7 +94,7 @@ void CheckConfigMacros::Defined( const Token& macroToken, MacroDefinition const 
 
 void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation location )
     {
-    if( configMacros.find( macroToken.getIdentifierInfo()->getName().str()) != configMacros.end())
+    if( configMacros.find( macroToken.getIdentifierInfo()->getName()) != configMacros.end())
         {
         const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
         if( filename == NULL

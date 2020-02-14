@@ -7239,7 +7239,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         fi
         AC_PATH_PROG(LLVM_CONFIG, llvm-config,[],"$clangbindir" $PATH)
         if test -n "$LLVM_CONFIG"; then
-            COMPILER_PLUGINS_CXXFLAGS=$($LLVM_CONFIG --cxxflags)
+            COMPILER_PLUGINS_CXXFLAGS=$($LLVM_CONFIG --cxxflags | sed -e s/-std=c++11/-std=c++14/)
             COMPILER_PLUGINS_LINKFLAGS=$($LLVM_CONFIG --ldflags --libs --system-libs | tr '\n' ' ')
             if test -z "$CLANGLIBDIR"; then
                 CLANGLIBDIR=$($LLVM_CONFIG --libdir)
