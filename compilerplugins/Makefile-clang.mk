@@ -101,6 +101,14 @@ CLANGWERROR :=
 #TODO: /WX
 else
 CLANGWERROR := -Werror
+# When COMPILER_PLUGINS_CXXFLAGS (obtained via `llvm-config --cxxflags`) contains options like
+# -Wno-maybe-uninitialized that are targeting GCC (when LLVM was actually built with GCC), and
+# COMPILER_PLUGINS_CXX (defaulting to CXX) deonotes a Clang that does not understand those options,
+# it fails with -Werror,-Wunknown-warning-option, so we need -Wno-unknown-warning-option (but which
+# GCC does not understand) at least with -Werror:
+ifeq ($(COMPILER_PLUGINS_COM_IS_CLANG),TRUE)
+CLANGWERROR += -Wno-unknown-warning-option
+endif
 endif
 endif
 

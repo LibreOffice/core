@@ -7218,6 +7218,7 @@ if test "$COM_IS_CLANG" != "TRUE"; then
     fi
 fi
 
+COMPILER_PLUGINS_COM_IS_CLANG=
 if test "$COM_IS_CLANG" = "TRUE"; then
     if test -n "$enable_compiler_plugins"; then
         compiler_plugins="$enable_compiler_plugins"
@@ -7336,6 +7337,18 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         LDFLAGS=$save_LDFLAGS
         LIBS="$save_LIBS"
         AC_LANG_POP([C++])
+
+        AC_MSG_CHECKING([whether the compiler for building compilerplugins is actually Clang])
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+            #ifndef __clang__
+            you lose
+            #endif
+            int foo=42;
+            ]])],
+            [AC_MSG_RESULT([yes])
+             COMPILER_PLUGINS_COM_IS_CLANG=TRUE],
+            [AC_MSG_RESULT([no])])
+        AC_SUBST(COMPILER_PLUGINS_COM_IS_CLANG)
     fi
 else
     if test "$enable_compiler_plugins" = "yes"; then
@@ -7343,6 +7356,7 @@ else
     fi
 fi
 AC_SUBST(COMPILER_PLUGINS)
+AC_SUBST(COMPILER_PLUGINS_COM_IS_CLANG)
 AC_SUBST(COMPILER_PLUGINS_CXX)
 AC_SUBST(COMPILER_PLUGINS_CXXFLAGS)
 AC_SUBST(COMPILER_PLUGINS_CXX_LINKFLAGS)
