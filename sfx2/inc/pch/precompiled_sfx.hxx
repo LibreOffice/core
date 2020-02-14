@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-13 17:43:02 using:
+ Generated on 2020-02-16 15:22:47 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,7 +26,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-#include <deque>
 #include <functional>
 #include <initializer_list>
 #include <map>
@@ -93,11 +92,11 @@
 #include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -437,36 +436,24 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sidebar/Context.hxx>
-#include <sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Deck.hxx>
-#include <sidebar/DeckDescriptor.hxx>
-#include <sidebar/DeckTitleBar.hxx>
-#include <sidebar/DrawHelper.hxx>
-#include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
-#include <sidebar/PanelDescriptor.hxx>
-#include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sidebar/TitleBar.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <templatecontaineritem.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/templatelocalview.hxx>
-#include <templateviewitem.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <thumbnailviewitem.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <unoctitm.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

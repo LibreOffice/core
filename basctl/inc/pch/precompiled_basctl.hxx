@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-13 21:29:21 using:
+ Generated on 2020-02-14 21:46:02 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -114,15 +114,12 @@
 #include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -136,7 +133,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -160,7 +156,6 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/treelist.hxx>
 #include <vcl/treelistentries.hxx>
@@ -396,7 +391,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/stbitem.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -426,12 +420,8 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/toolbarmenu.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/valueset.hxx>
 #include <svx/DiagramDataInterface.hxx>
-#include <svx/Palette.hxx>
-#include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
