@@ -21,7 +21,6 @@
 
 #include <i18nutil/unicode.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/field.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
