@@ -186,6 +186,10 @@ bool Application::QueryExit()
         return true;
 }
 
+void Application::Shutdown()
+{
+}
+
 void Application::Init()
 {
 }
@@ -429,6 +433,8 @@ void Application::Execute()
         Application::Yield();
 
     pSVData->maAppData.mbInAppExecute = false;
+
+    GetpApp()->Shutdown();
 }
 
 static bool ImplYield(bool i_bWait, bool i_bAllEvents)
@@ -514,11 +520,12 @@ void Application::Yield()
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )
 {
-    ImplGetSVData()->maAppData.mbAppQuit = true;
+    assert(ImplGetSVData()->maAppData.mbAppQuit);
 }
 
 void Application::Quit()
 {
+    ImplGetSVData()->maAppData.mbAppQuit = true;
     Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplQuitMsg ) );
 }
 
