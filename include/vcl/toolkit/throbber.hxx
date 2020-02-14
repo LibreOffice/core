@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_THROBBER_HXX
 #define INCLUDED_VCL_THROBBER_HXX
 
-#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION)
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_WORKBEN)
 #error "don't use this in new code"
 #endif
 
