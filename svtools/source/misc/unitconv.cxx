@@ -19,7 +19,7 @@
 
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
-#include <vcl/field.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
 
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
@@ -80,77 +80,11 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
     }
 }
 
-void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
-{
-    sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FieldUnit::TWIP ) );
-    sal_Int64 nLast = rField.Denormalize( rField.GetLast( FieldUnit::TWIP ) );
-    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FieldUnit::TWIP ) );
-    sal_Int64 nMax = rField.Denormalize( rField.GetMax( FieldUnit::TWIP ) );
-
-    if ( !bAll )
-    {
-        switch ( eUnit )
-        {
-            case FieldUnit::M:
-            case FieldUnit::KM:
-                eUnit = FieldUnit::CM;
-                break;
-
-            case FieldUnit::FOOT:
-            case FieldUnit::MILE:
-                eUnit = FieldUnit::INCH;
-                break;
-            default: ;//prevent warning
-        }
-    }
-    rField.SetUnit( eUnit );
-    switch( eUnit )
-    {
-        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FieldUnit::MM
-        case FieldUnit::CHAR:
-        case FieldUnit::LINE:
-        case FieldUnit::MM:
-            rField.SetSpinSize( 50 );
-            break;
-
-        case FieldUnit::INCH:
-            rField.SetSpinSize( 2 );
-            break;
-
-        default:
-            rField.SetSpinSize( 10 );
-    }
-
-    if ( FieldUnit::POINT == eUnit )
-    {
-        if( rField.GetDecimalDigits() > 1 )
-            rField.SetDecimalDigits( 1 );
-    }
-    else
-        rField.SetDecimalDigits( 2 );
-
-    if ( !bAll )
-    {
-        rField.SetFirst( rField.Normalize( nFirst ), FieldUnit::TWIP );
-        rField.SetLast( rField.Normalize( nLast ), FieldUnit::TWIP );
-        rField.SetMin( rField.Normalize( nMin ), FieldUnit::TWIP );
-        rField.SetMax( rField.Normalize( nMax ), FieldUnit::TWIP );
-    }
-}
-
 void SetMetricValue(weld::MetricSpinButton& rField, int nCoreValue, MapUnit eUnit)
 {
     auto nVal = OutputDevice::LogicToLogic(nCoreValue, eUnit, MapUnit::Map100thMM);
     nVal = rField.normalize(nVal);
     rField.set_value(nVal, FieldUnit::MM_100TH);
-}
-
-void SetMetricValue( MetricField& rField, long nCoreValue, MapUnit eUnit )
-{
-    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, eUnit, MapUnit::Map100thMM );
-    nVal = rField.Normalize( nVal );
-    rField.SetValue(nVal, FieldUnit::MM_100TH);
-
 }
 
 int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
@@ -175,30 +109,6 @@ int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
     if (!bRoundBefore)
         nUnitVal = rField.denormalize(nUnitVal);
     return nUnitVal;
-}
-
-long GetCoreValue( const MetricField& rField, MapUnit eUnit )
-{
-    sal_Int64 nVal = rField.GetValue(FieldUnit::MM_100TH);
-    // avoid rounding issues
-    const sal_Int64 nSizeMask = 0xffffffffff000000LL;
-    bool bRoundBefore = true;
-    if( nVal >= 0 )
-    {
-        if( (nVal & nSizeMask) == 0 )
-            bRoundBefore = false;
-    }
-    else
-    {
-        if( ((-nVal) & nSizeMask ) == 0 )
-            bRoundBefore = false;
-    }
-    if( bRoundBefore )
-        nVal = rField.Denormalize( nVal );
-    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MapUnit::Map100thMM, eUnit );
-    if( ! bRoundBefore )
-        nUnitVal = rField.Denormalize( nUnitVal );
-    return static_cast<long>(nUnitVal);
 }
 
 long CalcToUnit( float nIn, MapUnit eUnit )
