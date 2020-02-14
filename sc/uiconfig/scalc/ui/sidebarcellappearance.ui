@@ -33,6 +33,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackgroundcolor|tooltip_text">Select the background color of the selected cells.</property>
+            <property name="halign">end</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <property name="icon_size">2</property>
@@ -88,6 +89,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|borderlinecolor|tooltip_text">Select the line color of the borders.</property>
+            <property name="halign">end</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <property name="icon_size">2</property>
@@ -118,6 +120,7 @@
           <object class="GtkToolbar" id="borderlinestyle">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="halign">end</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <property name="icon_size">2</property>
