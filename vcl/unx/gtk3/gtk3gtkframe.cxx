@@ -2252,19 +2252,22 @@ const SystemEnvData* GtkSalFrame::GetSystemData() const
 
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
 {
+    GtkWindow* pWindow = GTK_IS_WINDOW(m_pWindow) ? GTK_WINDOW(m_pWindow) : nullptr;
     if (m_pParent)
     {
-        gtk_window_group_remove_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+        if (pWindow && GTK_IS_WINDOW(m_pParent->m_pWindow))
+            gtk_window_group_remove_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), pWindow);
         m_pParent->m_aChildren.remove(this);
     }
     m_pParent = static_cast<GtkSalFrame*>(pNewParent);
     if (m_pParent)
     {
         m_pParent->m_aChildren.push_back(this);
-        gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+        if (pWindow && GTK_IS_WINDOW(m_pParent->m_pWindow))
+            gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), pWindow);
     }
-    if( ! isChild() )
-        gtk_window_set_transient_for( GTK_WINDOW(m_pWindow),
+    if (!isChild() && pWindow)
+        gtk_window_set_transient_for( pWindow,
                                       (m_pParent && ! m_pParent->isChild(true,false)) ? GTK_WINDOW(m_pParent->m_pWindow) : nullptr
                                      );
 }
