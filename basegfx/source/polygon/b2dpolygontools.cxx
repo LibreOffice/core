@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <numeric>
+#include <algorithm>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -31,8 +33,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
-#include <numeric>
 
 // #i37443#
 #define ANGLE_BOUND_START_VALUE     (2.25)
@@ -1231,6 +1231,32 @@ namespace basegfx::utils
                 return;
             }
 
+            // precalculate maximal acceptable length of candidate polygon assuming
+            // we want to create a maximum of fNumberOfAllowedSnippets. For
+            // fNumberOfAllowedSnippets use ca. 65536, double due to line & gap.
+            static double fNumberOfAllowedSnippets(65535.0 * 2.0);
+            const double fAllowedLength((fNumberOfAllowedSnippets * fDotDashLength) / double(rDotDashArray.size()));
+            const double fCandidateLength(basegfx::utils::getLength(rCandidate));
+            std::vector<double> aDotDashArray(rDotDashArray);
+
+            if(fCandidateLength > fAllowedLength)
+            {
+                // we would produce more than fNumberOfAllowedSnippets, so
+                // adapt aDotDashArray to exactly produce assumed number. Also
+                // assert this to let the caller know about it.
+                // If this asserts: Please think about checking your DotDashArray
+                // before calling this function or evtl. use the callback version
+                // to *not* produce that much of data. Even then, you may still
+                // think about producing too much runtime (!)
+                assert(true && "applyLineDashing: potentially too expensive to do the requested dismantle - please consider stretched LineDash pattern (!)");
+
+                // calculate correcting factor, apply to aDotDashArray and fDotDashLength
+                // to enlarge these as needed
+                const double fFactor(fCandidateLength / fAllowedLength);
+                std::for_each(aDotDashArray.begin(), aDotDashArray.end(), [&fFactor](double &f){ f *= fFactor; });
+                fDotDashLength *= fFactor;
+            }
+
             // prepare current edge's start
             B2DCubicBezier aCurrentEdge;
             const bool bIsClosed(rCandidate.isClosed());
@@ -1240,7 +1266,7 @@ namespace basegfx::utils
             // prepare DotDashArray iteration and the line/gap switching bool
             sal_uInt32 nDotDashIndex(0);
             bool bIsLine(true);
-            double fDotDashMovingLength(rDotDashArray[0]);
+            double fDotDashMovingLength(aDotDashArray[0]);
             B2DPolygon aSnippet;
 
             // remember 1st and last snippets to try to merge after execution
@@ -1303,7 +1329,7 @@ namespace basegfx::utils
 
                             // prepare next DotDashArray step and flip line/gap flag
                             fLastDotDashMovingLength = fDotDashMovingLength;
-                            fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                            fDotDashMovingLength += aDotDashArray[(++nDotDashIndex) % nDotDashCount];
                             bIsLine = !bIsLine;
                         }
 
@@ -1367,7 +1393,7 @@ namespace basegfx::utils
 
                             // prepare next DotDashArray step and flip line/gap flag
                             fLastDotDashMovingLength = fDotDashMovingLength;
-                            fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                            fDotDashMovingLength += aDotDashArray[(++nDotDashIndex) % nDotDashCount];
                             bIsLine = !bIsLine;
                         }
 

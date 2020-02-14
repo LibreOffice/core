@@ -90,7 +90,90 @@ namespace basegfx::utils
             return fRetval;
         }
 
-        void applyLineDashing(const B3DPolygon& rCandidate, const std::vector<double>& rDotDashArray, B3DPolyPolygon* pLineTarget, double fDotDashLength)
+        void applyLineDashing(
+            const B3DPolygon& rCandidate,
+            const std::vector<double>& rDotDashArray,
+            B3DPolyPolygon* pLineTarget,
+            double fDotDashLength)
+        {
+            // clear targets in any case
+            if(pLineTarget)
+            {
+                pLineTarget->clear();
+            }
+
+            // provide callback as lambda
+            auto aLineCallback(
+                nullptr == pLineTarget
+                ? std::function<void(const basegfx::B3DPolygon&)>()
+                : [&pLineTarget](const basegfx::B3DPolygon& rSnippet){ pLineTarget->append(rSnippet); });
+
+            // call version that uses callbacks
+            applyLineDashing(
+                rCandidate,
+                rDotDashArray,
+                aLineCallback,
+                fDotDashLength);
+        }
+
+        static void implHandleSnippet(
+            const B3DPolygon& rSnippet,
+            std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
+            B3DPolygon& rFirst,
+            B3DPolygon& rLast)
+        {
+            if(rSnippet.isClosed())
+            {
+                if(!rFirst.count())
+                {
+                    rFirst = rSnippet;
+                }
+                else
+                {
+                    if(rLast.count())
+                    {
+                        rTargetCallback(rLast);
+                    }
+
+                    rLast = rSnippet;
+                }
+            }
+            else
+            {
+                rTargetCallback(rSnippet);
+            }
+        }
+
+        static void implHandleFirstLast(
+            std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
+            B3DPolygon& rFirst,
+            B3DPolygon& rLast)
+        {
+            if(rFirst.count() && rLast.count()
+                && rFirst.getB3DPoint(0).equal(rLast.getB3DPoint(rLast.count() - 1)))
+            {
+                // start of first and end of last are the same -> merge them
+                rLast.append(rFirst);
+                rLast.removeDoublePoints();
+                rFirst.clear();
+            }
+
+            if(rLast.count())
+            {
+                rTargetCallback(rLast);
+            }
+
+            if(rFirst.count())
+            {
+                rTargetCallback(rFirst);
+            }
+        }
+
+        void applyLineDashing(
+            const B3DPolygon& rCandidate,
+            const std::vector<double>& rDotDashArray,
+            std::function<void(const basegfx::B3DPolygon& rSnippet)> aLineTargetCallback,
+            double fDotDashLength)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
@@ -100,62 +183,74 @@ namespace basegfx::utils
                 fDotDashLength = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(fTools::more(fDotDashLength, 0.0) && pLineTarget && nPointCount)
+            if(fTools::lessOrEqual(fDotDashLength, 0.0) || !aLineTargetCallback || !nPointCount)
             {
-                // clear targets
-                if(pLineTarget)
+                // parameters make no sense, just add source to targets
+                if(aLineTargetCallback)
                 {
-                    pLineTarget->clear();
+                    aLineTargetCallback(rCandidate);
                 }
 
-                // prepare current edge's start
-                B3DPoint aCurrentPoint(rCandidate.getB3DPoint(0));
-                const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
+                return;
+            }
 
-                // prepare DotDashArray iteration and the line/gap switching bool
-                sal_uInt32 nDotDashIndex(0);
-                bool bIsLine(true);
-                double fDotDashMovingLength(rDotDashArray[0]);
-                B3DPolygon aSnippet;
+            // precalculate maximal acceptable length of candidate polygon assuming
+            // we want to create a maximum of fNumberOfAllowedSnippets. In 3D
+            // use less for fNumberOfAllowedSnippets, ca. 6553.6, double due to line & gap.
+            // Less in 3D due to potentially blowing up to rounded line segments.
+            static double fNumberOfAllowedSnippets(6553.5 * 2.0);
+            const double fAllowedLength((fNumberOfAllowedSnippets * fDotDashLength) / double(rDotDashArray.size()));
+            const double fCandidateLength(basegfx::utils::getLength(rCandidate));
+            std::vector<double> aDotDashArray(rDotDashArray);
 
-                // iterate over all edges
-                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+            if(fCandidateLength > fAllowedLength)
+            {
+                // we would produce more than fNumberOfAllowedSnippets, so
+                // adapt aDotDashArray to exactly produce assumed number. Also
+                // assert this to let the caller know about it.
+                // If this asserts: Please think about checking your DotDashArray
+                // before calling this function or evtl. use the callback version
+                // to *not* produce that much of data. Even then, you may still
+                // think about producing too much runtime (!)
+                assert(true && "applyLineDashing: potentially too expensive to do the requested dismantle - please consider stretched LineDash pattern (!)");
+
+                // calculate correcting factor, apply to aDotDashArray and fDotDashLength
+                // to enlarge these as needed
+                const double fFactor(fCandidateLength / fAllowedLength);
+                std::for_each(aDotDashArray.begin(), aDotDashArray.end(), [&fFactor](double &f){ f *= fFactor; });
+                fDotDashLength *= fFactor;
+            }
+
+            // prepare current edge's start
+            B3DPoint aCurrentPoint(rCandidate.getB3DPoint(0));
+            const bool bIsClosed(rCandidate.isClosed());
+            const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
+
+            // prepare DotDashArray iteration and the line/gap switching bool
+            sal_uInt32 nDotDashIndex(0);
+            bool bIsLine(true);
+            double fDotDashMovingLength(aDotDashArray[0]);
+            B3DPolygon aSnippet;
+
+            // remember 1st and last snippets to try to merge after execution
+            // is complete and hand to callback
+            B3DPolygon aFirstLine, aLastLine;
+
+            // iterate over all edges
+            for(sal_uInt32 a(0); a < nEdgeCount; a++)
+            {
+                // update current edge
+                const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
+                const double fEdgeLength(B3DVector(aNextPoint - aCurrentPoint).getLength());
+
+                if(!fTools::equalZero(fEdgeLength))
                 {
-                    // update current edge
-                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
-                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                    const double fEdgeLength(B3DVector(aNextPoint - aCurrentPoint).getLength());
-
-                    if(!fTools::equalZero(fEdgeLength))
+                    double fLastDotDashMovingLength(0.0);
+                    while(fTools::less(fDotDashMovingLength, fEdgeLength))
                     {
-                        double fLastDotDashMovingLength(0.0);
-                        while(fTools::less(fDotDashMovingLength, fEdgeLength))
-                        {
-                            // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
-                            const bool bHandleLine(bIsLine && pLineTarget);
-
-                            if(bHandleLine)
-                            {
-                                if(!aSnippet.count())
-                                {
-                                    aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
-                                }
-
-                                aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
-
-                                pLineTarget->append(aSnippet);
-
-                                aSnippet.clear();
-                            }
-
-                            // prepare next DotDashArray step and flip line/gap flag
-                            fLastDotDashMovingLength = fDotDashMovingLength;
-                            fDotDashMovingLength += rDotDashArray[(++nDotDashIndex) % nDotDashCount];
-                            bIsLine = !bIsLine;
-                        }
-
-                        // append snippet [fLastDotDashMovingLength, fEdgeLength]
-                        const bool bHandleLine(bIsLine && pLineTarget);
+                        // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
+                        const bool bHandleLine(bIsLine && aLineTargetCallback);
 
                         if(bHandleLine)
                         {
@@ -164,56 +259,54 @@ namespace basegfx::utils
                                 aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
                             }
 
-                            aSnippet.append(aNextPoint);
+                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fDotDashMovingLength / fEdgeLength));
+
+                            implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
+
+                            aSnippet.clear();
                         }
 
-                        // prepare move to next edge
-                        fDotDashMovingLength -= fEdgeLength;
+                        // prepare next DotDashArray step and flip line/gap flag
+                        fLastDotDashMovingLength = fDotDashMovingLength;
+                        fDotDashMovingLength += aDotDashArray[(++nDotDashIndex) % nDotDashCount];
+                        bIsLine = !bIsLine;
                     }
 
-                    // prepare next edge step (end point gets new start point)
-                    aCurrentPoint = aNextPoint;
-                }
+                    // append snippet [fLastDotDashMovingLength, fEdgeLength]
+                    const bool bHandleLine(bIsLine && aLineTargetCallback);
 
-                // append last intermediate results (if exists)
-                if(aSnippet.count())
-                {
-                    if(bIsLine && pLineTarget)
+                    if(bHandleLine)
                     {
-                        pLineTarget->append(aSnippet);
-                    }
-                }
-
-                // check if start and end polygon may be merged
-                if(pLineTarget)
-                {
-                    const sal_uInt32 nCount(pLineTarget->count());
-
-                    if(nCount > 1)
-                    {
-                        // these polygons were created above, there exists none with less than two points,
-                        // thus direct point access below is allowed
-                        const B3DPolygon aFirst(pLineTarget->getB3DPolygon(0));
-                        B3DPolygon aLast(pLineTarget->getB3DPolygon(nCount - 1));
-
-                        if(aFirst.getB3DPoint(0).equal(aLast.getB3DPoint(aLast.count() - 1)))
+                        if(!aSnippet.count())
                         {
-                            // start of first and end of last are the same -> merge them
-                            aLast.append(aFirst);
-                            aLast.removeDoublePoints();
-                            pLineTarget->setB3DPolygon(0, aLast);
-                            pLineTarget->remove(nCount - 1);
+                            aSnippet.append(interpolate(aCurrentPoint, aNextPoint, fLastDotDashMovingLength / fEdgeLength));
                         }
+
+                        aSnippet.append(aNextPoint);
                     }
+
+                    // prepare move to next edge
+                    fDotDashMovingLength -= fEdgeLength;
+                }
+
+                // prepare next edge step (end point gets new start point)
+                aCurrentPoint = aNextPoint;
+            }
+
+            // append last intermediate results (if exists)
+            if(aSnippet.count())
+            {
+                const bool bHandleLine(bIsLine && aLineTargetCallback);
+
+                if(bHandleLine)
+                {
+                    implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
                 }
             }
-            else
+
+            if(bIsClosed && aLineTargetCallback)
             {
-                // parameters make no sense, just add source to targets
-                if(pLineTarget)
-                {
-                    pLineTarget->append(rCandidate);
-                }
+                implHandleFirstLast(aLineTargetCallback, aFirstLine, aLastLine);
             }
         }
 
