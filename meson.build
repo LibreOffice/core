@@ -23,6 +23,7 @@ add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
 
 lex_bin = find_program('flex')
 bison_bin = find_program('bison')
+xslt_bin = find_program('xsltproc')
 
 thread_dep = dependency('threads')
 dl_dep = cpp.find_library('dl', required: false)
@@ -58,3 +59,5 @@ subdir('eventattacher')
 subdir('tools')
 subdir('remotebridges')
 subdir('binaryurp')
+subdir('officecfg')
+subdir('unotools')
