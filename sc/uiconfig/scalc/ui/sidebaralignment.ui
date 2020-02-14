@@ -459,4 +459,10 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="leftindent"/>
+      <widget name="orientationdegrees"/>
+    </widgets>
+  </object>
 </interface>
