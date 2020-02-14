@@ -140,6 +140,7 @@ public:
     void testTdf128432();
     void testTdf128627();
     void testTdf128634();
+    void testTdf130657();
     void testDeletedDataLabel();
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
@@ -241,6 +242,7 @@ public:
     CPPUNIT_TEST(testTdf128432);
     CPPUNIT_TEST(testTdf128627);
     CPPUNIT_TEST(testTdf128634);
+    CPPUNIT_TEST(testTdf130657);
     CPPUNIT_TEST(testDeletedDataLabel);
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
@@ -2110,6 +2112,21 @@ void Chart2ImportTest::testTdf128634()
 {
     load("/chart2/qa/extras/data/xlsx/", "tdf128634.xlsx");
     // Test ShiftedCategoryPosition for 3D Charts
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
+}
+
+void Chart2ImportTest::testTdf130657()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf130657.xlsx");
+    // Test ShiftedCategoryPosition for charts which is not contain a "crossbetween" OOXML tag.
     uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
