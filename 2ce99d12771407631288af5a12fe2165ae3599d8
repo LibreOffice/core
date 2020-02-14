@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6ddc3f6_26ed8a6d",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2062,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2020-02-14T09:32:05Z",
+      "side": 0,
+      "message": "I have currently no means to test this, but does the original bug remain fixed?",
+      "revId": "2ce99d12771407631288af5a12fe2165ae3599d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
