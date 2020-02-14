@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/lineend.hxx>
+#include <svtools/unitconv.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <swtypes.hxx>
 #include <labimp.hxx>
@@ -388,24 +389,23 @@ IMPL_LINK_NOARG(SwLabPage, TypeHdl, weld::ComboBox&, void)
 
 void SwLabPage::DisplayFormat()
 {
-    ScopedVclPtrInstance< MetricField > aField(Application::GetDefDialogParent(), WinBits(0));
-    FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*aField, aMetric);
-    aField->SetDecimalDigits(2);
-    aField->SetMin         (0);
-    aField->SetMax         (LONG_MAX);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
+    std::unique_ptr<weld::MetricSpinButton> xField(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
+    SetFieldUnit(*xField, ::GetDfltMetric(false));
+    xField->set_digits(2);
+    xField->set_range(0, INT_MAX - 1, FieldUnit::NONE);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.m_aLstType = pRec->m_aType;
-    SETFLDVAL(*aField, pRec->m_nWidth);
-    aField->Reformat();
-    const OUString aWString = aField->GetText();
+    setfldval(*xField, pRec->m_nWidth);
+    xField->reformat();
+    const OUString aWString = xField->get_text();
 
-    SETFLDVAL(*aField, pRec->m_nHeight);
-    aField->Reformat();
+    setfldval(*xField, pRec->m_nHeight);
+    xField->reformat();
 
     OUString aText = pRec->m_aType + ": " + aWString +
-           " x " + aField->GetText() +
+           " x " + xField->get_text() +
            " (" + OUString::number( pRec->m_nCols ) +
            " x " + OUString::number( pRec->m_nRows ) + ")";
     m_xFormatInfo->set_label(aText);
