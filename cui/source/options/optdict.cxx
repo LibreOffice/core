@@ -686,6 +686,8 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
             bool bTmpSelEntry=false;
             CDE_RESULT eCmpRes = CDE_DIFFERENT;
 
+            bool bDoubleColumn = m_pWordsLB == m_xDoubleColumnLB.get();
+
             for (int i = 0, nCount = m_pWordsLB->n_children(); i < nCount; ++i)
             {
                 OUString aTestStr(m_pWordsLB->get_text(i, 0));
@@ -697,7 +699,8 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
                     bDoNothing=true;
                     m_pWordsLB->set_cursor(i);
                     bDoNothing=false;
-                    m_xReplaceED->set_text(m_pWordsLB->get_text(i, 1));
+                    if (bDoubleColumn)
+                        m_xReplaceED->set_text(m_pWordsLB->get_text(i, 1));
 
                     if (CDE_SIMILAR == eCmpRes)
                     {
