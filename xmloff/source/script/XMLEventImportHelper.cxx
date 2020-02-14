@@ -99,8 +99,6 @@ void XMLEventImportHelper::PopTranslationTable()
 
 SvXMLImportContext* XMLEventImportHelper::CreateContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rXmlEventName,
@@ -132,7 +130,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
         {
             // delegate to factory
             pContext = aFactoryIterator->second->CreateContext(
-                rImport, nPrefix, rLocalName, xAttrList,
+                rImport, xAttrList,
                 rEvents, aNameIter->second);
         }
     }
@@ -140,7 +138,7 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     // default context (if no context was created above)
     if( nullptr == pContext )
     {
-        pContext = new SvXMLImportContext(rImport, nPrefix, rLocalName);
+        pContext = new SvXMLImportContext(rImport);
 
         Sequence<OUString> aMsgParams(2);
 

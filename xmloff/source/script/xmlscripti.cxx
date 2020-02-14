@@ -122,26 +122,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::crea
             return new XMLScriptChildContext( GetImport(), m_xModel, aLanguage );
         }
     }
-    return nullptr;
-}
-
-SvXMLImportContextRef XMLScriptContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLName,
-    const Reference<XAttributeList>& /*xAttrList*/ )
-{
-    SvXMLImportContextRef xContext;
-
-    if ( nPrefix == XML_NAMESPACE_OFFICE )
+    else if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
-        if ( IsXMLToken( rLName, XML_EVENT_LISTENERS ) )
-        {
-            Reference< XEventsSupplier> xSupplier( GetImport().GetModel(), UNO_QUERY );
-            xContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
-        }
+        Reference< XEventsSupplier> xSupplier( GetImport().GetModel(), UNO_QUERY );
+        return new XMLEventsImportContext( GetImport(), xSupplier );
     }
 
-    return xContext;
+    return nullptr;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

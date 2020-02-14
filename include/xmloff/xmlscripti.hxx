@@ -38,11 +38,6 @@ public:
                       const css::uno::Reference< css::frame::XModel>& rDocModel );
     virtual ~XMLScriptContext() override;
 
-    // Create child element.
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 

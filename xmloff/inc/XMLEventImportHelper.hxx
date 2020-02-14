@@ -84,8 +84,6 @@ public:
     /// create an appropriate import context for a particular event
     SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList,
         XMLEventsImportContext* rEvents,
         const OUString& rXmlEventName,
