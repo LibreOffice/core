@@ -112,7 +112,7 @@ public:
     const SvXMLTokenMap& GetSeriesAttrTokenMap();
     const SvXMLTokenMap& GetRegEquationAttrTokenMap();
 
-    static sal_uInt16 GetChartFamilyID() { return XML_STYLE_FAMILY_SCH_CHART_ID; }
+    static XmlStyleFamily GetChartFamilyID() { return XmlStyleFamily::SCH_CHART_ID; }
 
     /** @param bPushLastChartType If </sal_False>, in case a new chart type has to
                be added (because it does not exist yet), it is appended at the

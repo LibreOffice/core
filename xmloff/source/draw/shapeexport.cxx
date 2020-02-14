@@ -191,12 +191,12 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 */
 
     mrExport.GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+        XmlStyleFamily::SD_GRAPHICS_ID,
         XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
         GetPropertySetMapper(),
         XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
     mrExport.GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_PRESENTATION_ID,
+        XmlStyleFamily::SD_PRESENTATION_ID,
         XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
         GetPropertySetMapper(),
         XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
@@ -359,7 +359,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                         OUString aFamilyName;
                         xStylePropSet->getPropertyValue("Family") >>= aFamilyName;
                         if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
-                            aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+                            aShapeInfo.mnFamily = XmlStyleFamily::SD_PRESENTATION_ID;
                     }
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -370,7 +370,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 }
 
                 // get parent-style name
-                if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == aShapeInfo.mnFamily)
+                if(XmlStyleFamily::SD_PRESENTATION_ID == aShapeInfo.mnFamily)
                 {
                     aParentName = msPresentationStylePrefix;
                 }
@@ -491,11 +491,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
             if( nCount )
             {
-                aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aPropStates );
+                aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XmlStyleFamily::TEXT_PARAGRAPH, "", aPropStates );
                 if(aShapeInfo.msTextStyleName.isEmpty())
                 {
                     // Style did not exist, add it to AutoStalePool
-                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aPropStates);
+                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TEXT_PARAGRAPH, "", aPropStates);
                 }
             }
         }
@@ -683,7 +683,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // export style name
     if( !aShapeInfo.msStyleName.isEmpty() )
     {
-        if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
+        if(XmlStyleFamily::SD_GRAPHICS_ID == aShapeInfo.mnFamily)
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
         else
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
@@ -1023,12 +1023,12 @@ void XMLShapeExport::exportAutoStyles()
 
     // ...for graphic
     {
-        GetExport().GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID );
+        GetExport().GetAutoStylePool()->exportXML( XmlStyleFamily::SD_GRAPHICS_ID );
     }
 
     // ...for presentation
     {
-        GetExport().GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_PRESENTATION_ID );
+        GetExport().GetAutoStylePool()->exportXML( XmlStyleFamily::SD_PRESENTATION_ID );
     }
 
     if( mxShapeTableExport.is() )
@@ -1338,7 +1338,7 @@ void XMLShapeExport::ExportGraphicDefaults()
                 aStEx->exportDefaultStyle( xDefaults, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx->exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx->exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, false, XmlStyleFamily::SD_GRAPHICS_ID);
             }
         }
         catch(const lang::ServiceNotRegisteredException&)

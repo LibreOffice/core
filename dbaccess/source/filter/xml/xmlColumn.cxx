@@ -124,7 +124,7 @@ void OXMLColumn::endFastElement(sal_Int32 )
                 if ( pAutoStyles )
                 {
                     OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(
-                        dynamic_cast< const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,m_sStyleName)));
+                        dynamic_cast< const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_COLUMN,m_sStyleName)));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(xProp);
@@ -136,7 +136,7 @@ void OXMLColumn::endFastElement(sal_Int32 )
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(dynamic_cast<const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName)));
+                    OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(dynamic_cast<const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL,m_sCellStyleName)));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(xProp);
@@ -153,7 +153,7 @@ void OXMLColumn::endFastElement(sal_Int32 )
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
         if ( pAutoStyles )
         {
-            OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(dynamic_cast< const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName)));
+            OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(dynamic_cast< const OTableStyleContext* >(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL,m_sCellStyleName)));
             if ( pAutoStyle )
             {
                 // we also have to do this on the table to import text-properties

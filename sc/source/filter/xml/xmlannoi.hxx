@@ -27,16 +27,17 @@
 #include <vector>
 
 class ScXMLImport;
+enum class XmlStyleFamily;
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
 
 struct ScXMLAnnotationStyleEntry
 {
-    sal_uInt16 const          mnFamily;
-    OUString const       maName;
-    ESelection const          maSelection;
+    XmlStyleFamily       mnFamily;
+    OUString             maName;
+    ESelection           maSelection;
 
-    ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const OUString& rNam, const ESelection& rSel ) :
+    ScXMLAnnotationStyleEntry( XmlStyleFamily nFam, const OUString& rNam, const ESelection& rSel ) :
         mnFamily( nFam ),
         maName( rNam ),
         maSelection( rSel )
@@ -89,7 +90,7 @@ public:
         const css::uno::Reference< css::drawing::XShapes >& rxShapes,
         const OUString& rStyleName, const OUString& rTextStyle );
 
-    void AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection );
+    void AddContentStyle( XmlStyleFamily nFamily, const OUString& rName, const ESelection& rSelection );
 
 private:
     ScXMLAnnotationData& mrAnnotationData;

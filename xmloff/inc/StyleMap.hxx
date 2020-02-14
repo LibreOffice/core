@@ -26,13 +26,15 @@
 #include <boost/functional/hash.hpp>
 #include <unordered_map>
 
+enum class XmlStyleFamily;
+
 struct StyleNameKey_Impl
 {
-    sal_uInt16 const m_nFamily;
-    OUString const m_aName;
+    XmlStyleFamily m_nFamily;
+    OUString       m_aName;
 
-    StyleNameKey_Impl( sal_uInt16 nFamily,
-                               const OUString& rName ) :
+    StyleNameKey_Impl( XmlStyleFamily nFamily,
+                       const OUString& rName ) :
         m_nFamily( nFamily ),
         m_aName( rName )
     {

@@ -216,7 +216,7 @@ void OXMLCell::endFastElement(sal_Int32)
         m_xComponent = xFixedLine.get();
         m_pContainer->getSection()->add(m_xComponent.get());
         m_pContainer->addCell(m_xComponent);
-        XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(GetImport().GetAutoStyles()->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sStyleName)));
+        XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(GetImport().GetAutoStyles()->FindStyleChildContext(XmlStyleFamily::TABLE_CELL,m_sStyleName)));
         if ( pAutoStyle )
         {
             uno::Reference<beans::XPropertySet> xBorderProp = OXMLHelper::createBorderPropertySet();
