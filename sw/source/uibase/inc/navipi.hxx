@@ -97,7 +97,7 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
     DECL_LINK( ChangePageHdl, Timer*, void );
-    DECL_LINK( PageEditModifyHdl, SpinField&, void );
+    DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
     void UsePage();
 
 protected:

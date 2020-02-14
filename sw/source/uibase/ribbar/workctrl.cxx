@@ -714,15 +714,16 @@ IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
 
     switch ( nCode )
     {
         case KEY_TAB:
         {
+            static_cast<ToolBox*>(GetParent())->ChangeHighlightUpDn( aKeyCode.IsShift() );
             m_bRelease = false;
-            SelectHdl(*m_xWidget);
-            break;
+            [[fallthrough]];
         }
         case KEY_RETURN:
         {
@@ -736,7 +737,7 @@ IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             break;
     }
 
-    return bHandled || ChildKeyInput(rKEvt);
+    return bHandled;
 }
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )

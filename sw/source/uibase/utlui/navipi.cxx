@@ -185,16 +185,15 @@ void SwNavigationPI::UsePage()
 {
     SwView *pView = GetCreateView();
     SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
-    GetPageEdit().SetValue(1);
+    GetPageEdit().set_value(1);
     if (pSh)
     {
         const sal_uInt16 nPageCnt = pSh->GetPageCnt();
         sal_uInt16 nPhyPage, nVirPage;
         pSh->GetPageNum(nPhyPage, nVirPage);
 
-        GetPageEdit().SetMax(nPageCnt);
-        GetPageEdit().SetLast(nPageCnt);
-        GetPageEdit().SetValue(nPhyPage);
+        GetPageEdit().set_max(nPageCnt);
+        GetPageEdit().set_value(nPhyPage);
     }
 }
 
@@ -397,7 +396,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
     {
         if(m_aPageChgIdle.IsActive())
             m_aPageChgIdle.Stop();
-        m_pCreateView->GetWrtShell().GotoPage(static_cast<sal_uInt16>(rEdit.GetValue()), true);
+        m_pCreateView->GetWrtShell().GotoPage(rEdit.get_value(), true);
         m_pCreateView->GetEditWin().GrabFocus();
         m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }
@@ -414,8 +413,7 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, Control&, rControl, void )
     SwWrtShell &rSh = pView->GetWrtShell();
 
     const sal_uInt16 nPageCnt = rSh.GetPageCnt();
-    pEdit->SetMax(nPageCnt);
-    pEdit->SetLast(nPageCnt);
+    pEdit->set_max(nPageCnt);
 }
 
 void SwNavigationPI::ZoomOut()
@@ -543,15 +541,11 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_aDocListBox->setMaxWidthChars(20);
 
     // Insert the numeric field in the toolbox.
-    m_xEdit = VclPtr<NumEditAction>::Create(
-                    m_aContentToolBox.get(), WB_BORDER|WB_TABSTOP|WB_LEFT|WB_REPEAT|WB_SPIN);
-    m_xEdit->SetMin(1);
-    m_xEdit->SetFirst(1);
+    m_xEdit = VclPtr<NumEditAction>::Create(m_aContentToolBox.get());
     m_xEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     m_xEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
     m_xEdit->SetAccessibleName(m_xEdit->GetQuickHelpText());
-    m_xEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-    m_xEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    m_xEdit->connect_value_changed(LINK(this, SwNavigationPI, PageEditModifyHdl));
 
     // Double separators are not allowed, so you have to
     // determine the suitable size differently.
@@ -559,7 +553,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     tools::Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
-    Size aOptimalSize(m_xEdit->CalcMinimumSizeForText(m_xEdit->CreateFieldText(9999)));
+    Size aOptimalSize(m_xEdit->GetSizePixel());
     aItemWinSize.setWidth( std::max(aItemWinSize.Width(), aOptimalSize.Width()) );
     m_xEdit->SetSizePixel(aItemWinSize);
     m_aContentToolBox->InsertSeparator(4);
@@ -1078,7 +1072,7 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, weld::SpinButton&, void)
 {
     if (m_aPageChgIdle.IsActive())
         m_aPageChgIdle.Stop();

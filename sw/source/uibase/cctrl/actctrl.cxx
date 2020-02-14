@@ -18,38 +18,44 @@
  */
 
 #include <actctrl.hxx>
+#include <svx/dlgctrl.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 
-bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
+NumEditAction::NumEditAction(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/swriter/ui/spinbox.ui", "SpinBox")
+    , m_xWidget(m_xBuilder->weld_spin_button("spin"))
+{
+    m_xWidget->connect_key_press(LINK(this, NumEditAction, KeyInputHdl));
+    limitWidthForSidebar(*m_xWidget);
+    SetSizePixel(m_xWidget->get_preferred_size());
+}
+
+IMPL_LINK(NumEditAction, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    const sal_uInt16 aCode = aKeyCode.GetCode();
+    const sal_uInt16 nModifier = aKeyCode.GetModifier();
+    if( aCode == KEY_RETURN &&
+            !nModifier)
     {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const sal_uInt16 aCode = aKeyCode.GetCode();
-        const sal_uInt16 nModifier = aKeyCode.GetModifier();
-        if( aCode == KEY_RETURN &&
-                !nModifier)
+        aActionLink.Call( *this );
+        bHandled = true;
+    }
+    else
+    {
+        vcl::Window* pParent = GetParent();
+        if ( pParent != nullptr && aCode == KEY_TAB &&
+             pParent->GetType() == WindowType::TOOLBOX )
         {
-            aActionLink.Call( *this );
+            static_cast<ToolBox*>(pParent)->ChangeHighlightUpDn( aKeyCode.IsShift() );
             bHandled = true;
         }
-        else
-        {
-            vcl::Window* pParent = GetParent();
-            if ( pParent != nullptr && aCode == KEY_TAB &&
-                 pParent->GetType() == WindowType::TOOLBOX )
-            {
-                static_cast<ToolBox*>(pParent)->ChangeHighlightUpDn( aKeyCode.IsShift() );
-                bHandled = true;
-            }
-        }
     }
-    if(!bHandled)
-        bHandled = NumericField::EventNotify(rNEvt);
+
     return bHandled;
 }
 
