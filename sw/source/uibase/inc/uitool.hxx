@@ -19,12 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 
-#include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <swtypes.hxx>
 #include <swdllapi.h>
 
-class MetricFormatter;
 class SfxItemSet;
 class SwPageDesc;
 class SvxTabStopItem;
@@ -37,9 +35,6 @@ class SwTabCols;
 class DateTime;
 class SfxViewFrame;
 class SwEditShell;
-
-// switch a metric
-SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 
 // fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
