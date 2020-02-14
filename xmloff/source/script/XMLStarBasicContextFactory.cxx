@@ -48,8 +48,6 @@ XMLStarBasicContextFactory::~XMLStarBasicContextFactory()
 
 SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     SvXMLImport& rImport,
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rApiEventName)
@@ -110,7 +108,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     rEvents->AddEventValues(rApiEventName, aValues);
 
     // return dummy context
-    return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
+    return new SvXMLImportContext(rImport);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

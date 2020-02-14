@@ -39,8 +39,6 @@ public:
 
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
-        sal_uInt16 nPrefix,                 /// element: namespace prefix
-        const OUString& rLocalName,  /// element: local name
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList,/// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
