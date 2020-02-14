@@ -29,7 +29,7 @@
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/flagsdef.hxx>
@@ -734,7 +734,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         if( bWidthEq )
         {
             // Determine the width first as some styles can be missing depending on it
-            sal_Int64 nWidthPt =  static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+            sal_Int64 nWidthPt =  static_cast<sal_Int64>(vcl::ConvertDoubleValue(
                         sal_Int64( nWidth ), m_xLineWidthMF->get_digits(),
                         MapUnit::MapTwip, FieldUnit::POINT ));
             m_xLineWidthMF->set_value(nWidthPt, FieldUnit::POINT);
@@ -1158,7 +1158,7 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, void)
 {
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
                 nVal,
                 m_xLineWidthMF->get_digits(),
                 FieldUnit::POINT, MapUnit::MapTwip ));
@@ -1171,7 +1171,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, weld::MetricSpinButton&, 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 {
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
                 nVal,
                 m_xLineWidthMF->get_digits(),
                 FieldUnit::POINT, MapUnit::MapTwip ));
@@ -1352,7 +1352,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     }
 
     sal_Int64 nVal = m_xLineWidthMF->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(nVal, m_xLineWidthMF->get_digits(),
+    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(nVal, m_xLineWidthMF->get_digits(),
                                                                   m_xLineWidthMF->get_unit(), MapUnit::MapTwip));
     m_xLbLineStyle->SetWidth( nVal );
 }

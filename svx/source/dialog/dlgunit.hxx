@@ -20,13 +20,14 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_DLGUNIT_HXX
 
+#include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 
 inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
     OUStringBuffer aVal = OUString::number(
-        MetricField::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
+        vcl::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
 
     while( aVal.getLength() < 3 )
         aVal.insert( 0, "0" );

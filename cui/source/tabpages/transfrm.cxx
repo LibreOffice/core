@@ -38,6 +38,7 @@
 #include <svl/rectitem.hxx>
 #include <swpossizetabpage.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/fieldvalues.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -1289,7 +1290,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         }
     }
 
-    const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
+    const double fMaxLong(static_cast<double>(vcl::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
     fLeft = std::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = std::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = std::clamp(fTop, - fMaxLong, fMaxLong);

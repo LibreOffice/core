@@ -448,32 +448,6 @@ public:
     void             SetLast(sal_Int64 last) { SetLast(last, FieldUnit::NONE); }
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
-    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
-                                          FieldUnit eInUnit, FieldUnit eOutUnit );
-    static sal_Int64        ConvertValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
-                                          MapUnit eInUnit, FieldUnit eOutUnit );
-
-    // for backwards compatibility
-    // caution: conversion to double loses precision
-    static double           ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
-                                                FieldUnit eInUnit, FieldUnit eOutUnit );
-    static double           ConvertDoubleValue( double nValue, sal_uInt16 nDecDigits,
-                                                FieldUnit eInUnit, MapUnit eOutUnit );
-    static double           ConvertDoubleValue( double nValue, sal_uInt16 nDecDigits,
-                                                MapUnit eInUnit, FieldUnit eOutUnit );
-
-    // for backwards compatibility
-    // caution: conversion to double loses precision
-    static double           ConvertDoubleValue( sal_Int64 nValue, sal_Int64 nBaseValue, sal_uInt16 nDecDigits,
-                                                FieldUnit eInUnit, FieldUnit eOutUnit )
-    { return ConvertDoubleValue( static_cast<double>(nValue), nBaseValue, nDecDigits, eInUnit, eOutUnit ); }
-    static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
-                                                FieldUnit eInUnit, MapUnit eOutUnit )
-    { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
-    static double           ConvertDoubleValue( sal_Int64 nValue, sal_uInt16 nDecDigits,
-                                                MapUnit eInUnit, FieldUnit eOutUnit )
-    { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
-
     virtual bool            set_property(const OString &rKey, const OUString &rValue) override;
     virtual void            dispose() override;
 
