@@ -126,7 +126,10 @@ namespace vclcanvas
     {
 #if OSL_DEBUG_LEVEL > 0
         // inverse defaults for verbose debug mode
-        mbShowSpriteBounds = mbShowFrameInfo = true;
+        mbShowFrameInfo = true;
+        // this looks like drawing errors, enable only if explicitly asked for
+        static bool enableShowSpriteBounds = getenv("CANVAS_SPRITE_BOUNDS") != nullptr;
+        mbShowSpriteBounds = enableShowSpriteBounds;
 #endif
     }
 
