@@ -146,7 +146,8 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         :   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
-        ,   m_bIsTerminated         ( false                                     )   // see dispose() for further information!
+    , m_bIsTerminated(false)
+    , m_bIsShutdown(false)   // see dispose() for further information!
         ,   m_bSession              ( false                                         )
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
@@ -175,7 +176,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
-    SAL_WARN_IF( !m_bIsTerminated, "fwk.desktop", "Desktop not terminated before being destructed" );
+    SAL_WARN_IF(!m_bIsShutdown, "fwk.desktop", "Desktop not terminated before being destructed");
     SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk.desktop", "Desktop::~Desktop(): Who forgot to dispose this service?" );
 }
 
@@ -198,8 +199,10 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  )
 sal_Bool SAL_CALL Desktop::terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    SolarMutexResettableGuard aGuard;
 
-    SolarMutexClearableGuard aReadLock;
+    if (m_bIsTerminated)
+        return true;
 
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
     css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
@@ -209,35 +212,22 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
     bool                                                  bAskQuickStart     = !m_bSuspendQuickstartVeto;
+    const bool bRestartableMainLoop = Application::IsEventTestingModeEnabled() ||
+                                      comphelper::LibreOfficeKit::isActive();
+    aGuard.clear();
 
-    aReadLock.clear();
-
-    // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    bool bRestartableMainLoop = Application::IsEventTestingModeEnabled() ||
-                                comphelper::LibreOfficeKit::isActive();
-    bool bFramesClosed = impl_closeFrames(!bRestartableMainLoop);
 
-    // Ask normal terminate listener. They could stop terminating the process.
+    // Ask normal terminate listener. They could veto terminating the process.
     Desktop::TTerminateListenerList lCalledTerminationListener;
-    bool bVeto = false;
-    impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
-    if ( bVeto )
+    if (!impl_sendQueryTerminationEvent(lCalledTerminationListener))
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
         return false;
     }
 
-    if (bRestartableMainLoop)
-    {
-#ifndef IOS // or ANDROID?
-        // In the iOS app, posting the ImplQuitMsg user event will be too late, it will not be handled during the
-        // lifetime of the current document, but handled for the next document opened, which thus will break horribly.
-        Application::Quit();
-#endif
-        return true;
-    }
-    if ( ! bFramesClosed )
+    // try to close all open frames
+    if (!impl_closeFrames(!bRestartableMainLoop))
     {
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
         return false;
@@ -259,7 +249,6 @@ sal_Bool SAL_CALL Desktop::terminate()
     // but some can be dangerous. E.g. it would be dangerous if we close our pipe
     // and don't terminate in real because another listener throws a veto exception .-)
 
-    bool bTerminate = false;
     try
     {
         if( bAskQuickStart && xQuickLauncher.is() )
@@ -291,42 +280,33 @@ sal_Bool SAL_CALL Desktop::terminate()
             xSfxTerminator->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xSfxTerminator );
         }
-
-        bTerminate = true;
     }
     catch(const css::frame::TerminationVetoException&)
     {
-        bTerminate = false;
+        impl_sendCancelTerminationEvent(lCalledTerminationListener);
+        return false;
     }
 
-    if ( ! bTerminate )
-        impl_sendCancelTerminationEvent(lCalledTerminationListener);
-    else
+    aGuard.reset();
+    if (m_bIsTerminated)
+        return true;
+    m_bIsTerminated = true;
+
+    if (!bRestartableMainLoop)
     {
-        // "Protect" us against dispose before terminate calls!
-        // see dispose() for further information.
-        /* SAFE AREA --------------------------------------------------------------------------------------- */
-        SolarMutexClearableGuard aWriteLock;
         CrashReporter::addKeyValue("ShutDown", OUString::boolean(true), CrashReporter::Write);
-        m_bIsTerminated = true;
-        aWriteLock.clear();
-        /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
         // The clipboard listener needs to be the first. It can create copies of the
         // existing document which needs basically all the available infrastructure.
+        impl_sendTerminateToClipboard();
         {
-            SolarMutexResettableGuard aGuard;
-            impl_sendTerminateToClipboard();
-            aGuard.clear();
+            SolarMutexReleaser aReleaser;
             impl_sendNotifyTerminationEvent();
-            aGuard.reset();
-            Scheduler::ProcessEventsToIdle();
         }
+        Scheduler::ProcessEventsToIdle();
 
         if( bAskQuickStart && xQuickLauncher.is() )
-        {
             xQuickLauncher->notifyTermination( aEvent );
-        }
 
         if ( xStarBasicQuitGuard.is() )
             xStarBasicQuitGuard->notifyTermination( aEvent );
@@ -337,22 +317,44 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
-        // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
-        std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
-        xComponentDllListeners.swap(m_xComponentDllListeners);
-        for (auto& xListener : xComponentDllListeners)
-        {
-            xListener->notifyTermination(aEvent);
-        }
-        xComponentDllListeners.clear();
-
-        // Must be really the last listener to be called.
-        // Because it shutdown the whole process asynchronous !
-        if ( xSfxTerminator.is() )
-            xSfxTerminator->notifyTermination( aEvent );
+        // further termination is postponed to shutdown
     }
+    else
+        m_bIsShutdown = true;
 
-    return bTerminate;
+#ifndef IOS // or ANDROID?
+    aGuard.clear();
+    // In the iOS app, posting the ImplQuitMsg user event will be too late, it will not be handled during the
+    // lifetime of the current document, but handled for the next document opened, which thus will break horribly.
+    Application::Quit();
+#endif
+
+    return true;
+}
+
+void Desktop::shutdown()
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_HARDEXCEPTIONS);
+    SolarMutexGuard aGuard;
+
+    if (m_bIsShutdown)
+        return;
+    m_bIsShutdown = true;
+
+    css::uno::Reference<css::frame::XTerminateListener> xSfxTerminator = m_xSfxTerminator;
+    css::lang::EventObject aEvent(static_cast<::cppu::OWeakObject* >(this));
+
+    // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
+    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
+    xComponentDllListeners.swap(m_xComponentDllListeners);
+    for (auto& xListener : xComponentDllListeners)
+        xListener->notifyTermination(aEvent);
+    xComponentDllListeners.clear();
+
+    // Must be really the last listener to be called.
+    // Because it shuts down the whole process asynchronous!
+    if (xSfxTerminator.is())
+        xSfxTerminator->notifyTermination(aEvent);
 }
 
 namespace
@@ -1058,7 +1060,7 @@ void SAL_CALL Desktop::disposing()
 
     // But if you just ignore the assertion (which happens in unit
     // tests for instance in sc/qa/unit) nothing bad happens.
-    SAL_WARN_IF( !m_bIsTerminated, "fwk.desktop", "Desktop disposed before terminating it" );
+    SAL_WARN_IF(!m_bIsShutdown, "fwk.desktop", "Desktop disposed before terminating it");
 
     {
         SolarMutexGuard aWriteLock;
@@ -1555,16 +1557,13 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     return xComponent;
 }
 
-void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
-                                             bool&                      bVeto          )
+bool Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener)
 {
-    bVeto = false;
-
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
-        return;
+        return true;
 
     css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
 
@@ -1581,9 +1580,8 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
         }
         catch( const css::frame::TerminationVetoException& )
         {
-            // first veto will stop notification loop.
-            bVeto = true;
-            return;
+            // first veto will stop the query loop.
+            return false;
         }
         catch( const css::uno::Exception& )
         {
@@ -1593,6 +1591,8 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
             aIterator.remove();
         }
     }
+
+    return true;
 }
 
 void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
