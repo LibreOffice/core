@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDesktopInternal.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTask.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -89,6 +90,7 @@ enum ELoadState
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
+           css::frame::XDesktopInternal,
            css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
@@ -283,6 +285,8 @@ class Desktop final : private cppu::BaseMutex,
         /// @throws css::uno::RuntimeException
         bool terminateQuickstarterToo();
 
+        virtual void SAL_CALL shutdown() override;
+
     private:
 
         //  OPropertySetHelper
@@ -311,14 +315,11 @@ class Desktop final : private cppu::BaseMutex,
          *          Those list will be used to inform all called listener
          *          about cancel this termination request.
          *
-         *  @param  [out] bVeto
-         *          will be true if at least one listener threw a veto exception;
-         *          false otherwise.
+         *  @return true if no one vetoed the termination.
          *
          *  @see    impl_sendCancelTerminationEvent()
          */
-        void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
-                                            bool&             bVeto          );
+        bool impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener);
 
         /** calls cancelTermination() on every termination listener
          *  where queryTermination() was called before.
@@ -373,10 +374,14 @@ class Desktop final : private cppu::BaseMutex,
 
         mutable TransactionManager    m_aTransactionManager;
 
+        /** check flag to protect against multiple terminate runs
+          */
+        bool m_bIsTerminated;
+
         /** check flag to protect us against dispose before terminate!
           *   see dispose() for further information!
           */
-        bool m_bIsTerminated;
+        bool m_bIsShutdown;
 
         /** when true, the call came from session manager
           *   the method is Desktop::terminateQuickstarterToo()
