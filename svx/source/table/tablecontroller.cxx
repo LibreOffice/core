@@ -2796,14 +2796,24 @@ bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
     // copy cell contents
     for( sal_Int32 nRow = 0; nRow < nPasteRows; ++nRow )
     {
-        for( sal_Int32 nCol = 0; nCol < nPasteColumns; ++nCol )
+        for( sal_Int32 nCol = 0, nTargetCol = aStart.mnCol; nCol < nPasteColumns; ++nCol )
         {
-            CellRef xTargetCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( aStart.mnCol + nCol, aStart.mnRow + nRow ).get() ) );
+            CellRef xTargetCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nTargetCol, aStart.mnRow + nRow ).get() ) );
             if( xTargetCell.is() && !xTargetCell->isMerged() )
             {
-                xTargetCell->AddUndo();
-                xTargetCell->cloneFrom( dynamic_cast< Cell* >( xPasteTable->getCellByPosition( nCol, nRow ).get() ) );
-                nCol += xTargetCell->getColumnSpan() - 1;
+                CellRef xSourceCell(dynamic_cast<Cell*>(xPasteTable->getCellByPosition(nCol, nRow).get()));
+                if (xSourceCell.is())
+                {
+                    xTargetCell->AddUndo();
+                    // Prevent cell span exceeding the pasting range.
+                    if (nColumns < nTargetCol + xSourceCell->getColumnSpan())
+                        xTargetCell->replaceContentAndFormating(xSourceCell);
+                    else
+                        xTargetCell->cloneFrom(xSourceCell);
+
+                    nCol += xSourceCell->getColumnSpan() - 1;
+                    nTargetCol += xTargetCell->getColumnSpan();
+                }
             }
         }
     }
