@@ -3612,7 +3612,7 @@
           <value xml:lang="en-US">Protect Bookmarks</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Protect bookarks in current document</value>
+          <value xml:lang="en-US">Protect bookmarks in current document</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
