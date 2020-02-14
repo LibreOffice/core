@@ -23,7 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
@@ -3253,7 +3253,7 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 IMPL_LINK( SvxRuler, MenuSelect, Menu *, pMenu, bool )
 {
     /* Handler of the context menus for switching the unit of measurement */
-    SetUnit(MetricFormatter::StringToMetric(OUString::fromUtf8(pMenu->GetCurItemIdent())));
+    SetUnit(vcl::StringToMetric(OUString::fromUtf8(pMenu->GetCurItemIdent())));
     return false;
 }
 
@@ -3332,7 +3332,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             {
                 sal_uInt16 nId = aMenu->GetItemId(i - 1);
                 OString sIdent = aMenu->GetItemIdent(nId);
-                FieldUnit eMenuUnit = MetricFormatter::StringToMetric(OUString::fromUtf8(sIdent));
+                FieldUnit eMenuUnit = vcl::StringToMetric(OUString::fromUtf8(sIdent));
                 aMenu->CheckItem(nId, eMenuUnit == eUnit);
                 if( bReduceMetric )
                 {

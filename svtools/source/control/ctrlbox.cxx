@@ -1180,7 +1180,7 @@ int FontSizeBox::get_value() const
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     double fResult(0.0);
-    (void)MetricFormatter::TextToValue(aStr, fResult, 0, GetDecimalDigits(), rLocaleData, GetUnit());
+    (void)vcl::TextToValue(aStr, fResult, 0, GetDecimalDigits(), rLocaleData, GetUnit());
     if (!aStr.isEmpty())
     {
         if (fResult < nMin)
