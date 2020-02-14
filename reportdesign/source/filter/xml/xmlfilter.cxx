@@ -674,7 +674,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > RptXMLDocumentBodyCont
         const SvXMLStylesContext* pAutoStyles = rImport.GetAutoStyles();
         if (pAutoStyles)
         {
-            XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER, "pm1")));
+            XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext *>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::PAGE_MASTER, "pm1")));
             if (pAutoStyle)
             {
                 pAutoStyle->FillPropertySet(rImport.getReportDefinition().get());

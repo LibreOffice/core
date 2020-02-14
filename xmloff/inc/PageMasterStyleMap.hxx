@@ -88,7 +88,7 @@
 // Need own entries for PageMasterStyleMap since these get *filtered*
 // at export time using CTF_PM_FLAGMASK and XML_PM_CTF_START as detector
 // to find the first entry for header/footer (!), see
-// SvXMLAutoStylePoolP_Impl::exportXML, look for XML_STYLE_FAMILY_PAGE_MASTER
+// SvXMLAutoStylePoolP_Impl::exportXML, look for XmlStyleFamily::PAGE_MASTER
 #define CTF_PM_REPEAT_OFFSET_X          (XML_PM_CTF_START + 0x0037)
 #define CTF_PM_REPEAT_OFFSET_Y          (XML_PM_CTF_START + 0x0038)
 #define CTF_PM_FILLGRADIENTNAME         (XML_PM_CTF_START + 0x0039)

@@ -59,14 +59,14 @@ namespace
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
         SvXMLAttributeList&,
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&
         ) const
 {
-    if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
+    if ( XmlStyleFamily::CONTROL_ID == nFamily )
     {   // it's a control-related style
         const rtl::Reference< XMLPropertySetMapper >& aPropertyMapper = rPropExp.getPropertySetMapper();
 
@@ -81,7 +81,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 
-    if( (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily) || (XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily) )
+    if( (XmlStyleFamily::SD_GRAPHICS_ID == nFamily) || (XmlStyleFamily::SD_PRESENTATION_ID == nFamily) )
     {   // it's a graphics style
         const rtl::Reference< XMLPropertySetMapper >& aPropertyMapper = rPropExp.getPropertySetMapper();
         assert(aPropertyMapper.is());
@@ -137,7 +137,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 
-    if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
+    if( nFamily == XmlStyleFamily::PAGE_MASTER )
     {
         for( const auto& rProp : rProperties )
         {
@@ -169,14 +169,14 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
 void SvXMLAutoStylePoolP::exportStyleContent(
         const css::uno::Reference< css::xml::sax::XDocumentHandler > &,
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&
         ) const
 {
-    if( nFamily != XML_STYLE_FAMILY_PAGE_MASTER )
+    if( nFamily != XmlStyleFamily::PAGE_MASTER )
         return;
 
     sal_Int32       nHeaderStartIndex(-1);
@@ -271,7 +271,7 @@ SvXMLExport& SvXMLAutoStylePoolP::GetExport() const
 
 // TODO: remove this
 void SvXMLAutoStylePoolP::AddFamily(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const OUString& rStrName,
         SvXMLExportPropertyMapper* pMapper,
         const OUString& aStrPrefix )
@@ -281,7 +281,7 @@ void SvXMLAutoStylePoolP::AddFamily(
 }
 
 void SvXMLAutoStylePoolP::AddFamily(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const OUString& rStrName,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper,
         const OUString& rStrPrefix,
@@ -291,19 +291,19 @@ void SvXMLAutoStylePoolP::AddFamily(
 }
 
 void  SvXMLAutoStylePoolP::SetFamilyPropSetMapper(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
 {
     pImpl->SetFamilyPropSetMapper( nFamily, rMapper );
 }
 
-void SvXMLAutoStylePoolP::RegisterName( sal_Int32 nFamily,
+void SvXMLAutoStylePoolP::RegisterName( XmlStyleFamily nFamily,
                                          const OUString& rName )
 {
     pImpl->RegisterName( nFamily, rName );
 }
 
-void SvXMLAutoStylePoolP::RegisterDefinedName( sal_Int32 nFamily,
+void SvXMLAutoStylePoolP::RegisterDefinedName( XmlStyleFamily nFamily,
                                          const OUString& rName )
 {
     pImpl->RegisterDefinedName( nFamily, rName );
@@ -327,10 +327,10 @@ void SvXMLAutoStylePoolP::RegisterNames(
     const OUString* pNames = aNames.getConstArray();
     sal_Int32 nCount = min( aFamilies.getLength(), aNames.getLength() );
     for( sal_Int32 n = 0; n < nCount; n++ )
-        RegisterName( pFamilies[n], pNames[n] );
+        RegisterName( static_cast<XmlStyleFamily>(pFamilies[n]), pNames[n] );
 }
 
-OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
+OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
                                   const vector< XMLPropertyState >& rProperties )
 {
     OUString sName;
@@ -338,7 +338,7 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
     return sName;
 }
 
-OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
+OUString SvXMLAutoStylePoolP::Add( XmlStyleFamily nFamily,
                                   const OUString& rParent,
                                   const vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
@@ -347,26 +347,26 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
     return sName;
 }
 
-bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+bool SvXMLAutoStylePoolP::Add(OUString& rName, XmlStyleFamily nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
 {
     return pImpl->Add(rName, nFamily, rParent, rProperties);
 }
 
-bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
+bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, XmlStyleFamily nFamily, const OUString& rParent,
                                         const ::std::vector< XMLPropertyState >& rProperties )
 
 {
     return pImpl->AddNamed(rName, nFamily, rParent, rProperties);
 }
 
-OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
+OUString SvXMLAutoStylePoolP::Find( XmlStyleFamily nFamily,
                                    const OUString& rParent,
                                    const vector< XMLPropertyState >& rProperties ) const
 {
     return pImpl->Find( nFamily, rParent, rProperties );
 }
 
-void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily ) const
+void SvXMLAutoStylePoolP::exportXML( XmlStyleFamily nFamily ) const
 {
     pImpl->exportXML( nFamily, this );
 }

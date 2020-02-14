@@ -57,7 +57,7 @@ namespace rptxml
         OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-                SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
+                SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OControlStyleContext() override;
 
@@ -95,13 +95,13 @@ namespace rptxml
 
         // Create a style context.
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
-                sal_uInt16 nFamily,
+                XmlStyleFamily nFamily,
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-                sal_uInt16 nFamily, sal_uInt16 nPrefix,
+                XmlStyleFamily nFamily, sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -117,10 +117,10 @@ namespace rptxml
         virtual void EndElement() override;
 
         virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-                            sal_uInt16 nFamily ) const override;
+                            XmlStyleFamily nFamily ) const override;
         virtual css::uno::Reference< css::container::XNameContainer >
-            GetStylesContainer( sal_uInt16 nFamily ) const override;
-        virtual OUString GetServiceName( sal_uInt16 nFamily ) const override;
+            GetStylesContainer( XmlStyleFamily nFamily ) const override;
+        virtual OUString GetServiceName( XmlStyleFamily nFamily ) const override;
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };

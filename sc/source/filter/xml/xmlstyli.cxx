@@ -372,7 +372,7 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             if( IsXMLToken(aLocalName, XML_CONDITION ) )
                 msCondition = rValue;
             else if( IsXMLToken(aLocalName, XML_APPLY_STYLE_NAME ) )
-                msApplyStyle = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, rValue);
+                msApplyStyle = GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, rValue);
             else if ( IsXMLToken(aLocalName, XML_BASE_CELL_ADDRESS ) )
                 msBaseCell = rValue;
         }
@@ -426,7 +426,7 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle ) :
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sDataStyleName(),
     pStyles(&rStyles),
@@ -529,21 +529,21 @@ void XMLTableStyleContext::FillPropertySet(
 {
     if (!IsDefaultStyle())
     {
-        if (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL)
+        if (GetFamily() == XmlStyleFamily::TABLE_CELL)
         {
             if (!bParentSet)
             {
-                AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, GetParentName() )));
+                AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, GetParentName() )));
                 bParentSet = true;
             }
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
                 AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
         }
-        else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
+        else if (GetFamily() == XmlStyleFamily::TABLE_TABLE)
         {
             if (!sPageStyle.isEmpty())
-                AddProperty(CTF_SC_MASTERPAGENAME, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle )));
+                AddProperty(CTF_SC_MASTERPAGENAME, uno::makeAny(GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sPageStyle )));
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -551,7 +551,7 @@ void XMLTableStyleContext::FillPropertySet(
 
 void XMLTableStyleContext::SetDefaults()
 {
-    if ((GetFamily() == XML_STYLE_FAMILY_TABLE_CELL) && GetImport().GetModel().is())
+    if ((GetFamily() == XmlStyleFamily::TABLE_CELL) && GetImport().GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetImport().GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
@@ -600,14 +600,14 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     if (nNumberFormat < 0 && !sDataStyleName.isEmpty())
     {
         const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
-            pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, true));
+            pStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, sDataStyleName, true));
 
         if (!pStyle)
         {
             XMLTableStylesContext* pMyStyles = static_cast<XMLTableStylesContext*>(GetScImport().GetStyles());
             if (pMyStyles)
                 pStyle = static_cast<const SvXMLNumFormatContext*>(
-                    pMyStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, true));
+                    pMyStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, sDataStyleName, true));
             else
             {
                 OSL_FAIL("not possible to get style");
@@ -620,12 +620,12 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
 }
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle;
     // use own wrapper for text and paragraph, to record style usage
-    if (nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH || nFamily == XML_STYLE_FAMILY_TEXT_TEXT)
+    if (nFamily == XmlStyleFamily::TEXT_PARAGRAPH || nFamily == XmlStyleFamily::TEXT_TEXT)
         pStyle = new ScCellTextStyleContext( GetImport(), nPrefix, rLocalName,
                                             xAttrList, *this, nFamily );
     else
@@ -636,13 +636,14 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_CELL:
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
-        case XML_STYLE_FAMILY_TABLE_ROW:
-        case XML_STYLE_FAMILY_TABLE_TABLE:
+        case XmlStyleFamily::TABLE_CELL:
+        case XmlStyleFamily::TABLE_COLUMN:
+        case XmlStyleFamily::TABLE_ROW:
+        case XmlStyleFamily::TABLE_TABLE:
             pStyle = new XMLTableStyleContext( GetScImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
             break;
+        default: break;
         }
     }
 
@@ -650,7 +651,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily, nPrefix,
@@ -660,14 +661,15 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
     {
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
                 pStyle = new XMLTableStyleContext( GetScImport(), nPrefix, rLocalName,
                                             xAttrList, *this, nFamily, true);
             break;
-            case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+            case XmlStyleFamily::SD_GRAPHICS_ID:
                 pStyle = new XMLGraphicsDefaultStyle( GetScImport(), nPrefix, rLocalName,
                                             xAttrList, *this);
             break;
+            default: break;
         }
     }
 
@@ -705,7 +707,7 @@ void XMLTableStylesContext::EndElement()
 
 rtl::Reference < SvXMLImportPropertyMapper >
     XMLTableStylesContext::GetImportPropertyMapper(
-                    sal_uInt16 nFamily ) const
+                    XmlStyleFamily nFamily ) const
 {
     rtl::Reference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
 
@@ -713,7 +715,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
     {
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
             {
                 if( !xCellImpPropMapper.is() )
                 {
@@ -724,7 +726,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = xCellImpPropMapper;
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
             {
                 if( !xColumnImpPropMapper.is() )
                     const_cast<XMLTableStylesContext *>(this)->xColumnImpPropMapper =
@@ -732,7 +734,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = xColumnImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_ROW:
+            case XmlStyleFamily::TABLE_ROW:
             {
                 if( !xRowImpPropMapper.is() )
                     const_cast<XMLTableStylesContext *>(this)->xRowImpPropMapper =
@@ -740,7 +742,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = xRowImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
             {
                 if( !xTableImpPropMapper.is() )
                     const_cast<XMLTableStylesContext *>(this)->xTableImpPropMapper =
@@ -748,6 +750,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 xMapper = xTableImpPropMapper;
             }
              break;
+            default: break;
         }
     }
 
@@ -755,7 +758,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 uno::Reference < XNameContainer >
-        XMLTableStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
+        XMLTableStylesContext::GetStylesContainer( XmlStyleFamily nFamily ) const
 {
     uno::Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
@@ -763,7 +766,7 @@ uno::Reference < XNameContainer >
         OUString sName;
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
             {
                 if( xTableStyles.is() )
                     xStyles.set(xTableStyles);
@@ -771,7 +774,7 @@ uno::Reference < XNameContainer >
                     sName = "TableStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
             {
                 if( xCellStyles.is() )
                     xStyles.set(xCellStyles);
@@ -779,7 +782,7 @@ uno::Reference < XNameContainer >
                     sName = "CellStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
             {
                 if( xColumnStyles.is() )
                     xStyles.set(xColumnStyles);
@@ -787,7 +790,7 @@ uno::Reference < XNameContainer >
                     sName = "ColumnStyles";
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_ROW:
+            case XmlStyleFamily::TABLE_ROW:
             {
                 if( xRowStyles.is() )
                     xStyles.set(xRowStyles);
@@ -795,6 +798,7 @@ uno::Reference < XNameContainer >
                     sName = "RowStyles";
             }
             break;
+            default: break;
         }
         if( !xStyles.is() && !sName.isEmpty() && GetScImport().GetModel().is() )
         {
@@ -816,18 +820,19 @@ uno::Reference < XNameContainer >
                 }
                 switch( nFamily )
                 {
-                case XML_STYLE_FAMILY_TABLE_TABLE:
+                case XmlStyleFamily::TABLE_TABLE:
                     const_cast<XMLTableStylesContext *>(this)->xTableStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_CELL:
+                case XmlStyleFamily::TABLE_CELL:
                     const_cast<XMLTableStylesContext *>(this)->xCellStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_COLUMN:
+                case XmlStyleFamily::TABLE_COLUMN:
                     const_cast<XMLTableStylesContext *>(this)->xColumnStyles.set(xStyles);
                     break;
-                case XML_STYLE_FAMILY_TABLE_ROW:
+                case XmlStyleFamily::TABLE_ROW:
                     const_cast<XMLTableStylesContext *>(this)->xRowStyles.set(xStyles);
                     break;
+                default: break;
                 }
             }
         }
@@ -836,25 +841,26 @@ uno::Reference < XNameContainer >
     return xStyles;
 }
 
-OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+OUString XMLTableStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
 {
     OUString sServiceName(SvXMLStylesContext::GetServiceName(nFamily));
     if (sServiceName.isEmpty())
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XmlStyleFamily::TABLE_COLUMN:
             sServiceName = gsColumnStyleServiceName;
             break;
-        case XML_STYLE_FAMILY_TABLE_ROW:
+        case XmlStyleFamily::TABLE_ROW:
             sServiceName = gsRowStyleServiceName;
             break;
-        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XmlStyleFamily::TABLE_CELL:
             sServiceName = gsCellStyleServiceName;
             break;
-        case XML_STYLE_FAMILY_TABLE_TABLE:
+        case XmlStyleFamily::TABLE_TABLE:
             sServiceName = gsTableStyleServiceName;
             break;
+        default: break;
         }
     }
     return sServiceName;
@@ -866,28 +872,28 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
     {
         if (nCellStyleIndex == -1)
             nCellStyleIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nCellStyleIndex;
     }
     else if (nContextID == CTF_SC_NUMBERFORMAT)
     {
         if (nNumberFormatIndex == -1)
             nNumberFormatIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nNumberFormatIndex;
     }
     else if (nContextID == CTF_SC_IMPORT_MAP)
     {
         if (nConditionalFormatIndex == -1)
             nConditionalFormatIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_CELL)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nConditionalFormatIndex;
     }
     else if (nContextID == CTF_SC_MASTERPAGENAME)
     {
         if (nMasterPageNameIndex == -1)
                 nMasterPageNameIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return nMasterPageNameIndex;
     }
     else
@@ -895,7 +901,7 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
 }
 
 
-bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool ScXMLMasterStylesContext::InsertStyleFamily( XmlStyleFamily ) const
 {
     return true;
 }
@@ -918,7 +924,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 
     if( (XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_MASTER_PAGE) &&
-         InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+         InsertStyleFamily( XmlStyleFamily::MASTER_PAGE ) )
         pContext = new ScMasterPageContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
                         !GetImport().GetTextImport()->IsInsertMode() );
@@ -929,7 +935,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 /* nFamily */,
+        XmlStyleFamily /* nFamily */,
         sal_uInt16 /* nPrefix */,
         const OUString& /* rLocalName */,
         const uno::Reference< XAttributeList > & /* xAttrList */ )
@@ -1010,7 +1016,7 @@ void ScMasterPageContext::Finish( bool bOverwrite )
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
+            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
     XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false/*bDefaultStyle*/ ),
     nLastSheet(-1)
 {

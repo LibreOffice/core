@@ -173,7 +173,7 @@ void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& 
     mrAnnotationData.maTextStyle = rTextStyle;
 }
 
-void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection )
+void ScXMLAnnotationContext::AddContentStyle( XmlStyleFamily nFamily, const OUString& rName, const ESelection& rSelection )
 {
     mrAnnotationData.maContentStyles.emplace_back( nFamily, rName, rSelection );
 }
