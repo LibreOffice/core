@@ -28,6 +28,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
@@ -46,13 +47,17 @@ class SfxChildWindowContext;
 enum class RegionMode;
 class SpinField;
 
-class SwNavigationPI : public PanelLayout,
-                       public SfxControllerItem, public SfxListener
+class SwNavigationPI : public PanelLayout
+                     , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+                     , public SfxListener
 {
     friend class SwNavigationChild;
     friend class SwContentTree;
     friend class SwGlobalTree;
     friend class SwNavigationPIUIObject;
+
+    ::sfx2::sidebar::ControllerItem m_aDocFullName;
+    ::sfx2::sidebar::ControllerItem m_aPageStats;
 
     VclPtr<sfx2::sidebar::SidebarToolBox> m_aContentToolBox;
     VclPtr<ToolBox>             m_aGlobalToolBox;
@@ -93,7 +98,6 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( ToolBoxClickHdl, ToolBox *, void );
     DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
     DECL_LINK( EditAction, NumEditAction&, void );
-    DECL_LINK( EditGetFocus, Control&, void );
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
     DECL_LINK( ChangePageHdl, Timer*, void );
@@ -123,8 +127,9 @@ public:
     void            UpdateListBox();
     void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget, bool bWithCilds);
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                            const SfxPoolItem* pState ) override;
+    virtual void    NotifyItemUpdate(const sal_uInt16 nSId,
+                                     const SfxItemState eState,
+                                     const SfxPoolItem* pState) override;
 
     virtual void    StateChanged(StateChangedType nStateChange) override;
 
