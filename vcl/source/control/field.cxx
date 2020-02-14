@@ -1052,23 +1052,26 @@ static OUString ImplMetricToString( FieldUnit rUnit )
     return OUString();
 }
 
-FieldUnit MetricFormatter::StringToMetric(const OUString &rMetricString)
+namespace vcl
 {
-    // return FieldUnit
-    OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
-    for (auto const& elem : ImplGetCleanedFieldUnits())
+    FieldUnit StringToMetric(const OUString &rMetricString)
     {
-        if ( elem.first == aStr )
-            return elem.second;
-    }
+        // return FieldUnit
+        OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
+        for (auto const& elem : ImplGetCleanedFieldUnits())
+        {
+            if ( elem.first == aStr )
+                return elem.second;
+        }
 
-    return FieldUnit::NONE;
+        return FieldUnit::NONE;
+    }
 }
 
 static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 {
     OUString aStr = ImplMetricGetUnitText(rStr);
-    return MetricFormatter::StringToMetric(aStr);
+    return vcl::StringToMetric(aStr);
 }
 
 #define K *1000L
@@ -1357,27 +1360,30 @@ namespace vcl
     }
 }
 
-bool MetricFormatter::TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
-                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit)
+namespace vcl
 {
-    // Get value
-    sal_Int64 nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
-        return false;
+    bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+                     sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit)
+    {
+        // Get value
+        sal_Int64 nValue;
+        if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
+            return false;
 
-    // Determine unit
-    FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
+        // Determine unit
+        FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
 
-    // Recalculate unit
-    // caution: conversion to double loses precision
-    rValue = vcl::ConvertDoubleValue(static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit);
+        // Recalculate unit
+        // caution: conversion to double loses precision
+        rValue = vcl::ConvertDoubleValue(static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit);
 
-    return true;
+        return true;
+    }
 }
 
 void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
-    if ( !TextToValue( rStr, rValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
+    if (!vcl::TextToValue(rStr, rValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         return;
 
     double nTempVal = rValue;
@@ -1476,7 +1482,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
 {
     double nTempValue;
     // caution: precision loss in double cast
-    if (!TextToValue(rStr, nTempValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
+    if (!vcl::TextToValue(rStr, nTempValue, 0, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit))
         nTempValue = static_cast<double>(mnLastValue);
 
     // caution: precision loss in double cast

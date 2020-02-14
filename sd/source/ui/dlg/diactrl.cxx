@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -116,7 +116,7 @@ IMPL_LINK(SdPagesField, spin_button_input, int*, result, bool)
 {
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
     double fResult(0.0);
-    bool bRet = MetricFormatter::TextToValue(m_xWidget->get_text(), fResult, 0, m_xWidget->get_digits(), rLocaleData, FieldUnit::NONE);
+    bool bRet = vcl::TextToValue(m_xWidget->get_text(), fResult, 0, m_xWidget->get_digits(), rLocaleData, FieldUnit::NONE);
     if (bRet)
     {
         if (fResult > SAL_MAX_INT32)
