@@ -21,36 +21,29 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 
-bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
+NumEditAction::NumEditAction(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/swriter/ui/spinbox.ui", "SpinBox")
+    , m_xWidget(m_xBuilder->weld_spin_button("spin"))
 {
-    bool bHandled = false;
+    m_xWidget->connect_key_press(LINK(this, NumEditAction, KeyInputHdl));
+    limitWidth();
+    SetSizePixel(m_xContainer->get_preferred_size());
+}
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const sal_uInt16 aCode = aKeyCode.GetCode();
-        const sal_uInt16 nModifier = aKeyCode.GetModifier();
-        if( aCode == KEY_RETURN &&
-                !nModifier)
-        {
-            aActionLink.Call( *this );
-            bHandled = true;
-        }
-        else
-        {
-            vcl::Window* pParent = GetParent();
-            if ( pParent != nullptr && aCode == KEY_TAB &&
-                 pParent->GetType() == WindowType::TOOLBOX )
-            {
-                static_cast<ToolBox*>(pParent)->ChangeHighlightUpDn( aKeyCode.IsShift() );
-                bHandled = true;
-            }
-        }
-    }
-    if(!bHandled)
-        bHandled = NumericField::EventNotify(rNEvt);
-    return bHandled;
+void NumEditAction::limitWidth()
+{
+    m_xWidget->set_width_chars(3);
+}
+
+void NumEditAction::set_max(int nMax)
+{
+    m_xWidget->set_max(nMax);
+    limitWidth();
+}
+
+IMPL_LINK(NumEditAction, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

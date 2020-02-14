@@ -716,7 +716,8 @@ IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
 
     switch ( nCode )
     {

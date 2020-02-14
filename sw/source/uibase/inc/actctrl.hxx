@@ -19,24 +19,55 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_ACTCTRL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ACTCTRL_HXX
 
-#include <vcl/field.hxx>
+#include <sfx2/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 #include <swdllapi.h>
 
 // numerical input
-class NumEditAction: public NumericField
+class NumEditAction final : public InterimItemWindow
 {
-    Link<NumEditAction&,void> aActionLink;
+private:
+    std::unique_ptr<weld::SpinButton> m_xWidget;
 
-protected:
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    NumEditAction(vcl::Window* pParent, WinBits nBits)
-        : NumericField(pParent, nBits)
+    NumEditAction(vcl::Window* pParent);
+
+    virtual void dispose() override
     {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
     }
 
-    void        SetActionHdl( const Link<NumEditAction&,void>& rLink ) { aActionLink = rLink;}
+    virtual ~NumEditAction() override
+    {
+        disposeOnce();
+    }
+
+    void connect_value_changed(const Link<weld::SpinButton&, void>& rLink)
+    {
+        m_xWidget->connect_value_changed(rLink);
+    }
+
+    int get_value() const
+    {
+        return m_xWidget->get_value();
+    }
+
+    void set_value(int nValue)
+    {
+        m_xWidget->set_value(nValue);
+    }
+
+    void set_accessible_name(const OUString& rName)
+    {
+        m_xWidget->set_accessible_name(rName);
+    }
+
+    void set_max(int nMax);
+
+    void limitWidth();
 };
 
 #endif
