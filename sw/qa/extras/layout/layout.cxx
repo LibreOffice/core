@@ -37,6 +37,7 @@ public:
     void testRedlineSections();
     void testRedlineTables();
     void testRedlineCharAttributes();
+    void testRedlineShowHideFootnotePagination();
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST(testRedlineSections);
     CPPUNIT_TEST(testRedlineTables);
     CPPUNIT_TEST(testRedlineCharAttributes);
+    CPPUNIT_TEST(testRedlineShowHideFootnotePagination);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
@@ -2256,6 +2258,51 @@ void SwLayoutWriter::testRedlineCharAttributes()
     // why is this needed explicitly?
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
     CheckRedlineCharAttributesHidden();
+}
+
+void SwLayoutWriter::testRedlineShowHideFootnotePagination()
+{
+    createDoc("redline_footnote_pagination.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // check footnotes
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
+    // check that first page ends with the y line and second page starts with z
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+                "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
+                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+
+    // hide redlines - all still visible footnotes move to page 1
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 0);
+
+    // show again - should now get the same result as on loading
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // check footnotes
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
+    // check that first page ends with the y line and second page starts with z
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+                "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
+                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
 }
 
 void SwLayoutWriter::testTdf116830()
