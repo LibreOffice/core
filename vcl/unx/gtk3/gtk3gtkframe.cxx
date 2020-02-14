@@ -709,10 +709,15 @@ void GtkSalFrame::moveWindow( long nX, long nY )
 {
     if( isChild( false ) )
     {
-        if( m_pParent )
-            gtk_fixed_move( m_pParent->getFixedContainer(),
+        GtkWidget* pParent = m_pParent ? gtk_widget_get_parent(m_pWindow) : nullptr;
+        // tdf#130414 its possible that we were reparented and are no longer inside
+        // our original GtkFixed parent
+        if (pParent && GTK_IS_FIXED(pParent))
+        {
+            gtk_fixed_move( GTK_FIXED(pParent),
                             m_pWindow,
                             nX - m_pParent->maGeometry.nX, nY - m_pParent->maGeometry.nY );
+        }
     }
     else
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
@@ -1030,7 +1035,6 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
             // insert into container
             gtk_fixed_put( m_pParent->getFixedContainer(),
                            m_pWindow, 0, 0 );
-
         }
     }
     else
