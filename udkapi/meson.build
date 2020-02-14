@@ -1,8 +1,8 @@
 urbcompiler = find_program('urbcompiler.py')
 headerbuilder = find_program('headerbuilder.py')
 
-udkapi_urb = custom_target('udkapi_urb',
-  output: 'udkapi.urb',
+udkapi_rdb = custom_target('udkapi_rdb',
+  output: 'udkapi.rdb',
   command: [urbcompiler,
             unoidl_write_exe,
             meson.current_source_dir(),
@@ -15,7 +15,7 @@ udk_fake_h = custom_target('udkapi_h',
   output: 'udk_fake.h',
   command: [headerbuilder,
             cppumaker_exe,
-            udkapi_urb,
+            udkapi_rdb,
             '@OUTDIR@',
             '@PRIVATE_DIR@',
             '@OUTPUT@',
