@@ -185,16 +185,15 @@ void SwNavigationPI::UsePage()
 {
     SwView *pView = GetCreateView();
     SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
-    GetPageEdit().SetValue(1);
+    GetPageEdit().set_value(1);
     if (pSh)
     {
         const sal_uInt16 nPageCnt = pSh->GetPageCnt();
         sal_uInt16 nPhyPage, nVirPage;
         pSh->GetPageNum(nPhyPage, nVirPage);
 
-        GetPageEdit().SetMax(nPageCnt);
-        GetPageEdit().SetLast(nPageCnt);
-        GetPageEdit().SetValue(nPhyPage);
+        GetPageEdit().set_max(nPageCnt);
+        GetPageEdit().set_value(nPhyPage);
     }
 }
 
@@ -389,15 +388,14 @@ FactoryFunction SwNavigationPI::GetUITestFactory() const
 
 // Action-Handler Edit:
 // Switches to the page if the structure view is not turned on.
-
-IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
+void SwNavigationPI::EditAction()
 {
     SwView *pView = GetCreateView();
     if (pView)
     {
         if(m_aPageChgIdle.IsActive())
             m_aPageChgIdle.Stop();
-        m_pCreateView->GetWrtShell().GotoPage(static_cast<sal_uInt16>(rEdit.GetValue()), true);
+        m_pCreateView->GetWrtShell().GotoPage(GetPageEdit().get_value(), true);
         m_pCreateView->GetEditWin().GrabFocus();
         m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }
@@ -529,14 +527,9 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_aDocListBox->setMaxWidthChars(20);
 
     // Insert the numeric field in the toolbox.
-    m_xEdit = VclPtr<NumEditAction>::Create(
-                    m_aContentToolBox.get(), WB_BORDER|WB_TABSTOP|WB_LEFT|WB_REPEAT|WB_SPIN);
-    m_xEdit->SetMin(1);
-    m_xEdit->SetFirst(1);
-    m_xEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
-    m_xEdit->SetAccessibleName(m_xEdit->GetQuickHelpText());
-    m_xEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-    m_xEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    m_xEdit = VclPtr<NumEditAction>::Create(m_aContentToolBox.get());
+    m_xEdit->set_accessible_name(m_xEdit->GetQuickHelpText());
+    m_xEdit->connect_value_changed(LINK(this, SwNavigationPI, PageEditModifyHdl));
 
     // Double separators are not allowed, so you have to
     // determine the suitable size differently.
@@ -544,8 +537,9 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     tools::Rectangle aSecondRect = m_aContentToolBox->GetItemRect(m_aContentToolBox->GetItemId("header"));
     Size aItemWinSize( aFirstRect.Left() - aSecondRect.Left(),
                        aFirstRect.Bottom() - aFirstRect.Top() );
-    Size aOptimalSize(m_xEdit->CalcMinimumSizeForText(m_xEdit->CreateFieldText(9999)));
+    Size aOptimalSize(m_xEdit->GetSizePixel());
     aItemWinSize.setWidth( std::max(aItemWinSize.Width(), aOptimalSize.Width()) );
+    aItemWinSize.setHeight( std::max(aItemWinSize.Height(), aOptimalSize.Height()) );
     m_xEdit->SetSizePixel(aItemWinSize);
     m_aContentToolBox->InsertSeparator(4);
     m_aContentToolBox->InsertWindow( FN_PAGENUMBER, m_xEdit, ToolBoxItemBits::NONE, 4);
@@ -727,12 +721,10 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
         if(pActView)
         {
             SwWrtShell &rSh = pActView->GetWrtShell();
-            NumEditAction& rEdit = GetPageEdit();
-            const sal_uInt16 nPageCnt = rSh.GetPageCnt();
-            rEdit.SetMax(nPageCnt);
-            rEdit.SetLast(nPageCnt);
+            GetPageEdit().set_max(rSh.GetPageCnt());
         }
     }
+
 }
 
 void SwNavigationPI::StateChanged(StateChangedType nStateChange)
@@ -781,7 +773,8 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     {
         if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
         {
-            if (pHint->GetEventId() == SfxEventHintId::OpenDoc)
+            SfxEventHintId eEventId = pHint->GetEventId();
+            if (eEventId == SfxEventHintId::OpenDoc)
             {
                 SwView *pActView = GetCreateView();
                 if(pActView)
@@ -1068,12 +1061,12 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 {
     if (!IsDisposed())
     {
-        EditAction(GetPageEdit());
+        EditAction();
         GetPageEdit().GrabFocus();
     }
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, weld::SpinButton&, void)
 {
     if (m_aPageChgIdle.IsActive())
         m_aPageChgIdle.Stop();
