@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "579ab2d8_075e0d36",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-14T23:31:10Z",
+      "side": 1,
+      "message": "pass the default style\u0027s ui name to use in place of the hard coded \"Default Style\" used in the original sort code.",
+      "revId": "7d5270cae1e494fea01f11c64baf68a523e25bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e75a4151_3af8cb6e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-14T23:31:10Z",
+      "side": 1,
+      "message": "maybe return empty OUString() in this case?",
+      "range": {
+        "startLine": 1158,
+        "startChar": 0,
+        "endLine": 1158,
+        "endChar": 23
+      },
+      "revId": "7d5270cae1e494fea01f11c64baf68a523e25bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455b8652_2ad49ce3",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-14T23:31:10Z",
+      "side": 1,
+      "message": "Consider moving the code below to before the sort block above and adding the default style comparisons used in the sort lambda function in MakeTree_Impl to the sort lambda function here.\n\nThere doesn\u0027t seem need for SfxStringItem. OUString aFamilyName obtained from GetStyleFamilyName can be used by XNameAccess getByName. xStyles-\u003egetByName can use an OUString, maybe aStyleName, either \"Standard\" or \"Default Style\".\n\nThe usual practice I have seen used in LO code for local functions is to prepend lcl_ and declare static e.g. static lcl_GetStyleFamilyName",
+      "revId": "7d5270cae1e494fea01f11c64baf68a523e25bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3459b6bd_3bfc8898",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-14T23:31:10Z",
+      "side": 1,
+      "message": "Shouldn\u0027t have to do this. aUIName can be used in the sort lambda function for entry comparison",
+      "range": {
+        "startLine": 1287,
+        "startChar": 8,
+        "endLine": 1295,
+        "endChar": 13
+      },
+      "revId": "7d5270cae1e494fea01f11c64baf68a523e25bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
