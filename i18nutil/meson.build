@@ -1,0 +1,15 @@
+i18nutil_lib = shared_library('i18nutil',
+  'source/utility/casefolding.cxx',
+  'source/utility/oneToOneMapping.cxx',
+  'source/utility/paper.cxx',
+  'source/utility/scripttypedetector.cxx',
+  'source/utility/unicode.cxx',
+  'source/utility/widthfolding.cxx',
+  udk_fake_h, off_fake_h, system_hxx,
+  include_directories: [main_inc, udkh_inc, offapi_inc, setup_inc],
+  cpp_args: ['-DI18NUTIL_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  link_with: [utl_lib, i18nlangtag_lib, comphelper_lib, cppu_lib, sal_lib],
+  dependencies: [icuuc_dep, icu18_dep],
+)
+

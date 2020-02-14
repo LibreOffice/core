@@ -31,11 +31,17 @@ cppunit_dep = dependency('cppunit')
 main_inc = include_directories('include', 'config_host')
 langtag_dep = dependency('liblangtag')
 icuuc_dep = dependency('icu-uc')
+icu18_dep = dependency('icu-i18n')
 openssl_dep = dependency('openssl')
 zlib_dep = dependency('zlib')
 libxml_dep = dependency('libxml-2.0')
 
 cdata = configuration_data()
+
+# FIXME. Java does not provide .pc files.
+# Presumably this data can be obtained via other methods.
+jni_dep = declare_dependency(compile_args: ['-I/usr/lib/jvm/java-13-openjdk-amd64/include',
+                                            '-I/usr/lib/jvm/java-13-openjdk-amd64/include/linux'])
 
 subdir('config_host')
 subdir('sal')
@@ -62,3 +68,5 @@ subdir('binaryurp')
 subdir('officecfg')
 subdir('unotools')
 subdir('io')
+subdir('jvmfwk')
+subdir('i18nutil')
