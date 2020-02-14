@@ -21,13 +21,12 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vector>
 
-
 #define MIN_COLUMNWIDTH  2
-
 
 class ButtonFrame
 {

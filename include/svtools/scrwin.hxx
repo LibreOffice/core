@@ -21,10 +21,12 @@
 #define INCLUDED_SVTOOLS_SCRWIN_HXX
 
 #include <svtools/svtdllapi.h>
-#include <vcl/scrbar.hxx>
+#include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 
 class DataChangedEvent;
+class ScrollBar;
+class ScrollBarBox;
 
 class SVT_DLLPUBLIC ScrollableWindow: public vcl::Window
 {

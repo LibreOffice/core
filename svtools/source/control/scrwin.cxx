@@ -18,10 +18,10 @@
  */
 
 #include <svtools/scrwin.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-
+#include <vcl/settings.hxx>
+#include <vcl/scrbar.hxx>
 
 ScrollableWindow::ScrollableWindow( vcl::Window* pParent ) :
     Window( pParent, WB_CLIPCHILDREN ),

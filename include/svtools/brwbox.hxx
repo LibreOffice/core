@@ -20,7 +20,6 @@
 #define INCLUDED_SVTOOLS_BRWBOX_HXX
 
 #include <svtools/svtdllapi.h>
-#include <vcl/scrbar.hxx>
 #include <vcl/status.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/vclptr.hxx>
@@ -40,6 +39,7 @@
 class BrowserColumn;
 class BrowserDataWin;
 class BrowserHeader;
+class ScrollBar;
 
 namespace svt {
     class BrowseBoxImpl;
