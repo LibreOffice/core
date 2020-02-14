@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "301c0628_650e3c25",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-14T11:59:40Z",
+      "side": 1,
+      "message": "If no stylename is defined, then by definition it uses the default style, right?  So I think this should be:\nOUString sParaStyleName \u003d m_rDMapper_Impl.GetDefaultParaStyleName();\n[It seems in practice that every paragraph does specify a ParaStyleName. Still, for code-reading clarity it might be worth adding that in here.]",
+      "range": {
+        "startLine": 1083,
+        "startChar": 29,
+        "endLine": 1083,
+        "endChar": 43
+      },
+      "revId": "f15d67442972c5f69c71925a6bfa5aa1a39d54eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a4718a_1c07ed89",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-14T11:59:40Z",
+      "side": 1,
+      "message": "so you are setting direct-formattng here - copied from the style (if I read this correctly). Is that necessary to prevent the REAL SW table-style from overwriting it later on? \n\nProbably we need a comment somewhere here to clarify that SOME properties go into a WRITER table-style that applies later on, and the rest of the properties are from a DOCX tablestyle-definition which are applied as direct formatting (if I understand that correctly).",
+      "range": {
+        "startLine": 1107,
+        "startChar": 121,
+        "endLine": 1107,
+        "endChar": 131
+      },
+      "revId": "f15d67442972c5f69c71925a6bfa5aa1a39d54eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99400b80_d45b4572",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-14T11:59:40Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be at the beginning of the function?  Here it only runs if nothing is found.",
+      "range": {
+        "startLine": 871,
+        "startChar": 9,
+        "endLine": 871,
+        "endChar": 31
+      },
+      "revId": "f15d67442972c5f69c71925a6bfa5aa1a39d54eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bea2aa65_f9d993e4",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-14T11:59:40Z",
+      "side": 1,
+      "message": "You are hijacking a boolean and using it for two purposes here.\nWe have two sets of properties and we are merging them together. The property doesn\u0027t already exist, so copy it from the given map. Why does that make it a default? [The reason it works is because there is currently only one instance when bOverwrite\u003dfalse, and that call is specifically setting default values.]\n\nSince this is a general function, you probably need to make a specific function for the one instance where you are merging from a default source - in which case you know they are default properties.",
+      "range": {
+        "startLine": 341,
+        "startChar": 37,
+        "endLine": 341,
+        "endChar": 71
+      },
+      "revId": "f15d67442972c5f69c71925a6bfa5aa1a39d54eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06ca7d19_85533df5",
+        "filename": "writerfilter/source/dmapper/PropertyMap.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-14T11:59:40Z",
+      "side": 1,
+      "message": "This just doesn\u0027t sound logical... there shouldn\u0027t be any connection between overwriting and default.",
+      "range": {
+        "startLine": 162,
+        "startChar": 36,
+        "endLine": 162,
+        "endChar": 90
+      },
+      "revId": "f15d67442972c5f69c71925a6bfa5aa1a39d54eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
