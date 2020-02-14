@@ -35,6 +35,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <basegfx/range/b1drange.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtsrnd.hxx>
@@ -2696,6 +2697,9 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         long nYDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(getFramePrintArea()), rUpper );
         if( nYDiff > 0 )
             aRectFnSet.AddBottom( aRect, -nYDiff );
+
+        bool bAddVerticalFlyOffsets = rIDSA.get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
+
         for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
@@ -2723,7 +2727,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 bool bConsiderFly =
                     // #i46807# - do not consider invalid
                     // Writer fly frames.
-                    pFly->isFrameAreaDefinitionValid() &&
+                    (pFly->isFrameAreaDefinitionValid() || bAddVerticalFlyOffsets) &&
                     // fly anchored at character
                     pFly->IsFlyAtContentFrame() &&
                     // fly overlaps with corresponding table rectangle
@@ -2767,7 +2771,29 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 {
                     const SwFormatSurround   &rSur = pFly->GetFormat()->GetSurround();
                     const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
-                    if ( css::text::WrapTextMode_NONE == rSur.GetSurround() )
+                    bool bShiftDown = css::text::WrapTextMode_NONE == rSur.GetSurround();
+                    if (!bShiftDown && bAddVerticalFlyOffsets)
+                    {
+                        if (rSur.GetSurround() == text::WrapTextMode_PARALLEL
+                            && rHori.GetHoriOrient() == text::HoriOrientation::NONE)
+                        {
+                            // We know that wrapping was requested and the table frame overlaps with
+                            // the fly frame. Check if the print area overlaps with the fly frame as
+                            // well (in case the table does not use all the available width).
+                            basegfx::B1DRange aTabRange(
+                                aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea()),
+                                aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea())
+                                    + aRectFnSet.GetWidth(getFramePrintArea()));
+                            basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRect),
+                                                        aRectFnSet.GetRight(aFlyRect));
+                            // If it does, shift the table down. Do this only in the compat case,
+                            // normally an SwFlyPortion is created instead that increases the height
+                            // of the first table row.
+                            bShiftDown = aTabRange.overlaps(aFlyRange);
+                        }
+                    }
+
+                    if (bShiftDown)
                     {
                         long nBottom = aRectFnSet.GetBottom(aFlyRect);
                         if( aRectFnSet.YDiff( nPrtPos, nBottom ) < 0 )
