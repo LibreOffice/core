@@ -27,7 +27,6 @@
 #include <vcl/window.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/spinfld.hxx>
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
@@ -36,6 +35,7 @@
 
 class Button;
 class CheckBox;
+class SpinField;
 
 // EditBrowseBoxFlags (EBBF)
 
@@ -256,8 +256,8 @@ namespace svt
     {
     public:
         SpinCellController(SpinField* pSpinField);
-        const SpinField& GetSpinWindow() const { return static_cast<const SpinField &>(GetWindow()); }
-        SpinField& GetSpinWindow() { return static_cast<SpinField &>(GetWindow()); }
+        const SpinField& GetSpinWindow() const;
+        SpinField& GetSpinWindow();
 
         virtual void SetModified() override;
         virtual bool IsModified() const override;

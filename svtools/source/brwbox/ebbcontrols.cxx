@@ -18,6 +18,7 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/spinfld.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
@@ -454,6 +455,15 @@ namespace svt
         GetSpinWindow().SetModifyHdl( LINK(this, SpinCellController, ModifyHdl) );
     }
 
+    const SpinField& SpinCellController::GetSpinWindow() const
+    {
+        return static_cast<const SpinField &>(GetWindow());
+    }
+
+    SpinField& SpinCellController::GetSpinWindow()
+    {
+        return static_cast<SpinField &>(GetWindow());
+    }
 
     void SpinCellController::SetModified()
     {

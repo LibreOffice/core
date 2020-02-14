@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-05 19:55:24 using:
+ Generated on 2020-02-14 09:32:42 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -151,7 +151,6 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/spinfld.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
