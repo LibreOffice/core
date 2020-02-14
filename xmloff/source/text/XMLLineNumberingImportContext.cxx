@@ -59,7 +59,7 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG)
+:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_LINENUMBERINGCONFIG)
 ,   sNumFormat(GetXMLToken(XML_1))
 ,   sNumLetterSync(GetXMLToken(XML_FALSE))
 ,   nOffset(-1)
@@ -223,10 +223,10 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
 
             // set style name (if it exists)
             if ( GetImport().GetStyles()->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != nullptr )
+                            XmlStyleFamily::TEXT_TEXT, sStyleName ) != nullptr )
             {
                 aAny <<= GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName );
+                            XmlStyleFamily::TEXT_TEXT, sStyleName );
                 xLineNumbering->setPropertyValue(gsCharStyleName, aAny);
             }
 

@@ -28,6 +28,7 @@
 #include "address.hxx"
 
 class SvXMLNamespaceMap;
+enum class XmlStyleFamily;
 
 struct ScStreamEntry
 {
@@ -134,7 +135,7 @@ public:
     void        AddTableStyle( const OUString& rName, const ScAddress& rCellPos );
 
     void        HandleNoteStyles( const OUString& rStyleName, const OUString& rTextName, const ScAddress& rCellPos );
-    void        AddNoteContentStyle( sal_uInt16 nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
+    void        AddNoteContentStyle( XmlStyleFamily nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
 
     void        AddTextStyle( const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
 

@@ -121,7 +121,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     // based on the order used in this list.
     // Also need own defines for the used context flags (e.g. CTF_PM_FILLGRADIENTNAME instead of
     // CTF_FILLGRADIENTNAME) since these are used to *filter* up to which entry the attributes belong to the
-    // 'page-layout-properties' section (!), see SvXMLAutoStylePoolP_Impl::exportXML, look for XML_STYLE_FAMILY_PAGE_MASTER
+    // 'page-layout-properties' section (!), see SvXMLAutoStylePoolP_Impl::exportXML, look for XmlStyleFamily::PAGE_MASTER
     // note: these are duplicated below, in g_XMLPageMasterDrawingPageStyleMap
     PLMAP( "FillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  0 ),
     PLMAP( "FillColor",                     XML_NAMESPACE_DRAW,     XML_FILL_COLOR,             XML_TYPE_COLOR,                                         0 ),

@@ -77,7 +77,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             {
                 sMainEntryStyleName = rValue;
                 OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
-                    XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
+                    XmlStyleFamily::TEXT_TEXT, sMainEntryStyleName );
                 const Reference < css::container::XNameContainer >&
                     rStyles = GetImport().GetTextImport()->GetTextStyles();
                 bMainEntryStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
@@ -169,7 +169,7 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     if (bMainEntryStyleNameOK)
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
+                            XmlStyleFamily::TEXT_TEXT, sMainEntryStyleName );
         rIndexPropertySet->setPropertyValue("MainEntryCharacterStyleName",aAny);
     }
 

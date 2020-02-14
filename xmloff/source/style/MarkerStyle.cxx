@@ -130,7 +130,7 @@ void XMLMarkerStyleImport::importXML(
 
         if( !aDisplayName.isEmpty() )
         {
-            rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID, rStrName,
+            rImport.AddStyleDisplayName( XmlStyleFamily::SD_MARKER_ID, rStrName,
                                         aDisplayName );
             rStrName = aDisplayName;
         }

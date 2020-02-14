@@ -1461,7 +1461,7 @@ OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
     return sRet;
 }
 
-void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
+void SvXMLImport::AddStyleDisplayName( XmlStyleFamily nFamily,
                                        const OUString& rName,
                                        const OUString& rDisplayName )
 {
@@ -1488,11 +1488,11 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
     ::std::pair<StyleMap::iterator,bool> aRes( mpStyleMap->insert( aValue ) );
     SAL_WARN_IF( !aRes.second,
                  "xmloff.core",
-       "duplicate style name of family " << nFamily << ": \"" << rName << "\"");
+       "duplicate style name of family " << static_cast<int>(nFamily) << ": \"" << rName << "\"");
 
 }
 
-OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
+OUString SvXMLImport::GetStyleDisplayName( XmlStyleFamily nFamily,
                                            const OUString& rName ) const
 {
     OUString sName( rName );

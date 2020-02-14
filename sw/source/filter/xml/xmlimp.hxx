@@ -160,13 +160,13 @@ public:
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-                sal_uInt16 nSubFamily, SfxItemSet& rItemSet );
+                XmlStyleFamily nSubFamily, SfxItemSet& rItemSet );
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableCellAttrTokenMap();
 
-    bool FindAutomaticStyle( sal_uInt16 nFamily,
+    bool FindAutomaticStyle( XmlStyleFamily nFamily,
                              const OUString& rName,
                              const SfxItemSet **ppItemSet ) const;
     void MergeListsAtDocumentInsertPosition(SwDoc *pDoc);

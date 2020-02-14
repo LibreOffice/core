@@ -25,6 +25,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/families.hxx>
 #include <memory>
 
 class SvXMLStylesContext_Impl;
@@ -64,7 +65,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
     OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
     bool         mbHidden;
 
-    sal_uInt16   mnFamily;
+    XmlStyleFamily mnFamily;
 
     bool         mbValid : 1; // Set this to false in CreateAndInsert
                               // if the style shouldn't be processed
@@ -79,7 +80,7 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue );
 
-    void SetFamily( sal_uInt16 nSet ) { mnFamily = nSet; }
+    void SetFamily( XmlStyleFamily nSet ) { mnFamily = nSet; }
     void SetAutoName( const OUString& rName ) { maAutoName = rName; }
 
 public:
@@ -88,13 +89,13 @@ public:
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-              sal_uInt16 nFamily=0,
+              XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
               bool bDefaultStyle = false );
 
     SvXMLStyleContext( SvXMLImport& rImport,
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            sal_uInt16 nFamily=0,
+            XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
             bool bDefaultStyle = false );
 
     virtual ~SvXMLStyleContext() override;
@@ -112,7 +113,7 @@ public:
     const OUString&  GetParentName() const { return maParentName; }
     const OUString&  GetFollow() const { return maFollow; }
 
-    sal_uInt16 GetFamily() const { return mnFamily; }
+    XmlStyleFamily GetFamily() const { return mnFamily; }
 
     bool IsValid() const { return mbValid; }
     void SetValid( bool b ) { mbValid = b; }
@@ -185,16 +186,16 @@ protected:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
-    virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
-    virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+    virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const;
 
 public:
 
@@ -217,19 +218,19 @@ public:
     void AddStyle(SvXMLStyleContext& rNew);
 
     const SvXMLStyleContext *FindStyleChildContext(
-                                      sal_uInt16 nFamily,
+                                      XmlStyleFamily nFamily,
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
-    static sal_uInt16 GetFamily( const OUString& rFamily );
+    static XmlStyleFamily GetFamily( const OUString& rFamily );
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-                        sal_uInt16 nFamily ) const;
+                        XmlStyleFamily nFamily ) const;
 
     virtual css::uno::Reference< css::container::XNameContainer >
-        GetStylesContainer( sal_uInt16 nFamily ) const;
-    virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
+        GetStylesContainer( XmlStyleFamily nFamily ) const;
+    virtual OUString GetServiceName( XmlStyleFamily nFamily ) const;
 
     css::uno::Reference< css::style::XAutoStyleFamily >
-        GetAutoStyles( sal_uInt16 nFamily ) const;
+        GetAutoStyles( XmlStyleFamily nFamily ) const;
     void CopyAutoStylesToDoc();
     void CopyStylesToDoc( bool bOverwrite, bool bFinish = true );
     void FinishStyles( bool bOverwrite );

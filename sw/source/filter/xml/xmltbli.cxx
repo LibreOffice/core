@@ -770,7 +770,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const SfxPoolItem *pItem;
         const SfxItemSet *pAutoItemSet = nullptr;
         if( GetSwImport().FindAutomaticStyle(
-                    XML_STYLE_FAMILY_TABLE_COLUMN,
+                    XmlStyleFamily::TABLE_COLUMN,
                                               aStyleName, &pAutoItemSet ) &&
             pAutoItemSet &&
             SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
@@ -1979,7 +1979,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         const SfxItemSet *pAutoItemSet = nullptr;
         if( pCell->GetStartNode() && !sStyleName.isEmpty() &&
             GetSwImport().FindAutomaticStyle(
-                XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
+                XmlStyleFamily::TABLE_CELL, sStyleName, &pAutoItemSet ) )
         {
             if( pAutoItemSet )
                 pBoxFormat2->SetFormatAttr( *pAutoItemSet );
@@ -2141,7 +2141,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     if( 1 == (nBottomRow - nTopRow) &&
         !rStyleName.isEmpty() &&
         GetSwImport().FindAutomaticStyle(
-            XML_STYLE_FAMILY_TABLE_ROW, rStyleName, &pAutoItemSet ) )
+            XmlStyleFamily::TABLE_ROW, rStyleName, &pAutoItemSet ) )
     {
         if( pAutoItemSet )
             pFrameFormat->SetFormatAttr( *pAutoItemSet );
@@ -2612,7 +2612,7 @@ void SwXMLTableContext::MakeTable()
     const SfxItemSet *pAutoItemSet = nullptr;
     if( !m_aStyleName.isEmpty() &&
         rSwImport.FindAutomaticStyle(
-            XML_STYLE_FAMILY_TABLE_TABLE, m_aStyleName, &pAutoItemSet ) &&
+            XmlStyleFamily::TABLE_TABLE, m_aStyleName, &pAutoItemSet ) &&
          pAutoItemSet )
     {
         const SfxPoolItem *pItem;

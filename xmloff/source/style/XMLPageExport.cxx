@@ -68,9 +68,9 @@ void XMLPageExport::collectPageMasterAutoStyle(
         if( !aPropStates.empty())
         {
             OUString sParent;
-            rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, aPropStates );
+            rPageMasterName = rExport.GetAutoStylePool()->Find( XmlStyleFamily::PAGE_MASTER, sParent, aPropStates );
             if (rPageMasterName.isEmpty())
-                rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, aPropStates);
+                rPageMasterName = rExport.GetAutoStylePool()->Add(XmlStyleFamily::PAGE_MASTER, sParent, aPropStates);
         }
     }
 }
@@ -166,7 +166,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     xPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(
                                     xPageMasterPropSetMapper, rExp);
 
-    rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, XML_STYLE_FAMILY_PAGE_MASTER_NAME,
+    rExport.GetAutoStylePool()->AddFamily( XmlStyleFamily::PAGE_MASTER, XML_STYLE_FAMILY_PAGE_MASTER_NAME,
         xPageMasterExportPropMapper, XML_STYLE_FAMILY_PAGE_MASTER_PREFIX, false );
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
@@ -213,7 +213,7 @@ void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
 
 void XMLPageExport::exportAutoStyles()
 {
-    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER);
+    rExport.GetAutoStylePool()->exportXML(XmlStyleFamily::PAGE_MASTER);
 }
 
 void XMLPageExport::exportDefaultStyle()

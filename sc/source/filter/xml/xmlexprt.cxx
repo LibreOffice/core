@@ -376,13 +376,13 @@ ScXMLExport::ScXMLExport(
     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
     xTableStylesExportPropertySetMapper = new ScXMLTableExportPropertyMapper(xTableStylesPropertySetMapper);
 
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
         xCellStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
         xColumnStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
         xRowStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
         xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 
     if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
@@ -391,7 +391,7 @@ ScXMLExport::ScXMLExport(
         // should not conflict with user-defined styles since this name is
         // used for a table style which is not available in the UI.
         sExternalRefTabStyleName = "ta_extref";
-        GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sExternalRefTabStyleName);
+        GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_TABLE, sExternalRefTabStyleName);
 
         sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
         sAttrStyleName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_STYLE_NAME));
@@ -902,7 +902,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
 
         OUString aName;
         sal_Int32 nIndex;
-        if (GetAutoStylePool()->Add(aName, XML_STYLE_FAMILY_TABLE_CELL, aDefaultStyle, aProps))
+        if (GetAutoStylePool()->Add(aName, XmlStyleFamily::TABLE_CELL, aDefaultStyle, aProps))
         {
             pCellStyles->AddStyleName(aName, nIndex);
         }
@@ -1263,7 +1263,7 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
             std::vector<XMLPropertyState> aPropStates;
             toXMLPropertyStates(aPropStates, rSecAttrs, xMapper, rAttrMap);
             if (!aPropStates.empty())
-                xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
+                xStylePool->Add(XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
         }
     }
 
@@ -1844,7 +1844,7 @@ void ScXMLExport::RegisterDefinedStyleNames( const uno::Reference< css::sheet::X
     auto xAutoStylePool = GetAutoStylePool();
     for (const auto& rFormatInfo : pFormatData->maIDToName)
     {
-        xAutoStylePool->RegisterDefinedName(XML_STYLE_FAMILY_TABLE_CELL, rFormatInfo.second);
+        xAutoStylePool->RegisterDefinedName(XmlStyleFamily::TABLE_CELL, rFormatInfo.second);
     }
 }
 
@@ -1973,7 +1973,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
     exportDataStyles();
 
     aStylesExp->exportStyleFamily(OUString("CellStyles"),
-        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper, false, XML_STYLE_FAMILY_TABLE_CELL);
+        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper, false, XmlStyleFamily::TABLE_CELL);
 
     SvXMLExport::ExportStyles_(bUsed);
 }
@@ -2054,9 +2054,9 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             sal_Int32 nIndex;
             if (pOldName)
             {
-                if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates))
+                if (GetAutoStylePool()->AddNamed(*pOldName, XmlStyleFamily::TABLE_CELL, sStyleName, aPropStates))
                 {
-                    GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_CELL, *pOldName);
+                    GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_CELL, *pOldName);
                     // add to pCellStyles, so the name is found for normal sheets
                     pCellStyles->AddStyleName(*pOldName, nIndex);
                 }
@@ -2073,13 +2073,13 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     if (itr != pFormatData->maIDToName.end())
                     {
                         sName = itr->second;
-                        bAdded = GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates);
+                        bAdded = GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TABLE_CELL, sStyleName, aPropStates);
                         if (bAdded)
-                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_CELL, sName);
+                            GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_CELL, sName);
                     }
                 }
                 bool bIsAutoStyle(true);
-                if (bAdded || GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates))
+                if (bAdded || GetAutoStylePool()->Add(sName, XmlStyleFamily::TABLE_CELL, sStyleName, aPropStates))
                 {
                     pCellStyles->AddStyleName(sName, nIndex);
                 }
@@ -2140,9 +2140,9 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
         OUString sParent;
         if (pOldName)
         {
-            if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, aPropStates))
+            if (GetAutoStylePool()->AddNamed(*pOldName, XmlStyleFamily::TABLE_COLUMN, sParent, aPropStates))
             {
-                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_COLUMN, *pOldName);
+                GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_COLUMN, *pOldName);
                 // add to pColumnStyles, so the name is found for normal sheets
                 rIndex = pColumnStyles->AddStyleName(*pOldName);
             }
@@ -2150,7 +2150,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
         else
         {
             OUString sName;
-            if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, aPropStates))
+            if (GetAutoStylePool()->Add(sName, XmlStyleFamily::TABLE_COLUMN, sParent, aPropStates))
             {
                 rIndex = pColumnStyles->AddStyleName(sName);
             }
@@ -2169,9 +2169,9 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
         OUString sParent;
         if (pOldName)
         {
-            if (GetAutoStylePool()->AddNamed(*pOldName, XML_STYLE_FAMILY_TABLE_ROW, sParent, aPropStates))
+            if (GetAutoStylePool()->AddNamed(*pOldName, XmlStyleFamily::TABLE_ROW, sParent, aPropStates))
             {
-                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_ROW, *pOldName);
+                GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_ROW, *pOldName);
                 // add to pRowStyles, so the name is found for normal sheets
                 rIndex = pRowStyles->AddStyleName(*pOldName);
             }
@@ -2179,7 +2179,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
         else
         {
             OUString sName;
-            if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_ROW, sParent, aPropStates))
+            if (GetAutoStylePool()->Add(sName, XmlStyleFamily::TABLE_ROW, sParent, aPropStates))
             {
                 rIndex = pRowStyles->AddStyleName(sName);
             }
@@ -2313,8 +2313,8 @@ void ScXMLExport::collectAutoStyles()
                     {
                         std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
                         OUString sName( rTableEntry.maName );
-                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_TABLE, OUString(), aPropStates);
-                        GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sName);
+                        GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TABLE_TABLE, OUString(), aPropStates);
+                        GetAutoStylePool()->RegisterName(XmlStyleFamily::TABLE_TABLE, sName);
                     }
                 }
             }
@@ -2347,16 +2347,16 @@ void ScXMLExport::collectAutoStyles()
                             {
                                 std::vector<XMLPropertyState> aPropStates(xShapeMapper->Filter(xShapeProperties));
                                 OUString sName( rNoteEntry.maStyleName );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, OUString(), aPropStates);
-                                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
+                                GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::SD_GRAPHICS_ID, OUString(), aPropStates);
+                                GetAutoStylePool()->RegisterName(XmlStyleFamily::SD_GRAPHICS_ID, sName);
                             }
                             if ( !rNoteEntry.maTextStyle.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> aPropStates(
                                     GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
                                 OUString sName( rNoteEntry.maTextStyle );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, OUString(), aPropStates);
-                                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+                                GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_PARAGRAPH, OUString(), aPropStates);
+                                GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_PARAGRAPH, sName);
                             }
                         }
                     }
@@ -2387,8 +2387,8 @@ void ScXMLExport::collectAutoStyles()
                         {
                             std::vector<XMLPropertyState> aPropStates(xParaPropMapper->Filter(xParaProp));
                             OUString sName( rNoteParaEntry.maName );
-                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, OUString(), aPropStates);
-                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
+                            GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_PARAGRAPH, OUString(), aPropStates);
+                            GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_PARAGRAPH, sName);
                         }
                     }
                 }
@@ -2420,8 +2420,8 @@ void ScXMLExport::collectAutoStyles()
 
                             std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
                             OUString sName( rNoteTextEntry.maName );
-                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
-                            GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
+                            GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
+                            GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_TEXT, sName);
                         }
                     }
                 }
@@ -2461,8 +2461,8 @@ void ScXMLExport::collectAutoStyles()
 
                 std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
                 OUString sName( rTextEntry.maName );
-                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
-                GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
+                GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
+                GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_TEXT, sName);
                 xPrevCursorProp = xCursorProp;
                 aPrevPos = aPos;
             }
@@ -2493,7 +2493,7 @@ void ScXMLExport::collectAutoStyles()
                 if(!aPropStates.empty())
                 {
                     OUString sName;
-                    GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_TABLE, OUString(), aPropStates);
+                    GetAutoStylePool()->Add(sName, XmlStyleFamily::TABLE_TABLE, OUString(), aPropStates);
                     aTableStyles.push_back(sName);
                 }
             }
@@ -2616,11 +2616,11 @@ void ScXMLExport::ExportAutoStyles_()
 
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_COLUMN);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_ROW);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_TABLE);
         exportAutoDataStyles();
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_CELL);
 
         GetShapeExport()->exportAutoStyles();
         GetFormExport()->exportAutoStyles( );
@@ -3098,7 +3098,7 @@ void flushParagraph(
 
         std::vector<XMLPropertyState> aPropStates;
         const SvxFieldData* pField = toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
-        OUString aStyleName = xStylePool->Find(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
+        OUString aStyleName = xStylePool->Find(XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
         writeContent(rExport, aStyleName, aContent, pField);
     }
 }
@@ -5225,7 +5225,7 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 {
                     xRowStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScFromXLSRowStylesProperties, xScPropHdlFactory, true);
                     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
-                    GetAutoStylePool()->SetFamilyPropSetMapper( XML_STYLE_FAMILY_TABLE_ROW,
+                    GetAutoStylePool()->SetFamilyPropSetMapper( XmlStyleFamily::TABLE_ROW,
                         xRowStylesExportPropertySetMapper );
                 }
             }

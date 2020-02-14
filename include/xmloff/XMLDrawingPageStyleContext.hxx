@@ -31,14 +31,14 @@ public:
                                css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrList,
                                SvXMLStylesContext& rStyles,
                                ContextID_Index_Pair const pContextIDs[],
-                               sal_uInt16 const pFamilies[]);
+                               XmlStyleFamily const pFamilies[]);
 
     virtual void
     FillPropertySet(css::uno::Reference<css::beans::XPropertySet> const& rPropSet) override;
 
 private:
     std::unique_ptr<ContextID_Index_Pair[]> m_pContextIDs;
-    sal_uInt16 const* const m_pFamilies;
+    XmlStyleFamily const* const m_pFamilies;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

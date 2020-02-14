@@ -93,7 +93,7 @@ void XMLIndexTOCStylesContext::EndElement()
         for(sal_Int32 i = 0; i < nCount; i++)
         {
             aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                            XmlStyleFamily::TEXT_PARAGRAPH,
                                aStyleNames[i] );
         }
 

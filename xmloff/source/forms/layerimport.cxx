@@ -235,7 +235,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
 
     if (m_xAutoStyles.is())
     {
-        const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, _rControlNumerStyleName);
+        const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, _rControlNumerStyleName);
         if (pStyle)
         {
             const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
@@ -320,7 +320,7 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUStrin
         // did you use setAutoStyleContext?
 
     const SvXMLStyleContext* pControlStyle =
-        m_xAutoStyles.is() ? m_xAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : nullptr;
+        m_xAutoStyles.is() ? m_xAutoStyles->FindStyleChildContext( XmlStyleFamily::TEXT_PARAGRAPH, _rStyleName ) : nullptr;
     OSL_ENSURE( pControlStyle || !m_xAutoStyles.is(),
                 OStringBuffer("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"").append(OUStringToOString(_rStyleName, RTL_TEXTENCODING_ASCII_US)).append("\"!").getStr() );
     return pControlStyle;

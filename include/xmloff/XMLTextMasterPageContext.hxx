@@ -77,7 +77,7 @@ public:
 struct ContextID_Index_Pair;
 
 XMLOFF_DLLPUBLIC extern ContextID_Index_Pair const g_MasterPageContextIDs[];
-XMLOFF_DLLPUBLIC extern sal_uInt16 const g_MasterPageFamilies[];
+XMLOFF_DLLPUBLIC extern XmlStyleFamily const g_MasterPageFamilies[];
 
 #endif
 

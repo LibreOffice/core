@@ -353,7 +353,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
 
     // Style name for text span corresponds with the name of an automatic style.
     const XMLPropStyleContext* pStyle = dynamic_cast<const XMLPropStyleContext*>(
-        pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_TEXT, rStyleName));
+        pAutoStyles->FindStyleChildContext(XmlStyleFamily::TEXT_TEXT, rStyleName));
 
     if (!pStyle)
         // No style by that name found.

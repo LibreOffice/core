@@ -28,7 +28,7 @@ namespace rptxml
 
 void OXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
-            sal_Int32 nFamily,
+            XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
@@ -36,7 +36,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if ( nFamily == XML_STYLE_FAMILY_TABLE_CELL )
+    if ( nFamily == XmlStyleFamily::TABLE_CELL )
     {
         rtl::Reference< XMLPropertySetMapper > aPropMapper = rORptExport.GetCellStylePropertyMapper();
         for (const auto& rProp : rProperties)

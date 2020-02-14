@@ -572,7 +572,7 @@ void XMLTextFrameContext_Impl::Create()
     if( !sStyleName.isEmpty() )
     {
         OUString sDisplayStyleName( GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_SD_GRAPHICS_ID, sStyleName ) );
+                            XmlStyleFamily::SD_GRAPHICS_ID, sStyleName ) );
         const Reference < XNameContainer > & rStyles =
             xTextImportHelper->GetFrameStyles();
         if( rStyles.is() &&

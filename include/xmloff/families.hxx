@@ -23,76 +23,80 @@
     used in the SvXMLAutoStylePoolP.
  */
 
-// Misc (Pool)
-// reserved: 0..99
-#define XML_STYLE_FAMILY_DATA_STYLE             0
-#define XML_STYLE_FAMILY_PAGE_MASTER            1
 #define XML_STYLE_FAMILY_PAGE_MASTER_NAME       "page-layout"
 #define XML_STYLE_FAMILY_PAGE_MASTER_PREFIX     "pm"
-#define XML_STYLE_FAMILY_MASTER_PAGE            2
+#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME    "table"
+#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX  "ta"
+#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME   "table-column"
+#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX "co"
+#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME  "table-row"
+#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX    "ro"
+#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME "table-cell"
+#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX   "ce"
+#define XML_STYLE_FAMILY_SD_GRAPHICS_NAME       "graphic"
+#define XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX     "gr"
+#define XML_STYLE_FAMILY_SD_PRESENTATION_NAME   "presentation"
+#define XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX "pr"
+#define XML_STYLE_FAMILY_SD_POOL_NAME           "default"
+#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME    "drawing-page"
+#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX  "dp"
+#define XML_STYLE_FAMILY_SCH_CHART_NAME         "chart"
+#define XML_STYLE_FAMILY_SCH_CHART_PREFIX       "ch"
+#define XML_STYLE_FAMILY_CONTROL_PREFIX         "ctrl"
+
+enum class XmlStyleFamily
+{
+// Misc (Pool)
+// reserved: 0..99
+    DATA_STYLE             = 0,
+    PAGE_MASTER            = 1,
+    MASTER_PAGE            = 2,
 
 // Text
 // reserved: 100..199
-#define XML_STYLE_FAMILY_TEXT_PARAGRAPH         100
-#define XML_STYLE_FAMILY_TEXT_TEXT              101
-#define XML_STYLE_FAMILY_TEXT_LIST              102
-#define XML_STYLE_FAMILY_TEXT_OUTLINE           103
-#define XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG    105
-#define XML_STYLE_FAMILY_TEXT_ENDNOTECONFIG     106
-#define XML_STYLE_FAMILY_TEXT_SECTION           107
-#define XML_STYLE_FAMILY_TEXT_FRAME             108 // export only
-#define XML_STYLE_FAMILY_TEXT_RUBY              109
-#define XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG 110
-#define XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG 111
+    TEXT_PARAGRAPH         = 100,
+    TEXT_TEXT              = 101,
+    TEXT_LIST              = 102,
+    TEXT_OUTLINE           = 103,
+    TEXT_FOOTNOTECONFIG    = 105,
+    TEXT_ENDNOTECONFIG     = 106,
+    TEXT_SECTION           = 107,
+    TEXT_FRAME             = 108, // export only
+    TEXT_RUBY              = 109,
+    TEXT_BIBLIOGRAPHYCONFIG = 110,
+    TEXT_LINENUMBERINGCONFIG = 111,
 
 // Table
 // reserved: 200..299
-#define XML_STYLE_FAMILY_TABLE_TABLE            200
-#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME    "table"
-#define XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX  "ta"
-#define XML_STYLE_FAMILY_TABLE_COLUMN           202
-#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME   "table-column"
-#define XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX "co"
-#define XML_STYLE_FAMILY_TABLE_ROW              203
-#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME  "table-row"
-#define XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX    "ro"
-#define XML_STYLE_FAMILY_TABLE_CELL             204
-#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME "table-cell"
-#define XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX   "ce"
-#define XML_STYLE_FAMILY_TABLE_TEMPLATE_ID      205
+    TABLE_TABLE            = 200,
+    TABLE_COLUMN           = 202,
+    TABLE_ROW              = 203,
+    TABLE_CELL             = 204,
+    TABLE_TEMPLATE_ID      = 205,
 
 // Impress/Draw
 // reserved: 300..399
-#define XML_STYLE_FAMILY_SD_GRAPHICS_ID         300
-#define XML_STYLE_FAMILY_SD_GRAPHICS_NAME       "graphic"
-#define XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX     "gr"
+    SD_GRAPHICS_ID         = 300,
 
-#define XML_STYLE_FAMILY_SD_PRESENTATION_ID     301
-#define XML_STYLE_FAMILY_SD_PRESENTATION_NAME   "presentation"
-#define XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX "pr"
+    SD_PRESENTATION_ID     = 301,
 // families for derived from SvXMLStyleContext
-#define XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID         302
-#define XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID    306
-#define XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID   303
+    SD_PAGEMASTERCONEXT_ID         = 302,
+    SD_PAGEMASTERSTYLECONEXT_ID    = 306,
+    SD_PRESENTATIONPAGELAYOUT_ID   = 303,
 // family for draw pool
-#define XML_STYLE_FAMILY_SD_POOL_ID             304
-#define XML_STYLE_FAMILY_SD_POOL_NAME           "default"
+    SD_POOL_ID             = 304,
 // family for presentation drawpage properties
-#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID      305
-#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME    "drawing-page"
-#define XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX  "dp"
+    SD_DRAWINGPAGE_ID      = 305,
 
-#define XML_STYLE_FAMILY_SD_GRADIENT_ID     306
-#define XML_STYLE_FAMILY_SD_HATCH_ID        307
-#define XML_STYLE_FAMILY_SD_FILL_IMAGE_ID       308
-#define XML_STYLE_FAMILY_SD_MARKER_ID       309
-#define XML_STYLE_FAMILY_SD_STROKE_DASH_ID      310
+    SD_GRADIENT_ID         = 306,
+    SD_HATCH_ID            = 307,
+    SD_FILL_IMAGE_ID       = 308,
+    SD_MARKER_ID           = 309,
+    SD_STROKE_DASH_ID      = 310,
 
 // Chart
 // reserved: 400..499
-#define XML_STYLE_FAMILY_SCH_CHART_ID           400
-#define XML_STYLE_FAMILY_SCH_CHART_NAME         "chart"
-#define XML_STYLE_FAMILY_SCH_CHART_PREFIX       "ch"
+    SCH_CHART_ID           = 400,
 
 // Math
 // reserved: 500..599
@@ -100,8 +104,9 @@
 
 // Forms/Controls
 // reserved 600..649
-#define XML_STYLE_FAMILY_CONTROL_ID             600
-#define XML_STYLE_FAMILY_CONTROL_PREFIX         "ctrl"
+    CONTROL_ID             = 600,
+
+};
 
 #endif // INCLUDED_XMLOFF_FAMILIES_HXX
 

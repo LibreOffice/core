@@ -128,7 +128,7 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
         bool bDefaultStyle )
 :   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
 ,   m_nOutlineLevel( -1 )
@@ -211,7 +211,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     }
 
     sal_uInt16 nCategory = ParagraphStyleCategory::TEXT;
-    if(  XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() &&
+    if(  XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() &&
          !m_sCategoryVal.isEmpty() && xStyle->isUserDefined() &&
          xPropSetInfo->hasPropertyByName("Category") &&
         SvXMLUnitConverter::convertEnum( nCategory, m_sCategoryVal, aCategoryMap))
@@ -238,9 +238,9 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
 
 void XMLTextStyleContext::SetDefaults( )
 {
-    if( ( GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) ||
-        ( GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE ) ||
-        ( GetFamily() == XML_STYLE_FAMILY_TABLE_ROW ) )
+    if( ( GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH ) ||
+        ( GetFamily() == XmlStyleFamily::TABLE_TABLE ) ||
+        ( GetFamily() == XmlStyleFamily::TABLE_ROW ) )
     {
         Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
         if (xFactory.is())
@@ -321,7 +321,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             {
                 // change list style name to display name
                 OUString sDisplayListStyleName(
-                    GetImport().GetStyleDisplayName(XML_STYLE_FAMILY_TEXT_LIST,
+                    GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_LIST,
                                                   m_sListStyleName));
                 // The families container must exist
                 const Reference < XNameContainer >& rNumStyles =
@@ -341,7 +341,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     {
         // change list style name to display name
         OUString sDisplayDropCapTextStyleName(
-            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_TEXT,
+            GetImport().GetStyleDisplayName( XmlStyleFamily::TEXT_TEXT,
                                           m_sDropCapTextStyleName));
         // The families container must exist
         const Reference < XNameContainer >& rTextStyles =
@@ -358,7 +358,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     {
         OUString sDisplayName(
             GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_MASTER_PAGE, m_sMasterPageName));
+                            XmlStyleFamily::MASTER_PAGE, m_sMasterPageName));
         // The families container must exist
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
@@ -415,12 +415,12 @@ void XMLTextStyleContext::FillPropertySet(
     };
 
     // the style families associated with the same index modulo 4
-    static const sal_uInt16 aFamilies[] =
+    static const XmlStyleFamily aFamilies[] =
     {
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_HATCH_ID,
-        XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_HATCH_ID,
+        XmlStyleFamily::SD_FILL_IMAGE_ID
     };
 
     // get property set info
@@ -429,13 +429,13 @@ void XMLTextStyleContext::FillPropertySet(
     bool bAutomatic = false;
 
     if(pSvXMLStylesContext->IsAutomaticStyle() &&
-        (XML_STYLE_FAMILY_TEXT_TEXT == GetFamily() || XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily()))
+        (XmlStyleFamily::TEXT_TEXT == GetFamily() || XmlStyleFamily::TEXT_PARAGRAPH == GetFamily()))
     {
         bAutomatic = true;
 
         if( !GetAutoName().isEmpty() )
         {
-            OUString sAutoProp = ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT ) ?
+            OUString sAutoProp = ( GetFamily() == XmlStyleFamily::TEXT_TEXT ) ?
                 OUString( "CharAutoStyleName" ):
                 OUString( "ParaAutoStyleName" );
 
@@ -488,7 +488,7 @@ void XMLTextStyleContext::FillPropertySet(
     // value; if we didn't find one, we'll set to false, the file
     // format default.
     // border-model: same
-    if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_ROW == GetFamily())
+    if(IsDefaultStyle() && XmlStyleFamily::TABLE_ROW == GetFamily())
     {
         OUString sIsSplitAllowed("IsSplitAllowed");
         SAL_WARN_IF( !rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ), "xmloff", "property missing?" );
@@ -497,7 +497,7 @@ void XMLTextStyleContext::FillPropertySet(
             (aContextIDs[1].nIndex == -1) ? makeAny( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
     }
 
-    if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_TABLE == GetFamily())
+    if(IsDefaultStyle() && XmlStyleFamily::TABLE_TABLE == GetFamily())
     {
         OUString sCollapsingBorders("CollapsingBorders");
         SAL_WARN_IF( !rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ), "xmloff", "property missing?" );

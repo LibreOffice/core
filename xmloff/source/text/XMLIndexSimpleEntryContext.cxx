@@ -72,7 +72,7 @@ void XMLIndexSimpleEntryContext::StartElement(
         {
             m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
-                XML_STYLE_FAMILY_TEXT_TEXT, m_sCharStyleName );
+                XmlStyleFamily::TEXT_TEXT, m_sCharStyleName );
             // #142494#: Check if style exists
             const Reference < css::container::XNameContainer > & rStyles =
                 GetImport().GetTextImport()->GetTextStyles();
@@ -117,7 +117,7 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     {
         rValues[1].Name = "CharacterStyleName";
         aAny <<= GetImport().GetStyleDisplayName(
-                                    XML_STYLE_FAMILY_TEXT_TEXT,
+                                    XmlStyleFamily::TEXT_TEXT,
                                     m_sCharStyleName );
         rValues[1].Value = aAny;
     }

@@ -226,25 +226,25 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
     m_xRowExportHelper = new OSpecialHandleXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper());
 
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_TABLE_TABLE,
+        XmlStyleFamily::TABLE_TABLE,
         OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
         m_xExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_TABLE_COLUMN,
+        XmlStyleFamily::TABLE_COLUMN,
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
         m_xColumnExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_TABLE_CELL,
+        XmlStyleFamily::TABLE_CELL,
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
         m_xCellExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_TABLE_ROW,
+        XmlStyleFamily::TABLE_ROW,
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
         m_xRowExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
@@ -1125,15 +1125,15 @@ void ODBExport::exportTables(bool _bExportContext)
 
 void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 {
-    typedef std::pair<TPropertyStyleMap*,sal_uInt16> TEnumMapperPair;
+    typedef std::pair<TPropertyStyleMap*,XmlStyleFamily> TEnumMapperPair;
     typedef std::pair< rtl::Reference < SvXMLExportPropertyMapper> , TEnumMapperPair> TExportPropMapperPair;
     Reference<XColumnsSupplier> xSup(_xProp,UNO_QUERY);
     if ( xSup.is() )
     {
         const TExportPropMapperPair pExportHelper[] = {
-             TExportPropMapperPair(m_xExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_TABLE ))
-            // ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
-            ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XML_STYLE_FAMILY_TABLE_ROW))
+             TExportPropMapperPair(m_xExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XmlStyleFamily::TABLE_TABLE ))
+            // ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XmlStyleFamily::TABLE_CELL))
+            ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XmlStyleFamily::TABLE_ROW))
         };
 
         std::vector< XMLPropertyState > aPropertyStates;
@@ -1179,8 +1179,8 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     else
     { // here I know I have a column
         const TExportPropMapperPair pExportHelper[] = {
-             TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_COLUMN ))
-            ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
+             TExportPropMapperPair(m_xColumnExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XmlStyleFamily::TABLE_COLUMN ))
+            ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XmlStyleFamily::TABLE_CELL))
         };
         for (const auto & i : pExportHelper)
         {
@@ -1210,7 +1210,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 }
 
             }
-            if ( XML_STYLE_FAMILY_TABLE_CELL == i.second.second )
+            if ( XmlStyleFamily::TABLE_CELL == i.second.second )
                 std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
                 i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropStates ) );
@@ -1238,10 +1238,10 @@ void ODBExport::ExportAutoStyles_()
     if ( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         collectComponentStyles();
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_TABLE);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_COLUMN);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_CELL);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_ROW);
         exportDataStyles();
     }
 }

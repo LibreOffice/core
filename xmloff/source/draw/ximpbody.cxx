@@ -151,7 +151,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         {
             bool bDone(false);
             OUString sDisplayName( rImport.GetStyleDisplayName(
-                            XML_STYLE_FAMILY_MASTER_PAGE, maMasterPageName ) );
+                            XmlStyleFamily::MASTER_PAGE, maMasterPageName ) );
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {

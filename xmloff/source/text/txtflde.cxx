@@ -792,7 +792,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     if (FIELD_ID_COMBINED_CHARACTERS != nToken)
     {
         GetExport().GetTextParagraphExport()->Add(
-            XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet);
+            XmlStyleFamily::TEXT_TEXT, xRangePropSet);
     }
 
     // process special styles for each field (e.g. data styles)
@@ -898,7 +898,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
                    "need proper PropertyState for combined characters");
         const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState.get(), nullptr };
         GetExport().GetTextParagraphExport()->Add(
-            XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet,
+            XmlStyleFamily::TEXT_TEXT, xRangePropSet,
             aStates);
         break;
     }

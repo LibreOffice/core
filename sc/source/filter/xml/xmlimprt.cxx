@@ -1342,7 +1342,7 @@ void ScXMLImport::SetStyleToRanges()
             XMLTableStyleContext* pStyle = nullptr;
             if ( pStyles )
                 pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
-                        XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, true)));
+                        XmlStyleFamily::TABLE_CELL, sPrevStyleName, true)));
             if (pStyle)
             {
                 pStyle->FillPropertySet(xProperties);
@@ -1375,7 +1375,7 @@ void ScXMLImport::SetStyleToRanges()
             }
             else
             {
-                xProperties->setPropertyValue(gsCellStyle, uno::makeAny(GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName )));
+                xProperties->setPropertyValue(gsCellStyle, uno::makeAny(GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, sPrevStyleName )));
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
                 bool bInsert(nNumberFormat == -1);
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);

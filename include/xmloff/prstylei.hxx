@@ -91,7 +91,7 @@ public:
     XMLPropStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext() override;
 

@@ -148,7 +148,7 @@ static const OUStringLiteral gsFollowStyle(  "FollowStyle"  );
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
         bool bDefault )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
 ,   mxStyles( &rStyles )
@@ -272,7 +272,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
     // need to filter out old fill definitions when the new ones are used. The new
     // ones are used when a FillStyle is defined
-    const bool bTakeCareOfDrawingLayerFillStyle(xImpPrMap.is() && GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH);
+    const bool bTakeCareOfDrawingLayerFillStyle(xImpPrMap.is() && GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH);
     bool bDrawingLayerFillStylesUsed(false);
 
     if(bTakeCareOfDrawingLayerFillStyle)
@@ -288,7 +288,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     }
 
     if( pSvXMLStylesContext->IsAutomaticStyle()
-        && ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
+        && ( GetFamily() == XmlStyleFamily::TEXT_TEXT || GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH ) )
     {
         // Need to translate StyleName from temp MapNames to names
         // used in already imported items (already exist in the pool). This
@@ -313,7 +313,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             sal_Int32 nLen = aValues.getLength();
             if( nLen )
             {
-                if( GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
+                if( GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
@@ -343,7 +343,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 if( xAutoStyle.is() )
                 {
                     Sequence< OUString > aPropNames(1);
-                    aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
+                    aPropNames[0] = GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH ?
                         OUStringLiteral("ParaAutoStyleName") :
                         OUStringLiteral("CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
@@ -366,7 +366,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
         if( !xFamilies.is() )
         {
-            SAL_WARN("xmloff", "no styles container for family " << GetFamily());
+            SAL_WARN("xmloff", "no styles container for family " << static_cast<int>(GetFamily()));
             return;
         }
 
@@ -621,22 +621,22 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
                 if(a.mnIndex != -1)
                 {
                     const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
-                    sal_uInt16 aStyleFamily(0);
+                    XmlStyleFamily aStyleFamily(XmlStyleFamily::DATA_STYLE);
 
                     if(rPropName == s_FillGradientName || rPropName == s_FillTransparenceGradientName)
                     {
-                        aStyleFamily = XML_STYLE_FAMILY_SD_GRADIENT_ID;
+                        aStyleFamily = XmlStyleFamily::SD_GRADIENT_ID;
                     }
                     else if(rPropName == s_FillHatchName)
                     {
-                        aStyleFamily = XML_STYLE_FAMILY_SD_HATCH_ID;
+                        aStyleFamily = XmlStyleFamily::SD_HATCH_ID;
                     }
                     else if(rPropName == s_FillBitmapName)
                     {
-                        aStyleFamily = XML_STYLE_FAMILY_SD_FILL_IMAGE_ID;
+                        aStyleFamily = XmlStyleFamily::SD_FILL_IMAGE_ID;
                     }
 
-                    if(aStyleFamily)
+                    if(aStyleFamily != XmlStyleFamily::DATA_STYLE)
                     {
                         OUString sStyleName;
 

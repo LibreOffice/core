@@ -246,7 +246,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 {
                     XMLTableStylesContext* pStyles = static_cast<XMLTableStylesContext*>(mrScImport.GetAutoStyles());
                     const XMLTableStyleContext* pStyle = static_cast<const XMLTableStyleContext*>(
-                        pStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL, it.toString(), true));
+                        pStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, it.toString(), true));
                     if (pStyle)
                         mnNumberFormat = const_cast<XMLTableStyleContext*>(pStyle)->GetNumberFormat();
                 }

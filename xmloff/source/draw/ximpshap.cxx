@@ -149,7 +149,7 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mxShapes( rShapes )
     , mxAttrList(xAttrList)
     , mbListContextPushed( false )
-    , mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
+    , mnStyleFamily(XmlStyleFamily::SD_GRAPHICS_ID)
     , mbIsPlaceholder(false)
     , mbClearDefaultAttributes( true )
     , mbIsUserTransformed(false)
@@ -652,10 +652,10 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
                             uno::Reference< container::XNameAccess > xFamily;
 
-                            if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
+                            if( XmlStyleFamily::SD_PRESENTATION_ID == mnStyleFamily )
                             {
                                 aStyleName = GetImport().GetStyleDisplayName(
-                                    XML_STYLE_FAMILY_SD_PRESENTATION_ID,
+                                    XmlStyleFamily::SD_PRESENTATION_ID,
                                     aStyleName );
                                 sal_Int32 nPos = aStyleName.lastIndexOf( '-' );
                                 if( -1 != nPos )
@@ -671,7 +671,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                                 // get graphics family
                                 xFamilies->getByName("graphics") >>= xFamily;
                                 aStyleName = GetImport().GetStyleDisplayName(
-                                    XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+                                    XmlStyleFamily::SD_GRAPHICS_ID,
                                     aStyleName );
                             }
 
@@ -727,7 +727,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             if( nullptr == GetImport().GetShapeImport()->GetAutoStylesContext())
                 break;
 
-            const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
+            const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XmlStyleFamily::TEXT_PARAGRAPH, maTextStyleName);
             XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast<const XMLPropStyleContext*>( pTempStyle ) ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
             if( pStyle == nullptr )
                 break;
@@ -845,7 +845,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         else if( IsXMLToken( rLocalName, XML_STYLE_NAME ) )
         {
             maDrawStyleName = rValue;
-            mnStyleFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+            mnStyleFamily = XmlStyleFamily::SD_PRESENTATION_ID;
         }
     }
     else if( XML_NAMESPACE_SVG == nPrefix )
@@ -913,7 +913,7 @@ bool SdXMLShapeContext::isPresentationShape() const
 {
     if( !maPresentationClass.isEmpty() && const_cast<SdXMLShapeContext*>(this)->GetImport().GetShapeImport()->IsPresentationShapesSupported() )
     {
-        if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily)
+        if(XmlStyleFamily::SD_PRESENTATION_ID == mnStyleFamily)
         {
             return true;
         }
