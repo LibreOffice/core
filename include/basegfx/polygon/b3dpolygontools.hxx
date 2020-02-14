@@ -20,9 +20,11 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #define INCLUDED_BASEGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 
+#include <vector>
+#include <functional>
+
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
 
 
@@ -60,12 +62,18 @@ namespace basegfx
         /** Apply given LineDashing to given polygon
 
             For a description see applyLineDashing in b2dpolygontoos.hxx
+            Also 2nd version with callbacks, see comments in 2D version
         */
+        BASEGFX_DLLPUBLIC void applyLineDashing(
+            const B3DPolygon& rCandidate,
+            const std::vector<double>& rDotDashArray,
+            std::function<void(const basegfx::B3DPolygon& rSnippet)> aLineTargetCallback,
+            double fDotDashLength = 0.0);
         BASEGFX_DLLPUBLIC void applyLineDashing(
             const B3DPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B3DPolyPolygon* pLineTarget,
-            double fFullDashDotLen);
+            double fDotDashLength = 0.0);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
             rCandidate: the 3d geometry to change
