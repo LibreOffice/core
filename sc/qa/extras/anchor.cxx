@@ -42,6 +42,7 @@ public:
     void testODFAnchorTypes();
     void testCopyColumnWithImages();
     void testCutWithImages();
+    void testTdf121963();
     void testTdf129552();
     void testTdf130556();
 
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testODFAnchorTypes);
     CPPUNIT_TEST(testCopyColumnWithImages);
     CPPUNIT_TEST(testCutWithImages);
+    CPPUNIT_TEST(testTdf121963);
     CPPUNIT_TEST(testTdf129552);
     CPPUNIT_TEST(testTdf130556);
     CPPUNIT_TEST_SUITE_END();
@@ -370,6 +372,20 @@ void ScAnchorTest::testCutWithImages()
     }
 
     pDocSh->DoClose();
+}
+
+void ScAnchorTest::testTdf121963()
+{
+    OUString aFileURL;
+    createFileURL("tdf121963.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Without the accompanying fix in place, this test would have never returned due to an infinite
+    // invalidation loop, where ScGridWindow::Paint() invalidated itself.
+    Scheduler::ProcessEventsToIdle();
+
+    xComponent->dispose();
 }
 
 void ScAnchorTest::testTdf129552()
