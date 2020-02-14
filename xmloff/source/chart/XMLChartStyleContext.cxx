@@ -82,7 +82,7 @@ void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString
     if( !rStyleName.isEmpty())
     {
         const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext *>(rStylesContext.FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, true ));
+            XmlStyleFamily::DATA_STYLE, rStyleName, true ));
         if( pStyle )
         {
             sal_Int32 nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();

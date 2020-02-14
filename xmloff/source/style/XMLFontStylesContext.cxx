@@ -48,7 +48,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
 
-#define XML_STYLE_FAMILY_FONT 1
+#define XmlStyleFamily::FONT 1
 
 namespace {
 
@@ -88,7 +88,7 @@ XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         XMLFontStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_FONT ),
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::FONT ),
     xStyles( &rStyles )
 {
     aFamilyName <<= OUString();
@@ -387,7 +387,7 @@ bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nPitchIdx,
                          sal_Int32 nCharsetIdx ) const
 {
-    const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, true );
+    const SvXMLStyleContext* pStyle = FindStyleChildContext( XmlStyleFamily::FONT, rName, true );
     const XMLFontStyleContextFontFace *pFontStyle = dynamic_cast<const XMLFontStyleContextFontFace*>(pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,

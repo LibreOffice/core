@@ -284,7 +284,7 @@ public:
             if (aIter.getToken() == (XML_NAMESPACE_STYLE | XML_FAMILY))
             {
                 if (IsXMLToken(aIter.toString(), XML_TEXT))
-                    nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+                    nFamily = XmlStyleFamily::TEXT_TEXT;
                 else if (IsXMLToken(aIter.toString(), XML_NAME))
                     name = aIter.toString();
                 else if (IsXMLToken(aIter.toString(), XML_DISPLAY_NAME))

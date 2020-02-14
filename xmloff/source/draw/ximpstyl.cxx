@@ -139,7 +139,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
-        sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
+        sal_uInt16 nFamily = XmlStyleFamily::SD_DRAWINGPAGE_ID);
 
     SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -216,7 +216,7 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
                 const SdXMLNumberFormatImportContext* pSdNumStyle =
                     dynamic_cast< const SdXMLNumberFormatImportContext*> (
-                        GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, true ) );
+                        GetStyles()->FindStyleChildContext( XmlStyleFamily::DATA_STYLE, sStyleName, true ) );
 
                 if( pSdNumStyle )
                     nStyle = pSdNumStyle->GetDrawKey();
@@ -247,13 +247,13 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
     };
     static const sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
     {
-        XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
-        XML_STYLE_FAMILY_SD_MARKER_ID,
-        XML_STYLE_FAMILY_SD_MARKER_ID,
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_GRADIENT_ID,
-        XML_STYLE_FAMILY_SD_HATCH_ID,
-        XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+        XmlStyleFamily::SD_STROKE_DASH_ID,
+        XmlStyleFamily::SD_MARKER_ID,
+        XmlStyleFamily::SD_MARKER_ID,
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_GRADIENT_ID,
+        XmlStyleFamily::SD_HATCH_ID,
+        XmlStyleFamily::SD_FILL_IMAGE_ID
     };
 
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
@@ -296,7 +296,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID),
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::SD_PAGEMASTERSTYLECONEXT_ID),
     mnBorderBottom( 0 ),
     mnBorderLeft( 0 ),
     mnBorderRight( 0 ),
@@ -377,7 +377,7 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID)
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::SD_PAGEMASTERCONEXT_ID)
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
@@ -426,7 +426,7 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
+:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( AUTOLAYOUT_NONE )
 {
     // set family to something special at SvXMLStyleContext
@@ -783,7 +783,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     if( msDisplayName.isEmpty() )
         msDisplayName = msName;
     else if( msDisplayName != msName )
-        GetImport().AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, msName, msDisplayName );
+        GetImport().AddStyleDisplayName( XmlStyleFamily::MASTER_PAGE, msName, msDisplayName );
 
     GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
 
@@ -845,7 +845,7 @@ SvXMLImportContextRef SdXMLMasterPageContext::CreateChildContext(
                 XMLShapeStyleContext* pNew = new XMLShapeStyleContext(
                     GetSdImport(), nPrefix, rLocalName, xAttrList,
                     *GetSdImport().GetShapeImport()->GetStylesContext(),
-                    XML_STYLE_FAMILY_SD_PRESENTATION_ID);
+                    XmlStyleFamily::SD_PRESENTATION_ID);
 
                 // add this style to the outer StylesContext class for later processing
                 xContext = pNew;
@@ -969,12 +969,12 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
 
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
+    case XmlStyleFamily::SD_DRAWINGPAGE_ID:
         pContext = new SdXMLDrawingPageStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
         break;
-    case XML_STYLE_FAMILY_TABLE_CELL:
-    case XML_STYLE_FAMILY_TABLE_COLUMN:
-    case XML_STYLE_FAMILY_TABLE_ROW:
+    case XmlStyleFamily::TABLE_CELL:
+    case XmlStyleFamily::TABLE_COLUMN:
+    case XmlStyleFamily::TABLE_ROW:
         pContext = new XMLShapeStyleContext( GetSdImport(), nPrefix, rLocalName, xAttrList, *this, nFamily );
         break;
     }
@@ -996,7 +996,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
 
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+    case XmlStyleFamily::SD_GRAPHICS_ID:
         pContext = new XMLGraphicsDefaultStyle(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
         break;
     }
@@ -1015,7 +1015,7 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
 
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
+    case XmlStyleFamily::SD_DRAWINGPAGE_ID:
     {
         if(!xPresImpPropMapper.is())
         {
@@ -1027,17 +1027,17 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
         break;
     }
 
-    case XML_STYLE_FAMILY_TABLE_COLUMN:
-    case XML_STYLE_FAMILY_TABLE_ROW:
-    case XML_STYLE_FAMILY_TABLE_CELL:
+    case XmlStyleFamily::TABLE_COLUMN:
+    case XmlStyleFamily::TABLE_ROW:
+    case XmlStyleFamily::TABLE_CELL:
     {
         const rtl::Reference< XMLTableImport >& xTableImport( const_cast< SvXMLImport& >( GetImport() ).GetShapeImport()->GetShapeTableImport() );
 
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_COLUMN: xMapper = xTableImport->GetColumnImportPropertySetMapper().get(); break;
-        case XML_STYLE_FAMILY_TABLE_ROW: xMapper = xTableImport->GetRowImportPropertySetMapper().get(); break;
-        case XML_STYLE_FAMILY_TABLE_CELL: xMapper = xTableImport->GetCellImportPropertySetMapper().get(); break;
+        case XmlStyleFamily::TABLE_COLUMN: xMapper = xTableImport->GetColumnImportPropertySetMapper().get(); break;
+        case XmlStyleFamily::TABLE_ROW: xMapper = xTableImport->GetRowImportPropertySetMapper().get(); break;
+        case XmlStyleFamily::TABLE_CELL: xMapper = xTableImport->GetCellImportPropertySetMapper().get(); break;
         }
         break;
     }
@@ -1126,7 +1126,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMas
     {
         uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
         OUString sPrefix(rMaster.GetDisplayName() + "-");
-        ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
+        ImpSetGraphicStyles(xMasterPageStyles, XmlStyleFamily::SD_PRESENTATION_ID, sPrefix);
     }
     catch (const uno::Exception&)
     {
@@ -1144,7 +1144,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
         const OUString sGraphicStyleName("graphics");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, OUString());
     }
     catch( uno::Exception& )
     {
@@ -1159,7 +1159,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
         const OUString sCellStyleName("cell");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, OUString());
     }
     catch( uno::Exception& )
     {

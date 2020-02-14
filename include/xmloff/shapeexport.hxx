@@ -135,7 +135,7 @@ struct ImplXMLShapeExportInfo
 
     css::uno::Reference< css::drawing::XShape > xCustomShapeReplacement;
 
-    ImplXMLShapeExportInfo() : mnFamily( XML_STYLE_FAMILY_SD_GRAPHICS_ID ), meShapeType( XmlShapeTypeNotYetSet ) {}
+    ImplXMLShapeExportInfo() : mnFamily( XmlStyleFamily::SD_GRAPHICS_ID ), meShapeType( XmlShapeTypeNotYetSet ) {}
 };
 
 /** a vector for shape style and type cache information */

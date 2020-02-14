@@ -412,20 +412,20 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 
     // add family name
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
+        XmlStyleFamily::SD_GRAPHICS_ID,
+        OUString(XmlStyleFamily::SD_GRAPHICS_NAME),
           GetPropertySetMapper(),
-          OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
+          OUString(XmlStyleFamily::SD_GRAPHICS_PREFIX));
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+        XmlStyleFamily::SD_PRESENTATION_ID,
+        OUString(XmlStyleFamily::SD_PRESENTATION_NAME),
           GetPropertySetMapper(),
-          OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
+          OUString(XmlStyleFamily::SD_PRESENTATION_PREFIX));
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID,
-        OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME),
+        XmlStyleFamily::SD_DRAWINGPAGE_ID,
+        OUString(XmlStyleFamily::SD_DRAWINGPAGE_NAME),
           GetPresPagePropsMapper(),
-          OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX));
+          OUString(XmlStyleFamily::SD_DRAWINGPAGE_PREFIX));
     // prepare access to styles
     Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), UNO_QUERY );
     if(xFamSup.is())
@@ -1295,7 +1295,7 @@ void SdXMLExport::ImpPrepDrawPageInfos()
 {
     // create draw:style-name entries for page export
     // containing presentation page attributes AND background attributes
-    // fixed family for page-styles is "drawing-page" (XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)
+    // fixed family for page-styles is "drawing-page" (XmlStyleFamily::SD_DRAWINGPAGE_NAME)
 
     sal_Int32 nCnt;
     for(nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
@@ -1532,12 +1532,12 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
         {
             // there are filtered properties -> hard attributes
             // try to find this style in AutoStylePool
-            sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
+            sStyleName = GetAutoStylePool()->Find(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
 
             if(sStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
-                sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
+                sStyleName = GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
             }
         }
     }
@@ -1549,7 +1549,7 @@ void SdXMLExport::ImpPrepMasterPageInfos()
 {
     // create draw:style-name entries for master page export
     // containing only background attributes
-    // fixed family for page-styles is "drawing-page" (XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)
+    // fixed family for page-styles is "drawing-page" (XmlStyleFamily::SD_DRAWINGPAGE_NAME)
 
     sal_Int32 nCnt;
     for( nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
@@ -1594,9 +1594,9 @@ void SdXMLExport::ImpWritePresentationStyles()
                     OUString aPrefix( xNamed->getName() + "-" );
 
                     aStEx->exportStyleFamily(xNamed->getName(),
-                        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+                        OUString(XmlStyleFamily::SD_PRESENTATION_NAME),
                         aMapperRef, false,
-                        XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
+                        XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
                 }
             }
         }
@@ -2202,7 +2202,7 @@ void SdXMLExport::ExportAutoStyles_()
     }
 
     // export draw-page styles
-    GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
+    GetAutoStylePool()->exportXML( XmlStyleFamily::SD_DRAWINGPAGE_ID );
 
     exportAutoDataStyles();
 

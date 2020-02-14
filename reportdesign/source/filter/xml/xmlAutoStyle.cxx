@@ -36,7 +36,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if ( nFamily == XML_STYLE_FAMILY_TABLE_CELL )
+    if ( nFamily == XmlStyleFamily::TABLE_CELL )
     {
         rtl::Reference< XMLPropertySetMapper > aPropMapper = rORptExport.GetCellStylePropertyMapper();
         for (const auto& rProp : rProperties)

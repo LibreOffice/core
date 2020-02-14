@@ -36,7 +36,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if ( nFamily == XML_STYLE_FAMILY_TABLE_COLUMN )
+    if ( nFamily == XmlStyleFamily::TABLE_COLUMN )
     {
         rtl::Reference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
         for (auto const& property : rProperties)

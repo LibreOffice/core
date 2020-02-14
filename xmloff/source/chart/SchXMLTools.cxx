@@ -530,7 +530,7 @@ uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropSty
     if( !pPropStyleContext || !pStylesCtxt )
         return aRet;
     const ::std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
-    const rtl::Reference< XMLPropertySetMapper >& rMapper = pStylesCtxt->GetImportPropertyMapper( pPropStyleContext->GetFamily()/*XML_STYLE_FAMILY_SCH_CHART_ID*/ )->getPropertySetMapper();
+    const rtl::Reference< XMLPropertySetMapper >& rMapper = pStylesCtxt->GetImportPropertyMapper( pPropStyleContext->GetFamily()/*XmlStyleFamily::SCH_CHART_ID*/ )->getPropertySetMapper();
     for( const auto& rProp : rProperties )
     {
         sal_Int32 nIdx = rProp.mnIndex;

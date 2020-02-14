@@ -613,7 +613,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
+    if (nFamily == XmlStyleFamily::TABLE_CELL)
     {
         for(const auto& rProperty : rProperties)
         {
@@ -640,7 +640,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             }
         }
     }
-    else if (nFamily == XML_STYLE_FAMILY_TABLE_TABLE)
+    else if (nFamily == XmlStyleFamily::TABLE_TABLE)
     {
         for(const auto& rProperty : rProperties)
         {
@@ -675,7 +675,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
         ) const
 {
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
+    if (nFamily == XmlStyleFamily::TABLE_CELL)
     {
         for(const auto& rProperty : rProperties)
         {

@@ -147,7 +147,7 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
                 if ( pStyles )
                 {
                     XMLTableStyleContext* pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true)));
+                            XmlStyleFamily::TABLE_TABLE, sStyleName, true)));
                     if ( pStyle )
                     {
                         pStyle->FillPropertySet(xProperties);

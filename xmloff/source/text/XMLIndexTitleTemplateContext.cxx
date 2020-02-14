@@ -68,7 +68,7 @@ void XMLIndexTitleTemplateContext::StartElement(
         {
             sStyleName = xAttrList->getValueByIndex(nAttr);
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
-                XML_STYLE_FAMILY_TEXT_PARAGRAPH, sStyleName );
+                XmlStyleFamily::TEXT_PARAGRAPH, sStyleName );
             const Reference < css::container::XNameContainer >&
                 rStyles = GetImport().GetTextImport()->GetParaStyles();
             bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
@@ -86,7 +86,7 @@ void XMLIndexTitleTemplateContext::EndElement()
     if (bStyleNameOK)
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                                XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                                XmlStyleFamily::TEXT_PARAGRAPH,
                                 sStyleName );
         rTOCPropertySet->setPropertyValue("ParaStyleHeading", aAny);
     }
