@@ -48,7 +48,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
 
-#define XML_STYLE_FAMILY_FONT 1
+#define XML_STYLE_FAMILY_FONT XmlStyleFamily::PAGE_MASTER
 
 enum XMLFontStyleAttrTokens
 {

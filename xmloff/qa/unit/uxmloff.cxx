@@ -75,13 +75,13 @@ void Test::testAutoStylePool()
     rtl::Reference< XMLChartExportPropertyMapper > xExportPropMapper(
         new XMLChartExportPropertyMapper( xSetMapper, *pExport ) );
 
-    xPool->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+    xPool->AddFamily( XmlStyleFamily::TEXT_PARAGRAPH,
                       GetXMLToken( XML_PARAGRAPH ),
                       xExportPropMapper.get(),
                       OUString( "Bob" ) );
 
     std::vector< XMLPropertyState > aProperties;
-    OUString aName = xPool->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
+    OUString aName = xPool->Add( XmlStyleFamily::TEXT_PARAGRAPH, "", aProperties );
 
     // not that interesting but worth checking
     bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
@@ -91,7 +91,7 @@ void Test::testAutoStylePool()
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "style / naming changed", OUString("Bob1"), aName );
 
     // find ourselves again:
-    OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
+    OUString aSameName = xPool->Find( XmlStyleFamily::TEXT_PARAGRAPH, "", aProperties );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "same style not found", aName, aSameName );
 }
 

@@ -79,7 +79,7 @@ void XMLTextParagraphExport::exportTextFootnote(
     if (bAutoStyles)
     {
         // handle formatting of citation mark
-        Add( XML_STYLE_FAMILY_TEXT_TEXT, rPropSet );
+        Add( XmlStyleFamily::TEXT_TEXT, rPropSet );
 
         // handle formatting within footnote
         exportTextFootnoteHelper(xFootnote, xText, rText,

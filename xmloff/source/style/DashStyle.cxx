@@ -194,7 +194,7 @@ void XMLDashStyleImport::importXML(
 
     if( !aDisplayName.isEmpty() )
     {
-        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
+        rImport.AddStyleDisplayName( XmlStyleFamily::SD_STROKE_DASH_ID,
                                      rStrName, aDisplayName );
         rStrName = aDisplayName;
     }

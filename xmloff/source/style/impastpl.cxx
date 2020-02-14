@@ -43,7 +43,7 @@ using namespace ::xmloff::token;
 // ctor/dtor class XMLAutoStyleFamily
 
 XMLAutoStyleFamily::XMLAutoStyleFamily(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const OUString& rStrName,
         const rtl::Reference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
@@ -52,7 +52,7 @@ XMLAutoStyleFamily::XMLAutoStyleFamily(
     mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), mbAsFamily( bAsFamily )
 {}
 
-XMLAutoStyleFamily::XMLAutoStyleFamily( sal_Int32 nFamily ) :
+XMLAutoStyleFamily::XMLAutoStyleFamily( XmlStyleFamily nFamily ) :
     mnFamily(nFamily), mnCount(0), mnName(0), mbAsFamily(false) {}
 
 void XMLAutoStyleFamily::ClearEntries()
@@ -346,7 +346,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 // Adds stylefamily-information to sorted list
 
 void SvXMLAutoStylePoolP_Impl::AddFamily(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const OUString& rStrName,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper,
            const OUString& rStrPrefix,
@@ -381,7 +381,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
 }
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
 {
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
@@ -391,7 +391,7 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
 }
 
 // Adds a name to list
-void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
+void SvXMLAutoStylePoolP_Impl::RegisterName( XmlStyleFamily nFamily, const OUString& rName )
 {
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
     auto const iter = m_FamilySet.find(pTemp);
@@ -401,7 +401,7 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 }
 
 // Adds a name to list
-void SvXMLAutoStylePoolP_Impl::RegisterDefinedName( sal_Int32 nFamily, const OUString& rName )
+void SvXMLAutoStylePoolP_Impl::RegisterDefinedName( XmlStyleFamily nFamily, const OUString& rName )
 {
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
     auto const iter = m_FamilySet.find(pTemp);
@@ -429,7 +429,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
         // iterate over names
         for (const auto& rName : rFamily.maNameSet)
         {
-            aFamilies.push_back( rFamily.mnFamily );
+            aFamilies.push_back( static_cast<sal_Int32>(rFamily.mnFamily) );
             aNames.push_back( rName );
         }
     }
@@ -448,7 +448,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 // if not added, yet.
 
 bool SvXMLAutoStylePoolP_Impl::Add(
-    OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
+    OUString& rName, XmlStyleFamily nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
@@ -473,7 +473,7 @@ bool SvXMLAutoStylePoolP_Impl::Add(
 }
 
 bool SvXMLAutoStylePoolP_Impl::AddNamed(
-    const OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
+    const OUString& rName, XmlStyleFamily nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties )
 {
     // get family and parent the same way as in Add()
@@ -502,7 +502,7 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 // Search for an array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 
 
-OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
+OUString SvXMLAutoStylePoolP_Impl::Find( XmlStyleFamily nFamily,
                                          const OUString& rParent,
                                          const vector< XMLPropertyState >& rProperties ) const
 {
@@ -572,7 +572,7 @@ struct StyleComparator
 }
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     // Get list of parents for current family (nFamily)
@@ -675,7 +675,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
             sal_Int32 nStart(-1);
             sal_Int32 nEnd(-1);
-            if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
+            if (nFamily == XmlStyleFamily::PAGE_MASTER)
             {
                 nStart = 0;
                 sal_Int32 nIndex = 0;

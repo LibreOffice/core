@@ -151,7 +151,7 @@ bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & x
 
     if( !aDisplayName.isEmpty() )
     {
-        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID,
+        rImport.AddStyleDisplayName( XmlStyleFamily::SD_FILL_IMAGE_ID,
                                      rStrName, aDisplayName );
         rStrName = aDisplayName;
     }

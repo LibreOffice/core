@@ -1001,7 +1001,7 @@ void SchXMLExportHelper_Impl::exportAutoStyles()
         mrExport.exportAutoDataStyles();
 
         // export chart auto styles
-        mrAutoStylePool.exportXML( XML_STYLE_FAMILY_SCH_CHART_ID );
+        mrAutoStylePool.exportXML( XmlStyleFamily::SCH_CHART_ID );
 
         // export auto styles for additional shapes
         mrExport.GetShapeExport()->exportAutoStyles();
@@ -1025,26 +1025,26 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
 {
     // register chart auto-style family
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_SCH_CHART_ID,
+        XmlStyleFamily::SCH_CHART_ID,
         OUString( XML_STYLE_FAMILY_SCH_CHART_NAME ),
         mxExpPropMapper.get(),
         OUString( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
 
     // register shape family
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+        XmlStyleFamily::SD_GRAPHICS_ID,
         OUString( XML_STYLE_FAMILY_SD_GRAPHICS_NAME ),
         mxExpPropMapper.get(),
         OUString( XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX ));
     // register paragraph family also for shapes
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+        XmlStyleFamily::TEXT_PARAGRAPH,
         GetXMLToken( XML_PARAGRAPH ),
         mxExpPropMapper.get(),
         OUString( 'P' ));
     // register text family also for shapes
     mrAutoStylePool.AddFamily(
-        XML_STYLE_FAMILY_TEXT_TEXT,
+        XmlStyleFamily::TEXT_TEXT,
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
         OUString( 'T' ));
@@ -3480,7 +3480,7 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
 void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
 {
     if( !aStates.empty() )
-        maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
+        maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XmlStyleFamily::SCH_CHART_ID, aStates ));
 }
 
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )

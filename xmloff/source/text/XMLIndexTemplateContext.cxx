@@ -169,7 +169,7 @@ void XMLIndexTemplateContext::EndElement()
             {
                 OUString sDisplayStyleName =
                         GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                        XmlStyleFamily::TEXT_PARAGRAPH,
                         sStyleName );
                 // #i50288#: Check if style exists
                 const Reference < css::container::XNameContainer > & rStyles =

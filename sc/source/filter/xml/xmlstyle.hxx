@@ -184,7 +184,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 
     virtual void exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
-            sal_Int32 nFamily,
+            XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
@@ -193,7 +193,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 
     virtual void exportStyleContent(
             const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
-            sal_Int32 nFamily,
+            XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,

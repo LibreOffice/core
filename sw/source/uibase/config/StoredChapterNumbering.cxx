@@ -276,7 +276,7 @@ public:
     {
         OUString name;
         OUString displayName;
-        sal_uInt16 nFamily(0);
+        XmlStyleFamily nFamily(XmlStyleFamily::DATA_STYLE);
 
         sax_fastparser::FastAttributeList *pAttribList =
             sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
@@ -285,7 +285,7 @@ public:
             if (aIter.getToken() == (XML_NAMESPACE_STYLE | XML_FAMILY))
             {
                 if (IsXMLToken(aIter.toString(), XML_TEXT))
-                    nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+                    nFamily = XmlStyleFamily::TEXT_TEXT;
                 else if (IsXMLToken(aIter.toString(), XML_NAME))
                     name = aIter.toString();
                 else if (IsXMLToken(aIter.toString(), XML_DISPLAY_NAME))
@@ -296,7 +296,7 @@ public:
             else
                 SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
 
-        if (nFamily && !name.isEmpty() && !displayName.isEmpty())
+        if (nFamily != XmlStyleFamily::DATA_STYLE && !name.isEmpty() && !displayName.isEmpty())
         {
             rImport.AddStyleDisplayName(nFamily, name, displayName);
         }

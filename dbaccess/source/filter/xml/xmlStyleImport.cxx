@@ -48,7 +48,7 @@ using namespace xmloff::token;
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily )
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily )
     :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false )
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
@@ -66,25 +66,25 @@ void OTableStyleContext::FillPropertySet(
 {
     if ( !IsDefaultStyle() )
     {
-        if ( GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
+        if ( GetFamily() == XmlStyleFamily::TABLE_TABLE )
         {
             if ( !sPageStyle.isEmpty() )
             {
                 AddProperty(CTF_DB_MASTERPAGENAME, Any(sPageStyle));
             }
         }
-        else if ( GetFamily() == XML_STYLE_FAMILY_TABLE_COLUMN )
+        else if ( GetFamily() == XmlStyleFamily::TABLE_COLUMN )
         {
             if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
                 SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext* >(pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
+                    XmlStyleFamily::DATA_STYLE, m_sDataStyleName, true)));
                 if ( !pStyle )
                 {
                     OTableStylesContext* pMyStyles = dynamic_cast<OTableStylesContext* >(GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
                         pStyle = const_cast<SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext* >(pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
+                            FindStyleChildContext(XmlStyleFamily::DATA_STYLE, m_sDataStyleName, true)));
                     else {
                         OSL_FAIL("not possible to get style");
                     }
@@ -162,7 +162,7 @@ void OTableStylesContext::EndElement()
 
 rtl::Reference < SvXMLImportPropertyMapper >
     OTableStylesContext::GetImportPropertyMapper(
-                    sal_uInt16 nFamily ) const
+                    XmlStyleFamily nFamily ) const
 {
     rtl::Reference < SvXMLImportPropertyMapper > xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
 
@@ -170,27 +170,28 @@ rtl::Reference < SvXMLImportPropertyMapper >
     {
         switch( nFamily )
         {
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XmlStyleFamily::TABLE_TABLE:
             {
                 if ( !m_xTableImpPropMapper.is() )
                     m_xTableImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = m_xTableImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_COLUMN:
+            case XmlStyleFamily::TABLE_COLUMN:
             {
                 if ( !m_xColumnImpPropMapper.is() )
                     m_xColumnImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetColumnStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = m_xColumnImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_CELL:
+            case XmlStyleFamily::TABLE_CELL:
             {
                 if ( !m_xCellImpPropMapper.is() )
                     m_xCellImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = m_xCellImpPropMapper;
             }
              break;
+            default: break;
         }
     }
 
@@ -198,7 +199,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
@@ -208,35 +209,36 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_TABLE:
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
-        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XmlStyleFamily::TABLE_TABLE:
+        case XmlStyleFamily::TABLE_COLUMN:
+        case XmlStyleFamily::TABLE_CELL:
             pStyle = new OTableStyleContext( GetOwnImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
             break;
+        default: break;
         }
     }
 
     return pStyle;
 }
 
-OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+OUString OTableStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
 {
     OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
     if (sServiceName.isEmpty())
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_TABLE:
+        case XmlStyleFamily::TABLE_TABLE:
             sServiceName = XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME;
             break;
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XmlStyleFamily::TABLE_COLUMN:
             sServiceName = XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME;
             break;
-        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XmlStyleFamily::TABLE_CELL:
             sServiceName = XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME;
             break;
-
+        default: break;
         }
     }
     return sServiceName;
@@ -248,14 +250,14 @@ sal_Int32 OTableStylesContext::GetIndex(const sal_Int16 nContextID)
     {
         if (m_nNumberFormatIndex == -1)
             m_nNumberFormatIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_COLUMN)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_COLUMN)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return m_nNumberFormatIndex;
     }
     else if ( nContextID == CTF_DB_MASTERPAGENAME )
     {
         if (m_nMasterPageNameIndex == -1)
             m_nMasterPageNameIndex =
-                GetImportPropertyMapper(XML_STYLE_FAMILY_TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
+                GetImportPropertyMapper(XmlStyleFamily::TABLE_TABLE)->getPropertySetMapper()->FindEntryIndex(nContextID);
         return m_nMasterPageNameIndex;
     }
     else

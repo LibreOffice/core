@@ -126,7 +126,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG)
+:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
 ,   nOffset(0)
@@ -148,7 +148,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
             if( IsXMLToken( rValue, XML_ENDNOTE ) )
             {
                 bIsEndnote = true;
-                SetFamily( XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG );
+                SetFamily( XmlStyleFamily::TEXT_FOOTNOTECONFIG );
             }
             break;
         }
@@ -353,28 +353,28 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     if (!sCitationStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_TEXT_TEXT, sCitationStyle );
+                        XmlStyleFamily::TEXT_TEXT, sCitationStyle );
         rConfig->setPropertyValue(gsPropertyCharStyleName, aAny);
     }
 
     if (!sAnchorStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_TEXT_TEXT, sAnchorStyle );
+                        XmlStyleFamily::TEXT_TEXT, sAnchorStyle );
         rConfig->setPropertyValue(gsPropertyAnchorCharStyleName, aAny);
     }
 
     if (!sPageStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle );
+                        XmlStyleFamily::MASTER_PAGE, sPageStyle );
         rConfig->setPropertyValue(gsPropertyPageStyleName, aAny);
     }
 
     if (!sDefaultStyle.isEmpty())
     {
         aAny <<= GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_TEXT_PARAGRAPH, sDefaultStyle );
+                        XmlStyleFamily::TEXT_PARAGRAPH, sDefaultStyle );
         rConfig->setPropertyValue(gsPropertyParagraphStyleName, aAny);
     }
 

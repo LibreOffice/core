@@ -412,17 +412,17 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 
     // add family name
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_GRAPHICS_ID,
+        XmlStyleFamily::SD_GRAPHICS_ID,
         OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
           GetPropertySetMapper(),
           OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_PRESENTATION_ID,
+        XmlStyleFamily::SD_PRESENTATION_ID,
         OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
           GetPropertySetMapper(),
           OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
     GetAutoStylePool()->AddFamily(
-        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID,
+        XmlStyleFamily::SD_DRAWINGPAGE_ID,
         OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME),
           GetPresPagePropsMapper(),
           OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX));
@@ -1532,12 +1532,12 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
         {
             // there are filtered properties -> hard attributes
             // try to find this style in AutoStylePool
-            sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
+            sStyleName = GetAutoStylePool()->Find(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
 
             if(sStyleName.isEmpty())
             {
                 // Style did not exist, add it to AutoStalePool
-                sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
+                sStyleName = GetAutoStylePool()->Add(XmlStyleFamily::SD_DRAWINGPAGE_ID, sStyleName, aPropStates);
             }
         }
     }
@@ -1596,7 +1596,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                     aStEx->exportStyleFamily(xNamed->getName(),
                         OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
                         aMapperRef, false,
-                        XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
+                        XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
                 }
             }
         }
@@ -2202,7 +2202,7 @@ void SdXMLExport::ExportAutoStyles_()
     }
 
     // export draw-page styles
-    GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
+    GetAutoStylePool()->exportXML( XmlStyleFamily::SD_DRAWINGPAGE_ID );
 
     exportAutoDataStyles();
 

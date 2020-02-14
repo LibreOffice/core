@@ -332,7 +332,7 @@ void SdXMLGenericPageContext::EndElement()
                         if( pStyles )
                         {
                             const SdXMLNumberFormatImportContext* pSdNumStyle =
-                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, aDateTimeFormat, true ) );
+                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XmlStyleFamily::DATA_STYLE, aDateTimeFormat, true ) );
 
                             if( pSdNumStyle )
                             {
@@ -365,7 +365,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
             if (const SdXMLStylesContext* pStyles = dynamic_cast<const SdXMLStylesContext *>(pContext))
             {
                 const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
+                    XmlStyleFamily::SD_DRAWINGPAGE_ID, rStyleName);
 
                 if (const XMLPropStyleContext* pPropStyle = dynamic_cast<const XMLPropStyleContext*>(pStyle))
                 {
@@ -421,7 +421,7 @@ void SdXMLGenericPageContext::SetLayout()
 
         if (const SdXMLStylesContext* pStyles = dynamic_cast<const SdXMLStylesContext *>(pContext))
         {
-            const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
+            const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
 
             if (const SdXMLPresentationPageLayoutContext* pLayout = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
             {
@@ -481,7 +481,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString const & rsPageMasterName )
         // #80012# GetStylesContext() replaced with GetAutoStylesContext()
         const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
-        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : nullptr;
+        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XmlStyleFamily::SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : nullptr;
 
         if (const SdXMLPageMasterContext* pPageMaster = dynamic_cast<const SdXMLPageMasterContext*>(pStyle))
         {

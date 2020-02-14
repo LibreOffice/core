@@ -286,16 +286,16 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
 
     const OUString& sFamily( GetXMLToken(XML_PARAGRAPH) );
     OUString aPrefix( 'P');
-    GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
+    GetAutoStylePool()->AddFamily( XmlStyleFamily::TEXT_PARAGRAPH, sFamily,
                               m_xParaPropMapper, aPrefix );
 
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
         m_xCellStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
         m_xColumnStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
         m_xRowStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
+    GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_TABLE, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
         m_xTableStylesExportPropertySetMapper, XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 }
 
@@ -489,7 +489,7 @@ static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::ve
     }
 }
 
-void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, std::vector<OUString>& _rStyleNames)
+void ORptExport::collectStyleNames(XmlStyleFamily _nFamily,const ::std::vector< sal_Int32>& _aSize, std::vector<OUString>& _rStyleNames)
 {
     ::std::vector< XMLPropertyState > aPropertyStates;
     aPropertyStates.emplace_back(0);
@@ -504,7 +504,7 @@ void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_I
     }
 }
 
-void ORptExport::collectStyleNames(sal_Int32 _nFamily, const ::std::vector< sal_Int32>& _aSize, const ::std::vector< sal_Int32>& _aSizeAutoGrow, std::vector<OUString>& _rStyleNames)
+void ORptExport::collectStyleNames(XmlStyleFamily _nFamily, const ::std::vector< sal_Int32>& _aSize, const ::std::vector< sal_Int32>& _aSizeAutoGrow, std::vector<OUString>& _rStyleNames)
 {
     ::std::vector< XMLPropertyState > aPropertyStates;
     aPropertyStates.emplace_back(0);
@@ -604,9 +604,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
 
     TGridStyleMap::iterator aPos = m_aColumnStyleNames.emplace(_xProp.get(),std::vector<OUString>()).first;
-    collectStyleNames(XML_STYLE_FAMILY_TABLE_COLUMN,aColumnPos,aPos->second);
+    collectStyleNames(XmlStyleFamily::TABLE_COLUMN,aColumnPos,aPos->second);
     aPos = m_aRowStyleNames.emplace(_xProp.get(),std::vector<OUString>()).first;
-    collectStyleNames(XML_STYLE_FAMILY_TABLE_ROW, aRowPos, aRowPosAutoGrow, aPos->second);
+    collectStyleNames(XmlStyleFamily::TABLE_ROW, aRowPos, aRowPosAutoGrow, aPos->second);
 
     sal_Int32 x1 = 0;
     sal_Int32 y1 = 0;
@@ -1152,7 +1152,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     {
         ::std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
         if ( !aPropertyStates.empty() )
-            m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aPropertyStates ));
+            m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TEXT_PARAGRAPH, aPropertyStates ));
     }
     ::std::vector< XMLPropertyState > aPropertyStates( m_xCellStylesExportPropertySetMapper->Filter(_xProp) );
     Reference<XFixedLine> xFixedLine(_xProp,uno::UNO_QUERY);
@@ -1252,14 +1252,14 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
 
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_CELL, aPropertyStates ));
+        m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XmlStyleFamily::TABLE_CELL, aPropertyStates ));
 }
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
     ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp.get()) );
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates ));
+        m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XmlStyleFamily::TABLE_TABLE, aPropertyStates ));
 }
 
 void ORptExport::SetBodyAttributes()
@@ -1343,10 +1343,10 @@ void ORptExport::ExportAutoStyles_()
     if ( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         collectComponentStyles();
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_TABLE);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_COLUMN);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_ROW);
+        GetAutoStylePool()->exportXML(XmlStyleFamily::TABLE_CELL);
         exportDataStyles();
         GetShapeExport()->exportAutoStyles();
     }

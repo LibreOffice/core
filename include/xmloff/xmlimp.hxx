@@ -422,10 +422,10 @@ public:
     css::uno::Reference< css::embed::XStorage > const &
           GetSourceStorage() const;
 
-    void AddStyleDisplayName( sal_uInt16 nFamily,
+    void AddStyleDisplayName( XmlStyleFamily nFamily,
                               const OUString& rName,
                               const OUString& rDisplayName );
-    OUString GetStyleDisplayName( sal_uInt16 nFamily,
+    OUString GetStyleDisplayName( XmlStyleFamily nFamily,
                                   const OUString& rName ) const;
 
     ProgressBarHelper*  GetProgressBarHelper();

@@ -407,7 +407,7 @@ void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
     const OUString& rXMLFamily,
     const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-    bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
+    bool bUsed, XmlStyleFamily nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
     exportStyleFamily( sFamily, rXMLFamily, rPropMapper, bUsed, nFamily,
@@ -417,7 +417,7 @@ void XMLStyleExport::exportStyleFamily(
 void XMLStyleExport::exportStyleFamily(
     const OUString& rFamily, const OUString& rXMLFamily,
     const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-    bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
+    bool bUsed, XmlStyleFamily nFamily, const OUString* pPrefix)
 {
     assert(GetExport().GetModel().is());
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );

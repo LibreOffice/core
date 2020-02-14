@@ -67,7 +67,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         bool bOverwrite )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
+:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::MASTER_PAGE )
 ,   bInsertHeader( false )
 ,   bInsertFooter( false )
 ,   bInsertHeaderLeft( false )
@@ -112,7 +112,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
     if( !sDisplayName.isEmpty() )
     {
-        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sName,
+        rImport.AddStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sName,
                                      sDisplayName );
     }
     else
@@ -293,7 +293,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
         {
             OUString sDisplayFollow(
                 GetImport().GetStyleDisplayName(
-                        XML_STYLE_FAMILY_MASTER_PAGE, sFollow ) );
+                        XmlStyleFamily::MASTER_PAGE, sFollow ) );
             if( sDisplayFollow.isEmpty() ||
                 !xPageStyles->hasByName( sDisplayFollow ) )
                 sDisplayFollow = xStyle->getName();

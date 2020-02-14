@@ -62,7 +62,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
     if( CTF_PM_REGISTER_STYLE==nContextID )
     {
         OUString sDisplayName( rImport.GetStyleDisplayName(
-                    XML_STYLE_FAMILY_TEXT_PARAGRAPH, rValue ) );
+                    XmlStyleFamily::TEXT_PARAGRAPH, rValue ) );
         Reference < XNameContainer > xParaStyles =
             rImport.GetTextImport()->GetParaStyles();
         if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )

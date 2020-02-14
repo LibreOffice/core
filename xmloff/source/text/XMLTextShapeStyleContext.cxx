@@ -140,7 +140,7 @@ static const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
     XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
                           nFamily ),
     bAutoUpdate( false )

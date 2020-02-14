@@ -64,7 +64,7 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
         bool bDefaultStyle) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
+    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
     sPageUsage(),
     m_bIsFillStyleAlreadyConverted(false) //
 {
@@ -226,12 +226,12 @@ void PageStyleContext::FillPropertySet_PageStyle(
         };
 
         // the style families associated with the same index modulo 4
-        static sal_uInt16 aFamilies[] =
+        static const XmlStyleFamily aFamilies[] =
         {
-            XML_STYLE_FAMILY_SD_GRADIENT_ID,
-            XML_STYLE_FAMILY_SD_GRADIENT_ID,
-            XML_STYLE_FAMILY_SD_HATCH_ID,
-            XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+            XmlStyleFamily::SD_GRADIENT_ID,
+            XmlStyleFamily::SD_GRADIENT_ID,
+            XmlStyleFamily::SD_HATCH_ID,
+            XmlStyleFamily::SD_FILL_IMAGE_ID
         };
 
         // Fill PropertySet, but let it handle special properties not itself
@@ -333,12 +333,12 @@ extern ContextID_Index_Pair const g_MasterPageContextIDs[] =
     {-1, -1}
 };
 
-extern sal_uInt16 const g_MasterPageFamilies[] =
+extern XmlStyleFamily const g_MasterPageFamilies[] =
 {
-    XML_STYLE_FAMILY_SD_GRADIENT_ID,
-    XML_STYLE_FAMILY_SD_GRADIENT_ID,
-    XML_STYLE_FAMILY_SD_HATCH_ID,
-    XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+    XmlStyleFamily::SD_GRADIENT_ID,
+    XmlStyleFamily::SD_GRADIENT_ID,
+    XmlStyleFamily::SD_HATCH_ID,
+    XmlStyleFamily::SD_FILL_IMAGE_ID
 };
 
 // text grid enhancement for better CJK support

@@ -1314,8 +1314,8 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
             if( (rFlags & CONV_STAR_FONT_FLAGS_VALID) == 0 )
             {
                 XMLTextStyleContext *pStyle = nullptr;
-                sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
-                                           : XML_STYLE_FAMILY_TEXT_TEXT;
+                XmlStyleFamily nFamily = bPara ? XmlStyleFamily::TEXT_PARAGRAPH
+                                               : XmlStyleFamily::TEXT_TEXT;
                 if (!rStyleName.isEmpty() && m_xImpl->m_xAutoStyles.is())
                 {
                     const SvXMLStyleContext* pTempStyle =
@@ -1437,7 +1437,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
             if ( !aParentStyle.isEmpty() )
             {
                 aParentStyle =
-                    rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                    rImport.GetStyleDisplayName( XmlStyleFamily::TEXT_PARAGRAPH,
                                                  aParentStyle );
             }
             if ( aParentStyle.isEmpty() || !xParaStyles->hasByName( aParentStyle ) )
@@ -1520,8 +1520,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     static const char s_PageDescName[] = "PageDescName";
     static const char s_OutlineLevel[] = "OutlineLevel";
 
-    const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
-                                     : XML_STYLE_FAMILY_TEXT_TEXT;
+    const XmlStyleFamily nFamily = bPara ? XmlStyleFamily::TEXT_PARAGRAPH
+                                         : XmlStyleFamily::TEXT_TEXT;
     XMLTextStyleContext *pStyle = nullptr;
     OUString sStyleName( rStyleName );
     if (!sStyleName.isEmpty() && m_xImpl->m_xAutoStyles.is())
@@ -1752,7 +1752,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             OUString sDisplayName(
                 rImport.GetStyleDisplayName(
-                                XML_STYLE_FAMILY_MASTER_PAGE,
+                                XmlStyleFamily::MASTER_PAGE,
                                 pStyle->GetMasterPageName()) );
             if( sDisplayName.isEmpty() ||
                 (m_xImpl->m_xPageStyles.is() &&
@@ -1767,7 +1767,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             OUString sDisplayName(
                 rImport.GetStyleDisplayName(
-                                XML_STYLE_FAMILY_TEXT_TEXT,
+                                XmlStyleFamily::TEXT_TEXT,
                                 pStyle->GetDropCapStyleName()) );
             if (m_xImpl->m_xTextStyles->hasByName(sDisplayName) &&
                 xPropSetInfo->hasPropertyByName("DropCapCharStyleName"))
@@ -2159,7 +2159,7 @@ void XMLTextImportHelper::SetHyperlink(
     {
         OUString sDisplayName(
             rImport.GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_TEXT, rStyleName ) );
+                            XmlStyleFamily::TEXT_TEXT, rStyleName ) );
         if( !sDisplayName.isEmpty() &&
             xPropSetInfo->hasPropertyByName(s_UnvisitedCharStyleName) &&
             m_xImpl->m_xTextStyles->hasByName(sDisplayName))
@@ -2170,7 +2170,7 @@ void XMLTextImportHelper::SetHyperlink(
 
         sDisplayName =
             rImport.GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_TEXT, rVisitedStyleName );
+                            XmlStyleFamily::TEXT_TEXT, rVisitedStyleName );
         if( !sDisplayName.isEmpty() &&
             xPropSetInfo->hasPropertyByName(s_VisitedCharStyleName) &&
             m_xImpl->m_xTextStyles->hasByName(sDisplayName))
@@ -2204,7 +2204,7 @@ void XMLTextImportHelper::SetRuby(
         {
             const SvXMLStyleContext* pTempStyle =
                 static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
-                FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
+                FindStyleChildContext( XmlStyleFamily::TEXT_RUBY,
                                        rStyleName, true );
             XMLPropStyleContext *pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
 
@@ -2217,7 +2217,7 @@ void XMLTextImportHelper::SetRuby(
         {
             OUString sDisplayName(
                 rImport.GetStyleDisplayName(
-                            XML_STYLE_FAMILY_TEXT_TEXT, rTextStyleName ) );
+                            XmlStyleFamily::TEXT_TEXT, rTextStyleName ) );
             if( (!sDisplayName.isEmpty()) &&
                 m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
@@ -2447,7 +2447,7 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
 
     const SvXMLStyleContext* pStyle =
         static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
-                  FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE,
+                  FindStyleChildContext( XmlStyleFamily::DATA_STYLE,
                                               sStyleName, true );
 
     // get appropriate context
@@ -2483,7 +2483,7 @@ const SvxXMLListStyleContext *XMLTextImportHelper::FindAutoListStyle( const OUSt
     {
         const SvXMLStyleContext* pTempStyle =
             static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
-                    FindStyleChildContext( XML_STYLE_FAMILY_TEXT_LIST, rName,
+                    FindStyleChildContext( XmlStyleFamily::TEXT_LIST, rName,
                                            true );
         pStyle = dynamic_cast< const SvxXMLListStyleContext* >(pTempStyle);
     }
@@ -2498,7 +2498,7 @@ XMLPropStyleContext *XMLTextImportHelper::FindAutoFrameStyle( const OUString& rN
     {
         const SvXMLStyleContext* pTempStyle =
             static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
-                    FindStyleChildContext( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rName,
+                    FindStyleChildContext( XmlStyleFamily::SD_GRAPHICS_ID, rName,
                                            true );
         pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
     }
@@ -2515,7 +2515,7 @@ XMLPropStyleContext* XMLTextImportHelper::FindSectionStyle(
         const SvXMLStyleContext* pTempStyle =
             static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
                            FindStyleChildContext(
-                               XML_STYLE_FAMILY_TEXT_SECTION,
+                               XmlStyleFamily::TEXT_SECTION,
                                rName, true );
         pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
     }
@@ -2532,7 +2532,7 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
         const SvXMLStyleContext* pTempStyle =
             static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
                            FindStyleChildContext(
-                               XML_STYLE_FAMILY_PAGE_MASTER,
+                               XmlStyleFamily::PAGE_MASTER,
                                rName, true );
         pStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pTempStyle));
     }
@@ -2548,7 +2548,7 @@ XMLPropStyleContext * XMLTextImportHelper::FindDrawingPage(OUString const& rName
     }
     SvXMLStyleContext const* pStyle(
         static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->FindStyleChildContext(
-               XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rName, true));
+                XmlStyleFamily::SD_DRAWINGPAGE_ID, rName, true));
     assert(pStyle == nullptr || dynamic_cast<XMLPropStyleContext const*>(pStyle) != nullptr);
     return const_cast<XMLPropStyleContext*>(static_cast<XMLPropStyleContext const*>(pStyle));
 }

@@ -140,7 +140,7 @@ void XMLHatchStyleImport::importXML(
 
     if( !aDisplayName.isEmpty() )
     {
-        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_HATCH_ID, rStrName,
+        rImport.AddStyleDisplayName( XmlStyleFamily::SD_HATCH_ID, rStrName,
                                      aDisplayName );
         rStrName = aDisplayName;
     }

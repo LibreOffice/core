@@ -182,7 +182,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
     void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess > const & xPageStyles,
-        sal_uInt16 nFamily, const OUString& rPrefix) const;
+        XmlStyleFamily nFamily, const OUString& rPrefix) const;
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
@@ -191,13 +191,13 @@ protected:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
-        sal_uInt16 nFamily,
+        XmlStyleFamily nFamily,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<
             css::xml::sax::XAttributeList > & xAttrList ) override;
@@ -210,7 +210,7 @@ public:
         bool bIsAutoStyle);
 
     virtual void EndElement() override;
-    virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const override;
+    virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(XmlStyleFamily nFamily) const override;
 
     void SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const;
 

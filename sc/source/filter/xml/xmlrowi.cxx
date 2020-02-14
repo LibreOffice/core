@@ -168,7 +168,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                         if ( pStyles )
                         {
                             XMLTableStyleContext* pStyle(const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, true))));
+                                XmlStyleFamily::TABLE_ROW, sStyleName, true))));
                             if (pStyle)
                             {
                                 pStyle->FillPropertySet(xRowProperties);

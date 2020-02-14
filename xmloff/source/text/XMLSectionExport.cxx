@@ -86,14 +86,14 @@ void XMLSectionExport::ExportSectionStart(
     if (bAutoStyles)
     {
         // get PropertySet and add section style
-        GetParaExport().Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropertySet );
+        GetParaExport().Add( XmlStyleFamily::TEXT_SECTION, xPropertySet );
     }
     else
     {
         // always export section style
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                      GetParaExport().Find(
-                                     XML_STYLE_FAMILY_TEXT_SECTION,
+                                     XmlStyleFamily::TEXT_SECTION,
                                      xPropertySet, "" ) );
 
         // xml:id for RDF metadata

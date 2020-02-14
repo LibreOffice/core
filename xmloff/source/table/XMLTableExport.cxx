@@ -195,15 +195,15 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );
     mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), true ) );
 
-    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN,
+    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_COLUMN,
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),
         mxColumnExportPropertySetMapper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
-    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW,
+    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_ROW,
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME),
         mxRowExportPropertySetMapper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
-    mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL,
+    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL,
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME),
         mxCellExportPropertySetMapper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
@@ -238,7 +238,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
             if( has_states( aPropStates ) )
             {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, aPropStates) );
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TABLE_COLUMN, aPropStates) );
                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
                 xTableInfo->maColumnStyleMap[xKey] = sStyleName;
             }
@@ -262,7 +262,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
             if( has_states( aRowPropStates ) )
             {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, aRowPropStates) );
+                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TABLE_ROW, aRowPropStates) );
                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
                 xTableInfo->maRowStyleMap[xKey] = sStyleName;
             }
@@ -288,7 +288,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 OUString sStyleName;
                 std::vector< XMLPropertyState > aCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
                 if( has_states( aCellPropStates ) )
-                    sStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, aCellPropStates);
+                    sStyleName = mrExport.GetAutoStylePool()->Add(XmlStyleFamily::TABLE_CELL, aCellPropStates);
                 else
                     sStyleName = sParentStyleName;
 
@@ -495,7 +495,7 @@ void XMLTableExport::exportTableStyles()
         aStEx.set(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
     }
 
-    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XmlStyleFamily::TABLE_CELL);
 
     exportTableTemplates();
 }
@@ -507,9 +507,9 @@ void XMLTableExport::exportAutoStyles()
     if( !mbExportTables )
          return;
 
-    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_COLUMN );
-    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_ROW );
-    mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_CELL );
+    mrExport.GetAutoStylePool()->exportXML( XmlStyleFamily::TABLE_COLUMN );
+    mrExport.GetAutoStylePool()->exportXML( XmlStyleFamily::TABLE_ROW );
+    mrExport.GetAutoStylePool()->exportXML( XmlStyleFamily::TABLE_CELL );
 }
 
 const TableStyleElement* getTableStyleMap()

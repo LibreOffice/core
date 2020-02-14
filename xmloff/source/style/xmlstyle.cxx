@@ -98,9 +98,9 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         if( IsXMLToken( rLocalName, XML_FAMILY ) )
         {
             if( IsXMLToken( rValue, XML_PARAGRAPH ) )
-                mnFamily = sal_uInt16(SfxStyleFamily::Para);
+                mnFamily = XmlStyleFamily(SfxStyleFamily::Para);
             else if( IsXMLToken( rValue, XML_TEXT ) )
-                mnFamily = sal_uInt16(SfxStyleFamily::Char);
+                mnFamily = XmlStyleFamily(SfxStyleFamily::Char);
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
@@ -137,7 +137,7 @@ SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >&,
-        sal_uInt16 nFam, bool bDefault ) :
+        XmlStyleFamily nFam, bool bDefault ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
     mbHidden( false ),
     mnFamily( nFam ),
@@ -151,7 +151,7 @@ SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp,
         sal_Int32 /*nElement*/,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
-        sal_uInt16 nFam, bool bDefault ) :
+        XmlStyleFamily nFam, bool bDefault ) :
     SvXMLImportContext( rImp ),
     mbHidden( false ),
     mnFamily( nFam ),
@@ -209,13 +209,13 @@ bool SvXMLStyleContext::IsTransient() const
 
 class SvXMLStyleIndex_Impl
 {
-    OUString const              sName;
-    sal_uInt16 const            nFamily;
+    OUString               sName;
+    XmlStyleFamily         nFamily;
     const rtl::Reference<SvXMLStyleContext> mxStyle;
 
 public:
 
-    SvXMLStyleIndex_Impl( sal_uInt16 nFam, const OUString& rName ) :
+    SvXMLStyleIndex_Impl( XmlStyleFamily nFam, const OUString& rName ) :
         sName( rName ),
         nFamily( nFam )
     {
@@ -229,7 +229,7 @@ public:
     }
 
     const OUString& GetName() const { return sName; }
-    sal_uInt16 GetFamily() const { return nFamily; }
+    XmlStyleFamily GetFamily() const { return nFamily; }
     const SvXMLStyleContext *GetStyle() const { return mxStyle.get(); }
 };
 
@@ -277,7 +277,7 @@ public:
     inline void AddStyle( SvXMLStyleContext *pStyle );
     void Clear();
 
-    const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
+    const SvXMLStyleContext *FindStyleChildContext( XmlStyleFamily nFamily,
                                                     const OUString& rName,
                                                     bool bCreateIndex ) const;
     bool IsAutomaticStyle() const { return bAutomaticStyle; }
@@ -303,7 +303,7 @@ void SvXMLStylesContext_Impl::Clear()
     aStyles.clear();
 }
 
-const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uInt16 nFamily,
+const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( XmlStyleFamily nFamily,
                                                                          const OUString& rName,
                                                                          bool bCreateIndex ) const
 {
@@ -382,7 +382,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_STYLE_STYLE:
             case XML_TOK_STYLE_DEFAULT_STYLE:
             {
-                sal_uInt16 nFamily = 0;
+                XmlStyleFamily nFamily = XmlStyleFamily::DATA_STYLE;
                 sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
                 for( sal_Int16 i=0; i < nAttrCount; i++ )
                 {
@@ -480,116 +480,118 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {
-        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        case XML_STYLE_FAMILY_TEXT_TEXT:
-        case XML_STYLE_FAMILY_TEXT_SECTION:
+        case XmlStyleFamily::TEXT_PARAGRAPH:
+        case XmlStyleFamily::TEXT_TEXT:
+        case XmlStyleFamily::TEXT_SECTION:
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
             break;
 
-        case XML_STYLE_FAMILY_TEXT_RUBY:
+        case XmlStyleFamily::TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
             break;
-        case XML_STYLE_FAMILY_SCH_CHART_ID:
+        case XmlStyleFamily::SCH_CHART_ID:
             pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
             break;
 
-        case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        case XML_STYLE_FAMILY_SD_PRESENTATION_ID:
-        case XML_STYLE_FAMILY_SD_POOL_ID:
+        case XmlStyleFamily::SD_GRAPHICS_ID:
+        case XmlStyleFamily::SD_PRESENTATION_ID:
+        case XmlStyleFamily::SD_POOL_ID:
             pStyle = new XMLShapeStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
+            break;
+        default: break;
     }
 
     return pStyle;
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
-        sal_uInt16 /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
+        XmlStyleFamily /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
         const uno::Reference< xml::sax::XAttributeList > & )
 {
     return nullptr;
 }
 
-bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool SvXMLStylesContext::InsertStyleFamily( XmlStyleFamily ) const
 {
     return true;
 }
 
-sal_uInt16 SvXMLStylesContext::GetFamily( const OUString& rValue )
+XmlStyleFamily SvXMLStylesContext::GetFamily( const OUString& rValue )
 {
-    sal_uInt16 nFamily = 0U;
+    XmlStyleFamily nFamily = XmlStyleFamily::DATA_STYLE;
     if( IsXMLToken( rValue, XML_PARAGRAPH ) )
     {
-        nFamily = XML_STYLE_FAMILY_TEXT_PARAGRAPH;
+        nFamily = XmlStyleFamily::TEXT_PARAGRAPH;
     }
     else if( IsXMLToken( rValue, XML_TEXT ) )
     {
-        nFamily = XML_STYLE_FAMILY_TEXT_TEXT;
+        nFamily = XmlStyleFamily::TEXT_TEXT;
     }
     else if( IsXMLToken( rValue, XML_DATA_STYLE ) )
     {
-        nFamily = XML_STYLE_FAMILY_DATA_STYLE;
+        nFamily = XmlStyleFamily::DATA_STYLE;
     }
     else if ( IsXMLToken( rValue, XML_SECTION ) )
     {
-        nFamily = XML_STYLE_FAMILY_TEXT_SECTION;
+        nFamily = XmlStyleFamily::TEXT_SECTION;
     }
     else if( IsXMLToken( rValue, XML_TABLE ) )
     {
-        nFamily = XML_STYLE_FAMILY_TABLE_TABLE;
+        nFamily = XmlStyleFamily::TABLE_TABLE;
     }
     else if( IsXMLToken( rValue, XML_TABLE_COLUMN ) )
-        nFamily = XML_STYLE_FAMILY_TABLE_COLUMN;
+        nFamily = XmlStyleFamily::TABLE_COLUMN;
     else if( IsXMLToken( rValue, XML_TABLE_ROW ) )
-        nFamily = XML_STYLE_FAMILY_TABLE_ROW;
+        nFamily = XmlStyleFamily::TABLE_ROW;
     else if( IsXMLToken( rValue, XML_TABLE_CELL ) )
-        nFamily = XML_STYLE_FAMILY_TABLE_CELL;
+        nFamily = XmlStyleFamily::TABLE_CELL;
     else if ( rValue == XML_STYLE_FAMILY_SD_GRAPHICS_NAME )
     {
-        nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID;
+        nFamily = XmlStyleFamily::SD_GRAPHICS_ID;
     }
     else if ( rValue == XML_STYLE_FAMILY_SD_PRESENTATION_NAME )
     {
-        nFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
+        nFamily = XmlStyleFamily::SD_PRESENTATION_ID;
     }
     else if ( rValue == XML_STYLE_FAMILY_SD_POOL_NAME )
     {
-        nFamily = XML_STYLE_FAMILY_SD_POOL_ID;
+        nFamily = XmlStyleFamily::SD_POOL_ID;
     }
     else if ( rValue == XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME )
     {
-        nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID;
+        nFamily = XmlStyleFamily::SD_DRAWINGPAGE_ID;
     }
     else if ( rValue == XML_STYLE_FAMILY_SCH_CHART_NAME )
     {
-        nFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
+        nFamily = XmlStyleFamily::SCH_CHART_ID;
     }
     else if ( IsXMLToken( rValue, XML_RUBY ) )
     {
-        nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
+        nFamily = XmlStyleFamily::TEXT_RUBY;
     }
 
     return nFamily;
 }
 
 rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportPropertyMapper(
-                        sal_uInt16 nFamily ) const
+                        XmlStyleFamily nFamily ) const
 {
     rtl::Reference < SvXMLImportPropertyMapper > xMapper;
 
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         if( !mxParaImpPropMapper.is() )
         {
             SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
@@ -599,7 +601,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxParaImpPropMapper;
         break;
-    case XML_STYLE_FAMILY_TEXT_TEXT:
+    case XmlStyleFamily::TEXT_TEXT:
         if( !mxTextImpPropMapper.is() )
         {
             SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
@@ -610,7 +612,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         xMapper = mxTextImpPropMapper;
         break;
 
-    case XML_STYLE_FAMILY_TEXT_SECTION:
+    case XmlStyleFamily::TEXT_SECTION:
         // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
@@ -618,7 +620,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
             GetSectionImportPropertySetMapper();
         break;
 
-    case XML_STYLE_FAMILY_TEXT_RUBY:
+    case XmlStyleFamily::TEXT_RUBY:
         // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
@@ -626,9 +628,9 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
             GetRubyImportPropertySetMapper();
         break;
 
-    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-    case XML_STYLE_FAMILY_SD_PRESENTATION_ID:
-    case XML_STYLE_FAMILY_SD_POOL_ID:
+    case XmlStyleFamily::SD_GRAPHICS_ID:
+    case XmlStyleFamily::SD_PRESENTATION_ID:
+    case XmlStyleFamily::SD_POOL_ID:
         if(!mxShapeImpPropMapper.is())
         {
             rtl::Reference< XMLShapeImportHelper > aImpHelper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport();
@@ -637,7 +639,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxShapeImpPropMapper;
         break;
-    case XML_STYLE_FAMILY_SCH_CHART_ID:
+    case XmlStyleFamily::SCH_CHART_ID:
         if( ! mxChartImpPropMapper.is() )
         {
             XMLPropertySetMapper *const pPropMapper = new XMLChartPropertySetMapper(nullptr);
@@ -645,7 +647,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxChartImpPropMapper;
         break;
-    case XML_STYLE_FAMILY_PAGE_MASTER:
+    case XmlStyleFamily::PAGE_MASTER:
         if( ! mxPageImpPropMapper.is() )
         {
             XMLPropertySetMapper *pPropMapper =
@@ -656,17 +658,18 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxPageImpPropMapper;
         break;
+    default: break;
     }
 
     return xMapper;
 }
 
-Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFamily ) const
+Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily nFamily ) const
 {
     Reference < XAutoStyleFamily > xAutoStyles;
-    if( XML_STYLE_FAMILY_TEXT_TEXT == nFamily || XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily)
+    if( XmlStyleFamily::TEXT_TEXT == nFamily || XmlStyleFamily::TEXT_PARAGRAPH == nFamily)
     {
-        bool bPara = XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily;
+        bool bPara = XmlStyleFamily::TEXT_PARAGRAPH == nFamily;
         OUString sName;
         if( !bPara && mxTextAutoStyles.is() )
             xAutoStyles = mxTextAutoStyles;
@@ -692,25 +695,26 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
 }
 
 Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
-                                                sal_uInt16 nFamily ) const
+                                                XmlStyleFamily nFamily ) const
 {
     Reference < XNameContainer > xStyles;
     OUString sName;
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         if( mxParaStyles.is() )
             xStyles = mxParaStyles;
         else
             sName = "ParagraphStyles";
         break;
 
-    case XML_STYLE_FAMILY_TEXT_TEXT:
+    case XmlStyleFamily::TEXT_TEXT:
         if( mxTextStyles.is() )
             xStyles = mxTextStyles;
         else
             sName = "CharacterStyles";
         break;
+    default: break;
     }
     if( !xStyles.is() && !sName.isEmpty() )
     {
@@ -725,13 +729,14 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
 
                 switch( nFamily )
                 {
-                case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+                case XmlStyleFamily::TEXT_PARAGRAPH:
                     const_cast<SvXMLStylesContext *>(this)->mxParaStyles = xStyles;
                     break;
 
-                case XML_STYLE_FAMILY_TEXT_TEXT:
+                case XmlStyleFamily::TEXT_TEXT:
                     const_cast<SvXMLStylesContext *>(this)->mxTextStyles = xStyles;
                     break;
+                default: break;
                 }
             }
         }
@@ -740,17 +745,18 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
     return xStyles;
 }
 
-OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+OUString SvXMLStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
 {
     OUString sServiceName;
     switch( nFamily )
     {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XmlStyleFamily::TEXT_PARAGRAPH:
         sServiceName = gsParaStyleServiceName;
         break;
-    case XML_STYLE_FAMILY_TEXT_TEXT:
+    case XmlStyleFamily::TEXT_TEXT:
         sServiceName = gsTextStyleServiceName;
         break;
+    default: break;
     }
 
     return sServiceName;
@@ -812,9 +818,9 @@ void SvXMLStylesContext::CopyAutoStylesToDoc()
     for( i = 0; i < nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
-        if( !pStyle || ( pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_TEXT &&
-            pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_PARAGRAPH  &&
-            pStyle->GetFamily() != XML_STYLE_FAMILY_TABLE_CELL ) )
+        if( !pStyle || ( pStyle->GetFamily() != XmlStyleFamily::TEXT_TEXT &&
+            pStyle->GetFamily() != XmlStyleFamily::TEXT_PARAGRAPH  &&
+            pStyle->GetFamily() != XmlStyleFamily::TABLE_CELL ) )
             continue;
         pStyle->CreateAndInsert( false );
     }
@@ -870,7 +876,7 @@ void SvXMLStylesContext::FinishStyles( bool bOverwrite )
 }
 
 const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
-                                  sal_uInt16 nFamily,
+                                  XmlStyleFamily nFamily,
                                   const OUString& rName,
                                   bool bCreateIndex ) const
 {

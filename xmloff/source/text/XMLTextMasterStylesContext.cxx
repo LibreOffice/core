@@ -31,7 +31,7 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_MASTER_PAGE;
 
 
-bool XMLTextMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
+bool XMLTextMasterStylesContext::InsertStyleFamily( XmlStyleFamily ) const
 {
     return true;
 }
@@ -57,7 +57,7 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_MASTER_PAGE ) &&
-         InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+         InsertStyleFamily( XmlStyleFamily::MASTER_PAGE ) )
         pContext = new XMLTextMasterPageContext(
                         GetImport(), nPrefix, rLocalName,
                           xAttrList,
@@ -69,7 +69,7 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 /*nFamily*/,
+        XmlStyleFamily /*nFamily*/,
         sal_uInt16 /*nPrefix*/,
         const OUString& /*rLocalName*/,
         const Reference< XAttributeList > & /*xAttrList*/ )

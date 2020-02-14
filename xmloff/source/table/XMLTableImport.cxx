@@ -440,7 +440,7 @@ void XMLTableImportContext::InitColumns()
             {
                 const XMLPropStyleContext* pStyle =
                     dynamic_cast< const XMLPropStyleContext* >(
-                        pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN, xInfo->msStyleName) );
+                        pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_COLUMN, xInfo->msStyleName) );
 
                 if( pStyle )
                 {
@@ -513,7 +513,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
             {
                 const XMLPropStyleContext* pStyle =
                     dynamic_cast< const XMLPropStyleContext* >(
-                        pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW, sStyleName) );
+                        pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_ROW, sStyleName) );
 
                 if( pStyle )
                 {
@@ -671,7 +671,7 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
         {
             const XMLPropStyleContext* pStyle =
                 dynamic_cast< const XMLPropStyleContext* >(
-                    pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL, sStyleName) );
+                    pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_CELL, sStyleName) );
 
             if( pStyle )
             {
@@ -743,7 +743,7 @@ void XMLCellImportContext::EndElement()
 // class XMLTableTemplateContext
 
 XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_TABLE_TEMPLATE_ID, false )
+: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
 {
 }
 

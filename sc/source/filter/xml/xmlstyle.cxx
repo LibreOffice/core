@@ -610,7 +610,7 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
 
 void ScXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
-            sal_Int32 nFamily,
+            XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
@@ -618,7 +618,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
+    if (nFamily == XmlStyleFamily::TABLE_CELL)
     {
         for(const auto& rProperty : rProperties)
         {
@@ -645,7 +645,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             }
         }
     }
-    else if (nFamily == XML_STYLE_FAMILY_TABLE_TABLE)
+    else if (nFamily == XmlStyleFamily::TABLE_TABLE)
     {
         for(const auto& rProperty : rProperties)
         {
@@ -672,7 +672,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
 
 void ScXMLAutoStylePoolP::exportStyleContent(
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
-        sal_Int32 nFamily,
+        XmlStyleFamily nFamily,
         const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp
         , const SvXMLUnitConverter& rUnitConverter,
@@ -680,7 +680,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
         ) const
 {
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
+    if (nFamily == XmlStyleFamily::TABLE_CELL)
     {
         for(const auto& rProperty : rProperties)
         {

@@ -410,7 +410,7 @@ XMLTextListsHelper::MakeNumRule(
     if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {
         const OUString sDisplayStyleName(
-            i_rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+            i_rImport.GetStyleDisplayName( XmlStyleFamily::TEXT_LIST,
                                              i_StyleName) );
         const uno::Reference < container::XNameContainer >& rNumStyles(
                             i_rImport.GetTextImport()->GetNumberingStyles() );
