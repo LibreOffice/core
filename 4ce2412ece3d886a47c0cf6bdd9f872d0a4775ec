@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60661010_d82d9481",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-14T11:16:33Z",
+      "side": 1,
+      "message": "in the last ~10 patches missing of this leaded to fail many of the unit test... because of a nullptr....",
+      "range": {
+        "startLine": 470,
+        "startChar": 7,
+        "endLine": 470,
+        "endChar": 16
+      },
+      "revId": "4ce2412ece3d886a47c0cf6bdd9f872d0a4775ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
