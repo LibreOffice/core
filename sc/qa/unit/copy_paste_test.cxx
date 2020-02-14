@@ -78,14 +78,16 @@ void ScCopyPasteTest::testCopyPasteXLS()
     xModel2->setCurrentController( xController.get() );
 
     ScDocument& rDoc = xDocSh->GetDocument();
+    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the chart.", pOleObj);
 
     // Get the document controller
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
-    // 2. Highlight B2:C5
+    // 2. Highlight B2:K22
     ScRange aSrcRange;
-    ScRefFlags nRes = aSrcRange.Parse("B2:C5", &rDoc, rDoc.GetAddressConvention());
+    ScRefFlags nRes = aSrcRange.Parse("B2:K22", &rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
 
     ScMarkData aMark(MAXROW, MAXCOL);
@@ -95,7 +97,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
 
     // 3. Copy
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
     // 4. Close the document (Ctrl-W)
     xDocSh->DoClose();
@@ -123,8 +125,17 @@ void ScCopyPasteTest::testCopyPasteXLS()
     pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+
     // 6. Paste
+    ScRange aDstRange;
+    nRes = aDstRange.Parse("A1:K22", &rDoc2, rDoc2.GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+
+    pOleObj = getSingleChartObject(rDoc2, 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the chart.", pOleObj);
 
     xComponent->dispose();
 }
