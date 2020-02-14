@@ -2792,6 +2792,7 @@ dnl ===================================================================
 dnl Check macOS SDK and compiler
 dnl ===================================================================
 
+HAVE_MACOS_LD_PLATFORMVERSION=
 if test $_os = Darwin; then
 
     # If no --with-macosx-sdk option is given, look for one
@@ -3027,6 +3028,16 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what macOS app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
+
+    AC_MSG_CHECKING([whether the linker supports -platform_version])
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Xlinker -platform_version -Xlinker macos \
+        -Xlinker $MAC_OS_X_VERSION_MIN_REQUIRED_DOTS -Xlinker 0.0.0"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+        [AC_MSG_RESULT([yes])
+         HAVE_MACOS_LD_PLATFORMVERSION=TRUE],
+        [AC_MSG_RESULT([no])])
+    LDFLAGS=$save_LDFLAGS
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
@@ -3039,6 +3050,7 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(HAVE_MACOS_LD_PLATFORMVERSION)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
