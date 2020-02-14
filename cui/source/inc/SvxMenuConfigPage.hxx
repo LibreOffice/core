@@ -30,6 +30,8 @@ private:
     bool m_bIsMenuBar;
 
     DECL_LINK( SelectMenuEntry, weld::TreeView&, void );
+    DECL_LINK( ContentContextMenuHdl, const CommandEvent&, bool );
+    DECL_LINK( FunctionContextMenuHdl, const CommandEvent&, bool );
 
     DECL_LINK( GearHdl, const OString&, void );
 
