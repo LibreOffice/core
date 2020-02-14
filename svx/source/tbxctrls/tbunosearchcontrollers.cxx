@@ -106,7 +106,9 @@ public:
 
     virtual void GetFocus() override
     {
-        m_xWidget->grab_focus();
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
     }
 
 private:
@@ -396,9 +398,9 @@ void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
 
 void FindTextFieldControl::GetFocus()
 {
-    if (!m_xWidget)
-        return;
-    m_xWidget->grab_focus();
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 namespace {
