@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ce7ddd7_3422ef37",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-02-14T12:42:45Z",
+      "side": 1,
+      "message": "Why are you committing your personal TODO comments instead of keeping them locally? Especially given that they do not make any sense to anybody else - that MM01 above doesn\u0027t say anything and so is pointless there, and this MM01 comment is either confusing (and thus should not be there) or it\u0027s stating the obvious (and then it should not be there either).",
+      "range": {
+        "startLine": 718,
+        "startChar": 4,
+        "endLine": 718,
+        "endChar": 41
+      },
+      "revId": "5f61c9fe99ac93087b898adddbb4d4733f1fcd07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
