@@ -31,7 +31,6 @@
 #include <tools/fract.hxx>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
-#include <vcl/field.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -627,16 +626,20 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         // display original size
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
-        ScopedVclPtrInstance< MetricField > aFld(Application::GetDefDialogParent(), WB_HIDE);
-        SetFieldUnit( *aFld, eMetric );
-        aFld->SetDecimalDigits(m_xWidthMF->get_digits());
-        aFld->SetMax( LONG_MAX - 1 );
+        OUString sTemp;
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/spinbox.ui"));
+            std::unique_ptr<weld::MetricSpinButton> xFld(xBuilder->weld_metric_spin_button("spin", FieldUnit::CM));
+            SetFieldUnit( *xFld, eMetric );
+            xFld->set_digits(m_xWidthMF->get_digits());
+            xFld->set_max(INT_MAX - 1, FieldUnit::NONE);
 
-        aFld->SetValue( aFld->Normalize( aOrigSize.Width() ), eUnit );
-        OUString sTemp = aFld->GetText();
-        aFld->SetValue( aFld->Normalize( aOrigSize.Height() ), eUnit );
-        // multiplication sign (U+00D7)
-        sTemp += u"\u00D7" + aFld->GetText();
+            xFld->set_value(xFld->normalize(aOrigSize.Width()), eUnit);
+            sTemp = xFld->get_text();
+            xFld->set_value(xFld->normalize(aOrigSize.Height()), eUnit);
+            // multiplication sign (U+00D7)
+            sTemp += u"\u00D7" + xFld->get_text();
+        }
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
              sal_Int32 ax = sal_Int32(floor(static_cast<float>(aOrigPixelSize.Width()) /
