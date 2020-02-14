@@ -16,6 +16,24 @@
       "revId": "2ce99d12771407631288af5a12fe2165ae3599d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d84dd521_365c3999",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2062,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2020-02-14T11:50:39Z",
+      "side": 0,
+      "message": "I checked that the attachment of bug #63905 was printed in 6.4.0 with the custom size to PDF with my developer machines virtual PDF24 printer, and still is after this.",
+      "parentUuid": "d6ddc3f6_26ed8a6d",
+      "revId": "2ce99d12771407631288af5a12fe2165ae3599d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
