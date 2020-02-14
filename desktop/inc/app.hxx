@@ -75,6 +75,7 @@ class Desktop final : public Application
         virtual void            InitFinished() override;
         virtual void            DeInit() override;
         virtual bool            QueryExit() override;
+        virtual void            Shutdown() override;
         virtual void            Exception(ExceptionCategory nCategory) override;
         virtual void            OverrideSystemSettings( AllSettings& rSettings ) override;
         virtual void            AppEvent( const ApplicationEvent& rAppEvent ) override;

@@ -354,6 +354,8 @@ public:
     */
     virtual bool                QueryExit();
 
+    virtual void                Shutdown();
+
     /** @name Change Notification Functions
 
         Functions that notify when changes occur in the application.

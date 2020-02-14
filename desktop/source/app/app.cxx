@@ -76,6 +76,7 @@
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/frame/XDesktopInternal.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -604,6 +605,13 @@ bool Desktop::QueryExit()
     }
 
     return bExit;
+}
+
+void Desktop::Shutdown()
+{
+    Reference<XDesktop2> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
+    Reference<XDesktopInternal> xDesktopInternal(xDesktop, UNO_QUERY_THROW);
+    xDesktopInternal->shutdown();
 }
 
 void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
