@@ -217,8 +217,10 @@ void AxisConverter::convertFromModel(
                         aScaleData.ShiftedCategoryPosition = true;
                     else if( rTypeInfo.meTypeId == TYPEID_RADARLINE || rTypeInfo.meTypeId == TYPEID_RADARAREA )
                         aScaleData.ShiftedCategoryPosition = false;
-                    else
+                    else if( pCrossingAxis->mnCrossBetween != -1 ) /*because of backwards compatibility*/
                         aScaleData.ShiftedCategoryPosition = pCrossingAxis->mnCrossBetween == XML_between;
+                    else if( rTypeInfo.meTypeCategory == TYPECATEGORY_BAR || rTypeInfo.meTypeId == TYPEID_LINE || rTypeInfo.meTypeId == TYPEID_STOCK )
+                        aScaleData.ShiftedCategoryPosition = true;
                 }
                 else
                 {
