@@ -37,6 +37,9 @@ private:
 
     DECL_LINK( SelectCategory, weld::ComboBox&, void );
 
+    DECL_LINK( ContentContextMenuHdl, const CommandEvent&, bool );
+    DECL_LINK( FunctionContextMenuHdl, const CommandEvent&, bool );
+
     DECL_LINK( AddCommandHdl, weld::Button&, void );
     DECL_LINK( RemoveCommandHdl, weld::Button&, void );
 

@@ -23,6 +23,7 @@
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/commandevent.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
@@ -82,6 +83,10 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage, weld::DialogC
 
     rTreeView.connect_changed(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
+    rTreeView.connect_popup_menu( LINK( this, SvxToolbarConfigPage, ContentContextMenuHdl ) );
+
+    m_xFunctions->get_widget().connect_popup_menu(
+        LINK( this, SvxToolbarConfigPage, FunctionContextMenuHdl ) );
 
     m_xTopLevelListBox->set_help_id ( HID_SVX_TOPLEVELLISTBOX );
     m_xSaveInListBox->set_help_id( HID_SVX_SAVE_IN );
@@ -880,6 +885,80 @@ IMPL_LINK(SvxToolbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, boo
         return true;
     }
     return SvxMenuEntriesListBox::KeyInputHdl(rKeyEvent);
+}
+
+IMPL_LINK( SvxToolbarConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt, bool )
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
+
+    // Select clicked entry
+    std::unique_ptr<weld::TreeIter> rIter(rTreeView.make_iterator());
+    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), &*rIter );
+    rTreeView.select(*rIter);
+    SelectToolbarEntry( rTreeView );
+
+    int nSelectIndex = m_xContentsListBox->get_selected_index();
+
+    bool  bIsSeparator =
+        nSelectIndex != -1 && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nSelectIndex).toInt64())->IsSeparator();
+    bool bIsValidSelection =
+        !( m_xContentsListBox->n_children() == 0 || nSelectIndex == -1 );
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder( &rTreeView, "cui/ui/entrycontextmenu.ui" ) );
+    auto xContextMenu = xBuilder->weld_menu("menu");
+    xContextMenu->set_visible("add", false);
+    xContextMenu->set_visible("remove", bIsValidSelection);
+    xContextMenu->set_visible("rename", bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible("changeIcon", bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible("resetIcon", bIsValidSelection && !bIsSeparator);
+    xContextMenu->set_visible("restoreDefault", bIsValidSelection && !bIsSeparator);
+    OString sCommand(xContextMenu->popup_at_rect( &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1) ) ) );
+
+    if ( sCommand == "remove")
+        RemoveCommandHdl( *m_xRemoveCommandButton );
+    else if ( sCommand == "rename" )
+        ModifyItemHdl( "renameItem" );
+    else if ( sCommand == "changeIcon" )
+        ModifyItemHdl( "changeIcon" );
+    else if ( sCommand == "resetIcon" )
+        ModifyItemHdl( "resetIcon" );
+    else if ( sCommand == "restoreDefault" )
+        ModifyItemHdl( "restoreItem" );
+    else if ( !sCommand.isEmpty() )
+        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    return true;
+}
+
+IMPL_LINK( SvxToolbarConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt, bool )
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    weld::TreeView& rTreeView = m_xFunctions->get_widget();
+
+    // Select clicked entry
+    std::unique_ptr<weld::TreeIter> rIter(rTreeView.make_iterator());
+    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), &*rIter );
+    rTreeView.select(*rIter);
+    SelectFunctionHdl( rTreeView );
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder( &rTreeView, "cui/ui/entrycontextmenu.ui" ) );
+    auto xContextMenu = xBuilder->weld_menu("menu");
+    xContextMenu->set_visible("add", true);
+    xContextMenu->set_visible("remove", false);
+    xContextMenu->set_visible("rename", false);
+    xContextMenu->set_visible("changeIcon", false);
+    xContextMenu->set_visible("resetIcon", false);
+    xContextMenu->set_visible("restoreDefault", false);
+    OString sCommand(xContextMenu->popup_at_rect( &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1) ) ) );
+
+    if ( sCommand == "add")
+        AddCommandHdl( *m_xAddCommandButton );
+    else if ( !sCommand.isEmpty() )
+        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
