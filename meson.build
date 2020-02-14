@@ -32,6 +32,7 @@ langtag_dep = dependency('liblangtag')
 icuuc_dep = dependency('icu-uc')
 openssl_dep = dependency('openssl')
 zlib_dep = dependency('zlib')
+libxml_dep = dependency('libxml-2.0')
 
 cdata = configuration_data()
 
@@ -54,3 +55,4 @@ subdir('ucbhelper')
 subdir('comphelper')
 subdir('animations')
 subdir('eventattacher')
+subdir('tools')
