@@ -403,21 +403,6 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
     }
 }
 
-// If the page can be set here, the maximum is set.
-
-IMPL_LINK( SwNavigationPI, EditGetFocus, Control&, rControl, void )
-{
-    NumEditAction* pEdit = static_cast<NumEditAction*>(&rControl);
-    SwView *pView = GetCreateView();
-    if (!pView)
-        return;
-    SwWrtShell &rSh = pView->GetWrtShell();
-
-    const sal_uInt16 nPageCnt = rSh.GetPageCnt();
-    pEdit->SetMax(nPageCnt);
-    pEdit->SetLast(nPageCnt);
-}
-
 void SwNavigationPI::ZoomOut()
 {
     if (!IsZoomedIn())
@@ -510,7 +495,8 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings)
     : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame/*, true*/)
-    , SfxControllerItem(SID_DOCFULLNAME, *_pBindings)
+    , m_aDocFullName(SID_DOCFULLNAME, *_pBindings, *this)
+    , m_aPageStats(FN_STAT_PAGE, *_pBindings, *this)
     , m_pContentView(nullptr)
     , m_pContentWrtShell(nullptr)
     , m_pActContView(nullptr)
@@ -548,7 +534,6 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xEdit->SetMin(1);
     m_xEdit->SetFirst(1);
     m_xEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
-    m_xEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
     m_xEdit->SetAccessibleName(m_xEdit->GetQuickHelpText());
     m_xEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
     m_xEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
@@ -692,9 +677,6 @@ void SwNavigationPI::dispose()
         m_pxObjectShell.reset();
     }
 
-    if (IsBound())
-        m_rBindings.Release(*this);
-
     m_aDocListBox.clear();
     m_aGlobalTree.disposeAndClear();
     m_aGlobalBox.clear();
@@ -706,15 +688,16 @@ void SwNavigationPI::dispose()
 
     m_aPageChgIdle.Stop();
 
-    ::SfxControllerItem::dispose();
+    m_aDocFullName.dispose();
+    m_aPageStats.dispose();
 
     PanelLayout::dispose();
 }
 
-void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
-                                            const SfxPoolItem* /*pState*/ )
+void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
+                                      const SfxPoolItem* /*pState*/)
 {
-    if(nSID == SID_DOCFULLNAME)
+    if (nSID == SID_DOCFULLNAME)
     {
         SwView *pActView = GetCreateView();
         if(pActView)
@@ -737,6 +720,18 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
             m_aContentTree->SetActiveShell(nullptr);
         }
         UpdateListBox();
+    }
+    else if (nSID == FN_STAT_PAGE)
+    {
+        SwView *pActView = GetCreateView();
+        if(pActView)
+        {
+            SwWrtShell &rSh = pActView->GetWrtShell();
+            NumEditAction& rEdit = GetPageEdit();
+            const sal_uInt16 nPageCnt = rSh.GetPageCnt();
+            rEdit.SetMax(nPageCnt);
+            rEdit.SetLast(nPageCnt);
+        }
     }
 }
 
