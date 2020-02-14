@@ -38,6 +38,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/aeitem.hxx>
@@ -995,7 +996,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fRight  -= maRect.getWidth();
     fBottom -= maRect.getHeight();
 
-    const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
+    const double fMaxLong(static_cast<double>(vcl::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
     fLeft = std::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = std::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = std::clamp(fTop, - fMaxLong, fMaxLong);

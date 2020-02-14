@@ -18,7 +18,7 @@
  */
 
 #include <prcntfld.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 
 SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_pField(std::move(pControl))
@@ -65,7 +65,7 @@ void SwPercentField::ShowPercent(bool bPercent)
         m_pField->set_unit(FieldUnit::PERCENT);
         m_pField->set_digits(0);
 
-        int nCurrentWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+        int nCurrentWidth = vcl::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         // round to 0.5 percent
         int nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
 
@@ -73,7 +73,7 @@ void SwPercentField::ShowPercent(bool bPercent)
         m_pField->set_increments(5, 10, FieldUnit::NONE);
         if (nOldValue != nLastValue)
         {
-            nCurrentWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+            nCurrentWidth = vcl::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
             nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
             m_pField->set_value(nPercent, FieldUnit::NONE);
             nLastPercent = nPercent;
@@ -114,12 +114,12 @@ void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
         int nPercent, nCurrentWidth;
         if(eInUnit == FieldUnit::TWIP)
         {
-            nCurrentWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
+            nCurrentWidth = vcl::ConvertValue(nNewValue, 0, nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
         }
         else
         {
             int nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+            nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         }
         nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
         m_pField->set_value(nPercent, FieldUnit::NONE);
@@ -206,7 +206,7 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
         if (eOutUnit == FieldUnit::TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
-            return MetricField::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FieldUnit::TWIP, eOutUnit);
+            return vcl::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FieldUnit::TWIP, eOutUnit);
     }
 
     if (eOutUnit == FieldUnit::PERCENT)
@@ -218,11 +218,11 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
         if (eInUnit == FieldUnit::TWIP)  // Only convert if necessary
             nCurrentWidth = nValue;
         else
-            nCurrentWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FieldUnit::TWIP);
+            nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eInUnit, FieldUnit::TWIP);
         // Round to 0.5 percent
         return nRefValue ? (((nCurrentWidth * 1000) / nRefValue + 5) / 10) : 0;
     }
 
-    return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
+    return vcl::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

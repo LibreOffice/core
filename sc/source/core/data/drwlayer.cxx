@@ -67,7 +67,7 @@
 #include <table.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <memory>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
@@ -200,13 +200,13 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 static long TwipsToHmm (long nVal)
 {
-    return static_cast< long >( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+    return static_cast< long >( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
             FieldUnit::TWIP, FieldUnit::MM_100TH) );
 }
 
 static long HmmToTwips (long nVal)
 {
-    return static_cast< long > ( MetricField::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+    return static_cast< long > ( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
             FieldUnit::MM_100TH, FieldUnit::TWIP) );
 }
 

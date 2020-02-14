@@ -18,6 +18,7 @@
  */
 
 #include "dlgunit.hxx"
+#include <vcl/fieldvalues.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
@@ -219,12 +220,12 @@ void CompressGraphicsDialog::UpdateResolutionLB()
 
 double CompressGraphicsDialog::GetViewWidthInch() const
 {
-    return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
+    return static_cast<double>(vcl::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
 }
 
 double CompressGraphicsDialog::GetViewHeightInch() const
 {
-    return static_cast<double>(MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
+    return static_cast<double>(vcl::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FieldUnit::INCH)) / 100.0;
 }
 
 BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType() const

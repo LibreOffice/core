@@ -18,7 +18,7 @@
  */
 
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 
 #include <colrowba.hxx>
 #include <document.hxx>
@@ -39,7 +39,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
     {
         FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
 
-        sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
+        sal_Int64 nUserVal = vcl::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
         OUString aStr = rText + " "
                         + ScGlobal::pLocaleData->getNum( nUserVal, 2 )

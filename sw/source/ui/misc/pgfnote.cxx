@@ -21,7 +21,7 @@
 #include <fmtfsize.hxx>
 #include <hintids.hxx>
 #include <svtools/unitconv.hxx>
-#include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/borderline.hxx>
@@ -84,7 +84,7 @@ IMPL_LINK_NOARG(SwFootNotePage, HeightModify, weld::MetricSpinButton&, void)
 IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, weld::MetricSpinButton&, void)
 {
     sal_Int64 nVal = m_xLineWidthEdit->get_value(FieldUnit::NONE);
-    nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+    nVal = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
                 nVal,
                 m_xLineWidthEdit->get_digits(),
                 m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
@@ -170,7 +170,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // Separator width
     m_xLineWidthEdit->connect_value_changed(LINK(this, SwFootNotePage, LineWidthChanged_Impl));
 
-    sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
+    sal_Int64 nWidthPt = static_cast<sal_Int64>(vcl::ConvertDoubleValue(
             sal_Int64( pFootnoteInfo->GetLineWidth() ), m_xLineWidthEdit->get_digits(),
             MapUnit::MapTwip, m_xLineWidthEdit->get_unit( ) ));
     m_xLineWidthEdit->set_value(nWidthPt, FieldUnit::NONE);
@@ -236,7 +236,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
     // Separator width
     sal_Int64 nWidth = m_xLineWidthEdit->get_value(FieldUnit::NONE);
-    nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
+    nWidth = static_cast<long>(vcl::ConvertDoubleValue(
                    nWidth,
                    m_xLineWidthEdit->get_digits(),
                    m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
