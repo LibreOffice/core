@@ -135,6 +135,16 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;
 
+        if (!bFit && rLine.MaybeHasHints() && m_pFrame->GetFollow()
+            // if using same footnote container as the follow, pointless to try?
+            && m_pFrame->FindFootnoteBossFrame() != m_pFrame->GetFollow()->FindFootnoteBossFrame())
+        {
+            // possibly a footnote that is anchored beyond the end of this
+            // (the last) line is in the way, try to remove it and check again
+            m_pFrame->RemoveFootnote(rLine.GetEnd());
+            nHeight = aRectFnSet.YDiff( aRectFnSet.GetPrtBottom(*m_pFrame->GetUpper()), m_nOrigin );
+            bFit = nHeight >= nLineHeight;
+        }
         if ( !bFit )
         {
             if ( rLine.GetNext() &&
