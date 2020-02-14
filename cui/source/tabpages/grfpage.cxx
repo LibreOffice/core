@@ -32,6 +32,7 @@
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unitconv.hxx>
@@ -590,7 +591,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
                                                     SID_ATTR_GRAF_CROP ) ));
 
         sal_Int64 nSpin = m_xLeftMF->normalize(aOrigSize.Width()) / 20;
-        nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
+        nSpin = vcl::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, m_xLeftMF->get_unit());
 
         // if the margin is too big, it is set to 1/3 on both pages
@@ -618,7 +619,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         m_xLeftMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         m_xRightMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         nSpin = m_xTopMF->normalize(aOrigSize.Height()) / 20;
-        nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
+        nSpin = vcl::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, m_xLeftMF->get_unit() );
         m_xTopMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);
         m_xBottomMF->set_increments(nSpin, nSpin * 10, FieldUnit::NONE);

@@ -26,6 +26,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/toolkit/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/fmtfield.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
@@ -303,7 +304,7 @@ namespace weld
 
     int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
     {
-        return MetricField::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
+        return vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
     }
 
     IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)

@@ -11,7 +11,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPDEFAULTS_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/field.hxx>
 
 class ScTpDefaultsOptions : public SfxTabPage
 {

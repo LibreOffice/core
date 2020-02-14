@@ -26,6 +26,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
@@ -1135,7 +1136,7 @@ OUString FontSizeBox::format_number(int nValue) const
 
 void FontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
 {
-    auto nTempValue = MetricField::ConvertValue(nNewValue, 0, GetDecimalDigits(), eInUnit, GetUnit());
+    auto nTempValue = vcl::ConvertValue(nNewValue, 0, GetDecimalDigits(), eInUnit, GetUnit());
     if (nTempValue < nMin)
         nTempValue = nMin;
     else if (nTempValue > nMax)
@@ -1173,7 +1174,7 @@ int FontSizeBox::get_value() const
         FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
         auto nValue = aFontSizeNames.Name2Size(aStr);
         if (nValue)
-            return MetricField::ConvertValue(nValue, 0, GetDecimalDigits(), GetUnit(), GetUnit());
+            return vcl::ConvertValue(nValue, 0, GetDecimalDigits(), GetUnit(), GetUnit());
     }
 
     const SvtSysLocale aSysLocale;

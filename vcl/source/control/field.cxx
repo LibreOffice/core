@@ -27,6 +27,7 @@
 #include <comphelper/string.hxx>
 
 #include <vcl/builder.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -1140,22 +1141,25 @@ static double nonValueDoubleToValueDouble( double nValue )
     return rtl::math::isFinite( nValue ) ? nValue : 0.0;
 }
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
-                                     FieldUnit eInUnit, FieldUnit eOutUnit )
+namespace vcl
 {
-    double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
-                static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
-    sal_Int64 nLong ;
+    sal_Int64 ConvertValue(sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
+                           FieldUnit eInUnit, FieldUnit eOutUnit)
+    {
+        double nDouble = nonValueDoubleToValueDouble(vcl::ConvertDoubleValue(
+                    static_cast<double>(nValue), mnBaseValue, nDecDigits, eInUnit, eOutUnit));
+        sal_Int64 nLong ;
 
-    // caution: precision loss in double cast
-    if ( nDouble <= double(SAL_MIN_INT64) )
-        nLong = SAL_MIN_INT64;
-    else if ( nDouble >= double(SAL_MAX_INT64) )
-        nLong = SAL_MAX_INT64;
-    else
-        nLong = static_cast<sal_Int64>( nDouble );
+        // caution: precision loss in double cast
+        if ( nDouble <= double(SAL_MIN_INT64) )
+            nLong = SAL_MIN_INT64;
+        else if ( nDouble >= double(SAL_MAX_INT64) )
+            nLong = SAL_MAX_INT64;
+        else
+            nLong = static_cast<sal_Int64>( nDouble );
 
-    return nLong;
+        return nLong;
+    }
 }
 
 namespace {
@@ -1208,146 +1212,149 @@ double convertValue( double nValue, long nDigits, FieldUnit eInUnit, FieldUnit e
 
 }
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
-                                     MapUnit eInUnit, FieldUnit eOutUnit )
+namespace vcl
 {
-    if ( !checkConversionUnits(eInUnit, eOutUnit) )
+    sal_Int64 ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
+                                         MapUnit eInUnit, FieldUnit eOutUnit )
     {
-        OSL_FAIL( "invalid parameters" );
-        return nValue;
-    }
-
-    long nDecDigits = nDigits;
-    FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
-
-    // Avoid sal_Int64 <-> double conversion issues if possible:
-    if (eFieldUnit == eOutUnit && nDigits == 0)
-    {
-        return nValue;
-    }
-
-    return static_cast<sal_Int64>(
-        nonValueDoubleToValueDouble(
-            convertValue( nValue, nDecDigits, eFieldUnit, eOutUnit ) ) );
-}
-
-double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
-                                        FieldUnit eInUnit, FieldUnit eOutUnit )
-{
-    if ( eInUnit != eOutUnit )
-    {
-        sal_Int64 nMult = 1, nDiv = 1;
-
-        if (eInUnit == FieldUnit::PERCENT)
+        if ( !checkConversionUnits(eInUnit, eOutUnit) )
         {
-            if ( (mnBaseValue <= 0) || (nValue <= 0) )
-                return nValue;
-            nDiv = 100 * ImplPower10(nDecDigits);
-
-            nMult = mnBaseValue;
+            OSL_FAIL( "invalid parameters" );
+            return nValue;
         }
-        else if ( eOutUnit == FieldUnit::PERCENT ||
-                  eOutUnit == FieldUnit::CUSTOM ||
-                  eOutUnit == FieldUnit::NONE ||
-                  eOutUnit == FieldUnit::DEGREE ||
-                  eOutUnit == FieldUnit::SECOND ||
-                  eOutUnit == FieldUnit::MILLISECOND ||
-                  eOutUnit == FieldUnit::PIXEL ||
-                  eInUnit  == FieldUnit::CUSTOM ||
-                  eInUnit  == FieldUnit::NONE ||
-                  eInUnit  == FieldUnit::DEGREE ||
-                  eInUnit  == FieldUnit::MILLISECOND ||
-                  eInUnit  == FieldUnit::PIXEL )
-             return nValue;
+
+        long nDecDigits = nDigits;
+        FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
+
+        // Avoid sal_Int64 <-> double conversion issues if possible:
+        if (eFieldUnit == eOutUnit && nDigits == 0)
+        {
+            return nValue;
+        }
+
+        return static_cast<sal_Int64>(
+            nonValueDoubleToValueDouble(
+                convertValue( nValue, nDecDigits, eFieldUnit, eOutUnit ) ) );
+    }
+
+    double ConvertDoubleValue(double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
+                              FieldUnit eInUnit, FieldUnit eOutUnit)
+    {
+        if ( eInUnit != eOutUnit )
+        {
+            sal_Int64 nMult = 1, nDiv = 1;
+
+            if (eInUnit == FieldUnit::PERCENT)
+            {
+                if ( (mnBaseValue <= 0) || (nValue <= 0) )
+                    return nValue;
+                nDiv = 100 * ImplPower10(nDecDigits);
+
+                nMult = mnBaseValue;
+            }
+            else if ( eOutUnit == FieldUnit::PERCENT ||
+                      eOutUnit == FieldUnit::CUSTOM ||
+                      eOutUnit == FieldUnit::NONE ||
+                      eOutUnit == FieldUnit::DEGREE ||
+                      eOutUnit == FieldUnit::SECOND ||
+                      eOutUnit == FieldUnit::MILLISECOND ||
+                      eOutUnit == FieldUnit::PIXEL ||
+                      eInUnit  == FieldUnit::CUSTOM ||
+                      eInUnit  == FieldUnit::NONE ||
+                      eInUnit  == FieldUnit::DEGREE ||
+                      eInUnit  == FieldUnit::MILLISECOND ||
+                      eInUnit  == FieldUnit::PIXEL )
+                 return nValue;
+            else
+            {
+                if (eOutUnit == FieldUnit::MM_100TH)
+                    eOutUnit = FieldUnit::NONE;
+                if (eInUnit == FieldUnit::MM_100TH)
+                    eInUnit = FieldUnit::NONE;
+
+                nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eOutUnit)];
+                nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eInUnit)];
+
+                SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
+                SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
+            }
+
+            if ( nMult != 1 && nMult > 0 )
+                nValue *= nMult;
+            if ( nDiv != 1 && nDiv > 0 )
+            {
+                nValue += ( nValue < 0 ) ? (-nDiv/2) : (nDiv/2);
+                nValue /= nDiv;
+            }
+        }
+
+        return nValue;
+    }
+
+    double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
+                              MapUnit eInUnit, FieldUnit eOutUnit)
+    {
+        if ( !checkConversionUnits(eInUnit, eOutUnit) )
+        {
+            OSL_FAIL( "invalid parameters" );
+            return nValue;
+        }
+
+        long nDecDigits = nDigits;
+        FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
+
+        return convertValue(nValue, nDecDigits, eFieldUnit, eOutUnit);
+    }
+
+    double ConvertDoubleValue(double nValue, sal_uInt16 nDigits,
+                              FieldUnit eInUnit, MapUnit eOutUnit)
+    {
+        if ( eInUnit == FieldUnit::PERCENT ||
+             eInUnit == FieldUnit::CUSTOM ||
+             eInUnit == FieldUnit::NONE ||
+             eInUnit == FieldUnit::DEGREE ||
+             eInUnit == FieldUnit::SECOND ||
+             eInUnit == FieldUnit::MILLISECOND ||
+             eInUnit == FieldUnit::PIXEL ||
+             eOutUnit == MapUnit::MapPixel ||
+             eOutUnit == MapUnit::MapSysFont ||
+             eOutUnit == MapUnit::MapAppFont ||
+             eOutUnit == MapUnit::MapRelative )
+        {
+            OSL_FAIL( "invalid parameters" );
+            return nValue;
+        }
+
+        long nDecDigits = nDigits;
+        FieldUnit eFieldUnit = ImplMap2FieldUnit( eOutUnit, nDecDigits );
+
+        if ( nDecDigits < 0 )
+        {
+            nValue *= ImplPower10(-nDecDigits);
+        }
         else
         {
-            if (eOutUnit == FieldUnit::MM_100TH)
-                eOutUnit = FieldUnit::NONE;
-            if (eInUnit == FieldUnit::MM_100TH)
-                eInUnit = FieldUnit::NONE;
+            nValue /= ImplPower10(nDecDigits);
+        }
 
-            nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eOutUnit)];
-            nMult = aImplFactor[sal_uInt16(eOutUnit)][sal_uInt16(eInUnit)];
+        if ( eFieldUnit != eInUnit )
+        {
+            sal_Int64 nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eFieldUnit)];
+            sal_Int64 nMult = aImplFactor[sal_uInt16(eFieldUnit)][sal_uInt16(eInUnit)];
 
             SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
             SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
+
+            if( nMult != 1 && nMult > 0 )
+                nValue *= nMult;
+            if( nDiv != 1 && nDiv > 0 )
+            {
+                nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
+                nValue /= nDiv;
+            }
         }
-
-        if ( nMult != 1 && nMult > 0 )
-            nValue *= nMult;
-        if ( nDiv != 1 && nDiv > 0 )
-        {
-            nValue += ( nValue < 0 ) ? (-nDiv/2) : (nDiv/2);
-            nValue /= nDiv;
-        }
-    }
-
-    return nValue;
-}
-
-double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
-                                        MapUnit eInUnit, FieldUnit eOutUnit )
-{
-    if ( !checkConversionUnits(eInUnit, eOutUnit) )
-    {
-        OSL_FAIL( "invalid parameters" );
         return nValue;
     }
-
-    long nDecDigits = nDigits;
-    FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
-
-    return convertValue(nValue, nDecDigits, eFieldUnit, eOutUnit);
-}
-
-double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
-                                        FieldUnit eInUnit, MapUnit eOutUnit )
-{
-    if ( eInUnit == FieldUnit::PERCENT ||
-         eInUnit == FieldUnit::CUSTOM ||
-         eInUnit == FieldUnit::NONE ||
-         eInUnit == FieldUnit::DEGREE ||
-         eInUnit == FieldUnit::SECOND ||
-         eInUnit == FieldUnit::MILLISECOND ||
-         eInUnit == FieldUnit::PIXEL ||
-         eOutUnit == MapUnit::MapPixel ||
-         eOutUnit == MapUnit::MapSysFont ||
-         eOutUnit == MapUnit::MapAppFont ||
-         eOutUnit == MapUnit::MapRelative )
-    {
-        OSL_FAIL( "invalid parameters" );
-        return nValue;
-    }
-
-    long nDecDigits = nDigits;
-    FieldUnit eFieldUnit = ImplMap2FieldUnit( eOutUnit, nDecDigits );
-
-    if ( nDecDigits < 0 )
-    {
-        nValue *= ImplPower10(-nDecDigits);
-    }
-    else
-    {
-        nValue /= ImplPower10(nDecDigits);
-    }
-
-    if ( eFieldUnit != eInUnit )
-    {
-        sal_Int64 nDiv  = aImplFactor[sal_uInt16(eInUnit)][sal_uInt16(eFieldUnit)];
-        sal_Int64 nMult = aImplFactor[sal_uInt16(eFieldUnit)][sal_uInt16(eInUnit)];
-
-        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
-        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
-
-        if( nMult != 1 && nMult > 0 )
-            nValue *= nMult;
-        if( nDiv != 1 && nDiv > 0 )
-        {
-            nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
-            nValue /= nDiv;
-        }
-    }
-    return nValue;
 }
 
 bool MetricFormatter::TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
@@ -1363,7 +1370,7 @@ bool MetricFormatter::TextToValue(const OUString& rStr, double& rValue, sal_Int6
 
     // Recalculate unit
     // caution: conversion to double loses precision
-    rValue = MetricField::ConvertDoubleValue( static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit );
+    rValue = vcl::ConvertDoubleValue(static_cast<double>(nValue), nBaseValue, nDecDigits, eEntryUnit, eUnit);
 
     return true;
 }
@@ -1461,7 +1468,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 void MetricFormatter::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     // convert to previously configured units
-    nNewValue = MetricField::ConvertValue( nNewValue, 0, GetDecimalDigits(), eInUnit, meUnit );
+    nNewValue = vcl::ConvertValue( nNewValue, 0, GetDecimalDigits(), eInUnit, meUnit );
     NumericFormatter::SetUserValue( nNewValue );
 }
 
@@ -1479,7 +1486,7 @@ sal_Int64 MetricFormatter::GetValueFromStringUnit(const OUString& rStr, FieldUni
         nTempValue = static_cast<double>(mnMin);
 
     // convert to requested units
-    return MetricField::ConvertValue(static_cast<sal_Int64>(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
+    return vcl::ConvertValue(static_cast<sal_Int64>(nTempValue), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 sal_Int64 MetricFormatter::GetValueFromString(const OUString& rStr) const
@@ -1501,36 +1508,31 @@ void MetricFormatter::SetValue( sal_Int64 nValue )
 void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
 {
     // convert to requested units
-    NumericFormatter::SetMin( MetricField::ConvertValue( nNewMin, 0, GetDecimalDigits(),
-                                                         eInUnit, meUnit ) );
+    NumericFormatter::SetMin(vcl::ConvertValue(nNewMin, 0, GetDecimalDigits(), eInUnit, meUnit));
 }
 
 sal_Int64 MetricFormatter::GetMin( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( NumericFormatter::GetMin(), 0,
-                                      GetDecimalDigits(), meUnit, eOutUnit );
+    return vcl::ConvertValue(NumericFormatter::GetMin(), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
 {
     // convert to requested units
-    NumericFormatter::SetMax( MetricField::ConvertValue( nNewMax, 0, GetDecimalDigits(),
-                                                         eInUnit, meUnit ) );
+    NumericFormatter::SetMax(vcl::ConvertValue(nNewMax, 0, GetDecimalDigits(), eInUnit, meUnit));
 }
 
 sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( NumericFormatter::GetMax(), 0,
-                                      GetDecimalDigits(), meUnit, eOutUnit );
+    return vcl::ConvertValue(NumericFormatter::GetMax(), 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 sal_Int64 MetricFormatter::GetBaseValue() const
 {
     // convert to requested units
-    return MetricField::ConvertValue( 0, 0, GetDecimalDigits(),
-                                      meUnit, FieldUnit::NONE );
+    return vcl::ConvertValue(0, 0, GetDecimalDigits(), meUnit, FieldUnit::NONE);
 }
 
 void MetricFormatter::Reformat()
@@ -1557,8 +1559,8 @@ void MetricFormatter::Reformat()
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( 0/*nCorrectedValue*/, 0, GetDecimalDigits(),
-                                      meUnit, eOutUnit );
+    return vcl::ConvertValue(0/*nCorrectedValue*/, 0, GetDecimalDigits(),
+                             meUnit, eOutUnit);
 }
 
 MetricField::MetricField(vcl::Window* pParent, WinBits nWinStyle)
@@ -1609,31 +1611,27 @@ void MetricField::SetUnit( FieldUnit nNewUnit )
 void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
 {
     // convert
-    nNewFirst = MetricField::ConvertValue( nNewFirst, 0, GetDecimalDigits(),
-                                           eInUnit, meUnit );
+    nNewFirst = vcl::ConvertValue(nNewFirst, 0, GetDecimalDigits(), eInUnit, meUnit);
     mnFirst = nNewFirst;
 }
 
 sal_Int64 MetricField::GetFirst( FieldUnit eOutUnit ) const
 {
     // convert
-    return MetricField::ConvertValue( mnFirst, 0, GetDecimalDigits(),
-                                      meUnit, eOutUnit );
+    return vcl::ConvertValue(mnFirst, 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 {
     // convert
-    nNewLast = MetricField::ConvertValue( nNewLast, 0, GetDecimalDigits(),
-                                          eInUnit, meUnit );
+    nNewLast = vcl::ConvertValue(nNewLast, 0, GetDecimalDigits(), eInUnit, meUnit);
     mnLast = nNewLast;
 }
 
 sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 {
     // convert
-    return MetricField::ConvertValue( mnLast, 0, GetDecimalDigits(),
-                                      meUnit, eOutUnit );
+    return vcl::ConvertValue(mnLast, 0, GetDecimalDigits(), meUnit, eOutUnit);
 }
 
 bool MetricField::PreNotify( NotifyEvent& rNEvt )
@@ -1807,8 +1805,7 @@ void MetricBox::ReformatAll()
 void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos )
 {
     // convert to previously configured units
-    nValue = MetricField::ConvertValue( nValue, 0, GetDecimalDigits(),
-                                        eInUnit, meUnit );
+    nValue = vcl::ConvertValue(nValue, 0, GetDecimalDigits(), eInUnit, meUnit);
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
