@@ -198,7 +198,7 @@ namespace basegfx
             this internally to guarantee the same algorithm is used)
             it is not needed to accumulate a potentially huge number
             of polygons in the result-polyPolygons, but e.g. consume
-            them directly in the caller. Example is renderinmg a
+            them directly in the caller. Example is rendering a
             dashed line but without creating the potentially huge amount
             of polygons.
             The 2nd version will also merge first/last line/gap snippets
