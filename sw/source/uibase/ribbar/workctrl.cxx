@@ -36,8 +36,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>
@@ -605,24 +603,41 @@ class NavElementToolBoxControl : public svt::ToolboxController,
         VclPtr<NavElementBox_Impl>           m_pBox;
 };
 
-class NavElementBox_Impl : public ListBox
+class NavElementBox_Impl final : public InterimItemWindow
 {
 public:
-                        NavElementBox_Impl( vcl::Window* pParent,
-                                             const uno::Reference< frame::XFrame >& _xFrame,
-                                             NavElementToolBoxControl& rCtrl );
+    NavElementBox_Impl(vcl::Window* pParent,
+                       const uno::Reference<frame::XFrame>& _xFrame,
+                       NavElementToolBoxControl& rCtrl);
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    virtual ~NavElementBox_Impl() override
+    {
+        disposeOnce();
+    }
 
     void                Update();
 
-    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
-
-protected:
-    virtual void        Select() override;
-
 private:
+    std::unique_ptr<weld::ComboBox>            m_xWidget;
     NavElementToolBoxControl*                  m_pCtrl;
     bool                                       m_bRelease;
     uno::Reference< frame::XFrame >            m_xFrame;
+
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void                ReleaseFocus_Impl();
 };
@@ -632,19 +647,21 @@ private:
 NavElementBox_Impl::NavElementBox_Impl(
     vcl::Window*                                      _pParent,
     const uno::Reference< frame::XFrame >&            _xFrame,
-    NavElementToolBoxControl&                         _rCtrl ) :
-
-    ListBox( _pParent, WinBits( WB_DROPDOWN ) ),
-
-    m_pCtrl             ( &_rCtrl ),
-    m_bRelease          ( true ),
-    m_xFrame            ( _xFrame )
+    NavElementToolBoxControl&                         _rCtrl )
+    : InterimItemWindow(_pParent, "modules/swriter/ui/combobox.ui", "ComboBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+    , m_pCtrl(&_rCtrl)
+    , m_bRelease(true)
+    , m_xFrame(_xFrame)
 {
-    SetSizePixel( Size( 150, 260 ) );
+    m_xWidget->set_size_request(42, -1); // set to something small so the size set at the .ui takes precedence
 
-    sal_uInt16 i;
-    for ( i = 0; i < NID_COUNT; i++ )
-        InsertEntry( SwResId( aNavigationStrIds[i] ), Image( StockImage::Yes, aNavigationImgIds[i] ) );
+    for (sal_uInt16 i = 0; i < NID_COUNT; ++i)
+        m_xWidget->append("", SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
+    m_xWidget->connect_changed(LINK(this, NavElementBox_Impl, SelectHdl));
+    m_xWidget->connect_key_press(LINK(this, NavElementBox_Impl, KeyInputHdl));
+
+    SetSizePixel(m_xContainer->get_preferred_size());
 }
 
 void NavElementBox_Impl::ReleaseFocus_Impl()
@@ -659,15 +676,13 @@ void NavElementBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-void NavElementBox_Impl::Select()
+IMPL_LINK(NavElementBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    ListBox::Select();
-
-    if ( !IsTravelSelect() )
+    if (rComboBox.changed_by_direct_pick())  // only when picked from the list
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-        sal_uInt16 nPos = GetSelectedEntryPos();
+        sal_uInt16 nPos = rComboBox.get_active();
         sal_uInt16 nMoveType = aNavigationInsertIds[nPos];
         SwView::SetMoveType( nMoveType );
 
@@ -691,43 +706,39 @@ void NavElementBox_Impl::Update()
         {
             const char* id = aNavigationStrIds[i];
             OUString sText = SwResId( id );
-            SelectEntry( sText );
+            m_xWidget->set_active_text(sText);
             break;
         }
     }
 }
 
-bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        vcl::KeyCode aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        sal_uInt16 nCode = aKeyCode.GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
-        switch ( nCode )
+    switch ( nCode )
+    {
+        case KEY_TAB:
         {
-            case KEY_TAB:
-            {
-                static_cast<ToolBox*>(GetParent())->ChangeHighlightUpDn( aKeyCode.IsShift() );
-                m_bRelease = false;
-                [[fallthrough]];
-            }
-            case KEY_RETURN:
-            {
-                bHandled = true;
-                Select();
-                break;
-            }
-            case KEY_ESCAPE:
-                ReleaseFocus_Impl();
-                bHandled = true;
-                break;
+            m_bRelease = false;
+            SelectHdl(*m_xWidget);
+            break;
         }
+        case KEY_RETURN:
+        {
+            bHandled = true;
+            SelectHdl(*m_xWidget);
+            break;
+        }
+        case KEY_ESCAPE:
+            ReleaseFocus_Impl();
+            bHandled = true;
+            break;
     }
 
-    return bHandled || ListBox::EventNotify( rNEvt );
+    return bHandled || ChildKeyInput(rKEvt);
 }
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
