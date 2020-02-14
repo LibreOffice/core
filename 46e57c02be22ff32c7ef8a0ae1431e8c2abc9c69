@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f171cdc_e57fdb10",
+        "filename": "forms/IwyuFilter_forms.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-14T09:55:40Z",
+      "side": 1,
+      "message": "Did you intend to write something here?",
+      "revId": "46e57c02be22ff32c7ef8a0ae1431e8c2abc9c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2faee20_d4e98466",
+        "filename": "forms/source/component/BaseListBox.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-14T09:55:40Z",
+      "side": 1,
+      "message": "Not needed new empty line.",
+      "revId": "46e57c02be22ff32c7ef8a0ae1431e8c2abc9c69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
