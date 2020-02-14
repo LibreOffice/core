@@ -25,10 +25,6 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Executable_set_ldflags,\
-    $(filter-out -bind_at_load,$$(LDFLAGS)) \
-))
-
 # At least when building against SDK 10.15, changing the LC_VERSION_MIN_MACOSX load command's sdk
 # value from 10.15 to "n/a" (i.e., 0.0) is necessary to avoid blurry text in the LO UI:
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
