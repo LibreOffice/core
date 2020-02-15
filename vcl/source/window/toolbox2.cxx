@@ -1808,6 +1808,8 @@ boost::property_tree::ptree ToolBox::DumpAsPropertyTree()
             {
                 boost::property_tree::ptree aEntry;
                 int nId = GetItemId(i);
+                if (!IsItemVisible(nId))
+                    continue;
                 aEntry.put("type", "toolitem");
                 aEntry.put("text", GetItemText(nId));
                 aEntry.put("command", GetItemCommand(nId));
