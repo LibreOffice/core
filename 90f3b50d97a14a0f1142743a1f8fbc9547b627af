@@ -16,6 +16,24 @@
       "revId": "90f3b50d97a14a0f1142743a1f8fbc9547b627af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbfe364b_8d366c2c",
+        "filename": "sc/source/core/tool/jumpmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-15T14:19:17Z",
+      "side": 1,
+      "message": "In patch set 3,\n\n  sal_uInt64 n \u003d nCols * nRows;\n\ncould still overflow as discussed above.",
+      "parentUuid": "9132a2a2_fdc5b489",
+      "revId": "90f3b50d97a14a0f1142743a1f8fbc9547b627af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
