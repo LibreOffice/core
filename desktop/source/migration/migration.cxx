@@ -54,6 +54,7 @@
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#include <vcl/commandinfoprovider.hxx>
 
 using namespace osl;
 using namespace std;
@@ -72,44 +73,6 @@ namespace desktop
 static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
-
-static OUString retrieveLabelFromCommand(const OUString& sCommand, const OUString& sModuleIdentifier)
-{
-    OUString sLabel;
-
-    uno::Reference< container::XNameAccess > xUICommands;
-    uno::Reference< container::XNameAccess > const xNameAccess(
-        frame::theUICommandDescription::get(
-            ::comphelper::getProcessComponentContext()) );
-    xNameAccess->getByName( sModuleIdentifier ) >>= xUICommands;
-    if (xUICommands.is()) {
-        if ( !sCommand.isEmpty() ) {
-            OUString aStr;
-            ::uno::Sequence< beans::PropertyValue > aPropSeq;
-            try {
-                uno::Any a( xUICommands->getByName( sCommand ));
-                if ( a >>= aPropSeq ) {
-                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ ) {
-                        if ( aPropSeq[i].Name == "Label" ) {
-                            aPropSeq[i].Value >>= aStr;
-                            break;
-                        }
-                    }
-                }
-
-                sLabel = aStr;
-            } catch (const container::NoSuchElementException&) {
-                sLabel = sCommand;
-                sal_Int32 nIndex = sLabel.indexOf(':');
-                if (nIndex>=0 && nIndex <= sLabel.getLength()-1)
-                    sLabel = sLabel.copy(nIndex+1);
-            }
-
-        }
-    }
-
-    return sLabel;
-}
 
 static OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
 {
@@ -1020,9 +983,10 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         } while (nIndex >= 0);
 
         if (nIndex == -1) {
+            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(elem.m_sCommandURL, sModuleIdentifier);
             uno::Sequence< beans::PropertyValue > aPropSeq {
                 beans::PropertyValue(ITEM_DESCRIPTOR_COMMANDURL, 0, uno::makeAny(elem.m_sCommandURL), beans::PropertyState_DIRECT_VALUE),
-                beans::PropertyValue(ITEM_DESCRIPTOR_LABEL, 0, uno::makeAny(retrieveLabelFromCommand(elem.m_sCommandURL, sModuleIdentifier)), beans::PropertyState_DIRECT_VALUE),
+                beans::PropertyValue(ITEM_DESCRIPTOR_LABEL, 0, uno::makeAny(vcl::CommandInfoProvider::GetLabelForCommand(aProperties)), beans::PropertyState_DIRECT_VALUE),
                 beans::PropertyValue(ITEM_DESCRIPTOR_CONTAINER, 0, uno::makeAny(elem.m_xPopupMenu), beans::PropertyState_DIRECT_VALUE)
             };
 
