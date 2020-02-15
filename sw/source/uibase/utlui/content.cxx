@@ -77,6 +77,7 @@
 #include <ndtxt.hxx>
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/treelistentry.hxx>
 
 #include <swabstdlg.hxx>
@@ -1319,6 +1320,9 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
             {
                 pPop->InsertItem(805, SwResId(STR_SELECT));
                 pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
+                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(".uno:InsertCaptionDialog", "com.sun.star.text.TextDocument");
+                OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
+                pPop->InsertItem(FN_INSERT_CAPTION, sLabel);
                 pPop->InsertItem(404, m_sUnprotTable);
                 bool bFull = false;
                 OUString sTableName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
@@ -3396,6 +3400,14 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case 806:
             DeleteOutlineSelections();
             break;
+        case FN_INSERT_CAPTION:
+        {
+            m_pActiveShell->EnterStdMode();
+            SwContent* pCnt = static_cast<SwContent*>(pFirst->GetUserData());
+            m_pActiveShell->GotoTable(pCnt->GetName());
+            m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_INSERT_CAPTION);
+            break;
+        }
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
