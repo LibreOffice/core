@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3ec863e_a931ddb8",
+        "filename": "vcl/inc/sft.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-15T11:55:36Z",
+      "side": 1,
+      "message": "This looks unused?",
+      "range": {
+        "startLine": 341,
+        "startChar": 14,
+        "endLine": 341,
+        "endChar": 26
+      },
+      "revId": "5089881096c0a1d66d17fd34fdc1f8b8adcc3403",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
