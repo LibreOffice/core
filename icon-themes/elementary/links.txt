@@ -1333,6 +1333,8 @@ cmd/sc_pluginsactive.png cmd/sc_insertplugin.png
 cmd/32/cellprotection.png cmd/32/protect.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
+cmd/32/selectcolumn.png cmd/32/entirecolumn.png
+cmd/32/selectrow.png cmd/32/entirerow.png
 cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/setcolumnwidth.png cmd/32/columnwidth.png
 cmd/32/setrowheight.png cmd/32/rowheight.png
@@ -1345,6 +1347,8 @@ cmd/32/tableselectmenu.png cmd/32/selecttable.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
+cmd/lc_selectcolumn.png cmd/lc_entirecolumn.png
+cmd/lc_selectrow.png cmd/lc_entirerow.png
 cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_setcolumnwidth.png cmd/lc_columnwidth.png
 cmd/lc_setrowheight.png cmd/lc_rowheight.png
@@ -1357,6 +1361,8 @@ cmd/lc_tableselectmenu.png cmd/lc_selecttable.png
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+cmd/sc_selectcolumn.png cmd/sc_entirecolumn.png
+cmd/sc_selectrow.png cmd/sc_entirerow.png
 cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_setcolumnwidth.png cmd/sc_columnwidth.png
 cmd/sc_setrowheight.png cmd/sc_rowheight.png
