@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bbb3aff3_ab529342",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6154ba1b_2696f5a9",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be146664_63aea304",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d1af71_af80b69e",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be146664_63aea304",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1b97f1c8_510c9dee",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c86d58a1_24ee1193",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e670559_f23a1b10",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2929aa43_66ea7561",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e670559_f23a1b10",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "7122bc43_ea810b45",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "821a2154_6471e444",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f728d6b_208c017a",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57999f96_e68d198e",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f728d6b_208c017a",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "6897054a_5669d01c",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88b1b1b7_43c7d82d",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c978ae46_49d2dc10",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -135,6 +261,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2297b50b_c020af03",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c978ae46_49d2dc10",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "9bb991eb_6673f210",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3351a68e_7b6b2b11",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73093810_11a0b28a",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -169,6 +331,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5897793b_8ec5756d",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1565,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73093810_11a0b28a",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "349fab0b_b597d12b",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2563,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b111a2e_018cf388",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b81b58b8_e89ce1dd",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -203,6 +401,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "312e7cde_eb109d4e",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b81b58b8_e89ce1dd",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "112fc84c_0dd731c2",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40b19ace_2fca6d16",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fea39f8d_bd9e6f04",
         "filename": "sw/source/core/layout/fly.cxx",
         "patchSetId": 1
@@ -237,6 +471,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "901cd530_2dd10872",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea39f8d_bd9e6f04",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "0bebe62a_00d5fb0a",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd468527_3ec83a39",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d7cedbf_b7e0d85f",
         "filename": "sw/source/core/layout/hffrm.cxx",
         "patchSetId": 1
@@ -271,6 +541,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b01edb21_ad17644c",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d7cedbf_b7e0d85f",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -291,6 +579,24 @@
     },
     {
       "key": {
+        "uuid": "390bafbc_eff270cd",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2090,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4f6adf6_702bfdd6",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ea1940a_cb1892b7",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -305,6 +611,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "186a8db7_3e9c48bb",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ea1940a_cb1892b7",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -325,6 +649,24 @@
     },
     {
       "key": {
+        "uuid": "07842089_8a29b52b",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3182,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173b6310_cf02c431",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e2684b7_23f9145a",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -339,6 +681,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb0b2333_6695c621",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3244,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e2684b7_23f9145a",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -359,6 +719,24 @@
     },
     {
       "key": {
+        "uuid": "9421b910_49025b98",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "654941cf_5be4f157",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42e02f8c_1b1058dc",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -373,6 +751,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ad34fc_b378c34a",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3855,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42e02f8c_1b1058dc",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -410,6 +806,24 @@
     },
     {
       "key": {
+        "uuid": "d407d8ec_cfb105f0",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3981,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b0434c9_d78ffef4",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d4b4992_acd79a70",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -424,6 +838,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "881adb23_f500830c",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4082,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d4b4992_acd79a70",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -444,6 +876,24 @@
     },
     {
       "key": {
+        "uuid": "104bfe8c_cb3a94f5",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4200,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf0b9a59_fc845389",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ad5b502d_9a6ab147",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -458,6 +908,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "481bbc66_f61788d0",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad5b502d_9a6ab147",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -478,6 +946,24 @@
     },
     {
       "key": {
+        "uuid": "bed9356f_4da477a8",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6191,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a1ee2eb_13ea19ca",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "466c4f90_010cc20d",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -492,6 +978,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b9ced6c_bf4828c1",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6233,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "466c4f90_010cc20d",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -512,6 +1016,24 @@
     },
     {
       "key": {
+        "uuid": "aef881b7_f2ca3fc0",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6843,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6602741e_48fcdbf6",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b10c26d3_40361e2c",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -529,6 +1051,24 @@
     },
     {
       "key": {
+        "uuid": "57d649b5_0a0188f9",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7348,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b10c26d3_40361e2c",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "984095b7_d1cecc73",
         "filename": "sw/source/core/layout/paintfrm.cxx",
         "patchSetId": 1
@@ -543,6 +1083,24 @@
       "revId": "37f42a9baabc1609423279539b26d3661582e987",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5f022c_f8c00c23",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7450,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-15T14:17:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "984095b7_d1cecc73",
+      "revId": "37f42a9baabc1609423279539b26d3661582e987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
