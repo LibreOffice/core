@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04139f4f_97db61b1",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-02-15T06:08:01Z",
+      "side": 1,
+      "message": "So I see that during the revisions, this function was used to add additional possibilities, but in the end, it really isn\u0027t being used.  I suggest reverting this portion, as now code-reading is much more difficult than simply seeing that it refers only to Heading 1 - Heading 9.",
+      "revId": "125dd0be473d15681049814c3982f1ae2c66660f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
