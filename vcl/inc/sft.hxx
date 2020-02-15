@@ -314,6 +314,37 @@ constexpr int HHEA_caretSlopeRise_offset = 18;
 constexpr int HHEA_caretSlopeRun_offset = 20;
 
 /*
+  Some table vhea consts
+  cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/vhea
+  TYPE       NAME                       FROM BYTE
+  Fixed      version                    0
+  int16      ascent                     4
+  int16      descent                    6
+  int16      lineGap                    8
+  int16      advanceHeightMax          10
+  int16      minTopSideBearing         12
+  int16      minBottomSideBearing      14
+  int16      yMaxExtent                16
+  int16      caretSlopeRise            18
+  int16      caretSlopeRun             20
+  int16      caretOffset               22
+  int16      (reserved)                24
+  int16      (reserved)                26
+  int16      (reserved)                28
+  int16      (reserved)                30
+  int16      metricDataFormat          32
+  uint16     numOfLongVerMetrics       34
+  END                                  36
+
+  => length for vhea table = 36 bytes
+*/
+constexpr int VHEA_Length = 36;
+
+constexpr int VHEA_ascent_offset = 4;
+constexpr int VHEA_descent_offset = 6;
+constexpr int VHEA_lineGap_offset = 8;
+
+/*
   Some table post consts
   cf https://docs.microsoft.com/fr-fr/typography/opentype/spec/post
   TYPE       NAME                       FROM BYTE

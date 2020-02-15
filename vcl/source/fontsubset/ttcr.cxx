@@ -516,6 +516,15 @@ static int GetRawData_hhea(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     return TTCR_OK;
 }
 
+static int GetRawData_vhea(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    *len = VHEA_Length;
+    *ptr = static_cast<sal_uInt8 *>(_this->data);
+    *tag = T_vhea;
+
+    return TTCR_OK;
+}
+
 static int GetRawData_loca(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     tdata_loca *p;
@@ -798,6 +807,7 @@ static struct {
     {0,      GetRawData_generic},
     {T_head, GetRawData_head},
     {T_hhea, GetRawData_hhea},
+    {T_vhea, GetRawData_vhea},
     {T_loca, GetRawData_loca},
     {T_maxp, GetRawData_maxp},
     {T_glyf, GetRawData_glyf},
