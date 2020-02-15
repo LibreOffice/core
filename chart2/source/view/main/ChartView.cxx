@@ -1369,6 +1369,8 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                             xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
                                     }
                                 }
+                                if(aPageStyle.isEmpty())
+                                    aPageStyle = "Standard";
                             }
                             else
                             {
