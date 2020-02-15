@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4e3548e_8cf0d428",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-15T22:04:53Z",
+      "side": 1,
+      "message": "Typo?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "ef92ee5efe137f013de3ef45dab798ec8e4bfa3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
