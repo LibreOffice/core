@@ -339,8 +339,7 @@ void AxisConverter::convertFromModel(
         xAxis->setScaleData( aScaleData );
 
         // number format ------------------------------------------------------
-
-        if( (aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT) )
+        if( !mrModel.mbDeleted && ((aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT)) )
             getFormatter().convertNumberFormat(aAxisProp, mrModel.maNumberFormat, true);
 
         // position of crossing axis ------------------------------------------
