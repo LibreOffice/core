@@ -30,6 +30,12 @@ cmd/32/alignvcenter.png cmd/32/alignverticalcenter.png
 cmd/32/anchormenu.png cmd/32/toggleanchortype.png
 cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/bg/autoformatmenu.png cmd/32/bg/autocorrectdlg.png
+cmd/32/bg/spellingandgrammardialog.png cmd/32/bg/spelling.png
+cmd/32/bg/spelldialog.png cmd/32/bg/spelling.png
+cmd/32/bg/underline.png cmd/32/ca/underline.png
+cmd/32/bg/underlinedouble.png cmd/32/hu/underlinedouble.png
+cmd/32/bg/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/arrangeframemenu.png cmd/32/bringtofront.png
 cmd/32/arrangemenu.png cmd/32/bringtofront.png
 cmd/32/arrowshapes.png cmd/32/arrowshapes.left-right-arrow.png
@@ -281,6 +287,7 @@ cmd/32/justifypara.png cmd/32/alignblock.png
 cmd/32/km/underlinesimple.png cmd/32/km/underline.png
 cmd/32/ko/drawtext.png cmd/32/ko/text.png
 cmd/32/ko/fontcolor.png cmd/32/ko/color.png
+cmd/32/ko/formattextmenu.png cmd/32/ko/text.png
 cmd/32/ko/ordercrit.png cmd/32/ko/datasort.png
 cmd/32/ko/sortdown.png cmd/32/ko/sortdescending.png
 cmd/32/ko/sortup.png cmd/32/ko/sortascending.png
@@ -490,6 +497,18 @@ cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/ar/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/bg/lc_autoformatmenu.png cmd/bg/lc_autocorrectdlg.png
+cmd/bg/lc_spellingandgrammardialog.png cmd/bg/lc_spelling.png
+cmd/bg/lc_spelldialog.png cmd/bg/lc_spelling.png
+cmd/bg/lc_underline.png cmd/hu/lc_underline.png
+cmd/bg/lc_underlinedouble.png cmd/hu/lc_underlinedouble.png
+cmd/bg/lc_underlinesimple.png cmd/hu/lc_underline.png
+cmd/bg/sc_autoformatmenu.png cmd/bg/sc_autocorrectdlg.png
+cmd/bg/sc_spellingandgrammardialog.png cmd/bg/sc_spelling.png
+cmd/bg/sc_spelldialog.png cmd/bg/sc_spelling.png
+cmd/bg/sc_underline.png cmd/hu/sc_underline.png
+cmd/bg/sc_underlinedouble.png cmd/hu/sc_underlinedouble.png
+cmd/bg/sc_underlinesimple.png cmd/hu/sc_underline.png
 cmd/ca/lc_underlinesimple.png cmd/ca/lc_underline.png
 cmd/ca/sc_underlinesimple.png cmd/ca/sc_underline.png
 cmd/es/lc_bold.png cmd/ca/lc_bold.png
@@ -606,6 +625,7 @@ cmd/km/lc_underlinesimple.png cmd/km/lc_underline.png
 cmd/km/sc_underlinesimple.png cmd/km/sc_underline.png
 cmd/ko/lc_drawtext.png cmd/ko/lc_text.png
 cmd/ko/lc_fontcolor.png cmd/ko/lc_color.png
+cmd/ko/lc_formattextmenu.png cmd/ko/lc_text.png
 cmd/ko/lc_ordercrit.png cmd/ko/lc_datasort.png
 cmd/ko/lc_sortdown.png cmd/ko/lc_sortdescending.png
 cmd/ko/lc_sortup.png cmd/ko/lc_sortascending.png
@@ -613,6 +633,7 @@ cmd/ko/lc_tablesort.png cmd/ko/lc_datasort.png
 cmd/ko/lc_underlinesimple.png cmd/ko/lc_underline.png
 cmd/ko/sc_drawtext.png cmd/ko/sc_text.png
 cmd/ko/sc_fontcolor.png cmd/ko/sc_color.png
+cmd/ko/sc_formattextmenu.png cmd/ko/sc_text.png
 cmd/ko/sc_ordercrit.png cmd/ko/sc_datasort.png
 cmd/ko/sc_sortdown.png cmd/ko/sc_sortdescending.png
 cmd/ko/sc_sortup.png cmd/ko/sc_sortascending.png
@@ -1884,6 +1905,7 @@ sw/res/nc20011.png cmd/sc_insertdraw.png
 sw/res/one_left.png dbaccess/res/one_left.png
 sw/res/one_right.png dbaccess/res/one_right.png
 sw/res/page_break.png cmd/lc_insertpagebreak.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
 sw/res/sc20238.png sc/res/droplink.png
 sw/res/sc20239.png cmd/sc_copy.png
@@ -1907,7 +1929,7 @@ sw/res/sr20009.png cmd/sc_graphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/styfamnu.png sw/res/sf05.png
