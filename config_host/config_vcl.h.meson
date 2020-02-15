@@ -1,0 +1,14 @@
+/*
+
+Settings about vcl
+*/
+
+#ifndef CONFIG_VCL_H
+#define CONFIG_VCL_H
+
+/* Nature of the device pixel coordinate system.
+ * We either use long or double for coordinates.
+ */
+#mesondefine VCL_FLOAT_DEVICE_PIXEL
+
+#endif

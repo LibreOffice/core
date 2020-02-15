@@ -1,0 +1,6 @@
+#ifndef CONFIG_CAIRO_CANVAS_H
+#define CONFIG_CAIRO_CANVAS_H
+
+#mesondefine ENABLE_CAIRO_CANVAS
+
+#endif

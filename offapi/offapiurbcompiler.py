@@ -15,14 +15,18 @@ rdbfile = os.path.join(os.getcwd(), sys.argv[5])
 if not os.path.exists(priv_dir):
     os.mkdir(priv_dir)
 
-with open(classnamefile, 'w') as of:
-    fnames = Path(source_dir).glob('com/**/*.idl')
+def glob_and_write(of, tld):
+    fnames = Path(source_dir).glob(tld + '/**/*.idl')
     for fname in fnames:
         dotname = str(fname.relative_to(source_dir).with_suffix('')).replace('/', '.')
         if dotname.endswith('.modules'):
             continue
         of.write(dotname)
         of.write(' ')
+
+with open(classnamefile, 'w') as of:
+    glob_and_write(of, 'com')
+    glob_and_write(of, 'org')
 
 subprocess.check_call([idlwrite,
                        udkapi_urb_abs,

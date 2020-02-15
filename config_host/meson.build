@@ -57,6 +57,25 @@ cdata.set10('USE_TLS_OPENSSL', true)
 
 cdata.set10('HAVE_LIBCXX', false)
 
+cdata.set10('VCL_FLOAT_DEVICE_PIXEL', false) # ????
+
+cdata.set10('ENABLE_CAIRO_CANVAS', cairo_dep.found())
+
+cdata.set10('HAVE_FEATURE_DESKTOP', true)
+
+cdata.set10('ENABLE_EOT', eot_dep.found())
+
+cdata.set10('MPL_HAVE_SUBSET', false) # ?????
+
+cdata.set10('HAVE_FEATURE_OPENCL', false)
+
+cdata.set10('ENABLE_GTK3', gtk3_dep.found())
+
+cdata.set10('ENABLE_DBUS', dbus_dep.found())
+cdata.set10('DBUS_HAVE_GLIB', true) # ???
+
+cdata.set10('ENABLE_GIO', gio_dep.found())
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -103,4 +122,40 @@ configure_file(input: 'config_oox.h.meson',
 
 configure_file(input: 'config_libcxx.h.meson',
   output: 'config_libcxx.h',
+  configuration: cdata)
+
+configure_file(input: 'config_vcl.h.meson',
+  output: 'config_vcl.h',
+  configuration: cdata)
+
+configure_file(input: 'config_cairo_canvas.h.meson',
+  output: 'config_cairo_canvas.h',
+  configuration: cdata)
+
+configure_file(input: 'config_feature_desktop.h.meson',
+  output: 'config_feature_desktop.h',
+  configuration: cdata)
+
+configure_file(input: 'config_eot.h.meson',
+  output: 'config_eot.h',
+  configuration: cdata)
+
+configure_file(input: 'config_mpl.h.meson',
+  output: 'config_mpl.h',
+  configuration: cdata)
+
+configure_file(input: 'config_feature_opencl.h.meson',
+  output: 'config_feature_opencl.h',
+  configuration: cdata)
+
+configure_file(input: 'config_vclplug.h.meson',
+  output: 'config_vclplug.h',
+  configuration: cdata)
+
+configure_file(input: 'config_dbus.h.meson',
+  output: 'config_dbus.h',
+  configuration: cdata)
+
+configure_file(input: 'config_gio.h.meson',
+  output: 'config_gio.h',
   configuration: cdata)
