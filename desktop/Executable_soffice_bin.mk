@@ -31,8 +31,7 @@ ifeq ($(OS)-$(HAVE_MACOS_LD_PLATFORMVERSION),MACOSX-TRUE)
 # -<platform>_version_min flag", clang/test/Driver/darwin-ld-platform-version-macos.c in particular,
 # for the -platform_version that Clang passes by default to new-enough ld):
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
-    -Xlinker -platform_version -Xlinker macos -Xlinker $(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS) \
-        -Xlinker 0.0.0 \
+    -Xlinker -platform_version -Xlinker macos -Xlinker $(MACOSX_DEPLOYMENT_TARGET) -Xlinker 0.0.0 \
 ))
 endif
 

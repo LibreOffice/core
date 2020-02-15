@@ -2886,7 +2886,6 @@ if test $_os = Darwin; then
         AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--15])
         ;;
     esac
-    MAC_OS_X_VERSION_MIN_REQUIRED_DOTS=$with_macosx_version_min_required
 
     LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
@@ -3031,8 +3030,8 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether the linker supports -platform_version])
     save_LDFLAGS=$LDFLAGS
-    LDFLAGS="$LDFLAGS -Xlinker -platform_version -Xlinker macos \
-        -Xlinker $MAC_OS_X_VERSION_MIN_REQUIRED_DOTS -Xlinker 0.0.0"
+    LDFLAGS="$LDFLAGS -Xlinker -platform_version -Xlinker macos -Xlinker $MACOSX_DEPLOYMENT_TARGET \
+        -Xlinker 0.0.0"
     AC_LINK_IFELSE([AC_LANG_PROGRAM()],
         [AC_MSG_RESULT([yes])
          HAVE_MACOS_LD_PLATFORMVERSION=TRUE],
@@ -3042,7 +3041,6 @@ fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
-AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the macOS libtool command is unrelated to GNU libtool
