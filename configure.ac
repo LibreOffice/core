@@ -10838,6 +10838,9 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
 
     if test $OS = MACOSX && test "$MACOSX_SDK_VERSION" -ge 101500; then
         # The Bluetooth code doesn't compile with macOS SDK 10.15
+        if test "$enable_sdremote_bluetooth" = yes; then
+            AC_MSG_ERROR([macOS SDK $with_macosx_sdk does not currently support --enable-sdremote-bluetooth])
+        fi
         enable_sdremote_bluetooth=no
     fi
     # If not explicitly enabled or disabled, default
