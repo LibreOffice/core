@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbdd1efe_f39622f2",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-15T06:07:17Z",
+      "side": 1,
+      "message": "seems like the AddUndo should be inside the if?",
+      "revId": "e878f4fdf539a00309dc96a0152441cd0ecd38bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
