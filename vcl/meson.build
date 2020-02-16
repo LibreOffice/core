@@ -466,3 +466,11 @@ vclplug_gtk3 = shared_library('vclplug_gtk3',
   link_with: [vcl_lib, svl_lib, utl_lib, ucbhelper_lib, basegfx_lib, comphelper_lib, cppuhelper_lib, tl_lib, sot_lib, i18nlangtag_lib, i18nutil_lib, cppu_lib, sal_lib],
   dependencies: [gtk3_dep, gtkprint_dep, epoxy_dep, dl_dep, x11_dep],
 )
+
+executable('svdem',
+  'workben/svdem.cxx',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  link_with: [tl_lib, sal_lib, vcl_lib, cppu_lib, cppuhelper_lib, comphelper_lib]
+)
