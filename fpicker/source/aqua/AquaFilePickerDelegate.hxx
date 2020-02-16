@@ -37,9 +37,9 @@ class FilterHelper;
 
 - (void)setFilterHelper:(FilterHelper*)filterHelper;
 
-- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename;
+- (BOOL)panel:(id)sender shouldShowFilename:(NSString*)filename;
 - (void)panelSelectionDidChange:(id)sender;
-- (void)panel:(id)sender directoryDidChange:(NSString *)path;
+- (void)panel:(id)sender directoryDidChange:(NSString*)path;
 
 - (void)filterSelectedAtIndex:(id)sender;
 - (void)autoextensionChanged:(id)sender;

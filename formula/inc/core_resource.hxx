@@ -22,6 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <formula/formuladllapi.h>
 
-FORMULA_DLLPUBLIC OUString ForResId(const char *pId);
+FORMULA_DLLPUBLIC OUString ForResId(const char* pId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

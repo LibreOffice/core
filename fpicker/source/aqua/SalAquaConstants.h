@@ -42,7 +42,8 @@
 
 #define kAquaSpacePopupMenuFrameBoundsDiffTop (2)
 #define kAquaSpacePopupMenuFrameBoundsDiffBottom (4)
-#define kAquaSpacePopupMenuFrameBoundsDiffV (kAquaSpacePopupMenuFrameBoundsDiffTop + kAquaSpacePopupMenuFrameBoundsDiffBottom)
+#define kAquaSpacePopupMenuFrameBoundsDiffV                                                        \
+    (kAquaSpacePopupMenuFrameBoundsDiffTop + kAquaSpacePopupMenuFrameBoundsDiffBottom)
 #define kAquaSpacePopupMenuFrameBoundsDiffLeft (3)
 
 #define kAquaSpaceLabelFrameBoundsDiffH (3)

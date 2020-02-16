@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-FormulaDialogsTest::FormulaDialogsTest()
-{
-}
+FormulaDialogsTest::FormulaDialogsTest() {}
 
 void FormulaDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

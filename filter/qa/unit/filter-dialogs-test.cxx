@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-FilterDialogsTest::FilterDialogsTest()
-{
-}
+FilterDialogsTest::FilterDialogsTest() {}
 
 void FilterDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
