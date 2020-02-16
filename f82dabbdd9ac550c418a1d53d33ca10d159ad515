@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7744a752_0518c5b4",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-16T17:01:32Z",
+      "side": 1,
+      "message": "this might as well be a static_cast now, since a dynamic_cast to a reference type will throw std::bad_cast if it fails. Or maybe that was the point?",
+      "revId": "f82dabbdd9ac550c418a1d53d33ca10d159ad515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
