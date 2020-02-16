@@ -998,18 +998,15 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
     rLLevel.SetLabelFollowedBy( eLabelFollowedBy );
 }
 
-void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                           const OUString& rLocalName,
-                                           const OUString& rValue )
+void SvxXMLListStyleContext::SetAttribute( sal_Int32 nElement, const OUString& rValue )
 {
-    if( XML_NAMESPACE_TEXT == nPrefixKey &&
-        IsXMLToken( rLocalName, XML_CONSECUTIVE_NUMBERING ) )
+    if( nElement == XML_ELEMENT( TEXT, XML_CONSECUTIVE_NUMBERING ) )
     {
         bConsecutive = IsXMLToken( rValue, XML_TRUE );
     }
     else
     {
-        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
     }
 }
 
@@ -1018,21 +1015,8 @@ const OUStringLiteral sNumberingRules( "NumberingRules"  );
 const OUStringLiteral sIsContinuousNumbering( "IsContinuousNumbering"  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
         bool bOutl )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
-,   bConsecutive( false )
-,   bOutline( bOutl )
-{
-}
-
-SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-        bool bOutl )
-:   SvXMLStyleContext( rImport, nElement, xAttrList, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
+:   SvXMLStyleContext( rImport,  bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
 {

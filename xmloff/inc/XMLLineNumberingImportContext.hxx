@@ -66,11 +66,7 @@ class XMLLineNumberingImportContext final : public SvXMLStyleContext
 public:
 
 
-    XMLLineNumberingImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
+    XMLLineNumberingImportContext(SvXMLImport& rImport);
 
     virtual ~XMLLineNumberingImportContext() override;
 
@@ -80,9 +76,7 @@ public:
 
 private:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 
     virtual void CreateAndInsert(bool bOverwrite) override;
 

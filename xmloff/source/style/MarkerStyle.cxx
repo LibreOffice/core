@@ -31,6 +31,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -48,7 +49,7 @@ XMLMarkerStyleImport::~XMLMarkerStyleImport()
 }
 
 void XMLMarkerStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
@@ -58,37 +59,37 @@ void XMLMarkerStyleImport::importXML(
 
     std::unique_ptr<SdXMLImExViewBox> xViewBox;
 
-    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     OUString strPathData;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString aStrFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        rNamespaceMap.GetKeyByAttrName( aStrFullAttrName, &aStrAttrName );
-        OUString aStrValue = xAttrList->getValueByIndex( i );
+        OUString sValue = aIter.toString();
+        auto nToken = aIter.getToken() & TOKEN_MASK;
 
-        if( IsXMLToken( aStrAttrName, XML_NAME ) )
+        if( nToken == XML_NAME )
         {
-            rStrName = aStrValue;
+            rStrName = sValue;
         }
-        else if( IsXMLToken( aStrAttrName, XML_DISPLAY_NAME ) )
+        else if( nToken == XML_DISPLAY_NAME )
         {
-            aDisplayName = aStrValue;
+            aDisplayName = sValue;
         }
-        else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
+        else if( nToken == XML_VIEWBOX )
         {
-            xViewBox.reset(new SdXMLImExViewBox(aStrValue, rUnitConverter));
+            xViewBox.reset(new SdXMLImExViewBox(sValue, rUnitConverter));
             bHasViewBox = true;
-
         }
-        else if( IsXMLToken( aStrAttrName, XML_D ) )
+        else if( nToken == XML_D )
         {
-            strPathData = aStrValue;
+            strPathData = sValue;
             bHasPathData = true;
+        }
+        else
+        {
+            SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            assert(false);
         }
     }
 

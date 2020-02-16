@@ -32,13 +32,12 @@ using namespace ::com::sun::star::uno;
 
 
 XMLShapePropertySetContext::XMLShapePropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
+                 SvXMLImport& rImport,
+                 const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
+    SvXMLPropertySetContext( rImport, xAttrList, nFam,
                              rProps, rMap ),
     mnBulletIndex(-1)
 {
@@ -48,7 +47,7 @@ XMLShapePropertySetContext::~XMLShapePropertySetContext()
 {
 }
 
-void XMLShapePropertySetContext::EndElement()
+void XMLShapePropertySetContext::endFastElement(sal_Int32 nElement)
 {
     Reference< container::XIndexReplace > xNumRule;
     if( mxBulletStyle.is() )
@@ -62,27 +61,23 @@ void XMLShapePropertySetContext::EndElement()
     XMLPropertyState aPropState( mnBulletIndex, Any(xNumRule) );
     mrProperties.push_back( aPropState );
 
-    SvXMLPropertySetContext::EndElement();
+    SvXMLPropertySetContext::endFastElement(nElement);
 }
 
 SvXMLImportContextRef XMLShapePropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
     SvXMLImportContextRef xContext;
 
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
-    case CTF_NUMBERINGRULES:
-        mnBulletIndex = rProp.mnIndex;
-        mxBulletStyle = xContext = new SvxXMLListStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        break;
     case CTF_TABSTOP:
-        xContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix,
-                                                   rLocalName, rProp,
+        xContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix, rLocalName,
+                                                   rProp,
                                                    rProperties );
         break;
     }
@@ -93,6 +88,25 @@ SvXMLImportContextRef XMLShapePropertySetContext::CreateChildContext(
                                                             rProperties, rProp );
 
     return xContext;
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
+{
+    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    {
+    case CTF_NUMBERINGRULES:
+        mnBulletIndex = rProp.mnIndex;
+        mxBulletStyle = new SvxXMLListStyleContext( GetImport() );
+        return mxBulletStyle.get();
+        break;
+    }
+
+    return SvXMLPropertySetContext::createFastChildContext( nElement,
+                                                            xAttrList, rProperties, rProp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
