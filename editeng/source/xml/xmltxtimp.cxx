@@ -53,6 +53,10 @@ public:
     SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
@@ -67,18 +71,37 @@ SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, const un
 {
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTextImportContext::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*AttrList*/ )
+{
+    SvXMLImportContext* pContext = nullptr;
+    if(nElement == XML_ELEMENT(OFFICE, XML_BODY) )
+    {
+        pContext = new SvxXMLTextImportContext( GetImport(), mxText );
+    }
+    else if(nElement == XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES) )
+    {
+        pContext = new SvXMLStylesContext( GetImport() );
+        GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
+    }
+    else
+    {
+        // handled in CreateChildContext
+    }
+
+    return pContext;
+}
+
 SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
     {
-        pContext = new SvxXMLTextImportContext( GetImport(), mxText );
+        // handled in createFastChildContext
     }
     else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
     {
-        pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
-
+        // createFastChildContext
     }
     else
     {

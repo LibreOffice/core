@@ -32,13 +32,13 @@ class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleCont
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement,
+                               const OUString& rValue ) override;
 
 public:
 
 
-    XMLTextShapeStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextShapeStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     virtual ~XMLTextShapeStyleContext() override;
 

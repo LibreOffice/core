@@ -54,11 +54,8 @@ static const OUStringLiteral gsSortAlgorithm("SortAlgorithm");
 static const OUStringLiteral gsLocale("Locale");
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
+    SvXMLImport& rImport) :
+        SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
         sSuffix(),
         sPrefix(),
         sAlgorithm(),

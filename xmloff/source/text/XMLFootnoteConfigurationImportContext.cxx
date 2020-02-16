@@ -125,10 +125,8 @@ static const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
+    const Reference<XFastAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
 ,   nOffset(0)
@@ -136,18 +134,14 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 ,   bPosition(false)
 ,   bIsEndnote(false)
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                        XML_NOTE_CLASS ) )
+        OUString sValue = aIter.toString();
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            if( IsXMLToken( sValue, XML_ENDNOTE ) )
             {
                 bIsEndnote = true;
                 SetFamily( XmlStyleFamily::TEXT_FOOTNOTECONFIG );

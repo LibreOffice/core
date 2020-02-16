@@ -57,13 +57,24 @@ void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
+void PageStyleContext::SetAttribute( sal_Int32 nElement,
+                                        const OUString& rValue )
+{
+    // TODO: use a map here
+    if( nElement == XML_ELEMENT(STYLE, XML_PAGE_USAGE) )
+    {
+        sPageUsage = rValue;
+    }
+    else
+    {
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
+    }
+}
 
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
         bool bDefaultStyle) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
+    XMLPropStyleContext( rImport, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
     sPageUsage(),
     m_bIsFillStyleAlreadyConverted(false) //
 {

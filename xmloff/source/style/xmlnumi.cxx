@@ -1012,11 +1012,24 @@ void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
+void SvxXMLListStyleContext::SetAttribute( sal_Int32 nElement,
+                                           const OUString& rValue )
+{
+    if( nElement == XML_ELEMENT(TEXT, XML_CONSECUTIVE_NUMBERING) )
+    {
+        bConsecutive = IsXMLToken( rValue, XML_TRUE );
+    }
+    else
+    {
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
+    }
+}
+
 static const OUStringLiteral sIsPhysical( "IsPhysical"  );
 static const OUStringLiteral sNumberingRules( "NumberingRules"  );
 static const OUStringLiteral sIsContinuousNumbering( "IsContinuousNumbering"  );
 
-SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
+ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
@@ -1028,10 +1041,8 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 }
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         bool bOutl )
-:   SvXMLStyleContext( rImport, nElement, xAttrList, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
+:   SvXMLStyleContext( rImport,  bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
 {

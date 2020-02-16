@@ -51,12 +51,12 @@ namespace rptxml
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                 const OUString& rLocalName,
                                 const OUString& rValue ) override;
+        virtual void SetAttribute( sal_Int32 nElement,
+                                const OUString& rValue ) override;
 
     public:
 
-        OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        OControlStyleContext( ORptFilter& rImport,
                 SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OControlStyleContext() override;
@@ -96,25 +96,21 @@ namespace rptxml
         // Create a style context.
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 XmlStyleFamily nFamily,
-                sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-                XmlStyleFamily nFamily, sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+                XmlStyleFamily nFamily, sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     public:
 
 
-        OReportStylesContext( ORptFilter& rImport, sal_uInt16 nPrfx ,
-                const OUString& rLName ,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        OReportStylesContext( ORptFilter& rImport,
                 const bool bAutoStyles );
         virtual ~OReportStylesContext() override;
 
-        virtual void EndElement() override;
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
         virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                             XmlStyleFamily nFamily ) const override;

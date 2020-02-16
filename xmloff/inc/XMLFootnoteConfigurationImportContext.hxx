@@ -56,9 +56,7 @@ public:
 
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
 
     virtual ~XMLFootnoteConfigurationImportContext() override;
 

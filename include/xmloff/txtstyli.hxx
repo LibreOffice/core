@@ -50,13 +50,13 @@ protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement,
+                               const OUString& rValue ) override;
 
 public:
 
 
-    XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle = false );
     ~XMLTextStyleContext() override;

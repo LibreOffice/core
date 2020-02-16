@@ -85,10 +85,8 @@ static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 
 
 XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         XMLFontStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_FONT ),
+    SvXMLStyleContext( rImport, XML_STYLE_FAMILY_FONT ),
     xStyles( &rStyles )
 {
     aFamilyName <<= OUString();
@@ -133,6 +131,43 @@ void XMLFontStyleContextFontFace::SetAttribute( sal_uInt16 nPrefixKey,
         break;
     default:
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        break;
+    }
+}
+
+void XMLFontStyleContextFontFace::SetAttribute( sal_Int32 nElement,
+                                        const OUString& rValue )
+{
+    SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
+    Any aAny;
+
+    switch( nElement )
+    {
+    case XML_ELEMENT(SVG, XML_FONT_FAMILY):
+        if( GetStyles()->GetFamilyNameHdl().importXML( rValue, aAny,
+                                                          rUnitConv ) )
+            aFamilyName = aAny;
+        break;
+    case XML_ELEMENT(STYLE, XML_FONT_ADORNMENTS):
+        aStyleName <<= rValue;
+        break;
+    case XML_ELEMENT(STYLE, XML_FONT_FAMILY_GENERIC):
+        if( GetStyles()->GetFamilyHdl().importXML( rValue, aAny,
+                                                      rUnitConv ) )
+            aFamily = aAny;
+        break;
+    case XML_ELEMENT(STYLE, XML_FONT_PITCH):
+        if( GetStyles()->GetPitchHdl().importXML( rValue, aAny,
+                                                      rUnitConv ) )
+            aPitch = aAny;
+        break;
+    case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
+        if( GetStyles()->GetEncodingHdl().importXML( rValue, aAny,
+                                                      rUnitConv ) )
+            aEnc = aAny;
+        break;
+    default:
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
         break;
     }
 }
@@ -212,6 +247,15 @@ void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_uInt16 nPrefixKey, con
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
+void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_Int32 nElement,
+    const OUString& rValue )
+{
+    if( nElement == XML_ELEMENT(SVG, XML_STRING) )
+        uri.SetFormat(rValue);
+    else
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
+}
+
 
 XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -264,6 +308,15 @@ void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const 
         linkPath = rValue;
     else
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+}
+
+void XMLFontStyleContextFontFaceUri::SetAttribute( sal_Int32 nElement,
+    const OUString& rValue )
+{
+    if( nElement == XML_ELEMENT(XLINK, XML_HREF ))
+        linkPath = rValue;
+    else
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
 }
 
 void XMLFontStyleContextFontFaceUri::SetFormat( const OUString& rFormat )
@@ -344,21 +397,17 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Seque
 }
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle;
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_FONT_FACE ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_FONT_FACE ) )
     {
-        pStyle = new XMLFontStyleContextFontFace( GetImport(), nPrefix,
-                                               rLocalName, xAttrList, *this );
+        pStyle = new XMLFontStyleContextFontFace( GetImport(), *this );
     }
     else
     {
-        pStyle = SvXMLStylesContext::CreateStyleChildContext( nPrefix,
-                                               rLocalName, xAttrList );
+        pStyle = SvXMLStylesContext::CreateStyleChildContext( nElement, xAttrList );
     }
 
     return pStyle;

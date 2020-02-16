@@ -50,12 +50,9 @@ using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     XmlStyleFamily nFamily)
-:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+:   XMLPropStyleContext(rImport, rStyles, nFamily ),
     m_bIsNumRuleAlreadyConverted( false )
 {
 }
@@ -80,6 +77,31 @@ void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& 
 
         if( (XML_NAMESPACE_STYLE == nPrefixKey) &&
             ( IsXMLToken( rLocalName, ::xmloff::token::XML_NAME ) || IsXMLToken( rLocalName, ::xmloff::token::XML_DISPLAY_NAME ) ) )
+        {
+            if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
+            {
+                GetImport().
+                    AddStyleDisplayName( GetFamily(), GetName(), GetDisplayName() );
+            }
+        }
+    }
+}
+
+void XMLShapeStyleContext::SetAttribute( sal_Int32 nElement, const OUString& rValue )
+{
+    if (m_sControlDataStyleName.isEmpty() && (nElement & TOKEN_MASK) == ::xmloff::token::XML_DATA_STYLE_NAME)
+    {
+        m_sControlDataStyleName = rValue;
+    }
+    else if( nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_LIST_STYLE_NAME) )
+    {
+        m_sListStyleName = rValue;
+    }
+    else
+    {
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
+
+        if( nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_NAME ) || nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_DISPLAY_NAME) )
         {
             if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
             {
