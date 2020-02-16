@@ -54,6 +54,7 @@ gio_dep = dependency('gio-2.0')
 xext_dep = dependency('xext')
 x11_dep = dependency('x11')
 fc_dep = dependency('fontconfig')
+cairo_dep = dependency('cairo')
 
 # The version in Ubuntu eoan is too old.
 #mdds_dep = dependency('mdds-1.5')
@@ -103,3 +104,4 @@ subdir('xmlscript')
 subdir('toolkit')
 subdir('svtools')
 subdir('basic')
+subdir('canvas')
