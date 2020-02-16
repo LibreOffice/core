@@ -4,14 +4,32 @@
   <block-list:block block-list:abbreviated-name="(e)" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=".*(r)" block-list:name="®"/>
   <block-list:block block-list:abbreviated-name=".*(tm)" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name="ablem" block-list:name="amblem"/>
+  <block-list:block block-list:abbreviated-name="Ablem" block-list:name="Amblem"/>
   <block-list:block block-list:abbreviated-name="Abondone" block-list:name="Abandone"/>
   <block-list:block block-list:abbreviated-name="abondone" block-list:name="abandone"/>
   <block-list:block block-list:abbreviated-name="Abonoz" block-list:name="Abanoz"/>
   <block-list:block block-list:abbreviated-name="abonoz" block-list:name="abanoz"/>
+  <block-list:block block-list:abbreviated-name="Acaip" block-list:name="Acayip"/>
+  <block-list:block block-list:abbreviated-name="acaip" block-list:name="acayip"/>
+  <block-list:block block-list:abbreviated-name="Acenta" block-list:name="Acente"/>
+  <block-list:block block-list:abbreviated-name="acenta" block-list:name="acente"/>
+  <block-list:block block-list:abbreviated-name="Acitasyon" block-list:name="Ajitasyon"/>
+  <block-list:block block-list:abbreviated-name="acitasyon" block-list:name="ajitasyon"/>
   <block-list:block block-list:abbreviated-name="Açıcak" block-list:name="Açacak"/>
   <block-list:block block-list:abbreviated-name="açıcak" block-list:name="açacak"/>
+  <block-list:block block-list:abbreviated-name="Adele" block-list:name="Adale"/>
+  <block-list:block block-list:abbreviated-name="adele" block-list:name="adale"/>
   <block-list:block block-list:abbreviated-name="Afaroz" block-list:name="Aforoz"/>
   <block-list:block block-list:abbreviated-name="afaroz" block-list:name="aforoz"/>
+  <block-list:block block-list:abbreviated-name="Afilli" block-list:name="Afili"/>
+  <block-list:block block-list:abbreviated-name="afilli" block-list:name="afili"/>
+  <block-list:block block-list:abbreviated-name="Ahçı" block-list:name="Aşçı"/>
+  <block-list:block block-list:abbreviated-name="ahçı" block-list:name="aşçı"/>
+  <block-list:block block-list:abbreviated-name="Ahpap" block-list:name="Ahbap"/>
+  <block-list:block block-list:abbreviated-name="ahpap" block-list:name="ahbap"/>
+  <block-list:block block-list:abbreviated-name="Akapunktur" block-list:name="Akupunktur"/>
+  <block-list:block block-list:abbreviated-name="akapunktur" block-list:name="akupunktur"/>
   <block-list:block block-list:abbreviated-name="Akordiyon" block-list:name="Akordeon"/>
   <block-list:block block-list:abbreviated-name="akordiyon" block-list:name="akordeon"/>
   <block-list:block block-list:abbreviated-name="Akşam üzeri" block-list:name="Akşamüzeri"/>
