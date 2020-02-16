@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-FpickerDialogsTest::FpickerDialogsTest()
-{
-}
+FpickerDialogsTest::FpickerDialogsTest() {}
 
 void FpickerDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

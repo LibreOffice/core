@@ -24,7 +24,7 @@
 
 class Node;
 
-Node * mainParse(char const * _code);
+Node* mainParse(char const* _code);
 
 #endif
 

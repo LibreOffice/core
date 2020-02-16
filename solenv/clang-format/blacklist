@@ -4402,7 +4402,6 @@ filter/qa/cppunit/filters-tiff-test.cxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
 filter/qa/cppunit/xslt-test.cxx
-filter/qa/unit/filter-dialogs-test.cxx
 filter/source/config/cache/basecontainer.cxx
 filter/source/config/cache/basecontainer.hxx
 filter/source/config/cache/cacheitem.cxx
@@ -4723,7 +4722,6 @@ forms/source/xforms/NameContainer.hxx
 forms/source/xforms/binding.cxx
 forms/source/xforms/binding.hxx
 forms/source/xforms/boolexpression.cxx
-forms/source/xforms/boolexpression.hxx
 forms/source/xforms/collection.hxx
 forms/source/xforms/computedexpression.cxx
 forms/source/xforms/computedexpression.hxx
@@ -4775,8 +4773,6 @@ forms/source/xforms/xpathlib/extension.cxx
 forms/source/xforms/xpathlib/extension.hxx
 forms/source/xforms/xpathlib/xpathlib.cxx
 forms/source/xforms/xpathlib/xpathlib.hxx
-formula/inc/core_resource.hxx
-formula/qa/unit/formula-dialogs-test.cxx
 formula/source/core/api/FormulaCompiler.cxx
 formula/source/core/api/FormulaOpCodeMapperObj.cxx
 formula/source/core/api/grammar.cxx
@@ -4795,15 +4791,11 @@ formula/source/ui/dlg/parawin.hxx
 formula/source/ui/dlg/structpg.cxx
 formula/source/ui/dlg/structpg.hxx
 fpicker/inc/fpsofficeResMgr.hxx
-fpicker/qa/unit/fpicker-dialogs-test.cxx
-fpicker/source/aqua/AquaFilePickerDelegate.hxx
 fpicker/source/aqua/CFStringUtilities.hxx
 fpicker/source/aqua/ControlHelper.hxx
 fpicker/source/aqua/FPServiceInfo.hxx
 fpicker/source/aqua/FilterHelper.hxx
 fpicker/source/aqua/NSString_OOoAdditions.hxx
-fpicker/source/aqua/NSURL_OOoAdditions.hxx
-fpicker/source/aqua/SalAquaConstants.h
 fpicker/source/aqua/SalAquaFilePicker.hxx
 fpicker/source/aqua/SalAquaFolderPicker.hxx
 fpicker/source/aqua/SalAquaPicker.hxx
@@ -4998,7 +4990,6 @@ framework/inc/xml/toolboxconfigurationdefines.hxx
 framework/inc/xml/toolboxdocumenthandler.hxx
 framework/inc/xml/xmlnamespaces.hxx
 framework/qa/cppunit/dispatchtest.cxx
-framework/source/accelerators/acceleratorcache.cxx
 framework/source/accelerators/acceleratorconfiguration.cxx
 framework/source/accelerators/documentacceleratorconfiguration.cxx
 framework/source/accelerators/globalacceleratorconfiguration.cxx
@@ -5209,12 +5200,10 @@ hwpfilter/source/datecode.h
 hwpfilter/source/drawdef.h
 hwpfilter/source/drawing.h
 hwpfilter/source/fontmap.cxx
-hwpfilter/source/fontmap.hxx
 hwpfilter/source/formula.cxx
 hwpfilter/source/formula.h
 hwpfilter/source/grammar.cxx
 hwpfilter/source/grammar.h
-hwpfilter/source/grammar.hxx
 hwpfilter/source/hbox.cxx
 hwpfilter/source/hbox.h
 hwpfilter/source/hcode.cxx
@@ -5238,7 +5227,6 @@ hwpfilter/source/htags.h
 hwpfilter/source/hutil.cxx
 hwpfilter/source/hutil.h
 hwpfilter/source/hwpeq.cxx
-hwpfilter/source/hwpeq.h
 hwpfilter/source/hwpfile.cxx
 hwpfilter/source/hwpfile.h
 hwpfilter/source/hwplib.h
@@ -5247,7 +5235,6 @@ hwpfilter/source/hwpreader.cxx
 hwpfilter/source/hwpreader.hxx
 hwpfilter/source/ksc5601.h
 hwpfilter/source/lexer.cxx
-hwpfilter/source/lexer.hxx
 hwpfilter/source/mapping.h
 hwpfilter/source/mzstring.cxx
 hwpfilter/source/mzstring.h

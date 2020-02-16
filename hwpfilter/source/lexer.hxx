@@ -20,7 +20,7 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_LEXER_HXX
 #define INCLUDED_HWPFILTER_SOURCE_LEXER_HXX
 
-void initFlex(char const * s);
+void initFlex(char const* s);
 
 int yylex();
 

@@ -24,7 +24,6 @@
 
 namespace xforms
 {
-
 /** BoolExpression represents a computed XPath expression that returns
  * a bool value and caches the results.
  *
@@ -38,7 +37,7 @@ public:
 
     /// set the expression string
     /// (overridden for new definition of a simple expression)
-    void setExpression( const OUString& rExpression );
+    void setExpression(const OUString& rExpression);
 };
 
 } // namespace xforms

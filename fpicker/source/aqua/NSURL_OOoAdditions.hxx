@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 
 @interface NSURL (OOoAdditions)
-- (OUString) OUStringForInfo:(InfoType)info;
+- (OUString)OUStringForInfo:(InfoType)info;
 @end
 
 /*
@@ -35,7 +35,7 @@
     if there was no alias, nil is returned
 */
 
-NSString* resolveAlias( NSString* i_pSystemPath );
+NSString* resolveAlias(NSString* i_pSystemPath);
 
 #endif
 

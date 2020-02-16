@@ -25,7 +25,6 @@
 
 namespace framework
 {
-
 bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
     SolarMutexGuard g;
@@ -52,8 +51,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     return lKeys;
 }
 
-void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
-                                         const OUString&    sCommand)
+void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey, const OUString& sCommand)
 {
     SolarMutexGuard g;
 
@@ -109,7 +107,7 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
     SolarMutexGuard g;
 
-    const TKeyList&                            lKeys = getKeysByCommand(sCommand);
+    const TKeyList& lKeys = getKeysByCommand(sCommand);
     for (auto const& lKey : lKeys)
     {
         removeKey(lKey);

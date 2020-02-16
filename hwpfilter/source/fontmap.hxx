@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-int getRepFamilyName(char const *, char *, double &);
+int getRepFamilyName(char const*, char*, double&);
 
 #endif
 
