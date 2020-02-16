@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
 endif
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
+$(eval $(call gb_Module_add_javacheck_targets,chart2,\
     JunitTest_chart2_unoapi \
 ))
 

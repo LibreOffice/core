@@ -29,6 +29,19 @@ $(eval $(call gb_Module_add_check_targets,ridljar,\
     JunitTest_urp \
     JunitTest_util \
 ))
+
+$(eval $(call gb_Module_add_javacheck_targets,ridljar,\
+    JunitTest_bridgefactory \
+    JunitTest_connections \
+    JunitTest_java \
+    JunitTest_java_remote \
+    JunitTest_remote \
+    JunitTest_typedesc \
+    JunitTest_uno \
+    JunitTest_urp \
+    JunitTest_util \
+))
+
 endif
 
 # vim:set noet sw=4 ts=4:

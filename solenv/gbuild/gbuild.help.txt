@@ -35,6 +35,7 @@ AVAILABLE TARGETS
                             variable.
        check                run unit tests and if in toplevel subsequentcheck
        unitcheck            run unit tests
+       javacheck            run java tests
        slowcheck            run slow unit tests
        screenshot           create all screenshots
        subsequentcheck      run system tests (requires full installation)
