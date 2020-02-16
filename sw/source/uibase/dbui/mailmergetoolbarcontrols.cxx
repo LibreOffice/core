@@ -22,7 +22,6 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/InterimItemWindow.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -37,17 +36,82 @@ using namespace css;
 
 namespace {
 
+class CurrentEdit final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::Entry> m_xWidget;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+public:
+    CurrentEdit(vcl::Window* pParent)
+        : InterimItemWindow(pParent, "modules/swriter/ui/editbox.ui", "EditBox")
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
+    {
+        m_xWidget->connect_key_press(LINK(this, CurrentEdit, KeyInputHdl));
+        SetSizePixel(m_xWidget->get_preferred_size());
+    }
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    void set_sensitive(bool bSensitive)
+    {
+        Enable(bSensitive);
+        m_xWidget->set_sensitive(bSensitive);
+    }
+
+    bool get_sensitive() const
+    {
+        return m_xWidget->get_sensitive();
+    }
+
+    void set_text(const OUString& rText)
+    {
+        m_xWidget->set_text(rText);
+    }
+
+    OUString get_text() const
+    {
+        return m_xWidget->get_text();
+    }
+
+    void connect_activate(const Link<weld::Entry&, bool>& rLink)
+    {
+        m_xWidget->connect_activate(rLink);
+    }
+
+    virtual ~CurrentEdit() override
+    {
+        disposeOnce();
+    }
+};
+
+IMPL_LINK(CurrentEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
 /// Controller for .uno:MailMergeCurrentEntry toolbar checkbox: creates the checkbox & handles the value.
 class MMCurrentEntryController : public svt::ToolboxController, public lang::XServiceInfo
 {
-    VclPtr<Edit> m_pCurrentEdit;
+    VclPtr<CurrentEdit> m_xCurrentEdit;
 
-    DECL_LINK(CurrentEditUpdatedHdl, Edit&, void);
+    DECL_LINK(CurrentEditUpdatedHdl, weld::Entry&, bool);
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
         : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
-        , m_pCurrentEdit(nullptr)
+        , m_xCurrentEdit(nullptr)
     {
     }
 
@@ -218,7 +282,7 @@ void MMCurrentEntryController::dispose()
     SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
-    m_pCurrentEdit.disposeAndClear();
+    m_xCurrentEdit.disposeAndClear();
 }
 
 uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent)
@@ -228,17 +292,14 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
     if (pToolbar)
     {
         // make it visible
-        m_pCurrentEdit = VclPtr<Edit>::Create(pToolbar);
-        m_pCurrentEdit->SetWidthInChars(4);
-        m_pCurrentEdit->SetSizePixel(m_pCurrentEdit->GetOptimalSize());
-
-        m_pCurrentEdit->SetModifyHdl(LINK(this, MMCurrentEntryController, CurrentEditUpdatedHdl));
+        m_xCurrentEdit = VclPtr<CurrentEdit>::Create(pToolbar);
+        m_xCurrentEdit->connect_activate(LINK(this, MMCurrentEntryController, CurrentEditUpdatedHdl));
     }
 
-    return VCLUnoHelper::GetInterface(m_pCurrentEdit);
+    return VCLUnoHelper::GetInterface(m_xCurrentEdit);
 }
 
-IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
+IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, weld::Entry&, rEdit, bool)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
@@ -246,9 +307,9 @@ IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (!xConfigItem)
-        return;
+        return true;
 
-    OUString aText(rEdit.GetText());
+    OUString aText(rEdit.get_text());
     sal_Int32 nEntry = aText.toInt32();
     if (!aText.isEmpty() && nEntry != xConfigItem->GetResultSetPosition())
     {
@@ -256,11 +317,12 @@ IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
         // notify about the change
         dispatchCommand(".uno:MailMergeCurrentEntry", uno::Sequence<beans::PropertyValue>());
     }
+    return true;
 };
 
 void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEvent)
 {
-    if (!m_pCurrentEdit)
+    if (!m_xCurrentEdit)
         return;
 
     SwView* pView = ::GetActiveView();
@@ -270,16 +332,16 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
 
     if (!xConfigItem || !rEvent.IsEnabled)
     {
-        m_pCurrentEdit->Disable();
-        m_pCurrentEdit->SetText("");
+        m_xCurrentEdit->set_sensitive(false);
+        m_xCurrentEdit->set_text("");
     }
     else
     {
-        sal_Int32 nEntry = m_pCurrentEdit->GetText().toInt32();
-        if (!m_pCurrentEdit->IsEnabled() || nEntry != xConfigItem->GetResultSetPosition())
+        sal_Int32 nEntry = m_xCurrentEdit->get_text().toInt32();
+        if (!m_xCurrentEdit->get_sensitive() || nEntry != xConfigItem->GetResultSetPosition())
         {
-            m_pCurrentEdit->Enable();
-            m_pCurrentEdit->SetText(OUString::number(xConfigItem->GetResultSetPosition()));
+            m_xCurrentEdit->set_sensitive(true);
+            m_xCurrentEdit->set_text(OUString::number(xConfigItem->GetResultSetPosition()));
         }
     }
 }
