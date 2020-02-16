@@ -71,13 +71,13 @@ namespace
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 
-    std::string UnoNameFromDeckId(const OUString& rsDeckId)
+    std::string UnoNameFromDeckId(const OUString& rsDeckId, bool isImpress = false)
     {
         if (rsDeckId == "SdCustomAnimationDeck")
             return ".uno:CustomAnimation";
 
         if (rsDeckId == "PropertyDeck")
-            return ".uno:Sidebar";
+            return isImpress ? ".uno:ModifyPage" : ".uno:Sidebar";
 
         if (rsDeckId == "SdLayoutsDeck")
             return ".uno:ModifyPage";
@@ -236,7 +236,7 @@ void SidebarController::disposeDecks()
     {
         if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
         {
-            const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+            const std::string hide = UnoNameFromDeckId(msCurrentDeckId, vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(GetCurrentContext().msApplication));
             if (!hide.empty())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                        (hide + "=false").c_str());
@@ -754,13 +754,13 @@ void SidebarController::SwitchToDeck (
         {
             if (msCurrentDeckId != rDeckDescriptor.msId)
             {
-                const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+                const std::string hide = UnoNameFromDeckId(msCurrentDeckId, vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(GetCurrentContext().msApplication));
                 if (!hide.empty())
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                            (hide + "=false").c_str());
             }
 
-            const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId);
+            const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId, vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(GetCurrentContext().msApplication));
             if (!show.empty())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                        (show + "=true").c_str());
@@ -1310,7 +1310,7 @@ void SidebarController::UpdateDeckOpenState()
 
                 if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
                 {
-                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId, vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(GetCurrentContext().msApplication));
                     if (!uno.empty())
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                                 (uno + "=true").c_str());
@@ -1348,7 +1348,7 @@ void SidebarController::UpdateDeckOpenState()
 
                 if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
                 {
-                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId, vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(GetCurrentContext().msApplication));
                     if (!uno.empty())
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                                 (uno + "=false").c_str());
