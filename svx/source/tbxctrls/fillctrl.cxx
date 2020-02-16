@@ -65,6 +65,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpBitmapItem()
     , mxFillControl(nullptr)
     , mpLbFillType(nullptr)
+    , mpToolBoxColor(nullptr)
     , mpLbFillAttr(nullptr)
     , meLastXFS(static_cast<drawing::FillStyle>(-1))
     , mnLastPosGradient(0)
