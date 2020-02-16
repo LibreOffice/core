@@ -33,7 +33,7 @@ private:
     void add_to_collection(const std::string& dirPath);
 
 public:
-    bool exists(std::string filePath);
+    bool exists(const std::string& filePath);
 };
 
 #else

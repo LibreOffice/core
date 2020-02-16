@@ -54,7 +54,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     allIncludes.insert(EntriesPair(dirPath, dirContent));
 }
 
-bool IncludesCollection::exists(string filePath) {
+bool IncludesCollection::exists(const string& filePath) {
 #if defined(_WIN32)
     transform(
         filePath.begin(), filePath.end(), filePath.begin(),
