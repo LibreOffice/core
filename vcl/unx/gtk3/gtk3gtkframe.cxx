@@ -3694,6 +3694,10 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if( pObj == pThis->m_pWindow )
     {
+        pThis->m_aDamageHandler.damaged = nullptr;
+        pThis->m_aDamageHandler.handle = nullptr;
+        if (pThis->m_pSurface)
+            cairo_surface_set_user_data(pThis->m_pSurface, SvpSalGraphics::getDamageKey(), nullptr, nullptr);
         pThis->m_pFixedContainer = nullptr;
         pThis->m_pEventBox = nullptr;
         pThis->m_pTopLevelGrid = nullptr;
