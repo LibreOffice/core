@@ -529,6 +529,11 @@ void Application::Quit()
     Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplQuitMsg ) );
 }
 
+bool Application::IsQuit()
+{
+    return ImplGetSVData()->maAppData.mbAppQuit;
+}
+
 comphelper::SolarMutex& Application::GetSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
