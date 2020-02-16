@@ -112,14 +112,10 @@ public __gc class BridgeTest : public WeakBase, public XMain
             Any a2 = (Any) val2;
             ret = a1.Type == a2.Type && compareData(a1.Value, a2.Value);
         }
-        else if (t1->IsValueType)
+        else
         {
             //Any, enum, int, bool char, float, double etc.
             ret = val1->Equals(val2);
-        }
-        else
-        {
-            Debug::Assert(false);
         }
         return ret;
     }
