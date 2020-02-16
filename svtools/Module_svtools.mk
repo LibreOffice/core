@@ -43,11 +43,9 @@ endif
 
 endif
 
-ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
     JunitTest_svtools_unoapi \
 ))
-endif
 
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,svtools,\

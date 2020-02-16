@@ -126,7 +126,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 ))
 endif
 
-ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_complex \
     JunitTest_sw_unoapi_1 \
@@ -134,13 +133,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_unoapi_3 \
     JunitTest_sw_unoapi_4 \
 ))
-endif
 
-ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
 	PythonTest_sw_python \
 ))
-endif
 
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,sw,\
