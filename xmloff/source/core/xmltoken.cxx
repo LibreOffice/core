@@ -3386,6 +3386,7 @@ namespace xmloff::token {
             // check the consistency of the token list. Below, we use the
             // ordinal value of the token as index into the token list, so we
             // should make sure that every entry is at the proper position
+            std::set<OString> tokenSet;
             const XMLTokenEntry* pEntry = aTokenList;
             const XMLTokenEntry* pEntryEnd =
                 pEntry + SAL_N_ELEMENTS(aTokenList);
@@ -3395,9 +3396,19 @@ namespace xmloff::token {
                 assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
                     // Inconsistency in the token list!
                     // The positions in xmltoken.hxx and xmltoken.cxx need to match.
+
+                if (pEntry->nLength && nPos >= XML_UNIT_MM)
+                    // ignoring the zero-length fake entries and the namespace prefix entrie
+                {
+                    auto pair = tokenSet.insert(OString(pEntry->pChar, pEntry->nLength));
+                    SAL_WARN_IF(!pair.second, "xmloff", "duplicate token string " << OUString( pEntry->pChar, pEntry->nLength,
+                                                 RTL_TEXTENCODING_ASCII_US ));
+                    assert(pair.second && "duplicate token string");
+                }
                 ++pEntry;
                 ++nPos;
             }
+
             s_bChecked = true; // it's all static, checking once is enough
         }
 #endif

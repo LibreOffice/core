@@ -24,6 +24,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
@@ -59,13 +60,30 @@ void XMLChartStyleContext::SetAttribute(
     }
 }
 
+void XMLChartStyleContext::SetAttribute(
+    sal_Int32 nElement,
+    const OUString& rValue )
+{
+    if( (nElement & TOKEN_MASK) == XML_DATA_STYLE_NAME )
+    {
+        msDataStyleName =rValue;
+    }
+    else if( (nElement & TOKEN_MASK) == XML_PERCENTAGE_DATA_STYLE_NAME )
+    {
+        msPercentageDataStyleName =rValue;
+    }
+    else
+    {
+        XMLShapeStyleContext::SetAttribute( nElement, rValue );
+    }
+}
+
+
 XMLChartStyleContext::XMLChartStyleContext(
-    SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+    SvXMLImport& rImport,
     SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
 
-        XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+        XMLShapeStyleContext( rImport, rStyles, nFamily ),
         mrStyles( rStyles )
 {}
 
