@@ -97,7 +97,7 @@ public:
 
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -107,7 +107,7 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl( ORptFilter& rImpor
 {
 }
 
-void RptMLMasterStylesContext_Impl::EndElement()
+void RptMLMasterStylesContext_Impl::endFastElement(sal_Int32 )
 {
     FinishStyles( true );
     GetImport().FinishStyles();
@@ -631,34 +631,18 @@ public:
                     return pStyleContext;
                 }
                 break;
+            case XML_ELEMENT(OFFICE, XML_STYLES):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return rImport.CreateStylesContext(false);
+                break;
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+                // don't use the autostyles from the styles-document for the progress
+                return rImport.CreateStylesContext(true);
+                break;
         }
         return nullptr;
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
-    {
-        SvXMLImportContext *pContext = nullptr;
-
-        ORptFilter & rImport(static_cast<ORptFilter&>(GetImport()));
-        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
-        switch (rTokenMap.Get(nPrefix, rLocalName))
-        {
-            case XML_TOK_CONTENT_STYLES:
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateStylesContext(rLocalName, xAttrList, false);
-                break;
-            case XML_TOK_CONTENT_AUTOSTYLES:
-                // don't use the autostyles from the styles-document for the progress
-                pContext = rImport.CreateStylesContext(rLocalName, xAttrList, true);
-                break;
-            default:
-                break;
-        }
-
-        return pContext;
-    }
 };
 
 }
@@ -711,30 +695,14 @@ public:
                 rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 return rImport.CreateFontDeclsContext();
                 break;
+            case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
+                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+                return rImport.CreateStylesContext(true);
+                break;
         }
         return nullptr;
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 const nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference<xml::sax::XAttributeList> & xAttrList) override
-    {
-        SvXMLImportContext *pContext = nullptr;
-
-        ORptFilter & rImport(static_cast<ORptFilter&>(GetImport()));
-        const SvXMLTokenMap& rTokenMap = rImport.GetDocContentElemTokenMap();
-        switch (rTokenMap.Get(nPrefix, rLocalName))
-        {
-            case XML_TOK_CONTENT_AUTOSTYLES:
-                rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = rImport.CreateStylesContext(rLocalName, xAttrList, true);
-                break;
-            default:
-                break;
-        }
-
-        return pContext;
-    }
 };
 
 }
@@ -814,13 +782,12 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
     return *m_pCellElemTokenMap;
 }
 
-SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
-                                     const uno::Reference< XAttributeList>& xAttrList, bool bIsAutoStyle )
+SvXMLImportContext* ORptFilter::CreateStylesContext( bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = bIsAutoStyle ? GetAutoStyles() : GetStyles();
     if ( !pContext )
     {
-        pContext = new OReportStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
+        pContext = new OReportStylesContext(*this, bIsAutoStyle);
         if (bIsAutoStyle)
             SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
         else

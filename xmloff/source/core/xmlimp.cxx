@@ -2020,7 +2020,10 @@ const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 
 OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
 {
-    return getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
+    // return URI and prefix and name, used for debugging issues with fast-parser importing
+    // where the URI is often some old compatibility namespace
+    return getNamespaceURIFromToken(nToken) + " "
+        + getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
 }
 
 OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)

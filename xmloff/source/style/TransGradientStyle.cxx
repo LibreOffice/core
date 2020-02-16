@@ -79,7 +79,7 @@ XMLTransGradientStyleImport::~XMLTransGradientStyleImport()
 }
 
 void XMLTransGradientStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
@@ -93,62 +93,42 @@ void XMLTransGradientStyleImport::importXML(
     aGradient.Angle = 0;
     aGradient.Border = 0;
 
-    static const SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
-        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
-        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
-        { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
-        { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
-        { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START },
-        { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END },
-        { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
-        { XML_NAMESPACE_DRAW, XML_BORDER, XML_TOK_GRADIENT_BORDER, },
-        XML_TOKEN_MAP_END
-    };
-
-    static const SvXMLTokenMap aTokenMap( aTrGradientAttrTokenMap );
-    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
-        const OUString& rStrValue = xAttrList->getValueByIndex( i );
-
         sal_Int32 nTmpValue;
+        OUString sValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_GRADIENT_NAME:
+        case XML_ELEMENT(DRAW, XML_NAME):
             {
-                rStrName = rStrValue;
+                rStrName = sValue;
             }
             break;
-        case XML_TOK_GRADIENT_DISPLAY_NAME:
+        case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
             {
-                aDisplayName = rStrValue;
+                aDisplayName = sValue;
             }
             break;
-        case XML_TOK_GRADIENT_STYLE:
+        case XML_ELEMENT(DRAW, XML_STYLE):
             {
-                SvXMLUnitConverter::convertEnum( aGradient.Style, rStrValue, pXML_GradientStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aGradient.Style, sValue, pXML_GradientStyle_Enum );
             }
             break;
-        case XML_TOK_GRADIENT_CX:
-            ::sax::Converter::convertPercent( nTmpValue, rStrValue );
+        case XML_ELEMENT(DRAW, XML_CX):
+            ::sax::Converter::convertPercent( nTmpValue, sValue );
             aGradient.XOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
-        case XML_TOK_GRADIENT_CY:
-            ::sax::Converter::convertPercent( nTmpValue, rStrValue );
+        case XML_ELEMENT(DRAW, XML_CY):
+            ::sax::Converter::convertPercent( nTmpValue, sValue );
             aGradient.YOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
-        case XML_TOK_GRADIENT_START:
+        case XML_ELEMENT(DRAW, XML_START):
             {
                 sal_Int32 aStartTransparency;
-                ::sax::Converter::convertPercent( aStartTransparency, rStrValue );
+                ::sax::Converter::convertPercent( aStartTransparency, sValue );
 
                 sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
                     ( (100 - aStartTransparency) * 255 ) / 100 );
@@ -157,10 +137,10 @@ void XMLTransGradientStyleImport::importXML(
                 aGradient.StartColor = static_cast<sal_Int32>( aColor );
             }
             break;
-        case XML_TOK_GRADIENT_END:
+        case XML_ELEMENT(DRAW, XML_END):
             {
                 sal_Int32 aEndTransparency;
-                ::sax::Converter::convertPercent( aEndTransparency, rStrValue );
+                ::sax::Converter::convertPercent( aEndTransparency, sValue );
 
                 sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
                     ( (100 - aEndTransparency) * 255 ) / 100 );
@@ -169,20 +149,20 @@ void XMLTransGradientStyleImport::importXML(
                 aGradient.EndColor = static_cast<sal_Int32>( aColor );
             }
             break;
-        case XML_TOK_GRADIENT_ANGLE:
+        case XML_ELEMENT(DRAW, XML_GRADIENT_ANGLE):
             {
                 bool const bSuccess =
-                    ::sax::Converter::convertAngle(aGradient.Angle, rStrValue);
+                    ::sax::Converter::convertAngle(aGradient.Angle, sValue);
                 SAL_INFO_IF(!bSuccess, "xmloff.style", "failed to import draw:angle");
             }
             break;
-        case XML_TOK_GRADIENT_BORDER:
-            ::sax::Converter::convertPercent( nTmpValue, rStrValue );
+        case XML_ELEMENT(DRAW, XML_BORDER):
+            ::sax::Converter::convertPercent( nTmpValue, sValue );
             aGradient.Border = sal::static_int_cast< sal_Int16 >(nTmpValue);
             break;
 
         default:
-            SAL_INFO("xmloff.style", "Unknown token at import transparency gradient style");
+            SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 
