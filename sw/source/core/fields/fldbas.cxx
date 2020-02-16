@@ -185,6 +185,11 @@ void SwFieldType::GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex)
     CallSwClientNotify(sw::GatherNodeIndexHint(rvNodeIndex));
 }
 
+void SwFieldType::GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp)
+{
+    CallSwClientNotify(sw::GatherRefFieldsHint(rvRFields, nTyp));
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));

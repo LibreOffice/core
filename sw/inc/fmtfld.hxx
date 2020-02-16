@@ -27,6 +27,7 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 #include "ndindex.hxx"
+#include "reffld.hxx"
 
 class SwField;
 class SwTextField;
@@ -60,6 +61,11 @@ namespace sw {
     struct GatherNodeIndexHint final : SfxHint {
         std::vector<sal_uLong>& m_rvNodeIndex;
         GatherNodeIndexHint(std::vector<sal_uLong>& rvNodeIndex) : m_rvNodeIndex(rvNodeIndex) {};
+    };
+    struct GatherRefFieldsHint final : SfxHint {
+        std::vector<SwGetRefField*>& m_rvRFields;
+        const sal_uInt16 m_nType;
+        GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nType) : m_rvRFields(rvRFields), m_nType(nType) {};
     };
 }
 

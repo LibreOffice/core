@@ -35,6 +35,7 @@ class SwFormatField;
 class SwRootFrame;
 class SvNumberFormatter;
 class IDocumentRedlineAccess;
+class SwGetRefField;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 
@@ -277,6 +278,7 @@ public:
     void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
     bool HasHiddenInformationNotes();
     void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
+    void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
 };
 
 inline void SwFieldType::UpdateFields() const

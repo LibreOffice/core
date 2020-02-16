@@ -22,6 +22,8 @@
  * (nodes, attributes, formats and chars).
  */
 
+
+#include <algorithm>
 #include <hintids.hxx>
 
 #include <o3tl/safeint.hxx>
@@ -911,40 +913,22 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
     m_pOutFormatNode = pOldMod;
 }
 
-bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
+bool MSWordExportBase::HasRefToAttr(const OUString& rName)
 {
+    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
+    std::vector<SwGetRefField*> vpRFields;
+    pType->GatherRefFields(vpRFields, REF_SETREFATTR);
+    return std::any_of(vpRFields.begin(), vpRFields.end(),
+            [rName](SwGetRefField* pF) { return rName == pF->GetSetRefName(); });
+}
 
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef );
-    SwIterator<SwFormatField, SwFieldType> aFormatFields( *pType );
-    for ( SwFormatField* pFormatField = aFormatFields.First(); pFormatField; pFormatField = aFormatFields.Next() )
-    {
-        const SwTextNode* pNd;
-        if ( pFormatField->GetTextField() && nTyp == pFormatField->GetField()->GetSubType() &&
-             nullptr != ( pNd  = pFormatField->GetTextField()->GetpTextNode() ) &&
-             pNd->GetNodes().IsDocNodes() )
-        {
-            const SwGetRefField& rRField = *static_cast< SwGetRefField* >( pFormatField->GetField() );
-            switch ( nTyp )
-            {
-                case REF_BOOKMARK:
-                case REF_SETREFATTR:
-                    if ( pName && *pName == rRField.GetSetRefName() )
-                        return true;
-                    break;
-                case REF_FOOTNOTE:
-                case REF_ENDNOTE:
-                    if ( nSeqNo == rRField.GetSeqNo() )
-                        return true;
-                    break;
-                case REF_SEQUENCEFLD:
-                    break;      // ???
-                case REF_OUTLINE:
-                    break;      // ???
-            }
-        }
-    }
-
-    return false;
+bool MSWordExportBase::HasRefToFootOrEndnote(const bool isEndNote, const sal_uInt16 nSeqNo)
+{
+    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
+    std::vector<SwGetRefField*> vpRFields;
+    pType->GatherRefFields(vpRFields, isEndNote ? REF_ENDNOTE : REF_FOOTNOTE);
+    return std::any_of(vpRFields.begin(), vpRFields.end(),
+            [nSeqNo](SwGetRefField* pF) { return nSeqNo == pF->GetSeqNo(); });
 }
 
 OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
@@ -3487,7 +3471,7 @@ void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
     // if any reference to this footnote/endnote then insert an internal
     // Bookmark.
     OUString sBkmkNm;
-    if ( GetExport().HasRefToObject( nTyp, nullptr, rFootnote.GetTextFootnote()->GetSeqRefNo() ))
+    if ( GetExport().HasRefToFootOrEndnote( rFootnote.IsEndNote(), rFootnote.GetTextFootnote()->GetSeqRefNo()))
     {
         sBkmkNm = MSWordExportBase::GetBookmarkName( nTyp, nullptr,
                                     rFootnote.GetTextFootnote()->GetSeqRefNo() );

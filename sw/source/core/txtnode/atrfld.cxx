@@ -266,6 +266,13 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     {
         if(auto pTextField = GetTextField())
             pGatherNodeIndexHint->m_rvNodeIndex.push_back(pTextField->GetTextNode().GetIndex());
+    } else if (const auto pGatherRefFieldsHint = dynamic_cast<const sw::GatherRefFieldsHint*>( &rHint ))
+    {
+        if(!GetTextField() || pGatherRefFieldsHint->m_nType != GetField()->GetSubType())
+            return;
+        SwTextNode* pNd = GetTextField()->GetpTextNode();
+        if(pNd && pNd->GetNodes().IsDocNodes())
+            pGatherRefFieldsHint->m_rvRFields.push_back(static_cast<SwGetRefField*>(GetField()));
     }
 }
 
