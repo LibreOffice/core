@@ -100,18 +100,36 @@
   <block-list:block block-list:abbreviated-name="atelye" block-list:name="atölye"/>
   <block-list:block block-list:abbreviated-name="Azerbeycan" block-list:name="Azerbaycan"/>
   <block-list:block block-list:abbreviated-name="azerbeycan" block-list:name="Azerbaycan"/>
+  <block-list:block block-list:abbreviated-name="Barsak" block-list:name="Bağırsak"/>
+  <block-list:block block-list:abbreviated-name="barsak" block-list:name="bağırsak"/>
   <block-list:block block-list:abbreviated-name="Beyfendi" block-list:name="Beyefendi"/>
   <block-list:block block-list:abbreviated-name="beyfendi" block-list:name="beyefendi"/>
+  <block-list:block block-list:abbreviated-name="Bilader" block-list:name="Birader"/>
+  <block-list:block block-list:abbreviated-name="bilader" block-list:name="birader"/>
+  <block-list:block block-list:abbreviated-name="Bilimum" block-list:name="Bilumum"/>
+  <block-list:block block-list:abbreviated-name="bilimum" block-list:name="bilumum"/>
+  <block-list:block block-list:abbreviated-name="Birfiil" block-list:name="Bilfiil"/>
+  <block-list:block block-list:abbreviated-name="birfiil" block-list:name="bilfiil"/>
+  <block-list:block block-list:abbreviated-name="Birhaber" block-list:name="Bihaber"/>
+  <block-list:block block-list:abbreviated-name="birhaber" block-list:name="bihaber"/>
   <block-list:block block-list:abbreviated-name="Bir kaç" block-list:name="Birkaç"/>
   <block-list:block block-list:abbreviated-name="bir kaç" block-list:name="birkaç"/>
   <block-list:block block-list:abbreviated-name="Birşey" block-list:name="Bir şey"/>
   <block-list:block block-list:abbreviated-name="birşey" block-list:name="bir şey"/>
   <block-list:block block-list:abbreviated-name="Birgün" block-list:name="Bir gün"/>
   <block-list:block block-list:abbreviated-name="birgün" block-list:name="bir gün"/>
+  <block-list:block block-list:abbreviated-name="Boğa yılanı" block-list:name="Boa yılanı"/>
+  <block-list:block block-list:abbreviated-name="boğa yılanı" block-list:name="boa yılanı"/>
+  <block-list:block block-list:abbreviated-name="Boğça" block-list:name="Poğaça"/>
+  <block-list:block block-list:abbreviated-name="boğça" block-list:name="poğaça"/>
+  <block-list:block block-list:abbreviated-name="Boy pos" block-list:name="Boy bos"/>
+  <block-list:block block-list:abbreviated-name="boy pos" block-list:name="boy bos"/>
   <block-list:block block-list:abbreviated-name="Bujiteri" block-list:name="Bijuteri"/>
   <block-list:block block-list:abbreviated-name="bujiteri" block-list:name="bijuteri"/>
   <block-list:block block-list:abbreviated-name="Bulüz" block-list:name="Bluz"/>
   <block-list:block block-list:abbreviated-name="bulüz" block-list:name="bluz"/>
+  <block-list:block block-list:abbreviated-name="Büsküüt" block-list:name="Bisküvi"/>
+  <block-list:block block-list:abbreviated-name="büsküüt" block-list:name="bisküvi"/>
   <block-list:block block-list:abbreviated-name="Büyültmek" block-list:name="Büyütmek"/>
   <block-list:block block-list:abbreviated-name="büyültmek" block-list:name="büyütmek"/>
   <block-list:block block-list:abbreviated-name="Çala kalem" block-list:name="Çalakalem"/>
