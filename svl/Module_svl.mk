@@ -40,11 +40,9 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_urihelper \
 ))
 
-ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
     JunitTest_svl_complex \
 ))
-endif
 
 #todo: dde platform dependent
 #todo: package_inc

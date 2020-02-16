@@ -38,18 +38,14 @@ $(eval $(call gb_Module_add_check_targets,sfx2,\
     CppunitTest_sfx2_classification \
 ))
 
-ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
     JunitTest_sfx2_complex \
     JunitTest_sfx2_unoapi \
 ))
-endif
 
-ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
 	PythonTest_sfx2_python \
 ))
-endif
 
 #todo: clean up quickstarter stuff in both libraries
 #todo: move standard pool to svl

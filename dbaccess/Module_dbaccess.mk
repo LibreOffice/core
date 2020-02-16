@@ -83,12 +83,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
     JunitTest_dbaccess_unoapi \
 ))
 
-ifneq ($(DISABLE_PYTHON),TRUE)
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	PythonTest_dbaccess_python \
 ))
-endif
 endif
 
 # screenshots
