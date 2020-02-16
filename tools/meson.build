@@ -40,6 +40,12 @@ tl_lib = shared_library('tl',
   'source/zcodec/zcodec.cxx',
   'source/xml/XmlWriter.cxx',
   'source/xml/XmlWalker.cxx',
+  # FIXME: create this file at build time
+  # rather than using this pregenerated one.
+  # The executable crashes on startup if run
+  # directly, it requires some env setup
+  # that I'm not aware of.
+  'reversemap.cxx',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DTOOLS_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
