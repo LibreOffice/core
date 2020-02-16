@@ -26,6 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -55,11 +56,8 @@ const OUStringLiteral gsSortAlgorithm("SortAlgorithm");
 const OUStringLiteral gsLocale("Locale");
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
+    SvXMLImport& rImport) :
+        SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
         sSuffix(),
         sPrefix(),
         sAlgorithm(),
@@ -73,63 +71,59 @@ XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationCont
 {
 }
 
-void XMLIndexBibliographyConfigurationContext::SetAttribute(
-    sal_uInt16 nPrefix,
-    const OUString& sLocalName,
-    const OUString& sValue)
+void XMLIndexBibliographyConfigurationContext::SetAttribute(sal_Int32 nElement, const OUString& rValue )
 {
-    if( XML_NAMESPACE_TEXT == nPrefix )
+    if( nElement == XML_ELEMENT(TEXT, XML_PREFIX) )
     {
-        if( IsXMLToken(sLocalName, XML_PREFIX) )
+        sPrefix = rValue;
+    }
+    else if( nElement == XML_ELEMENT(TEXT, XML_SUFFIX) )
+    {
+        sSuffix = rValue;
+    }
+    else if( nElement == XML_ELEMENT(TEXT, XML_NUMBERED_ENTRIES) )
+    {
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, rValue))
         {
-            sPrefix = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_SUFFIX) )
-        {
-            sSuffix = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
-        {
-            bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, sValue))
-            {
-                bNumberedEntries = bTmp;
-            }
-        }
-        else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
-        {
-            bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, sValue))
-            {
-                bSortByPosition = bTmp;
-            }
-        }
-        else if( IsXMLToken(sLocalName, XML_SORT_ALGORITHM) )
-        {
-            sAlgorithm = sValue;
+            bNumberedEntries = bTmp;
         }
     }
-    else if( XML_NAMESPACE_FO == nPrefix )
+    else if( nElement == XML_ELEMENT(TEXT, XML_SORT_BY_POSITION) )
     {
-        if( IsXMLToken(sLocalName, XML_LANGUAGE) )
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, rValue))
         {
-            maLanguageTagODF.maLanguage = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_SCRIPT) )
-        {
-            maLanguageTagODF.maScript = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_COUNTRY) )
-        {
-            maLanguageTagODF.maCountry = sValue;
+            bSortByPosition = bTmp;
         }
     }
-    else if( XML_NAMESPACE_STYLE == nPrefix )
+    else if( nElement == XML_ELEMENT(TEXT, XML_SORT_ALGORITHM) )
     {
-        if( IsXMLToken(sLocalName, XML_RFC_LANGUAGE_TAG) )
-        {
-            maLanguageTagODF.maRfcLanguageTag = sValue;
-        }
+        sAlgorithm = rValue;
+    }
+    else if( nElement == XML_ELEMENT(FO, XML_LANGUAGE) ||
+             nElement == XML_ELEMENT(FO_COMPAT, XML_LANGUAGE) )
+    {
+        maLanguageTagODF.maLanguage = rValue;
+    }
+    else if( nElement == XML_ELEMENT(FO, XML_SCRIPT) ||
+             nElement == XML_ELEMENT(FO_COMPAT, XML_SCRIPT) )
+    {
+        maLanguageTagODF.maScript = rValue;
+    }
+    else if( nElement == XML_ELEMENT(FO, XML_COUNTRY) ||
+             nElement == XML_ELEMENT(FO_COMPAT, XML_COUNTRY) )
+    {
+        maLanguageTagODF.maCountry = rValue;
+    }
+    else if( nElement == XML_ELEMENT(STYLE, XML_RFC_LANGUAGE_TAG) )
+    {
+        maLanguageTagODF.maRfcLanguageTag = rValue;
+    }
+    else
+    {
+        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement) << "=" << rValue);
+        assert(false);
     }
 }
 

@@ -27,7 +27,7 @@
 
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::xml::sax { class XAttributeList; }
+namespace com::sun::star::xml::sax { class XFastAttributeList; }
 
 class SvXMLExport;
 class SvXMLImport;
@@ -36,7 +36,7 @@ namespace XMLImageStyle
 {
 
 UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
-UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) bool importXML(css::uno::Reference<css::xml::sax::XAttributeList> const & xAttrList,
+UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) bool importXML(css::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
                                 css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

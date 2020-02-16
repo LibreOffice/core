@@ -331,30 +331,17 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
             }
             break;
         }
-    }
-    return nullptr;
-}
-
-SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContextRef xContext;
-    const SvXMLTokenMap& rTokenMap = GetSdImport().GetBodyElemTokenMap();
-
-    switch(rTokenMap.Get(nPrefix, rLocalName))
-    {
-        case XML_TOK_BODY_HEADER_DECL:
-        case XML_TOK_BODY_FOOTER_DECL:
-        case XML_TOK_BODY_DATE_TIME_DECL:
+        case XML_ELEMENT(PRESENTATION, XML_HEADER_DECL):
+        case XML_ELEMENT(PRESENTATION, XML_FOOTER_DECL):
+        case XML_ELEMENT(PRESENTATION, XML_DATE_TIME_DECL):
         {
-            xContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
+            return new SdXMLHeaderFooterDeclContext( GetImport(), xAttrList );
             break;
         }
+        default:
+            assert(false);
     }
-
-    return xContext;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

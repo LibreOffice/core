@@ -54,19 +54,13 @@ class XMLIndexBibliographyConfigurationContext final : public SvXMLStyleContext
 public:
 
 
-    XMLIndexBibliographyConfigurationContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
+    XMLIndexBibliographyConfigurationContext(SvXMLImport& rImport);
 
     virtual ~XMLIndexBibliographyConfigurationContext() override;
 
 private:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
