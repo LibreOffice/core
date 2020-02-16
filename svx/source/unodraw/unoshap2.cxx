@@ -122,16 +122,6 @@ uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeGroup::acquire() throw ( )
-{
-    SvxShape::acquire();
-}
-
-void SAL_CALL SvxShapeGroup::release() throw ( )
-{
-    SvxShape::release();
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
@@ -380,15 +370,6 @@ uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeConnector::acquire() throw ( )
-{
-    SvxShapeText::acquire();
-}
-
-void SAL_CALL SvxShapeConnector::release() throw ( )
-{
-    SvxShapeText::release();
-}
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
@@ -512,15 +493,6 @@ uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeControl::acquire() throw ( )
-{
-    SvxShapeText::acquire();
-}
-
-void SAL_CALL SvxShapeControl::release() throw ( )
-{
-    SvxShapeText::release();
-}
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
@@ -1619,17 +1591,6 @@ uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
         aReturn = ::cppu::queryInterface(rType, static_cast<drawing::XEnhancedCustomShapeDefaulter*>(this) );
     return aReturn;
 }
-
-void SAL_CALL SvxCustomShape::acquire() throw ( )
-{
-    SvxShapeText::acquire();
-}
-
-void SAL_CALL SvxCustomShape::release() throw ( )
-{
-    SvxShapeText::release();
-}
-
 
 uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
 {

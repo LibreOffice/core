@@ -166,10 +166,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -199,10 +199,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -232,10 +232,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -265,10 +265,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -357,10 +357,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -494,10 +494,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
@@ -522,10 +522,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL
     queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakObject::release(); }
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
