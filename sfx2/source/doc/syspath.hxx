@@ -24,7 +24,7 @@
 
 namespace SystemPath
 {
-    bool GetUserTemplateLocation(sal_Unicode*, int nSize);
+bool GetUserTemplateLocation(sal_Unicode*, int nSize);
 };
 
 #endif

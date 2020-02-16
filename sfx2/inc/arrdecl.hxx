@@ -23,7 +23,7 @@
 #include <memory>
 
 class SfxFilter;
-typedef ::std::vector< std::shared_ptr<const SfxFilter> > SfxFilterList_Impl;
+typedef ::std::vector<std::shared_ptr<const SfxFilter>> SfxFilterList_Impl;
 
 #endif
 

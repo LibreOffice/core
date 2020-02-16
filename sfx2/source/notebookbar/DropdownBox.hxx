@@ -32,7 +32,7 @@ private:
     VclPtr<NotebookbarPopup> m_pPopup;
 
 public:
-    explicit DropdownBox(vcl::Window *pParent);
+    explicit DropdownBox(vcl::Window* pParent);
     virtual ~DropdownBox() override;
     virtual void dispose() override;
 

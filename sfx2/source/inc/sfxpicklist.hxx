@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#define PICKLIST_MAXSIZE  100
+#define PICKLIST_MAXSIZE 100
 
 class SfxApplication;
 class SfxPickListImpl;
@@ -31,6 +31,7 @@ class SfxPickList
 {
 private:
     std::unique_ptr<SfxPickListImpl> mxImpl;
+
 public:
     SfxPickList(SfxApplication& rApp);
     ~SfxPickList();

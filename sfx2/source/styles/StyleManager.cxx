@@ -12,7 +12,6 @@
 
 namespace sfx2
 {
-
 SfxStyleSheetBase* StyleManager::Search(const OUString& rStyleName, SfxStyleFamily eFamily)
 {
     SfxStyleSheetBasePool* pPool = mrShell.GetStyleSheetPool();
