@@ -110,7 +110,9 @@ void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::setValueIf(SCCOLROW nPos1, S
         getRangeData(nCurrentStartRow, aRangeData);
         if (rPredicate(aRangeData.mnValue))
         {
-            setValue(nPos1, std::min<SCCOLROW>(nPos2, aRangeData.mnPos2), nValue);
+            // set value from current iteration point on, til end of range.
+            // Note that aRangeData may well contain much lower values for nPos1
+            setValue(nCurrentStartRow, std::min<SCCOLROW>(nPos2, aRangeData.mnPos2), nValue);
         }
 
         // even if nPos2 is bigger than nPos2 this should terminate the loop
