@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6520ddd_192b282b",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2441,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-02-16T15:21:37Z",
+      "side": 1,
+      "message": "this would overwrite the \"normal\" ascender and descender etc with the vertical text equivalents which isn\u0027t what we want I believe.\n\nbefore commit 561a02ec72cf963d7cd59cfb9a183c1032f0861b what we had here was...\n\n    if (table) {\n        info-\u003evascent  \u003d XUnits(UPEm, GetInt16(table, 4));\n        info-\u003evdescent \u003d XUnits(UPEm, GetInt16(table, 6));\n    }\n\nwhere we stashed those values into differerent vertical fields which that 2017 commit determined we then didn\u0027t use. I feel we just want to go with removing the getTable(ttf, O_vhea) call",
+      "revId": "f8313ce3312f2967f5cc5d4eb78b30e591bd4eba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
