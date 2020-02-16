@@ -80,8 +80,8 @@
 #endif
 struct sockaddr_l2
 {
-  sa_family_t l2_family;
-  unsigned short l2_psm;
-  bdaddr_t l2_bdaddr;
+    sa_family_t l2_family;
+    unsigned short l2_psm;
+    bdaddr_t l2_bdaddr;
 };
 #endif

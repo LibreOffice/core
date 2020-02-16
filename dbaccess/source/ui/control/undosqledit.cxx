@@ -26,7 +26,7 @@ void OSqlEditUndoAct::ToggleText()
 {
     OUString strNext = m_pOwner->GetText();
     m_pOwner->SetText(m_strNextText);
-    m_strNextText  =strNext;
+    m_strNextText = strNext;
 }
 
 } // namespace

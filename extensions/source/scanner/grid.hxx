@@ -36,10 +36,10 @@ class GridDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::ComboBox> m_xResetTypeBox;
     std::unique_ptr<weld::Button> m_xResetButton;
-    std::unique_ptr<GridWindow>     m_xGridWindow;
+    std::unique_ptr<GridWindow> m_xGridWindow;
     std::unique_ptr<weld::CustomWeld> m_xGridWindowWND;
 
-    DECL_LINK( ClickButtonHdl, weld::Button&, void );
+    DECL_LINK(ClickButtonHdl, weld::Button&, void);
 
 public:
     GridDialog(weld::Window* pParent, double* pXValues, double* pYValues, int nValues);

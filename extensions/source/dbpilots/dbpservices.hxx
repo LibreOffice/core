@@ -29,7 +29,6 @@ extern "C" {
 void createRegistryInfo_OGridWizard();
 void createRegistryInfo_OGroupBoxWizard();
 void createRegistryInfo_OListComboWizard();
-
 }
 
 #endif

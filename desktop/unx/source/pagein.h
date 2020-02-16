@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-void pagein_execute(char const * path, char const * file);
+void pagein_execute(char const* path, char const* file);
 
 #endif
 

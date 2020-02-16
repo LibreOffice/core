@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-DesktopDialogsTest::DesktopDialogsTest()
-{
-}
+DesktopDialogsTest::DesktopDialogsTest() {}
 
 void DesktopDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

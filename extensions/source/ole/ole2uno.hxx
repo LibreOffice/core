@@ -48,13 +48,13 @@ using namespace com::sun::star::beans;
 using namespace osl;
 using namespace std;
 
-VARTYPE getVarType( const Any& val);
+VARTYPE getVarType(const Any& val);
 /* creates a Type object for a given type name.
 
     The function returns false if the name does not represent
     a valid type.
 */
-bool getType( BSTR name, Type & type);
+bool getType(BSTR name, Type& type);
 void o2u_attachCurrentThread();
 
 class BridgeRuntimeError
@@ -66,7 +66,6 @@ public:
     }
     OUString message;
 };
-
 
 Mutex* getBridgeMutex();
 

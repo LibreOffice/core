@@ -50,7 +50,6 @@ void createRegistryInfo_OTextConnectionSettingsDialog();
 void createRegistryInfo_OUserSettingsDialog();
 void createRegistryInfo_OViewControl();
 void createRegistryInfo_SbaXGridControl();
-
 }
 
 #endif
