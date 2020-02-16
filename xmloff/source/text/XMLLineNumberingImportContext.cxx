@@ -55,11 +55,8 @@ static const OUStringLiteral gsRestartAtEachPage("RestartAtEachPage");
 static const OUStringLiteral gsSeparatorInterval("SeparatorInterval");
 
 XMLLineNumberingImportContext::XMLLineNumberingImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_LINENUMBERINGCONFIG)
+    SvXMLImport& rImport)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_LINENUMBERINGCONFIG)
 ,   sNumFormat(GetXMLToken(XML_1))
 ,   sNumLetterSync(GetXMLToken(XML_FALSE))
 ,   nOffset(-1)

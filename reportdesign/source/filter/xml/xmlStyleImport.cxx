@@ -68,10 +68,8 @@ public:
 }
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false/*bDefaultStyle*/ ),
+    XMLPropStyleContext( rImport, rStyles, nFamily, false/*bDefaultStyle*/ ),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
     m_rImport(rImport)
@@ -143,6 +141,17 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
+void OControlStyleContext::SetAttribute( sal_Int32 nElement,
+                                        const OUString& rValue )
+{
+    // TODO: use a map here
+    if( (nElement & TOKEN_MASK) == XML_DATA_STYLE_NAME )
+        m_sDataStyleName = rValue;
+    else if ( (nElement & TOKEN_MASK) == XML_MASTER_PAGE_NAME )
+        ;
+    else
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
+}
 
 static const OUStringLiteral g_sTableStyleFamilyName( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME );
 static const OUStringLiteral g_sColumnStyleFamilyName( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME );
@@ -150,11 +159,8 @@ static const OUStringLiteral g_sRowStyleFamilyName( XML_STYLE_FAMILY_TABLE_ROW_S
 static const OUStringLiteral g_sCellStyleFamilyName( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
-        sal_uInt16 nPrfx ,
-        const OUString& rLName ,
-        const Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStylesContext( rImport ),
     m_rImport(rImport),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
@@ -169,15 +175,13 @@ OReportStylesContext::~OReportStylesContext()
 }
 
 
-void OReportStylesContext::EndElement()
+void OReportStylesContext::endFastElement(sal_Int32 /*nElement*/)
 {
-    SvXMLStylesContext::EndElement();
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else
         GetImport().GetStyles()->CopyStylesToDoc(true);
 }
-
 
 rtl::Reference < SvXMLImportPropertyMapper >
     OReportStylesContext::GetImportPropertyMapper(
@@ -237,8 +241,8 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
@@ -246,13 +250,11 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
     {
         case XmlStyleFamily::SD_GRAPHICS_ID:
             // There are no writer specific defaults for graphic styles!
-            pStyle = new XMLGraphicsDefaultStyle( GetImport(), nPrefix,
-                                rLocalName, xAttrList, *this );
+            pStyle = new XMLGraphicsDefaultStyle( GetImport(), *this );
             break;
         default:
             pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily,
-                                                                       nPrefix,
-                                                                rLocalName,
+                                                                       nElement,
                                                                 xAttrList );
             break;
     }
@@ -260,11 +262,10 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
-                                                            rLocalName,
+    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nElement,
                                                             xAttrList );
     if (!pStyle)
     {
@@ -274,8 +275,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TABLE_COLUMN:
         case XmlStyleFamily::TABLE_ROW:
         case XmlStyleFamily::TABLE_CELL:
-            pStyle = new OControlStyleContext( GetOwnImport(), nPrefix, rLocalName,
-                                               xAttrList, *this, nFamily );
+            pStyle = new OControlStyleContext( GetOwnImport(), *this, nFamily );
             break;
         default:
             OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. Please check.");
