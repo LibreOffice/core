@@ -12072,7 +12072,6 @@ setup_native/source/win32/customactions/shellextensions/vistaspecial.cxx
 setup_native/source/win32/customactions/tools/checkversion.cxx
 setup_native/source/win32/customactions/tools/seterror.cxx
 setup_native/source/win32/customactions/tools/seterror.hxx
-sfx2/inc/arrdecl.hxx
 sfx2/inc/bitset.hxx
 sfx2/inc/bluthsndapi.hxx
 sfx2/inc/charmapcontrol.hxx
@@ -12084,7 +12083,6 @@ sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
 sfx2/inc/preventduplicateinteraction.hxx
 sfx2/inc/recentdocsview.hxx
-sfx2/inc/sfxbasecontroller_internal.hxx
 sfx2/inc/notebookbar/NotebookbarTabControl.hxx
 sfx2/inc/sidebar/Accessible.hxx
 sfx2/inc/sidebar/AccessibleTitleBar.hxx
@@ -12277,7 +12275,6 @@ sfx2/source/doc/objitem.cxx
 sfx2/source/doc/objmisc.cxx
 sfx2/source/doc/objserv.cxx
 sfx2/source/doc/objstor.cxx
-sfx2/source/doc/objstor.hxx
 sfx2/source/doc/objxtor.cxx
 sfx2/source/doc/oleprops.cxx
 sfx2/source/doc/oleprops.hxx
@@ -12288,9 +12285,7 @@ sfx2/source/doc/saveastemplatedlg.cxx
 sfx2/source/doc/sfxbasemodel.cxx
 sfx2/source/doc/sfxmodelfactory.cxx
 sfx2/source/doc/syspath.cxx
-sfx2/source/doc/syspath.hxx
 sfx2/source/doc/syspathw32.cxx
-sfx2/source/doc/syspathw32.hxx
 sfx2/source/doc/templatedlg.cxx
 sfx2/source/doc/watermarkitem.cxx
 sfx2/source/doc/zoomitem.cxx
@@ -12307,16 +12302,13 @@ sfx2/source/inc/fltoptint.hxx
 sfx2/source/inc/helper.hxx
 sfx2/source/inc/helpids.h
 sfx2/source/inc/hintpost.hxx
-sfx2/source/inc/itemdel.hxx
 sfx2/source/inc/macroloader.hxx
 sfx2/source/inc/nochaos.hxx
 sfx2/source/inc/objshimp.hxx
 sfx2/source/inc/openflag.hxx
 sfx2/source/inc/openurlhint.hxx
 sfx2/source/inc/partwnd.hxx
-sfx2/source/inc/preview.hxx
 sfx2/source/inc/recfloat.hxx
-sfx2/source/inc/sfxpicklist.hxx
 sfx2/source/inc/sfxtypes.hxx
 sfx2/source/inc/sfxurlrelocator.hxx
 sfx2/source/inc/shellimpl.hxx
@@ -12332,7 +12324,6 @@ sfx2/source/inc/workwin.hxx
 sfx2/source/inet/inettbc.cxx
 sfx2/source/notebookbar/ContextVBox.cxx
 sfx2/source/notebookbar/DropdownBox.cxx
-sfx2/source/notebookbar/DropdownBox.hxx
 sfx2/source/notebookbar/NotebookbarTabControl.cxx
 sfx2/source/notebookbar/PriorityHBox.cxx
 sfx2/source/notebookbar/SfxNotebookBar.cxx
@@ -12382,7 +12373,6 @@ sfx2/source/sidebar/UnoPanel.cxx
 sfx2/source/sidebar/UnoPanels.cxx
 sfx2/source/sidebar/UnoSidebar.cxx
 sfx2/source/statbar/stbitem.cxx
-sfx2/source/styles/StyleManager.cxx
 sfx2/source/toolbox/tbxitem.cxx
 sfx2/source/view/classificationcontroller.cxx
 sfx2/source/view/classificationhelper.cxx

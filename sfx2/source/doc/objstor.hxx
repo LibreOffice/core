@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel);
+void impl_addToModelCollection(const css::uno::Reference<css::frame::XModel>& xModel);
 
 #endif // INCLUDED_SFX2_SOURCE_DOC_OBJSTOR_HXX
 

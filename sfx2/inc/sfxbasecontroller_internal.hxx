@@ -14,7 +14,6 @@
 
 extern sal_uInt32 Get10ThSec();
 
-
 #endif // INCLUDED_SFX2_INC_SFXBASECONTROLLER_INTERNAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 
 class SfxPoolItem;
 
-void DeleteItemOnIdle( std::unique_ptr<SfxPoolItem> pItem );
+void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem);
 
 #endif
 

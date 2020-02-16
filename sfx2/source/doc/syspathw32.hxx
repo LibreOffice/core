@@ -25,7 +25,7 @@
 #include <sal/types.h>
 
 #if defined _WIN32
-bool GetUserTemplateLocation(sal_Unicode *, int nSize);
+bool GetUserTemplateLocation(sal_Unicode*, int nSize);
 #endif
 
 #endif
