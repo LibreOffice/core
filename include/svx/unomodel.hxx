@@ -67,8 +67,10 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    {  SfxBaseModel::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    {  SfxBaseModel::release(); }
 
     // XModel
     virtual void SAL_CALL lockControllers(  ) override;

@@ -191,7 +191,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw() override ;
+    virtual void SAL_CALL acquire() throw() override final
+    { OWeakObject::acquire(); }
 
     /**___________________________________________________________________________________________________
         @short      decrement refcount
@@ -200,7 +201,8 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw() override ;
+    virtual void SAL_CALL release() throw() override final
+    { OWeakObject::release(); }
 
 
     //  XTypeProvider

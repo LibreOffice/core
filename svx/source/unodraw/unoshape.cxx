@@ -3757,17 +3757,6 @@ uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
 }
 
 
-void SAL_CALL SvxShapeText::acquire() throw()
-{
-    SvxShape::acquire();
-}
-
-
-void SAL_CALL SvxShapeText::release() throw()
-{
-    SvxShape::release();
-}
-
 // XServiceInfo
 
 OUString SAL_CALL SvxShapeText::getImplementationName()
@@ -3932,16 +3921,6 @@ uno::Any SAL_CALL SvxShapeRect::queryInterface( const uno::Type & rType )
 uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType )
 {
     return SvxShapeText::queryAggregation( rType );
-}
-
-void SAL_CALL SvxShapeRect::acquire() throw()
-{
-    OWeakAggObject::acquire();
-}
-
-void SAL_CALL SvxShapeRect::release() throw()
-{
-    OWeakAggObject::release();
 }
 
 // XServiceInfo
