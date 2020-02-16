@@ -1031,8 +1031,12 @@ short Dialog::Execute()
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 
-    long nRet = mpDialogImpl->mnResult;
-    mpDialogImpl->mnResult = -1;
+    long nRet = 0;
+    if (mpDialogImpl)
+    {
+        nRet = mpDialogImpl->mnResult;
+        mpDialogImpl->mnResult = -1;
+    }
 
     return static_cast<short>(nRet);
 
