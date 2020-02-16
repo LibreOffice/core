@@ -180,6 +180,11 @@ bool SwFieldType::HasHiddenInformationNotes()
     return bHasHiddenInformationNotes;
 }
 
+void SwFieldType::GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex)
+{
+    CallSwClientNotify(sw::GatherNodeIndexHint(rvNodeIndex));
+}
+
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldTypes"));

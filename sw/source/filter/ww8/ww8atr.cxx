@@ -355,15 +355,7 @@ void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
     SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter );
-    SwIterator<SwFormatField,SwFieldType> aFormatFields( *pType );
-    for ( SwFormatField* pField = aFormatFields.First(); pField; pField = aFormatFields.Next() )
-    {
-        if (const SwTextField *pTextField = pField->GetTextField())
-        {
-            const SwTextNode &rTextNode = pTextField->GetTextNode();
-            m_aChapterFieldLocs.push_back(rTextNode.GetIndex());
-        }
-    }
+    pType->GatherNodeIndex(m_aChapterFieldLocs);
 }
 
 bool MSWordExportBase::ContentContainsChapterField(const SwFormatContent &rContent) const

@@ -262,6 +262,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     {
         if(!pHasHiddenInfoHint->m_rbHasHiddenInformationNotes && GetTextField() && IsFieldInDoc())
             pHasHiddenInfoHint->m_rbHasHiddenInformationNotes = true;
+    } else if (const auto pGatherNodeIndexHint = dynamic_cast<const sw::GatherNodeIndexHint*>( &rHint ))
+    {
+        if(auto pTextField = GetTextField())
+            pGatherNodeIndexHint->m_rvNodeIndex.push_back(pTextField->GetTextNode().GetIndex());
     }
 }
 
