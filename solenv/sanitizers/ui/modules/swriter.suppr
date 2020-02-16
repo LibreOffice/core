@@ -131,6 +131,7 @@ sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label13'] orphan-label
 sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label4'] orphan-label
 sw/uiconfig/swriter/ui/opttablepage.ui://GtkLabel[@id='label14'] orphan-label
 sw/uiconfig/swriter/ui/outlinenumberingpage.ui://GtkDrawingArea[@id='preview'] no-labelled-by
+sw/uiconfig/swriter/ui/poseditbox.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/mailmerge.ui://GtkSpinButton[@id='from'] no-labelled-by
 sw/uiconfig/swriter/ui/mailmerge.ui://GtkLabel[@id='fieldlabel'] orphan-label
 sw/uiconfig/swriter/ui/mailmerge.ui://GtkLabel[@id='mailformatlabel'] orphan-label

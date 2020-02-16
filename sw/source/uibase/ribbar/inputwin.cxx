@@ -58,9 +58,14 @@
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
+IMPL_LINK(PosEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
 SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispatcher)
     : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
-    , aPos(VclPtr<Edit>::Create(this, WB_3DLOOK|WB_CENTER|WB_BORDER|WB_READONLY))
+    , mxPos(VclPtr<PosEdit>::Create(this))
     , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
     , pWrtShell(nullptr)
     , pView(nullptr)
@@ -72,7 +77,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     bIsTable = bDelSel = false;
 
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
-    aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
     InsertItem(FN_FORMULA_CALC, Image(StockImage::Yes, RID_BMP_FORMULA_CALC),
                SwResId(STR_FORMULA_CALC));
@@ -91,9 +95,9 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
         pView = pActiveView;
     pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
 
-    InsertWindow(ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
+    InsertWindow(ED_POS, mxPos.get(), ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SwResId(STR_ACCESS_FORMULA_TYPE));
-    aPos->SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TYPE));
+    mxPos->set_accessible_name(SwResId(STR_ACCESS_FORMULA_TYPE));
     SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
@@ -116,14 +120,14 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     SetSizePixel( aSize );
 
     // align edit and item vcentered
-    Size    aPosSize = aPos->GetSizePixel();
+    Size    aPosSize = mxPos->GetSizePixel();
     aPosSize.setHeight( nMaxHeight );
     aEditSize.setHeight( nMaxHeight );
-    Point aPosPos  = aPos->GetPosPixel();
+    Point aPosPos  = mxPos->GetPosPixel();
     Point aEditPos = aEdit->GetPosPixel();
     aPosPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
     aEditPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
-    aPos->SetPosSizePixel( aPosPos, aPosSize );
+    mxPos->SetPosSizePixel( aPosPos, aPosSize );
     aEdit->SetPosSizePixel( aEditPos, aEditSize );
 }
 
@@ -146,7 +150,7 @@ void SwInputWindow::dispose()
 
     CleanupUglyHackWithUndo();
 
-    aPos.disposeAndClear();
+    mxPos.disposeAndClear();
     aEdit.disposeAndClear();
     ToolBox::dispose();
 }
@@ -204,11 +208,11 @@ void SwInputWindow::ShowWin()
             short nSrch = -1;
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = static_cast<short>(nPos);
-            aPos->SetText( rPos.copy( ++nSrch ) );
+            mxPos->set_text( rPos.copy( ++nSrch ) );
             aCurrentTableName = pWrtShell->GetTableFormat()->GetName();
         }
         else
-            aPos->SetText(SwResId(STR_TBL_FORMULA));
+            mxPos->set_text(SwResId(STR_TBL_FORMULA));
 
         // Edit current field
         OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");
