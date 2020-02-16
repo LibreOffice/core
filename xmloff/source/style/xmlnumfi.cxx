@@ -82,7 +82,6 @@ public:
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
     const SvXMLTokenMap&    GetStylesElemTokenMap();
     const SvXMLTokenMap&    GetStyleElemTokenMap();
-    const SvXMLTokenMap&    GetStyleAttrTokenMap();
     const SvXMLTokenMap&    GetStyleElemAttrTokenMap();
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
     sal_uInt32              GetKeyForName( const OUString& rName );
@@ -434,13 +433,13 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
         static const SvXMLTokenMapEntry aStylesElemMap[] =
         {
             //  style elements
-            { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      XML_TOK_STYLES_NUMBER_STYLE      },
-            { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    XML_TOK_STYLES_CURRENCY_STYLE    },
-            { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  XML_TOK_STYLES_PERCENTAGE_STYLE  },
-            { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        XML_TOK_STYLES_DATE_STYLE        },
-            { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        XML_TOK_STYLES_TIME_STYLE        },
-            { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     XML_TOK_STYLES_BOOLEAN_STYLE     },
-            { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        XML_TOK_STYLES_TEXT_STYLE        },
+            { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      sal_uInt16(SvXMLStylesTokens::NUMBER_STYLE)      },
+            { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    sal_uInt16(SvXMLStylesTokens::CURRENCY_STYLE)    },
+            { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  sal_uInt16(SvXMLStylesTokens::PERCENTAGE_STYLE)  },
+            { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        sal_uInt16(SvXMLStylesTokens::DATE_STYLE)        },
+            { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        sal_uInt16(SvXMLStylesTokens::TIME_STYLE)        },
+            { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     sal_uInt16(SvXMLStylesTokens::BOOLEAN_STYLE)     },
+            { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        sal_uInt16(SvXMLStylesTokens::TEXT_STYLE)        },
             XML_TOKEN_MAP_END
         };
 
@@ -485,39 +484,6 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
         pStyleElemTokenMap = std::make_unique<SvXMLTokenMap>( aStyleElemMap );
     }
     return *pStyleElemTokenMap;
-}
-
-const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
-{
-    if( !pStyleAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aStyleAttrMap[] =
-        {
-            //  attributes for a style
-            { XML_NAMESPACE_STYLE,  XML_NAME,                  XML_TOK_STYLE_ATTR_NAME                  },
-            { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,      XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG,     },
-            { XML_NAMESPACE_NUMBER, XML_LANGUAGE,              XML_TOK_STYLE_ATTR_LANGUAGE              },
-            { XML_NAMESPACE_NUMBER, XML_SCRIPT,                XML_TOK_STYLE_ATTR_SCRIPT                },
-            { XML_NAMESPACE_NUMBER, XML_COUNTRY,               XML_TOK_STYLE_ATTR_COUNTRY               },
-            { XML_NAMESPACE_NUMBER, XML_TITLE,                 XML_TOK_STYLE_ATTR_TITLE                 },
-            { XML_NAMESPACE_NUMBER, XML_AUTOMATIC_ORDER,       XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER       },
-            { XML_NAMESPACE_NUMBER, XML_FORMAT_SOURCE,         XML_TOK_STYLE_ATTR_FORMAT_SOURCE         },
-            { XML_NAMESPACE_NUMBER, XML_TRUNCATE_ON_OVERFLOW,  XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW  },
-            { XML_NAMESPACE_STYLE,  XML_VOLATILE,              XML_TOK_STYLE_ATTR_VOLATILE              },
-            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,     XML_TOK_STYLE_ATTR_TRANSL_FORMAT    },
-            // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_RFC_LANGUAGE_TAG, XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG   },
-            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,   XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE  },
-            // not defined in ODF { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SCRIPT,     XML_TOK_STYLE_ATTR_TRANSL_SCRIPT    },
-            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY   },
-            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,      XML_TOK_STYLE_ATTR_TRANSL_STYLE     },
-            { XML_NAMESPACE_LO_EXT, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
-            { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_SPELLOUT,    XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT   },
-            XML_TOKEN_MAP_END
-        };
-
-        pStyleAttrTokenMap = std::make_unique<SvXMLTokenMap>( aStyleAttrMap );
-    }
-    return *pStyleAttrTokenMap;
 }
 
 const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
@@ -700,14 +666,14 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
 
 static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
-    sal_uInt16 nFormatType = rParent.GetType();
+    SvXMLStylesTokens nFormatType = rParent.GetType();
 
     // Treat space equal to non-breaking space separator.
     const sal_Unicode cNBSP = 0x00A0;
     sal_Unicode cTS;
-    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
-           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+    if ( ( nFormatType == SvXMLStylesTokens::NUMBER_STYLE ||
+           nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE ) &&
             (cChar == (cTS = rParent.GetLocaleData().getNumThousandSep()[0]) ||
              (cChar == ' ' && cTS == cNBSP)) )
     {
@@ -729,19 +695,19 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
            cChar == ',' ||
            cChar == ':' ||
            cChar == '\''   ) &&
-         ( nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_DATE_STYLE ||
-           nFormatType == XML_TOK_STYLES_TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
+         ( nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::DATE_STYLE ||
+           nFormatType == SvXMLStylesTokens::TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
         return true;
 
     //  percent sign must be used without quotes for percentage styles only
-    if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
+    if ( nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE && cChar == '%' )
         return true;
 
     //  don't put quotes around single parentheses (often used for negative numbers)
-    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
-           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+    if ( ( nFormatType == SvXMLStylesTokens::NUMBER_STYLE ||
+           nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE ) &&
          ( cChar == '(' || cChar == ')' ) )
         return true;
 
@@ -765,7 +731,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  the difference of quotes.
         bQuote = false;
     }
-    else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
+    else if ( rParent.GetType() == SvXMLStylesTokens::PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
@@ -1328,11 +1294,10 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
 
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                    SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType,
+                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStyleContext( rImport ),
     pData( pNewData ),
     pStyles( &rStyles ),
     aMyConditions(),
@@ -1363,67 +1328,63 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     OUString aSpellout;
     bool bAttrBool(false);
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        const SvXMLTokenMap& rTokenMap = pData->GetStyleAttrTokenMap();
-        sal_uInt16 nToken = rTokenMap.Get( nPrefix, aLocalName );
-        switch (nToken)
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            case XML_TOK_STYLE_ATTR_NAME:
+            case XML_ELEMENT(STYLE, XML_NAME):
                 break;
-            case XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG:
+            case XML_ELEMENT(NUMBER, XML_RFC_LANGUAGE_TAG):
                 aLanguageTagODF.maRfcLanguageTag = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_LANGUAGE:
+            case XML_ELEMENT(NUMBER, XML_LANGUAGE):
                 aLanguageTagODF.maLanguage = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_SCRIPT:
+            case XML_ELEMENT(NUMBER, XML_SCRIPT):
                 aLanguageTagODF.maScript = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_COUNTRY:
+            case XML_ELEMENT(NUMBER, XML_COUNTRY):
                 aLanguageTagODF.maCountry = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TITLE:
+            case XML_ELEMENT(NUMBER, XML_TITLE):
                 sFormatTitle = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER:
+            case XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER):
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bAutoOrder = bAttrBool;
                 break;
-            case XML_TOK_STYLE_ATTR_FORMAT_SOURCE:
+            case XML_ELEMENT(NUMBER, XML_FORMAT_SOURCE):
                 SvXMLUnitConverter::convertEnum( bFromSystem, sValue, aFormatSourceMap );
                 break;
-            case XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW:
+            case XML_ELEMENT(NUMBER, XML_TRUNCATE_ON_OVERFLOW):
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bTruncate = bAttrBool;
                 break;
-            case XML_TOK_STYLE_ATTR_VOLATILE:
+            case XML_ELEMENT(STYLE, XML_VOLATILE):
                 //  volatile formats can be removed after importing
                 //  if not used in other styles
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bRemoveAfterUse = bAttrBool;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_FORMAT):
                 aNatNumAttr.Format = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_SPELLOUT:
+            case XML_ELEMENT(LO_EXT, XML_TRANSLITERATION_SPELLOUT):
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_SPELLOUT):
                 aSpellout = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_LANGUAGE):
                 aNatNumAttr.Locale.Language = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_COUNTRY):
                 aNatNumAttr.Locale.Country = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_STYLE:
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_STYLE):
                 aNatNumAttr.Style = sValue;
                 break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 
@@ -1468,15 +1429,14 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                    const OUString& rName,
                                     const sal_Int32 nTempKey, LanguageType nLang,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::DATA_STYLE ),
+    SvXMLStyleContext( rImport, XmlStyleFamily::DATA_STYLE ),
     pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),
-    nType( 0 ),
+    nType( SvXMLStylesTokens::NUMBER_STYLE ),
     nKey(nTempKey),
     nFormatLang( nLang ),
     bAutoOrder( false ),
@@ -1498,7 +1458,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( false )
 {
-    SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
+    SetAttribute(XML_ELEMENT(STYLE, XML_NAME), rName);
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()
@@ -1668,7 +1628,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  #99391# adjust only if the format contains no text elements, no conditions
         //  and no color definition (detected by the '[' at the start)
 
-        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
                 aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
@@ -1676,18 +1636,18 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     {
         //! only if two decimal places was set?
 
-        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
                 aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 
     //  boolean is always the builtin boolean format
     //  (no other boolean formats are implemented)
-    if ( nType == XML_TOK_STYLES_BOOLEAN_STYLE )
+    if ( nType == SvXMLStylesTokens::BOOLEAN_STYLE )
         nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
 
     //  check for default date formats
-    if ( nType == XML_TOK_STYLES_DATE_STYLE && bAutoOrder && !bDateNoDefault )
+    if ( nType == SvXMLStylesTokens::DATE_STYLE && bAutoOrder && !bDateNoDefault )
     {
         NfIndexTableOffset eFormat = static_cast<NfIndexTableOffset>(SvXMLNumFmtDefaults::GetDefaultDateFormat(
             eDateDOW, eDateDay, eDateMonth, eDateYear,
@@ -1817,7 +1777,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     if ( bAutoDec )
     {
-        if ( nType == XML_TOK_STYLES_CURRENCY_STYLE )
+        if ( nType == SvXMLStylesTokens::CURRENCY_STYLE )
         {
             //  for currency formats, "automatic decimals" is used for the automatic
             //  currency format with (fixed) decimals from the locale settings
@@ -2151,7 +2111,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
         bDefaultCond = true;
 
-    if ( nType == XML_TOK_STYLES_TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
+    if ( nType == SvXMLStylesTokens::TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
     {
         //  The last condition in a number format with a text part can only
         //  be "all other numbers", the condition string must be empty.
@@ -2271,30 +2231,34 @@ SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
 }
 
 SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                sal_Int32 nElement,
+                const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                 SvXMLStylesContext& rStyles )
 {
-    SvXMLStyleContext* pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = pData->GetStylesElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
-    switch (nToken)
+    SvXMLStylesTokens nType;
+    switch (nElement)
     {
-        case XML_TOK_STYLES_NUMBER_STYLE:
-        case XML_TOK_STYLES_CURRENCY_STYLE:
-        case XML_TOK_STYLES_PERCENTAGE_STYLE:
-        case XML_TOK_STYLES_DATE_STYLE:
-        case XML_TOK_STYLES_TIME_STYLE:
-        case XML_TOK_STYLES_BOOLEAN_STYLE:
-        case XML_TOK_STYLES_TEXT_STYLE:
-            pContext = new SvXMLNumFormatContext( rImport, nPrefix, rLocalName,
-                                                    pData.get(), nToken, xAttrList, rStyles );
+        case XML_ELEMENT(NUMBER, XML_NUMBER_STYLE):
+            nType = SvXMLStylesTokens::NUMBER_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_CURRENCY_STYLE):
+            nType = SvXMLStylesTokens::CURRENCY_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_PERCENTAGE_STYLE):
+            nType = SvXMLStylesTokens::PERCENTAGE_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_DATE_STYLE):
+            nType = SvXMLStylesTokens::DATE_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_TIME_STYLE):
+            nType = SvXMLStylesTokens::TIME_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_BOOLEAN_STYLE):
+            nType = SvXMLStylesTokens::BOOLEAN_STYLE; break;
+        case XML_ELEMENT(NUMBER, XML_TEXT_STYLE):
+            nType = SvXMLStylesTokens::TEXT_STYLE; break;
             break;
+        default:
+            // return NULL if not a data style, caller must handle other elements
+            return nullptr;
     }
-
-    // return NULL if not a data style, caller must handle other elements
-    return pContext;
+    return new SvXMLNumFormatContext( rImport,
+                                          pData.get(), nType, xAttrList, rStyles );
 }
 
 const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()

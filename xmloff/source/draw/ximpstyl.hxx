@@ -53,9 +53,7 @@ public:
 
     SdXMLPageMasterStyleContext(
         SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext() override;
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
@@ -78,15 +76,10 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
 
 public:
 
-    SdXMLPageMasterContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SdXMLPageMasterContext( SdXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mxPageMasterStyle.get(); }
 };
@@ -155,17 +148,13 @@ class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 
 public:
 
-    SdXMLPresentationPageLayoutContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+    SdXMLPresentationPageLayoutContext(SdXMLImport& rImport);
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 ) override;
     sal_uInt16 GetTypeId() const { return mnTypeId; }
 };
 
@@ -188,28 +177,25 @@ class SdXMLStylesContext : public SvXMLStylesContext
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         XmlStyleFamily nFamily,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        XmlStyleFamily nFamily, sal_Int32 nElement,
         const css::uno::Reference<
-            css::xml::sax::XAttributeList > & xAttrList ) override;
+            css::xml::sax::XFastAttributeList > & xAttrList ) override;
 public:
 
     SdXMLStylesContext(
         SdXMLImport& rImport,
         bool bIsAutoStyle);
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(XmlStyleFamily nFamily) const override;
 
     void SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const;
@@ -247,13 +233,12 @@ public:
 class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 {
 public:
-    SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    SdXMLHeaderFooterDeclContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual bool IsTransient() const override;
-    virtual void EndElement() override;
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
 private:
     OUString maStrName;

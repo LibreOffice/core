@@ -76,32 +76,26 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 
 protected:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue );
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue );
 
     void SetFamily( XmlStyleFamily nSet ) { mnFamily = nSet; }
     void SetAutoName( const OUString& rName ) { maAutoName = rName; }
 
 public:
 
-
-    SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    SvXMLStyleContext( SvXMLImport& rImport,
               XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
               bool bDefaultStyle = false );
-
-    SvXMLStyleContext( SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
-            bool bDefaultStyle = false );
 
     virtual ~SvXMLStyleContext() override;
 
     virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) final override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & ) override final {}
+    virtual void EndElement() override final {}
+    virtual void Characters(OUString const &) override final {}
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+                                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
@@ -178,18 +172,16 @@ protected:
     SvXMLStyleContext *GetStyle( sal_uInt32 i );
     const SvXMLStyleContext *GetStyle( sal_uInt32 i ) const;
 
-    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const;
 
@@ -200,20 +192,17 @@ public:
 
     virtual ~SvXMLStylesContext() override;
 
+    virtual void StartElement(
+        const css::uno::Reference< css::xml::sax::XAttributeList > & ) override final {}
+    virtual void EndElement() override final {}
+    virtual void Characters(OUString const &) override final {}
+
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     // Create child element.
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    // Create child element.
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
-    // Override this method to insert styles into the document.
-    virtual void EndElement() override;
 
     // This allows to add an SvXMLStyleContext to this context from extern
     void AddStyle(SvXMLStyleContext& rNew);

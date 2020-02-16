@@ -50,12 +50,9 @@ using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     XmlStyleFamily nFamily)
-:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+:   XMLPropStyleContext(rImport, rStyles, nFamily ),
     m_bIsNumRuleAlreadyConverted( false )
 {
 }
@@ -64,22 +61,21 @@ XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }
 
-void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue )
+void XMLShapeStyleContext::SetAttribute( sal_Int32 nElement, const OUString& rValue )
 {
-    if (m_sControlDataStyleName.isEmpty() && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
+    if (m_sControlDataStyleName.isEmpty() && (nElement & TOKEN_MASK) == ::xmloff::token::XML_DATA_STYLE_NAME)
     {
         m_sControlDataStyleName = rValue;
     }
-    else if( (XML_NAMESPACE_STYLE == nPrefixKey) && IsXMLToken( rLocalName, ::xmloff::token::XML_LIST_STYLE_NAME ) )
+    else if( nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_LIST_STYLE_NAME) )
     {
         m_sListStyleName = rValue;
     }
     else
     {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
 
-        if( (XML_NAMESPACE_STYLE == nPrefixKey) &&
-            ( IsXMLToken( rLocalName, ::xmloff::token::XML_NAME ) || IsXMLToken( rLocalName, ::xmloff::token::XML_DISPLAY_NAME ) ) )
+        if( nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_NAME ) || nElement == XML_ELEMENT(STYLE, ::xmloff::token::XML_DISPLAY_NAME) )
         {
             if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
             {
@@ -90,40 +86,31 @@ void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& 
     }
 }
 
-SvXMLImportContextRef XMLShapeStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeStyleContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
+    sal_uInt32 nFamily = 0;
+    if( nElement == XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES ) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_TEXT_PROPERTIES ))
+        nFamily = XML_TYPE_PROP_TEXT;
+    else if( nElement == XML_ELEMENT(STYLE, XML_PARAGRAPH_PROPERTIES ) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_PARAGRAPH_PROPERTIES ))
+        nFamily = XML_TYPE_PROP_PARAGRAPH;
+    else if( nElement == XML_ELEMENT(STYLE, XML_GRAPHIC_PROPERTIES ) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_GRAPHIC_PROPERTIES ))
+    if( nFamily )
     {
-        sal_uInt32 nFamily = 0;
-        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_TEXT;
-        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_PARAGRAPH;
-        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_GRAPHIC;
-        if( nFamily )
-        {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-                GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
-                xContext = new XMLShapePropertySetContext( GetImport(), nPrefix,
-                                                        rLocalName, xAttrList,
-                                                        nFamily,
-                                                        GetProperties(),
-                                                        xImpPrMap );
-        }
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            return new XMLShapePropertySetContext( GetImport(), xAttrList,
+                                                    nFamily,
+                                                    GetProperties(),
+                                                    xImpPrMap );
     }
 
-    if (!xContext)
-        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
-    return xContext;
+    return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
 }
 
 void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet > & rPropSet )

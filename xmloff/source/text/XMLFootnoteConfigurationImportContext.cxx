@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/namespacemap.hxx>
@@ -126,10 +127,8 @@ const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
+    const Reference<XFastAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
 ,   nOffset(0)
@@ -137,23 +136,21 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 ,   bPosition(false)
 ,   bIsEndnote(false)
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                        XML_NOTE_CLASS ) )
+        OUString sValue = aIter.toString();
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            if( IsXMLToken( sValue, XML_ENDNOTE ) )
             {
                 bIsEndnote = true;
                 SetFamily( XmlStyleFamily::TEXT_FOOTNOTECONFIG );
             }
             break;
+        }
+        else
+        {
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 
@@ -221,25 +218,26 @@ SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
     { XML_TOKEN_INVALID,    0 },
 };
 
-void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue )
+void XMLFootnoteConfigurationImportContext::SetAttribute(
+    sal_Int32 nElement,
+    const OUString& rValue )
 {
-    switch (GetFtnConfigAttrTokenMap().Get(nPrefixKey, rLocalName))
+    switch (nElement)
     {
-        case XML_TOK_FTNCONFIG_CITATION_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_CITATION_STYLE_NAME):
             sCitationStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_ANCHOR_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_CITATION_BODY_STYLE_NAME):
             sAnchorStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_DEFAULT_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_DEFAULT_STYLE_NAME):
             sDefaultStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_PAGE_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_MASTER_PAGE_NAME):
             sPageStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_OFFSET:
+        case XML_ELEMENT(TEXT, XML_START_VALUE):
+        case XML_ELEMENT(TEXT, XML_OFFSET): // for backwards compatibility with SRC630 & earlier
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(nTmp, rValue))
@@ -248,30 +246,41 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
             }
             break;
         }
-        case XML_TOK_FTNCONFIG_NUM_PREFIX:
+        case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
+        case XML_ELEMENT(TEXT, XML_NUM_PREFIX): // for backwards compatibility with SRC630 & earlier
             sPrefix = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_SUFFIX:
+        case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
+        case XML_ELEMENT(TEXT, XML_NUM_SUFFIX): // for backwards compatibility with SRC630 & earlier
             sSuffix = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumFormat = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumSync = rValue;
             break;
-        case XML_TOK_FTNCONFIG_START_AT:
+        case XML_ELEMENT(TEXT, XML_START_NUMBERING_AT):
         {
             (void)SvXMLUnitConverter::convertEnum(nNumbering, rValue,
                                                   aFootnoteNumberingMap);
             break;
         }
-        case XML_TOK_FTNCONFIG_POSITION:
+        case XML_ELEMENT(TEXT, XML_FOOTNOTES_POSITION):
             bPosition = IsXMLToken( rValue, XML_DOCUMENT );
             break;
+        case XML_ELEMENT(TEXT, XML_NOTE_CLASS): // handled in constructor
+            break;
         default:
-            ; // ignore
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement) << "=" << rValue);
     }
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteConfigurationImportContext::createFastChildContext(
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return nullptr;
 }
 
 SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(

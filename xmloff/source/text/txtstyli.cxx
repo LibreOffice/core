@@ -74,64 +74,48 @@ const SvXMLEnumMapEntry<sal_uInt16> aCategoryMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void XMLTextStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    if( nElement == XML_ELEMENT(STYLE, XML_AUTO_UPDATE ) )
     {
-        // TODO: use a map here
-        if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
+        if( IsXMLToken( rValue, XML_TRUE ) )
+            m_isAutoUpdate = true;
+    }
+    else if( nElement == XML_ELEMENT(STYLE, XML_LIST_STYLE_NAME ) )
+    {
+        m_sListStyleName = rValue;
+        // Inherited paragraph style lost information about unset numbering (#i69523#)
+        m_bListStyleSet = true;
+    }
+    else if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE_NAME ) )
+    {
+        m_sMasterPageName = rValue;
+        m_bHasMasterPageName = true;
+    }
+    else if( nElement == XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME ) )
+        m_sDataStyleName = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_CLASS ) )
+        m_sCategoryVal = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_DEFAULT_OUTLINE_LEVEL ) )
+    {
+        sal_Int32 nTmp;
+        if (::sax::Converter::convertNumber( nTmp, rValue ) &&
+            0 <= nTmp && nTmp <= 10 )
         {
-            if( IsXMLToken( rValue, XML_TRUE ) )
-                m_isAutoUpdate = true;
-        }
-        else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
-        {
-            m_sListStyleName = rValue;
-            // Inherited paragraph style lost information about unset numbering (#i69523#)
-            m_bListStyleSet = true;
-        }
-        else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
-        {
-            m_sMasterPageName = rValue;
-            m_bHasMasterPageName = true;
-        }
-        else if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
-        {
-            m_sDataStyleName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_CLASS ) )
-        {
-            m_sCategoryVal = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_DEFAULT_OUTLINE_LEVEL ) )
-        {
-            sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber( nTmp, rValue ) &&
-                0 <= nTmp && nTmp <= 10 )
-            {
-                m_nOutlineLevel = static_cast<sal_Int8>(nTmp);
-            }
-        }
-        else
-        {
-            XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+            m_nOutlineLevel = static_cast<sal_Int8>(nTmp);
         }
     }
     else
     {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
     }
 }
 
-
 XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
         bool bDefaultStyle )
-:   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
+:   XMLPropStyleContext( rImport, rStyles, nFamily, bDefaultStyle )
 ,   m_nOutlineLevel( -1 )
 ,   m_isAutoUpdate( false )
 ,   m_bHasMasterPageName( false )

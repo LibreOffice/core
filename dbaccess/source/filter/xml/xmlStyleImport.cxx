@@ -41,10 +41,8 @@ using namespace xmloff::token;
 
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily )
-    :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false )
+    :XMLPropStyleContext( rImport, rStyles, nFamily, false )
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {
@@ -109,17 +107,16 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later
 }
 
-void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void OTableStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
     // TODO: use a map here
-    if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
+    if( (nElement & TOKEN_MASK) == XML_DATA_STYLE_NAME )
         m_sDataStyleName = rValue;
-    else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
+    else if ( (nElement & TOKEN_MASK) == XML_MASTER_PAGE_NAME )
         sPageStyle = rValue;
     else
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
 }
 
 ODBFilter& OTableStyleContext::GetOwnImport()
@@ -191,11 +188,10 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
-                                                            rLocalName,
+    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nElement,
                                                             xAttrList );
     if (!pStyle)
     {
@@ -204,8 +200,7 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TABLE_TABLE:
         case XmlStyleFamily::TABLE_COLUMN:
         case XmlStyleFamily::TABLE_CELL:
-            pStyle = new OTableStyleContext( GetOwnImport(), nPrefix, rLocalName,
-                                               xAttrList, *this, nFamily );
+            pStyle = new OTableStyleContext( GetOwnImport(), *this, nFamily );
             break;
         default: break;
         }
