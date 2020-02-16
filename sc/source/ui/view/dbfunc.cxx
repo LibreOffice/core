@@ -54,7 +54,7 @@ void ScDBFunc::GotoDBArea( const OUString& rDBName )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();
-    ScDBData* pData = pDBCol->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
+    ScDBData* pData = pDBCol->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rDBName));
     if (pData)
     {
         SCTAB nTab = 0;

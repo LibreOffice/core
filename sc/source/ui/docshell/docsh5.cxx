@@ -303,7 +303,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 {
                     ++nCount;
                     aNewName = aImport + OUString::number( nCount );
-                    pDummy = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
+                    pDummy = rDBs.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aNewName));
                 }
                 while (pDummy);
                 pNoNameData = new ScDBData( aNewName, nTab,

@@ -266,7 +266,7 @@ bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
     {
         aCacheName = rName;
         // surprisingly slow ...
-        aCacheUpperName = ScGlobal::pCharClass->uppercase(rName);
+        aCacheUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
     }
     aUpperName = aCacheUpperName;
 
@@ -375,7 +375,7 @@ bool ScDocument::ValidNewTabName( const OUString& rName ) const
     bool bValid = ValidTabName(rName);
     if (!bValid)
         return false;
-    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
     for (const auto& a : maTabs)
     {
         if (!a)

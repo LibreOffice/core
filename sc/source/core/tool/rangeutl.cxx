@@ -267,7 +267,7 @@ bool ScRangeUtil::MakeRangeFromName (
         //then check for local range names
         ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
         ScRangeData* pData = nullptr;
-        aName = ScGlobal::pCharClass->uppercase(aName);
+        aName = ScGlobal::getCharClassPtr()->uppercase(aName);
         if ( pRangeNames )
             pData = pRangeNames->findByUpperName(aName);
         if (!pData)
@@ -308,7 +308,7 @@ bool ScRangeUtil::MakeRangeFromName (
     else if( eScope==RUTL_DBASE )
     {
         ScDBCollection::NamedDBs& rDbNames = pDoc->GetDBCollection()->getNamedDBs();
-        ScDBData* pData = rDbNames.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
+        ScDBData* pData = rDbNames.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
         if (pData)
         {
             pData->GetArea(nTab, nColStart, nRowStart, nColEnd, nRowEnd);
@@ -900,7 +900,7 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rStr
 {
     ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
     ScRangeData* pData = nullptr;
-    OUString aUpperName = ScGlobal::pCharClass->uppercase(rString);
+    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rString);
     if(pLocalRangeName)
     {
         pData = pLocalRangeName->findByUpperName(aUpperName);

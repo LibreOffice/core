@@ -85,7 +85,7 @@ ScDBData::ScDBData( const OUString& rName,
     mbTableColumnNamesDirty(true),
     nFilteredRowCount(0)
 {
-    aUpper = ScGlobal::pCharClass->uppercase(aUpper);
+    aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -154,7 +154,7 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
-    aUpper = ScGlobal::pCharClass->uppercase(aUpper);
+    aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)

@@ -71,7 +71,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
     mxEdSepArrayRow->connect_focus_in(aLink3);
 
     // Get the decimal separator for current locale.
-    OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
+    OUString aSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? u'.' : aSep[0];
 
     maSavedDocOptions = static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(

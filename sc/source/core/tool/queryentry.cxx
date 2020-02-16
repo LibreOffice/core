@@ -162,7 +162,7 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( utl::SearchParam::SearchType eS
         OUString aStr = maQueryItems[0].maString.getString();
         pSearchParam.reset(new utl::SearchParam(
             aStr, eSearchType, bCaseSens, '~', bWildMatchSel));
-        pSearchText.reset(new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass ));
+        pSearchText.reset(new utl::TextSearch( *pSearchParam, *ScGlobal::getCharClassPtr() ));
     }
     return pSearchText.get();
 }

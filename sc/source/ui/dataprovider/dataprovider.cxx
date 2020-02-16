@@ -262,7 +262,7 @@ void ScDBDataManager::SetDatabase(const OUString& rDBName)
 
 ScDBData* ScDBDataManager::getDBData()
 {
-    ScDBData* pDBData = mpDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(maDBName));
+    ScDBData* pDBData = mpDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(maDBName));
     return pDBData;
 }
 

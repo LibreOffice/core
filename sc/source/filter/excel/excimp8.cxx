@@ -478,7 +478,7 @@ OUString CreateFromDouble( double fVal )
 {
     return rtl::math::doubleToUString(fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
+                ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true);
 }
 
 }

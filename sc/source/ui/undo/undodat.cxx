@@ -902,7 +902,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
     else
     {
         ScDBCollection* pColl = rDoc.GetDBCollection();
-        pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aDBName));
+        pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aDBName));
     }
 
     if ( pDBData )

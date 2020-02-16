@@ -1316,17 +1316,17 @@ public:
     {
         // Layout name takes precedence.
         const std::optional<OUString> & pLayoutName = pDim->GetLayoutName();
-        if (pLayoutName && ScGlobal::pCharClass->uppercase(*pLayoutName) == maName)
+        if (pLayoutName && ScGlobal::getCharClassPtr()->uppercase(*pLayoutName) == maName)
             return true;
 
         ScGeneralFunction eGenFunc = pDim->GetFunction();
         ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(eGenFunc);
         OUString aSrcName = ScDPUtil::getSourceDimensionName(pDim->GetName());
         OUString aFuncName = ScDPUtil::getDisplayedMeasureName(aSrcName, eFunc);
-        if (maName == ScGlobal::pCharClass->uppercase(aFuncName))
+        if (maName == ScGlobal::getCharClassPtr()->uppercase(aFuncName))
             return true;
 
-        return maName == ScGlobal::pCharClass->uppercase(aSrcName);
+        return maName == ScGlobal::getCharClassPtr()->uppercase(aSrcName);
     }
 };
 
@@ -1371,7 +1371,7 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
 
     std::vector<const ScDPSaveDimension*>::iterator it = std::find_if(
         aDataDims.begin(), aDataDims.end(),
-        FindByName(ScGlobal::pCharClass->uppercase(rDataFieldName)));
+        FindByName(ScGlobal::getCharClassPtr()->uppercase(rDataFieldName)));
 
     if (it == aDataDims.end())
         return fRet;

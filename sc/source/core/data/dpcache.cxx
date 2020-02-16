@@ -337,7 +337,7 @@ typedef std::unordered_set<OUString> LabelSet;
 
 void normalizeAddLabel(const OUString& rLabel, std::vector<OUString>& rLabels, LabelSet& rExistingNames)
 {
-    const OUString aLabelLower = ScGlobal::pCharClass->lowercase(rLabel);
+    const OUString aLabelLower = ScGlobal::getCharClassPtr()->lowercase(rLabel);
     sal_Int32 nSuffix = 1;
     OUString aNewLabel = rLabel;
     OUString aNewLabelLower = aLabelLower;
@@ -1255,7 +1255,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
         if (!p)
             return rItem.GetString();
 
-        sal_Unicode cDecSep = ScGlobal::pLocaleData->getNumDecimalSep()[0];
+        sal_Unicode cDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0];
         return ScDPUtil::getNumGroupName(fVal, p->maInfo, cDecSep, mpDoc->GetFormatTable());
     }
 

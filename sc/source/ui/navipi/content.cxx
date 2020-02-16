@@ -350,7 +350,7 @@ static OUString lcl_GetDBAreaRange( const ScDocument* pDoc, const OUString& rDBN
     if (pDoc)
     {
         ScDBCollection* pDbNames = pDoc->GetDBCollection();
-        const ScDBData* pData = pDbNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
+        const ScDBData* pData = pDbNames->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rDBName));
         if (pData)
         {
             ScRange aRange;
@@ -1186,7 +1186,7 @@ static bool lcl_GetRange( const ScDocument* pDoc, ScContentId nType, const OUStr
         ScRangeName* pList = pDoc->GetRangeName();
         if (pList)
         {
-            const ScRangeData* p = pList->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
+            const ScRangeData* p = pList->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
             if (p && p->IsValidReference(rRange))
                 bFound = true;
         }
@@ -1196,7 +1196,7 @@ static bool lcl_GetRange( const ScDocument* pDoc, ScContentId nType, const OUStr
         ScDBCollection* pList = pDoc->GetDBCollection();
         if (pList)
         {
-            const ScDBData* p = pList->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rName));
+            const ScDBData* p = pList->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
             if (p)
             {
                 SCTAB nTab;

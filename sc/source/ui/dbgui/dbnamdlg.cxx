@@ -341,7 +341,7 @@ void ScDbNameDlg::UpdateNames()
 void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 {
 
-    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rStrName));
+    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rStrName));
 
     if ( pData )
     {
@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
                 ScAddress aStart = theCurArea.aStart;
                 ScAddress aEnd   = theCurArea.aEnd;
 
-                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aNewName));
+                ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aNewName));
                 if (pOldEntry)
                 {
                     //  modify area
