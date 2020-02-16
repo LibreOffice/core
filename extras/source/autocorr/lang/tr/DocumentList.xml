@@ -34,20 +34,72 @@
   <block-list:block block-list:abbreviated-name="akordiyon" block-list:name="akordeon"/>
   <block-list:block block-list:abbreviated-name="Akşam üzeri" block-list:name="Akşamüzeri"/>
   <block-list:block block-list:abbreviated-name="akşam üzeri" block-list:name="akşamüzeri"/>
+  <block-list:block block-list:abbreviated-name="Alarım" block-list:name="Alarm"/>
+  <block-list:block block-list:abbreviated-name="alarım" block-list:name="alarm"/>
+  <block-list:block block-list:abbreviated-name="Aliminyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="aliminyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Alimünyum" block-list:name="Alüminyum"/>
+  <block-list:block block-list:abbreviated-name="alimünyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Allerji" block-list:name="Alerji"/>
+  <block-list:block block-list:abbreviated-name="allerji" block-list:name="alerji"/>
   <block-list:block block-list:abbreviated-name="Almünyum" block-list:name="Alüminyum"/>
   <block-list:block block-list:abbreviated-name="almünyum" block-list:name="alüminyum"/>
+  <block-list:block block-list:abbreviated-name="Alobora" block-list:name="Alabora"/>
+  <block-list:block block-list:abbreviated-name="alobora" block-list:name="alabora"/>
+  <block-list:block block-list:abbreviated-name="Amartisör" block-list:name="Amortisör"/>
+  <block-list:block block-list:abbreviated-name="amartisör" block-list:name="amortisör"/>
   <block-list:block block-list:abbreviated-name="Ana kara" block-list:name="Anakara"/>
   <block-list:block block-list:abbreviated-name="ana kara" block-list:name="anakara"/>
+  <block-list:block block-list:abbreviated-name="Anfi" block-list:name="Amfi"/>
+  <block-list:block block-list:abbreviated-name="anfi" block-list:name="amfi"/>
+  <block-list:block block-list:abbreviated-name="Anotomi" block-list:name="Anatomi"/>
+  <block-list:block block-list:abbreviated-name="anotomi" block-list:name="anatomi"/>
+  <block-list:block block-list:abbreviated-name="Antiparantez" block-list:name="Antrparantez"/>
+  <block-list:block block-list:abbreviated-name="antiparantez" block-list:name="antrparantez"/>
   <block-list:block block-list:abbreviated-name="Antreman" block-list:name="Antrenman"/>
   <block-list:block block-list:abbreviated-name="antreman" block-list:name="antrenman"/>
+  <block-list:block block-list:abbreviated-name="Aparatif" block-list:name="Aperitif"/>
+  <block-list:block block-list:abbreviated-name="aparatif" block-list:name="aperitif"/>
+  <block-list:block block-list:abbreviated-name="Aperatif" block-list:name="Aperitif"/>
+  <block-list:block block-list:abbreviated-name="aperatif" block-list:name="aperitif"/>
+  <block-list:block block-list:abbreviated-name="Aporlor" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="aporlor" block-list:name="hoparlör"/>
+  <block-list:block block-list:abbreviated-name="Aptes" block-list:name="Abdest"/>
+  <block-list:block block-list:abbreviated-name="aptes" block-list:name="abdest"/>
+  <block-list:block block-list:abbreviated-name="Arabeks" block-list:name="Arabesk"/>
+  <block-list:block block-list:abbreviated-name="arabeks" block-list:name="arabesk"/>
   <block-list:block block-list:abbreviated-name="Arasıra" block-list:name="Ara sıra"/>
   <block-list:block block-list:abbreviated-name="arasıra" block-list:name="ara sıra"/>
+  <block-list:block block-list:abbreviated-name="Arefe" block-list:name="Arife"/>
+  <block-list:block block-list:abbreviated-name="arefe" block-list:name="arife"/>
   <block-list:block block-list:abbreviated-name="Aritmatik" block-list:name="Aritmetik"/>
   <block-list:block block-list:abbreviated-name="aritmatik" block-list:name="aritmetik"/>
+  <block-list:block block-list:abbreviated-name="Arozöz" block-list:name="Arazöz"/>
+  <block-list:block block-list:abbreviated-name="arozöz" block-list:name="arazöz"/>
+  <block-list:block block-list:abbreviated-name="Artis" block-list:name="Artist"/>
+  <block-list:block block-list:abbreviated-name="artis" block-list:name="artist"/>
+  <block-list:block block-list:abbreviated-name="Artiz" block-list:name="Artist"/>
+  <block-list:block block-list:abbreviated-name="artiz" block-list:name="artist"/>
+  <block-list:block block-list:abbreviated-name="Askari" block-list:name="Asgari"/>
+  <block-list:block block-list:abbreviated-name="askari" block-list:name="asgari"/>
   <block-list:block block-list:abbreviated-name="Aşkolsun" block-list:name="Aşk olsun"/>
   <block-list:block block-list:abbreviated-name="aşkolsun" block-list:name="aşk olsun"/>
   <block-list:block block-list:abbreviated-name="Assubay" block-list:name="Astsubay"/>
   <block-list:block block-list:abbreviated-name="assubay" block-list:name="astsubay"/>
+  <block-list:block block-list:abbreviated-name="Asvalt" block-list:name="Asfalt"/>
+  <block-list:block block-list:abbreviated-name="asvalt" block-list:name="asfalt"/>
+  <block-list:block block-list:abbreviated-name="Aşantiyon" block-list:name="Eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="aşantiyon" block-list:name="eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="Aşentiyon" block-list:name="Eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="aşentiyon" block-list:name="eşantiyon"/>
+  <block-list:block block-list:abbreviated-name="Aşofman" block-list:name="Eşofman"/>
+  <block-list:block block-list:abbreviated-name="aşofman" block-list:name="eşofman"/>
+  <block-list:block block-list:abbreviated-name="Ataç" block-list:name="Ataş"/>
+  <block-list:block block-list:abbreviated-name="ataç" block-list:name="ataş"/>
+  <block-list:block block-list:abbreviated-name="Atelye" block-list:name="Atölye"/>
+  <block-list:block block-list:abbreviated-name="atelye" block-list:name="atölye"/>
+  <block-list:block block-list:abbreviated-name="Azerbeycan" block-list:name="Azerbaycan"/>
+  <block-list:block block-list:abbreviated-name="azerbeycan" block-list:name="Azerbaycan"/>
   <block-list:block block-list:abbreviated-name="Beyfendi" block-list:name="Beyefendi"/>
   <block-list:block block-list:abbreviated-name="beyfendi" block-list:name="beyefendi"/>
   <block-list:block block-list:abbreviated-name="Bir kaç" block-list:name="Birkaç"/>
@@ -114,6 +166,8 @@
   <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
   <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
   <block-list:block block-list:abbreviated-name="hiç bir" block-list:name="hiçbir"/>
+  <block-list:block block-list:abbreviated-name="Hoporlör" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="hoporlör" block-list:name="hoparlör"/>
   <block-list:block block-list:abbreviated-name="Hoşçakal" block-list:name="Hoşça kal"/>
   <block-list:block block-list:abbreviated-name="hoşçakal" block-list:name="hoşça kal"/>
   <block-list:block block-list:abbreviated-name="Hoşgeldin" block-list:name="Hoş geldin"/>
@@ -176,6 +230,8 @@
   <block-list:block block-list:abbreviated-name="odf" block-list:name="ODF"/>
   <block-list:block block-list:abbreviated-name="Oğmak" block-list:name="Ovmak"/>
   <block-list:block block-list:abbreviated-name="oğmak" block-list:name="ovmak"/>
+  <block-list:block block-list:abbreviated-name="Opörler" block-list:name="Hoparlör"/>
+  <block-list:block block-list:abbreviated-name="opörler" block-list:name="hoparlör"/>
   <block-list:block block-list:abbreviated-name="Orjinal" block-list:name="Orijinal"/>
   <block-list:block block-list:abbreviated-name="orjinal" block-list:name="orijinal"/>
   <block-list:block block-list:abbreviated-name="Ön görmek" block-list:name="Öngörmek"/>
