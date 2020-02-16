@@ -47,7 +47,7 @@ $(eval $(call gb_Module_add_targets,svx,\
 ))
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
+$(eval $(call gb_Module_add_javacheck_targets,svx,\
     JunitTest_svx_unoapi \
 ))
 

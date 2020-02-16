@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,javaunohelper,\
     Jar_juh \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,javaunohelper,\
+$(eval $(call gb_Module_add_javacheck_targets,javaunohelper,\
     JunitTest_juh \
 ))
 

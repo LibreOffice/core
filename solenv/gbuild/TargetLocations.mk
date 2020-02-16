@@ -126,6 +126,7 @@ gb_LinkTarget_get_pch_reuse_timestamp = $(WORKDIR)/PrecompiledHeader/$(call gb_P
 gb_Module_get_nonl10n_target = $(WORKDIR)/Module/nonl10n/$(1)
 gb_Module_get_l10n_target = $(WORKDIR)/Module/l10n/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
+gb_Module_get_javacheck_target = $(WORKDIR)/Module/javacheck/$(1)
 gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_screenshot_target = $(WORKDIR)/Module/screenshot/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)

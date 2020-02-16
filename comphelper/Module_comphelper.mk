@@ -25,7 +25,7 @@ $(eval $(call gb_Module_add_targets,comphelper,\
 		StaticLibrary_windows_process )\
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
+$(eval $(call gb_Module_add_javacheck_targets,comphelper,\
     JunitTest_comphelper_complex \
 ))
 

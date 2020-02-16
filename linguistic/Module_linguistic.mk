@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,linguistic,\
 #$(eval $(call gb_Module_add_check_targets,linguistic,\
 #))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
+$(eval $(call gb_Module_add_javacheck_targets,linguistic,\
     JunitTest_linguistic_unoapi \
 ))
 

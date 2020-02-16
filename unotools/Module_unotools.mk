@@ -13,9 +13,10 @@ $(eval $(call gb_Module_add_targets,unotools,\
     Library_utl \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,unotools,\
+$(eval $(call gb_Module_add_javacheck_targets,unotools,\
     JunitTest_unotools_complex \
 ))
+
 $(eval $(call gb_Module_add_check_targets,unotools,\
     CppunitTest_unotools_fontdefs \
 ))

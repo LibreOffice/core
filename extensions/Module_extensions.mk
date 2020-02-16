@@ -104,7 +104,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif # OS=MACOSX
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,extensions,\
+$(eval $(call gb_Module_add_javacheck_targets,extensions,\
     JunitTest_extensions_unoapi \
 ))
 
