@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-BasctlDialogsTest::BasctlDialogsTest()
-{
-}
+BasctlDialogsTest::BasctlDialogsTest() {}
 
 void BasctlDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

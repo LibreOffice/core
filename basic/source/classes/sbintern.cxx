@@ -25,7 +25,7 @@ SbiGlobals* SbiGlobals::pGlobals = nullptr;
 
 SbiGlobals* GetSbData()
 {
-    if( !SbiGlobals::pGlobals )
+    if (!SbiGlobals::pGlobals)
         SbiGlobals::pGlobals = new SbiGlobals;
     return SbiGlobals::pGlobals;
 }
@@ -33,13 +33,13 @@ SbiGlobals* GetSbData()
 SbiGlobals::SbiGlobals()
 {
     pInst = nullptr;
-    pSbFac= nullptr;
+    pSbFac = nullptr;
     pUnoFac = nullptr;
     pTypeFac = nullptr;
     pClassFac = nullptr;
     pOLEFac = nullptr;
     pFormFac = nullptr;
-    pMod  = nullptr;
+    pMod = nullptr;
     pCompMod = nullptr; // JSM
     nInst = 0;
     nCode = ERRCODE_NONE;

@@ -28,7 +28,6 @@ class SbModule;
 
 namespace basctl
 {
-
 struct BreakPoint
 {
     bool bEnabled;
@@ -48,19 +47,19 @@ struct BreakPoint
 class BreakPointList
 {
 private:
-    BreakPointList& operator =(BreakPointList const &) = delete;
+    BreakPointList& operator=(BreakPointList const&) = delete;
     std::vector<BreakPoint> maBreakPoints;
 
 public:
     BreakPointList();
 
-    BreakPointList(BreakPointList const & rList);
+    BreakPointList(BreakPointList const& rList);
 
     ~BreakPointList();
 
     void reset();
 
-    void transfer(BreakPointList & rList);
+    void transfer(BreakPointList& rList);
 
     void InsertSorted(BreakPoint pBrk);
     BreakPoint* FindBreakPoint(sal_uInt16 nLine);

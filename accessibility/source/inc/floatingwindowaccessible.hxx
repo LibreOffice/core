@@ -26,7 +26,7 @@ class FloatingWindowAccessible final : public VCLXAccessibleComponent
 public:
     using VCLXAccessibleComponent::VCLXAccessibleComponent;
 
-    virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
+    virtual void FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
