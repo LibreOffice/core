@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <basic/sbstar.hxx>
 
-css::uno::Reference< css::frame::XModel > getDocumentModel( StarBASIC* );
+css::uno::Reference<css::frame::XModel> getDocumentModel(StarBASIC*);
 
 #endif // INCLUDED_BASIC_SOURCE_INC_SBXMOD_HXX
 

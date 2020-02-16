@@ -46,7 +46,6 @@ accessibility/inc/extended/accessibletablistbox.hxx
 accessibility/inc/extended/accessibletablistboxtable.hxx
 accessibility/inc/extended/textwindowaccessibility.hxx
 accessibility/inc/helper/IComboListBoxHelper.hxx
-accessibility/inc/helper/accresmgr.hxx
 accessibility/inc/helper/characterattributeshelper.hxx
 accessibility/inc/helper/listboxhelper.hxx
 accessibility/inc/standard/accessiblemenubasecomponent.hxx
@@ -115,7 +114,6 @@ accessibility/source/helper/IComboListBoxHelper.cxx
 accessibility/source/helper/acc_factory.cxx
 accessibility/source/helper/accresmgr.cxx
 accessibility/source/helper/characterattributeshelper.cxx
-accessibility/source/inc/floatingwindowaccessible.hxx
 accessibility/source/standard/accessiblemenubasecomponent.cxx
 accessibility/source/standard/accessiblemenucomponent.cxx
 accessibility/source/standard/accessiblemenuitemcomponent.cxx
@@ -224,7 +222,6 @@ avmedia/source/win/winuno.cxx
 basctl/inc/helpids.h
 basctl/inc/iderdll.hxx
 basctl/inc/strings.hxx
-basctl/qa/unit/basctl-dialogs-test.cxx
 basctl/source/accessibility/accessibledialogcontrolshape.cxx
 basctl/source/accessibility/accessibledialogwindow.cxx
 basctl/source/basicide/basdoc.cxx
@@ -248,7 +245,6 @@ basctl/source/basicide/bastype3.cxx
 basctl/source/basicide/bastype3.hxx
 basctl/source/basicide/bastypes.cxx
 basctl/source/basicide/breakpoint.cxx
-basctl/source/basicide/breakpoint.hxx
 basctl/source/basicide/brkdlg.cxx
 basctl/source/basicide/brkdlg.hxx
 basctl/source/basicide/doceventnotifier.cxx
@@ -395,7 +391,6 @@ basic/source/classes/global.cxx
 basic/source/classes/image.cxx
 basic/source/classes/propacc.cxx
 basic/source/classes/sb.cxx
-basic/source/classes/sbintern.cxx
 basic/source/classes/sbunoobj.cxx
 basic/source/classes/sbxmod.cxx
 basic/source/comp/basiccharclass.cxx
@@ -418,7 +413,6 @@ basic/source/inc/codegen.hxx
 basic/source/inc/date.hxx
 basic/source/inc/dlgcont.hxx
 basic/source/inc/errobject.hxx
-basic/source/inc/eventatt.hxx
 basic/source/inc/expr.hxx
 basic/source/inc/filefmt.hxx
 basic/source/inc/image.hxx
@@ -433,7 +427,6 @@ basic/source/inc/sbintern.hxx
 basic/source/inc/sbjsmeth.hxx
 basic/source/inc/sbjsmod.hxx
 basic/source/inc/sbunoobj.hxx
-basic/source/inc/sbxmod.hxx
 basic/source/inc/scanner.hxx
 basic/source/inc/scriptcont.hxx
 basic/source/inc/stdobj.hxx

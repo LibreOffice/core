@@ -27,7 +27,7 @@ class SbxArray;
 // Instantiate "com.sun.star.awt.UnoControlDialog" on basis
 // of a DialogLibrary entry: Convert from XML-ByteSequence
 // and attach events.
-void RTL_Impl_CreateUnoDialog( SbxArray& rPar );
+void RTL_Impl_CreateUnoDialog(SbxArray& rPar);
 
 #endif
 
