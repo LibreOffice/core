@@ -344,7 +344,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         SwNodeIndex aStartNode = *pStartNode;
 
         // go to the next node (actual content)
-        aStartNode++;
+        ++aStartNode;
 
         // this has to be a table
         if (!aStartNode.GetNode().IsTableNode())
