@@ -3861,7 +3861,7 @@ bool ScTable::RefVisible(const ScFormulaCell* pCell)
 void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr)
 {
     GetInputString(nCol, nRow, rStr);
-    rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
+    rStr = ScGlobal::getCharClassPtr()->uppercase(rStr.trim());
 }
 
 // Calculate the size of the sheet and set the size on DrawPage

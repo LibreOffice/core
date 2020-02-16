@@ -2864,7 +2864,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         rDoc.PreprocessRangeNameUpdate();
 
         // input available yet? Then remove beforehand (=change)
-        ScRangeData* pData = pList->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
+        ScRangeData* pData = pList->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
         if (pData)
         {                                   // take old Index
             pNewEntry->SetIndex(pData->GetIndex());

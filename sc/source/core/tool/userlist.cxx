@@ -69,7 +69,7 @@ void ScUserListData::InitTokens()
             if (nLen)
             {
                 OUString aSub(p0, nLen);
-                OUString aUpStr = ScGlobal::pCharClass->uppercase(aSub);
+                OUString aUpStr = ScGlobal::getCharClassPtr()->uppercase(aSub);
                 maSubStrings.emplace_back(aSub, aUpStr);
             }
             bFirst = true;
@@ -79,7 +79,7 @@ void ScUserListData::InitTokens()
     if (nLen)
     {
         OUString aSub(p0, nLen);
-        OUString aUpStr = ScGlobal::pCharClass->uppercase(aSub);
+        OUString aUpStr = ScGlobal::getCharClassPtr()->uppercase(aSub);
         maSubStrings.emplace_back(aSub, aUpStr);
     }
 }
@@ -124,7 +124,7 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bo
     }
 
     // When that fails, do a case insensitive search.
-    OUString aUpStr = ScGlobal::pCharClass->uppercase(rSubStr);
+    OUString aUpStr = ScGlobal::getCharClassPtr()->uppercase(rSubStr);
     itr = ::std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));
     if (itr != maSubStrings.end())
@@ -205,7 +205,7 @@ ScUserList::ScUserList()
     uno::Sequence< i18n::CalendarItem2 > xCal;
 
     const uno::Sequence< i18n::Calendar2 > xCalendars(
-            ScGlobal::pLocaleData->getAllCalendars() );
+            ScGlobal::getLocaleDataPtr()->getAllCalendars() );
 
     for ( const auto& rCalendar : xCalendars )
     {

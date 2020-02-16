@@ -399,7 +399,7 @@ formula::ParamClass ScParameterClassification::GetExternalParameterType( const f
         return eRet;
 
     // similar to ScInterpreter::ScExternal()
-    OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
+    OUString aFuncName = ScGlobal::getCharClassPtr()->uppercase( pToken->GetExternal());
     {
         const LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
         if (pLegacyFuncData)

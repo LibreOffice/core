@@ -1260,7 +1260,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     if ( aStart.isEmpty() )
         return false;
 
-    aStart = ScGlobal::pCharClass->uppercase( aStart );
+    aStart = ScGlobal::getCharClassPtr()->uppercase( aStart );
     sal_Int32 nPos = aStart.getLength() - 1;
     sal_Unicode c = aStart[ nPos ];
     // fdo#75264 use maFormulaChar to check if characters are used in function names
@@ -1426,7 +1426,7 @@ void ScInputHandler::UseFormulaData()
             return;
 
         if ( aParagraph.getLength() > aSel.nEndPos &&
-             ( ScGlobal::pCharClass->isLetterNumeric( aParagraph, aSel.nEndPos ) ||
+             ( ScGlobal::getCharClassPtr()->isLetterNumeric( aParagraph, aSel.nEndPos ) ||
                aParagraph[ aSel.nEndPos ] == '_' ||
                aParagraph[ aSel.nEndPos ] == '.' ||
                aParagraph[ aSel.nEndPos ] == '$'   ) )
@@ -3100,25 +3100,25 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 bInsertPreCorrectedString = false;
                 OUString aReplace(pAuto->GetStartDoubleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
+                    aReplace = ScGlobal::getLocaleDataPtr()->getDoubleQuotationMarkStart();
                 if( aReplace != "\"" )
                     aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetEndDoubleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd();
+                    aReplace = ScGlobal::getLocaleDataPtr()->getDoubleQuotationMarkEnd();
                 if( aReplace != "\"" )
                     aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetStartSingleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::pLocaleData->getQuotationMarkStart();
+                    aReplace = ScGlobal::getLocaleDataPtr()->getQuotationMarkStart();
                 if( aReplace != "'" )
                     aString = aString.replaceAll( aReplace, "'" );
 
                 aReplace = OUString(pAuto->GetEndSingleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::pLocaleData->getQuotationMarkEnd();
+                    aReplace = ScGlobal::getLocaleDataPtr()->getQuotationMarkEnd();
                 if( aReplace != "'" )
                     aString = aString.replaceAll( aReplace, "'");
             }

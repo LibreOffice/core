@@ -183,7 +183,7 @@ bool ScAreaLink::IsEqual( const OUString& rFile, const OUString& rFilter, const 
 bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const OUString& rAreaName )
 {
     bool bFound = false;
-    OUString aUpperName = ScGlobal::pCharClass->uppercase(rAreaName);
+    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rAreaName);
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     if (pNames)         // named ranges
     {

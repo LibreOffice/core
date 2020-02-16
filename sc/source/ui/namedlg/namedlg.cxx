@@ -256,7 +256,7 @@ bool ScNameDlg::IsNameValid()
         m_xFtInfo->set_label(maErrInvalidNameStr);
         return false;
     }
-    else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
+    else if (pRangeName && pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
     {
         m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         m_xFtInfo->set_label(maErrNameInUse);
@@ -292,7 +292,7 @@ ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 {
     ScRangeName* pRangeName = GetRangeName(rLine.aScope);
-    ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rLine.aName));
+    ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rLine.aName));
     if (pData)
     {
         UpdateChecks(pData);
@@ -325,7 +325,7 @@ void ScNameDlg::RemovePushed()
     for (const auto& rEntry : aEntries)
     {
         ScRangeName* pRangeName = GetRangeName(rEntry.aScope);
-        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rEntry.aName));
+        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rEntry.aName));
         OSL_ENSURE(pData, "table and model should be in sync");
         // be safe and check for possible problems
         if (pData)
@@ -368,7 +368,7 @@ void ScNameDlg::NameModified()
     OUString aNewScope = m_xLbScope->get_active_text();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
-    ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
+    ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::getCharClassPtr()->uppercase(aOldName) );
     ScRangeName* pNewRangeName = GetRangeName( aNewScope );
     OSL_ENSURE(pData, "model and table should be in sync");
     // be safe and check for range data

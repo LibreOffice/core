@@ -537,11 +537,8 @@ class ScGlobal
 
 public:
     static SvtSysLocale*        pSysLocale;
-    // for faster access a pointer to the single instance provided by SvtSysLocale
-    SC_DLLPUBLIC static const CharClass*     pCharClass;
-    // for faster access a pointer to the single instance provided by SvtSysLocale
-    SC_DLLPUBLIC static const LocaleDataWrapper* pLocaleData;
-    SC_DLLPUBLIC static const LocaleDataWrapper* GetpLocaleData();
+    SC_DLLPUBLIC static const LocaleDataWrapper* getLocaleDataPtr();
+    SC_DLLPUBLIC static const CharClass* getCharClassPtr();
 
     static CalendarWrapper*     GetCalendar();
     SC_DLLPUBLIC static CollatorWrapper*        GetCollator();

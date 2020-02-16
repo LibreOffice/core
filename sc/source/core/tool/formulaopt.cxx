@@ -62,7 +62,7 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // the old separator set.
         return;
 
-    const LocaleDataWrapper& rLocaleData = *ScGlobal::pLocaleData;
+    const LocaleDataWrapper& rLocaleData = *ScGlobal::getLocaleDataPtr();
     const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
     const OUString& rListSep = rLocaleData.getListSep();
 

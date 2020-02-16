@@ -211,7 +211,7 @@ void ScSolverOptionsDialog::FillListBox()
                 OUString sTxt = aVisName + ": ";
                 sTxt += rtl::math::doubleToUString(fDoubleValue,
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
+                    ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
 
                 m_xLbSettings->set_text(nPos, sTxt, 1);
             }
@@ -259,7 +259,7 @@ void ScSolverOptionsDialog::EditOption()
                 OUString sTxt(pStringItem->GetText() + ": ");
                 sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
+                    ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
 
                 m_xLbSettings->set_text(nEntry, sTxt, 1);
             }
@@ -374,7 +374,7 @@ void ScSolverValueDialog::SetValue( double fValue )
 {
     m_xEdValue->set_text( rtl::math::doubleToUString( fValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true ) );
+            ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true ) );
 }
 
 double ScSolverValueDialog::GetValue() const
@@ -383,7 +383,7 @@ double ScSolverValueDialog::GetValue() const
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    double fValue = ScGlobal::GetpLocaleData()->stringToDouble( aInput, true, &eStatus, &nParseEnd);
+    double fValue = ScGlobal::getLocaleDataPtr()->stringToDouble( aInput, true, &eStatus, &nParseEnd);
     /* TODO: shouldn't there be some error checking? */
     return fValue;
 }

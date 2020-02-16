@@ -264,7 +264,7 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
             if (!pRangeName)
                 break;
 
-            OUString aUpper = ScGlobal::pCharClass->uppercase(searchRangeName);
+            OUString aUpper = ScGlobal::getCharClassPtr()->uppercase(searchRangeName);
             const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
             if (!pData)
                 break;

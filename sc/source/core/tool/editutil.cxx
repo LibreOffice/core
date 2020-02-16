@@ -241,7 +241,7 @@ OUString ScEditUtil::GetCellFieldValue(
         case text::textfield::Type::DATE:
         {
             Date aDate(Date::SYSTEM);
-            aRet = ScGlobal::pLocaleData->getDate(aDate);
+            aRet = ScGlobal::getLocaleDataPtr()->getDate(aDate);
         }
         break;
         case text::textfield::Type::DOCINFO_TITLE:
@@ -815,7 +815,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         case text::textfield::Type::EXTENDED_TIME:
         case text::textfield::Type::TIME:
             // For now, time field in the header / footer is always dynamic.
-            aRet = ScGlobal::pLocaleData->getTime(aData.aDateTime);
+            aRet = ScGlobal::getLocaleDataPtr()->getTime(aData.aDateTime);
         break;
         case text::textfield::Type::DOCINFO_TITLE:
             aRet = aData.aTitle;
@@ -836,7 +836,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = aData.aTabName;
         break;
         case text::textfield::Type::DATE:
-            aRet = ScGlobal::pLocaleData->getDate(aData.aDateTime);
+            aRet = ScGlobal::getLocaleDataPtr()->getDate(aData.aDateTime);
         break;
         default:
             aRet = "?";

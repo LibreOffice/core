@@ -113,7 +113,7 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::YEARS:
             return OUString::number(nValue);
         case sheet::DataPilotFieldGroupBy::QUARTERS:
-            return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
+            return ScGlobal::getLocaleDataPtr()->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
         case css::sheet::DataPilotFieldGroupBy::MONTHS:
             return ScGlobal::GetCalendar()->getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    // 0-based, get short name
@@ -138,7 +138,7 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::MINUTES:
         case sheet::DataPilotFieldGroupBy::SECONDS:
         {
-            OUStringBuffer aBuf(ScGlobal::pLocaleData->getTimeSep());
+            OUStringBuffer aBuf(ScGlobal::getLocaleDataPtr()->getTimeSep());
             aBuf.append(getTwoDigitString(nValue));
             return aBuf.makeStringAndClear();
         }

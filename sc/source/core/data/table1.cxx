@@ -352,7 +352,7 @@ void ScTable::SetName( const OUString& rNewName )
 const OUString& ScTable::GetUpperName() const
 {
     if (aUpperName.isEmpty() && !aName.isEmpty())
-        aUpperName = ScGlobal::pCharClass->uppercase(aName);
+        aUpperName = ScGlobal::getCharClassPtr()->uppercase(aName);
     return aUpperName;
 }
 

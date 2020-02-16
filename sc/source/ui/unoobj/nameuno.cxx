@@ -122,7 +122,7 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
             pNames = pDocShell->GetDocument().GetRangeName();
         if (pNames)
         {
-            pRet = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+            pRet = pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
             if (pRet)
                 pRet->ValidateTabRefs();        // adjust relative tab refs to valid tables
         }
@@ -166,7 +166,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (!pNames)
         return;
 
-    const ScRangeData* pOld = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+    const ScRangeData* pOld = pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
     if (!pOld)
         return;
 
@@ -488,7 +488,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScRangeName* pNames = GetRangeName_Impl();
-        if (pNames && !pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
+        if (pNames && !pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
         {
             std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
             // GRAM_API for API compatibility.
@@ -543,7 +543,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
             if (pData && lcl_UserVisibleName(*pData))
             {
                 std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName(*pNames));
@@ -685,7 +685,7 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
             if (pData && lcl_UserVisibleName(*pData))
                 return true;
         }

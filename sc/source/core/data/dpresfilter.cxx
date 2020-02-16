@@ -104,7 +104,7 @@ void ScDPResultTree::add(
 
         // See if this dimension exists.
         auto& rDims = pMemNode->maChildDimensions;
-        OUString aUpperName = ScGlobal::pCharClass->uppercase(filter.maDimName);
+        OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(filter.maDimName);
         auto itDim = rDims.find(aUpperName);
         if (itDim == rDims.end())
         {
@@ -119,7 +119,7 @@ void ScDPResultTree::add(
         // Now, see if this dimension member exists.
         DimensionNode* pDim = itDim->second.get();
         MembersType& rMembersValueNames = pDim->maChildMembersValueNames;
-        aUpperName = ScGlobal::pCharClass->uppercase(filter.maValueName);
+        aUpperName = ScGlobal::getCharClassPtr()->uppercase(filter.maValueName);
         MembersType::iterator itMem = rMembersValueNames.find(aUpperName);
         if (itMem == rMembersValueNames.end())
         {
@@ -139,7 +139,7 @@ void ScDPResultTree::add(
             if (!filter.maValue.isEmpty() && filter.maValue != filter.maValueName)
             {
                 MembersType& rMembersValues = pDim->maChildMembersValues;
-                aUpperName = ScGlobal::pCharClass->uppercase(filter.maValue);
+                aUpperName = ScGlobal::getCharClassPtr()->uppercase(filter.maValue);
                 MembersType::iterator itMemVal = rMembersValues.find(aUpperName);
                 if (itMemVal == rMembersValues.end())
                 {
@@ -159,8 +159,8 @@ void ScDPResultTree::add(
     if (pDimName && pMemName)
     {
         NamePairType aNames(
-            ScGlobal::pCharClass->uppercase(*pDimName),
-            ScGlobal::pCharClass->uppercase(*pMemName));
+            ScGlobal::getCharClassPtr()->uppercase(*pDimName),
+            ScGlobal::getCharClassPtr()->uppercase(*pMemName));
 
         LeafValuesType::iterator it = maLeafValues.find(aNames);
         if (it == maLeafValues.end())
@@ -203,7 +203,7 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     for (const sheet::DataPilotFieldFilter& rFilter : rFilters)
     {
         auto itDim = pMember->maChildDimensions.find(
-            ScGlobal::pCharClass->uppercase(rFilter.FieldName));
+            ScGlobal::getCharClassPtr()->uppercase(rFilter.FieldName));
 
         if (itDim == pMember->maChildDimensions.end())
             // Specified dimension not found.
@@ -211,12 +211,12 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 
         const DimensionNode* pDim = itDim->second.get();
         MembersType::const_iterator itMem( pDim->maChildMembersValueNames.find(
-                    ScGlobal::pCharClass->uppercase( rFilter.MatchValueName)));
+                    ScGlobal::getCharClassPtr()->uppercase( rFilter.MatchValueName)));
 
         if (itMem == pDim->maChildMembersValueNames.end())
         {
             // Specified member name not found, try locale independent value.
-            itMem = pDim->maChildMembersValues.find( ScGlobal::pCharClass->uppercase( rFilter.MatchValue));
+            itMem = pDim->maChildMembersValues.find( ScGlobal::getCharClassPtr()->uppercase( rFilter.MatchValue));
 
             if (itMem == pDim->maChildMembersValues.end())
                 // Specified member not found.
@@ -250,8 +250,8 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
 double ScDPResultTree::getLeafResult(const css::sheet::DataPilotFieldFilter& rFilter) const
 {
     NamePairType aPair(
-        ScGlobal::pCharClass->uppercase(rFilter.FieldName),
-        ScGlobal::pCharClass->uppercase(rFilter.MatchValueName));
+        ScGlobal::getCharClassPtr()->uppercase(rFilter.FieldName),
+        ScGlobal::getCharClassPtr()->uppercase(rFilter.MatchValueName));
 
     LeafValuesType::const_iterator it = maLeafValues.find(aPair);
     if (it != maLeafValues.end())

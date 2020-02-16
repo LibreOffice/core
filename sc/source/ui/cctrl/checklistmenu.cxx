@@ -1218,7 +1218,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl, Button*, void)
 IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 {
     OUString aSearchText = maEdSearch->GetText();
-    aSearchText = ScGlobal::pCharClass->lowercase( aSearchText );
+    aSearchText = ScGlobal::getCharClassPtr()->lowercase( aSearchText );
     bool bSearchTextEmpty = aSearchText.isEmpty();
     size_t n = maMembers.size();
     size_t nSelCount = 0;
@@ -1237,9 +1237,9 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
         if ( !bSearchTextEmpty )
         {
             if ( !bIsDate )
-                bPartialMatch = ( ScGlobal::pCharClass->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
+                bPartialMatch = ( ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
             else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
-                bPartialMatch = (ScGlobal::pCharClass->lowercase( OUString(
+                bPartialMatch = (ScGlobal::getCharClassPtr()->lowercase( OUString(
                                 maMembers[i].maRealName + maMembers[i].maDateParts[1] )).indexOf( aSearchText ) != -1);
             else
                 continue;

@@ -153,7 +153,7 @@ bool ScNameDefDlg::IsNameValid()
         m_xBtnAdd->set_sensitive(false);
         return false;
     }
-    else if (pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
+    else if (pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
     {
         m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
         m_xFtInfo->set_label(maErrNameInUse);

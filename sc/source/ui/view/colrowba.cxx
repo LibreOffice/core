@@ -42,7 +42,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
         sal_Int64 nUserVal = vcl::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
         OUString aStr = rText + " "
-                        + ScGlobal::pLocaleData->getNum( nUserVal, 2 )
+                        + ScGlobal::getLocaleDataPtr()->getNum( nUserVal, 2 )
                         + " " + SdrFormatter::GetUnitStr(eUserMet);
         return aStr;
     }

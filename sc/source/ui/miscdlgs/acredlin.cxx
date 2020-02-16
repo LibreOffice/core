@@ -424,9 +424,9 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
     {
         aBuf.append(aUser);
         aBuf.append('\t');
-        aBuf.append(ScGlobal::pLocaleData->getDate(aDateTime));
+        aBuf.append(ScGlobal::getLocaleDataPtr()->getDate(aDateTime));
         aBuf.append(' ');
-        aBuf.append(ScGlobal::pLocaleData->getTime(aDateTime));
+        aBuf.append(ScGlobal::getLocaleDataPtr()->getTime(aDateTime));
         aBuf.append('\t');
 
         bIsGenerated = false;
@@ -603,7 +603,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             if (!bIsGenerated)
             {
                 rTreeView.set_text(*xEntry, aUser, 2);
-                OUString sDate = ScGlobal::pLocaleData->getDate(aDateTime) + " " + ScGlobal::pLocaleData->getTime(aDateTime);
+                OUString sDate = ScGlobal::getLocaleDataPtr()->getDate(aDateTime) + " " + ScGlobal::getLocaleDataPtr()->getTime(aDateTime);
                 rTreeView.set_text(*xEntry, sDate, 3);
             }
 
@@ -691,8 +691,8 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
     if(!bIsGenerated)
     {
         aString += aUser + "\t"
-                +  ScGlobal::pLocaleData->getDate(aDateTime) + " "
-                +  ScGlobal::pLocaleData->getTime(aDateTime) + "\t";
+                +  ScGlobal::getLocaleDataPtr()->getDate(aDateTime) + " "
+                +  ScGlobal::getLocaleDataPtr()->getTime(aDateTime) + "\t";
     }
     else
     {

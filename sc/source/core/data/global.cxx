@@ -80,8 +80,6 @@ ScUserList*     ScGlobal::pUserList = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
 SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
-const CharClass*  ScGlobal::pCharClass = nullptr;
-const LocaleDataWrapper*  ScGlobal::pLocaleData = nullptr;
 CalendarWrapper* ScGlobal::pCalendar = nullptr;
 std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
@@ -446,8 +444,6 @@ void ScGlobal::Init()
     // FIXME: If the sort-order etc. should depend the installed Office version
     //        use Application::GetSettings().GetUILanguage() here
     pSysLocale = new SvtSysLocale;
-    pCharClass = pSysLocale->GetCharClassPtr();
-    pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     pEmptyBrushItem = new SvxBrushItem( COL_TRANSPARENT, ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -556,10 +552,6 @@ void ScGlobal::Clear()
     delete pCaseCollator.load(); pCaseCollator = nullptr;
     delete pCollator.load(); pCollator = nullptr;
     DELETEZ(pCalendar);
-    // Do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance !
-    pCharClass = nullptr;
-    // Do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance !
-    pLocaleData = nullptr;
     DELETEZ(pSysLocale);
     delete pLocale.load(); pLocale = nullptr;
     DELETEZ(pStrClipDocName);
@@ -1016,13 +1008,24 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
         });
 }
 
-const LocaleDataWrapper* ScGlobal::GetpLocaleData()
+const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
 {
     OSL_ENSURE(
-        pLocaleData,
-        "ScGlobal::GetpLocaleData() called before ScGlobal::Init()");
-    return pLocaleData;
+        pSysLocale,
+        "ScGlobal::getLocaleDataPtr() called before ScGlobal::Init()");
+
+    return pSysLocale->GetLocaleDataPtr();
 }
+
+const CharClass* ScGlobal::getCharClassPtr()
+{
+    OSL_ENSURE(
+        pSysLocale,
+        "ScGlobal::getCharClassPtr() called before ScGlobal::Init()");
+
+    return pSysLocale->GetCharClassPtr();
+}
+
 CalendarWrapper*     ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);

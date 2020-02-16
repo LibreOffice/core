@@ -186,7 +186,7 @@ void ScHTMLImport::WriteToDocument(
         if (!pTable->GetTableName().isEmpty())
         {
             OUString aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
-            if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
+            if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
@@ -217,7 +217,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUStr
             for(;;)
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
-                const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::pCharClass->uppercase(aToken));
+                const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aToken));
                 if (!pRangeData)
                     break;
                 ScRange aRange;

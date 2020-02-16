@@ -129,9 +129,9 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             DateTime aDT = pFound->GetDateTime();
             aTrackText  = pFound->GetUser()
                         + ", "
-                        + ScGlobal::pLocaleData->getDate(aDT)
+                        + ScGlobal::getLocaleDataPtr()->getDate(aDT)
                         + " "
-                        + ScGlobal::pLocaleData->getTime(aDT)
+                        + ScGlobal::getLocaleDataPtr()->getTime(aDT)
                         + ":\n";
             OUString aComStr=pFound->GetComment();
             if(!aComStr.isEmpty())

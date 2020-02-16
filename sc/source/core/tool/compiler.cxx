@@ -178,7 +178,7 @@ void ScCompiler::DeInit()
 bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 {
     // function names are always case-insensitive
-    OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpper = ScGlobal::getCharClassPtr()->uppercase(rName);
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -272,7 +272,7 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
             pCharClass = pCharClassEnglish;
         }
         else
-            pCharClass = ScGlobal::pCharClass;
+            pCharClass = ScGlobal::getCharClassPtr();
         SetGrammarAndRefConvention( mxSymbols->getGrammar(), GetGrammar());
     }
 }
@@ -1795,7 +1795,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
-    pCharClass(ScGlobal::pCharClass),
+    pCharClass(ScGlobal::getCharClassPtr()),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1818,7 +1818,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
-        pCharClass( ScGlobal::pCharClass ),
+        pCharClass( ScGlobal::getCharClassPtr() ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -1840,7 +1840,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
-    pCharClass(ScGlobal::pCharClass),
+    pCharClass(ScGlobal::getCharClassPtr()),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1863,7 +1863,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
-        pCharClass( ScGlobal::pCharClass ),
+        pCharClass( ScGlobal::getCharClassPtr() ),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -1885,7 +1885,7 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
 {
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;
-    ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
+    ParseResult aRes = ScGlobal::getCharClassPtr()->parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_OUSTRING, nContFlags, EMPTY_OUSTRING);
     bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
 
@@ -2077,8 +2077,8 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
-    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::pLocaleData->getNumDecimalSep()[0]);
-    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::pLocaleData->getNumDecimalSepAlt().toChar());
+    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0]);
+    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::getLocaleDataPtr()->getNumDecimalSepAlt().toChar());
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -2689,7 +2689,7 @@ Label_MaskStateMachine:
         // the bi18n case (which we don't want to include as yet another
         // special case above as it is rare enough and doesn't generally occur
         // in formulas).
-        const sal_Unicode cGroupSep = ScGlobal::pLocaleData->getNumThousandSep()[0];
+        const sal_Unicode cGroupSep = ScGlobal::getLocaleDataPtr()->getNumThousandSep()[0];
         const bool bGroupSeparator = (128 <= cGroupSep && cGroupSep != cSep &&
                 cGroupSep != cArrayColSep && cGroupSep != cArrayRowSep &&
                 cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
@@ -3275,14 +3275,14 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
 {
     // Has to be called before IsValue
     sal_Unicode ch1 = rName[0];
-    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::pLocaleData->getNumDecimalSep()[0] );
+    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
     // Code further down checks only if cDecSep=='.' so simply obtaining the
     // alternative decimal separator if it's not is sufficient.
     if (cDecSep != '.')
     {
-        cDecSep = ScGlobal::pLocaleData->getNumDecimalSepAlt().toChar();
+        cDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSepAlt().toChar();
         if ( ch1 == cDecSep )
             return false;
     }
@@ -4164,7 +4164,7 @@ static bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, Formul
     }
     else
     {
-        rUpper = ScGlobal::pCharClass->uppercase(rOrg);
+        rUpper = ScGlobal::getCharClassPtr()->uppercase(rOrg);
         return false;
     }
 }
@@ -4258,7 +4258,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     else
     {
         OUString aTmpStr( cSymbol[0] );
-        bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
+        bMayBeFuncName = ScGlobal::getCharClassPtr()->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }
     if (bAsciiNonAlnum && cSymbol[1] == 0)
@@ -4363,7 +4363,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
         // User defined names and such do need i18n upper also in ODF.
         if (bAsciiUpper)
-            aUpper = ScGlobal::pCharClass->uppercase( aOrg );
+            aUpper = ScGlobal::getCharClassPtr()->uppercase( aOrg );
 
         if (IsNamedRange( aUpper ))
             return true;
@@ -4421,7 +4421,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Provide single token information and continue. Do not set an error, that
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
-    aUpper = ScGlobal::pCharClass->lowercase( aUpper );
+    aUpper = ScGlobal::getCharClassPtr()->lowercase( aUpper );
     svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aUpper);
     maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
     maRawToken.NewOpCode( ocBad );
@@ -5004,7 +5004,7 @@ bool ScCompiler::IsCharFlagAllConventions(
         return true;
     }
     else
-        return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
+        return ScGlobal::getCharClassPtr()->isLetterNumeric( rStr, nPos );
 }
 
 void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
@@ -5276,7 +5276,7 @@ void ScCompiler::LocalizeString( OUString& rName ) const
 // quote characters contained within are escaped by '\\'.
 bool ScCompiler::EnQuote( OUString& rStr )
 {
-    sal_Int32 nType = ScGlobal::pCharClass->getStringType( rStr, 0, rStr.getLength() );
+    sal_Int32 nType = ScGlobal::getCharClassPtr()->getStringType( rStr, 0, rStr.getLength() );
     if ( !CharClass::isNumericType( nType )
             && CharClass::isAlphaNumericType( nType ) )
         return false;

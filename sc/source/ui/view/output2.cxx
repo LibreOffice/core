@@ -637,7 +637,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     }
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     sal_Int32 nLen = aString.getLength();
-    sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator[0];
+    sal_Unicode cDecSep = ScGlobal::getLocaleDataPtr()->getLocaleItem().decimalSeparator[0];
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         sal_Unicode c = aString[i];
@@ -745,7 +745,7 @@ long ScDrawStringsVars::GetDotWidth()
     if (nDotWidth > 0)
         return nDotWidth;
 
-    const OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
+    const OUString& sep = ScGlobal::getLocaleDataPtr()->getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
     return nDotWidth;
 }
@@ -1369,7 +1369,7 @@ bool beginsWithRTLCharacter(const OUString& rStr)
     if (rStr.isEmpty())
         return false;
 
-    switch (ScGlobal::pCharClass->getCharacterDirection(rStr, 0))
+    switch (ScGlobal::getCharClassPtr()->getCharacterDirection(rStr, 0))
     {
         case i18n::DirectionProperty_RIGHT_TO_LEFT:
         case i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC:

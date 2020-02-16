@@ -212,7 +212,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
-                        rDoc.SetString(rCol, nRow, 0, ScGlobal::pCharClass->lowercase(aStr));
+                        rDoc.SetString(rCol, nRow, 0, ScGlobal::getCharClassPtr()->lowercase(aStr));
                     }
                 }
             }
@@ -226,7 +226,7 @@ void TextTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_STRING)
                     {
                         OUString aStr = rDoc.GetString(rCol, nRow, 0);
-                        rDoc.SetString(rCol, nRow, 0, ScGlobal::pCharClass->uppercase(aStr));
+                        rDoc.SetString(rCol, nRow, 0, ScGlobal::getCharClassPtr()->uppercase(aStr));
                     }
                 }
             }
@@ -244,16 +244,16 @@ void TextTransformation::Transform(ScDocument& rDoc) const
                         sal_Int32 length = aStr.getLength();
 
                         if(length != 0)
-                            aStr = aStr.replaceAt(0, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[0])));
+                            aStr = aStr.replaceAt(0, 1, ScGlobal::getCharClassPtr()->uppercase(OUString(aStr[0])));
 
                         for (sal_Int32 i = 1; i < length; i++){
                             if (aStr[i-1] == sal_Unicode(U' '))
                             {
-                                aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->uppercase(OUString(aStr[i])));
+                                aStr = aStr.replaceAt(i, 1, ScGlobal::getCharClassPtr()->uppercase(OUString(aStr[i])));
                             }
                             else
                             {
-                                aStr = aStr.replaceAt(i, 1, ScGlobal::pCharClass->lowercase(OUString(aStr[i])));
+                                aStr = aStr.replaceAt(i, 1, ScGlobal::getCharClassPtr()->lowercase(OUString(aStr[i])));
                             }
                         }
                         rDoc.SetString(rCol, nRow, 0, aStr);
