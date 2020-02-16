@@ -24,10 +24,11 @@
 #include <svtools/brwbox.hxx>
 #include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/status.hxx>
 
 #include <tools/multisel.hxx>
 #include <tools/fract.hxx>

@@ -23,11 +23,11 @@
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
-#include <vcl/status.hxx>
-
+#include <vcl/vclptr.hxx>
 
 class SfxModule;
 class SfxStatusBarControl;
+class StatusBar;
 
 svt::StatusbarController* SfxStatusBarControllerFactory(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
