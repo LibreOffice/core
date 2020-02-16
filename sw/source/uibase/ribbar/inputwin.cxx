@@ -66,7 +66,7 @@ IMPL_LINK(PosEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispatcher)
     : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
     , mxPos(VclPtr<PosEdit>::Create(this))
-    , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
+    , mxEdit(VclPtr<InputEdit>::Create(this))
     , pWrtShell(nullptr)
     , pView(nullptr)
     , m_bDoesUndo(true)
@@ -75,8 +75,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
 {
     bFirst = true;
     bIsTable = bDelSel = false;
-
-    aEdit->SetSizePixel(aEdit->CalcMinimumSize());
 
     InsertItem(FN_FORMULA_CALC, Image(StockImage::Yes, RID_BMP_FORMULA_CALC),
                SwResId(STR_FORMULA_CALC));
@@ -101,16 +99,16 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
-    InsertWindow(ED_FORMULA, aEdit.get());
+    InsertWindow(ED_FORMULA, mxEdit.get());
     SetItemText(ED_FORMULA, SwResId(STR_ACCESS_FORMULA_TEXT));
-    aEdit->SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TEXT));
+    mxEdit->set_accessible_name(SwResId(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | ToolBoxItemBits::DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
-    Size    aEditSize = aEdit->GetSizePixel();
+    Size    aEditSize = mxEdit->GetSizePixel();
     tools::Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
     long nMaxHeight = std::max(aEditSize.Height(), aItemRect.GetHeight());
     if( nMaxHeight+2 > aSizeTbx.Height() )
@@ -124,11 +122,11 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     aPosSize.setHeight( nMaxHeight );
     aEditSize.setHeight( nMaxHeight );
     Point aPosPos  = mxPos->GetPosPixel();
-    Point aEditPos = aEdit->GetPosPixel();
+    Point aEditPos = mxEdit->GetPosPixel();
     aPosPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
     aEditPos.setY( (aSize.Height() - nMaxHeight)/2 + 1 );
     mxPos->SetPosSizePixel( aPosPos, aPosSize );
-    aEdit->SetPosSizePixel( aEditPos, aEditSize );
+    mxEdit->SetPosSizePixel( aEditPos, aEditSize );
 }
 
 SwInputWindow::~SwInputWindow()
@@ -151,7 +149,7 @@ void SwInputWindow::dispose()
     CleanupUglyHackWithUndo();
 
     mxPos.disposeAndClear();
-    aEdit.disposeAndClear();
+    mxEdit.disposeAndClear();
     ToolBox::dispose();
 }
 
@@ -177,19 +175,18 @@ void SwInputWindow::Resize()
     ToolBox::Resize();
 
     long    nWidth      = GetSizePixel().Width();
-    long    nLeft       = aEdit->GetPosPixel().X();
-    Size    aEditSize   = aEdit->GetSizePixel();
+    long    nLeft       = mxEdit->GetPosPixel().X();
+    Size    aEditSize   = mxEdit->GetSizePixel();
 
     aEditSize.setWidth( std::max( static_cast<long>(nWidth - nLeft - 5), long(0) ) );
-    aEdit->SetSizePixel( aEditSize );
-    aEdit->Invalidate();
+    mxEdit->SetSizePixel( aEditSize );
 }
 
 void SwInputWindow::ShowWin()
 {
     bIsTable = false;
     // stop rulers
-    if(pView)
+    if (pView)
     {
         pView->GetHRuler().SetActive( false );
         pView->GetVRuler().SetActive( false );
@@ -268,22 +265,27 @@ void SwInputWindow::ShowWin()
 
         bFirst = false;
 
-        aEdit->SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
+        mxEdit->connect_changed( LINK( this, SwInputWindow, ModifyHdl ));
 
-        aEdit->SetText( sEdit );
-        aEdit->SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
+        mxEdit->set_text( sEdit );
         sOldFormula = sEdit;
 
-        aEdit->Invalidate();
-        aEdit->Update();
-        aEdit->GrabFocus();
         // For input cut the UserInterface
 
         pView->GetEditWin().LockKeyInput(true);
         pView->GetViewFrame()->GetDispatcher()->Lock(true);
         pWrtShell->Push();
     }
+
     ToolBox::Show();
+
+    // grab focus after ToolBox is shown so focus isn't potentially lost elsewhere
+    if (pView)
+    {
+        int nPos = mxEdit->get_text().getLength();
+        mxEdit->select_region(nPos, nPos);
+        mxEdit->GrabFocus();
+    }
 }
 
 IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
@@ -292,7 +294,7 @@ IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
     if (!aCommand.isEmpty())
     {
         aCommand += " ";
-        aEdit->ReplaceSelected(OStringToOUString(aCommand, RTL_TEXTENCODING_ASCII_US));
+        mxEdit->replace_selection(OStringToOUString(aCommand, RTL_TEXTENCODING_ASCII_US));
     }
     return false;
 }
@@ -337,7 +339,7 @@ void  SwInputWindow::ApplyFormula()
     pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
     // Form should always begin with "=", so remove it here again
-    OUString sEdit(comphelper::string::strip(aEdit->GetText(), ' '));
+    OUString sEdit(comphelper::string::strip(mxEdit->get_text(), ' '));
     if( !sEdit.isEmpty() && '=' == sEdit[0] )
         sEdit = sEdit.copy( 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
@@ -383,9 +385,9 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
         if( pTableFormat && aCurrentTableName != pTableFormat->GetName() )
             sTableNm = pTableFormat->GetName();
 
-        aEdit->UpdateRange( sBoxNms, sTableNm );
+        mxEdit->UpdateRange( sBoxNms, sTableNm );
 
-        OUString sNew = OUStringChar(CH_LRE) + aEdit->GetText()
+        OUString sNew = OUStringChar(CH_LRE) + mxEdit->get_text()
             + OUStringChar(CH_PDF);
 
         if( sNew != sOldFormula )
@@ -408,7 +410,7 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
         }
     }
     else
-        aEdit->GrabFocus();
+        mxEdit->GrabFocus();
 }
 
 void SwInputWindow::SetFormula( const OUString& rFormula )
@@ -421,19 +423,18 @@ void SwInputWindow::SetFormula( const OUString& rFormula )
         else
             sEdit += rFormula;
     }
-    aEdit->SetText( sEdit );
-    aEdit->SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
-    aEdit->Invalidate();
+    mxEdit->set_text( sEdit );
+    mxEdit->select_region(sEdit.getLength(), sEdit.getLength());
     bDelSel = true;
 }
 
-IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, weld::Entry&, void)
 {
     if (bIsTable && m_bResetUndo)
     {
         pWrtShell->StartAllAction();
         DelBoxContent();
-        OUString sNew = OUStringChar(CH_LRE) + aEdit->GetText()
+        OUString sNew = OUStringChar(CH_LRE) + mxEdit->get_text()
             + OUStringChar(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
@@ -457,15 +458,26 @@ void SwInputWindow::DelBoxContent()
     }
 }
 
-void InputEdit::KeyInput(const KeyEvent& rEvent)
+IMPL_LINK(InputEdit, KeyInputHdl, const KeyEvent&, rEvent, bool)
 {
+    bool bHandled = false;
     const vcl::KeyCode aCode = rEvent.GetKeyCode();
-    if(aCode == KEY_RETURN || aCode == KEY_F2 )
-        static_cast<SwInputWindow*>(GetParent())->ApplyFormula();
+    if (aCode == KEY_RETURN || aCode == KEY_F2)
+    {
+        bHandled = ActivateHdl(*m_xWidget);
+    }
     else if(aCode == KEY_ESCAPE )
+    {
         static_cast<SwInputWindow*>(GetParent())->CancelFormula();
-    else
-        Edit::KeyInput(rEvent);
+        bHandled = true;
+    }
+    return bHandled || ChildKeyInput(rEvent);
+}
+
+IMPL_LINK_NOARG(InputEdit, ActivateHdl, weld::Entry&, bool)
+{
+    static_cast<SwInputWindow*>(GetParent())->ApplyFormula();
+    return true;
 }
 
 void InputEdit::UpdateRange(const OUString& rBoxes,
@@ -482,25 +494,29 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     if(!rName.isEmpty())
         aPrefix += ".";
     OUString aBoxes = aPrefix + rBoxes;
-    Selection aSelection(GetSelection());
+
+    int nSelStartPos, nSelEndPos;
+    m_xWidget->get_selection_bounds(nSelStartPos, nSelEndPos);
+
+    Selection aSelection(nSelStartPos, nSelEndPos);
     sal_uInt16 nSel = static_cast<sal_uInt16>(aSelection.Len());
     // OS: The following expression ensures that in the overwrite mode,
     // the selected closing parenthesis will be not deleted.
     if( nSel && ( nSel > 1 ||
-                  GetText()[ static_cast<sal_uInt16>(aSelection.Min()) ] != cClose ))
-        Cut();
+                  m_xWidget->get_text()[ static_cast<sal_uInt16>(aSelection.Min()) ] != cClose ))
+        m_xWidget->cut_clipboard();
     else
         aSelection.Max() = aSelection.Min();
-    OUString aActText(GetText());
+    OUString aActText(m_xWidget->get_text());
     const sal_uInt16 nLen = aActText.getLength();
     if( !nLen )
     {
         OUString aStr = OUStringChar(cOpen) + aBoxes + OUStringChar(cClose);
-        SetText(aStr);
+        m_xWidget->set_text(aStr);
         sal_Int32 nPos = aStr.indexOf( cClose );
         OSL_ENSURE(nPos != -1, "delimiter not found");
         ++nPos;
-        SetSelection( Selection( nPos, nPos ));
+        m_xWidget->select_region(nPos, nPos);
     }
     else
     {
@@ -549,10 +565,10 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
         }
-        if( GetText() != aActText )
+        if( m_xWidget->get_text() != aActText )
         {
-            SetText( aActText );
-            SetSelection( Selection( nPos, nPos ) );
+            m_xWidget->set_text(aActText);
+            m_xWidget->select_region(nPos, nPos);
         }
     }
     GrabFocus();
