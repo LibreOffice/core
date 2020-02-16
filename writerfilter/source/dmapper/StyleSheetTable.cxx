@@ -1071,11 +1071,11 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                         {
                                             if (aSheetProps->sStyleIdentifierD == sBaseId)
                                             {
-                                                StyleSheetPropertyMap* aStyleSheetProps
-                                                    = dynamic_cast<StyleSheetPropertyMap*>(aSheetProps->pProperties.get());
-                                                pStyleSheetProperties->SetListLevel(aStyleSheetProps->GetListLevel());
-                                                pStyleSheetProperties->SetOutlineLevel(aStyleSheetProps->GetOutlineLevel());
-                                                pStyleSheetProperties->SetNumId(aStyleSheetProps->GetNumId());
+                                                StyleSheetPropertyMap& rStyleSheetProps
+                                                    = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
+                                                pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
+                                                pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
+                                                pStyleSheetProperties->SetNumId(rStyleSheetProps.GetNumId());
                                                 break;
                                             }
                                         }
