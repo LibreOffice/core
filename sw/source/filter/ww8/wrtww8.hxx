@@ -634,7 +634,8 @@ public:
     }
 
     /// Find the reference.
-    bool HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
+    bool HasRefToAttr(const OUString& rName);
+    bool HasRefToFootOrEndnote(const bool isEndNote, const sal_uInt16 nSeqNo);
 
     /// Find the bookmark name.
     static OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
