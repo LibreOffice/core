@@ -152,22 +152,6 @@ void InteractionContinuation::recordSelection()
 
 
 // virtual
-void SAL_CALL InteractionAbort::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionAbort::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
 uno::Any SAL_CALL
 InteractionAbort::queryInterface( const uno::Type & rType )
 {
@@ -216,22 +200,6 @@ void SAL_CALL InteractionAbort::select()
 
 
 // XInterface methods.
-
-
-// virtual
-void SAL_CALL InteractionRetry::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionRetry::release()
-    throw()
-{
-    OWeakObject::release();
-}
 
 
 // virtual
@@ -286,22 +254,6 @@ void SAL_CALL InteractionRetry::select()
 
 
 // virtual
-void SAL_CALL InteractionApprove::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionApprove::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
 uno::Any SAL_CALL
 InteractionApprove::queryInterface( const uno::Type & rType )
 {
@@ -353,22 +305,6 @@ void SAL_CALL InteractionApprove::select()
 
 
 // virtual
-void SAL_CALL InteractionDisapprove::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionDisapprove::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
 uno::Any SAL_CALL
 InteractionDisapprove::queryInterface( const uno::Type & rType )
 {
@@ -417,22 +353,6 @@ void SAL_CALL InteractionDisapprove::select()
 
 
 // XInterface methods.
-
-
-// virtual
-void SAL_CALL InteractionSupplyAuthentication::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionSupplyAuthentication::release()
-    throw()
-{
-    OWeakObject::release();
-}
 
 
 // virtual
@@ -627,22 +547,6 @@ void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
 
 
 // virtual
-void SAL_CALL InteractionReplaceExistingData::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionReplaceExistingData::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-// virtual
 uno::Any SAL_CALL
 InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
 {
@@ -690,20 +594,6 @@ void SAL_CALL InteractionReplaceExistingData::select()
 // InteractionAuthFallback Implementation
 
 // XInterface methods.
-
-// virtual
-void SAL_CALL InteractionAuthFallback::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-// virtual
-void SAL_CALL InteractionAuthFallback::release()
-    throw()
-{
-    OWeakObject::release();
-}
 
 // virtual
 uno::Any SAL_CALL

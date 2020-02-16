@@ -264,16 +264,6 @@ uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxUnoDrawingModel::acquire() throw ( )
-{
-    SfxBaseModel::acquire();
-}
-
-void SAL_CALL SvxUnoDrawingModel::release() throw ( )
-{
-    SfxBaseModel::release();
-}
-
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
 {

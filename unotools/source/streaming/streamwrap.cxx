@@ -240,16 +240,6 @@ Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
     return aReturn;
 }
 
-void SAL_CALL OSeekableOutputStreamWrapper::acquire(  ) throw ()
-{
-    OOutputStreamWrapper::acquire();
-}
-
-void SAL_CALL OSeekableOutputStreamWrapper::release(  ) throw ()
-{
-    OOutputStreamWrapper::release();
-}
-
 void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
 {
     rStream.Seek(static_cast<sal_uInt32>(_nLocation));

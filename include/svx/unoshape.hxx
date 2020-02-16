@@ -376,8 +376,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShape::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShape::release(); }
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -407,8 +409,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { OWeakAggObject::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { OWeakAggObject::release(); }
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
@@ -436,8 +440,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShape::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShape::release(); }
 
     // XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
@@ -485,8 +491,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShapeText::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShapeText::release(); }
 
     // XShapeDescriptor
     virtual OUString SAL_CALL getShapeType() override;
@@ -524,8 +532,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShapeText::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShapeText::release(); }
 
     // XPropertySet
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -671,8 +681,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShape::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShape::release(); }
 
     // XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
@@ -804,8 +816,10 @@ public:
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() throw() override;
-    virtual void SAL_CALL release() throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { SvxShapeText::acquire(); }
+    virtual void SAL_CALL release() throw() override
+    { SvxShapeText::release(); }
 
     // XShape
     virtual css::awt::Point SAL_CALL getPosition() override;

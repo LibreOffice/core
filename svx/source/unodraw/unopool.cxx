@@ -340,16 +340,6 @@ uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxUnoDrawPool::acquire() throw ( )
-{
-    OWeakAggObject::acquire();
-}
-
-void SAL_CALL SvxUnoDrawPool::release() throw ( )
-{
-    OWeakAggObject::release();
-}
-
 uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
 {
     static const uno::Sequence aTypes {
