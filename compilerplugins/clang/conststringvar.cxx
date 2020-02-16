@@ -27,17 +27,24 @@ public:
     explicit ConstStringVar(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
+    bool preRun() override {
+        return compiler.getLangOpts().CPlusPlus;
+            // clang::Expr::isCXX11ConstantExpr only works for C++
+    }
+
+    void postRun() override {
+        for (auto v: vars_) {
+            report(
+                DiagnosticsEngine::Warning,
+                "variable is only used as rvalue, should be const",
+                v->getLocation())
+                << v->getSourceRange();
+        }
+    }
+
     void run() override {
-        if (compiler.getLangOpts().CPlusPlus) {
-                // clang::Expr::isCXX11ConstantExpr only works for C++
-            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-            for (auto v: vars_) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    "variable is only used as rvalue, should be const",
-                    v->getLocation())
-                    << v->getSourceRange();
-            }
+        if (preRun() && TraverseDecl(compiler.getASTContext().getTranslationUnitDecl())) {
+            postRun();
         }
     }
 
