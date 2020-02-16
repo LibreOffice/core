@@ -166,6 +166,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/indentpage \
 	sw/uiconfig/swriter/ui/infonotfounddialog \
 	sw/uiconfig/swriter/ui/inforeadonlydialog \
+	sw/uiconfig/swriter/ui/inputeditbox \
 	sw/uiconfig/swriter/ui/insertautotextdialog \
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
