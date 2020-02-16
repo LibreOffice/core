@@ -23,7 +23,6 @@
 
 namespace chart
 {
-
 class MutexContainer
 {
 protected:

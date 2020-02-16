@@ -21,7 +21,6 @@
 
 namespace chart
 {
-
 #define CHART_MODEL_SERVICE_IMPLEMENTATION_NAME "com.sun.star.comp.chart2.ChartModel"
 #define CHART_MODEL_SERVICE_NAME "com.sun.star.chart2.ChartDocument"
 //@todo create your own service containing the service com.sun.star.document.OfficeDocument

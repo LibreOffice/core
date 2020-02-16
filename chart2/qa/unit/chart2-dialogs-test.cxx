@@ -36,9 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-Chart2DialogsTest::Chart2DialogsTest()
-{
-}
+Chart2DialogsTest::Chart2DialogsTest() {}
 
 void Chart2DialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {
