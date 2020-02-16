@@ -26,6 +26,7 @@
 
 #include "swdllapi.h"
 #include "calbck.hxx"
+#include "ndindex.hxx"
 
 class SwField;
 class SwTextField;
@@ -55,6 +56,10 @@ namespace sw {
     struct HasHiddenInformationNotesHint final : SfxHint {
         bool& m_rbHasHiddenInformationNotes;
         HasHiddenInformationNotesHint(bool& rbHasHiddenInformationNotes) : m_rbHasHiddenInformationNotes(rbHasHiddenInformationNotes) {};
+    };
+    struct GatherNodeIndexHint final : SfxHint {
+        std::vector<sal_uLong>& m_rvNodeIndex;
+        GatherNodeIndexHint(std::vector<sal_uLong>& rvNodeIndex) : m_rvNodeIndex(rvNodeIndex) {};
     };
 }
 

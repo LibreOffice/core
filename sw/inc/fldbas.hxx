@@ -22,6 +22,8 @@
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
 #include "calbck.hxx"
+#include "ndindex.hxx"
+
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
 #include <vector>
@@ -274,6 +276,7 @@ public:
     SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
     void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
     bool HasHiddenInformationNotes();
+    void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
 };
 
 inline void SwFieldType::UpdateFields() const
