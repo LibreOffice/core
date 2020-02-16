@@ -31,7 +31,6 @@
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <svtools/calendar.hxx>
-#include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
 #include <table/tablecontrol.hxx>
 
@@ -96,12 +95,6 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const cs
         SVTXDateField * newComp = new SVTXDateField;
         *ppNewComp = newComp;
         newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pWindow)) );
-    }
-    else if ( aServiceName.equalsIgnoreAsciiCase( "Tree" ) )
-    {
-        TreeControlPeer* pPeer = new TreeControlPeer;
-        *ppNewComp = pPeer;
-        pWindow = pPeer->createVclControl( pParent, nWinBits );
     }
     else if ( aServiceName.equalsIgnoreAsciiCase( "Grid" ) )
     {

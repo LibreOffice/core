@@ -13271,8 +13271,6 @@ svtools/source/uno/statusbarcontroller.cxx
 svtools/source/uno/svtxgridcontrol.cxx
 svtools/source/uno/svtxgridcontrol.hxx
 svtools/source/uno/toolboxcontroller.cxx
-svtools/source/uno/treecontrolpeer.cxx
-svtools/source/uno/treecontrolpeer.hxx
 svtools/source/uno/unocontroltablemodel.cxx
 svtools/source/uno/unocontroltablemodel.hxx
 svtools/source/uno/unoevent.cxx
@@ -15923,6 +15921,7 @@ toolkit/inc/controls/stdtabcontroller.hxx
 toolkit/inc/controls/stdtabcontrollermodel.hxx
 toolkit/inc/controls/tabpagecontainer.hxx
 toolkit/inc/controls/tabpagemodel.hxx
+toolkit/inc/controls/treecontrolpeer.hxx
 toolkit/inc/controls/tkscrollbar.hxx
 toolkit/inc/controls/unocontrolcontainer.hxx
 toolkit/inc/controls/unocontrolcontainermodel.hxx
@@ -15987,6 +15986,7 @@ toolkit/source/controls/tkscrollbar.cxx
 toolkit/source/controls/tkspinbutton.cxx
 toolkit/source/controls/tree/treecontrol.cxx
 toolkit/source/controls/tree/treecontrol.hxx
+toolkit/source/controls/tree/treecontrolpeer.cxx
 toolkit/source/controls/tree/treedatamodel.cxx
 toolkit/source/controls/unocontrol.cxx
 toolkit/source/controls/unocontrolbase.cxx

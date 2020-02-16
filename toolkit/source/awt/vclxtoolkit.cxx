@@ -79,6 +79,7 @@
 
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
+#include <controls/treecontrolpeer.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
@@ -1807,6 +1808,12 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 {
                     pNewWindow = VclPtr<FileControl>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXFileControl;
+                }
+                else if (aServiceName == "tree")
+                {
+                    TreeControlPeer* pPeer = new TreeControlPeer;
+                    *ppNewComp = pPeer;
+                    pNewWindow = pPeer->createVclControl( pParent, nWinBits );
                 }
             break;
             default:
