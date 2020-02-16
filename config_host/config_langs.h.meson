@@ -1,0 +1,10 @@
+/* Configuration of restriction on supported ui languages, by the
+ * --with-lang option.
+ */
+
+#ifndef CONFIG_LANGS_H
+#define CONFIG_LANGS_H
+
+#define WITH_LANG ""
+
+#endif

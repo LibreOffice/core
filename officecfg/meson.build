@@ -26,4 +26,18 @@ system_hxx = custom_target('System.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+vcl_hxx = custom_target('VCL.hxx',
+  output: 'VCL.hxx',
+  input: ['registry/cppheader.xsl',
+          'registry/schema/org/openoffice/VCL.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'VCL',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+
 setup_inc = include_directories('..') # HACK

@@ -76,6 +76,8 @@ cdata.set10('DBUS_HAVE_GLIB', true) # ???
 
 cdata.set10('ENABLE_GIO', gio_dep.found())
 
+cdata.set_quoted('OOO_VENDOR', 'Vogon high comman')
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -158,4 +160,16 @@ configure_file(input: 'config_dbus.h.meson',
 
 configure_file(input: 'config_gio.h.meson',
   output: 'config_gio.h',
+  configuration: cdata)
+
+configure_file(input: 'config_oauth2.h.meson',
+  output: 'config_oauth2.h',
+  configuration: cdata)
+
+configure_file(input: 'config_langs.h.meson',
+  output: 'config_langs.h',
+  configuration: cdata)
+
+configure_file(input: 'config_vendor.h.meson',
+  output: 'config_vendor.h',
   configuration: cdata)
