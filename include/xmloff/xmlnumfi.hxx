@@ -35,15 +35,15 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 
 #define XML_NUMBERSTYLES "NumberStyles"
 
-enum SvXMLStylesTokens
+enum class SvXMLStylesTokens
 {
-    XML_TOK_STYLES_NUMBER_STYLE,
-    XML_TOK_STYLES_CURRENCY_STYLE,
-    XML_TOK_STYLES_PERCENTAGE_STYLE,
-    XML_TOK_STYLES_DATE_STYLE,
-    XML_TOK_STYLES_TIME_STYLE,
-    XML_TOK_STYLES_BOOLEAN_STYLE,
-    XML_TOK_STYLES_TEXT_STYLE
+    NUMBER_STYLE,
+    CURRENCY_STYLE,
+    PERCENTAGE_STYLE,
+    DATE_STYLE,
+    TIME_STYLE,
+    BOOLEAN_STYLE,
+    TEXT_STYLE
 };
 
 enum SvXMLDateElementAttributes
@@ -88,6 +88,11 @@ public:
                 const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                 SvXMLStylesContext& rStyles);
 
+    SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                SvXMLStylesContext& rStyles);
+
     SvXMLNumImpData* getData() { return pData.get(); }
 
     const SvXMLTokenMap&    GetStylesElemTokenMap();
@@ -119,7 +124,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     SvXMLNumImpData*    pData;
     SvXMLStylesContext* const   pStyles;
     std::vector <MyCondition>   aMyConditions;
-    sal_uInt16 const          nType;
+    SvXMLStylesTokens const     nType;
     sal_Int32           nKey;
 //  OUString       sFormatName;
     OUString       sFormatTitle;
@@ -153,11 +158,16 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                sal_uInt16 nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumImpData* pNewData,
-                                    sal_uInt16 nNewType,
+                                    SvXMLStylesTokens nNewType,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                                    SvXMLStylesContext& rStyles );
+                SvXMLNumFormatContext( SvXMLImport& rImport,
+                                    SvXMLNumImpData* pNewData,
+                                    SvXMLStylesTokens nNewType,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx,
@@ -176,7 +186,7 @@ public:
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
     sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
-    sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
+    SvXMLStylesTokens GetType() const           { return nType; }   // SvXMLStylesTokens
 
     bool HasLongDoW() const                     { return bHasLongDoW; }
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }

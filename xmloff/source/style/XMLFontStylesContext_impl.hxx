@@ -45,15 +45,14 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
 public:
 
 
-    XMLFontStyleContextFontFace( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference<
-                css::xml::sax::XAttributeList > & xAttrList,
+    XMLFontStyleContextFontFace( SvXMLImport& rImport,
             XMLFontStylesContext& rStyles );
     virtual ~XMLFontStyleContextFontFace() override;
 
-    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-                       const OUString& rValue ) override;
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                                   const OUString& rLocalName,
+                                   const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 
     void FillProperties( ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
@@ -107,8 +106,10 @@ public:
                 css::xml::sax::XAttributeList > & xAttrList,
             const XMLFontStyleContextFontFace& font );
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue ) override;
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                                   const OUString& rLocalName,
+                                   const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
     void SetFormat( const OUString& rFormat );
     void EndElement() override;
     SvXMLImportContextRef CreateChildContext(
@@ -129,8 +130,10 @@ public:
                 css::xml::sax::XAttributeList > & xAttrList,
             XMLFontStyleContextFontFaceUri& uri );
 
-    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
-        const OUString& rValue ) override;
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                                   const OUString& rLocalName,
+                                   const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 };
 
 #endif

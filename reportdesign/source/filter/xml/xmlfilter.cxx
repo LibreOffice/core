@@ -97,7 +97,7 @@ public:
 
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -107,7 +107,7 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl( ORptFilter& rImpor
 {
 }
 
-void RptMLMasterStylesContext_Impl::EndElement()
+void RptMLMasterStylesContext_Impl::endFastElement(sal_Int32 )
 {
     FinishStyles( true );
     GetImport().FinishStyles();
@@ -642,6 +642,7 @@ public:
         }
         return nullptr;
     }
+
 };
 
 }
@@ -701,6 +702,7 @@ public:
         }
         return nullptr;
     }
+
 };
 
 }

@@ -44,8 +44,9 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     bool const                  bOutline : 1;
 
     SAL_DLLPRIVATE virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+                                   const OUString& rLocalName,
+                                   const OUString& rValue ) override;
+    SAL_DLLPRIVATE virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 
 public:
 
@@ -59,8 +60,6 @@ public:
 
     SvxXMLListStyleContext(
             SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             bool bOutl = false );
 
     ~SvxXMLListStyleContext() override;

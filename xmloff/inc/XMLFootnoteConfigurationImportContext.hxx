@@ -51,22 +51,22 @@ class XMLFootnoteConfigurationImportContext final : public SvXMLStyleContext
     bool bPosition;
     bool bIsEndnote;
 
-    /// parse attributes
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
 public:
-
 
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
+        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
 
     virtual ~XMLFootnoteConfigurationImportContext() override;
 
+    /// parse attributes
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+
     /// for footnotes, also parse begin and end notices
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

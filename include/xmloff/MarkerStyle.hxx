@@ -28,7 +28,7 @@ class SvXMLImport;
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace uno { template<class A> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax { class XFastAttributeList; } }
     namespace uno { class Any; }
 } } }
 
@@ -42,7 +42,7 @@ public:
     ~XMLMarkerStyleImport();
 
     void importXML(
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );
 };

@@ -38,15 +38,13 @@ protected:
     OUString     m_sListStyleName;
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+                                   const OUString& rLocalName,
+                                   const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 public:
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         XmlStyleFamily nFamily);
     virtual ~XMLShapeStyleContext() override;

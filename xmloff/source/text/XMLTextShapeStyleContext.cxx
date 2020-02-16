@@ -138,15 +138,25 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
+void XMLTextShapeStyleContext::SetAttribute( sal_Int32 nElement,
+                                        const OUString& rValue )
+{
+    if( nElement == XML_ELEMENT(STYLE, XML_AUTO_UPDATE) )
+    {
+          if( IsXMLToken( rValue, XML_TRUE ) )
+            bAutoUpdate = true;
+    }
+    else
+    {
+        XMLShapeStyleContext::SetAttribute( nElement, rValue );
+    }
+}
 
 static const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-    XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
-                          nFamily ),
+    XMLShapeStyleContext( rImport, rStyles, nFamily ),
     bAutoUpdate( false )
 {
 }

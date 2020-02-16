@@ -2020,6 +2020,8 @@ const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 
 OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
 {
+    // return URI and prefix and name, used for debugging issues with fast-parser importing
+    // where the URI is often some old compatibility namespace
     OUString rv;
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );

@@ -63,10 +63,9 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
 static const OUStringLiteral gsFollowStyle( "FollowStyle" );
 
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        const Reference< XFastAttributeList > & xAttrList,
         bool bOverwrite )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::MASTER_PAGE )
+:   SvXMLStyleContext( rImport, XmlStyleFamily::MASTER_PAGE )
 ,   bInsertHeader( false )
 ,   bInsertFooter( false )
 ,   bInsertHeaderLeft( false )
@@ -77,31 +76,29 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 ,   bFooterInserted( false )
 {
     OUString sName, sDisplayName;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if( XML_NAMESPACE_STYLE == nPrefix )
+        OUString sValue = aIter.toString();
+        if( aIter.getToken() == XML_ELEMENT(STYLE, XML_NAME) )
         {
-            if( IsXMLToken( aLocalName, XML_NAME ) )
-            {
-                sName = xAttrList->getValueByIndex( i );
-            }
-            else if( IsXMLToken( aLocalName, XML_DISPLAY_NAME ) )
-            {
-                sDisplayName = xAttrList->getValueByIndex( i );
-            }
-            else if( IsXMLToken( aLocalName, XML_NEXT_STYLE_NAME ) )
-            {
-                sFollow = xAttrList->getValueByIndex( i );
-            }
-            else if( IsXMLToken( aLocalName, XML_PAGE_LAYOUT_NAME ) )
-            {
-                sPageMasterName = xAttrList->getValueByIndex( i );
-            }
+            sName = sValue;
         }
+        else if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DISPLAY_NAME) )
+        {
+            sDisplayName = sValue;
+        }
+        else if( aIter.getToken() == XML_ELEMENT(STYLE, XML_NEXT_STYLE_NAME) )
+        {
+            sFollow = sValue;
+        }
+        else if( aIter.getToken() == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME) )
+        {
+            sPageMasterName = sValue;
+        }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
 
     if( !sDisplayName.isEmpty() )

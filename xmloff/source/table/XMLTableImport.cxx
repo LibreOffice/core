@@ -154,7 +154,7 @@ public:
 class XMLTableTemplateContext : public SvXMLStyleContext
 {
 public:
-    XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
+    XMLTableTemplateContext( SvXMLImport& rImport );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
@@ -231,9 +231,9 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const 
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
 }
 
-SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext()
 {
-    return new XMLTableTemplateContext( mrImport, nPrfx, rLName, xAttrList );
+    return new XMLTableTemplateContext( mrImport );
 }
 
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
@@ -740,8 +740,8 @@ void XMLCellImportContext::EndElement()
 }
 
 
-XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport )
+: SvXMLStyleContext( rImport, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
 {
 }
 
