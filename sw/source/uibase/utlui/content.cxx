@@ -3453,9 +3453,13 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             }
             else if (eTypeId == ContentTypeId::REGION)
             {
+                m_pActiveShell->EnterStdMode();
                 m_pActiveShell->GotoRegion(pCnt->GetName());
-                m_pActiveShell->Right(CRSR_SKIP_CHARS, false, 1, false );
-                m_pActiveShell->SelAll();
+                GotoCurrRegionAndSkip(m_pActiveShell->GetCurrentShellCursor(), fnRegionEnd, m_pActiveShell->IsReadOnlyAvailable());
+                m_pActiveShell->SttSelect();
+                GotoCurrRegionAndSkip(m_pActiveShell->GetCurrentShellCursor(), fnRegionStart, m_pActiveShell->IsReadOnlyAvailable());
+                m_pActiveShell->EndSelect();
+                m_pActiveShell->UpdateCursor();
             }
             m_pActiveShell->LeaveAddMode();
         }
