@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,unoxml,\
     CppunitTest_unoxml_domtest \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,unoxml,\
+$(eval $(call gb_Module_add_javacheck_targets,unoxml,\
     JunitTest_unoxml_complex \
     JunitTest_unordf_complex \
 ))

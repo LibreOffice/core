@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_check_targets,toolkit,\
 endif
 
 ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,toolkit,\
+$(eval $(call gb_Module_add_javacheck_targets,toolkit,\
     JunitTest_toolkit_complex \
     JunitTest_toolkit_unoapi_1 \
     JunitTest_toolkit_unoapi_2 \

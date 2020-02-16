@@ -17,7 +17,7 @@ $(eval $(call gb_Module_add_l10n_targets,forms,\
     AllLangMoTarget_frm \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,forms,\
+$(eval $(call gb_Module_add_javacheck_targets,forms,\
     JunitTest_forms_unoapi_1 \
     JunitTest_forms_unoapi_2 \
     JunitTest_forms_unoapi_3 \

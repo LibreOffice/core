@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_check_targets,xmloff,\
 		CppunitTest_xmloff_uxmloff) \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
+$(eval $(call gb_Module_add_javacheck_targets,xmloff,\
     JunitTest_xmloff_unoapi \
 ))
 

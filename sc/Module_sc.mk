@@ -95,13 +95,6 @@ endif
 # CppunitTest_sc_chart_regression_test \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-	JunitTest_sc_complex \
-	JunitTest_sc_unoapi_1 \
-	JunitTest_sc_unoapi_2 \
-	JunitTest_sc_unoapi_3 \
-	JunitTest_sc_unoapi_4 \
-	JunitTest_sc_unoapi_6 \
-	JunitTest_sc_unoapi_7 \
 	CppunitTest_sc_anchor_test \
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationshapeobj \
@@ -210,6 +203,16 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \
+))
+
+$(eval $(call gb_Module_add_javacheck_targets,sc,\
+	JunitTest_sc_complex \
+	JunitTest_sc_unoapi_1 \
+	JunitTest_sc_unoapi_2 \
+	JunitTest_sc_unoapi_3 \
+	JunitTest_sc_unoapi_4 \
+	JunitTest_sc_unoapi_6 \
+	JunitTest_sc_unoapi_7 \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
