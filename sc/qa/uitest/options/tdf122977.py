@@ -19,6 +19,7 @@ class chartDefaultColors(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
+
         #Go to Tools -> Options -> Charts -> Default Colors
         self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
         xDialogOpt = self.xUITest.getTopFocusWindow()
@@ -32,12 +33,14 @@ class chartDefaultColors(UITestCase):
         xAdd = xDialogOpt.getChild("add")
         xDelete = xDialogOpt.getChild("delete")
         xDefault = xDialogOpt.getChild("default")
+
         #click Default - reset
         xDefault.executeAction("CLICK", tuple())
-        nrDefaultColors = get_state_as_dict(xColors)["EntryCount"]
+        nrDefaultColors = get_state_as_dict(xColors)["Children"]
         nrDefaultColors1 = int(nrDefaultColors) + 1
         xAdd.executeAction("CLICK", tuple())    #add new color
-        self.assertEqual(get_state_as_dict(xColors)["EntryCount"], str(nrDefaultColors1))
+        self.assertEqual(get_state_as_dict(xColors)["Children"], str(nrDefaultColors1))
+
         #delete new color
         def handle_delete_dlg(dialog):
             xyesBtn = dialog.getChild("yes")
@@ -45,13 +48,13 @@ class chartDefaultColors(UITestCase):
 
         self.ui_test.execute_blocking_action(xDelete.executeAction, args=('CLICK', ()),
                 dialog_handler=handle_delete_dlg)
-        self.assertEqual(get_state_as_dict(xColors)["EntryCount"], nrDefaultColors)
+        self.assertEqual(get_state_as_dict(xColors)["Children"], nrDefaultColors)
 
         xAdd.executeAction("CLICK", tuple())    #add new color
-        self.assertEqual(get_state_as_dict(xColors)["EntryCount"], str(nrDefaultColors1))
+        self.assertEqual(get_state_as_dict(xColors)["Children"], str(nrDefaultColors1))
         #click Default
         xDefault.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(xColors)["EntryCount"], nrDefaultColors)
+        self.assertEqual(get_state_as_dict(xColors)["Children"], nrDefaultColors)
 
         xCancelBtn = xDialogOpt.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
