@@ -23,13 +23,13 @@
 
 namespace chart
 {
-
 /** dialog for paragraph properties of shapes
  */
 class ShapeParagraphDialog : public SfxTabDialogController
 {
 public:
     ShapeParagraphDialog(weld::Window* pParent, const SfxItemSet* pAttr);
+
 private:
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 };

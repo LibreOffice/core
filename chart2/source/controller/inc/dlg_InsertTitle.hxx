@@ -28,12 +28,12 @@ namespace chart
 class SchTitleDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<TitleResources>  m_xTitleResources;
+    std::unique_ptr<TitleResources> m_xTitleResources;
 
 public:
     SchTitleDlg(weld::Window* pParent, const TitleDialogData& rInput);
 
-    void getResult( TitleDialogData& rOutput );
+    void getResult(TitleDialogData& rOutput);
 };
 
 } //namespace chart

@@ -23,7 +23,6 @@
 
 namespace chart
 {
-
 TextDirectionListBox::TextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
     : svx::FrameDirectionListBox(std::move(pControl))
 {

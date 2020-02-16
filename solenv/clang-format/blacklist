@@ -848,7 +848,6 @@ chart2/qa/extras/chart2export.cxx
 chart2/qa/extras/chart2import.cxx
 chart2/qa/extras/charttest.hxx
 chart2/qa/extras/xshape/chart2xshape.cxx
-chart2/qa/unit/chart2-dialogs-test.cxx
 chart2/qa/unit/common_functor_test.cxx
 chart2/source/controller/accessibility/AccessibleBase.cxx
 chart2/source/controller/accessibility/AccessibleChartElement.cxx
@@ -930,7 +929,6 @@ chart2/source/controller/dialogs/DialogModel.hxx
 chart2/source/controller/dialogs/ObjectNameProvider.cxx
 chart2/source/controller/dialogs/RangeSelectionHelper.cxx
 chart2/source/controller/dialogs/RangeSelectionListener.cxx
-chart2/source/controller/dialogs/TextDirectionListBox.cxx
 chart2/source/controller/dialogs/TimerTriggeredControllerLock.cxx
 chart2/source/controller/dialogs/TitleDialogData.cxx
 chart2/source/controller/dialogs/dlg_ChartType.cxx
@@ -1041,13 +1039,9 @@ chart2/source/controller/inc/dlg_CreationWizard_UNO.hxx
 chart2/source/controller/inc/dlg_DataEditor.hxx
 chart2/source/controller/inc/dlg_DataSource.hxx
 chart2/source/controller/inc/dlg_InsertAxis_Grid.hxx
-chart2/source/controller/inc/dlg_InsertDataLabel.hxx
 chart2/source/controller/inc/dlg_InsertErrorBars.hxx
 chart2/source/controller/inc/dlg_InsertLegend.hxx
-chart2/source/controller/inc/dlg_InsertTitle.hxx
 chart2/source/controller/inc/dlg_ObjectProperties.hxx
-chart2/source/controller/inc/dlg_ShapeFont.hxx
-chart2/source/controller/inc/dlg_ShapeParagraph.hxx
 chart2/source/controller/inc/dlg_View3D.hxx
 chart2/source/controller/inc/helpids.h
 chart2/source/controller/inc/res_ErrorBar.hxx
@@ -1142,7 +1136,6 @@ chart2/source/controller/sidebar/ChartSidebarSelectionListener.cxx
 chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx
 chart2/source/controller/uitest/uiobject.cxx
 chart2/source/inc/AxisHelper.hxx
-chart2/source/inc/AxisIndexDefines.hxx
 chart2/source/inc/BaseGFXHelper.hxx
 chart2/source/inc/CachedDataSequence.hxx
 chart2/source/inc/CharacterProperties.hxx
@@ -1179,7 +1172,6 @@ chart2/source/inc/MeanValueRegressionCurveCalculator.hxx
 chart2/source/inc/MediaDescriptorHelper.hxx
 chart2/source/inc/ModifyListenerHelper.hxx
 chart2/source/inc/MovingAverageRegressionCurveCalculator.hxx
-chart2/source/inc/MutexContainer.hxx
 chart2/source/inc/NameContainer.hxx
 chart2/source/inc/NumberFormatterWrapper.hxx
 chart2/source/inc/OPropertySet.hxx
@@ -1198,11 +1190,9 @@ chart2/source/inc/RelativeSizeHelper.hxx
 chart2/source/inc/ResId.hxx
 chart2/source/inc/Scaling.hxx
 chart2/source/inc/SceneProperties.hxx
-chart2/source/inc/StackMode.hxx
 chart2/source/inc/StatisticsHelper.hxx
 chart2/source/inc/ThreeDHelper.hxx
 chart2/source/inc/TitleHelper.hxx
-chart2/source/inc/TrueGuard.hxx
 chart2/source/inc/UncachedDataSequence.hxx
 chart2/source/inc/UserDefinedProperties.hxx
 chart2/source/inc/WeakListenerAdapter.hxx
@@ -1217,7 +1207,6 @@ chart2/source/inc/chartview/DataPointSymbolSupplier.hxx
 chart2/source/inc/chartview/DrawModelWrapper.hxx
 chart2/source/inc/chartview/ExplicitScaleValues.hxx
 chart2/source/inc/chartview/ExplicitValueProvider.hxx
-chart2/source/inc/servicenames.hxx
 chart2/source/inc/servicenames_charttypes.hxx
 chart2/source/inc/servicenames_coosystems.hxx
 chart2/source/model/filter/XMLFilter.cxx

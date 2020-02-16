@@ -23,7 +23,6 @@
 
 namespace chart
 {
-
 class ViewElementListProvider;
 
 /** dialog for font properties of shapes
@@ -32,7 +31,8 @@ class ShapeFontDialog : public SfxTabDialogController
 {
 public:
     ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
-        const ViewElementListProvider* pViewElementListProvider);
+                    const ViewElementListProvider* pViewElementListProvider);
+
 private:
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 

@@ -35,7 +35,8 @@ private:
     std::unique_ptr<DataLabelResources> m_apDataLabelResources;
 
 public:
-    DataLabelsDialog(weld::Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
+    DataLabelsDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
+                     SvNumberFormatter* pFormatter);
     virtual ~DataLabelsDialog() override;
 
     void FillItemSet(SfxItemSet& rOutAttrs);

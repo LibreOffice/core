@@ -21,7 +21,6 @@
 
 namespace chart
 {
-
 // needed for chart type templates
 
 enum class StackMode

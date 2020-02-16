@@ -26,13 +26,12 @@ namespace chart
 class TrueGuard final
 {
 public:
-    explicit TrueGuard( bool& rbTrueDuringGuardedTime );
+    explicit TrueGuard(bool& rbTrueDuringGuardedTime);
     ~TrueGuard();
 
 private:
     bool& m_rbTrueDuringGuardedTime;
 };
-
 }
 // INCLUDED_CHART2_SOURCE_INC_TRUEGUARD_HXX
 #endif
