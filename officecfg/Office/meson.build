@@ -46,3 +46,18 @@ basicide_hxx = custom_target('BasicIDE.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+paths_hxx = custom_target('Paths.hxx',
+  output: 'Paths.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Paths.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Paths',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
