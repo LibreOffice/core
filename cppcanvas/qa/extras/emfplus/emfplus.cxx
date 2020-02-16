@@ -24,14 +24,16 @@ using namespace com::sun::star;
 class Test : public UnoApiTest
 {
 public:
-    Test() : UnoApiTest("/cppcanvas/qa/extras/emfplus/data/")
+    Test()
+        : UnoApiTest("/cppcanvas/qa/extras/emfplus/data/")
     {
     }
 
     virtual void setUp() override
     {
         UnoApiTest::setUp();
-        mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+        mxDesktop.set(
+            frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
         SfxApplication::GetOrCreate();
     };
 

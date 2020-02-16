@@ -25,4 +25,3 @@
 #define MYSQL_CHARSET ""
 #endif
 #endif
-

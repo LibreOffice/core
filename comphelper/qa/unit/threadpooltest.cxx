@@ -26,8 +26,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void ThreadPoolTest::testPreferredConcurrency() {
-
+void ThreadPoolTest::testPreferredConcurrency()
+{
     // Check default.
     auto nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     sal_Int32 nExpected = 4; // UTs are capped to 4.
