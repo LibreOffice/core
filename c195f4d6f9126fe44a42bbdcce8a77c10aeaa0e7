@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "097fca84_ffffbc04",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "see my comment made here for patch set 10",
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c228eedc_cd600fbc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "Why not keep the original code and compare to a default style passed to the function like what is done now for non hierarchical views?",
+      "range": {
+        "startLine": 615,
+        "startChar": 0,
+        "endLine": 621,
+        "endChar": 11
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0035994_39c1dc62",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "could use eFam here",
+      "range": {
+        "startLine": 1086,
+        "startChar": 35,
+        "endLine": 1086,
+        "endChar": 53
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4971d53b_1d667fa2",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "I prefer OUString() but \"\" is acceptable.",
+      "range": {
+        "startLine": 1158,
+        "startChar": 11,
+        "endLine": 1158,
+        "endChar": 14
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40bea150_4fbd8fe5",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "LO code style convention seems to use \u0027p\u0027 as the first character for pointer variable names. I have seen both \u0027a\u0027 and \u0027s\u0027 used as the first character for string variable naming.\n\nConsider using a more descriptive name than NameItem. It seems the variable is used for a families internal default style name.",
+      "range": {
+        "startLine": 1259,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 24
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f081bd6_2f0e90a4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "Does table styles non hierarchical views work as expected? Shouldn\u0027t this be \"Default Style\"? \n\ncode nit-pick: one space before and after \u003d\u003d\n               one space after \u003d",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 38
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08675524_9e847548",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "it is probably better to add aUIName to the lambda capture []\nmaybe look for information about lambda function capturing local variables",
+      "range": {
+        "startLine": 1266,
+        "startChar": 0,
+        "endLine": 1266,
+        "endChar": 28
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ed05efc_71b5722e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-16T21:33:16Z",
+      "side": 1,
+      "message": "Is there reason for const removal for rLHS and rRHS?\n\nmore code format nit-picks: space before and after \u003d\u003d",
+      "range": {
+        "startLine": 1287,
+        "startChar": 0,
+        "endLine": 1292,
+        "endChar": 51
+      },
+      "revId": "c195f4d6f9126fe44a42bbdcce8a77c10aeaa0e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
