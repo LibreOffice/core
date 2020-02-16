@@ -25,6 +25,16 @@ enum E
 int const c1 = 1;
 constexpr int c2 = 2;
 
+struct S
+{
+    S()
+    // expected-error-re@+1 {{implicit conversion of constant {{nullptr|0}} of type 'nullptr_t' to 'bool'; use 'false' instead [loplugin:consttobool]}}
+    : b(nullptr)
+    {
+    }
+    bool b;
+};
+
 int main()
 {
     bool b;
@@ -32,8 +42,6 @@ int main()
     b = 0;
     // expected-error@+1 {{implicit conversion of constant 1 of type 'sal_Bool' (aka 'unsigned char') to 'bool'; use 'true' instead [loplugin:consttobool]}}
     b = sal_True;
-    // expected-error-re@+1 {{implicit conversion of constant {{nullptr|0}} of type 'nullptr_t' to 'bool'; use 'false' instead [loplugin:consttobool]}}
-    b = nullptr;
     // expected-error@+1 {{implicit conversion of constant 1.000000e+00 of type 'double' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     b = 1.0;
     // expected-error@+1 {{implicit conversion of constant 2 of type 'E' to 'bool'; use 'true' instead [loplugin:consttobool]}}
