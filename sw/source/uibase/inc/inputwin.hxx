@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 
+#include <sfx2/InterimItemWindow.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
@@ -43,12 +44,56 @@ protected:
     virtual void    KeyInput( const KeyEvent&  ) override;
 };
 
+class PosEdit final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::Entry> m_xWidget;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+public:
+    PosEdit(vcl::Window* pParent)
+        : InterimItemWindow(pParent, "modules/swriter/ui/poseditbox.ui", "PosEditBox")
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
+    {
+        m_xWidget->connect_key_press(LINK(this, PosEdit, KeyInputHdl));
+        SetSizePixel(m_xWidget->get_preferred_size());
+    }
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    void set_text(const OUString& rText)
+    {
+        m_xWidget->set_text(rText);
+    }
+
+    void set_accessible_name(const OUString& rName)
+    {
+        m_xWidget->set_accessible_name(rName);
+    }
+
+    virtual ~PosEdit() override
+    {
+        disposeOnce();
+    }
+};
+
 class SwInputWindow final : public ToolBox
 {
 friend class InputEdit;
 
-    VclPtr<Edit>        aPos;
-    VclPtr<InputEdit>   aEdit;
+    VclPtr<PosEdit> mxPos;
+    VclPtr<InputEdit> aEdit;
     std::unique_ptr<SwFieldMgr> pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
