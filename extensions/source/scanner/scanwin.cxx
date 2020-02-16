@@ -43,7 +43,6 @@
 
 namespace
 {
-
 enum TwainState
 {
     TWAIN_STATE_NONE = 0,
@@ -342,8 +341,7 @@ bool Twain::InitializeNewShim(ScannerManager& rMgr, const VclPtr<vcl::Window>& x
         return false; // Have a shim for another task already!
 
     // hold reference to ScannerManager, to prevent premature death
-    mxMgr.set(static_cast<OWeakObject*>(mpCurMgr = &rMgr),
-              css::uno::UNO_QUERY);
+    mxMgr.set(static_cast<OWeakObject*>(mpCurMgr = &rMgr), css::uno::UNO_QUERY);
 
     mpThread.set(new ShimListenerThread(xTopWindow));
     mpThread->launch();
@@ -595,8 +593,8 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
 
     VclPtr<vcl::Window> xTopWindow = ImplGetActiveFrameWindow();
     if (xTopWindow)
-        xTopWindow->IncModalCount(); // to avoid changes between the two operations that each
-                                     // block the window
+        xTopWindow
+            ->IncModalCount(); // to avoid changes between the two operations that each block the window
     comphelper::ScopeGuard aModalGuard([xTopWindow]() {
         if (xTopWindow)
             xTopWindow->DecModalCount();

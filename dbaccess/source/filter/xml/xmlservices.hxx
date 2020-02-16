@@ -32,7 +32,6 @@ void createRegistryInfo_ODBFilter();
 void createRegistryInfo_ODBFilterExport();
 void createRegistryInfo_OFullExport();
 void createRegistryInfo_OSettingsExport();
-
 }
 
 #endif

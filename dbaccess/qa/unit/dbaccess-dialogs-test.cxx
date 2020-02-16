@@ -39,9 +39,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-DbaccessDialogsTest::DbaccessDialogsTest()
-{
-}
+DbaccessDialogsTest::DbaccessDialogsTest() {}
 
 void DbaccessDialogsTest::registerKnownDialogsByID(mapType& /*rKnownDialogs*/)
 {

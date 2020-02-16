@@ -19,9 +19,7 @@ void update_checker();
 class Updater
 {
 private:
-
 public:
-
     static OUString getUpdateInfoLog();
     static OUString getPatchDirURL();
     static OUString getUpdateFileURL();
