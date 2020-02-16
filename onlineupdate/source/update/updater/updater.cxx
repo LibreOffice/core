@@ -731,8 +731,9 @@ static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
 
         while (written < read)
         {
-            size_t chunkWritten = fwrite(buffer, 1, read - written, outfile);
-            if (chunkWritten <= 0)
+            size_t nCount = read - written;
+            size_t chunkWritten = fwrite(buffer, 1, nCount, outfile);
+            if (chunkWritten != nCount)
             {
                 LOG(("ensure_copy: failed to write the file: " LOG_S ", err: %d",
                      dest, errno));
