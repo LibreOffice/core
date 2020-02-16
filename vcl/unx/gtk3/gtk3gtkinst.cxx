@@ -3461,20 +3461,47 @@ public:
     }
 };
 
-    class ChildFrame : public WorkWindow
+class ChildFrame : public WorkWindow
+{
+private:
+    Idle  maLayoutIdle;
+
+    DECL_LINK(ImplHandleLayoutTimerHdl, Timer*, void);
+public:
+    ChildFrame(vcl::Window* pParent, WinBits nStyle)
+        : WorkWindow(pParent, nStyle)
     {
-    public:
-        ChildFrame(vcl::Window* pParent, WinBits nStyle)
-            : WorkWindow(pParent, nStyle)
-        {
-        }
-        virtual void Resize() override
-        {
-            WorkWindow::Resize();
-            if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
-                pChild->SetPosSizePixel(Point(0, 0), GetSizePixel());
-        }
-    };
+        maLayoutIdle.SetPriority(TaskPriority::RESIZE);
+        maLayoutIdle.SetInvokeHandler( LINK( this, ChildFrame, ImplHandleLayoutTimerHdl ) );
+        maLayoutIdle.SetDebugName( "ChildFrame maLayoutIdle" );
+    }
+
+    virtual void dispose() override
+    {
+        maLayoutIdle.Stop();
+        WorkWindow::dispose();
+    }
+
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override
+    {
+        WorkWindow::queue_resize(eReason);
+        if (maLayoutIdle.IsActive())
+            return;
+        maLayoutIdle.Start();
+    }
+
+    virtual void Resize() override
+    {
+        WorkWindow::Resize();
+        queue_resize();
+    }
+};
+
+IMPL_LINK_NOARG(ChildFrame, ImplHandleLayoutTimerHdl, Timer*, void)
+{
+    if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
+        pChild->SetPosSizePixel(Point(0, 0), GetSizePixel());
+}
 
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
 {
