@@ -1011,7 +1011,7 @@ namespace
         }
         void run()
         {
-            while (m_xRt->Step()) {}
+            while (m_xRt->Step() && !Application::IsQuit()) {}
         }
         virtual ~RunInitGuard()
         {
