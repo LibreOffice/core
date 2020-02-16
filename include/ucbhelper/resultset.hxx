@@ -395,7 +395,7 @@ public:
 
     /**
      * This method is called to instruct the supplier to release the (possibly
-     * presnt) property values at the given index.
+     * present) property values at the given index.
      *
      * @param nIndex is the zero-based index within the logical data array
      *               of the supplier.
