@@ -61,3 +61,21 @@ paths_hxx = custom_target('Paths.hxx',
             '-o',
             '@OUTPUT@',
             '@INPUT@'])
+
+protocolhandler_hxx = custom_target('ProtocolHandler.hxx',
+  output: 'ProtocolHandler.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/ProtocolHandler.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'ProtocolHandler',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+subdir('UI')

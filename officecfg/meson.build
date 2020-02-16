@@ -39,4 +39,17 @@ vcl_hxx = custom_target('VCL.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+inet_hxx = custom_target('Inet.hxx',
+  output: 'Inet.hxx',
+  input: ['registry/cppheader.xsl',
+          'registry/schema/org/openoffice/Inet.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Inet',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
 setup_inc = include_directories('..') # HACK
