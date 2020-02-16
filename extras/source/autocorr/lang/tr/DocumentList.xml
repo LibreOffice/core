@@ -94,6 +94,8 @@
   <block-list:block block-list:abbreviated-name="gider ayak" block-list:name="giderayak"/>
   <block-list:block block-list:abbreviated-name="Hegamonya" block-list:name="Hegemonya"/>
   <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
+  <block-list:block block-list:abbreviated-name="Herşey" block-list:name="Her şey"/>
+  <block-list:block block-list:abbreviated-name="herşey" block-list:name="her şey"/>
   <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
   <block-list:block block-list:abbreviated-name="hiç bir" block-list:name="hiçbir"/>
   <block-list:block block-list:abbreviated-name="Hoşçakal" block-list:name="Hoşça kal"/>
@@ -113,8 +115,8 @@
   <block-list:block block-list:abbreviated-name="isbat" block-list:name="ispat"/>
   <block-list:block block-list:abbreviated-name="Jipon" block-list:name="Jüpon"/>
   <block-list:block block-list:abbreviated-name="jipon" block-list:name="jüpon"/>
-  <block-list:block block-list:abbreviated-name="Kapora" block-list:name="Kaparo"/>
-  <block-list:block block-list:abbreviated-name="kapora" block-list:name="kaparo"/>
+  <block-list:block block-list:abbreviated-name="Kaparo" block-list:name="Kaparo"/>
+  <block-list:block block-list:abbreviated-name="kaparo" block-list:name="kapora"/>
   <block-list:block block-list:abbreviated-name="Kare kök" block-list:name="Karekök"/>
   <block-list:block block-list:abbreviated-name="kare kök" block-list:name="karekök"/>
   <block-list:block block-list:abbreviated-name="Karma karışık" block-list:name="Karmakarışık"/>
