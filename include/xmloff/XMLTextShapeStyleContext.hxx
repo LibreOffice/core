@@ -29,18 +29,18 @@ class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleCont
 
     rtl::Reference<XMLEventsImportContext> xEventContext;
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+    virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
 
 public:
 
 
-    XMLTextShapeStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextShapeStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     virtual ~XMLTextShapeStyleContext() override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix,

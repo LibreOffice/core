@@ -62,6 +62,26 @@ public:
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp );
 
+    SvXMLPropertySetContext(
+            SvXMLImport& rImport,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            sal_uInt32 nFamily,
+            ::std::vector< XMLPropertyState > &rProps,
+            const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+              sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
+    // This method is called from this instance implementation of
+    // createFastChildContext if the element matches an entry in the
+    // SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT_ITEM_IMPORT
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+                        sal_Int32 nElement,
+                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList,
+                        ::std::vector< XMLPropertyState > &rProperties,
+                        const XMLPropertyState& rProp );
+
 };
 
 #endif // INCLUDED_XMLOFF_XMLPRCON_HXX

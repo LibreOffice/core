@@ -91,69 +91,36 @@ const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
     return *mpStyleStylesElemTokenMap;
 }
 
-void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                      const OUString& rLocalName,
+void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
                                       const OUString& rValue )
 {
     // TODO: use a map here
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    if( nElement == XML_ELEMENT(STYLE, XML_FAMILY) )
     {
-        if( IsXMLToken( rLocalName, XML_FAMILY ) )
-        {
-            if( IsXMLToken( rValue, XML_PARAGRAPH ) )
-                mnFamily = XmlStyleFamily(SfxStyleFamily::Para);
-            else if( IsXMLToken( rValue, XML_TEXT ) )
-                mnFamily = XmlStyleFamily(SfxStyleFamily::Char);
-        }
-        else if( IsXMLToken( rLocalName, XML_NAME ) )
-        {
-            maName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_DISPLAY_NAME ) )
-        {
-            maDisplayName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_PARENT_STYLE_NAME ) )
-        {
-            maParentName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_NEXT_STYLE_NAME ) )
-        {
-            maFollow = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_HIDDEN ) )
-        {
-            mbHidden = rValue.toBoolean();
-        }
+        if( IsXMLToken( rValue, XML_PARAGRAPH ) )
+            mnFamily = XmlStyleFamily(SfxStyleFamily::Para);
+        else if( IsXMLToken( rValue, XML_TEXT ) )
+            mnFamily = XmlStyleFamily(SfxStyleFamily::Char);
     }
-    else if (XML_NAMESPACE_LO_EXT == nPrefixKey)
+    else if( nElement == XML_ELEMENT(STYLE, XML_NAME ) )
+        maName = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_DISPLAY_NAME ) )
+       maDisplayName = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_PARENT_STYLE_NAME ) )
+        maParentName = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_NEXT_STYLE_NAME ) )
+        maFollow = rValue;
+    else if( nElement == XML_ELEMENT(STYLE, XML_HIDDEN ) )
+        mbHidden = rValue.toBoolean();
+    else
     {
-        if (IsXMLToken(rLocalName, XML_HIDDEN))
-        {
-            mbHidden = rValue.toBoolean();
-        }
+        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement) << "=" << rValue);
+        assert(false);
     }
-}
-
-
-SvXMLStyleContext::SvXMLStyleContext(
-        SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >&,
-        XmlStyleFamily nFam, bool bDefault ) :
-    SvXMLImportContext( rImp, nPrfx, rLName ),
-    mbHidden( false ),
-    mnFamily( nFam ),
-    mbValid( true ),
-    mbNew( true ),
-    mbDefaultStyle( bDefault )
-{
 }
 
 SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp,
-        sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
         XmlStyleFamily nFam, bool bDefault ) :
     SvXMLImportContext( rImp ),
     mbHidden( false ),
@@ -168,17 +135,11 @@ SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
 
-void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+void SvXMLStyleContext::startFastElement( sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        SetAttribute( nPrefix, aLocalName, rValue );
+        SetAttribute( aIter.getToken(), aIter.toString() );
     }
 }
 
@@ -363,116 +324,97 @@ bool SvXMLStylesContext::IsAutomaticStyle() const
     return mpImpl->IsAutomaticStyle();
 }
 
-SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
-                                                                const OUString& rLocalName,
-                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_Int32 nElement,
+                                                                const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
     if(GetImport().GetDataStylesImport())
     {
-        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), p_nPrefix,
-                                               rLocalName, xAttrList, *this);
+        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), nElement,
+                                               xAttrList, *this);
     }
 
     if (!pStyle)
     {
-        const SvXMLTokenMap& rTokenMap = GetStyleStylesElemTokenMap();
-        sal_uInt16 nToken = rTokenMap.Get( p_nPrefix, rLocalName );
-        switch( nToken )
+        switch( nElement )
         {
-            case XML_TOK_STYLE_STYLE:
-            case XML_TOK_STYLE_DEFAULT_STYLE:
+            case XML_ELEMENT(STYLE, XML_STYLE):
+            case XML_ELEMENT(STYLE, XML_DEFAULT_STYLE):
             {
                 XmlStyleFamily nFamily = XmlStyleFamily::DATA_STYLE;
-                sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-                for( sal_Int16 i=0; i < nAttrCount; i++ )
+                for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
                 {
-                    const OUString& rAttrName = xAttrList->getNameByIndex( i );
-                    OUString aLocalName;
-                    sal_uInt16 nPrefix =
-                        GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                    &aLocalName );
-                    if( XML_NAMESPACE_STYLE == nPrefix &&
-                        IsXMLToken( aLocalName, XML_FAMILY ) )
+                    if( aIter.getToken() == XML_ELEMENT(STYLE, XML_FAMILY) )
                     {
-                        const OUString& rValue = xAttrList->getValueByIndex( i );
-                        nFamily = GetFamily( rValue );
+                        nFamily = GetFamily( aIter.toString() );
                         break;
                     }
                 }
-                pStyle = XML_TOK_STYLE_STYLE==nToken
-                    ? CreateStyleStyleChildContext( nFamily, p_nPrefix,
-                                                    rLocalName, xAttrList )
-                    : CreateDefaultStyleStyleChildContext( nFamily, p_nPrefix,
-                                                    rLocalName, xAttrList );
+                pStyle = nElement == XML_ELEMENT(STYLE, XML_STYLE)
+                    ? CreateStyleStyleChildContext( nFamily, nElement, xAttrList )
+                    : CreateDefaultStyleStyleChildContext( nFamily, nElement, xAttrList );
             }
             break;
-            case XML_TOK_STYLE_PAGE_MASTER:
-            case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
+            case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT):
+            case XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT):
             {
                 //there is not page family in ODF now, so I specify one for it
-                bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken;
-                pStyle = new PageStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, *this, bDefaultStyle );
+                bool bDefaultStyle  = nElement == XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT);
+                pStyle = new PageStyleContext( GetImport(), *this, bDefaultStyle );
             }
             break;
-            case XML_TOK_TEXT_LIST_STYLE:
-                pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList );
+            case XML_ELEMENT(TEXT, XML_LIST_STYLE):
+                pStyle = new SvxXMLListStyleContext( GetImport() );
                 break;
-            case XML_TOK_TEXT_OUTLINE:
-                pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, true );
+            case XML_ELEMENT(TEXT, XML_OUTLINE_STYLE):
+                pStyle = new SvxXMLListStyleContext( GetImport(), true );
                 break;
-            case XML_TOK_TEXT_NOTE_CONFIG:
-                pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
-                                                                   p_nPrefix,
-                                                                   rLocalName,
-                                                                   xAttrList);
+            case XML_ELEMENT(TEXT, XML_NOTES_CONFIGURATION):
+                pStyle = new XMLFootnoteConfigurationImportContext(GetImport(), xAttrList);
                 break;
 
-            case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
+            case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_CONFIGURATION):
                 pStyle = new XMLIndexBibliographyConfigurationContext(
-                    GetImport(), p_nPrefix, rLocalName, xAttrList);
+                    GetImport());
                 break;
 
-            case XML_TOK_TEXT_LINENUMBERING_CONFIG:
+            case XML_ELEMENT(TEXT, XML_LINENUMBERING_CONFIGURATION):
                 pStyle = new XMLLineNumberingImportContext(
-                    GetImport(), p_nPrefix, rLocalName, xAttrList);
+                    GetImport());
                 break;
 
 
             // FillStyles
 
-            case XML_TOK_STYLES_GRADIENTSTYLES:
+            case XML_ELEMENT(DRAW, XML_GRADIENT):
             {
-                pStyle = new XMLGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLGradientStyleContext( GetImport(), xAttrList );
                 break;
             }
-            case XML_TOK_STYLES_HATCHSTYLES:
+            case XML_ELEMENT(DRAW, XML_HATCH):
             {
-                pStyle = new XMLHatchStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLHatchStyleContext( GetImport(), xAttrList );
                 break;
             }
-            case XML_TOK_STYLES_BITMAPSTYLES:
+            case XML_ELEMENT(DRAW, XML_FILL_IMAGE):
             {
-                pStyle = new XMLBitmapStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLBitmapStyleContext( GetImport(), xAttrList );
                 break;
             }
-            case XML_TOK_STYLES_TRANSGRADIENTSTYLES:
+            case XML_ELEMENT(DRAW, XML_OPACITY):
             {
-                pStyle = new XMLTransGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLTransGradientStyleContext( GetImport(), xAttrList );
                 break;
             }
-            case XML_TOK_STYLES_MARKERSTYLES:
+            case XML_ELEMENT(DRAW, XML_MARKER):
             {
-                pStyle = new XMLMarkerStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLMarkerStyleContext( GetImport(), xAttrList );
                 break;
             }
-            case XML_TOK_STYLES_DASHSTYLES:
+            case XML_ELEMENT(DRAW, XML_STROKE_DASH):
             {
-                pStyle = new XMLDashStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
+                pStyle = new XMLDashStyleContext( GetImport(), xAttrList );
                 break;
             }
         }
@@ -482,8 +424,8 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
@@ -492,24 +434,20 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TEXT_PARAGRAPH:
         case XmlStyleFamily::TEXT_TEXT:
         case XmlStyleFamily::TEXT_SECTION:
-            pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
-                                              xAttrList, *this, nFamily );
+            pStyle = new XMLTextStyleContext( GetImport(), *this, nFamily );
             break;
 
         case XmlStyleFamily::TEXT_RUBY:
-            pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
-                                              xAttrList, *this, nFamily );
+            pStyle = new XMLPropStyleContext( GetImport(), *this, nFamily );
             break;
         case XmlStyleFamily::SCH_CHART_ID:
-            pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
-                                               xAttrList, *this, nFamily );
+            pStyle = new XMLChartStyleContext( GetImport(), *this, nFamily );
             break;
 
         case XmlStyleFamily::SD_GRAPHICS_ID:
         case XmlStyleFamily::SD_PRESENTATION_ID:
         case XmlStyleFamily::SD_POOL_ID:
-            pStyle = new XMLShapeStyleContext( GetImport(), nPrefix, rLocalName,
-                                               xAttrList, *this, nFamily );
+            pStyle = new XMLShapeStyleContext( GetImport(), *this, nFamily );
             break;
         default: break;
     }
@@ -518,8 +456,8 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
-        const uno::Reference< xml::sax::XAttributeList > & )
+        XmlStyleFamily /*nFamily*/, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & )
 {
     return nullptr;
 }
@@ -775,19 +713,11 @@ SvXMLStylesContext::~SvXMLStylesContext()
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return nullptr;
-}
-
-SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                                            const OUString& rLocalName,
-                                                            const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    SvXMLStyleContext *pStyle =
-        CreateStyleChildContext( nPrefix, rLocalName, xAttrList );
+    SvXMLStyleContext *pStyle = CreateStyleChildContext( nElement, xAttrList );
     if( pStyle )
     {
         if( !pStyle->IsTransient() )
@@ -796,10 +726,6 @@ SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix
     }
 
     return pContext;
-}
-
-void SvXMLStylesContext::EndElement()
-{
 }
 
 void SvXMLStylesContext::AddStyle(SvXMLStyleContext& rNew)

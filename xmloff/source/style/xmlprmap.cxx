@@ -19,6 +19,7 @@
 
 #include <rtl/ref.hxx>
 
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -260,6 +261,37 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
             if( (!nPropType || nPropType == rEntry.GetPropType()) &&
                 rEntry.nXMLNameSpace == nNamespace &&
                 rStrName == rEntry.sXMLAttributeName )
+                return nIndex;
+            else
+                nIndex++;
+
+        } while( nIndex<nEntries );
+    }
+
+    return -1;
+}
+
+// Search for the given name and the namespace in the list and return
+// the index of the entry
+// If there is no matching entry the method returns -1
+sal_Int32 XMLPropertySetMapper::GetEntryIndex(
+        sal_Int32 nElement,
+        sal_uInt32 nPropType,
+        sal_Int32 nStartAt /* = -1 */ ) const
+{
+    sal_Int32 nEntries = GetEntryCount();
+    sal_Int32 nIndex= nStartAt == - 1? 0 : nStartAt+1;
+
+    sal_uInt16 nNamespace = (nElement >> NMSP_SHIFT) - 1;
+    OUString aStrName = GetXMLToken(static_cast<xmloff::token::XMLTokenEnum>(nElement & TOKEN_MASK));
+    if ( nEntries && nIndex < nEntries )
+    {
+        do
+        {
+            const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
+            if( (!nPropType || nPropType == rEntry.GetPropType()) &&
+                rEntry.nXMLNameSpace == nNamespace &&
+                aStrName == rEntry.sXMLAttributeName )
                 return nIndex;
             else
                 nIndex++;

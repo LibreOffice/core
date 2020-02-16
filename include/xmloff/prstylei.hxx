@@ -74,9 +74,7 @@ protected:
     static const OldFillStyleDefinitionSet& getHeaderSet();
     static const OldFillStyleDefinitionSet& getFooterSet();
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
     SvXMLStylesContext *GetStyles() { return mxStyles.get(); }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
@@ -88,9 +86,7 @@ protected:
 public:
 
 
-    XMLPropStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLPropStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext() override;

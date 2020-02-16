@@ -49,8 +49,8 @@ using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 
-XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, SvXMLStylesContext& rStyles )
-: XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, XmlStyleFamily::SD_GRAPHICS_ID, true )
+XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, SvXMLStylesContext& rStyles )
+: XMLPropStyleContext( rImport, rStyles, XmlStyleFamily::SD_GRAPHICS_ID, true )
 {
 }
 
@@ -58,31 +58,28 @@ XMLGraphicsDefaultStyle::~XMLGraphicsDefaultStyle()
 {
 }
 
-SvXMLImportContextRef XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLGraphicsDefaultStyle::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
+    sal_uInt32 nFamily = 0;
+    if( nElement == XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_TEXT_PROPERTIES) )
+        nFamily = XML_TYPE_PROP_TEXT;
+    else if( nElement == XML_ELEMENT(STYLE, XML_PARAGRAPH_PROPERTIES) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_PARAGRAPH_PROPERTIES) )
+        nFamily = XML_TYPE_PROP_PARAGRAPH;
+    else if( nElement == XML_ELEMENT(STYLE, XML_GRAPHIC_PROPERTIES) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_GRAPHIC_PROPERTIES) )
+        nFamily = XML_TYPE_PROP_GRAPHIC;
+    if( nFamily )
     {
-        sal_uInt32 nFamily = 0;
-        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_TEXT;
-        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_PARAGRAPH;
-        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
-            nFamily = XML_TYPE_PROP_GRAPHIC;
-        if( nFamily )
-        {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
-                xContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily, GetProperties(), xImpPrMap );
-        }
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            return new XMLShapePropertySetContext( GetImport(), xAttrList, nFamily, GetProperties(), xImpPrMap );
     }
 
-    if (!xContext)
-        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-
-    return xContext;
+    return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
 }
 
 namespace {

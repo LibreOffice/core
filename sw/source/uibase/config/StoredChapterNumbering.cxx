@@ -337,38 +337,26 @@ public:
         }
     }
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override
-    {
-        if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken(rLocalName, XML_OUTLINE_STYLE))
-        {
-            ++m_nCounter;
-            if (m_nCounter <= SwChapterNumRules::nMaxRules)
-            {
-                SvxXMLListStyleContext *const pContext(
-                    new SvxXMLListStyleContext(GetImport(),
-                                nPrefix, rLocalName, xAttrList, true));
-                m_Contexts.emplace_back(pContext);
-                return pContext;
-            }
-        }
-        return nullptr;
-    }
-
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
                 sal_Int32 Element,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
     {
         if (Element == XML_ELEMENT(TEXT, XML_OUTLINE_STYLE))
         {
-            // handled in CreateChildContext
+            ++m_nCounter;
+            if (m_nCounter <= SwChapterNumRules::nMaxRules)
+            {
+                auto pContext = new SvxXMLListStyleContext(GetImport(), true);
+                m_Contexts.emplace_back(pContext);
+                return pContext;
+            }
         }
         else if (Element == XML_ELEMENT(STYLE, XML_STYLE))
         {
             return new StoredChapterNumberingDummyStyleContext(GetImport(), xAttrList);
         }
+        else
+            assert(false);
 
         return nullptr;
     }

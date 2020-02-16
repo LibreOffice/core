@@ -1646,7 +1646,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
             if (aAny >>= nKey)
             {
                 SvXMLStyleContext* pContext = new SvXMLNumFormatContext(
-                    *this, XML_NAMESPACE_NUMBER, name, xAttrList, nKey,
+                    *this, name, nKey,
                     GetDataStylesImport()->GetLanguageForKey(nKey), *pAutoStyles);
                 pAutoStyles->AddStyle(*pContext);
             }
@@ -2035,6 +2035,8 @@ const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 
 OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
 {
+    // return URI and prefix and name, used for debugging issues with fast-parser importing
+    // where the URI is often some old compatibility namespace
     OUString rv;
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );

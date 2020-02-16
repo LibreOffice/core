@@ -29,16 +29,12 @@ private:
     SvXMLStylesContext& mrStyles;
 
     /// is called when an attribute at the (auto)style element is found
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 
 public:
 
     XMLChartStyleContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     virtual ~XMLChartStyleContext() override;
 

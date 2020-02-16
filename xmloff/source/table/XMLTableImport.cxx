@@ -157,17 +157,15 @@ public:
 class XMLTableTemplateContext : public SvXMLStyleContext
 {
 public:
-    XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
+    XMLTableTemplateContext( SvXMLImport& rImport );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 ) override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 protected:
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 private:
     XMLTableTemplate maTableTemplate;
     OUString msTemplateStyleName;
@@ -234,9 +232,9 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const 
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
 }
 
-SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext()
 {
-    return new XMLTableTemplateContext( mrImport, nPrfx, rLName, xAttrList );
+    return new XMLTableTemplateContext( mrImport );
 }
 
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
@@ -745,24 +743,24 @@ void XMLCellImportContext::EndElement()
 }
 
 
-XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport )
+: SvXMLStyleContext( rImport, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
 {
 }
 
-void XMLTableTemplateContext::SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue )
+void XMLTableTemplateContext::SetAttribute( sal_Int32 nElement, const OUString& rValue  )
 {
-    if( (nPrefixKey == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_STYLE_NAME ))
+    if( (nElement == XML_ELEMENT(TEXT, XML_STYLE_NAME ))
         // Writer specific: according to oasis odf 1.2 prefix should be "table" and element name should be "name"
-        || (nPrefixKey == XML_NAMESPACE_TABLE && IsXMLToken( rLocalName, XML_NAME )))
+        || nElement == XML_ELEMENT(TABLE, XML_NAME ))
     {
         msTemplateStyleName = rValue;
     }
+    else
+        assert(false);
 }
 
-void XMLTableTemplateContext::EndElement()
+void XMLTableTemplateContext::endFastElement(sal_Int32 )
 {
     rtl::Reference< XMLTableImport > xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
     if( xTableImport.is() )
