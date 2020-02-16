@@ -161,7 +161,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_xDispatchRecorderSupplier(                                            )
         ,   m_xPipeTerminator       (                                               )
         ,   m_xQuickLauncher        (                                               )
-        ,   m_xStarBasicQuitGuard   (                                               )
         ,   m_xSWThreadManager      (                                               )
         ,   m_xSfxTerminator        (                                               )
         ,   m_xTitleNumberGenerator (                                               )
@@ -206,7 +205,6 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
     css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
-    css::uno::Reference< css::frame::XTerminateListener > xStarBasicQuitGuard = m_xStarBasicQuitGuard;
     css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
     css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
@@ -257,12 +255,6 @@ sal_Bool SAL_CALL Desktop::terminate()
             lCalledTerminationListener.push_back( xQuickLauncher );
         }
 
-        if ( xStarBasicQuitGuard.is() )
-        {
-            xStarBasicQuitGuard->queryTermination( aEvent );
-            lCalledTerminationListener.push_back( xStarBasicQuitGuard );
-        }
-
         if ( xSWThreadManager.is() )
         {
             xSWThreadManager->queryTermination( aEvent );
@@ -307,9 +299,6 @@ sal_Bool SAL_CALL Desktop::terminate()
 
         if( bAskQuickStart && xQuickLauncher.is() )
             xQuickLauncher->notifyTermination( aEvent );
-
-        if ( xStarBasicQuitGuard.is() )
-            xStarBasicQuitGuard->notifyTermination( aEvent );
 
         if ( xSWThreadManager.is() )
             xSWThreadManager->notifyTermination( aEvent );
@@ -416,11 +405,6 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xQuickLauncher = xListener;
             return;
         }
-        if( sImplementationName == "com.sun.star.comp.svx.StarBasicQuitGuard" )
-        {
-            m_xStarBasicQuitGuard = xListener;
-            return;
-        }
         if( sImplementationName == "com.sun.star.util.comp.FinalThreadManager" )
         {
             m_xSWThreadManager = xListener;
@@ -463,12 +447,6 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         if( sImplementationName == "com.sun.star.comp.desktop.QuickstartWrapper" )
         {
             m_xQuickLauncher.clear();
-            return;
-        }
-
-        if( sImplementationName == "com.sun.star.comp.svx.StarBasicQuitGuard" )
-        {
-            m_xStarBasicQuitGuard.clear();
             return;
         }
 
@@ -1105,7 +1083,6 @@ void SAL_CALL Desktop::disposing()
 
     m_xPipeTerminator.clear();
     m_xQuickLauncher.clear();
-    m_xStarBasicQuitGuard.clear();
     m_xSWThreadManager.clear();
 
     // we need a copy because the disposing might call the removeEventListener method

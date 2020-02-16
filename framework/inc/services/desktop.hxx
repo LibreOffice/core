@@ -418,18 +418,6 @@ class Desktop final : private cppu::BaseMutex,
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
 
-        /** special terminate listener active when a macro is executing.
-          * Because basic runs Application::Yield internally the application may quit
-          * while running inside the internal basic event loop. So all the basic
-          * infrastructure may be deleted while the call is executing, leading to
-          * a variant of crashes. So this special terminate listener will
-          * veto the current quit attempt, stop basic execution, which will
-          * cause the inner event loop to quit, and on return to the outer normal
-          * application event loop then resend the quit attempt.
-          * So these implementation must be a special terminate listener too .-(
-          */
-        css::uno::Reference< css::frame::XTerminateListener > m_xStarBasicQuitGuard;
-
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs... it can't be guaranteed that
           * running jobs can be cancelled successfully if the corresponding document will be closed...

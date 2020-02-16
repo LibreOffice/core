@@ -737,109 +737,6 @@ namespace svxform
         m_pScriptExecutor = nullptr;
     }
 
-    namespace {
-
-    // tdf#88985 If LibreOffice tries to exit during the execution of a macro
-    // then: detect the effort, stop basic execution, block until the macro
-    // returns due to that stop, then restart the quit. This avoids the app
-    // exiting and destroying itself until the macro is parked at a safe place
-    // to do that.
-    class QuitGuard
-    {
-    private:
-
-        class TerminateListener : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener,
-                                                                       css::lang::XServiceInfo>
-        {
-        private:
-            css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
-            osl::Mutex maMutex;
-            bool mbQuitBlocked;
-        public:
-            // XTerminateListener
-            virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
-            {
-                mbQuitBlocked = true;
-#if HAVE_FEATURE_SCRIPTING
-                StarBASIC::Stop();
-#endif
-                throw css::frame::TerminationVetoException();
-            }
-
-            virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
-            {
-                mbQuitBlocked = false;
-            }
-
-            using cppu::WeakComponentImplHelperBase::disposing;
-
-            virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
-            {
-                const bool bShutDown = (rEvent.Source == m_xDesktop);
-                if (bShutDown && m_xDesktop.is())
-                {
-                    m_xDesktop->removeTerminateListener(this);
-                    m_xDesktop.clear();
-                }
-            }
-
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() override
-            {
-                return "com.sun.star.comp.svx.StarBasicQuitGuard";
-            }
-
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
-            {
-                return cppu::supportsService(this, ServiceName);
-            }
-
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-            {
-                return { "com.sun.star.svx.StarBasicQuitGuard" };
-            }
-
-        public:
-            TerminateListener()
-                : cppu::WeakComponentImplHelper<css::frame::XTerminateListener,
-                                                css::lang::XServiceInfo>(maMutex)
-                , mbQuitBlocked(false)
-            {
-            }
-
-            void start()
-            {
-                css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-                m_xDesktop = css::frame::Desktop::create(xContext);
-                m_xDesktop->addTerminateListener(this);
-            }
-
-            void stop()
-            {
-                if (!m_xDesktop.is())
-                    return;
-                m_xDesktop->removeTerminateListener(this);
-                if (mbQuitBlocked)
-                    m_xDesktop->terminate();
-            }
-        };
-
-        rtl::Reference<TerminateListener> mxListener;
-    public:
-        QuitGuard()
-            : mxListener(new TerminateListener)
-        {
-            mxListener->start();
-        }
-
-        ~QuitGuard()
-        {
-            mxListener->stop();
-        }
-    };
-
-    }
-
     IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, void*, p, void )
     {
         ScriptEvent* _pEvent = static_cast<ScriptEvent*>(p);
@@ -851,10 +748,7 @@ namespace svxform
             ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
             if ( !impl_isDisposed_nothrow() )
-            {
-                QuitGuard aQuitGuard;
                 impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, nullptr );
-            }
         }
 
         delete _pEvent;
