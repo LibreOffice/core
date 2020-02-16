@@ -4323,11 +4323,16 @@ void ScFiltersTest::testAutoheight2Rows()
 
     SCTAB nTab = 0;
     int nHeight1 = rDoc.GetRowHeight(0, nTab, false);
-    int nHeight3 = rDoc.GetRowHeight(2, nTab, false);
+    int nHeight2 = rDoc.GetRowHeight(1, nTab, false);
+    int nHeight4 = rDoc.GetRowHeight(3, nTab, false);
+    int nHeight5 = rDoc.GetRowHeight(4, nTab, false);
 
     // We will do relative comparison, because calculated autoheight
     // can be different on different platforms
-    CPPUNIT_ASSERT_MESSAGE("Row #3 should be thinner than #1", nHeight3 < nHeight1);
+    CPPUNIT_ASSERT_MESSAGE("Row #1 and row #4 must have same height after load & auto-adjust",
+                           abs( nHeight1 - nHeight4 ) < 10 );
+    CPPUNIT_ASSERT_MESSAGE("Row #2 and row #5 must have same height after load & auto-adjust",
+                           abs( nHeight2 - nHeight5 ) < 10 );
 
     xDocSh->DoClose();
 }
