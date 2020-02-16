@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,configmgr,\
     Library_configmgr \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,configmgr,\
+$(eval $(call gb_Module_add_javacheck_targets,configmgr,\
     JunitTest_configmgr_unoapi \
 ))
 

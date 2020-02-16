@@ -27,7 +27,7 @@ $(eval $(call gb_Module_add_check_targets,sot,\
     CppunitTest_sot_test_sot \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sot,\
+$(eval $(call gb_Module_add_javacheck_targets,sot,\
     JunitTest_sot_complex \
 ))
 

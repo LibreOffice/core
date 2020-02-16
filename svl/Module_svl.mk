@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_urihelper \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
+$(eval $(call gb_Module_add_javacheck_targets,svl,\
     JunitTest_svl_complex \
 ))
 

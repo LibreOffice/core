@@ -126,7 +126,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 ))
 endif
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
+$(eval $(call gb_Module_add_javacheck_targets,sw,\
     JunitTest_sw_complex \
     JunitTest_sw_unoapi_1 \
     JunitTest_sw_unoapi_2 \
