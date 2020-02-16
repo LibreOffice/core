@@ -1,4 +1,5 @@
 subdir('Office')
+subdir('TypeDetection')
 
 setup_hxx = custom_target('Setup.hxx',
   output: 'Setup.hxx',
