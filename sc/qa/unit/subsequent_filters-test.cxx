@@ -250,6 +250,9 @@ public:
     void testBorderColorsXLSXML();
     void testHiddenRowsColumnsXLSXML();
     void testColumnWidthRowHeightXLSXML();
+    void testCharacterSetXLSXML();
+    void testTdf62268();
+    void testVBAMacroFunctionODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -386,6 +389,8 @@ public:
     CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
     CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
+    CPPUNIT_TEST(testTdf62268);
+    CPPUNIT_TEST(testVBAMacroFunctionODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2777,8 +2782,8 @@ void ScFiltersTest::testMiscRowHeights()
 
     static const TestParam::RowData MultiLineOptData[] =
     {
-        // Row 0 is 12.63 mm and optimal flag is set
-        { 0, 0, 0, 1263, CHECK_OPTIMAL, true  },
+        // Row 0 is 12.63 mm, but optimal flag is set
+        { 0, 0, 0, 1236, CHECK_OPTIMAL, true  },
         // Row 1 is 11.99 mm and optimal flag is NOT set
         { 1, 1, 0, 1199, CHECK_OPTIMAL, false  },
     };
@@ -2816,8 +2821,9 @@ void ScFiltersTest::testOptimalHeightReset()
     ScDocument& rDoc = xDocSh->GetDocument();
     // open document in read/write mode ( otherwise optimal height stuff won't
     // be triggered ) *and* you can't delete cell contents.
-    int nHeight = sc::TwipsToHMM ( rDoc.GetRowHeight(nRow, nTab, false) );
-    CPPUNIT_ASSERT_EQUAL(1263, nHeight);
+    int nHeight = rDoc.GetRowHeight(nRow, nTab, false);
+    // Due to some minor differences on Mac this comparison is made bit fuzzy
+    CPPUNIT_ASSERT_LESSEQUAL( 8, abs( nHeight - 701 ) );
 
     ScDocFunc &rFunc = xDocSh->GetDocFunc();
 
@@ -4248,6 +4254,34 @@ void ScFiltersTest::testCondFormatFormulaListenerXLSX()
     rDoc.SetValue(0, 0, 0, 2.0);
 
     CPPUNIT_ASSERT(aListener.mbCalled);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf62268()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf62268.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    int nHeight;
+
+    SCTAB nTab = 0;
+    nHeight = rDoc.GetRowHeight(0, nTab, false);
+    CPPUNIT_ASSERT_LESSEQUAL( 3, abs( 256 - nHeight ) );
+    nHeight = rDoc.GetRowHeight(1, nTab, false);
+    CPPUNIT_ASSERT_LESSEQUAL( 19, abs( 1905 - nHeight ) );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testVBAMacroFunctionODS()
+{
+    ScDocShellRef xDocSh = loadDoc("vba_macro_functions.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aFunction;
+    rDoc.GetFormula(2, 0, 0, aFunction);
+    std::cout << aFunction << std::endl;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, rDoc.GetValue(2, 0, 0), 1e-6);
 
     xDocSh->DoClose();
 }
