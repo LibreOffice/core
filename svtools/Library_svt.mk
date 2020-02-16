@@ -175,7 +175,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/statusbarcontroller \
     svtools/source/uno/svtxgridcontrol \
     svtools/source/uno/toolboxcontroller \
-    svtools/source/uno/treecontrolpeer \
     svtools/source/uno/unocontroltablemodel \
     svtools/source/uno/unogridcolumnfacade \
     svtools/source/uno/unoevent \
