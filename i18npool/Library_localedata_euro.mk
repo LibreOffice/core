@@ -67,6 +67,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\
 	CustomTarget/i18npool/localedata/localedata_kl_GL \
 	CustomTarget/i18npool/localedata/localedata_la_VA \
 	CustomTarget/i18npool/localedata/localedata_lb_LU \
+	CustomTarget/i18npool/localedata/localedata_lij_IT \
 	CustomTarget/i18npool/localedata/localedata_lld_IT \
 	CustomTarget/i18npool/localedata/localedata_lt_LT \
 	CustomTarget/i18npool/localedata/localedata_ltg_LV \

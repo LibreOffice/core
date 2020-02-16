@@ -192,6 +192,7 @@ static const struct {
     { "cu_RU",  lcl_DATA_EURO },
     { "vec_IT", lcl_DATA_EURO },
     { "szl_PL", lcl_DATA_EURO },
+    { "lij_IT", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
