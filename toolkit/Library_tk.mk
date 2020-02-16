@@ -103,6 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/animatedimages \
     toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \
+    toolkit/source/controls/tree/treecontrolpeer \
     toolkit/source/controls/tree/treedatamodel \
     toolkit/source/controls/unocontrol \
     toolkit/source/controls/unocontrolbase \

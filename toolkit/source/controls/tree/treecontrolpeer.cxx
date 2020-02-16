@@ -28,7 +28,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
-#include "treecontrolpeer.hxx"
+#include <controls/treecontrolpeer.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <cppuhelper/implbase.hxx>
