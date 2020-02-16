@@ -308,10 +308,9 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        throw() override;
-    virtual void SAL_CALL release()
-        throw() override;
+    virtual void SAL_CALL acquire() throw() override
+    { cppu::OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() override;
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL

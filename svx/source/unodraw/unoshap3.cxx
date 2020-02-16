@@ -100,16 +100,6 @@ uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType )
     return SvxShape::queryInterface( rType );
 }
 
-void SAL_CALL Svx3DSceneObject::acquire() throw ( )
-{
-    SvxShape::acquire();
-}
-
-void SAL_CALL Svx3DSceneObject::release() throw ( )
-{
-    SvxShape::release();
-}
-
 // XTypeProvider
 
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()

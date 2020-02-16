@@ -42,16 +42,6 @@ Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )
         return ::cppu::OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL OWeakTypeObject::acquire()    throw ()
-{
-    ::cppu::OWeakObject::acquire();
-}
-
-void SAL_CALL OWeakTypeObject::release()    throw ()
-{
-    ::cppu::OWeakObject::release();
-}
-
 Sequence< Type > SAL_CALL OWeakTypeObject::getTypes(  )
 {
     return Sequence< Type >();

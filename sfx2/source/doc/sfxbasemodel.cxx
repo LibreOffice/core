@@ -527,29 +527,6 @@ Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType )
     return SfxBaseModel_Base::queryInterface( rType );
 }
 
-//  XInterface
-void SAL_CALL SfxBaseModel::acquire() throw( )
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OWeakObject::acquire() ;
-}
-
-
-//  XInterface
-
-
-void SAL_CALL SfxBaseModel::release() throw( )
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    OWeakObject::release() ;
-}
-
 
 //  XTypeProvider
 

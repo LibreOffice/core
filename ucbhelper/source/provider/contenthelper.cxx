@@ -138,12 +138,6 @@ ContentImplHelper::~ContentImplHelper()
 {
 }
 
-void SAL_CALL ContentImplHelper::acquire()
-    throw()
-{
-    cppu::OWeakObject::acquire();
-}
-
 void SAL_CALL ContentImplHelper::release()
     throw()
 {
