@@ -21,7 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/button.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -97,17 +97,73 @@ public:
     virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
 };
 
+class ExcludeCheckBox final : public InterimItemWindow
+{
+private:
+    std::unique_ptr<weld::CheckButton> m_xWidget;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+public:
+    ExcludeCheckBox(vcl::Window* pParent)
+        : InterimItemWindow(pParent, "modules/swriter/ui/checkbox.ui", "CheckBox")
+        , m_xWidget(m_xBuilder->weld_check_button("checkbutton"))
+    {
+        m_xWidget->set_label(SwResId(ST_EXCLUDE));
+        m_xWidget->connect_key_press(LINK(this, ExcludeCheckBox, KeyInputHdl));
+        SetSizePixel(m_xWidget->get_preferred_size());
+    }
+
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    void set_sensitive(bool bSensitive)
+    {
+        Enable(bSensitive);
+        m_xWidget->set_sensitive(bSensitive);
+    }
+
+    void set_active(bool bActive)
+    {
+        m_xWidget->set_active(bActive);
+    }
+
+    void connect_toggled(const Link<weld::ToggleButton&, void>& rLink)
+    {
+        m_xWidget->connect_toggled(rLink);
+    }
+
+    virtual ~ExcludeCheckBox() override
+    {
+        disposeOnce();
+    }
+};
+
+IMPL_LINK(ExcludeCheckBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return ChildKeyInput(rKEvt);
+}
+
 /// Controller for .uno:MailMergeExcludeEntry toolbar checkbox: creates the checkbox & handles the value.
 class MMExcludeEntryController : public svt::ToolboxController, public lang::XServiceInfo
 {
-    VclPtr<CheckBox> m_pExcludeCheckbox;
+    VclPtr<ExcludeCheckBox> m_xExcludeCheckbox;
 
-    DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, void);
+    DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::ToggleButton&, void);
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
         : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
-        , m_pExcludeCheckbox(nullptr)
+        , m_xExcludeCheckbox(nullptr)
     {
     }
 
@@ -233,7 +289,7 @@ void MMExcludeEntryController::dispose()
     SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
-    m_pExcludeCheckbox.disposeAndClear();
+    m_xExcludeCheckbox.disposeAndClear();
 }
 
 uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent)
@@ -243,17 +299,14 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
     if (pToolbar)
     {
         // make it visible
-        m_pExcludeCheckbox = VclPtr<CheckBox>::Create(pToolbar);
-        m_pExcludeCheckbox->SetText(SwResId(ST_EXCLUDE));
-        m_pExcludeCheckbox->SetSizePixel(m_pExcludeCheckbox->GetOptimalSize());
-
-        m_pExcludeCheckbox->SetToggleHdl(LINK(this, MMExcludeEntryController, ExcludeHdl));
+        m_xExcludeCheckbox = VclPtr<ExcludeCheckBox>::Create(pToolbar);
+        m_xExcludeCheckbox->connect_toggled(LINK(this, MMExcludeEntryController, ExcludeHdl));
     }
 
-    return VCLUnoHelper::GetInterface(m_pExcludeCheckbox);
+    return VCLUnoHelper::GetInterface(m_xExcludeCheckbox);
 }
 
-IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
+IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, weld::ToggleButton&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
@@ -261,12 +314,12 @@ IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, voi
         xConfigItem = pView->GetMailMergeConfigItem();
 
     if (xConfigItem)
-        xConfigItem->ExcludeRecord(xConfigItem->GetResultSetPosition(), rCheckbox.IsChecked());
+        xConfigItem->ExcludeRecord(xConfigItem->GetResultSetPosition(), rCheckbox.get_active());
 };
 
 void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEvent)
 {
-    if (!m_pExcludeCheckbox)
+    if (!m_xExcludeCheckbox)
         return;
 
     SwView* pView = ::GetActiveView();
@@ -276,13 +329,13 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
 
     if (!xConfigItem || !rEvent.IsEnabled)
     {
-        m_pExcludeCheckbox->Disable();
-        m_pExcludeCheckbox->Check(false);
+        m_xExcludeCheckbox->set_sensitive(false);
+        m_xExcludeCheckbox->set_active(false);
     }
     else
     {
-        m_pExcludeCheckbox->Enable();
-        m_pExcludeCheckbox->Check(xConfigItem->IsRecordExcluded(xConfigItem->GetResultSetPosition()));
+        m_xExcludeCheckbox->set_sensitive(false);
+        m_xExcludeCheckbox->set_active(xConfigItem->IsRecordExcluded(xConfigItem->GetResultSetPosition()));
     }
 }
 

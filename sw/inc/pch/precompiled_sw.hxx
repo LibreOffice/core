@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-14 09:24:22 using:
+ Generated on 2020-02-16 16:30:24 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -68,6 +68,9 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
@@ -411,6 +414,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
 #include <xmloff/dllapi.h>
+#include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/odffields.hxx>
 #include <xmloff/xmlictxt.hxx>

@@ -22,6 +22,7 @@ sw/uiconfig/swriter/ui/businessdatapage.ui://GtkEntry[@id='state'] no-labelled-b
 sw/uiconfig/swriter/ui/cardmediumpage.ui://GtkLabel[@id='formatinfo'] orphan-label
 sw/uiconfig/swriter/ui/cardmediumpage.ui://GtkComboBoxText[@id='hiddentype'] no-labelled-by
 sw/uiconfig/swriter/ui/ccdialog.ui://GtkLabel[@id='label4'] orphan-label
+sw/uiconfig/swriter/ui/checkbox.ui://GtkCheckButton[@id='checkbutton'] button-no-label
 sw/uiconfig/swriter/ui/columnpage.ui://GtkSpinButton[@id='width3mf'] labelled-by-and-mnemonic
 sw/uiconfig/swriter/ui/columnpage.ui://GtkSpinButton[@id='width2mf'] labelled-by-and-mnemonic
 sw/uiconfig/swriter/ui/columnpage.ui://GtkSpinButton[@id='width1mf'] labelled-by-and-mnemonic
