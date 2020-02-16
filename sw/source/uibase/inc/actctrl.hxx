@@ -45,6 +45,13 @@ public:
         disposeOnce();
     }
 
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
     void connect_value_changed(const Link<weld::SpinButton&, void>& rLink)
     {
         m_xWidget->connect_value_changed(rLink);
