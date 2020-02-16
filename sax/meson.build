@@ -1,0 +1,11 @@
+sax_lib = shared_library('sax',
+  'source/tools/converter.cxx',
+  'source/tools/fastattribs.cxx',
+  'source/tools/fastserializer.cxx',
+  'source/tools/fshelper.cxx',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DSAX_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  link_with: [sal_lib, tl_lib, comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib],
+)
