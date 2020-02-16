@@ -60,17 +60,17 @@ cmd/sc_insertmenulegend.png cmd/sc_legend.png
 # Add
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/addons.png cmd/32/insertplugin.png
-cmd/32/addprintarea.png cmd/32/inserttable.png
+cmd/32/addprintarea.png cmd/32/defineprintarea.png
 cmd/32/addtable.png cmd/32/dbnewtable.png
 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_addons.png cmd/lc_insertplugin.png
-cmd/lc_addprintarea.png cmd/lc_inserttable.png
+cmd/lc_addprintarea.png cmd/lc_defineprintarea.png
 cmd/lc_addtable.png cmd/lc_dbnewtable.png
 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_addons.png cmd/sc_insertplugin.png
-cmd/sc_addprintarea.png cmd/sc_inserttable.png
+cmd/sc_addprintarea.png cmd/sc_defineprintarea.png
 cmd/sc_addtable.png cmd/sc_dbnewtable.png
 
 # tooltips
@@ -533,28 +533,20 @@ cmd/sc_attributepagesize.png cmd/sc_ruler.png
 cmd/32/previewprintoptions.png cmd/32/printpreview.png
 cmd/32/printpagepreview.png cmd/32/printpreview.png
 cmd/32/sendfax.png cmd/32/print.png
-cmd/32/editprintarea.png cmd/32/editdoc.png
 
 cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_sendfax.png cmd/lc_print.png
-cmd/lc_editprintarea.png cmd/lc_editdoc.png
 
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_print.png
-cmd/sc_editprintarea.png cmd/sc_editdoc.png
 
 # Delete
-cmd/32/deletecell.png cmd/32/delete.png
-cmd/32/deleteprintarea.png cmd/32/delete.png
 cmd/32/deleterecord.png cmd/32/delete.png
 
-cmd/lc_deletecell.png cmd/lc_delete.png
-cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleterecord.png cmd/lc_delete.png
 
-cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 
 # Folder
