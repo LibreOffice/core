@@ -53,7 +53,8 @@ cdata.set10('HAVE_FEATURE_GPGME', false)
 
 cdata.set10('LIBLANGTAG_INLINE_FIX', false)
 
-cdata.set10('USE_TLS_OPENSSL', true)
+cdata.set10('USE_TLS_OPENSSL', openssl_dep.found())
+cdata.set10('USE_TLS_NSS', nss_dep.found())
 
 cdata.set10('HAVE_LIBCXX', false)
 

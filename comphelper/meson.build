@@ -106,5 +106,5 @@ comphelper_lib = shared_library('comphelper',
              '-DLIBO_INTERNAL_ONLY' ],
   include_directories: [main_inc, 'source/inc'],
   link_with: [cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, ucbhelper_lib, i18nlangtag_lib],
-  dependencies: [openssl_dep, zlib_dep, icuuc_dep],
+  dependencies: [openssl_dep, nss_dep, zlib_dep, icuuc_dep],
 )

@@ -9,3 +9,17 @@ sax_lib = shared_library('sax',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [sal_lib, tl_lib, comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib],
 )
+
+expwrap_lib = shared_library('expwrap',
+  'source/expatwrap/sax_expat.cxx',
+  'source/expatwrap/saxwriter.cxx',
+  'source/expatwrap/xml2utf.cxx',
+  'source/fastparser/fastparser.cxx',
+  'source/fastparser/legacyfastparser.cxx',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DFASTSAX_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
+  link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, sax_lib, tl_lib],
+  dependencies: [libxml_dep, expat_dep, zlib_dep],
+)
