@@ -437,7 +437,12 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     // first, process current user events
     bool bEvent = DispatchUserEvents(bHandleAllCurrentEvents);
     if (!bHandleAllCurrentEvents && bEvent)
+    {
+        // some other thread is processing the list and might wait for the lock
+        if (m_aProcessingThread != 0)
+            SolarMutexReleaser rel;
         return true;
+    }
 
     bEvent = CheckTimeout() || bEvent;
 
