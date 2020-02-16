@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 
 #include <sfx2/InterimItemWindow.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -31,18 +30,74 @@ class SwWrtShell;
 class SwView;
 class SfxDispatcher;
 
-class InputEdit : public Edit
+class InputEdit final : public InterimItemWindow
 {
+private:
+    std::unique_ptr<weld::Entry> m_xWidget;
+
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
 public:
-                    InputEdit(vcl::Window* pParent, WinBits nStyle) :
-                        Edit(pParent , nStyle){}
+    InputEdit(vcl::Window* pParent)
+        : InterimItemWindow(pParent, "modules/swriter/ui/inputeditbox.ui", "InputEditBox")
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
+    {
+        m_xWidget->connect_key_press(LINK(this, InputEdit, KeyInputHdl));
+        m_xWidget->connect_activate(LINK(this, InputEdit, ActivateHdl));
+        SetSizePixel(m_xWidget->get_preferred_size());
+    }
 
-    void            UpdateRange(const OUString& aSel,
-                                const OUString& aTableName );
+    void UpdateRange(const OUString& rSel, const OUString& rTableName);
 
-protected:
-    virtual void    KeyInput( const KeyEvent&  ) override;
+    virtual void dispose() override
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    void set_text(const OUString& rText)
+    {
+        m_xWidget->set_text(rText);
+    }
+
+    OUString get_text() const
+    {
+        return m_xWidget->get_text();
+    }
+
+    void set_accessible_name(const OUString& rName)
+    {
+        m_xWidget->set_accessible_name(rName);
+    }
+
+    void replace_selection(const OUString& rText)
+    {
+        m_xWidget->replace_selection(rText);
+    }
+
+    void select_region(int nStartPos, int nEndPos)
+    {
+        m_xWidget->select_region(nStartPos, nEndPos);
+    }
+
+    void connect_changed(const Link<weld::Entry&, void>& rLink)
+    {
+        m_xWidget->connect_changed(rLink);
+    }
+
+    virtual ~InputEdit() override
+    {
+        disposeOnce();
+    }
 };
+
 
 class PosEdit final : public InterimItemWindow
 {
@@ -93,7 +148,7 @@ class SwInputWindow final : public ToolBox
 friend class InputEdit;
 
     VclPtr<PosEdit> mxPos;
-    VclPtr<InputEdit> aEdit;
+    VclPtr<InputEdit> mxEdit;
     std::unique_ptr<SwFieldMgr> pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
@@ -109,7 +164,7 @@ friend class InputEdit;
     void CleanupUglyHackWithUndo();
 
     void DelBoxContent();
-    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
     using Window::IsActive;
 

@@ -94,6 +94,7 @@ sw/uiconfig/swriter/ui/indexentry.ui://GtkButton[@id='previous'] button-no-label
 sw/uiconfig/swriter/ui/indexentry.ui://GtkButton[@id='next'] button-no-label
 sw/uiconfig/swriter/ui/indexentry.ui://GtkButton[@id='first'] button-no-label
 sw/uiconfig/swriter/ui/indexentry.ui://GtkButton[@id='last'] button-no-label
+sw/uiconfig/swriter/ui/inputeditbox.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/insertbookmark.ui://GtkLabel[@id='lbForbiddenChars'] orphan-label
 sw/uiconfig/swriter/ui/insertbreak.ui://GtkSpinButton[@id='pagenumsb'] missing-label-for
 sw/uiconfig/swriter/ui/insertcaption.ui://GtkEntry[@id='caption_edit'] no-labelled-by
