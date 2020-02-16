@@ -29,3 +29,20 @@ common_hxx = custom_target('Common.hxx',
             '-o',
             '@OUTPUT@',
             '@INPUT@'])
+
+basicide_hxx = custom_target('BasicIDE.hxx',
+  output: 'BasicIDE.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/BasicIDE.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'BasicIDE',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+

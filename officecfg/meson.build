@@ -39,5 +39,4 @@ vcl_hxx = custom_target('VCL.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
-
 setup_inc = include_directories('..') # HACK

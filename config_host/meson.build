@@ -78,6 +78,9 @@ cdata.set10('ENABLE_GIO', gio_dep.found())
 
 cdata.set_quoted('OOO_VENDOR', 'Vogon high comman')
 
+cdata.set10('HAVE_FEATURE_EXTENSIONS', 1)
+cdata.set10('ENABLE_EXTENSION_UPDATE', 1)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -172,4 +175,8 @@ configure_file(input: 'config_langs.h.meson',
 
 configure_file(input: 'config_vendor.h.meson',
   output: 'config_vendor.h',
+  configuration: cdata)
+
+configure_file(input: 'config_extensions.h.meson',
+  output: 'config_extensions.h',
   configuration: cdata)
