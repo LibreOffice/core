@@ -514,7 +514,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     sal_Unicode   m_cTabDecimal;  // the current decimal delimiter
     sal_Unicode   m_cHookChar;    // For tabs in fields etc.
-    sal_uInt8   m_nMaxHyph;       // Max. line count of followup hyphenations
+    sal_uInt8   m_nMaxHyph;       // Max. line count of follow-up hyphenations
 
     // Hyphenating ...
     bool InitHyph( const bool bAuto = false );
