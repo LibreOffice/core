@@ -352,7 +352,7 @@ const char* ANALYSIS_Imabs[] =
 
 const char* ANALYSIS_Imaginary[] =
 {
-    NC_("ANALYSIS_Imaginary", "Returns the imaginary coefficient of a complex number"),
+    NC_("ANALYSIS_Imaginary", "Returns the imaginary part of a complex number"),
     NC_("ANALYSIS_Imaginary", "Complex number"),
     NC_("ANALYSIS_Imaginary", "The complex number")
 };
@@ -435,7 +435,7 @@ const char* ANALYSIS_Improduct[] =
 
 const char* ANALYSIS_Imreal[] =
 {
-    NC_("ANALYSIS_Imreal", "Returns the real coefficient of a complex number"),
+    NC_("ANALYSIS_Imreal", "Returns the real part of a complex number"),
     NC_("ANALYSIS_Imreal", "Complex number"),
     NC_("ANALYSIS_Imreal", "The complex number")
 };
@@ -528,11 +528,11 @@ const char* ANALYSIS_Imcsch[] =
 
 const char* ANALYSIS_Complex[] =
 {
-    NC_("ANALYSIS_Complex", "Converts real and imaginary coefficients into a complex number"),
-    NC_("ANALYSIS_Complex", "Real num"),
-    NC_("ANALYSIS_Complex", "The real coefficient"),
-    NC_("ANALYSIS_Complex", "I num"),
-    NC_("ANALYSIS_Complex", "The imaginary coefficient"),
+    NC_("ANALYSIS_Complex", "Converts real and imaginary parts into a complex number"),
+    NC_("ANALYSIS_Complex", "Real part"),
+    NC_("ANALYSIS_Complex", "The real part"),
+    NC_("ANALYSIS_Complex", "Im part"),
+    NC_("ANALYSIS_Complex", "The imaginary part"),
     NC_("ANALYSIS_Complex", "Suffix"),
     NC_("ANALYSIS_Complex", "The suffix")
 };
