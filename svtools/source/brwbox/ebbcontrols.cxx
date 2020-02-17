@@ -532,7 +532,7 @@ namespace svt
     void MultiLineTextCell::Modify()
     {
         GetTextEngine()->SetModified( true );
-        MultiLineEdit::Modify();
+        VclMultiLineEdit::Modify();
     }
 
 
@@ -597,7 +597,7 @@ namespace svt
                 }
             }
         }
-        return MultiLineEdit::PreNotify( rNEvt );
+        return VclMultiLineEdit::PreNotify( rNEvt );
     }
 
 

@@ -30,7 +30,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class Button;
@@ -188,11 +188,11 @@ namespace svt
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
-    class SVT_DLLPUBLIC MultiLineTextCell final : public MultiLineEdit
+    class SVT_DLLPUBLIC MultiLineTextCell final : public VclMultiLineEdit
     {
     public:
         MultiLineTextCell( vcl::Window* _pParent, WinBits _nStyle )
-            :MultiLineEdit( _pParent, _nStyle )
+            : VclMultiLineEdit( _pParent, _nStyle )
         {
         }
 
