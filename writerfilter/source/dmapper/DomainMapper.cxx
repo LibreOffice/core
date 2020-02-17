@@ -3735,6 +3735,8 @@ bool DomainMapper::IsInHeaderFooter() const
     return m_pImpl->IsInHeaderFooter();
 }
 
+bool DomainMapper::IsInShape() const { return m_pImpl->IsInShape(); }
+
 bool DomainMapper::IsInTable() const
 {
     return m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell();
