@@ -6866,7 +6866,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     {
         // Lowered by the differences between the descenders (descent = baseline to bottom of lowest letter).
         // The descent is generally about 20% of the total font height.
-        // That is why DFLT_ESC_PROP (58) _originally_ lead to 8% (DFLT_ESC_SUB)
+        // That is why DFLT_ESC_PROP (58) leads to 8% (DFLT_ESC_SUB)
         nEsc = .2 * -(100 - nProp);
     }
 

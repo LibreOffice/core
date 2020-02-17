@@ -317,6 +317,25 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
+DECLARE_HTMLIMPORT_TEST(testTdf80194_subscript, "tdf80194_subscript.html")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
+    // Most recently, the default subscript was 33%, which is much too large for a subscript.
+    // The original 8% (derived from a mathematical calculation) is much better in general,
+    // and for HTML was a better match when testing with firefox.
+    // DFLT_ESC_AUTO_SUB was tested, but HTML specs are pretty loose, and generally
+    // it exceeds the font ascent - so the formula-based-escapement is not appropriate.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -8.f, getProperty<float>(getRun(xPara, 2, "p"), "CharEscapement"), 1);
+
+    xPara.set(getParagraph(2));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1), "CharEscapement"), 0);
+    uno::Reference<text::XTextRange> xRun (getRun(xPara, 2, "L"));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 33.f, getProperty<float>(xRun, "CharEscapement"), 1);
+    // HTML (although unspecified) tends to use a fairly large font. Definitely more than DFLT_ESC_PROP.
+    CPPUNIT_ASSERT( 70 < getProperty<sal_Int8>(xRun, "CharEscapementHeight"));
+}
+
 DECLARE_HTMLIMPORT_TEST(testReqIfTable, "reqif-table.xhtml")
 {
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
