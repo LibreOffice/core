@@ -41,6 +41,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/chartdatadialog \
 	chart2/uiconfig/ui/charttypedialog \
 	chart2/uiconfig/ui/columnfragment \
+	chart2/uiconfig/ui/combobox \
 	chart2/uiconfig/ui/datarangedialog \
 	chart2/uiconfig/ui/dlg_DataLabel \
 	chart2/uiconfig/ui/dlg_InsertErrorBars \
