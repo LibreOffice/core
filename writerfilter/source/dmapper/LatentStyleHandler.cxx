@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "LatentStyleHandler.hxx"
+#include "TagLogger.hxx"
 #include <ooxml/resourceids.hxx>
 
 namespace writerfilter::dmapper

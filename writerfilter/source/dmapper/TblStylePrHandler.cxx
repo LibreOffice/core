@@ -18,6 +18,7 @@
  */
 
 #include "TblStylePrHandler.hxx"
+#include "TagLogger.hxx"
 #include "CellMarginHandler.hxx"
 #include "PropertyMap.hxx"
 #include <ooxml/resourceids.hxx>

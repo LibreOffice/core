@@ -26,6 +26,8 @@
 #include "PropertyMap.hxx"
 #include "TableData.hxx"
 
+#include <dmapper/resourcemodel.hxx>
+
 namespace writerfilter
 {
 namespace dmapper

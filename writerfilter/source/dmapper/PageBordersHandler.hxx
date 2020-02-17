@@ -19,11 +19,9 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PAGEBORDERSHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PAGEBORDERSHANDLER_HXX
 
-#include "BorderHandler.hxx"
 #include "PropertyMap.hxx"
 
 #include "LoggedResources.hxx"
-#include <memory>
 
 #include <com/sun/star/table/BorderLine2.hpp>
 

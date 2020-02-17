@@ -22,7 +22,6 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include "ConversionHelper.hxx"
 #include "WrapPolygonHandler.hxx"
 #include "util.hxx"
 

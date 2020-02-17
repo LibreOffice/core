@@ -24,8 +24,6 @@
 
 #include "TableManager.hxx"
 #include "PropertyMap.hxx"
-#include "StyleSheetTable.hxx"
-#include <com/sun/star/text/XTextRange.hpp>
 #include <vector>
 #include <memory>
 #include <comphelper/sequenceashashmap.hxx>

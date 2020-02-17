@@ -24,9 +24,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <dmapper/resourcemodel.hxx>
-#include <ooxml/OOXMLDocument.hxx>
+#include <ooxml/OOXMLDocumentImpl.hxx>
 #include <rtl/ref.hxx>
-#include "OOXMLParserState.hxx"
 
 namespace writerfilter {
 namespace ooxml

@@ -20,7 +20,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SECTIONCOLUMNHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <memory>
 #include <vector>
 
 namespace writerfilter {

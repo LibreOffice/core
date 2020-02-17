@@ -20,18 +20,19 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAP_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/ref.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
 #include <memory>
 #include <o3tl/optional.hxx>
 #include <map>
 #include <vector>
-#include "TagLogger.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans {

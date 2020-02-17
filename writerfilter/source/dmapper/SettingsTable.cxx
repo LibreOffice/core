@@ -18,6 +18,7 @@
  */
 
 #include "SettingsTable.hxx"
+#include "TagLogger.hxx"
 
 #include <vector>
 

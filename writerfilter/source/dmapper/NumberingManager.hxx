@@ -24,11 +24,11 @@
 
 #include "DomainMapper.hxx"
 #include "LoggedResources.hxx"
+#include "StyleSheetTable.hxx"
 
 #include <editeng/numitem.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
 namespace writerfilter {

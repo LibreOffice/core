@@ -22,7 +22,6 @@
 
 #include <memory>
 #include "LoggedResources.hxx"
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
 namespace writerfilter {

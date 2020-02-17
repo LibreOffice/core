@@ -19,13 +19,10 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
-
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
@@ -35,9 +32,6 @@
 
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/resmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>

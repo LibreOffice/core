@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "PropertyMap.hxx"
+#include "TagLogger.hxx"
 #include <ooxml/resourceids.hxx>
 #include "DomainMapper_Impl.hxx"
 #include "ConversionHelper.hxx"
@@ -28,7 +29,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -36,7 +36,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

@@ -14,8 +14,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace ::com::sun::star;
 
 namespace

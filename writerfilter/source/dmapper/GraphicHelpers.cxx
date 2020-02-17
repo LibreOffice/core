@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ConversionHelper.hxx"
+
 #include "GraphicHelpers.hxx"
+#include "TagLogger.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "PropertyIds.hxx"
 
@@ -29,14 +30,10 @@
 
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <sal/log.hxx>
-#include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <iostream>
-#include <memory>
 
 namespace writerfilter::dmapper {
 

@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <limits>
 #include <tuple>
 #include <vector>
 
@@ -20,7 +19,7 @@
 
 #include <rtl/ustring.hxx>
 #include <dmapper/ConversionHelper.hxx>
-#include <dmapper/DomainMapper_Impl.hxx>
+#include <dmapper/DomainMapperFactory.hxx>
 
 namespace {
 

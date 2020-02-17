@@ -25,8 +25,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
-#include <oox/mathml/import.hxx>
 #include <oox/mathml/importutils.hxx>
+#include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySet.hxx"
 

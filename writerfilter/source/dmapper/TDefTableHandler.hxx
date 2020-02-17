@@ -20,7 +20,6 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TDEFTABLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <memory>
 #include <vector>
 namespace com{ namespace sun{ namespace star{
     namespace table {

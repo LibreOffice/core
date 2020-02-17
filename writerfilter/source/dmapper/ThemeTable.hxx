@@ -22,9 +22,7 @@
 
 #include "LoggedResources.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <i18nlangtag/lang.h>
-#include <map>
 #include <memory>
 
 namespace writerfilter {

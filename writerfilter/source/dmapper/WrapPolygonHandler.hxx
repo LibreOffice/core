@@ -20,7 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
 
-#include <deque>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include "LoggedResources.hxx"
 #include <tools/fract.hxx>

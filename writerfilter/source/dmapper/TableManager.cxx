@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <ooxml/resourceids.hxx>
 #include "TableManager.hxx"
+#include "TagLogger.hxx"
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"

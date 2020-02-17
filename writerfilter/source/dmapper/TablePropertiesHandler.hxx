@@ -25,8 +25,6 @@
 #include "TableManager.hxx"
 #include <dmapper/resourcemodel.hxx>
 
-#include <memory>
-
 #include <vector>
 
 namespace writerfilter {

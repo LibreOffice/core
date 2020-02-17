@@ -18,12 +18,10 @@
  */
 #include "CellColorHandler.hxx"
 #include "PropertyMap.hxx"
-#include "ConversionHelper.hxx"
 #include "TDefTableHandler.hxx"
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
-#include <sal/macros.h>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/color.hxx>

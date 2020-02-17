@@ -20,10 +20,11 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
 
-#include <dmapper/resourcemodel.hxx>
+#include <com/sun/star/text/XTextRange.hpp>
+
+#include "PropertyMap.hxx"
 
 #include <vector>
-#include <memory>
 
 namespace writerfilter
 {

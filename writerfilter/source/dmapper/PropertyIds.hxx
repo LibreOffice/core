@@ -19,6 +19,8 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 
+#include <rtl/ustring.hxx>
+
 namespace writerfilter {
 namespace dmapper{
 // Ensure that Character Properties are placed between PROP_CHARACTER_STYLES and PROP_CHARACTER_END

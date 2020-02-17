@@ -20,10 +20,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
+#include <oox/mathml/import.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sal/log.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>

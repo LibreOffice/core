@@ -21,7 +21,6 @@
 #define INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
 
 #include <string>
-#include <memory>
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>

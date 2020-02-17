@@ -18,7 +18,6 @@
  */
 #include "ConversionHelper.hxx"
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -27,8 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <tools/mapunit.hxx>
-#include <algorithm>
-#include <functional>
 
 using namespace com::sun::star;
 

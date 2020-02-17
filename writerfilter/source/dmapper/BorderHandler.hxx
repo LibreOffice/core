@@ -19,7 +19,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
 
-#include <memory>
 #include <vector>
 #include "LoggedResources.hxx"
 #include "PropertyMap.hxx"

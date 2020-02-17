@@ -25,7 +25,6 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -33,7 +32,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "TablePositionHandler.hxx"
-#include "ConversionHelper.hxx"
+#include "TagLogger.hxx"
 #include "util.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

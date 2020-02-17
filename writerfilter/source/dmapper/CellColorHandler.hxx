@@ -21,7 +21,6 @@
 
 #include "LoggedResources.hxx"
 #include "PropertyMap.hxx"
-#include <memory>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

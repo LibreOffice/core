@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
 #include <sax/fastattribs.hxx>
 #include "OOXMLFactory.hxx"
-#include "OOXMLFastHelper.hxx"
 
 namespace writerfilter::ooxml {
 

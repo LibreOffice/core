@@ -23,18 +23,13 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
-#include <com/sun/star/text/XTextAppendAndConvert.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <queue>
 #include <stack>
-#include <tuple>
 #include <unordered_map>
 #include <vector>
 #include <o3tl/optional.hxx>
-
-#include <ooxml/resourceids.hxx>
 
 #include "DomainMapper.hxx"
 #include "DomainMapperTableManager.hxx"
@@ -51,8 +46,6 @@
 #include "SmartTagHandler.hxx"
 #include "FormControlHelper.hxx"
 #include <map>
-
-#include <string.h>
 
 namespace com{ namespace sun{ namespace star{
         namespace awt{

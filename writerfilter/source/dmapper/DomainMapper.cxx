@@ -16,10 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include "BorderHandler.hxx"
 #include "PageBordersHandler.hxx"
 
 #include "util.hxx"
 #include "SdtHelper.hxx"
+#include "TagLogger.hxx"
 #include "TDefTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "ConversionHelper.hxx"
@@ -27,6 +29,7 @@
 #include "MeasureHandler.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
+#include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -81,9 +84,6 @@
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/font.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;

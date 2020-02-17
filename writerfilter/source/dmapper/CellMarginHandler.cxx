@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "CellMarginHandler.hxx"
-#include "PropertyMap.hxx"
 #include "ConversionHelper.hxx"
 #include <ooxml/resourceids.hxx>
 #include <comphelper/propertysequence.hxx>
