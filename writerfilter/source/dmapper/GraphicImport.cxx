@@ -292,7 +292,8 @@ public:
         ,m_rAligns(rAligns)
         ,m_rPositivePercentages(rPositivePercentages)
     {
-        if (eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE)
+        if (eGraphicImportType == GraphicImportType::IMPORT_AS_DETECTED_INLINE
+            && !rDMapper.IsInShape())
         {
             zOrder = 0;
         }
