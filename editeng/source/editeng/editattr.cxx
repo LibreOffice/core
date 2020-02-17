@@ -273,9 +273,9 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 
     short nEsc = static_cast<const SvxEscapementItem*>(GetItem())->GetEsc();
     if ( nEsc == DFLT_ESC_AUTO_SUPER )
-        nEsc = 100 - nProp;
+        nEsc =  .8 * (100 - nProp);
     else if ( nEsc == DFLT_ESC_AUTO_SUB )
-        nEsc = sal::static_int_cast< short >( -( 100 - nProp ) );
+        nEsc =  .2 * -(100 - nProp);
     rFont.SetEscapement( nEsc );
 }
 
