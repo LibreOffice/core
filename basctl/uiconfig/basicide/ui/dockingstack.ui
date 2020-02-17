@@ -4,15 +4,13 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name expander -->
-      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkGrid" id="DockingOrganizer">
+  <object class="GtkGrid" id="DockingStack">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
@@ -27,7 +25,7 @@
         <property name="vexpand">True</property>
         <property name="shadow_type">in</property>
         <child>
-          <object class="GtkTreeView" id="libraries">
+          <object class="GtkTreeView" id="stack">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -42,17 +40,10 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                  <attributes>
-                    <attribute name="pixbuf">0</attribute>
-                  </attributes>
-                </child>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                   <attributes>
-                    <attribute name="text">1</attribute>
+                    <attribute name="text">0</attribute>
                   </attributes>
                 </child>
               </object>
@@ -70,7 +61,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
-        <property name="mnemonic_widget">libraries</property>
+        <property name="mnemonic_widget">stack</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>

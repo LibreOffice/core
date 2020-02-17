@@ -42,6 +42,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
@@ -1834,22 +1835,24 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
     aTreeListBox->UpdateWatches( bBasicStopped );
 }
 
-
 // StackWindow
-
-
-StackWindow::StackWindow (Layout* pParent) :
-    DockingWindow(pParent),
-    aTreeListBox( VclPtr<SvTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP) ),
-    aStackStr( IDEResId( RID_STR_STACK ) )
+StackWindow::StackWindow(Layout* pParent)
+    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
 {
-    aTreeListBox->SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME));
-    aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
-    aTreeListBox->SetHighlightRange();
-    aTreeListBox->SetSelectionMode( SelectionMode::NONE );
-    aTreeListBox->InsertEntry( OUString() );
-    aTreeListBox->Show();
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
+                                                       "modules/BasicIDE/ui/dockingstack.ui"));
+    m_xContainer = m_xBuilder->weld_container("DockingStack");
+
+    m_xTitle = m_xBuilder->weld_label("title");
+    m_xTitle->set_label(IDEResId(RID_STR_STACK));
+    m_xTreeListBox = m_xBuilder->weld_tree_view("stack");
+
+    m_xTreeListBox->set_help_id(HID_BASICIDE_STACKWINDOW_LIST);
+    m_xTreeListBox->set_accessible_name(IDEResId(RID_STR_STACKNAME));
+    m_xTreeListBox->set_selection_mode(SelectionMode::NONE);
+    m_xTreeListBox->append_text(OUString());
 
     SetText(IDEResId(RID_STR_STACKNAME));
 
@@ -1858,7 +1861,6 @@ StackWindow::StackWindow (Layout* pParent) :
     // make stack window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
-
 
 StackWindow::~StackWindow()
 {
@@ -1869,40 +1871,43 @@ void StackWindow::dispose()
 {
     if (!IsDisposed())
         GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
-    aTreeListBox.disposeAndClear();
+    m_xTitle.reset();
+    m_xTreeListBox.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
     DockingWindow::dispose();
 }
 
 void StackWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.DrawText(Point(DWBORDER, 7), aStackStr);
     lcl_DrawIDEWindowFrame(this, rRenderContext);
 }
 
 void StackWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
-    Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER);
+    Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - 2*DWBORDER);
 
     if ( aBoxSz.Width() < 4 )
         aBoxSz.setWidth( 0 );
     if ( aBoxSz.Height() < 4 )
         aBoxSz.setHeight( 0 );
 
-    aTreeListBox->SetSizePixel( aBoxSz );
+    m_xVclContentArea->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
 
     Invalidate();
 }
 
 void StackWindow::UpdateCalls()
 {
-    aTreeListBox->SetUpdateMode(false);
-    aTreeListBox->Clear();
+    m_xTreeListBox->freeze();
+    m_xTreeListBox->clear();
 
     if (StarBASIC::IsRunning())
     {
         ErrCode eOld = SbxBase::GetError();
-        aTreeListBox->SetSelectionMode( SelectionMode::Single );
+        m_xTreeListBox->set_selection_mode(SelectionMode::Single);
 
         sal_Int32 nScope = 0;
         SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
@@ -1952,7 +1957,7 @@ void StackWindow::UpdateCalls()
                 }
                 aEntry.append(")");
             }
-            aTreeListBox->InsertEntry( aEntry.makeStringAndClear() );
+            m_xTreeListBox->append_text(aEntry.makeStringAndClear());
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -1963,11 +1968,11 @@ void StackWindow::UpdateCalls()
     }
     else
     {
-        aTreeListBox->SetSelectionMode( SelectionMode::NONE );
-        aTreeListBox->InsertEntry( OUString() );
+        m_xTreeListBox->set_selection_mode(SelectionMode::NONE);
+        m_xTreeListBox->append_text(OUString());
     }
 
-    aTreeListBox->SetUpdateMode(true);
+    m_xTreeListBox->thaw();
 }
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
