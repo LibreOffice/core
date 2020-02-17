@@ -30,7 +30,6 @@
 #include <editeng/crossedoutitem.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/useroptions.hxx>
-#include <svtools/svmedit.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -269,7 +268,7 @@ void AnnotationWindow::InitControls()
     mpTextWindow->SetPointer(PointerStyle::Text);
 
     // window control for author and date
-    mpMeta = VclPtr<MultiLineEdit>::Create(this,0);
+    mpMeta = VclPtr<VclMultiLineEdit>::Create(this,0);
     mpMeta->SetReadOnly();
     mpMeta->SetRightToLeft(AllSettings::GetLayoutRTL());
     mpMeta->AlwaysDisableInput(true);
