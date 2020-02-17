@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(LibBox, FocusInHdl, weld::Widget&, void)
 IMPL_LINK_NOARG(LibBox, FocusOutHdl, weld::Widget&, void)
 {
     // comboboxes can be comprised of multiple widgets, ensure all have lost focus
-    if (!m_xWidget->has_focus())
+    if (m_xWidget && !m_xWidget->has_focus())
         mbFillBox = true;
 }
 

@@ -51,10 +51,37 @@ namespace
 static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ElementSelectorToolbarController";
 }
 
-SelectorListBox::SelectorListBox( vcl::Window* pParent, WinBits nStyle )
-    : ListBox( pParent, nStyle )
-    , m_bReleaseFocus( true )
+SelectorListBox::SelectorListBox(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/schart/ui/combobox.ui", "ComboBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+    , m_bReleaseFocus(true)
 {
+    m_xWidget->connect_key_press(LINK(this, SelectorListBox, KeyInputHdl));
+    m_xWidget->connect_changed(LINK(this, SelectorListBox, SelectHdl));
+    m_xWidget->connect_focus_out(LINK(this, SelectorListBox, FocusOutHdl));
+
+    ::Size aLogicalSize(75, 0);
+    ::Size aPixelSize = LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
+    m_xWidget->set_size_request(aPixelSize.Width(), -1);
+    SetSizePixel(m_xContainer->get_preferred_size());
+}
+
+void SelectorListBox::dispose()
+{
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
+}
+
+void SelectorListBox::GetFocus()
+{
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
+}
+
+SelectorListBox::~SelectorListBox()
+{
+    disposeOnce();
 }
 
 static void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdentifier & rParent, std::vector< ListBoxEntryData >& rEntries
@@ -79,7 +106,7 @@ void SelectorListBox::SetChartController( const Reference< frame::XController >&
 
 void SelectorListBox::UpdateChartElementsListAndSelection()
 {
-    Clear();
+    m_xWidget->clear();
     m_aEntries.clear();
 
     Reference< frame::XController > xChartController( m_xChartController );
@@ -138,11 +165,12 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             }
         }
 
+        m_xWidget->freeze();
         sal_uInt16 nEntryPosToSelect = 0; bool bSelectionFound = false;
         sal_uInt16 nN=0;
         for (auto const& entry : m_aEntries)
         {
-            InsertEntry(entry.UIName);
+            m_xWidget->append_text(entry.UIName);
             if ( !bSelectionFound && aSelectedOID == entry.OID )
             {
                 nEntryPosToSelect = nN;
@@ -150,16 +178,12 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             }
             ++nN;
         }
+        m_xWidget->thaw();
 
         if( bSelectionFound )
-            SelectEntryPos(nEntryPosToSelect);
-
-        sal_Int32 nEntryCount = GetEntryCount();
-        if( nEntryCount > 100 )
-            nEntryCount = 100;
-        SetDropDownLineCount( nEntryCount );
+            m_xWidget->set_active(nEntryPosToSelect);
     }
-    SaveValue(); //remind current selection pos
+    m_xWidget->save_value(); //remind current selection pos
 }
 
 void SelectorListBox::ReleaseFocus_Impl()
@@ -176,14 +200,12 @@ void SelectorListBox::ReleaseFocus_Impl()
         xFrame->getContainerWindow()->setFocus();
 }
 
-void SelectorListBox::Select()
+IMPL_LINK(SelectorListBox, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
-    ListBox::Select();
-
-    if ( !IsTravelSelect() )
+    if (rComboBox.changed_by_direct_pick())
     {
-        const sal_Int32 nPos = GetSelectedEntryPos();
-        if( o3tl::make_unsigned(nPos) < m_aEntries.size() )
+        const sal_Int32 nPos = rComboBox.get_active();
+        if (o3tl::make_unsigned(nPos) < m_aEntries.size())
         {
             ObjectIdentifier aOID = m_aEntries[nPos].OID;
             Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartController.get(), uno::UNO_QUERY );
@@ -194,46 +216,38 @@ void SelectorListBox::Select()
     }
 }
 
-bool SelectorListBox::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(SelectorListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
-        switch ( nCode )
+    switch ( nCode )
+    {
+        case KEY_RETURN:
+        case KEY_TAB:
         {
-            case KEY_RETURN:
-            case KEY_TAB:
-            {
-                if ( nCode == KEY_TAB )
-                    m_bReleaseFocus = false;
-                else
-                    bHandled = true;
-                Select();
-                break;
-            }
-
-            case KEY_ESCAPE:
-                SelectEntryPos( GetSavedValue() ); //restore saved selection
-                ReleaseFocus_Impl();
-                break;
+            if ( nCode == KEY_TAB )
+                m_bReleaseFocus = false;
+            else
+                bHandled = true;
+            SelectHdl(*m_xWidget);
+            break;
         }
-    }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-    {
-        if ( !HasFocus() )
-            SelectEntryPos( GetSavedValue() );
+
+        case KEY_ESCAPE:
+            m_xWidget->set_active_text(m_xWidget->get_saved_value()); //restore saved selection
+            ReleaseFocus_Impl();
+            break;
     }
 
-    return bHandled || ListBox::EventNotify(rNEvt);
+    return bHandled || ChildKeyInput(rKEvt);
 }
 
-Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()
+IMPL_LINK_NOARG(SelectorListBox, FocusOutHdl, weld::Widget&, void)
 {
-    UpdateChartElementsListAndSelection();
-    return ListBox::CreateAccessible();
+    if (m_xWidget && !m_xWidget->has_focus()) // comboboxes can be comprised of multiple widgets, ensure all have lost focus
+        m_xWidget->set_active_text(m_xWidget->get_saved_value());
 }
 
 OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
@@ -294,11 +308,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
         if( pParent )
         {
-            m_apSelectorListBox.reset( VclPtr<SelectorListBox>::Create( pParent, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER ) );
-            ::Size aLogicalSize( 75, 160 );
-            ::Size aPixelSize = m_apSelectorListBox->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
-            m_apSelectorListBox->SetSizePixel( aPixelSize );
-            m_apSelectorListBox->SetDropDownLineCount( 5 );
+            m_apSelectorListBox.reset(VclPtr<SelectorListBox>::Create(pParent));
         }
     }
     if( m_apSelectorListBox.get() )
