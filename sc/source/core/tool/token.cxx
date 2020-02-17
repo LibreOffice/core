@@ -3375,12 +3375,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             SCTAB nOldTab = (*pp)->GetSheet();
                             if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
                                 aRes.mbNameModified = true;
-                            if (rCxt.mnTabDelta &&
-                                    rCxt.maRange.aStart.Tab() <= nOldTab && nOldTab <= rCxt.maRange.aEnd.Tab())
-                            {
-                                aRes.mbNameModified = true;
-                                (*pp)->SetSheet( nOldTab + rCxt.mnTabDelta);
-                            }
                         }
                         break;
                     case ocDBArea:
