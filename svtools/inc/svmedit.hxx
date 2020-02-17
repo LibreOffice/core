@@ -22,17 +22,13 @@
 
 #include <vcl/vclmedit.hxx>
 
-#include <svtools/svtdllapi.h>
-
-
-class SVT_DLLPUBLIC MultiLineEdit : public VclMultiLineEdit
+class MultiLineEdit : public VclMultiLineEdit
 {
 public:
     MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) override;
 };
-
 
 #endif // INCLUDED_SVTOOLS_SVMEDIT_HXX
 
