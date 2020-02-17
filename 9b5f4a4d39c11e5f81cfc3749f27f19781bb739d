@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bd22d20_4ab8fe36",
+        "filename": "desktop/source/migration/migration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-02-17T06:42:35Z",
+      "side": 1,
+      "message": "Why use GetCommandProperties ? Does this return the same as the method you removed?",
+      "range": {
+        "startLine": 988,
+        "startChar": 102,
+        "endLine": 988,
+        "endChar": 122
+      },
+      "revId": "9b5f4a4d39c11e5f81cfc3749f27f19781bb739d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
