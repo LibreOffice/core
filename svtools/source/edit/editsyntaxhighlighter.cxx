@@ -17,24 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svtools/svmedit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/txtattr.hxx>
 
-
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( vcl::Window* pParent, WinBits nWinStyle,
-    HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), aHighlighter(aLanguage)
+    HighlighterLanguage aLanguage): VclMultiLineEdit(pParent,nWinStyle), aHighlighter(aLanguage)
 {
     EnableUpdateData(300);
 }
 
 void MultiLineEditSyntaxHighlight::SetText(const OUString& rNewText)
 {
-    MultiLineEdit::SetText(rNewText);
+    VclMultiLineEdit::SetText(rNewText);
     UpdateData();
 }
 
@@ -111,7 +108,7 @@ bool MultiLineEditSyntaxHighlight::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         DoBracketHilight(rNEvt.GetKeyEvent()->GetCharCode());
 
-    return MultiLineEdit::PreNotify(rNEvt);
+    return VclMultiLineEdit::PreNotify(rNEvt);
 }
 
 Color MultiLineEditSyntaxHighlight::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
