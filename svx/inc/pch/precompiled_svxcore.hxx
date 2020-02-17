@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-14 09:32:42 using:
+ Generated on 2020-02-17 12:26:22 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -105,7 +105,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/combobox.hxx>

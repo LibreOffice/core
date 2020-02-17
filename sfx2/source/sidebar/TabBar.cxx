@@ -31,6 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
+#include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>

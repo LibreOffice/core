@@ -23,11 +23,14 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 
-#include <vcl/button.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 
 #include <functional>
+
+class Button;
+class CheckBox;
+class RadioButton;
 
 namespace svt { class AcceleratorExecute; }
 
