@@ -316,8 +316,12 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
     // TableStyle:firstRow (for header rows 1 and 2) color and size overrides document rPrDefault
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5B9BD5), getProperty<sal_Int32>(getRun(xCell,1), "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(xCell,1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5B9BD5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),1), "CharHeight"));
+    // direct formatting in A1
+    uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell2->getText()), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraphOfText(1, xCell2->getText()),1), "CharHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
@@ -327,6 +331,23 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A3"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(xCell,1), "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
+{
+    // check text portions with and without direct formatting
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // text portions with direct formatting
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 2), "CharColor"));
+    // default paragraph text color
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x5B9BD5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell->getText()), 3), "CharColor"));
+    // text portions with direct formatting
+    CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),2), "CharHeight"));
+    // default paragraph text size
+    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),3), "CharHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTcBorders, "testTcBorders.docx")
