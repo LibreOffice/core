@@ -59,6 +59,7 @@ public:
     void testEmbeddedPdf();
     void testEmbeddedText();
     void testTransparenText();
+    void testDefaultSubscripts();
     void testTdf98477();
     void testAuthorField();
     void testTdf50499();
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testEmbeddedPdf);
     CPPUNIT_TEST(testEmbeddedText);
     CPPUNIT_TEST(testTransparenText);
+    CPPUNIT_TEST(testDefaultSubscripts);
     CPPUNIT_TEST(testTdf98477);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf50499);
@@ -847,6 +849,21 @@ void SdExportTest::testTransparenText()
     // - Actual  : 0
     // i.e. the 75% transparent text was turned into a "not transparent at all" text.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(75), nCharTransparence);
+
+    xShell->DoClose();
+}
+
+void SdExportTest::testDefaultSubscripts()
+{
+    sd::DrawDocShellRef xShell
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf80194_defaultSubscripts.fodg"), FODG);
+    xShell = saveAndReload(xShell.get(), ODG);
+
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
+    // Default subscripts were too large, enlarging the gap between the next line.
+    // The exact size isn't important. Was 18975, now 16604.
+    CPPUNIT_ASSERT(17000 > xShape->getSize().Height);
 
     xShell->DoClose();
 }
