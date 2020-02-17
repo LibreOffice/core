@@ -430,13 +430,6 @@ struct SymbolData
     { }
 };
 
-/// Information about a paragraph to be finished after a table end.
-struct TableParagraph
-{
-    PropertyMapPtr m_pPropertyMap;
-    css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
-};
-
 class DomainMapper;
 class DomainMapper_Impl final
 {
