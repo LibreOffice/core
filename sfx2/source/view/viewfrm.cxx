@@ -931,6 +931,13 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
             {
                 if ( !pSh->CanReload_Impl() || pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                     rSet.DisableItem(nWhich);
+                else
+                {
+                    // If any ChildFrame is reloadable, the slot is enabled,
+                    // so you can perform CTRL-Reload
+                    rSet.Put( SfxBoolItem( nWhich, false));
+                }
+
                 break;
             }
         }
