@@ -16,6 +16,24 @@
       "revId": "f82dabbdd9ac550c418a1d53d33ca10d159ad515",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2db18ff4_c17ba173",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-02-17T17:18:50Z",
+      "side": 1,
+      "message": "I\u0027ve no objections if a static_cast is known to work, but the previous code felt it needed to be a dynamic_cast so I left it dynamic, except with an expected exception if it isn\u0027t what its supposed to be, instead of a null-deref",
+      "parentUuid": "7744a752_0518c5b4",
+      "revId": "f82dabbdd9ac550c418a1d53d33ca10d159ad515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
