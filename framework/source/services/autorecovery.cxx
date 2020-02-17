@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -3328,10 +3329,10 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
         // put the filter name into the descriptor - we're not going to involve any type detection, so
         // the document might be lost without the FilterName property
-        if ( (rInfo.DocumentState & DocState::TryLoadOriginal) == DocState::TryLoadOriginal)
+/*        if ( (rInfo.DocumentState & DocState::TryLoadOriginal) == DocState::TryLoadOriginal)
             lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.RealFilter;
         else
-            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.DefaultFilter;
+            lDescriptor[ utl::MediaDescriptor::PROP_FILTERNAME() ] <<= rInfo.DefaultFilter;*/
 
         if ( sURL == rInfo.FactoryURL )
         {
@@ -3346,6 +3347,23 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         }
         else
         {
+            Reference< css::document::XTypeDetection > xDetect(
+                m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.document.TypeDetection", m_xContext),
+                UNO_QUERY_THROW);
+            lDescriptor[lDescriptor.PROP_URL()] <<= sURL;
+            Sequence< css::beans::PropertyValue > lDescriptorSeq = lDescriptor.getAsConstPropertyValueList();
+            OUString sType = xDetect->queryTypeByDescriptor(lDescriptorSeq, true);
+
+            // no valid content -> loading not possible
+            if (sType.isEmpty())
+                throw css::uno::RuntimeException(
+                    "Recovery of \"" + sURL + "\" failed.",
+                    static_cast<css::frame::XDispatch*>(this)
+                );
+
+            lDescriptor = lDescriptorSeq;
+
             // let it recover itself
             Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
             xDocRecover->recoverFromFile(
