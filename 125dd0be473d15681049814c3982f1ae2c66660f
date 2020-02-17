@@ -34,6 +34,24 @@
       "revId": "125dd0be473d15681049814c3982f1ae2c66660f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c48ef2e_3380ee58",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1002200
+      },
+      "writtenOn": "2020-02-17T13:34:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "259340e9_58a0524d",
+      "revId": "125dd0be473d15681049814c3982f1ae2c66660f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
