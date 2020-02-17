@@ -27,7 +27,6 @@
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
