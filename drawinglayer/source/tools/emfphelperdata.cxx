@@ -544,7 +544,7 @@ namespace emfplushelper
                         break;
                 }
             }
-            else if (pen->penDataFlags & EmfPlusPenDataMiterLimit) // pen has a custom dash line
+            else if (pen->penDataFlags & EmfPlusPenDataDashedLine) // pen has a custom dash line
             {
                 // StrokeAttribute needs a double vector while the pen provides a float vector
                 std::vector<double> aPattern(pen->dashPattern.size());
