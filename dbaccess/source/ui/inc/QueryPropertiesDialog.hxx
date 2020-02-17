@@ -12,7 +12,6 @@
 
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
-#include "LimitBox.hxx"
 
 namespace dbaui
 {

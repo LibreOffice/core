@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-29 23:12:45 using:
+ Generated on 2020-02-17 16:58:13 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -68,7 +68,6 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
@@ -81,14 +80,13 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
@@ -97,8 +95,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -118,7 +114,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -224,16 +219,14 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <ConnectionLineData.hxx>
 #include <FieldDescriptions.hxx>
 #include <QEnumTypes.hxx>
 #include <QueryDesignView.hxx>
 #include <QueryTableView.hxx>
-#include <TableWindowData.hxx>
+#include <TableFieldDescription.hxx>
 #include <TypeInfo.hxx>
 #include <UITools.hxx>
 #include <browserids.hxx>
-#include <callbacks.hxx>
 #include <dbaccess/dataview.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <dbadmin.hxx>
