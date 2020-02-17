@@ -92,6 +92,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/fmtfield.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
@@ -1814,6 +1815,21 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     TreeControlPeer* pPeer = new TreeControlPeer;
                     *ppNewComp = pPeer;
                     pNewWindow = pPeer->createVclControl( pParent, nWinBits );
+                }
+                else if (aServiceName == "formattedfield")
+                {
+                    pNewWindow = VclPtr<FormattedField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXFormattedField;
+                }
+                else if (aServiceName == "numericfield")
+                {
+                    pNewWindow = VclPtr<DoubleNumericField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXNumericField;
+                }
+                else if (aServiceName == "longcurrencyfield")
+                {
+                    pNewWindow = VclPtr<DoubleCurrencyField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXCurrencyField;
                 }
             break;
             default:
