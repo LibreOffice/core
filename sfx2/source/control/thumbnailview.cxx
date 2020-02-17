@@ -1008,7 +1008,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         {
             mnFirstLine = nNewLine;
         }
-        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
+        else if ( mnVisLines != 0 && nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
         }
@@ -2176,7 +2176,7 @@ void SfxThumbnailView::SelectItem( sal_uInt16 nItemId )
         {
             mnFirstLine = nNewLine;
         }
-        else if ( nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
+        else if ( mnVisLines != 0 && nNewLine > o3tl::make_unsigned(mnFirstLine+mnVisLines-1) )
         {
             mnFirstLine = static_cast<sal_uInt16>(nNewLine-mnVisLines+1);
         }
