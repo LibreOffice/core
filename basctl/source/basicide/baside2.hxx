@@ -33,6 +33,7 @@
 #include <basic/sbstar.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <o3tl/enumarray.hxx>
@@ -244,8 +245,11 @@ public:
 class StackWindow : public DockingWindow
 {
 private:
-    VclPtr<SvTreeListBox>  aTreeListBox;
-    OUString               aStackStr;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Label> m_xTitle;
+    std::unique_ptr<weld::TreeView> m_xTreeListBox;
 
 protected:
     virtual void    Resize() override;
