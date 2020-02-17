@@ -8343,6 +8343,13 @@ public:
         gtk_entry_set_placeholder_text(m_pEntry, rText.toUtf8().getStr());
     }
 
+    virtual void grab_focus() override
+    {
+        disable_notify_events();
+        gtk_entry_grab_focus_without_selecting(m_pEntry);
+        enable_notify_events();
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nActivateSignalId);
