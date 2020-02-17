@@ -92,6 +92,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/fmtfield.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/longcurr.hxx>
@@ -707,12 +708,14 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("dockingwindow"),      WindowType::DOCKINGWINDOW },
     { OUStringLiteral("edit"),               WindowType::EDIT },
     { OUStringLiteral("errorbox"),           WindowType::ERRORBOX },
+    { OUStringLiteral("filecontrol"),        WindowType::CONTROL },
     { OUStringLiteral("fixedbitmap"),        WindowType::FIXEDBITMAP },
     { OUStringLiteral("fixedhyperlink"),     WindowType::CONTROL },
     { OUStringLiteral("fixedimage"),         WindowType::FIXEDIMAGE },
     { OUStringLiteral("fixedline"),          WindowType::FIXEDLINE },
     { OUStringLiteral("fixedtext"),          WindowType::FIXEDTEXT },
     { OUStringLiteral("floatingwindow"),     WindowType::FLOATINGWINDOW },
+    { OUStringLiteral("formattedfield"),     WindowType::CONTROL },
     { OUStringLiteral("frame"),              WindowType::GROUPBOX },
     { OUStringLiteral("framewindow"),        WindowType::TOOLKIT_FRAMEWINDOW },
     { OUStringLiteral("groupbox"),           WindowType::GROUPBOX },
@@ -721,7 +724,7 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("infobox"),            WindowType::INFOBOX },
     { OUStringLiteral("listbox"),            WindowType::LISTBOX },
     { OUStringLiteral("longcurrencybox"),    WindowType::LONGCURRENCYBOX },
-    { OUStringLiteral("longcurrencyfield"),  WindowType::LONGCURRENCYFIELD },
+    { OUStringLiteral("longcurrencyfield"),  WindowType::CONTROL },
     { OUStringLiteral("menubutton"),         WindowType::MENUBUTTON },
     { OUStringLiteral("messbox"),            WindowType::MESSBOX },
     { OUStringLiteral("metricbox"),          WindowType::METRICBOX },
@@ -732,7 +735,7 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("multilineedit"),      WindowType::MULTILINEEDIT },
     { OUStringLiteral("multilistbox"),       WindowType::MULTILISTBOX },
     { OUStringLiteral("numericbox"),         WindowType::NUMERICBOX },
-    { OUStringLiteral("numericfield"),       WindowType::NUMERICFIELD },
+    { OUStringLiteral("numericfield"),       WindowType::CONTROL },
     { OUStringLiteral("okbutton"),           WindowType::OKBUTTON },
     { OUStringLiteral("patternbox"),         WindowType::PATTERNBOX },
     { OUStringLiteral("patternfield"),       WindowType::PATTERNFIELD },
@@ -757,6 +760,7 @@ static ComponentInfo const aComponentInfos [] =
     { OUStringLiteral("timebox"),            WindowType::TIMEBOX },
     { OUStringLiteral("timefield"),          WindowType::TIMEFIELD },
     { OUStringLiteral("toolbox"),            WindowType::TOOLBOX },
+    { OUStringLiteral("tree"),               WindowType::CONTROL },
     { OUStringLiteral("tristatebox"),        WindowType::TRISTATEBOX },
     { OUStringLiteral("warningbox"),         WindowType::WARNINGBOX },
     { OUStringLiteral("window"),             WindowType::WINDOW },
@@ -1528,11 +1532,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WindowType::LONGCURRENCYBOX:
                 pNewWindow = VclPtr<LongCurrencyBox>::Create( pParent, nWinBits );
             break;
-            case WindowType::LONGCURRENCYFIELD:
-                pNewWindow = VclPtr<LongCurrencyField>::Create( pParent, nWinBits );
-                *ppNewComp = new VCLXCurrencyField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<LongCurrencyField*>(pNewWindow.get())) );
-            break;
             case WindowType::MENUBUTTON:
                 pNewWindow = VclPtr<MenuButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
@@ -1578,12 +1577,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WindowType::NUMERICBOX:
                 pNewWindow = VclPtr<NumericBox>::Create( pParent, nWinBits );
-            break;
-            case WindowType::NUMERICFIELD:
-                pNewWindow = VclPtr<NumericField>::Create( pParent, nWinBits );
-                static_cast<NumericField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
-                *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<NumericField*>(pNewWindow.get())) );
             break;
             case WindowType::OKBUTTON:
                 pNewWindow = VclPtr<OKButton>::Create( pParent, nWinBits );
@@ -1815,6 +1808,21 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     *ppNewComp = pPeer;
                     pNewWindow = pPeer->createVclControl( pParent, nWinBits );
                 }
+                else if (aServiceName == "formattedfield")
+                {
+                    pNewWindow = VclPtr<FormattedField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXFormattedField;
+                }
+                else if (aServiceName == "numericfield")
+                {
+                    pNewWindow = VclPtr<DoubleNumericField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXNumericField;
+                }
+                else if (aServiceName == "longcurrencyfield")
+                {
+                    pNewWindow = VclPtr<DoubleCurrencyField>::Create( pParent, nWinBits );
+                    *ppNewComp = new SVTXCurrencyField;
+                }
             break;
             default:
                 OSL_ENSURE( false, "VCLXToolkit::ImplCreateWindow: unknown window type!" );
@@ -1897,9 +1905,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     // if SvTools could not provide a window, create it ourself
     if ( !pNewWindow )
         pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits, aPair.second );
-
-    if (!pNewWindow)
-        fprintf(stderr, "debug here\n");
 
     DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
     SAL_INFO_IF( !pNewComp, "toolkit", "createWindow: No special Interface!" );
