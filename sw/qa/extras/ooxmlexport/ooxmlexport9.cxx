@@ -30,7 +30,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-//#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -247,6 +246,82 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
 
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-comprehensive.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // cell A1
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    // cell A2
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "ParaSubStyleDefaultsChar");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:sz", "val", "16");
+    // cell A3
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleNormal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    // cell A4
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleDefaults");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "after", "200");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    // cell A5
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "color");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "sz");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", "val", "AAAA00"); // all text in color
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    // cell A6
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr", "color");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", "val", "AAAA00");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")

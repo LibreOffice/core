@@ -1759,7 +1759,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // collect these pending paragraph properties to process in endTable()
                 if (xParaProps && m_nTableDepth > 0)
                 {
-                    TableParagraph aPending{pParaContext, xParaProps};
+                    uno::Reference<text::XTextCursor> xCur = xTextRange->getText( )->createTextCursor( );
+                    xCur->gotoEnd(false);
+                    xCur->goLeft(1, false);
+                    uno::Reference<text::XTextCursor> xCur2 =  xTextRange->getText()->createTextCursorByRange(xCur);
+                    uno::Reference<text::XParagraphCursor> xParaCursor(xCur2, uno::UNO_QUERY_THROW);
+                    xParaCursor->gotoStartOfParagraph(false);
+                    TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
                     m_aParagraphsToEndTable.push_back(aPending);
                 }
 
