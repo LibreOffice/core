@@ -148,8 +148,14 @@ namespace vclcanvas
 
                     // bitmasks are much faster than alphamasks on some platforms
                     // so convert to bitmask if useful
-#ifndef MACOSX
-                    if( aMask.GetBitCount() != 1 )
+                    bool convertTo1Bpp = aMask.GetBitCount() != 1;
+#ifdef MACOSX
+                    convertTo1Bpp = false;
+#endif
+                    if( SkiaHelper::isVCLSkiaEnabled())
+                        convertTo1Bpp = false;
+
+                    if( convertTo1Bpp )
                     {
                         OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
                                    "monochrome (performance!)");
@@ -157,12 +163,14 @@ namespace vclcanvas
                         BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
                         aMask = aMaskEx.GetBitmap();
                     }
-#endif
 
                     // Note: since we retrieved aBmp and aMask
                     // directly from an OutDev, it's already a
                     // 'display bitmap' on windows.
-                    maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
+                    if( aMask.GetBitCount() == 1 )
+                        maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
+                    else
+                        maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
                 }
             }
 
