@@ -450,6 +450,16 @@ bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pE
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
+        // ignore QEvent::ShortcutOverride events originating from outside the application,
+        // since such an extra event is sent e.g. with Orca screen reader enabled,
+        // so that two events of that kind (the "real one" and one from outside)
+        // would otherwise be processed, resulting in duplicate input as 'handleKeyEvent'
+        // is called below (s. tdf#122053)
+        if (pEvent->spontaneous())
+        {
+            return false;
+        }
+
         // Accepted event disables shortcut activation,
         // but enables keypress event.
         // If event is not accepted and shortcut is successfully activated,
