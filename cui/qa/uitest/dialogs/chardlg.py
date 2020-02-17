@@ -79,4 +79,25 @@ class Test(UITestCase):
         self.assertEqual(paragraph.CharTransparence, 5)
         self.ui_test.close_doc()
 
+    def testSvxCharEffectsPageWriterAutomatic(self):
+        # Start Writer.
+        self.ui_test.create_doc_in_start_center("writer")
+        doc = self.xUITest.getTopFocusWindow()
+        editWin = doc.getChild("writer_edit")
+
+        # Use Format -> Character.
+        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xTabs = xDialog.getChild("tabcontrol")
+        # Select RID_SVXPAGE_CHAR_EFFECTS.
+        select_pos(xTabs, "1")
+        xFontColorLB = xDialog.getChild("fontcolorlb")
+        # Without the accompanying fix in place, this test would have failed with:
+        # AssertionError: 'White' != 'Automatic'
+        # i.e. the auto color lost its alpha component and appeared as white.
+        self.assertEqual(get_state_as_dict(xFontColorLB)["Text"], "Automatic")
+
+        self.ui_test.close_dialog_through_button(xDialog.getChild("ok"))
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
