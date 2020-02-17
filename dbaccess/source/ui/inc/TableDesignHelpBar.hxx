@@ -22,7 +22,7 @@
 #include <vcl/tabpage.hxx>
 #include "IClipBoardTest.hxx"
 
-class MultiLineEdit;
+class VclMultiLineEdit;
 
 namespace dbaui
 {
@@ -31,7 +31,7 @@ namespace dbaui
     class OTableDesignHelpBar : public TabPage, public IClipboardTest
     {
     private:
-        VclPtr<MultiLineEdit>  m_pTextWin;
+        VclPtr<VclMultiLineEdit>  m_pTextWin;
 
     protected:
         virtual void Resize() override;
