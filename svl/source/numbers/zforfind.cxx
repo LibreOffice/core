@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <charconv>
 #include <cstdlib>
 #include <float.h>
 #include <comphelper/string.hxx>
@@ -151,34 +152,11 @@ static void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr
  */
 double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFraction )
 {
+    const OString sNum
+        = (bForceFraction ? "." : "0") + OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US);
     double fNum = 0.0;
-    double fFrac = 0.0;
-    int nExp = 0;
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rStr.getLength();
-    bool bPreSep = !bForceFraction;
-
-    while (nPos < nLen)
-    {
-        if (rStr[nPos] == '.')
-        {
-            bPreSep = false;
-        }
-        else if (bPreSep)
-        {
-            fNum = fNum * 10.0 + static_cast<double>(rStr[nPos] - '0');
-        }
-        else
-        {
-            fFrac = fFrac * 10.0 + static_cast<double>(rStr[nPos] - '0');
-            --nExp;
-        }
-        nPos++;
-    }
-    if ( fFrac )
-    {
-        return fNum + ::rtl::math::pow10Exp( fFrac, nExp );
-    }
+    std::from_chars(sNum.getStr(), sNum.getStr() + sNum.getLength(), fNum,
+                    std::chars_format::fixed);
     return fNum;
 }
 
