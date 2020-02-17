@@ -102,6 +102,23 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
     // i.e. the rectangle (with no name) was on top of the oval one, not the other way around.
     CPPUNIT_ASSERT_EQUAL(OUString("Oval 2"), xOval->getName());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInlineInShapeAnchoredZOrder)
+{
+    // This document has a textbox shape and then an inline shape inside that.
+    // The ZOrder of the inline shape is larger than the hosting textbox, so the image is visible.
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "inline-inshape-anchored-zorder.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XNamed> xOval(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Picture 1
+    // - Actual  : Text Box 2
+    // i.e. the image was behind the textbox that was hosting it.
+    CPPUNIT_ASSERT_EQUAL(OUString("Picture 1"), xOval->getName());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
