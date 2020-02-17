@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4427706a_a7e32d2c",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-17T10:03:37Z",
+      "side": 1,
+      "message": "I will change this to SCSIZE.",
+      "parentUuid": "cc59d288_5600d4a8",
+      "range": {
+        "startLine": 203,
+        "startChar": 8,
+        "endLine": 203,
+        "endChar": 16
+      },
+      "revId": "5d04eb24003ebda6de85d50e241509b45c012ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae05ed7d_6f67419c",
         "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ab7cb6f6_37290af5",
+        "filename": "sc/source/ui/miscdlgs/filldlg.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-17T10:03:37Z",
+      "side": 1,
+      "message": "It is not possible to open the Fill Series dialog through \"Sheet -\u003e Fill Cells -\u003e Fill Series\" when selection spans less than 2 cells. So I believe it will never be 0.",
+      "parentUuid": "ae05ed7d_6f67419c",
+      "range": {
+        "startLine": 208,
+        "startChar": 47,
+        "endLine": 208,
+        "endChar": 54
+      },
+      "revId": "5d04eb24003ebda6de85d50e241509b45c012ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10d72940_bc2521db",
         "filename": "sc/source/ui/view/cellsh1.cxx",
         "patchSetId": 10
@@ -59,6 +107,24 @@
       "writtenOn": "2020-02-16T15:54:48Z",
       "side": 1,
       "message": "Bah, sorry for fuzz.. seeing now that nSelectHeight is always used with rows it should be of type SCROW instead, similar SCCOL for nSelectWidth, and the respective parameter types of functions. Or rather even both SCSIZE because it is an *amount* of rows or columns, not a row number or column number.\n\nAlso note that the result is not the height/width selected, but subtracted by 1, i.e. 0 if only one row or column was selected, it probably should be +1 for the amount being selected (didn\u0027t build/try the modified dialog yet).",
+      "revId": "5d04eb24003ebda6de85d50e241509b45c012ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63f0f9cb_b5092e40",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-02-17T10:03:37Z",
+      "side": 1,
+      "message": "According to your suggestions I think SCSIZE is the most appropriate type for both. I\u0027ll use that.\n\nWhat I needed for calculations in ScFillSeries::CheckValues() was selected *amount* of cells subtracted by 1. If it is misleading I might add 1 here, than substract 1 in CheckValues() so that variables do justice to their names.",
+      "parentUuid": "10d72940_bc2521db",
       "revId": "5d04eb24003ebda6de85d50e241509b45c012ce0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
