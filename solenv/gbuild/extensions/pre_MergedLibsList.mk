@@ -55,24 +55,34 @@ MERGE_LIBRARY_LIST := \
 	$(if $(ENABLE_JAVA),javaloader) \
 	$(if $(ENABLE_JAVA),javavm) \
 	lng \
+	lnth \
 	localebe1 \
 	mcnttype \
 	msfilter \
 	mtfrenderer \
+	numbertext \
+	odfflatxml \
+	offacc \
+	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
+	passwordcontainer \
 	sax \
 	sb \
 	simplecanvas \
 	sfx \
 	sofficeapp \
 	sot \
+	spell \
 	$(if $(DISABLE_GUI),,spl) \
+	srtrs1 \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
+	svgio \
 	svl \
 	svt \
 	svx \
 	svxcore \
+	syssh \
 	tk \
 	tl \
 	ucb1 \
