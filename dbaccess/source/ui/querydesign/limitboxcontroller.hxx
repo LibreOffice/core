@@ -20,7 +20,7 @@
 namespace dbaui
 {
 
-class LimitBoxImpl;
+class LimitBox;
 
 /**
  * A ToolboxController to paste LimitBox onto the Query Design Toolbar
@@ -66,7 +66,7 @@ class LimitBoxController: public svt::ToolboxController,
         using svt::ToolboxController::dispatchCommand;
 
     private:
-        VclPtr<LimitBoxImpl> m_pLimitBox;
+        VclPtr<LimitBox> m_xLimitBox;
 };
 
 } ///dbaui namespace
