@@ -737,10 +737,13 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
         ScDocument& rNewDoc, const ScAddress& rNewPos, const ScAddress& rOldPos, const bool bGlobalNamesToLocal,
         const bool bUsedByFormula ) const
 {
-    const bool bSameDoc = (rNewDoc.GetPool() == const_cast<ScDocument*>(this)->GetPool());
-    if (bSameDoc && ((rSheet < 0 && !bGlobalNamesToLocal) || (rSheet >= 0 && rSheet != rOldPos.Tab())))
+    ScDocument* pThis = const_cast<ScDocument*>(this);
+    const bool bSameDoc = (rNewDoc.GetPool() == pThis->GetPool());
+    if (bSameDoc && ((rSheet < 0 && !bGlobalNamesToLocal) || (rSheet >= 0
+                    && (rSheet != rOldPos.Tab() || (IsClipboard() && pThis->IsCutMode())))))
         // Same doc and global name, if not copied to local name, or
-        // sheet-local name on other sheet stays the same.
+        // sheet-local name on other sheet stays the same. Sheet-local on
+        // same sheet also in a clipboard cut&paste / move operation.
         return false;
 
     // Ensure we don't fiddle with the references until exit.
