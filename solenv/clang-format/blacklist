@@ -2660,6 +2660,7 @@ cui/source/dialogs/cuigrfflt.cxx
 cui/source/dialogs/cuihyperdlg.cxx
 cui/source/dialogs/cuiimapwnd.cxx
 cui/source/dialogs/cuitbxform.cxx
+cui/source/dialogs/dlgname.cxx
 cui/source/dialogs/hangulhanjadlg.cxx
 cui/source/dialogs/hldocntp.cxx
 cui/source/dialogs/hldoctp.cxx
