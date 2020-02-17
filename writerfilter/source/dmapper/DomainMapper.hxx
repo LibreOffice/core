@@ -112,6 +112,7 @@ public:
     bool IsInHeaderFooter() const;
     bool IsInTable() const;
     bool IsStyleSheetImport() const;
+    bool IsInShape() const;
 
     void hasControls( const bool bSet ) { mbHasControls = bSet; }
 
