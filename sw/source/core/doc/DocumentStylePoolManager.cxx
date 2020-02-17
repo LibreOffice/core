@@ -1514,7 +1514,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLCHR_ENDNOTE_ANCHOR:        // Endnote anchor
     case RES_POOLCHR_FOOTNOTE_ANCHOR:       // Footnote anchor
         {
-            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58, RES_CHRATR_ESCAPEMENT ) );
+            aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, DFLT_ESC_PROP, RES_CHRATR_ESCAPEMENT ) );
         }
         break;
 

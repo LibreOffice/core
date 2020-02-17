@@ -196,7 +196,7 @@ namespace
 
             if(DFLT_ESC_AUTO_SUPER == nEsc)
             {
-                nEsc = 33;
+                nEsc = DFLT_ESC_SUPER;
             }
             else if(DFLT_ESC_AUTO_SUB == nEsc)
             {
