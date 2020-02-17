@@ -202,7 +202,7 @@ ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_Li
                                     const OUString& aQH_Comment)
     :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
         aLbScenario ( VclPtr<ScScenarioListBox>::Create(*this) ),
-        aEdComment  ( VclPtr<MultiLineEdit>::Create(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
+        aEdComment  ( VclPtr<VclMultiLineEdit>::Create(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
 {
     vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );

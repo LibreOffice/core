@@ -29,7 +29,7 @@
 #include <sfx2/childwin.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "content.hxx"
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx>
 
 class SfxPoolItem;
 class ScTabViewShell;
@@ -103,7 +103,7 @@ protected:
 
 private:
     VclPtr<ScScenarioListBox>   aLbScenario;
-    VclPtr<MultiLineEdit>       aEdComment;
+    VclPtr<VclMultiLineEdit>    aEdComment;
 };
 
 class ColumnEdit : public SpinField
