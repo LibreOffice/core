@@ -232,15 +232,17 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
     {
         case BitmapAccessMode::Write:
             EnsureBitmapUniqueData();
+            if (mBitmap.isNull() && !mBuffer)
+                return nullptr;
             break;
         case BitmapAccessMode::Read:
             EnsureBitmapData();
+            if (mBitmap.isNull() && !mBuffer)
+                return nullptr;
             break;
-        default:
+        case BitmapAccessMode::Info:
             break;
     }
-    if (mBitmap.isNull() && !mBuffer)
-        return nullptr;
 #ifdef DBG_UTIL
     // BitmapWriteAccess stores also a copy of the palette and it can
     // be modified, so concurrent reading of it might result in inconsistencies.
