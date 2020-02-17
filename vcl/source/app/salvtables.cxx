@@ -6249,10 +6249,12 @@ private:
     DECL_LINK(EntryActivateHdl, Edit&, bool);
     DECL_LINK(SelectHdl, ::ComboBox&, void);
     WeldTextFilter m_aTextFilter;
+    bool m_bInSelect;
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceComboBox<::ComboBox>(pComboBox, pBuilder, bTakeOwnership)
         , m_aTextFilter(m_aEntryInsertTextHdl)
+        , m_bInSelect(false)
     {
         m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
         m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithEdit, SelectHdl));
@@ -6267,7 +6269,7 @@ public:
 
     virtual bool changed_by_direct_pick() const override
     {
-        return !m_xComboBox->IsModifyByKeyboard();
+        return m_bInSelect && !m_xComboBox->IsModifyByKeyboard();
     }
 
     virtual void set_entry_message_type(weld::EntryMessageType eType) override
@@ -6370,7 +6372,9 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, SelectHdl, ::ComboBox&, void)
 {
+    m_bInSelect = true;
     signal_changed();
+    m_bInSelect = false;
 }
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, bool)
