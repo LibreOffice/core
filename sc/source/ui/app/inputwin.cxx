@@ -1979,21 +1979,32 @@ void ScTextWnd::TextGrabFocus()
 
 // Position window
 
-ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
-    ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
-    nTipVisible ( nullptr ),
-    bFormulaMode( false )
+ScPosWnd::ScPosWnd(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/scalc/ui/posbox.ui", "PosBox")
+    , m_xWidget(m_xBuilder->weld_combo_box("pos_window"))
+    , m_nAsyncGetFocusId(nullptr)
+    , nTipVisible(nullptr)
+    , bFormulaMode(false)
 {
-    set_id("pos_window");
-    Size aSize( GetTextWidth( "GW99999:GW99999" ),
-                GetTextHeight() );
-    aSize.AdjustWidth(25 );    // FIXME: ??
-    aSize.setHeight( CalcWindowSizePixel(21) ); // Functions: 20 MRU + "others..."
-    SetSizePixel( aSize );
+    m_xWidget->set_entry_width_chars(15);
+    SetSizePixel(m_xContainer->get_preferred_size());
 
     FillRangeNames();
 
     StartListening( *SfxGetpApp() ); // For Navigator rangename updates
+
+    m_xWidget->connect_key_press(LINK(this, ScPosWnd, KeyInputHdl));
+    m_xWidget->connect_entry_activate(LINK(this, ScPosWnd, ActivateHdl));
+    m_xWidget->connect_changed(LINK(this, ScPosWnd, ModifyHdl));
+    m_xWidget->connect_focus_in(LINK(this, ScPosWnd, FocusInHdl));
+    m_xWidget->connect_focus_out(LINK(this, ScPosWnd, FocusOutHdl));
+}
+
+void ScPosWnd::GetFocus()
+{
+    if (m_xWidget)
+        m_xWidget->grab_focus();
+    InterimItemWindow::GetFocus();
 }
 
 ScPosWnd::~ScPosWnd()
@@ -2007,7 +2018,14 @@ void ScPosWnd::dispose()
 
     HideTip();
 
-    ComboBox::dispose();
+    if (m_nAsyncGetFocusId)
+    {
+        Application::RemoveUserEvent(m_nAsyncGetFocusId);
+        m_nAsyncGetFocusId = nullptr;
+    }
+    m_xWidget.reset();
+
+    InterimItemWindow::dispose();
 }
 
 void ScPosWnd::SetFormulaMode( bool bSet )
@@ -2030,7 +2048,7 @@ void ScPosWnd::SetPos( const OUString& rPosStr )
     if ( aPosStr != rPosStr )
     {
         aPosStr = rPosStr;
-        SetText(aPosStr);
+        m_xWidget->set_entry_text(aPosStr);
     }
 }
 
@@ -2045,15 +2063,16 @@ OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
 
 void ScPosWnd::FillRangeNames()
 {
-    Clear();
+    m_xWidget->clear();
+    m_xWidget->freeze();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        InsertEntry(ScResId( STR_MANAGE_NAMES ));
-        SetSeparatorPos(0);
+        m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
+        m_xWidget->append_separator("separator");
 
         ScRange aDummy;
         std::set<OUString> aSet;
@@ -2080,15 +2099,17 @@ void ScPosWnd::FillRangeNames()
 
         for (const auto& rItem : aSet)
         {
-            InsertEntry(rItem);
+            m_xWidget->append_text(rItem);
         }
     }
-    SetText(aPosStr);
+    m_xWidget->thaw();
+    m_xWidget->set_entry_text(aPosStr);
 }
 
 void ScPosWnd::FillFunctions()
 {
-    Clear();
+    m_xWidget->clear();
+    m_xWidget->freeze();
 
     OUString aFirstName;
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
@@ -2106,7 +2127,7 @@ void ScPosWnd::FillFunctions()
                 const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
                 if ( pDesc->nFIndex == nId && pDesc->mxFuncName )
                 {
-                    InsertEntry( *pDesc->mxFuncName );
+                    m_xWidget->append_text(*pDesc->mxFuncName);
                     if (aFirstName.isEmpty())
                         aFirstName = *pDesc->mxFuncName;
                     break; // Stop searching
@@ -2118,9 +2139,10 @@ void ScPosWnd::FillFunctions()
     //! Re-add entry "Other..." for Function AutoPilot if it can work with text that
     // has been entered so far
 
-    //  InsertEntry( ScResId(STR_FUNCTIONLIST_MORE) );
+    //  m_xWidget->append_text(ScResId(STR_FUNCTIONLIST_MORE));
 
-    SetText(aFirstName);
+    m_xWidget->thaw();
+    m_xWidget->set_entry_text(aFirstName);
 }
 
 void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -2145,12 +2167,9 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScPosWnd::HideTip()
 {
-    if ( nTipVisible )
+    if (nTipVisible)
     {
-        vcl::Window* pWin = GetSubEdit();
-        if (!pWin)
-            pWin = this;
-        Help::HidePopover(pWin, nTipVisible);
+        Help::HidePopover(this, nTipVisible);
         nTipVisible = nullptr;
     }
 }
@@ -2203,17 +2222,21 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
     return eRet;
 }
 
-void ScPosWnd::Modify()
+IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
 {
-    ComboBox::Modify();
-
     HideTip();
 
-    if ( !IsTravelSelect() && !bFormulaMode )
+    if (m_xWidget->changed_by_direct_pick())
+    {
+        DoEnter();
+        return;
+    }
+
+    if (!bFormulaMode)
     {
         // determine the action that would be taken for the current input
 
-        ScNameInputType eType = lcl_GetInputType( GetText() );      // uses current view
+        ScNameInputType eType = lcl_GetInputType(m_xWidget->get_active_text());      // uses current view
         const char* pStrId = nullptr;
         switch ( eType )
         {
@@ -2244,36 +2267,23 @@ void ScPosWnd::Modify()
         if (pStrId)
         {
             // show the help tip at the text cursor position
-            vcl::Window* pWin = GetSubEdit();
-            if (!pWin)
-                pWin = this;
             Point aPos;
-            vcl::Cursor* pCur = pWin->GetCursor();
+            vcl::Cursor* pCur = GetCursor();
             if (pCur)
-                aPos = pWin->LogicToPixel( pCur->GetPos() );
-            aPos = pWin->OutputToScreenPixel( aPos );
+                aPos = LogicToPixel( pCur->GetPos() );
+            aPos = OutputToScreenPixel( aPos );
             tools::Rectangle aRect( aPos, aPos );
 
             OUString aText = ScResId(pStrId);
             QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-            nTipVisible = Help::ShowPopover(pWin, aRect, aText, nAlign);
+            nTipVisible = Help::ShowPopover(this, aRect, aText, nAlign);
         }
     }
 }
 
-void ScPosWnd::Select()
-{
-    ComboBox::Select(); //  In VCL GetText() only return the selected entry afterwards
-
-    HideTip();
-
-    if (!IsTravelSelect())
-        DoEnter();
-}
-
 void ScPosWnd::DoEnter()
 {
-    OUString aText = GetText();
+    OUString aText = m_xWidget->get_active_text();
     if ( !aText.isEmpty() )
     {
         if ( bFormulaMode )
@@ -2364,66 +2374,70 @@ void ScPosWnd::DoEnter()
         }
     }
     else
-        SetText( aPosStr );
+        m_xWidget->set_entry_text(aPosStr);
 
     ReleaseFocus_Impl();
 }
 
-bool ScPosWnd::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK_NOARG(ScPosWnd, ActivateHdl, weld::ComboBox&, bool)
+{
+    DoEnter();
+    return true;
+}
+
+IMPL_LINK(ScPosWnd, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = true;
 
-    switch (rNEvt.GetType())
+    switch (rKEvt.GetKeyCode().GetCode())
     {
-        case MouseNotifyEvent::KEYINPUT:
-        {
-            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-            switch ( pKEvt->GetKeyCode().GetCode() )
+        case KEY_RETURN:
+            bHandled = ActivateHdl(*m_xWidget);
+            break;
+        case KEY_ESCAPE:
+            if (nTipVisible)
             {
-                case KEY_RETURN:
-                    DoEnter();
-                    break;
-
-                case KEY_ESCAPE:
-                    if (nTipVisible)
-                    {
-                        // escape when the tip help is shown: only hide the tip
-                        HideTip();
-                    }
-                    else
-                    {
-                        if (!bFormulaMode)
-                            SetText( aPosStr );
-                        ReleaseFocus_Impl();
-                    }
-                    break;
-
-                default:
-                    bHandled = false;
-                    break;
+                // escape when the tip help is shown: only hide the tip
+                HideTip();
             }
-        }
-        break;
-        case MouseNotifyEvent::GETFOCUS:
-        {
-            // Select the whole text upon focus.
-            OUString aStr = GetText();
-            SetSelection(Selection(0, aStr.getLength()));
-        }
-        break;
-        case MouseNotifyEvent::LOSEFOCUS:
-            HideTip();
-            bHandled = false;
-        break;
+            else
+            {
+                if (!bFormulaMode)
+                    m_xWidget->set_entry_text(aPosStr);
+                ReleaseFocus_Impl();
+            }
+            break;
         default:
             bHandled = false;
+            break;
     }
 
-    if (!bHandled)
-        bHandled = ComboBox::EventNotify(rNEvt);
+    return bHandled || ChildKeyInput(rKEvt);
+}
 
-    return bHandled;
+IMPL_LINK_NOARG(ScPosWnd, OnAsyncGetFocus, void*, void)
+{
+    m_nAsyncGetFocusId = nullptr;
+    m_xWidget->select_entry_region(0, -1);
+}
+
+IMPL_LINK_NOARG(ScPosWnd, FocusInHdl, weld::Widget&, void)
+{
+    if (m_nAsyncGetFocusId)
+        return;
+    // do it async to defeat entry in combobox having its own ideas about the focus
+    m_nAsyncGetFocusId = Application::PostUserEvent(LINK(this, ScPosWnd, OnAsyncGetFocus));
+}
+
+IMPL_LINK_NOARG(ScPosWnd, FocusOutHdl, weld::Widget&, void)
+{
+    if (m_nAsyncGetFocusId)
+    {
+        Application::RemoveUserEvent(m_nAsyncGetFocusId);
+        m_nAsyncGetFocusId = nullptr;
+    }
+
+    HideTip();
 }
 
 void ScPosWnd::ReleaseFocus_Impl()

@@ -23,6 +23,7 @@
 #include <vector>
 #include <memory>
 #include <vcl/toolbox.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/button.hxx>
@@ -149,9 +150,13 @@ private:
     bool mbInvalidate;
 };
 
-class ScPosWnd : public ComboBox, public SfxListener        // Display position
+class ScPosWnd final : public InterimItemWindow, public SfxListener        // Display position
 {
 private:
+    std::unique_ptr<weld::ComboBox> m_xWidget;
+
+    ImplSVEvent* m_nAsyncGetFocusId;
+
     OUString        aPosStr;
     void*           nTipVisible;
     bool            bFormulaMode;
@@ -160,15 +165,18 @@ public:
                     ScPosWnd( vcl::Window* pParent );
     virtual         ~ScPosWnd() override;
     virtual void    dispose() override;
+    virtual void    GetFocus() override;
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );
 
-protected:
-    virtual void    Select() override;
-    virtual void    Modify() override;
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+private:
+    DECL_LINK(OnAsyncGetFocus, void*, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_LINK(FocusOutHdl, weld::Widget&, void);
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
