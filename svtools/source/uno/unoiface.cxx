@@ -21,7 +21,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/svmedit.hxx>
+#include <svmedit.hxx>
 #include <unoiface.hxx>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <cppuhelper/queryinterface.hxx>

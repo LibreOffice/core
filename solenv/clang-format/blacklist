@@ -6669,7 +6669,6 @@ include/svtools/slidesorterbaropt.hxx
 include/svtools/soerr.hxx
 include/svtools/statusbarcontroller.hxx
 include/svtools/stringtransfer.hxx
-include/svtools/svmedit.hxx
 include/svtools/svparser.hxx
 include/svtools/svtdllapi.h
 include/svtools/tabbar.hxx
@@ -13130,6 +13129,7 @@ svl/source/undo/undo.cxx
 svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/strings.hxx
+svtools/inc/svmedit.hxx
 svtools/inc/svmedit2.hxx
 svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
