@@ -512,27 +512,6 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
-{
-    SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
-public:
-    explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual Size            CalcMinimumSize() const override;
-
-    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void            Modify() override;
-
-    virtual void            ReformatAll() override;
-
-    void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
-    virtual void            dispose() override;
-};
-
-
 class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
 {
 public:
