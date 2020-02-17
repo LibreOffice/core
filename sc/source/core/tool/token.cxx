@@ -3389,9 +3389,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                             SCTAB nOldTab = (*pp)->GetSheet();
                             if (isNameModified(rCxt.maUpdatedNames, nOldTab, **pp))
                                 aRes.mbNameModified = true;
-                            if (rCxt.mnTabDelta &&
-                                    rCxt.maRange.aStart.Tab() <= nOldTab && nOldTab <= rCxt.maRange.aEnd.Tab())
+                            if (rCxt.mnTabDelta && aOldRange.In(rOldPos) &&
+                                    aOldRange.aStart.Tab() <= nOldTab && nOldTab <= aOldRange.aEnd.Tab())
                             {
+                                /* TODO: this may not be needed at all anymore;
+                                 * investigate when we actually hit the
+                                 * condition. */
                                 aRes.mbNameModified = true;
                                 (*pp)->SetSheet( nOldTab + rCxt.mnTabDelta);
                             }
