@@ -38,7 +38,6 @@
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
-#include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
