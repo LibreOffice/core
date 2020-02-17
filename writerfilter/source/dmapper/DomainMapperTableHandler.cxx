@@ -1066,58 +1066,36 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 
 // table style has got bigger precedence than docDefault style,
 // but lower precedence than the paragraph styles and direct paragraph formatting
-void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableInfo & rInfo)
+void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, css::beans::PropertyValues rCellProperties)
 {
-    for( auto const& eId : rInfo.aTablePropertyIds )
+    for( auto const& eId : aAllTableParaProperties )
     {
         // apply paragraph and character properties of the table style on table paragraphs
-        if ( isParagraphProperty(eId) || isCharacterProperty(eId) )
+        // if there is no direct paragraph formatting
+        if ( !rParaProp.m_pPropertyMap->isSet(eId) )
         {
-            // check all paragraphs of the table
-            for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+            OUString sPropertyName = getPropertyName(eId);
+            auto pCellProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
+                [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
+            // this cell applies the table style property
+            if (pCellProp != rCellProperties.end())
             {
-                // there is no direct paragraph formatting
-                if (!rParaProp.m_pPropertyMap->isSet(eId))
+                bool bDocDefault;
+                OUString sParaStyleName;
+                rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
+                StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
+                uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
+                // use table style when no paragraph style setting or a docDefault value is applied instead of it
+                if ( aParaStyle == uno::Any() || bDocDefault ||
+                   // set default behaviour of MSO ("overrideTableStyleFontSizeAndJustification" exception):
+                   // if Normal style defines 11 pt or 12 pt font heights, table style overrides its font size
+                   (eId == PROP_CHAR_HEIGHT && sParaStyleName == "Standard" && (aParaStyle == uno::Any(double(11)) || aParaStyle == uno::Any(double(12))))) try
                 {
-                    bool bDocDefault;
-                    OUString sParaStyleName;
-                    rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
-                    StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
-                    uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
-                    // use table style when a docDefault value is applied instead of it,
-                    // and there is no associated TableStyleSheetEntry
-                    // TODO: replace CNF_ALL with the actual mask
-                    if ( (aParaStyle == uno::Any() || bDocDefault) && !rInfo.pTableStyle->GetProperties(CNF_ALL)->getProperty(eId) )
-                    {
-                        OUString sPropertyName = getPropertyName(eId);
-                        auto pTableProp = std::find_if(rInfo.aTableProperties.begin(), rInfo.aTableProperties.end(),
-                            [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
-                        if (pTableProp != rInfo.aTableProperties.end())
-                        {
-                            try
-                            {
-                                rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pTableProp->Value );
-                            }
-                            catch ( const uno::Exception & )
-                            {
-                                TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
-                            }
-                        }
-                    }
-                    // table style can overwrite paragraph style, when the paragraph style property has a default value, restore it
-                    // TODO remove the associated TableStyleSheetEntry styles, if needed
-                    else if ( aParaStyle != uno::Any() && !bDocDefault )
-                    {
-                        OUString sPropertyName = getPropertyName(eId);
-                        try
-                        {
-                            rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, aParaStyle );
-                        }
-                        catch ( const uno::Exception & )
-                        {
-                            TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
-                        }
-                    }
+                    rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pCellProp->Value );
+                }
+                catch ( const uno::Exception & )
+                {
+                    TOOLS_INFO_EXCEPTION("writerfilter.dmapper", "Exception during table style correction");
                 }
             }
         }
@@ -1153,6 +1131,55 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         uno::Reference<text::XTextRange> xEnd;
 
         bool bFloating = !aFrameProperties.empty();
+
+        // OOXML table style may contain paragraph properties, apply these on cell paragraphs
+        if ( m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements() )
+        {
+            // collect all paragraph properties used in table styles
+            PropertyMapPtr pAllTableProps( new PropertyMap );
+            pAllTableProps->InsertProps(aTableInfo.pTableDefaults);
+            if ( aTableInfo.pTableStyle )
+                pAllTableProps->InsertProps(aTableInfo.pTableStyle->GetProperties( CNF_ALL ));
+            for (const auto& eId : pAllTableProps->GetPropertyIds())
+            {
+                if ( !isParagraphProperty(eId) && !isCharacterProperty(eId) )
+                    pAllTableProps->Erase(eId);
+            }
+            std::vector< PropertyIds > aAllTableParaProperties = pAllTableProps->GetPropertyIds();
+
+            if ( !aAllTableParaProperties.empty() )
+            {
+                for (size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
+                {
+                    for (size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
+                    {
+                        auto rStartPara = m_aTableRanges[nRow][nCell][0];
+                        auto rEndPara = m_aTableRanges[nRow][nCell][1];
+                        uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rStartPara->getText(), uno::UNO_QUERY);
+                        bool bApply = false;
+                        // search paragraphs of the cell
+                        std::vector<TableParagraph>::iterator aIt = m_rDMapper_Impl.m_aParagraphsToEndTable.begin();
+                        while ( aIt != m_rDMapper_Impl.m_aParagraphsToEndTable.end() )
+                        {
+                            if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, aIt->m_rStartParagraph) == 0)
+                                bApply = true;
+                            if (bApply)
+                            {
+                                bool bEndOfApply = (xTextRangeCompare->compareRegionEnds(rEndPara, aIt->m_rEndParagraph) == 0);
+                                ApplyParagraphPropertiesFromTableStyle(*aIt, aAllTableParaProperties, aCellProperties[nRow][nCell]);
+                                // erase this element to avoid of overwriting paragraph styles of nested tables
+                                aIt = m_rDMapper_Impl.m_aParagraphsToEndTable.erase(aIt);
+                                if (bEndOfApply)
+                                    break;
+                            }
+                            else
+                                ++aIt;
+                        }
+                    }
+                }
+            }
+        }
+
         // Additional checks: if we can do this.
         if (bFloating && m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements())
         {
@@ -1221,9 +1248,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                         }
                     }
                 }
-
-                // OOXML table style may contain paragraph properties, apply these now.
-                ApplyParagraphPropertiesFromTableStyle(aTableInfo);
             }
         }
         catch ( const lang::IllegalArgumentException & )
