@@ -78,4 +78,53 @@ protocolhandler_hxx = custom_target('ProtocolHandler.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+compatibility_hxx = custom_target('compatibility.hxx',
+  output: 'Compatibility.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Compatibility.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Compatibility',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+writer_hxx = custom_target('writer.hxx',
+  output: 'Writer.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Writer.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Writer',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+security_hxx = custom_target('security.hxx',
+  output: 'Security.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Security.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Security',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+
 subdir('UI')
