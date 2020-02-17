@@ -3183,7 +3183,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                     }
                 }
 
-                reader.nextItem(
+                (void)reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
                 OString sValue(name.begin, name.length);
@@ -3344,7 +3344,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                     }
                 }
 
-                reader.nextItem(
+                (void)reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
                 OString sValue(name.begin, name.length);
@@ -3946,7 +3946,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             name = reader.getAttributeValue(false);
             OString sKey(name.begin, name.length);
             sKey = sKey.replace('_', '-');
-            reader.nextItem(
+            (void)reader.nextItem(
                 xmlreader::XmlReader::Text::Raw, &name, &nsId);
             OString sValue(name.begin, name.length);
 
@@ -4117,7 +4117,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
         }
     }
 
-    reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
+    (void)reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     OString sValue(name.begin, name.length);
     OUString sFinalValue;
     if (bTranslated)
@@ -4154,7 +4154,7 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
         }
     }
 
-    reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
+    (void)reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     OString sID(name.begin, name.length);
     sal_Int32 nDelim = sID.indexOf(':');
     if (nDelim != -1)
