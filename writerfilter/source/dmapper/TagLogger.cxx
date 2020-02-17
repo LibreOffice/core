@@ -19,8 +19,6 @@
 
 #include <string.h>
 #include "TagLogger.hxx"
-#include <ooxml/QNameToString.hxx>
-#include <unordered_map>
 #ifdef DBG_UTIL
 #include <unotools/pathoptions.hxx>
 #endif

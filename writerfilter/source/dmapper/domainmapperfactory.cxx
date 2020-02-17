@@ -8,6 +8,7 @@
  */
 
 #include "DomainMapper.hxx"
+#include "TagLogger.hxx"
 #include <unotools/mediadescriptor.hxx>
 
 namespace writerfilter::dmapper

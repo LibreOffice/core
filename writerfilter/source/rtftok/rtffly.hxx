@@ -14,6 +14,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <ooxml/resourceids.hxx>
 #include <osl/endian.h>
 
 namespace writerfilter

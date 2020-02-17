@@ -19,12 +19,13 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <ooxml/resourceids.hxx>
 #include "DomainMapper_Impl.hxx"
 #include "ConversionHelper.hxx"
 #include "SdtHelper.hxx"
 #include "DomainMapperTableHandler.hxx"
+#include "TagLogger.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -59,6 +60,7 @@
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -67,8 +69,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -79,7 +79,6 @@
 #include <oox/mathml/import.hxx>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
-#include "GraphicHelpers.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
 
 #include <oox/token/tokens.hxx>
@@ -89,8 +88,6 @@
 #include <tuple>
 #include <unordered_map>
 
-#include <vcl/svapp.hxx>
-#include <vcl/outdev.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
@@ -99,7 +96,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/lineend.hxx>
 #include <sal/log.hxx>
 
 

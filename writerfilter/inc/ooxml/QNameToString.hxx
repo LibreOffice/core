@@ -19,12 +19,9 @@
 #ifndef INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 #define INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 
-#include <memory>
 #include <map>
 #include <string>
-#include <iostream>
 #include <dmapper/resourcemodel.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace writerfilter
 {

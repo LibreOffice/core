@@ -21,9 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
 
 #include "LoggedResources.hxx"
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <map>
 #include <memory>
 
 namespace com{ namespace sun{ namespace star{

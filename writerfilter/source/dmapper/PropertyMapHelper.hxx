@@ -20,7 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
-#include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 namespace writerfilter

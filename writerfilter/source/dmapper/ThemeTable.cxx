@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "TagLogger.hxx"
 #include "ThemeTable.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <ooxml/resourceids.hxx>
+
+#include <map>
 
 using namespace com::sun::star;
 

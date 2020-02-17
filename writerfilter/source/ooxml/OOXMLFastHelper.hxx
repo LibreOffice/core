@@ -19,8 +19,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 
-#include <iostream>
-#include <ooxml/QNameToString.hxx>
 #include "OOXMLFastContextHandler.hxx"
 
 namespace writerfilter {

@@ -24,15 +24,14 @@
 #include "MeasureHandler.hxx"
 #include "TrackChangesHandler.hxx"
 #include "TablePropertiesHandler.hxx"
+#include "TagLogger.hxx"
 #include "TDefTableHandler.hxx"
 #include "DomainMapperTableManager.hxx"
 
 #include <ooxml/resourceids.hxx>
 
-#include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <oox/token/tokens.hxx>
-#include "DomainMapper.hxx"
 
 using namespace com::sun::star;
 using namespace oox;

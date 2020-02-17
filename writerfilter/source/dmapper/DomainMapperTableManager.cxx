@@ -18,21 +18,15 @@
  */
 #include <o3tl/optional.hxx>
 #include "DomainMapperTableManager.hxx"
-#include "BorderHandler.hxx"
-#include "CellColorHandler.hxx"
-#include "CellMarginHandler.hxx"
 #include "ConversionHelper.hxx"
 #include "MeasureHandler.hxx"
-#include "TDefTableHandler.hxx"
-#include <com/sun/star/text/HoriOrientation.hpp>
+#include "TagLogger.hxx"
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include <ooxml/resourceids.hxx>
-#include "DomainMapper.hxx"
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <numeric>

@@ -22,7 +22,6 @@
 #include <iostream>
 #include <ooxml/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <oox/token/tokens.hxx>
 #include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
 

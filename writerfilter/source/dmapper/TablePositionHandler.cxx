@@ -8,6 +8,7 @@
  */
 #include "TablePositionHandler.hxx"
 #include "ConversionHelper.hxx"
+#include "TagLogger.hxx"
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>

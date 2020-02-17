@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
 #include "LoggedResources.hxx"
+#include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
 
 using namespace ::com::sun::star;

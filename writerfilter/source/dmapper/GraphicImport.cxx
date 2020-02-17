@@ -64,6 +64,7 @@
 #include "GraphicHelpers.hxx"
 #include "GraphicImport.hxx"
 #include "PropertyMap.hxx"
+#include "TagLogger.hxx"
 #include "WrapPolygonHandler.hxx"
 #include "util.hxx"
 

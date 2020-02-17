@@ -24,6 +24,7 @@
 
 #include "LoggedResources.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 namespace com { namespace sun { namespace star {

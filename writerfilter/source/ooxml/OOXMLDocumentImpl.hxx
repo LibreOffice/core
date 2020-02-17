@@ -21,7 +21,6 @@
 
 #include <ooxml/OOXMLDocument.hxx>
 
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include "OOXMLPropertySet.hxx"

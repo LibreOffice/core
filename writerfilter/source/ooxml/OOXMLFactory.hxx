@@ -20,14 +20,9 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 
-#include <memory>
-
 #include <dmapper/resourcemodel.hxx>
 
-#include <oox/token/tokens.hxx>
-
 #include "OOXMLFastContextHandler.hxx"
-#include <boost/intrusive_ptr.hpp>
 
 namespace writerfilter {
 namespace ooxml {

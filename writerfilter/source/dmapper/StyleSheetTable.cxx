@@ -18,9 +18,9 @@
  */
 #include "StyleSheetTable.hxx"
 #include "util.hxx"
-#include "NumberingManager.hxx"
 #include "ConversionHelper.hxx"
 #include "TblStylePrHandler.hxx"
+#include "TagLogger.hxx"
 #include "BorderHandler.hxx"
 #include "LatentStyleHandler.hxx"
 #include <ooxml/resourceids.hxx>
@@ -30,14 +30,15 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <map>
-#include <set>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

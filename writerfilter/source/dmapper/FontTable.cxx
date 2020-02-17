@@ -21,11 +21,9 @@
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <sal/log.hxx>
-#include <osl/file.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
 #include <unotools/fontdefs.hxx>
-#include <com/sun/star/awt/FontPitch.hpp>
 
 using namespace com::sun::star;
 

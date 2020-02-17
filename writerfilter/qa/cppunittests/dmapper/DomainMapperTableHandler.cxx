@@ -16,8 +16,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace ::com::sun::star;
 
 namespace

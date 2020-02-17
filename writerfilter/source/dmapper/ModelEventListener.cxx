@@ -20,8 +20,6 @@
 #include "PropertyIds.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

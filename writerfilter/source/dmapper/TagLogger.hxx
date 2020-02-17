@@ -21,10 +21,9 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TAGLOGGER_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/ref.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <dmapper/resourcemodel.hxx>
 #include <string>
-#include <memory>
 #include <libxml/xmlwriter.h>
 
 namespace writerfilter
