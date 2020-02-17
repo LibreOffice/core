@@ -25,8 +25,8 @@
 
 // class SvxEscapementItem -----------------------------------------------
 
-#define DFLT_ESC_SUPER   33     // 1/3
-#define DFLT_ESC_SUB    -33     // also 1/3 previously 8/100
+#define DFLT_ESC_SUPER   33     // 42% (100 - DFLT_ESC_PROP) of ascent (~80% of font height) = 33% of total font height
+#define DFLT_ESC_SUB     -8     // 42% of descent (~20% of font height) = -8%. previously -33% (pre-2020), previously 8/100 (pre-2000?)
 #define DFLT_ESC_PROP    58
 #define MAX_ESC_POS      13999
 #define DFLT_ESC_AUTO_SUPER  (MAX_ESC_POS+1)
