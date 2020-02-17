@@ -208,9 +208,9 @@ public:
 class NumberingCheck : public NodeCheck
 {
 private:
-    SwTextNode* pPreviousTextNode;
+    SwTextNode* m_pPreviousTextNode;
 
-    const std::vector<std::pair<OUString, OUString>> constNumberingCombinations{
+    const std::vector<std::pair<OUString, OUString>> m_aNumberingCombinations{
         { "1.", "2." }, { "(1)", "(2)" }, { "1)", "2)" },   { "a.", "b." }, { "(a)", "(b)" },
         { "a)", "b)" }, { "A.", "B." },   { "(A)", "(B)" }, { "A)", "B)" }
     };
@@ -218,7 +218,7 @@ private:
 public:
     NumberingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
-        , pPreviousTextNode(nullptr)
+        , m_pPreviousTextNode(nullptr)
     {
     }
 
@@ -226,12 +226,12 @@ public:
     {
         if (pCurrent->IsTextNode())
         {
-            if (pPreviousTextNode)
+            if (m_pPreviousTextNode)
             {
-                for (auto& rPair : constNumberingCombinations)
+                for (auto& rPair : m_aNumberingCombinations)
                 {
                     if (pCurrent->GetTextNode()->GetText().startsWith(rPair.second)
-                        && pPreviousTextNode->GetText().startsWith(rPair.first))
+                        && m_pPreviousTextNode->GetText().startsWith(rPair.first))
                     {
                         OUString sNumbering = rPair.first + " " + rPair.second + "...";
                         OUString sIssueText
@@ -240,7 +240,7 @@ public:
                     }
                 }
             }
-            pPreviousTextNode = pCurrent->GetTextNode();
+            m_pPreviousTextNode = pCurrent->GetTextNode();
         }
     }
 };
@@ -595,12 +595,12 @@ public:
 class HeaderCheck : public NodeCheck
 {
 private:
-    int nPreviousLevel;
+    int m_nPreviousLevel;
 
 public:
     HeaderCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
-        , nPreviousLevel(0)
+        , m_nPreviousLevel(0)
     {
     }
 
@@ -614,11 +614,11 @@ public:
             if (nLevel < 0)
                 return;
 
-            if (nLevel > nPreviousLevel && std::abs(nLevel - nPreviousLevel) > 1)
+            if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
             {
                 lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
             }
-            nPreviousLevel = nLevel;
+            m_nPreviousLevel = nLevel;
         }
     }
 };

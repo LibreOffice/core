@@ -50,7 +50,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames() const
         "Content/PrintPlaceholders",    // 16 not in Sw/Web
         "Content/PrintHiddenText"       // 17 not in Sw/Web
     };
-    const int nCount = bIsWeb ? 12 : 18;
+    const int nCount = m_bIsWeb ? 12 : 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -63,7 +63,7 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames() const
 SwPrintOptions::SwPrintOptions(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Print") : OUString("Office.Writer/Print"),
         ConfigItemMode::ReleaseTree),
-    bIsWeb(bWeb)
+    m_bIsWeb(bWeb)
 {
     m_bPrintPageBackground = !bWeb;
     m_bPrintBlackFont = bWeb;

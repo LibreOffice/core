@@ -25,7 +25,7 @@
 class SwPrintOptions final : public SwPrintData, public utl::ConfigItem
 {
 private:
-    bool const            bIsWeb;
+    bool const            m_bIsWeb;
 
     css::uno::Sequence<OUString> GetPropertyNames() const;
 
