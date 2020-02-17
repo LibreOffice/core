@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8be453c_ad942502",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-17T13:04:47Z",
+      "side": 1,
+      "message": "if using assert is even the right fix here (which I didn\u0027t yet verify), the way to silence warnings about nResult being unused is to add a line like\n\n  (void)nResult; // avoid warnings\n\nMoving the call of m_lnkContextSupplier.Call into the assert is certainly wrong, as it would omit the call in --disable-assert-always-aborts builds.",
+      "revId": "a470f6a3ae60aa2af56ffc6e3ff1ea4a8e4e5078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
