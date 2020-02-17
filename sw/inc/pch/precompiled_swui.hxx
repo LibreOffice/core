@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-16 15:31:35 using:
+ Generated on 2020-02-17 12:28:23 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -568,6 +568,7 @@
 #include <pam.hxx>
 #include <pardlg.hxx>
 #include <poolfmt.hxx>
+#include <reffld.hxx>
 #include <ring.hxx>
 #include <section.hxx>
 #include <shellio.hxx>

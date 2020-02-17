@@ -23,13 +23,14 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/button.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 
 class ImplTabItem;
 struct ImplTabCtrlData;
 class TabPage;
+class Button;
+class PushButton;
 class ListBox;
 
 #ifndef TAB_APPEND
