@@ -663,8 +663,8 @@ canvas/inc/base/canvascustomspritehelper.hxx
 canvas/inc/base/disambiguationhelper.hxx
 canvas/inc/base/graphicdevicebase.hxx
 canvas/inc/base/integerbitmapbase.hxx
-canvas/inc/base/spritecanvasbase.hxx
 canvas/inc/base/sprite.hxx
+canvas/inc/base/spritecanvasbase.hxx
 canvas/inc/base/spritesurface.hxx
 canvas/inc/parametricpolypolygon.hxx
 canvas/inc/propertysethelper.hxx
@@ -674,8 +674,8 @@ canvas/inc/rendering/isurface.hxx
 canvas/inc/rendering/isurfaceproxy.hxx
 canvas/inc/rendering/isurfaceproxymanager.hxx
 canvas/inc/spriteredrawmanager.hxx
-canvas/inc/verifyinput.hxx
 canvas/inc/vclwrapper.hxx
+canvas/inc/verifyinput.hxx
 canvas/source/cairo/cairo_cachedbitmap.cxx
 canvas/source/cairo/cairo_cachedbitmap.hxx
 canvas/source/cairo/cairo_canvas.cxx
@@ -1880,11 +1880,10 @@ configmgr/source/xcuparser.cxx
 configmgr/source/xcuparser.hxx
 configmgr/source/xmldata.cxx
 configmgr/source/xmldata.hxx
-connectivity/inc/strings.hxx
 connectivity/inc/ParameterCont.hxx
 connectivity/inc/SQLStatementHelper.hxx
-connectivity/inc/TIndexColumns.hxx
 connectivity/inc/TIndex.hxx
+connectivity/inc/TIndexColumns.hxx
 connectivity/inc/TKey.hxx
 connectivity/inc/TKeyColumns.hxx
 connectivity/inc/sdbcx/VCatalog.hxx
@@ -1895,6 +1894,7 @@ connectivity/inc/sdbcx/VKey.hxx
 connectivity/inc/sdbcx/VKeyColumn.hxx
 connectivity/inc/sdbcx/VTypeDef.hxx
 connectivity/inc/sdbcx/VUser.hxx
+connectivity/inc/strings.hxx
 connectivity/qa/connectivity/ado/DriverTest.cxx
 connectivity/qa/connectivity/commontools/FValue_test.cxx
 connectivity/qa/connectivity/mork/DriverTest.cxx
@@ -3867,8 +3867,8 @@ editeng/source/accessibility/AccessibleContextBase.cxx
 editeng/source/accessibility/AccessibleEditableTextPara.cxx
 editeng/source/accessibility/AccessibleHyperlink.cxx
 editeng/source/accessibility/AccessibleHyperlink.hxx
-editeng/source/accessibility/AccessibleImageBullet.hxx
 editeng/source/accessibility/AccessibleImageBullet.cxx
+editeng/source/accessibility/AccessibleImageBullet.hxx
 editeng/source/accessibility/AccessibleParaManager.cxx
 editeng/source/accessibility/AccessibleSelectionBase.cxx
 editeng/source/accessibility/AccessibleStaticTextBase.cxx
@@ -5718,9 +5718,9 @@ include/connectivity/dbconversion.hxx
 include/connectivity/dbexception.hxx
 include/connectivity/dbmetadata.hxx
 include/connectivity/dbtools.hxx
-include/connectivity/internalnode.hxx
 include/connectivity/filtermanager.hxx
 include/connectivity/formattedcolumnvalue.hxx
+include/connectivity/internalnode.hxx
 include/connectivity/odbc.hxx
 include/connectivity/parameters.hxx
 include/connectivity/paramwrapper.hxx
@@ -12081,13 +12081,13 @@ sfx2/inc/emojiviewitem.hxx
 sfx2/inc/fwkhelper.hxx
 sfx2/inc/guisaveas.hxx
 sfx2/inc/inettbc.hxx
+sfx2/inc/notebookbar/NotebookbarTabControl.hxx
 sfx2/inc/preventduplicateinteraction.hxx
 sfx2/inc/recentdocsview.hxx
-sfx2/inc/notebookbar/NotebookbarTabControl.hxx
 sfx2/inc/sidebar/Accessible.hxx
 sfx2/inc/sidebar/AccessibleTitleBar.hxx
-sfx2/inc/sidebar/ContextList.hxx
 sfx2/inc/sidebar/ContextChangeBroadcaster.hxx
+sfx2/inc/sidebar/ContextList.hxx
 sfx2/inc/sidebar/ControllerFactory.hxx
 sfx2/inc/sidebar/DeckDescriptor.hxx
 sfx2/inc/sidebar/DeckLayouter.hxx
@@ -15921,8 +15921,8 @@ toolkit/inc/controls/stdtabcontroller.hxx
 toolkit/inc/controls/stdtabcontrollermodel.hxx
 toolkit/inc/controls/tabpagecontainer.hxx
 toolkit/inc/controls/tabpagemodel.hxx
-toolkit/inc/controls/treecontrolpeer.hxx
 toolkit/inc/controls/tkscrollbar.hxx
+toolkit/inc/controls/treecontrolpeer.hxx
 toolkit/inc/controls/unocontrolcontainer.hxx
 toolkit/inc/controls/unocontrolcontainermodel.hxx
 toolkit/inc/helper/accessibilityclient.hxx
@@ -17988,7 +17988,6 @@ xmloff/inc/forms/property_handler.hxx
 xmloff/inc/forms/property_ids.hxx
 xmloff/inc/propimp0.hxx
 xmloff/inc/prstylecond.hxx
-xmloff/inc/xmltabe.hxx
 xmloff/inc/txtflde.hxx
 xmloff/inc/txtfldi.hxx
 xmloff/inc/txtlists.hxx
@@ -17996,6 +17995,7 @@ xmloff/inc/txtvfldi.hxx
 xmloff/inc/xexptran.hxx
 xmloff/inc/xmlmultiimagehelper.hxx
 xmloff/inc/xmlsdtypes.hxx
+xmloff/inc/xmltabe.hxx
 xmloff/inc/xmltabi.hxx
 xmloff/inc/xmlversion.hxx
 xmloff/qa/unit/tokenmap-test.cxx
