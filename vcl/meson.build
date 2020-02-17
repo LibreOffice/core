@@ -1,3 +1,8 @@
+glxtest_lib = static_library('glxtest', 'unx/glxtest.cxx',
+  include_directories: [main_inc, 'inc'],
+  dependencies: [x11_dep, dl_dep],
+)
+
 vcl_lib = shared_library('vcl',
   'source/animate/Animation.cxx',
   'source/animate/AnimationBitmap.cxx',

@@ -1,0 +1,13 @@
+helplinker_lib = shared_library('helplinker',
+  'source/HelpCompiler.cxx',
+  'source/LuceneHelper.cxx',
+  'source/HelpIndexer.cxx',
+  'source/HelpSearch.cxx',
+  'source/BasCodeTagger.cxx',
+  cpp_args: ['-Dl10N_DLLIMPLEMENTATION',
+             '-DHELPLINKER_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, 'inc'],
+  link_with: [comphelper_lib, sal_lib],
+  dependencies: [libxml_dep, clucene_dep, libxslt_dep],
+)

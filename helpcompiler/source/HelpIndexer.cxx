@@ -81,9 +81,12 @@ bool HelpIndexer::indexDocuments()
 
         // Construct the analyzer appropriate for the given language
         std::unique_ptr<lucene::analysis::Analyzer> analyzer;
+        /* FIXME: I had to disable this, probably due to version
+           differences.
         if (bUseCJK)
             analyzer.reset(new lucene::analysis::LanguageBasedAnalyzer(L"cjk"));
         else
+        */
             analyzer.reset(new lucene::analysis::standard::StandardAnalyzer());
 
         OUString ustrSystemPath;
