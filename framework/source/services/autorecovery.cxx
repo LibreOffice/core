@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -3346,6 +3347,28 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         }
         else
         {
+            OUString sFilterName;
+            lDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
+            if (!sFilterName.isEmpty()
+                && (sFilterName == "Calc MS Excel 2007 XML" || sFilterName == "Impress MS PowerPoint 2007 XML" || sFilterName == "MS Word 2007 XML"))
+                // TODO: Check for other affected formats + templates
+            {
+                Reference< css::document::XExtendedFilterDetection > xDetection(
+                    m_xContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.comp.oox.FormatDetector", m_xContext),
+                    UNO_QUERY_THROW);
+                lDescriptor[utl::MediaDescriptor::PROP_URL()] <<= sURL;
+                Sequence< css::beans::PropertyValue > lDescriptorSeq = lDescriptor.getAsConstPropertyValueList();
+                OUString sType = xDetection->detect(lDescriptorSeq);
+
+                if (!sType.isEmpty())
+                {
+                    // Detecton was successful. Update media descriptor with modified one,
+                    // potentially containing encryption data.
+                    lDescriptor = lDescriptorSeq;
+                }
+            }
+
             // let it recover itself
             Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
             xDocRecover->recoverFromFile(
