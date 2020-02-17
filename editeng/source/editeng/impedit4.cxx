@@ -930,12 +930,12 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             short nEsc = static_cast<const SvxEscapementItem&>(rItem).GetEsc();
             if ( nEsc == DFLT_ESC_AUTO_SUPER )
             {
-                nEsc = 100 - nProp;
+                nEsc =  .8 * (100 - nProp);
                 nProp100++; // A 1 afterwards means 'automatic'.
             }
             else if ( nEsc == DFLT_ESC_AUTO_SUB )
             {
-                nEsc = sal::static_int_cast< short >( -( 100 - nProp ) );
+                nEsc =  .2 * -(100 - nProp);
                 nProp100++;
             }
             // SWG:
