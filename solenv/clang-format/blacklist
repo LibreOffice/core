@@ -3225,7 +3225,6 @@ dbaccess/source/ui/inc/JoinController.hxx
 dbaccess/source/ui/inc/JoinDesignView.hxx
 dbaccess/source/ui/inc/JoinExchange.hxx
 dbaccess/source/ui/inc/JoinTableView.hxx
-dbaccess/source/ui/inc/LimitBox.hxx
 dbaccess/source/ui/inc/QEnumTypes.hxx
 dbaccess/source/ui/inc/QueryDesignView.hxx
 dbaccess/source/ui/inc/QueryPropertiesDialog.hxx
@@ -3365,7 +3364,6 @@ dbaccess/source/ui/querydesign/JoinController.cxx
 dbaccess/source/ui/querydesign/JoinDesignView.cxx
 dbaccess/source/ui/querydesign/JoinExchange.cxx
 dbaccess/source/ui/querydesign/JoinTableView.cxx
-dbaccess/source/ui/querydesign/LimitBox.cxx
 dbaccess/source/ui/querydesign/QTableConnection.cxx
 dbaccess/source/ui/querydesign/QTableConnection.hxx
 dbaccess/source/ui/querydesign/QTableConnectionData.cxx
