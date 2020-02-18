@@ -666,6 +666,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf80194_autoSubscript)
+{
+    createDoc();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Automatic mode enabled", false,
+        getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoEscapement"));
+    dispatchCommand(mxComponent, ".uno:SubScript", {});
+    // Writer has always had automatic mode enabled when creating subscript/superscripts.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Automatic mode enabled", true,
+        getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoEscapement"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
     SwDoc* pDoc = createDoc("tdf64242_optimizeTable.odt");
