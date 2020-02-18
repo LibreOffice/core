@@ -23,16 +23,19 @@ ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR).dll,PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
 endif
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	PCbuild/$(python_arch_subdir)_asyncio$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes_test$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_elementtree$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_msi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_multiprocessing$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_queue$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_socket$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ssl$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_testbuffer$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_testcapi$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_testconsole$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)pyexpat$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)select$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)unicodedata$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
