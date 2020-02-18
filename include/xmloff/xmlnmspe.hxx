@@ -100,18 +100,18 @@ constexpr sal_uInt16 XML_NAMESPACE_REPORT_OASIS = XML_NAMESPACE_OASIS_BASE +    
 
 // namespaces used in the technical preview (SO 5.2)
 constexpr sal_uInt16 XML_OLD_NAMESPACE_BASE = 62;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_FO = XML_OLD_NAMESPACE_BASE +             0;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_XLINK = XML_OLD_NAMESPACE_BASE +          1;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_OFFICE = XML_OLD_NAMESPACE_BASE +         2;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_STYLE = XML_OLD_NAMESPACE_BASE +          3;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_TEXT = XML_OLD_NAMESPACE_BASE +           4;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_TABLE = XML_OLD_NAMESPACE_BASE +          5;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_META = XML_OLD_NAMESPACE_BASE +           6;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_DRAW = XML_OLD_NAMESPACE_BASE +           7;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_NUMBER = XML_OLD_NAMESPACE_BASE +         8;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_PRESENTATION = XML_OLD_NAMESPACE_BASE +   9;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_CHART = XML_OLD_NAMESPACE_BASE +         10;
-constexpr sal_uInt16 XML_OLD_NAMESPACE_SMIL = XML_OLD_NAMESPACE_BASE +          11;
+constexpr sal_uInt16 XML_NAMESPACE_FO_SO52 = XML_OLD_NAMESPACE_BASE +             0;
+constexpr sal_uInt16 XML_NAMESPACE_XLINK_SO52 = XML_OLD_NAMESPACE_BASE +          1;
+constexpr sal_uInt16 XML_NAMESPACE_OFFICE_SO52 = XML_OLD_NAMESPACE_BASE +         2;
+constexpr sal_uInt16 XML_NAMESPACE_STYLE_SO52 = XML_OLD_NAMESPACE_BASE +          3;
+constexpr sal_uInt16 XML_NAMESPACE_TEXT_SO52 = XML_OLD_NAMESPACE_BASE +           4;
+constexpr sal_uInt16 XML_NAMESPACE_TABLE_SO52 = XML_OLD_NAMESPACE_BASE +          5;
+constexpr sal_uInt16 XML_NAMESPACE_META_SO52 = XML_OLD_NAMESPACE_BASE +           6;
+constexpr sal_uInt16 XML_NAMESPACE_DRAW_SO52 = XML_OLD_NAMESPACE_BASE +           7;
+constexpr sal_uInt16 XML_NAMESPACE_NUMBER_SO52 = XML_OLD_NAMESPACE_BASE +         8;
+constexpr sal_uInt16 XML_NAMESPACE_PRESENTATION_SO52 = XML_OLD_NAMESPACE_BASE +   9;
+constexpr sal_uInt16 XML_NAMESPACE_CHART_SO52 = XML_OLD_NAMESPACE_BASE +         10;
+constexpr sal_uInt16 XML_NAMESPACE_SMIL_SO52 = XML_OLD_NAMESPACE_BASE +          11;
 
 // experimental namespaces
 constexpr sal_uInt16 XML_NAMESPACE_FIELD =           100;

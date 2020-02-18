@@ -155,7 +155,7 @@ static void lcl_fillNamespaceContainer(
         // as a hack, we will ignore our own 'default' namespaces
         SAL_WARN_IF( sPrefix.isEmpty(), "xmloff", "no prefix?" );
         if( !sPrefix.startsWith("_") &&
-            nKeyIter >= XML_OLD_NAMESPACE_META)
+            nKeyIter >= XML_NAMESPACE_META_SO52)
         {
             // insert prefix (use replace if already known)
             if( xContainer->hasByName( sPrefix ) )
