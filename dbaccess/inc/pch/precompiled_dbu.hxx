@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-17 16:58:13 using:
+ Generated on 2020-02-18 12:02:26 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,7 +27,6 @@
 #include <cstring>
 #include <deque>
 #include <functional>
-#include <limits.h>
 #include <limits>
 #include <list>
 #include <map>
@@ -198,7 +197,6 @@
 #include <svx/svxdllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
