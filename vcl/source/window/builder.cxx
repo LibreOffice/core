@@ -41,7 +41,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolkit/throbber.hxx>

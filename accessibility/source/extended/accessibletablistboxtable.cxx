@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <extended/accessibletablistboxtable.hxx>
 #include <extended/AccessibleBrowseBoxTableCell.hxx>
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
-#include <vcl/svtabbx.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-
+#include <vcl/toolkit/svtabbx.hxx>
 
 namespace accessibility
 {

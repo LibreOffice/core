@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_add_defs,icontest,\
 endif
 
 $(eval $(call gb_Executable_add_defs,icontest,\
-    -DVCL_WORKBEN \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_Executable_use_api,icontest,\
