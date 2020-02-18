@@ -140,6 +140,24 @@ OUString GetVendorId(DeviceVendor id)
     abort();
 }
 
+DeviceVendor GetVendorFromId(uint32_t id)
+{
+    switch (id)
+    {
+        case 0x8086:
+            return VendorIntel;
+        case 0x10de:
+            return VendorNVIDIA;
+        case 0x1002:
+            return VendorAMD;
+        case 0x1414:
+            return VendorMicrosoft;
+        default:
+            return VendorAll;
+    }
+    abort();
+}
+
 Parser::Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList)
     : meBlockType(BlockType::UNKNOWN)
     , mrDriverList(rDriverList)
