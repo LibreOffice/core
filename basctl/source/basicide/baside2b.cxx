@@ -43,7 +43,6 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
@@ -1584,15 +1583,9 @@ struct WatchItem
 }
 
 WatchWindow::WatchWindow(Layout* pParent)
-    : DockingWindow(pParent)
+    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingwatch.ui", "DockingWatch")
     , m_nUpdateWatchesId(nullptr)
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
-                                                       "modules/BasicIDE/ui/dockingwatch.ui"));
-    m_xContainer = m_xBuilder->weld_container("DockingWatch");
-
     m_xTitleArea = m_xBuilder->weld_container("titlearea");
 
     nVirtToolBoxHeight = m_xTitleArea->get_preferred_size().Height();
@@ -1666,9 +1659,6 @@ void WatchWindow::dispose()
     m_xRemoveWatchButton.reset();
     m_xTitleArea.reset();
     m_xTreeListBox.reset();
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
     if (!IsDisposed())
         GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     DockingWindow::dispose();
@@ -1797,14 +1787,8 @@ IMPL_LINK(WatchWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 // StackWindow
 StackWindow::StackWindow(Layout* pParent)
-    : DockingWindow(pParent)
+    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingstack.ui", "DockingStack")
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
-                                                       "modules/BasicIDE/ui/dockingstack.ui"));
-    m_xContainer = m_xBuilder->weld_container("DockingStack");
-
     m_xTitle = m_xBuilder->weld_label("title");
     m_xTitle->set_label(IDEResId(RID_STR_STACK));
 
@@ -1836,9 +1820,6 @@ void StackWindow::dispose()
         GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     m_xTitle.reset();
     m_xTreeListBox.reset();
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
     DockingWindow::dispose();
 }
 

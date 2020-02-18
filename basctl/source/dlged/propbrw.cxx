@@ -38,6 +38,7 @@
 #include <svx/svdview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 

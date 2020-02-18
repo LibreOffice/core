@@ -25,19 +25,12 @@
 
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
 
 namespace basctl
 {
 ObjectCatalog::ObjectCatalog(vcl::Window* pParent)
-    : DockingWindow(pParent)
+    : DockingWindow(pParent, "modules/BasicIDE/ui/dockingorganizer.ui", "DockingOrganizer")
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
-                                                       "modules/BasicIDE/ui/dockingorganizer.ui"));
-    m_xContainer = m_xBuilder->weld_container("DockingOrganizer");
-
     m_xTitle = m_xBuilder->weld_label("title");
     m_xTree.reset(new SbTreeListBox(m_xBuilder->weld_tree_view("libraries"), GetFrameWeld()));
 
@@ -66,9 +59,6 @@ void ObjectCatalog::dispose()
         GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
     m_xTitle.reset();
     m_xTree.reset();
-    m_xContainer.reset();
-    m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
     DockingWindow::dispose();
 }
 

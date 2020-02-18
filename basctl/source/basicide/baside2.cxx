@@ -34,6 +34,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sbmeth.hxx>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

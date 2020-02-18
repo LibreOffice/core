@@ -25,6 +25,7 @@
 #include <svtools/tabbar.hxx>
 #include <basic/sbdef.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/weld.hxx>
 
 #include <unordered_map>
 
@@ -80,7 +81,7 @@ struct BasicStatus
 class DockingWindow : public ::DockingWindow
 {
 public:
-    DockingWindow(vcl::Window* pParent);
+    DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
     DockingWindow(Layout* pParent);
     virtual ~DockingWindow() override;
     virtual void dispose() override;
@@ -98,6 +99,11 @@ protected:
     virtual void     ToggleFloatingMode() override;
     virtual bool PrepareToggleFloatingMode() override;
     virtual void     StartDocking() override;
+
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
 
 private:
     // the position and the size of the floating window
