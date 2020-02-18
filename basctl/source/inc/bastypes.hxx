@@ -80,9 +80,8 @@ struct BasicStatus
 class DockingWindow : public ::DockingWindow
 {
 public:
-    DockingWindow (vcl::Window* pParent);
-    DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
-    DockingWindow (Layout* pParent);
+    DockingWindow(vcl::Window* pParent);
+    DockingWindow(Layout* pParent);
     virtual ~DockingWindow() override;
     virtual void dispose() override;
     void ResizeIfDocking (Point const&, Size const&);

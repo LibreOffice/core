@@ -30,7 +30,7 @@
 namespace basctl
 {
 ObjectCatalog::ObjectCatalog(vcl::Window* pParent)
-    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
+    : DockingWindow(pParent)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
