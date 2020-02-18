@@ -96,6 +96,7 @@ public:
     sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
+    void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
 };
 
 // class SvHeaderTabListBox ---------------------------------------------------

@@ -8339,6 +8339,26 @@ private:
         return m_aModelColToViewCol[modelcol];
     }
 
+    void set_column_editable(int nCol, bool bEditable)
+    {
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                void* pData = g_object_get_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex");
+                if (reinterpret_cast<sal_IntPtr>(pData) == nCol)
+                {
+                    g_object_set(G_OBJECT(pCellRenderer), "editable", bEditable, "editable-set", true, nullptr);
+                    break;
+                }
+            }
+            g_list_free(pRenderers);
+        }
+    }
+
     static void signalRowDeleted(GtkTreeModel*, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
@@ -8511,6 +8531,13 @@ public:
             gtk_tree_view_column_set_fixed_width(pColumn, nWidth);
             pEntry = g_list_next(pEntry);
         }
+    }
+
+    virtual void set_column_editables(const std::vector<bool>& rEditables) override
+    {
+        size_t nTabCount = rEditables.size();
+        for (size_t i = 0 ; i < nTabCount; ++i)
+            set_column_editable(i, rEditables[i]);
     }
 
     virtual void set_centered_column(int nCol) override

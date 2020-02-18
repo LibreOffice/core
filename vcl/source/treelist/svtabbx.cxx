@@ -429,6 +429,18 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
         Invalidate();
 }
 
+void SvTabListBox::SetTabEditable(sal_uInt16 nTab, bool bEditable)
+{
+    DBG_ASSERT(nTab<mvTabList.size(),"GetTabPos:Invalid Tab");
+    if( nTab >= mvTabList.size() )
+        return;
+    SvLBoxTab& rTab = mvTabList[ nTab ];
+    if (bEditable)
+        rTab.nFlags |= SvLBoxTabFlags::EDITABLE;
+    else
+        rTab.nFlags &= ~SvLBoxTabFlags::EDITABLE;
+}
+
 long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
     if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )

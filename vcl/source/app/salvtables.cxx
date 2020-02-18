@@ -3474,6 +3474,13 @@ public:
         m_xTreeView->Resize();
     }
 
+    virtual void set_column_editables(const std::vector<bool>& rEditables) override
+    {
+        size_t nTabCount = rEditables.size();
+        for (size_t i = 0 ; i < nTabCount; ++i)
+            m_xTreeView->SetTabEditable(i, rEditables[i]);
+    }
+
     virtual void set_centered_column(int nCol) override
     {
         m_xTreeView->SetTabJustify(nCol, SvTabJustify::AdjustCenter);
