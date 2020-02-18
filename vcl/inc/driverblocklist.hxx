@@ -23,6 +23,19 @@ VCL_DLLPUBLIC bool IsDeviceBlocked(const OUString& blocklistURL, const OUString&
 VCL_DLLPUBLIC int32_t GetWindowsVersion();
 #endif
 
+enum DeviceVendor
+{
+    VendorAll,
+    VendorIntel,
+    VendorNVIDIA,
+    VendorAMD,
+    VendorMicrosoft,
+};
+const int DeviceVendorMax = VendorMicrosoft + 1;
+
+/// Returns vendor for the given vendor ID, or VendorAll if not known.
+VCL_DLLPUBLIC DeviceVendor GetVendorFromId(uint32_t id);
+
 // The rest should be private (only for the unittest).
 
 struct InvalidFileException
@@ -58,16 +71,6 @@ enum VersionComparisonOp
     DRIVER_BETWEEN_INCLUSIVE_START, // driver >= version && driver < versionMax
     DRIVER_COMPARISON_IGNORED
 };
-
-enum DeviceVendor
-{
-    VendorAll,
-    VendorIntel,
-    VendorNVIDIA,
-    VendorAMD,
-    VendorMicrosoft,
-};
-const int DeviceVendorMax = VendorMicrosoft + 1;
 
 struct DriverInfo
 {
