@@ -69,7 +69,6 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/cliplistener.hxx>
-#include <vcl/svlbitm.hxx>
 #include <svtools/insdlg.hxx>
 
 #include <comphelper/sequence.hxx>
