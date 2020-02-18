@@ -84,7 +84,7 @@ def add_tests_for_file(test_file, test_suite):
         for test_name in test_names:
             full_name = ".".join([module_name, c.__name__, test_name])
             if len(test_name_limit) > 0:
-                if not test_name_limit.startswith(full_name):
+                if test_name_limit != full_name:
                     continue
                 test_name_limit_found = True
 
