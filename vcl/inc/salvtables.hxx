@@ -26,7 +26,7 @@
 
 class SalInstanceBuilder : public weld::Builder
 {
-private:
+protected:
     std::unique_ptr<VclBuilder> m_xBuilder;
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
@@ -393,7 +393,7 @@ public:
     SystemWindow* getSystemWindow();
 };
 
-class SalInstanceLabel final : public SalInstanceWidget, public virtual weld::Label
+class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
 {
 private:
     // Control instead of FixedText so we can also use this for
