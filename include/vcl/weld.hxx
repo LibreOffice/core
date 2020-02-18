@@ -915,6 +915,7 @@ public:
     virtual void unselect(const TreeIter& rIter) = 0;
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
     virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
+    virtual void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void expand_row(const TreeIter& rIter) = 0;
     virtual void collapse_row(const TreeIter& rIter) = 0;
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
@@ -1023,6 +1024,7 @@ public:
 
     virtual void columns_autosize() = 0;
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
+    virtual void set_column_editables(const std::vector<bool>& rEditables) = 0;
     virtual int get_column_width(int nCol) const = 0;
     virtual void set_centered_column(int nCol) = 0;
     virtual OUString get_column_title(int nColumn) const = 0;

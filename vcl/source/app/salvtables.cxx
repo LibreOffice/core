@@ -3757,6 +3757,13 @@ public:
         m_xTreeView->Resize();
     }
 
+    virtual void set_column_editables(const std::vector<bool>& rEditables) override
+    {
+        size_t nTabCount = rEditables.size();
+        for (size_t i = 0 ; i < nTabCount; ++i)
+            m_xTreeView->SetTabEditable(i, rEditables[i]);
+    }
+
     virtual void set_centered_column(int nCol) override
     {
         m_xTreeView->SetTabJustify(nCol, SvTabJustify::AdjustCenter);
@@ -4537,6 +4544,22 @@ public:
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         return GetPlaceHolderChild(rVclIter.iter) != nullptr;
+    }
+
+    virtual void set_children_on_demand(const weld::TreeIter& rIter, bool bChildrenOnDemand) override
+    {
+        disable_notify_events();
+
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+
+        SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(rVclIter.iter);
+
+        if (bChildrenOnDemand && !pPlaceHolder)
+            m_xTreeView->InsertEntry("<dummy>", rVclIter.iter, false, 0, nullptr);
+        else if (!bChildrenOnDemand && pPlaceHolder)
+            m_xTreeView->RemoveEntry(pPlaceHolder);
+
+        enable_notify_events();
     }
 
     virtual void expand_row(const weld::TreeIter& rIter) override
