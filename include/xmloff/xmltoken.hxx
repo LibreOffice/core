@@ -2815,6 +2815,7 @@ namespace xmloff { namespace token {
 
         XML_NP_ANIMATION,
         XML_N_ANIMATION,
+        XML_N_ANIMATION_OOO,
 
         XML_PAR,
         XML_SEQ,

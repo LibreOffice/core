@@ -2812,6 +2812,7 @@ namespace xmloff::token {
 
         TOKEN( "anim",                      XML_NP_ANIMATION ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0",  XML_N_ANIMATION ),
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:animation:1.0",  XML_N_ANIMATION_OOO ),
 
         TOKEN( "par",                           XML_PAR ),
         TOKEN( "seq",                           XML_SEQ ),

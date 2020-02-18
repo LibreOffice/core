@@ -74,7 +74,7 @@ constexpr sal_uInt16 XML_NAMESPACE_CALC_EXT   = XML_NAMESPACE_EXT_BASE + 4;
 constexpr sal_uInt16 XML_NAMESPACE_LO_EXT     = XML_NAMESPACE_EXT_BASE + 5;
 
 // namespaces for OOo formats
-constexpr sal_uInt16 XML_NAMESPACE_OOO_BASE = 44U;
+constexpr sal_uInt16 XML_NAMESPACE_OOO_BASE = 44;
 constexpr sal_uInt16 XML_NAMESPACE_OFFICE_OOO = XML_NAMESPACE_OOO_BASE +         0;
 constexpr sal_uInt16 XML_NAMESPACE_META_OOO = XML_NAMESPACE_OOO_BASE +           1;
 constexpr sal_uInt16 XML_NAMESPACE_STYLE_OOO = XML_NAMESPACE_OOO_BASE +          2;
@@ -88,18 +88,19 @@ constexpr sal_uInt16 XML_NAMESPACE_CHART_OOO = XML_NAMESPACE_OOO_BASE +         
 constexpr sal_uInt16 XML_NAMESPACE_CONFIG_OOO = XML_NAMESPACE_OOO_BASE +        10;
 constexpr sal_uInt16 XML_NAMESPACE_FORM_OOO = XML_NAMESPACE_OOO_BASE +          11;
 constexpr sal_uInt16 XML_NAMESPACE_SCRIPT_OOO = XML_NAMESPACE_OOO_BASE +        12;
+constexpr sal_uInt16 XML_NAMESPACE_ANIMATION_OOO = XML_NAMESPACE_OOO_BASE +     13;
 
-constexpr sal_uInt16 XML_NAMESPACE_COMPAT_BASE = 57;
+constexpr sal_uInt16 XML_NAMESPACE_COMPAT_BASE = 58;
 constexpr sal_uInt16 XML_NAMESPACE_SVG_COMPAT = XML_NAMESPACE_COMPAT_BASE +      0;
 constexpr sal_uInt16 XML_NAMESPACE_FO_COMPAT = XML_NAMESPACE_COMPAT_BASE +       1;
 constexpr sal_uInt16 XML_NAMESPACE_SMIL_COMPAT = XML_NAMESPACE_COMPAT_BASE +     2;
 
-constexpr sal_uInt16 XML_NAMESPACE_OASIS_BASE = 60;
+constexpr sal_uInt16 XML_NAMESPACE_OASIS_BASE = 61;
 constexpr sal_uInt16 XML_NAMESPACE_DB_OASIS = XML_NAMESPACE_OASIS_BASE +         0;
 constexpr sal_uInt16 XML_NAMESPACE_REPORT_OASIS = XML_NAMESPACE_OASIS_BASE +     1;
 
 // namespaces used in the technical preview (SO 5.2)
-constexpr sal_uInt16 XML_OLD_NAMESPACE_BASE = 62;
+constexpr sal_uInt16 XML_OLD_NAMESPACE_BASE = 63;
 constexpr sal_uInt16 XML_NAMESPACE_FO_SO52 = XML_OLD_NAMESPACE_BASE +             0;
 constexpr sal_uInt16 XML_NAMESPACE_XLINK_SO52 = XML_OLD_NAMESPACE_BASE +          1;
 constexpr sal_uInt16 XML_NAMESPACE_OFFICE_SO52 = XML_OLD_NAMESPACE_BASE +         2;

@@ -348,11 +348,6 @@ SdXMLImport::SdXMLImport(
         GetXMLToken(XML_NP_SMIL),
         GetXMLToken(XML_N_SMIL_COMPAT),
         XML_NAMESPACE_SMIL);
-
-    GetNamespaceMap().Add(
-        GetXMLToken(XML_NP_ANIMATION),
-        GetXMLToken(XML_N_ANIMATION),
-        XML_NAMESPACE_ANIMATION);
 }
 
 // XImporter
