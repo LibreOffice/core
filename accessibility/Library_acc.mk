@@ -37,6 +37,10 @@ $(eval $(call gb_Library_use_libraries,acc,\
     vcl \
 ))
 
+$(eval $(call gb_Library_add_defs,acc,\
+    -DVCL_INTERNALS \
+))
+
 $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleBrowseBox \
     accessibility/source/extended/AccessibleBrowseBoxBase \
