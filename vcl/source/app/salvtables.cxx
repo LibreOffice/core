@@ -6466,7 +6466,10 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         m_pTreeView->disable_notify_events();
         auto& rListBox = m_pTreeView->getTreeView();
         if (!rListBox.FirstSelected())
-            rListBox.Select(rListBox.First(), true);
+        {
+            if (SvTreeListEntry* pEntry = rListBox.First())
+                rListBox.Select(pEntry, true);
+        }
         else
             rListBox.KeyInput(rKeyEvent);
         m_xEntry->set_text(m_xTreeView->get_selected_text());
