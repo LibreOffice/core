@@ -3051,14 +3051,7 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
             if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
             {
-                if (static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
-                    DeleteOutlineSelections();
-                else
-                    EditEntry(pEntry, EditEntryMode::DELETE);
-                m_bViewHasChanged = true;
-                GetParentWindow()->UpdateListBox();
-                TimerUpdate(&m_aUpdTimer);
-                GrabFocus();
+                EditEntry(pEntry, EditEntryMode::DELETE);
             }
         }
     }
@@ -3394,7 +3387,8 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         }
         break;
         case 806:
-            DeleteOutlineSelections();
+            // Delete outline selections
+            EditEntry(pFirst, EditEntryMode::DELETE);
             break;
         //Display
         default:
@@ -3548,6 +3542,13 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
     uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
     switch(nType)
     {
+        case ContentTypeId::OUTLINE :
+            if(nMode == EditEntryMode::DELETE)
+            {
+                DeleteOutlineSelections();
+            }
+        break;
+
         case ContentTypeId::TABLE     :
             if(nMode == EditEntryMode::UNPROTECT_TABLE)
             {
@@ -3755,6 +3756,13 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();
+    }
+    if(EditEntryMode::DELETE == nMode)
+    {
+        m_bViewHasChanged = true;
+        GetParentWindow()->UpdateListBox();
+        TimerUpdate(&m_aUpdTimer);
+        GrabFocus();
     }
 }
 
