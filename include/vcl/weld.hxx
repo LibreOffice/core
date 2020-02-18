@@ -1419,7 +1419,7 @@ protected:
 
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                            const OString& rDialogId);
+                            const OString& rDialogId, bool bMobile = false);
     virtual Dialog* getDialog() override;
     virtual ~GenericDialogController() COVERITY_NOEXCEPT_FALSE override;
 };

@@ -17,7 +17,7 @@
 
 class SalInstanceBuilder : public weld::Builder
 {
-private:
+protected:
     std::unique_ptr<VclBuilder> m_xBuilder;
     VclPtr<vcl::Window> m_aOwnedToplevel;
 public:
