@@ -27,7 +27,6 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>

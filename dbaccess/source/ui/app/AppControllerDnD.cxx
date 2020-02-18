@@ -56,7 +56,6 @@
 #include <strings.hrc>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svlbitm.hxx>
 #include <listviewitems.hxx>
 #include "AppDetailView.hxx"
 #include <linkeddocuments.hxx>
