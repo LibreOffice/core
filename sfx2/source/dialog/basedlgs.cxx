@@ -40,6 +40,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <workwin.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -835,7 +837,10 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage)
 
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
                                          const OString& rDialogId)
-    : GenericDialogController(pParent, rUIFile, rDialogId)
+    : GenericDialogController(pParent, rUIFile, rDialogId,
+                                    comphelper::LibreOfficeKit::isActive()
+                                    && SfxViewShell::Current()
+                                    && SfxViewShell::Current()->isLOKMobilePhone())
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
 }

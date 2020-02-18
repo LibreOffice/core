@@ -445,6 +445,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/polypolygon \
     vcl/backendtest/outputdevice/polyline \
     vcl/backendtest/outputdevice/rectangle \
+    vcl/jsdialog/jsdialogbuilder \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\

@@ -62,6 +62,7 @@
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 #include <comphelper/lok.hxx>
+#include <jsdialog/jsdialogbuilder.hxx>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
@@ -141,9 +142,20 @@ namespace
 }
 #endif
 
-weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile)
+weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile)
 {
-    return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+    bool bUseJSBuilder = false;
+
+    if (bMobile)
+    {
+        if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui")
+            bUseJSBuilder = true;
+    }
+
+    if (bUseJSBuilder)
+        return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+    else
+        return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
 }
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile)
