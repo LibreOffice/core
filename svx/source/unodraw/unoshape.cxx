@@ -1625,7 +1625,9 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
 
     if (!pMap)
     {
-        SAL_WARN("svx.uno", "Unknown Property: " << rPropertyName);
+        // reduce log noise by ignoring two properties that higher level code queries for on all objects
+        SAL_WARN_IF(rPropertyName != "FromWordArt" && rPropertyName != "GraphicColorMode",
+            "svx.uno", "Unknown Property: " << rPropertyName);
         throw beans::UnknownPropertyException( rPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
