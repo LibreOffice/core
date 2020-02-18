@@ -24,7 +24,6 @@
 #define RID_BMP_DLGLIB          "res/dialogfolder_16.png"
 #define RID_BMP_DLGLIBNOTLOADED "res/dialogfoldernot_16.png"
 #define RID_BMP_DIALOG          "res/im30823.png"
-#define RID_BMP_REMOVEWATCH     "res/baswatr.png"
 
 #endif
 

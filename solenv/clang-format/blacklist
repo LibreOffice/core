@@ -242,7 +242,6 @@ basctl/source/basicide/basobj2.cxx
 basctl/source/basicide/basobj3.cxx
 basctl/source/basicide/bastype2.cxx
 basctl/source/basicide/bastype3.cxx
-basctl/source/basicide/bastype3.hxx
 basctl/source/basicide/bastypes.cxx
 basctl/source/basicide/breakpoint.cxx
 basctl/source/basicide/brkdlg.cxx

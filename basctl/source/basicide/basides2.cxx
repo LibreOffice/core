@@ -28,6 +28,7 @@
 #include "baside2.hxx"
 #include "basdoc.hxx"
 #include <basidesh.hxx>
+#include <tools/debug.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <sfx2/signaturestate.hxx>

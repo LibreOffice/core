@@ -21,14 +21,9 @@
 
 #include <memory>
 #include <layout.hxx>
-#include "bastype3.hxx"
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 
-#include <vcl/svtabbx.hxx>
-#include <vcl/headbar.hxx>
-
-#include <vcl/button.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <vcl/lstbox.hxx>
@@ -157,7 +152,6 @@ public:
     bool            GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const;
 };
 
-
 class BreakPointWindow final : public vcl::Window
 {
     ModulWindow&    rModulWindow;
@@ -191,45 +185,37 @@ public:
     BreakPointList& GetBreakPoints()        { return aBreakPointList; }
 };
 
-
-class WatchTreeListBox final : public SvHeaderTabListBox
-{
-    OUString aEditingRes;
-
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  ) override;
-    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
-
-    SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
-
-public:
-    WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits );
-    virtual ~WatchTreeListBox() override;
-    virtual void    dispose() override;
-
-    void            RequestingChildren( SvTreeListEntry * pParent ) override;
-    void            UpdateWatches( bool bBasicStopped = false );
-
-    using           SvTabListBox::SetTabs;
-    virtual void    SetTabs() override;
-};
-
-
 class WatchWindow final : public DockingWindow
 {
-    OUString            aWatchStr;
-    VclPtr<ExtendedEdit>        aXEdit;
-    VclPtr<ImageButton>         aRemoveWatchButton;
-    VclPtr<WatchTreeListBox>    aTreeListBox;
-    VclPtr<HeaderBar>           aHeaderBar;
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Container> m_xTitleArea;
+    std::unique_ptr<weld::Label> m_xTitle;
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xRemoveWatchButton;
+    std::unique_ptr<weld::TreeView> m_xTreeListBox;
+
+    ImplSVEvent* m_nUpdateWatchesId;
+    OUString aEditingRes;
 
     virtual void    Resize() override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 
-    DECL_LINK( ButtonHdl, Button *, void );
-    DECL_LINK(TreeListHdl, SvTreeListBox*, void);
-    DECL_LINK( implEndDragHdl, HeaderBar *, void );
-    DECL_LINK( EditAccHdl, Accelerator&, void );
+    SbxBase* ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbArrayElement);
 
+    void implEnableChildren(weld::TreeIter& rEntry, bool bEnable);
+
+    DECL_STATIC_LINK(WatchWindow, ButtonHdl, weld::Button&, void);
+    DECL_LINK(TreeListHdl, weld::TreeView&, void);
+    DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
+    DECL_LINK(ExecuteUpdateWatches, void*, void);
 
 public:
     explicit WatchWindow (Layout* pParent);
@@ -238,9 +224,8 @@ public:
 
     void            AddWatch( const OUString& rVName );
     void            RemoveSelectedWatch();
-    void            UpdateWatches( bool bBasicStopped );
+    void            UpdateWatches(bool bBasicStopped = false);
 };
-
 
 class StackWindow : public DockingWindow
 {

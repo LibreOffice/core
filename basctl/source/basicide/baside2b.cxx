@@ -42,6 +42,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/debug.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urihelper.hxx>
@@ -55,7 +56,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/textwindowpeer.hxx>
-#include <vcl/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -77,7 +77,6 @@ long const nBasePad = 2;
 long const nCursorPad = 5;
 
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
-static const long nHeaderBarHeight = 16;
 
 // Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
 SbxVariable* IsSbxVariable (SbxBase* pBase)
@@ -1550,131 +1549,6 @@ void BreakPointWindow::dispose()
     Window::dispose();
 }
 
-namespace
-{
-    const sal_uInt16 ITEM_ID_VARIABLE = 1;
-    const sal_uInt16 ITEM_ID_VALUE = 2;
-    const sal_uInt16 ITEM_ID_TYPE = 3;
-}
-
-WatchWindow::WatchWindow (Layout* pParent)
-    : DockingWindow(pParent)
-    , aWatchStr(IDEResId( RID_STR_REMOVEWATCH))
-    , aXEdit(VclPtr<ExtendedEdit>::Create(this, WB_BORDER | WB_3DLOOK))
-    , aRemoveWatchButton(VclPtr<ImageButton>::Create(this, WB_SMALLSTYLE))
-    , aTreeListBox(VclPtr<WatchTreeListBox>::Create(this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS |
-                                                          WB_HASLINES | WB_HSCROLL | WB_TABSTOP |
-                                                          WB_HASLINESATROOT | WB_HASBUTTONSATROOT))
-    , aHeaderBar(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BORDER))
-{
-    aXEdit->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
-    aXEdit->SetHelpId(HID_BASICIDE_WATCHWINDOW_EDIT);
-    aXEdit->SetSizePixel(aXEdit->LogicToPixel(Size(80, 12), MapMode(MapUnit::MapAppFont)));
-    aTreeListBox->SetAccessibleName(IDEResId(RID_STR_WATCHNAME));
-
-    long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
-    aXEdit->SetPosPixel( Point( nTextLen, 3 ) );
-    aXEdit->SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
-    aXEdit->GetAccelerator().InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );
-    aXEdit->GetAccelerator().InsertItem( 2, vcl::KeyCode( KEY_ESCAPE ) );
-    aXEdit->Show();
-
-    aRemoveWatchButton->Disable();
-    aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
-    aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
-    aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
-    aRemoveWatchButton->SetModeImage(Image(StockImage::Yes, RID_BMP_REMOVEWATCH));
-    aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
-    Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
-    aSz.AdjustWidth(6 );
-    aSz.AdjustHeight(6 );
-    aRemoveWatchButton->SetSizePixel( aSz );
-    aRemoveWatchButton->Show();
-
-    long nRWBtnSize = aRemoveWatchButton->GetModeImage().GetSizePixel().Height() + 10;
-    nVirtToolBoxHeight = aXEdit->GetSizePixel().Height() + 7;
-
-    if ( nRWBtnSize > nVirtToolBoxHeight )
-        nVirtToolBoxHeight = nRWBtnSize;
-
-    aTreeListBox->SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
-    aTreeListBox->EnableInplaceEditing(true);
-    aTreeListBox->SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
-    aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
-    aTreeListBox->SetHighlightRange( 1, 5 );
-
-    Point aPnt( DWBORDER, nVirtToolBoxHeight + 1 );
-    aHeaderBar->SetPosPixel( aPnt );
-    aHeaderBar->SetEndDragHdl( LINK( this, WatchWindow, implEndDragHdl ) );
-
-    long nVarTabWidth = 220;
-    long nValueTabWidth = 100;
-    long const nTypeTabWidth = 1250;
-    aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE), nVarTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE), nValueTabWidth );
-    aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE), nTypeTabWidth );
-
-    long aTabPositions[] = { 0, nVarTabWidth, nVarTabWidth + nValueTabWidth };
-    aTreeListBox->SvHeaderTabListBox::SetTabs( SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel );
-    aTreeListBox->InitHeaderBar( aHeaderBar.get() );
-
-    aTreeListBox->SetNodeDefaultImages( );
-
-    aHeaderBar->Show();
-
-    aTreeListBox->Show();
-
-    SetText(IDEResId(RID_STR_WATCHNAME));
-
-    SetHelpId( HID_BASICIDE_WATCHWINDOW );
-
-    // make watch window keyboard accessible
-    GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
-}
-
-
-WatchWindow::~WatchWindow()
-{
-    disposeOnce();
-}
-
-void WatchWindow::dispose()
-{
-    aXEdit.disposeAndClear();
-    aRemoveWatchButton.disposeAndClear();
-    aHeaderBar.disposeAndClear();
-    aTreeListBox.disposeAndClear();
-    if (!IsDisposed())
-        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
-    DockingWindow::dispose();
-}
-
-void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    rRenderContext.DrawText(Point(DWBORDER, 7), aWatchStr);
-    lcl_DrawIDEWindowFrame(this, rRenderContext);
-}
-
-void WatchWindow::Resize()
-{
-    Size aSz = GetOutputSizePixel();
-    Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
-
-    if ( aBoxSz.Width() < 4 )
-        aBoxSz.setWidth( 0 );
-    if ( aBoxSz.Height() < 4 )
-        aBoxSz.setHeight( 0 );
-
-    aBoxSz.AdjustHeight( -nHeaderBarHeight );
-    aTreeListBox->SetSizePixel( aBoxSz );
-    aTreeListBox->GetHScroll()->SetPageSize( aTreeListBox->GetHScroll()->GetVisibleSize() );
-
-    aBoxSz.setHeight( nHeaderBarHeight );
-    aHeaderBar->SetSizePixel( aBoxSz );
-
-    Invalidate();
-}
-
 namespace {
 
 struct WatchItem
@@ -1709,6 +1583,117 @@ struct WatchItem
 
 }
 
+WatchWindow::WatchWindow(Layout* pParent)
+    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
+    , m_nUpdateWatchesId(nullptr)
+{
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea,
+                                                       "modules/BasicIDE/ui/dockingwatch.ui"));
+    m_xContainer = m_xBuilder->weld_container("DockingWatch");
+
+    m_xTitleArea = m_xBuilder->weld_container("titlearea");
+
+    nVirtToolBoxHeight = m_xTitleArea->get_preferred_size().Height();
+
+    m_xTitle = m_xBuilder->weld_label("title");
+    m_xTitle->set_label(IDEResId(RID_STR_REMOVEWATCH));
+
+    m_xEdit = m_xBuilder->weld_entry("edit");
+    m_xRemoveWatchButton = m_xBuilder->weld_button("remove");
+    m_xTreeListBox = m_xBuilder->weld_tree_view("treeview");
+
+    m_xEdit->set_accessible_name(IDEResId(RID_STR_WATCHNAME));
+    m_xEdit->set_help_id(HID_BASICIDE_WATCHWINDOW_EDIT);
+    m_xEdit->set_size_request(LogicToPixel(Size(80, 0), MapMode(MapUnit::MapAppFont)).Width(), -1);
+    m_xEdit->connect_activate(LINK( this, WatchWindow, ActivateHdl));
+    m_xEdit->connect_key_press(LINK( this, WatchWindow, KeyInputHdl));
+    m_xTreeListBox->set_accessible_name(IDEResId(RID_STR_WATCHNAME));
+
+    m_xRemoveWatchButton->set_sensitive(false);
+    m_xRemoveWatchButton->connect_clicked(LINK( this, WatchWindow, ButtonHdl));
+    m_xRemoveWatchButton->set_help_id(HID_BASICIDE_REMOVEWATCH);
+    m_xRemoveWatchButton->set_tooltip_text(IDEResId(RID_STR_REMOVEWATCHTIP));
+
+    m_xTreeListBox->set_help_id(HID_BASICIDE_WATCHWINDOW_LIST);
+    m_xTreeListBox->connect_editing(LINK(this, WatchWindow, EditingEntryHdl),
+                                    LINK(this, WatchWindow, EditedEntryHdl));
+    m_xTreeListBox->connect_changed( LINK( this, WatchWindow, TreeListHdl ) );
+    m_xTreeListBox->connect_expanding(LINK(this, WatchWindow, RequestingChildrenHdl));
+
+    std::vector<int> aWidths;
+    std::vector<bool> aEditables;
+    aWidths.push_back(220);  // VarTabWidth
+    aEditables.push_back(false);
+    aWidths.push_back(100);  // ValueTabWidth
+    aEditables.push_back(true);
+    aWidths.push_back(1250); // TypeTabWidth
+    aEditables.push_back(false);
+    m_xTreeListBox->set_column_fixed_widths(aWidths);
+    m_xTreeListBox->set_column_editables(aEditables);
+
+    SetText(IDEResId(RID_STR_WATCHNAME));
+
+    SetHelpId( HID_BASICIDE_WATCHWINDOW );
+
+    // make watch window keyboard accessible
+    GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
+}
+
+WatchWindow::~WatchWindow()
+{
+    disposeOnce();
+}
+
+void WatchWindow::dispose()
+{
+    if (m_nUpdateWatchesId)
+    {
+        Application::RemoveUserEvent(m_nUpdateWatchesId);
+        m_nUpdateWatchesId = nullptr;
+    }
+
+    // Destroy user data
+    m_xTreeListBox->all_foreach([this](weld::TreeIter& rEntry){
+        WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
+        delete pItem;
+        return false;
+    });
+
+    m_xTitle.reset();
+    m_xEdit.reset();
+    m_xRemoveWatchButton.reset();
+    m_xTitleArea.reset();
+    m_xTreeListBox.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
+    if (!IsDisposed())
+        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    DockingWindow::dispose();
+}
+
+void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    lcl_DrawIDEWindowFrame(this, rRenderContext);
+}
+
+void WatchWindow::Resize()
+{
+    Size aSz = GetOutputSizePixel();
+    Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - 2*DWBORDER);
+
+    if ( aBoxSz.Width() < 4 )
+        aBoxSz.setWidth( 0 );
+    if ( aBoxSz.Height() < 4 )
+        aBoxSz.setHeight( 0 );
+
+    m_xVclContentArea->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
+
+    Invalidate();
+}
+
 WatchItem* WatchItem::GetRootItem()
 {
     WatchItem* pItem = mpArrayParentItem;
@@ -1736,103 +1721,78 @@ void WatchWindow::AddWatch( const OUString& rVName )
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     WatchItem* pWatchItem = new WatchItem(aVar);
 
-    OUString aWatchStr_ = aVar + "\t\t";
-    SvTreeListEntry* pNewEntry = aTreeListBox->InsertEntry( aWatchStr_, nullptr, true );
-    pNewEntry->SetUserData( pWatchItem );
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
+    std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
+    m_xTreeListBox->insert(nullptr, -1, &aVar, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+    m_xTreeListBox->set_text(*xRet, "", 1);
+    m_xTreeListBox->set_text(*xRet, "", 2);
 
-    aTreeListBox->Select(pNewEntry);
-    aTreeListBox->MakeVisible(pNewEntry);
-    aRemoveWatchButton->Enable();
+    m_xTreeListBox->set_cursor(*xRet);
+    m_xTreeListBox->select(*xRet);
+    m_xTreeListBox->scroll_to_row(*xRet);
+    m_xRemoveWatchButton->set_sensitive(true);
 
     UpdateWatches(false);
 }
 
 void WatchWindow::RemoveSelectedWatch()
 {
-    SvTreeListEntry* pEntry = aTreeListBox->GetCurEntry();
-    if ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry = m_xTreeListBox->make_iterator();
+    bool bEntry = m_xTreeListBox->get_cursor(xEntry.get());
+    if (bEntry)
     {
-        aTreeListBox->GetModel()->Remove( pEntry );
-        pEntry = aTreeListBox->GetCurEntry();
-        if ( pEntry )
-            aXEdit->SetText( static_cast<WatchItem*>(pEntry->GetUserData())->maName );
+        m_xTreeListBox->remove(*xEntry);
+        bEntry = m_xTreeListBox->get_cursor(xEntry.get());
+        if (bEntry)
+            m_xEdit->set_text(reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xEntry).toInt64())->maName);
         else
-            aXEdit->SetText( OUString() );
-        if ( !aTreeListBox->GetEntryCount() )
-            aRemoveWatchButton->Disable();
+            m_xEdit->set_text(OUString());
+        if ( !m_xTreeListBox->n_children() )
+            m_xRemoveWatchButton->set_sensitive(false);
     }
 }
 
-
-IMPL_LINK( WatchWindow, ButtonHdl, Button *, pButton, void )
+IMPL_STATIC_LINK_NOARG(WatchWindow, ButtonHdl, weld::Button&, void)
 {
-    if (pButton == aRemoveWatchButton.get())
-        if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
+    if (SfxDispatcher* pDispatcher = GetDispatcher())
+        pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
 }
 
-IMPL_LINK_NOARG(WatchWindow, TreeListHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(WatchWindow, TreeListHdl, weld::TreeView&, void)
 {
-    SvTreeListEntry* pCurEntry = aTreeListBox->GetCurEntry();
-    if ( pCurEntry && pCurEntry->GetUserData() )
-        aXEdit->SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
+    std::unique_ptr<weld::TreeIter> xCurEntry = m_xTreeListBox->make_iterator();
+    bool bCurEntry = m_xTreeListBox->get_cursor(xCurEntry.get());
+    if (!bCurEntry)
+        return;
+    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xCurEntry).toInt64());
+    if (!pItem)
+        return;
+    m_xEdit->set_text(pItem->maName);
 }
 
-IMPL_LINK_NOARG( WatchWindow, implEndDragHdl, HeaderBar *, void )
+IMPL_LINK_NOARG(WatchWindow, ActivateHdl, weld::Entry&, bool)
 {
-    const sal_Int32 TAB_WIDTH_MIN = 10;
-    sal_Int32 nMaxWidth =
-        aHeaderBar->GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
-
-    sal_Int32 nVariableWith = aHeaderBar->GetItemSize( ITEM_ID_VARIABLE );
-    if( nVariableWith < TAB_WIDTH_MIN )
-        aHeaderBar->SetItemSize( ITEM_ID_VARIABLE, TAB_WIDTH_MIN );
-    else if( nVariableWith > nMaxWidth )
-        aHeaderBar->SetItemSize( ITEM_ID_VARIABLE, nMaxWidth );
-
-    sal_Int32 nValueWith = aHeaderBar->GetItemSize( ITEM_ID_VALUE );
-    if( nValueWith < TAB_WIDTH_MIN )
-        aHeaderBar->SetItemSize( ITEM_ID_VALUE, TAB_WIDTH_MIN );
-    else if( nValueWith > nMaxWidth )
-        aHeaderBar->SetItemSize( ITEM_ID_VALUE, nMaxWidth );
-
-    if (aHeaderBar->GetItemSize( ITEM_ID_TYPE ) < TAB_WIDTH_MIN)
-        aHeaderBar->SetItemSize( ITEM_ID_TYPE, TAB_WIDTH_MIN );
-
-    sal_Int32 nPos = 0;
-    sal_uInt16 nTabs = aHeaderBar->GetItemCount();
-    for( sal_uInt16 i = 1 ; i < nTabs ; ++i )
+    OUString aCurText(m_xEdit->get_text());
+    if (!aCurText.isEmpty())
     {
-        nPos += aHeaderBar->GetItemSize( i );
-        aTreeListBox->SetTab( i, nPos, MapUnit::MapPixel );
+        AddWatch(aCurText);
+        m_xEdit->select_region(0, -1);
     }
+    return true;
 }
 
-IMPL_LINK( WatchWindow, EditAccHdl, Accelerator&, rAcc, void )
+IMPL_LINK(WatchWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    switch ( rAcc.GetCurKeyCode().GetCode() )
+    bool bHandled = false;
+
+    sal_uInt16 nKeyCode = rKEvt.GetKeyCode().GetCode();
+    if (nKeyCode == KEY_ESCAPE)
     {
-        case KEY_RETURN:
-        {
-            OUString aCurText( aXEdit->GetText() );
-            if ( !aCurText.isEmpty() )
-            {
-                AddWatch( aCurText );
-                aXEdit->SetSelection( Selection( 0, 0xFFFF ) );
-            }
-        }
-        break;
-        case KEY_ESCAPE:
-        {
-            aXEdit->SetText( OUString() );
-        }
-        break;
+        m_xEdit->set_text(OUString());
+        bHandled = true;
     }
-}
 
-void WatchWindow::UpdateWatches( bool bBasicStopped )
-{
-    aTreeListBox->UpdateWatches( bBasicStopped );
+    return bHandled;
 }
 
 // StackWindow
@@ -1847,6 +1807,9 @@ StackWindow::StackWindow(Layout* pParent)
 
     m_xTitle = m_xBuilder->weld_label("title");
     m_xTitle->set_label(IDEResId(RID_STR_STACK));
+
+    m_xTitle->set_size_request(-1, nVirtToolBoxHeight); // so the two title areas are the same height
+
     m_xTreeListBox = m_xBuilder->weld_tree_view("stack");
 
     m_xTreeListBox->set_help_id(HID_BASICIDE_STACKWINDOW_LIST);
@@ -2088,46 +2051,6 @@ EditorWindow::GetComponentInterface(bool bCreate)
     return xPeer;
 }
 
-
-// WatchTreeListBox
-
-
-WatchTreeListBox::WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits )
-    : SvHeaderTabListBox( pParent, nWinBits )
-{}
-
-WatchTreeListBox::~WatchTreeListBox()
-{
-    disposeOnce();
-}
-
-void WatchTreeListBox::dispose()
-{
-    // Destroy user data
-    SvTreeListEntry* pEntry = First();
-    while ( pEntry )
-    {
-        delete static_cast<WatchItem*>(pEntry->GetUserData());
-        pEntry->SetUserData(nullptr);
-        pEntry = Next( pEntry );
-    }
-    SvHeaderTabListBox::dispose();
-}
-
-void WatchTreeListBox::SetTabs()
-{
-    SvHeaderTabListBox::SetTabs();
-    sal_uInt16 nTabCount_ = aTabs.size();
-    for( sal_uInt16 i = 0 ; i < nTabCount_ ; i++ )
-    {
-        SvLBoxTab* pTab = aTabs[i].get();
-        if( i == 2 )
-            pTab->nFlags |= SvLBoxTabFlags::EDITABLE;
-        else
-            pTab->nFlags &= ~SvLBoxTabFlags::EDITABLE;
-    }
-}
-
 static sal_uInt32 getCorrectedPropCount(SbxArray* p)
 {
     sal_uInt32 nPropCount = p->Count32();
@@ -2141,16 +2064,16 @@ static sal_uInt32 getCorrectedPropCount(SbxArray* p)
     return nPropCount;
 }
 
-void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
+IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bool)
 {
     if( !StarBASIC::IsRunning() )
-        return;
+        return true;
 
-    if( GetChildCount( pParent ) > 0 )
-        return;
+    if (m_xTreeListBox->iter_has_child(rParent))
+        return true;
 
-    SvTreeListEntry* pEntry = pParent;
-    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
+    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rParent).toInt64());
+    std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
 
     SbxDimArray* pArray = pItem->mpArray.get();
     SbxDimArray* pRootArray = pItem->GetRootArray();
@@ -2175,12 +2098,18 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
 
             pItem->maMemberList.push_back(pVar->GetName());
             OUString const& rName = pItem->maMemberList.back();
-            SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( rName, pEntry );
-            pChildEntry->SetUserData(new WatchItem(rName));
+
+            WatchItem* pWatchItem = new WatchItem(rName);
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
+
+            m_xTreeListBox->insert(&rParent, -1, &rName, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+            m_xTreeListBox->set_text(*xRet, "", 1);
+            m_xTreeListBox->set_text(*xRet, "", 2);
         }
-        if( nPropCount > 0 )
+
+        if (nPropCount > 0 && !m_nUpdateWatchesId)
         {
-            UpdateWatches();
+            m_nUpdateWatchesId = Application::PostUserEvent(LINK(this, WatchWindow, ExecuteUpdateWatches));
         }
     }
     else if( pArray )
@@ -2221,27 +2150,40 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
             aDisplayName += aIndexStr;
             pChildItem->maDisplayName = aDisplayName;
 
-            SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( aDisplayName, pEntry );
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pChildItem)));
+
+            m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+            m_xTreeListBox->set_text(*xRet, "", 1);
+            m_xTreeListBox->set_text(*xRet, "", 2);
+
             nElementCount++;
-            pChildEntry->SetUserData( pChildItem );
         }
-        if( nElementCount > 0 )
+        if (nElementCount > 0 && !m_nUpdateWatchesId)
         {
-            UpdateWatches();
+            m_nUpdateWatchesId = Application::PostUserEvent(LINK(this, WatchWindow, ExecuteUpdateWatches));
         }
     }
+
+    return true;
 }
 
-SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement )
+IMPL_LINK_NOARG(WatchWindow, ExecuteUpdateWatches, void*, void)
+{
+    m_nUpdateWatchesId = nullptr;
+    UpdateWatches();
+}
+
+SbxBase* WatchWindow::ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbArrayElement)
 {
     SbxBase* pSBX = nullptr;
     rbArrayElement = false;
 
-    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
+    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
     OUString aVName( pItem->maName );
 
-    SvTreeListEntry* pParentEntry = GetParent( pEntry );
-    WatchItem* pParentItem = pParentEntry ? static_cast<WatchItem*>(pParentEntry->GetUserData()) : nullptr;
+    std::unique_ptr<weld::TreeIter> xParentEntry = m_xTreeListBox->make_iterator(&rEntry);
+    bool bParentEntry = m_xTreeListBox->iter_parent(*xParentEntry);
+    WatchItem* pParentItem = bParentEntry ? reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xParentEntry).toInt64()) : nullptr;
     if( pParentItem )
     {
         SbxObject* pObj = pParentItem->mpObject.get();
@@ -2272,22 +2214,22 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
     return pSBX;
 }
 
-bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
+IMPL_LINK(WatchWindow, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
 {
-    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
+    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rIter).toInt64());
 
     bool bEdit = false;
-    if ( StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError() )
+    if (StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError())
     {
         // No out of scope entries
         bool bArrayElement;
-        SbxBase* pSbx = ImplGetSBXForEntry( pEntry, bArrayElement );
+        SbxBase* pSbx = ImplGetSBXForEntry(rIter, bArrayElement);
         if (IsSbxVariable(pSbx) || bArrayElement)
         {
             // Accept no objects and only end nodes of arrays for editing
             if( !pItem->mpObject.is() && ( !pItem->mpArray.is() || pItem->nDimLevel == pItem->nDimCount ) )
             {
-                aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
+                aEditingRes = m_xTreeListBox->get_text(rIter, 1);
                 aEditingRes = comphelper::string::strip(aEditingRes, ' ');
                 bEdit = true;
             }
@@ -2297,9 +2239,10 @@ bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     return bEdit;
 }
 
-bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+IMPL_LINK(WatchWindow, EditedEntryHdl, const IterString&, rIterString, bool)
 {
-    OUString aResult = comphelper::string::strip(rNewText, ' ');
+    const weld::TreeIter& rIter = rIterString.first;
+    OUString aResult = comphelper::string::strip(rIterString.second, ' ');
 
     sal_uInt16 nResultLen = aResult.getLength();
     sal_Unicode cFirst = aResult[0];
@@ -2311,7 +2254,7 @@ bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNe
         return false;
 
     bool bArrayElement;
-    SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
+    SbxBase* pSBX = ImplGetSBXForEntry(rIter, bArrayElement);
 
     if (SbxVariable* pVar = IsSbxVariable(pSBX))
     {
@@ -2337,22 +2280,23 @@ bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNe
     return false;
 }
 
-
 namespace
 {
 
-void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox* pThis )
+void implCollapseModifiedObjectEntry(weld::TreeIter& rParent, weld::TreeView& rTree)
 {
-    pThis->Collapse( pParent );
+    rTree.collapse_row(rParent);
 
-    SvTreeList* pModel = pThis->GetModel();
-    SvTreeListEntry* pDeleteEntry;
-    while( (pDeleteEntry = pThis->SvTreeListBox::GetEntry( pParent, 0 )) != nullptr )
+    std::unique_ptr<weld::TreeIter> xDeleteEntry = rTree.make_iterator(&rParent);
+
+    while (rTree.iter_children(*xDeleteEntry))
     {
-        implCollapseModifiedObjectEntry( pDeleteEntry, pThis );
+        implCollapseModifiedObjectEntry(*xDeleteEntry, rTree);
 
-        delete static_cast<WatchItem*>(pDeleteEntry->GetUserData());
-        pModel->Remove( pDeleteEntry );
+        WatchItem* pItem = reinterpret_cast<WatchItem*>(rTree.get_id(*xDeleteEntry).toInt64());
+        delete pItem;
+        rTree.remove(*xDeleteEntry);
+        rTree.copy_iterator(rParent, *xDeleteEntry);
     }
 }
 
@@ -2384,40 +2328,41 @@ OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
     return aRetStr;
 }
 
-void implEnableChildren( SvTreeListEntry* pEntry, bool bEnable )
+} // namespace
+
+void WatchWindow::implEnableChildren(weld::TreeIter& rEntry, bool bEnable)
 {
-    if( bEnable )
+    if (bEnable)
     {
-        pEntry->SetFlags(
-            (pEntry->GetFlags() & ~SvTLEntryFlags(SvTLEntryFlags::NO_NODEBMP | SvTLEntryFlags::HAD_CHILDREN))
-            | SvTLEntryFlags::CHILDREN_ON_DEMAND );
+        if (!m_xTreeListBox->get_row_expanded(rEntry))
+            m_xTreeListBox->set_children_on_demand(rEntry, true);
     }
     else
     {
-        pEntry->SetFlags( pEntry->GetFlags() & ~SvTLEntryFlags::CHILDREN_ON_DEMAND );
+        assert(!m_xTreeListBox->get_row_expanded(rEntry));
+        m_xTreeListBox->set_children_on_demand(rEntry, false);
     }
 }
 
-} // namespace
-
-void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
+void WatchWindow::UpdateWatches(bool bBasicStopped)
 {
     SbMethod* pCurMethod = StarBASIC::GetActiveMethod();
 
     ErrCode eOld = SbxBase::GetError();
     setBasicWatchMode( true );
 
-    SvTreeListEntry* pEntry = First();
-    while ( pEntry )
-    {
-        WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
+    m_xTreeListBox->all_foreach([this, pCurMethod, bBasicStopped](weld::TreeIter& rEntry){
+        WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
         DBG_ASSERT( !pItem->maName.isEmpty(), "Var? - Must not be empty!" );
         OUString aWatchStr;
         OUString aTypeStr;
         if ( pCurMethod )
         {
+            bool bCollapse = false;
+            TriState eEnableChildren = TRISTATE_INDET;
+
             bool bArrayElement;
-            SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
+            SbxBase* pSBX = ImplGetSBXForEntry(rEntry, bArrayElement);
 
             // Array? If no end node create type string
             if( bArrayElement && pItem->nDimLevel < pItem->nDimCount )
@@ -2425,10 +2370,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 SbxDimArray* pRootArray = pItem->GetRootArray();
                 SbxDataType eType = pRootArray->GetType();
                 aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
-                implEnableChildren( pEntry, true );
+                eEnableChildren = TRISTATE_TRUE;
             }
 
-            bool bCollapse = false;
             if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
                 // extra treatment of arrays
@@ -2472,12 +2416,12 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         {
                             bArrayChanged = true;
                         }
-                        implEnableChildren(pEntry, true);
+                        eEnableChildren = TRISTATE_TRUE;
                         // #i37227 Clear always and replace array
                         if( pNewArray != pOldArray )
                         {
                             pItem->clearWatchItem();
-                            implEnableChildren(pEntry, true);
+                            eEnableChildren = TRISTATE_TRUE;
 
                             pItem->mpArray = pNewArray;
                             sal_Int32 nDims = pNewArray->GetDims32();
@@ -2515,7 +2459,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         }
 
                         pItem->mpObject = pObj;
-                        implEnableChildren( pEntry, true );
+                        eEnableChildren = TRISTATE_TRUE;
                         aTypeStr = getBasicObjectTypeName( pObj );
                     }
                     else
@@ -2524,7 +2468,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         if( pItem->mpObject.is() )
                         {
                             bCollapse = true;
-                            implEnableChildren( pEntry, false );
+                            eEnableChildren = TRISTATE_FALSE;
                         }
                     }
                 }
@@ -2533,7 +2477,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     if( pItem->mpObject.is() )
                     {
                         bCollapse = true;
-                        implEnableChildren( pEntry, false );
+                        eEnableChildren = TRISTATE_FALSE;
                     }
 
                     bool bString = (static_cast<sal_uInt8>(eType) == sal_uInt8(SbxSTRING));
@@ -2564,30 +2508,29 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 
             if( bCollapse )
             {
-                implCollapseModifiedObjectEntry( pEntry, this );
+                implCollapseModifiedObjectEntry(rEntry, *m_xTreeListBox);
                 pItem->clearWatchItem();
             }
 
+            if (eEnableChildren != TRISTATE_INDET)
+                implEnableChildren(rEntry, eEnableChildren == TRISTATE_TRUE);
         }
         else if( bBasicStopped )
         {
             if( pItem->mpObject.is() || pItem->mpArray.is() )
             {
-                implCollapseModifiedObjectEntry( pEntry, this );
+                implCollapseModifiedObjectEntry(rEntry, *m_xTreeListBox);
                 pItem->mpObject.clear();
                 pItem->mpArray.clear();
             }
             pItem->clearWatchItem();
         }
 
-        SvHeaderTabListBox::SetEntryText( aWatchStr, pEntry, ITEM_ID_VALUE-1 );
-        SvHeaderTabListBox::SetEntryText( aTypeStr, pEntry, ITEM_ID_TYPE-1 );
+        m_xTreeListBox->set_text(rEntry, aWatchStr, 1);
+        m_xTreeListBox->set_text(rEntry, aTypeStr, 2);
 
-        pEntry = Next( pEntry );
-    }
-
-    // Force redraw
-    Invalidate();
+        return false;
+    });
 
     SbxBase::ResetError();
     if( eOld != ERRCODE_NONE )
