@@ -355,15 +355,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
 {
     try
     {
-        // SAFE ->
-        osl::ClearableMutexGuard aLock(m_aLock);
-        uno::Reference< container::XNameReplace > xEvents = m_xEvents;
-        aLock.clear();
-        // <- SAFE
-
-        uno::Any aAny;
-        if ( xEvents.is() && xEvents->hasByName( aEvent.EventName ) )
-            aAny = xEvents->getByName(aEvent.EventName);
+        uno::Any aAny = m_xEvents->getByName(aEvent.EventName);
         SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
     }
     catch ( uno::RuntimeException const & )
