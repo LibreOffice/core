@@ -168,6 +168,15 @@ SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPr
         mxLayerManager = xLayerSupplier->getLayerManager();
 }
 
+SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport )
+: SvXMLImportContext(rImport)
+{
+    Reference< XLayerSupplier > xLayerSupplier( rImport.GetModel(), UNO_QUERY );
+    SAL_WARN_IF( !xLayerSupplier.is(), "xmloff", "xmloff::SdXMLLayerSetContext::SdXMLLayerSetContext(), XModel is not supporting XLayerSupplier!" );
+    if( xLayerSupplier.is() )
+        mxLayerManager = xLayerSupplier->getLayerManager();
+}
+
 SdXMLLayerSetContext::~SdXMLLayerSetContext()
 {
 }
