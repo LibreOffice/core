@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
 ))
 
 $(eval $(call gb_Executable_add_defs,ui-previewer,\
-    -DVCL_WORKBEN \
+    -DVCL_INTERNALS \
 ))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))

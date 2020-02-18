@@ -19,7 +19,7 @@
 
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>

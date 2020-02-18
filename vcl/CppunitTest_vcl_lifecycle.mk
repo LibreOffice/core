@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_lifecycle, \
 ))
 
 $(eval $(call gb_CppunitTest_add_defs,vcl_lifecycle,\
-    -DVCL_WORKBEN \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_lifecycle))
