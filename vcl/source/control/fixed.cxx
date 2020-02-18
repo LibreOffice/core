@@ -956,6 +956,14 @@ bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
     {
         SetImage(loadThemeImage(rValue));
     }
+    else if (rKey == "icon-size")
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~WB_SMALLSTYLE;
+        if (rValue == "2")
+            nBits |= WB_SMALLSTYLE;
+        SetStyle(nBits);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
