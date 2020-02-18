@@ -755,6 +755,7 @@ namespace o3tl
 #define LANGUAGE_USER_KABARDIAN             LanguageType(0x06A4)
 #define LANGUAGE_USER_GUADELOUPEAN_CREOLE_FRENCH    LanguageType(0x06A5)
 #define LANGUAGE_USER_LIGURIAN              LanguageType(0x06A6)
+#define LANGUAGE_USER_MINANGKABAU           LanguageType(0x06A7)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
