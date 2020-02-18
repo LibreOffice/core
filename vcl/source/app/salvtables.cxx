@@ -4598,7 +4598,7 @@ public:
         {
             if (func(aVclIter))
                 return;
-            aVclIter.iter = m_xTreeView->Next(aVclIter.iter);
+            iter_next(aVclIter);
         }
     }
 
