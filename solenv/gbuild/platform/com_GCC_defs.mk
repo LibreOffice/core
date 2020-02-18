@@ -201,6 +201,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 # optimization level
 gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
+gb_COMPILERDEBUGOPTFLAGS := -Og
 
 ifeq ($(OS),ANDROID)
 gb_DEBUGINFO_FLAGS=-glldb

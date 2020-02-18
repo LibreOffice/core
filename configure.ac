@@ -1194,10 +1194,11 @@ libo_FUZZ_ARG_ENABLE(symbols,
          Example: --enable-symbols="all -sw/ -Library_sc".]))
 
 libo_FUZZ_ARG_ENABLE(optimized,
-    AS_HELP_STRING([--disable-optimized],
+    AS_HELP_STRING([--enable-optimized=<yes/no/debug>],
         [Whether to compile with optimization flags.
          By default, disabled for --enable-debug and --enable-dbgutil, enabled
-         otherwise.]))
+         otherwise. Using 'debug' will try to use only optimizations that should
+         not interfere with debugging.]))
 
 libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
@@ -4204,6 +4205,8 @@ if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" 
     fi
 fi
 
+ENABLE_OPTIMIZED=
+ENABLE_OPTIMIZED_DEBUG=
 AC_MSG_CHECKING([whether to compile with optimization flags])
 if test -z "$enable_optimized"; then
     if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
@@ -4212,14 +4215,33 @@ if test -z "$enable_optimized"; then
         enable_optimized=yes
     fi
 fi
-if test "$enable_optimized" != no; then
+if test "$enable_optimized" = yes; then
     ENABLE_OPTIMIZED=TRUE
     AC_MSG_RESULT([yes])
+elif test "$enable_optimized" = debug; then
+    ENABLE_OPTIMIZED_DEBUG=TRUE
+    AC_MSG_RESULT([yes (debug)])
+    HAVE_GCC_OG=
+    if test "$GCC" = "yes"; then
+        AC_MSG_CHECKING([whether $CC_BASE supports -Og])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -Og"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_OG=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+        if test "$HAVE_GCC_OG" = "TRUE"; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+        fi
+    fi
+    if test -z "$HAVE_GCC_OG"; then
+        AC_MSG_ERROR([The compiler does not support optimizations suitable for debugging.])
+    fi
 else
-    ENABLE_OPTIMIZED=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_OPTIMIZED)
+AC_SUBST(ENABLE_OPTIMIZED_DEBUG)
 
 #
 # determine CPUNAME, OS, ...
