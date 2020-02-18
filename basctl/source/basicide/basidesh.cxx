@@ -42,6 +42,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <tools/debug.hxx>
 
 #if defined(DISABLE_DYNLOADING) || ENABLE_MERGELIBS
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */

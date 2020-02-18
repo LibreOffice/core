@@ -42,6 +42,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/dialogpage \
 	basctl/uiconfig/basicide/ui/dockingorganizer \
 	basctl/uiconfig/basicide/ui/dockingstack \
+	basctl/uiconfig/basicide/ui/dockingwatch \
 	basctl/uiconfig/basicide/ui/exportdialog \
 	basctl/uiconfig/basicide/ui/gotolinedialog \
 	basctl/uiconfig/basicide/ui/importlibdialog \
