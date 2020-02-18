@@ -23,6 +23,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <tools/gen.hxx>
+#include <driverblocklist.hxx>
 
 #include <tools/sk_app/VulkanWindowContext.h>
 
@@ -52,6 +53,13 @@ VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkImage>& image, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);
 #endif
+
+extern uint32_t vendorId;
+
+inline DriverBlocklist::DeviceVendor getVendor()
+{
+    return DriverBlocklist::GetVendorFromId(vendorId);
+}
 
 } // namespace
 

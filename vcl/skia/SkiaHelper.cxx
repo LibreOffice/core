@@ -38,6 +38,8 @@ bool isVCLSkiaEnabled() { return false; }
 
 namespace SkiaHelper
 {
+uint32_t vendorId = 0;
+
 static OUString getBlacklistFile()
 {
     OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
@@ -53,19 +55,21 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
     OUString driverVersion = OUString::number(props.driverVersion >> 22) + "."
                              + OUString::number((props.driverVersion >> 12) & 0x3ff) + "."
                              + OUString::number(props.driverVersion & 0xfff);
-    OUString vendorId = "0x" + OUString::number(props.vendorID, 16);
-    OUString deviceId = "0x" + OUString::number(props.deviceID, 16);
+    vendorId = props.vendorID;
+    OUString vendorIdStr = "0x" + OUString::number(props.vendorID, 16);
+    OUString deviceIdStr = "0x" + OUString::number(props.deviceID, 16);
     SAL_INFO("vcl.skia",
              "Vulkan API version: "
                  << (props.apiVersion >> 22) << "." << ((props.apiVersion >> 12) & 0x3ff) << "."
                  << (props.apiVersion & 0xfff) << ", driver version: " << driverVersion
-                 << ", vendor: " << vendorId << ", device: " << deviceId << ", type: "
+                 << ", vendor: " << vendorIdStr << ", device: " << deviceIdStr << ", type: "
                  << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)]
                  << ", name: " << props.deviceName);
-    return DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersion, vendorId, deviceId);
+    return DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersion, vendorIdStr,
+                                            deviceIdStr);
 }
 
-static void checkDeviceBlacklisted()
+static void checkDeviceBlacklisted(bool blockDisable = false)
 {
     static bool done = false;
     if (!done)
@@ -86,7 +90,7 @@ static void checkDeviceBlacklisted()
                 }
                 else
                     SAL_INFO("vcl.skia", "Vulkan could not be initialized");
-                if (blacklisted)
+                if (blacklisted && !blockDisable)
                     disableRenderMethod(RenderVulkan);
                 break;
             }
@@ -135,6 +139,8 @@ bool isVCLSkiaEnabled()
     if (bForceSkia)
     {
         bRet = true;
+        // don't actually block if blacklisted, but log it if enabled, and also get the vendor id
+        checkDeviceBlacklisted(true);
     }
     else if (getenv("SAL_FORCEGL"))
     {
