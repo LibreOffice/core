@@ -48,6 +48,7 @@ enum class StreamMode {
     NOCREATE                 = 0x0004,  ///< 1 == Don't create file
     TRUNC                    = 0x0008,  ///< Truncate _existing_ file to zero length
     COPY_ON_SYMLINK          = 0x0010,  ///< copy-on-write for symlinks (Unix)
+    TEMPORARY                = 0x0020,  ///< temporary file attribute (Windows)
 // sharing options
     SHARE_DENYNONE           = 0x0100,
     SHARE_DENYREAD           = 0x0200,  // overrides denynone
@@ -61,7 +62,7 @@ enum class StreamMode {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x0f1f> {};
+    template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x0f3f> {};
 }
 
 #define STREAM_SEEK_TO_BEGIN            0L
