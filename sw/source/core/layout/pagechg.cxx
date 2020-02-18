@@ -991,7 +991,7 @@ void SwPageFrame::PrepareRegisterChg()
 }
 
 //FIXME: provide missing documentation
-/** Check all pages (starting from the given one) if they use the right frame format.
+/** Check all pages (starting from the given one) if they use the appropriate frame format.
  *
  * If "wrong" pages are found, try to fix this as simple as possible.
  *
@@ -1291,8 +1291,8 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     SwPageDesc *pDesc = nullptr;
 
     // insert right (odd) or left (even) page?
-    bool bNextOdd = !pPrevPage->OnRightPage();
-    bool bWishedOdd = bNextOdd;
+    bool bNextRightPage = !pPrevPage->OnRightPage();
+    bool bWishedRightPage = bNextRightPage;
 
     // Which PageDesc is relevant?
     // For ContentFrame take the one from format if provided,
@@ -1304,7 +1304,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
         if ( rDesc.GetNumOffset() )
         {
             ::o3tl::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
-            bWishedOdd = oNumOffset && (*oNumOffset % 2) != 0;
+            bWishedRightPage = sw::IsRightPageByNumber(*pRoot, *oNumOffset);
             // use the opportunity to set the flag at root
             pRoot->SetVirtPageNum( true );
         }
@@ -1313,20 +1313,20 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
         pDesc = pPrevPage->GetPageDesc()->GetFollow();
 
     assert(pDesc && "Missing PageDesc");
-    if( !(bWishedOdd ? pDesc->GetRightFormat() : pDesc->GetLeftFormat()) )
-        bWishedOdd = !bWishedOdd;
+    if( !(bWishedRightPage ? pDesc->GetRightFormat() : pDesc->GetLeftFormat()) )
+        bWishedRightPage = !bWishedRightPage;
     bool const bWishedFirst = pDesc != pPrevPage->GetPageDesc();
 
     SwDoc *pDoc = pPrevPage->GetFormat()->GetDoc();
     bool bCheckPages = false;
     // If there is no FrameFormat for this page, create an empty page.
-    if( bWishedOdd != bNextOdd )
+    if (bWishedRightPage != bNextRightPage)
     {
         if( doInsertPage( pRoot, &pSibling, pDoc->GetEmptyPageFormat(),
                           pPrevPage->GetPageDesc(), bFootnote, nullptr ) )
             bCheckPages = true;
     }
-    SwFrameFormat *const pFormat( bWishedOdd
+    SwFrameFormat *const pFormat( bWishedRightPage
             ? pDesc->GetRightFormat(bWishedFirst)
             : pDesc->GetLeftFormat(bWishedFirst) );
     assert(pFormat);
@@ -1560,17 +1560,17 @@ void SwRootFrame::AssertFlyPages()
             // and let the ::Notify mechanism newly evaluate
             // m_bEmptyPage (see SwPageFrame::UpdateAttr_). Code is taken and
             // adapted from ::InsertPage (used below), this needs previous page
-            bool bWishedOdd(!pPrevPage->OnRightPage());
+            bool bWishedRightPage(!pPrevPage->OnRightPage());
             SwPageDesc* pDesc(pPrevPage->GetPageDesc()->GetFollow());
             assert(pDesc && "Missing PageDesc");
 
-            if(!(bWishedOdd ? pDesc->GetRightFormat() : pDesc->GetLeftFormat()))
+            if (!(bWishedRightPage ? pDesc->GetRightFormat() : pDesc->GetLeftFormat()))
             {
-                bWishedOdd = !bWishedOdd;
+                bWishedRightPage = !bWishedRightPage;
             }
 
             bool const bWishedFirst(pDesc != pPrevPage->GetPageDesc());
-            SwFrameFormat* pFormat(bWishedOdd ? pDesc->GetRightFormat(bWishedFirst) : pDesc->GetLeftFormat(bWishedFirst));
+            SwFrameFormat* pFormat(bWishedRightPage ? pDesc->GetRightFormat(bWishedFirst) : pDesc->GetLeftFormat(bWishedFirst));
 
             // set SwFrameFormat, this will trigger SwPageFrame::UpdateAttr_ and re-evaluate
             // m_bEmptyPage, too
@@ -1614,9 +1614,9 @@ void SwRootFrame::AssertFlyPages()
             if ( pPage )
             {
                 SwPageDesc *pTmpDesc = pPage->FindPageDesc();
-                bool bOdd = pPage->OnRightPage();
+                bool isRightPage = pPage->OnRightPage();
                 if ( pPage->GetFormat() !=
-                     (bOdd ? pTmpDesc->GetRightFormat() : pTmpDesc->GetLeftFormat()) )
+                     (isRightPage ? pTmpDesc->GetRightFormat() : pTmpDesc->GetLeftFormat()) )
                     RemoveFootnotes( pPage, false, true );
             }
         }
