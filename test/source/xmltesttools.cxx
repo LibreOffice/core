@@ -181,6 +181,8 @@ void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNu
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    if (nNumberOfNodes != xmlXPathNodeSetGetLength(pXmlNodes))
+        CPPUNIT_ASSERT_EQUAL(1, 2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OStringLiteral("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);

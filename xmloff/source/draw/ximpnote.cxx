@@ -18,8 +18,10 @@
  */
 
 #include "ximpnote.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
@@ -61,6 +63,73 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
                 break;
             }
             case XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME:
+            {
+                maUseDateTimeDeclName =  sValue;
+                break;
+            }
+
+        }
+    }
+
+    SetStyle( sStyleName );
+
+    // now delete all up-to-now contained shapes from this notes page
+    uno::Reference< drawing::XShape > xShape;
+    while(rShapes->getCount())
+    {
+        rShapes->getByIndex(0) >>= xShape;
+        if(xShape.is())
+            rShapes->remove(xShape);
+    }
+
+    // set page-master?
+    if(!sPageMasterName.isEmpty())
+    {
+        SetPageMaster( sPageMasterName );
+    }
+}
+
+SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    uno::Reference< drawing::XShapes > const & rShapes)
+:   SdXMLGenericPageContext( rImport, xAttrList, rShapes )
+{
+    OUString sStyleName, sPageMasterName;
+
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
+    {
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
+        {
+            case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
+            {
+                sPageMasterName = sValue;
+                break;
+            }
+            case XML_ELEMENT(DRAW, XML_STYLE_NAME):
+            {
+                sStyleName = sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_HEADER_NAME):
+            case XML_ELEMENT(PRESENTATION_SO52, XML_USE_HEADER_NAME):
+            case XML_ELEMENT(PRESENTATION_OOO, XML_USE_HEADER_NAME):
+            {
+                maUseHeaderDeclName =  sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_FOOTER_NAME):
+            case XML_ELEMENT(PRESENTATION_SO52, XML_USE_FOOTER_NAME):
+            case XML_ELEMENT(PRESENTATION_OOO, XML_USE_FOOTER_NAME):
+            {
+                maUseFooterDeclName =  sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_DATE_TIME_NAME):
+            case XML_ELEMENT(PRESENTATION_SO52, XML_USE_DATE_TIME_NAME):
+            case XML_ELEMENT(PRESENTATION_OOO, XML_USE_DATE_TIME_NAME):
             {
                 maUseDateTimeDeclName =  sValue;
                 break;

@@ -244,9 +244,6 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     // This base class implementation returns a context that ignores everything.
-    virtual SvXMLImportContext *CreateDocumentContext(sal_uInt16 nPrefix,
-                                               const OUString& rLocalName,
-                                               const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
