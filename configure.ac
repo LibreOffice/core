@@ -1,3 +1,4 @@
+
 dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*-
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
