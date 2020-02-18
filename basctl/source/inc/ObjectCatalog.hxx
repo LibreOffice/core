@@ -46,10 +46,6 @@ public:
     void SetCurrentEntry(BaseWindow* pCurWin);
 
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
-
     std::unique_ptr<weld::Label> m_xTitle; ///< Title of the Object Catalog window
     std::unique_ptr<SbTreeListBox> m_xTree; ///< The Treelist of the objects in window
 

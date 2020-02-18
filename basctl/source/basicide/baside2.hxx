@@ -188,9 +188,6 @@ public:
 class WatchWindow final : public DockingWindow
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Container> m_xTitleArea;
     std::unique_ptr<weld::Label> m_xTitle;
     std::unique_ptr<weld::Entry> m_xEdit;
@@ -230,9 +227,6 @@ public:
 class StackWindow : public DockingWindow
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
-    std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Label> m_xTitle;
     std::unique_ptr<weld::TreeView> m_xTreeListBox;
 

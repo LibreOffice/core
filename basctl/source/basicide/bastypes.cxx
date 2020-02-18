@@ -38,6 +38,7 @@
 #include <svl/srchdefs.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/stream.hxx>
@@ -255,11 +256,16 @@ WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
 
-DockingWindow::DockingWindow(vcl::Window* pParent) :
+DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID) :
     ::DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui"),
     pLayout(nullptr),
     nShowCount(0)
-{ }
+{
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xContainer = m_xBuilder->weld_container(rID);
+}
 
 DockingWindow::DockingWindow (Layout* pParent) :
     ::DockingWindow(pParent, StyleBits),
@@ -274,6 +280,9 @@ DockingWindow::~DockingWindow()
 
 void DockingWindow::dispose()
 {
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
     pLayout.clear();
     ::DockingWindow::dispose();
 }
