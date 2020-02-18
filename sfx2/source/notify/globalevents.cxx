@@ -59,6 +59,7 @@ typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                            , public ::cppu::WeakImplHelper< css::lang::XServiceInfo
                                                            , css::frame::XGlobalEventBroadcaster
+                                                           , css::document::XEventBroadcaster
                                                            , css::document::XEventListener
                                                             >
 {
