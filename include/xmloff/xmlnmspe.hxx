@@ -65,7 +65,7 @@ constexpr sal_uInt16 XML_NAMESPACE_GRDDL =           36;
 constexpr sal_uInt16 XML_NAMESPACE_VERSIONS_LIST =   37;
 
 // namespaces for odf extended formats
-constexpr sal_uInt16 XML_NAMESPACE_EXT_BASE   = 38;
+constexpr sal_uInt16 XML_NAMESPACE_EXT_BASE   = 50;
 constexpr sal_uInt16 XML_NAMESPACE_OFFICE_EXT = XML_NAMESPACE_EXT_BASE + 0;
 constexpr sal_uInt16 XML_NAMESPACE_TABLE_EXT  = XML_NAMESPACE_EXT_BASE + 1;
 constexpr sal_uInt16 XML_NAMESPACE_CHART_EXT  = XML_NAMESPACE_EXT_BASE + 2;
@@ -74,7 +74,7 @@ constexpr sal_uInt16 XML_NAMESPACE_CALC_EXT   = XML_NAMESPACE_EXT_BASE + 4;
 constexpr sal_uInt16 XML_NAMESPACE_LO_EXT     = XML_NAMESPACE_EXT_BASE + 5;
 
 // namespaces for OOo formats
-constexpr sal_uInt16 XML_NAMESPACE_OOO_BASE = 44U;
+constexpr sal_uInt16 XML_NAMESPACE_OOO_BASE = 60;
 constexpr sal_uInt16 XML_NAMESPACE_OFFICE_OOO = XML_NAMESPACE_OOO_BASE +         0;
 constexpr sal_uInt16 XML_NAMESPACE_META_OOO = XML_NAMESPACE_OOO_BASE +           1;
 constexpr sal_uInt16 XML_NAMESPACE_STYLE_OOO = XML_NAMESPACE_OOO_BASE +          2;
@@ -84,22 +84,24 @@ constexpr sal_uInt16 XML_NAMESPACE_TABLE_OOO = XML_NAMESPACE_OOO_BASE +         
 constexpr sal_uInt16 XML_NAMESPACE_DRAW_OOO = XML_NAMESPACE_OOO_BASE +           6;
 constexpr sal_uInt16 XML_NAMESPACE_DR3D_OOO = XML_NAMESPACE_OOO_BASE +           7;
 constexpr sal_uInt16 XML_NAMESPACE_PRESENTATION_OOO = XML_NAMESPACE_OOO_BASE +   8;
-constexpr sal_uInt16 XML_NAMESPACE_CHART_OOO = XML_NAMESPACE_OOO_BASE +          9;
-constexpr sal_uInt16 XML_NAMESPACE_CONFIG_OOO = XML_NAMESPACE_OOO_BASE +        10;
-constexpr sal_uInt16 XML_NAMESPACE_FORM_OOO = XML_NAMESPACE_OOO_BASE +          11;
-constexpr sal_uInt16 XML_NAMESPACE_SCRIPT_OOO = XML_NAMESPACE_OOO_BASE +        12;
+constexpr sal_uInt16 XML_NAMESPACE_PRESENTATION_OASIS = XML_NAMESPACE_OOO_BASE + 9; // only used for some config files in sd/
+constexpr sal_uInt16 XML_NAMESPACE_CHART_OOO = XML_NAMESPACE_OOO_BASE +         10;
+constexpr sal_uInt16 XML_NAMESPACE_CONFIG_OOO = XML_NAMESPACE_OOO_BASE +        12;
+constexpr sal_uInt16 XML_NAMESPACE_FORM_OOO = XML_NAMESPACE_OOO_BASE +          13;
+constexpr sal_uInt16 XML_NAMESPACE_SCRIPT_OOO = XML_NAMESPACE_OOO_BASE +        14;
+constexpr sal_uInt16 XML_NAMESPACE_ANIMATION_OOO = XML_NAMESPACE_OOO_BASE +     15;
 
-constexpr sal_uInt16 XML_NAMESPACE_COMPAT_BASE = 57;
+constexpr sal_uInt16 XML_NAMESPACE_COMPAT_BASE = 80;
 constexpr sal_uInt16 XML_NAMESPACE_SVG_COMPAT = XML_NAMESPACE_COMPAT_BASE +      0;
 constexpr sal_uInt16 XML_NAMESPACE_FO_COMPAT = XML_NAMESPACE_COMPAT_BASE +       1;
 constexpr sal_uInt16 XML_NAMESPACE_SMIL_COMPAT = XML_NAMESPACE_COMPAT_BASE +     2;
 
-constexpr sal_uInt16 XML_NAMESPACE_OASIS_BASE = 60;
+constexpr sal_uInt16 XML_NAMESPACE_OASIS_BASE = 90;
 constexpr sal_uInt16 XML_NAMESPACE_DB_OASIS = XML_NAMESPACE_OASIS_BASE +         0;
 constexpr sal_uInt16 XML_NAMESPACE_REPORT_OASIS = XML_NAMESPACE_OASIS_BASE +     1;
 
 // namespaces used in the technical preview (SO 5.2)
-constexpr sal_uInt16 XML_OLD_NAMESPACE_BASE = 62;
+constexpr sal_uInt16 XML_OLD_NAMESPACE_BASE = 100;
 constexpr sal_uInt16 XML_NAMESPACE_FO_SO52 = XML_OLD_NAMESPACE_BASE +             0;
 constexpr sal_uInt16 XML_NAMESPACE_XLINK_SO52 = XML_OLD_NAMESPACE_BASE +          1;
 constexpr sal_uInt16 XML_NAMESPACE_OFFICE_SO52 = XML_OLD_NAMESPACE_BASE +         2;
@@ -114,9 +116,9 @@ constexpr sal_uInt16 XML_NAMESPACE_CHART_SO52 = XML_OLD_NAMESPACE_BASE +        
 constexpr sal_uInt16 XML_NAMESPACE_SMIL_SO52 = XML_OLD_NAMESPACE_BASE +          11;
 
 // experimental namespaces
-constexpr sal_uInt16 XML_NAMESPACE_FIELD =           100;
-constexpr sal_uInt16 XML_NAMESPACE_CSS3TEXT =        103;  // CSS Text Level 3
-constexpr sal_uInt16 XML_NAMESPACE_FORMX =           101;  // form interop extensions
+constexpr sal_uInt16 XML_NAMESPACE_FIELD =           120;
+constexpr sal_uInt16 XML_NAMESPACE_CSS3TEXT =        123;  // CSS Text Level 3
+constexpr sal_uInt16 XML_NAMESPACE_FORMX =           121;  // form interop extensions
 
 
 #endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
