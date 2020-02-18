@@ -1584,7 +1584,7 @@ struct WatchItem
 }
 
 WatchWindow::WatchWindow(Layout* pParent)
-    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
+    : DockingWindow(pParent)
     , m_nUpdateWatchesId(nullptr)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
@@ -1797,7 +1797,7 @@ IMPL_LINK(WatchWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 // StackWindow
 StackWindow::StackWindow(Layout* pParent)
-    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
+    : DockingWindow(pParent)
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
