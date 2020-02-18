@@ -9638,7 +9638,6 @@ AC_MSG_CHECKING([whether to enable LDAP support])
     else
         AC_MSG_RESULT([yes])
         ENABLE_LDAP="TRUE"
-        AC_DEFINE(HAVE_FEATURE_LDAP)
     fi
 fi
 AC_SUBST(ENABLE_LDAP)
