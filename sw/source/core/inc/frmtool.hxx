@@ -150,8 +150,14 @@ extern bool bSetCompletePaintOnInvalidate;
 SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
 long CalcHeightWithFlys( const SwFrame *pFrame );
 
+namespace sw {
+
+bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 nPageNum);
+
+} // namespace sw
+
 SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
-                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFootnote,
+                          bool isRightPage, bool bFirst, bool bInsertEmpty, bool bFootnote,
                           SwFrame *pSibling );
 
 // connect Flys with page
