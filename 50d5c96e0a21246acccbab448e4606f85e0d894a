@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf3dc66f_78a773c9",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-18T10:40:55Z",
+      "side": 1,
+      "message": "there is an extra \"s\" in snOptions, which breaks the build",
+      "revId": "50d5c96e0a21246acccbab448e4606f85e0d894a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
