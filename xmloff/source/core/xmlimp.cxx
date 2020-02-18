@@ -323,14 +323,6 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper maInterfaceToIdentifierMapper;
 };
 
-SvXMLImportContext *SvXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix,
-                                         const OUString& rLocalName,
-                                         const uno::Reference< xml::sax::XAttributeList >& )
-{
-    SAL_WARN( "xmloff.core", "CreateDocumentContext should be overridden, for element " << rLocalName);
-    return new SvXMLImportContext( *this, nPrefix, rLocalName );
-}
-
 SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -736,19 +728,15 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     }
     else
     {
-        xContext.set(CreateDocumentContext(nPrefix, aLocalName, xAttrList));
-        if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
-            dynamic_cast< const SvXMLImportContext*>(xContext.get()) !=  nullptr )
-        {
-            Reference<xml::sax::XLocator> xDummyLocator;
-            Sequence < OUString > aParams { rName };
+        Reference<xml::sax::XLocator> xDummyLocator;
+        Sequence < OUString > aParams { rName };
 
-            SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
-                      aParams, "Root element " + aLocalName + " unknown", xDummyLocator );
-        }
+        SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
+                  aParams, "Root element " + rName + " unknown", xDummyLocator );
     }
 
-    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
+    if ( !xContext.is() )
+        SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
 
     if( !xContext.is() )
         xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
@@ -2080,6 +2068,7 @@ void SvXMLImport::initializeNamespaceMaps()
         {
             const OUString& sNamespace = GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) );
             const OUString& sPrefix = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
+            assert( aNamespaceMap.find(nToken +1) == aNamespaceMap.end() && "cannot map two namespaces to the same token here");
             aNamespaceMap[ nToken + 1 ] = std::make_pair( sPrefix, sNamespace );
             aNamespaceURIPrefixMap.emplace( sNamespace, sPrefix );
         }
@@ -2115,6 +2104,7 @@ void SvXMLImport::initializeNamespaceMaps()
     mapTokenToNamespace( XML_NAMESPACE_PRESENTATION,     XML_NP_PRESENTATION,  XML_N_PRESENTATION     );
     mapTokenToNamespace( XML_NAMESPACE_PRESENTATION_SO52,XML_NP_PRESENTATION,  XML_N_PRESENTATION_OLD );
     mapTokenToNamespace( XML_NAMESPACE_PRESENTATION_OOO, XML_NP_PRESENTATION,  XML_N_PRESENTATION_OOO );
+    mapTokenToNamespace( XML_NAMESPACE_PRESENTATION_OASIS, XML_NP_PRESENTATION, XML_N_PRESENTATION_OASIS );
     mapTokenToNamespace( XML_NAMESPACE_SVG,              XML_NP_SVG,           XML_N_SVG              );
     mapTokenToNamespace( XML_NAMESPACE_SVG_COMPAT,       XML_NP_SVG,           XML_N_SVG_COMPAT       );
     mapTokenToNamespace( XML_NAMESPACE_CHART,            XML_NP_CHART,         XML_N_CHART            );
@@ -2145,6 +2135,7 @@ void SvXMLImport::initializeNamespaceMaps()
     mapTokenToNamespace( XML_NAMESPACE_SMIL_SO52,        XML_NP_SMIL,          XML_N_SMIL_OLD         );
     mapTokenToNamespace( XML_NAMESPACE_SMIL_COMPAT,      XML_NP_SMIL,          XML_N_SMIL_COMPAT      );
     mapTokenToNamespace( XML_NAMESPACE_ANIMATION,        XML_NP_ANIMATION,     XML_N_ANIMATION        );
+    mapTokenToNamespace( XML_NAMESPACE_ANIMATION_OOO,    XML_NP_ANIMATION,     XML_N_ANIMATION_OOO    );
     mapTokenToNamespace( XML_NAMESPACE_REPORT,           XML_NP_RPT,           XML_N_RPT              );
     mapTokenToNamespace( XML_NAMESPACE_REPORT_OASIS,     XML_NP_RPT,           XML_N_RPT_OASIS        );
     mapTokenToNamespace( XML_NAMESPACE_OF,               XML_NP_OF,            XML_N_OF               );

@@ -2499,6 +2499,7 @@ namespace xmloff::token {
         TOKEN( "http://openoffice.org/2000/drawing",    XML_N_DRAW_OOO ),
         TOKEN( "http://openoffice.org/2000/dr3d",       XML_N_DR3D_OOO ),
         TOKEN( "http://openoffice.org/2000/presentation",XML_N_PRESENTATION_OOO ),
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0",XML_N_PRESENTATION_OASIS ),
         TOKEN( "http://openoffice.org/2000/chart",      XML_N_CHART_OOO ),
         TOKEN( "http://openoffice.org/2001/config",     XML_N_CONFIG_OOO ),
         TOKEN( "http://openoffice.org/2000/form",       XML_N_FORM_OOO ),
@@ -2787,6 +2788,7 @@ namespace xmloff::token {
 
         TOKEN( "anim",                      XML_NP_ANIMATION ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0",  XML_N_ANIMATION ),
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:animation:1.0",  XML_N_ANIMATION_OOO ),
 
         TOKEN( "par",                           XML_PAR ),
         TOKEN( "seq",                           XML_SEQ ),

@@ -2497,6 +2497,7 @@ namespace xmloff { namespace token {
         XML_N_DRAW_OOO,
         XML_N_DR3D_OOO,
         XML_N_PRESENTATION_OOO,
+        XML_N_PRESENTATION_OASIS,
         XML_N_CHART_OOO,
         XML_N_CONFIG_OOO,
         XML_N_FORM_OOO,
@@ -2788,6 +2789,7 @@ namespace xmloff { namespace token {
 
         XML_NP_ANIMATION,
         XML_N_ANIMATION,
+        XML_N_ANIMATION_OOO,
 
         XML_PAR,
         XML_SEQ,

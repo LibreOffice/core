@@ -801,7 +801,7 @@ void SdImportTest::testFdo64512()
 
     uno::Reference< drawing::XDrawPage > xPage(
         xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "no exactly three shapes", static_cast<sal_Int32>(3), xPage->getCount() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "not exactly three shapes", static_cast<sal_Int32>(3), xPage->getCount() );
 
     uno::Reference< beans::XPropertySet > xConnectorShape(
         xPage->getByIndex(2), uno::UNO_QUERY );
