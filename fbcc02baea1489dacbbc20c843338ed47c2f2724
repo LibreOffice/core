@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8feaf7a4_cd55d2c9",
+        "filename": "offapi/com/sun/star/chart2/DataSeries.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-18T14:00:54Z",
+      "side": 1,
+      "message": "Do we really need this? What about to use default leader lines to custom labels (keeping the recent automation to disable the too short leader lines)?\n\nThe problem is with the UNO extension, that 1) we must extend the UI, 2) extend LO_EXT ODF, and 3) OASIS/ISO standard. First of all, we must analyze MSO\u0027s UI carefully, and try to avoid bigger changes.\n\nIt seems for me, that we must skip this boolean variable, and - later - we can implement a \n\nlong LeaderLines with the custom leader line types specified(?) in OOXML.",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 68
+      },
+      "revId": "fbcc02baea1489dacbbc20c843338ed47c2f2724",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
