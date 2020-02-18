@@ -29,6 +29,8 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <workwin.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -200,7 +202,10 @@ void SfxModelessDialogController::Close()
 
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
                                          const OString& rDialogId)
-    : GenericDialogController(pParent, rUIFile, rDialogId)
+    : GenericDialogController(pParent, rUIFile, rDialogId,
+                                    comphelper::LibreOfficeKit::isActive()
+                                    && SfxViewShell::Current()
+                                    && SfxViewShell::Current()->isLOKMobilePhone())
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
     m_xDialog->connect_toplevel_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
