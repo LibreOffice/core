@@ -1741,23 +1741,23 @@ bool SwFrame::WannaRightPage() const
         }
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );
-    bool bOdd;
+    bool isRightPage;
     if( oPgNum )
-        bOdd = (*oPgNum % 2) != 0;
+        isRightPage = sw::IsRightPageByNumber(*mpRoot, *oPgNum);
     else
     {
-        bOdd = pPage->OnRightPage();
+        isRightPage = pPage->OnRightPage();
         if( pPage->GetPrev() && static_cast<const SwPageFrame*>(pPage->GetPrev())->IsEmptyPage() )
-            bOdd = !bOdd;
+            isRightPage = !isRightPage;
     }
     if( !pPage->IsEmptyPage() )
     {
         if( !pDesc->GetRightFormat() )
-            bOdd = false;
+            isRightPage = false;
         else if( !pDesc->GetLeftFormat() )
-            bOdd = true;
+            isRightPage = true;
     }
-    return bOdd;
+    return isRightPage;
 }
 
 bool SwFrame::OnFirstPage() const
@@ -1770,17 +1770,9 @@ bool SwFrame::OnFirstPage() const
         const SwPageFrame* pPrevFrame = dynamic_cast<const SwPageFrame*>(pPage->GetPrev());
         if (pPrevFrame)
         {
-            if (pPrevFrame->IsEmptyPage() && pPrevFrame->GetPhyPageNum()==1)
-            {
-                // This was the first page of the document, but its page number
-                // was set to an even number, so a blank page was automatically
-                // inserted before it to make this be a "left" page.
-                // We still use the first page format of the page style here.
-                bRet = true;
-            } else {
-                const SwPageDesc* pDesc = pPage->GetPageDesc();
-                bRet = pPrevFrame->GetPageDesc() != pDesc;
-            }
+            // first page of layout may be empty page, but only if it starts with "Left Page" style
+            const SwPageDesc* pDesc = pPage->GetPageDesc();
+            bRet = pPrevFrame->GetPageDesc() != pDesc;
         }
         else
             bRet = true;
