@@ -667,7 +667,20 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         if (aFind == m_pParserState->m_aStockMap.end())
         {
             if (!elem.m_bRadio)
+            {
                 pTargetButton->SetModeImage(pImage->GetImage());
+                if (pImage->GetStyle() | WB_SMALLSTYLE)
+                {
+                    pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
+                    Size aSz(pTargetButton->GetModeImage().GetSizePixel());
+                    aSz.AdjustWidth(6);
+                    aSz.AdjustHeight(6);
+                    if (pTargetButton->get_width_request() == -1)
+                        pTargetButton->set_width_request(aSz.Width());
+                    if (pTargetButton->get_height_request() == -1)
+                        pTargetButton->set_height_request(aSz.Height());
+                }
+            }
             else
                 pTargetRadio->SetModeRadioImage(pImage->GetImage());
         }
