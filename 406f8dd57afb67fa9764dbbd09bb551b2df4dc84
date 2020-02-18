@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ac34209_4b5c3773",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "code styles I\u0027ve seen used in LO code for functions are:\n\nfunction(param,\u003cspace\u003eparam)\nand\nfunction(\u003cspace\u003eparam,\u003cspace\u003eparam\u003cspace\u003e)\n\nI usually follow the existing code style that is used in the area I am making changes. Here, the original code style is function(parameter), no space after ( or before )",
+      "range": {
+        "startLine": 582,
+        "startChar": 50,
+        "endLine": 582,
+        "endChar": 68
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d93ebe5_77d4fdc3",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "extra tab at start of each line",
+      "range": {
+        "startLine": 617,
+        "startChar": 8,
+        "endLine": 622,
+        "endChar": 83
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb432f8f_dae9df3e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 704,
+        "startChar": 75,
+        "endLine": 704,
+        "endChar": 76
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d027a49_ec7628c8",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "move { to next line",
+      "range": {
+        "startLine": 1078,
+        "startChar": 64,
+        "endLine": 1078,
+        "endChar": 65
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "681461d3_921961ee",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "pItem might not be valid here",
+      "range": {
+        "startLine": 1100,
+        "startChar": 32,
+        "endLine": 1100,
+        "endChar": 51
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c32843f2_c4dc02fb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "single space before and after \u003d",
+      "range": {
+        "startLine": 1122,
+        "startChar": 23,
+        "endLine": 1122,
+        "endChar": 25
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516d06bd_c5777ad0",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "single space after ,",
+      "range": {
+        "startLine": 1139,
+        "startChar": 18,
+        "endLine": 1139,
+        "endChar": 30
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd2a8cbf_a0c07ad6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 1280,
+        "startChar": 26,
+        "endLine": 1280,
+        "endChar": 28
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf7a54d_907d1d9d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "single space before and after \u003d",
+      "range": {
+        "startLine": 1283,
+        "startChar": 23,
+        "endLine": 1283,
+        "endChar": 25
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "435154d8_48f649fc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "Is there strong need for an empty line here?",
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6815a543_e2762f1b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-18T06:46:27Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 1308,
+        "startChar": 7,
+        "endLine": 1308,
+        "endChar": 70
+      },
+      "revId": "406f8dd57afb67fa9764dbbd09bb551b2df4dc84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
