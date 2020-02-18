@@ -17,7 +17,7 @@
 
 class SalInstanceBuilder : public weld::Builder
 {
-private:
+protected:
     std::unique_ptr<VclBuilder> m_xBuilder;
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
@@ -930,6 +930,7 @@ private:
     VclPtr<CheckBox> m_xCheckButton;
 
     DECL_LINK(ToggleHdl, CheckBox&, void);
+
 public:
     SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
