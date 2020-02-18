@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f092ae1a_1c13f9eb",
+        "filename": "include/xmloff/xmlnmspe.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-18T12:19:20Z",
+      "side": 1,
+      "message": "if we have to rename them can we rename them to _SO52 so we know how old they are exactly?\n\n(i honestly dont know where these are used...)",
+      "revId": "601aa583d18e28c91784ef3ab9c0ba80da76c72a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
