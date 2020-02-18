@@ -59,7 +59,7 @@
 #include <slider.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svlbitm.hxx>
-#include <vcl/svtabbx.hxx>
+#include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/treelistentry.hxx>
