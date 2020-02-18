@@ -668,17 +668,19 @@ bool SwLayHelper::CheckInsertPage()
             if ( oPgNum )
                 static_cast<SwRootFrame*>(mrpPage->GetUpper())->SetVirtPageNum(true);
         }
-        bool bNextPageOdd = !mrpPage->OnRightPage();
+        bool bNextPageRight = !mrpPage->OnRightPage();
         bool bInsertEmpty = false;
-        if( oPgNum && bNextPageOdd != ( ( *oPgNum % 2 ) != 0 ) )
+        assert(mrpPage->GetUpper()->GetLower());
+        if (oPgNum && bNextPageRight != IsRightPageByNumber(
+                    *static_cast<SwRootFrame*>(mrpPage->GetUpper()), *oPgNum))
         {
-            bNextPageOdd = !bNextPageOdd;
+            bNextPageRight = !bNextPageRight;
             bInsertEmpty = true;
         }
         // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != mrpPage->GetPageDesc();
         ::InsertNewPage( const_cast<SwPageDesc&>(*pDesc), mrpPage->GetUpper(),
-                         bNextPageOdd, bNextPageFirst, bInsertEmpty, false, mrpPage->GetNext() );
+             bNextPageRight, bNextPageFirst, bInsertEmpty, false, mrpPage->GetNext());
         if ( bEnd )
         {
             OSL_ENSURE( mrpPage->GetNext(), "No new page?" );

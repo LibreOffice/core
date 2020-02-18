@@ -848,7 +848,7 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
 
     //My Pagedesc doesn't count if I'm a follow!
     const SwPageDesc *pDesc = nullptr;
-    int nTmp = 0;
+    o3tl::optional<sal_uInt16> oTmp;
     SwFlowFrame *pFlow = SwFlowFrame::CastFlowFrame( this );
     if ( !pFlow || !pFlow->IsFollow() )
     {
@@ -857,18 +857,18 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
         if( pDesc )
         {
             if( !pDesc->GetRightFormat() )
-                nTmp = 2;
+                oTmp = 2;
             else if( !pDesc->GetLeftFormat() )
-                nTmp = 1;
+                oTmp = 1;
             else if( rFormatDesc.GetNumOffset() )
-                nTmp = *rFormatDesc.GetNumOffset();
+                oTmp = rFormatDesc.GetNumOffset();
         }
     }
 
     // Does the Content bring a Pagedesc or do we need the
     // virtual page number of the new layout leaf?
     // PageDesc isn't allowed with Follows
-    const bool bOdd = nTmp ? (nTmp % 2) !=0 : pNew->OnRightPage();
+    const bool isRightPage = oTmp ? sw::IsRightPageByNumber(*mpRoot, *oTmp) : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
 
@@ -886,14 +886,14 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
 
     SAL_INFO( "sw.pageframe", "WrongPageDesc p: " << pNew << " phys: " << pNew->GetPhyPageNum() );
     SAL_INFO( "sw.pageframe", "WrongPageDesc " << pNew->GetPageDesc() << " " << pDesc );
-    SAL_INFO( "sw.pageframe", "WrongPageDesc odd: " << bOdd
+    SAL_INFO( "sw.pageframe", "WrongPageDesc right: " << isRightPage
               << " first: " << bFirst << " " << pNew->GetFormat() << " == "
-              << (bOdd ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)) << " "
-              << (bOdd ? pDesc->GetLeftFormat(bFirst) : pDesc->GetRightFormat(bFirst)) );
+              << (isRightPage ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)) << " "
+              << (isRightPage ? pDesc->GetLeftFormat(bFirst) : pDesc->GetRightFormat(bFirst)) );
 
     return (pNew->GetPageDesc() != pDesc)   //  own desc ?
         || (pNew->GetFormat() !=
-              (bOdd ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)))
+              (isRightPage ? pDesc->GetRightFormat(bFirst) : pDesc->GetLeftFormat(bFirst)))
         || (pNewDesc && pNewDesc == pDesc);
 }
 

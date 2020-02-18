@@ -2883,10 +2883,27 @@ void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling )
     pParent->Grow( nGrowVal );
 }
 
+namespace sw {
+
+bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 const nPageNum)
+{
+    assert(rLayout.GetLower());
+    // unfortunately can only get SwPageDesc, not SwFormatPageDesc here...
+    auto const nFirstVirtPageNum(rLayout.GetLower()->GetVirtPageNum());
+    bool const isFirstPageOfLayoutOdd(nFirstVirtPageNum % 2 == 1);
+    return ((nPageNum % 2) == 1) == isFirstPageOfLayoutOdd;
+}
+
+} // namespace sw
+
 SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
-                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFootnote,
+        bool const isRightPage, bool const bFirst, bool bInsertEmpty,
+        bool const bFootnote,
                           SwFrame *pSibling )
 {
+    assert(pUpper);
+    assert(pUpper->IsRootFrame());
+    assert(!pSibling || static_cast<SwLayoutFrame const*>(pUpper)->Lower() != pSibling); // currently no insert before 1st page
     SwPageFrame *pRet;
     SwDoc *pDoc = static_cast<SwLayoutFrame*>(pUpper)->GetFormat()->GetDoc();
     if (bFirst)
@@ -2895,7 +2912,7 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
         {
             // We need to fallback to left or right page format, decide it now.
             // FIXME: is this still needed?
-            if (bOdd)
+            if (isRightPage)
             {
                 rDesc.GetFirstMaster().SetFormatAttr( rDesc.GetMaster().GetHeader() );
                 rDesc.GetFirstMaster().SetFormatAttr( rDesc.GetMaster().GetFooter() );
@@ -2910,11 +2927,11 @@ SwPageFrame * InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
             }
         }
     }
-    SwFrameFormat *pFormat(bOdd ? rDesc.GetRightFormat(bFirst) : rDesc.GetLeftFormat(bFirst));
+    SwFrameFormat *pFormat(isRightPage ? rDesc.GetRightFormat(bFirst) : rDesc.GetLeftFormat(bFirst));
     // If there is no FrameFormat for this page, add an empty page
     if ( !pFormat )
     {
-        pFormat = bOdd ? rDesc.GetLeftFormat() : rDesc.GetRightFormat();
+        pFormat = isRightPage ? rDesc.GetLeftFormat() : rDesc.GetRightFormat();
         OSL_ENSURE( pFormat, "Descriptor without any format?!" );
         bInsertEmpty = !bInsertEmpty;
     }
