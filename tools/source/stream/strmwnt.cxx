@@ -315,13 +315,18 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
             nOpenAction = OPEN_EXISTING;
     }
 
+    DWORD nAttributes = FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS;
+
+    if ( nMode & StreamMode::TEMPORARY )
+        nAttributes |= FILE_ATTRIBUTE_TEMPORARY;
+
     pInstanceData->hFile = CreateFileW(
         o3tl::toW(aFilename.getStr()),
         nAccessMode,
         nShareMode,
         nullptr,
         nOpenAction,
-        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
+        nAttributes,
         nullptr
     );
 

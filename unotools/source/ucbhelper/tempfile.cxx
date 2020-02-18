@@ -418,7 +418,7 @@ SvStream* TempFile::GetStream( StreamMode eMode )
     if (!pStream)
     {
         if (!aName.isEmpty())
-            pStream.reset(new SvFileStream(aName, eMode));
+            pStream.reset(new SvFileStream(aName, eMode | StreamMode::TEMPORARY));
         else
             pStream.reset(new SvMemoryStream(nullptr, 0, eMode));
     }
