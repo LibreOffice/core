@@ -223,7 +223,7 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
 
     // Vulkan version numbers have only 3 fields.
     if (destIdx == SAL_N_ELEMENTS(dest) - 2)
-        dest[destIdx++][0] = '\0';
+        dest[++destIdx][0] = '\0';
     if (destIdx != SAL_N_ELEMENTS(dest) - 1)
     {
         return false;
