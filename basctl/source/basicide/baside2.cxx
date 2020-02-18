@@ -53,6 +53,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
+#include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>

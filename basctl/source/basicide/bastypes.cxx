@@ -418,29 +418,6 @@ void DockingWindow::DockThis ()
     }
 }
 
-ExtendedEdit::ExtendedEdit(vcl::Window* pParent, WinBits nStyle)
-    : Edit(pParent, nStyle)
-{
-    aAcc.SetSelectHdl( LINK( this, ExtendedEdit, EditAccHdl ) );
-    Control::SetGetFocusHdl( LINK( this, ExtendedEdit, ImplGetFocusHdl ) );
-    Control::SetLoseFocusHdl( LINK( this, ExtendedEdit, ImplLoseFocusHdl ) );
-}
-
-IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl, Control&, void)
-{
-    Application::InsertAccel( &aAcc );
-}
-
-IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl, Control&, void)
-{
-    Application::RemoveAccel( &aAcc );
-}
-
-IMPL_LINK( ExtendedEdit, EditAccHdl, Accelerator&, rAcc, void )
-{
-    aAccHdl.Call( rAcc );
-}
-
 TabBar::TabBar( vcl::Window* pParent ) :
     ::TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
