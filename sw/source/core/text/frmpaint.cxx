@@ -112,7 +112,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         if( m_aRect.Bottom() > nBottom )
             m_aRect.Bottom( nBottom );
     }
-    int nVirtPageNum = 0;
+    bool isRightPage(false);
     if( bLineNum )
     {
         /* Initializes the Members necessary for line numbering:
@@ -138,13 +138,13 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         {
             if( pFrame->FindPageFrame()->OnRightPage() )
             {
-                nVirtPageNum = 1;
+                isRightPage = true;
                 ePos = ePos == LINENUMBER_POS_INSIDE ?
                         LINENUMBER_POS_LEFT : LINENUMBER_POS_RIGHT;
             }
             else
             {
-                nVirtPageNum = 2;
+                isRightPage = false;
                 ePos = ePos == LINENUMBER_POS_OUTSIDE ?
                         LINENUMBER_POS_LEFT : LINENUMBER_POS_RIGHT;
             }
@@ -164,9 +164,9 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
     {
         if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
         {
-            if( !nVirtPageNum )
-                nVirtPageNum = pFrame->FindPageFrame()->OnRightPage() ? 1 : 2;
-            if( nVirtPageNum % 2 )
+            if (!isRightPage)
+                isRightPage = pFrame->FindPageFrame()->OnRightPage();
+            if (isRightPage)
                 eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
             else
                 eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
