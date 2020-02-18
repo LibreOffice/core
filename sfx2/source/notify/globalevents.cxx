@@ -355,7 +355,9 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
 {
     try
     {
-        uno::Any aAny = m_xEvents->getByName(aEvent.EventName);
+        uno::Any aAny;
+        if ( m_xEvents->hasByName( aEvent.EventName ) )
+            aAny = m_xEvents->getByName(aEvent.EventName);
         SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
     }
     catch ( uno::RuntimeException const & )
