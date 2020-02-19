@@ -30,8 +30,6 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 
-#include <svtools/ctrlbox.hxx>
-
 #include <vcl/idle.hxx>
 
 #include <sfx2/tabdlg.hxx>
@@ -48,6 +46,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 struct CustomProperty;
+class SvtCalendarBox;
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -242,9 +241,9 @@ public:
     ::o3tl::optional<sal_Int16> m_TZ;
 
     CustomPropertiesDateField(SvtCalendarBox* pDateField);
-    void set_visible(bool bVisible) { m_xDateField->set_visible(bVisible); }
-    Date get_date() const { return m_xDateField->get_date(); }
-    void set_date(const Date& rDate) { m_xDateField->set_date(rDate); }
+    void set_visible(bool bVisible);
+    Date get_date() const;
+    void set_date(const Date& rDate);
     ~CustomPropertiesDateField();
 };
 
