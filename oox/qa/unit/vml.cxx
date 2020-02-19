@@ -15,8 +15,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace ::com::sun::star;
 
 char const DATA_DIRECTORY[] = "/oox/qa/unit/data/";
