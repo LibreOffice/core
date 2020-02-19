@@ -273,7 +273,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSu
     // subscript custom: Proportional size is 80%, lower by 25%.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName("subscript custom"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("CharStyle has 12pt font size", 12.f, getProperty<float>(xStyle, "CharHeight"));
-    // subscript larger font: Proportional size is 80%, lowered by DFLT_ESC_SUB_AUTO
+    // subscript larger font: Proportional size is 80%, lowered by DFLT_ESC_AUTO_SUB
     xStyle.set(getStyles("CharacterStyles")->getByName("subscript larger font"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Auto CharStyle has 12pt font size", 12.f, getProperty<float>(xStyle, "CharHeight"));
 }

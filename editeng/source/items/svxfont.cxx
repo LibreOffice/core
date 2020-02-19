@@ -510,9 +510,17 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
     {
         short nTmpEsc;
         if( DFLT_ESC_AUTO_SUPER == nEsc )
+        {
+            nTmpEsc = .8 * (100 - nPropr);
+            assert (nTmpEsc == DFLT_ESC_SUPER && "I'm sure this formula needs to be changed, but how to confirm that???");
             nTmpEsc = DFLT_ESC_SUPER;
+        }
         else if( DFLT_ESC_AUTO_SUB == nEsc )
+        {
+            nTmpEsc = .2 * -(100 - nPropr);
+            assert (nTmpEsc == -20 && "I'm sure this formula needs to be changed, but how to confirm that???");
             nTmpEsc = -20;
+        }
         else
             nTmpEsc = nEsc;
         Size aSize = GetFontSize();
