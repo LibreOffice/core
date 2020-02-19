@@ -43,6 +43,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
     CPPUNIT_ASSERT_GREATEREQUAL(nFlyBottom, nTableTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
+{
+    // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
+    // a solid upper border.
+    load(DATA_DIRECTORY, "border-collapse-compat.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump aDumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+
+    // Make sure the solid border has priority.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 48
+    // i.e. there was no single cell border with width=20, rather there were 48 border parts
+    // (forming a dotted border), all with width=40.
+    assertXPath(pXmlDoc, "//polyline[@style='solid']", "width", "20");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

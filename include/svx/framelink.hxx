@@ -116,6 +116,7 @@ private:
         double              mfSecn;     /// Width of secondary (right or bottom) line.
         double              mfPatternScale; /// Scale used for line pattern spacing.
         SvxBorderLineStyle  mnType;
+        bool mbWordTableCell;
 
     public:
         /** Constructs an invisible frame style. */
@@ -129,7 +130,8 @@ private:
             mfDist(0.0),
             mfSecn(0.0),
             mfPatternScale(1.0),
-            mnType(SvxBorderLineStyle::SOLID)
+            mnType(SvxBorderLineStyle::SOLID),
+            mbWordTableCell(false)
         {}
     };
 
@@ -186,6 +188,9 @@ public:
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style& MirrorSelf();
+
+    /** Enables the Word-compatible Style comparison code. */
+    void SetWordTableCell(bool bWordTableCell);
 
     bool operator==( const Style& rOther) const;
     bool operator<( const Style& rOther) const;
