@@ -2744,11 +2744,23 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     bool const bVert = mrTabFrame.IsVertical();
     bool const bR2L  = mrTabFrame.IsRightToLeft();
 
+    bool bWordTableCell = false;
+    SwViewShell* pShell = rFrame.getRootFrame()->GetCurrShell();
+    if (pShell)
+    {
+        const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
+        bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+    }
+
     // no scaling needed, it's all in the primitives and the target device
     svx::frame::Style aL(rBoxItem.GetLeft(), 1.0);
+    aL.SetWordTableCell(bWordTableCell);
     svx::frame::Style aR(rBoxItem.GetRight(), 1.0);
+    aR.SetWordTableCell(bWordTableCell);
     svx::frame::Style aT(rBoxItem.GetTop(), 1.0);
+    aT.SetWordTableCell(bWordTableCell);
     svx::frame::Style aB(rBoxItem.GetBottom(), 1.0);
+    aB.SetWordTableCell(bWordTableCell);
 
     aR.MirrorSelf();
     aB.MirrorSelf();
