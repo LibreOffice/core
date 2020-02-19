@@ -14,7 +14,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/storagehelper.hxx>

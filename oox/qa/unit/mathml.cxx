@@ -13,8 +13,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace ::com::sun::star;
 
 /// oox mathml tests.
