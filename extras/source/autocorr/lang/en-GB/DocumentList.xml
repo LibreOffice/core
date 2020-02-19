@@ -70,6 +70,7 @@
   <block-list:block block-list:abbreviated-name="andthe" block-list:name="and the"/>
   <block-list:block block-list:abbreviated-name="anothe" block-list:name="another"/>
   <block-list:block block-list:abbreviated-name="anual" block-list:name="annual"/>
+  <block-list:block block-list:abbreviated-name="anythnig" block-list:name="anything"/>
   <block-list:block block-list:abbreviated-name="apparant" block-list:name="apparent"/>
   <block-list:block block-list:abbreviated-name="apparrent" block-list:name="apparent"/>
   <block-list:block block-list:abbreviated-name="appearence" block-list:name="appearance"/>
@@ -212,6 +213,7 @@
   <block-list:block block-list:abbreviated-name="coudl" block-list:name="could"/>
   <block-list:block block-list:abbreviated-name="could of been" block-list:name="could have been"/>
   <block-list:block block-list:abbreviated-name="could of had" block-list:name="could have had"/>
+  <block-list:block block-list:abbreviated-name="couldnt" block-list:name="couldn’t"/>
   <block-list:block block-list:abbreviated-name="couldthe" block-list:name="could the"/>
   <block-list:block block-list:abbreviated-name="cpoy" block-list:name="copy"/>
   <block-list:block block-list:abbreviated-name="creme" block-list:name="crème"/>
@@ -229,6 +231,7 @@
   <block-list:block block-list:abbreviated-name="decor" block-list:name="décor"/>
   <block-list:block block-list:abbreviated-name="defendent" block-list:name="defendant"/>
   <block-list:block block-list:abbreviated-name="definately" block-list:name="definitely"/>
+  <block-list:block block-list:abbreviated-name="deleteing" block-list:name="deleting"/>
   <block-list:block block-list:abbreviated-name="deptartment" block-list:name="department"/>
   <block-list:block block-list:abbreviated-name="desicion" block-list:name="decision"/>
   <block-list:block block-list:abbreviated-name="desicions" block-list:name="decisions"/>
@@ -253,6 +256,7 @@
   <block-list:block block-list:abbreviated-name="dident" block-list:name="didn’t"/>
   <block-list:block block-list:abbreviated-name="diden’t" block-list:name="didn’t"/>
   <block-list:block block-list:abbreviated-name="didnot" block-list:name="did not"/>
+  <block-list:block block-list:abbreviated-name="didnt" block-list:name="didn’t"/>
   <block-list:block block-list:abbreviated-name="difefrent" block-list:name="different"/>
   <block-list:block block-list:abbreviated-name="diferences" block-list:name="differences"/>
   <block-list:block block-list:abbreviated-name="differance" block-list:name="difference"/>
@@ -278,11 +282,13 @@
   <block-list:block block-list:abbreviated-name="documnets" block-list:name="documents"/>
   <block-list:block block-list:abbreviated-name="doe snot" block-list:name="does not"/>
   <block-list:block block-list:abbreviated-name="doese" block-list:name="does"/>
+  <block-list:block block-list:abbreviated-name="doesnt" block-list:name="doesn’t"/>
   <block-list:block block-list:abbreviated-name="doign" block-list:name="doing"/>
   <block-list:block block-list:abbreviated-name="doimg" block-list:name="doing"/>
   <block-list:block block-list:abbreviated-name="doind" block-list:name="doing"/>
   <block-list:block block-list:abbreviated-name="dollers" block-list:name="dollars"/>
   <block-list:block block-list:abbreviated-name="donig" block-list:name="doing"/>
+  <block-list:block block-list:abbreviated-name="dont" block-list:name="don’t"/>
   <block-list:block block-list:abbreviated-name="driveing" block-list:name="driving"/>
   <block-list:block block-list:abbreviated-name="drnik" block-list:name="drink"/>
   <block-list:block block-list:abbreviated-name="efel" block-list:name="feel"/>
@@ -420,6 +426,8 @@
   <block-list:block block-list:abbreviated-name="insurence" block-list:name="insurance"/>
   <block-list:block block-list:abbreviated-name="int he" block-list:name="in the"/>
   <block-list:block block-list:abbreviated-name="inteh" block-list:name="in the"/>
+  <block-list:block block-list:abbreviated-name="inteligence" block-list:name="intelligence"/>
+  <block-list:block block-list:abbreviated-name="inteligences" block-list:name="intelligences"/>
   <block-list:block block-list:abbreviated-name="interum" block-list:name="interim"/>
   <block-list:block block-list:abbreviated-name="inthe" block-list:name="in the"/>
   <block-list:block block-list:abbreviated-name="inwhich" block-list:name="in which"/>
@@ -459,9 +467,11 @@
   <block-list:block block-list:abbreviated-name="litttle" block-list:name="little"/>
   <block-list:block block-list:abbreviated-name="liuke" block-list:name="like"/>
   <block-list:block block-list:abbreviated-name="liveing" block-list:name="living"/>
+  <block-list:block block-list:abbreviated-name="lizzard" block-list:name="lizard"/>
   <block-list:block block-list:abbreviated-name="loev" block-list:name="love"/>
   <block-list:block block-list:abbreviated-name="lonly" block-list:name="lonely"/>
   <block-list:block block-list:abbreviated-name="lookign" block-list:name="looking"/>
+  <block-list:block block-list:abbreviated-name="mainteined" block-list:name="maintained"/>
   <block-list:block block-list:abbreviated-name="maintenence" block-list:name="maintenance"/>
   <block-list:block block-list:abbreviated-name="makeing" block-list:name="making"/>
   <block-list:block block-list:abbreviated-name="managment" block-list:name="management"/>
@@ -644,6 +654,7 @@
   <block-list:block block-list:abbreviated-name="shoudl" block-list:name="should"/>
   <block-list:block block-list:abbreviated-name="should of been" block-list:name="should have been"/>
   <block-list:block block-list:abbreviated-name="should of had" block-list:name="should have had"/>
+  <block-list:block block-list:abbreviated-name="shouldnt" block-list:name="shouldn’t"/>
   <block-list:block block-list:abbreviated-name="showinf" block-list:name="showing"/>
   <block-list:block block-list:abbreviated-name="signifacnt" block-list:name="significant"/>
   <block-list:block block-list:abbreviated-name="simalar" block-list:name="similar"/>
@@ -750,6 +761,7 @@
   <block-list:block block-list:abbreviated-name="tothe" block-list:name="to the"/>
   <block-list:block block-list:abbreviated-name="towrad" block-list:name="toward"/>
   <block-list:block block-list:abbreviated-name="traditionalyl" block-list:name="traditionally"/>
+  <block-list:block block-list:abbreviated-name="trainning" block-list:name="training"/>
   <block-list:block block-list:abbreviated-name="transfered" block-list:name="transferred"/>
   <block-list:block block-list:abbreviated-name="truely" block-list:name="truly"/>
   <block-list:block block-list:abbreviated-name="truley" block-list:name="truly"/>
@@ -763,6 +775,7 @@
   <block-list:block block-list:abbreviated-name="undert he" block-list:name="under the"/>
   <block-list:block block-list:abbreviated-name="UnitedStates" block-list:name="United States"/>
   <block-list:block block-list:abbreviated-name="unliek" block-list:name="unlike"/>
+  <block-list:block block-list:abbreviated-name="unmainteined" block-list:name="unmaintained"/>
   <block-list:block block-list:abbreviated-name="unpleasently" block-list:name="unpleasantly"/>
   <block-list:block block-list:abbreviated-name="untill" block-list:name="until"/>
   <block-list:block block-list:abbreviated-name="untilll" block-list:name="until"/>
