@@ -16,6 +16,24 @@
       "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05437f69_b7f8b0d5",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-19T20:02:29Z",
+      "side": 1,
+      "message": "Yes, you are right. I actually hurried to test if it would fail my unit test because I\u0027m afraid it would have the same problem...",
+      "parentUuid": "f39947b3_fd5f2c39",
+      "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
