@@ -51,7 +51,7 @@
     <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Rp-421]">
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
@@ -87,22 +87,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[$Rp-421]#.##0;([$Rp-421]#.##0)</FormatCode>
+      <FormatCode>[CURRENCY]#.##0;([CURRENCY]#.##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$Rp-421]#.##0;([$Rp-421]#.##0)</FormatCode>
+      <FormatCode>[CURRENCY]#.##0;([CURRENCY]#.##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[$Rp-421]#.##0;[RED]([$Rp-421]#.##0)</FormatCode>
+      <FormatCode>[CURRENCY]#.##0;[RED]([CURRENCY]#.##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[$Rp-421]#.##0;[RED]([$Rp-421]#.##0)</FormatCode>
+      <FormatCode>[CURRENCY]#.##0;[RED]([CURRENCY]#.##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$Rp-421]#.##0;[RED]([$Rp-421]#.##0)</FormatCode>
+      <FormatCode>[CURRENCY]#.##0;[RED]([CURRENCY]#.##0)</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD/MM/YY</FormatCode>
