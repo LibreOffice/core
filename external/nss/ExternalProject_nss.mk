@@ -34,7 +34,31 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
-else # OS!=WNT
+else ifneq (,$(filter FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS))) # non-WNT gyp-based
+
+# The nss build system uses 'python', so make it find our internal python if necessary.
+nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
+nss_SETUP_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/setup-python
+
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+	$(call gb_Trace_StartRange,nss,EXTERNAL)
+	echo "#! /bin/sh" > $(nss_PYTHON)
+	pythondir=$$($(call gb_ExternalExecutable_get_command,python) -c 'import sys; import os; sys.stdout.write(os.path.dirname(sys.executable))') \
+		&& echo PATH=\"$$pythondir:\$$PATH\" >>$(nss_PYTHON)
+	echo '$(call gb_ExternalExecutable_get_command,python)' \"$$\@\" $(if $(ICECREAM_RUN), | sed 's/$(ICECREAM_RUN)//') >> $(nss_PYTHON)
+	chmod +x $(nss_PYTHON)
+	cp $(SRCDIR)/external/nss/setup-python $(nss_SETUP_PYTHON)
+	chmod +x $(nss_SETUP_PYTHON)
+	$(call gb_ExternalProject_run,build,\
+			COMMA=$(COMMA) \
+			PATH=$(call gb_UnpackedTarball_get_dir,nss):$(call gb_UnpackedTarball_get_dir,gyp):$$PATH \
+			./build.sh -v --disable-tests --enable-libpkix \
+				$(if $(ENABLE_DBGUTIL),,--opt) \
+		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
+	,nss)
+	$(call gb_Trace_EndRange,nss,EXTERNAL)
+
+else # platforms which need(?) the old build system (feel free to port to the new system)
 # make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
 # OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
