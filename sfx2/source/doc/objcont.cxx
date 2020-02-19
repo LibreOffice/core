@@ -26,6 +26,7 @@
 #include <comphelper/fileurl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 #include <svl/style.hxx>
 
 #include <svl/intitem.hxx>
