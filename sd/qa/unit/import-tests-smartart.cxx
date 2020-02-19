@@ -101,6 +101,7 @@ public:
     void testFontSize();
     void testVerticalBlockList();
     void testBulletList();
+    void testMissingBullet();
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
+    CPPUNIT_TEST(testMissingBullet);
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
@@ -1273,6 +1275,30 @@ void SdImportTestSmartArt::testVerticalBlockList()
                          xShapeEmpty->getPosition().Y + xShapeEmpty->getSize().Height);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testMissingBullet()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-missing-bullet.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup1(xGroup->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup2(xGroup1->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xGroup2->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xText.is());
+
+    uno::Reference<container::XEnumerationAccess> xParasAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParas = xParasAccess->createEnumeration();
+    xParas->nextElement();// skip parent
+
+    uno::Reference<beans::XPropertySet> xPara1(xParas->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara1.is());
+
+    sal_Int16 nNumberingLevel = -1;
+    xPara1->getPropertyValue("NumberingLevel")>>= nNumberingLevel;
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nNumberingLevel);
 }
 
 void SdImportTestSmartArt::testBulletList()
