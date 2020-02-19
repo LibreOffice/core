@@ -98,8 +98,6 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         sal_uInt16 aPageId = GetPageId(aPos);
 
         //initialize
-        if(RrePageID!=aPageId)
-            pDrViewSh->FreshNavigatrEntry();
         RrePageID=aPageId;
         if (aPageId == 0)
         {

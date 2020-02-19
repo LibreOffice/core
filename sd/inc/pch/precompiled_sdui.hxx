@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 11:00:25 using:
+ Generated on 2020-02-25 20:28:19 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <sstream>
@@ -100,7 +101,6 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -133,12 +133,10 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
@@ -150,8 +148,6 @@
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistentries.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
@@ -327,14 +323,11 @@
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
-#include <helper/simplereferencecomponent.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -429,7 +422,6 @@
 #include <svx/xpoly.hxx>
 #include <svx/xtable.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

@@ -45,8 +45,8 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     // need additional information.  For this a user data object is
     // created that contains the necessary information.
     SdTransferable* pTransferable = SD_MOD()->pTransferDrag;
-    SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
-        = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
+    SdPageObjsTLV::SdPageObjsTransferable* pTreeListBoxTransferable
+        = dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(pTransferable);
     if (pTreeListBoxTransferable!=nullptr && !TransferableData::GetFromTransferable(pTransferable))
     {
         pTransferable->AddUserData(

@@ -259,7 +259,6 @@ public:
     //Realize multi-selection of objects, If object is marked, the
     //corresponding entry is set true, else the corresponding entry is set
     //false.
-    void            FreshNavigatrEntry();
     void            FreshNavigatrTree();
     void            MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rWin);
 
