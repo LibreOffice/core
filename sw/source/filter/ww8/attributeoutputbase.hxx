@@ -134,6 +134,10 @@ namespace msword {
     const sal_uInt8 PageBreak   = 0xC;
 }
 
+namespace sw { namespace ww8 {
+    struct NodeState;
+}}
+
 /// Type of a style in the style table.
 enum StyleType
 {
@@ -149,6 +153,7 @@ private:
     OUString m_sBaseURL; // To be used in ConvertURL
 
     OUString ConvertURL( const OUString& rUrl, bool bAbsoluteOut );
+    void GenerateBookmarkForField(const SwTextNode& rNode, const SwTextAttr& rHt, const SwGetRefField& rRefField, SwWW8AttrIter& rAttrIter, sw::ww8::NodeState& rState);
 
 public:
     /// Export the state of RTL/CJK.
@@ -215,6 +220,7 @@ public:
 
     /// MSO uses bookmarks to reference sequence fields, so we need to generate these additional bookmarks during export
     void GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter);
+
 
     void StartTOX( const SwSection& rSect );
 
