@@ -72,6 +72,7 @@
 #include <aboutdialog.hxx>
 #include <bitmaps.hlst>
 #include <wizdlg.hxx>
+#include <salvtables.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -236,521 +237,486 @@ SalMenuItem::~SalMenuItem()
 {
 }
 
-class SalInstanceBuilder;
-
-namespace {
-
-class SalInstanceWidget : public virtual weld::Widget
+void SalInstanceWidget::ensure_event_listener()
 {
-protected:
-    VclPtr<vcl::Window> m_xWidget;
-    SalInstanceBuilder* m_pBuilder;
-
-private:
-    DECL_LINK(EventListener, VclWindowEvent&, void);
-    DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
-    DECL_LINK(MouseEventListener, VclSimpleEvent&, void);
-    DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
-
-    const bool m_bTakeOwnership;
-    bool m_bEventListener;
-    bool m_bKeyEventListener;
-    bool m_bMouseEventListener;
-    int m_nBlockNotify;
-
-protected:
-    void ensure_event_listener()
-    {
-        if (!m_bEventListener)
-        {
-            m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, EventListener));
-            m_bEventListener = true;
-        }
-    }
-
-    // we want the ability to mark key events as handled, so use this variant
-    // for those, we get all keystrokes in this case, so we will need to filter
-    // them later
-    void ensure_key_listener()
-    {
-        if (!m_bKeyEventListener)
-        {
-            Application::AddKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
-            m_bKeyEventListener = true;
-        }
-    }
-
-    // we want the ability to know about mouse events that happen in our children
-    // so use this variant, we will need to filter them later
-    void ensure_mouse_listener()
-    {
-        if (!m_bMouseEventListener)
-        {
-            Application::AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
-            m_bMouseEventListener = true;
-        }
-    }
-
-    virtual void HandleEventListener(VclWindowEvent& rEvent);
-    virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
-    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent);
-
-    void set_background(const Color& rColor)
-    {
-        m_xWidget->SetControlBackground(rColor);
-        m_xWidget->SetBackground(m_xWidget->GetControlBackground());
-        // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
-        // transparent children of the widget
-        m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
-    }
-
-public:
-    SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : m_xWidget(pWidget)
-        , m_pBuilder(pBuilder)
-        , m_bTakeOwnership(bTakeOwnership)
-        , m_bEventListener(false)
-        , m_bKeyEventListener(false)
-        , m_bMouseEventListener(false)
-        , m_nBlockNotify(0)
-    {
-    }
-
-    virtual void set_sensitive(bool sensitive) override
-    {
-        m_xWidget->Enable(sensitive);
-    }
-
-    virtual bool get_sensitive() const override
-    {
-        return m_xWidget->IsEnabled();
-    }
-
-    virtual bool get_visible() const override
-    {
-        return m_xWidget->IsVisible();
-    }
-
-    virtual bool is_visible() const override
-    {
-        return m_xWidget->IsReallyVisible();
-    }
-
-    virtual void set_can_focus(bool bCanFocus) override
-    {
-        auto nStyle = m_xWidget->GetStyle() & ~(WB_TABSTOP | WB_NOTABSTOP);
-        if (bCanFocus)
-            nStyle |= WB_TABSTOP;
-        else
-            nStyle |= WB_NOTABSTOP;
-        m_xWidget->SetStyle(nStyle);
-    }
-
-    virtual void grab_focus() override
-    {
-        m_xWidget->GrabFocus();
-    }
-
-    virtual bool has_focus() const override
-    {
-        return m_xWidget->HasFocus();
-    }
-
-    virtual bool is_active() const override
-    {
-        return m_xWidget->IsActive();
-    }
-
-    virtual void set_has_default(bool has_default) override
-    {
-        m_xWidget->set_property("has-default", OUString::boolean(has_default));
-    }
-
-    virtual bool get_has_default() const override
-    {
-        return m_xWidget->GetStyle() & WB_DEFBUTTON;
-    }
-
-    virtual void show() override
-    {
-        m_xWidget->Show();
-    }
-
-    virtual void hide() override
-    {
-        m_xWidget->Hide();
-    }
-
-    virtual void set_size_request(int nWidth, int nHeight) override
-    {
-        m_xWidget->set_width_request(nWidth);
-        m_xWidget->set_height_request(nHeight);
-    }
-
-    virtual Size get_size_request() const override
-    {
-        return Size(m_xWidget->get_width_request(),
-                    m_xWidget->get_height_request());
-    }
-
-    virtual Size get_preferred_size() const override
-    {
-        return m_xWidget->get_preferred_size();
-    }
-
-    virtual float get_approximate_digit_width() const override
-    {
-        return m_xWidget->approximate_digit_width();
-    }
-
-    virtual int get_text_height() const override
-    {
-        return m_xWidget->GetTextHeight();
-    }
-
-    virtual Size get_pixel_size(const OUString& rText) const override
-    {
-        //TODO, or do I want GetTextBoundRect ?, just using width at the moment anyway
-        return Size(m_xWidget->GetTextWidth(rText), m_xWidget->GetTextHeight());
-    }
-
-    virtual vcl::Font get_font() override
-    {
-        return m_xWidget->GetPointFont(*m_xWidget);
-    }
-
-    virtual OString get_buildable_name() const override
-    {
-        return m_xWidget->get_id().toUtf8();
-    }
-
-    virtual void set_help_id(const OString& rId) override
-    {
-        return m_xWidget->SetHelpId(rId);
-    }
-
-    virtual OString get_help_id() const override
-    {
-        return m_xWidget->GetHelpId();
-    }
-
-    virtual void set_grid_left_attach(int nAttach) override
-    {
-        m_xWidget->set_grid_left_attach(nAttach);
-    }
-
-    virtual int get_grid_left_attach() const override
-    {
-        return m_xWidget->get_grid_left_attach();
-    }
-
-    virtual void set_grid_width(int nCols) override
-    {
-        m_xWidget->set_grid_width(nCols);
-    }
-
-    virtual void set_grid_top_attach(int nAttach) override
-    {
-        m_xWidget->set_grid_top_attach(nAttach);
-    }
-
-    virtual int get_grid_top_attach() const override
-    {
-        return m_xWidget->get_grid_top_attach();
-    }
-
-    virtual void set_hexpand(bool bExpand) override
-    {
-        m_xWidget->set_hexpand(bExpand);
-    }
-
-    virtual bool get_hexpand() const override
-    {
-        return m_xWidget->get_hexpand();
-    }
-
-    virtual void set_vexpand(bool bExpand) override
-    {
-        m_xWidget->set_vexpand(bExpand);
-    }
-
-    virtual bool get_vexpand() const override
-    {
-        return m_xWidget->get_vexpand();
-    }
-
-    virtual void set_secondary(bool bSecondary) override
-    {
-        m_xWidget->set_secondary(bSecondary);
-    }
-
-    virtual void set_margin_top(int nMargin) override
-    {
-        m_xWidget->set_margin_top(nMargin);
-    }
-
-    virtual void set_margin_bottom(int nMargin) override
-    {
-        m_xWidget->set_margin_bottom(nMargin);
-    }
-
-    virtual void set_margin_left(int nMargin) override
-    {
-        m_xWidget->set_margin_left(nMargin);
-    }
-
-    virtual void set_margin_right(int nMargin) override
-    {
-        m_xWidget->set_margin_bottom(nMargin);
-    }
-
-    virtual int get_margin_top() const override
-    {
-        return m_xWidget->get_margin_top();
-    }
-
-    virtual int get_margin_bottom() const override
-    {
-        return m_xWidget->get_margin_bottom();
-    }
-
-    virtual int get_margin_left() const override
-    {
-        return m_xWidget->get_margin_left();
-    }
-
-    virtual int get_margin_right() const override
-    {
-        return m_xWidget->get_margin_bottom();
-    }
-
-    virtual void set_accessible_name(const OUString& rName) override
-    {
-        m_xWidget->SetAccessibleName(rName);
-    }
-
-    virtual OUString get_accessible_name() const override
-    {
-        return m_xWidget->GetAccessibleName();
-    }
-
-    virtual OUString get_accessible_description() const override
-    {
-        return m_xWidget->GetAccessibleDescription();
-    }
-
-    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override
-    {
-        vcl::Window* pAtkLabel = pLabel ? dynamic_cast<SalInstanceWidget&>(*pLabel).getWidget() : nullptr;
-        m_xWidget->SetAccessibleRelationLabeledBy(pAtkLabel);
-    }
-
-    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
-    {
-        vcl::Window* pAtkLabeled = pLabeled ? dynamic_cast<SalInstanceWidget&>(*pLabeled).getWidget() : nullptr;
-        m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
-    }
-
-    virtual void add_extra_accessible_relation(const css::accessibility::AccessibleRelation &rRelation) override
-    {
-        m_xWidget->AddExtraAccessibleRelation(rRelation);
-    }
-
-    virtual void clear_extra_accessible_relations() override
-    {
-        m_xWidget->ClearExtraAccessibleRelations();
-    }
-
-    virtual void set_tooltip_text(const OUString& rTip) override
-    {
-        m_xWidget->SetQuickHelpText(rTip);
-    }
-
-    virtual OUString get_tooltip_text() const override
-    {
-        return m_xWidget->GetQuickHelpText();
-    }
-
-    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
-    {
-        ensure_event_listener();
-        weld::Widget::connect_focus_in(rLink);
-    }
-
-    virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override
-    {
-        m_xWidget->SetMnemonicActivateHdl(LINK(this, SalInstanceWidget, MnemonicActivateHdl));
-        weld::Widget::connect_mnemonic_activate(rLink);
-    }
-
-    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
-    {
-        ensure_event_listener();
-        weld::Widget::connect_focus_out(rLink);
-    }
-
-    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
-    {
-        ensure_event_listener();
-        weld::Widget::connect_size_allocate(rLink);
-    }
-
-    virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
-    {
-        ensure_mouse_listener();
-        weld::Widget::connect_mouse_press(rLink);
-    }
-
-    virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override
-    {
-        ensure_mouse_listener();
-        weld::Widget::connect_mouse_move(rLink);
-    }
-
-    virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
-    {
-        ensure_mouse_listener();
-        weld::Widget::connect_mouse_release(rLink);
-    }
-
-    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
-    {
-        ensure_key_listener();
-        weld::Widget::connect_key_press(rLink);
-    }
-
-    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
-    {
-        ensure_key_listener();
-        weld::Widget::connect_key_release(rLink);
-    }
-
-    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int &y, int& width, int &height) override
-    {
-        tools::Rectangle aRect(m_xWidget->GetWindowExtentsRelative(dynamic_cast<SalInstanceWidget&>(rRelative).getWidget()));
-        x = aRect.Left();
-        y = aRect.Top();
-        width = aRect.GetWidth();
-        height = aRect.GetHeight();
-        return true;
-    }
-
-    virtual void grab_add() override
-    {
-        m_xWidget->CaptureMouse();
-    }
-
-    virtual bool has_grab() const override
-    {
-        return m_xWidget->IsMouseCaptured();
-    }
-
-    virtual void grab_remove() override
-    {
-        m_xWidget->ReleaseMouse();
-    }
-
-    virtual bool get_direction() const override
-    {
-        return m_xWidget->IsRTLEnabled();
-    }
-
-    virtual void set_direction(bool bRTL) override
-    {
-        m_xWidget->EnableRTL(bRTL);
-    }
-
-    virtual void freeze() override
-    {
-        m_xWidget->SetUpdateMode(false);
-    }
-
-    virtual void thaw() override
-    {
-        m_xWidget->SetUpdateMode(true);
-    }
-
-    virtual std::unique_ptr<weld::Container> weld_parent() const override;
-
-    virtual ~SalInstanceWidget() override
-    {
-        if (m_aMnemonicActivateHdl.IsSet())
-            m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&,bool>());
-        if (m_bMouseEventListener)
-            Application::RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
-        if (m_bKeyEventListener)
-            Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
-        if (m_bEventListener)
-            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, EventListener));
-        if (m_bTakeOwnership)
-            m_xWidget.disposeAndClear();
-    }
-
-    vcl::Window* getWidget()
-    {
-        return m_xWidget;
-    }
-
-    void disable_notify_events()
-    {
-        ++m_nBlockNotify;
-    }
-
-    bool notify_events_disabled()
-    {
-        return m_nBlockNotify != 0;
-    }
-
-    void enable_notify_events()
-    {
-        --m_nBlockNotify;
-    }
-
-    virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
-
-    virtual OUString strip_mnemonic(const OUString &rLabel) const override
-    {
-        return rLabel.replaceFirst("~", "");
-    }
-
-    virtual VclPtr<VirtualDevice> create_virtual_device() const override
-    {
-        // create with (annoying) separate alpha layer that LibreOffice itself uses
-        return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
-    }
-
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
-    {
-        return m_xWidget->GetDropTarget();
-    }
-
-    virtual void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) override
-    {
-        m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
-    }
-
-    virtual void set_stack_background() override
-    {
-        set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
-    }
-
-    virtual void set_toolbar_background() override
-    {
-        m_xWidget->SetBackground();
-        m_xWidget->SetPaintTransparent(true);
-    }
-
-    virtual void set_highlight_background() override
-    {
-        set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());
-    }
-
-    SystemWindow* getSystemWindow()
-    {
-        return m_xWidget->GetSystemWindow();
-    }
-};
-
+    if (!m_bEventListener)
+    {
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, EventListener));
+        m_bEventListener = true;
+    }
+}
+
+// we want the ability to mark key events as handled, so use this variant
+// for those, we get all keystrokes in this case, so we will need to filter
+// them later
+void SalInstanceWidget::ensure_key_listener()
+{
+    if (!m_bKeyEventListener)
+    {
+        Application::AddKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
+        m_bKeyEventListener = true;
+    }
+}
+
+// we want the ability to know about mouse events that happen in our children
+// so use this variant, we will need to filter them later
+void SalInstanceWidget::ensure_mouse_listener()
+{
+    if (!m_bMouseEventListener)
+    {
+        Application::AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+        m_bMouseEventListener = true;
+    }
+}
+
+void SalInstanceWidget::set_background(const Color& rColor)
+{
+    m_xWidget->SetControlBackground(rColor);
+    m_xWidget->SetBackground(m_xWidget->GetControlBackground());
+    // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
+    // transparent children of the widget
+    m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+}
+
+SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : m_xWidget(pWidget)
+    , m_pBuilder(pBuilder)
+    , m_bTakeOwnership(bTakeOwnership)
+    , m_bEventListener(false)
+    , m_bKeyEventListener(false)
+    , m_bMouseEventListener(false)
+    , m_nBlockNotify(0)
+{
+}
+
+void SalInstanceWidget::set_sensitive(bool sensitive)
+{
+    m_xWidget->Enable(sensitive);
+}
+
+bool SalInstanceWidget::get_sensitive() const
+{
+    return m_xWidget->IsEnabled();
+}
+
+bool SalInstanceWidget::get_visible() const
+{
+    return m_xWidget->IsVisible();
+}
+
+bool SalInstanceWidget::is_visible() const
+{
+    return m_xWidget->IsReallyVisible();
+}
+
+void SalInstanceWidget::set_can_focus(bool bCanFocus)
+{
+    auto nStyle = m_xWidget->GetStyle() & ~(WB_TABSTOP | WB_NOTABSTOP);
+    if (bCanFocus)
+        nStyle |= WB_TABSTOP;
+    else
+        nStyle |= WB_NOTABSTOP;
+    m_xWidget->SetStyle(nStyle);
+}
+
+void SalInstanceWidget::grab_focus()
+{
+    m_xWidget->GrabFocus();
+}
+
+bool SalInstanceWidget::has_focus() const
+{
+    return m_xWidget->HasFocus();
+}
+
+bool SalInstanceWidget::is_active() const
+{
+    return m_xWidget->IsActive();
+}
+
+void SalInstanceWidget::set_has_default(bool has_default)
+{
+    m_xWidget->set_property("has-default", OUString::boolean(has_default));
+}
+
+bool SalInstanceWidget::get_has_default() const
+{
+    return m_xWidget->GetStyle() & WB_DEFBUTTON;
+}
+
+void SalInstanceWidget::show()
+{
+    m_xWidget->Show();
+}
+
+void SalInstanceWidget::hide()
+{
+    m_xWidget->Hide();
+}
+
+void SalInstanceWidget::set_size_request(int nWidth, int nHeight)
+{
+    m_xWidget->set_width_request(nWidth);
+    m_xWidget->set_height_request(nHeight);
+}
+
+Size SalInstanceWidget::get_size_request() const
+{
+    return Size(m_xWidget->get_width_request(),
+                m_xWidget->get_height_request());
+}
+
+Size SalInstanceWidget::get_preferred_size() const
+{
+    return m_xWidget->get_preferred_size();
+}
+
+float SalInstanceWidget::get_approximate_digit_width() const
+{
+    return m_xWidget->approximate_digit_width();
+}
+
+int SalInstanceWidget::get_text_height() const
+{
+    return m_xWidget->GetTextHeight();
+}
+
+Size SalInstanceWidget::get_pixel_size(const OUString& rText) const
+{
+    //TODO, or do I want GetTextBoundRect ?, just using width at the moment anyway
+    return Size(m_xWidget->GetTextWidth(rText), m_xWidget->GetTextHeight());
+}
+
+vcl::Font SalInstanceWidget::get_font()
+{
+    return m_xWidget->GetPointFont(*m_xWidget);
+}
+
+OString SalInstanceWidget::get_buildable_name() const
+{
+    return m_xWidget->get_id().toUtf8();
+}
+
+void SalInstanceWidget::set_help_id(const OString& rId)
+{
+    return m_xWidget->SetHelpId(rId);
+}
+
+OString SalInstanceWidget::get_help_id() const
+{
+    return m_xWidget->GetHelpId();
+}
+
+void SalInstanceWidget::set_grid_left_attach(int nAttach)
+{
+    m_xWidget->set_grid_left_attach(nAttach);
+}
+
+int SalInstanceWidget::get_grid_left_attach() const
+{
+    return m_xWidget->get_grid_left_attach();
+}
+
+void SalInstanceWidget::set_grid_width(int nCols)
+{
+    m_xWidget->set_grid_width(nCols);
+}
+
+void SalInstanceWidget::set_grid_top_attach(int nAttach)
+{
+    m_xWidget->set_grid_top_attach(nAttach);
+}
+
+int SalInstanceWidget::get_grid_top_attach() const
+{
+    return m_xWidget->get_grid_top_attach();
+}
+
+void SalInstanceWidget::set_hexpand(bool bExpand)
+{
+    m_xWidget->set_hexpand(bExpand);
+}
+
+bool SalInstanceWidget::get_hexpand() const
+{
+    return m_xWidget->get_hexpand();
+}
+
+void SalInstanceWidget::set_vexpand(bool bExpand)
+{
+    m_xWidget->set_vexpand(bExpand);
+}
+
+bool SalInstanceWidget::get_vexpand() const
+{
+    return m_xWidget->get_vexpand();
+}
+
+void SalInstanceWidget::set_secondary(bool bSecondary)
+{
+    m_xWidget->set_secondary(bSecondary);
+}
+
+void SalInstanceWidget::set_margin_top(int nMargin)
+{
+    m_xWidget->set_margin_top(nMargin);
+}
+
+void SalInstanceWidget::set_margin_bottom(int nMargin)
+{
+    m_xWidget->set_margin_bottom(nMargin);
+}
+
+void SalInstanceWidget::set_margin_left(int nMargin)
+{
+    m_xWidget->set_margin_left(nMargin);
+}
+
+void SalInstanceWidget::set_margin_right(int nMargin)
+{
+    m_xWidget->set_margin_bottom(nMargin);
+}
+
+int SalInstanceWidget::get_margin_top() const
+{
+    return m_xWidget->get_margin_top();
+}
+
+int SalInstanceWidget::get_margin_bottom() const
+{
+    return m_xWidget->get_margin_bottom();
+}
+
+int SalInstanceWidget::get_margin_left() const
+{
+    return m_xWidget->get_margin_left();
+}
+
+int SalInstanceWidget::get_margin_right() const
+{
+    return m_xWidget->get_margin_bottom();
+}
+
+void SalInstanceWidget::set_accessible_name(const OUString& rName)
+{
+    m_xWidget->SetAccessibleName(rName);
+}
+
+OUString SalInstanceWidget::get_accessible_name() const
+{
+    return m_xWidget->GetAccessibleName();
+}
+
+OUString SalInstanceWidget::get_accessible_description() const
+{
+    return m_xWidget->GetAccessibleDescription();
+}
+
+void SalInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
+{
+    vcl::Window* pAtkLabel = pLabel ? dynamic_cast<SalInstanceWidget&>(*pLabel).getWidget() : nullptr;
+    m_xWidget->SetAccessibleRelationLabeledBy(pAtkLabel);
+}
+
+void SalInstanceWidget::set_accessible_relation_label_for(weld::Widget* pLabeled)
+{
+    vcl::Window* pAtkLabeled = pLabeled ? dynamic_cast<SalInstanceWidget&>(*pLabeled).getWidget() : nullptr;
+    m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
+}
+
+void SalInstanceWidget::add_extra_accessible_relation(const css::accessibility::AccessibleRelation &rRelation)
+{
+    m_xWidget->AddExtraAccessibleRelation(rRelation);
+}
+
+void SalInstanceWidget::clear_extra_accessible_relations()
+{
+    m_xWidget->ClearExtraAccessibleRelations();
+}
+
+void SalInstanceWidget::set_tooltip_text(const OUString& rTip)
+{
+    m_xWidget->SetQuickHelpText(rTip);
+}
+
+OUString SalInstanceWidget::get_tooltip_text() const
+{
+    return m_xWidget->GetQuickHelpText();
+}
+
+void SalInstanceWidget::connect_focus_in(const Link<Widget&, void>& rLink)
+{
+    ensure_event_listener();
+    weld::Widget::connect_focus_in(rLink);
+}
+
+void SalInstanceWidget::connect_mnemonic_activate(const Link<Widget&, bool>& rLink)
+{
+    m_xWidget->SetMnemonicActivateHdl(LINK(this, SalInstanceWidget, MnemonicActivateHdl));
+    weld::Widget::connect_mnemonic_activate(rLink);
+}
+
+void SalInstanceWidget::connect_focus_out(const Link<Widget&, void>& rLink)
+{
+    ensure_event_listener();
+    weld::Widget::connect_focus_out(rLink);
+}
+
+void SalInstanceWidget::connect_size_allocate(const Link<const Size&, void>& rLink)
+{
+    ensure_event_listener();
+    weld::Widget::connect_size_allocate(rLink);
+}
+
+void SalInstanceWidget::connect_mouse_press(const Link<const MouseEvent&, bool>& rLink)
+{
+    ensure_mouse_listener();
+    weld::Widget::connect_mouse_press(rLink);
+}
+
+void SalInstanceWidget::connect_mouse_move(const Link<const MouseEvent&, bool>& rLink)
+{
+    ensure_mouse_listener();
+    weld::Widget::connect_mouse_move(rLink);
+}
+
+void SalInstanceWidget::connect_mouse_release(const Link<const MouseEvent&, bool>& rLink)
+{
+    ensure_mouse_listener();
+    weld::Widget::connect_mouse_release(rLink);
+}
+
+void SalInstanceWidget::connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+{
+    ensure_key_listener();
+    weld::Widget::connect_key_press(rLink);
+}
+
+void SalInstanceWidget::connect_key_release(const Link<const KeyEvent&, bool>& rLink)
+{
+    ensure_key_listener();
+    weld::Widget::connect_key_release(rLink);
+}
+
+bool SalInstanceWidget::get_extents_relative_to(Widget& rRelative, int& x, int &y, int& width, int &height)
+{
+    tools::Rectangle aRect(m_xWidget->GetWindowExtentsRelative(dynamic_cast<SalInstanceWidget&>(rRelative).getWidget()));
+    x = aRect.Left();
+    y = aRect.Top();
+    width = aRect.GetWidth();
+    height = aRect.GetHeight();
+    return true;
+}
+
+void SalInstanceWidget::grab_add()
+{
+    m_xWidget->CaptureMouse();
+}
+
+bool SalInstanceWidget::has_grab() const
+{
+    return m_xWidget->IsMouseCaptured();
+}
+
+void SalInstanceWidget::grab_remove()
+{
+    m_xWidget->ReleaseMouse();
+}
+
+bool SalInstanceWidget::get_direction() const
+{
+    return m_xWidget->IsRTLEnabled();
+}
+
+void SalInstanceWidget::set_direction(bool bRTL)
+{
+    m_xWidget->EnableRTL(bRTL);
+}
+
+void SalInstanceWidget::freeze()
+{
+    m_xWidget->SetUpdateMode(false);
+}
+
+void SalInstanceWidget::thaw()
+{
+    m_xWidget->SetUpdateMode(true);
+}
+
+SalInstanceWidget::~SalInstanceWidget()
+{
+    if (m_aMnemonicActivateHdl.IsSet())
+        m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&,bool>());
+    if (m_bMouseEventListener)
+        Application::RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+    if (m_bKeyEventListener)
+        Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
+    if (m_bEventListener)
+        m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, EventListener));
+    if (m_bTakeOwnership)
+        m_xWidget.disposeAndClear();
+}
+
+vcl::Window* SalInstanceWidget::getWidget()
+{
+    return m_xWidget;
+}
+
+void SalInstanceWidget::disable_notify_events()
+{
+    ++m_nBlockNotify;
+}
+
+bool SalInstanceWidget::notify_events_disabled()
+{
+    return m_nBlockNotify != 0;
+}
+
+void SalInstanceWidget::enable_notify_events()
+{
+    --m_nBlockNotify;
+}
+
+OUString SalInstanceWidget::strip_mnemonic(const OUString &rLabel) const
+{
+    return rLabel.replaceFirst("~", "");
+}
+
+VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
+{
+    // create with (annoying) separate alpha layer that LibreOffice itself uses
+    return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+}
+
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_drop_target()
+{
+    return m_xWidget->GetDropTarget();
+}
+
+void SalInstanceWidget::connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink)
+{
+    m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
+}
+
+void SalInstanceWidget::set_stack_background()
+{
+    set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
+}
+
+void SalInstanceWidget::set_toolbar_background()
+{
+    m_xWidget->SetBackground();
+    m_xWidget->SetPaintTransparent(true);
+}
+
+void SalInstanceWidget::set_highlight_background()
+{
+    set_background(m_xWidget->GetSettings().GetStyleSettings().GetHighlightColor());
+}
+
+SystemWindow* SalInstanceWidget::getSystemWindow()
+{
+    return m_xWidget->GetSystemWindow();
 }
 
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
@@ -1268,68 +1234,62 @@ public:
         m_xGroup->set_mode(eMode);
     }
 };
+}
 
-class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
+void SalInstanceContainer::implResetDefault(const vcl::Window* _pWindow)
 {
-protected:
-    VclPtr<vcl::Window> m_xContainer;
-
-private:
-    void implResetDefault(const vcl::Window* _pWindow)
+    vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
+    while (pChildLoop)
     {
-        vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
-        while (pChildLoop)
+        // does the window participate in the tabbing order?
+        if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
+            implResetDefault(pChildLoop);
+
+        // is it a button?
+        WindowType eType = pChildLoop->GetType();
+        if  (   (WindowType::PUSHBUTTON == eType)
+            ||  (WindowType::OKBUTTON == eType)
+            ||  (WindowType::CANCELBUTTON == eType)
+            ||  (WindowType::HELPBUTTON == eType)
+            ||  (WindowType::IMAGEBUTTON == eType)
+            ||  (WindowType::MENUBUTTON == eType)
+            ||  (WindowType::MOREBUTTON == eType)
+            )
         {
-            // does the window participate in the tabbing order?
-            if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
-                implResetDefault(pChildLoop);
-
-            // is it a button?
-            WindowType eType = pChildLoop->GetType();
-            if  (   (WindowType::PUSHBUTTON == eType)
-                ||  (WindowType::OKBUTTON == eType)
-                ||  (WindowType::CANCELBUTTON == eType)
-                ||  (WindowType::HELPBUTTON == eType)
-                ||  (WindowType::IMAGEBUTTON == eType)
-                ||  (WindowType::MENUBUTTON == eType)
-                ||  (WindowType::MOREBUTTON == eType)
-                )
-            {
-                pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
-            }
-
-            // the next one ...
-            pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
+            pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
         }
-    }
 
-public:
-    SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pContainer, pBuilder, bTakeOwnership)
-        , m_xContainer(pContainer)
-    {
+        // the next one ...
+        pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
     }
-    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
-    {
-        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pVclWidget);
-        SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
-        assert(!pNewParent || pNewVclParent);
-        pVclWidget->getWidget()->SetParent(pNewVclParent ? pNewVclParent->getWidget() : nullptr);
-    }
-    virtual void recursively_unset_default_buttons() override
-    {
-        implResetDefault(m_xContainer.get());
-    }
-    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override
-    {
-        auto xPage = VclPtr<VclBin>::Create(m_xContainer.get());
-        xPage->set_expand(true);
-        xPage->Show();
-        return css::uno::Reference<css::awt::XWindow>(xPage->GetComponentInterface(), css::uno::UNO_QUERY);
-    }
-};
+}
 
+SalInstanceContainer::SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceWidget(pContainer, pBuilder, bTakeOwnership)
+    , m_xContainer(pContainer)
+{
+}
+
+void SalInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
+{
+    SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+    assert(pVclWidget);
+    SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
+    assert(!pNewParent || pNewVclParent);
+    pVclWidget->getWidget()->SetParent(pNewVclParent ? pNewVclParent->getWidget() : nullptr);
+}
+
+void SalInstanceContainer::recursively_unset_default_buttons()
+{
+    implResetDefault(m_xContainer.get());
+}
+
+css::uno::Reference<css::awt::XWindow> SalInstanceContainer::CreateChildFrame()
+{
+    auto xPage = VclPtr<VclBin>::Create(m_xContainer.get());
+    xPage->set_expand(true);
+    xPage->Show();
+    return css::uno::Reference<css::awt::XWindow>(xPage->GetComponentInterface(), css::uno::UNO_QUERY);
 }
 
 std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
@@ -1382,194 +1342,184 @@ public:
         }
     }
 
-class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
+}
+
+void SalInstanceWindow::override_child_help(vcl::Window* pParent)
 {
-private:
-    VclPtr<vcl::Window> m_xWindow;
+    for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+        override_child_help(pChild);
+    pParent->SetHelpHdl(LINK(this, SalInstanceWindow, HelpHdl));
+}
 
-    DECL_LINK(HelpHdl, vcl::Window&, bool);
+void SalInstanceWindow::clear_child_help(vcl::Window* pParent)
+{
+    for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+        clear_child_help(pChild);
+    pParent->SetHelpHdl(Link<vcl::Window&,bool>());
+}
 
-    void override_child_help(vcl::Window* pParent)
+
+SalInstanceWindow::SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pWindow, pBuilder, bTakeOwnership)
+    , m_xWindow(pWindow)
+{
+    override_child_help(m_xWindow);
+}
+
+void SalInstanceWindow::set_title(const OUString& rTitle)
+{
+    m_xWindow->SetText(rTitle);
+}
+
+OUString SalInstanceWindow::get_title() const
+{
+    return m_xWindow->GetText();
+}
+
+void SalInstanceWindow::set_busy_cursor(bool bBusy)
+{
+    if (bBusy)
+        m_xWindow->EnterWait();
+    else
+        m_xWindow->LeaveWait();
+}
+
+css::uno::Reference<css::awt::XWindow> SalInstanceWindow::GetXWindow()
+{
+    css::uno::Reference<css::awt::XWindow> xWindow(m_xWindow->GetComponentInterface(), css::uno::UNO_QUERY);
+    return xWindow;
+}
+
+void SalInstanceWindow::resize_to_request()
+{
+    if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get()))
     {
-        for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-            override_child_help(pChild);
-        pParent->SetHelpHdl(LINK(this, SalInstanceWindow, HelpHdl));
+        pSysWin->setOptimalLayoutSize();
+        return;
     }
-
-    void clear_child_help(vcl::Window* pParent)
+    if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(m_xWindow.get()))
     {
-        for (vcl::Window *pChild = pParent->GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
-            clear_child_help(pChild);
-        pParent->SetHelpHdl(Link<vcl::Window&,bool>());
+        pDockWin->setOptimalLayoutSize();
+        return;
     }
+    assert(false && "must be system or docking window");
+}
 
-public:
-    SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pWindow, pBuilder, bTakeOwnership)
-        , m_xWindow(pWindow)
+void SalInstanceWindow::set_modal(bool bModal)
+{
+    m_xWindow->ImplGetFrame()->SetModal(bModal);
+}
+
+bool SalInstanceWindow::get_modal() const
+{
+    return m_xWindow->ImplGetFrame()->GetModal();
+}
+
+void SalInstanceWindow::window_move(int x, int y)
+{
+    m_xWindow->SetPosPixel(Point(x, y));
+}
+
+Size SalInstanceWindow::get_size() const
+{
+    return m_xWindow->GetSizePixel();
+}
+
+Point SalInstanceWindow::get_position() const
+{
+    return m_xWindow->GetPosPixel();
+}
+
+tools::Rectangle SalInstanceWindow::get_monitor_workarea() const
+{
+    return m_xWindow->GetDesktopRectPixel();
+}
+
+void SalInstanceWindow::set_centered_on_parent(bool /*bTrackGeometryRequests*/)
+{
+    if (vcl::Window* pParent = m_xWidget->GetParent())
     {
-        override_child_help(m_xWindow);
+        Size aParentGeometry(pParent->GetSizePixel());
+        Size aGeometry(m_xWidget->get_preferred_size());
+        auto nX = (aParentGeometry.Width() - aGeometry.Width()) / 2;
+        auto nY = (aParentGeometry.Height() - aGeometry.Height()) / 2;
+        m_xWidget->SetPosPixel(Point(nX, nY));
     }
+}
 
-    virtual void set_title(const OUString& rTitle) override
+bool SalInstanceWindow::get_resizable() const
+{
+    return m_xWindow->GetStyle() & WB_SIZEABLE;
+}
+
+bool SalInstanceWindow::has_toplevel_focus() const
+{
+    return m_xWindow->HasChildPathFocus();
+}
+
+void SalInstanceWindow::present()
+{
+    m_xWindow->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
+}
+
+void SalInstanceWindow::set_window_state(const OString& rStr)
+{
+    SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+    assert(pSysWin);
+    pSysWin->SetWindowState(rStr);
+}
+
+OString SalInstanceWindow::get_window_state(WindowStateMask nMask) const
+{
+    SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+    assert(pSysWin);
+    return pSysWin->GetWindowState(nMask);
+}
+
+SystemEnvData SalInstanceWindow::get_system_data() const
+{
+    return *m_xWindow->GetSystemData();
+}
+
+void SalInstanceWindow::connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink)
+{
+    ensure_event_listener();
+    weld::Window::connect_toplevel_focus_changed(rLink);
+}
+
+void SalInstanceWindow::HandleEventListener(VclWindowEvent& rEvent)
+{
+    if (rEvent.GetId() == VclEventId::WindowActivate || rEvent.GetId() == VclEventId::WindowDeactivate)
     {
-        m_xWindow->SetText(rTitle);
+        signal_toplevel_focus_changed();
+        return;
     }
+    SalInstanceContainer::HandleEventListener(rEvent);
+}
 
-    virtual OUString get_title() const override
-    {
-        return m_xWindow->GetText();
-    }
+void SalInstanceWindow::draw(VirtualDevice& rOutput)
+{
+    SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
+    assert(pSysWin);
+    pSysWin->createScreenshot(rOutput);
+}
 
-    void help();
+weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
+{
+    weld::ScreenShotCollection aRet;
 
-    virtual void set_busy_cursor(bool bBusy) override
-    {
-        if (bBusy)
-            m_xWindow->EnterWait();
-        else
-            m_xWindow->LeaveWait();
-    }
+    // collect all children. Choose start pos to be negative
+    // of target dialog's position to get all positions relative to (0,0)
+    const Point aParentPos(m_xWindow->GetPosPixel());
+    const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
+    CollectChildren(*m_xWindow, aTopLeft, aRet);
 
-    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override
-    {
-        css::uno::Reference<css::awt::XWindow> xWindow(m_xWindow->GetComponentInterface(), css::uno::UNO_QUERY);
-        return xWindow;
-    }
+    return aRet;
+}
 
-    virtual void resize_to_request() override
-    {
-        if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get()))
-        {
-            pSysWin->setOptimalLayoutSize();
-            return;
-        }
-        if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(m_xWindow.get()))
-        {
-            pDockWin->setOptimalLayoutSize();
-            return;
-        }
-        assert(false && "must be system or docking window");
-    }
-
-    virtual void set_modal(bool bModal) override
-    {
-        m_xWindow->ImplGetFrame()->SetModal(bModal);
-    }
-
-    virtual bool get_modal() const override
-    {
-        return m_xWindow->ImplGetFrame()->GetModal();
-    }
-
-    virtual void window_move(int x, int y) override
-    {
-        m_xWindow->SetPosPixel(Point(x, y));
-    }
-
-    virtual Size get_size() const override
-    {
-        return m_xWindow->GetSizePixel();
-    }
-
-    virtual Point get_position() const override
-    {
-        return m_xWindow->GetPosPixel();
-    }
-
-    virtual tools::Rectangle get_monitor_workarea() const override
-    {
-        return m_xWindow->GetDesktopRectPixel();
-    }
-
-    virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override
-    {
-        if (vcl::Window* pParent = m_xWidget->GetParent())
-        {
-            Size aParentGeometry(pParent->GetSizePixel());
-            Size aGeometry(m_xWidget->get_preferred_size());
-            auto nX = (aParentGeometry.Width() - aGeometry.Width()) / 2;
-            auto nY = (aParentGeometry.Height() - aGeometry.Height()) / 2;
-            m_xWidget->SetPosPixel(Point(nX, nY));
-        }
-    }
-
-    virtual bool get_resizable() const override
-    {
-        return m_xWindow->GetStyle() & WB_SIZEABLE;
-    }
-
-    virtual bool has_toplevel_focus() const override
-    {
-        return m_xWindow->HasChildPathFocus();
-    }
-
-    virtual void present() override
-    {
-        m_xWindow->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
-    }
-
-    virtual void set_window_state(const OString& rStr) override
-    {
-        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
-        assert(pSysWin);
-        pSysWin->SetWindowState(rStr);
-    }
-
-    virtual OString get_window_state(WindowStateMask nMask) const override
-    {
-        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
-        assert(pSysWin);
-        return pSysWin->GetWindowState(nMask);
-    }
-
-    virtual SystemEnvData get_system_data() const override
-    {
-        return *m_xWindow->GetSystemData();
-    }
-
-    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
-    {
-        ensure_event_listener();
-        weld::Window::connect_toplevel_focus_changed(rLink);
-    }
-
-    virtual void HandleEventListener(VclWindowEvent& rEvent) override
-    {
-        if (rEvent.GetId() == VclEventId::WindowActivate || rEvent.GetId() == VclEventId::WindowDeactivate)
-        {
-            signal_toplevel_focus_changed();
-            return;
-        }
-        SalInstanceContainer::HandleEventListener(rEvent);
-    }
-
-    virtual void draw(VirtualDevice& rOutput) override
-    {
-        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
-        assert(pSysWin);
-        pSysWin->createScreenshot(rOutput);
-    }
-
-    virtual weld::ScreenShotCollection collect_screenshot_data() override
-    {
-        weld::ScreenShotCollection aRet;
-
-        // collect all children. Choose start pos to be negative
-        // of target dialog's position to get all positions relative to (0,0)
-        const Point aParentPos(m_xWindow->GetPosPixel());
-        const basegfx::B2IPoint aTopLeft(-aParentPos.X(), -aParentPos.Y());
-        CollectChildren(*m_xWindow, aTopLeft, aRet);
-
-        return aRet;
-    }
-
-    virtual ~SalInstanceWindow() override
-    {
-        clear_child_help(m_xWindow);
-    }
-};
-
+SalInstanceWindow::~SalInstanceWindow()
+{
+    clear_child_help(m_xWindow);
 }
 
 IMPL_LINK_NOARG(SalInstanceWindow, HelpHdl, vcl::Window&, bool)
@@ -1601,197 +1551,178 @@ namespace
             }
         }
     }
+}
 
-class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
+SalInstanceDialog::SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceWindow(pDialog, pBuilder, bTakeOwnership)
+    , m_xDialog(pDialog)
+    , m_nOldEditWidthReq(0)
+    , m_nOldBorderWidth(0)
 {
-private:
-    VclPtr<::Dialog> m_xDialog;
-
-    // for calc ref dialog that shrink to range selection widgets and resize back
-    VclPtr<vcl::Window> m_xRefEdit;
-    std::vector<VclPtr<vcl::Window> > m_aHiddenWidgets;    // vector of hidden Controls
-    long m_nOldEditWidthReq; // Original width request of the input field
-    sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
-
-    DECL_LINK(PopupScreenShotMenuHdl, const CommandEvent&, bool);
-
-public:
-    SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWindow(pDialog, pBuilder, bTakeOwnership)
-        , m_xDialog(pDialog)
-        , m_nOldEditWidthReq(0)
-        , m_nOldBorderWidth(0)
+    const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
+    if (bScreenshotMode)
     {
-        const bool bScreenshotMode(officecfg::Office::Common::Misc::ScreenshotMode::get());
-        if (bScreenshotMode)
-        {
-            m_xDialog->SetPopupMenuHdl(LINK(this, SalInstanceDialog, PopupScreenShotMenuHdl));
-        }
+        m_xDialog->SetPopupMenuHdl(LINK(this, SalInstanceDialog, PopupScreenShotMenuHdl));
+    }
+}
+
+bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn)
+{
+    VclAbstractDialog::AsyncContext aCtx;
+    aCtx.mxOwnerDialogController = aOwner;
+    aCtx.maEndDialogFn = rEndDialogFn;
+    VclButtonBox* pActionArea = m_xDialog->get_action_area();
+    if (pActionArea)
+        pActionArea->sort_native_button_order();
+    return m_xDialog->StartExecuteAsync(aCtx);
+}
+
+bool SalInstanceDialog::runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)> &rEndDialogFn)
+{
+    assert( rxSelf.get() == this );
+    VclAbstractDialog::AsyncContext aCtx;
+    // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
+    // which is that rxSelf enforces.
+    aCtx.mxOwnerSelf = rxSelf;
+    aCtx.maEndDialogFn = rEndDialogFn;
+    VclButtonBox* pActionArea = m_xDialog->get_action_area();
+    if (pActionArea)
+        pActionArea->sort_native_button_order();
+    return m_xDialog->StartExecuteAsync(aCtx);
+}
+
+void SalInstanceDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
+{
+    SalInstanceWidget* pVclEdit = dynamic_cast<SalInstanceWidget*>(pEdit);
+    assert(pVclEdit);
+    SalInstanceWidget* pVclButton = dynamic_cast<SalInstanceWidget*>(pButton);
+
+    vcl::Window* pRefEdit = pVclEdit->getWidget();
+    vcl::Window* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
+
+    auto nOldEditWidth = pRefEdit->GetSizePixel().Width();
+    m_nOldEditWidthReq = pRefEdit->get_width_request();
+
+    //We want just pRefBtn and pRefEdit to be shown
+    //mark widgets we want to be visible, starting with pRefEdit
+    //and all its direct parents.
+    winset aVisibleWidgets;
+    vcl::Window *pContentArea = m_xDialog->get_content_area();
+    for (vcl::Window *pCandidate = pRefEdit;
+        pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
+        pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
+    {
+        aVisibleWidgets.insert(pCandidate);
+    }
+    //same again with pRefBtn, except stop if there's a
+    //shared parent in the existing widgets
+    for (vcl::Window *pCandidate = pRefBtn;
+        pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
+        pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
+    {
+        if (aVisibleWidgets.insert(pCandidate).second)
+            break;
     }
 
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override
+    //hide everything except the aVisibleWidgets
+    hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
+
+    // the insert function case has an initially hidden edit widget, so it has
+    // not start size, so take larger of actual size and size request
+    pRefEdit->set_width_request(std::max(nOldEditWidth, m_nOldEditWidthReq));
+    m_nOldBorderWidth = m_xDialog->get_border_width();
+    m_xDialog->set_border_width(0);
+    if (vcl::Window *pActionArea = m_xDialog->get_action_area())
+        pActionArea->Hide();
+    m_xDialog->setOptimalLayoutSize();
+    m_xRefEdit = pRefEdit;
+}
+
+void SalInstanceDialog::undo_collapse()
+{
+    // All others: Show();
+    for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
     {
-        VclAbstractDialog::AsyncContext aCtx;
-        aCtx.mxOwnerDialogController = aOwner;
-        aCtx.maEndDialogFn = rEndDialogFn;
-        VclButtonBox* pActionArea = m_xDialog->get_action_area();
-        if (pActionArea)
-           pActionArea->sort_native_button_order();
-        return m_xDialog->StartExecuteAsync(aCtx);
+        pWindow->Show();
+    }
+    m_aHiddenWidgets.clear();
+
+    m_xRefEdit->set_width_request(m_nOldEditWidthReq);
+    m_xRefEdit.clear();
+    m_xDialog->set_border_width(m_nOldBorderWidth);
+    if (vcl::Window *pActionArea = m_xDialog->get_action_area())
+        pActionArea->Show();
+    m_xDialog->setOptimalLayoutSize();
+}
+
+void SalInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
+{
+    m_xDialog->SetInstallLOKNotifierHdl(rLink);
+}
+
+int SalInstanceDialog::run()
+{
+    VclButtonBox* pActionArea = m_xDialog->get_action_area();
+    if (pActionArea)
+        pActionArea->sort_native_button_order();
+    return m_xDialog->Execute();
+}
+
+void SalInstanceDialog::response(int nResponse)
+{
+    m_xDialog->EndDialog(nResponse);
+}
+
+void SalInstanceDialog::add_button(const OUString& rText, int nResponse, const OString& rHelpId)
+{
+    VclButtonBox* pBox = m_xDialog->get_action_area();
+    VclPtr<PushButton> xButton(VclPtr<PushButton>::Create(pBox, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER));
+    xButton->SetText(rText);
+    xButton->SetHelpId(rHelpId);
+
+    switch (nResponse)
+    {
+        case RET_OK:
+            xButton->set_id("ok");
+            break;
+        case RET_CLOSE:
+            xButton->set_id("close");
+            break;
+        case RET_CANCEL:
+            xButton->set_id("cancel");
+            break;
+        case RET_YES:
+            xButton->set_id("yes");
+            break;
+        case RET_NO:
+            xButton->set_id("no");
+            break;
     }
 
-    virtual bool runAsync(std::shared_ptr<Dialog> const & rxSelf, const std::function<void(sal_Int32)> &rEndDialogFn) override
-    {
-        assert( rxSelf.get() == this );
-        VclAbstractDialog::AsyncContext aCtx;
-        // In order to store a shared_ptr to ourself, we have to have been constructed by make_shared,
-        // which is that rxSelf enforces.
-        aCtx.mxOwnerSelf = rxSelf;
-        aCtx.maEndDialogFn = rEndDialogFn;
-        VclButtonBox* pActionArea = m_xDialog->get_action_area();
-        if (pActionArea)
-           pActionArea->sort_native_button_order();
-        return m_xDialog->StartExecuteAsync(aCtx);
-    }
+    xButton->Show();
+    m_xDialog->add_button(xButton, nResponse, true);
+}
 
-    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
-    {
-        SalInstanceWidget* pVclEdit = dynamic_cast<SalInstanceWidget*>(pEdit);
-        assert(pVclEdit);
-        SalInstanceWidget* pVclButton = dynamic_cast<SalInstanceWidget*>(pButton);
+void SalInstanceDialog::set_modal(bool bModal)
+{
+    if (get_modal() == bModal)
+        return;
+    m_xDialog->SetModalInputMode(bModal);
+}
 
-        vcl::Window* pRefEdit = pVclEdit->getWidget();
-        vcl::Window* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
+bool SalInstanceDialog::get_modal() const
+{
+    return m_xDialog->IsModalInputMode();
+}
 
-        auto nOldEditWidth = pRefEdit->GetSizePixel().Width();
-        m_nOldEditWidthReq = pRefEdit->get_width_request();
+void SalInstanceDialog::set_default_response(int nResponse)
+{
+    m_xDialog->set_default_response(nResponse);
+}
 
-        //We want just pRefBtn and pRefEdit to be shown
-        //mark widgets we want to be visible, starting with pRefEdit
-        //and all its direct parents.
-        winset aVisibleWidgets;
-        vcl::Window *pContentArea = m_xDialog->get_content_area();
-        for (vcl::Window *pCandidate = pRefEdit;
-            pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
-            pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
-        {
-            aVisibleWidgets.insert(pCandidate);
-        }
-        //same again with pRefBtn, except stop if there's a
-        //shared parent in the existing widgets
-        for (vcl::Window *pCandidate = pRefBtn;
-            pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
-            pCandidate = pCandidate->GetWindow(GetWindowType::RealParent))
-        {
-            if (aVisibleWidgets.insert(pCandidate).second)
-                break;
-        }
-
-        //hide everything except the aVisibleWidgets
-        hideUnless(pContentArea, aVisibleWidgets, m_aHiddenWidgets);
-
-        // the insert function case has an initially hidden edit widget, so it has
-        // not start size, so take larger of actual size and size request
-        pRefEdit->set_width_request(std::max(nOldEditWidth, m_nOldEditWidthReq));
-        m_nOldBorderWidth = m_xDialog->get_border_width();
-        m_xDialog->set_border_width(0);
-        if (vcl::Window *pActionArea = m_xDialog->get_action_area())
-            pActionArea->Hide();
-        m_xDialog->setOptimalLayoutSize();
-        m_xRefEdit = pRefEdit;
-    }
-
-    virtual void undo_collapse() override
-    {
-        // All others: Show();
-        for (VclPtr<vcl::Window> const & pWindow : m_aHiddenWidgets)
-        {
-            pWindow->Show();
-        }
-        m_aHiddenWidgets.clear();
-
-        m_xRefEdit->set_width_request(m_nOldEditWidthReq);
-        m_xRefEdit.clear();
-        m_xDialog->set_border_width(m_nOldBorderWidth);
-        if (vcl::Window *pActionArea = m_xDialog->get_action_area())
-            pActionArea->Show();
-        m_xDialog->setOptimalLayoutSize();
-    }
-
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override
-    {
-        m_xDialog->SetInstallLOKNotifierHdl(rLink);
-    }
-
-    virtual int run() override
-    {
-        VclButtonBox* pActionArea = m_xDialog->get_action_area();
-        if (pActionArea)
-           pActionArea->sort_native_button_order();
-        return m_xDialog->Execute();
-    }
-
-    virtual void response(int nResponse) override
-    {
-        m_xDialog->EndDialog(nResponse);
-    }
-
-    virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override
-    {
-        VclButtonBox* pBox = m_xDialog->get_action_area();
-        VclPtr<PushButton> xButton(VclPtr<PushButton>::Create(pBox, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER));
-        xButton->SetText(rText);
-        xButton->SetHelpId(rHelpId);
-
-        switch (nResponse)
-        {
-            case RET_OK:
-                xButton->set_id("ok");
-                break;
-            case RET_CLOSE:
-                xButton->set_id("close");
-                break;
-            case RET_CANCEL:
-                xButton->set_id("cancel");
-                break;
-            case RET_YES:
-                xButton->set_id("yes");
-                break;
-            case RET_NO:
-                xButton->set_id("no");
-                break;
-        }
-
-        xButton->Show();
-        m_xDialog->add_button(xButton, nResponse, true);
-    }
-
-    virtual void set_modal(bool bModal) override
-    {
-        if (get_modal() == bModal)
-            return;
-        m_xDialog->SetModalInputMode(bModal);
-    }
-
-    virtual bool get_modal() const override
-    {
-        return m_xDialog->IsModalInputMode();
-    }
-
-    virtual weld::Button* weld_widget_for_response(int nResponse) override;
-
-    virtual void set_default_response(int nResponse) override
-    {
-        m_xDialog->set_default_response(nResponse);
-    }
-
-    virtual Container* weld_content_area() override
-    {
-        return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
-    }
-
-};
-
+weld::Container* SalInstanceDialog::weld_content_area()
+{
+    return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
 }
 
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -5494,55 +5425,46 @@ public:
     }
 };
 
-class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
+}
+
+SalInstanceLabel::SalInstanceLabel(Control* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership)
+    : SalInstanceWidget(pLabel, pBuilder, bTakeOwnership)
+    , m_xLabel(pLabel)
 {
-private:
-    // Control instead of FixedText so we can also use this for
-    // SelectableFixedText which is derived from Edit. We just typically need
-    // [G|S]etText which exists in their shared baseclass
-    VclPtr<Control> m_xLabel;
-public:
-    SalInstanceLabel(Control* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pLabel, pBuilder, bTakeOwnership)
-        , m_xLabel(pLabel)
-    {
-    }
+}
 
-    virtual void set_label(const OUString& rText) override
-    {
-        m_xLabel->SetText(rText);
-    }
+void SalInstanceLabel::set_label(const OUString& rText)
+{
+    m_xLabel->SetText(rText);
+}
 
-    virtual OUString get_label() const override
-    {
-        return m_xLabel->GetText();
-    }
+OUString SalInstanceLabel::get_label() const
+{
+    return m_xLabel->GetText();
+}
 
-    virtual void set_mnemonic_widget(Widget* pTarget) override
-    {
-        FixedText* pLabel = dynamic_cast<FixedText*>(m_xLabel.get());
-        assert(pLabel && "can't use set_mnemonic_widget on SelectableFixedText");
-        SalInstanceWidget* pTargetWidget = dynamic_cast<SalInstanceWidget*>(pTarget);
-        pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
-    }
+void SalInstanceLabel::set_mnemonic_widget(Widget* pTarget)
+{
+    FixedText* pLabel = dynamic_cast<FixedText*>(m_xLabel.get());
+    assert(pLabel && "can't use set_mnemonic_widget on SelectableFixedText");
+    SalInstanceWidget* pTargetWidget = dynamic_cast<SalInstanceWidget*>(pTarget);
+    pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
+}
 
-    virtual void set_message_type(weld::EntryMessageType eType) override
-    {
-        if (eType == weld::EntryMessageType::Error)
-            m_xLabel->SetControlBackground(m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
-        else if (eType == weld::EntryMessageType::Warning)
-            m_xLabel->SetControlBackground(COL_YELLOW);
-        else
-            m_xLabel->SetControlBackground();
-    }
+void SalInstanceLabel::set_message_type(weld::EntryMessageType eType)
+{
+    if (eType == weld::EntryMessageType::Error)
+        m_xLabel->SetControlBackground(m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+    else if (eType == weld::EntryMessageType::Warning)
+        m_xLabel->SetControlBackground(COL_YELLOW);
+    else
+        m_xLabel->SetControlBackground();
+}
 
-    virtual void set_font(const vcl::Font& rFont) override
-    {
-        m_xLabel->SetPointFont(*m_xLabel, rFont);
-        m_xLabel->Invalidate();
-    }
-};
-
+void SalInstanceLabel::set_font(const vcl::Font& rFont)
+{
+    m_xLabel->SetPointFont(*m_xLabel, rFont);
+    m_xLabel->Invalidate();
 }
 
 std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
@@ -6502,352 +6424,346 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
     }
 }
 
-class SalInstanceBuilder : public weld::Builder
+SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+    : weld::Builder(rUIFile)
+    , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, OString(), css::uno::Reference<css::frame::XFrame>(), false))
 {
-private:
-    std::unique_ptr<VclBuilder> m_xBuilder;
-    VclPtr<vcl::Window> m_aOwnedToplevel;
-public:
-    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
-        : weld::Builder(rUIFile)
-        , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, OString(), css::uno::Reference<css::frame::XFrame>(), false))
-    {
-    }
+}
 
-    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString &id, bool bTakeOwnership) override
-    {
-        MessageDialog* pMessageDialog = m_xBuilder->get<MessageDialog>(id);
-        std::unique_ptr<weld::MessageDialog> pRet(pMessageDialog ? new SalInstanceMessageDialog(pMessageDialog, this, false) : nullptr);
-        if (bTakeOwnership && pMessageDialog)
-        {
-            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-            m_aOwnedToplevel.set(pMessageDialog);
-            m_xBuilder->drop_ownership(pMessageDialog);
-        }
-        return pRet;
-    }
-
-    virtual std::unique_ptr<weld::AboutDialog> weld_about_dialog(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::AboutDialog* pAboutDialog = m_xBuilder->get<vcl::AboutDialog>(id);
-        std::unique_ptr<weld::AboutDialog> pRet(pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
-        if (bTakeOwnership && pAboutDialog)
-        {
-            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-            m_aOwnedToplevel.set(pAboutDialog);
-            m_xBuilder->drop_ownership(pAboutDialog);
-        }
-        return pRet;
-    }
-
-    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership) override
-    {
-        Dialog* pDialog = m_xBuilder->get<Dialog>(id);
-        std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false) : nullptr);
-        if (bTakeOwnership && pDialog)
-        {
-            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-            m_aOwnedToplevel.set(pDialog);
-            m_xBuilder->drop_ownership(pDialog);
-        }
-        return pRet;
-    }
-
-    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
-        std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false) : nullptr);
-        if (bTakeOwnership && pDialog)
-        {
-            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-            m_aOwnedToplevel.set(pDialog);
-            m_xBuilder->drop_ownership(pDialog);
-        }
-        return pRet;
-    }
-
-    virtual std::unique_ptr<weld::Window> create_screenshot_window() override
+std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(const OString &id, bool bTakeOwnership)
+{
+    MessageDialog* pMessageDialog = m_xBuilder->get<MessageDialog>(id);
+    std::unique_ptr<weld::MessageDialog> pRet(pMessageDialog ? new SalInstanceMessageDialog(pMessageDialog, this, false) : nullptr);
+    if (bTakeOwnership && pMessageDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pMessageDialog);
+        m_xBuilder->drop_ownership(pMessageDialog);
+    }
+    return pRet;
+}
 
-        vcl::Window *pRoot = m_xBuilder->get_widget_root();
-        if (SystemWindow *pWindow = dynamic_cast<SystemWindow*>(pRoot))
-        {
-            std::unique_ptr<weld::Window> xRet(new SalInstanceWindow(pWindow, this, false));
-            m_aOwnedToplevel.set(pWindow);
-            m_xBuilder->drop_ownership(pWindow);
-            return xRet;
-        }
+std::unique_ptr<weld::AboutDialog> SalInstanceBuilder::weld_about_dialog(const OString &id, bool bTakeOwnership)
+{
+    vcl::AboutDialog* pAboutDialog = m_xBuilder->get<vcl::AboutDialog>(id);
+    std::unique_ptr<weld::AboutDialog> pRet(pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
+    if (bTakeOwnership && pAboutDialog)
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pAboutDialog);
+        m_xBuilder->drop_ownership(pAboutDialog);
+    }
+    return pRet;
+}
 
-        VclPtrInstance<Dialog> xDialog(nullptr, WB_HIDE | WB_STDDIALOG | WB_SIZEABLE | WB_CLOSEABLE, Dialog::InitFlag::NoParent);
-        xDialog->SetText(utl::ConfigManager::getProductName());
+std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString &id, bool bTakeOwnership)
+{
+    Dialog* pDialog = m_xBuilder->get<Dialog>(id);
+    std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false) : nullptr);
+    if (bTakeOwnership && pDialog)
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pDialog);
+        m_xBuilder->drop_ownership(pDialog);
+    }
+    return pRet;
+}
 
-        auto xContentArea = VclPtr<VclVBox>::Create(xDialog, false, 12);
-        pRoot->SetParent(xContentArea);
-        assert(pRoot == xContentArea->GetWindow(GetWindowType::FirstChild));
-        xContentArea->Show();
-        pRoot->Show();
-        xDialog->SetHelpId(pRoot->GetHelpId());
+std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OString &id, bool bTakeOwnership)
+{
+    vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
+    std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false) : nullptr);
+    if (bTakeOwnership && pDialog)
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pDialog);
+        m_xBuilder->drop_ownership(pDialog);
+    }
+    return pRet;
+}
 
-        m_aOwnedToplevel.set(xDialog);
+std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
+{
+    assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
 
-        return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
+    vcl::Window *pRoot = m_xBuilder->get_widget_root();
+    if (SystemWindow *pWindow = dynamic_cast<SystemWindow*>(pRoot))
+    {
+        std::unique_ptr<weld::Window> xRet(new SalInstanceWindow(pWindow, this, false));
+        m_aOwnedToplevel.set(pWindow);
+        m_xBuilder->drop_ownership(pWindow);
+        return xRet;
     }
 
-    virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
-    {
-        SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
-        return pWindow ? std::make_unique<SalInstanceWindow>(pWindow, this, bTakeOwnership) : nullptr;
-    }
+    VclPtrInstance<Dialog> xDialog(nullptr, WB_HIDE | WB_STDDIALOG | WB_SIZEABLE | WB_CLOSEABLE, Dialog::InitFlag::NoParent);
+    xDialog->SetText(utl::ConfigManager::getProductName());
 
-    virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
-        return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, bTakeOwnership) : nullptr;
-    }
+    auto xContentArea = VclPtr<VclVBox>::Create(xDialog, false, 12);
+    pRoot->SetParent(xContentArea);
+    assert(pRoot == xContentArea->GetWindow(GetWindowType::FirstChild));
+    xContentArea->Show();
+    pRoot->Show();
+    xDialog->SetHelpId(pRoot->GetHelpId());
 
-    virtual std::unique_ptr<weld::Container> weld_container(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
-        return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, bTakeOwnership) : nullptr;
-    }
+    m_aOwnedToplevel.set(xDialog);
 
-    virtual std::unique_ptr<weld::Box> weld_box(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
-        return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership) : nullptr;
-    }
+    return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
+}
 
-    virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override
-    {
-        VclFrame* pFrame = m_xBuilder->get<VclFrame>(id);
-        std::unique_ptr<weld::Frame> pRet(pFrame ? new SalInstanceFrame(pFrame, this, false) : nullptr);
-        if (bTakeOwnership && pFrame)
-        {
-            assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-            m_aOwnedToplevel.set(pFrame);
-            m_xBuilder->drop_ownership(pFrame);
-        }
-        return pRet;
-    }
+std::unique_ptr<weld::Window> SalInstanceBuilder::weld_window(const OString &id, bool bTakeOwnership)
+{
+    SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
+    return pWindow ? std::make_unique<SalInstanceWindow>(pWindow, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bTakeOwnership) override
-    {
-        VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
-        return pScrolledWindow ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString &id, bool bTakeOwnership)
+{
+    vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+    return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership) override
+std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString &id, bool bTakeOwnership)
+{
+    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+    return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, bTakeOwnership) : nullptr;
+}
+
+std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString &id, bool bTakeOwnership)
+{
+    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+    return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership) : nullptr;
+}
+
+std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString &id, bool bTakeOwnership)
+{
+    VclFrame* pFrame = m_xBuilder->get<VclFrame>(id);
+    std::unique_ptr<weld::Frame> pRet(pFrame ? new SalInstanceFrame(pFrame, this, false) : nullptr);
+    if (bTakeOwnership && pFrame)
     {
-        vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
-        if (!pNotebook)
-            return nullptr;
-        if (pNotebook->GetType() == WindowType::TABCONTROL)
-            return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this, bTakeOwnership);
-        if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
-            return std::make_unique<SalInstanceVerticalNotebook>(static_cast<VerticalTabControl*>(pNotebook), this, bTakeOwnership);
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pFrame);
+        m_xBuilder->drop_ownership(pFrame);
+    }
+    return pRet;
+}
+
+std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString &id, bool bTakeOwnership)
+{
+    VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
+    return pScrolledWindow ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, bTakeOwnership) : nullptr;
+}
+
+std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString &id, bool bTakeOwnership)
+{
+    vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
+    if (!pNotebook)
         return nullptr;
-    }
+    if (pNotebook->GetType() == WindowType::TABCONTROL)
+        return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this, bTakeOwnership);
+    if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
+        return std::make_unique<SalInstanceVerticalNotebook>(static_cast<VerticalTabControl*>(pNotebook), this, bTakeOwnership);
+    return nullptr;
+}
 
-    virtual std::unique_ptr<weld::Button> weld_button(const OString &id, bool bTakeOwnership) override
-    {
-        Button* pButton = m_xBuilder->get<Button>(id);
-        return pButton ? std::make_unique<SalInstanceButton>(pButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OString &id, bool bTakeOwnership)
+{
+    Button* pButton = m_xBuilder->get<Button>(id);
+    return pButton ? std::make_unique<SalInstanceButton>(pButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id, bool bTakeOwnership) override
-    {
-        MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
-        return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OString &id, bool bTakeOwnership)
+{
+    MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
+    return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id, bool bTakeOwnership) override
-    {
-        FixedHyperlink* pButton = m_xBuilder->get<FixedHyperlink>(id);
-        return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OString &id, bool bTakeOwnership)
+{
+    FixedHyperlink* pButton = m_xBuilder->get<FixedHyperlink>(id);
+    return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id, bool bTakeOwnership) override
-    {
-        PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
-        return pToggleButton ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OString &id, bool bTakeOwnership)
+{
+    PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
+    return pToggleButton ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id, bool bTakeOwnership) override
-    {
-        RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
-        return pRadioButton ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OString &id, bool bTakeOwnership)
+{
+    RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
+    return pRadioButton ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id, bool bTakeOwnership) override
-    {
-        CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
-        return pCheckButton ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OString &id, bool bTakeOwnership)
+{
+    CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
+    return pCheckButton ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id, bool bTakeOwnership) override
-    {
-        Slider* pSlider = m_xBuilder->get<Slider>(id);
-        return pSlider ? std::make_unique<SalInstanceScale>(pSlider, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString &id, bool bTakeOwnership)
+{
+    Slider* pSlider = m_xBuilder->get<Slider>(id);
+    return pSlider ? std::make_unique<SalInstanceScale>(pSlider, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id, bool bTakeOwnership) override
-    {
-        ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
-        return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OString &id, bool bTakeOwnership)
+{
+    ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
+    return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString &id, bool bTakeOwnership) override
-    {
-        Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
-        return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OString &id, bool bTakeOwnership)
+{
+    Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
+    return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override
-    {
-        FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
-        return pImage ? std::make_unique<SalInstanceImage>(pImage, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString &id, bool bTakeOwnership)
+{
+    FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
+    return pImage ? std::make_unique<SalInstanceImage>(pImage, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString &id, bool bTakeOwnership) override
-    {
-        Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
-        return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OString &id, bool bTakeOwnership)
+{
+    Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
+    return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override
-    {
-        Edit* pEntry = m_xBuilder->get<Edit>(id);
-        return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OString &id, bool bTakeOwnership)
+{
+    Edit* pEntry = m_xBuilder->get<Edit>(id);
+    return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id, bool bTakeOwnership) override
-    {
-        FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-        return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OString &id, bool bTakeOwnership)
+{
+    FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
+    return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
-                                                                            bool bTakeOwnership) override
+std::unique_ptr<weld::MetricSpinButton> SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                                                                        bool bTakeOwnership)
+{
+    std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id, bTakeOwnership));
+    if (xButton)
     {
-        std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id, bTakeOwnership));
-        if (xButton)
-        {
-            SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(*xButton);
-            rButton.SetUseThousandSep();
-        }
-        return std::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
+        SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(*xButton);
+        rButton.SetUseThousandSep();
     }
+    return std::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
+}
 
-    virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString& id,
-                                                                                  bool bTakeOwnership) override
-    {
-        FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-        return pSpinButton ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::FormattedSpinButton> SalInstanceBuilder::weld_formatted_spin_button(const OString& id,
+                                                                                bool bTakeOwnership)
+{
+    FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
+    return pSpinButton ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                                        bool bTakeOwnership) override
-    {
-        std::unique_ptr<weld::TimeSpinButton> pRet(new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat));
-        SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
-        rButton.DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
-        return pRet;
-    }
+std::unique_ptr<weld::TimeSpinButton> SalInstanceBuilder::weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+                                                    bool bTakeOwnership)
+{
+    std::unique_ptr<weld::TimeSpinButton> pRet(new weld::TimeSpinButton(weld_spin_button(id, bTakeOwnership), eFormat));
+    SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(pRet->get_widget());
+    rButton.DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
+    return pRet;
+}
 
-    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership) override
-    {
-        vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
-        ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
-        if (pComboBox)
-            return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, bTakeOwnership);
-        ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-        return pListBox ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString &id, bool bTakeOwnership)
+{
+    vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+    ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
+    if (pComboBox)
+        return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, bTakeOwnership);
+    ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
+    return pListBox ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
-    {
-        vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
-        return pContainer ? std::make_unique<SalInstanceEntryTreeView>(pContainer, this, bTakeOwnership,
-                                                                       weld_entry(entryid, bTakeOwnership),
-                                                                       weld_tree_view(treeviewid, bTakeOwnership)) : nullptr;
-    }
+std::unique_ptr<weld::EntryTreeView> SalInstanceBuilder::weld_entry_tree_view(const OString& containerid,
+                                    const OString& entryid, const OString& treeviewid, bool bTakeOwnership)
+{
+    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
+    return pContainer ? std::make_unique<SalInstanceEntryTreeView>(pContainer, this, bTakeOwnership,
+                                                                    weld_entry(entryid, bTakeOwnership),
+                                                                    weld_tree_view(treeviewid, bTakeOwnership)) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
-    {
-        SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
-        return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OString &id, bool bTakeOwnership)
+{
+    SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
+    return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString &id, bool bTakeOwnership) override
-    {
-        IconView* pIconView = m_xBuilder->get<IconView>(id);
-        return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OString &id, bool bTakeOwnership)
+{
+    IconView* pIconView = m_xBuilder->get<IconView>(id);
+    return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
-    {
-        Control* pLabel = m_xBuilder->get<Control>(id);
-        return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString &id, bool bTakeOwnership)
+{
+    Control* pLabel = m_xBuilder->get<Control>(id);
+    return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id, bool bTakeOwnership) override
-    {
-        VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-        return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OString &id, bool bTakeOwnership)
+{
+    VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
+    return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id, bool bTakeOwnership) override
-    {
-        VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
-        return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OString &id, bool bTakeOwnership)
+{
+    VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
+    return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11yImpl,
-            FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership) override
-    {
-        VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
-        return pDrawingArea ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, this, rA11yImpl,
-                pUITestFactoryFunction, pUserData, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::DrawingArea> SalInstanceBuilder::weld_drawing_area(const OString &id, const a11yref& rA11yImpl,
+        FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership)
+{
+    VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
+    return pDrawingArea ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, this, rA11yImpl,
+            pUITestFactoryFunction, pUserData, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id, bool bTakeOwnership) override
-    {
-        PopupMenu* pMenu = m_xBuilder->get_menu(id);
-        return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString &id, bool bTakeOwnership)
+{
+    PopupMenu* pMenu = m_xBuilder->get_menu(id);
+    return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id, bool bTakeOwnership) override
-    {
-        ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
-        return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, bTakeOwnership) : nullptr;
-    }
+std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString &id, bool bTakeOwnership)
+{
+    ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
+    return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, bTakeOwnership) : nullptr;
+}
 
-    virtual std::unique_ptr<weld::SizeGroup> create_size_group() override
-    {
-        return std::make_unique<SalInstanceSizeGroup>();
-    }
+std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()
+{
+    return std::make_unique<SalInstanceSizeGroup>();
+}
 
-    OString get_current_page_help_id() const
-    {
-        TabControl *pCtrl = m_xBuilder->get<TabControl>("tabcontrol");
-        TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
-        vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
-        pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
-        if (pTabChild)
-            return pTabChild->GetHelpId();
-        return OString();
-    }
+OString SalInstanceBuilder::get_current_page_help_id() const
+{
+    TabControl *pCtrl = m_xBuilder->get<TabControl>("tabcontrol");
+    TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
+    vcl::Window *pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
+    pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
+    if (pTabChild)
+        return pTabChild->GetHelpId();
+    return OString();
+}
 
-    virtual ~SalInstanceBuilder() override
-    {
-        if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(m_aOwnedToplevel.get()))
-            pOwnedToplevel->m_pUIBuilder = std::move(m_xBuilder);
-        else
-            m_xBuilder.reset();
-        m_aOwnedToplevel.disposeAndClear();
-    }
-};
+SalInstanceBuilder::~SalInstanceBuilder()
+{
+    if (VclBuilderContainer* pOwnedToplevel = dynamic_cast<VclBuilderContainer*>(m_aOwnedToplevel.get()))
+        pOwnedToplevel->m_pUIBuilder = std::move(m_xBuilder);
+    else
+        m_xBuilder.reset();
+    m_aOwnedToplevel.disposeAndClear();
+}
 
 weld::Builder* SalInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
