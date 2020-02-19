@@ -34,6 +34,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss-android.patch.1) \
 	external/nss/nss.bzmozilla1238154.patch \
     external/nss/macos-dlopen.patch.0 \
+	external/nss/buildsystem.patch.0 \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
