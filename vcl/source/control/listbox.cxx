@@ -34,11 +34,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-void ListBox::EnableQuickSelection( bool b )
-{
-    mpImplLB->GetMainWindow()->EnableQuickSelection(b);
-}
-
 ListBox::ListBox(WindowType nType)
     : Control(nType)
     , mpImplLB(nullptr)

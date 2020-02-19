@@ -613,11 +613,6 @@ SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
     return &maStrGlyphs;
 }
 
-void ImplListBoxWindow::EnableQuickSelection( bool b )
-{
-    maQuickSelectionEngine.SetEnabled( b );
-}
-
 void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 {
     ImplEntryMetrics aMetrics;
