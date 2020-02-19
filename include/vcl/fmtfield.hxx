@@ -65,6 +65,7 @@ protected:
     bool                m_bHasMin : 1;
     bool                m_bHasMax : 1;
 
+    bool                m_bWrapOnLimits : 1;
     bool                m_bStrictFormat : 1;
 
     bool                m_bEnableEmptyField : 1;
