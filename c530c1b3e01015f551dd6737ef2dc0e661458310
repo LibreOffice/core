@@ -22,6 +22,30 @@
       "revId": "c530c1b3e01015f551dd6737ef2dc0e661458310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05612377_fce1ed02",
+        "filename": "canvas/source/vcl/spritehelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-02-19T15:15:26Z",
+      "side": 1,
+      "message": "It\u0027s fine here if I remove the #ifdef, and trying to avoid this would IMO result in code that would be more ugly for no good reason.\nI don\u0027t think compilers go that far, otherwise such a warning would be showing all over the place.",
+      "parentUuid": "5da63812_8832265a",
+      "range": {
+        "startLine": 153,
+        "startChar": 20,
+        "endLine": 153,
+        "endChar": 41
+      },
+      "revId": "c530c1b3e01015f551dd6737ef2dc0e661458310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
