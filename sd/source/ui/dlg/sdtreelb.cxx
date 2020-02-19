@@ -25,7 +25,6 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <cusshow.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -96,8 +95,6 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
 {
     rParent.SetupDragOrigin();
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SdPageObjsTLB, WB_TABSTOP)
 
 SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 {
@@ -382,29 +379,38 @@ bool SdPageObjsTLB::SelectEntry( const OUString& rName )
 /**
  * @return true if children of the specified string are selected
  */
-bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
+bool SdPageObjsTLV::HasSelectedChildren( const OUString& rName )
 {
     bool bChildren = false;
 
     if( !rName.isEmpty() )
     {
-        bool bFound  = false;
-        SvTreeListEntry* pEntry = nullptr;
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         OUString aTmp;
 
-        for( pEntry = First(); pEntry && !bFound; pEntry = Next( pEntry ) )
+        if (m_xTreeView->get_iter_first(*xEntry))
         {
-            aTmp = GetEntryText( pEntry );
-            if( aTmp == rName )
+            do
             {
-                bFound = true;
-                bool bExpanded = IsExpanded( pEntry );
-                long nCount = GetChildSelectionCount( pEntry );
-                if( bExpanded && nCount > 0 )
-                    bChildren = true;
+                aTmp = m_xTreeView->get_text(*xEntry);
+                if (aTmp == rName)
+                {
+
+                    // see if any of the selected nodes are subchildren of this node
+                    m_xTreeView->selected_foreach([this, &bChildren, &xEntry](weld::TreeIter& rEntry){
+                        std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
+                        while (!bChildren && m_xTreeView->iter_parent(*xParent))
+                            bChildren = m_xTreeView->iter_compare(*xParent, *xEntry) == 0;
+                        return bChildren;
+                    });
+
+                    break;
+                }
             }
+            while (m_xTreeView->iter_next(*xEntry));
         }
     }
+
     return bChildren;
 }
 
@@ -602,31 +608,32 @@ void SdPageObjsTLB::AddShapeList (
         Expand( pEntry );
 }
 
-void SdPageObjsTLB::SetShowAllShapes (
+void SdPageObjsTLV::SetShowAllShapes (
     const bool bShowAllShapes,
     const bool bFillList)
 {
-    mbShowAllShapes = bShowAllShapes;
+    m_bShowAllShapes = bShowAllShapes;
     if (bFillList)
     {
-        if (mpMedium == nullptr)
-            Fill(mpDoc, mbShowAllPages, maDocName);
+        if (m_pMedium == nullptr)
+            Fill(m_pDoc, m_bShowAllPages, m_aDocName);
         else
-            Fill(mpDoc, mpMedium, maDocName);
+            Fill(m_pDoc, m_pMedium, m_aDocName);
     }
 }
 
-bool SdPageObjsTLB::IsEqualToShapeList(SvTreeListEntry*& pEntry, const SdrObjList& rList,
+bool SdPageObjsTLV::IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
                                        const OUString& rListName)
 {
-    if (!pEntry)
+    if (!rEntry)
         return false;
-    OUString aName = GetEntryText(pEntry);
+    OUString aName = m_xTreeView->get_text(*rEntry);
 
     if (rListName != aName)
         return false;
 
-    pEntry = Next(pEntry);
+    if (!m_xTreeView->iter_next(*rEntry))
+        rEntry.reset();
 
     SdrObjListIter aIter(&rList,
                          !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
@@ -640,22 +647,25 @@ bool SdPageObjsTLB::IsEqualToShapeList(SvTreeListEntry*& pEntry, const SdrObjLis
 
         if (!aObjectName.isEmpty())
         {
-            if (!pEntry)
+            if (!rEntry)
                 return false;
 
-            aName = GetEntryText(pEntry);
+            aName = m_xTreeView->get_text(*rEntry);
 
             if (aObjectName != aName)
                 return false;
 
             if (pObj->IsGroupObject())
             {
-                bool bRet = IsEqualToShapeList(pEntry, *pObj->GetSubList(), aObjectName);
+                bool bRet = IsEqualToShapeList(rEntry, *pObj->GetSubList(), aObjectName);
                 if (!bRet)
                     return false;
             }
             else
-                pEntry = Next(pEntry);
+            {
+                if (!m_xTreeView->iter_next(*rEntry))
+                    rEntry.reset();
+            }
         }
     }
 
@@ -668,26 +678,28 @@ bool SdPageObjsTLB::IsEqualToShapeList(SvTreeListEntry*& pEntry, const SdrObjLis
  * If a doc is provided, this will be the used doc (important by more than
  * one document).
  */
-bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
+bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
 {
     if( pInDoc )
-        mpDoc = pInDoc;
+        m_pDoc = pInDoc;
 
-    if( !mpDoc )
+    if( !m_pDoc )
         return false;
 
-    SvTreeListEntry* pEntry = First();
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xEntry))
+        xEntry.reset();
 
     // compare all pages including the objects
     sal_uInt16 nPage = 0;
-    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
+    const sal_uInt16 nMaxPages = m_pDoc->GetPageCount();
 
     while( nPage < nMaxPages )
     {
-        const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
+        const SdPage* pPage = static_cast<const SdPage*>( m_pDoc->GetPage( nPage ) );
         if( pPage->GetPageKind() == PageKind::Standard )
         {
-            bool bRet = IsEqualToShapeList(pEntry, *pPage, pPage->GetName());
+            bool bRet = IsEqualToShapeList(xEntry, *pPage, pPage->GetName());
             if (!bRet)
                 return false;
         }
@@ -695,7 +707,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     }
     // If there are still entries in the listbox,
     // then objects (with names) or pages were deleted
-    return !pEntry;
+    return !xEntry;
 }
 
 /**
@@ -1401,8 +1413,12 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_pDoc(nullptr)
     , m_pBookmarkDoc(nullptr)
     , m_pMedium(nullptr)
+    , m_pOwnMedium(nullptr)
     , m_bLinkableSelected(false)
     , m_bShowAllPages(false)
+    , m_bNavigationGrabsFocus(true)
+    , m_bSaveTreeItemState(false)
+    , m_eSelectionMode(SelectionMode::Single)
 {
     m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
     m_xTreeView->connect_changed(LINK(this, SdPageObjsTLV, SelectHdl));
@@ -1421,17 +1437,28 @@ IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
     m_aChangeHdl.Call(*m_xTreeView);
 }
 
-OUString SdPageObjsTLV::GetObjectName(const SdrObject* pObject)
+OUString SdPageObjsTLV::GetObjectName(
+    const SdrObject* pObject,
+    const bool bCreate) const
 {
-    if ( !pObject )
-        return OUString();
+    OUString aRet;
 
-    OUString aRet = pObject->GetName();
-    if (!aRet.isEmpty())
-        return aRet;
+    if ( pObject )
+    {
+        aRet = pObject->GetName();
 
-    if (auto pOle = dynamic_cast<const SdrOle2Obj* >(pObject))
-        aRet = pOle->GetPersistName();
+        if (aRet.isEmpty() && dynamic_cast<const SdrOle2Obj* >(pObject) !=  nullptr)
+            aRet = static_cast< const SdrOle2Obj* >( pObject )->GetPersistName();
+    }
+
+    if (bCreate
+        && m_bShowAllShapes
+        && aRet.isEmpty()
+        && pObject!=nullptr)
+    {
+        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
+        aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
+    }
 
     return aRet;
 }
@@ -1454,13 +1481,42 @@ std::vector<OUString> SdPageObjsTLV::GetSelectEntryList(const int nDepth) const
  * Checks if it is a draw file and opens the BookmarkDoc depending of
  * the provided Docs
  */
-SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc()
+SdDrawDocument* SdPageObjsTLV::GetBookmarkDoc(SfxMedium* pMed)
 {
-    if (!m_pBookmarkDoc)
+    if (
+       !m_pBookmarkDoc ||
+         (pMed && (!m_pOwnMedium || m_pOwnMedium->GetName() != pMed->GetName()))
+      )
     {
-        DBG_ASSERT( m_pMedium, "No SfxMedium provided!" );
+        // create a new BookmarkDoc if now one exists or if a new Medium is provided
+        if (m_pOwnMedium != pMed)
+        {
+            CloseBookmarkDoc();
+        }
 
-        if ( m_pMedium )
+        if (pMed)
+        {
+            // it looks that it is undefined if a Medium was set by Fill() already
+            DBG_ASSERT( !m_pMedium, "SfxMedium confusion!" );
+            delete m_pMedium;
+            m_pMedium = nullptr;
+
+            // take over this Medium (currently used only be Navigator)
+            m_pOwnMedium = pMed;
+        }
+
+        DBG_ASSERT( m_pMedium || pMed, "No SfxMedium provided!" );
+
+        if( pMed )
+        {
+            // in this mode the document is also owned and controlled by this instance
+            m_xBookmarkDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, true, DocumentType::Impress);
+            if (m_xBookmarkDocShRef->DoLoad(pMed))
+                m_pBookmarkDoc = m_xBookmarkDocShRef->GetDoc();
+            else
+                m_pBookmarkDoc = nullptr;
+        }
+        else if ( m_pMedium )
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
             // successful creation of a document makes this the owner of the medium
@@ -1556,6 +1612,11 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
     return true;
 }
 
+void SdPageObjsTLV::SetSdNavigator(SdNavigatorWin* pNavigator)
+{
+    m_xNavigator = pNavigator;
+}
+
 void SdPageObjsTLV::SetViewFrame(const SfxViewFrame* pViewFrame)
 {
     sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
@@ -1572,15 +1633,25 @@ void SdPageObjsTLV::CloseBookmarkDoc()
     {
         m_xBookmarkDocShRef->DoClose();
         m_xBookmarkDocShRef.clear();
+
+        // Medium is owned by document, so it's destroyed already
+        m_pOwnMedium = nullptr;
     }
     else if (m_pBookmarkDoc)
     {
+        DBG_ASSERT(!m_pOwnMedium, "SfxMedium confusion!");
         if (m_pDoc)
         {
             // The document owns the Medium, so the Medium will be invalid after closing the document
             const_cast<SdDrawDocument*>(m_pDoc)->CloseBookmarkDoc();
             m_pMedium = nullptr;
         }
+    }
+    else
+    {
+        // perhaps mpOwnMedium provided, but no successful creation of BookmarkDoc
+        delete m_pOwnMedium;
+        m_pOwnMedium = nullptr;
     }
 
     m_pBookmarkDoc = nullptr;
@@ -1690,14 +1761,14 @@ void SdPageObjsTLV::AddShapeList (
 /**
  * Fill TreeLB with pages and objects
  */
-void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, const OUString& rDocName)
+void SdPageObjsTLV::Fill(const SdDrawDocument* pInDoc, bool bAllPages, const OUString& rDocName)
 {
     OUString aSelection = m_xTreeView->get_selected_text();
     clear();
 
     m_pDoc = pInDoc;
     m_aDocName = rDocName;
-    m_bShowAllPages = true;
+    m_bShowAllPages = bAllPages;
     m_pMedium = nullptr;
 
     // first insert all pages including objects

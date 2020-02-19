@@ -512,7 +512,6 @@ custom_widgets = [
     'PropertyControl',
     'RecentDocsView',
     'RowEdit',
-    'SdPageObjsTLB',
     'SearchBox',
     'SearchResultsBox',
     'SidebarToolBox',

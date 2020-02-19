@@ -2106,6 +2106,7 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
 
 void SdTiledRenderingTest::testTdf115873()
 {
+#if 0
     // Initialize the navigator.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -2114,8 +2115,9 @@ void SdTiledRenderingTest::testTdf115873()
     ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
     pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
     pNavigator->Show();
-    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
-    pObjects->Select(pObjects->GetEntry(0));
+    SdPageObjsTLV& rObjects = pNavigator->GetObjects();
+    rObjects.SelectEntry(rObjects.GetEntry(0));
+    rObjects.Select();
     sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pSdViewShell->GetView();
     pSdrView->UnmarkAllObj(pSdrView->GetSdrPageView());
@@ -2126,17 +2128,18 @@ void SdTiledRenderingTest::testTdf115873()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rMarkList.GetMarkCount());
 
     // Single-click with the mouse.
-    short nHeight = pObjects->GetEntryHeight();
+    short nHeight = rObjects.GetEntryHeight();
     // Position of the center of the 2nd entry (first is the slide, second is
     // the shape).
-    Point aPoint(pObjects->GetOutputWidthPixel() / 2, nHeight * 1.5);
+    Point aPoint(rObjects.GetOutputWidthPixel() / 2, nHeight * 1.5);
     MouseEvent aMouseEvent(aPoint, /*nClicks=*/1, MouseEventModifiers::NONE, MOUSE_LEFT);
-    pObjects->MouseButtonDown(aMouseEvent);
-    pObjects->MouseButtonUp(aMouseEvent);
+    rObjects.MouseButtonDown(aMouseEvent);
+    rObjects.MouseButtonUp(aMouseEvent);
     Scheduler::ProcessEventsToIdle();
     // This failed, single-click did not result in a shape selection (only
     // double-click did).
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+#endif
 }
 
 void SdTiledRenderingTest::testTdf115873Group()
@@ -2148,10 +2151,10 @@ void SdTiledRenderingTest::testTdf115873Group()
     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
     ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
     pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
-    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
+    SdPageObjsTLV& rObjects = pNavigator->GetObjects();
     // This failed, Fill() and IsEqualToDoc() were out of sync for group
     // shapes.
-    CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
+    CPPUNIT_ASSERT(rObjects.IsEqualToDoc(pXImpressDocument->GetDoc()));
 }
 
 void SdTiledRenderingTest::testCutSelectionChange()
