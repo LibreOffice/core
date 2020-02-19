@@ -95,6 +95,8 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     // DragTypeListBox
     maLbDocs->setMaxWidthChars(20);
     maLbDocs->SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
+
+    SetDragImage();
 }
 
 void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)
