@@ -22,6 +22,7 @@
 
 #include "wrtww8.hxx"
 
+#include <sal/log.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustring.hxx>
 
@@ -155,7 +156,7 @@ public:
     OString AddRelation( const OUString& rType, const OUString& rTarget );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) override { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
-    virtual void WriteChar( sal_Unicode ) override { /* FIXME */ fprintf( stderr, "HACK! WriteChar() has nothing to do for docx.\n" ); }
+    virtual void WriteChar( sal_Unicode ) override { SAL_WARN("sw.ww8", "FIXME: WriteChar() has nothing to do for docx."); }
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering( const SwFormat &rFormat ) override;
