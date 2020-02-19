@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5da63812_8832265a",
+        "filename": "canvas/source/vcl/spritehelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-19T13:48:34Z",
+      "side": 1,
+      "message": "On macOS, I\u0027d expect a warning here that the previous assigned value is unused",
+      "range": {
+        "startLine": 153,
+        "startChar": 20,
+        "endLine": 153,
+        "endChar": 41
+      },
+      "revId": "c530c1b3e01015f551dd6737ef2dc0e661458310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
