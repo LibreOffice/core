@@ -540,13 +540,13 @@ SET_FONTALIGNMENT:
                 if( aPlainMap.nEscapement )
                 {
                     const sal_uInt16 nEsc = aPlainMap.nEscapement;
-                    if( -1 == nTokenValue || RTF_SUB == nToken )
-                        nTokenValue = 6;
+                    if( -1 == nTokenValue )
+                         nTokenValue = 6;  //RTF default \dn value in half-points
                     if( IsCalcValue() )
                         CalcValue();
                     const SvxEscapementItem& rOld =
                         static_cast<const SvxEscapementItem&>(pSet->Get( nEsc,false));
-                    short nEs;
+                    sal_Int16 nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUPER == rOld.GetEsc() )
                     {
@@ -555,7 +555,7 @@ SET_FONTALIGNMENT:
                     }
                     else
                     {
-                        nEs = static_cast<short>(-nTokenValue);
+                        nEs = (nToken == RTF_SUB) ? DFLT_ESC_AUTO_SUB : -nTokenValue;
                         nProp = (nToken == RTF_SUB) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
@@ -900,13 +900,13 @@ ATTR_SETOVERLINE:
                 if( aPlainMap.nEscapement )
                 {
                     const sal_uInt16 nEsc = aPlainMap.nEscapement;
-                    if( -1 == nTokenValue || RTF_SUPER == nToken )
-                        nTokenValue = 6;
+                    if( -1 == nTokenValue )
+                        nTokenValue = 6;  //RTF default \up value in half-points
                     if( IsCalcValue() )
                         CalcValue();
                     const SvxEscapementItem& rOld =
                         static_cast<const SvxEscapementItem&>(pSet->Get( nEsc,false));
-                    short nEs;
+                    sal_Int16 nEs;
                     sal_uInt8 nProp;
                     if( DFLT_ESC_AUTO_SUB == rOld.GetEsc() )
                     {
@@ -915,7 +915,7 @@ ATTR_SETOVERLINE:
                     }
                     else
                     {
-                        nEs = static_cast<short>(nTokenValue);
+                        nEs =  (nToken == RTF_SUPER) ? DFLT_ESC_AUTO_SUPER : nTokenValue;
                         nProp = (nToken == RTF_SUPER) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
