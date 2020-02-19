@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "055842cd_c4bb1761",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-19T06:18:04Z",
+      "side": 1,
+      "message": "I need help in that point. How should i take the true xText object?",
+      "range": {
+        "startLine": 1290,
+        "startChar": 4,
+        "endLine": 1290,
+        "endChar": 31
+      },
+      "revId": "93cacdd16a665856e2793566b67c24ae3587673e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
