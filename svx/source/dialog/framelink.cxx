@@ -260,6 +260,16 @@ Style& Style::MirrorSelf()
     return *this;
 }
 
+void Style::SetWordTableCell(bool bWordTableCell)
+{
+    if (!maImplStyle)
+    {
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->mbWordTableCell = bWordTableCell;
+}
+
 bool Style::operator==( const Style& rOther) const
 {
     if(!maImplStyle && !rOther.maImplStyle)
@@ -283,12 +293,119 @@ bool Style::operator==( const Style& rOther) const
         && Type() == rOther.Type());
 }
 
+namespace
+{
+/**
+ * Gets the weight of rStyle, according to [MS-OI29500] v20171130, 2.1.168 Part 1 Section 17.4.66,
+ * tcBorders (Table Cell Borders).
+ */
+double GetWordTableCellBorderWeight(const Style& rStyle)
+{
+    double fWidth = rStyle.GetWidth();
+    int nBorderNumber = 0;
+
+    // See lcl_convertBorderStyleFromToken() in writerfilter/ and ConvertBorderStyleFromWord() in
+    // editeng/, this is the opposite of the combination of those functions.
+    switch (rStyle.Type())
+    {
+        case SvxBorderLineStyle::NONE:
+            return 0.0;
+        case SvxBorderLineStyle::DOTTED:
+        case SvxBorderLineStyle::DASHED:
+            return 1.0;
+        case SvxBorderLineStyle::SOLID:
+            // single = 1
+            // thick = 2
+            // wave = 20
+            nBorderNumber = 1;
+            break;
+        case SvxBorderLineStyle::DOUBLE:
+        case SvxBorderLineStyle::DOUBLE_THIN:
+            // double = 3
+            // triple = 10
+            // doubleWave = 21
+            // dashDotStroked = 23
+            nBorderNumber = 3;
+            break;
+        case SvxBorderLineStyle::DASH_DOT:
+            // dotDash = 8
+            nBorderNumber = 8;
+            break;
+        case SvxBorderLineStyle::DASH_DOT_DOT:
+            // dotDotDash = 9
+            nBorderNumber = 9;
+            break;
+        case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+            // thinThickSmallGap = 11
+            nBorderNumber = 11;
+            break;
+        case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+            // thickThinSmallGap = 12
+            // thinThickThinSmallGap = 13
+            nBorderNumber = 12;
+            break;
+        case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+            // thinThickMediumGap = 14
+            nBorderNumber = 14;
+            break;
+        case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+            // thickThinMediumGap = 15
+            // thinThickThinMediumGap = 16
+            nBorderNumber = 15;
+            break;
+        case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+            // thinThickLargeGap = 17
+            nBorderNumber = 17;
+            break;
+        case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
+            // thickThinLargeGap = 18
+            // thinThickThinLargeGap = 19
+            nBorderNumber = 18;
+            break;
+        case SvxBorderLineStyle::FINE_DASHED:
+            // dashSmallGap = 22
+            nBorderNumber = 22;
+            break;
+        case SvxBorderLineStyle::EMBOSSED:
+            // threeDEmboss = 24
+            nBorderNumber = 24;
+            break;
+        case SvxBorderLineStyle::ENGRAVED:
+            // threeDEngrave = 25
+            nBorderNumber = 25;
+            break;
+        case SvxBorderLineStyle::OUTSET:
+            // outset = 26
+            nBorderNumber = 25;
+            break;
+        case SvxBorderLineStyle::INSET:
+            // inset = 27
+            nBorderNumber = 27;
+            break;
+    }
+
+    return nBorderNumber * fWidth;
+}
+}
+
 bool Style::operator<( const Style& rOther) const
 {
     if(!maImplStyle && !rOther.maImplStyle)
     {
         // are equal
         return false;
+    }
+
+    if (maImplStyle && maImplStyle->mbWordTableCell)
+    {
+        // The below code would first compare based on the border width, Word compares based on its
+        // calculated weight, do that in the compat case.
+        double fLW = GetWordTableCellBorderWeight(*this);
+        double fRW = GetWordTableCellBorderWeight(rOther);
+        if (!rtl::math::approxEqual(fLW, fRW))
+        {
+            return fLW < fRW;
+        }
     }
 
     // different total widths -> this<rOther, if this is thinner
