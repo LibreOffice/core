@@ -591,6 +591,7 @@
                     <property name="label" translatable="yes" context="effectspage|fonttransparencyft">_Transparency:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fonttransparencymtr</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
