@@ -296,13 +296,28 @@ class SD_DLLPUBLIC SdPageObjsTLV
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<::svt::AcceleratorExecute> m_xAccel;
+    VclPtr<SdNavigatorWin> m_xNavigator;
     const SdDrawDocument* m_pDoc;
     SdDrawDocument* m_pBookmarkDoc;
     SfxMedium* m_pMedium;
+    SfxMedium* m_pOwnMedium;
     bool m_bLinkableSelected;
+    bool m_bShowAllShapes;
+
     /** This flag controls whether to show all pages.
     */
     bool m_bShowAllPages;
+
+    /**
+     * If navigation should not only select the relevant shape but also change
+     * focus to it.
+     */
+    bool m_bNavigationGrabsFocus;
+
+    bool m_bSaveTreeItemState;
+
+    SelectionMode m_eSelectionMode;
+
     OUString m_aDocName;
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
     Link<weld::TreeView&, void> m_aChangeHdl;
@@ -315,8 +330,14 @@ private:
         @param pObject
             When this is NULL then an empty string is returned, regardless
             of the value of bCreate.
+        @param bCreate
+            This flag controls for objects without user supplied name
+            whether a name is created.  When a name is created then this
+            name is not stored in the object.
     */
-    static OUString GetObjectName (const SdrObject* pObject);
+    OUString GetObjectName (
+        const SdrObject* pObject,
+        const bool bCreate = true) const;
 
     void CloseBookmarkDoc();
 
@@ -349,6 +370,11 @@ public:
         m_xTreeView->show();
     }
 
+    void grab_focus()
+    {
+        m_xTreeView->grab_focus();
+    }
+
     void set_size_request(int nWidth, int nHeight)
     {
         m_xTreeView->set_size_request(nWidth, nHeight);
@@ -366,9 +392,21 @@ public:
 
     void set_selection_mode(SelectionMode eMode)
     {
+        m_eSelectionMode = eMode;
         m_xTreeView->set_selection_mode(eMode);
     }
 
+    SelectionMode get_selection_mode() const
+    {
+        return m_eSelectionMode;
+    }
+
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
+    {
+        m_xTreeView->connect_row_activated(rLink);
+    }
+
+    bool HasSelectedChildren(const OUString& rName);
     bool SelectEntry(const OUString& rName);
 
     OUString get_selected_text() const
@@ -379,6 +417,11 @@ public:
     bool get_selected() const
     {
         return m_xTreeView->get_selected(nullptr);
+    }
+
+    int count_selected_rows() const
+    {
+        return m_xTreeView->count_selected_rows();
     }
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink)
@@ -413,8 +456,17 @@ public:
 
     void SetViewFrame(const SfxViewFrame* pViewFrame);
 
-    void Fill(const SdDrawDocument*, const OUString& rDocName);
+    void Fill(const SdDrawDocument*, bool bAllPages, const OUString& rDocName);
     void Fill(const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName);
+
+    void SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
+    bool GetShowAllShapes() const { return m_bShowAllShapes; }
+
+    bool IsNavigationGrabsFocus() const { return m_bNavigationGrabsFocus; }
+    bool IsEqualToDoc(const SdDrawDocument* pInDoc);
+    /// Visits rList recursively and tries to advance rEntry accordingly.
+    bool IsEqualToShapeList(std::unique_ptr<weld::TreeIter>& rEntry, const SdrObjList& rList,
+                            const OUString& rListName);
 
     /** Add one list box entry for the parent of the given shapes and one child entry for
         each of the given shapes.
@@ -442,7 +494,7 @@ public:
 
     std::vector<OUString> GetSelectEntryList(const int nDepth) const;
 
-    SdDrawDocument* GetBookmarkDoc();
+    SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = nullptr);
 
     bool IsLinkableSelected() const { return m_bLinkableSelected; }
 
@@ -456,10 +508,15 @@ public:
         m_xTreeView->insert(pParent, -1, &rName, &rId, nullptr, nullptr, &rExpander, false, pEntry);
     }
 
+    //Mark Current Entry
+    void SetSdNavigator(SdNavigatorWin* pNavigator);
+
     void clear()
     {
         m_xTreeView->clear();
     }
+
+    void SetSaveTreeItemStateFlag(bool bState) { m_bSaveTreeItemState = bState; }
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
