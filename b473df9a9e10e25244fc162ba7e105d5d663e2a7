@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88840c7b_d936929b",
+        "filename": "UnoControls/source/controls/OConnectionPointHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-19T10:20:13Z",
+      "side": 1,
+      "message": "the correct grammar is \"Container does not exist\" - of course not your fault because it was already wrong in the comment ... oh actually the comment can be removed, it just says the same thing as the line of code so it does not add value.",
+      "revId": "b473df9a9e10e25244fc162ba7e105d5d663e2a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
