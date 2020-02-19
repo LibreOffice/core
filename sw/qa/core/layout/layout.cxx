@@ -13,6 +13,7 @@
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
+#include <test/mtfxmldump.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -41,6 +42,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
     // i.e. the table's top border overlapped with the image, even if the image's wrap mode was set
     // to parallel.
     CPPUNIT_ASSERT_GREATEREQUAL(nFlyBottom, nTableTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
+{
+    // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
+    // a solid upper border.
+    load(DATA_DIRECTORY, "border-collapse-compat.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump aDumper;
+    xmlDocPtr pXmlDoc = aDumper.dumpAndParse(*xMetaFile);
+
+    // Make sure the solid border has priority.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 48
+    // i.e. there was no single cell border with width=20, rather there were 48 border parts
+    // (forming a dotted border), all with width=40.
+    assertXPath(pXmlDoc, "//polyline[@style='solid']", "width", "20");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
