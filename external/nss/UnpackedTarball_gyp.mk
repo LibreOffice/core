@@ -7,13 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,nss))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,gyp))
 
-$(eval $(call gb_Module_add_targets,nss,\
-	UnpackedTarball_nss \
-	UnpackedTarball_gyp \
-	ExternalPackage_nss \
-	ExternalProject_nss \
+$(eval $(call gb_UnpackedTarball_set_tarball,gyp,$(GYP_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_add_patches,gyp,\
+	external/nss/gyp-buildsystem.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

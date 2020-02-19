@@ -131,6 +131,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
 		$(call fetch_Optional,GPGMEPP,GPGME_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
+		$(call fetch_Optional,GYP,GYP_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,HSQLDB,HSQLDB_TARBALL) \
 		$(call fetch_Optional,HUNSPELL,HUNSPELL_TARBALL) \

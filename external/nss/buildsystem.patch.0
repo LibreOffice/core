@@ -1,0 +1,32 @@
+--- ./nss/coreconf/nspr.sh.sav	2019-11-19 20:55:30.000000000 +0100
++++ ./nss/coreconf/nspr.sh	2020-02-19 22:25:05.863542364 +0100
+@@ -28,7 +28,7 @@
+ 
+     # These NSPR options are directory-specific, so they don't need to be
+     # included in nspr_opt and changing them doesn't force a rebuild of NSPR.
+-    extra_params=(--prefix="$dist_dir"/$target)
++    extra_params=(--prefix="$dist_dir"/out --libdir="$dist_dir"/out/lib --includedir="$dist_dir"/out/include)
+     if [ "$opt_build" = 1 ]; then
+         extra_params+=(--disable-debug --enable-optimize)
+     fi
+--- ./nss/build.sh.sav	2019-11-19 20:55:30.000000000 +0100
++++ ./nss/build.sh	2020-02-19 22:28:30.976068194 +0100
+@@ -243,10 +243,10 @@
+         exit 3
+     fi
+     # These extra arguments aren't used in determining whether to rebuild.
+-    obj_dir="$dist_dir/$target"
++    obj_dir="$dist_dir/out"
+     gyp_params+=(-Dnss_dist_obj_dir="$obj_dir")
+     if [ "$no_local_nspr" = 0 ]; then
+-        set_nspr_path "$obj_dir/include/nspr:$obj_dir/lib"
++        set_nspr_path "$obj_dir/include:$obj_dir/lib"
+     fi
+ 
+     run_verbose run_scanbuild ${GYP} -f ninja "${gyp_params[@]}" "$cwd/nss.gyp"
+@@ -263,4 +263,4 @@
+     echo "Building NSS requires an installation of ninja: https://ninja-build.org/" 1>&2
+     exit 3
+ fi
+-run_scanbuild "$ninja" -C "$target_dir" "${ninja_params[@]}"
++run_scanbuild setup-python "$ninja" -C "$target_dir" "${ninja_params[@]}"

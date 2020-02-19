@@ -9667,6 +9667,10 @@ if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
     AC_DEFINE(ENABLE_NSS)
+    # internal nss uses gyp
+    if test -z "$SYSTEM_NSS"; then
+       BUILD_TYPE="$BUILD_TYPE GYP"
+    fi
 elif test $_os != iOS ; then
     with_tls=openssl
 fi
