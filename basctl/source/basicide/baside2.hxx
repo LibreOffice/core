@@ -26,7 +26,7 @@
 
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
-#include <vcl/lstbox.hxx>
+#include <sfx2/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
@@ -51,7 +51,6 @@ namespace basctl
 {
 
 class ObjectCatalog;
-class CodeCompleteListBox;
 class CodeCompleteWindow;
 class ModulWindowLayout;
 
@@ -64,7 +63,7 @@ void setTextEngineText (ExtTextEngine&, OUString const&);
 
 class EditorWindow final : public vcl::Window, public SfxListener
 {
-friend class CodeCompleteListBox;
+friend class CodeCompleteWindow;
 private:
     class ChangesListener;
 
@@ -446,43 +445,25 @@ private:
     } aSyntaxColors;
 };
 
-class CodeCompleteListBox: public ListBox
+class CodeCompleteWindow final : public InterimItemWindow
 {
-friend class CodeCompleteWindow;
-friend class EditorWindow;
 private:
-    OUStringBuffer aFuncBuffer;
+    VclPtr<EditorWindow> pParent; // parent window
+    TextSelection m_aTextSelection;
+    std::unique_ptr<weld::TreeView> m_xListBox;
+
     /* a buffer to build up function name when typing
      * a function name, used for showing/hiding listbox values
      * */
-    VclPtr<CodeCompleteWindow> pCodeCompleteWindow; // parent window
+    OUStringBuffer aFuncBuffer;
 
+    void InsertSelectedEntry(); // insert the selected entry
     void SetMatchingEntries(); // sets the visible entries based on aFuncBuffer variable
-    void HideAndRestoreFocus();
     TextView* GetParentEditView();
 
-public:
-    explicit CodeCompleteListBox( CodeCompleteWindow* pPar );
-    virtual ~CodeCompleteListBox() override;
-    virtual void dispose() override;
-    void InsertSelectedEntry(); //insert the selected entry
-
-    DECL_LINK(ImplDoubleClickHdl, ListBox&, void);
-    DECL_LINK(ImplSelectHdl, ListBox&, void);
-
-protected:
-    virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
-};
-
-class CodeCompleteWindow: public vcl::Window
-{
-friend class CodeCompleteListBox;
-private:
-    VclPtr<EditorWindow> pParent; // parent window
-    TextSelection aTextSelection;
-    VclPtr<CodeCompleteListBox> pListBox;
-
-    void InitListBox(); // initialize the ListBox
+    DECL_LINK(ImplDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(ImplSelectHdl, weld::TreeView&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
     explicit CodeCompleteWindow( EditorWindow* pPar );
@@ -492,15 +473,18 @@ public:
     void InsertEntry( const OUString& aStr );
     void ClearListBox();
     void SetTextSelection( const TextSelection& aSel );
-    const TextSelection& GetTextSelection() const { return aTextSelection;}
+    const TextSelection& GetTextSelection() const { return m_aTextSelection;}
     void ResizeAndPositionListBox();
     void SelectFirstEntry(); //selects first entry in ListBox
-    void ClearAndHide();
+
     /*
      * clears if typed anything, then hides
      * the window, clear internal variables
      * */
-    CodeCompleteListBox* GetListBox(){return pListBox;}
+    void ClearAndHide();
+    void HideAndRestoreFocus();
+
+    bool HandleKeyInput(const KeyEvent& rKeyEvt);
 };
 
 class UnoTypeCodeCompletetor
