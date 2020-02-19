@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f39947b3_fd5f2c39",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-19T19:12:57Z",
+      "side": 1,
+      "message": "this now ignores bForceFraction and consequently does something different when it is true?",
+      "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
