@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
 
-#include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
@@ -102,7 +101,7 @@ public:
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    VclPtr<SdPageObjsTLB> const & GetObjects() const;
+    const SdPageObjsTLV&        GetObjects() const;
 
 protected:
     virtual bool                EventNotify(NotifyEvent& rNEvt) override;
@@ -112,9 +111,9 @@ private:
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 
-    VclPtr<ToolBox>             maToolbox;
-    VclPtr<SdPageObjsTLB>       maTlbObjects;
-    VclPtr<ListBox>             maLbDocs;
+    std::unique_ptr<weld::Toolbar> mxToolbox;
+    std::unique_ptr<SdPageObjsTLV> mxTlbObjects;
+    std::unique_ptr<weld::ComboBox> mxLbDocs;
 
     bool                        mbDocImported;
     OUString                    maDropFileName;
@@ -133,19 +132,18 @@ private:
     static OUString             GetDragTypeSdBmpId(NavigatorDragType eDT);
     NavDocInfo*                 GetDocInfo();
 
-                                DECL_LINK( SelectToolboxHdl, ToolBox *, void );
-                                DECL_LINK( DropdownClickToolBoxHdl, ToolBox *, void );
-                                DECL_LINK( ClickObjectHdl, SvTreeListBox*, bool );
-                                DECL_LINK( SelectDocumentHdl, ListBox&, void );
-                                DECL_LINK( MenuSelectHdl, Menu *, bool );
-                                DECL_LINK( ShapeFilterCallback, Menu *, bool );
+                                DECL_LINK( SelectToolboxHdl, const OString&, void );
+                                DECL_LINK( DropdownClickToolBoxHdl, ToolBox*, void );
+                                DECL_LINK( ClickObjectHdl, weld::TreeView&, bool );
+                                DECL_LINK( SelectDocumentHdl, weld::ComboBox&, void );
+                                DECL_LINK( MenuSelectHdl, Menu*, bool );
+                                DECL_LINK( ShapeFilterCallback, Menu*, bool );
 
     void                        SetDragImage();
 
 public:
     //when object is marked , fresh the corresponding entry tree .
     void                        FreshTree ( const  SdDrawDocument* pDoc );
-    void                        FreshEntry( );
 };
 
 /**

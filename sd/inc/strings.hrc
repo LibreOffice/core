@@ -277,7 +277,6 @@
 #define STRING_DRAG_AND_DROP_SLIDES                     NC_("STRING_DRAG_AND_DROP_SLIDES", "Drag and Drop Slides" )
 #define STR_PHOTO_ALBUM_EMPTY_WARNING                   NC_("STR_PHOTO_ALBUM_EMPTY_WARNING", "Please add Images to the Album." )
 #define STR_PHOTO_ALBUM_TEXTBOX                         NC_("STR_PHOTO_ALBUM_TEXTBOX", "Text Slide")
-#define STR_OBJECTS_TREE                                NC_("STR_OBJECTS_TREE", "Page Tree")
 #define STR_OVERWRITE_WARNING                           NC_("STR_OVERWRITE_WARNING", "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?")
 
 #define STR_LAYER_BCKGRND                               NC_("STR_LAYER_BCKGRND", "Background" )
