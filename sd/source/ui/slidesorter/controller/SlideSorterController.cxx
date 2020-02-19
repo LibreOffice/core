@@ -363,7 +363,7 @@ bool SlideSorterController::Command (
                 if (!rEvent.IsMouseEvent())
                     pDispatcher->ExecutePopup(aPopupId, pWindow, &aMenuLocation);
                 else
-                    pDispatcher->ExecutePopup(aPopupId);
+                    pDispatcher->ExecutePopup(aPopupId, pWindow);
                 mbContextMenuOpen = false;
                 mrSlideSorter.GetView().UpdatePageUnderMouse();
                 ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
