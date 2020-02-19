@@ -274,8 +274,6 @@ public:
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
-    void EnableQuickSelection( bool b );
-
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;

@@ -1658,10 +1658,6 @@ include/vcl/lstbox.hxx:232
     void ListBox::EnableUserDraw(_Bool)
     _Bool bUserDraw
     1
-include/vcl/lstbox.hxx:277
-    void ListBox::EnableQuickSelection(_Bool)
-    _Bool b
-    0
 include/vcl/mtfxmldump.hxx:34
     void MetafileXmlDump::filterActionType(const enum MetaActionType,_Bool)
     _Bool bShouldFilter
