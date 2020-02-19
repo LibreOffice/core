@@ -669,7 +669,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
             if (!elem.m_bRadio)
             {
                 pTargetButton->SetModeImage(pImage->GetImage());
-                if (pImage->GetStyle() | WB_SMALLSTYLE)
+                if (pImage->GetStyle() & WB_SMALLSTYLE)
                 {
                     pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
                     Size aSz(pTargetButton->GetModeImage().GetSizePixel());
