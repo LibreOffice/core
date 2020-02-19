@@ -458,9 +458,10 @@ void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
         pEditView->MouseButtonDown( rEvt );
     if( pCodeCompleteWnd->IsVisible() )
     {
-        if( pEditView->GetSelection() != pCodeCompleteWnd->GetTextSelection() )
-        {//selection changed, code complete window should be hidden
-            pCodeCompleteWnd->GetListBox()->HideAndRestoreFocus();
+        if (pEditView->GetSelection() != pCodeCompleteWnd->GetTextSelection())
+        {
+            //selection changed, code complete window should be hidden
+            pCodeCompleteWnd->HideAndRestoreFocus();
         }
     }
 }
@@ -518,13 +519,9 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     SfxViewShell *pVS( SfxViewShell::Current());
     bool bDone = pVS && pVS->KeyInput( rKEvt );
 
-    if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
+    if (pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn())
     {
-        pCodeCompleteWnd->GetListBox()->KeyInput(rKEvt);
-        if( rKEvt.GetKeyCode().GetCode() == KEY_UP
-            || rKEvt.GetKeyCode().GetCode() == KEY_DOWN
-            || rKEvt.GetKeyCode().GetCode() == KEY_TAB
-            || rKEvt.GetKeyCode().GetCode() == KEY_POINT)
+        if (pCodeCompleteWnd->HandleKeyInput(rKEvt))
             return;
     }
 
@@ -2519,78 +2516,72 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
     setBasicWatchMode( false );
 }
 
-CodeCompleteListBox::CodeCompleteListBox( CodeCompleteWindow* pPar )
-: ListBox(pPar, WB_SORT | WB_BORDER ),
-pCodeCompleteWindow( pPar )
-{
-    SetDoubleClickHdl(LINK(this, CodeCompleteListBox, ImplDoubleClickHdl));
-    SetSelectHdl(LINK(this, CodeCompleteListBox, ImplSelectHdl));
-}
-
-CodeCompleteListBox::~CodeCompleteListBox()
-{
-    disposeOnce();
-}
-
-void CodeCompleteListBox::dispose()
-{
-    pCodeCompleteWindow.clear();
-    ListBox::dispose();
-}
-
-IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(CodeCompleteWindow, ImplDoubleClickHdl, weld::TreeView&, bool)
 {
     InsertSelectedEntry();
+    return true;
 }
 
-IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl, ListBox&, void)
-{//give back the focus to the parent
-    pCodeCompleteWindow->pParent->GrabFocus();
-}
-
-TextView* CodeCompleteListBox::GetParentEditView()
+IMPL_LINK_NOARG(CodeCompleteWindow, ImplSelectHdl, weld::TreeView&, void)
 {
-    return pCodeCompleteWindow->pParent->GetEditView();
+    //give back the focus to the parent
+    pParent->GrabFocus();
 }
 
-void CodeCompleteListBox::InsertSelectedEntry()
+TextView* CodeCompleteWindow::GetParentEditView()
 {
+    return pParent->GetEditView();
+}
+
+void CodeCompleteWindow::InsertSelectedEntry()
+{
+    OUString sSelectedEntry = m_xListBox->get_selected_text();
+
     if( !aFuncBuffer.isEmpty() )
     {
         // if the user typed in something: remove, and insert
-        GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
+        GetParentEditView()->SetSelection(pParent->GetLastHighlightPortionTextSelection());
         GetParentEditView()->DeleteSelected();
 
-        if( !GetSelectedEntry().isEmpty() )
-        {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectedEntry() );
+        if (!sSelectedEntry.isEmpty())
+        {
+            // if the user selected something
+            GetParentEditView()->InsertText(sSelectedEntry);
         }
     }
     else
     {
-        if( !GetSelectedEntry().isEmpty() )
-        {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectedEntry() );
+        if (!sSelectedEntry.isEmpty())
+        {
+            // if the user selected something
+            GetParentEditView()->InsertText(sSelectedEntry);
         }
     }
     HideAndRestoreFocus();
 }
 
-void CodeCompleteListBox::SetMatchingEntries()
+void CodeCompleteWindow::SetMatchingEntries()
 {
-    for(sal_Int32 i=0; i< GetEntryCount(); ++i)
+    for (sal_Int32 i = 0, nEntryCount = m_xListBox->n_children(); i< nEntryCount; ++i)
     {
-        OUString sEntry = GetEntry(i);
-        if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )
+        OUString sEntry = m_xListBox->get_text(i);
+        if (sEntry.startsWithIgnoreAsciiCase(aFuncBuffer.toString()))
         {
-            SelectEntry(sEntry);
+            m_xListBox->select(i);
             break;
         }
     }
 }
 
-void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
+IMPL_LINK(CodeCompleteWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
+    return HandleKeyInput(rKEvt);
+}
+
+bool CodeCompleteWindow::HandleKeyInput( const KeyEvent& rKeyEvt )
+{
+    bool bHandled = true;
+
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
     if( (( aChar >= KEY_A ) && ( aChar <= KEY_Z ))
         || ((aChar >= KEY_0) && (aChar <= KEY_9)) )
@@ -2602,13 +2593,15 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
     {
         switch( aChar )
         {
+            case KEY_POINT:
+                break;
             case KEY_ESCAPE: // hide, do nothing
                 HideAndRestoreFocus();
                 break;
             case KEY_RIGHT:
             {
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
-                if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara()-1 )
+                if( aTextSelection.GetEnd().GetPara() != GetTextSelection().GetEnd().GetPara()-1 )
                 {
                     HideAndRestoreFocus();
                 }
@@ -2617,7 +2610,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             case KEY_LEFT:
             {
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
-                if( aTextSelection.GetStart().GetIndex()-1 < pCodeCompleteWindow->GetTextSelection().GetStart().GetIndex() )
+                if( aTextSelection.GetStart().GetIndex()-1 < GetTextSelection().GetStart().GetIndex() )
                 {//leave the cursor where it is
                     HideAndRestoreFocus();
                 }
@@ -2625,23 +2618,23 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             }
             case KEY_TAB:
             {
-                TextSelection aTextSelection = pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection();
-                OUString sTypedText = pCodeCompleteWindow->pParent->GetEditEngine()->GetText(aTextSelection);
+                TextSelection aTextSelection = pParent->GetLastHighlightPortionTextSelection();
+                OUString sTypedText = pParent->GetEditEngine()->GetText(aTextSelection);
                 if( !aFuncBuffer.isEmpty() )
                 {
-                    sal_Int32 nInd = GetSelectedEntryPos();
-                    if( nInd != LISTBOX_ENTRY_NOTFOUND )
-                    {//if there is something selected
+                    sal_Int32 nInd = m_xListBox->get_selected_index();
+                    if (nInd != -1)
+                    {
+                        int nEntryCount = m_xListBox->n_children();
+                        //if there is something selected
                         bool bFound = false;
-                        if( nInd == GetEntryCount() )
-                            nInd = 0;
-                        for( sal_Int32 i = nInd; i != GetEntryCount(); ++i )
+                        for (sal_Int32 i = nInd; i != nEntryCount; ++i)
                         {
-                            OUString sEntry = GetEntry(i);
+                            OUString sEntry = m_xListBox->get_text(i);
                             if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() )
                                 && (aFuncBuffer.toString() != sTypedText) && (i != nInd) )
                             {
-                                SelectEntry( sEntry );
+                                m_xListBox->select(i);
                                 bFound = true;
                                 break;
                             }
@@ -2651,7 +2644,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                         GetParentEditView()->SetSelection( aTextSelection );
                         GetParentEditView()->DeleteSelected();
-                        GetParentEditView()->InsertText( GetSelectedEntry() );
+                        GetParentEditView()->InsertText(m_xListBox->get_selected_text());
                     }
                 }
                 break;
@@ -2664,8 +2657,8 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 {
                     //if there was something inserted by tab: add it to aFuncBuffer
                     TextSelection aSel( GetParentEditView()->GetSelection() );
-                    TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
-                    GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+                    TextPaM aEnd( GetParentEditView()->CursorEndOfLine(GetTextSelection().GetEnd()) );
+                    GetParentEditView()->SetSelection(TextSelection(GetTextSelection().GetStart(), aEnd ) );
                     OUString aTabInsertedStr( GetParentEditView()->GetSelected() );
                     GetParentEditView()->SetSelection( aSel );
 
@@ -2677,33 +2670,55 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                     SetMatchingEntries();
                 }
                 else
-                    pCodeCompleteWindow->ClearAndHide();
+                {
+                    ClearAndHide();
+                    bHandled = false;
+                }
                 break;
             case KEY_RETURN:
                 InsertSelectedEntry();
                 break;
-            case KEY_UP: case KEY_DOWN:
-                NotifyEvent nEvt( MouseNotifyEvent::KEYINPUT, nullptr, &rKeyEvt );
-                PreNotify(nEvt);
+            case KEY_UP:
+            {
+                int nInd = m_xListBox->get_selected_index();
+                if (nInd)
+                    m_xListBox->select(nInd - 1);
+                break;
+            }
+            case KEY_DOWN:
+            {
+                int nInd = m_xListBox->get_selected_index();
+                if (nInd + 1 < m_xListBox->n_children())
+                    m_xListBox->select(nInd + 1);
+                break;
+            }
+            default:
+                bHandled = false;
                 break;
         }
     }
-    ListBox::KeyInput(rKeyEvt);
+
+    return bHandled;
 }
 
-void CodeCompleteListBox::HideAndRestoreFocus()
+void CodeCompleteWindow::HideAndRestoreFocus()
 {
-    pCodeCompleteWindow->Hide();
-    pCodeCompleteWindow->pParent->GrabFocus();
+    Hide();
+    pParent->GrabFocus();
 }
 
-CodeCompleteWindow::CodeCompleteWindow( EditorWindow* pPar )
-: Window( pPar ),
-pParent( pPar ),
-pListBox( VclPtr<CodeCompleteListBox>::Create(this) )
+CodeCompleteWindow::CodeCompleteWindow(EditorWindow* pPar)
+    : InterimItemWindow(pPar, "modules/BasicIDE/ui/codecomplete.ui", "CodeComplete")
+    , pParent(pPar)
+    , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
 {
-    SetSizePixel( Size(151,151) ); //default, later it changes
-    InitListBox();
+    m_xListBox->connect_row_activated(LINK(this, CodeCompleteWindow, ImplDoubleClickHdl));
+    m_xListBox->connect_changed(LINK(this, CodeCompleteWindow, ImplSelectHdl));
+    m_xListBox->connect_key_press(LINK(this, CodeCompleteWindow, KeyInputHdl));
+    m_xListBox->make_sorted();
+
+    m_xListBox->set_size_request(150, 150); // default, this will adopt the line length
+    SetSizePixel(m_xContainer->get_preferred_size());
 }
 
 CodeCompleteWindow::~CodeCompleteWindow()
@@ -2713,62 +2728,46 @@ CodeCompleteWindow::~CodeCompleteWindow()
 
 void CodeCompleteWindow::dispose()
 {
-    pListBox.disposeAndClear();
+    m_xListBox.reset();
     pParent.clear();
-    vcl::Window::dispose();
-}
-
-void CodeCompleteWindow::InitListBox()
-{
-    pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
-    pListBox->Show();
-    pListBox->EnableQuickSelection( false );
+    InterimItemWindow::dispose();
 }
 
 void CodeCompleteWindow::InsertEntry( const OUString& aStr )
 {
-    pListBox->InsertEntry( aStr );
+    m_xListBox->append_text(aStr);
 }
 
 void CodeCompleteWindow::ClearListBox()
 {
-    pListBox->Clear();
-    pListBox->aFuncBuffer.setLength(0);
+    m_xListBox->clear();
+    aFuncBuffer.setLength(0);
 }
 
 void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )
 {
-    aTextSelection = aSel;
+    m_aTextSelection = aSel;
 }
-
 
 void CodeCompleteWindow::ResizeAndPositionListBox()
 {
-    if( pListBox->GetEntryCount() >= 1 )
-    {// if there is at least one element inside
+    if (m_xListBox->n_children() >= 1)
+    {
+        // if there is at least one element inside
         // calculate basic position: under the current line
         tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
         aPos.setY( (aPos.Y() - nViewYOffset) + nBasePad );
 
-        OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
-        for( sal_Int32 i=1; i< pListBox->GetEntryCount(); ++i )
-        {
-            if( pListBox->GetEntry( i ).getLength() > aLongestEntry.getLength() )
-                aLongestEntry = pListBox->GetEntry( i );
-        }
-        // get column/line count
-        const sal_uInt16& nColumns = aLongestEntry.getLength();
-        const sal_uInt16  nLines = static_cast<sal_uInt16>( std::min( sal_Int32(6), pListBox->GetEntryCount() ));
+        // get line count
+        const sal_uInt16 nLines = static_cast<sal_uInt16>(std::min(6, m_xListBox->n_children()));
 
-        Size aSize = pListBox->CalcBlockSize( nColumns, nLines );
+        m_xListBox->set_size_request(-1, m_xListBox->get_height_rows(nLines));
+
+        Size aSize = m_xContainer->get_preferred_size();
         //set the size
         SetSizePixel( aSize );
-        //1 px smaller, to see the border
-        aSize.setWidth( aSize.getWidth() - 1 );
-        aSize.setHeight( aSize.getHeight() - 1 );
-        pListBox->SetSizePixel( aSize );
 
         //calculate position
         const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
@@ -2791,16 +2790,14 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
 
 void CodeCompleteWindow::SelectFirstEntry()
 {
-    if( pListBox->GetEntryCount() > 0 )
-    {
-         pListBox->SelectEntryPos( 0 );
-    }
+    if (m_xListBox->n_children() > 0)
+        m_xListBox->select(0);
 }
 
 void CodeCompleteWindow::ClearAndHide()
 {
     ClearListBox();
-    pListBox->HideAndRestoreFocus();
+    HideAndRestoreFocus();
 }
 
 UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType )
