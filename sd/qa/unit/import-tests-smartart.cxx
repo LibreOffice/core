@@ -19,6 +19,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -101,6 +102,7 @@ public:
     void testFontSize();
     void testVerticalBlockList();
     void testBulletList();
+    void testMissingBullet();
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
@@ -144,6 +146,7 @@ public:
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
+    CPPUNIT_TEST(testMissingBullet);
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
@@ -1273,6 +1276,33 @@ void SdImportTestSmartArt::testVerticalBlockList()
                          xShapeEmpty->getPosition().Y + xShapeEmpty->getSize().Height);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testMissingBullet()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-missing-bullet.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<text::XText> xText(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xText.is()); //xText->getString returns "" instead of "Bullet No\nBullet Yes" it is same even xGroup->getByIndex(0)
+
+/*
+    uno::Reference<container::XEnumerationAccess> xParasAccess(xText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParasAccess.is());
+
+    uno::Reference<container::XEnumeration> xParas = xParasAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParas.is());
+
+    xParas->nextElement();// skip parent
+
+    uno::Reference<beans::XPropertySet> xPara1(xParas->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPara1.is());
+
+    CPPUNIT_ASSERT(!xPara1->getPropertyValue("NumberingLevel").hasValue());
+*/
 }
 
 void SdImportTestSmartArt::testBulletList()
