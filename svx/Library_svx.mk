@@ -35,7 +35,6 @@ $(eval $(call gb_Library_use_custom_headers,svx,\
 
 $(eval $(call gb_Library_add_defs,svx,\
     -DSVX_DLLIMPLEMENTATION \
-    -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,svx,svx/inc/pch/precompiled_svx))

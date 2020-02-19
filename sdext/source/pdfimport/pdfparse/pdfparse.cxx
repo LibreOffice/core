@@ -50,7 +50,7 @@
 #endif
 
 
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 using namespace pdfparse;
 
 namespace {
@@ -560,12 +560,12 @@ std::unique_ptr<PDFEntry> PDFReader::read( const char* pBuffer, unsigned int nLe
     try
     {
 #if OSL_DEBUG_LEVEL > 0
-        boost::spirit::parse_info<const char*> aInfo =
+        boost::spirit::classic::parse_info<const char*> aInfo =
 #endif
-            boost::spirit::parse( pBuffer,
+            boost::spirit::classic::parse( pBuffer,
                                   pBuffer+nLen,
                                   aGrammar,
-                                  boost::spirit::space_p );
+                                  boost::spirit::classic::space_p );
 #if OSL_DEBUG_LEVEL > 0
         SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << (aInfo.hit ? OUString("true") : OUString("false")) << ", full = " << (aInfo.full ? OUString("true") : OUString("false")) << ", length = " << static_cast<int>(aInfo.length) );
 #endif
@@ -638,12 +638,12 @@ std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
     try
     {
 #if OSL_DEBUG_LEVEL > 0
-        boost::spirit::parse_info< file_iterator<> > aInfo =
+        boost::spirit::classic::parse_info< file_iterator<> > aInfo =
 #endif
-            boost::spirit::parse( file_start,
+            boost::spirit::classic::parse( file_start,
                                   file_end,
                                   aGrammar,
-                                  boost::spirit::space_p );
+                                  boost::spirit::classic::space_p );
 #if OSL_DEBUG_LEVEL > 0
         SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop at offset = " << aInfo.stop - file_start << ", hit = " << (aInfo.hit ? "true" : "false") << ", full = " << (aInfo.full ? "true" : "false") << ", length = " << aInfo.length);
 #endif

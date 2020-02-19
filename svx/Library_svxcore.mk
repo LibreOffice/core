@@ -46,7 +46,6 @@ $(eval $(call gb_Library_set_precompiled_header,svxcore,svx/inc/pch/precompiled_
 
 $(eval $(call gb_Library_add_defs,svxcore,\
     -DSVXCORE_DLLIMPLEMENTATION \
-    -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
 $(eval $(call gb_Library_use_libraries,svxcore,\

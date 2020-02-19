@@ -282,7 +282,7 @@ public:
                                                    ( '-' multiplicative_expression )* )
 
     */
-class ExpressionGrammar : public ::boost::spirit::grammar< ExpressionGrammar >
+class ExpressionGrammar : public ::boost::spirit::classic::grammar< ExpressionGrammar >
 {
 public:
     /** Create an arithmetic expression grammar
@@ -301,14 +301,14 @@ public:
         // grammar definition
         explicit definition( const ExpressionGrammar& self )
         {
-            using ::boost::spirit::space_p;
-            using ::boost::spirit::range_p;
-            using ::boost::spirit::lexeme_d;
-            using ::boost::spirit::ch_p;
-            using ::boost::spirit::int_p;
-            using ::boost::spirit::as_lower_d;
-            using ::boost::spirit::strlit;
-            using ::boost::spirit::inhibit_case;
+            using ::boost::spirit::classic::space_p;
+            using ::boost::spirit::classic::range_p;
+            using ::boost::spirit::classic::lexeme_d;
+            using ::boost::spirit::classic::ch_p;
+            using ::boost::spirit::classic::int_p;
+            using ::boost::spirit::classic::as_lower_d;
+            using ::boost::spirit::classic::strlit;
+            using ::boost::spirit::classic::inhibit_case;
 
 
             typedef inhibit_case<strlit<> > token_t;
@@ -360,7 +360,7 @@ public:
             BOOST_SPIRIT_DEBUG_RULE(andExpression);
         }
 
-        const ::boost::spirit::rule< ScannerT >& start() const
+        const ::boost::spirit::classic::rule< ScannerT >& start() const
         {
             return basicExpression;
         }
@@ -368,11 +368,11 @@ public:
     private:
         // the constituents of the Spirit arithmetic expression grammar.
         // For the sake of readability, without 'ma' prefix.
-        ::boost::spirit::rule< ScannerT >   basicExpression;
-        ::boost::spirit::rule< ScannerT >   unaryFunction;
-        ::boost::spirit::rule< ScannerT >   assignment;
-        ::boost::spirit::rule< ScannerT >   integer,argument;
-        ::boost::spirit::rule< ScannerT >   orExpression,andExpression;
+        ::boost::spirit::classic::rule< ScannerT >   basicExpression;
+        ::boost::spirit::classic::rule< ScannerT >   unaryFunction;
+        ::boost::spirit::classic::rule< ScannerT >   assignment;
+        ::boost::spirit::classic::rule< ScannerT >   integer,argument;
+        ::boost::spirit::classic::rule< ScannerT >   orExpression,andExpression;
     };
 
     const ParserContextSharedPtr& getContext() const
@@ -415,11 +415,11 @@ std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUS
 
     ExpressionGrammar aExpressionGrammer( pContext );
 
-    const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
-            ::boost::spirit::parse( aStart,
+    const ::boost::spirit::classic::parse_info<StringIteratorT> aParseInfo(
+            ::boost::spirit::classic::parse( aStart,
                                     aEnd,
                                     aExpressionGrammer,
-                                    ::boost::spirit::space_p ) );
+                                    ::boost::spirit::classic::space_p ) );
 
 #if (OSL_DEBUG_LEVEL > 0)
     std::cout.flush(); // needed to keep stdout and cout in sync

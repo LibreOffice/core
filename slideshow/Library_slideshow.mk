@@ -14,10 +14,6 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(SRCDIR)/slideshow/source/inc \
 ))
 
-$(eval $(call gb_Library_add_defs,slideshow,\
-    -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-))
-
 ifneq ($(strip $(debug)$(DEBUG)),)
 $(eval $(call gb_Library_add_defs,slideshow,\
     -DBOOST_SP_ENABLE_DEBUG_HOOKS \
