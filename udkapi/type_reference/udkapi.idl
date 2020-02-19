@@ -1869,7 +1869,7 @@ module com {
      boolean isAbsolute();
      string getScheme();
      string getSchemeSpecificPart();
-     boolean isHierarchical();
+     /** @deprecated */ boolean isHierarchical();
      boolean hasAuthority();
      string getAuthority();
      string getPath();
