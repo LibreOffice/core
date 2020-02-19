@@ -22,6 +22,30 @@
       "revId": "93cacdd16a665856e2793566b67c24ae3587673e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3da08c3_5aa12cb2",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-19T08:32:37Z",
+      "side": 1,
+      "message": "Saving the import result in ODP gives you an idea how the group shapes nest into each other and how to access the shape with the text.\n\nPlaying around in basic, this one:\n\n xray ThisComponent.DrawPages(0).getByIndex(0).getByIndex(2).getByIndex(0).getByIndex(0).String\n\nGives me \"Bullet no\\nBullet yes\". If you use getChildShape() (see how other tests use it), then you could be able to translate this to C++. Does that help?",
+      "parentUuid": "055842cd_c4bb1761",
+      "range": {
+        "startLine": 1290,
+        "startChar": 4,
+        "endLine": 1290,
+        "endChar": 31
+      },
+      "revId": "93cacdd16a665856e2793566b67c24ae3587673e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
