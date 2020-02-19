@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
 #include <unotools/useroptions.hxx>
+#include <svtools/ctrlbox.hxx>
 #include <svtools/imagemgr.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -1537,6 +1538,21 @@ CustomPropertiesDateField::CustomPropertiesDateField(SvtCalendarBox* pDateField)
 {
     DateTime aDateTime(DateTime::SYSTEM);
     m_xDateField->set_date(aDateTime);
+}
+
+void CustomPropertiesDateField::set_visible(bool bVisible)
+{
+    m_xDateField->set_visible(bVisible);
+}
+
+Date CustomPropertiesDateField::get_date() const
+{
+    return m_xDateField->get_date();
+}
+
+void CustomPropertiesDateField::set_date(const Date& rDate)
+{
+    m_xDateField->set_date(rDate);
 }
 
 CustomPropertiesDateField::~CustomPropertiesDateField()
