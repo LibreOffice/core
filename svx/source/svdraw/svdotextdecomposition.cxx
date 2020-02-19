@@ -171,7 +171,8 @@ namespace
         aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
 
         // look for proportional font scaling, if necessary, scale accordingly
-        if(100 != rInfo.mrFont.GetPropr())
+        sal_Int8 nPropr(rInfo.mrFont.GetPropr());
+        if(100 != nPropr)
         {
             const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
             aNewTransform.scale(fFactor, fFactor);
@@ -190,10 +191,14 @@ namespace
 
             if(DFLT_ESC_AUTO_SUPER == nEsc)
             {
+                nEsc = .8 * (100 - nPropr);
+                assert (nEsc == DFLT_ESC_SUPER && "I'm sure this formula needs to be changed, but how to confirm that???");
                 nEsc = DFLT_ESC_SUPER;
             }
             else if(DFLT_ESC_AUTO_SUB == nEsc)
             {
+                nEsc = .2 * -(100 - nPropr);
+                assert (nEsc == -20 && "I'm sure this formula needs to be changed, but how to confirm that???");
                 nEsc = -20;
             }
 
