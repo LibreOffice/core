@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Type.hxx>
@@ -40,6 +41,7 @@
 #include <unotools/eventcfg.hxx>
 #include <eventsupplier.hxx>
 
+#include <set>
 #include <vector>
 
 using namespace css;
@@ -61,13 +63,16 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                                                            , css::frame::XGlobalEventBroadcaster
                                                            , css::document::XEventBroadcaster
                                                            , css::document::XEventListener
+                                                           , css::lang::XComponent
                                                             >
 {
     css::uno::Reference< css::container::XNameReplace > m_xEvents;
     css::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
     ::comphelper::OInterfaceContainerHelper2 m_aLegacyListeners;
     ::comphelper::OInterfaceContainerHelper2 m_aDocumentListeners;
+    std::multiset<css::uno::Reference<css::lang::XEventListener>> m_disposeListeners;
     TModelList m_lModels;
+    bool m_disposed;
 
 public:
     explicit SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
@@ -124,6 +129,15 @@ public:
     // css.lang.XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
+    // css.lang.XComponent
+    void SAL_CALL dispose() override;
+
+    void SAL_CALL addEventListener(css::uno::Reference<css::lang::XEventListener> const & xListener)
+        override;
+
+    void SAL_CALL removeEventListener(
+        css::uno::Reference<css::lang::XEventListener> const & aListener) override;
+
 private:
 
     // threadsafe
@@ -140,6 +154,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XCompone
     , m_xJobExecutorListener( task::theJobExecutor::get( rxContext ), uno::UNO_QUERY_THROW )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
+    , m_disposed(false)
 {
     osl_atomic_increment(&m_refCount);
     SfxApplication::GetOrCreate();
@@ -151,6 +166,9 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEven
 {
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
+    if (m_disposed) {
+        throw css::lang::DisposedException();
+    }
     return m_xEvents;
     // <- SAFE
 }
@@ -158,13 +176,28 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEven
 
 void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const uno::Reference< document::XEventListener >& xListener)
 {
+    {
+        osl::MutexGuard g(m_aLock);
+        if (m_disposed) {
+            throw css::lang::DisposedException();
+        }
+    }
     // container is threadsafe
     m_aLegacyListeners.addInterface(xListener);
+    // Take care of an XComponent::dispose being processed in parallel with the above addInterface:
+    {
+        osl::MutexGuard g(m_aLock);
+        if (!m_disposed) {
+            return;
+        }
+    }
+    m_aLegacyListeners.disposeAndClear({static_cast<OWeakObject *>(this)});
 }
 
 
 void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< document::XEventListener >& xListener)
 {
+    // The below removeInterface will silently do nothing when m_disposed:
     // container is threadsafe
     m_aLegacyListeners.removeInterface(xListener);
 }
@@ -172,12 +205,27 @@ void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const uno::Reference< do
 
 void SAL_CALL SfxGlobalEvents_Impl::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
 {
+    {
+        osl::MutexGuard g(m_aLock);
+        if (m_disposed) {
+            throw css::lang::DisposedException();
+        }
+    }
     m_aDocumentListeners.addInterface( Listener );
+    // Take care of an XComponent::dispose being processed in parallel with the above addInterface:
+    {
+        osl::MutexGuard g(m_aLock);
+        if (!m_disposed) {
+            return;
+        }
+    }
+    m_aDocumentListeners.disposeAndClear({static_cast<OWeakObject *>(this)});
 }
 
 
 void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& Listener )
 {
+    // The below removeInterface will silently do nothing when m_disposed:
     m_aDocumentListeners.removeInterface( Listener );
 }
 
@@ -192,6 +240,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_Even
 
 void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEvent)
 {
+    // The below implts_* will silently do nothing when m_disposed:
     document::DocumentEvent aDocEvent(aEvent.Source, aEvent.EventName, nullptr, uno::Any());
     implts_notifyJobExecution(aEvent);
     implts_checkAndExecuteEventBindings(aDocEvent);
@@ -201,6 +250,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const document::EventObject& aEv
 
 void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const document::DocumentEvent& Event )
 {
+    // The below implts_* will silently do nothing when m_disposed:
     implts_notifyJobExecution(document::EventObject(Event.Source, Event.EventName));
     implts_checkAndExecuteEventBindings(Event);
     implts_notifyListener(Event);
@@ -219,6 +269,52 @@ void SAL_CALL SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
     // <- SAFE
 }
 
+void SfxGlobalEvents_Impl::dispose() {
+    std::multiset<css::uno::Reference<css::lang::XEventListener>> listeners;
+    {
+        osl::MutexGuard g(m_aLock);
+        m_xEvents.clear();
+        m_xJobExecutorListener.clear();
+        m_disposeListeners.swap(listeners);
+        m_lModels.clear();
+        m_disposed = true;
+    }
+    m_aLegacyListeners.disposeAndClear({static_cast<OWeakObject *>(this)});
+    m_aDocumentListeners.disposeAndClear({static_cast<OWeakObject *>(this)});
+    for (auto const & i: listeners) {
+        try {
+            i->disposing({static_cast< cppu::OWeakObject * >(this)});
+        } catch (css::lang::DisposedException &) {}
+    }
+}
+
+void SfxGlobalEvents_Impl::addEventListener(
+    css::uno::Reference<css::lang::XEventListener> const & xListener)
+{
+    if (!xListener.is()) {
+        throw css::uno::RuntimeException("null listener");
+    }
+    {
+        osl::MutexGuard g(m_aLock);
+        if (!m_disposed) {
+            m_disposeListeners.insert(xListener);
+            return;
+        }
+    }
+    try {
+        xListener->disposing({static_cast< cppu::OWeakObject * >(this)});
+    } catch (css::lang::DisposedException &) {}
+}
+
+void SfxGlobalEvents_Impl::removeEventListener(
+    css::uno::Reference<css::lang::XEventListener> const & aListener)
+{
+    osl::MutexGuard g(m_aLock);
+    auto const i = m_disposeListeners.find(aListener);
+    if (i != m_disposeListeners.end()) {
+        m_disposeListeners.erase(i);
+    }
+}
 
 sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
 {
@@ -229,6 +325,9 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const uno::Any& aElement)
 
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
+    if (m_disposed) {
+        throw css::lang::DisposedException();
+    }
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt != m_lModels.end())
         bHas = true;
@@ -251,6 +350,9 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     // SAFE ->
     {
         osl::MutexGuard aLock(m_aLock);
+        if (m_disposed) {
+            throw css::lang::DisposedException();
+        }
         TModelList::iterator pIt = impl_searchDoc(xDoc);
         if (pIt != m_lModels.end())
             throw container::ElementExistException(
@@ -312,6 +414,9 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
 {
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
+    if (m_disposed) {
+        throw css::lang::DisposedException();
+    }
     uno::Sequence<uno::Any> models(m_lModels.size());
     for (size_t i = 0; i < m_lModels.size(); ++i)
     {
@@ -334,6 +439,9 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
 {
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
+    if (m_disposed) {
+        throw css::lang::DisposedException();
+    }
     return (!m_lModels.empty());
     // <- SAFE
 }
@@ -341,9 +449,17 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
 
 void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject& aEvent)
 {
+    css::uno::Reference<css::document::XEventListener> listener;
+    {
+        osl::MutexGuard g(m_aLock);
+        listener = m_xJobExecutorListener;
+    }
+    if (!listener.is()) {
+        return;
+    }
     try
     {
-        m_xJobExecutorListener->notifyEvent(aEvent);
+        listener->notifyEvent(aEvent);
     }
     catch(const uno::RuntimeException&)
         { throw; }
@@ -354,11 +470,19 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject
 
 void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::DocumentEvent& aEvent)
 {
+    css::uno::Reference<css::container::XNameReplace> events;
+    {
+        osl::MutexGuard g(m_aLock);
+        events = m_xEvents;
+    }
+    if (!events.is()) {
+        return;
+    }
     try
     {
         uno::Any aAny;
-        if ( m_xEvents->hasByName( aEvent.EventName ) )
-            aAny = m_xEvents->getByName(aEvent.EventName);
+        if ( events->hasByName( aEvent.EventName ) )
+            aAny = events->getByName(aEvent.EventName);
         SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
     }
     catch ( uno::RuntimeException const & )
