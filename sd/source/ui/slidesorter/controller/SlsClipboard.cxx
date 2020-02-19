@@ -481,14 +481,14 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
 {
     do
     {
-        SdPageObjsTLB::SdPageObjsTransferable* pTreeListBoxTransferable
-            = dynamic_cast<SdPageObjsTLB::SdPageObjsTransferable*>(pTransferable);
+        SdPageObjsTLV::SdPageObjsTransferable* pTreeListBoxTransferable
+            = dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(pTransferable);
         if (pTreeListBoxTransferable == nullptr)
             break;
 
         // Find view shell for the document of the transferable.
         ::sd::ViewShell* pViewShell
-              = SdPageObjsTLB::GetViewShellForDocShell(pTreeListBoxTransferable->GetDocShell());
+              = SdPageObjsTLV::GetViewShellForDocShell(pTreeListBoxTransferable->GetDocShell());
         if (pViewShell == nullptr)
             break;
 
@@ -844,8 +844,8 @@ Clipboard::DropType Clipboard::IsDropAccepted() const
             return DT_NONE;
     }
 
-    const SdPageObjsTLB::SdPageObjsTransferable* pPageObjsTransferable
-        = dynamic_cast<const SdPageObjsTLB::SdPageObjsTransferable*>(pDragTransferable);
+    const SdPageObjsTLV::SdPageObjsTransferable* pPageObjsTransferable
+        = dynamic_cast<const SdPageObjsTLV::SdPageObjsTransferable*>(pDragTransferable);
     if (pPageObjsTransferable != nullptr)
         return DT_PAGE_FROM_NAVIGATOR;
 

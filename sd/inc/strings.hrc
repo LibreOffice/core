@@ -157,9 +157,6 @@
 // Strings for animation effects
 #define STR_INSERT_TEXT                                 NC_("STR_INSERT_TEXT", "Insert Text")
 #define STR_LOAD_PRESENTATION_LAYOUT                    NC_("STR_LOAD_PRESENTATION_LAYOUT", "Load Master Slide")
-#define STR_DRAGTYPE_URL                                NC_("STR_DRAGTYPE_URL", "Insert as Hyperlink")
-#define STR_DRAGTYPE_EMBEDDED                           NC_("STR_DRAGTYPE_EMBEDDED", "Insert as Copy")
-#define STR_DRAGTYPE_LINK                               NC_("STR_DRAGTYPE_LINK", "Insert as Link")
 #define STR_GLUE_ESCDIR_SMART                           NC_("STR_GLUE_ESCDIR_SMART", "Smart")
 #define STR_GLUE_ESCDIR_LEFT                            NC_("STR_GLUE_ESCDIR_LEFT", "Left")
 #define STR_GLUE_ESCDIR_RIGHT                           NC_("STR_GLUE_ESCDIR_RIGHT", "Right")
@@ -263,8 +260,6 @@
 #define STR_GRAPHICS_STYLE_FAMILY                       NC_("STR_GRAPHICS_STYLE_FAMILY", "Drawing Styles")
 #define STR_PRESENTATIONS_STYLE_FAMILY                  NC_("STR_PRESENTATIONS_STYLE_FAMILY", "Presentation Styles")
 #define STR_CELL_STYLE_FAMILY                           NC_("STR_CELL_STYLE_FAMILY", "Cell Styles")
-#define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 NC_("STR_NAVIGATOR_SHOW_NAMED_SHAPES", "Named shapes")
-#define STR_NAVIGATOR_SHOW_ALL_SHAPES                   NC_("STR_NAVIGATOR_SHOW_ALL_SHAPES", "All shapes")
 #define STR_NAVIGATOR_SHAPE_BASE_NAME                   NC_("STR_NAVIGATOR_SHAPE_BASE_NAME", "Shape %1")
 #define STR_SET_BACKGROUND_PICTURE                      NC_("STR_SET_BACKGROUND_PICTURE", "Set Background Image" )
 #define RID_ANNOTATIONS_START                           NC_("RID_ANNOTATIONS_START", "Comments")
@@ -277,7 +272,6 @@
 #define STRING_DRAG_AND_DROP_SLIDES                     NC_("STRING_DRAG_AND_DROP_SLIDES", "Drag and Drop Slides" )
 #define STR_PHOTO_ALBUM_EMPTY_WARNING                   NC_("STR_PHOTO_ALBUM_EMPTY_WARNING", "Please add Images to the Album." )
 #define STR_PHOTO_ALBUM_TEXTBOX                         NC_("STR_PHOTO_ALBUM_TEXTBOX", "Text Slide")
-#define STR_OBJECTS_TREE                                NC_("STR_OBJECTS_TREE", "Page Tree")
 #define STR_OVERWRITE_WARNING                           NC_("STR_OVERWRITE_WARNING", "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?")
 
 #define STR_LAYER_BCKGRND                               NC_("STR_LAYER_BCKGRND", "Background" )

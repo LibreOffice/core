@@ -248,19 +248,6 @@ void DrawViewShell::StartRulerDrag (
     }
 }
 
-//If object is marked , the corresponding entry is set true ,
-//else the corresponding entry is set false .
-void DrawViewShell::FreshNavigatrEntry()
-{
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
-    if( pWindow )
-    {
-        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
-        if( pNavWin )
-            pNavWin->FreshEntry();
-    }
-}
-
 void DrawViewShell::FreshNavigatrTree()
 {
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );

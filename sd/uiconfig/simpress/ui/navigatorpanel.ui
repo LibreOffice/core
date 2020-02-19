@@ -1,10 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkMenu" id="dragmodemenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanelSTR_DRAGTYPE_URL">Insert as Hyperlink</property>
+        <property name="draw_as_radio">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_DRAGTYPE_LINK">Insert as Link</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_DRAGTYPE_EMBEDDED">Insert as Copy</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">1</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="NavigatorPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <child>
       <object class="GtkGrid">
@@ -16,7 +58,7 @@
         <property name="row_spacing">6</property>
         <property name="column_spacing">12</property>
         <child>
-          <object class="GtkComboBox" id="documents">
+          <object class="GtkComboBoxText" id="documents">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
@@ -32,13 +74,51 @@
           </packing>
         </child>
         <child>
-          <object class="sdlo-SdPageObjsTLB" id="tree:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="SdPageObjsTLB-selection1"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="tree">
+                <property name="width_request">-1</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore2</property>
+                <property name="headers_visible">False</property>
+                <property name="reorderable">True</property>
+                <property name="search_column">1</property>
+                <property name="enable_tree_lines">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection11"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn21">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext44"/>
+                      <attributes>
+                        <attribute name="pixbuf">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext22"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="tree-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|STR_OBJECTS_TREE">Page Tree</property>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
           <packing>
@@ -51,17 +131,17 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="toolbar_style">icons</property>
+            <property name="icon_size">2</property>
             <child>
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
-                <property name="action_name">first</property>
                 <property name="icon_name">sd/res/nv03.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -69,12 +149,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
-                <property name="action_name">previous</property>
                 <property name="icon_name">sd/res/nv04.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -82,12 +161,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
-                <property name="action_name">next</property>
                 <property name="icon_name">sd/res/nv05.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -95,12 +173,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
-                <property name="action_name">last</property>
                 <property name="icon_name">sd/res/nv06.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -110,7 +187,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -118,12 +195,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
-                <property name="action_name">dragmode</property>
                 <property name="icon_name">sd/res/nv09.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
@@ -131,12 +207,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
-                <property name="action_name">shapes</property>
                 <property name="icon_name">sd/res/graphic.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">True</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
           </object>
@@ -150,6 +225,29 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkMenu" id="shapemenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkRadioMenuItem" id="named">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_SHOW_NAMED_SHAPES">Named shapes</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="all">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorpanel|STR_NAVIGATOR_SHOW_ALL_SHAPES">All shapes</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">named</property>
+      </object>
     </child>
   </object>
 </interface>
