@@ -52,7 +52,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
 ))
 
 #todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
-#todo: -DBOOST_SPIRIT_USE_OLD_NAMESPACE only in CustomShapes ?
 #todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
 #todo: component file
 # vim: set noet sw=4 ts=4:

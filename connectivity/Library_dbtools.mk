@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,dbtools))
 
 $(eval $(call gb_Library_add_defs,dbtools,\
 	-DOOO_DLLIMPLEMENTATION_DBTOOLS \
-	-DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
 $(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/dbtools))

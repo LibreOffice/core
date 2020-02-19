@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_defs,pdfimport, \
 endif
 
 $(eval $(call gb_Library_add_defs,pdfimport, \
-    -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
     -DBOOST_ALL_NO_LIB \
 ))
 

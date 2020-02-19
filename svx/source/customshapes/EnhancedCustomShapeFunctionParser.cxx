@@ -921,14 +921,14 @@ public:
 // notation, not the 1.0e10 one.
 
 // TODO(F1): Also handle the 1.0e10 case here.
-template< typename T > struct custom_real_parser_policies : public ::boost::spirit::ureal_parser_policies<T>
+template< typename T > struct custom_real_parser_policies : public ::boost::spirit::classic::ureal_parser_policies<T>
 {
     template< typename ScannerT >
-        static typename ::boost::spirit::parser_result< ::boost::spirit::chlit<>, ScannerT >::type
+        static typename ::boost::spirit::classic::parser_result< ::boost::spirit::classic::chlit<>, ScannerT >::type
     parse_exp(ScannerT& scan)
     {
         // as_lower_d somehow breaks MSVC7
-        return ::boost::spirit::ch_p('E').parse(scan);
+        return ::boost::spirit::classic::ch_p('E').parse(scan);
     }
 };
 
@@ -960,7 +960,7 @@ template< typename T > struct custom_real_parser_policies : public ::boost::spir
 
     */
 
-class ExpressionGrammar : public ::boost::spirit::grammar< ExpressionGrammar >
+class ExpressionGrammar : public ::boost::spirit::classic::grammar< ExpressionGrammar >
 {
 public:
     /** Create an arithmetic expression grammar
@@ -979,10 +979,10 @@ public:
         // grammar definition
         explicit definition( const ExpressionGrammar& self )
         {
-            using ::boost::spirit::str_p;
-            using ::boost::spirit::range_p;
-            using ::boost::spirit::lexeme_d;
-            using ::boost::spirit::real_parser;
+            using ::boost::spirit::classic::str_p;
+            using ::boost::spirit::classic::range_p;
+            using ::boost::spirit::classic::lexeme_d;
+            using ::boost::spirit::classic::real_parser;
 
             identifier =
                             str_p( "pi"         )[ EnumFunctor(ExpressionFunct::EnumPi,        self.getContext() ) ]
@@ -1071,7 +1071,7 @@ public:
             BOOST_SPIRIT_DEBUG_RULE(identifier);
         }
 
-        const ::boost::spirit::rule< ScannerT >& start() const
+        const ::boost::spirit::classic::rule< ScannerT >& start() const
         {
             return additiveExpression;
         }
@@ -1079,18 +1079,18 @@ public:
     private:
         // the constituents of the Spirit arithmetic expression grammar.
         // For the sake of readability, without 'ma' prefix.
-        ::boost::spirit::rule< ScannerT >   additiveExpression;
-        ::boost::spirit::rule< ScannerT >   multiplicativeExpression;
-        ::boost::spirit::rule< ScannerT >   unaryExpression;
-        ::boost::spirit::rule< ScannerT >   basicExpression;
-        ::boost::spirit::rule< ScannerT >   unaryFunction;
-        ::boost::spirit::rule< ScannerT >   binaryFunction;
-        ::boost::spirit::rule< ScannerT >   ternaryFunction;
-        ::boost::spirit::rule< ScannerT >   funcRef_decl;
-        ::boost::spirit::rule< ScannerT >   functionReference;
-        ::boost::spirit::rule< ScannerT >   modRef_decl;
-        ::boost::spirit::rule< ScannerT >   modifierReference;
-        ::boost::spirit::rule< ScannerT >   identifier;
+        ::boost::spirit::classic::rule< ScannerT >   additiveExpression;
+        ::boost::spirit::classic::rule< ScannerT >   multiplicativeExpression;
+        ::boost::spirit::classic::rule< ScannerT >   unaryExpression;
+        ::boost::spirit::classic::rule< ScannerT >   basicExpression;
+        ::boost::spirit::classic::rule< ScannerT >   unaryFunction;
+        ::boost::spirit::classic::rule< ScannerT >   binaryFunction;
+        ::boost::spirit::classic::rule< ScannerT >   ternaryFunction;
+        ::boost::spirit::classic::rule< ScannerT >   funcRef_decl;
+        ::boost::spirit::classic::rule< ScannerT >   functionReference;
+        ::boost::spirit::classic::rule< ScannerT >   modRef_decl;
+        ::boost::spirit::classic::rule< ScannerT >   modifierReference;
+        ::boost::spirit::classic::rule< ScannerT >   identifier;
     };
 
     const ParserContextSharedPtr& getContext() const
@@ -1136,11 +1136,11 @@ std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUS
     pContext->mpCustoShape = &rCustoShape;
 
     ExpressionGrammar aExpressionGrammer( pContext );
-    const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
-            ::boost::spirit::parse( aStart,
+    const ::boost::spirit::classic::parse_info<StringIteratorT> aParseInfo(
+            ::boost::spirit::classic::parse( aStart,
                                     aEnd,
-                                    aExpressionGrammer >> ::boost::spirit::end_p,
-                                    ::boost::spirit::space_p ) );
+                                    aExpressionGrammer >> ::boost::spirit::classic::end_p,
+                                    ::boost::spirit::classic::space_p ) );
 
     // input fully congested by the parser?
     if( !aParseInfo.full )
