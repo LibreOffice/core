@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -291,7 +292,6 @@ FormattedField::StaticFormatter::~StaticFormatter()
     }
 }
 
-
 FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
     :SpinField(pParent, nStyle)
     ,m_aLastSelection(0,0)
@@ -299,6 +299,7 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
     ,m_dMaxValue(0)
     ,m_bHasMin(false)
     ,m_bHasMax(false)
+    ,m_bWrapOnLimits(false)
     ,m_bStrictFormat(true)
     ,m_bEnableEmptyField(true)
     ,m_bAutoColor(false)
@@ -844,11 +845,16 @@ void FormattedField::EnableEmptyField(bool bEnable)
 
 void FormattedField::ImplSetValue(double dVal, bool bForce)
 {
-
     if (m_bHasMin && (dVal<m_dMinValue))
-        dVal = m_dMinValue;
+    {
+        dVal = m_bWrapOnLimits ? fmod(dVal + m_dMaxValue + 1 - m_dMinValue, m_dMaxValue + 1) + m_dMinValue
+                               : m_dMinValue;
+    }
     if (m_bHasMax && (dVal>m_dMaxValue))
-        dVal = m_dMaxValue;
+    {
+        dVal = m_bWrapOnLimits ? fmod(dVal - m_dMinValue, m_dMaxValue + 1) + m_dMinValue
+                               : m_dMaxValue;
+    }
     if (!bForce && (dVal == GetValue()))
         return;
 
@@ -983,6 +989,8 @@ bool FormattedField::set_property(const OString &rKey, const OUString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
+    else if (rKey == "wrap")
+        m_bWrapOnLimits = toBool(rValue);
     else
         return SpinField::set_property(rKey, rValue);
     return true;
