@@ -17,9 +17,13 @@
 #
 
 ulimit -c unlimited
-# debugging assistance
+# Linux debugging assistance
 export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
 export MALLOC_PERTURB_=153
 export OOO_DISABLE_RECOVERY=1
+
+# macOS debugging assistance
+export MallocScribble=1
+export MallocPreScribble=1
