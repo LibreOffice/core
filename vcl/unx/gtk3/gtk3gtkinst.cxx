@@ -12797,6 +12797,9 @@ private:
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
+        if (pEvent->state) // only with no modifiers held
+            return false;
+
         if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
             pEvent->keyval == GDK_KEY_KP_Down || pEvent->keyval == GDK_KEY_Down || pEvent->keyval == GDK_KEY_KP_Page_Down || pEvent->keyval == GDK_KEY_Page_Down)
         {
@@ -13126,6 +13129,31 @@ void ensure_intercept_drawing_area_accessibility()
     }
 }
 
+void ensure_disable_ctrl_page_up_down(GType eType)
+{
+    gpointer pClass = g_type_class_ref(eType);
+    GtkWidgetClass* pWidgetClass = GTK_WIDGET_CLASS(pClass);
+    GtkBindingSet* pBindingSet = gtk_binding_set_by_class(pWidgetClass);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Up, GDK_CONTROL_MASK);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Up, static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK));
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Down, GDK_CONTROL_MASK);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Down, static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK));
+    g_type_class_unref(pClass);
+}
+
+// tdf#130400 disable ctrl+page_up and ctrl+page_down bindings so the
+// keystrokes are consumed by the surrounding notebook bindings instead
+void ensure_disable_ctrl_page_up_down_bindings()
+{
+    static bool bDone;
+    if (!bDone)
+    {
+        ensure_disable_ctrl_page_up_down(GTK_TYPE_TREE_VIEW);
+        ensure_disable_ctrl_page_up_down(GTK_TYPE_SPIN_BUTTON);
+        bDone = true;
+    }
+}
+
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -13333,6 +13361,7 @@ public:
         , m_xInterimGlue(pInterimGlue)
     {
         ensure_intercept_drawing_area_accessibility();
+        ensure_disable_ctrl_page_up_down_bindings();
 
         sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
