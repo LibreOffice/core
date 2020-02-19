@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a382d8d_1046efbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-02-19T19:11:17Z",
+      "side": 1,
+      "message": "Use Git hashes instead of Gerrit IDs as a more future-proof method of identifying commits.",
+      "revId": "7448b69b4aaa982940e49c5ace9842f07dd81938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
