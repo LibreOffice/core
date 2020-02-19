@@ -1092,8 +1092,10 @@ OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
-        const SwContentNode* pTextNode = pPam->GetContentNode();
-        if (!pTextNode || !pTextNode->IsTextNode())
+        SwContentNode const*const pTextNode = pPam->GetContentNode();
+        SwContentNode const*const pMarkTextNode = pPam->GetContentNode(false);
+        if (!pTextNode || !pTextNode->IsTextNode()
+            || !pMarkTextNode || !pMarkTextNode->IsTextNode())
         {
             return pRet;
         }
@@ -1103,7 +1105,7 @@ OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
         const bool bParaEnd = rSearchOpt.searchString == "$" || rSearchOpt.searchString == "^$" || rSearchOpt.searchString == "$^";
         if (bParaEnd || (pLayout
                 ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
-                : pTextNode == pPam->GetContentNode(false)))
+                : pTextNode == pMarkTextNode))
         {
             utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
             OUString rStr = pLayout
@@ -1113,8 +1115,16 @@ OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
             AmbiguousIndex nEnd;
             if (pLayout)
             {
-                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->Start()));
-                nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->End()));
+                SwTextFrame const*const pStartFrame(
+                    bParaEnd && *pPam->GetMark() < *pPam->GetPoint()
+                        ? static_cast<SwTextFrame const*>(pMarkTextNode->getLayoutFrame(pLayout))
+                        : pFrame);
+                SwTextFrame const*const pEndFrame(
+                    bParaEnd && *pPam->GetPoint() <= *pPam->GetMark()
+                        ? static_cast<SwTextFrame const*>(pMarkTextNode->getLayoutFrame(pLayout))
+                        : pFrame);
+                nStart.SetFrameIndex(pStartFrame->MapModelToViewPos(*pPam->Start()));
+                nEnd.SetFrameIndex(pEndFrame->MapModelToViewPos(*pPam->End()));
             }
             else
             {
