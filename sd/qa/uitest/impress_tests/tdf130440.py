@@ -24,15 +24,22 @@ class tdf129346(UITestCase):
         xEdit = xDoc.getChild("impress_win")
         xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
 
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
         self.xUITest.executeCommand(".uno:Redo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
         self.xUITest.executeCommand(".uno:Redo")
+        xToolkit.processEventsToIdle()
 
         xDoc = self.xUITest.getTopFocusWindow()
         xEdit = xDoc.getChild("impress_win")
