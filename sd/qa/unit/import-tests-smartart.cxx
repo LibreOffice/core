@@ -101,7 +101,7 @@ public:
     void testFontSize();
     void testVerticalBlockList();
     void testBulletList();
-    void testMissingBullet();
+    void testMissingBulletAndIndent();
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
@@ -145,7 +145,7 @@ public:
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
-    CPPUNIT_TEST(testMissingBullet);
+    CPPUNIT_TEST(testMissingBulletAndIndent);
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
@@ -1277,7 +1277,7 @@ void SdImportTestSmartArt::testVerticalBlockList()
     xDocShRef->DoClose();
 }
 
-void SdImportTestSmartArt::testMissingBullet()
+void SdImportTestSmartArt::testMissingBulletAndIndent()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-missing-bullet.pptx"),
@@ -1296,9 +1296,13 @@ void SdImportTestSmartArt::testMissingBullet()
     CPPUNIT_ASSERT(xPara1.is());
 
     sal_Int16 nNumberingLevel = -1;
+    sal_Int32 nParaLeftMargin = -1;
+
     xPara1->getPropertyValue("NumberingLevel")>>= nNumberingLevel;
+    xPara1->getPropertyValue("ParaLeftMargin")>>= nParaLeftMargin;
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nNumberingLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(309), nParaLeftMargin);
 }
 
 void SdImportTestSmartArt::testBulletList()
