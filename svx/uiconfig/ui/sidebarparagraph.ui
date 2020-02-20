@@ -381,11 +381,7 @@
           </packing>
         </child>
         <child>
-<<<<<<< HEAD   (aad94d Silence warnings in salvtables.hxx)
-          <object class="GtkBox" id="box4">
-=======
           <object class="GtkBox" id="indentfieldbox">
->>>>>>> CHANGE (8b9246 sidebar: provide indent field boxes with useful id for hidin)
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
