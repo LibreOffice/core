@@ -16,6 +16,24 @@
       "revId": "c66fe94d3e9cc1394dd4b569a3d8f374208a729b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "980e6714_22caf0e2",
+        "filename": "offapi/com/sun/star/drawing/framework/XConfigurationController.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-20T10:47:07Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/89082\u003e \"Revert typo in documentation\"",
+      "parentUuid": "fa31d9ce_552b7d30",
+      "revId": "c66fe94d3e9cc1394dd4b569a3d8f374208a729b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
