@@ -34,6 +34,24 @@
       "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7b8da5_50591f56",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-20T06:11:02Z",
+      "side": 1,
+      "message": "You could certainly use stringToDouble for the non-bForceFraction case....",
+      "parentUuid": "05437f69_b7f8b0d5",
+      "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
