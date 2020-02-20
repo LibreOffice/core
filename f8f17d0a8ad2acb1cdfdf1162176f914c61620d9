@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "994bb79f_9fad5f91",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-20T12:56:40Z",
+      "side": 1,
+      "message": "The oox/ importer actually puts the left indent for bulleted paragraphs into the NumberingRules property. NumberingRules is a sequence of rules, then you have a sequence of key-value pairs for each rule. The LeftMargin name is what you\u0027re looking for. See SdImportTest::testTdf104445() for a test that already accesses the left margin that way.",
+      "revId": "f8f17d0a8ad2acb1cdfdf1162176f914c61620d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
