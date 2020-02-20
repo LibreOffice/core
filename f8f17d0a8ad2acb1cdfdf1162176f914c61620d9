@@ -16,6 +16,24 @@
       "revId": "f8f17d0a8ad2acb1cdfdf1162176f914c61620d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1cc21f2_e16738d8",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-20T20:36:13Z",
+      "side": 1,
+      "message": "I\u0027ve update the patch in that way(Patch set 3). Unfortunately it doesn\u0027t hold the correct value. LeftMargin is 600 before and after my patch. It should be something else. Do you have any other idea? I\u0027ve tried to use FirstLineIndent SymbolTextDistance. Result same.",
+      "parentUuid": "994bb79f_9fad5f91",
+      "revId": "f8f17d0a8ad2acb1cdfdf1162176f914c61620d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
