@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0da114_f63ebe18",
+        "filename": "svx/source/unodraw/UnoGraphicExporter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T10:16:51Z",
+      "side": 1,
+      "message": "this is wrong, it\u0027s nWidthPixel !\u003d 0",
+      "revId": "746c56967a2ef21e6d30827414439ffa5dc95c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "920201e1_5ddd24e4",
+        "filename": "svx/source/unodraw/UnoGraphicExporter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T10:16:51Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "746c56967a2ef21e6d30827414439ffa5dc95c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4380161f_8f6a1156",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T10:16:51Z",
+      "side": 1,
+      "message": "there\u0027s an extra / prepended here?",
+      "revId": "746c56967a2ef21e6d30827414439ffa5dc95c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
