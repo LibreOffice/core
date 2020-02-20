@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e16d551e_4b54f6a2",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T10:10:08Z",
+      "side": 1,
+      "message": "typo, should be \"acquire\"\n\n... actually this doesn\u0027t really tell the caller anything useful; the problem is that the xObj-\u003egetComponent() doesn\u0027t have a XPropertySetInfo... and considering the if (...isLink()) above it must be an embedded object... maybe write this as \"embedded object doesn\u0027t have XPropertySetInfo\"?",
+      "range": {
+        "startLine": 762,
+        "startChar": 70,
+        "endLine": 762,
+        "endChar": 77
+      },
+      "revId": "edfac71e3e9a92e5997d71b2993333df8ee8c337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
