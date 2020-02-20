@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6f1e6de_ad125998",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-20T13:17:44Z",
+      "side": 1,
+      "message": "We need better condition for the fix, because this is fragile and not so obvious. I am going to add it soon.",
+      "range": {
+        "startLine": 2496,
+        "startChar": 4,
+        "endLine": 2496,
+        "endChar": 93
+      },
+      "revId": "af31509f6e8e84bb4407cfe6139e36d95d411c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
