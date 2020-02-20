@@ -95,8 +95,11 @@ bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
         }
         break;
     case Stmt::MaterializeTemporaryExprClass:
+    case Stmt::CXXBindTemporaryExprClass:
     case Stmt::ParenExprClass:
         break;
+    case Stmt::CXXNullPtrLiteralExprClass:
+        return true;
     default:
         // Conservatively assume non-identical for expressions that don't happen for us in practice
         // when compiling the LO code base (and for which the above set of supported classes would
