@@ -3173,6 +3173,8 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             }
         }
 
+        // GetTopContext() is changed by inserted breaks, but we want to keep the current context
+        PropertyMapPtr pContext = m_pImpl->GetTopContext();
         if (!m_pImpl->GetFootnoteContext())
         {
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
@@ -3182,7 +3184,6 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->clearDeferredBreaks();
         }
 
-        PropertyMapPtr pContext = m_pImpl->GetTopContext();
         if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
         {
             pContext->GetFootnote()->setLabel(sText);
@@ -3469,6 +3470,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         }
         else
         {
+            // GetTopContext() is changed by inserted breaks, but we want to keep the current context
+            PropertyMapPtr pContext = m_pImpl->GetTopContext();
             if (!m_pImpl->GetFootnoteContext())
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
@@ -3498,7 +3501,6 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->clearDeferredBreaks();
             }
 
-            PropertyMapPtr pContext = m_pImpl->GetTopContext();
             if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
             {
                 pContext->GetFootnote()->setLabel( sText );
