@@ -99,8 +99,6 @@ public:
     bool            IsInDropDown() const;
     void            ToggleDropDown();
 
-    long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
-
     void            SetUserItemSize( const Size& rSz );
     void            EnableUserDraw( bool bUserDraw );
 
@@ -120,7 +118,6 @@ public:
     bool            IsMultiSelectionEnabled() const;
 
     void            SetSelectHdl(const Link<ComboBox&,void>& rLink);
-    const Link<ComboBox&,void>&   GetSelectHdl() const;
     void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
     const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
     void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
@@ -139,8 +136,6 @@ public:
     void*           GetEntryData( sal_Int32  nPos ) const;
 
     sal_Int32       GetTopEntry() const;
-
-    void            SetProminentEntryType( ProminentEntry eType );
 
     sal_uInt16      GetDisplayLineCount() const;
 

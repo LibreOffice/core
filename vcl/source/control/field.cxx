@@ -586,16 +586,6 @@ void NumericFormatter::SetDecimalDigits( sal_uInt16 nDigits )
     ReformatAll();
 }
 
-void NumericFormatter::SetShowTrailingZeros( bool bShowTrailingZeros )
-{
-    if ( mbShowTrailingZeros != bShowTrailingZeros )
-    {
-        mbShowTrailingZeros = bShowTrailingZeros;
-        ReformatAll();
-    }
-}
-
-
 void NumericFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
@@ -1006,11 +996,6 @@ void NumericBox::ReformatAll()
     }
     NumericFormatter::Reformat();
     SetUpdateMode( true );
-}
-
-void NumericBox::InsertValue( sal_Int64 nValue, sal_Int32 nPos )
-{
-    ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
 static bool ImplMetricProcessKeyInput( const KeyEvent& rKEvt,
@@ -1533,12 +1518,6 @@ sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
 {
     // convert to requested units
     return vcl::ConvertValue(NumericFormatter::GetMax(), 0, GetDecimalDigits(), meUnit, eOutUnit);
-}
-
-sal_Int64 MetricFormatter::GetBaseValue() const
-{
-    // convert to requested units
-    return vcl::ConvertValue(0, 0, GetDecimalDigits(), meUnit, FieldUnit::NONE);
 }
 
 void MetricFormatter::Reformat()

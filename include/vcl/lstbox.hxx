@@ -197,7 +197,6 @@ public:
     sal_Int32           GetTopEntry() const;
 
     void                SaveValue() { mnSaveValue = GetSelectedEntryPos(); }
-    sal_Int32           GetSavedValue() const { return mnSaveValue; }
     bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectedEntryPos(); }
 
     /**
@@ -234,7 +233,6 @@ public:
     void                DrawEntry( const UserDrawEvent& rEvt );
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
-    const Link<ListBox&,void>& GetSelectHdl() const                    { return maSelectHdl; }
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
     const Link<ListBox&,void>& GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 

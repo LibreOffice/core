@@ -344,8 +344,6 @@ public:
 
     void    ParentDestroyed();
 
-    void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-
     static ValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:

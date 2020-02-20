@@ -60,7 +60,6 @@ public:
     virtual void dispose() override;
     void            SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
     using SvTreeListBox::GetTab;
-    void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MapUnit::MapAppFont );
     long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
@@ -84,7 +83,6 @@ public:
     static OUString  GetEntryText( SvTreeListEntry*, sal_uInt16 nCol );
     OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void             SetEntryText(const OUString&, SvTreeListEntry*, sal_uInt16 nCol=0xffff);
     OUString         GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
     sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 

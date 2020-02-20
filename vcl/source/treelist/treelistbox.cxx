@@ -3405,11 +3405,6 @@ ScrollBar *SvTreeListBox::GetVScroll()
     return pImpl->m_aVerSBar.get();
 }
 
-ScrollBar *SvTreeListBox::GetHScroll()
-{
-    return pImpl->m_aHorSBar.get();
-}
-
 void SvTreeListBox::EnableAsyncDrag( bool b )
 {
     pImpl->EnableAsyncDrag( b );

@@ -146,7 +146,6 @@ public:
     bool            IsGlobalMode() const {return    m_bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool();
 
     FactoryFunction GetUITestFactory() const override;
 };
