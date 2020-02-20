@@ -2436,10 +2436,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     switch (rHint.GetId())
     {
         case SfxHintId::DocChanged:
-            if (!(m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE && HasFocus()))
-            {
-                m_bViewHasChanged = true;
-            }
+            m_bViewHasChanged = true;
             break;
         case SfxHintId::ModeChanged:
             if (SwWrtShell* pShell = GetWrtShell())
