@@ -23,7 +23,6 @@
 #include <svtools/svtdllapi.h>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/customweld.hxx>
 #include <memory>
 #include <vector>
@@ -196,7 +195,6 @@ typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 class SVT_DLLPUBLIC ValueSet : public Control
 {
 private:
-    Timer           maTimer;
     ValueItemList   mItemList;
     std::unique_ptr<ValueSetItem> mpNoneItem;
     VclPtr<ScrollBar> mxScrollBar;

@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
 #include <vcl/transfer.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 

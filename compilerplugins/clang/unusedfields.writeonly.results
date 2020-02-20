@@ -1,12 +1,10 @@
-basctl/source/basicide/moduldlg.hxx:130
+basctl/source/basicide/moduldlg.hxx:131
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:180
-    basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:249
+basctl/source/inc/bastype2.hxx:183
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/IDEComboBox.hxx:104
+basctl/source/inc/IDEComboBox.hxx:121
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
     basegfx::(anonymous namespace)::Triangulator maNewEdgeEntries std::vector<std::unique_ptr<EdgeEntry> >
@@ -58,6 +56,24 @@ bridges/source/jni_uno/jni_java2uno.cxx:153
     jni_uno::(anonymous namespace)::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:154
     jni_uno::(anonymous namespace)::largest a uno_Any
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex r float
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex g float
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex a float
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex b float
+canvas/inc/rendering/irendermodule.hxx:36
+    canvas::Vertex v float
+canvas/inc/rendering/irendermodule.hxx:36
+    canvas::Vertex u float
+canvas/inc/rendering/irendermodule.hxx:37
+    canvas::Vertex z float
+canvas/inc/rendering/irendermodule.hxx:37
+    canvas::Vertex x float
+canvas/inc/rendering/irendermodule.hxx:37
+    canvas::Vertex y float
 canvas/source/cairo/cairo_canvasbitmap.hxx:120
     cairocanvas::CanvasBitmap mpBufferCairo ::cairo::CairoSharedPtr
 canvas/source/cairo/cairo_spritedevicehelper.hxx:74
@@ -310,31 +326,13 @@ include/basic/basmgr.hxx:56
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:73
     SbxValues::(anonymous) pData void *
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex a float
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex b float
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex g float
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex r float
-include/canvas/rendering/irendermodule.hxx:37
-    canvas::Vertex v float
-include/canvas/rendering/irendermodule.hxx:37
-    canvas::Vertex u float
-include/canvas/rendering/irendermodule.hxx:38
-    canvas::Vertex x float
-include/canvas/rendering/irendermodule.hxx:38
-    canvas::Vertex y float
-include/canvas/rendering/irendermodule.hxx:38
-    canvas::Vertex z float
 include/comphelper/parallelsort.hxx:89
     comphelper::(anonymous namespace)::ProfileZone mbDummy _Bool
 include/comphelper/unique_disposing_ptr.hxx:30
     comphelper::unique_disposing_ptr m_xTerminateListener css::uno::Reference<css::frame::XTerminateListener>
 include/drawinglayer/attribute/sdrallattribute3d.hxx:44
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
-include/drawinglayer/primitive2d/mediaprimitive2d.hxx:51
+include/drawinglayer/primitive2d/mediaprimitive2d.hxx:50
     drawinglayer::primitive2d::MediaPrimitive2D maURL class rtl::OUString
 include/drawinglayer/texture/texture.hxx:77
     drawinglayer::texture::GeoTexSvxGradient maDefinitionRange basegfx::B2DRange
@@ -380,8 +378,6 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText const class rtl::OUString
-include/sfx2/notebookbar/NotebookbarTabControl.hxx:44
-    NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 include/svtools/brwbox.hxx:247
     BrowseBox::CursorMoveAttempt m_nCol const long
 include/svtools/brwbox.hxx:248
@@ -394,6 +390,8 @@ include/svx/AccessibilityCheckDialog.hxx:46
     svx::AccessibilityCheckDialog m_aAccessibilityCheckEntries std::vector<std::unique_ptr<AccessibilityCheckEntry> >
 include/svx/bmpmask.hxx:128
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
+include/svx/fillctrl.hxx:83
+    FillControl mxColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
 include/svx/float3d.hxx:204
     Svx3DWin pControllerItem std::unique_ptr<Svx3DCtrlItem>
 include/svx/fmtools.hxx:134
@@ -402,7 +400,7 @@ include/svx/galctrl.hxx:39
     GalleryPreview mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 include/svx/galctrl.hxx:92
     GalleryIconView mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
-include/svx/gridctrl.hxx:254
+include/svx/gridctrl.hxx:256
     DbGridControl m_pCursorDisposeListener std::unique_ptr<DisposeListenerGridBridge>
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
@@ -598,7 +596,7 @@ sc/source/ui/inc/filtdlg.hxx:174
     ScSpecialFilterDlg pOptionsMgr std::unique_ptr<ScFilterOptionsMgr>
 sc/source/ui/inc/instbdlg.hxx:57
     ScInsertTableDlg aDocShTablesRef SfxObjectShellRef
-sc/source/ui/inc/linkarea.hxx:37
+sc/source/ui/inc/linkarea.hxx:38
     ScLinkedAreaDlg aSourceRef SfxObjectShellRef
 sc/source/ui/inc/pfuncache.hxx:49
     ScPrintSelectionStatus aRanges class ScRangeList
@@ -674,6 +672,8 @@ sd/source/ui/view/ToolBarManager.cxx:315
     sd::ToolBarManager::Implementation mpAsynchronousLayouterLock ::std::unique_ptr<LayouterLock>
 sdext/source/presenter/PresenterTimer.cxx:104
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
+sfx2/inc/notebookbar/NotebookbarTabControl.hxx:43
+    NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:38
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
 sfx2/source/doc/sfxbasemodel.cxx:449
@@ -688,7 +688,7 @@ sfx2/source/inc/appdata.hxx:89
     SfxAppData_Impl mxAppPickList std::unique_ptr<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/view/classificationcontroller.cxx:72
+sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:300
     Vertex normal glm::vec3
@@ -804,7 +804,7 @@ svx/source/sidebar/possize/PosSizePropertyPanel.hxx:105
     svx::sidebar::PosSizePropertyPanel mxArrangeDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/svdraw/svdpdf.hxx:193
     ImpSdrPdfImport mdPageWidthPts double
-svx/source/tbxctrls/tbcontrl.cxx:203
+svx/source/tbxctrls/tbcontrl.cxx:202
     (anonymous namespace)::SvxFontNameBox_Impl m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -813,7 +813,7 @@ sw/inc/swmodule.hxx:96
 sw/inc/swmodule.hxx:109
     SwModule m_xLinguServiceEventListener css::uno::Reference<css::linguistic2::XLinguServiceEventListener>
 sw/inc/swwait.hxx:45
-    SwWait mpLockedDispatchers std::unordered_set<SfxDispatcher *>
+    SwWait mpLockedDispatchers o3tl::sorted_vector<SfxDispatcher *>
 sw/inc/unoframe.hxx:311
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:184
@@ -845,15 +845,13 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo7/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
     MailDispatcher m_aListenerVector std::vector< ::rtl::Reference<IMailDispatcherListener> >
 sw/source/uibase/inc/maildispatcher.hxx:152
     MailDispatcher m_xSelfReference ::rtl::Reference<MailDispatcher>
-sw/source/uibase/inc/navipi.hxx:70
-    SwNavigationPI m_xNaviListener std::unique_ptr<NaviStateListener>
 sw/source/uibase/inc/redlndlg.hxx:62
     SwRedlineAcceptDlg m_aUsedSeqNo class SwRedlineDataParentSortArr
 sw/source/uibase/sidebar/TableEditPanel.hxx:51
@@ -948,6 +946,8 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
 vcl/inc/accel.h:33
     ImplAccelEntry mpAutoAccel class Accelerator *
+vcl/inc/driverblocklist.hxx:97
+    DriverBlocklist::DriverInfo maMsg class rtl::OUString
 vcl/inc/fontselect.hxx:61
     FontSelectPattern mfExactHeight float
 vcl/inc/opengl/RenderList.hxx:29
@@ -1014,7 +1014,7 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/unx/salgdi.h:310
+vcl/inc/unx/salgdi.h:311
     X11SalGraphics nTextPixel_ Pixel
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
@@ -1024,9 +1024,9 @@ vcl/inc/WidgetThemeLibrary.hxx:95
     vcl::ControlDrawParameters bIsAction _Bool
 vcl/inc/WidgetThemeLibrary.hxx:96
     vcl::ControlDrawParameters nValue int64_t
-vcl/source/filter/graphicfilter.cxx:659
+vcl/source/filter/graphicfilter.cxx:660
     (anonymous namespace)::ImpFilterLibCacheEntry maFiltername const class rtl::OUString
-vcl/source/filter/graphicfilter.cxx:762
+vcl/source/filter/graphicfilter.cxx:763
     (anonymous namespace)::ImpFilterLibCache mpLast struct (anonymous namespace)::ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
@@ -1060,7 +1060,7 @@ vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1605
+vcl/unx/gtk3/gtk3gtkinst.cxx:1610
      in char *
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1068,9 +1068,11 @@ vcl/unx/gtk3/gtk3hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
 vcl/workben/vcldemo.cxx:1750
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
-writerfilter/source/dmapper/PropertyMap.hxx:204
+writerfilter/source/dmapper/DomainMapperTableHandler.cxx:232
+    writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
+writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/dmapper/SettingsTable.cxx:260
+writerfilter/source/dmapper/SettingsTable.cxx:261
     writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
 xmlhelp/source/cxxhelp/provider/databases.hxx:251
     chelp::Databases m_aDatabases chelp::Databases::DatabasesTable
