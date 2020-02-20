@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "529d7377_4fc2f800",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-20T11:05:55Z",
+      "side": 1,
+      "message": "those double() are unnecessary, it\u0027s enough to use a single 1.0*multiplication factor at the beginning of the expression:\n\nsqrt(1.0*w1*w2+h1*h2)",
+      "range": {
+        "startLine": 747,
+        "startChar": 54,
+        "endLine": 747,
+        "endChar": 198
+      },
+      "revId": "769433ad93040bc81f06672c8a2c01e2b76fece3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f687cb3_3b7f3e10",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-02-20T11:05:55Z",
+      "side": 1,
+      "message": "A) fix line width\n\nWe must use a thicker line instead of the default 0 Postscript line width (\u003dthinnest line width), because 1) the line width is always 1-pixel/1 dot, so zooming of the chart will result practically invisible leader lines for example on a research poster. 2) Some printers cannot print the thinnest lines of the PDF/Postscript documents, so the leader lines will be really invisible (not only practically invisible on a high resolution print).\n\nB) fix line end position on the data point\n\nUse center of the data point, instead of the right side of its boundary rectangle\n\nC) fix line end position on the label:\n\nDraw only to middle point of the nearest side of the boundary rectangle, ideally with an optional broken line to avoid narrow angle of contanct, like MSO does, but a shorter line could be a temporary solution.",
+      "range": {
+        "startLine": 757,
+        "startChar": 24,
+        "endLine": 757,
+        "endChar": 93
+      },
+      "revId": "769433ad93040bc81f06672c8a2c01e2b76fece3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
