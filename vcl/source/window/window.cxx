@@ -3880,7 +3880,7 @@ void Window::RequestDoubleBuffering(bool bRequest)
 }
 
 /*
- * The rational here is that we moved destructors to
+ * The rationale here is that we moved destructors to
  * dispose and this altered a lot of code paths, that
  * are better left unchanged for now.
  */
