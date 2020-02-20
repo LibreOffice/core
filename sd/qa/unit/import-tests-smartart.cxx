@@ -101,7 +101,7 @@ public:
     void testFontSize();
     void testVerticalBlockList();
     void testBulletList();
-    void testMissingBullet();
+    void testMissingBulletAndIndent();
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
@@ -145,7 +145,7 @@ public:
     CPPUNIT_TEST(testFontSize);
     CPPUNIT_TEST(testVerticalBlockList);
     CPPUNIT_TEST(testBulletList);
-    CPPUNIT_TEST(testMissingBullet);
+    CPPUNIT_TEST(testMissingBulletAndIndent);
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
@@ -1277,7 +1277,7 @@ void SdImportTestSmartArt::testVerticalBlockList()
     xDocShRef->DoClose();
 }
 
-void SdImportTestSmartArt::testMissingBullet()
+void SdImportTestSmartArt::testMissingBulletAndIndent()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-missing-bullet.pptx"),
@@ -1297,8 +1297,19 @@ void SdImportTestSmartArt::testMissingBullet()
 
     sal_Int16 nNumberingLevel = -1;
     xPara1->getPropertyValue("NumberingLevel")>>= nNumberingLevel;
-
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nNumberingLevel);
+
+    uno::Reference< container::XIndexAccess > xNumRule;
+    xPara1->getPropertyValue("NumberingRules") >>= xNumRule;
+    uno::Sequence<beans::PropertyValue> aBulletProps;
+    xNumRule->getByIndex(1) >>= aBulletProps;
+
+    for (int i = 0; i < aBulletProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aBulletProps[i];
+        if(rProp.Name == "LeftMargin")
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(309), rProp.Value.get<sal_Int32>());
+    }
 }
 
 void SdImportTestSmartArt::testBulletList()
