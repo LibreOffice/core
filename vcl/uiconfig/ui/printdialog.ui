@@ -109,7 +109,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes" context="printdialog|print ">Print</property>
+                <property name="label" translatable="yes" context="printdialog|print">_Print</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -296,7 +296,7 @@
                             <property name="spacing">3</property>
                             <child>
                               <object class="GtkCheckButton" id="previewbox">
-                                <property name="label" translatable="yes" context="printdialog|previewbox">Preview</property>
+                                <property name="label" translatable="yes" context="printdialog|previewbox">Pre_view</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -741,7 +741,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|cbPrintOrder">_Order:</property>
+                                                <property name="label" translatable="yes" context="printdialog|cbPrintOrder">Order:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">reverseorder</property>
                                               </object>
