@@ -1024,6 +1024,17 @@ DECLARE_OOXMLEXPORT_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
+{
+    // tdf#130799: Inside vertical borders of a table should not be missing.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // Left and right borders.
+    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testRightBorder, "tdf129442_RightBorder.docx")
 {
     // tdf#129442: Right border of a one column table was missing.
