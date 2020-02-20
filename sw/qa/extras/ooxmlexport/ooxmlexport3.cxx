@@ -1061,6 +1061,47 @@ DECLARE_OOXMLEXPORT_TEST(testBottomBorders, "tdf129452_BottomBorders.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 }
 
+<<<<<<< HEAD   (2efa40 update credits)
+=======
+DECLARE_OOXMLEXPORT_TEST(testFontTypes, "tdf120344_FontTypes.docx")
+{
+    // tdf#120344: Font type of numbering symbols can be different than the font type of the text.
+
+    // Check the font type of the text, should be Consolas.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:rFonts [@w:ascii='Consolas']", 1);
+
+    // Now the font type of the numbering symbols, should be Arial Black.
+    xmlDocPtr qXmlDocument = parseExport("word/numbering.xml");
+    if (!qXmlDocument)
+        return;
+    assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testNumberingLevels, "tdf95495.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // tdf#95495: set list level of the custom style based on the setting of the parent style
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
+{
+    // tdf#130799: Inside vertical borders of a table should not be missing.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // Left and right borders.
+    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
+}
+
+>>>>>>> CHANGE (111db7 tdf#130799 DOCX import: fix missing inside vertical borders)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
