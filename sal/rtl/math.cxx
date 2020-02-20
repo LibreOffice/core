@@ -891,7 +891,13 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
             if (fFrac != 0.0)
             {
-                fVal += rtl::math::pow10Exp( fFrac, nFracExp );
+                // For small values, splitting the original computation:
+                //    fVal += rtl::math::pow10Exp( fFrac, nFracExp );
+                // up produces more accurate results (see test in test-rtl-math.cxx)
+                if (nFracExp >= 0)
+                    fVal += fFrac * (1 << nFracExp) * std::pow(5.0, nFracExp);
+                else
+                    fVal += fFrac / ( (1 << -nFracExp) * std::pow(5.0, -nFracExp) );
             }
             else if (nValExp < 0)
             {
