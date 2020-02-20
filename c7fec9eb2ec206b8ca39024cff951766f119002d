@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63bf3e4a_2dadb9b1",
+        "filename": "xmloff/source/draw/sdpropls.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T16:44:34Z",
+      "side": 1,
+      "message": "please make sure this isn\u0027t exported for ODF 1.1/1.2 but only extended; one of these MAP macros takes a version number...",
+      "revId": "c7fec9eb2ec206b8ca39024cff951766f119002d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
