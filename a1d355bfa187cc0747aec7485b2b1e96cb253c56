@@ -52,6 +52,24 @@
       "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74cac69e_702124a3",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-20T06:15:00Z",
+      "side": 1,
+      "message": "Sorry, don\u0027t follow you. The rtl::math::stringToDouble obviously has the same problem as the replaced code: https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/53635/console (look for \"Value must be the nearest representation of decimal 0.0042\" message), so the unit test fails the same way. I suppose we need to adopt some performant yet correct implementation like https://github.com/achan001/dtoa-fast as an o3tl::from_chars until std::from_chars is available...",
+      "parentUuid": "7b7b8da5_50591f56",
+      "revId": "a1d355bfa187cc0747aec7485b2b1e96cb253c56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
