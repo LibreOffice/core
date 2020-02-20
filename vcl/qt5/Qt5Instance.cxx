@@ -400,7 +400,10 @@ void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, cons
 
 OpenGLContext* Qt5Instance::CreateOpenGLContext() { return new Qt5OpenGLContext; }
 
-bool Qt5Instance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }
+bool Qt5Instance::IsMainThread() const
+{
+    return !qApp || (qApp->thread() == QThread::currentThread());
+}
 
 void Qt5Instance::TriggerUserEventProcessing()
 {
