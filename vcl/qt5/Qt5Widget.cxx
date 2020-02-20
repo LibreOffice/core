@@ -450,12 +450,12 @@ bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pE
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
-        // ignore QEvent::ShortcutOverride events originating from outside the application,
+        // ignore non-spontaneous QEvent::ShortcutOverride events,
         // since such an extra event is sent e.g. with Orca screen reader enabled,
-        // so that two events of that kind (the "real one" and one from outside)
+        // so that two events of that kind (the "real one" and a non-spontaneous one)
         // would otherwise be processed, resulting in duplicate input as 'handleKeyEvent'
         // is called below (s. tdf#122053)
-        if (pEvent->spontaneous())
+        if (!pEvent->spontaneous())
         {
             return false;
         }
