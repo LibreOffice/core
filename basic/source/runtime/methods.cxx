@@ -330,8 +330,15 @@ static void implChr( SbxArray& rPar, bool bChrW )
         }
         else
         {
-            sal_Unicode aCh = static_cast<sal_Unicode>(pArg->GetUShort());
-            aStr = OUString(aCh);
+            // Map negative 16-bit values to large positive ones, so that code like Chr(&H8000)
+            // still works after the fix for tdf#62326 changed those four-digit hex notations to
+            // produce negative values:
+            sal_Int32 aCh = pArg->GetLong();
+            if (aCh < -0x8000 || aCh > 0xFFFF) {
+                StarBASIC::Error(ERRCODE_BASIC_MATH_OVERFLOW);
+                aCh = 0;
+            }
+            aStr = OUString(static_cast<sal_Unicode>(aCh));
         }
         rPar.Get32(0)->PutString( aStr );
     }
