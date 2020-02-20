@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d750ea4_c1af497f",
+        "filename": "sfx2/source/bastyp/progress.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T10:19:26Z",
+      "side": 1,
+      "message": "this one was already converted in commit 2d089b2adc1fc67a7621c3078b6b37c5e997789c which causes a merge conflict, please rebase this patch onto current master...",
+      "revId": "179a14098d1ff6fe8a0d972e6b2a9a08e7707442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
