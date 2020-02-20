@@ -322,9 +322,7 @@ core_constructor_list = [
     "com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
-    "com_sun_star_comp_xmlscript_XMLBasicImporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
-    "com_sun_star_comp_xmlscript_XMLOasisBasicImporter",
 # xmlsecurity/util/xmlsecurity.component
     ("com_sun_star_security_CertificateContainer_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_security_DocumentDigitalSignatures_get_implementation", "#if HAVE_FEATURE_NSS"),

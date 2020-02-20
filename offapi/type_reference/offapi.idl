@@ -4974,18 +4974,9 @@ module com {
     };
    };
    module document {
-    published service XMLBasicImporter {
-     interface ::com::sun::star::document::XImporter;
-     interface ::com::sun::star::xml::sax::XDocumentHandler;
-    };
     published service XMLOasisBasicExporter: ::com::sun::star::document::XXMLBasicExporter {
      createWithHandler([in] ::com::sun::star::xml::sax::XDocumentHandler DocumentHandler);
     };
-    published interface XXMLOasisBasicImporter {
-     interface ::com::sun::star::document::XImporter;
-     interface ::com::sun::star::xml::sax::XDocumentHandler;
-    };
-    published service XMLOasisBasicImporter: ::com::sun::star::document::XXMLOasisBasicImporter;
     published interface XMimeTypeInfo {
      interface ::com::sun::star::uno::XInterface;
      boolean supportsMimeType([in] string MimeTypeName);

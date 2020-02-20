@@ -46,7 +46,6 @@ $(eval $(call gb_Library_add_exception_objects,xmlscript,\
     xmlscript/source/xmldlg_imexp/xmldlg_impmodels \
     xmlscript/source/xmldlg_imexp/xmldlg_import \
     xmlscript/source/xmlflat_imexp/xmlbas_export \
-    xmlscript/source/xmlflat_imexp/xmlbas_import \
     xmlscript/source/xmllib_imexp/xmllib_export \
     xmlscript/source/xmllib_imexp/xmllib_import \
     xmlscript/source/xmlmod_imexp/xmlmod_export \
