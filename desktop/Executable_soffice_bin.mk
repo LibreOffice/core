@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \
 ))
 
-ifeq ($(OS)-$(HAVE_MACOS_LD_PLATFORMVERSION),MACOSX-TRUE)
+ifeq ($(OS),MACOSX)
 # At least when building against SDK 10.15, changing the LC_VERSION_MIN_MACOSX load command's sdk
 # value from 10.15 to "n/a" (i.e., 0.0.0) is necessary to avoid blurry text in the LO UI (see
 # <https://github.com/llvm/llvm-project/commit/25ce33a6e4f3b13732c0f851e68390dc2acb9123>
