@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44f6d955_22759b32",
+        "filename": "sd/qa/uitest/impress_tests/tdf130440.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-20T08:34:13Z",
+      "side": 1,
+      "message": "This Redo is not relevant for the test?",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 49
+      },
+      "revId": "bea50dda06f0c92e5a31594adb6f0225580f8d7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
