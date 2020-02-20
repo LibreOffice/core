@@ -47,7 +47,8 @@
   <implementation name="SchXMLImport.Content">
     <service name="com.sun.star.comp.Chart.XMLOasisContentImporter"/>
   </implementation>
-  <implementation name="SchXMLImport.Meta">
+  <implementation name="SchXMLImport.Meta"
+      constructor="com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLOasisMetaImporter"/>
   </implementation>
   <implementation name="SchXMLImport.Styles">
