@@ -1133,6 +1133,7 @@ SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {
     SalPointerState aState;
     aState.maPos = toPoint(QCursor::pos());
+    aState.maPos.Move(-maGeometry.nX, -maGeometry.nY);
     aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
                      | GetKeyModCode(QGuiApplication::keyboardModifiers());
     return aState;
