@@ -202,6 +202,7 @@ public:
     void testFdo85554();
     void testAutoCorr();
     void testTdf83260();
+    void testTdf130274();
     void testMergeDoc();
     void testCreatePortions();
     void testBookmarkUndo();
@@ -410,6 +411,7 @@ public:
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
     CPPUNIT_TEST(testTdf83260);
+    CPPUNIT_TEST(testTdf130274);
     CPPUNIT_TEST(testMergeDoc);
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
@@ -1630,6 +1632,29 @@ void SwUiWriterTest::testTdf83260()
     {
         rUndoManager.Undo();
     }
+}
+
+void SwUiWriterTest::testTdf130274()
+{
+    SwDoc *const pDoc(createDoc());
+    SwWrtShell *const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+
+    CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
+    CPPUNIT_ASSERT(!IDocumentRedlineAccess::IsRedlineOn(
+            pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // "tset" may be replaced by the AutoCorrect in the test profile
+    pWrtShell->Insert("tset");
+    // select from left to right
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+
+    pWrtShell->SetRedlineFlags(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    // this would crash in AutoCorrect
+    pWrtShell->AutoCorrect(corr, '.');
+
+    CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
 }
 
 void SwUiWriterTest::testMergeDoc()
