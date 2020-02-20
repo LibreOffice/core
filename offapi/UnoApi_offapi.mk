@@ -134,7 +134,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/document,\
 	OOXMLDocumentPropertiesImporter \
 	XMLBasicExporter \
 	XMLOasisBasicExporter \
-	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/drawing,\
 	ColorTable \
@@ -757,7 +756,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/document,\
 	PDFDialog \
 	Settings \
 	TypeDetection \
-	XMLBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
@@ -2258,7 +2256,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	XVbaMethodParameter \
 	XViewDataSupplier \
 	XXMLBasicExporter \
-	XXMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	Alignment \
