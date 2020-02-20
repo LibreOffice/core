@@ -22,6 +22,30 @@
       "revId": "443f5c6e43760c0b95bad5490f7aa1f2712a9734",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d6a89d0_3e90f92d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T09:46:21Z",
+      "side": 1,
+      "message": "this patch was merged, so i guess this patch should be adapted so that the jars have the same content as the ones built by gbuild. or maybe they can all be copied from gbuild now, i don\u0027t know.",
+      "parentUuid": "ecdeeef0_89a71fbf",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 7
+      },
+      "revId": "443f5c6e43760c0b95bad5490f7aa1f2712a9734",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
