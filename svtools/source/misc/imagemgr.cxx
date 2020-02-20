@@ -778,13 +778,6 @@ OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
     return GetImageNameFromList_Impl(nImage, /*bBig*/false);
 }
 
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject )
-{
-    SvImageId nImage = GetImageId_Impl( rObject, false );
-    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, false/*bBig*/ );
-}
-
 Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
 {
     SvImageId nImage = GetImageId_Impl(rObject, true);

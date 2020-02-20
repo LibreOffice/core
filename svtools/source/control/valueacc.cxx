@@ -703,26 +703,6 @@ ValueItemAcc::~ValueItemAcc()
 {
 }
 
-void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
-{
-    if( !nEventId )
-        return;
-
-    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-    accessibility::AccessibleEventObject                                                        aEvtObject;
-
-    aEvtObject.EventId = nEventId;
-    aEvtObject.Source = static_cast<uno::XWeak*>(this);
-    aEvtObject.NewValue = rNewValue;
-    aEvtObject.OldValue = rOldValue;
-
-    for (auto const& tmpListener : aTmpListeners)
-    {
-        tmpListener->notifyEvent( aEvtObject );
-    }
-}
-
-
 void ValueItemAcc::ParentDestroyed()
 {
     const ::osl::MutexGuard aGuard( maMutex );

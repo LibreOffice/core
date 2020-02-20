@@ -142,7 +142,6 @@ public:
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    void                    SetShowTrailingZeros( bool bShowTrailingZeros );
     bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
 
     void                    SetUserValue( sal_Int64 nNewValue );
@@ -208,7 +207,6 @@ public:
     void                    SetMin( sal_Int64 nNewMin, FieldUnit eInUnit );
     using NumericFormatter::GetMin;
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
-    sal_Int64               GetBaseValue() const;
 
     void                    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual void            SetValue( sal_Int64 nValue ) override;
@@ -439,10 +437,8 @@ public:
     virtual void            SetUnit( FieldUnit meUnit ) override;
 
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
-    void             SetFirst(sal_Int64 first) { SetFirst(first, FieldUnit::NONE); }
     sal_Int64               GetFirst( FieldUnit eOutUnit ) const;
     void                    SetLast( sal_Int64 nNewLast, FieldUnit eInUnit );
-    void             SetLast(sal_Int64 last) { SetLast(last, FieldUnit::NONE); }
     sal_Int64               GetLast( FieldUnit eOutUnit ) const;
 
     virtual bool            set_property(const OString &rKey, const OUString &rValue) override;

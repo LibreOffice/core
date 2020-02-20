@@ -502,7 +502,6 @@ public:
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
     void                ChangeHighlight( ImplToolItems::size_type nPos );
-    bool                ChangeHighlightUpDn( bool bUp );
 
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );

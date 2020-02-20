@@ -106,11 +106,6 @@ namespace vcl
     {
     }
 
-    void QuickSelectionEngine::SetEnabled( bool b )
-    {
-        bEnabled = b;
-    }
-
     bool QuickSelectionEngine::HandleKeyEvent( const KeyEvent& _keyEvent )
     {
         if( bEnabled )

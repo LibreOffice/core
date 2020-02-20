@@ -66,7 +66,6 @@ public:
     void                    InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
 
     sal_uInt16              GetCurItemId() const { return mnCurId; }
-    const vcl::KeyCode&     GetCurKeyCode() const { return maCurKeyCode; }
 
     sal_uInt16              GetItemCount() const;
     sal_uInt16              GetItemId( sal_uInt16 nPos ) const;

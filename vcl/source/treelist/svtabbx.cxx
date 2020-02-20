@@ -128,23 +128,6 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
         Invalidate();
 }
 
-void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
-{
-    DBG_ASSERT(nTab<mvTabList.size(),"Invalid Tab-Pos");
-    if( nTab >= mvTabList.size() )
-        return;
-
-    MapMode aMMSource( eMapUnit );
-    MapMode aMMDest( MapUnit::MapPixel );
-    Size aSize( nValue, 0 );
-    aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
-    nValue = aSize.Width();
-    mvTabList[ nTab ].SetPos( nValue );
-    SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
-    if( IsUpdateMode() )
-        Invalidate();
-}
-
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                         bool /*bChildrenOnDemand*/,
                                         sal_uLong nPos, void* pUserData )
@@ -259,39 +242,6 @@ OUString SvTabListBox::GetEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
 {
     SvTreeListEntry* pEntry = GetEntryOnPos( nPos );
     return GetEntryText( pEntry, nCol );
-}
-
-void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, sal_uInt16 nCol)
-{
-    DBG_ASSERT(pEntry,"SetEntryText:Invalid Entry");
-    if( !pEntry )
-        return;
-
-    OUString sOldText = GetEntryText(pEntry, nCol);
-    if (sOldText == rStr)
-        return;
-
-    sal_Int32 nIndex = 0;
-    const sal_uInt16 nCount = pEntry->ItemCount();
-    for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
-    {
-        SvLBoxItem& rBoxItem = pEntry->GetItem( nCur );
-        if (rBoxItem.GetType() == SvLBoxItemType::String)
-        {
-            if (!nCol || nCol==0xFFFF)
-            {
-                const OUString aTemp(GetToken(rStr, nIndex));
-                static_cast<SvLBoxString&>(rBoxItem).SetText( aTemp );
-                if (!nCol && nIndex<0)
-                    break;
-            }
-            else
-            {
-                --nCol;
-            }
-        }
-    }
-    GetModel()->InvalidateEntry( pEntry );
 }
 
 OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
