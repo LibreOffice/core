@@ -3417,32 +3417,6 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
     GetParentWindow()->UpdateListBox();
 }
 
-void SwContentTree::DeleteOutlineSelections()
-{
-    m_pActiveShell->StartAction();
-    m_pActiveShell->EnterAddMode();
-    auto nChapters(0);
-    for (SvTreeListEntry* pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
-    {
-        ++nChapters;
-        if ((pEntry->HasChildren() || pEntry->HasChildrenOnDemand()) && !IsExpanded(pEntry)) // only count children if not expanded
-            nChapters += pEntry->GetChildEntries().size();
-        m_pActiveShell->SttSelect();
-        SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
-        m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !IsExpanded(pEntry), false); // select children if not expanded
-        m_pActiveShell->EndSelect();
-    }
-    m_pActiveShell->LeaveAddMode();
-    SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SwResId(STR_CHAPTERS, nChapters));
-    m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-    m_pActiveShell->SetTextFormatColl(nullptr);
-    m_pActiveShell->Delete();
-    m_pActiveShell->ClearMark();
-    m_pActiveShell->EndUndo();
-    m_pActiveShell->EndAction();
-}
-
 void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 {
     m_nOutlineLevel = nSet;
@@ -3532,11 +3506,12 @@ OUString SwContentType::RemoveNewline(const OUString& rEntry)
     return aEntry.makeStringAndClear();
 }
 
-void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMode)
+void SwContentTree::EditEntry(SvTreeListEntry const * pEntry_, EditEntryMode nMode)
 {
-    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
-    GotoContent(pCnt);
+    SwContent* pCnt = static_cast<SwContent*>(pEntry_->GetUserData());
     const ContentTypeId nType = pCnt->GetParent()->GetType();
+    if(nType != ContentTypeId::OUTLINE)
+        GotoContent(pCnt);
     sal_uInt16 nSlot = 0;
 
     uno::Reference< container::XNameAccess >  xNameAccess, xSecond, xThird;
@@ -3545,7 +3520,29 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
         case ContentTypeId::OUTLINE :
             if(nMode == EditEntryMode::DELETE)
             {
-                DeleteOutlineSelections();
+                m_pActiveShell->EnterStdMode();
+                m_pActiveShell->StartAction();
+                m_pActiveShell->EnterAddMode();
+                auto nChapters(0);
+                for (SvTreeListEntry* pEntry = FirstSelected(); pEntry; pEntry = NextSelected(pEntry))
+                {
+                    ++nChapters;
+                    if ((pEntry->HasChildren() || pEntry->HasChildrenOnDemand()) && !IsExpanded(pEntry)) // only count children if not expanded
+                        nChapters += pEntry->GetChildEntries().size();
+                    m_pActiveShell->SttSelect();
+                    SwOutlineNodes::size_type nActPos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos();
+                    m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !IsExpanded(pEntry), false); // select children if not expanded
+                    m_pActiveShell->EndSelect();
+                }
+                m_pActiveShell->LeaveAddMode();
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UndoArg1, SwResId(STR_CHAPTERS, nChapters));
+                m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
+                m_pActiveShell->SetTextFormatColl(nullptr);
+                m_pActiveShell->Delete();
+                m_pActiveShell->ClearMark();
+                m_pActiveShell->EndUndo();
+                m_pActiveShell->EndAction();
             }
         break;
 
