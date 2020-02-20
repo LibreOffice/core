@@ -2198,7 +2198,26 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().
             if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
-                ScGlobal::OpenURL(aUrl, aTarget);
+            {
+                // in mobile view there is no ctrl+click and for hyperlink popup
+                // the cell coordinates must be sent along with click position for elegance
+                if (comphelper::LibreOfficeKit::isActive() &&
+                     comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+                {
+                    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                    Point aPos = rMEvt.GetPosPixel();
+                    SCCOL nPosX;
+                    SCROW nPosY;
+                    pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+                    auto pForTabView = dynamic_cast<const ScTabViewShell *>(pViewShell);
+                    OString aCursor = pForTabView->GetViewData().describeCellCursorAt(nPosX, nPosY);
+                    double fPPTX = pForTabView->GetViewData().GetPPTX();
+                    int mouseX = aPos.X() / fPPTX;
+                    OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", " + OString::number(mouseX));
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
+                } else
+                    ScGlobal::OpenURL(aUrl, aTarget);
+            }
             else
             {
                 ScAddress aTempAddr;
