@@ -280,7 +280,7 @@ OUString ScFuncDesc::getFunctionName() const
 
 const formula::IFunctionCategory* ScFuncDesc::getCategory() const
 {
-    return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory);
+    return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory - 1);
 }
 
 OUString ScFuncDesc::getDescription() const
