@@ -1,13 +1,13 @@
-avmedia/inc/mediacontrol.hxx:72
+avmedia/inc/mediacontrol.hxx:64
     avmedia::MediaControl maIdle
     avmedia MediaControl Idle
-avmedia/inc/mediacontrol.hxx:73
+avmedia/inc/mediacontrol.hxx:65
     avmedia::MediaControl maChangeTimeIdle
     avmedia MediaControl Change Time Idle
-avmedia/source/framework/soundhandler.hxx:115
+avmedia/source/framework/soundhandler.hxx:114
     avmedia::SoundHandler m_aUpdateIdle
     avmedia SoundHandler Update
-basctl/source/basicide/baside2.hxx:86
+basctl/source/basicide/baside2.hxx:81
     basctl::EditorWindow aHighlighter
     0
 basctl/source/inc/dlged.hxx:132
@@ -40,6 +40,18 @@ bridges/source/jni_uno/jni_bridge.h:53
 bridges/source/jni_uno/jni_uno2java.cxx:391
     jni_uno::(anonymous namespace)::UNO_proxy m_ref
     1
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex g
+    1
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex r
+    1
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex b
+    1
+canvas/inc/rendering/irendermodule.hxx:37
+    canvas::Vertex z
+    0
 chart2/source/controller/dialogs/DataBrowser.cxx:209
     chart::impl::SeriesHeader m_aUpdateDataTimer
     UpdateDataTimer
@@ -58,7 +70,7 @@ chart2/source/controller/inc/TitleDialogData.hxx:36
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed
     0
-comphelper/source/misc/threadpool.cxx:39
+comphelper/source/misc/threadpool.cxx:40
     comphelper gbIsWorkerThread
     1
 connectivity/source/inc/dbase/DIndexIter.hxx:36
@@ -109,7 +121,7 @@ cui/source/inc/linkdlg.hxx:46
 cui/source/inc/thesdlg.hxx:32
     SvxThesaurusDialog m_aModifyIdle
     cui SvxThesaurusDialog LookUp Modify
-cui/source/options/optgdlg.cxx:1237
+cui/source/options/optgdlg.cxx:1277
     LanguageConfig_Impl aLanguageOptions
     0
 cui/source/options/optjava.hxx:60
@@ -196,18 +208,6 @@ include/basegfx/pixel/bpixel.hxx:43
 include/basic/sbxvar.hxx:73
     SbxValues::(anonymous) pData
     0
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex g
-    1
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex r
-    1
-include/canvas/rendering/irendermodule.hxx:36
-    canvas::Vertex b
-    1
-include/canvas/rendering/irendermodule.hxx:38
-    canvas::Vertex z
-    0
 include/comphelper/parallelsort.hxx:89
     comphelper::(anonymous namespace)::ProfileZone mbDummy
     1
@@ -271,6 +271,9 @@ include/svtools/svparser.hxx:74
 include/svtools/tabbar.hxx:323
     TabBar mnOffY
     0
+include/svtools/valueset.hxx:219
+    ValueSet mnSpacing
+    0
 include/svx/ctredlin.hxx:91
     SvxRedlinTable aDaTiFirst
     0
@@ -297,9 +300,6 @@ include/svx/deflt3d.hxx:53
     1
 include/svx/deflt3d.hxx:54
     E3dDefaultAttributes bDefaultExtrudeSmoothFrontBack
-    0
-include/svx/fillctrl.hxx:53
-    SvxFillToolBoxControl mpFillControl
     0
 include/svx/fontwork.hxx:77
     SvxFontWorkDialog aInputIdle
@@ -337,18 +337,9 @@ include/vcl/settings.hxx:146
 include/vcl/settings.hxx:147
     DialogStyle action_area_border
     5
-io/qa/textinputstream.cxx:97
-    (anonymous namespace)::Input open_
-    1
 libreofficekit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
     0
-odk/source/unoapploader/unx/unoapploader.c:39
-    /home/noel/libo2/odk/source/unoapploader/unx/unoapploader.c PATHSEPARATOR
-    :
-odk/source/unoapploader/unx/unoapploader.c:81
-    main ENVVARNAME
-    LD_LIBRARY_PATH
 oox/source/core/contexthandler2.cxx:36
     oox::core::ElementInfo maChars
     0
@@ -475,9 +466,6 @@ sc/inc/scmod.hxx:84
 sc/inc/table.hxx:180
     ScTable mpRowHeights
     0
-sc/qa/extras/check_data_pilot_field.cxx:62
-    sc_apitest::CheckDataPilotField mMaxFieldIndex
-    6
 sc/qa/unit/screenshots/screenshots.cxx:40
     ScScreenshotTest mCsv
     some, strings, here, separated, by, commas
@@ -651,6 +639,9 @@ svgio/source/svgreader/svgdocumenthandler.cxx:82
     1
 svl/source/crypto/cryptosign.cxx:153
     (anonymous namespace)::TimeStampReq extensions
+    0
+svtools/source/control/valueimp.hxx:62
+    ValueSetItem mpData
     0
 svx/inc/sdr/overlay/overlaymanagerbuffered.hxx:44
     sdr::overlay::OverlayManagerBuffered maBufferIdle
@@ -931,6 +922,9 @@ sw/source/uibase/inc/unotools.hxx:45
 unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave
     0
+vcl/headless/svpgdi.cxx:1327
+    SvpSalGraphics::drawPolyLine bDoDirectCairoStroke
+    1
 vcl/inc/canvasbitmap.hxx:55
     vcl::unotools::VclCanvasBitmap m_nEndianness
     0
@@ -951,9 +945,6 @@ vcl/inc/salprn.hxx:44
     4294967295
 vcl/inc/salwtype.hxx:157
     SalWheelMouseEvent mbDeltaIsPixel
-    0
-vcl/inc/slider.hxx:39
-    Slider mnChannelPixOffset
     0
 vcl/inc/svdata.hxx:278
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
@@ -1048,25 +1039,28 @@ vcl/source/gdi/pdfwriter_impl.hxx:735
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx:700
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:12932
+vcl/unx/gtk3/gtk3gtkinst.cxx:13120
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
+    1
+vcl/unx/gtk3/gtk3gtkinst.cxx:13148
+    (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
     /home/noel/libo2/workdir/LexTarget/l10ntools/source/xrmlex.cxx bText
     0
-writerfilter/source/dmapper/DomainMapper_Impl.hxx:155
+writerfilter/source/dmapper/DomainMapper_Impl.hxx:148
     writerfilter::dmapper::FieldParagraph m_bRemove
     0
-writerfilter/source/dmapper/SettingsTable.cxx:263
+writerfilter/source/dmapper/SettingsTable.cxx:264
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:871
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:872
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:872
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:873
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:875
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:876
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
 writerfilter/source/rtftok/rtftokenizer.hxx:72

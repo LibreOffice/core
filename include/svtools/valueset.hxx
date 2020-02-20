@@ -216,7 +216,6 @@ private:
     sal_uInt16      mnUserCols;
     sal_uInt16      mnUserVisLines;
     sal_uInt16      mnFirstLine;
-    sal_uInt16      mnSpacing;
     DrawFrameStyle  mnFrameStyle;
     Color           maColor;
     Link<ValueSet*,void>  maSelectHdl;

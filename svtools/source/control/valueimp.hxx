@@ -59,7 +59,6 @@ struct ValueSetItem
     Image               maImage;
     Color               maColor;
     OUString            maText;
-    void*               mpData;
     rtl::Reference< ValueItemAcc > mxAcc;
 
     explicit ValueSetItem( ValueSet& rParent );

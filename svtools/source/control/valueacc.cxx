@@ -41,7 +41,6 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     , mnId(0)
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
-    , mpData(nullptr)
     , mxAcc()
 {
 }

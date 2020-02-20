@@ -34,14 +34,14 @@ include/tools/ref.hxx:126
 include/vbahelper/vbapagesetupbase.hxx:50
     VbaPageSetupBase mnOrientPortrait
     sal_Int32
-include/vcl/dialog.hxx:48
-    Dialog mnMousePositioned
-    long
 include/vcl/headbar.hxx:208
     HeaderBar mnBorderOff1
     long
 include/vcl/headbar.hxx:209
     HeaderBar mnBorderOff2
+    long
+include/vcl/toolkit/dialog.hxx:52
+    Dialog mnMousePositioned
     long
 jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
     (anonymous) g_bInGetJavaVM
@@ -88,7 +88,7 @@ svx/source/inc/cell.hxx:204
 svx/source/table/tablertfimporter.cxx:57
     sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
-sw/source/filter/ww8/docxexport.hxx:98
+sw/source/filter/ww8/docxexport.hxx:99
     DocxExport m_nHeadersFootersInSection
     sal_Int32
 sw/source/filter/ww8/ww8scan.hxx:58
@@ -118,6 +118,6 @@ vcl/workben/icontest.cxx:147
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
     /home/noel/libo2/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
-writerfilter/source/dmapper/PageBordersHandler.hxx:53
+writerfilter/source/dmapper/PageBordersHandler.hxx:51
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
     class SectionPropertyMap::BorderOffsetFrom

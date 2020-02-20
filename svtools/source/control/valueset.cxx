@@ -83,7 +83,6 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     mnCurCol            = 0;
     mnUserCols          = 0;
     mnUserVisLines      = 0;
-    mnSpacing           = 0;
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbFormat            = true;
     mbHighlight         = false;
@@ -391,7 +390,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     if (nStyle & WB_NONEFIELD)
     {
         nNoneHeight = nTxtHeight + nOff;
-        nNoneSpace = mnSpacing;
+        nNoneSpace = 0;
     }
     else
     {
@@ -410,7 +409,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     {
         if (mnUserItemWidth)
         {
-            mnCols = static_cast<sal_uInt16>((aWinSize.Width() - nScrBarWidth + mnSpacing) / (mnUserItemWidth + mnSpacing));
+            mnCols = static_cast<sal_uInt16>((aWinSize.Width() - nScrBarWidth) / mnUserItemWidth);
             if (mnCols <= 0)
                 mnCols = 1;
         }
@@ -439,7 +438,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     }
     else if (mnUserItemHeight)
     {
-        mnVisLines = (nCalcHeight - nNoneSpace + mnSpacing) / (mnUserItemHeight + mnSpacing);
+        mnVisLines = (nCalcHeight - nNoneSpace) / mnUserItemHeight;
         if (!mnVisLines)
             mnVisLines = 1;
     }
@@ -462,16 +461,15 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
     }
 
     // calculate item size
-    const long nColSpace  = (mnCols - 1) * static_cast<long>(mnSpacing);
-    const long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
+    const long nLineSpace = nNoneSpace;
     if (mnUserItemWidth && !mnUserCols)
     {
         mnItemWidth = mnUserItemWidth;
-        if (mnItemWidth > aWinSize.Width() - nScrBarWidth - nColSpace)
-            mnItemWidth = aWinSize.Width() - nScrBarWidth - nColSpace;
+        if (mnItemWidth > aWinSize.Width() - nScrBarWidth)
+            mnItemWidth = aWinSize.Width() - nScrBarWidth;
     }
     else
-        mnItemWidth = (aWinSize.Width() - nScrBarWidth-nColSpace) / mnCols;
+        mnItemWidth = (aWinSize.Width() - nScrBarWidth) / mnCols;
     if (mnUserItemHeight && !mnUserVisLines)
     {
         mnItemHeight = mnUserItemHeight;
@@ -543,7 +541,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         }
 
         // calculate offsets
-        long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+        long nAllItemWidth = mnItemWidth * mnCols;
         long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
         long nStartX = (aWinSize.Width() - nScrBarWidth - nAllItemWidth) / 2;
         long nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
@@ -578,8 +576,8 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
 
         maItemListRect.SetLeft( x );
         maItemListRect.SetTop( y );
-        maItemListRect.SetRight( x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1 );
-        maItemListRect.SetBottom( y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1 );
+        maItemListRect.SetRight( x + mnCols * mnItemWidth - 1 );
+        maItemListRect.SetBottom( y + mnVisLines * mnItemHeight - 1 );
 
         for (size_t i = 0; i < nItemCount; i++)
         {
@@ -602,10 +600,10 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
                 if (!((i + 1) % mnCols))
                 {
                     x = nStartX;
-                    y += mnItemHeight + mnSpacing;
+                    y += mnItemHeight;
                 }
                 else
-                    x += mnItemWidth + mnSpacing;
+                    x += mnItemWidth;
             }
             else
             {
@@ -631,7 +629,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
             if (nStyle & WB_NONEFIELD)
             {
                 aPos.setY( nStartY + nNoneHeight + 1 );
-                aSize.setHeight( ((mnItemHeight + mnSpacing) * mnVisLines) - 2 - mnSpacing );
+                aSize.setHeight( (mnItemHeight * mnVisLines) - 2 );
             }
             mxScrollBar->SetPosSizePixel(aPos, aSize);
             mxScrollBar->SetRangeMax(mnLines);
@@ -885,10 +883,10 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         const int yc = rPos.Y() - maItemListRect.Top();
         // The point is inside the area of item list,
         // let's find the containing item.
-        const int col = xc / (mnItemWidth + mnSpacing);
-        const int x = xc % (mnItemWidth + mnSpacing);
-        const int row = yc / (mnItemHeight + mnSpacing);
-        const int y = yc % (mnItemHeight + mnSpacing);
+        const int col = xc / mnItemWidth;
+        const int x = xc % mnItemWidth;
+        const int row = yc / mnItemHeight;
+        const int y = yc % mnItemHeight;
 
         if (x < mnItemWidth && y < mnItemHeight)
         {
@@ -1465,8 +1463,8 @@ tools::Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
 
     const size_t row = mnCols ? nPos/mnCols : 0;
     const size_t col = mnCols ? nPos%mnCols : 0;
-    const long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
-    const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
+    const long x = maItemListRect.Left()+col*mnItemWidth;
+    const long y = maItemListRect.Top()+row*mnItemHeight;
 
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
 }
@@ -1767,12 +1765,6 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
     else
         n = 0;
 
-    if ( mnSpacing )
-    {
-        aSize.AdjustWidth(mnSpacing * (nCalcCols - 1) );
-        aSize.AdjustHeight(mnSpacing * (nCalcLines - 1) );
-    }
-
     if ( nStyle & WB_NAMEFIELD )
     {
         aSize.AdjustHeight(nTxtHeight + NAME_OFFSET );
@@ -1782,7 +1774,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
     if ( nStyle & WB_NONEFIELD )
     {
-        aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
+        aSize.AdjustHeight(nTxtHeight + n);
     }
 
     // sum possible ScrollBar width
