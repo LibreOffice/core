@@ -836,7 +836,17 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // Do not apply vertical borders to a one column table.
                 else if (m_aCellProperties.size() > 1 && aRowOfCellsIterator->size() <= 1)
                 {
-                    rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
+                    bool isOneCol = true;
+                    for (size_t i = nRow; i < m_aCellProperties.size(); i++)
+                    {
+                        if (m_aCellProperties[i].size() > 1)
+                        {
+                            isOneCol = false;
+                            break;
+                        }
+                    }
+                    if (isOneCol)
+                        rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
                 }
                 // Do not apply horizontal borders to a one row table.
                 else if (m_aCellProperties.size() == 1 && aRowOfCellsIterator->size() > 1)
