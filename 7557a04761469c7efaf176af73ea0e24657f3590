@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6f12197_59eb5efd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-20T00:13:12Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 617,
+        "startChar": 17,
+        "endLine": 617,
+        "endChar": 19
+      },
+      "revId": "7557a04761469c7efaf176af73ea0e24657f3590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e3adc8d_222e0444",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-20T00:13:12Z",
+      "side": 1,
+      "message": "tab",
+      "range": {
+        "startLine": 623,
+        "startChar": 4,
+        "endLine": 623,
+        "endChar": 7
+      },
+      "revId": "7557a04761469c7efaf176af73ea0e24657f3590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a12308d_f8a2ebad",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-02-20T00:13:12Z",
+      "side": 1,
+      "message": "Good catch on this replace. I missed it myself ;)",
+      "range": {
+        "startLine": 1149,
+        "startChar": 56,
+        "endLine": 1149,
+        "endChar": 61
+      },
+      "revId": "7557a04761469c7efaf176af73ea0e24657f3590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
