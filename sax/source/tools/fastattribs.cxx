@@ -144,7 +144,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token )
                        getFastAttributeValue(i),
                        AttributeValueLength( i ) );
 
-    throw SAXException();
+    throw SAXException("FastAttributeList::getValueToken: unknown token " + OUString::number(Token), nullptr, Any());
 }
 
 sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default )
@@ -216,7 +216,7 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token )
         if (maAttributeTokens[i] == Token)
             return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
-    throw SAXException();
+    throw SAXException("FastAttributeList::getValue: unknown token " + OUString::number(Token), nullptr, Any());
 }
 
 OUString FastAttributeList::getValueByIndex( ::sal_Int32 nTokenIndex ) const
