@@ -2836,6 +2836,10 @@ void Window::setPosSizePixel( long nX, long nY,
 
         pWindow->mpWindowImpl->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
 
+        // Adjust resize with the hack of different client size and frame geometries to fix
+        // native menu bars. Eventually this should be replaced by proper mnTopBorder usage.
+        pWindow->mpWindowImpl->mpFrame->GetClientSize(nWidth, nHeight);
+
         // Resize should be called directly. If we haven't
         // set the correct size, we get a second resize from
         // the system with the correct size. This can be happened
