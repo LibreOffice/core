@@ -33,7 +33,7 @@ class tdf129346(UITestCase):
         self.xUITest.executeCommand(".uno:Redo")
         # usually passes, but sometimes it asserts with AssertionError: 1 != 2
         #self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
-        #self.xUITest.executeCommand(".uno:Redo")
+        self.xUITest.executeCommand(".uno:Redo")
 
         xDoc = self.xUITest.getTopFocusWindow()
         xEdit = xDoc.getChild("impress_win")
