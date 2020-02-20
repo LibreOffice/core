@@ -18,6 +18,200 @@ basic/source/comp/codegen.cxx:531
     void (anonymous namespace)::BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:540
     _Bool (anonymous namespace)::BufferTransformer::processParams()
+canvas/inc/base/basemutexhelper.hxx:58
+    void canvas::BaseMutexHelper::disposing()
+canvas/inc/base/bitmapcanvasbase.hxx:72
+    struct com::sun::star::geometry::IntegerSize2D canvas::BitmapCanvasBase::getSize()
+canvas/inc/base/bitmapcanvasbase.hxx:79
+    unsigned char canvas::BitmapCanvasBase::hasAlpha()
+canvas/inc/base/bitmapcanvasbase.hxx:84
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::BitmapCanvasBase::getScaledBitmap(const struct com::sun::star::geometry::RealSize2D &,unsigned char,)
+canvas/inc/base/bitmapcanvasbase.hxx:105
+    void canvas::BitmapCanvasBase2::copyRect(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:94
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
+canvas/inc/base/bufferedgraphicdevicebase.hxx:100
+    int canvas::BufferedGraphicDeviceBase::createBuffers(int,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:107
+    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
+canvas/inc/base/bufferedgraphicdevicebase.hxx:111
+    unsigned char canvas::BufferedGraphicDeviceBase::showBuffer(unsigned char,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:118
+    unsigned char canvas::BufferedGraphicDeviceBase::switchBuffer(unsigned char,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:162
+    void canvas::BufferedGraphicDeviceBase::disposeThis()
+canvas/inc/base/bufferedgraphicdevicebase.hxx:209
+    void canvas::BufferedGraphicDeviceBase::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:219
+    void canvas::BufferedGraphicDeviceBase::windowResized(const struct com::sun::star::awt::WindowEvent &,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:224
+    void canvas::BufferedGraphicDeviceBase::windowMoved(const struct com::sun::star::awt::WindowEvent &,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:229
+    void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
+canvas/inc/base/bufferedgraphicdevicebase.hxx:236
+    void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
+canvas/inc/base/canvasbase.hxx:124
+    void canvas::CanvasBase::disposeThis()
+canvas/inc/base/canvasbase.hxx:135
+    void canvas::CanvasBase::clear()
+canvas/inc/base/canvasbase.hxx:144
+    void canvas::CanvasBase::drawPoint(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:157
+    void canvas::CanvasBase::drawLine(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:173
+    void canvas::CanvasBase::drawBezier(const struct com::sun::star::geometry::RealBezierSegment2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:190
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:206
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokePolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
+canvas/inc/base/canvasbase.hxx:223
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+canvas/inc/base/canvasbase.hxx:241
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+canvas/inc/base/canvasbase.hxx:260
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> canvas::CanvasBase::queryStrokeShapes(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
+canvas/inc/base/canvasbase.hxx:277
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:293
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
+canvas/inc/base/canvasbase.hxx:310
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
+canvas/inc/base/canvasbase.hxx:329
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
+canvas/inc/base/canvasbase.hxx:347
+    class com::sun::star::uno::Sequence<struct com::sun::star::rendering::FontInfo> canvas::CanvasBase::queryAvailableFonts(const struct com::sun::star::rendering::FontInfo &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+canvas/inc/base/canvasbase.hxx:361
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawText(const struct com::sun::star::rendering::StringContext &,const class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,signed char,)
+canvas/inc/base/canvasbase.hxx:383
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawTextLayout(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XTextLayout> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:400
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:416
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvasbase.hxx:432
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
+canvas/inc/base/canvascustomspritebase.hxx:94
+    void canvas::CanvasCustomSpriteBase::disposeThis()
+canvas/inc/base/canvascustomspritebase.hxx:105
+    void canvas::CanvasCustomSpriteBase::clear()
+canvas/inc/base/canvascustomspritebase.hxx:116
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasCustomSpriteBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvascustomspritebase.hxx:142
+    void canvas::CanvasCustomSpriteBase::setAlpha(double,)
+canvas/inc/base/canvascustomspritebase.hxx:151
+    void canvas::CanvasCustomSpriteBase::move(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
+canvas/inc/base/canvascustomspritebase.hxx:164
+    void canvas::CanvasCustomSpriteBase::transform(const struct com::sun::star::geometry::AffineMatrix2D &,)
+canvas/inc/base/canvascustomspritebase.hxx:175
+    void canvas::CanvasCustomSpriteBase::clip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,)
+canvas/inc/base/canvascustomspritebase.hxx:184
+    void canvas::CanvasCustomSpriteBase::setPriority(double,)
+canvas/inc/base/canvascustomspritebase.hxx:191
+    void canvas::CanvasCustomSpriteBase::show()
+canvas/inc/base/canvascustomspritebase.hxx:198
+    void canvas::CanvasCustomSpriteBase::hide()
+canvas/inc/base/canvascustomspritebase.hxx:207
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvas> canvas::CanvasCustomSpriteBase::getContentCanvas()
+canvas/inc/base/canvascustomspritebase.hxx:215
+    _Bool canvas::CanvasCustomSpriteBase::isAreaUpdateOpaque(const class basegfx::B2DRange &,)const
+canvas/inc/base/canvascustomspritebase.hxx:222
+    _Bool canvas::CanvasCustomSpriteBase::isContentChanged()const
+canvas/inc/base/canvascustomspritebase.hxx:229
+    class basegfx::B2DPoint canvas::CanvasCustomSpriteBase::getPosPixel()const
+canvas/inc/base/canvascustomspritebase.hxx:236
+    class basegfx::B2DVector canvas::CanvasCustomSpriteBase::getSizePixel()const
+canvas/inc/base/canvascustomspritebase.hxx:243
+    class basegfx::B2DRange canvas::CanvasCustomSpriteBase::getUpdateArea()const
+canvas/inc/base/canvascustomspritebase.hxx:250
+    double canvas::CanvasCustomSpriteBase::getPriority()const
+canvas/inc/base/disambiguationhelper.hxx:70
+    void canvas::DisambiguationHelper::disposing()
+canvas/inc/base/disambiguationhelper.hxx:73
+    void canvas::DisambiguationHelper::disposing(const struct com::sun::star::lang::EventObject &,)
+canvas/inc/base/graphicdevicebase.hxx:134
+    void canvas::GraphicDeviceBase::disposeThis()
+canvas/inc/base/graphicdevicebase.hxx:145
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::GraphicDeviceBase::getBufferController()
+canvas/inc/base/graphicdevicebase.hxx:150
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XColorSpace> canvas::GraphicDeviceBase::getDeviceColorSpace()
+canvas/inc/base/graphicdevicebase.hxx:157
+    struct com::sun::star::geometry::RealSize2D canvas::GraphicDeviceBase::getPhysicalResolution()
+canvas/inc/base/graphicdevicebase.hxx:164
+    struct com::sun::star::geometry::RealSize2D canvas::GraphicDeviceBase::getPhysicalSize()
+canvas/inc/base/graphicdevicebase.hxx:171
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XLinePolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleLinePolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealPoint2D> > &,)
+canvas/inc/base/graphicdevicebase.hxx:178
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBezierPolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleBezierPolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealBezierSegment2D> > &,)
+canvas/inc/base/graphicdevicebase.hxx:185
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+canvas/inc/base/graphicdevicebase.hxx:196
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+canvas/inc/base/graphicdevicebase.hxx:207
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+canvas/inc/base/graphicdevicebase.hxx:218
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
+canvas/inc/base/graphicdevicebase.hxx:229
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
+canvas/inc/base/graphicdevicebase.hxx:234
+    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
+canvas/inc/base/graphicdevicebase.hxx:239
+    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
+canvas/inc/base/graphicdevicebase.hxx:245
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
+canvas/inc/base/graphicdevicebase.hxx:253
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Any> &,)
+canvas/inc/base/graphicdevicebase.hxx:261
+    class com::sun::star::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
+canvas/inc/base/graphicdevicebase.hxx:268
+    void canvas::GraphicDeviceBase::update()
+canvas/inc/base/graphicdevicebase.hxx:278
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> canvas::GraphicDeviceBase::getPropertySetInfo()
+canvas/inc/base/graphicdevicebase.hxx:284
+    void canvas::GraphicDeviceBase::setPropertyValue(const class rtl::OUString &,const class com::sun::star::uno::Any &,)
+canvas/inc/base/graphicdevicebase.hxx:291
+    class com::sun::star::uno::Any canvas::GraphicDeviceBase::getPropertyValue(const class rtl::OUString &,)
+canvas/inc/base/graphicdevicebase.hxx:297
+    void canvas::GraphicDeviceBase::addPropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+canvas/inc/base/graphicdevicebase.hxx:305
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+canvas/inc/base/graphicdevicebase.hxx:310
+    void canvas::GraphicDeviceBase::addVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+canvas/inc/base/graphicdevicebase.hxx:318
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+canvas/inc/base/integerbitmapbase.hxx:44
+    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getData(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+canvas/inc/base/integerbitmapbase.hxx:58
+    void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+canvas/inc/base/integerbitmapbase.hxx:72
+    void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+canvas/inc/base/integerbitmapbase.hxx:86
+    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+canvas/inc/base/integerbitmapbase.hxx:100
+    struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
+canvas/inc/base/spritecanvasbase.hxx:84
+    void canvas::SpriteCanvasBase::disposeThis()
+canvas/inc/base/spritecanvasbase.hxx:95
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
+canvas/inc/base/spritecanvasbase.hxx:106
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
+canvas/inc/base/spritecanvasbase.hxx:121
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
+canvas/inc/base/spritecanvasbase.hxx:132
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> canvas::SpriteCanvasBase::createClonedSprite(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XSprite> &,)
+canvas/inc/base/spritecanvasbase.hxx:144
+    void canvas::SpriteCanvasBase::showSprite(const class rtl::Reference<class canvas::Sprite> &,)
+canvas/inc/base/spritecanvasbase.hxx:153
+    void canvas::SpriteCanvasBase::hideSprite(const class rtl::Reference<class canvas::Sprite> &,)
+canvas/inc/base/spritecanvasbase.hxx:162
+    void canvas::SpriteCanvasBase::moveSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,)
+canvas/inc/base/spritecanvasbase.hxx:174
+    void canvas::SpriteCanvasBase::updateSprite(const class rtl::Reference<class canvas::Sprite> &,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,)
+canvas/inc/rendering/icolorbuffer.hxx:44
+    void canvas::IColorBuffer::~IColorBuffer()
+canvas/inc/rendering/irendermodule.hxx:59
+    void canvas::IRenderModule::~IRenderModule()
+canvas/inc/rendering/isurface.hxx:34
+    void canvas::ISurface::~ISurface()
 chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 extensions/source/dbpilots/unoautopilot.hxx:98
@@ -36,21 +230,21 @@ extensions/source/propctrlr/commoncontrol.hxx:141
     void pcr::CommonBehaviourControl::notifyModifiedValue()
 extensions/source/propctrlr/commoncontrol.hxx:156
     void pcr::CommonBehaviourControl::disposing()
-forms/source/xforms/datatypes.hxx:234
+forms/source/xforms/datatypes.hxx:233
     class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
-forms/source/xforms/datatypes.hxx:237
+forms/source/xforms/datatypes.hxx:236
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
-forms/source/xforms/datatypes.hxx:238
+forms/source/xforms/datatypes.hxx:237
     class cppu::IPropertyArrayHelper & xforms::ODerivedDataType::getInfoHelper()
-forms/source/xforms/namedcollection.hxx:80
+forms/source/xforms/namedcollection.hxx:82
     class com::sun::star::uno::Type NamedCollection::getElementType()
-forms/source/xforms/namedcollection.hxx:85
+forms/source/xforms/namedcollection.hxx:87
     unsigned char NamedCollection::hasElements()
-forms/source/xforms/namedcollection.hxx:91
+forms/source/xforms/namedcollection.hxx:93
     class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
-forms/source/xforms/namedcollection.hxx:99
+forms/source/xforms/namedcollection.hxx:101
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
-forms/source/xforms/namedcollection.hxx:104
+forms/source/xforms/namedcollection.hxx:106
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
@@ -82,10 +276,8 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svtools/valueset.hxx:301
-    void ValueSet::UserDraw(const class UserDrawEvent &,)
-include/toolkit/controls/geometrycontrolmodel.hxx:183
-    void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
+include/svtools/valueset.hxx:291
+    void ValueSet::Select()
 include/vbahelper/vbacollectionimpl.hxx:290
     int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:295
@@ -110,17 +302,23 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/weld.hxx:101
+include/vcl/field.hxx:213
+    void MetricFormatter::SetValue(long,enum FieldUnit,)
+include/vcl/field.hxx:230
+    long MetricFormatter::GetValueFromStringUnit(const class rtl::OUString &,enum FieldUnit,)const
+include/vcl/treelistbox.hxx:460
+    class SvTreeListEntry * SvTreeListBox::CloneEntry(class SvTreeListEntry *,)
+include/vcl/weld.hxx:103
     void weld::Widget::set_visible(_Bool,)
-sc/source/core/opencl/formulagroupcl.cxx:1054
+sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
-sc/source/core/opencl/formulagroupcl.cxx:1062
+sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1345
+sc/source/core/opencl/formulagroupcl.cxx:1352
     void sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
-sc/source/core/opencl/formulagroupcl.cxx:1347
+sc/source/core/opencl/formulagroupcl.cxx:1354
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:1361
+sc/source/core/opencl/formulagroupcl.cxx:1368
     unsigned long sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::Marshal(struct _cl_kernel *,int,int,struct _cl_program *,)
 sc/source/ui/vba/vbacondition.hxx:41
     class rtl::OUString ScVbaCondition::Formula1()
@@ -196,11 +394,11 @@ slideshow/source/engine/activities/activitiesfactory.cxx:331
     void slideshow::internal::(anonymous namespace)::FromToByActivity::performEnd()
 slideshow/source/engine/activities/activitiesfactory.cxx:344
     void slideshow::internal::(anonymous namespace)::FromToByActivity::dispose()
-slideshow/source/engine/activities/activitiesfactory.cxx:526
+slideshow/source/engine/activities/activitiesfactory.cxx:525
     void slideshow::internal::(anonymous namespace)::ValuesActivity::startAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:537
+slideshow/source/engine/activities/activitiesfactory.cxx:536
     void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
-slideshow/source/engine/activities/activitiesfactory.cxx:582
+slideshow/source/engine/activities/activitiesfactory.cxx:581
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
 slideshow/source/engine/animationfactory.cxx:437
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
@@ -208,9 +406,11 @@ slideshow/source/engine/animationfactory.cxx:440
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
+toolkit/inc/controls/geometrycontrolmodel.hxx:182
+    void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salframe.hxx:191
+vcl/inc/salframe.hxx:194
     void SalFrame::Flush(const class tools::Rectangle &,)
 vcl/inc/salinst.hxx:92
     _Bool SalInstance::SVMainHook(int *,)
@@ -226,7 +426,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:212
+vcl/inc/skia/gdiimpl.hxx:213
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
@@ -264,13 +464,13 @@ workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:164
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:72
+writerfilter/source/ooxml/OOXMLFactory.hxx:67
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:73
+writerfilter/source/ooxml/OOXMLFactory.hxx:68
     void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:74
+writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:75
+writerfilter/source/ooxml/OOXMLFactory.hxx:70
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
 xmloff/source/forms/elementimport.hxx:574
     class rtl::Reference<class SvXMLImportContext> xmloff::OContainerImport::CreateChildContext(unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)

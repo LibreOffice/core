@@ -210,7 +210,7 @@ public:
     sal_Int64               GetMin( FieldUnit eOutUnit ) const;
     sal_Int64               GetBaseValue() const;
 
-    virtual void            SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
+    void                    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual void            SetValue( sal_Int64 nValue ) override;
     using NumericFormatter::SetUserValue;
     void                    SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
@@ -227,7 +227,7 @@ protected:
     SAL_DLLPRIVATE void     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
     virtual sal_Int64       GetValueFromString(const OUString& rStr) const override;
-    virtual sal_Int64       GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
+    sal_Int64               GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const;
 
 private:
     OUString                maCustomUnitText;

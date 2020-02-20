@@ -287,7 +287,7 @@ public:
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
     virtual FactoryFunction GetUITestFactory() const override;
 
-    virtual void    Select();
+    void             Select();
 
     /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,

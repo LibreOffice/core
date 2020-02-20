@@ -457,7 +457,7 @@ public:
     virtual void             DragFinished( sal_Int8 nDropAction );
     virtual bool             NotifyAcceptDrop( SvTreeListEntry* );
 
-    virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
+    SvTreeListEntry*         CloneEntry( SvTreeListEntry* pSource );
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     virtual TriState NotifyMoving(
