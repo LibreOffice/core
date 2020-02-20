@@ -69,99 +69,56 @@
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
-              <object class="GtkLabel" id="wordslabel">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label1">Words</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="inclspaceslabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="exclspaceslabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="selectwords">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="selectchars">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="selectcharsnospaces">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label9">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="wordcount|label9">Selection</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="wordcount|label9">Selection</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="documentlabel-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="wordcount|label10">Document</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
               </packing>
             </child>
             <child>
@@ -179,13 +136,76 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="docwords">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="wordslabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label1">Words</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="selectwords">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docwords">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -193,13 +213,76 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="docchars">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="inclspaceslabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="selectchars">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docchars">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -207,13 +290,76 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="doccharsnospaces">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="exclspaceslabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="selectcharsnospaces">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="doccharsnospaces">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -221,11 +367,23 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="cjkcharsft">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="cjkcharsft">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -233,14 +391,26 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="selectcjkchars">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="selectcjkchars">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -248,14 +418,26 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="doccjkchars">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="doccjkchars">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -263,11 +445,23 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="standardizedpages">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="standardizedpages">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -275,14 +469,26 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="selectstandardizedpages">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="selectstandardizedpages">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -290,14 +496,26 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="docstandardizedpages">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docstandardizedpages">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -305,10 +523,22 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="wordslabel-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label1">Words</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="wordslabel-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label1">Words</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -316,59 +546,25 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="inclspaceslabel-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="exclspaceslabel-mobile">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="cjkcharsft2">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="standardizedpages2">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="docwords-mobile">
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docwords-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -376,13 +572,48 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="docchars-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="inclspaceslabel-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docchars-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -390,13 +621,48 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="doccharsnospaces-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="exclspaceslabel-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="doccharsnospaces-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -404,14 +670,50 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="doccjkchars-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="cjkcharsft2">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="doccjkchars-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -419,32 +721,54 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="docstandardizedpages-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="halign">end</property>
-                <property name="hexpand">True</property>
-                <property name="label">            0</property>
-                <property name="justify">right</property>
-                <property name="xalign">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="standardizedpages2">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
+                <property name="left_attach">0</property>
                 <property name="top_attach">11</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="documentlabel-mobile">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes" context="wordcount|label10">Document</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="docstandardizedpages-mobile">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">            0</property>
+                    <property name="justify">right</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
+                <property name="top_attach">11</property>
               </packing>
             </child>
             <child>
@@ -490,17 +814,5 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="selectwords"/>
-      <widget name="selectchars"/>
-      <widget name="selectcharsnospaces"/>
-      <widget name="selectcjkchars"/>
-      <widget name="selectstandardizedpages"/>
-      <widget name="docwords"/>
-      <widget name="docchars"/>
-      <widget name="doccharsnospaces"/>
-      <widget name="doccjkchars"/>
-      <widget name="docstandardizedpages"/>
-    </widgets>
   </object>
 </interface>
