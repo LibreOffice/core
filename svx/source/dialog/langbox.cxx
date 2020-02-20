@@ -332,11 +332,6 @@ void SvxLanguageBox::InsertLanguage(const LanguageType nLangType)
     InsertLanguage(nLangType, css::i18n::ScriptType::WEAK);
 }
 
-void SvxLanguageBox::InsertDefaultLanguage(sal_Int16 nType)
-{
-    InsertLanguage(LANGUAGE_SYSTEM, nType);
-}
-
 weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal_Int16 nType)
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage(nLangType);

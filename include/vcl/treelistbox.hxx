@@ -701,7 +701,6 @@ public:
 
     void            EndSelection();
     ScrollBar*      GetVScroll();
-    ScrollBar*      GetHScroll();
     void            EnableAsyncDrag( bool b );
 
     SvTreeListEntry*    GetFirstEntryInView() const;

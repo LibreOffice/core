@@ -995,8 +995,6 @@ bool ComboBox::IsMultiSelectionEnabled() const
 
 void ComboBox::SetSelectHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_SelectHdl = rLink; }
 
-const Link<ComboBox&,void>& ComboBox::GetSelectHdl() const { return m_pImpl->m_SelectHdl; }
-
 void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_DoubleClickHdl = rLink; }
 
 const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
@@ -1006,11 +1004,6 @@ void ComboBox::SetEntryActivateHdl(const Link<Edit&,bool>& rLink)
     if (!m_pImpl->m_pSubEdit)
         return;
     m_pImpl->m_pSubEdit->SetActivateHdl(rLink);
-}
-
-long ComboBox::CalcWindowSizePixel(sal_uInt16 nLines) const
-{
-    return m_pImpl->m_pImplLB->GetEntryHeight() * nLines;
 }
 
 Size ComboBox::GetOptimalSize() const
@@ -1343,11 +1336,6 @@ sal_Int32 ComboBox::GetTopEntry() const
     if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
         nPos = 0;
     return nPos;
-}
-
-void ComboBox::SetProminentEntryType( ProminentEntry eType )
-{
-    m_pImpl->m_pImplLB->SetProminentEntryType( eType );
 }
 
 tools::Rectangle ComboBox::GetDropDownPosSizePixel() const

@@ -76,7 +76,6 @@ public:
 
     virtual void            ReformatAll() override;
 
-    void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
     virtual void            dispose() override;
 };
 

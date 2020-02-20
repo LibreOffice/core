@@ -81,7 +81,6 @@ public:
                             LanguageType eDefaultLangType = LANGUAGE_NONE,
                             sal_Int16 nDefaultType = 0 );
     void            InsertLanguage(const LanguageType nLangType);
-    void            InsertDefaultLanguage(sal_Int16 nType);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}
     sal_Int32           SaveEditedAsEntry();
