@@ -265,7 +265,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want the cursor to go into the cell to the right, after entering a value in Calc? Use the Tab key instead of Enter."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To display the scrollbar to the left, enable Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Complex text and check Sheet ▸ Right-To-Left."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag a formatted object to the Styles and Formatting window. A dialog box opens, just enter the name of the new style."), "", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME do not only bring new features and bug fixes. They also include security patches. Stay safe, and keep yourself updated!"), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME provide new features, bug fixes, and security patches. Keep your software updated!"), "SFX2_HID_DLG_CHECKFORONLINEUPDATE", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "http://fridrich.blogspot.com.tr/2013/08/extending-swiss-army-knife-overview.html", ""},
 };
 
