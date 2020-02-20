@@ -3182,6 +3182,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
         if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
         {
             pContext->GetFootnote()->setLabel(sText);
+            m_pImpl->EndCustomFootnote();
             //otherwise ignore sText
         }
         else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
@@ -3496,7 +3497,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->clearDeferredBreaks();
             }
 
-            if (pContext && pContext->GetFootnote().is() && m_pImpl->IsInCustomFootnote())
+            if (pContext && pContext->GetFootnote().is())
             {
                 pContext->GetFootnote()->setLabel( sText );
                 //otherwise ignore sText
