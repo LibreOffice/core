@@ -590,7 +590,9 @@ sal_uLong SwLayHelper::CalcPageCount()
         if ( nNdCount > 100 ) // no estimation below this value
         {
             if ( nPgCount > 0 )
-                mnMaxParaPerPage = nNdCount / nPgCount;
+            {   // tdf#129529 avoid 0...
+                mnMaxParaPerPage = std::max<sal_uLong>(3, nNdCount / nPgCount);
+            }
             else
             {
                 mnMaxParaPerPage = std::max( sal_uLong(20),
