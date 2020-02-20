@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c852dd19_6d223f9e",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-20T12:28:25Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s necessary - I don\u0027t think that Basic should do any magic like that. If it takes negatives like \"\u0026H8000\", then it\u0027s OK to take \"-1\" IMO - so this comment is arguable...",
+      "range": {
+        "startLine": 335,
+        "startChar": 40,
+        "endLine": 336,
+        "endChar": 39
+      },
+      "revId": "95dff27fe9908a7679088ea4245f32f54b2486f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
