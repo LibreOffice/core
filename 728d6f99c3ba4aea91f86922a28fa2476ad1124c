@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4962305d_ad839033",
+        "filename": "scaddins/source/analysis/analysis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-20T09:58:06Z",
+      "side": 1,
+      "message": "we could be a little more specific here, like \"undefined expression: 0^0\"",
+      "revId": "728d6f99c3ba4aea91f86922a28fa2476ad1124c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
