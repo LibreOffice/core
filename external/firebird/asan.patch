@@ -204,17 +204,14 @@
  #ifdef DEBUG_GDS_ALLOC
 --- src/include/firebird.h
 +++ src/include/firebird.h
-@@ -38,8 +38,20 @@
+@@ -38,8 +38,17 @@
  #include "gen/autoconfig.h"
  #endif
  
-+#if defined __clang__ && defined __has_feature
-+#if __has_feature(address_sanitizer)
++#if defined __clang__
++//#if __has_feature(address_sanitizer)
 +#define USE_ASAN
-+#endif
-+#endif
-+#if defined __clang__ && (defined __apple_build_version__ ? __clang_major__ >= 9 : __clang_major__ >= 4)
-+#define USE_ASAN
++//#endif
 +#endif
 +#if defined __SANITIZE_ADDRESS__
 +#define USE_ASAN
