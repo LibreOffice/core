@@ -32,11 +32,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // chart oasis import
-OUString SchXMLImport_Meta_getImplementationName() throw();
-css::uno::Sequence<OUString> SchXMLImport_Meta_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SchXMLImport_Meta_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString SchXMLImport_Styles_getImplementationName() throw();
 css::uno::Sequence<OUString> SchXMLImport_Styles_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
