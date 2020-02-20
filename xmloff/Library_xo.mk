@@ -193,7 +193,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/script/XMLScriptExportHandler \
     xmloff/source/script/XMLStarBasicContextFactory \
     xmloff/source/script/XMLStarBasicExportHandler \
-    xmloff/source/script/xmlbasici \
+    xmloff/source/script/xmlbasicscript \
     xmloff/source/script/xmlscripti \
     xmloff/source/style/AttributeContainerHandler \
     xmloff/source/style/DashStyle \

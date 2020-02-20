@@ -23,7 +23,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
-#include "xmlbasici.hxx"
+#include "xmlbasicscript.hxx"
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -52,11 +52,8 @@ public:
         const css::uno::Reference< css::frame::XModel>& rxModel,
         const OUString& rLanguage );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
-    { return nullptr; }
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
@@ -73,20 +70,20 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport,
 {
 }
 
-SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptChildContext::createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContextRef xContext;
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
         OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) + ":Basic" );
 
-        if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
-            xContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
+        if ( m_aLanguage == aBasic && nElement == XML_ELEMENT(OOO, XML_LIBRARIES) )
+        {
+            return new xmloff::BasicLibrariesElement( GetImport(), m_xModel,/*bOasis*/ true );
+        }
     }
 
-    return xContext;
+    return nullptr;
 }
 
 // XMLScriptContext: context for <office:scripts> element
