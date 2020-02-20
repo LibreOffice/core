@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0644f079_f4e8ce90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-20T08:23:32Z",
+      "side": 1,
+      "message": "Patch set 3 should have adapted the commit message?  I no longer find std::from_chars involved in the change.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "c694f51ed257b0c91f2088be94fdacbc55b759be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
