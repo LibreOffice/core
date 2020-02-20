@@ -92,6 +92,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     {
         sValue = rAttribs.getString( XML_indent ).get();
         mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
+        rPropertyMap.setProperty( PROP_ParaLeftMargin, sValue.isEmpty() ? 0 : GetCoordinate( sValue ));
     }
 
   // ST_TextIndentLevelType
