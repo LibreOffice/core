@@ -29,6 +29,12 @@ class SwWordCountFloatDlg : public SfxModelessDialogController
     void showCJK(bool bShowCJK);
     void showStandardizedPages(bool bShowStandardizedPages);
 
+    std::unique_ptr<weld::Button> m_xCloseButton;
+    std::unique_ptr<weld::Button> m_xHelpButton;
+    std::unique_ptr<weld::Label> m_xDocumentLabelFT;
+    std::unique_ptr<weld::Label> m_xWordsLabelFT;
+    std::unique_ptr<weld::Label> m_xIncludingSpacesLabelFT;
+    std::unique_ptr<weld::Label> m_xExcludingSpacesLabelFT;
     std::unique_ptr<weld::Label> m_xCurrentWordFT;
     std::unique_ptr<weld::Label> m_xCurrentCharacterFT;
     std::unique_ptr<weld::Label> m_xCurrentCharacterExcludingSpacesFT;
@@ -40,7 +46,9 @@ class SwWordCountFloatDlg : public SfxModelessDialogController
     std::unique_ptr<weld::Label> m_xDocCjkcharsFT;
     std::unique_ptr<weld::Label> m_xDocStandardizedPagesFT;
     std::unique_ptr<weld::Label> m_xCjkcharsLabelFT;
+    std::unique_ptr<weld::Label> m_xCjkcharsLabel2FT;
     std::unique_ptr<weld::Label> m_xStandardizedPagesLabelFT;
+    std::unique_ptr<weld::Label> m_xStandardizedPagesLabel2FT;
 
 public:
     SwWordCountFloatDlg(SfxBindings* pBindings,
