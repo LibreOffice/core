@@ -407,10 +407,10 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 if (sw::GetRanges(ranges, *rEditSh.GetDoc(), aPam))
                 {
                     pDoc->getIDocumentContentOperations().ReplaceRange(aPam, pFnd->GetLong(), false);
+                    bRet = true;
                 }
-                else
+                else if (!ranges.empty())
                 {
-                    assert(!ranges.empty());
                     assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
                     pDoc->getIDocumentContentOperations().ReplaceRange(
                             *ranges.front(), pFnd->GetLong(), false);
@@ -418,6 +418,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                     {
                         DeleteSelImpl(**it);
                     }
+                    bRet = true;
                 }
 
                 // tdf#83260 After calling sw::DocumentContentOperationsManager::ReplaceRange
@@ -425,8 +426,6 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 // ReplaceRange shows changes, this moves deleted nodes from special section to document.
                 // Then Show mode is disabled again. As a result pTextNd may be invalidated.
                 pTextNd = rCursor.GetNode().GetTextNode();
-
-                bRet = true;
             }
         }
         else
