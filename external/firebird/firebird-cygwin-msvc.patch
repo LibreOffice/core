@@ -10,8 +10,8 @@
  #include "gen/autoconfig.h"
 -#endif
  
- #if defined __clang__ && defined __has_feature
- #if __has_feature(address_sanitizer)
+ #if defined __clang__
+ //#if __has_feature(address_sanitizer)
 --- src/misc/writeBuildNum.sh	2016-07-07 15:57:04.538983200 +0200
 +++ src/misc/writeBuildNum.sh	2016-07-13 11:31:18.132820200 +0200
 @@ -95,9 +95,9 @@
