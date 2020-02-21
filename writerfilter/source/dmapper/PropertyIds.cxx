@@ -366,7 +366,7 @@ bool isCharacterProperty( const PropertyIds eId )
 
 bool isParagraphProperty( const PropertyIds eId )
 {
-    return eId >= PROP_PARA_ADJUST && eId <= PROP_PARA_WIDOWS;
+    return (eId >= PROP_PARA_ADJUST && eId <= PROP_PARA_WIDOWS) || eId == PROP_FILL_COLOR;
 }
 
 } //namespace writerfilter
