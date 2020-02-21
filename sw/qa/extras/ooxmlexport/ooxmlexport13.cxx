@@ -338,6 +338,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table has 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("TextBody has 1.07 line-spacing", sal_Int16(107), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height, 1);
+    // table-style based paragraph background color
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing paragraph background color in cell A1", sal_Int32(0xCCFFCC), getProperty<sal_Int32>(xPara, "ParaBackColor"));
 
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
@@ -351,6 +353,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height, 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph background color in cell A2", sal_Int32(-1), getProperty<sal_Int32>(xPara, "ParaBackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
