@@ -174,4 +174,20 @@ update_hxx = custom_target('update.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+math_hxx = custom_target('math.hxx',
+  output: 'Math.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Math.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Math',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
 subdir('UI')
