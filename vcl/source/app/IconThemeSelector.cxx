@@ -68,7 +68,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
 #if MPL_HAVE_SUBSET
         r = "tango";
 #else
-        r = "breeze";
+        r = "sukapura";
 #endif
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||

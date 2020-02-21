@@ -1,0 +1,7 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="12" y2="4"><stop offset="0" stop-color="#e9e9e9"/><stop offset=".2857143" stop-color="#f2f2f2"/><stop offset="1" stop-color="#fbfbfb"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="4.5" y2="11.5"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+
+
+
+
+     /&amp;amp;gt;
+ <path d="m1 .9865434c-.554 0-1 .446-1 1v12.0134566c0 .554.446 1 1 1h14c.554 0 1-.446 1-1v-12.0134566c0-.554-.446-1-1-1zm0 1h14v12.0134566h-14z" fill="#98989d"/><path d="m1 1.9865434h14v12.0134566h-14z" fill="url(#a)"/><path d="m1.5 2.4865434h13v11.0134566h-13z" fill="none" stroke="url(#b)" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4.5" cy="5.5" fill="#8c897d" r="2.005997" stroke="#808080"/><path d="m2.5 12.5-.0330869-.59841 2.5330869-2.9015901 2 1.5933561 5-4.5933561 1.5 5.0000001v1.5z" fill="#848484" fill-rule="evenodd" stroke="#7b7b7b"/></svg>
