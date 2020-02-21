@@ -84,6 +84,8 @@ cdata.set10('ENABLE_EXTENSION_UPDATE', 1)
 
 cdata.set10('HAVE_FEATURE_JAVA', false)
 
+cdata.set_quoted('EXTRA_BUILDID', 'buildid')
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -186,4 +188,12 @@ configure_file(input: 'config_extensions.h.meson',
 
 configure_file(input: 'config_java.h.meson',
   output: 'config_java.h',
+  configuration: cdata)
+
+configure_file(input: 'config_buildid.h.meson',
+  output: 'config_buildid.h',
+  configuration: cdata)
+
+configure_file(input: 'config_fuzzers.h.meson',
+  output: 'config_fuzzers.h',
   configuration: cdata)

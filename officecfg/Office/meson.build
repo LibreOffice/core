@@ -190,4 +190,20 @@ math_hxx = custom_target('math.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+optionsdialog_hxx = custom_target('optionsdialog.hxx',
+  output: 'OptionsDialog.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/OptionsDialog.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'OptionsDialog',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
 subdir('UI')
