@@ -16,6 +16,24 @@
       "revId": "154fbf53a82016fb40bf93b2d847a73552d0fe34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc2b4ebd_e6a40f7d",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-21T13:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1f9f09c_c580b42e",
+      "revId": "154fbf53a82016fb40bf93b2d847a73552d0fe34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
