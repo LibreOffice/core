@@ -2608,24 +2608,32 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
 {
     OUString aString;
 
+#if defined(IOS) || defined(ANDROID)
+    bool isMobile = true;
+#else
+    bool isMobile = comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
+#endif
+
     if (eObjKind == PRESOBJ_TITLE)
     {
         if (mbMaster)
         {
             if (mePageKind != PageKind::Notes)
             {
-                aString = SdResId( STR_PRESOBJ_MPTITLE );
+                if (isMobile)
+                    aString = SdResId(STR_PRESOBJ_MPTITLE_MOBILE);
+                else
+                    aString = SdResId(STR_PRESOBJ_MPTITLE);
             }
             else
             {
-                aString = SdResId( STR_PRESOBJ_MPNOTESTITLE );
+                if (isMobile)
+                    aString = SdResId(STR_PRESOBJ_MPNOTESTITLE_MOBILE);
+                else
+                    aString = SdResId(STR_PRESOBJ_MPNOTESTITLE);
             }
         }
-        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())
-#ifdef IOS
-                 || true
-#endif
-                 )
+        else if (isMobile)
             aString = SdResId(STR_PRESOBJ_TITLE_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_TITLE);
@@ -2633,8 +2641,13 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     else if (eObjKind == PRESOBJ_OUTLINE)
     {
         if (mbMaster)
-            aString = SdResId(STR_PRESOBJ_MPOUTLINE);
-        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        {
+            if (isMobile)
+                aString = SdResId(STR_PRESOBJ_MPOUTLINE_MOBILE);
+            else
+                aString = SdResId(STR_PRESOBJ_MPOUTLINE);
+        }
+        else if (isMobile)
             aString = SdResId(STR_PRESOBJ_OUTLINE_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_OUTLINE);
@@ -2642,15 +2655,20 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     else if (eObjKind == PRESOBJ_NOTES)
     {
         if (mbMaster)
-            aString = SdResId(STR_PRESOBJ_MPNOTESTEXT);
-        else if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        {
+            if (isMobile)
+                aString = SdResId(STR_PRESOBJ_MPNOTESTEXT_MOBILE);
+            else
+                aString = SdResId(STR_PRESOBJ_MPNOTESTEXT);
+        }
+        else if (isMobile)
             aString = SdResId(STR_PRESOBJ_NOTESTEXT_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_NOTESTEXT);
     }
     else if (eObjKind == PRESOBJ_TEXT)
     {
-        if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        if (isMobile)
             aString = SdResId(STR_PRESOBJ_TEXT_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_TEXT);
