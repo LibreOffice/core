@@ -184,14 +184,22 @@ static long lcl_Undersize( const SwFrame* pFrame )
     return nRet;
 }
 
+namespace sw {
+
+SwTwips FootnoteSeparatorHeight(SwPageFootnoteInfo const& rInf)
+{
+    return rInf.GetTopDist() + rInf.GetBottomDist() + rInf.GetLineWidth();
+}
+
+} // namespace sw
+
 /// "format" the frame (Fixsize is not set here).
 void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     // calculate total border, only one distance to the top
     const SwPageFrame* pPage = FindPageFrame();
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
-    const SwTwips nBorder = rInf.GetTopDist() + rInf.GetBottomDist() +
-                            rInf.GetLineWidth();
+    const SwTwips nBorder = sw::FootnoteSeparatorHeight(rInf);
     SwRectFnSet aRectFnSet(this);
 
     if ( !isFramePrintAreaValid() )
