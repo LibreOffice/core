@@ -38,6 +38,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <xmloff/styleexp.hxx>
 
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
@@ -90,6 +91,13 @@ private:
     void ExportCell( const css::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
     void ExportTableColumns( const css::uno::Reference < css::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
 
+};
+
+class XMLOFF_DLLPUBLIC XMLCellStyleExport final : public XMLStyleExport
+{
+    using XMLStyleExport::XMLStyleExport;
+    virtual void exportStyleAttributes(const css::uno::Reference<css::style::XStyle>& rStyle) override;
+    virtual void exportStyleContent(const css::uno::Reference<css::style::XStyle>& rStyle) override;
 };
 
 #endif
