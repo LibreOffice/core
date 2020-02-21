@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1f9f09c_c580b42e",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-21T08:12:59Z",
+      "side": 1,
+      "message": "Like here, first you assert that the number level is 1, but then you get the 0th element of the array, shouldn\u0027t that be 1 as well?",
+      "revId": "154fbf53a82016fb40bf93b2d847a73552d0fe34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
