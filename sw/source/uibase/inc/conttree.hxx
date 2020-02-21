@@ -102,6 +102,8 @@ class SwContentTree final
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
 
+    sal_uInt32          m_nOutlineTracking = 1;
+
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
     bool                m_bDocChgdInDragging  :1;

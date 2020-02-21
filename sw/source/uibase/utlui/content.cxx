@@ -830,7 +830,11 @@ enum STR_CONTEXT_IDX
     IDX_STR_INACTIVE = 9,
     IDX_STR_EDIT_ENTRY = 10,
     IDX_STR_DELETE_ENTRY = 11,
-    IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 12
+    IDX_STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY = 12,
+    IDX_STR_OUTLINE_TRACKING = 13,
+    IDX_STR_OUTLINE_TRACKING_DEFAULT = 14,
+    IDX_STR_OUTLINE_TRACKING_FOCUS = 15,
+    IDX_STR_OUTLINE_TRACKING_OFF = 16
 };
 
 }
@@ -849,7 +853,11 @@ static const char* STR_CONTEXT_ARY[] =
     STR_INACTIVE,
     STR_EDIT_ENTRY,
     STR_DELETE_ENTRY,
-    STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY
+    STR_SEND_OUTLINE_TO_CLIPBOARD_ENTRY,
+    STR_OUTLINE_TRACKING,
+    STR_OUTLINE_TRACKING_DEFAULT,
+    STR_OUTLINE_TRACKING_FOCUS,
+    STR_OUTLINE_TRACKING_OFF
 };
 
 SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
@@ -1227,7 +1235,13 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     VclPtrInstance<PopupMenu> pSubPop1;
     VclPtrInstance<PopupMenu> pSubPop2;
     VclPtrInstance<PopupMenu> pSubPop3;
+    VclPtrInstance<PopupMenu> pSubPopOutlineTracking;
 
+    for(int i = 1; i <= 3; ++i)
+    {
+        pSubPopOutlineTracking->InsertItem(i + 10, m_aContextStrings[i + IDX_STR_OUTLINE_TRACKING], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
+    }
+    pSubPopOutlineTracking->CheckItem(10 + m_nOutlineTracking);
     for(int i = 1; i <= MAXLEVEL; ++i)
     {
         pSubPop1->InsertItem(i + 100, OUString::number(i), MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
@@ -1405,6 +1419,8 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     pPop->InsertSeparator();
     if (bOutline)
     {
+        pPop->InsertItem(4, m_aContextStrings[IDX_STR_OUTLINE_TRACKING]);
+        pPop->SetPopupMenu(4, pSubPopOutlineTracking);
         pPop->InsertItem(1, m_aContextStrings[IDX_STR_OUTLINE_LEVEL]);
         pPop->SetPopupMenu(1, pSubPop1);
     }
@@ -1744,14 +1760,14 @@ void SwContentTree::Display( bool bActive )
             nOldScrollPos = pVScroll->GetThumbPos();
 
         sEntryName = GetEntryText(pOldSelEntry);
-        SvTreeListEntry* pParantEntry = pOldSelEntry;
-        while( GetParent(pParantEntry))
+        SvTreeListEntry* pParentEntry = pOldSelEntry;
+        while( GetParent(pParentEntry))
         {
-            pParantEntry = GetParent(pParantEntry);
+            pParentEntry = GetParent(pParentEntry);
         }
         if(GetParent(pOldSelEntry))
         {
-            nEntryRelPos = GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParantEntry);
+            nEntryRelPos = GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParentEntry);
         }
     }
     Clear();
@@ -1776,6 +1792,7 @@ void SwContentTree::Display( bool bActive )
     if(pShell)
     {
         SvTreeListEntry* pSelEntry = nullptr;
+        // all content navigation view
         if(m_nRootType == ContentTypeId::UNKNOWN)
         {
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
@@ -1806,7 +1823,7 @@ void SwContentTree::Display( bool bActive )
                     Expand(pEntry);
                     if(nEntryRelPos && nCntType == m_nLastSelType)
                     {
-                        // Now maybe select an additional child
+                        // reselect the entry
                         SvTreeListEntry* pChild = pEntry;
                         SvTreeListEntry* pTemp = nullptr;
                         sal_uLong nPos = 1;
@@ -1825,7 +1842,6 @@ void SwContentTree::Display( bool bActive )
                         if(!pSelEntry || lcl_IsContentType(pSelEntry))
                             pSelEntry = pTemp;
                     }
-
                 }
             }
             if(pSelEntry)
@@ -1836,6 +1852,7 @@ void SwContentTree::Display( bool bActive )
             else
                 nOldScrollPos = 0;
         }
+        // root content navigation view
         else
         {
             std::unique_ptr<SwContentType>& rpRootContentT = bActive ?
@@ -1866,49 +1883,29 @@ void SwContentTree::Display( bool bActive )
             else
                 RequestingChildren(pParent);
             Expand(pParent);
-            if (m_nRootType == ContentTypeId::OUTLINE && State::ACTIVE == m_eState)
-            {
-                // find out where the cursor is
-                const SwOutlineNodes::size_type nActPos = pShell->GetOutlinePos(MAXLEVEL);
-                SvTreeListEntry* pEntry = First();
 
-                while( nullptr != (pEntry = Next(pEntry)) )
-                {
-                    assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                    if (static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos() == nActPos)
-                    {
-                        MakeVisible(pEntry);
-                        Select(pEntry);
-                        SetCurEntry(pEntry);
-                    }
-                }
-
-            }
-            else
+            // reselect the entry
+            SvTreeListEntry* pChild = pParent;
+            SvTreeListEntry* pTemp = nullptr;
+            sal_uLong nPos = 1;
+            while(nullptr != (pChild = Next(pChild)))
             {
-                // Now maybe select an additional child
-                SvTreeListEntry* pChild = pParent;
-                SvTreeListEntry* pTemp = nullptr;
-                sal_uLong nPos = 1;
-                while(nullptr != (pChild = Next(pChild)))
-                {
-                    // The old text will be slightly favored
-                    if(sEntryName == GetEntryText(pChild) ||
+                // The old text will be slightly favored
+                if(sEntryName == GetEntryText(pChild) ||
                         nPos == nEntryRelPos )
-                    {
-                        pSelEntry = pChild;
-                        break;
-                    }
-                    pTemp = pChild;
-                    nPos++;
-                }
-                if(!pSelEntry)
-                    pSelEntry = pTemp;
-                if(pSelEntry)
                 {
-                    MakeVisible(pSelEntry);
-                    Select(pSelEntry);
+                    pSelEntry = pChild;
+                    break;
                 }
+                pTemp = pChild;
+                nPos++;
+            }
+            if(!pSelEntry)
+                pSelEntry = pTemp;
+            if(pSelEntry)
+            {
+                MakeVisible(pSelEntry);
+                Select(pSelEntry);
             }
         }
     }
@@ -2140,47 +2137,47 @@ bool SwContentTree::HasContentChanged()
                 m_aActiveContentArr[i]->Invalidate();
         }
     }
+    // root content navigation view
     else if(m_bIsRoot)
     {
-        bool bOutline = false;
-        SvTreeListEntry* pEntry = First();
-        if(!pEntry)
+        SvTreeListEntry* pRootEntry = First();
+        if(!pRootEntry)
             bRepaint = true;
         else
         {
-            assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-            const ContentTypeId nType = static_cast<SwContentType*>(pEntry->GetUserData())->GetType();
-            bOutline = m_nRootType == ContentTypeId::OUTLINE;
+            assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pRootEntry->GetUserData())));
+            const ContentTypeId nType = static_cast<SwContentType*>(pRootEntry->GetUserData())->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
             if(!pArrType)
                 bRepaint = true;
             else
             {
+                // start check if first selected outline level has changed
                 SvTreeListEntry* pFirstSel;
-                if(bOutline && !HasFocus() &&
-                        nullptr != ( pFirstSel = FirstSelected()) &&
+                if(m_nRootType == ContentTypeId::OUTLINE && !HasFocus() &&
+                        nullptr != (pFirstSel = FirstSelected()) &&
                             lcl_IsContent(pFirstSel))
                 {
                     assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstSel->GetUserData())));
-                    const auto nSelLevel =
-                        static_cast<SwOutlineContent*>(pFirstSel->GetUserData())->GetOutlineLevel();
+                    const auto nSelLevel = static_cast<SwOutlineContent*>(pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
                     const SwOutlineNodes::size_type nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
-                    if (nOutlinePos != SwOutlineNodes::npos &&
-                        pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
+                    if (nOutlinePos != SwOutlineNodes::npos && pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos) != nSelLevel)
                         bRepaint = true;
                 }
+                // end check if first selected outline level has changed
 
                 pArrType->Init(&bInvalidate);
                 pArrType->FillMemberList();
-                pEntry->SetUserData(static_cast<void*>(pArrType));
+                pRootEntry->SetUserData(static_cast<void*>(pArrType));
                 if(!bRepaint)
                 {
-                    if(GetChildCount(pEntry) != pArrType->GetMemberCount())
-                            bRepaint = true;
+                    if(GetChildCount(pRootEntry) != pArrType->GetMemberCount())
+                        bRepaint = true;
                     else
                     {
-                        const size_t nChildCount = GetChildCount(pEntry);
+                        const size_t nChildCount = GetChildCount(pRootEntry);
+                        SvTreeListEntry* pEntry = pRootEntry;
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pEntry = Next(pEntry);
@@ -2196,33 +2193,8 @@ bool SwContentTree::HasContentChanged()
                 }
             }
         }
-        if( !bRepaint && bOutline && !HasFocus() )
-        {
-            // find out where the cursor is
-            const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
-            SvTreeListEntry* pFirstEntry = First();
-
-            while( nullptr != (pFirstEntry = Next(pFirstEntry)) )
-            {
-                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirstEntry->GetUserData())));
-                if (static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetOutlinePos() == nActPos)
-                {
-                    if(FirstSelected() != pFirstEntry)
-                    {
-                        Select(pFirstEntry);
-                        MakeVisible(pFirstEntry);
-                    }
-                }
-                else if (IsSelected(pFirstEntry))
-                {
-                    SvTreeListBox::SelectListEntry(pFirstEntry, false);
-                    bInvalidate = true;
-                }
-            }
-
-        }
-
     }
+    // all content navigation view
     else
     {
         SvTreeListEntry* pEntry = First();
@@ -2230,9 +2202,9 @@ bool SwContentTree::HasContentChanged()
         {
             bool bNext = true; // at least a next must be
             assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-            SwContentType* pTreeType = static_cast<SwContentType*>(pEntry->GetUserData());
-            const size_t nTreeCount = pTreeType->GetMemberCount();
-            const ContentTypeId nType = pTreeType->GetType();
+            SwContentType* pCntType = static_cast<SwContentType*>(pEntry->GetUserData());
+            const size_t nCntCount = pCntType->GetMemberCount();
+            const ContentTypeId nType = pCntType->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
             if(!pArrType)
                 bRepaint = true;
@@ -2242,15 +2214,15 @@ bool SwContentTree::HasContentChanged()
                 pEntry->SetUserData(static_cast<void*>(pArrType));
                 if(IsExpanded(pEntry))
                 {
-                    bool bLevelOrVisibiblityChanged = false;
-                    // bLevelOrVisibiblityChanged is set if outlines have changed their level
+                    bool bLevelOrVisibilityChanged = false;
+                    // bLevelOrVisibilityChanged is set if outlines have changed their level
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
+                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
                     const size_t nChildCount = GetChildCount(pEntry);
-                    if((nType == ContentTypeId::OUTLINE) && bLevelOrVisibiblityChanged)
+                    if((nType == ContentTypeId::OUTLINE) && bLevelOrVisibilityChanged)
                         bRepaint = true;
-                    if(bLevelOrVisibiblityChanged)
+                    if(bLevelOrVisibilityChanged)
                         bInvalidate = true;
 
                     if(nChildCount != pArrType->GetMemberCount())
@@ -2270,18 +2242,18 @@ bool SwContentTree::HasContentChanged()
                                 bRepaint = true;
                         }
                     }
-
                 }
+                // not expanded and has children
                 else if(pEntry->HasChildren())
                 {
                     // was the entry once opened, then must also the
                     // invisible records be examined.
                     // At least the user data must be updated.
-                    bool bLevelOrVisibiblityChanged = false;
-                    // bLevelOrVisibiblityChanged is set if outlines have changed their level
+                    bool bLevelOrVisibilityChanged = false;
+                    // bLevelOrVisibilityChanged is set if outlines have changed their level
                     // or if the visibility of objects (frames, sections, tables) has changed
                     // i.e. in header/footer
-                    pArrType->FillMemberList(&bLevelOrVisibiblityChanged);
+                    pArrType->FillMemberList(&bLevelOrVisibilityChanged);
                     bool bRemoveChildren = false;
                     const size_t nChildCount = GetChildCount(pEntry);
                     if( nChildCount != pArrType->GetMemberCount() )
@@ -2315,7 +2287,7 @@ bool SwContentTree::HasContentChanged()
                     }
 
                 }
-                else if((nTreeCount != 0)
+                else if((nCntCount != 0)
                             != (pArrType->GetMemberCount()!=0))
                 {
                     bRepaint = true;
@@ -2803,6 +2775,58 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
             FindActiveTypeAndRemoveUserData();
             Display(true);
         }
+
+        // track document outline position at cursor
+        if (m_nOutlineTracking == 3) // no outline tracking
+            return;
+        const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL); // find out where the cursor is
+        if (nActPos == SwOutlineNodes::npos)
+        {
+            // cursor is not in an outline position so clear any selections in the tree list
+            if (FirstSelected())
+                SelectAll(false);
+        }
+        else
+        {
+            SvTreeListEntry* pFirstSelected = FirstSelected();
+            for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+            {
+                if (lcl_IsContent(pEntry) &&
+                        static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                {
+                    // only select if not already selected
+                    // might have been scrolled out of view by the user so leave it that way
+                    if (static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos() == nActPos)
+                    {
+                        if (pEntry != pFirstSelected)
+                        {
+                            if (m_nOutlineTracking == 2) // focused outline tracking
+                            {
+                                // collapse to children of root node
+                                for (SvTreeListEntry* pChildEntry = FirstChild(First()); pChildEntry; pChildEntry = Next(pChildEntry))
+                                {
+                                    if (static_cast<SwContent*>(pChildEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                                        Collapse(pChildEntry);
+                                    else
+                                        break;
+                                }
+                            }
+                            SelectAll(false);
+                            Select(pEntry);
+                            MakeVisible(pEntry);
+                        }
+                        break;
+                    }
+                }
+                else
+                {
+                    // use of this break assumes outline content type is first in tree
+                    if (lcl_IsContentType(pEntry) &&
+                            static_cast<SwContentType*>(pEntry->GetUserData())->GetType() != ContentTypeId::OUTLINE)
+                        break;
+                }
+            }
+        }
     }
     else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
     {
@@ -3279,6 +3303,13 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
     SvTreeListEntry* pFirst = FirstSelected();
     switch( nSelectedPopupEntry )
     {
+        case 11:
+        case 12:
+        case 13:
+            nSelectedPopupEntry -= 10;
+            if(m_nOutlineTracking != nSelectedPopupEntry)
+                m_nOutlineTracking = nSelectedPopupEntry;
+        break;
         //Outlinelevel
         case 101:
         case 102:
