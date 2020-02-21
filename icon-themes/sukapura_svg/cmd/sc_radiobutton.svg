@@ -1,0 +1,6 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-11.40678" x2="-11.457627" y1="13.355932" y2="-.627119"><stop offset="0" stop-color="#e9e9e9"/><stop offset=".2857143" stop-color="#f2f2f2"/><stop offset="1" stop-color="#fbfbfb"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8" x2="8" y1="12.5" y2="3.5"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+
+
+
+     /&amp;amp;gt;
+ <path d="m8 1c3.865993 0 7 3.1340068 7 7 0 3.865993-3.134007 7-7 7-3.8659932 0-7-3.134007-7-7 0-3.8659932 3.1340068-7 7-7z" fill="url(#a)"/><path d="m8 0a8 8 0 0 0 -8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0 -8-8zm0 1a7 7 0 0 1 7 7 7 7 0 0 1 -7 7 7 7 0 0 1 -7-7 7 7 0 0 1 7-7z" fill="#98989d"/><circle cx="8" cy="8" fill="#69696e" r="4.003084" stroke-width=".800617"/><circle cx="8" cy="8" fill="none" r="4.499574" stroke="url(#b)"/></svg>
