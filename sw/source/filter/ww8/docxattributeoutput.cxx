@@ -7564,6 +7564,21 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
     }
 }
 
+static void WriteFootnoteSeparatorHeight(
+    ::sax_fastparser::FSHelperPtr const& pSerializer, SwTwips const nHeight)
+{
+    // try to get the height by setting font size of the paragraph
+    if (nHeight != 0)
+    {
+        pSerializer->startElementNS(XML_w, XML_pPr);
+        pSerializer->startElementNS(XML_w, XML_rPr);
+        pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val),
+            OString::number((nHeight + 5) / 10));
+        pSerializer->endElementNS(XML_w, XML_rPr);
+        pSerializer->endElementNS(XML_w, XML_pPr);
+    }
+}
+
 void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 {
     m_setFootnote = true;
@@ -7582,9 +7597,9 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSNS( XML_w, XML_id ), OString::number(nIndex++),
             FSNS( XML_w, XML_type ), "separator" );
     m_pSerializer->startElementNS(XML_w, XML_p);
-    m_pSerializer->startElementNS(XML_w, XML_r);
 
     bool bSeparator = true;
+    SwTwips nHeight(0);
     if (bFootnotes)
     {
         const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_pDoc->GetPageDesc(0).GetFootnoteInfo();
@@ -7592,8 +7607,12 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
         bSeparator = rFootnoteInfo.GetLineStyle() != SvxBorderLineStyle::NONE
                   && rFootnoteInfo.GetLineWidth() > 0
                   && double(rFootnoteInfo.GetWidth()) > 0;
+        nHeight = sw::FootnoteSeparatorHeight(rFootnoteInfo);
     }
 
+    WriteFootnoteSeparatorHeight(m_pSerializer, nHeight);
+
+    m_pSerializer->startElementNS(XML_w, XML_r);
     if (bSeparator)
         m_pSerializer->singleElementNS(XML_w, XML_separator);
     m_pSerializer->endElementNS( XML_w, XML_r );
@@ -7605,6 +7624,9 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSNS( XML_w, XML_id ), OString::number(nIndex++),
             FSNS( XML_w, XML_type ), "continuationSeparator" );
     m_pSerializer->startElementNS(XML_w, XML_p);
+
+    WriteFootnoteSeparatorHeight(m_pSerializer, nHeight);
+
     m_pSerializer->startElementNS(XML_w, XML_r);
     if (bSeparator)
     {

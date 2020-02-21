@@ -293,9 +293,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFootnoteSeparator, "footnotesep.fodt")
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "id", "0");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]", "type", "separator");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]/w:p[1]/w:r[1]/w:separator", 0);
+    // use paragraph font size to simulate height
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[1]/w:p[1]/w:pPr[1]/w:rPr[1]/w:sz", "val", "12");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]", "id", "1");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]", "type", "continuationSeparator");
     assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]/w:p[1]/w:r[1]/w:continuationSeparator", 0);
+    assertXPath(pXmlFootnotes, "/w:footnotes[1]/w:footnote[2]/w:p[1]/w:pPr[1]/w:rPr[1]/w:sz", "val", "12");
 
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
     assertXPath(pXmlSettings, "/w:settings[1]/w:footnotePr[1]/w:footnote[1]", "id", "0");
