@@ -1601,174 +1601,153 @@ public:
     }
 };
 
-namespace
+WeldTextFilter::WeldTextFilter(Link<OUString&, bool>& rInsertTextHdl)
+    : TextFilter(OUString())
+    , m_rInsertTextHdl(rInsertTextHdl)
 {
-    class WeldTextFilter : public TextFilter
-    {
-    private:
-        Link<OUString&, bool>& m_rInsertTextHdl;
-    public:
-        WeldTextFilter(Link<OUString&, bool>& rInsertTextHdl)
-            : TextFilter(OUString())
-            , m_rInsertTextHdl(rInsertTextHdl)
-        {
-        }
-
-        virtual OUString filter(const OUString &rText) override
-        {
-            if (!m_rInsertTextHdl.IsSet())
-                return rText;
-            OUString sText(rText);
-            const bool bContinue = m_rInsertTextHdl.Call(sText);
-            if (!bContinue)
-                return OUString();
-            return sText;
-        }
-    };
 }
 
-class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
+OUString WeldTextFilter::filter(const OUString &rText)
 {
-private:
-    VclPtr<Edit> m_xEntry;
+    if (!m_rInsertTextHdl.IsSet())
+        return rText;
+    OUString sText(rText);
+    const bool bContinue = m_rInsertTextHdl.Call(sText);
+    if (!bContinue)
+        return OUString();
+    return sText;
+}
 
-    DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(CursorListener, VclWindowEvent&, void);
-    DECL_LINK(ActivateHdl, Edit&, bool);
+SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceWidget(pEntry, pBuilder, bTakeOwnership)
+    , m_xEntry(pEntry)
+    , m_aTextFilter(m_aInsertTextHdl)
+{
+    m_xEntry->SetModifyHdl(LINK(this, SalInstanceEntry, ChangeHdl));
+    m_xEntry->SetActivateHdl(LINK(this, SalInstanceEntry, ActivateHdl));
+    m_xEntry->SetTextFilter(&m_aTextFilter);
+}
 
-    WeldTextFilter m_aTextFilter;
-public:
-    SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceWidget(pEntry, pBuilder, bTakeOwnership)
-        , m_xEntry(pEntry)
-        , m_aTextFilter(m_aInsertTextHdl)
+void SalInstanceEntry::set_text(const OUString& rText)
+{
+    disable_notify_events();
+    m_xEntry->SetText(rText);
+    enable_notify_events();
+}
+
+OUString SalInstanceEntry::get_text() const
+{
+    return m_xEntry->GetText();
+}
+
+void SalInstanceEntry::set_width_chars(int nChars)
+{
+    m_xEntry->SetWidthInChars(nChars);
+}
+
+int SalInstanceEntry::get_width_chars() const
+{
+    return m_xEntry->GetWidthInChars();
+}
+
+void SalInstanceEntry::set_max_length(int nChars)
+{
+    m_xEntry->SetMaxTextLen(nChars);
+}
+
+void SalInstanceEntry::select_region(int nStartPos, int nEndPos)
+{
+    disable_notify_events();
+    m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    enable_notify_events();
+}
+
+bool SalInstanceEntry::get_selection_bounds(int& rStartPos, int &rEndPos)
+{
+    const Selection& rSelection = m_xEntry->GetSelection();
+    rStartPos = rSelection.Min();
+    rEndPos = rSelection.Max();
+    return rSelection.Len();
+}
+
+void SalInstanceEntry::set_position(int nCursorPos)
+{
+    disable_notify_events();
+    if (nCursorPos < 0)
+        m_xEntry->SetCursorAtLast();
+    else
+        m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
+    enable_notify_events();
+}
+
+int SalInstanceEntry::get_position() const
+{
+    return m_xEntry->GetSelection().Max();
+}
+
+void SalInstanceEntry::set_editable(bool bEditable)
+{
+    m_xEntry->SetReadOnly(!bEditable);
+}
+
+bool SalInstanceEntry::get_editable() const
+{
+    return !m_xEntry->IsReadOnly();
+}
+
+void SalInstanceEntry::set_error(bool bError)
+{
+    if (bError)
     {
-        m_xEntry->SetModifyHdl(LINK(this, SalInstanceEntry, ChangeHdl));
-        m_xEntry->SetActivateHdl(LINK(this, SalInstanceEntry, ActivateHdl));
-        m_xEntry->SetTextFilter(&m_aTextFilter);
+        // #i75179# enable setting the background to a different color
+        m_xEntry->SetForceControlBackground(true);
+        m_xEntry->SetControlForeground(COL_WHITE);
+        m_xEntry->SetControlBackground(0xff6563);
     }
-
-    virtual void set_text(const OUString& rText) override
+    else
     {
-        disable_notify_events();
-        m_xEntry->SetText(rText);
-        enable_notify_events();
+        m_xEntry->SetForceControlBackground(false);
+        m_xEntry->SetControlForeground();
+        m_xEntry->SetControlBackground();
     }
+}
 
-    virtual OUString get_text() const override
-    {
-        return m_xEntry->GetText();
-    }
+vcl::Font SalInstanceEntry::get_font()
+{
+    return m_xEntry->GetFont();
+}
 
-    virtual void set_width_chars(int nChars) override
-    {
-        m_xEntry->SetWidthInChars(nChars);
-    }
+void SalInstanceEntry::set_font(const vcl::Font& rFont)
+{
+    m_xEntry->SetFont(rFont);
+    m_xEntry->Invalidate();
+}
 
-    virtual int get_width_chars() const override
-    {
-        return m_xEntry->GetWidthInChars();
-    }
+void SalInstanceEntry::connect_cursor_position(const Link<Entry&, void>& rLink)
+{
+    assert(!m_aCursorPositionHdl.IsSet());
+    m_xEntry->AddEventListener(LINK(this, SalInstanceEntry, CursorListener));
+    weld::Entry::connect_cursor_position(rLink);
+}
 
-    virtual void set_max_length(int nChars) override
-    {
-        m_xEntry->SetMaxTextLen(nChars);
-    }
+Edit& SalInstanceEntry::getEntry()
+{
+    return *m_xEntry;
+}
 
-    virtual void select_region(int nStartPos, int nEndPos) override
-    {
-        disable_notify_events();
-        m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
-        enable_notify_events();
-    }
+void SalInstanceEntry::fire_signal_changed()
+{
+    signal_changed();
+}
 
-    bool get_selection_bounds(int& rStartPos, int &rEndPos) override
-    {
-        const Selection& rSelection = m_xEntry->GetSelection();
-        rStartPos = rSelection.Min();
-        rEndPos = rSelection.Max();
-        return rSelection.Len();
-    }
-
-    virtual void set_position(int nCursorPos) override
-    {
-        disable_notify_events();
-        if (nCursorPos < 0)
-            m_xEntry->SetCursorAtLast();
-        else
-            m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
-        enable_notify_events();
-    }
-
-    virtual int get_position() const override
-    {
-        return m_xEntry->GetSelection().Max();
-    }
-
-    virtual void set_editable(bool bEditable) override
-    {
-        m_xEntry->SetReadOnly(!bEditable);
-    }
-
-    virtual bool get_editable() const override
-    {
-        return !m_xEntry->IsReadOnly();
-    }
-
-    virtual void set_error(bool bError) override
-    {
-        if (bError)
-        {
-            // #i75179# enable setting the background to a different color
-            m_xEntry->SetForceControlBackground(true);
-            m_xEntry->SetControlForeground(COL_WHITE);
-            m_xEntry->SetControlBackground(0xff6563);
-        }
-        else
-        {
-            m_xEntry->SetForceControlBackground(false);
-            m_xEntry->SetControlForeground();
-            m_xEntry->SetControlBackground();
-        }
-    }
-
-    virtual vcl::Font get_font() override
-    {
-        return m_xEntry->GetFont();
-    }
-
-    virtual void set_font(const vcl::Font& rFont) override
-    {
-        m_xEntry->SetFont(rFont);
-        m_xEntry->Invalidate();
-    }
-
-    virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override
-    {
-        assert(!m_aCursorPositionHdl.IsSet());
-        m_xEntry->AddEventListener(LINK(this, SalInstanceEntry, CursorListener));
-        weld::Entry::connect_cursor_position(rLink);
-    }
-
-    Edit& getEntry()
-    {
-        return *m_xEntry;
-    }
-
-    void fire_signal_changed()
-    {
-        signal_changed();
-    }
-
-    virtual ~SalInstanceEntry() override
-    {
-        if (m_aCursorPositionHdl.IsSet())
-            m_xEntry->RemoveEventListener(LINK(this, SalInstanceEntry, CursorListener));
-        m_xEntry->SetTextFilter(nullptr);
-        m_xEntry->SetActivateHdl(Link<Edit&, bool>());
-        m_xEntry->SetModifyHdl(Link<Edit&, void>());
-    }
-};
+SalInstanceEntry::~SalInstanceEntry()
+{
+    if (m_aCursorPositionHdl.IsSet())
+        m_xEntry->RemoveEventListener(LINK(this, SalInstanceEntry, CursorListener));
+    m_xEntry->SetTextFilter(nullptr);
+    m_xEntry->SetActivateHdl(Link<Edit&, bool>());
+    m_xEntry->SetModifyHdl(Link<Edit&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void)
 {
@@ -2476,112 +2455,99 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     return bRet;
 }
 
-class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
+double SalInstanceSpinButton::toField(int nValue) const
 {
-private:
-    VclPtr<FormattedField> m_xButton;
+    return static_cast<double>(nValue) / Power10(get_digits());
+}
 
-    DECL_LINK(UpDownHdl, SpinField&, void);
-    DECL_LINK(LoseFocusHdl, Control&, void);
-    DECL_LINK(OutputHdl, Edit&, bool);
-    DECL_LINK(InputHdl, sal_Int64*, TriState);
-    DECL_LINK(ActivateHdl, Edit&, bool);
+int SalInstanceSpinButton::fromField(double fValue) const
+{
+    return FRound(fValue * Power10(get_digits()));
+}
 
-    double toField(int nValue) const
-    {
-        return static_cast<double>(nValue) / Power10(get_digits());
-    }
+SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
+    , m_xButton(pButton)
+{
+    m_xButton->SetThousandsSep(false);  //off by default, MetricSpinButton enables it
+    m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
+    m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
+    m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
+    m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
+    m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
+    if (Edit* pEdit = m_xButton->GetSubEdit())
+        pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
+    else
+        m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
+}
 
-    int fromField(double fValue) const
-    {
-        return FRound(fValue * Power10(get_digits()));
-    }
+int SalInstanceSpinButton::get_value() const
+{
+    return fromField(m_xButton->GetValue());
+}
 
-public:
-    SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
-        , m_xButton(pButton)
-    {
-        m_xButton->SetThousandsSep(false);  //off by default, MetricSpinButton enables it
-        m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
-        m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
-        m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
-        m_xButton->SetOutputHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
-        m_xButton->SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
-        if (Edit* pEdit = m_xButton->GetSubEdit())
-            pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
-        else
-            m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
-    }
+void SalInstanceSpinButton::set_value(int value)
+{
+    m_xButton->SetValue(toField(value));
+}
 
-    virtual int get_value() const override
-    {
-        return fromField(m_xButton->GetValue());
-    }
+void SalInstanceSpinButton::set_range(int min, int max)
+{
+    m_xButton->SetMinValue(toField(min));
+    m_xButton->SetMaxValue(toField(max));
+}
 
-    virtual void set_value(int value) override
-    {
-        m_xButton->SetValue(toField(value));
-    }
+void SalInstanceSpinButton::get_range(int& min, int& max) const
+{
+    min = fromField(m_xButton->GetMinValue());
+    max = fromField(m_xButton->GetMaxValue());
+}
 
-    virtual void set_range(int min, int max) override
-    {
-        m_xButton->SetMinValue(toField(min));
-        m_xButton->SetMaxValue(toField(max));
-    }
+void SalInstanceSpinButton::set_increments(int step, int /*page*/)
+{
+    m_xButton->SetSpinSize(toField(step));
+}
 
-    virtual void get_range(int& min, int& max) const override
-    {
-        min = fromField(m_xButton->GetMinValue());
-        max = fromField(m_xButton->GetMaxValue());
-    }
+void SalInstanceSpinButton::get_increments(int& step, int& page) const
+{
+    step = fromField(m_xButton->GetSpinSize());
+    page = fromField(m_xButton->GetSpinSize());
+}
 
-    virtual void set_increments(int step, int /*page*/) override
-    {
-        m_xButton->SetSpinSize(toField(step));
-    }
+void SalInstanceSpinButton::set_digits(unsigned int digits)
+{
+    m_xButton->SetDecimalDigits(digits);
+}
 
-    virtual void get_increments(int& step, int& page) const override
-    {
-        step = fromField(m_xButton->GetSpinSize());
-        page = fromField(m_xButton->GetSpinSize());
-    }
+//so with hh::mm::ss, incrementing mm will not reset ss
+void SalInstanceSpinButton::DisableRemainderFactor()
+{
+    m_xButton->DisableRemainderFactor();
+}
 
-    virtual void set_digits(unsigned int digits) override
-    {
-        m_xButton->SetDecimalDigits(digits);
-    }
+//off by default for direct SpinButtons, MetricSpinButton enables it
+void SalInstanceSpinButton::SetUseThousandSep()
+{
+    m_xButton->SetThousandsSep(true);
+}
 
-    //so with hh::mm::ss, incrementing mm will not reset ss
-    void DisableRemainderFactor()
-    {
-        m_xButton->DisableRemainderFactor();
-    }
+unsigned int SalInstanceSpinButton::get_digits() const
+{
+    return m_xButton->GetDecimalDigits();
+}
 
-    //off by default for direct SpinButtons, MetricSpinButton enables it
-    void SetUseThousandSep()
-    {
-        m_xButton->SetThousandsSep(true);
-    }
-
-    virtual unsigned int get_digits() const override
-    {
-        return m_xButton->GetDecimalDigits();
-    }
-
-    virtual ~SalInstanceSpinButton() override
-    {
-        if (Edit* pEdit = m_xButton->GetSubEdit())
-            pEdit->SetActivateHdl(Link<Edit&, bool>());
-        else
-            m_xButton->SetActivateHdl(Link<Edit&, bool>());
-        m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
-        m_xButton->SetOutputHdl(Link<Edit&, bool>());
-        m_xButton->SetLoseFocusHdl(Link<Control&, void>());
-        m_xButton->SetDownHdl(Link<SpinField&, void>());
-        m_xButton->SetUpHdl(Link<SpinField&, void>());
-    }
-};
+SalInstanceSpinButton::~SalInstanceSpinButton()
+{
+    if (Edit* pEdit = m_xButton->GetSubEdit())
+        pEdit->SetActivateHdl(Link<Edit&, bool>());
+    else
+        m_xButton->SetActivateHdl(Link<Edit&, bool>());
+    m_xButton->SetInputHdl(Link<sal_Int64*, TriState>());
+    m_xButton->SetOutputHdl(Link<Edit&, bool>());
+    m_xButton->SetLoseFocusHdl(Link<Control&, void>());
+    m_xButton->SetDownHdl(Link<SpinField&, void>());
+    m_xButton->SetUpHdl(Link<SpinField&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, ActivateHdl, Edit&, bool)
 {
