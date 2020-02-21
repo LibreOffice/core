@@ -323,6 +323,44 @@ namespace
         SourceHelper& operator=(const SourceHelper&) = delete;
     };
 
+    class SystemDependentData_SourceHelper : public basegfx::SystemDependentData
+    {
+    private:
+        std::shared_ptr<SourceHelper>       maSourceHelper;
+
+    public:
+        SystemDependentData_SourceHelper(
+            basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+            const std::shared_ptr<SourceHelper>& rSourceHelper)
+        :   basegfx::SystemDependentData(rSystemDependentDataManager),
+            maSourceHelper(rSourceHelper)
+        {
+        }
+
+        const std::shared_ptr<SourceHelper>& getSourceHelper() const { return maSourceHelper; };
+        virtual sal_Int64 estimateUsageInBytes() const override;
+    };
+
+    // MM02 class to allow buffering of SourceHelper
+    sal_Int64 SystemDependentData_SourceHelper::estimateUsageInBytes() const
+    {
+        sal_Int64 nRetval(0);
+        cairo_surface_t* source(maSourceHelper ? maSourceHelper->getSurface() : nullptr);
+
+        if(source)
+        {
+            const long nStride(cairo_image_surface_get_stride(source));
+            const long nHeight(cairo_image_surface_get_height(source));
+
+            if(0 != nStride && 0 != nHeight)
+            {
+                nRetval = nStride * nHeight;
+            }
+        }
+
+        return nRetval;
+    }
+
     class MaskHelper
     {
     public:
@@ -388,6 +426,123 @@ namespace
         MaskHelper(const MaskHelper&) = delete;
         MaskHelper& operator=(const MaskHelper&) = delete;
     };
+
+    class SystemDependentData_MaskHelper : public basegfx::SystemDependentData
+    {
+    private:
+        std::shared_ptr<MaskHelper>       maMaskHelper;
+
+    public:
+        SystemDependentData_MaskHelper(
+            basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+            const std::shared_ptr<MaskHelper>& rMaskHelper)
+        :   basegfx::SystemDependentData(rSystemDependentDataManager),
+            maMaskHelper(rMaskHelper)
+        {
+        }
+
+        const std::shared_ptr<MaskHelper>& getMaskHelper() const { return maMaskHelper; };
+        virtual sal_Int64 estimateUsageInBytes() const override;
+    };
+
+    // MM02 class to allow buffering of MaskHelper
+    sal_Int64 SystemDependentData_MaskHelper::estimateUsageInBytes() const
+    {
+        sal_Int64 nRetval(0);
+        cairo_surface_t* mask(maMaskHelper ? maMaskHelper->getMask() : nullptr);
+
+        if(mask)
+        {
+            const long nStride(cairo_image_surface_get_stride(mask));
+            const long nHeight(cairo_image_surface_get_height(mask));
+
+            if(0 != nStride && 0 != nHeight)
+            {
+                nRetval = nStride * nHeight;
+            }
+        }
+
+        return nRetval;
+    }
+
+    // MM02 decide to use buffers or not
+    static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
+    static bool bUseBuffer(nullptr == pDisableMM02Goodies);
+    static long nMinimalSquareSizeToBuffer(64*64);
+
+    void tryToUseSourceBuffer(
+        const SalBitmap& rSourceBitmap,
+        std::shared_ptr<SourceHelper>& rSurface)
+    {
+        // MM02 try to access buffered SourceHelper
+        std::shared_ptr<SystemDependentData_SourceHelper> pSystemDependentData_SourceHelper;
+        const bool bBufferSource(bUseBuffer
+            && rSourceBitmap.GetSize().Width() * rSourceBitmap.GetSize().Height() > nMinimalSquareSizeToBuffer);
+
+        if(bBufferSource)
+        {
+            const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
+            pSystemDependentData_SourceHelper = rSrcBmp.getSystemDependentData<SystemDependentData_SourceHelper>();
+
+            if(pSystemDependentData_SourceHelper)
+            {
+                // reuse buffered data
+                rSurface = pSystemDependentData_SourceHelper->getSourceHelper();
+            }
+        }
+
+        if(!rSurface)
+        {
+            // create data on-demand
+            rSurface = std::make_shared<SourceHelper>(rSourceBitmap);
+
+            if(bBufferSource)
+            {
+                // add to buffering mechanism to potentially reuse next time
+                const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
+                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_SourceHelper>(
+                    ImplGetSystemDependentDataManager(),
+                    rSurface);
+            }
+        }
+    }
+
+    void tryToUseMaskBuffer(
+        const SalBitmap& rMaskBitmap,
+        std::shared_ptr<MaskHelper>& rMask)
+    {
+        // MM02 try to access buffered MaskHelper
+        std::shared_ptr<SystemDependentData_MaskHelper> pSystemDependentData_MaskHelper;
+        const bool bBufferMask(bUseBuffer
+            && rMaskBitmap.GetSize().Width() * rMaskBitmap.GetSize().Height() > nMinimalSquareSizeToBuffer);
+
+        if(bBufferMask)
+        {
+            const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rMaskBitmap));
+            pSystemDependentData_MaskHelper = rSrcBmp.getSystemDependentData<SystemDependentData_MaskHelper>();
+
+            if(pSystemDependentData_MaskHelper)
+            {
+                // reuse buffered data
+                rMask = pSystemDependentData_MaskHelper->getMaskHelper();
+            }
+        }
+
+        if(!rMask)
+        {
+            // create data on-demand
+            rMask = std::make_shared<MaskHelper>(rMaskBitmap);
+
+            if(bBufferMask)
+            {
+                // add to buffering mechanism to potentially reuse next time
+                const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rMaskBitmap));
+                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_MaskHelper>(
+                    ImplGetSystemDependentDataManager(),
+                    rMask);
+            }
+        }
+    }
 }
 
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap )
@@ -398,16 +553,22 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         return false;
     }
 
-    SourceHelper aSurface(rSourceBitmap);
-    cairo_surface_t* source = aSurface.getSurface();
+    // MM02 try to access buffered SourceHelper
+    std::shared_ptr<SourceHelper> aSurface;
+    tryToUseSourceBuffer(rSourceBitmap, aSurface);
+    cairo_surface_t* source = aSurface->getSurface();
+
     if (!source)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
         return false;
     }
 
-    MaskHelper aMask(rAlphaBitmap);
-    cairo_surface_t *mask = aMask.getMask();
+    // MM02 try to access buffered MaskHelper
+    std::shared_ptr<MaskHelper> aMask;
+    tryToUseMaskBuffer(rAlphaBitmap, aMask);
+    cairo_surface_t *mask = aMask->getMask();
+
     if (!mask)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
@@ -468,29 +629,34 @@ bool SvpSalGraphics::drawTransformedBitmap(
         return false;
     }
 
-    SourceHelper aSurface(rSourceBitmap);
-    cairo_surface_t* source = aSurface.getSurface();
-    if (!source)
+    // MM02 try to access buffered SourceHelper
+    std::shared_ptr<SourceHelper> aSurface;
+    tryToUseSourceBuffer(rSourceBitmap, aSurface);
+    cairo_surface_t* source(aSurface->getSurface());
+
+    if(!source)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
         return false;
     }
 
-    std::unique_ptr<MaskHelper> xMask;
-    cairo_surface_t *mask = nullptr;
-    if (pAlphaBitmap)
+    // MM02 try to access buffered MaskHelper
+    std::shared_ptr<MaskHelper> aMask;
+
+    if(nullptr != pAlphaBitmap)
     {
-        xMask.reset(new MaskHelper(*pAlphaBitmap));
-        mask = xMask->getMask();
-        if (!mask)
-        {
-            SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
-            return false;
-        }
+        tryToUseMaskBuffer(*pAlphaBitmap, aMask);
+    }
+
+    // access cairo_surface_t from MaskHelper
+    cairo_surface_t* mask(aMask ? aMask->getMask() : nullptr);
+    if(nullptr != pAlphaBitmap && nullptr == mask)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
+        return false;
     }
 
     const Size aSize = rSourceBitmap.GetSize();
-
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
 
@@ -1761,8 +1927,17 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
-    SourceHelper aSurface(rSourceBitmap);
-    cairo_surface_t* source = aSurface.getSurface();
+    // MM02 try to access buffered SourceHelper
+    std::shared_ptr<SourceHelper> aSurface;
+    tryToUseSourceBuffer(rSourceBitmap, aSurface);
+    cairo_surface_t* source = aSurface->getSurface();
+
+    if (!source)
+    {
+        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
+        return;
+    }
+
     copyWithOperator(rTR, source, CAIRO_OPERATOR_OVER);
 }
 
@@ -1786,6 +1961,10 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 {
     /** creates an image from the given rectangle, replacing all black pixels
      *  with nMaskColor and make all other full transparent */
+    // MM02 here decided *against* using buffered SourceHelper
+    // because the data gets somehow 'unmuliplied'. This may also be
+    // done just once, but I am not sure if this is safe to do.
+    // So for now dispense re-using data here.
     SourceHelper aSurface(rSalBitmap, true); // The mask is argb32
     if (!aSurface.getSurface())
     {

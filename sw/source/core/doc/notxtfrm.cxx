@@ -74,6 +74,14 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
+// MM02 needed for VOC mechanism and getting the OC - may be moved to an own file
+#include <svx/sdrpagewindow.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+
 using namespace com::sun::star;
 
 static bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
@@ -140,7 +148,9 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
 :   SwContentFrame( pNode, pSib ),
     // RotateFlyFrame3
-    mpTransformableSwFrame()
+    mpTransformableSwFrame(),
+    // MM02
+    mpViewContact()
 {
     mnFrameType = SwFrameType::NoTxt;
 }
@@ -917,6 +927,7 @@ static bool paintUsingPrimitivesHelper(
     return false;
 }
 
+// MM02 original using falölback to VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
     vcl::RenderContext & rOutputDevice,
     GraphicObject const& rGrfObj,
@@ -931,12 +942,30 @@ void paintGraphicUsingPrimitivesHelper(
     // -> the primitive renderer will create the needed pdf export data
     // -> if bitmap content, it will be cached system-dependent
     drawinglayer::primitive2d::Primitive2DContainer aContent(1);
-
     aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
         rGraphicTransform,
         rGrfObj,
         rGraphicAttr);
 
+    // MM02 use primitive-based version for visualization
+    paintGraphicUsingPrimitivesHelper(
+        rOutputDevice,
+        aContent,
+        rGraphicTransform,
+        rName,
+        rTitle,
+        rDescription);
+}
+
+// MM02 new VOC and primitive-based version
+void paintGraphicUsingPrimitivesHelper(
+    vcl::RenderContext & rOutputDevice,
+    drawinglayer::primitive2d::Primitive2DContainer& rContent,
+    const basegfx::B2DHomMatrix& rGraphicTransform,
+    const OUString& rName,
+    const OUString& rTitle,
+    const OUString& rDescription)
+{
     // RotateFlyFrame3: If ClipRegion is set at OutputDevice, we
     // need to use that. Usually the renderer would be a VCL-based
     // PrimitiveRenderer, but there are system-specific shortcuts that
@@ -1003,9 +1032,12 @@ void paintGraphicUsingPrimitivesHelper(
                 aTarget.append(aClip);
             }
 
-            aContent[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                aTarget,
-                aContent);
+            drawinglayer::primitive2d::MaskPrimitive2D* pNew(
+                new drawinglayer::primitive2d::MaskPrimitive2D(
+                    aTarget,
+                    rContent));
+            rContent.resize(1);
+            rContent[0] = pNew;
         }
     }
 
@@ -1013,11 +1045,14 @@ void paintGraphicUsingPrimitivesHelper(
     {
         // Embed to ObjectInfoPrimitive2D when we have Name/Title/Description
         // information available
-        aContent[0] = new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-            aContent,
-            rName,
-            rTitle,
-            rDescription);
+        drawinglayer::primitive2d::ObjectInfoPrimitive2D* pNew(
+            new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
+                rContent,
+                rName,
+                rTitle,
+                rDescription));
+        rContent.resize(1);
+        rContent[0] = pNew;
     }
 
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
@@ -1025,9 +1060,109 @@ void paintGraphicUsingPrimitivesHelper(
 
     paintUsingPrimitivesHelper(
         rOutputDevice,
-        aContent,
+        rContent,
         aTargetRange,
         aTargetRange);
+}
+
+// DrawContact section
+namespace { // anonymous namespace
+class ViewObjectContactOfSwNoTextFrame : public sdr::contact::ViewObjectContact
+{
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequence(
+        const sdr::contact::DisplayInfo& rDisplayInfo) const override;
+
+public:
+    ViewObjectContactOfSwNoTextFrame(
+        sdr::contact::ObjectContact& rObjectContact,
+        sdr::contact::ViewContact& rViewContact);
+};
+
+class ViewContactOfSwNoTextFrame : public sdr::contact::ViewContact
+{
+private:
+    // owner
+    const SwNoTextFrame&        mrSwNoTextFrame;
+
+protected:
+    // Create an Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual sdr::contact::ViewObjectContact& CreateObjectSpecificViewObjectContact(
+        sdr::contact::ObjectContact& rObjectContact) override;
+
+public:
+    // read-access to owner
+    const SwNoTextFrame& getSwNoTextFrame() const { return mrSwNoTextFrame; }
+
+    // basic constructor, used from SwNoTextFrame.
+    explicit ViewContactOfSwNoTextFrame(const SwNoTextFrame& rSwNoTextFrame);
+};
+
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSwNoTextFrame::createPrimitive2DSequence(
+    const sdr::contact::DisplayInfo& /*rDisplayInfo*/) const
+{
+    // MM02 get all the parameters formally used in paintGraphicUsingPrimitivesHelper
+    ViewContactOfSwNoTextFrame& rVCOfNTF(static_cast<ViewContactOfSwNoTextFrame&>(GetViewContact()));
+    const SwNoTextFrame& rSwNoTextFrame(rVCOfNTF.getSwNoTextFrame());
+    SwNoTextNode& rNoTNd(const_cast<SwNoTextNode&>(*static_cast<const SwNoTextNode*>(rSwNoTextFrame.GetNode())));
+    SwGrfNode* pGrfNd(rNoTNd.GetGrfNode());
+
+    if(nullptr != pGrfNd)
+    {
+        const bool bPrn(GetObjectContact().isOutputToPrinter() || GetObjectContact().isOutputToRecordingMetaFile());
+        const GraphicObject& rGrfObj(pGrfNd->GetGrfObj(bPrn));
+        GraphicAttr aGraphicAttr;
+        pGrfNd->GetGraphicAttr(aGraphicAttr, &rSwNoTextFrame);
+        const basegfx::B2DHomMatrix aGraphicTransform(rSwNoTextFrame.getFrameAreaTransformation());
+
+        // MM02 this is the right place in the VOC-Mechanism to create
+        // the primitives for visualization - these will be automatically
+        // buffered and reused
+        drawinglayer::primitive2d::Primitive2DContainer aContent(1);
+        aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
+            aGraphicTransform,
+            rGrfObj,
+            aGraphicAttr);
+
+        return aContent;
+    }
+
+    return drawinglayer::primitive2d::Primitive2DContainer();
+}
+
+ViewObjectContactOfSwNoTextFrame::ViewObjectContactOfSwNoTextFrame(
+    sdr::contact::ObjectContact& rObjectContact,
+    sdr::contact::ViewContact& rViewContact)
+:   sdr::contact::ViewObjectContact(rObjectContact, rViewContact)
+{
+}
+
+sdr::contact::ViewObjectContact& ViewContactOfSwNoTextFrame::CreateObjectSpecificViewObjectContact(
+    sdr::contact::ObjectContact& rObjectContact)
+{
+    sdr::contact::ViewObjectContact* pRetval = new ViewObjectContactOfSwNoTextFrame(rObjectContact, *this);
+    return *pRetval;
+}
+
+ViewContactOfSwNoTextFrame::ViewContactOfSwNoTextFrame(
+    const SwNoTextFrame& rSwNoTextFrame
+)
+:   sdr::contact::ViewContact(),
+    mrSwNoTextFrame(rSwNoTextFrame)
+{
+}
+} // end of anonymous namespace
+
+sdr::contact::ViewContact& SwNoTextFrame::GetViewContact() const
+{
+    if(!mpViewContact)
+    {
+        const_cast< SwNoTextFrame* >(this)->mpViewContact =
+            std::make_unique<ViewContactOfSwNoTextFrame>(*this);
+    }
+
+    return *mpViewContact;
 }
 
 /** Paint the graphic.
@@ -1155,16 +1290,67 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 }
                 else
                 {
-                    const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+                    // MM02 To allow system-dependent buffering of the involved
+                    // bitmaps it is necessary to re-use the involved primitives
+                    // and their already executed decomposition (also for
+                    // performance reasons). This is usually done in DrawingLayer
+                    // by using the VOC-Mechanism (see descriptions elsewhere).
+                    // To get that here, make the involved SwNoTextFrame (this)
+                    // a sdr::contact::ViewContact supplier by supporing
+                    // a GetViewContact() - call. For ObjectContact we can use
+                    // the already exising ObjectContact from the involved
+                    // DrawingLayer. For tis, the helper classes
+                    //     ViewObjectContactOfSwNoTextFrame
+                    //     ViewContactOfSwNoTextFrame
+                    // are created which support the VOC-mechanism in it's minimal
+                    // form. This allows automatic and view-dependent (multiple edit
+                    // windows, print, etc.) re-use of the created primitives.
+                    // Also: Will be very useful when completely changing the Writer
+                    // repaint to VOC and Primitives, too.
+                    static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
+                    static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
 
-                    paintGraphicUsingPrimitivesHelper(
-                        *pOut,
-                        rGrfObj,
-                        aGrfAttr,
-                        aGraphicTransform,
-                        nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
-                        rNoTNd.GetTitle(),
-                        rNoTNd.GetDescription());
+                    if(bUseViewObjectContactMechanism)
+                    {
+                        // MM02 use VOC-mechanism and buffer primitives
+                        SwViewShellImp* pImp(pShell->Imp());
+                        SdrPageView* pPageView(nullptr != pImp ? pImp->GetPageView() : nullptr);
+                        SdrPageWindow* pPageWindow(nullptr != pPageView ? pPageView->FindPageWindow(*pShell->GetOut()) : nullptr);
+
+                        if(nullptr != pPageWindow)
+                        {
+                            sdr::contact::ObjectContact& rOC(pPageWindow->GetObjectContact());
+                            sdr::contact::ViewContact& rVC(GetViewContact());
+                            sdr::contact::ViewObjectContact& rVOC(rVC.GetViewObjectContact(rOC));
+                            sdr::contact::DisplayInfo aDisplayInfo;
+
+                            drawinglayer::primitive2d::Primitive2DContainer aPrimitives(rVOC.getPrimitive2DSequence(aDisplayInfo));
+                            const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+
+                            paintGraphicUsingPrimitivesHelper(
+                                *pOut,
+                                aPrimitives,
+                                aGraphicTransform,
+                                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                                rNoTNd.GetTitle(),
+                                rNoTNd.GetDescription());
+                        }
+                    }
+                    else
+                    {
+                        // MM02 fallback to direct paint with primitive-recreation
+                        // which will block reusage of system-dependent bitmap data
+                        const basegfx::B2DHomMatrix aGraphicTransform(getFrameAreaTransformation());
+
+                        paintGraphicUsingPrimitivesHelper(
+                            *pOut,
+                            rGrfObj,
+                            aGrfAttr,
+                            aGraphicTransform,
+                            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                            rNoTNd.GetTitle(),
+                            rNoTNd.GetDescription());
+                    }
                 }
             }
             else
