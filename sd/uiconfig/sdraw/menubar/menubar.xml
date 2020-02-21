@@ -421,6 +421,7 @@
       <menu:menuitem menu:id=".uno:TransformDialog"/>
       <menu:menuitem menu:id=".uno:TextAttributes"/>
       <menu:menuitem menu:id=".uno:FormatLine"/>
+      <menu:menuitem menu:id=".uno:ConnectorAttributes"/>
       <menu:menuitem menu:id=".uno:FormatArea"/>
       <menu:menuitem menu:id=".uno:FillShadow"/>
       <menu:menuseparator/>
