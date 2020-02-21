@@ -65,11 +65,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
         r = "breeze";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
-#if MPL_HAVE_SUBSET
-        r = "tango";
-#else
-        r = "breeze";
-#endif
+        r = "sukapura";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
          desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
