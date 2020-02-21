@@ -67,6 +67,7 @@ qrcodegen_dep = declare_dependency(compile_args: ['-I/usr/include/qrcodegen'],
 # The version in Ubuntu eoan is too old.
 #mdds_dep = dependency('mdds-1.5')
 mdds_dep = declare_dependency(include_directories: 'mdds')
+broken_mdds_dep = declare_dependency(include_directories: '.')
 
 cdata = configuration_data()
 
@@ -136,3 +137,4 @@ subdir('starmath')
 subdir('cui')
 subdir('sd')
 subdir('formula')
+subdir('sc')
