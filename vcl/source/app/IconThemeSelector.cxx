@@ -9,7 +9,7 @@
 
 #include <comphelper/lok.hxx>
 
-#include <IconThemeSelector.hxx>
+#include <vcl/IconThemeSelector.hxx>
 
 #include <vcl/IconThemeInfo.hxx>
 #include <config_mpl.h>
@@ -66,7 +66,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
 #if MPL_HAVE_SUBSET
-        r = "tango";
+        r = "sukapura";
 #else
         r = "breeze";
 #endif
