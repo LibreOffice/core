@@ -206,4 +206,36 @@ optionsdialog_hxx = custom_target('optionsdialog.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+impress_hxx = custom_target('impress.hxx',
+  output: 'Impress.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Impress.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Impress',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
+draw_hxx = custom_target('draw.hxx',
+  output: 'Draw.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Draw.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Draw',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
 subdir('UI')
