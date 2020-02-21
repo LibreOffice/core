@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include "TablePositionHandler.hxx"
 #include "TagLogger.hxx"
 #include "util.hxx"
@@ -1094,6 +1095,23 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
             if (pCellProp != rCellProperties.end())
             {
                 bool bDocDefault;
+                // handle paragraph background color defined in CellColorHandler
+                if (eId == PROP_FILL_COLOR)
+                {
+                    // table style defines paragraph background color, use the correct property name
+                    auto pFillStyleProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
+                        [&](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
+                    if ( pFillStyleProp != rCellProperties.end() &&
+                         pFillStyleProp->Value == uno::makeAny(drawing::FillStyle_SOLID) )
+                    {
+                        sPropertyName = "ParaBackColor";
+                    }
+                    else
+                    {
+                        // FillStyle_NONE, skip table style usage for paragraph background color
+                        continue;
+                    }
+                }
                 OUString sParaStyleName;
                 rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
                 StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
@@ -1112,8 +1130,17 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     uno::Reference< beans::XPropertyState > xParaProperties( xParagraph, uno::UNO_QUERY_THROW );
                     if ( xParaProperties->getPropertyState(sPropertyName) == css::beans::PropertyState_DEFAULT_VALUE )
                     {
-                        // apply style setting when the paragraph doesn't modify it
-                        rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pCellProp->Value );
+                        if ( eId != PROP_FILL_COLOR )
+                        {
+                            // apply style setting when the paragraph doesn't modify it
+                            rParaProp.m_rPropertySet->setPropertyValue( sPropertyName, pCellProp->Value );
+                        }
+                        else
+                        {
+                            // we need this for complete import of table-style based paragraph background color
+                            rParaProp.m_rPropertySet->setPropertyValue( "FillColor",  pCellProp->Value );
+                            rParaProp.m_rPropertySet->setPropertyValue( "FillStyle",  uno::makeAny(drawing::FillStyle_SOLID) );
+                        }
                     }
                     else
                     {
