@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>min</LangID>
+      <DefaultName>Minangkabau</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ID</CountryID>
+      <DefaultName>Indonesia</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="id_ID"/>
+  <LC_FORMAT ref="id_ID" replaceFrom="[CURRENCY]" replaceTo="[$Rp-6A7]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Aka</DefaultAbbrvName>
+          <DefaultFullName>Akaik</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Sin</DefaultAbbrvName>
+          <DefaultFullName>Sinayan</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Sal</DefaultAbbrvName>
+          <DefaultFullName>Salasa</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Rab</DefaultAbbrvName>
+          <DefaultFullName>Rabaa</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Kam</DefaultAbbrvName>
+          <DefaultFullName>Kamih</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Jum</DefaultAbbrvName>
+          <DefaultFullName>Jumaik</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sat</DefaultAbbrvName>
+          <DefaultFullName>Satu</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Yun</DefaultAbbrvName>
+          <DefaultFullName>Yunari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Peb</DefaultAbbrvName>
+          <DefaultFullName>Pebruari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>Maret</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>April</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mai</DefaultAbbrvName>
+          <DefaultFullName>Mai</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>Juni</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>Juli</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Agu</DefaultAbbrvName>
+          <DefaultFullName>Agustus</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Okt</DefaultAbbrvName>
+          <DefaultFullName>Oktober</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>November</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Des</DefaultAbbrvName>
+          <DefaultFullName>Desember</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BCE</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>CE</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="id_ID"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>bana</trueWord>
+      <falseWord>salah</falseWord>
+      <quarter1Word>kuartal partamo</quarter1Word>
+      <quarter2Word>kuartal kaduo</quarter2Word>
+      <quarter3Word>kuartal katigo</quarter3Word>
+      <quarter4Word>kuartal kaampek</quarter4Word>
+      <aboveWord>labiah dari</aboveWord>
+      <belowWord>kurang dari</belowWord>
+      <quarter1Abbreviation>K1</quarter1Abbreviation>
+      <quarter2Abbreviation>K2</quarter2Abbreviation>
+      <quarter3Abbreviation>K3</quarter3Abbreviation>
+      <quarter4Abbreviation>K4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
