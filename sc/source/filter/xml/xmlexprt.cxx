@@ -101,6 +101,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/table/XMLTableExport.hxx>
 
 #include <sax/tools/converter.hxx>
 #include <tools/fldunit.hxx>
@@ -1957,7 +1958,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
     }
-    rtl::Reference<ScXMLStyleExport> aStylesExp(new ScXMLStyleExport(*this, GetAutoStylePool().get()));
+    rtl::Reference<XMLCellStyleExport> aStylesExp(new XMLCellStyleExport(*this, GetAutoStylePool().get()));
     if (GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
@@ -1971,29 +1972,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
                 GetShapeExport()->ExportGraphicDefaults();
             }
         }
-        uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (GetModel(), uno::UNO_QUERY);
-        if (xStyleFamiliesSupplier.is())
-        {
-            uno::Reference <container::XNameAccess> xStylesFamilies(xStyleFamiliesSupplier->getStyleFamilies());
-            if (xStylesFamilies.is())
-            {
-                uno::Reference <container::XIndexAccess> xCellStyles(xStylesFamilies->getByName("CellStyles"), uno::UNO_QUERY);
-                if (xCellStyles.is())
-                {
-                    sal_Int32 nCount(xCellStyles->getCount());
-                    for (sal_Int32 i = 0; i < nCount; ++i)
-                    {
-                        uno::Reference <beans::XPropertySet> xCellProperties(xCellStyles->getByIndex(i), uno::UNO_QUERY);
-                        if (xCellProperties.is())
-                        {
-                            sal_Int32 nNumberFormat = 0;
-                            if (xCellProperties->getPropertyValue(SC_UNONAME_NUMFMT) >>= nNumberFormat)
-                                addDataStyle(nNumberFormat);
-                        }
-                    }
-                }
-            }
-        }
+        collectDataStyles(false);
     }
     exportDataStyles();
 

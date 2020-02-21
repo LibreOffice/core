@@ -31,6 +31,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -142,6 +143,22 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
     return nMax;
 }
 
+namespace {
+
+class XMLCellExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+public:
+    using SvXMLExportPropertyMapper::SvXMLExportPropertyMapper;
+    /** this method is called for every item that has the
+    MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+    virtual void handleSpecialItem(SvXMLAttributeList&, const XMLPropertyState&, const SvXMLUnitConverter&,
+        const SvXMLNamespaceMap&, const std::vector<XMLPropertyState>*, sal_uInt32) const override
+    {
+        // the SpecialItem NumberFormat must not be handled by this method
+    }
+};
+
+}
 
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
@@ -168,7 +185,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
 
     if (mbWriter)
     {
-        mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper(new XMLTextPropertySetMapper(TextPropMap::CELL, true));
+        mxCellExportPropertySetMapper = new XMLCellExportPropertyMapper(new XMLTextPropertySetMapper(TextPropMap::CELL, true));
     }
     else
     {
@@ -471,7 +488,7 @@ void XMLTableExport::exportTableStyles()
     if (mbWriter)
     {
         sCellStyleName = "CellStyles";
-        aStEx.set(new XMLStyleExport(mrExport));
+        aStEx.set(new XMLCellStyleExport(mrExport));
     }
     else
     {
@@ -659,6 +676,32 @@ void XMLTableExport::exportTableTemplates()
     catch(const Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff", "XMLTableExport::exportTableDesigns()");
+    }
+}
+
+void XMLCellStyleExport::exportStyleContent(const Reference<XStyle>& /*rStyle*/)
+{
+}
+
+void XMLCellStyleExport::exportStyleAttributes(const Reference<XStyle>& rStyle)
+{
+    Reference<XPropertySet> xPropSet(rStyle, UNO_QUERY);
+    if (xPropSet.is())
+    {
+        Reference<XPropertySetInfo> xPropSetInfo(xPropSet->getPropertySetInfo());
+        const OUString sNumberFormat("NumberFormat");
+        if (xPropSetInfo->hasPropertyByName(sNumberFormat))
+        {
+            Reference<XPropertyState> xPropState(xPropSet, UNO_QUERY);
+            if (xPropState.is() && (PropertyState_DIRECT_VALUE ==
+                xPropState->getPropertyState(sNumberFormat)))
+            {
+                sal_Int32 nNumberFormat = 0;
+                if (xPropSet->getPropertyValue(sNumberFormat) >>= nNumberFormat)
+                    GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
+                                             GetExport().getDataStyleName(nNumberFormat));
+            }
+        }
     }
 }
 

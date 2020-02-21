@@ -2007,6 +2007,13 @@ DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
 
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
+{
+    // Test that number format of cell styles can be imported and exported.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CellStyles")->getByName("Test Style.11"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, "NumberFormat"));
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf129568, "tdf129568.fodt")
 {
     // Test that export doesn't fail, and that style is imported and in use.

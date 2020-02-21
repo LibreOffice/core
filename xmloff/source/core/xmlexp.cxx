@@ -68,6 +68,8 @@
 #include <XMLImageMapExport.hxx>
 #include <XMLBase64Export.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1785,6 +1787,37 @@ void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::vector< SettingsGroup >& )
 {
     return 0;
+}
+
+void SvXMLExport::collectDataStyles(bool bFromUsedStyles)
+{
+    Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(GetModel(), uno::UNO_QUERY);
+    if (!xStyleFamiliesSupplier.is())
+        return;
+
+    Reference<container::XNameAccess> xStylesFamilies(xStyleFamiliesSupplier->getStyleFamilies());
+    if (!xStylesFamilies.is())
+        return;
+
+    Reference<container::XIndexAccess> xCellStyles(xStylesFamilies->getByName("CellStyles"), uno::UNO_QUERY);
+    if (!xCellStyles.is())
+        return;
+
+    sal_Int32 nCount(xCellStyles->getCount());
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        Reference<style::XStyle> xStyle(xCellStyles->getByIndex(i), uno::UNO_QUERY);
+        if (bFromUsedStyles && !xStyle->isInUse())
+            continue;
+
+        Reference<beans::XPropertySet> xCellProperties(xStyle, uno::UNO_QUERY);
+        if (xCellProperties.is())
+        {
+            sal_Int32 nNumberFormat = 0;
+            if (xCellProperties->getPropertyValue("NumberFormat") >>= nNumberFormat)
+                addDataStyle(nNumberFormat);
+        }
+    }
 }
 
 void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool /*bTimeFormat*/ )
