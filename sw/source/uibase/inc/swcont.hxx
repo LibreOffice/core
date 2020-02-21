@@ -44,7 +44,7 @@ enum class ContentTypeId
 };
 
 // strings for context menus
-#define CONTEXT_COUNT   13
+#define CONTEXT_COUNT   17
 #define GLOBAL_CONTEXT_COUNT 14
 
 // modes for Drag 'n Drop
