@@ -180,7 +180,7 @@
 #include <i18nlangtag/lang.h>
 #include <macros/xserviceinfo.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

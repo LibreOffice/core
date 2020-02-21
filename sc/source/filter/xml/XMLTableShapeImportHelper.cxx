@@ -94,7 +94,7 @@ void XMLTableShapeImportHelper::finishShape(
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            o3tl::optional<OUString> xRangeList;
+            std::optional<OUString> xRangeList;
             SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
             for( sal_Int16 i=0; i < nAttrCount; ++i )
             {

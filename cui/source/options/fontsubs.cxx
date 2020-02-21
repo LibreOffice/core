@@ -178,7 +178,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
     if (m_xFontNameLB->get_active() != -1)
         sFontName = m_xFontNameLB->get_active_text();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
-        o3tl::optional< OUString >(sFontName), batch);
+        std::optional< OUString >(sFontName), batch);
     batch->commit();
 
     return false;

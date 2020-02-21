@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 #include <libxml/parser.h>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 struct JavaInfo;
 
@@ -159,28 +159,28 @@ private:
         If /java/enabled@xsi:nil == true then the value will be uninitialized
         after a call to load().
     */
-    o3tl::optional<sal_Bool> m_enabled;
+    std::optional<sal_Bool> m_enabled;
 
     /** User configurable option. /java/userClassPath
         If /java/userClassPath@xsi:nil == true then the value is uninitialized
         after a call to load().
     */
-    o3tl::optional< OUString> m_userClassPath;
+    std::optional< OUString> m_userClassPath;
     /** User configurable option.  /java/javaInfo
         If /java/javaInfo@xsi:nil == true then the value is uninitialized
         after a call to load.
      */
-    o3tl::optional<CNodeJavaInfo> m_javaInfo;
+    std::optional<CNodeJavaInfo> m_javaInfo;
     /** User configurable option. /java/vmParameters
         If /java/vmParameters@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    o3tl::optional< ::std::vector< OUString> > m_vmParameters;
+    std::optional< ::std::vector< OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
         If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    o3tl::optional< ::std::vector< OUString> > m_JRELocations;
+    std::optional< ::std::vector< OUString> > m_JRELocations;
 
 public:
 
@@ -225,22 +225,22 @@ public:
 
     /** returns the value of the element /java/enabled
      */
-    const o3tl::optional<sal_Bool> & getEnabled() const { return m_enabled;}
+    const std::optional<sal_Bool> & getEnabled() const { return m_enabled;}
     /** returns the value of the element /java/userClassPath.
      */
-    const o3tl::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
+    const std::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
 
     /** returns the value of the element /java/javaInfo.
      */
-    const o3tl::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
+    const std::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const o3tl::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
+    const std::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const o3tl::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
+    const std::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
 };
 
 /** merges the settings for shared, user and installation during construction.

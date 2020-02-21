@@ -14,7 +14,7 @@
 #include <queue>
 #include <tuple>
 #include <vector>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <oox/mathml/importutils.hxx>
@@ -275,7 +275,7 @@ private:
     sal_Int32 m_nTop = 0;
     sal_Int32 m_nRight = 0;
     sal_Int32 m_nBottom = 0;
-    o3tl::optional<sal_Int32> m_oZ; ///< Z-Order of the shape.
+    std::optional<sal_Int32> m_oZ; ///< Z-Order of the shape.
     sal_Int16 m_nHoriOrientRelation
         = 0; ///< Horizontal text::RelOrientation for drawinglayer shapes.
     sal_Int16 m_nVertOrientRelation = 0; ///< Vertical text::RelOrientation for drawinglayer shapes.
@@ -381,7 +381,7 @@ private:
     sal_Int32 m_nHoriPadding, m_nVertPadding;
     sal_Int32 m_nHoriAlign, m_nHoriAnchor, m_nVertAlign, m_nVertAnchor;
     Id m_nHRule;
-    o3tl::optional<Id> m_oWrap;
+    std::optional<Id> m_oWrap;
 
 public:
     explicit RTFFrame(RTFParserState* pParserState);

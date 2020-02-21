@@ -25,7 +25,7 @@
 #include <expressionnode.hxx>
 #include <wakeupevent.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <vector>
 
 namespace slideshow {
@@ -80,7 +80,7 @@ struct ActivityParameters
         EventQueue&                                 rEventQueue,
         ActivitiesQueue&                            rActivitiesQueue,
         double                                      nMinDuration,
-        ::o3tl::optional<double> const&            rRepeats,
+        ::std::optional<double> const&            rRepeats,
         double                                      nAccelerationFraction,
         double                                      nDecelerationFraction,
         sal_uInt32                                  nMinNumberOfFrames,
@@ -117,7 +117,7 @@ struct ActivityParameters
 
     /// Total duration of activity (including all repeats)
     const double                                mnMinDuration;
-    ::o3tl::optional<double> const&            mrRepeats;
+    ::std::optional<double> const&            mrRepeats;
     const double                                mnAccelerationFraction;
     const double                                mnDecelerationFraction;
 

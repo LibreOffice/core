@@ -994,7 +994,7 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
     const ScDPSaveData* pData = rDPObj.GetSaveData();
     if (pData)
     {
-        const o3tl::optional<OUString> & pGrandTotal = pData->GetGrandTotalName();
+        const std::optional<OUString> & pGrandTotal = pData->GetGrandTotalName();
         if (pGrandTotal)
             maGrandTotalName = *pGrandTotal;
     }

@@ -14,7 +14,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess>
     BitmapScopedWriteAccess;
@@ -83,8 +83,8 @@ public:
     void DrawRect(const tools::Rectangle& rRect);
 
 private:
-    o3tl::optional<BitmapColor> mpLineColor;
-    o3tl::optional<BitmapColor> mpFillColor;
+    std::optional<BitmapColor> mpLineColor;
+    std::optional<BitmapColor> mpFillColor;
 
     BitmapWriteAccess() = delete;
     BitmapWriteAccess(const BitmapWriteAccess&) = delete;

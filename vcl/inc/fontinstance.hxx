@@ -30,7 +30,7 @@
 #include <tools/fontenum.hxx>
 #include <vcl/glyphitem.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <unordered_map>
 #include <memory>
 
@@ -103,7 +103,7 @@ private:
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<PhysicalFontFace> m_pFontFace;
-    o3tl::optional<bool> m_xbIsGraphiteFont;
+    std::optional<bool> m_xbIsGraphiteFont;
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()

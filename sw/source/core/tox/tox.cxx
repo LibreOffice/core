@@ -30,7 +30,7 @@
 #include <hints.hxx>
 #include <calbck.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -817,7 +817,7 @@ lcl_SearchNextToken(const OUString & sPattern, sal_Int32 const nStt)
 
    @return the token
  */
-static o3tl::optional<SwFormToken>
+static std::optional<SwFormToken>
 lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
 {
     OUString sToken( lcl_SearchNextToken(sPattern, nCurPatternPos) );
@@ -827,7 +827,7 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     if (TOKEN_END == eTokenType) // invalid input? skip it
     {
         nCurPatternPos = sPattern.getLength();
-        return o3tl::optional<SwFormToken>();
+        return std::optional<SwFormToken>();
     }
 
     // at this point sPattern contains the
@@ -906,7 +906,7 @@ SwFormTokensHelper::SwFormTokensHelper(const OUString & rPattern)
 
     while (nCurPatternPos < rPattern.getLength())
     {
-        o3tl::optional<SwFormToken> const oToken(
+        std::optional<SwFormToken> const oToken(
                 lcl_BuildToken(rPattern, nCurPatternPos));
         if (oToken)
             m_Tokens.push_back(*oToken);

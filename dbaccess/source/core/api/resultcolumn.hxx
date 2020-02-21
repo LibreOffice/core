@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <column.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <comphelper/proparrhlp.hxx>
 namespace dbaccess
 {
@@ -38,20 +38,20 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xDBMetaData;
         sal_Int32                             m_nPos;
         css::uno::Any                         m_aIsRowVersion;
-        mutable ::o3tl::optional< sal_Bool > m_isSigned;
-        mutable ::o3tl::optional< sal_Bool > m_isCurrency;
-        mutable ::o3tl::optional< sal_Bool > m_bSearchable;
-        mutable ::o3tl::optional< sal_Bool > m_isCaseSensitive;
-        mutable ::o3tl::optional< sal_Bool > m_isReadOnly;
-        mutable ::o3tl::optional< sal_Bool > m_isWritable;
-        mutable ::o3tl::optional< sal_Bool > m_isDefinitelyWritable;
-        mutable ::o3tl::optional< sal_Bool > m_isAutoIncrement;
-        mutable ::o3tl::optional< sal_Int32 > m_isNullable;
-        mutable ::o3tl::optional< OUString > m_sColumnLabel;
-        mutable ::o3tl::optional< sal_Int32 > m_nColumnDisplaySize;
-        mutable ::o3tl::optional< sal_Int32 > m_nColumnType;
-        mutable ::o3tl::optional< sal_Int32 > m_nPrecision;
-        mutable ::o3tl::optional< sal_Int32 > m_nScale;
+        mutable ::std::optional< sal_Bool > m_isSigned;
+        mutable ::std::optional< sal_Bool > m_isCurrency;
+        mutable ::std::optional< sal_Bool > m_bSearchable;
+        mutable ::std::optional< sal_Bool > m_isCaseSensitive;
+        mutable ::std::optional< sal_Bool > m_isReadOnly;
+        mutable ::std::optional< sal_Bool > m_isWritable;
+        mutable ::std::optional< sal_Bool > m_isDefinitelyWritable;
+        mutable ::std::optional< sal_Bool > m_isAutoIncrement;
+        mutable ::std::optional< sal_Int32 > m_isNullable;
+        mutable ::std::optional< OUString > m_sColumnLabel;
+        mutable ::std::optional< sal_Int32 > m_nColumnDisplaySize;
+        mutable ::std::optional< sal_Int32 > m_nColumnType;
+        mutable ::std::optional< sal_Int32 > m_nPrecision;
+        mutable ::std::optional< sal_Int32 > m_nScale;
 
         virtual ~OResultColumn() override;
     public:

@@ -87,7 +87,7 @@ void HelpBackendDb::addEntry(OUString const & url, Data const & data)
 }
 
 
-::o3tl::optional<HelpBackendDb::Data>
+::std::optional<HelpBackendDb::Data>
 HelpBackendDb::getEntry(OUString const & url)
 {
     try
@@ -100,9 +100,9 @@ HelpBackendDb::getEntry(OUString const & url)
         }
         else
         {
-            return ::o3tl::optional<Data>();
+            return ::std::optional<Data>();
         }
-        return ::o3tl::optional<Data>(retData);
+        return ::std::optional<Data>(retData);
     }
     catch ( const css::deployment::DeploymentException& )
     {

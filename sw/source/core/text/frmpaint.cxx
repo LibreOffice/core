@@ -112,7 +112,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         if( m_aRect.Bottom() > nBottom )
             m_aRect.Bottom( nBottom );
     }
-    o3tl::optional<bool> oIsRightPage;
+    std::optional<bool> oIsRightPage;
     if( bLineNum )
     {
         /* Initializes the Members necessary for line numbering:

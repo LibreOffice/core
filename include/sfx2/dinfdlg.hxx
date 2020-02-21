@@ -34,7 +34,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -238,7 +238,7 @@ class CustomPropertiesDateField
 private:
     std::unique_ptr<SvtCalendarBox> m_xDateField;
 public:
-    ::o3tl::optional<sal_Int16> m_TZ;
+    ::std::optional<sal_Int16> m_TZ;
 
     CustomPropertiesDateField(SvtCalendarBox* pDateField);
     void set_visible(bool bVisible);

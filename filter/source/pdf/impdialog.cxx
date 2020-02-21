@@ -1547,7 +1547,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
 
         try
         {
-            o3tl::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+            std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
             if (aTSAURLs)
             {
                 const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;

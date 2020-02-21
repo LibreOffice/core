@@ -121,7 +121,7 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
     m_aSub[SwFontScript::Latin].m_nFontCacheId = m_aSub[SwFontScript::CJK].m_nFontCacheId = m_aSub[SwFontScript::CTL].m_nFontCacheId = nullptr;
 }
 
-const o3tl::optional<editeng::SvxBorderLine>&
+const std::optional<editeng::SvxBorderLine>&
 SwFont::GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
     switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
@@ -145,7 +145,7 @@ SwFont::GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) cons
     }
 }
 
-const o3tl::optional<editeng::SvxBorderLine>&
+const std::optional<editeng::SvxBorderLine>&
 SwFont::GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
     switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
@@ -169,7 +169,7 @@ SwFont::GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) c
     }
 }
 
-const o3tl::optional<editeng::SvxBorderLine>&
+const std::optional<editeng::SvxBorderLine>&
 SwFont::GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
     switch (GetOrientation(bVertLayout, bVertLayoutLRBT))
@@ -193,7 +193,7 @@ SwFont::GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) con
     }
 }
 
-const o3tl::optional<editeng::SvxBorderLine>&
+const std::optional<editeng::SvxBorderLine>&
 SwFont::GetAbsRightBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const
 {
     switch (GetOrientation(bVertLayout, bVertLayoutLRBT))

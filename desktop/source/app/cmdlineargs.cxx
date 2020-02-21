@@ -82,7 +82,7 @@ public:
         }
     }
 
-    virtual o3tl::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
+    virtual std::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
     virtual bool next(OUString * argument) override {
         OSL_ASSERT(argument != nullptr);
@@ -95,7 +95,7 @@ public:
     }
 
 private:
-    o3tl::optional< OUString > m_cwdUrl;
+    std::optional< OUString > m_cwdUrl;
     sal_uInt32 m_count;
     sal_uInt32 m_index;
 };

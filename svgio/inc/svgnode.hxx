@@ -26,7 +26,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
 #include <vector>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 // predefines
 namespace svgio
@@ -94,10 +94,10 @@ namespace svgio
             std::vector< std::unique_ptr<SvgNode> >  maChildren;
 
             /// Id svan value
-            o3tl::optional<OUString>   mpId;
+            std::optional<OUString>   mpId;
 
             /// Class svan value
-            o3tl::optional<OUString>   mpClass;
+            std::optional<OUString>   mpClass;
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
@@ -167,11 +167,11 @@ namespace svgio
             double getCurrentXHeight() const;
 
             /// Id access
-            o3tl::optional<OUString> const & getId() const { return mpId; }
+            std::optional<OUString> const & getId() const { return mpId; }
             void setId(OUString const &);
 
             /// Class access
-            o3tl::optional<OUString> const & getClass() const { return mpClass; }
+            std::optional<OUString> const & getClass() const { return mpClass; }
             void setClass(OUString const &);
 
             /// XmlSpace access

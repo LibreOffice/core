@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 
 namespace dp_manager {
@@ -35,8 +35,8 @@ class ExtensionProperties final
     OUString m_propFileUrl;
     const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    ::o3tl::optional< OUString> m_prop_suppress_license;
-    ::o3tl::optional< OUString> m_prop_extension_update;
+    ::std::optional< OUString> m_prop_suppress_license;
+    ::std::optional< OUString> m_prop_extension_update;
 
     static OUString getPropertyValue(css::beans::NamedValue const & v);
 public:

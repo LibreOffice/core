@@ -140,7 +140,7 @@ public:
 
 class MaybeMergedIter
 {
-    o3tl::optional<sw::MergedAttrIter> m_oMergedIter;
+    std::optional<sw::MergedAttrIter> m_oMergedIter;
     SwTextNode const*const m_pNode;
     size_t m_HintIndex;
 
@@ -951,7 +951,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             const_cast<SwPaM&>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        o3tl::optional<OUString> xRepl;
+        std::optional<OUString> xRepl;
         if (bRegExp)
             xRepl = sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout);
         bool const bReplaced = sw::ReplaceImpl(rCursor,
@@ -1094,10 +1094,10 @@ bool ReplaceImpl(
     return bReplaced;
 }
 
-o3tl::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
         SwPaM *const pPam, SwRootFrame const*const pLayout)
 {
-    o3tl::optional<OUString> xRet;
+    std::optional<OUString> xRet;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {

@@ -27,7 +27,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <drawingml/textfont.hxx>
 #include <drawingml/textspacing.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace com { namespace sun { namespace star {
     namespace graphic { class XGraphic; }
@@ -90,10 +90,10 @@ public:
 
     TextSpacing&                        getParaTopMargin() { return maParaTopMargin; }
     TextSpacing&                        getParaBottomMargin() { return maParaBottomMargin; }
-    o3tl::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
-    o3tl::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
+    std::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
+    std::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
-    o3tl::optional< css::style::ParagraphAdjust >&       getParaAdjust() { return moParaAdjust; }
+    std::optional< css::style::ParagraphAdjust >&       getParaAdjust() { return moParaAdjust; }
     void                                setParaAdjust( css::style::ParagraphAdjust nParaAdjust ) { moParaAdjust = nParaAdjust; }
 
     TextSpacing&                        getLineSpacing() { return maLineSpacing; }
@@ -124,9 +124,9 @@ protected:
     BulletList                      maBulletList;
     TextSpacing                     maParaTopMargin;
     TextSpacing                     maParaBottomMargin;
-    o3tl::optional< sal_Int32 >    moParaLeftMargin;
-    o3tl::optional< sal_Int32 >    moFirstLineIndentation;
-    o3tl::optional< css::style::ParagraphAdjust >    moParaAdjust;
+    std::optional< sal_Int32 >    moParaLeftMargin;
+    std::optional< sal_Int32 >    moFirstLineIndentation;
+    std::optional< css::style::ParagraphAdjust >    moParaAdjust;
     sal_Int16                       mnLevel;
     TextSpacing                     maLineSpacing;
 };

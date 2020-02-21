@@ -92,7 +92,7 @@ void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 
 static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
 {
-    o3tl::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
+    std::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
 
     if ( pOrigVal )
     {
@@ -103,8 +103,8 @@ static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const
 static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
         sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow, bool bMergedVertically )
 {
-    o3tl::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
-    o3tl::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
+    std::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
+    std::optional<PropertyMap::Property> pHorizontalVal = pCellProps->getProperty(META_PROP_HORIZONTAL_BORDER);
 
     // Handle the vertical and horizontal borders
     uno::Any aVertProp;
@@ -254,7 +254,7 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
     if (!pTableProperties)
         return false;
 
-    const o3tl::optional<PropertyMap::Property> aTblBorder = pTableProperties->getProperty(nId);
+    const std::optional<PropertyMap::Property> aTblBorder = pTableProperties->getProperty(nId);
     if( aTblBorder )
     {
         OSL_VERIFY(aTblBorder->second >>= rLine);
@@ -388,7 +388,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aGrabBag["TablePosition"] <<= aGrabBagTS;
         }
 
-        o3tl::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
+        std::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
         if(aTableStyleVal)
         {
             // Apply table style properties recursively
@@ -456,7 +456,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // This is the one preserving just all the table look attributes.
-        o3tl::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
+        std::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
         if (oTableLook)
         {
             aGrabBag["TableStyleLook"] = oTableLook->second;
@@ -464,7 +464,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // This is just the "val" attribute's numeric value.
-        const o3tl::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
+        const std::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
         if(aTblLook)
         {
             aTblLook->second >>= rInfo.nTblLook;
@@ -472,25 +472,25 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         // apply cell margin settings of the table style
-        const o3tl::optional<PropertyMap::Property> oLeftMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_LEFT);
+        const std::optional<PropertyMap::Property> oLeftMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_LEFT);
         if (oLeftMargin)
         {
             oLeftMargin->second >>= rInfo.nLeftBorderDistance;
             m_aTableProperties->Erase(oLeftMargin->first);
         }
-        const o3tl::optional<PropertyMap::Property> oRightMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_RIGHT);
+        const std::optional<PropertyMap::Property> oRightMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_RIGHT);
         if (oRightMargin)
         {
             oRightMargin->second >>= rInfo.nRightBorderDistance;
             m_aTableProperties->Erase(oRightMargin->first);
         }
-        const o3tl::optional<PropertyMap::Property> oTopMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_TOP);
+        const std::optional<PropertyMap::Property> oTopMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_TOP);
         if (oTopMargin)
         {
             oTopMargin->second >>= rInfo.nTopBorderDistance;
             m_aTableProperties->Erase(oTopMargin->first);
         }
-        const o3tl::optional<PropertyMap::Property> oBottomMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_BOTTOM);
+        const std::optional<PropertyMap::Property> oBottomMargin = m_aTableProperties->getProperty(META_PROP_CELL_MAR_BOTTOM);
         if (oBottomMargin)
         {
             oBottomMargin->second >>= rInfo.nBottomBorderDistance;
@@ -598,7 +598,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if ( !m_aCellProperties.empty() && !m_aCellProperties[0].empty() )
         {
             // aLeftBorder already contains tblBorder; overwrite if cell is different.
-            o3tl::optional<PropertyMap::Property> aCellBorder
+            std::optional<PropertyMap::Property> aCellBorder
                 = m_aCellProperties[0][0]->getProperty(PROP_LEFT_BORDER);
             if ( aCellBorder )
                 aCellBorder->second >>= aLeftBorder;
@@ -658,7 +658,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
         if( m_aRowProperties.size() == 1 && m_aRowProperties[0].get() )
         {
-            o3tl::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
+            std::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
             if( oSplitAllowed )
             {
                 bool bRowCanSplit = true;
@@ -808,18 +808,18 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     // Apply also possible tblPrEx borders on cells
                     for (const PropertyIds& rBorder : pBorders)
                     {
-                        o3tl::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
-                        o3tl::optional<PropertyMap::Property> oRowCellBorder;
+                        std::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
+                        std::optional<PropertyMap::Property> oRowCellBorder;
                         // we can have table border exception in row properties
                         if (*aRowIter && (*aRowIter)->isSet(rBorder))
                             oRowCellBorder = (*aRowIter)->getProperty(rBorder);
-                        o3tl::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
+                        std::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
                         if (oRowCellBorder && oDirectCellBorder)
                         {
                             table::BorderLine2 aRowCellBorder = oRowCellBorder->second.get<table::BorderLine2>();
                             table::BorderLine2 aDirectCellBorder = oDirectCellBorder->second.get<table::BorderLine2>();
                             if (aRowCellBorder.LineStyle != table::BorderLineStyle::NONE && aDirectCellBorder.LineStyle == table::BorderLineStyle::NONE)
-                                oDirectCellBorder = o3tl::optional<PropertyMap::Property>();
+                                oDirectCellBorder = std::optional<PropertyMap::Property>();
                         }
                         if (oRowCellBorder && !oDirectCellBorder)
                         {
@@ -846,7 +846,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                             }
                             else
                             {
-                                o3tl::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(rBorder);
+                                std::optional<PropertyMap::Property> oTableBorder = rInfo.pTableBorders->getProperty(rBorder);
                                 if (oTableBorder)
                                 {
                                     table::BorderLine2 aTableBorder = oTableBorder->second.get<table::BorderLine2>();
@@ -928,7 +928,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                                                  uno::makeAny(rInfo.nBottomBorderDistance ), false);
 
                 // Horizontal merge is not a UNO property, extract that info here to rMerges, and then remove it from the map.
-                const o3tl::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
+                const std::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
                 if (aHorizontalMergeVal)
                 {
                     if (aHorizontalMergeVal->second.get<bool>())

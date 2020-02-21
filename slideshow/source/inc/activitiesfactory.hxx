@@ -36,7 +36,7 @@
 #include "boolanimation.hxx"
 #include "pairanimation.hxx"
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 /* Definition of ActivitiesFactory class */
 
@@ -55,7 +55,7 @@ namespace ActivitiesFactory
             double                                nMinDuration,
             sal_uInt32                            nMinNumberOfFrames,
             bool                                  bAutoReverse,
-            ::o3tl::optional<double> const&      aRepeats,
+            ::std::optional<double> const&      aRepeats,
             double                                nAcceleration,
             double                                nDeceleration,
             const ShapeSharedPtr&                 rShape,
@@ -110,7 +110,7 @@ namespace ActivitiesFactory
             unspecified, the activity will repeat
             indefinitely.
         */
-        ::o3tl::optional<double> const                 maRepeats;
+        ::std::optional<double> const                 maRepeats;
 
         /// Fraction of simple time to accelerate animation
         double const                                    mnAcceleration;

@@ -848,7 +848,7 @@ bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
 
     //My Pagedesc doesn't count if I'm a follow!
     const SwPageDesc *pDesc = nullptr;
-    o3tl::optional<sal_uInt16> oTmp;
+    std::optional<sal_uInt16> oTmp;
     SwFlowFrame *pFlow = SwFlowFrame::CastFlowFrame( this );
     if ( !pFlow || !pFlow->IsFollow() )
     {
@@ -2531,7 +2531,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
 #if BOOST_VERSION < 105600
             std::list<SwFrameDeleteGuard> g;
 #else
-            ::o3tl::optional<SwFrameDeleteGuard> g;
+            ::std::optional<SwFrameDeleteGuard> g;
 #endif
             if (m_rThis.GetUpper()->IsCellFrame())
             {

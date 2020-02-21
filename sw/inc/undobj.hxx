@@ -27,7 +27,7 @@
 #include "SwRewriter.hxx"
 #include "swundo.hxx"
 #include <o3tl/typed_flags_set.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class SwHistory;
 class SwPaM;
@@ -58,7 +58,7 @@ class SwUndo
 
 protected:
     bool m_bCacheComment;
-    mutable o3tl::optional<OUString> maComment;
+    mutable std::optional<OUString> maComment;
 
     static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, const sal_uLong* pEndIdx = nullptr );
     static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );

@@ -24,7 +24,7 @@
 #include "hintids.hxx"
 #include "format.hxx"
 #include "calbck.hxx"
-#include <o3tl/optional.hxx>
+#include <optional>
 #include "pagedesc.hxx"
 
 class IntlWrapper;
@@ -34,7 +34,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
 {
-    ::o3tl::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
+    ::std::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
     SwModify* m_pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
 protected:
@@ -62,8 +62,8 @@ public:
           SwPageDesc *GetPageDesc() { return static_cast<SwPageDesc*>(GetRegisteredIn()); }
     const SwPageDesc *GetPageDesc() const { return static_cast<const SwPageDesc*>(GetRegisteredIn()); }
 
-    const ::o3tl::optional<sal_uInt16>&  GetNumOffset() const        { return m_oNumOffset; }
-    void    SetNumOffset( const ::o3tl::optional<sal_uInt16>& oNum ) { m_oNumOffset = oNum; }
+    const ::std::optional<sal_uInt16>&  GetNumOffset() const        { return m_oNumOffset; }
+    void    SetNumOffset( const ::std::optional<sal_uInt16>& oNum ) { m_oNumOffset = oNum; }
 
     /// Query / set where attribute is anchored.
     const SwModify* GetDefinedIn() const { return m_pDefinedIn; }

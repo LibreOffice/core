@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class Graphic;
 class SwGrfNode;
@@ -41,8 +41,8 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
-    o3tl::optional<OUString> maText;
-    o3tl::optional<OUString> maUndoText;
+    std::optional<OUString> maText;
+    std::optional<OUString> maUndoText;
     std::unique_ptr<SwRedlineData> m_pRedlData;
     sal_uLong m_nNode;
     sal_Int32 m_nContent, m_nLen;
@@ -59,7 +59,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
     SwDoc * m_pDoc;
 
     void Init(const SwNodeIndex & rNode);
-    o3tl::optional<OUString> GetTextFromDoc() const;
+    std::optional<OUString> GetTextFromDoc() const;
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nContent, sal_Int32 nLen,
@@ -135,8 +135,8 @@ private:
 class SwUndoReRead : public SwUndo
 {
     std::unique_ptr<Graphic> mpGraphic;
-    o3tl::optional<OUString> maNm;
-    o3tl::optional<OUString> maFltr;
+    std::optional<OUString> maNm;
+    std::optional<OUString> maFltr;
     sal_uLong mnPosition;
     MirrorGraph mnMirror;
 

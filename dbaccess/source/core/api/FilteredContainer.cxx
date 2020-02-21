@@ -28,7 +28,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <sal/log.hxx>
 
 namespace dbaccess
@@ -99,7 +99,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         return bFilterMatch;
     }
 
-    typedef ::o3tl::optional< OUString >    OptionalString;
+    typedef ::std::optional< OUString >    OptionalString;
 
     namespace {
 

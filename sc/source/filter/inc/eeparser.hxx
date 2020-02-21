@@ -24,7 +24,7 @@
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/editdata.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <address.hxx>
 #include <memory>
 #include <vector>
@@ -52,11 +52,11 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    o3tl::optional<OUString>
+    std::optional<OUString>
                         pValStr;        // HTML possibly SDVAL string
-    o3tl::optional<OUString>
+    std::optional<OUString>
                         pNumStr;        // HTML possibly SDNUM string
-    o3tl::optional<OUString>
+    std::optional<OUString>
                         pName;          // HTML possibly anchor/RangeName
     OUString            aAltText;       // HTML IMG ALT Text
     std::vector< std::unique_ptr<ScHTMLImage> > maImageList;       // graphics in this cell

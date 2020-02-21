@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <rtl/ustring.hxx>
 #include "libxmlutil.hxx"
@@ -40,7 +40,7 @@ class VendorSettings
 public:
     VendorSettings();
 
-    o3tl::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
+    std::optional<VersionInfo> getVersionInformation(const OUString & sVendor) const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.

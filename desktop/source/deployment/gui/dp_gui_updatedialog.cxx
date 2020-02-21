@@ -24,7 +24,7 @@
 #include <vector>
 
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -380,7 +380,7 @@ void UpdateDialog::Thread::prepareUpdateData(
         out_du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
 
-    const ::o3tl::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
+    const ::std::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
 
     out_du.name = getUpdateDisplayString(out_data, infoset.getVersion());
 
@@ -809,7 +809,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
         {
             DisabledUpdate &rData = m_disabledUpdates[ index->m_nIndex ];
             dp_misc::DescriptionInfoset aInfoset( m_context, rData.aUpdateInfo );
-            ::o3tl::optional< OUString > aID( aInfoset.getIdentifier() );
+            ::std::optional< OUString > aID( aInfoset.getIdentifier() );
             if ( aID )
                 aExtensionID = *aID;
             aVersion = aInfoset.getVersion();

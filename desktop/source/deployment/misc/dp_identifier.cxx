@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -32,7 +32,7 @@
 namespace dp_misc {
 
 OUString generateIdentifier(
-    ::o3tl::optional< OUString > const & optional,
+    ::std::optional< OUString > const & optional,
     OUString const & fileName)
 {
     return optional ? *optional : generateLegacyIdentifier(fileName);

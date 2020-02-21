@@ -50,12 +50,12 @@ namespace connectivity
 
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();
-        OUString     getErrorMessage( const ErrorCondition _eCondition, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
+        OUString     getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
         static ErrorCode    getErrorCode( const ErrorCondition _eCondition );
-        void                raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
-        void                raiseException( const ErrorCondition _eCondition, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
-        void                raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const Type& _rExceptionType, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
-        SQLException        getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
+        void                raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
+        void                raiseException( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
+        void                raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const Type& _rExceptionType, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
+        SQLException        getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
 
     private:
         /// returns the basic error message associated with the given error condition, without any parameter replacements
@@ -69,7 +69,7 @@ namespace connectivity
         /// returns an SQLException describing the given error condition
         SQLException
                 impl_buildSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-                    const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 );
+                    const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 );
     private:
         std::locale                                             m_aResources;
     };
@@ -90,7 +90,7 @@ namespace connectivity
 
         /** substitutes a given placeholder in the given message with the given value
         */
-        void lcl_substitutePlaceholder(OUString& _rMessage, const char* _pPlaceholder, const o3tl::optional<OUString>& rParamValue)
+        void lcl_substitutePlaceholder(OUString& _rMessage, const char* _pPlaceholder, const std::optional<OUString>& rParamValue)
         {
             size_t nPlaceholderLen( strlen( _pPlaceholder ) );
             sal_Int32 nIndex = _rMessage.indexOfAsciiL( _pPlaceholder, nPlaceholderLen );
@@ -142,7 +142,7 @@ namespace connectivity
         }
     }
 
-    OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+    OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         OUString sErrorMessage( impl_getErrorMessage( _eCondition ) );
 
@@ -160,7 +160,7 @@ namespace connectivity
     }
 
 
-    void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+    void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         raiseTypedException(
             _eCondition,
@@ -173,7 +173,7 @@ namespace connectivity
     }
 
 
-    void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+    void SQLError_Impl::raiseException( const ErrorCondition _eCondition, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         raiseTypedException(
             _eCondition,
@@ -186,7 +186,7 @@ namespace connectivity
     }
 
     void SQLError_Impl::raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-        const Type& _rExceptionType, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+        const Type& _rExceptionType, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         if ( !::cppu::UnoType< SQLException >::get().isAssignableFrom( _rExceptionType ) )
             throw std::bad_cast();
@@ -203,13 +203,13 @@ namespace connectivity
     }
 
     SQLException SQLError_Impl::getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-        const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+        const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         return impl_buildSQLException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
 
     SQLException SQLError_Impl::impl_buildSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-        const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 )
+        const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 )
     {
         return SQLException(
             getErrorMessage( _eCondition, _rParamValue1, _rParamValue2, _rParamValue3 ),
@@ -258,7 +258,7 @@ namespace connectivity
 
     OUString SQLError::getErrorMessage( const ErrorCondition _eCondition ) const
     {
-        return m_pImpl->getErrorMessage( _eCondition, o3tl::optional<OUString>(), o3tl::optional<OUString>(), o3tl::optional<OUString>() );
+        return m_pImpl->getErrorMessage( _eCondition, std::optional<OUString>(), std::optional<OUString>(), std::optional<OUString>() );
     }
 
 
@@ -268,7 +268,7 @@ namespace connectivity
     }
 
 
-    void SQLError::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 ) const
+    void SQLError::raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 ) const
     {
         m_pImpl->raiseException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }
@@ -276,19 +276,19 @@ namespace connectivity
 
     void SQLError::raiseException( const ErrorCondition _eCondition ) const
     {
-        m_pImpl->raiseException( _eCondition, o3tl::optional<OUString>(), o3tl::optional<OUString>(), o3tl::optional<OUString>() );
+        m_pImpl->raiseException( _eCondition, std::optional<OUString>(), std::optional<OUString>(), std::optional<OUString>() );
     }
 
 
     void SQLError::raiseTypedException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
         const Type& _rExceptionType ) const
     {
-        m_pImpl->raiseTypedException( _eCondition, _rxContext, _rExceptionType, o3tl::optional<OUString>(), o3tl::optional<OUString>(), o3tl::optional<OUString>() );
+        m_pImpl->raiseTypedException( _eCondition, _rxContext, _rExceptionType, std::optional<OUString>(), std::optional<OUString>(), std::optional<OUString>() );
     }
 
 
     SQLException SQLError::getSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
-        const o3tl::optional<OUString>& _rParamValue1, const o3tl::optional<OUString>& _rParamValue2, const o3tl::optional<OUString>& _rParamValue3 ) const
+        const std::optional<OUString>& _rParamValue1, const std::optional<OUString>& _rParamValue2, const std::optional<OUString>& _rParamValue3 ) const
     {
         return m_pImpl->getSQLException( _eCondition, _rxContext, _rParamValue1, _rParamValue2, _rParamValue3 );
     }

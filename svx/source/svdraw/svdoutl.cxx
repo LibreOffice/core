@@ -72,7 +72,7 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 }
 
 OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
-                                     o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor)
+                                     std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor)
 {
     bool bOk = false;
     OUString aRet;

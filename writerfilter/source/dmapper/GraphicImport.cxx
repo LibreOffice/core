@@ -247,10 +247,10 @@ public:
     std::queue<OUString>& m_rPositivePercentages;
     OUString sAnchorId;
     comphelper::SequenceAsHashMap m_aInteropGrabBag;
-    o3tl::optional<sal_Int32> m_oEffectExtentLeft;
-    o3tl::optional<sal_Int32> m_oEffectExtentTop;
-    o3tl::optional<sal_Int32> m_oEffectExtentRight;
-    o3tl::optional<sal_Int32> m_oEffectExtentBottom;
+    std::optional<sal_Int32> m_oEffectExtentLeft;
+    std::optional<sal_Int32> m_oEffectExtentTop;
+    std::optional<sal_Int32> m_oEffectExtentRight;
+    std::optional<sal_Int32> m_oEffectExtentBottom;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper& rDMapper, std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)

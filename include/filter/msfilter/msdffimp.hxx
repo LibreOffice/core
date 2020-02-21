@@ -28,7 +28,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/stl_types.hxx>
@@ -226,9 +226,9 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
                     pClientDataBuffer;
     sal_uInt32      nClientDataLen;
     sal_uInt32      nXAlign;
-    o3tl::optional<sal_uInt32> nXRelTo;
+    std::optional<sal_uInt32> nXRelTo;
     sal_uInt32      nYAlign;
-    o3tl::optional<sal_uInt32> nYRelTo;
+    std::optional<sal_uInt32> nYRelTo;
     sal_uInt32      nLayoutInTableCell;
     ShapeFlag       nFlags;
     sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape

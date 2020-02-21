@@ -1098,7 +1098,7 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, o3tl::nullopt, nullptr, bIsFirstParagraph );
+    aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, std::nullopt, nullptr, bIsFirstParagraph );
     NeedsDocumentProtected( aSects.back() );
 }
 
@@ -1419,7 +1419,7 @@ void WW8AttributeOutput::SectionBiDi( bool bBiDi )
     m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
 }
 
-void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber )
+void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::std::optional<sal_uInt16>& oPageRestartNumber )
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );

@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/eeitem.hxx>
@@ -491,7 +491,7 @@ struct MSFILTER_DLLPUBLIC PPTFieldEntry
     sal_uInt16          nTextRangeEnd;
     std::unique_ptr<SvxFieldItem> xField1;
     std::unique_ptr<SvxFieldItem> xField2;
-    o3tl::optional<OUString> xString;
+    std::optional<OUString> xString;
 
     PPTFieldEntry()
         : nPos(0)
@@ -813,7 +813,7 @@ class PPTNumberFormatCreator
                     sal_uInt32 nLevel,
                     TSS_Type nInstance,
                     TSS_Type nInstanceInSheet,
-                    o3tl::optional< sal_Int16 >& rStartNumbering,
+                    std::optional< sal_Int16 >& rStartNumbering,
                     sal_uInt32 nFontHeight,
                     PPTParagraphObj const * pPara
                 );
@@ -841,7 +841,7 @@ public:
                     SvxNumberFormat& rNumberFormat,
                     PPTParagraphObj* pPara,
                     TSS_Type nInstanceInSheet,
-                    o3tl::optional< sal_Int16 >& rStartNumbering
+                    std::optional< sal_Int16 >& rStartNumbering
                 );
 };
 
@@ -1177,7 +1177,7 @@ public:
     void                    AppendPortion( PPTPortionObj& rPortion );
     void                    ApplyTo(
                                 SfxItemSet& rSet,
-                                o3tl::optional< sal_Int16 >& rStartNumbering,
+                                std::optional< sal_Int16 >& rStartNumbering,
                                 SdrPowerPointImport const & rManager,
                                 TSS_Type nInstanceInSheet
                             );

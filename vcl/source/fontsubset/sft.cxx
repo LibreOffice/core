@@ -2599,8 +2599,8 @@ append(std::bitset<N> & rSet, size_t const nOffset, sal_uInt32 const nValue)
 }
 
 bool getTTCoverage(
-    o3tl::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> &rUnicodeRange,
-    o3tl::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> &rCodePageRange,
+    std::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> &rUnicodeRange,
+    std::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> &rCodePageRange,
     const unsigned char* pTable, size_t nLength)
 {
     bool bRet = false;

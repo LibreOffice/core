@@ -32,7 +32,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace desktop
 {
@@ -43,10 +43,10 @@ oslSignalAction SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* p
 // that was given by command line or by IPC pipe communication.
 struct ProcessDocumentsRequest
 {
-    explicit ProcessDocumentsRequest(o3tl::optional< OUString > const & cwdUrl):
+    explicit ProcessDocumentsRequest(std::optional< OUString > const & cwdUrl):
         aCwdUrl(cwdUrl), pcProcessed( nullptr ), bTextCat( false ), bScriptCat( false ) {}
 
-    o3tl::optional< OUString > aCwdUrl;
+    std::optional< OUString > aCwdUrl;
     OUString aModule;
     std::vector< OUString > aOpenList; // Documents that should be opened in the default way
     std::vector< OUString > aViewList; // Documents that should be opened in viewmode

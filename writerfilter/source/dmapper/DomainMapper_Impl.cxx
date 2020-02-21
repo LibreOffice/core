@@ -809,7 +809,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
     {
         if(pEntry->pProperties)
         {
-            o3tl::optional<PropertyMap::Property> aProperty =
+            std::optional<PropertyMap::Property> aProperty =
                     pEntry->pProperties->getProperty(eId);
             if( aProperty )
             {
@@ -837,7 +837,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         const PropertyMapPtr& pDefaultParaProps = GetStyleSheetTable()->GetDefaultParaProps();
         if ( pDefaultParaProps )
         {
-            o3tl::optional<PropertyMap::Property> aProperty = pDefaultParaProps->getProperty(eId);
+            std::optional<PropertyMap::Property> aProperty = pDefaultParaProps->getProperty(eId);
             if ( aProperty )
             {
                 if (pIsDocDefault)
@@ -852,7 +852,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
         const PropertyMapPtr& pDefaultCharProps = GetStyleSheetTable()->GetDefaultCharProps();
         if ( pDefaultCharProps )
         {
-            o3tl::optional<PropertyMap::Property> aProperty = pDefaultCharProps->getProperty(eId);
+            std::optional<PropertyMap::Property> aProperty = pDefaultCharProps->getProperty(eId);
             if ( aProperty )
             {
                 if (pIsDocDefault)
@@ -896,7 +896,7 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
     // first look in directly applied attributes
     if ( rContext )
     {
-        o3tl::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
+        std::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
         if ( aProperty )
             return aProperty->second;
     }
@@ -1054,7 +1054,7 @@ static void lcl_AddRangeAndStyle(
     pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
     if(pPropertyMap)
     {
-        o3tl::optional<PropertyMap::Property> aParaStyle = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
+        std::optional<PropertyMap::Property> aParaStyle = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
         if( aParaStyle )
         {
             OUString sName;
@@ -1384,7 +1384,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // over the ones from the numbering styles in Word
             // but in Writer numbering styles have priority,
             // so insert directly into the paragraph properties to compensate.
-            o3tl::optional<PropertyMap::Property> oProperty;
+            std::optional<PropertyMap::Property> oProperty;
             const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
             const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
             if (!pEntry->sBaseStyleIdentifier.isEmpty())
@@ -2367,7 +2367,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // This adds a hack on top of the following hack to save the style name in the context.
         PropertyMapPtr pTopContext = GetTopContext();
         OUString sFootnoteCharStyleName;
-        o3tl::optional< PropertyMap::Property > aProp = pTopContext->getProperty(PROP_CHAR_STYLE_NAME);
+        std::optional< PropertyMap::Property > aProp = pTopContext->getProperty(PROP_CHAR_STYLE_NAME);
         if (aProp)
             aProp->second >>= sFootnoteCharStyleName;
 
@@ -2834,7 +2834,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
                 // it needs to be set on the object too, as that's what object placement code uses.
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
-                o3tl::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
+                std::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
                 if(aPropMargin)
                     xProps->setPropertyValue( getPropertyName( PROP_BOTTOM_MARGIN ), aPropMargin->second );
             }
@@ -3338,7 +3338,7 @@ static bool lcl_FindInCommand(
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
-    o3tl::optional<PropertyMap::Property> pLocale = pTopContext->getProperty(PROP_CHAR_LOCALE);
+    std::optional<PropertyMap::Property> pLocale = pTopContext->getProperty(PROP_CHAR_LOCALE);
     if( pLocale )
         pLocale->second >>= rLocale;
     else
@@ -4644,7 +4644,7 @@ void DomainMapper_Impl::handleIndex
 static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
         uno::Reference<text::XFormField> const& xFormField,
         uno::Reference<text::XTextRange> const& xStartRange,
-        o3tl::optional<FieldId> const oFieldId) -> void
+        std::optional<FieldId> const oFieldId) -> void
 {
     uno::Reference<text::XTextContent> const xTextContent(xFormField, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
@@ -4686,7 +4686,7 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
 
 static auto PopFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
         uno::Reference<text::XTextCursor> const& xCursor,
-        o3tl::optional<FieldId> const oFieldId) -> void
+        std::optional<FieldId> const oFieldId) -> void
 {
     if (oFieldId
         && (oFieldId == FIELD_FORMCHECKBOX || oFieldId == FIELD_FORMDROPDOWN))
@@ -6672,7 +6672,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
             }
 
             // In case numbering rules is not found via a style, try the direct formatting instead.
-            o3tl::optional<PropertyMap::Property> oProp = pContext->getProperty(PROP_NUMBERING_RULES);
+            std::optional<PropertyMap::Property> oProp = pContext->getProperty(PROP_NUMBERING_RULES);
             if (oProp)
             {
                 xLevels.set(oProp->second, uno::UNO_QUERY);
@@ -6778,7 +6778,7 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
 {
     sal_Int32 nRet = 0;
 
-    o3tl::optional<PropertyMap::Property> pProp = m_pTopContext->getProperty(PROP_NUMBERING_RULES);
+    std::optional<PropertyMap::Property> pProp = m_pTopContext->getProperty(PROP_NUMBERING_RULES);
     uno::Reference<container::XIndexAccess> xNumberingRules;
     if (pProp)
         xNumberingRules.set(pProp->second, uno::UNO_QUERY);

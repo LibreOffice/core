@@ -35,7 +35,7 @@
 #include "continuousactivitybase.hxx"
 #include "continuouskeytimeactivitybase.hxx"
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <memory>
 #include <vector>
@@ -101,7 +101,7 @@ class FromToByActivity : public BaseType
 {
 public:
     typedef typename AnimationType::ValueType           ValueType;
-    typedef o3tl::optional<ValueType>                  OptionalValueType;
+    typedef std::optional<ValueType>                  OptionalValueType;
 
 private:
     // some compilers don't inline whose definition they haven't
@@ -389,7 +389,7 @@ AnimationActivitySharedPtr createFromToByActivity(
     const ::basegfx::B2DVector&                              rSlideBounds )
 {
     typedef typename AnimationType::ValueType           ValueType;
-    typedef o3tl::optional<ValueType>                  OptionalValueType;
+    typedef std::optional<ValueType>                  OptionalValueType;
 
     OptionalValueType aFrom;
     OptionalValueType aTo;

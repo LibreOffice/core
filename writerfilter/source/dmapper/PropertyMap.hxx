@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include "PropertyIds.hxx"
 #include <memory>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <map>
 #include <vector>
 
@@ -164,7 +164,7 @@ public:
     void InsertProps( const PropertyMapPtr& rMap, const bool bOverwrite = true );
 
     // Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
-    o3tl::optional< Property > getProperty( PropertyIds eId ) const;
+    std::optional< Property > getProperty( PropertyIds eId ) const;
 
     // Has the property named been set (via Insert)?
     bool isSet( PropertyIds eId ) const;
@@ -231,7 +231,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_aFirstPageStyle;
     css::uno::Reference< css::beans::XPropertySet > m_aFollowPageStyle;
 
-    o3tl::optional< css::table::BorderLine2 >      m_oBorderLines[4];
+    std::optional< css::table::BorderLine2 >      m_oBorderLines[4];
     sal_Int32                                       m_nBorderDistances[4];
     BorderApply                                     m_eBorderApply;
     BorderOffsetFrom                                m_eBorderOffsetFrom;

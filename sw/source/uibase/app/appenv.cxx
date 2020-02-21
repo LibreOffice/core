@@ -288,7 +288,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             else
             {
                 OUString sFollowName(pFollow->GetName());
-                pSh->InsertPageBreak(&sFollowName, o3tl::nullopt);
+                pSh->InsertPageBreak(&sFollowName, std::nullopt);
             }
             pSh->SttEndDoc(true);
         }

@@ -2201,7 +2201,7 @@ void Desktop::OpenDefault()
 
 
 OUString GetURL_Impl(
-    const OUString& rName, o3tl::optional< OUString > const & cwdUrl )
+    const OUString& rName, std::optional< OUString > const & cwdUrl )
 {
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
     // as INetURLObj does not handle URLs there

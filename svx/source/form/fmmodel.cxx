@@ -28,7 +28,7 @@
 
 #include <sfx2/objsh.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
@@ -39,7 +39,7 @@ struct FmFormModelImplData
 {
     rtl::Reference<FmXUndoEnvironment>  mxUndoEnv;
     bool                bOpenInDesignIsDefaulted;
-    o3tl::optional<bool> aControlsUseRefDevice;
+    std::optional<bool> aControlsUseRefDevice;
 
     FmFormModelImplData()
         :bOpenInDesignIsDefaulted( true )

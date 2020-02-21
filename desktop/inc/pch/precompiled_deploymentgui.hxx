@@ -84,7 +84,7 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/gen.hxx>

@@ -138,7 +138,7 @@
 
 #include <unordered_set>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <libxml/xmlwriter.h>
 #include <memory>
 
@@ -207,8 +207,8 @@ struct SdrObject::Impl
 {
     sdr::ObjectUserVector maObjectUsers;
     std::shared_ptr<DiagramDataInterface> mpDiagramData;
-    o3tl::optional<double> mnRelativeWidth;
-    o3tl::optional<double> mnRelativeHeight;
+    std::optional<double> mnRelativeWidth;
+    std::optional<double> mnRelativeHeight;
     sal_Int16               meRelativeWidthRelation;
     sal_Int16               meRelativeHeightRelation;
 
