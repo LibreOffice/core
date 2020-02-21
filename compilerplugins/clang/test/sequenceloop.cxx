@@ -30,15 +30,6 @@ void foo2(const css::uno::Sequence<css::uno::Reference<css::uno::XInterface>>& a
     for (const auto& x : aSeq)
         x.get();
 }
-
-css::uno::Sequence<css::uno::Reference<css::uno::XInterface>> getSequenceByValue();
-
-// no warning expected
-void foo3()
-{
-    for (const auto& x : getSequenceByValue())
-        x.get();
-}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
