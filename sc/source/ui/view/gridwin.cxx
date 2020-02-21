@@ -2221,13 +2221,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     OString aCursor = pForTabView->GetViewData().describeCellCursorAt(nPosX, nPosY);
                     double fPPTX = pForTabView->GetViewData().GetPPTX();
                     int mouseX = aPos.X() / fPPTX;
-                    OStringBuffer aBuf;
-                    aBuf.append(aUrl.toUtf8().getStr());
-                    aBuf.append(" coordinates: ");
-                    aBuf.append(aCursor);
-                    aBuf.append(", ");
-                    aBuf.append(mouseX);
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aBuf.makeStringAndClear().getStr());
+                    OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", " + OString::number(mouseX));
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
             }
