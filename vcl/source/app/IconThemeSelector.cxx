@@ -66,7 +66,7 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
 #if MPL_HAVE_SUBSET
-        r = "tango";
+        r = "sukapura";
 #else
         r = "breeze";
 #endif
