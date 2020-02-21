@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdcff074_b564e6ae",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 4113,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-02-21T10:01:33Z",
+      "side": 1,
+      "message": "This section is just a copy of KJ and needs to be checked. Also icon_themes/sukapura/LICENSE is missing",
+      "range": {
+        "startLine": 4112,
+        "startChar": 10,
+        "endLine": 4113,
+        "endChar": 37
+      },
+      "revId": "a82a17fa60898c1e00ad0744e5115404799a1ea1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
