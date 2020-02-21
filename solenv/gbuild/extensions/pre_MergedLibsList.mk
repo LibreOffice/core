@@ -83,13 +83,24 @@ MERGE_LIBRARY_LIST := \
 	svx \
 	svxcore \
 	syssh \
+	textfd \
 	tk \
 	tl \
 	ucb1 \
 	ucbhelper \
 	ucpexpand1 \
+	ucpext \
+	ucphier1 \
+	ucpimage \
 	ucpfile1 \
+	ucptdoc1 \
+	unordf \
 	unoxml \
+	$(if $(ENABLE_ONLINE_UPDATE), \
+		updatecheckui \
+        updchk \
+	) \
+	updatefeed \
 	utl \
 	uui \
 	vcl \
