@@ -30,6 +30,7 @@
 #include "impedit.hxx"
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/escapementitem.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -2756,6 +2757,12 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         OutputDevice* pDev = pOut ? pOut : GetRefDevice();
         rFont.SetPhysFont( pDev );
         FontMetric aMetric( pDev->GetFontMetric() );
+
+        // before forcing nPropr to 100%, calculate a new escapement relative to this fake size.
+        sal_uInt8 nPropr = rFont.GetPropr();
+        sal_Int16 nEsc = rFont.GetEscapement();
+        if ( nPropr && nEsc && nPropr != 100 && abs(nEsc) != DFLT_ESC_AUTO_SUPER )
+            rFont.SetEscapement( 100.0/nPropr * nEsc );
 
         // Set the font as we want it to look like & reset the Propr attribute
         // so that it is not counted twice.

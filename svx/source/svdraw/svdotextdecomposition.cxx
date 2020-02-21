@@ -197,13 +197,13 @@ namespace
                 nEsc = -20;
             }
 
-            if(nEsc > 100)
+            if(nEsc > MAX_ESC_POS)
             {
-                nEsc = 100;
+                nEsc = MAX_ESC_POS;
             }
-            else if(nEsc < -100)
+            else if(nEsc < -MAX_ESC_POS)
             {
-                nEsc = -100;
+                nEsc = -MAX_ESC_POS;
             }
 
             const double fEscapement(nEsc / -100.0);
