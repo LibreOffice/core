@@ -30,6 +30,9 @@
 #include <unoprnms.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
+#include <xmloff/maptype.hxx>
+#include <xmloff/xmlnumfi.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/txtstyli.hxx>
@@ -391,6 +394,16 @@ SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
 
 namespace {
 
+class SwXMLCellStyleContext : public XMLPropStyleContext
+{
+    OUString m_sDataStyleName;
+    void AddDataFormat();
+public:
+    using XMLPropStyleContext::XMLPropStyleContext;
+    virtual void FillPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet) override;
+    virtual void SetAttribute(sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue) override;
+};
+
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
     OUString                    sMasterPageName;
@@ -445,6 +458,64 @@ public:
     bool ResolveDataStyleName();
 };
 
+}
+
+void SwXMLCellStyleContext::AddDataFormat()
+{
+    if (m_sDataStyleName.isEmpty() || IsDefaultStyle())
+        return;
+
+    const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
+        GetStyles()->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, m_sDataStyleName, true));
+
+    if (!pStyle)
+    {
+        SAL_WARN("sw.xml", "not possible to get data style " << m_sDataStyleName);
+        return;
+    }
+
+    sal_Int32 nNumberFormat = const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey();
+    if (nNumberFormat < 0)
+        return;
+
+    rtl::Reference<SvXMLImportPropertyMapper> xPropertyMapper(GetStyles()->GetImportPropertyMapper(GetFamily()));
+    if (!xPropertyMapper.is())
+    {
+        SAL_WARN("sw.xml", "there is no import prop mapper");
+        return;
+    }
+
+    const rtl::Reference<XMLPropertySetMapper>& xPropertySetMapper(xPropertyMapper->getPropertySetMapper());
+    sal_Int32 nIndex = xPropertySetMapper->GetEntryIndex(XML_NAMESPACE_STYLE, GetXMLToken(XML_DATA_STYLE_NAME), 0);
+    if (nIndex < 0)
+    {
+        SAL_WARN("sw.xml", "could not find id for " << GetXMLToken(XML_DATA_STYLE_NAME));
+        return;
+    }
+
+    auto aIter = std::find_if(GetProperties().begin(), GetProperties().end(),
+        [&nIndex](const XMLPropertyState& rProp) {
+            return rProp.mnIndex == nIndex;
+        });
+
+    if (aIter != GetProperties().end())
+        aIter->maValue <<= nNumberFormat;
+    else
+        GetProperties().push_back(XMLPropertyState(nIndex, makeAny(nNumberFormat)));
+}
+
+void SwXMLCellStyleContext::FillPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)
+{
+    AddDataFormat();
+    XMLPropStyleContext::FillPropertySet(rPropSet);
+}
+
+void SwXMLCellStyleContext::SetAttribute(sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue)
+{
+    if (IsXMLToken(rLocalName, XML_DATA_STYLE_NAME))
+        m_sDataStyleName = rValue;
+    else
+        XMLPropStyleContext::SetAttribute(nPrefixKey, rLocalName, rValue);
 }
 
 void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
@@ -750,7 +821,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         if (IsAutomaticStyle())
             pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
         else if (nFamily == XmlStyleFamily::TABLE_CELL) // Real cell styles are used for table-template import.
-            pStyle = new XMLPropStyleContext(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+            pStyle = new SwXMLCellStyleContext(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
         else
             SAL_WARN("sw.xml", "Context does not exists for non automatic table, column or row style.");
         break;

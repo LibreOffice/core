@@ -1014,7 +1014,7 @@ XMLPropertyMapEntry const aXMLCellPropMap[] =
     MC_E( "BottomBorderDistance", FO,    PADDING_BOTTOM,   XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
     MC_E( "VertOrient",           STYLE, VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_POS,                        0 ),
     MC_E( "WritingMode",          STYLE, WRITING_MODE,     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT,           0 ),
-    MC_E( "NumberFormat",         STYLE, DATA_STYLE_NAME,  XML_TYPE_NUMBER,                                   0 ),
+    MC_E( "NumberFormat",         STYLE, DATA_STYLE_NAME,  XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM_EXPORT,      0 ),
     // paragraph properties
     MP_E( "ParaAdjust",           FO,    TEXT_ALIGN,       XML_TYPE_TEXT_ADJUST,                              0 ),
     // text properties
