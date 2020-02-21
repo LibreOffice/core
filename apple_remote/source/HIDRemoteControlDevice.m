@@ -286,7 +286,7 @@ cleanup:
 
     NSNumber* buttonId = [[self cookieToButtonMapping] objectForKey: cookieString];
     if (buttonId != nil) {
-       switch ( (int)buttonId )
+       switch ( [buttonId intValue] )
        {
        case kMetallicRemote2009ButtonPlay:
        case kMetallicRemote2009ButtonMiddlePlay:
