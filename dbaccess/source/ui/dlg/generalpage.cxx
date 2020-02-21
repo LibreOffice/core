@@ -42,6 +42,7 @@
 #include <unotools/confignode.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <svtools/miscopt.hxx>
 #include <sal/log.hxx>
 #include <dbwizsetup.hxx>
 
@@ -147,6 +148,9 @@ namespace dbaui
                 DisplayedTypes aDisplayedTypes;
 
                 ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+
+                SvtMiscOptions aMiscOptions;
+
                 for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                         aTypeLoop != aEnd;
                         ++aTypeLoop
@@ -159,6 +163,8 @@ namespace dbaui
                         if (m_xEmbeddedDBType->find_text(sDisplayName) == -1 &&
                             dbaccess::ODsnTypeCollection::isEmbeddedDatabase(sURLPrefix))
                         {
+                            if( !aMiscOptions.IsExperimentalMode() && sURLPrefix.startsWith("sdbc:embedded:firebird") )
+                                continue;
                             aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                         }
                     }
