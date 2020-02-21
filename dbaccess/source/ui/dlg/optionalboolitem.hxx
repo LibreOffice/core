@@ -22,7 +22,7 @@
 
 #include <svl/poolitem.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace dbaui
 {
@@ -30,7 +30,7 @@ namespace dbaui
     // OptionalBoolItem
     class OptionalBoolItem : public SfxPoolItem
     {
-        ::o3tl::optional< bool >   m_aValue;
+        ::std::optional< bool >   m_aValue;
 
     public:
         explicit OptionalBoolItem( sal_uInt16 nWhich );
@@ -43,7 +43,7 @@ namespace dbaui
         bool    GetValue() const                { return *m_aValue; }
         void    SetValue(bool _bValue)          { m_aValue = _bValue; }
 
-        const ::o3tl::optional< bool >&
+        const ::std::optional< bool >&
             GetFullValue() const { return m_aValue; }
     };
 

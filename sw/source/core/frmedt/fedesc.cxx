@@ -55,7 +55,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     SwPageFrame *pPage = GetCurrFrame()->FindPageFrame();
     const SwFrame *pFlow = nullptr;
-    ::o3tl::optional<sal_uInt16> oPageNumOffset;
+    ::std::optional<sal_uInt16> oPageNumOffset;
 
     OSL_ENSURE( !GetCursor()->HasMark(), "ChgCurPageDesc only without selection!");
 

@@ -70,16 +70,16 @@ namespace svt::table
         TableMetrics                                    nRowHeight;
         TableMetrics                                    nColumnHeaderHeight;
         TableMetrics                                    nRowHeaderWidth;
-        ::o3tl::optional< ::Color >                    m_aGridLineColor;
-        ::o3tl::optional< ::Color >                    m_aHeaderBackgroundColor;
-        ::o3tl::optional< ::Color >                    m_aHeaderTextColor;
-        ::o3tl::optional< ::Color >                    m_aActiveSelectionBackColor;
-        ::o3tl::optional< ::Color >                    m_aInactiveSelectionBackColor;
-        ::o3tl::optional< ::Color >                    m_aActiveSelectionTextColor;
-        ::o3tl::optional< ::Color >                    m_aInactiveSelectionTextColor;
-        ::o3tl::optional< ::Color >                    m_aTextColor;
-        ::o3tl::optional< ::Color >                    m_aTextLineColor;
-        ::o3tl::optional< ::std::vector< ::Color > >   m_aRowColors;
+        ::std::optional< ::Color >                    m_aGridLineColor;
+        ::std::optional< ::Color >                    m_aHeaderBackgroundColor;
+        ::std::optional< ::Color >                    m_aHeaderTextColor;
+        ::std::optional< ::Color >                    m_aActiveSelectionBackColor;
+        ::std::optional< ::Color >                    m_aInactiveSelectionBackColor;
+        ::std::optional< ::Color >                    m_aActiveSelectionTextColor;
+        ::std::optional< ::Color >                    m_aInactiveSelectionTextColor;
+        ::std::optional< ::Color >                    m_aTextColor;
+        ::std::optional< ::Color >                    m_aTextLineColor;
+        ::std::optional< ::std::vector< ::Color > >   m_aRowColors;
         VerticalAlignment                               m_eVerticalAlign;
         bool                                            bEnabled;
         ModellListeners                                 m_aListeners;
@@ -532,7 +532,7 @@ namespace svt::table
 
     namespace
     {
-        void lcl_setColor( Any const & i_color, ::o3tl::optional< ::Color > & o_convertedColor )
+        void lcl_setColor( Any const & i_color, ::std::optional< ::Color > & o_convertedColor )
         {
             if ( !i_color.hasValue() )
                 o_convertedColor.reset();
@@ -552,7 +552,7 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getLineColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getLineColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aGridLineColor;
@@ -566,7 +566,7 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getHeaderBackgroundColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getHeaderBackgroundColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aHeaderBackgroundColor;
@@ -580,35 +580,35 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getHeaderTextColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getHeaderTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aHeaderTextColor;
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getActiveSelectionBackColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getActiveSelectionBackColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aActiveSelectionBackColor;
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getInactiveSelectionBackColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getInactiveSelectionBackColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aInactiveSelectionBackColor;
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getActiveSelectionTextColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getActiveSelectionTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aActiveSelectionTextColor;
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getInactiveSelectionTextColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getInactiveSelectionTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aInactiveSelectionTextColor;
@@ -650,7 +650,7 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getTextColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aTextColor;
@@ -664,7 +664,7 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::Color > UnoControlTableModel::getTextLineColor() const
+    ::std::optional< ::Color > UnoControlTableModel::getTextLineColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aTextColor;
@@ -678,7 +678,7 @@ namespace svt::table
     }
 
 
-    ::o3tl::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
+    ::std::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aRowColors;

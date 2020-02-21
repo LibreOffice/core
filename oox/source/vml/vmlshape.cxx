@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <cassert>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <o3tl/safeint.hxx>
 #include <oox/vml/vmlshape.hxx>
@@ -526,7 +526,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             aPropMap.erase(PROP_FillTransparence);
         }
         // And no LineColor property; individual borders can have colors and widths
-        o3tl::optional<sal_Int32> oLineWidth;
+        std::optional<sal_Int32> oLineWidth;
         if (maTypeModel.maStrokeModel.moWeight.has())
             oLineWidth = ConversionHelper::decodeMeasureToHmm(
                 rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false);
@@ -660,7 +660,7 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     awt::Rectangle aShapeRect(rShapeRect);
-    o3tl::optional<sal_Int32> oRotation;
+    std::optional<sal_Int32> oRotation;
     bool bFlipX = false, bFlipY = false;
     if (!maTypeModel.maRotation.isEmpty())
         oRotation = ConversionHelper::decodeRotation(maTypeModel.maRotation);

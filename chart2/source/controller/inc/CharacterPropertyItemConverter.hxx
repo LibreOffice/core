@@ -22,7 +22,7 @@
 #include "ItemConverter.hxx"
 #include <com/sun/star/awt/Size.hpp>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace chart { namespace wrapper {
 
@@ -52,7 +52,7 @@ private:
 
     OUString m_aRefSizePropertyName;
     css::uno::Reference<css::beans::XPropertySet> m_xRefSizePropSet;
-    o3tl::optional<css::awt::Size> m_pRefSize;
+    std::optional<css::awt::Size> m_pRefSize;
 };
 
 }}

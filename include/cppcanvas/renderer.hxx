@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/color.hxx>
@@ -100,16 +100,16 @@ namespace cppcanvas
         struct Parameters
         {
             /// Optionally forces the fill color attribute for all actions
-            ::o3tl::optional< IntSRGBA >                  maFillColor;
+            ::std::optional< IntSRGBA >                  maFillColor;
 
             /// Optionally forces the line color attribute for all actions
-            ::o3tl::optional< IntSRGBA >                 maLineColor;
+            ::std::optional< IntSRGBA >                 maLineColor;
 
             /// Optionally forces the text color attribute for all actions
-            ::o3tl::optional< IntSRGBA >                  maTextColor;
+            ::std::optional< IntSRGBA >                  maTextColor;
 
             /// Optionally forces the given fontname for all text actions
-            ::o3tl::optional< OUString >                  maFontName;
+            ::std::optional< OUString >                  maFontName;
 
             /** Optionally transforms all text output actions with the
                 given matrix (in addition to the overall canvas
@@ -119,16 +119,16 @@ namespace cppcanvas
                 rect coordinate system, i.e. the metafile is assumed
                 to be contained in the unit rect.
              */
-            ::o3tl::optional< ::basegfx::B2DHomMatrix >    maTextTransformation;
+            ::std::optional< ::basegfx::B2DHomMatrix >    maTextTransformation;
 
             /// Optionally forces the given font weight for all text actions
-            ::o3tl::optional< sal_Int8 >                   maFontWeight;
+            ::std::optional< sal_Int8 >                   maFontWeight;
 
             /// Optionally forces the given font letter form (italics etc.) for all text actions
-            ::o3tl::optional< sal_Int8 >                   maFontLetterForm;
+            ::std::optional< sal_Int8 >                   maFontLetterForm;
 
             /// Optionally forces underlining for all text actions
-            ::o3tl::optional< bool >                       maFontUnderline;
+            ::std::optional< bool >                       maFontUnderline;
         };
     };
 

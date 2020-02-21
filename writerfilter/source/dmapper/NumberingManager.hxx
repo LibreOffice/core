@@ -132,7 +132,7 @@ private:
     OUString                      m_sNumStyleLink;
 
     /// list id to use for all derived numbering definitions
-    o3tl::optional<OUString> m_oListId;
+    std::optional<OUString> m_oListId;
 
 public:
     typedef tools::SvRef< AbstractListDef > Pointer;

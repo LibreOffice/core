@@ -28,7 +28,7 @@
 #include <soundplayer.hxx>
 
 #include <memory>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace cppcanvas
 {
@@ -73,7 +73,7 @@ protected:
         entering slides.
     */
     SlideChangeBase(
-        ::o3tl::optional<SlideSharedPtr> const & leavingSlide,
+        ::std::optional<SlideSharedPtr> const & leavingSlide,
         const SlideSharedPtr&                     pEnteringSlide,
         const SoundPlayerSharedPtr&               pSoundPlayer,
         const UnoViewContainer&                   rViewContainer,
@@ -114,7 +114,7 @@ protected:
     SlideBitmapSharedPtr getEnteringBitmap( const ViewEntry& rViewEntry ) const;
 
     SlideBitmapSharedPtr createBitmap( const UnoViewSharedPtr&                pView,
-                                       const o3tl::optional<SlideSharedPtr>& rSlide_ ) const;
+                                       const std::optional<SlideSharedPtr>& rSlide_ ) const;
 
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
@@ -184,7 +184,7 @@ private:
     EventMultiplexer&                   mrEventMultiplexer;
     ScreenUpdater&                      mrScreenUpdater;
 
-    ::o3tl::optional<SlideSharedPtr>   maLeavingSlide;
+    ::std::optional<SlideSharedPtr>   maLeavingSlide;
     SlideSharedPtr                      mpEnteringSlide;
 
     ViewsVecT                           maViewData;

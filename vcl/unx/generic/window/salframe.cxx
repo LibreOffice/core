@@ -57,7 +57,7 @@
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <algorithm>
 

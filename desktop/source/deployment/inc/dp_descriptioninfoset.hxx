@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
@@ -83,7 +83,7 @@ public:
        @return
        the identifier, or an empty <code>optional</code> if none is specified
     */
-    ::o3tl::optional< OUString > getIdentifier() const;
+    ::std::optional< OUString > getIdentifier() const;
 
     /**
        Return the textual version representation.
@@ -135,7 +135,7 @@ public:
         As long as there is a simple-license element, the function will return
         the structure. If it does not exist, then the optional object is uninitialized.
     */
-    ::o3tl::optional<SimpleLicenseAttributes> getSimpleLicenseAttributes() const;
+    ::std::optional<SimpleLicenseAttributes> getSimpleLicenseAttributes() const;
 
     /** returns the localized display name of the extensions.
 
@@ -162,7 +162,7 @@ public:
         the download website URL, or an empty <code>optional</code> if none is
         specified
     */
-    ::o3tl::optional< OUString > getLocalizedUpdateWebsiteURL() const;
+    ::std::optional< OUString > getLocalizedUpdateWebsiteURL() const;
 
     /** returns the relative URL to the description.
 
@@ -206,7 +206,7 @@ public:
     bool hasDescription() const;
 
 private:
-    SAL_DLLPRIVATE ::o3tl::optional< OUString > getOptionalValue(
+    SAL_DLLPRIVATE ::std::optional< OUString > getOptionalValue(
         OUString const & expression) const;
 
     SAL_DLLPRIVATE css::uno::Sequence< OUString > getUrls(

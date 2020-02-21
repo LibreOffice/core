@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <rtl/ustring.hxx>
 #include <global.hxx>
@@ -65,7 +65,7 @@ class ScXMLExportDataPilot
     void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(const ScDPSaveData* pDPSave);
 
-    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const o3tl::optional<OUString> & pGrandTotal);
+    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const std::optional<OUString> & pGrandTotal);
 
 public:
     explicit ScXMLExportDataPilot(ScXMLExport& rExport);

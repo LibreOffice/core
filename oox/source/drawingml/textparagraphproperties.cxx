@@ -412,8 +412,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( maParaBottomMargin.bHasValue || bPushDefaultValues )
         aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );
 
-    o3tl::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
-    o3tl::optional< sal_Int32 > noFirstLineIndentation( moFirstLineIndentation );
+    std::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
+    std::optional< sal_Int32 > noFirstLineIndentation( moFirstLineIndentation );
 
     if ( nNumberingType != NumberingType::NUMBER_NONE )
     {

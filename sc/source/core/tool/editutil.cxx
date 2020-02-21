@@ -195,7 +195,7 @@ std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, S
 }
 
 OUString ScEditUtil::GetCellFieldValue(
-    const SvxFieldData& rFieldData, const ScDocument* pDoc, o3tl::optional<Color>* ppTextColor )
+    const SvxFieldData& rFieldData, const ScDocument* pDoc, std::optional<Color>* ppTextColor )
 {
     OUString aRet;
     switch (rFieldData.GetClassId())
@@ -796,7 +796,7 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )
 
 OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    o3tl::optional<Color>& /* rTxtColor */, o3tl::optional<Color>& /* rFldColor */ )
+                                    std::optional<Color>& /* rTxtColor */, std::optional<Color>& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if (!pFieldData)
@@ -860,7 +860,7 @@ ScFieldEditEngine::ScFieldEditEngine(
 
 OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_Int32 /* nPos */,
-                                    o3tl::optional<Color>& rTxtColor, o3tl::optional<Color>& /* rFldColor */ )
+                                    std::optional<Color>& rTxtColor, std::optional<Color>& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
 

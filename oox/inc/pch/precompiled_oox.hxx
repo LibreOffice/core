@@ -171,7 +171,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/fshelper.hxx>

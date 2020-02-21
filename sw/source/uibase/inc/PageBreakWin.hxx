@@ -13,7 +13,7 @@
 #include "FrameControl.hxx"
 #include <vcl/builder.hxx>
 #include <vcl/timer.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class Menu;
 class SwPageFrame;
@@ -34,7 +34,7 @@ class SwPageBreakWin : public SwFrameMenuButtonBase
     Timer                 m_aFadeTimer;
     bool                  m_bDestroyed;
 
-    o3tl::optional<Point> m_xMousePt;
+    std::optional<Point> m_xMousePt;
 
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame );
@@ -46,7 +46,7 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Activate( ) override;
 
-    void UpdatePosition(const o3tl::optional<Point>& xEvtPt = o3tl::optional<Point>());
+    void UpdatePosition(const std::optional<Point>& xEvtPt = std::optional<Point>());
 
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;

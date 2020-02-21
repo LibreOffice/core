@@ -40,7 +40,7 @@
 #include <pamtyp.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <algorithm>
 #include <memory>
@@ -64,9 +64,9 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         return static_cast<const SvxColorItem&>(rItem1).GetValue().IsRGBEqual(
                                 static_cast<const SvxColorItem&>(rItem2).GetValue() );
     case RES_PAGEDESC:
-        ::o3tl::optional<sal_uInt16> const oNumOffset1 =
+        ::std::optional<sal_uInt16> const oNumOffset1 =
             static_cast<const SwFormatPageDesc&>(rItem1).GetNumOffset();
-        ::o3tl::optional<sal_uInt16> const oNumOffset2 =
+        ::std::optional<sal_uInt16> const oNumOffset2 =
             static_cast<const SwFormatPageDesc&>(rItem2).GetNumOffset();
 
         if (oNumOffset1 != oNumOffset2)
@@ -1302,7 +1302,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             const_cast<SwPaM &>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        o3tl::optional<OUString> xRepl;
+        std::optional<OUString> xRepl;
         if (bRegExp)
             xRepl = sw::ReplaceBackReferences(*pSearchOpt, &rCursor, m_pLayout);
         sw::ReplaceImpl(rCursor,

@@ -350,7 +350,7 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

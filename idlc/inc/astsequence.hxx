@@ -38,7 +38,7 @@ public:
     virtual const char* getRelativName() const override;
 private:
     AstType const * m_pMemberType;
-    mutable o3tl::optional<OString> m_xRelativName;
+    mutable std::optional<OString> m_xRelativName;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTSEQUENCE_HXX

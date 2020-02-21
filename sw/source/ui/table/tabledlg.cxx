@@ -1321,8 +1321,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         }
         sal_uInt16 nPgNum = static_cast<sal_uInt16>(m_xPageNoNF->get_value());
         bool const usePageNo(bState && m_xPageNoCB->get_active());
-        o3tl::optional<sal_uInt16> const oPageNum(
-                usePageNo ? nPgNum : o3tl::optional<sal_Int16>());
+        std::optional<sal_uInt16> const oPageNum(
+                usePageNo ? nPgNum : std::optional<sal_Int16>());
         if (!pDesc || !pDesc->GetPageDesc()
             || (pDesc->GetPageDesc()->GetName() != sPage)
             || (pDesc->GetNumOffset() != oPageNum))
@@ -1449,7 +1449,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 OUString sPageDesc;
                 const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
 
-                ::o3tl::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
+                ::std::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
                 {
                     m_xPageNoCB->set_active(true);

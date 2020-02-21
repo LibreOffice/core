@@ -185,7 +185,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>

@@ -163,7 +163,7 @@ void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUS
             bEndOfLine, bEndOfParagraph, rOverlineColor, rTextLineColor );
 }
 
-OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor )
+OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor )
 {
     return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }

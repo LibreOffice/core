@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <memory>
 
 namespace connectivity
@@ -138,9 +138,9 @@ namespace connectivity
         void            raiseException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const o3tl::optional<OUString>& _rParamValue1 = o3tl::nullopt,
-                            const o3tl::optional<OUString>& _rParamValue2 = o3tl::nullopt,
-                            const o3tl::optional<OUString>& _rParamValue3 = o3tl::nullopt
+                            const std::optional<OUString>& _rParamValue1 = std::nullopt,
+                            const std::optional<OUString>& _rParamValue2 = std::nullopt,
+                            const std::optional<OUString>& _rParamValue3 = std::nullopt
                         ) const;
 
         /** throws an SQLException describing the given error condition
@@ -221,9 +221,9 @@ namespace connectivity
                         getSQLException(
                             const ErrorCondition _eCondition,
                             const css::uno::Reference< css::uno::XInterface >& _rxContext,
-                            const o3tl::optional<OUString>& _rParamValue1 = o3tl::nullopt,
-                            const o3tl::optional<OUString>& _rParamValue2 = o3tl::nullopt,
-                            const o3tl::optional<OUString>& _rParamValue3 = o3tl::nullopt
+                            const std::optional<OUString>& _rParamValue1 = std::nullopt,
+                            const std::optional<OUString>& _rParamValue2 = std::nullopt,
+                            const std::optional<OUString>& _rParamValue3 = std::nullopt
                         ) const;
 
     private:

@@ -23,7 +23,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <memory>
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
@@ -65,7 +65,7 @@ namespace comphelper
     //= EventLogger
 
     class EventLogger_Impl;
-    typedef ::o3tl::optional< OUString >    OptionalString;
+    typedef ::std::optional< OUString >    OptionalString;
 
     /** encapsulates a css::logging::XLogger
 

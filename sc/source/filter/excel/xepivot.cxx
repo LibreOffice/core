@@ -922,7 +922,7 @@ void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
     ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, rSaveMem.HasShowDetails() && !rSaveMem.GetShowDetails() );
 
     // visible name
-    const o3tl::optional<OUString> & pVisName = rSaveMem.GetLayoutName();
+    const std::optional<OUString> & pVisName = rSaveMem.GetLayoutName();
     if (pVisName && *pVisName != GetItemName())
         maItemInfo.SetVisName(*pVisName);
 }
@@ -1005,11 +1005,11 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     ::set_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL, rSaveDim.HasShowEmpty() && rSaveDim.GetShowEmpty() );
 
     // visible name
-    const o3tl::optional<OUString> & pLayoutName = rSaveDim.GetLayoutName();
+    const std::optional<OUString> & pLayoutName = rSaveDim.GetLayoutName();
     if (pLayoutName && *pLayoutName != GetFieldName())
         maFieldInfo.SetVisName(*pLayoutName);
 
-    const o3tl::optional<OUString> & pSubtotalName = rSaveDim.GetSubtotalName();
+    const std::optional<OUString> & pSubtotalName = rSaveDim.GetSubtotalName();
     if (pSubtotalName)
     {
         OUString aSubName = lcl_convertCalcSubtotalName(*pSubtotalName);
@@ -1076,7 +1076,7 @@ void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim 
     rDataInfo.SetApiAggFunc( eFunc );
 
     // visible name
-    const o3tl::optional<OUString> & pVisName = rSaveDim.GetLayoutName();
+    const std::optional<OUString> & pVisName = rSaveDim.GetLayoutName();
     if (pVisName)
         rDataInfo.SetVisName(*pVisName);
     else

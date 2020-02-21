@@ -40,12 +40,11 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 
     PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
     vcl::Font aFont(pOut->GetFont());
-    o3tl::optional<PropertyMap::Property> aFontName
+    std::optional<PropertyMap::Property> aFontName
         = pDefaultCharProps->getProperty(PROP_CHAR_FONT_NAME);
     if (aFontName)
         aFont.SetFamilyName(aFontName->second.get<OUString>());
-    o3tl::optional<PropertyMap::Property> aHeight
-        = pDefaultCharProps->getProperty(PROP_CHAR_HEIGHT);
+    std::optional<PropertyMap::Property> aHeight = pDefaultCharProps->getProperty(PROP_CHAR_HEIGHT);
     if (aHeight)
     {
         nHeight = aHeight->second.get<double>() * 35; // points -> mm100

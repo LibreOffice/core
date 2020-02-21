@@ -526,7 +526,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     else if (dynamic_cast<const SdrMeasureField*>( pField))
     {
         // Clear measure field
-        pInfo->SetFieldColor(o3tl::optional<Color>());
+        pInfo->SetFieldColor(std::optional<Color>());
     }
     else if ( auto pTimeField = dynamic_cast<const SvxExtTimeField*>( pField) )
     {

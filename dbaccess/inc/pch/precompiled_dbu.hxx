@@ -176,7 +176,7 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>

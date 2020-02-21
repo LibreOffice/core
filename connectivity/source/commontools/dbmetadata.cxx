@@ -38,7 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 
 namespace dbtools
@@ -71,8 +71,8 @@ namespace dbtools
         Reference< XDatabaseMetaData >  xConnectionMetaData;
         ::connectivity::DriversConfig   aDriverConfig;
 
-        ::o3tl::optional< OUString >    sCachedIdentifierQuoteString;
-        ::o3tl::optional< OUString >    sCachedCatalogSeparator;
+        ::std::optional< OUString >    sCachedIdentifierQuoteString;
+        ::std::optional< OUString >    sCachedCatalogSeparator;
 
         DatabaseMetaData_Impl()
             :xConnection()
@@ -154,7 +154,7 @@ namespace dbtools
 
 
         const OUString& lcl_getConnectionStringSetting(
-            const DatabaseMetaData_Impl& _metaData, ::o3tl::optional< OUString >& _cachedSetting,
+            const DatabaseMetaData_Impl& _metaData, ::std::optional< OUString >& _cachedSetting,
             OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
         {
             if ( !_cachedSetting )

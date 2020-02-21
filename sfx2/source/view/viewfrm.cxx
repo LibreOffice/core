@@ -85,7 +85,7 @@
 #include <framework/framelistanalyzer.hxx>
 #include <shellimpl.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <unotools/configmgr.hxx>
 
@@ -450,7 +450,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bool bOK = false;
                 bool bRetryIgnoringLock = false;
                 bool bOpenTemplate = false;
-                o3tl::optional<bool> aOrigROVal;
+                std::optional<bool> aOrigROVal;
                 if (!pVersionItem)
                 {
                     auto pRO = pMed->GetItemSet()->GetItem<SfxBoolItem>(SID_DOC_READONLY, false);
@@ -2356,7 +2356,7 @@ void SfxViewFrame::ExecView_Impl
 static bool impl_maxOpenDocCountReached()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    o3tl::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+    std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
     // NIL means: count of allowed documents = infinite !
     if (!x)
         return false;

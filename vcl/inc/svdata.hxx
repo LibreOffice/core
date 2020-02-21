@@ -137,10 +137,10 @@ struct ImplSVAppData
     SVAppKeyListeners       maKeyListeners;       // listeners for key events only (eg, extended toolkit)
     std::vector<ImplPostEventPair> maPostedEventList;
     ImplAccelManager*       mpAccelMgr;           // Accelerator Manager
-    o3tl::optional<OUString> mxAppName;            // Application name
-    o3tl::optional<OUString> mxAppFileName;        // Abs. Application FileName
-    o3tl::optional<OUString> mxDisplayName;        // Application Display Name
-    o3tl::optional<OUString> mxToolkitName;        // Toolkit Name
+    std::optional<OUString> mxAppName;            // Application name
+    std::optional<OUString> mxAppFileName;        // Abs. Application FileName
+    std::optional<OUString> mxDisplayName;        // Application Display Name
+    std::optional<OUString> mxToolkitName;        // Toolkit Name
     Help*                   mpHelp = nullptr;               // Application help
     VclPtr<PopupMenu>       mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow

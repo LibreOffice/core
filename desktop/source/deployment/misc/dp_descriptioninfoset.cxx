@@ -25,7 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
@@ -325,7 +325,7 @@ DescriptionInfoset::DescriptionInfoset(
 
 DescriptionInfoset::~DescriptionInfoset() {}
 
-::o3tl::optional< OUString > DescriptionInfoset::getIdentifier() const {
+::std::optional< OUString > DescriptionInfoset::getIdentifier() const {
     return getOptionalValue("desc:identifier/@value");
 }
 
@@ -345,7 +345,7 @@ OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & express
 void DescriptionInfoset::checkBlacklist() const
 {
     if (m_element.is()) {
-        o3tl::optional< OUString > id(getIdentifier());
+        std::optional< OUString > id(getIdentifier());
         if (!id)
             return; // nothing to check
         OUString currentversion(getVersion());
@@ -519,20 +519,20 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
     return OUString();
 }
 
-::o3tl::optional< OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
+::std::optional< OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
     const
 {
     bool bParentExists = false;
     const OUString sURL (getLocalizedHREFAttrFromChild("/desc:description/desc:update-website", &bParentExists ));
 
     if (!sURL.isEmpty())
-        return ::o3tl::optional< OUString >(sURL);
+        return ::std::optional< OUString >(sURL);
     else
-        return bParentExists ? ::o3tl::optional< OUString >(OUString()) :
-            ::o3tl::optional< OUString >();
+        return bParentExists ? ::std::optional< OUString >(OUString()) :
+            ::std::optional< OUString >();
 }
 
-::o3tl::optional< OUString > DescriptionInfoset::getOptionalValue(
+::std::optional< OUString > DescriptionInfoset::getOptionalValue(
     OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNode > n;
@@ -544,8 +544,8 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
         }
     }
     return n.is()
-        ? ::o3tl::optional< OUString >(getNodeValue(n))
-        : ::o3tl::optional< OUString >();
+        ? ::std::optional< OUString >(getNodeValue(n))
+        : ::std::optional< OUString >();
 }
 
 css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
@@ -630,7 +630,7 @@ OUString DescriptionInfoset::getLocalizedLicenseURL() const
 
 }
 
-::o3tl::optional<SimpleLicenseAttributes>
+::std::optional<SimpleLicenseAttributes>
 DescriptionInfoset::getSimpleLicenseAttributes() const
 {
     //Check if the node exist
@@ -647,22 +647,22 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
             attributes.acceptBy =
                 getNodeValueFromExpression("/desc:description/desc:registration/desc:simple-license/@accept-by");
 
-            ::o3tl::optional< OUString > suppressOnUpdate = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-on-update");
+            ::std::optional< OUString > suppressOnUpdate = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-on-update");
             if (suppressOnUpdate)
                 attributes.suppressOnUpdate = (*suppressOnUpdate).trim().equalsIgnoreAsciiCase("true");
             else
                 attributes.suppressOnUpdate = false;
 
-            ::o3tl::optional< OUString > suppressIfRequired = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-if-required");
+            ::std::optional< OUString > suppressIfRequired = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-if-required");
             if (suppressIfRequired)
                 attributes.suppressIfRequired = (*suppressIfRequired).trim().equalsIgnoreAsciiCase("true");
             else
                 attributes.suppressIfRequired = false;
 
-            return ::o3tl::optional<SimpleLicenseAttributes>(attributes);
+            return ::std::optional<SimpleLicenseAttributes>(attributes);
         }
     }
-    return ::o3tl::optional<SimpleLicenseAttributes>();
+    return ::std::optional<SimpleLicenseAttributes>();
 }
 
 OUString DescriptionInfoset::getLocalizedDescriptionURL() const

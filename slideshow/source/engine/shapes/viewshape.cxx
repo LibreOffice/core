@@ -542,7 +542,7 @@ namespace slideshow::internal
             // shape needs repaint - setup all that's needed
 
 
-            o3tl::optional<basegfx::B2DPolyPolygon> aClip;
+            std::optional<basegfx::B2DPolyPolygon> aClip;
 
             if( pAttr )
             {

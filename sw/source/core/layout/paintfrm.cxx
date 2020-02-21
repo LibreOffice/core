@@ -4759,7 +4759,7 @@ namespace drawinglayer::primitive2d
 
 namespace {
 
-editeng::SvxBorderLine const * get_ptr(o3tl::optional<editeng::SvxBorderLine> const & opt) {
+editeng::SvxBorderLine const * get_ptr(std::optional<editeng::SvxBorderLine> const & opt) {
     return opt ? &*opt : nullptr;
 }
 

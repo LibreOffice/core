@@ -38,7 +38,7 @@ public:
         @param nNumStripes
         Number of comb-like stripes to show in this effect
     */
-    CombTransition( ::o3tl::optional<SlideSharedPtr> const & leavingSlide,
+    CombTransition( ::std::optional<SlideSharedPtr> const & leavingSlide,
                     const SlideSharedPtr&                     pEnteringSlide,
                     const SoundPlayerSharedPtr&               pSoundPlayer,
                     const UnoViewContainer&                   rViewContainer,

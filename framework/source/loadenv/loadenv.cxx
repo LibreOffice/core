@@ -918,7 +918,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 
     try
     {
-        o3tl::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+        std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
 
         // NIL means: count of allowed documents = infinite !
         //     => return true

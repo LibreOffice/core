@@ -517,7 +517,7 @@ sc/inc/compiler.hxx:265
 sc/inc/document.hxx:2604
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/patattr.hxx:55
-    ScPatternAttr mxHashCode o3tl::optional<size_t>
+    ScPatternAttr mxHashCode std::optional<size_t>
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78

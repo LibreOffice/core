@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <o3tl/optional.hxx>
+#include <optional>
 #include "DomainMapperTableManager.hxx"
 #include "ConversionHelper.hxx"
 #include "MeasureHandler.hxx"
@@ -429,7 +429,7 @@ void DomainMapperTableManager::startLevel( )
     TableManager::startLevel( );
 
     // If requested, pop the value that was pushed too early.
-    o3tl::optional<sal_Int32> oCurrentWidth;
+    std::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
     {
         oCurrentWidth = m_aCellWidths.back()->back();
@@ -471,7 +471,7 @@ void DomainMapperTableManager::endLevel( )
     m_aGridSpans.pop_back( );
 
     // Do the same trick as in startLevel(): pop the value that was pushed too early.
-    o3tl::optional<sal_Int32> oCurrentWidth;
+    std::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
         oCurrentWidth = m_aCellWidths.back()->back();
     m_aCellWidths.pop_back( );

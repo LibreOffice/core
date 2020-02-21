@@ -1887,8 +1887,8 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 
 void GtkSalFrame::StartPresentation( bool bStart )
 {
-    o3tl::optional<guint> aWindow;
-    o3tl::optional<Display*> aDisplay;
+    std::optional<guint> aWindow;
+    std::optional<Display*> aDisplay;
     if( getDisplay()->IsX11Display() )
     {
         aWindow = widget_get_xid(m_pWindow);

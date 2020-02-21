@@ -326,7 +326,7 @@ void SwPageBreakWin::Activate( )
     MenuButton::Activate();
 }
 
-void SwPageBreakWin::UpdatePosition(const o3tl::optional<Point>& xEvtPt)
+void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
 {
     if ( xEvtPt )
     {

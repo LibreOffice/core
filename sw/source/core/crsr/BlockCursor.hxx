@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_CRSR_BLOCKCURSOR_HXX
 #define INCLUDED_SW_SOURCE_CORE_CRSR_BLOCKCURSOR_HXX
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <tools/gen.hxx>
 
 #include <viscrs.hxx>
@@ -39,8 +39,8 @@ struct SwPosition;
 class SwBlockCursor
 {
     SwShellCursor maCursor;
-    o3tl::optional<Point> maStartPt;
-    o3tl::optional<Point> maEndPt;
+    std::optional<Point> maStartPt;
+    std::optional<Point> maEndPt;
 
 public:
     SwBlockCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos ) :
@@ -69,12 +69,12 @@ public:
 
         @return 0, if no start point has been set
     */
-    o3tl::optional<Point> const & getStartPoint() const { return maStartPt; }
+    std::optional<Point> const & getStartPoint() const { return maStartPt; }
     /** The document coordinates where the block selection ends (at the moment)
 
         @return 0, if no end point has been set
     */
-    o3tl::optional<Point> const & getEndPoint() const { return maEndPt; }
+    std::optional<Point> const & getEndPoint() const { return maEndPt; }
     /** Deletion of the mouse created rectangle
 
         When start and end points exist, the block cursor depends on this. If the

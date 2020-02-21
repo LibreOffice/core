@@ -247,7 +247,7 @@
 #include <editeng/svxenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

@@ -28,7 +28,7 @@
 #include <editeng/swafopt.hxx>
 #include <editeng/editengdllapi.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <map>
 #include <memory>
 
@@ -155,7 +155,7 @@ public:
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
     const SvxAutocorrWord* Insert(SvxAutocorrWord aWord) const;
-    o3tl::optional<SvxAutocorrWord> FindAndRemove(const SvxAutocorrWord *pWord);
+    std::optional<SvxAutocorrWord> FindAndRemove(const SvxAutocorrWord *pWord);
     void                   LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt);
     bool                   empty() const;
 

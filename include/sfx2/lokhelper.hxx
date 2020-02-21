@@ -17,7 +17,7 @@
 #include <sfx2/viewsh.hxx>
 #include <cstddef>
 #include <rtl/string.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 struct SFX2_DLLPUBLIC LokMouseEventData
 {
@@ -27,7 +27,7 @@ struct SFX2_DLLPUBLIC LokMouseEventData
     MouseEventModifiers meModifiers;
     int mnButtons;
     int mnModifier;
-    o3tl::optional<Point> maLogicPosition;
+    std::optional<Point> maLogicPosition;
 
     LokMouseEventData(int nType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
         : mnType(nType)

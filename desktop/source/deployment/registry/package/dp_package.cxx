@@ -65,7 +65,7 @@
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/deployment/Prerequisites.hpp>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
@@ -623,7 +623,7 @@ bool BackendImpl::PackageImpl::checkLicense(
 {
     try
     {
-        ::o3tl::optional<SimpleLicenseAttributes> simplLicAttr
+        ::std::optional<SimpleLicenseAttributes> simplLicAttr
             = info.getSimpleLicenseAttributes();
         if (! simplLicAttr)
             return true;
@@ -946,7 +946,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
     OUString sLicense;
     DescriptionInfoset aInfo = getDescriptionInfoset();
 
-    ::o3tl::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
+    ::std::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
     if ( aSimplLicAttr )
     {
         OUString aLicenseURL = aInfo.getLocalizedLicenseURL();

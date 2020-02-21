@@ -55,7 +55,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <memory>
 #include <vector>
 
@@ -231,7 +231,7 @@ private:
     EditEngine*               pEditEngine;
     VclPtr<vcl::Window>       pOutWin;
     EditView::OutWindowSet    aOutWindowSet;
-    o3tl::optional<PointerStyle>  mxPointer;
+    std::optional<PointerStyle>  mxPointer;
     std::unique_ptr<DragAndDropInfo>  pDragAndDropInfo;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;

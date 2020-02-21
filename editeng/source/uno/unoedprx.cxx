@@ -614,7 +614,7 @@ SfxItemPool* SvxAccessibleTextAdapter::GetPool() const
     return mpTextForwarder->GetPool();
 }
 
-OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor )
+OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor )
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
