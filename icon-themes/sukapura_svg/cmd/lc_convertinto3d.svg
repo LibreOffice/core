@@ -1,0 +1,8 @@
+<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="-2.81356" x2="-2.610169" xlink:href="#d" y1="14.864407" y2="-.186441"/><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="-.707107" x2="8" xlink:href="#d" y1="10.353553" y2="10.353553"/><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="7.18644" x2="7.389831" xlink:href="#d" y1="23.864407" y2="8.813559"/><linearGradient id="d" gradientUnits="userSpaceOnUse" x1="7.18644" x2="7.389831" y1="15.864407" y2=".813559"><stop offset="0" stop-color="#e5eefc"/><stop offset="1" stop-color="#fcfdff"/></linearGradient>
+
+
+
+
+
+     /&amp;amp;amp;amp;gt;
+ <path d="m23.5 3.5-17 17" fill="none" stroke="#69696e" stroke-linecap="round" stroke-linejoin="round"/><path d="m8.5 13.5 4-4v-8h-8l-4 4h8z" fill="url(#b)"/><g stroke="#0a84ff" stroke-linejoin="round"><path d="m15.5 14.5v8h8v-8z" fill="url(#c)"/><path d="m.5 5.5v8h8v-8z" fill="url(#a)"/><path d="m.5 5.5 4-4h8v8l-4 4v-8l4-4" fill="none" stroke-linecap="round"/></g></svg>

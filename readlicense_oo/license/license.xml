@@ -4063,6 +4063,44 @@
         <p>This work is distributed under the terms of the Creative Commons BY-SA 3.0 license.</p>
         <p><a href="#a__CC-BY-SA_3_0">Jump to CC-BY-SA 3.0</a></p>
     </div>
+# FIXME: insert sukapura license here
+    <div class="sukapura">
+        <h2>Sukapura</h2>
+        <p>Sukapura Icon Theme</p>
+        <blockquote>
+            Copyright (c) 2014 Rizal Muttaqin &lt;sundaralinux@gmail.com&gt;<br />
+        </blockquote>
+        <blockquote>
+            <p>This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+            Lesser General Public License as published by the Free Software Foundation; either version 3 of the
+            License, or (at your option) any later version.</p>
+            <p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+            the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
+            Public License for more details.</p>
+            <p>You should have received a copy of the GNU Lesser General Public License along with this library. If
+            not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.</p>
+        </blockquote>
+        <p>Clarification:</p>
+        <blockquote>
+            <p>The GNU Lesser General Public License or LGPL is written for software libraries in the first place. We
+            expressly want the LGPL to be valid for this artwork library too.</p>
+            <p>KDE Oxygen theme icons is a special kind of software library, it is an artwork library, it's elements
+            can be used in a Graphical User Interface, or GUI.</p>
+            <p>Source code, for this library means:</p>
+            <ul>
+                <li>where they exist, SVG;</li>
+                <li>otherwise, if applicable, the multi-layered formats xcf or psd, or otherwise png.</li>
+            </ul>
+            <p>The LGPL in some sections obliges you to make the files carry notices. With images this is in some cases
+            impossible or hardly useful.</p>
+            <p>With this library a notice is placed at a prominent place in the directory containing the elements. You
+            may follow this practice.</p>
+            <p>The exception in section 5 of the GNU Lesser General Public License covers the use of elements of this
+            art library in a GUI.</p>
+            <p>kde-artists [at] kde.org</p>
+        </blockquote>
+        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
+    </div>
     <div class="tango">
         <h2>Tango theme</h2>
         <p>Portions of the Tango theme contain work licenced under the Creative Commons Attribution-Share Alike 3.0
