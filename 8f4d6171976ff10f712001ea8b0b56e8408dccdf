@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b1cd6720_009e5eca",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-21T07:39:32Z",
+      "side": 1,
+      "message": "Clang forgot to abort the build.. :) I will fix it...",
+      "parentUuid": "6d1f4373_1db51959",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 3
+      },
+      "revId": "8f4d6171976ff10f712001ea8b0b56e8408dccdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4f76be8_d4103ec3",
         "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
         "patchSetId": 19
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-21T07:34:33Z",
       "side": 1,
       "message": "(You can optimize this using std::find_if)",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 13
+      },
+      "revId": "8f4d6171976ff10f712001ea8b0b56e8408dccdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47b7eb3b_54927f0f",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-02-21T07:39:32Z",
+      "side": 1,
+      "message": "ok I will change it.",
+      "parentUuid": "b4f76be8_d4103ec3",
       "range": {
         "startLine": 475,
         "startChar": 0,
