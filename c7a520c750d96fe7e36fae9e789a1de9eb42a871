@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef8880fa_a750720c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-02-21T06:57:59Z",
+      "side": 1,
+      "message": "I\u0027m surprised but this works!",
+      "range": {
+        "startLine": 268,
+        "startChar": 151,
+        "endLine": 268,
+        "endChar": 184
+      },
+      "revId": "c7a520c750d96fe7e36fae9e789a1de9eb42a871",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
