@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9267e201_55538b52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd1253d2_e1792296",
+      "range": {
+        "startLine": 20,
+        "startChar": 29,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41439ada_1ae91c69",
         "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
         "patchSetId": 1
@@ -166,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "ac69acff_e545e5bf",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "I am not a master in VB. Could you clarify what do you mean with explicit variant and implicit variant? I could not find any documentation about it. Do you mean passing a variable, which is explicitly defined, e.g., Dim B As Integer vs. A \u003d 123 in the calling function or just the declaration in the header like Optional B As Variant?",
+      "parentUuid": "32123f36_d8c9f994",
+      "range": {
+        "startLine": 67,
+        "startChar": 36,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e78db97f_9380d8f9",
         "filename": "basic/qa/basic_coverage/test_optional_paramters_vba.vb",
         "patchSetId": 1
@@ -284,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "fca02e6c_3da33e1a",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4031,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "623f67e5_00b1260d",
+      "range": {
+        "startLine": 4031,
+        "startChar": 4,
+        "endLine": 4031,
+        "endChar": 22
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283e373e_794d026e",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -355,6 +427,30 @@
     },
     {
       "key": {
+        "uuid": "c2416ff0_0e7d52bb",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3aaef3a9_5a69bd6b",
+      "range": {
+        "startLine": 4034,
+        "startChar": 9,
+        "endLine": 4034,
+        "endChar": 37
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf4dcf83_a23ea3be",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -402,6 +498,30 @@
     },
     {
       "key": {
+        "uuid": "d45edcc6_c006c2b3",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7183575b_c02ddd13",
+      "range": {
+        "startLine": 4043,
+        "startChar": 4,
+        "endLine": 4043,
+        "endChar": 52
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0ab2505_55657f1c",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -446,6 +566,30 @@
       "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61f26861_451bdba0",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cf997fe_c2b49b51",
+      "range": {
+        "startLine": 4056,
+        "startChar": 23,
+        "endLine": 4056,
+        "endChar": 64
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -520,6 +664,30 @@
     },
     {
       "key": {
+        "uuid": "98f25b5b_bec7ca45",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ad9a0a3f_ef494622",
+      "range": {
+        "startLine": 4065,
+        "startChar": 60,
+        "endLine": 4065,
+        "endChar": 79
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c10c524a_875af0ec",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -564,6 +732,30 @@
       "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23efbbe2_628b6555",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-02-21T01:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44f59afd_66c534dc",
+      "range": {
+        "startLine": 4083,
+        "startChar": 31,
+        "endLine": 4083,
+        "endChar": 32
+      },
+      "revId": "9364d2a82c0c528b12d3f6a01ce5f52ae32c678b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
