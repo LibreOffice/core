@@ -63,12 +63,6 @@ bool SequenceLoop::VisitCXXForRangeStmt(CXXForRangeStmt const* forStmt)
     if (!tc2.LvalueReference().Const())
         return true;
 
-    // bit awkward, but the only way to sniff out if we're being passed a value or a reference
-    auto rangeDeclStmt = dyn_cast<DeclStmt>(forStmt->getRangeStmt());
-    auto rangeVarDecl = dyn_cast<VarDecl>(rangeDeclStmt->getSingleDecl());
-    if (rangeVarDecl->getType()->isRValueReferenceType())
-        return true;
-
     report(DiagnosticsEngine::Warning,
            ("use std::as_const, or otherwise make the for-range-initializer expression const, to"
             " avoid creating a copy of the Sequence"),
