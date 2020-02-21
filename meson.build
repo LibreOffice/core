@@ -8,28 +8,54 @@ minor_version = varr[1]
 micro_version = varr[2]
 patch_version = '0'
 this_year = '2020'
-
+main_inc = include_directories('include', 'config_host')
 cpp = meson.get_compiler('cpp')
+thread_dep = dependency('threads')
+dl_dep = cpp.find_library('dl', required: false)
+cdata = configuration_data()
 
-add_global_arguments('-DLINUX', language: 'cpp')
-add_global_arguments('-DLINUX', language: 'c')
-add_global_arguments('-DUNIX', language: 'cpp')
-add_global_arguments('-DUNIX', language: 'c')
-add_global_arguments('-DUNX', language: 'cpp')
-add_global_arguments('-DUNX', language: 'c')
-add_global_arguments('-DX86_64', language: 'cpp')
-add_global_arguments('-DX86_64', language: 'c')
-add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
+if host_machine.system() == 'linux'
+  add_global_arguments('-DLINUX', language: 'cpp')
+  add_global_arguments('-DLINUX', language: 'c')
+  add_global_arguments('-DUNIX', language: 'cpp')
+  add_global_arguments('-DUNIX', language: 'c')
+  add_global_arguments('-DUNX', language: 'cpp')
+  add_global_arguments('-DUNX', language: 'c')
+  add_global_arguments('-DX86_64', language: 'cpp')
+  add_global_arguments('-DX86_64', language: 'c')
+  add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
+  rtl_os = 'linux'
+elif host_machine.system() == 'windows'
+  # HACK: just random values thrown in to make
+  # sal compile.
+  add_global_arguments('-DWNT', language: 'cpp')
+  add_global_arguments('-DWNT', language: 'c')
+  add_global_arguments('-DX86_64', language: 'cpp')
+  add_global_arguments('-DX86_64', language: 'c')
+  add_global_arguments('-DNOMINMAX', language: 'cpp')
+  #add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
+  rtl_os = 'nt'
+  cppunit_dep = dependency('', required: false)
+  openssl_dep = cppunit_dep
+  nss_dep = cppunit_dep
+  cairo_dep = cppunit_dep
+  eot_dep = cppunit_dep
+  gtk3_dep = cppunit_dep
+  dbus_dep = cppunit_dep
+  gio_dep = cppunit_dep
+  subdir('config_host')
+  subdir('sal')
+  subdir_done()
+else
+  error('Unsupported OS.')
+endif
 
 lex_bin = find_program('flex')
 bison_bin = find_program('bison')
 xslt_bin = find_program('xsltproc')
 gentokens_bin = find_program('solenv/bin/generate-tokens.py')
 
-thread_dep = dependency('threads')
-dl_dep = cpp.find_library('dl', required: false)
 cppunit_dep = dependency('cppunit')
-main_inc = include_directories('include', 'config_host')
 langtag_dep = dependency('liblangtag')
 icuuc_dep = dependency('icu-uc')
 icu18_dep = dependency('icu-i18n')
@@ -68,8 +94,6 @@ qrcodegen_dep = declare_dependency(compile_args: ['-I/usr/include/qrcodegen'],
 #mdds_dep = dependency('mdds-1.5')
 mdds_dep = declare_dependency(include_directories: 'mdds')
 broken_mdds_dep = declare_dependency(include_directories: '.')
-
-cdata = configuration_data()
 
 # FIXME. Java does not provide .pc files.
 # Presumably this data can be obtained via other methods.

@@ -32,9 +32,9 @@ cdata.set_quoted('LIBO_URE_SHARE_JAVA_FOLDER', 'FIXME')
 cdata.set_quoted('SRC_ROOT', meson.source_root())
 cdata.set_quoted('BUILDDIR', meson.build_root())
 
-cdata.set10('HAVE_GCC_BUILTIN_ATOMIC', true)
-cdata.set10('HAVE_GCC_BUILTIN_FFS', true)
-cdata.set10('HAVE_GCC_PRAGMA_OPERATOR', true)
+cdata.set10('HAVE_GCC_BUILTIN_ATOMIC', cpp.get_id() == 'gcc')
+cdata.set10('HAVE_GCC_BUILTIN_FFS', cpp.get_id() == 'gcc')
+cdata.set10('HAVE_GCC_PRAGMA_OPERATOR', cpp.get_id() == 'gcc')
 cdata.set10('HAVE_GCC_DEPRECATED_MESSAGES', false)
 cdata.set10('HAVE_SYSLOG_H', cpp.has_header('syslog.h'))
 
