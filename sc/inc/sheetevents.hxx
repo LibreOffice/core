@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 enum class ScSheetEventId {
     FOCUS, UNFOCUS, SELECT, DOUBLECLICK, RIGHTCLICK, CHANGE, CALCULATE, COUNT,
@@ -32,7 +32,7 @@ enum class ScSheetEventId {
 
 class ScSheetEvents
 {
-    std::unique_ptr<o3tl::optional<OUString>[]> mpScriptNames;
+    std::unique_ptr<std::optional<OUString>[]> mpScriptNames;
 
     void        Clear();
 

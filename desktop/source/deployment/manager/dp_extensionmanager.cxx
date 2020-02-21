@@ -553,7 +553,7 @@ bool ExtensionManager::doChecksForAddExtension(
         ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>(), m_xContext);
 
         dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
-        const ::o3tl::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
+        const ::std::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =
             info.getSimpleLicenseAttributes();
 
         if (licenseAttributes && licenseAttributes->suppressIfRequired

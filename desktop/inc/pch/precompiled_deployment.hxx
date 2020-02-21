@@ -72,7 +72,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>

@@ -23,7 +23,7 @@
 #include <unx/fontmanager.hxx>
 
 #include "cairo_gtk3_cairo.hxx"
-#include <o3tl/optional.hxx>
+#include <optional>
 
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = nullptr;

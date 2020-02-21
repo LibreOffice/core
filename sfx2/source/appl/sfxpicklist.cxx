@@ -102,7 +102,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    o3tl::optional<OUString> aThumbnail;
+    std::optional<OUString> aThumbnail;
 
     // generate the thumbnail
     //fdo#74834: only generate thumbnail for history if the corresponding option is not disabled in the configuration

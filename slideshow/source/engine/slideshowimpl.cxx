@@ -400,13 +400,13 @@ private:
     //map of vector of Polygons, containing polygons drawn on each slide.
     PolygonMap                              maPolygons;
 
-    o3tl::optional<RGBColor>               maUserPaintColor;
+    std::optional<RGBColor>               maUserPaintColor;
 
     double                                  maUserPaintStrokeWidth;
 
     //changed for the eraser project
-    o3tl::optional<bool>           maEraseAllInk;
-    o3tl::optional<sal_Int32>          maEraseInk;
+    std::optional<bool>           maEraseAllInk;
+    std::optional<sal_Int32>          maEraseInk;
     //end changed
 
     std::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
@@ -840,7 +840,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 nTransitionDuration,
                 nMinFrames,
                 false,
-                o3tl::optional<double>(1.0),
+                std::optional<double>(1.0),
                 0.0,
                 0.0,
                 ShapeSharedPtr(),

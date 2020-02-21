@@ -22,7 +22,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 
@@ -343,8 +343,8 @@ public:
 class EditCharAttribField final : public EditCharAttrib
 {
     OUString   aFieldValue;
-    o3tl::optional<Color>  mxTxtColor;
-    o3tl::optional<Color>  mxFldColor;
+    std::optional<Color>  mxTxtColor;
+    std::optional<Color>  mxFldColor;
 
     EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
 
@@ -358,8 +358,8 @@ public:
                                     { return !(operator == ( rAttr ) ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-    o3tl::optional<Color>&   GetTextColor()      { return mxTxtColor; }
-    o3tl::optional<Color>&   GetFieldColor()     { return mxFldColor; }
+    std::optional<Color>&   GetTextColor()      { return mxTxtColor; }
+    std::optional<Color>&   GetFieldColor()     { return mxFldColor; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

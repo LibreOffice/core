@@ -26,7 +26,7 @@
 
 #include "viewlayer.hxx"
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <memory>
 
 
@@ -145,8 +145,8 @@ namespace slideshow
 
             double const                                                mnSpritePrio;
             double                                                      mnAlpha;
-            ::o3tl::optional< ::basegfx::B2DPoint >                    maPosPixel;
-            ::o3tl::optional< ::basegfx::B2DPolyPolygon >              maClip;
+            ::std::optional< ::basegfx::B2DPoint >                    maPosPixel;
+            ::std::optional< ::basegfx::B2DPolyPolygon >              maClip;
 
             bool                                                        mbSpriteVisible;
         };

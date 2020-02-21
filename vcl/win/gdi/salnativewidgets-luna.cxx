@@ -51,7 +51,7 @@
 
 #include <map>
 #include <string>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <ControlCacheKey.hxx>
 
 using namespace std;

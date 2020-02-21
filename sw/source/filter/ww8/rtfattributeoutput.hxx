@@ -30,7 +30,7 @@
 
 #include <rtl/strbuf.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class SwGrfNode;
 class SwOLENode;
@@ -193,7 +193,7 @@ public:
     /// The style of the page numbers.
     ///
     void SectionPageNumbering(sal_uInt16 nNumType,
-                              const ::o3tl::optional<sal_uInt16>& oPageRestartNumber) override;
+                              const ::std::optional<sal_uInt16>& oPageRestartNumber) override;
 
     /// The type of breaking.
     void SectionType(sal_uInt8 nBreakCode) override;
@@ -610,7 +610,7 @@ private:
 
     std::vector<std::pair<OString, OString>> m_aFlyProperties;
 
-    o3tl::optional<css::drawing::FillStyle> m_oFillStyle;
+    std::optional<css::drawing::FillStyle> m_oFillStyle;
 
     /// If we're in the process of exporting a hyperlink, then its URL.
     OUString m_sURL;

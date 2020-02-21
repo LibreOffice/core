@@ -47,7 +47,7 @@
 #include <sal/log.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <algorithm>
 #include <iterator>
@@ -732,7 +732,7 @@ namespace frm
             return;
         }
 
-        ::o3tl::optional< sal_Int16 > aBoundColumn(o3tl::nullopt);
+        ::std::optional< sal_Int16 > aBoundColumn(std::nullopt);
         if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
         {
             sal_Int16 nBoundColumn( 0 );

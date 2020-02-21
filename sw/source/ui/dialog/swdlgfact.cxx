@@ -377,7 +377,7 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
     return m_xDlg->GetKind();
 }
 
-::o3tl::optional<sal_uInt16> AbstractSwBreakDlg_Impl:: GetPageNumber()
+::std::optional<sal_uInt16> AbstractSwBreakDlg_Impl:: GetPageNumber()
 {
     return m_xDlg->GetPageNumber();
 }

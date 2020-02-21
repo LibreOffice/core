@@ -585,17 +585,17 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, const ScColorScal
     return (*itr)->GetValue();
 }
 
-o3tl::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
+std::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 {
     ScRefCellValue rCell(*mpDoc, rAddr);
     if(!rCell.hasNumeric())
-        return o3tl::optional<Color>();
+        return std::optional<Color>();
 
     // now we have for sure a value
     double nVal = rCell.getValue();
 
     if (maColorScales.size() < 2)
-        return o3tl::optional<Color>();
+        return std::optional<Color>();
 
     double nMin = std::numeric_limits<double>::max();
     double nMax = std::numeric_limits<double>::min();
@@ -603,7 +603,7 @@ o3tl::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) con
 
     // this check is for safety
     if(nMin >= nMax)
-        return o3tl::optional<Color>();
+        return std::optional<Color>();
 
     ScColorScaleEntries::const_iterator itr = begin();
     double nValMin = CalcValue(nMin, nMax, itr);

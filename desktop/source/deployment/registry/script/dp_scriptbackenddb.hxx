@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <dp_backenddb.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace com { namespace sun { namespace star {
         namespace uno {

@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CONFIG_HXX
 
 #include <unotools/configitem.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <set>
 
 namespace basegfx { class B2IVector; }
@@ -72,7 +72,7 @@ namespace dxcanvas
         virtual void               ImplCommit() override;
         typedef std::set< DeviceInfo > ValueSet;
         ValueSet                   maValues;
-        o3tl::optional<sal_Int32> maMaxTextureSize;
+        std::optional<sal_Int32> maMaxTextureSize;
         bool                       mbBlacklistCurrentDevice;
         bool                       mbValuesDirty;
     };

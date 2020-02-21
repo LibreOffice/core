@@ -462,7 +462,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
     // Get hold of PageDesc (either via FrameFormat of the first node or the initial one).
     SwPageDesc *pDesc = nullptr;
-    ::o3tl::optional<sal_uInt16> oPgNum;
+    ::std::optional<sal_uInt16> oPgNum;
 
     if ( pTableNd )
     {

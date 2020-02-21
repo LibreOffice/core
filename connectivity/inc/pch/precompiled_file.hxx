@@ -181,7 +181,7 @@
 #include <file/fcode.hxx>
 #include <file/fcomp.hxx>
 #include <file/filedllapi.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <resource/sharedresources.hxx>

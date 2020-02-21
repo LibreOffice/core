@@ -131,7 +131,7 @@ namespace DatabaseObject = sdb::application::DatabaseObject;
 namespace dbaccess
 {
 
-    typedef ::o3tl::optional< bool > optional_bool;
+    typedef ::std::optional< bool > optional_bool;
 
     // helper
     namespace
@@ -790,7 +790,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     if ( xHandler.is() )
         aDocumentArgs.put( "InteractionHandler", xHandler );
 
-    ::o3tl::optional< sal_Int16 > aDocumentMacroMode;
+    ::std::optional< sal_Int16 > aDocumentMacroMode;
 
     if ( !lcl_extractOpenMode( _rOpenArgument, nOpenMode ) )
     {

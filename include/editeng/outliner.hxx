@@ -40,7 +40,7 @@
 #include <editeng/paragraphdata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -484,8 +484,8 @@ private:
     Outliner*           pOutliner;
     const SvxFieldItem& rFldItem;
 
-    o3tl::optional<Color> mxTxtColor;
-    o3tl::optional<Color> mxFldColor;
+    std::optional<Color> mxTxtColor;
+    std::optional<Color> mxFldColor;
 
     OUString            aRepresentation;
 
@@ -509,11 +509,11 @@ public:
 
     const SvxFieldItem& GetField() const { return rFldItem; }
 
-    o3tl::optional<Color> const & GetTextColor() const { return mxTxtColor; }
-    void            SetTextColor( o3tl::optional<Color> xCol ) { mxTxtColor = xCol; }
+    std::optional<Color> const & GetTextColor() const { return mxTxtColor; }
+    void            SetTextColor( std::optional<Color> xCol ) { mxTxtColor = xCol; }
 
-    o3tl::optional<Color> const & GetFieldColor() const { return mxFldColor; }
-    void            SetFieldColor( o3tl::optional<Color> xCol ) { mxFldColor = xCol; }
+    std::optional<Color> const & GetFieldColor() const { return mxFldColor; }
+    void            SetFieldColor( std::optional<Color> xCol ) { mxFldColor = xCol; }
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
@@ -880,7 +880,7 @@ public:
     bool            UpdateFields();
     void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );
 
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, o3tl::optional<Color>& rTxtColor, o3tl::optional<Color>& rFldColor );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor );
 
     void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference< css::linguistic2::XSpellChecker1 > const &

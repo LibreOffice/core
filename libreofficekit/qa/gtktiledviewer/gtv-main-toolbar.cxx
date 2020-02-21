@@ -20,7 +20,7 @@
 #include <memory>
 
 #include <boost/property_tree/json_parser.hpp>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace {
 

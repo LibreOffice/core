@@ -51,8 +51,8 @@ enum ScAutoFontColorMode
 
 class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
 {
-    o3tl::optional<OUString>  pName;
-    mutable o3tl::optional<size_t> mxHashCode;
+    std::optional<OUString>  pName;
+    mutable std::optional<size_t> mxHashCode;
     ScStyleSheet*              pStyle;
     sal_uInt64                 mnKey;
 public:

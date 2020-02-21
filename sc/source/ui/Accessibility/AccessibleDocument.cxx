@@ -93,13 +93,13 @@ struct ScAccessibleShapeData
     ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_);
     ~ScAccessibleShapeData();
     mutable rtl::Reference< ::accessibility::AccessibleShape > pAccShape;
-    mutable o3tl::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
+    mutable std::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
     css::uno::Reference< css::drawing::XShape > xShape;
     mutable bool            bSelected;
     bool                    bSelectable;
     // cache these to make the sorting cheaper
-    o3tl::optional<sal_Int16> mxLayerID;
-    o3tl::optional<sal_Int32> mxZOrder;
+    std::optional<sal_Int16> mxLayerID;
+    std::optional<sal_Int32> mxZOrder;
 };
 
 }
@@ -270,7 +270,7 @@ private:
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;
 
-    o3tl::optional<ScAddress> GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
+    std::optional<ScAddress> GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
     void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
     void AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const;
@@ -1118,7 +1118,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     return bResult;
 }
 
-o3tl::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
+std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
 {
     if (mpViewShell)
     {
@@ -1129,12 +1129,12 @@ o3tl::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawi
             if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
             {
                 if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
-                    return o3tl::optional<ScAddress>(pAnchor->maStart);
+                    return std::optional<ScAddress>(pAnchor->maStart);
             }
         }
     }
 
-    return o3tl::optional<ScAddress>();
+    return std::optional<ScAddress>();
 }
 
 uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const ScAccessibleShapeData* pData) const
@@ -1170,7 +1170,7 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
 {
     if (pData)
     {
-        o3tl::optional<ScAddress> xAddress = GetAnchor(xShape);
+        std::optional<ScAddress> xAddress = GetAnchor(xShape);
         if ((xAddress && pData->xRelationCell && (*xAddress != *(pData->xRelationCell))) ||
             (!xAddress && pData->xRelationCell) || (xAddress && !pData->xRelationCell))
         {

@@ -24,7 +24,7 @@
 #include <tox.hxx>
 #include <authfld.hxx>
 #include <memory>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class SwWrtShell;
 class SwForm;
@@ -38,9 +38,9 @@ class SW_DLLPUBLIC SwTOXDescription
     OUString            m_sSequenceName;
     OUString            m_sMainEntryCharStyle;
     OUString            m_sAutoMarkURL;
-    o3tl::optional<OUString>
+    std::optional<OUString>
                         m_aTitle;
-    o3tl::optional<OUString>
+    std::optional<OUString>
                         m_aTOUName;
     std::unique_ptr<SwForm>
                         m_pForm;
@@ -98,10 +98,10 @@ public:
     void            SetAutoMarkURL(const OUString& rSet) {m_sAutoMarkURL = rSet;}
 
     void            SetTitle(const OUString& rSet) { m_aTitle = rSet; }
-    o3tl::optional<OUString> const & GetTitle() const {return m_aTitle; }
+    std::optional<OUString> const & GetTitle() const {return m_aTitle; }
 
     void            SetTOUName(const OUString& rSet) { m_aTOUName = rSet; }
-    o3tl::optional<OUString> const & GetTOUName() const { return m_aTOUName; }
+    std::optional<OUString> const & GetTOUName() const { return m_aTOUName; }
 
     void            SetForm(const SwForm& rSet) { m_pForm.reset( new SwForm(rSet) );}
     const SwForm*   GetForm() const {return m_pForm.get();}
@@ -172,14 +172,14 @@ class SwTOXMarkDescription
     int         mnLevel;
     bool        mbMainEntry;
 
-    o3tl::optional<OUString>  maPrimKey;
-    o3tl::optional<OUString>  maSecKey;
-    o3tl::optional<OUString>  maAltStr;
-    o3tl::optional<OUString>  maTOUName;
+    std::optional<OUString>  maPrimKey;
+    std::optional<OUString>  maSecKey;
+    std::optional<OUString>  maAltStr;
+    std::optional<OUString>  maTOUName;
 
-    o3tl::optional<OUString>  maPhoneticReadingOfAltStr;
-    o3tl::optional<OUString>  maPhoneticReadingOfPrimKey;
-    o3tl::optional<OUString>  maPhoneticReadingOfSecKey;
+    std::optional<OUString>  maPhoneticReadingOfAltStr;
+    std::optional<OUString>  maPhoneticReadingOfPrimKey;
+    std::optional<OUString>  maPhoneticReadingOfSecKey;
 
     SwTOXMarkDescription(SwTOXMarkDescription const &) = delete;
     SwTOXMarkDescription & operator= (SwTOXMarkDescription const &) = delete;
@@ -202,25 +202,25 @@ public:
     bool            IsMainEntry() const {return mbMainEntry;}
 
     void            SetPrimKey(const OUString& rSet) { maPrimKey = rSet; }
-    o3tl::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
+    std::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
 
     void            SetSecKey(const OUString& rSet) { maSecKey = rSet; }
-    o3tl::optional<OUString> const & GetSecKey() const { return maSecKey; }
+    std::optional<OUString> const & GetSecKey() const { return maSecKey; }
 
     void            SetAltStr(const OUString& rSet) { maAltStr = rSet; }
-    o3tl::optional<OUString> const & GetAltStr() const { return maAltStr; }
+    std::optional<OUString> const & GetAltStr() const { return maAltStr; }
 
     void            SetTOUName(const OUString& rSet) { maTOUName = rSet; }
-    o3tl::optional<OUString> const & GetTOUName() const { return maTOUName; }
+    std::optional<OUString> const & GetTOUName() const { return maTOUName; }
 
     void            SetPhoneticReadingOfAltStr(const OUString& rSet) { maPhoneticReadingOfAltStr = rSet; }
-    o3tl::optional<OUString> const & GetPhoneticReadingOfAltStr() const { return maPhoneticReadingOfAltStr; }
+    std::optional<OUString> const & GetPhoneticReadingOfAltStr() const { return maPhoneticReadingOfAltStr; }
 
     void            SetPhoneticReadingOfPrimKey(const OUString& rSet) { maPhoneticReadingOfPrimKey = rSet; }
-    o3tl::optional<OUString> const & GetPhoneticReadingOfPrimKey() const { return maPhoneticReadingOfPrimKey; }
+    std::optional<OUString> const & GetPhoneticReadingOfPrimKey() const { return maPhoneticReadingOfPrimKey; }
 
     void            SetPhoneticReadingOfSecKey(const OUString& rSet) { maPhoneticReadingOfSecKey = rSet; }
-    o3tl::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
+    std::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
 };
 
 class SW_DLLPUBLIC SwTOXMgr

@@ -64,9 +64,6 @@ blacklist:
     desktop/source/deployment/misc/lockfile.cxx:
     # Needed on WIN32
     - memory
-    desktop/source/deployment/misc/dp_descriptioninfoset.cxx:
-    # Actually used
-    - o3tl/optional.hxx
     desktop/source/deployment/registry/executable/dp_executablebackenddb.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

@@ -120,7 +120,7 @@ void ScDPSaveMember::SetLayoutName( const OUString& rName )
     mpLayoutName = rName;
 }
 
-const o3tl::optional<OUString> & ScDPSaveMember::GetLayoutName() const
+const std::optional<OUString> & ScDPSaveMember::GetLayoutName() const
 {
     return mpLayoutName;
 }
@@ -355,7 +355,7 @@ void ScDPSaveDimension::SetSubtotalName(const OUString& rName)
     mpSubtotalName = rName;
 }
 
-const o3tl::optional<OUString> & ScDPSaveDimension::GetSubtotalName() const
+const std::optional<OUString> & ScDPSaveDimension::GetSubtotalName() const
 {
     return mpSubtotalName;
 }
@@ -371,7 +371,7 @@ bool ScDPSaveDimension::IsMemberNameInUse(const OUString& rName) const
         if (rName.equalsIgnoreAsciiCase(pMem->GetName()))
             return true;
 
-        const o3tl::optional<OUString> & pLayoutName = pMem->GetLayoutName();
+        const std::optional<OUString> & pLayoutName = pMem->GetLayoutName();
         return pLayoutName && rName.equalsIgnoreAsciiCase(*pLayoutName);
     });
 }
@@ -381,7 +381,7 @@ void ScDPSaveDimension::SetLayoutName(const OUString& rName)
     mpLayoutName = rName;
 }
 
-const o3tl::optional<OUString> & ScDPSaveDimension::GetLayoutName() const
+const std::optional<OUString> & ScDPSaveDimension::GetLayoutName() const
 {
     return mpLayoutName;
 }
@@ -502,7 +502,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         if (mpLayoutName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_LAYOUTNAME, *mpLayoutName);
 
-        const o3tl::optional<OUString> & pSubTotalName = GetSubtotalName();
+        const std::optional<OUString> & pSubTotalName = GetSubtotalName();
         if (pSubTotalName)
             // Custom subtotal name, with '?' being replaced by the visible field name later.
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FIELD_SUBTOTALNAME, *pSubTotalName);
@@ -768,7 +768,7 @@ void ScDPSaveData::SetGrandTotalName(const OUString& rName)
     mpGrandTotalName = rName;
 }
 
-const o3tl::optional<OUString> & ScDPSaveData::GetGrandTotalName() const
+const std::optional<OUString> & ScDPSaveData::GetGrandTotalName() const
 {
     return mpGrandTotalName;
 }
@@ -1054,7 +1054,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             // no error
         }
 
-        const o3tl::optional<OUString> & pGrandTotalName = GetGrandTotalName();
+        const std::optional<OUString> & pGrandTotalName = GetGrandTotalName();
         if (pGrandTotalName)
             ScUnoHelpFunctions::SetOptionalPropertyValue(xSourceProp, SC_UNO_DP_GRANDTOTAL_NAME, *pGrandTotalName);
     }

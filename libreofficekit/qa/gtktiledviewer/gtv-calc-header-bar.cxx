@@ -19,7 +19,7 @@
 
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/unreachable.hxx>
 
 namespace {

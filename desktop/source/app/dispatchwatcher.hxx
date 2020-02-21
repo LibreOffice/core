@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <vector>
 
@@ -59,7 +59,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         {
             RequestType aRequestType;
             OUString    aURL;
-            o3tl::optional< OUString > aCwdUrl;
+            std::optional< OUString > aCwdUrl;
             OUString    aPrinterName;  // also conversion params
             OUString    aPreselectedFactory;
         };

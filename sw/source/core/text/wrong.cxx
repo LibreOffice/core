@@ -875,7 +875,7 @@ sal_uInt16 WrongListIteratorCounter::GetElementCount()
     return 0;
 }
 
-o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>>
+std::optional<std::pair<TextFrameIndex, TextFrameIndex>>
 WrongListIteratorCounter::GetElementAt(sal_uInt16 nIndex)
 {
     if (m_pMergedPara)
@@ -906,7 +906,7 @@ WrongListIteratorCounter::GetElementAt(sal_uInt16 nIndex)
                 {
                     if (nIndex == 0)
                     {
-                        return o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
+                        return std::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
                             std::pair<TextFrameIndex, TextFrameIndex>(
                                 m_CurrentIndex - TextFrameIndex(rExtent.nStart -
                                     std::max(rExtent.nStart, pWrong->mnPos)),
@@ -919,17 +919,17 @@ WrongListIteratorCounter::GetElementAt(sal_uInt16 nIndex)
             m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
             ++m_CurrentExtent;
         }
-        return o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
+        return std::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
     }
     else if (m_pWrongList)
     {
         SwWrongArea const*const pWrong(m_pWrongList->GetElement(nIndex));
-        return o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
+        return std::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
             std::pair<TextFrameIndex, TextFrameIndex>(
                     TextFrameIndex(pWrong->mnPos),
                     TextFrameIndex(pWrong->mnPos + pWrong->mnLen)));
     }
-    return o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
+    return std::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
 }
 
 } // namespace sw

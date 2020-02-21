@@ -37,7 +37,7 @@
 #include <fldbas.hxx>
 
 #include <vector>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/sorted_vector.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/drawingml.hxx>
@@ -300,7 +300,7 @@ public:
 
     /// The style of the page numbers.
     ///
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::o3tl::optional<sal_uInt16>& oPageRestartNumber ) override;
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, const ::std::optional<sal_uInt16>& oPageRestartNumber ) override;
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) override;
@@ -934,7 +934,7 @@ private:
     std::vector<sal_Int32> lastOpenCell;
     std::vector<sal_Int32> lastClosedCell;
 
-    o3tl::optional<css::drawing::FillStyle> m_oFillStyle;
+    std::optional<css::drawing::FillStyle> m_oFillStyle;
     /// If FormatBox() already handled fill style / gradient.
     bool m_bIgnoreNextFill;
 

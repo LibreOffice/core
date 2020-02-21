@@ -3170,7 +3170,7 @@ void SbaTableQueryBrowser::impl_initialize()
 
     if ( m_bEnableBrowser )
     {
-        m_aDocScriptSupport = ::o3tl::optional< bool >( false );
+        m_aDocScriptSupport = ::std::optional< bool >( false );
     }
     else
     {
@@ -3178,7 +3178,7 @@ void SbaTableQueryBrowser::impl_initialize()
         // there is a specific database document which we belong to.
         Reference< XOfficeDatabaseDocument > xDocument( getDataSourceOrModel(
             lcl_getDataSource( m_xDatabaseContext, sInitialDataSourceName, xConnection ) ), UNO_QUERY );
-        m_aDocScriptSupport = ::o3tl::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
+        m_aDocScriptSupport = ::std::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
     }
 
     if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEscapeProcessing, xConnection, true ) )

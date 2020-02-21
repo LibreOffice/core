@@ -21,13 +21,13 @@
 #define INCLUDED_SC_INC_PARAMISC_HXX
 
 #include "address.hxx"
-#include <o3tl/optional.hxx>
+#include <optional>
 
 struct ScSolveParam
 {
     ScAddress                   aRefFormulaCell;
     ScAddress                   aRefVariableCell;
-    o3tl::optional<OUString>   pStrTargetVal;
+    std::optional<OUString>   pStrTargetVal;
 
     ScSolveParam();
     ScSolveParam( const ScSolveParam& r );

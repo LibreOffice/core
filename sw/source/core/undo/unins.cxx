@@ -56,9 +56,9 @@ using namespace ::com::sun::star;
 
 // INSERT
 
-o3tl::optional<OUString> SwUndoInsert::GetTextFromDoc() const
+std::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 {
-    o3tl::optional<OUString> aResult;
+    std::optional<OUString> aResult;
 
     SwNodeIndex aNd( m_pDoc->GetNodes(), m_nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
@@ -448,7 +448,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 SwRewriter SwUndoInsert::GetRewriter() const
 {
     SwRewriter aResult;
-    o3tl::optional<OUString> aStr;
+    std::optional<OUString> aStr;
     bool bDone = false;
 
     if (maText)
@@ -794,7 +794,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 
     // cache the old values
     std::unique_ptr<Graphic> pOldGrf( mpGraphic ? new Graphic(*mpGraphic) : nullptr);
-    o3tl::optional<OUString> aOldNm = maNm;
+    std::optional<OUString> aOldNm = maNm;
     MirrorGraph nOldMirr = mnMirror;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );

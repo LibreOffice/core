@@ -984,7 +984,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
-                ::o3tl::optional<sal_uInt16> oNumOffset = rPageDesc.GetNumOffset();
+                ::std::optional<sal_uInt16> oNumOffset = rPageDesc.GetNumOffset();
                 if (oNumOffset && *oNumOffset > 0)
                 {
                     // #i114163# positiveInteger only!

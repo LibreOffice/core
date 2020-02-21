@@ -2245,7 +2245,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, c
     ListItem& rItem( m_xData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
-    impl_handleInsert( i_nPosition, i_rItemText, ::o3tl::optional< OUString >(), aGuard );
+    impl_handleInsert( i_nPosition, i_rItemText, ::std::optional< OUString >(), aGuard );
     // <----- SYNCHRONIZED
 }
 
@@ -2257,7 +2257,7 @@ void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, 
     ListItem& rItem( m_xData->insertItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleInsert( i_nPosition, ::o3tl::optional< OUString >(), i_rItemImageURL, aGuard );
+    impl_handleInsert( i_nPosition, ::std::optional< OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
 }
 
@@ -2291,7 +2291,7 @@ void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, cons
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
-    impl_handleModify( i_nPosition, i_rItemText, ::o3tl::optional< OUString >(), aGuard );
+    impl_handleModify( i_nPosition, i_rItemText, ::std::optional< OUString >(), aGuard );
     // <----- SYNCHRONIZED
 }
 
@@ -2303,7 +2303,7 @@ void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, con
     ListItem& rItem( m_xData->getItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
-    impl_handleModify( i_nPosition, ::o3tl::optional< OUString >(), i_rItemImageURL, aGuard );
+    impl_handleModify( i_nPosition, ::std::optional< OUString >(), i_rItemImageURL, aGuard );
     // <----- SYNCHRONIZED
 }
 
@@ -2410,8 +2410,8 @@ void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< 
 }
 
 
-void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::o3tl::optional< OUString >& i_rItemText,
-        const ::o3tl::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
+        const ::std::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     // sync with legacy StringItemList property
@@ -2465,14 +2465,14 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     }
     else
     {
-        impl_notifyItemListEvent_nolck( i_nItemPosition, ::o3tl::optional< OUString >(), ::o3tl::optional< OUString >(),
+        impl_notifyItemListEvent_nolck( i_nItemPosition, ::std::optional< OUString >(), ::std::optional< OUString >(),
             &XItemListListener::listItemRemoved );
     }
 }
 
 
-void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::o3tl::optional< OUString >& i_rItemText,
-        const ::o3tl::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
+void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
+        const ::std::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
     // SYNCHRONIZED ----->
     if ( !!i_rItemText )
@@ -2501,8 +2501,8 @@ void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition,
 }
 
 
-void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::o3tl::optional< OUString >& i_rItemText,
-    const ::o3tl::optional< OUString >& i_rItemImageURL,
+void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::std::optional< OUString >& i_rItemText,
+    const ::std::optional< OUString >& i_rItemImageURL,
     void ( SAL_CALL XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
 {
     ItemListEvent aEvent;

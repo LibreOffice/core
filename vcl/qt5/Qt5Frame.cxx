@@ -735,8 +735,8 @@ void Qt5Frame::StartPresentation(bool bStart)
 // meh - so there's no Qt platform independent solution
 // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
 #if QT5_USING_X11
-    o3tl::optional<unsigned int> aRootWindow;
-    o3tl::optional<Display*> aDisplay;
+    std::optional<unsigned int> aRootWindow;
+    std::optional<Display*> aDisplay;
 
     if (QX11Info::isPlatformX11())
     {

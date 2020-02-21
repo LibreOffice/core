@@ -16,7 +16,7 @@
 #include <type_traits>
 #include <utility>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -36,37 +36,37 @@ namespace detail {
 struct Void {};
 
 template<typename T> struct Optional { using type = T const *; };
-template<> struct Optional<void> { using type = o3tl::optional<Void const>; };
-template<> struct Optional<bool> { using type = o3tl::optional<bool const>; };
+template<> struct Optional<void> { using type = std::optional<Void const>; };
+template<> struct Optional<bool> { using type = std::optional<bool const>; };
 template<> struct Optional<sal_Int8> {
-    using type = o3tl::optional<sal_Int8 const>;
+    using type = std::optional<sal_Int8 const>;
 };
 template<> struct Optional<sal_Int16> {
-    using type = o3tl::optional<sal_Int16 const>;
+    using type = std::optional<sal_Int16 const>;
 };
 template<> struct Optional<sal_uInt16> {
-    using type = o3tl::optional<sal_uInt16 const>;
+    using type = std::optional<sal_uInt16 const>;
 };
 template<> struct Optional<sal_Int32> {
-    using type = o3tl::optional<sal_Int32 const>;
+    using type = std::optional<sal_Int32 const>;
 };
 template<> struct Optional<sal_uInt32> {
-    using type = o3tl::optional<sal_uInt32 const>;
+    using type = std::optional<sal_uInt32 const>;
 };
 template<> struct Optional<sal_Int64> {
-    using type = o3tl::optional<sal_Int64 const>;
+    using type = std::optional<sal_Int64 const>;
 };
 template<> struct Optional<sal_uInt64> {
-    using type = o3tl::optional<sal_uInt64 const>;
+    using type = std::optional<sal_uInt64 const>;
 };
 template<> struct Optional<float> {
-    using type = o3tl::optional<float const>;
+    using type = std::optional<float const>;
 };
 template<> struct Optional<double> {
-    using type = o3tl::optional<double const>;
+    using type = std::optional<double const>;
 };
 template<typename T> struct Optional<css::uno::Reference<T>> {
-    using type = o3tl::optional<css::uno::Reference<T> const>;
+    using type = std::optional<css::uno::Reference<T> const>;
 };
 template<> struct Optional<css::uno::Reference<css::uno::XInterface>> {
     using type = css::uno::Reference<css::uno::XInterface> const *;
@@ -85,12 +85,12 @@ template<typename T> struct IsUnoSequenceType<cppu::UnoSequenceType<T>>:
     std::true_type
 {};
 
-template<typename T> inline o3tl::optional<T const> tryGetConverted(
+template<typename T> inline std::optional<T const> tryGetConverted(
     css::uno::Any const & any)
 {
     T v;
     return (any >>= v)
-        ? o3tl::optional<T const>(std::move(v)) : o3tl::optional<T const>();
+        ? std::optional<T const>(std::move(v)) : std::optional<T const>();
 }
 
 }
@@ -105,7 +105,7 @@ template<typename T> inline o3tl::optional<T const> tryGetConverted(
     proxy is positive.  For a positive proxy P representing a value of requested
     type T, for any T other than void, the expression *P yields that value of
     type T.  (Technically, the proxy is either a plain pointer or a
-    o3tl::optional, depending on whether a plain pointer into the given Any can
+    std::optional, depending on whether a plain pointer into the given Any can
     be returned for the specified type.)
 
     @attention A proxy returned from this function must not outlive the
@@ -124,7 +124,7 @@ template<typename T> inline o3tl::optional<T const> tryGetConverted(
     @note Ideally this would be a public member function of css::uno::Any (at
     least conditional on LIBO_INTERNAL_ONLY, as it requires C++11).  However, as
     std::optional (which would be needed to implement the proxies) is only
-    available since C++14, we need to use o3tl::optional for now.  But To not
+    available since C++14, we need to use std::optional for now.  But To not
     make every entity that includes <com/sun/star/uno/Any.hxx> depend on
     boost_headers, keep this here for now.
 
@@ -156,8 +156,8 @@ template<> inline detail::Optional<void>::type tryAccess<void>(
     css::uno::Any const & any)
 {
     return any.hasValue()
-        ? o3tl::optional<detail::Void const>()
-        : o3tl::optional<detail::Void const>(detail::Void());
+        ? std::optional<detail::Void const>()
+        : std::optional<detail::Void const>(detail::Void());
 }
 
 template<> inline detail::Optional<bool>::type tryAccess<bool>(

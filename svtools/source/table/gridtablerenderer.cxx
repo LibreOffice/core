@@ -203,7 +203,7 @@ namespace svt::table
 
     namespace
     {
-        Color lcl_getEffectiveColor(o3tl::optional<Color> const& i_modelColor,
+        Color lcl_getEffectiveColor(std::optional<Color> const& i_modelColor,
                                     StyleSettings const& i_styleSettings,
                                     Color const& (StyleSettings::*i_getDefaultColor) () const)
         {
@@ -229,7 +229,7 @@ namespace svt::table
         rRenderContext.DrawRect(_rArea);
 
         // delimiter lines at bottom/right
-        o3tl::optional<Color> aLineColor(m_pImpl->rModel.getLineColor());
+        std::optional<Color> aLineColor(m_pImpl->rModel.getLineColor());
         Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
         rRenderContext.SetLineColor(lineColor);
         rRenderContext.DrawLine(_rArea.BottomLeft(), _rArea.BottomRight());
@@ -261,7 +261,7 @@ namespace svt::table
             nDrawTextFlags |= DrawTextFlags::Disable;
         rRenderContext.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
-        o3tl::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
         Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
         rRenderContext.SetLineColor( lineColor );
         rRenderContext.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
@@ -309,7 +309,7 @@ namespace svt::table
 
         Color backgroundColor = _rStyle.GetFieldColor();
 
-        o3tl::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
         Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
 
         Color const activeSelectionBackColor = lcl_getEffectiveColor(m_pImpl->rModel.getActiveSelectionBackColor(),
@@ -325,7 +325,7 @@ namespace svt::table
         }
         else
         {
-            o3tl::optional< std::vector<Color> > aRowColors = m_pImpl->rModel.getRowBackgroundColors();
+            std::optional< std::vector<Color> > aRowColors = m_pImpl->rModel.getRowBackgroundColors();
             if (!aRowColors)
             {
                 // use alternating default colors
@@ -370,7 +370,7 @@ namespace svt::table
     {
         rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
 
-        o3tl::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
         Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
         rRenderContext.SetLineColor(lineColor);
         rRenderContext.DrawLine(_rArea.BottomLeft(), _rArea.BottomRight());
@@ -428,7 +428,7 @@ namespace svt::table
 
         if ( m_pImpl->bUseGridLines )
         {
-            ::o3tl::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
+            ::std::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
             ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
 
             if ( _bSelected && !aLineColor )

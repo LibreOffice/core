@@ -28,7 +28,7 @@
 #include <swtypes.hxx>
 #include "drawfont.hxx"
 #include <editeng/borderline.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <o3tl/enumarray.hxx>
 
 class SfxItemSet;
@@ -140,10 +140,10 @@ class SwFont
     Color       m_aOverColor;     // color of the overlining
 
     // character borders
-    o3tl::optional<editeng::SvxBorderLine>     m_aTopBorder;
-    o3tl::optional<editeng::SvxBorderLine>     m_aBottomBorder;
-    o3tl::optional<editeng::SvxBorderLine>     m_aRightBorder;
-    o3tl::optional<editeng::SvxBorderLine>     m_aLeftBorder;
+    std::optional<editeng::SvxBorderLine>     m_aTopBorder;
+    std::optional<editeng::SvxBorderLine>     m_aBottomBorder;
+    std::optional<editeng::SvxBorderLine>     m_aRightBorder;
+    std::optional<editeng::SvxBorderLine>     m_aLeftBorder;
 
     // border distance
     sal_uInt16 m_nTopBorderDist;
@@ -336,19 +336,19 @@ public:
     void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
     void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
 
-    const o3tl::optional<editeng::SvxBorderLine>& GetTopBorder() const { return m_aTopBorder; }
-    const o3tl::optional<editeng::SvxBorderLine>& GetBottomBorder() const { return m_aBottomBorder; }
-    const o3tl::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
-    const o3tl::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
+    const std::optional<editeng::SvxBorderLine>& GetTopBorder() const { return m_aTopBorder; }
+    const std::optional<editeng::SvxBorderLine>& GetBottomBorder() const { return m_aBottomBorder; }
+    const std::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
+    const std::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
 
     // Get absolute border correspond to the layout verticality and orientation.
-    const o3tl::optional<editeng::SvxBorderLine>&
+    const std::optional<editeng::SvxBorderLine>&
     GetAbsTopBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
-    const o3tl::optional<editeng::SvxBorderLine>&
+    const std::optional<editeng::SvxBorderLine>&
     GetAbsBottomBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
-    const o3tl::optional<editeng::SvxBorderLine>&
+    const std::optional<editeng::SvxBorderLine>&
     GetAbsRightBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
-    const o3tl::optional<editeng::SvxBorderLine>&
+    const std::optional<editeng::SvxBorderLine>&
     GetAbsLeftBorder(const bool bVertLayout, const bool bVertLayoutLRBT) const;
 
     void SetTopBorderDist( const sal_uInt16 nTopDist );

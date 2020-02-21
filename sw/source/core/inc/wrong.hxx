@@ -29,7 +29,7 @@
 
 #include <vector>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 #include <tools/color.hxx>
 #include <swtypes.hxx>
@@ -407,7 +407,7 @@ public:
     WrongListIteratorCounter(SwWrongList const& rWrongList);
 
     sal_uInt16 GetElementCount();
-    o3tl::optional<std::pair<TextFrameIndex, TextFrameIndex>> GetElementAt(sal_uInt16 nIndex);
+    std::optional<std::pair<TextFrameIndex, TextFrameIndex>> GetElementAt(sal_uInt16 nIndex);
 };
 
 } // namespace sw

@@ -149,45 +149,45 @@ namespace svt::table
         }
         virtual void addTableModelListener( const PTableModelListener& ) override {}
         virtual void removeTableModelListener( const PTableModelListener& ) override {}
-        virtual ::o3tl::optional< ::Color > getLineColor() const override
+        virtual ::std::optional< ::Color > getLineColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color > getHeaderBackgroundColor() const override
+        virtual ::std::optional< ::Color > getHeaderBackgroundColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color > getHeaderTextColor() const override
+        virtual ::std::optional< ::Color > getHeaderTextColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color >    getActiveSelectionBackColor() const override
+        virtual ::std::optional< ::Color >    getActiveSelectionBackColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color >    getInactiveSelectionBackColor() const override
+        virtual ::std::optional< ::Color >    getInactiveSelectionBackColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color >    getActiveSelectionTextColor() const override
+        virtual ::std::optional< ::Color >    getActiveSelectionTextColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color >    getInactiveSelectionTextColor() const override
+        virtual ::std::optional< ::Color >    getInactiveSelectionTextColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color > getTextColor() const override
+        virtual ::std::optional< ::Color > getTextColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::Color > getTextLineColor() const override
+        virtual ::std::optional< ::Color > getTextLineColor() const override
         {
-            return ::o3tl::optional< ::Color >();
+            return ::std::optional< ::Color >();
         }
-        virtual ::o3tl::optional< ::std::vector< ::Color > > getRowBackgroundColors() const override
+        virtual ::std::optional< ::std::vector< ::Color > > getRowBackgroundColors() const override
         {
-            return ::o3tl::optional< ::std::vector< ::Color > >();
+            return ::std::optional< ::std::vector< ::Color > >();
         }
         virtual css::style::VerticalAlignment getVerticalAlign() const override
         {

@@ -2522,7 +2522,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
     {
         for (SvxAutocorrWord & aWordToDelete : aDeleteEntries)
         {
-            o3tl::optional<SvxAutocorrWord> xFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
+            std::optional<SvxAutocorrWord> xFoundEntry = pAutocorr_List->FindAndRemove( &aWordToDelete );
             if( xFoundEntry )
             {
                 if( !xFoundEntry->IsTextOnly() )
@@ -2545,7 +2545,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
         for (const SvxAutocorrWord & aNewEntrie : aNewEntries)
         {
             SvxAutocorrWord aWordToAdd(aNewEntrie.GetShort(), aNewEntrie.GetLong(), true );
-            o3tl::optional<SvxAutocorrWord> xRemoved = pAutocorr_List->FindAndRemove( &aWordToAdd );
+            std::optional<SvxAutocorrWord> xRemoved = pAutocorr_List->FindAndRemove( &aWordToAdd );
             if( xRemoved )
             {
                 if( !xRemoved->IsTextOnly() )
@@ -2591,7 +2591,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     if( bRet )
     {
         SvxAutocorrWord aNew(rShort, rLong, true );
-        o3tl::optional<SvxAutocorrWord> xRemove = pAutocorr_List->FindAndRemove( &aNew );
+        std::optional<SvxAutocorrWord> xRemove = pAutocorr_List->FindAndRemove( &aNew );
         if( xRemove )
         {
             if( !xRemove->IsTextOnly() )
@@ -2727,7 +2727,7 @@ bool SvxAutocorrWordList::empty() const
     return mpImpl->maHash.empty() && mpImpl->maSortedVector.empty();
 }
 
-o3tl::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(const SvxAutocorrWord *pWord)
+std::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(const SvxAutocorrWord *pWord)
 {
 
     if ( mpImpl->maSortedVector.empty() ) // use the hash
@@ -2750,7 +2750,7 @@ o3tl::optional<SvxAutocorrWord> SvxAutocorrWordList::FindAndRemove(const SvxAuto
             return pMatch;
         }
     }
-    return o3tl::optional<SvxAutocorrWord>();
+    return std::optional<SvxAutocorrWord>();
 }
 
 // return the sorted contents - defer sorting until we have to.

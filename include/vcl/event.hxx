@@ -27,7 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
-#include <o3tl/optional.hxx>
+#include <optional>
 
 class CommandEvent;
 
@@ -109,7 +109,7 @@ private:
     sal_uInt16          mnCode;
 
     // Set, if the document relative logic position are available
-    o3tl::optional<Point> maLogicPosition;
+    std::optional<Point> maLogicPosition;
 
 public:
     explicit        MouseEvent();
@@ -127,7 +127,7 @@ public:
         maLogicPosition = aLogicPosition;
     }
 
-    o3tl::optional<Point> getLogicPosition() const
+    std::optional<Point> getLogicPosition() const
     {
         return maLogicPosition;
     }

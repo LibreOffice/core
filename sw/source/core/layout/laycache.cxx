@@ -654,7 +654,7 @@ bool SwLayHelper::CheckInsertPage()
 
     if ( bBrk || pDesc )
     {
-        ::o3tl::optional<sal_uInt16> oPgNum;
+        ::std::optional<sal_uInt16> oPgNum;
         if ( !pDesc )
         {
             pDesc = mrpPage->GetPageDesc()->GetFollow();

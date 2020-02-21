@@ -51,7 +51,7 @@ namespace dbaccess
     struct ContentProperties
     {
         OUString aTitle;         // Title
-        ::o3tl::optional< OUString >
+        ::std::optional< OUString >
                         aContentType;   // ContentType (aka MediaType aka MimeType)
         bool        bIsDocument;    // IsDocument
         bool        bIsFolder;      // IsFolder

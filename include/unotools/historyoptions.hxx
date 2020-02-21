@@ -27,7 +27,7 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
@@ -86,7 +86,7 @@ public:
     */
     void AppendItem(EHistoryType eHistory,
             const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-            const o3tl::optional<OUString>& sThumbnail);
+            const std::optional<OUString>& sThumbnail);
 
     /** Delete item from the specified list.
     */

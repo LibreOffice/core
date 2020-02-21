@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_INC_APP_HXX
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -173,7 +173,7 @@ class Desktop final : public Application
 };
 
 OUString GetURL_Impl(
-    const OUString& rName, o3tl::optional< OUString > const & cwdUrl );
+    const OUString& rName, std::optional< OUString > const & cwdUrl );
 
 OUString ReplaceStringHookProc(const OUString& rStr);
 

@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/optional.hxx>
+#include <optional>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include "dp_misc_api.hxx"
@@ -47,7 +47,7 @@ namespace dp_misc {
    on the given file name
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
-    ::o3tl::optional< OUString > const & optional,
+    ::std::optional< OUString > const & optional,
     OUString const & fileName);
 
 /**

@@ -498,7 +498,7 @@ public:
     virtual void NbcReformatText() override;
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
-        bool bEdit, o3tl::optional<Color>& rpTxtColor, o3tl::optional<Color>& rpFldColor, OUString& rRet) const;
+        bool bEdit, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, OUString& rRet) const;
 
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
