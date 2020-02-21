@@ -7,6 +7,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/spinfld.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -321,6 +323,109 @@ public:
     virtual void set_default_response(int nResponse) override;
 
     virtual weld::Container* weld_content_area() override;
+};
+
+class WeldTextFilter : public TextFilter
+{
+private:
+    Link<OUString&, bool>& m_rInsertTextHdl;
+public:
+    WeldTextFilter(Link<OUString&, bool>& rInsertTextHdl);
+
+    virtual OUString filter(const OUString &rText) override;
+};
+
+class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
+{
+private:
+    VclPtr<Edit> m_xEntry;
+
+    DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
+    DECL_LINK(ActivateHdl, Edit&, bool);
+
+    WeldTextFilter m_aTextFilter;
+public:
+    SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_text(const OUString& rText) override;
+
+    virtual OUString get_text() const override;
+
+    virtual void set_width_chars(int nChars) override;
+
+    virtual int get_width_chars() const override;
+
+    virtual void set_max_length(int nChars) override;
+
+    virtual void select_region(int nStartPos, int nEndPos) override;
+
+    bool get_selection_bounds(int& rStartPos, int &rEndPos) override;
+
+    virtual void set_position(int nCursorPos) override;
+
+    virtual int get_position() const override;
+
+    virtual void set_editable(bool bEditable) override;
+
+    virtual bool get_editable() const override;
+
+    virtual void set_error(bool bError) override;
+
+    virtual vcl::Font get_font() override;
+
+    virtual void set_font(const vcl::Font& rFont) override;
+
+    virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override;
+
+    Edit& getEntry();
+
+    void fire_signal_changed();
+
+    virtual ~SalInstanceEntry() override;
+};
+
+class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
+{
+private:
+    VclPtr<FormattedField> m_xButton;
+
+    DECL_LINK(UpDownHdl, SpinField&, void);
+    DECL_LINK(LoseFocusHdl, Control&, void);
+    DECL_LINK(OutputHdl, Edit&, bool);
+    DECL_LINK(InputHdl, sal_Int64*, TriState);
+    DECL_LINK(ActivateHdl, Edit&, bool);
+
+    double toField(int nValue) const;
+
+    int fromField(double fValue) const;
+
+public:
+    SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual int get_value() const override;
+
+    virtual void set_value(int value) override;
+
+    virtual void set_range(int min, int max) override;
+
+    virtual void get_range(int& min, int& max) const override;
+
+    virtual void set_increments(int step, int /*page*/) override;
+
+    virtual void get_increments(int& step, int& page) const override;
+
+    virtual void set_digits(unsigned int digits) override;
+
+    //so with hh::mm::ss, incrementing mm will not reset ss
+    void DisableRemainderFactor();
+
+    //off by default for direct SpinButtons, MetricSpinButton enables it
+    void SetUseThousandSep();
+
+    virtual unsigned int get_digits() const override;
+
+    virtual ~SalInstanceSpinButton() override;
 };
 
 #endif
