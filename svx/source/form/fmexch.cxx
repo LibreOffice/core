@@ -19,9 +19,6 @@
 
 #include <fmexch.hxx>
 
-#include <sot/storage.hxx>
-#include <svl/itempool.hxx>
-
 #include <sot/formats.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>

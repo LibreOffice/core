@@ -11,19 +11,12 @@
 #include <sal/log.hxx>
 
 #include <stdio.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
 
 #include <vector>
-
-#include <unotools/streamwrap.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <tools/urlobj.hxx>
@@ -31,7 +24,6 @@
 
 #include <osl/file.hxx>
 #include <osl/process.h>
-#include <rtl/bootstrap.hxx>
 #include <sfx2/app.hxx>
 #include <sal/types.h>
 #include <tools/diagnose_ex.h>

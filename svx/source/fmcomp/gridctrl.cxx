@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <helpids.h>
 #include <svx/gridctrl.hxx>
@@ -36,10 +35,8 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -56,9 +53,7 @@
 
 #include <svx/strings.hrc>
 
-#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include <fmservs.hxx>
 #include <sdbdatacolumn.hxx>
 
 #include <comphelper/property.hxx>

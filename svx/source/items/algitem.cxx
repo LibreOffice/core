@@ -17,27 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svxitems.hrc>
 #include <svx/strings.hrc>
 #include <osl/diagnose.h>
-#include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/table/ShadowLocation.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
-#include <com/sun/star/table/TableOrientation.hpp>
-#include <com/sun/star/util/SortField.hpp>
-#include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 
 #include <svx/algitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
-#include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <svx/unomid.hxx>
 

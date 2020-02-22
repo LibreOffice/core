@@ -50,7 +50,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <svx/sdrpaintwindow.hxx>
 
-#include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
 #include <tools/diagnose_ex.h>
 #include <svx/svxids.hrc>

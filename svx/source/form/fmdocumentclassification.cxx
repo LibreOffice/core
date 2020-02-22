@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
 #include <tools/diagnose_ex.h>
@@ -71,7 +70,6 @@ namespace svxform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::xforms;
     using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::sdbc;
 
 
     namespace

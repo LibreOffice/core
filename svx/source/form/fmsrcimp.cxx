@@ -20,8 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>
@@ -32,27 +30,20 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
-#include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/util/NumberFormatter.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
 
 #include <fmprop.hxx>
-#include <fmservs.hxx>
 #include <svx/fmsrcimp.hxx>
-#include <svx/fmsearch.hxx>
 
 #include <comphelper/types.hxx>
 #include <unotools/syslocale.hxx>

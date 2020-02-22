@@ -18,9 +18,6 @@
  */
 
 #include <svx/svxids.hrc>
-#include <tools/stream.hxx>
-#include <svl/memberid.h>
-#include <basic/sbxvar.hxx>
 #include <sfx2/event.hxx>
 #include <svx/hlnkitem.hxx>
 

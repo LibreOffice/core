@@ -19,38 +19,27 @@
 
 
 #include <tabwin.hxx>
-#include <svx/fmtools.hxx>
 #include <fmservs.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/util/XLocalizedAliases.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 
 #include <helpids.h>
 #include <svx/fmshell.hxx>
 #include <fmshimp.hxx>
-#include <svx/fmpage.hxx>
-
-#include <fmpgeimp.hxx>
 
 #include <fmprop.hxx>
 
 #include <svx/dialmgr.hxx>
-#include <svx/svdpagv.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
 #include <tabwin.hrc>
 
 const long STD_WIN_SIZE_X = 120;

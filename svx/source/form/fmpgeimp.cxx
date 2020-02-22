@@ -18,7 +18,6 @@
  */
 
 
-#include <svx/svxerr.hxx>
 #include <fmpgeimp.hxx>
 #include <fmundo.hxx>
 #include <svx/fmtools.hxx>
@@ -35,19 +34,17 @@
 #include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/Forms.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 
 #include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
-#include <unotools/streamwrap.hxx>
 #include <connectivity/dbtools.hxx>
 
 using namespace ::com::sun::star::uno;

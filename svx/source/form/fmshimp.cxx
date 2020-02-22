@@ -32,7 +32,6 @@
 #include <fmundo.hxx>
 #include <fmurl.hxx>
 #include <fmvwimp.hxx>
-#include <formtoolbars.hxx>
 #include <gridcols.hxx>
 #include <svx/svditer.hxx>
 #include <svx/dialmgr.hxx>
@@ -54,18 +53,13 @@
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/TabOrderDialog.hpp>
-#include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/form/XGrid.hpp>
 #include <com/sun/star/form/XGridPeer.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -77,10 +71,8 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/evtmethodhelper.hxx>
@@ -92,7 +84,6 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -106,7 +97,6 @@
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
-#include <functional>
 #include <map>
 #include <memory>
 #include <vector>

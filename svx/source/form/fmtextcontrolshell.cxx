@@ -24,16 +24,12 @@
 #include <fmtextcontrolshell.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/fmglob.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/udlnitem.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
@@ -52,15 +48,14 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 

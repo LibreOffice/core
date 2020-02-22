@@ -17,3 +17,58 @@ blacklist:
     svx/source/dialog/srchdlg.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    svx/source/fmcomp/dbaobjectex.cxx:
+    # Actually used
+    - com/sun/star/ucb/XContent.hpp
+    svx/source/fmcomp/dbaexchange.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/gallery2/galtheme.cxx:
+    # Don't propose hxx -> h change in URE libs
+    - osl/thread.hxx
+    svx/source/items/galleryitem.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/lang/XComponent.hpp
+    svx/source/form/dataaccessdescriptor.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    svx/source/form/fmcontrolbordermanager.cxx:
+    # Actually used
+    - com/sun/star/form/validation/XValidatableFormComponent.hpp
+    svx/source/form/databaselocationinput.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    svx/source/form/tabwin.cxx:
+    # Needed for UnoType instatiation
+    - com/sun/star/sdbc/XConnection.hpp
+    svx/source/form/typemap.cxx:
+    # Needed for svxslots.hxx
+    - config_options.h
+    - sfx2/objitem.hxx
+    - sfx2/msg.hxx
+    - svl/memberid.h
+    - editeng/wghtitem.hxx
+    - editeng/udlnitem.hxx
+    - editeng/crossedoutitem.hxx
+    - editeng/contouritem.hxx
+    - editeng/shdditem.hxx
+    - editeng/postitem.hxx
+    - svx/clipfmtitem.hxx
+    - editeng/fhgtitem.hxx
+    - editeng/fontitem.hxx
+    - editeng/charreliefitem.hxx
+    - editeng/escapementitem.hxx
+    - editeng/colritem.hxx
+    - editeng/wrlmitem.hxx
+    - editeng/charscaleitem.hxx
+    - editeng/autokernitem.hxx
+    - editeng/ulspitem.hxx
+    - editeng/lrspitem.hxx
+    - editeng/lspcitem.hxx
+    - editeng/langitem.hxx
+    - editeng/kernitem.hxx
+    - editeng/adjustitem.hxx
+    - editeng/emphasismarkitem.hxx
+    - editeng/memberids.h

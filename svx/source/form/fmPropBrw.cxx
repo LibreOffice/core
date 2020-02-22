@@ -36,10 +36,7 @@
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
@@ -58,20 +55,14 @@
 #include <o3tl/deleter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
-
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

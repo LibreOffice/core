@@ -23,43 +23,23 @@
 
 #include <helpids.h>
 #include <svx/fmglob.hxx>
-#include <fmservs.hxx>
-#include <svx/fmmodel.hxx>
+#include <svx/fmtools.hxx>
 #include <fmexch.hxx>
-#include <fmundo.hxx>
-#include <fmpgeimp.hxx>
 
 #include <svx/svxids.hrc>
 
 #include <fmprop.hxx>
 #include <bitmaps.hlst>
 #include <svx/dialmgr.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdouno.hxx>
-#include <svx/svdobj.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <vcl/menu.hxx>
 #include <sfx2/objitem.hxx>
-#include <sfx2/request.hxx>
 
 #include <svx/fmshell.hxx>
-#include <fmshimp.hxx>
-#include <svx/fmpage.hxx>
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/types.hxx>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;

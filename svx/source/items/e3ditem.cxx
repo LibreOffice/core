@@ -18,14 +18,10 @@
  */
 
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include <comphelper/fileformat.h>
-#include <tools/stream.hxx>
 #include <rtl/math.hxx>
 #include <libxml/xmlwriter.h>
 
 #include <svx/e3ditem.hxx>
-
-#include <climits>
 
 using namespace ::com::sun::star;
 

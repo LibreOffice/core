@@ -21,7 +21,6 @@
 
 #include <memory>
 
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <datanavi.hxx>
 #include <fmservs.hxx>
@@ -32,14 +31,11 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
-#include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/treelistentry.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/objitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
@@ -50,14 +46,10 @@
 #include <vcl/layout.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/DOMException.hpp>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::beans;

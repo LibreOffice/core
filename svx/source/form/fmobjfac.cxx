@@ -29,7 +29,6 @@
 #include <svx/fmglob.hxx>
 
 #include <fmobj.hxx>
-#include <fmshimp.hxx>
 
 #include <svx/fmshell.hxx>
 

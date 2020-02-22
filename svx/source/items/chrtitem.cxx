@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/fileformat.h>
-#include <tools/stream.hxx>
-#include <basic/sbxvar.hxx>
 #include <rtl/math.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-
-#include <float.h>
-#include <climits>
 
 #include <svx/chrtitem.hxx>
 
