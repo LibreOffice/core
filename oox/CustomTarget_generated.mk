@@ -32,8 +32,8 @@ $(oox_MISC)/oox-drawingml-adj-names : \
 # Generate tokens for oox
 $(eval $(call gb_CustomTarget_token_hash,oox/generated,tokenhash.inc,tokenhash.gperf))
 
-$(eval $(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,namespaces,namespace,namespaces.txt,namespaces-strict,namespaces.pl))
-$(eval $(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,properties,property,,,properties.pl))
+$(eval $(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,namespaces,namespace,namespaces.txt,namespaces-strict,namespaces.py))
+$(eval $(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,properties,property,,,properties.py))
 $(eval $(call gb_CustomTarget_generate_tokens,oox/generated,oox,oox/source/token,tokens,token,tokenhash.gperf))
 
 $(call gb_CustomTarget_get_target,oox/generated) : \
