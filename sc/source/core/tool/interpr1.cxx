@@ -2237,6 +2237,7 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString&
                 case NF_DATE_SYS_DDMMM:     rFmtStr = "D2"; break;
                 case NF_DATE_SYS_MMYY:      rFmtStr = "D3"; break;
                 case NF_DATETIME_SYSTEM_SHORT_HHMM:
+                case NF_DATETIME_SYS_DDMMYYYY_HHMM:
                 case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
                                             rFmtStr = "D4"; break;
                 case NF_DATE_DIN_MMDD:      rFmtStr = "D5"; break;

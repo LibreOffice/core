@@ -168,16 +168,16 @@
     <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
+    <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
       <FormatCode>H:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
       <FormatCode>H:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
+    <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
       <FormatCode>H:MM AM/PM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
       <FormatCode>H:MM:SS AM/PM</FormatCode><!-- with commonly used 24-hour time, the AM/PM indicator is not needed -->
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
@@ -193,7 +193,10 @@
       <FormatCode>DD.MM.YY H:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD.MM.YYYY H:MM:SS AM/PM</FormatCode><!-- with commonly used 24-hour time, the AM/PM indicator is useless (and also never used) -->
+      <FormatCode>DD.MM.YYYY H:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>DD.MM.YYYY H:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>

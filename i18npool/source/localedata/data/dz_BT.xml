@@ -140,11 +140,14 @@
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
       <FormatCode>[HH]:MM:SS.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD HH:MM AM/PM</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME"  formatindex="46">
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YY "ཟླ་" M "ཚེས་" DD HH:MM AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>[NatNum1]DD-MM-YYYY HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="true" type="medium" usage="DATE_TIME"  formatindex="50">
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD HH:MM AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>General</FormatCode>
@@ -164,19 +167,19 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
       <FormatCode>[NatNum1]#,###.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="69">
+    <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="75">
       <FormatCode>0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="70">
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="76">
       <FormatCode>0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey9" default="false" type="short" usage="FIXED_NUMBER"  formatindex="71">
+    <FormatElement msgid="FixedFormatskey9" default="false" type="short" usage="FIXED_NUMBER"  formatindex="77">
       <FormatCode>#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey10" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="72">
+    <FormatElement msgid="FixedFormatskey10" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="78">
       <FormatCode>#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="73">
+    <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="79">
       <FormatCode>#,###.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
@@ -197,22 +200,22 @@
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
       <FormatCode>[NatNum1][CURRENCY]#,##0.--;[NatNum1][RED]-[CURRENCY]#,##0.--</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="60">
+    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="66">
       <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="61">
+    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="67">
       <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="62">
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="68">
       <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="63">
+    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="69">
       <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY"  formatindex="64">
+    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY"  formatindex="70">
       <FormatCode>#,##0.00 CCC</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="65">
+    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="71">
       <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -222,10 +225,10 @@
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
       <FormatCode>[NatNum1]0.00%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="66">
+    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="72">
       <FormatCode>0%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="67">
+    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="73">
       <FormatCode>0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
@@ -234,10 +237,10 @@
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="7">
       <FormatCode>0.00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="68">
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="74">
       <FormatCode>[NatNum1]0.00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey4" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+    <FormatElement msgid="ScientificFormatskey4" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="80">
       <FormatCode>##0.00E+00</FormatCode>
     </FormatElement>
 

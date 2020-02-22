@@ -83,7 +83,7 @@
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
       <FormatCode>0,00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="84">
       <FormatCode>##0,00E+00</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
@@ -174,106 +174,106 @@
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW.</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="60">
+    <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="66">
       <FormatCode>[NatNum12 MMMM=abbreviation]YYYY". "MMMM D.</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="61">
+    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="67">
       <FormatCode>[NatNum12 D=possessive]YYYY". "MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="62">
+    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="68">
       <FormatCode>[NatNum12 D=possessive-superessive]YYYY". "MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="63">
+    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="69">
       <FormatCode>[NatNum12 D=possessive-ablative]YYYY". "MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="64">
+    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="70">
       <FormatCode>[NatNum12 D=possessive-terminative]YYYY". "MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey27" default="false" type="long" usage="DATE" formatindex="65">
+    <FormatElement msgid="DateFormatskey27" default="false" type="long" usage="DATE" formatindex="71">
       <FormatCode>[NatNum12 D=possessive-adjective]YYYY". "MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey28" default="false" type="long" usage="DATE" formatindex="66">
+    <FormatElement msgid="DateFormatskey28" default="false" type="long" usage="DATE" formatindex="72">
       <FormatCode>[NatNum12 D=possessive-superessive,NNN=superessive]YYYY". "MMMM D, NNN</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="67">
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="73">
       <FormatCode>[NatNum12 D=possessive]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="68">
+    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="74">
       <FormatCode>[NatNum12 D=possessive-superessive]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="69">
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="75">
       <FormatCode>[NatNum12 D=possessive-ablative]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey32" default="false" type="medium" usage="DATE" formatindex="70">
+    <FormatElement msgid="DateFormatskey32" default="false" type="medium" usage="DATE" formatindex="76">
       <FormatCode>[NatNum12 D=possessive-terminative]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="71">
+    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="77">
       <FormatCode>[NatNum12 MMMM=article,D=possessive-adjective]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey34" default="false" type="medium" usage="DATE" formatindex="72">
+    <FormatElement msgid="DateFormatskey34" default="false" type="medium" usage="DATE" formatindex="78">
       <FormatCode>[NatNum12 MMMM=capitalize article,D=possessive-adjective]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="73">
+    <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="79">
       <FormatCode>[NatNum12 MMMM=article,D=adjective]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey36" default="false" type="medium" usage="DATE" formatindex="74">
+    <FormatElement msgid="DateFormatskey36" default="false" type="medium" usage="DATE" formatindex="80">
       <FormatCode>[NatNum12 MMMM=capitalize article,D=adjective]MMMM" "D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey37" default="false" type="long" usage="DATE" formatindex="75">
+    <FormatElement msgid="DateFormatskey37" default="false" type="long" usage="DATE" formatindex="81">
       <FormatCode>[NatNum12 MMMM=article]MMMM"i"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey38" default="false" type="medium" usage="DATE" formatindex="76">
+    <FormatElement msgid="DateFormatskey38" default="false" type="medium" usage="DATE" formatindex="82">
       <FormatCode>[NatNum12 MMMM=capitalize article]MMMM"i"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey39" default="false" type="medium" usage="DATE" formatindex="77">
+    <FormatElement msgid="DateFormatskey39" default="false" type="medium" usage="DATE" formatindex="83">
       <FormatCode>[NatNum12 superessive]NNN</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="79">
+    <FormatElement msgid="DateFormatskey40" default="false" type="medium" usage="DATE" formatindex="85">
       <FormatCode>[NatNum12 ablative]NNN</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="80">
+    <FormatElement msgid="DateFormatskey41" default="false" type="medium" usage="DATE" formatindex="86">
       <FormatCode>[NatNum12 terminative]NNN</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey42" default="false" type="medium" usage="DATE" formatindex="81">
+    <FormatElement msgid="DateFormatskey42" default="false" type="medium" usage="DATE" formatindex="87">
       <FormatCode>[NatNum12 inessive]YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey43" default="false" type="medium" usage="DATE" formatindex="82">
+    <FormatElement msgid="DateFormatskey43" default="false" type="medium" usage="DATE" formatindex="88">
       <FormatCode>[NatNum12 ablative]YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey44" default="false" type="medium" usage="DATE" formatindex="83">
+    <FormatElement msgid="DateFormatskey44" default="false" type="medium" usage="DATE" formatindex="89">
       <FormatCode>[NatNum12 article]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="84">
+    <FormatElement msgid="DateFormatskey45" default="false" type="medium" usage="DATE" formatindex="90">
       <FormatCode>[NatNum12 capitalize article]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="85">
+    <FormatElement msgid="DateFormatskey46" default="false" type="medium" usage="DATE" formatindex="91">
       <FormatCode>[NatNum12 inessive]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="86">
+    <FormatElement msgid="DateFormatskey47" default="false" type="medium" usage="DATE" formatindex="92">
       <FormatCode>[NatNum12 article inessive]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey48" default="false" type="medium" usage="DATE" formatindex="87">
+    <FormatElement msgid="DateFormatskey48" default="false" type="medium" usage="DATE" formatindex="93">
       <FormatCode>[NatNum12 capitalize article inessive]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey49" default="false" type="medium" usage="DATE" formatindex="88">
+    <FormatElement msgid="DateFormatskey49" default="false" type="medium" usage="DATE" formatindex="94">
       <FormatCode>[NatNum12 ablative]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey50" default="false" type="medium" usage="DATE" formatindex="89">
+    <FormatElement msgid="DateFormatskey50" default="false" type="medium" usage="DATE" formatindex="95">
       <FormatCode>[NatNum12 article ablative]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey51" default="false" type="medium" usage="DATE" formatindex="90">
+    <FormatElement msgid="DateFormatskey51" default="false" type="medium" usage="DATE" formatindex="96">
       <FormatCode>[NatNum12 capitalize article ablative]MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey52" default="false" type="medium" usage="DATE" formatindex="91">
+    <FormatElement msgid="DateFormatskey52" default="false" type="medium" usage="DATE" formatindex="97">
       <FormatCode>[NatNum12 MMMM=possessive-inessive]YYYY" "MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey53" default="false" type="medium" usage="DATE" formatindex="92">
+    <FormatElement msgid="DateFormatskey53" default="false" type="medium" usage="DATE" formatindex="98">
       <FormatCode>[NatNum12 MMMM=possessive-ablative]YYYY" "MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey54" default="false" type="medium" usage="DATE" formatindex="93">
+    <FormatElement msgid="DateFormatskey54" default="false" type="medium" usage="DATE" formatindex="99">
       <FormatCode>[NatNum12 MMMM=possessive-terminative]YYYY" "MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey55" default="false" type="medium" usage="DATE" formatindex="94">
+    <FormatElement msgid="DateFormatskey55" default="false" type="medium" usage="DATE" formatindex="100">
       <FormatCode>[NatNum12 ordinal year]YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
@@ -302,6 +302,9 @@
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>YYYY.MM.DD. HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>YYYY.MM.DD. HH:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
