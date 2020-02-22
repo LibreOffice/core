@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXAutoTextGroup)
 
     // Rename not existing should throw an exception
     CPPUNIT_ASSERT_THROW_MESSAGE(
-        "We expect an exception on renaming not-exising AutoText",
+        "We expect an exception on renaming not-existing AutoText",
         xAutoTextGroup->renameByName(sTextName, sTextNameNew, sTextTitleNew),
         container::ElementExistException);
 
