@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f3a7cf5_128eaab8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:14:01Z",
+      "side": 1,
+      "message": "\"Missing parameters\" is misleading in this context. Missing parameter is the one that is absent in the function call; and in the paragraph you wrote just above: \"optional parameters are allowed with default values\". So the following looks like you are talking about missing arguments that have explicit default values; and reading that way, it looks like \"you are allowed to have optional arguments with defaults; when you call such a function, and omit such parameter, it will not be initialized to default value of its datatype\" - but that\u0027s not what is meant.\n\nProposed wording:\n\n\"optional parameters are allowed to have default values\" (this makes clear that defaults are allowed, but not mandatory);\n\n\"Missing parameters that don\u0027t have explicit default values will not be initialized to their default values of its datatype\".",
+      "range": {
+        "startLine": 16,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 39
+      },
+      "revId": "ee3fc30fcff9dacac46f8e5f29663d1f9e78d694",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae707a65_77e5359d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:14:01Z",
+      "side": 1,
+      "message": "Similar edit needed here",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "ee3fc30fcff9dacac46f8e5f29663d1f9e78d694",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

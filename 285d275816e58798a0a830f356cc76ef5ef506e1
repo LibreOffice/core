@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ac3d22e_2431182a",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 4021,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:14:01Z",
+      "side": 0,
+      "message": "Why this comment was removed? I mean, has something changed, so that it is it irrelevant anymore?",
+      "range": {
+        "startLine": 4021,
+        "startChar": 3,
+        "endLine": 4021,
+        "endChar": 24
+      },
+      "revId": "285d275816e58798a0a830f356cc76ef5ef506e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
