@@ -112,7 +112,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="masterpage">
-                        <property name="label" translatable="yes" context="slidedesigndialog|masterpage">_Exchange background page</property>
+                        <property name="label" translatable="yes" context="slidedesigndialog|masterpage">_Apply Master Slide to all slides</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -127,7 +127,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkmasters">
-                        <property name="label" translatable="yes" context="slidedesigndialog|checkmasters">_Delete unused backgrounds</property>
+                        <property name="label" translatable="yes" context="slidedesigndialog|checkmasters">_Delete unused Master Slides</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
