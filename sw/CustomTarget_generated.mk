@@ -10,16 +10,16 @@
 $(eval $(call gb_CustomTarget_CustomTarget,sw/generated))
 
 sw_SRC := $(SRCDIR)/sw/source/core/swg
-sw_PL := $(SRCDIR)/solenv/bin/gentoken.pl
+sw_PY := $(SRCDIR)/solenv/bin/gentoken.py
 sw_INC := $(call gb_CustomTarget_get_workdir,sw/generated)
 
-$(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PL)
+$(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PY)
 	mkdir -p $(sw_INC)
-	$(PERL) $(sw_PL) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
+	$(PYTHON) $(sw_PY) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
 
-$(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PL)
+$(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PY)
 	mkdir -p $(sw_INC)
-	$(PERL) $(sw_PL) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
+	$(PYTHON) $(sw_PY) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
 
 $(sw_INC)/tokens.cxx : $(sw_INC)/TextBlockTokens.gperf $(sw_INC)/BlockListTokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(sw_INC)/tokens.cxx \
