@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28ff136a_8c5ed9a8",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T09:36:35Z",
+      "side": 1,
+      "message": "This is wrong. std::string has a dedicated API to return C string: use OUString::createFromAscii(svg.c_str()), not a hack to get address of a return of operator[].",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 25
+      },
+      "revId": "2de42b53b7c23223c38e64a75eae248d8a0cd4ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
