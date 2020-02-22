@@ -18,7 +18,6 @@
  */
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>

@@ -22,8 +22,6 @@
 #include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
 #include <svx/svdpage.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -22,7 +22,6 @@
 #include <svl/whiter.hxx>
 #include <svx/svddef.hxx>
 #include <svx/scene3d.hxx>
-#include <svx/svditer.hxx>
 #include <memory>
 
 

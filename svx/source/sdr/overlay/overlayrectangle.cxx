@@ -18,11 +18,6 @@
  */
 
 #include <sdr/overlay/overlayrectangle.hxx>
-#include <vcl/outdev.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>

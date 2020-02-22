@@ -20,10 +20,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <tools/debug.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/animation/objectanimator.hxx>
 
 using namespace com::sun::star;
 

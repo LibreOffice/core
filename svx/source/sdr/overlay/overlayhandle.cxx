@@ -19,14 +19,6 @@
 
 #include <sdr/overlay/overlayhandle.hxx>
 #include <sdr/overlay/overlaytools.hxx>
-#include <tools/poly.hxx>
-#include <vcl/outdev.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 namespace sdr::overlay {
 

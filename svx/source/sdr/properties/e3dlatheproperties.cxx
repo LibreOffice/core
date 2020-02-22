@@ -18,7 +18,6 @@
  */
 
 #include <sdr/properties/e3dlatheproperties.hxx>
-#include <svl/itemset.hxx>
 #include <svx/lathe3d.hxx>
 
 

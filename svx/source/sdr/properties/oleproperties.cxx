@@ -18,7 +18,6 @@
  */
 
 #include <sdr/properties/oleproperties.hxx>
-#include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>

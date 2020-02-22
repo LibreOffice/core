@@ -19,10 +19,7 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
 #include <sdr/properties/attributeproperties.hxx>
-#include <sdr/properties/itemsettools.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -30,7 +27,6 @@
 #include <svl/poolitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svddef.hxx>
-#include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
@@ -38,10 +34,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xflhtit.hxx>
-#include <svx/xlnasit.hxx>
-#include <svx/xflasit.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 
 namespace sdr::properties

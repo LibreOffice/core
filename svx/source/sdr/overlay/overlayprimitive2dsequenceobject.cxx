@@ -19,8 +19,6 @@
 
 
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 
 
 namespace sdr::overlay

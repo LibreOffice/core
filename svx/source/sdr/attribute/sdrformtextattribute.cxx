@@ -20,6 +20,8 @@
 #include <sdr/attribute/sdrformtextattribute.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <svl/itemset.hxx>
+#include <svx/sdprcitm.hxx>
+#include <svx/svddef.hxx>
 #include <svx/xftdiit.hxx>
 #include <svx/xftstit.hxx>
 #include <svx/xftshxy.hxx>
@@ -30,9 +32,7 @@
 #include <svx/xftshcit.hxx>
 #include <svx/xftmrit.hxx>
 #include <svx/xftouit.hxx>
-#include <svx/sdshtitm.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/sdshcitm.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>

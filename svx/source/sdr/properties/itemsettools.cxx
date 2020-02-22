@@ -23,7 +23,6 @@
 #include <svl/whiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
-#include <vcl/outdev.hxx>
 #include <memory>
 
 // class to remember broadcast start positions

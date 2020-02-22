@@ -18,8 +18,6 @@
  */
 
 #include <sdr/overlay/overlayhelpline.hxx>
-#include <vcl/outdev.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 

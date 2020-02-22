@@ -20,10 +20,10 @@
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <svx/svdocirc.hxx>
+#include <svx/sdangitm.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrellipseprimitive2d.hxx>
 #include <svl/itemset.hxx>
-#include <svx/sxciaitm.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/canvastools.hxx>
 

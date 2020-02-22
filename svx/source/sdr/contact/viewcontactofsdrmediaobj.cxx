@@ -22,7 +22,6 @@
 #include <svx/svdomedia.hxx>
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
-#include <avmedia/mediawindow.hxx>
 #include <vcl/canvastools.hxx>
 
 namespace sdr::contact {

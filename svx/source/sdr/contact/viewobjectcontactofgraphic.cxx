@@ -19,10 +19,7 @@
 
 #include <sdr/contact/viewobjectcontactofgraphic.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 
 namespace sdr::contact
 {

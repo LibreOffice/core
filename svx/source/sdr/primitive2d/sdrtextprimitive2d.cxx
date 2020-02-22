@@ -19,7 +19,6 @@
 
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
-#include <basegfx/color/bcolor.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <editeng/outlobj.hxx>

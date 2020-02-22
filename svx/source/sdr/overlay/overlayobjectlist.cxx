@@ -19,9 +19,7 @@
 
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/svdmodel.hxx>
 #include <vcl/outdev.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/gen.hxx>
 
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>

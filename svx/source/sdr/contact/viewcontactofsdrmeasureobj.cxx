@@ -22,8 +22,8 @@
 #include <svx/svdomeas.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
+#include <svx/sdmetitm.hxx>
 #include <svx/sxmbritm.hxx>
-#include <svx/sxmlhitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <sxmtaitm.hxx>
 #include <sdr/primitive2d/sdrmeasureprimitive2d.hxx>

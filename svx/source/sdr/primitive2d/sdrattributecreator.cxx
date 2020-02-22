@@ -19,6 +19,9 @@
 
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
+#include <svx/sdprcitm.hxx>
 #include <svx/xdef.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xlineit0.hxx>
@@ -43,10 +46,6 @@
 #include <svx/xgrscit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflbckit.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdsxyitm.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshtitm.hxx>
 #include <svx/xflbmsxy.hxx>
 #include <svx/xflbtoxy.hxx>
 #include <svx/xflboxy.hxx>
@@ -54,9 +53,7 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xtextit0.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <svx/svdotext.hxx>
-#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svl/itempool.hxx>

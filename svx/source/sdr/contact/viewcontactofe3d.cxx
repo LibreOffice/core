@@ -27,7 +27,6 @@
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
-#include <drawinglayer/attribute/sdrlineattribute.hxx>
 
 namespace {
 

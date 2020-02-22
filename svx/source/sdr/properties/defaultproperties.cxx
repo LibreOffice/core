@@ -23,11 +23,9 @@
 #include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/outdev.hxx>
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/svddef.hxx>
-#include <svx/svdpool.hxx>
 #include <editeng/eeitem.hxx>
 #include <libxml/xmlwriter.h>
 #include <svx/svdmodel.hxx>

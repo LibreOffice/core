@@ -20,17 +20,10 @@
 #include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdobj.hxx>
-#include <sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <vcl/timer.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
-#include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <sdr/contact/viewobjectcontactofmasterpagedescriptor.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

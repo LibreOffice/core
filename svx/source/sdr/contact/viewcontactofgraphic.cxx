@@ -31,7 +31,6 @@
 #include <tools/debug.hxx>
 
 #include <svx/sdgcpitm.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -42,9 +41,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>

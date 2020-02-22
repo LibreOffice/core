@@ -72,3 +72,10 @@ blacklist:
     - editeng/adjustitem.hxx
     - editeng/emphasismarkitem.hxx
     - editeng/memberids.h
+    svx/source/sdr/contact/viewcontactofe3d.cxx:
+    # Needed for direct member access
+    - drawinglayer/attribute/sdrlightattribute3d.hxx
+    svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx:
+    # Actually used
+    - com/sun/star/awt/XControlContainer.hpp
+    - comphelper/scopeguard.hxx
