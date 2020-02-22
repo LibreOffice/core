@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55891cf5_fee74fce",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3349,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:30:00Z",
+      "side": 1,
+      "message": "A comment here would be useful, that describes what this workaround is for.",
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fcca6dd_c9322226",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3362,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:30:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we also strip out the filter name here? or else it will shortcut the detection IIRC?",
+      "range": {
+        "startLine": 3362,
+        "startChar": 52,
+        "endLine": 3362,
+        "endChar": 66
+      },
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "109e4fc4_d5de729c",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3364,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-22T11:30:00Z",
+      "side": 1,
+      "message": "... and possibly also if filter name is same? i.e., to avoid a case when detection changed the filter type.\n\nOr maybe just extract encryption properties from the returned descriptor, and add to the original one, instead of replacing it all?",
+      "range": {
+        "startLine": 3364,
+        "startChar": 22,
+        "endLine": 3364,
+        "endChar": 35
+      },
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
