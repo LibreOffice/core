@@ -13,6 +13,7 @@ cpp = meson.get_compiler('cpp')
 thread_dep = dependency('threads')
 dl_dep = cpp.find_library('dl', required: false)
 cdata = configuration_data()
+osx_frameworks_dep = []
 
 if host_machine.system() == 'linux'
   add_global_arguments('-DLINUX', language: 'cpp')
@@ -35,6 +36,39 @@ elif host_machine.system() == 'windows'
   add_global_arguments('-DNOMINMAX', language: 'cpp')
   #add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
   rtl_os = 'nt'
+  cppunit_dep = dependency('', required: false)
+  openssl_dep = cppunit_dep
+  nss_dep = cppunit_dep
+  cairo_dep = cppunit_dep
+  eot_dep = cppunit_dep
+  gtk3_dep = cppunit_dep
+  dbus_dep = cppunit_dep
+  gio_dep = cppunit_dep
+  subdir('config_host')
+  subdir('sal')
+  subdir_done()
+elif host_machine.system() == 'darwin'
+  add_languages('objcpp')
+  osx_frameworks_dep = [dependency('Carbon', method: 'extraframework'),
+                        dependency('CoreFoundation', method: 'extraframework'),
+                        dependency('Foundation', method: 'extraframework')]
+
+  # HACK: just random values thrown in to make
+  # sal compile. OSX only.
+  add_global_arguments('-DMACOSX', language: 'objcpp')
+  add_global_arguments('-DMACOSX', language: 'cpp')
+  add_global_arguments('-DMACOSX', language: 'c')
+  add_global_arguments('-DUNIX', language: 'objcpp')
+  add_global_arguments('-DUNIX', language: 'cpp')
+  add_global_arguments('-DUNIX', language: 'c')
+  add_global_arguments('-DUNX', language: 'objccpp')
+  add_global_arguments('-DUNX', language: 'cpp')
+  add_global_arguments('-DUNX', language: 'c')
+  add_global_arguments('-DX86_64', language: 'objcpp')
+  add_global_arguments('-DX86_64', language: 'cpp')
+  add_global_arguments('-DX86_64', language: 'c')
+  #add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
+  rtl_os = 'macosx'
   cppunit_dep = dependency('', required: false)
   openssl_dep = cppunit_dep
   nss_dep = cppunit_dep

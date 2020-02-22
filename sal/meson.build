@@ -1,3 +1,36 @@
+unix_common = [
+  'osl/unx/backtraceapi.cxx',
+  'osl/unx/conditn.cxx',
+  'osl/unx/file.cxx',
+  'osl/unx/file_error_transl.cxx',
+  'osl/unx/file_misc.cxx',
+  'osl/unx/file_path_helper.cxx',
+  'osl/unx/file_stat.cxx',
+  'osl/unx/file_url.cxx',
+  'osl/unx/file_volume.cxx',
+  'osl/unx/interlck.cxx',
+  'osl/unx/memory.cxx',
+  'osl/unx/module.cxx',
+  'osl/unx/mutex.cxx',
+  'osl/unx/nlsupport.cxx',
+  'osl/unx/pipe.cxx',
+  'osl/unx/process.cxx',
+  'osl/unx/process_impl.cxx',
+  'osl/unx/profile.cxx',
+  'osl/unx/random.cxx',
+  'osl/unx/readwrite_helper.cxx',
+  'osl/unx/salinit.cxx',
+  'osl/unx/security.cxx',
+  'osl/unx/signal.cxx',
+  'osl/unx/socket.cxx',
+  'osl/unx/soffice.cxx',
+  'osl/unx/tempfile.cxx',
+  'osl/unx/thread.cxx',
+  'osl/unx/time.cxx',
+  'osl/unx/uunxapi.cxx',
+]
+
+
 if host_machine.system() == 'windows'
   system_sources = [
     'osl/w32/backtrace.cxx',
@@ -27,40 +60,11 @@ if host_machine.system() == 'windows'
     'osl/w32/signal.cxx',
   ]
   system_link_args = ['ws2_32.lib', 'Mpr.lib', 'userenv.lib', 'Dbghelp.lib', 'Wer.lib']
+elif host_machine.system() == 'darwin'
+  system_sources = unix_common + ['osl/unx/osxlocale.cxx', 'osl/unx/system.mm']
+  system_link_args = []
 else
-  system_sources = [
-    'osl/unx/backtraceapi.cxx',
-    'osl/unx/conditn.cxx',
-    'osl/unx/file.cxx',
-    'osl/unx/file_error_transl.cxx',
-    'osl/unx/file_misc.cxx',
-    'osl/unx/file_path_helper.cxx',
-    'osl/unx/file_stat.cxx',
-    'osl/unx/file_url.cxx',
-    'osl/unx/file_volume.cxx',
-    'osl/unx/interlck.cxx',
-    'osl/unx/memory.cxx',
-    'osl/unx/module.cxx',
-    'osl/unx/mutex.cxx',
-    'osl/unx/nlsupport.cxx',
-#    'osl/unx/osxlocale.cxx',
-    'osl/unx/pipe.cxx',
-    'osl/unx/process.cxx',
-    'osl/unx/process_impl.cxx',
-    'osl/unx/profile.cxx',
-    'osl/unx/random.cxx',
-    'osl/unx/readwrite_helper.cxx',
-    'osl/unx/salinit.cxx',
-    'osl/unx/security.cxx',
-    'osl/unx/signal.cxx',
-    'osl/unx/socket.cxx',
-    'osl/unx/soffice.cxx',
-    'osl/unx/system.cxx',
-    'osl/unx/tempfile.cxx',
-    'osl/unx/thread.cxx',
-    'osl/unx/time.cxx',
-    'osl/unx/uunxapi.cxx',
-  ]
+  system_sources = unix_common + ['osl/unx/system.cxx']
   system_link_args = []
 endif
 
@@ -119,13 +123,13 @@ sal_lib = shared_library('sal',
   'textenc/textenc.cxx',
   'textenc/unichars.cxx',
   include_directories: [main_inc, 'inc'],
-  cpp_args: ['-DSRCDIR="{}"'.format(meson.current_source_dir()),
-             '-DRTL_OS="{}"'.format(rtl_os),
+  cpp_args: ['-DSRCDIR="@0@"'.format(meson.current_source_dir()),
+             '-DRTL_OS="@0@"'.format(rtl_os),
              '-DRTL_ARCH="x86_64"',
              '-DLIBO_INTERNAL_ONLY',
              '-DSAL_DLLIMPLEMENTATION'],
   link_args: system_link_args,
-  dependencies: [thread_dep, dl_dep]
+  dependencies: [thread_dep, osx_frameworks_dep, dl_dep]
   )
 
 if cppunit_dep.found()
