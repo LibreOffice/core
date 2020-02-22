@@ -18,7 +18,6 @@
  */
 
 #include <sdr/properties/e3dsphereproperties.hxx>
-#include <svl/itemset.hxx>
 #include <svx/sphere3d.hxx>
 
 

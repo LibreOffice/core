@@ -20,12 +20,10 @@
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <sdr/contact/viewobjectcontactofsdrpage.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
+#include <svtools/colorcfg.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>

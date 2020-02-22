@@ -23,7 +23,6 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdobj.hxx>

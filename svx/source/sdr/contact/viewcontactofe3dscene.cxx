@@ -18,11 +18,7 @@
  */
 
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

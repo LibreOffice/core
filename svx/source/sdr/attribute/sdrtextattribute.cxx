@@ -22,8 +22,6 @@
 #include <sdr/attribute/sdrformtextattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/flditem.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <rtl/instance.hxx>
 

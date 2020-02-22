@@ -21,12 +21,8 @@
 #include <sdr/contact/viewobjectcontactofgroup.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/outdev.hxx>
 
 
 using namespace com::sun::star;

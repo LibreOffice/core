@@ -22,7 +22,6 @@
 #include <svx/svdoedge.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrconnectorprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 namespace sdr::contact

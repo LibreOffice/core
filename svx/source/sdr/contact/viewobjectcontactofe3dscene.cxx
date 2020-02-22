@@ -22,12 +22,8 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <basegfx/matrix/b3dhommatrix.hxx>
-#include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <sdr/contact/viewobjectcontactofe3d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 
 
 using namespace com::sun::star;

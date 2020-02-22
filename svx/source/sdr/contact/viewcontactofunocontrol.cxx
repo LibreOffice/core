@@ -22,16 +22,12 @@
 #include <sdr/contact/viewcontactofunocontrol.hxx>
 #include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
 
-#include <svx/sdrpaintwindow.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>

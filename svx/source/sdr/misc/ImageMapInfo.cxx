@@ -22,7 +22,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/unoshape.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

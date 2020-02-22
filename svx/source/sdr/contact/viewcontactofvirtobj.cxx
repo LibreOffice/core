@@ -19,10 +19,8 @@
 
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <svx/svdovirt.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 namespace sdr::contact {

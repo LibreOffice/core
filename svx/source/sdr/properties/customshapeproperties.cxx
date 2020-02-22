@@ -23,8 +23,8 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/sdooitm.hxx>
 #include <editeng/eeitem.hxx>
-#include <svx/sdtagitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/hint.hxx>
 

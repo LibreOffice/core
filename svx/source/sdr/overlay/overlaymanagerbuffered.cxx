@@ -20,14 +20,10 @@
 #include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/outdev.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/window.hxx>
-#include <tools/stream.hxx>
 #include <tools/fract.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/dibtools.hxx>
 
 
 namespace sdr::overlay

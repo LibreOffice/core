@@ -21,14 +21,12 @@
 #include <sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <sdr/contact/viewcontactofunocontrol.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/properties/properties.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>

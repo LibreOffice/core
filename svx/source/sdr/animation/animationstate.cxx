@@ -21,7 +21,6 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <comphelper/lok.hxx>

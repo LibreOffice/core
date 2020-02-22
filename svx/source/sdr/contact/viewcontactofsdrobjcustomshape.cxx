@@ -20,17 +20,11 @@
 #include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdooitm.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/svditer.hxx>
 #include <sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/obj3d.hxx>
-#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <vcl/canvastools.hxx>
-#include <sal/log.hxx>
 
 
 namespace sdr::contact

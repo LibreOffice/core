@@ -20,7 +20,6 @@
 #include <sdr/primitive2d/sdrrectangleprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

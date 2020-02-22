@@ -41,7 +41,6 @@
 #include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/svdpool.hxx>
 
 using namespace com::sun::star;
 

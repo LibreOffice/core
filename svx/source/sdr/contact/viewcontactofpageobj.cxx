@@ -19,12 +19,7 @@
 
 #include <sdr/contact/viewcontactofpageobj.hxx>
 #include <svx/svdopage.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/outdev.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <sdr/contact/viewobjectcontactofpageobj.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

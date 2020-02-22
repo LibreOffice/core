@@ -18,9 +18,6 @@
  */
 
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <vcl/outdev.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 

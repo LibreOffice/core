@@ -19,13 +19,8 @@
 
 #include <sdr/contact/viewcontactofgroup.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <sdr/contact/viewobjectcontactofgroup.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <tools/debug.hxx>
 #include <vcl/canvastools.hxx>

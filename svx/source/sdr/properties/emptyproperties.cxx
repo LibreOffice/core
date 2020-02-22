@@ -21,10 +21,7 @@
 
 #include <sdr/properties/emptyproperties.hxx>
 #include <svl/itemset.hxx>
-#include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdpool.hxx>
-#include <vcl/outdev.hxx>
 
 
 namespace sdr::properties

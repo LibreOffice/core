@@ -17,26 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
-#include <svx/charthelper.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vcl/region.hxx>
-#include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/animation/animationstate.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <svx/svdoole2.hxx>
-#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 using namespace com::sun::star;

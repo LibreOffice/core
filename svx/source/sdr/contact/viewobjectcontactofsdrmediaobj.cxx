@@ -21,10 +21,7 @@
 
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/svdomedia.hxx>
-#include <svx/svdpagv.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <avmedia/mediaitem.hxx>

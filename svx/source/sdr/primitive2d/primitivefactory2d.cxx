@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <rtl/ref.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
