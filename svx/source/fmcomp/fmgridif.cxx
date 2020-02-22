@@ -27,7 +27,6 @@
 #include <gridcell.hxx>
 #include <sdbdatacolumn.hxx>
 #include <svx/fmgridcl.hxx>
-#include <svx/svxids.hrc>
 #include <tools/urlobj.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
@@ -52,7 +51,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>

@@ -23,7 +23,6 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
-#include <tools/stream.hxx>
 #include <tools/resary.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/strarray.hxx>
@@ -33,10 +32,8 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/BreakType.hpp>
 #include <svl/itemset.hxx>
 #include <svx/strings.hrc>
-#include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 
 using namespace ::com::sun::star;

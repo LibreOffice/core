@@ -19,7 +19,6 @@
 
 
 #include <memory>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 #include <fmprop.hxx>
 #include <svx/strings.hrc>
@@ -33,19 +32,15 @@
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -57,7 +52,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <rtl/math.hxx>
@@ -76,8 +70,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/sqlnode.hxx>
-
-#include <math.h>
 
 using namespace ::connectivity;
 using namespace ::svxform;

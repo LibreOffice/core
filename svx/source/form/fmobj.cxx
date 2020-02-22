@@ -22,25 +22,19 @@
 #include <fmvwimp.hxx>
 #include <fmpgeimp.hxx>
 #include <svx/fmview.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>
-#include <editeng/editeng.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/fmmodel.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/Forms.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
 #include <svx/fmtools.hxx>
 
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

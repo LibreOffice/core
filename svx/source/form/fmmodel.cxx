@@ -24,7 +24,6 @@
 
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <svx/svdobj.hxx>
 
 #include <sfx2/objsh.hxx>
 

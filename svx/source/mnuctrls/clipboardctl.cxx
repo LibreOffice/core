@@ -17,13 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
-#include <sot/exchange.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/clipboardctl.hxx>

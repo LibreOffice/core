@@ -19,22 +19,14 @@
 
 
 #include <sot/formats.hxx>
-#include <svl/urlbmk.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <vcl/graphicfilter.hxx>
-#include <editeng/brushitem.hxx>
 #include <helpids.h>
-#include <svx/gallery.hxx>
 #include <svx/svxids.hrc>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
@@ -43,20 +35,15 @@
 #include <svx/galmisc.hxx>
 #include <galbrws2.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
-#include <svx/fmmodel.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/strings.hrc>
-#include <GalleryControl.hxx>
-#include <bitmaps.hlst>
 #include <svx/galleryitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <map>
 #include <memory>

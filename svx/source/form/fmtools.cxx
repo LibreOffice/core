@@ -24,62 +24,27 @@
 #include <svx/fmglob.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
-#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/Language.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 
-#include <basic/sbxvar.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
-#include <rtl/math.hxx>
-#include <sfx2/bindings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-
-#include <algorithm>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

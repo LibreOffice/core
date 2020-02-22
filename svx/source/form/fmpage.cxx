@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/macros.h>
-
 #include <svx/fmpage.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -28,17 +26,13 @@
 
 #include <fmpgeimp.hxx>
 
-#include <sfx2/objsh.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 
 
-#include <svx/fmglob.hxx>
 #include <fmprop.hxx>
 #include <fmundo.hxx>
-#include <svx/fmtools.hxx>
 using namespace ::svxform;
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>

@@ -27,7 +27,6 @@
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <svx/fmtools.hxx>
-#include <fmundo.hxx>
 #include <fmvwimp.hxx>
 #include <formcontrolfactory.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -48,16 +47,12 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
@@ -67,9 +62,7 @@
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 

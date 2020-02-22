@@ -19,7 +19,6 @@
 
 #include <svx/fmsrccfg.hxx>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nutil/transliteration.hxx>

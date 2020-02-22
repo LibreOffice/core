@@ -17,24 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
-#include <formtoolbars.hxx>
 #include <labelitemwindow.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
-#include <svx/tbxctl.hxx>
 #include <tbxform.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

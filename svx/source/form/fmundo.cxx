@@ -28,7 +28,6 @@
 #include <fmobj.hxx>
 #include <fmprop.hxx>
 #include <svx/strings.hrc>
-#include <svx/fmglob.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
@@ -40,17 +39,13 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <svx/fmtools.hxx>
-#include <svl/macitem.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
@@ -66,7 +61,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::form::binding;
 using namespace ::com::sun::star::sdbc;
 using namespace ::svxform;

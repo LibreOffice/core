@@ -21,8 +21,6 @@
 
 #include <sfx2/objitem.hxx>
 #include <sfx2/msg.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/memberid.h>
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -44,7 +42,6 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 

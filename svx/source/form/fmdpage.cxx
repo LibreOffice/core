@@ -19,12 +19,10 @@
 
 #include <svx/fmpage.hxx>
 #include <fmobj.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::RuntimeException;

@@ -25,7 +25,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <svx/fmglob.hxx>
 
 using namespace ::svxform;
 

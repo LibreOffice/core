@@ -19,13 +19,9 @@
 
 #include <GalleryControl.hxx>
 
-#include <svx/galmisc.hxx>
 #include <svx/gallery1.hxx>
 #include "galbrws1.hxx"
 #include <galbrws2.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 
 namespace svx::sidebar {
 

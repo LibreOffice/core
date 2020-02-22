@@ -20,19 +20,9 @@
 #include <fmvwimp.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
-#include <fmservs.hxx>
 #include <fmprop.hxx>
-#include <fmpgeimp.hxx>
 #include <fmundo.hxx>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
@@ -46,15 +36,12 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svditer.hxx>
-#include <fmobj.hxx>
 
 #include <svx/svxids.hrc>
 
-#include <fmexch.hxx>
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
@@ -66,8 +53,6 @@
 #include <sfx2/viewsh.hxx>
 #include <fmexpl.hxx>
 #include <formcontrolling.hxx>
-#include <svl/numuno.hxx>
-#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <fmdocumentclassification.hxx>
 #include <formtoolbars.hxx>
@@ -78,9 +63,6 @@
 
 #define ShellClass_FmFormShell
 #include <svxslots.hxx>
-
-#include <tbxform.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>
 

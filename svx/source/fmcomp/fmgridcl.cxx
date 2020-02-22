@@ -32,7 +32,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
-#include <sdbdatacolumn.hxx>
 
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -48,7 +47,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -64,9 +62,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/fmtfield.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/numuno.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
@@ -76,7 +72,6 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <math.h>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

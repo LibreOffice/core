@@ -19,9 +19,7 @@
 
 #include <svx/dataaccessdescriptor.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/urlobj.hxx>
@@ -30,7 +28,6 @@
 namespace svx
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ucb;
 

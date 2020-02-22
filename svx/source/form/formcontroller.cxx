@@ -55,9 +55,7 @@
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -73,9 +71,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlparse.hxx>
@@ -93,8 +89,6 @@
 
 #include <algorithm>
 #include <iterator>
-
-#include <o3tl/functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;

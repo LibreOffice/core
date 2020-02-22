@@ -24,12 +24,9 @@
 #include <fmprop.hxx>
 #include <svx/strings.hrc>
 
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -38,12 +35,9 @@
 #include <connectivity/sqlnode.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <o3tl/safeint.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>

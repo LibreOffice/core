@@ -16,12 +16,9 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/tempfile.hxx>
 #include <svx/gallery1.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <memory>

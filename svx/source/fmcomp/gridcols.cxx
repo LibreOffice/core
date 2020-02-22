@@ -20,7 +20,8 @@
 #include <gridcols.hxx>
 #include <tools/debug.hxx>
 #include <fmservs.hxx>
-#include <svx/fmtools.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
 using namespace ::com::sun::star::uno;
 
 

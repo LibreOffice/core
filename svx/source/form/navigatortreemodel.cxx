@@ -21,10 +21,8 @@
 #include <svx/fmshell.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdpagv.hxx>
 
 #include <fmprop.hxx>
 
