@@ -68,7 +68,7 @@ else
   system_link_args = []
 endif
 
-sal_lib = shared_library('sal',
+sal_lib = shared_library('sallo',
   'rtl/alloc_arena.cxx',
   'rtl/alloc_cache.cxx',
   'rtl/alloc_fini.cxx',

@@ -1,4 +1,4 @@
-svt_lib = shared_library('svt',
+svt_lib = shared_library('svtlo',
   'source/brwbox/brwbox1.cxx',
   'source/brwbox/brwbox2.cxx',
   'source/brwbox/brwbox3.cxx',

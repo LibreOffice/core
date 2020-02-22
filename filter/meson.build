@@ -1,4 +1,4 @@
-filterconfig_lib = shared_library('filterconfig',
+filterconfig_lib = shared_library('filterconfiglo',
   'source/config/cache/basecontainer.cxx',
   'source/config/cache/cacheitem.cxx',
   'source/config/cache/cacheupdatelistener.cxx',
@@ -19,7 +19,7 @@ filterconfig_lib = shared_library('filterconfig',
 )
 
 # Requires too much custom target work. Fix later.
-#svgfilter_lib = shared_library('svgfilter',
+#svgfilter_lib = shared_library('svgfilterlo',
 #  'source/svg/svgfilter.cxx',
 #  'source/svg/svgexport.cxx',
 #  'source/svg/svgfontexport.cxx',
@@ -34,7 +34,7 @@ filterconfig_lib = shared_library('filterconfig',
 #  dependencies: [],
 #)
 
-msfilter_lib = shared_library('msfilter',
+msfilter_lib = shared_library('msfilterlo',
   'source/msfilter/countryid.cxx',
   'source/msfilter/dffpropset.cxx',
   'source/msfilter/dffrecordheader.cxx',

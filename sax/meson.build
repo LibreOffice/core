@@ -1,4 +1,4 @@
-sax_lib = shared_library('sax',
+sax_lib = shared_library('saxlo',
   'source/tools/converter.cxx',
   'source/tools/fastattribs.cxx',
   'source/tools/fastserializer.cxx',
@@ -11,7 +11,7 @@ sax_lib = shared_library('sax',
   install: true,
 )
 
-expwrap_lib = shared_library('expwrap',
+expwrap_lib = shared_library('expwraplo',
   'source/expatwrap/sax_expat.cxx',
   'source/expatwrap/saxwriter.cxx',
   'source/expatwrap/xml2utf.cxx',

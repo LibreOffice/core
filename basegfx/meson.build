@@ -1,4 +1,4 @@
-basegfx_lib = shared_library('basegfx',
+basegfx_lib = shared_library('basegfxlo',
   'source/polygon/b2dpolygonclipper.cxx',
   'source/polygon/b2dpolygoncutandtouch.cxx',
   'source/polygon/b2dpolygontriangulator.cxx',

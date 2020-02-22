@@ -1,4 +1,4 @@
-binaryurp_lib = shared_library('binaryurp',
+binaryurp_lib = shared_library('binaryurplo',
   'source/binaryany.cxx',
   'source/bridge.cxx',
   'source/bridgefactory.cxx',

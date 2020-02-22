@@ -1,4 +1,4 @@
-starmath_lib = shared_library('starmath',
+starmath_lib = shared_library('starmathlo',
   'source/AccessibleSmElement.cxx',
   'source/AccessibleSmElementsControl.cxx',
   'source/ElementsDockingWindow.cxx',
@@ -67,7 +67,7 @@ starmath_lib = shared_library('starmath',
 )
 
 
-smd_lib = shared_library('smd',
+smd_lib = shared_library('smdlo',
   'source/smdetect.cxx',
   'source/eqnolefilehdr.cxx',
   udk_fake_h, off_fake_h, math_hxx,

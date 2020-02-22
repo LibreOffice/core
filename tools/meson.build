@@ -3,7 +3,7 @@ oopathutils_lib = static_library('oopathutils',
   include_directories: [main_inc],
 )
 
-tl_lib = shared_library('tl',
+tl_lib = shared_library('tllo',
   'source/datetime/datetime.cxx',
   'source/datetime/datetimeutils.cxx',
   'source/datetime/systemdatetime.cxx',

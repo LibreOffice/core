@@ -1,4 +1,4 @@
-xmlreader_lib = shared_library('xmlreader',
+xmlreader_lib = shared_library('xmlreaderlo',
   'source/pad.cxx',
   'source/span.cxx',
   'source/xmlreader.cxx',

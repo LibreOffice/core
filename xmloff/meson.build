@@ -1,6 +1,6 @@
 subdir('token')
 
-xo_lib = shared_library('xo',
+xo_lib = shared_library('xolo',
   'source/chart/ColorPropertySet.cxx',
   'source/chart/PropertyMaps.cxx',
   'source/chart/SchXMLAutoStylePoolP.cxx',
@@ -320,7 +320,7 @@ xo_lib = shared_library('xo',
   install: true,
 )
 
-xof_lib = shared_library('xof',
+xof_lib = shared_library('xoflo',
   'source/transform/ChartOASISTContext.cxx',
   'source/transform/ChartOOoTContext.cxx',
   'source/transform/ChartPlotAreaOASISTContext.cxx',

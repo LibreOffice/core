@@ -1,4 +1,4 @@
-ucbhelper_lib = shared_library('ucbhelper',
+ucbhelper_lib = shared_library('ucbhelperlo',
   'source/client/activedatasink.cxx',
   'source/client/activedatastreamer.cxx',
   'source/client/commandenvironment.cxx',

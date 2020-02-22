@@ -1,4 +1,4 @@
-canvastools_lib = shared_library('canvastools',
+canvastools_lib = shared_library('canvastoolslo',
   'source/tools/cachedprimitivebase.cxx',
   'source/tools/canvascustomspritehelper.cxx',
   'source/tools/canvastools.cxx',
@@ -20,7 +20,7 @@ canvastools_lib = shared_library('canvastools',
   install: true,
 )
 
-vclcanvas_lib = shared_library('vclcanvas',
+vclcanvas_lib = shared_library('vclcanvaslo',
   'source/vcl/backbuffer.cxx',
   'source/vcl/bitmapbackbuffer.cxx',
   'source/vcl/cachedbitmap.cxx',
@@ -47,7 +47,7 @@ vclcanvas_lib = shared_library('vclcanvas',
   install: true,
 )
 
-cairocanvas_lib = shared_library('cairocanvas',
+cairocanvas_lib = shared_library('cairocanvaslo',
   'source/cairo/cairo_cachedbitmap.cxx',
   'source/cairo/cairo_canvas.cxx',
   'source/cairo/cairo_canvasbitmap.cxx',

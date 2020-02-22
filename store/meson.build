@@ -1,4 +1,4 @@
-store_lib = shared_library('store',
+store_lib = shared_library('storelo',
   'source/lockbyte.cxx',
   'source/object.cxx',
   'source/storbase.cxx',

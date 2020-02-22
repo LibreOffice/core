@@ -1,4 +1,4 @@
-drawinglayer_lib = shared_library('drawinglayer',
+drawinglayer_lib = shared_library('drawinglayerlo',
   'source/animation/animationtiming.cxx',
   'source/attribute/fillgraphicattribute.cxx',
   'source/attribute/fillgradientattribute.cxx',

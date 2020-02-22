@@ -1,4 +1,4 @@
-cppu_lib = shared_library('cppu',
+cppu_lib = shared_library('cppulo',
   'source/cppu/compat.cxx',
   'source/cppu/cppu_opt.cxx',
   'source/threadpool/current.cxx',

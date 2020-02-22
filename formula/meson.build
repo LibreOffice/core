@@ -1,4 +1,4 @@
-for_lib = shared_library('for',
+for_lib = shared_library('forlo',
   'source/core/api/FormulaCompiler.cxx',
   'source/core/api/FormulaOpCodeMapperObj.cxx',
   'source/core/api/grammar.cxx',
@@ -15,7 +15,7 @@ for_lib = shared_library('for',
   install: true,
 )
 
-forui_lib = shared_library('forui',
+forui_lib = shared_library('foruilo',
   'source/ui/dlg/formula.cxx',
   'source/ui/dlg/FormulaHelper.cxx',
   'source/ui/dlg/funcpage.cxx',

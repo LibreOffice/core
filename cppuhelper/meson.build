@@ -6,7 +6,7 @@ temp_hack = static_library('cppuuno',
   include_directories: [main_inc, udkh_inc, offapi_inc, cpphelper_uno_inc],
 )
 
-cppuhelper_lib = shared_library('cpphelper',
+cppuhelper_lib = shared_library('cpphelperlo',
   'source/access_control.cxx',
   'source/bootstrap.cxx',
   'source/compat.cxx',

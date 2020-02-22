@@ -1,4 +1,4 @@
-animcore_lib = shared_library('animcore',
+animcore_lib = shared_library('animcorelo',
   'source/animcore/animcore.cxx',
   udk_fake_h, off_fake_h,
   include_directories: [main_inc, udkh_inc, offapi_inc],

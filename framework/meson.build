@@ -1,4 +1,4 @@
-fwi_lib = shared_library('fwi',
+fwi_lib = shared_library('fwilo',
   'source/fwi/classes/converter.cxx',
   'source/fwi/classes/protocolhandlercache.cxx',
   'source/fwi/helper/mischelper.cxx',
@@ -17,7 +17,7 @@ fwi_lib = shared_library('fwi',
   install: true,
 )
 
-fwe_lib = shared_library('fwe',
+fwe_lib = shared_library('fwelo',
   'source/fwe/classes/actiontriggercontainer.cxx',
   'source/fwe/classes/actiontriggerpropertyset.cxx',
   'source/fwe/classes/actiontriggerseparatorpropertyset.cxx',
@@ -52,7 +52,7 @@ fwe_lib = shared_library('fwe',
   install: true,
 )
 
-fwl_lib = shared_library('fwl',
+fwl_lib = shared_library('fwllo',
   'source/dispatch/mailtodispatcher.cxx',
   'source/dispatch/oxt_handler.cxx',
   'source/dispatch/popupmenudispatcher.cxx',
@@ -80,7 +80,7 @@ fwl_lib = shared_library('fwl',
   install: true,
 )
 
-fwm_lib = shared_library('fwm',
+fwm_lib = shared_library('fwmlo',
   'source/dispatch/systemexec.cxx',
   'source/jobs/helponstartup.cxx',
   'source/jobs/shelljob.cxx',
@@ -93,7 +93,7 @@ fwm_lib = shared_library('fwm',
   install: true,
 )
 
-fwk_lib = shared_library('fwk',
+fwk_lib = shared_library('fwklo',
   'source/accelerators/acceleratorcache.cxx',
   'source/accelerators/acceleratorconfiguration.cxx',
   'source/accelerators/documentacceleratorconfiguration.cxx',

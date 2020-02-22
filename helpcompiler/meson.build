@@ -1,4 +1,4 @@
-helplinker_lib = shared_library('helplinker',
+helplinker_lib = shared_library('helplinkerlo',
   'source/HelpCompiler.cxx',
   'source/LuceneHelper.cxx',
   'source/HelpIndexer.cxx',

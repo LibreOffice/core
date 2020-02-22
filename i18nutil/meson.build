@@ -1,4 +1,4 @@
-i18nutil_lib = shared_library('i18nutil',
+i18nutil_lib = shared_library('i18nutillo',
   'source/utility/casefolding.cxx',
   'source/utility/oneToOneMapping.cxx',
   'source/utility/paper.cxx',

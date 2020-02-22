@@ -1,4 +1,4 @@
-i18nlangtag_lib = shared_library('i18nlangtag',
+i18nlangtag_lib = shared_library('i18nlangtaglo',
   'source/isolang/insys.cxx',
   'source/isolang/isolang.cxx',
   'source/isolang/mslangid.cxx',

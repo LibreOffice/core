@@ -1,4 +1,4 @@
-salhelper_lib = shared_library('salhelper',
+salhelper_lib = shared_library('salhelperlo',
   'source/condition.cxx',
   'source/dynload.cxx',
   'source/simplereferenceobject.cxx',

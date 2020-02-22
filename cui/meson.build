@@ -1,4 +1,4 @@
-cui_lib = shared_library('cui',
+cui_lib = shared_library('cuilo',
   'source/customize/acccfg.cxx',
   'source/customize/cfg.cxx',
   'source/customize/cfgutil.cxx',

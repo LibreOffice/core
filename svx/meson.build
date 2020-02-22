@@ -9,7 +9,7 @@ sfxslots_hxx = custom_target('svxslots',
             '-fs' + meson.build_root() + '/@OUTPUT@',
             meson.build_root() + '/@INPUT@'])
 
-svxcore_lib = shared_library('svxcore',
+svxcore_lib = shared_library('svxcorelo',
   'source/core/extedit.cxx',
   'source/core/graphichelper.cxx',
   'source/customshapes/EnhancedCustomShape2d.cxx',
@@ -384,7 +384,7 @@ svxcore_lib = shared_library('svxcore',
   install: true,
 )
 
-svx_lib = shared_library('svx',
+svx_lib = shared_library('svxlo',
   'source/accessibility/AccessibleControlShape.cxx',
   'source/accessibility/AccessibleEmptyEditSource.cxx',
   'source/accessibility/AccessibleFrameSelector.cxx',

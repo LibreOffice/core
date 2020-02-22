@@ -1,4 +1,4 @@
-utl_lib = shared_library('utl',
+utl_lib = shared_library('utllo',
   'source/accessibility/accessiblerelationsethelper.cxx',
   'source/accessibility/accessiblestatesethelper.cxx',
   'source/config/bootstrap.cxx',

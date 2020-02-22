@@ -1,4 +1,4 @@
-cppcanvas_lib = shared_library('cppcanvas',
+cppcanvas_lib = shared_library('cppcanvaslo',
   'source/mtfrenderer/bitmapaction.cxx',
   'source/mtfrenderer/cachedprimitivebase.cxx',
   'source/mtfrenderer/implrenderer.cxx',

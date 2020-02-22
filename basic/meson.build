@@ -69,7 +69,7 @@ common_sources = files(
   'source/sbx/sbxvar.cxx',
 )
 
-sb_lib = shared_library('sb',
+sb_lib = shared_library('sblo',
   scripting_sources,
   common_sources,
   'source/runtime/dllmgr-none.cxx',

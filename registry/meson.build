@@ -1,4 +1,4 @@
-reg_lib = shared_library('reg',
+reg_lib = shared_library('reglo',
   'source/keyimpl.cxx',
   'source/reflread.cxx',
   'source/reflwrit.cxx',

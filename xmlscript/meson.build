@@ -1,4 +1,4 @@
-xmlscript_lib = shared_library('xmlscript',
+xmlscript_lib = shared_library('xmlscriptlo',
   'source/misc/unoservices.cxx',
   'source/xml_helper/xml_byteseq.cxx',
   'source/xml_helper/xml_element.cxx',

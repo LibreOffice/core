@@ -1,4 +1,4 @@
-opencl_lib = shared_library('opencl',
+opencl_lib = shared_library('opencllo',
   'source/openclconfig.cxx',
   'source/openclwrapper.cxx',
   'source/opencl_device.cxx',

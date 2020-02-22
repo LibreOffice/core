@@ -1,4 +1,4 @@
-svl_lib = shared_library('svl',
+svl_lib = shared_library('svllo',
   'source/config/asiancfg.cxx',
   'source/config/cjkoptions.cxx',
   'source/config/ctloptions.cxx',

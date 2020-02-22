@@ -1,4 +1,4 @@
-evtatt_lib = shared_library('evtatt',
+evtatt_lib = shared_library('evtattlo',
   'source/eventattacher.cxx',
   udk_fake_h, off_fake_h,
   include_directories: [main_inc],

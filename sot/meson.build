@@ -1,4 +1,4 @@
-sot_lib = shared_library('sot',
+sot_lib = shared_library('sotlo',
   'source/unoolestorage/xolesimplestorage.cxx',
   'source/base/formats.cxx',
   'source/base/object.cxx',

@@ -1,4 +1,4 @@
-lng_lib = shared_library('lng',
+lng_lib = shared_library('lnglo',
   'source/convdic.cxx',
   'source/convdiclist.cxx',
   'source/convdicxml.cxx',

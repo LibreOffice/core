@@ -1,4 +1,4 @@
-vbahelper_lib = shared_library('vbahelper',
+vbahelper_lib = shared_library('vbahelperlo',
   'source/vbahelper/vbaapplicationbase.cxx',
   'source/vbahelper/vbacolorformat.cxx',
   'source/vbahelper/vbacommandbar.cxx',
@@ -33,8 +33,7 @@ vbahelper_lib = shared_library('vbahelper',
   install: true,
 )
 
-
-msforms_lib = shared_library('msforms',
+msforms_lib = shared_library('msformslo',
   'source/msforms/service.cxx',
   'source/msforms/vbabutton.cxx',
   'source/msforms/vbacheckbox.cxx',

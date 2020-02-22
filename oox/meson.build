@@ -1,4 +1,4 @@
-oox_lib = shared_library('oox',
+oox_lib = shared_library('ooxlo',
   'source/core/binarycodec.cxx',
   'source/core/contexthandler2.cxx',
   'source/core/contexthandler.cxx',

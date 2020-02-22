@@ -1,4 +1,4 @@
-tk_lib = shared_library('tk',
+tk_lib = shared_library('tklo',
   'source/awt/asynccallback.cxx',
   'source/awt/stylesettings.cxx',
   'source/awt/scrollabledialog.cxx',

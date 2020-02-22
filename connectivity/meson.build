@@ -23,7 +23,7 @@ sql_bison = custom_target('sql_bison',
              '--defines=@OUTPUT1@',
              '--output=@OUTPUT0@'])
 
-dbtools_lib = shared_library('dbtools',
+dbtools_lib = shared_library('dbtoolslo',
   'source/commontools/AutoRetrievingBase.cxx',
   'source/commontools/BlobHelper.cxx',
   'source/commontools/CommonTools.cxx',

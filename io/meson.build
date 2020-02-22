@@ -1,4 +1,4 @@
-io_lib = shared_library('io',
+io_lib = shared_library('iolo',
   'source/services.cxx',
   'source/acceptor/acc_pipe.cxx',
   'source/acceptor/acc_socket.cxx',

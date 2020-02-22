@@ -1,4 +1,4 @@
-uuresolver_lib = shared_library('uuresolver',
+uuresolver_lib = shared_library('uuresolverlo',
   'source/unourl_resolver/unourl_resolver.cxx',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],

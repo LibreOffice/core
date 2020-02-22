@@ -8,7 +8,7 @@ sfxslots_hxx = custom_target('sfxslots',
             '-fs' + meson.build_root() + '/@OUTPUT@',
             meson.build_root() + '/@INPUT@'])
 
-sfx_lib = shared_library('sfx',
+sfx_lib = shared_library('sfxlo',
   'source/accessibility/AccessibilityCheck.cxx',
   'source/accessibility/AccessibilityIssue.cxx',
   'source/appl/app.cxx',

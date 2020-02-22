@@ -8,7 +8,7 @@ pgen = custom_target('unoidl_bison',
   input: 'source/sourceprovider-parser.y',
   command : [bison_bin, '@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'])
 
-unoidl_lib = shared_library('unoidl',
+unoidl_lib = shared_library('unoidllo',
   'source/legacyprovider.cxx',
   'source/sourcefileprovider.cxx',
   'source/sourcetreeprovider.cxx',

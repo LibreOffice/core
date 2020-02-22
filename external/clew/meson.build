@@ -1,4 +1,4 @@
-clew_lib = shared_library('clew',
+clew_lib = shared_library('clewlo',
   'source/clew.c',
   include_directories: ['source/include'],
   dependencies: [dl_dep],

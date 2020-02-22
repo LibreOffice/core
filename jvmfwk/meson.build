@@ -1,4 +1,4 @@
-jvmfwk_lib = shared_library('jvmfwk',
+jvmfwk_lib = shared_library('jvmfwklo',
   'plugins/sunmajor/pluginlib/gnujre.cxx',
   'plugins/sunmajor/pluginlib/otherjre.cxx',
   'plugins/sunmajor/pluginlib/sunjavaplugin.cxx',

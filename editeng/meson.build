@@ -1,7 +1,7 @@
 # FIXME: using a pregenerated tokens.cxx instead of generating
 # it properly.
 
-editeng_lib = shared_library('editeng',
+editeng_lib = shared_library('editenglo',
   'source/accessibility/AccessibleComponentBase.cxx',
   'source/accessibility/AccessibleContextBase.cxx',
   'source/accessibility/AccessibleEditableTextPara.cxx',
