@@ -347,6 +347,9 @@ static PyTypeObject PyUNOStructType =
     , nullptr
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
+#if PY_VERSION_HEX >= 0x03080200
+    , 0 //Py_ssize_t tp_print
+#endif
 #endif
 #endif
 };
