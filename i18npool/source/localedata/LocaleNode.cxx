@@ -620,8 +620,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
         sal_Int16 formatindex = static_cast<sal_Int16>(aFormatIndex.toInt32());
         // Ensure the new reserved range is not used anymore, free usage start
-        // was up'ed from 50 to 60.
-        if (50 <= formatindex && formatindex < i18npool::nFirstFreeFormatIndex)
+        // was up'ed from 50 to 60 (and more later).
+        if (i18npool::nStopPredefinedFormatIndex <= formatindex && formatindex < i18npool::nFirstFreeFormatIndex)
         {
             incErrorInt( "Error: Reserved formatindex=\"%d\" in FormatElement.\n", formatindex);
             bShowNextFreeFormatIndex = true;
@@ -862,14 +862,15 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 incError( "No abbreviated DateAcceptancePattern present. For example M/D or D.M.\n");
         }
 
-        // 0..47 MUST be present, 48,49 MUST NOT be present
+        // 0..9 MUST be present, 10,11 MUST NOT be present, 12..47 MUST be
+        // present, 48,49 MUST NOT be present, 50 MUST be present.
         ValueSet::const_iterator aIter( aFormatIndexSet.begin());
         for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
-                nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
+                nNext < i18npool::nStopPredefinedFormatIndex; ++nNext)
         {
             sal_Int16 nHere = ::std::min( (aIter != aFormatIndexSet.end() ? *aIter :
-                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES),
-                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
+                    i18npool::nStopPredefinedFormatIndex),
+                    i18npool::nStopPredefinedFormatIndex);
             if (aIter != aFormatIndexSet.end()) ++aIter;
             for ( ; nNext < nHere; ++nNext)
             {
@@ -887,6 +888,12 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             }
             switch (nHere)
             {
+                case cssi::NumberFormatIndex::FRACTION_1 :
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``# ?/?''.\n", nNext);
+                    break;
+                case cssi::NumberFormatIndex::FRACTION_2 :
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``# ?\?/?\?''.\n", nNext);
+                    break;
                 case cssi::NumberFormatIndex::BOOLEAN :
                     incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.\n", nNext);
                     break;

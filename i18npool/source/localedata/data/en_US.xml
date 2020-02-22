@@ -207,36 +207,39 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>MM/DD/YYYY HH:MM AM/PM</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
   <LC_FORMAT_1>
-    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="60">
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="66">
       <FormatCode>[~jewish]NNNND MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="61">
+    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="67">
       <FormatCode>[~jewish]NNNNMMMM D YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="62">
+    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="68">
       <FormatCode>[~jewish]NN MMMM D YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="63">
+    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="69">
       <FormatCode>[~jewish]NN D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="64">
+    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="70">
       <FormatCode>[~jewish]D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey27" default="false" type="long" usage="DATE" formatindex="65">
+    <FormatElement msgid="DateFormatskey27" default="false" type="long" usage="DATE" formatindex="71">
       <FormatCode>[~jewish]MMMM D YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="66">
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="72">
       <FormatCode>[~jewish]D MMMM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="67">
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="73">
       <FormatCode>[~jewish]MMMM D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="68">
+    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="74">
       <FormatCode>[~jewish]MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="69">
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="75">
       <FormatCode>[~jewish]MMMM</FormatCode>
     </FormatElement>
   </LC_FORMAT_1>

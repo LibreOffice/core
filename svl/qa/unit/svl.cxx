@@ -220,6 +220,19 @@ void Test::testNumberFormat()
         nullptr
     };
 
+// Following aren't in range of NF_DATETIME_START and NF_DATETIME_END
+// see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
+    const char* pDateTimeExt1[] = {
+        "MM/DD/YYYY HH:MM AM/PM",
+        nullptr
+    };
+
+    const char* pDateTimeExt2[] = {
+        "YYYY-MM-DD HH:MM:SS",
+        "YYYY-MM-DD\"T\"HH:MM:SS",
+        nullptr
+    };
+
     const char* pBoolean[] = {
         "BOOLEAN",
         nullptr
@@ -240,13 +253,15 @@ void Test::testNumberFormat()
         { NF_SCIENTIFIC_START, NF_SCIENTIFIC_END, 2, pScientific },
         { NF_PERCENT_START, NF_PERCENT_END, 2, pPercent },
         { NF_FRACTION_START, NF_FRACTION_END, 2, pFraction },
-        { NF_FRACTION_3D, NF_FRACTION_100, 7, pFractionExt },
         { NF_CURRENCY_START, NF_CURRENCY_END, 6, pCurrency },
         { NF_DATE_START, NF_DATE_END, 21, pDate },
         { NF_TIME_START, NF_TIME_END, 7, pTime },
         { NF_DATETIME_START, NF_DATETIME_END, 2, pDateTime },
         { NF_BOOLEAN, NF_BOOLEAN, 1, pBoolean },
-        { NF_TEXT, NF_TEXT, 1, pText }
+        { NF_TEXT, NF_TEXT, 1, pText },
+        { NF_DATETIME_SYS_DDMMYYYY_HHMM, NF_DATETIME_SYS_DDMMYYYY_HHMM, 1, pDateTimeExt1 },
+        { NF_FRACTION_3D, NF_FRACTION_100, 7, pFractionExt },
+        { NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDDTHHMMSS, 2, pDateTimeExt2 }
     };
 
     SvNumberFormatter aFormatter(m_xContext, eLang);
@@ -267,7 +282,7 @@ void Test::testNumberFormat()
 
             CPPUNIT_ASSERT_MESSAGE("Number format entry is expected, but doesn't exist.", p);
             OUString aCode = p->GetFormatstring();
-            CPPUNIT_ASSERT_EQUAL( aCode.toUtf8() , OString( aTests[i].pCodes[j-nStart] ) );
+            CPPUNIT_ASSERT_EQUAL( OString( aTests[i].pCodes[j-nStart] ), aCode.toUtf8());
         }
     }
 

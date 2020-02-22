@@ -169,7 +169,7 @@
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="60">
+    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="66">
       <FormatCode>YYYY MMMM DD NN</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
@@ -193,19 +193,19 @@
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
       <FormatCode>[HH]:MM:SS,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME" formatindex="61">
+    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME" formatindex="67">
       <FormatCode>H"."MM "val."</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME" formatindex="62">
+    <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME" formatindex="68">
       <FormatCode>H "val." M "min."</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME" formatindex="63">
+    <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME" formatindex="69">
       <FormatCode>H "val." MM "min." SS "sek."</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey11" default="false" type="short" usage="TIME" formatindex="64">
+    <FormatElement msgid="TimeFormatskey11" default="false" type="short" usage="TIME" formatindex="70">
       <FormatCode>H "h" M "min"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME" formatindex="65">
+    <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME" formatindex="71">
       <FormatCode>H "h" M "min" S "s"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
@@ -213,6 +213,9 @@
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>YYYY-MM-DD HH:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>

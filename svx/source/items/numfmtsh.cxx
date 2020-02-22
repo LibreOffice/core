@@ -661,41 +661,14 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rLi
 short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rList, short nSelPos,
                                                        bool bSuppressDuplicates)
 {
-    sal_uInt16 nMyType;
-
-    sal_uInt32 nNFEntry;
-    OUString aNewFormNInfo;
+    // Add first, so a NF_DATETIME_SYSTEM_SHORT_HHMM may be suppressed in
+    // locales that do not use 2-digit years there and this here is the
+    // default.
+    FillEListWithOneDateTime_Impl( rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM);
 
     for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
-        nNFEntry = pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex), eCurLanguage);
-
-        const SvNumberformat* pNumEntry = pFormatter->GetEntry(nNFEntry);
-        if (pNumEntry != nullptr)
-        {
-            SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
-            CategoryToPos_Impl(nMyCat, nMyType);
-            aNewFormNInfo = pNumEntry->GetFormatstring();
-
-            if (nNFEntry == nCurFormatKey)
-            {
-                nSelPos = (!IsRemoved_Impl(nNFEntry)) ? aCurEntryList.size() : SELPOS_NONE;
-            }
-
-            if (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
-                    || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
-            {
-                // Ugly hack to suppress an ISO date+time format that is the
-                // default date+time format of the locale and identical to the
-                // internally generated one to be added below.
-                if (!bSuppressDuplicates || (aNewFormNInfo != "YYYY-MM-DD HH:MM:SS"
-                            && aNewFormNInfo != "YYYY-MM-DD\"T\"HH:MM:SS"))
-                {
-                    rList.push_back(aNewFormNInfo);
-                    aCurEntryList.push_back(nNFEntry);
-                }
-            }
-        }
+        FillEListWithOneDateTime_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex));
     }
 
     // Always add the internally generated ISO formats.
@@ -703,6 +676,40 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
                                         NF_DATETIME_ISO_YYYYMMDDTHHMMSS, false);
 
     return nSelPos;
+}
+
+void SvxNumberFormatShell::FillEListWithOneDateTime_Impl(std::vector<OUString>& rList, short & nSelPos,
+                                                         bool bSuppressDuplicates, NfIndexTableOffset nOffset)
+{
+    sal_uInt32 nNFEntry = pFormatter->GetFormatIndex(nOffset, eCurLanguage);
+
+    const SvNumberformat* pNumEntry = pFormatter->GetEntry(nNFEntry);
+    if (pNumEntry == nullptr)
+        return;
+
+    SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
+    sal_uInt16 nMyType;
+    CategoryToPos_Impl(nMyCat, nMyType);
+    OUString aNewFormNInfo = pNumEntry->GetFormatstring();
+
+    if (nNFEntry == nCurFormatKey)
+    {
+        nSelPos = (!IsRemoved_Impl(nNFEntry)) ? aCurEntryList.size() : SELPOS_NONE;
+    }
+
+    if (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
+            || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
+    {
+        // Ugly hack to suppress an ISO date+time format that is the
+        // default date+time format of the locale and identical to the
+        // internally generated one to be added after/below.
+        if (!bSuppressDuplicates || (aNewFormNInfo != "YYYY-MM-DD HH:MM:SS"
+                    && aNewFormNInfo != "YYYY-MM-DD\"T\"HH:MM:SS"))
+        {
+            rList.push_back(aNewFormNInfo);
+            aCurEntryList.push_back(nNFEntry);
+        }
+    }
 }
 
 bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uInt32 nKey)
@@ -719,6 +726,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         case NF_TIME_HH_MMSS:
         case NF_TIME_MMSS00:
         case NF_TIME_HH_MMSS00:
+        case NF_DATETIME_SYS_DDMMYYYY_HHMM:
         case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDD_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDDTHHMMSS:

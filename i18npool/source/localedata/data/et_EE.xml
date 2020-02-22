@@ -198,6 +198,9 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>DD.MM.YYYY HH:MM:SS</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>DD.MM.YYYY HH:MM</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
     <Collator default="true" unoid="alphanumeric">&amp;[before 1]T&lt;š&lt;&lt;&lt;Š&lt;z&lt;&lt;&lt;Z&lt;ž&lt;&lt;&lt;Ž&amp;v&lt;&lt;&lt;V&lt;w&lt;&lt;&lt;W&amp;[before 1]X&lt;õ&lt;&lt;&lt;Õ&lt;ä&lt;&lt;&lt;Ä&lt;ö&lt;&lt;&lt;Ö&lt;ü&lt;&lt;&lt;Ü</Collator>

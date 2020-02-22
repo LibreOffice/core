@@ -156,8 +156,9 @@
 <!-- The LC_FORMAT element contains number format codes and may actually appear
      twice (with the second occurrence named LC_FORMAT_1). One section is
      mandatory and MUST contain at least all required format codes
-     formatindex="0" to formatindex="47", MUST NOT contain formatindex 48 and
-     49, and MAY contain other format codes. See below ATTLIST FormatElement
+     formatindex="0" to formatindex="47" (except 10 and 11 MUST NOT be
+     defined), MUST NOT contain formatindex 48 and 49, MUST contain formatindex
+     50, and MAY contain other format codes. See below ATTLIST FormatElement
      formatindex.
 
      A second LC_FORMAT_1 section may follow containing other format codes. The
@@ -223,7 +224,7 @@
     The following FormatElements must follow specific rules:
 
     All:
-        The format indices 0..59 are reserved and, for backwards compatibility,
+        The format indices 0..65 are reserved and, for backwards compatibility,
         indices 0..49 MUST be used as stated in
         offapi/com/sun/star/i18n/NumberFormatIndex.idl (
         https://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/i18n/NumberFormatIndex.idl )
@@ -254,7 +255,7 @@
 
         If you want to define yet more formats than the preset and reserved
         0..49 range that's fine, only make sure those formatindex="..." values
-        are each >=60 and all values are unique within one locale.
+        are each >=66 and all values are unique within one locale.
 
     Of usage="FIXED_NUMBER":
         formatindex="0" MUST be the format containing the 'General' keyword.
@@ -273,13 +274,20 @@
         separators, and the YMD default order is determined from the order
         encountered in this format.
         TODO: Future versions should make use of an edit="true" attribute
-        instead of relying on this special requirement.
+        instead of relying on this special index requirement.
 
         formatindex="33" must be ISO 8601 YYYY-MM-DD format code.
 
     Of usage="DATE_TIME":
+        formatindex="46" should contain a short year YY code and only HH and MM
+        without SS seconds.
+
         formatindex="47" is used to edit already existing combined date/time
-        data. The requirements are the same as for formatindex="21" above.
+        data. The requirements are the same as for formatindex="21" above, plus
+        HH and MM and SS codes.
+
+        formatindex="50" must contain a long year YYYY code and only HH and MM
+        without SS seconds.
 
     Of usage="TIME":
         * The FormatElement with default="true" type="medium" is used to edit

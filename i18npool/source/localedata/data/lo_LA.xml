@@ -168,7 +168,7 @@
     <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey10" default="true" type="long" usage="DATE" formatindex="60">
+    <FormatElement msgid="DateFormatskey10" default="true" type="long" usage="DATE" formatindex="66">
       <FormatCode>NNNN"ວັນທີ" DD "ເດືອນ" MMMM "ປີ" YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
@@ -197,6 +197,9 @@
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>DD/MM/YYYY "ວັນທີ" "ເດືອນ" "ປີ" HH"ໂມງ":MM"ນາທີ"</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION ref="en_US" />
