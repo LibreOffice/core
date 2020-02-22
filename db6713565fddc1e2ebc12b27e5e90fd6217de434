@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "297bd2c1_d3c741a6",
+        "filename": "icon-themes/sukapura/AUTHORS",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-02-22T07:48:56Z",
+      "side": 1,
+      "message": "Not an expert in this field but is it possible to use GPL for CC0-derviates?",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "db6713565fddc1e2ebc12b27e5e90fd6217de434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d44d4994_c3c4463f",
+        "filename": "vcl/source/app/IconThemeSelector.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-02-22T07:48:56Z",
+      "side": 1,
+      "message": "Sukapura is GPL like Breeze so it cannot be used here (and it would be only when GPL is excluded).",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "db6713565fddc1e2ebc12b27e5e90fd6217de434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
