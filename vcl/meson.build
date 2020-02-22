@@ -740,3 +740,48 @@ vclplug_qt5 = shared_library('vclplug_qt5lo',
   install : true,
 )
 
+vclplug_kf5_moc = qt5.preprocess(
+  moc_headers : [
+    'unx/kf5/KF5FilePicker.hxx'
+  ],
+  include_directories: [ 'inc/qt5', 'unx/kf5' ],
+  dependencies: [ qt5_dep ]
+)
+
+vclplug_kf5 = shared_library('vclplug_kf5lo',
+  'unx/kf5/KF5FilePicker.cxx',
+  'unx/kf5/KF5SalFrame.cxx',
+  'unx/kf5/KF5SalInstance.cxx',
+  vclplug_kf5_moc,
+  udk_fake_h, off_fake_h, common_hxx,
+  include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'inc/qt5', setup_inc],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             '-DVCLPLUG_KF5_IMPLEMENTATION',
+             '-Wno-deprecated-declarations'],
+  link_with: [
+    basegfx_lib,
+    comphelper_lib,
+    cppu_lib,
+    cppuhelper_lib,
+    i18nlangtag_lib,
+    i18nutil_lib,
+    sal_lib,
+    salhelper_lib,
+    sot_lib,
+    svl_lib,
+    tl_lib,
+    ucbhelper_lib,
+    utl_lib,
+    vcl_lib,
+    vclplug_qt5,
+  ],
+  dependencies: [
+    cairo_dep,
+    harfbuzz_dep,
+    kf5_config_dep,
+    kf5_i18n_dep,
+    kf5_kio_filewidgets_dep,
+    qt5_dep,
+  ],
+  install : true,
+)

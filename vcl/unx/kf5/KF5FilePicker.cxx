@@ -18,7 +18,6 @@
  */
 
 #include "KF5FilePicker.hxx"
-#include <KF5FilePicker.moc>
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/supportsservice.hxx>

@@ -169,6 +169,11 @@ qt5 = import('qt5')
 qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'Widgets'])
 qt5_x11_dep = dependency('qt5', modules: ['X11Extras'])
 
+kf5_kio_filewidgets_dep = dependency('KF5KIO', modules: ['KF5::KIOFileWidgets'])
+kf5_i18n_dep = dependency('KF5I18n')
+kf5_config_dep = dependency('KF5KIO', modules: 'KF5::ConfigCore')
+kf5_winsys_dep = dependency('KF5WindowSystem')
+
 # The version in Ubuntu eoan is too old.
 mdds_dep = dependency('mdds-1.6',
                       version: '>=1.6.0',
