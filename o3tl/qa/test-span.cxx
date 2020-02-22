@@ -34,15 +34,9 @@ private:
         CPPUNIT_ASSERT_EQUAL(1, *v.begin());
         CPPUNIT_ASSERT_EQUAL(
             o3tl::span<int>::difference_type(3), v.end() - v.begin());
-        CPPUNIT_ASSERT_EQUAL(1, *v.cbegin());
-        CPPUNIT_ASSERT_EQUAL(
-            o3tl::span<int>::difference_type(3), v.cend() - v.cbegin());
         CPPUNIT_ASSERT_EQUAL(3, *v.rbegin());
         CPPUNIT_ASSERT_EQUAL(
             o3tl::span<int>::difference_type(3), v.rend() - v.rbegin());
-        CPPUNIT_ASSERT_EQUAL(3, *v.crbegin());
-        CPPUNIT_ASSERT_EQUAL(
-            o3tl::span<int>::difference_type(3), v.crend() - v.crbegin());
         CPPUNIT_ASSERT_EQUAL(std::size_t(3), v.size());
         CPPUNIT_ASSERT(!v.empty());
         CPPUNIT_ASSERT_EQUAL(2, v[1]);
