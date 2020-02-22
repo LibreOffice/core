@@ -1,6 +1,12 @@
 project('libreoffice', 'c', 'cpp',
   version: '1.2.3',
-  default_options: ['cpp_std=c++17'])
+  default_options: [
+    'cpp_std=c++17',
+    'prefix=' + meson.source_root() + '/instdir',
+    'bindir=program',
+    'libdir=program',
+  ]
+)
 
 varr = meson.project_version().split('.')
 major_version = varr[0]

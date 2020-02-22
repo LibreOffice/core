@@ -881,7 +881,6 @@ swui_lib = shared_library('swuilo',
   install: true,
 )
 
-
 msword_lib = shared_library('mswordlo',
   'source/filter/docx/swdocxreader.cxx',
   'source/filter/rtf/swparrtf.cxx',
@@ -1050,6 +1049,5 @@ vbaswobj_lib = shared_library('vbaswobjlo',
     vcl_lib
   ],
   dependencies: [libxml_dep],
-
   install: true,
 )
