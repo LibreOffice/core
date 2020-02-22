@@ -203,8 +203,9 @@ private:
                                                        bool bSuppressDuplicates );
     SVX_DLLPRIVATE short FillEListWithDateTime_Impl( std::vector<OUString>& rList,short nSelPos,
                                                      bool bSuppressDuplicates );
-    SVX_DLLPRIVATE void  FillEListWithOneDateTime_Impl( std::vector<OUString>& rList, short & nSelPos,
-                                                        bool bSuppressDuplicates, NfIndexTableOffset nOffset );
+    SVX_DLLPRIVATE void  FillEListWithOneFormat_Impl( std::vector<OUString>& rList, short & nSelPos,
+                                                      bool bSuppressDuplicates, NfIndexTableOffset nOffset,
+                                                      bool bSuppressIsoDateTime );
     SVX_DLLPRIVATE short FillEListWithCurrency_Impl( std::vector<OUString>& rList,short nSelPos);
     SVX_DLLPRIVATE short FillEListWithSysCurrencys( std::vector<OUString>& rList,short nSelPos);
     SVX_DLLPRIVATE short FillEListWithUserCurrencys( std::vector<OUString>& rList,short nSelPos);

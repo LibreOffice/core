@@ -622,37 +622,9 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rLi
      * the list position of the current format. If the list is empty
      * or if there is no current format, SELPOS_NONE is delivered.
      */
-    sal_uInt16 nMyType;
-
-    sal_uInt32 nNFEntry;
-    OUString aNewFormNInfo;
-
-    long nIndex;
-
-    for (nIndex = eOffsetStart; nIndex <= eOffsetEnd; nIndex++)
+    for (long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex)
     {
-        nNFEntry = pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex), eCurLanguage);
-
-        const SvNumberformat* pNumEntry = pFormatter->GetEntry(nNFEntry);
-
-        if (pNumEntry == nullptr)
-            continue;
-
-        SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
-        CategoryToPos_Impl(nMyCat, nMyType);
-        aNewFormNInfo = pNumEntry->GetFormatstring();
-
-        if (nNFEntry == nCurFormatKey)
-        {
-            nSelPos = (!IsRemoved_Impl(nNFEntry)) ? aCurEntryList.size() : SELPOS_NONE;
-        }
-
-        if (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
-                || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
-        {
-            rList.push_back(aNewFormNInfo);
-            aCurEntryList.push_back(nNFEntry);
-        }
+        FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), false);
     }
 
     return nSelPos;
@@ -661,14 +633,16 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rLi
 short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rList, short nSelPos,
                                                        bool bSuppressDuplicates)
 {
+    // Append a list of date+time formats.
+
     // Add first, so a NF_DATETIME_SYSTEM_SHORT_HHMM may be suppressed in
     // locales that do not use 2-digit years there and this here is the
     // default.
-    FillEListWithOneDateTime_Impl( rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM);
+    FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM, true);
 
     for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
-        FillEListWithOneDateTime_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex));
+        FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), true);
     }
 
     // Always add the internally generated ISO formats.
@@ -678,8 +652,9 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
     return nSelPos;
 }
 
-void SvxNumberFormatShell::FillEListWithOneDateTime_Impl(std::vector<OUString>& rList, short & nSelPos,
-                                                         bool bSuppressDuplicates, NfIndexTableOffset nOffset)
+void SvxNumberFormatShell::FillEListWithOneFormat_Impl(std::vector<OUString>& rList, short & nSelPos,
+                                                       bool bSuppressDuplicates, NfIndexTableOffset nOffset,
+                                                       bool bSuppressIsoDateTime)
 {
     sal_uInt32 nNFEntry = pFormatter->GetFormatIndex(nOffset, eCurLanguage);
 
@@ -697,18 +672,17 @@ void SvxNumberFormatShell::FillEListWithOneDateTime_Impl(std::vector<OUString>& 
         nSelPos = (!IsRemoved_Impl(nNFEntry)) ? aCurEntryList.size() : SELPOS_NONE;
     }
 
-    if (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
-            || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
+    // Ugly hack to suppress an ISO date+time format that is the default
+    // date+time format of the locale and identical to the internally generated
+    // one always to be added after/below.
+    const bool bSupIso = bSuppressIsoDateTime && bSuppressDuplicates &&
+        (aNewFormNInfo == "YYYY-MM-DD HH:MM:SS" || aNewFormNInfo == "YYYY-MM-DD\"T\"HH:MM:SS");
+
+    if (!bSupIso && (!bSuppressDuplicates || IsEssentialFormat_Impl(nMyCat, nNFEntry)
+                || std::find(rList.begin(), rList.end(), aNewFormNInfo) == rList.end()))
     {
-        // Ugly hack to suppress an ISO date+time format that is the
-        // default date+time format of the locale and identical to the
-        // internally generated one to be added after/below.
-        if (!bSuppressDuplicates || (aNewFormNInfo != "YYYY-MM-DD HH:MM:SS"
-                    && aNewFormNInfo != "YYYY-MM-DD\"T\"HH:MM:SS"))
-        {
-            rList.push_back(aNewFormNInfo);
-            aCurEntryList.push_back(nNFEntry);
-        }
+        rList.push_back(aNewFormNInfo);
+        aCurEntryList.push_back(nNFEntry);
     }
 }
 
