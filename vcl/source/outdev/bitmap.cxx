@@ -1157,9 +1157,9 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
     return true;
 }
 
-// MM02 add som etest class to get a simple timer-based output to be able
+// MM02 add some test class to get a simple timer-based output to be able
 // to check if it gets faster - and how much. Uncomment next line or set
-// DO_TIME_TEST for compile tiome if you want to use it
+// DO_TIME_TEST for compile time if you want to use it
 // #define DO_TIME_TEST
 #ifdef DO_TIME_TEST
 #include <tools/time.hxx>
