@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "805ff3ba_71b2a67e",
+        "filename": "vcl/source/bitmap/BitmapFilterStackBlur.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-02-22T18:54:28Z",
+      "side": 1,
+      "message": "I get a build break here and same in #423, VS 2017 on Windows 10.\nIt works with\nnRadius \u003d std::min\u003csal_Int32\u003e(254, std::max\u003csal_Int32\u003e(2, nRadius));\nAlthough I find\nnRadius \u003d std::clamp\u003csal_Int32\u003e(nRadius, 2, 254);\nbetter readable. But I don\u0027t know whether clamp is supported by other compilers.",
+      "range": {
+        "startLine": 401,
+        "startChar": 14,
+        "endLine": 401,
+        "endChar": 22
+      },
+      "revId": "f22479cd8091faf54df147d1ee791dd63904182f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
