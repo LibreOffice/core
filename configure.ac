@@ -1583,8 +1583,13 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
+<<<<<<< HEAD   (bd4ec5 tdf#130573 labels exchanged in export to BMP)
          Possible choices: *breeze, *breeze_dark, *breeze_svg, *breeze_dark_svg, *colibre, *colibre_svg, *elementary,
          *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_svg, *sifr_dark, *sifr_dark_svg, *tango.]),
+=======
+         Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg, *colibre, *colibre_svg, *elementary,
+         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg, *tango.]),
+>>>>>>> CHANGE (4617a5 tdf#128849 -- Add Sifr (Dark + SVG) to the icon theme list)
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -11517,14 +11522,22 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
+<<<<<<< HEAD   (bd4ec5 tdf#130573 labels exchanged in export to BMP)
     with_theme="breeze breeze_dark breeze_svg breeze_dark_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
+=======
+    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
+>>>>>>> CHANGE (4617a5 tdf#128849 -- Add Sifr (Dark + SVG) to the icon theme list)
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
+<<<<<<< HEAD   (bd4ec5 tdf#130573 labels exchanged in export to BMP)
         breeze|breeze_dark|breeze_svg|breeze_dark_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango) real_theme="$theme" ;;
+=======
+        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango) real_theme="$theme" ;;
+>>>>>>> CHANGE (4617a5 tdf#128849 -- Add Sifr (Dark + SVG) to the icon theme list)
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
