@@ -565,7 +565,7 @@
             <desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
             <label>X Axis Subdivision</label>
           </info>
-          <value>1</value>
+          <value>3</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: HTML_Editor/Grid/Subdivision -->
@@ -575,7 +575,7 @@
             <desc>Defines the distance between the grid points on the Y-axis.</desc>
             <label>Y Axis Subdivision</label>
           </info>
-          <value>1</value>
+          <value>3</value>
         </prop>
       </group>
     </group>

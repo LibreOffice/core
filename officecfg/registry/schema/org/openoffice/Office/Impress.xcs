@@ -957,7 +957,7 @@
             <desc>Specifies the number of points between two adjacent grid points on the X axis.</desc>
             <label>X Axis Subdivision</label>
           </info>
-          <value>9</value>
+          <value>3</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:double" oor:nillable="false">
           <!-- OldPath: Impress/Grid/Subdivision -->
@@ -968,7 +968,7 @@
             <desc>Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
             <label>Y Axis Subdivision</label>
           </info>
-          <value>9</value>
+          <value>3</value>
         </prop>
       </group>
       <group oor:name="SnapGrid">
