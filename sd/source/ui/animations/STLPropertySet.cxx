@@ -18,8 +18,7 @@
  */
 
 #include "STLPropertySet.hxx"
-
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using com::sun::star::uno::Any;
 
@@ -50,7 +49,7 @@ void STLPropertySet::setPropertyValue( sal_Int32 nHandle, const Any& rValue )
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
+        SAL_WARN("sd", "sd::STLPropertySet::setPropertyValue(), unknown property!");
     }
 }
 
@@ -63,7 +62,7 @@ Any STLPropertySet::getPropertyValue( sal_Int32 nHandle ) const
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyValue(), unknown property!" );
+        SAL_WARN("sd", "sd::STLPropertySet::getPropertyValue(), unknown property!");
 
         Any aAny;
         return aAny;
@@ -79,7 +78,7 @@ STLPropertyState STLPropertySet::getPropertyState( sal_Int32 nHandle ) const
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyState(), unknown property!" );
+        SAL_WARN("sd", "sd::STLPropertySet::getPropertyState(), unknown property!");
         return STLPropertyState::Ambiguous;
     }
 }
@@ -93,7 +92,7 @@ void STLPropertySet::setPropertyState( sal_Int32 nHandle, STLPropertyState nStat
     }
     else
     {
-        OSL_FAIL( "sd::STLPropertySet::setPropertyState(), unknown property!" );
+        SAL_WARN("sd","sd::STLPropertySet::setPropertyState(), unknown property!");
     }
 }
 
