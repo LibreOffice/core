@@ -100,8 +100,9 @@ $(if $(7),$(call gb_CustomTarget_get_workdir,$(1))/$(7)names.inc) : \
 	touch $$@
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
+		$(call gb_ExternalExecutable_get_dependencies,python) \
 		$(if $(7),$(SRCDIR)/$(3)/$(7).txt) \
-		$(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.pl) \
+		$(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.py) \
 		$(SRCDIR)/$(3)/$(4).txt \
 		$(SRCDIR)/$(3)/$(4).hxx.head \
 		$(SRCDIR)/$(3)/$(4).hxx.tail
@@ -110,7 +111,7 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2)/token/$(4).hxx : \
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(1))/misc \
 	    	$(call gb_CustomTarget_get_workdir,$(1)) \
 		$(call gb_CustomTarget_get_workdir,$(1))/$(2)/token
-	perl $(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.pl) \
+	$(call gb_ExternalExecutable_get_command,python) $(if $(8),$(SRCDIR)/$(3)/$(8),$(SRCDIR)/solenv/bin/generate-tokens.py) \
 	    	$(SRCDIR)/$(3)/$(4).txt \
 		$(call gb_CustomTarget_get_workdir,$(1))/misc/$(5)ids.inc \
 		$(call gb_CustomTarget_get_workdir,$(1))/$(5)names.inc \
