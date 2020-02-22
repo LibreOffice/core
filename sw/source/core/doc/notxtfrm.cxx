@@ -1296,9 +1296,9 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     // performance reasons). This is usually done in DrawingLayer
                     // by using the VOC-Mechanism (see descriptions elsewhere).
                     // To get that here, make the involved SwNoTextFrame (this)
-                    // a sdr::contact::ViewContact supplier by supporing
+                    // a sdr::contact::ViewContact supplier by supporting
                     // a GetViewContact() - call. For ObjectContact we can use
-                    // the already exising ObjectContact from the involved
+                    // the already existing ObjectContact from the involved
                     // DrawingLayer. For tis, the helper classes
                     //     ViewObjectContactOfSwNoTextFrame
                     //     ViewContactOfSwNoTextFrame
