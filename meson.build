@@ -174,10 +174,7 @@ kf5_i18n_dep = dependency('KF5I18n')
 kf5_config_dep = dependency('KF5KIO', modules: 'KF5::ConfigCore')
 kf5_winsys_dep = dependency('KF5WindowSystem')
 
-# The version in Ubuntu eoan is too old.
-mdds_dep = dependency('mdds-1.6',
-                      version: '>=1.6.0',
-                      fallback: ['mdds', 'mdds_dep'])
+mdds_dep = dependency('mdds-1.5')
 
 # FIXME. Java does not provide .pc files.
 # Presumably this data can be obtained via other methods.
