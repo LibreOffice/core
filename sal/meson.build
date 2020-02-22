@@ -116,7 +116,11 @@ sal_lib = shared_library('sallo',
              '-DLIBO_INTERNAL_ONLY',
              '-DSAL_DLLIMPLEMENTATION'],
   link_args: system_link_args,
-  dependencies: [thread_dep, osx_frameworks_dep, dl_dep],
+  dependencies: [
+    dl_dep,
+    osx_frameworks_dep,
+    thread_dep,
+  ],
   gnu_symbol_visibility: 'hidden',
   install: true,
 )
