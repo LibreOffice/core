@@ -18,7 +18,6 @@
  */
 
 #include <Qt5FilePicker.hxx>
-#include <Qt5FilePicker.moc>
 
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>

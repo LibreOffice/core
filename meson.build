@@ -165,6 +165,10 @@ mythes_dep = dependency('mythes')
 libexttextcat_dep = dependency('libexttextcat')
 numbertext_dep = dependency('libnumbertext')
 
+qt5 = import('qt5')
+qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'Widgets'])
+qt5_x11_dep = dependency('qt5', modules: ['X11Extras'])
+
 # The version in Ubuntu eoan is too old.
 mdds_dep = dependency('mdds-1.6',
                       version: '>=1.6.0',

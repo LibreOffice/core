@@ -18,7 +18,6 @@
  */
 
 #include <Qt5Frame.hxx>
-#include <Qt5Frame.moc>
 
 #include <Qt5Data.hxx>
 #include <Qt5DragAndDrop.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <Qt5Timer.hxx>
-#include <Qt5Timer.moc>
 
 #include <QtWidgets/QApplication>
 #include <QtCore/QThread>

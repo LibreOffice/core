@@ -8,7 +8,6 @@
  */
 
 #include <Qt5Menu.hxx>
-#include <Qt5Menu.moc>
 
 #include <Qt5Frame.hxx>
 #include <Qt5Instance.hxx>

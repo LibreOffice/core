@@ -9,7 +9,6 @@
  */
 
 #include <Qt5Clipboard.hxx>
-#include <Qt5Clipboard.moc>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>

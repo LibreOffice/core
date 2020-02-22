@@ -18,7 +18,6 @@
  */
 
 #include <Qt5AccessibleWidget.hxx>
-#include <Qt5AccessibleWidget.moc>
 
 #include <QtGui/QAccessibleInterface>
 

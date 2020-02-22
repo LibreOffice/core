@@ -18,7 +18,6 @@
  */
 
 #include <Qt5Instance.hxx>
-#include <Qt5Instance.moc>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

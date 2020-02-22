@@ -18,7 +18,6 @@
  */
 
 #include <Qt5Object.hxx>
-#include <Qt5Object.moc>
 
 #include <Qt5Frame.hxx>
 #include <Qt5Widget.hxx>

@@ -9,7 +9,6 @@
  */
 
 #include <Qt5MainWindow.hxx>
-#include <Qt5MainWindow.moc>
 #include <Qt5AccessibleWidget.hxx>
 
 #include <QtGui/QAccessible>

@@ -8,7 +8,6 @@
  */
 
 #include <Qt5XAccessible.hxx>
-#include <Qt5XAccessible.moc>
 
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
