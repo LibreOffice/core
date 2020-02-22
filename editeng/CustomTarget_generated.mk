@@ -10,12 +10,12 @@
 $(eval $(call gb_CustomTarget_CustomTarget,editeng/generated))
 
 editeng_SRC := $(SRCDIR)/editeng/source/misc
-editeng_PL := $(SRCDIR)/solenv/bin/gentoken.pl
+editeng_PY := $(SRCDIR)/solenv/bin/gentoken.py
 editeng_INC := $(call gb_CustomTarget_get_workdir,editeng/generated)
 
-$(editeng_INC)/tokens.hxx $(editeng_INC)/tokens.gperf : $(editeng_SRC)/tokens.txt $(editeng_PL)
+$(editeng_INC)/tokens.hxx $(editeng_INC)/tokens.gperf : $(editeng_SRC)/tokens.txt $(editeng_PY)
 	mkdir -p $(editeng_INC)
-	$(PERL) $(editeng_PL) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
+	$(PYTHON) $(editeng_PY) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
 
 $(editeng_INC)/tokens.cxx : $(editeng_INC)/tokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(editeng_INC)/tokens.cxx $(editeng_INC)/tokens.gperf
