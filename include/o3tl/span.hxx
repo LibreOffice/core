@@ -62,17 +62,10 @@ public:
     constexpr iterator begin() const noexcept { return data_; }
     constexpr iterator end() const noexcept { return begin() + size(); }
 
-    constexpr const_iterator cbegin() const noexcept { return begin(); }
-    constexpr const_iterator cend() const noexcept { return end(); }
-
     reverse_iterator rbegin() const noexcept
     { return reverse_iterator(end()); }
     reverse_iterator rend() const noexcept
     { return reverse_iterator(begin()); }
-
-    constexpr const_reverse_iterator crbegin() const noexcept
-    { return rbegin(); }
-    constexpr const_reverse_iterator crend() const noexcept { return rend(); }
 
     constexpr size_type size() const noexcept { return size_; }
 
