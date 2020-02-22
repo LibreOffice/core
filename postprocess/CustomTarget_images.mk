@@ -52,7 +52,8 @@ $(packimages_DIR)/images_%.zip : \
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
 		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
-		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/pack_images.py \
+		$(call gb_ExternalExecutable_get_command,python) \
+			$(SRCDIR)/solenv/bin/pack_images.py \
 			$(if $(DEFAULT_THEME),\
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
 				-g $(SRCDIR)/icon-themes/$* -m $(SRCDIR)/icon-themes/$* -c $(SRCDIR)/icon-themes/$* \
@@ -107,11 +108,13 @@ $(packimages_DIR)/commandimagelist.ilst :
 
 $(packimages_DIR)/sorted.lst : \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
-		$(call gb_Postprocess_get_target,AllUIConfigs)
+		$(call gb_Postprocess_get_target,AllUIConfigs) \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
+		$(call gb_ExternalExecutable_get_command,python) \
+			$(SRCDIR)/solenv/bin/image-sort.py \
 			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
