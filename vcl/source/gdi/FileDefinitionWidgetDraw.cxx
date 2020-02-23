@@ -975,11 +975,26 @@ bool FileDefinitionWidgetDraw::updateSettings(AllSettings& rSettings)
     aStyleSet.SetLightBorderColor(pDefinitionStyle->maLightBorderColor);
     aStyleSet.SetShadowColor(pDefinitionStyle->maShadowColor);
     aStyleSet.SetDarkShadowColor(pDefinitionStyle->maDarkShadowColor);
+    aStyleSet.SetDefaultButtonTextColor(pDefinitionStyle->maDefaultButtonTextColor);
     aStyleSet.SetButtonTextColor(pDefinitionStyle->maButtonTextColor);
     aStyleSet.SetDefaultActionButtonTextColor(pDefinitionStyle->maDefaultActionButtonTextColor);
     aStyleSet.SetActionButtonTextColor(pDefinitionStyle->maActionButtonTextColor);
-    aStyleSet.SetActionButtonRolloverTextColor(pDefinitionStyle->maActionButtonRolloverTextColor);
+    aStyleSet.SetFlatButtonTextColor(pDefinitionStyle->maFlatButtonTextColor);
+    aStyleSet.SetDefaultButtonRolloverTextColor(pDefinitionStyle->maDefaultButtonRolloverTextColor);
     aStyleSet.SetButtonRolloverTextColor(pDefinitionStyle->maButtonRolloverTextColor);
+    aStyleSet.SetDefaultActionButtonRolloverTextColor(
+        pDefinitionStyle->maDefaultActionButtonRolloverTextColor);
+    aStyleSet.SetActionButtonRolloverTextColor(pDefinitionStyle->maActionButtonRolloverTextColor);
+    aStyleSet.SetFlatButtonRolloverTextColor(pDefinitionStyle->maFlatButtonRolloverTextColor);
+    aStyleSet.SetDefaultButtonPressedRolloverTextColor(
+        pDefinitionStyle->maDefaultButtonPressedRolloverTextColor);
+    aStyleSet.SetButtonPressedRolloverTextColor(pDefinitionStyle->maButtonPressedRolloverTextColor);
+    aStyleSet.SetDefaultActionButtonPressedRolloverTextColor(
+        pDefinitionStyle->maDefaultActionButtonPressedRolloverTextColor);
+    aStyleSet.SetActionButtonPressedRolloverTextColor(
+        pDefinitionStyle->maActionButtonPressedRolloverTextColor);
+    aStyleSet.SetFlatButtonPressedRolloverTextColor(
+        pDefinitionStyle->maFlatButtonPressedRolloverTextColor);
     aStyleSet.SetRadioCheckTextColor(pDefinitionStyle->maRadioCheckTextColor);
     aStyleSet.SetGroupTextColor(pDefinitionStyle->maGroupTextColor);
     aStyleSet.SetLabelTextColor(pDefinitionStyle->maLabelTextColor);

@@ -1033,12 +1033,21 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetActiveTabColor(aBase);
 
     // Buttons
+    style.SetDefaultButtonTextColor(aButn);
     style.SetButtonTextColor(aButn);
     style.SetDefaultActionButtonTextColor(aButn);
     style.SetActionButtonTextColor(aButn);
-    style.SetActionButtonRolloverTextColor(aButn);
+    style.SetFlatButtonTextColor(aButn);
+    style.SetDefaultButtonRolloverTextColor(aButn);
     style.SetButtonRolloverTextColor(aButn);
+    style.SetDefaultActionButtonRolloverTextColor(aButn);
+    style.SetActionButtonRolloverTextColor(aButn);
+    style.SetFlatButtonRolloverTextColor(aButn);
+    style.SetDefaultButtonPressedRolloverTextColor(aButn);
     style.SetButtonPressedRolloverTextColor(aButn);
+    style.SetDefaultActionButtonPressedRolloverTextColor(aButn);
+    style.SetActionButtonPressedRolloverTextColor(aButn);
+    style.SetFlatButtonPressedRolloverTextColor(aButn);
 
     // Tabs
     style.SetTabTextColor(aButn);
