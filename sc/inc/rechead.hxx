@@ -54,9 +54,9 @@ private:
                         pBuf;
     std::unique_ptr<SvMemoryStream>
                         pMemStream;
-    sal_uLong           nEndPos;
-    sal_uLong           nEntryEnd;
-    sal_uLong           nTotalEnd;
+    sal_uInt64          nEndPos;
+    sal_uInt64          nEntryEnd;
+    sal_uInt64          nTotalEnd;
 
 public:
     ScMultipleReadHeader(SvStream& rNewStream);
@@ -64,7 +64,7 @@ public:
 
     void    StartEntry();
     void    EndEntry();
-    sal_uLong   BytesLeft() const;
+    sal_uInt64  BytesLeft() const;
 };
 
 class ScMultipleWriteHeader
@@ -72,9 +72,9 @@ class ScMultipleWriteHeader
 private:
     SvStream&       rStream;
     SvMemoryStream  aMemStream;
-    sal_uLong       nDataPos;
+    sal_uInt64      nDataPos;
     sal_uInt32      nDataSize;
-    sal_uLong       nEntryStart;
+    sal_uInt64      nEntryStart;
 
 public:
     ScMultipleWriteHeader(SvStream& rNewStream);
