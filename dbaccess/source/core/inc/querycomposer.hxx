@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCOMPOSER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCOMPOSER_HXX
 
-#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -28,7 +27,6 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/sqliterator.hxx>
-#include <connectivity/sqlparse.hxx>
 #include <apitools.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 

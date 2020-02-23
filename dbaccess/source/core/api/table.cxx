@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <apitools.hxx>
 #include <table.hxx>
 #include <definitioncolumn.hxx>
 #include <stringconstants.hxx>

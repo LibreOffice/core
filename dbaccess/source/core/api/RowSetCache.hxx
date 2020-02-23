@@ -20,21 +20,10 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETCACHE_HXX
 
 #include <connectivity/CommonTools.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbc/XPreparedStatement.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbcx/XDeleteRows.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include "RowSetRow.hxx"
 #include "RowSetCacheIterator.hxx"
 

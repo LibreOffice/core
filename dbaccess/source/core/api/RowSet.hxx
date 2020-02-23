@@ -37,12 +37,9 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
-#include <com/sun/star/sdb/RowSetVetoException.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 

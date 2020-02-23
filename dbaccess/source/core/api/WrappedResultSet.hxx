@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_WRAPPEDRESULTSET_HXX
 
 #include "CacheSet.hxx"
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 

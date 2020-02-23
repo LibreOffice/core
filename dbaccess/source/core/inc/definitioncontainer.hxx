@@ -25,24 +25,18 @@
 #include <map>
 #include <vector>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <osl/mutex.hxx>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
 #include "ContentHelper.hxx"
 #include "containerapprove.hxx"
 #include <comphelper/uno3.hxx>
-#include <rtl/ref.hxx>
-#include <apitools.hxx>
 
 namespace dbaccess
 {

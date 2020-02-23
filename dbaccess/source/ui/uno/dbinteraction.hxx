@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
 
 #include <cppuhelper/implbase.hxx>
+#include <connectivity/CommonTools.hxx>
 
 #include <apitools.hxx>
 

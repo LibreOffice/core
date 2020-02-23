@@ -11,7 +11,6 @@
 #define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLBINARYNODE_HXX
 
 #include <vector>
-#include <cppuhelper/implbase.hxx>
 
 #include "rowinputbinary.hxx"
 #include "columndef.hxx"

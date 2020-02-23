@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_INC_FLT_REGHELPER_HXX
 #define INCLUDED_DBACCESS_SOURCE_INC_FLT_REGHELPER_HXX
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>

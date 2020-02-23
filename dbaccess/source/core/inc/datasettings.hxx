@@ -20,9 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DATASETTINGS_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_DATASETTINGS_HXX
 
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/ustring.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 

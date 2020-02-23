@@ -23,32 +23,16 @@
 #include "columnsettings.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <comphelper/propertycontainer.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <connectivity/FValue.hxx>
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/propshlp.hxx>
-#include <osl/diagnose.h>
 
 namespace dbaccess
 {

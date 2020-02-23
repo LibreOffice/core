@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 namespace dbaxml

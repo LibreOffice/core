@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHIERARCHYCOLLECTION_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include "xmlEnums.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

@@ -20,9 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_HELPERCOLLECTIONS_HXX
 
 #include <connectivity/sdbcx/VCollection.hxx>
-#include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <connectivity/PColumn.hxx>
 #include <rtl/ref.hxx>
 
 namespace dbaccess

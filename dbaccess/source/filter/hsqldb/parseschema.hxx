@@ -11,7 +11,6 @@
 #define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_PARSECHEMA_HXX
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <vector>
 #include <map>
 

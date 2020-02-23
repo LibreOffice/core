@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <TableDeco.hxx>
+#include <apitools.hxx>
 #include <definitioncolumn.hxx>
 #include <stringconstants.hxx>
 #include <core_resource.hxx>

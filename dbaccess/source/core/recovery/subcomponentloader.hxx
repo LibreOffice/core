@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTLOADER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTLOADER_HXX
 
-#include <dbaccess/dbaccessdllapi.h>
-
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

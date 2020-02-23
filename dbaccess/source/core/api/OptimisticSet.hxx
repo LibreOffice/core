@@ -25,7 +25,6 @@
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/sqliterator.hxx>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 
 namespace dbaccess

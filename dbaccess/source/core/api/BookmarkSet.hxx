@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_BOOKMARKSET_HXX
 
 #include "CacheSet.hxx"
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 
 namespace dbaccess

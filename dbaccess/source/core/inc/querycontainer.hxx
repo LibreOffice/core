@@ -21,27 +21,19 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 
 #include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <connectivity/CommonTools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerApproveListener.hpp>
 
 #include "definitioncontainer.hxx"
-#include <apitools.hxx>
 
 namespace dbtools
 {

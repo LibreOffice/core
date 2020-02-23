@@ -32,6 +32,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include <stringconstants.hxx>
+#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
 namespace dbaxml

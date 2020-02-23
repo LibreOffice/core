@@ -1,0 +1,23 @@
+---
+assumeFilename: dbaccess/source/ui/querydesign/QueryDesignView.cxx
+blacklist:
+    dbaccess/source/inc/dbu_reghelper.hxx:
+    # Needed for registrationhelper.hxx
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - rtl/ustring.hxx
+    - cppuhelper/factory.hxx
+    dbaccess/source/inc/flt_reghelper.hxx:
+    # Needed for registrationhelper.hxx
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - rtl/ustring.hxx
+    - cppuhelper/factory.hxx
+    dbaccess/source/inc/apitools.hxx:
+    # Needed for macros to work
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - comphelper/sequence.hxx
+    - strings.hxx
+    dbaccess/source/filter/xml/xmlExport.hxx:
+    # Needed for implicit dtor
+    - xmloff/txtprmap.hxx

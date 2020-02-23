@@ -23,6 +23,7 @@
 
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <definitioncolumn.hxx>

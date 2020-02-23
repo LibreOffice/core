@@ -22,6 +22,8 @@
 
 #include "storagestream.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <memory>
 
 namespace dbaccess

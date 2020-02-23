@@ -20,17 +20,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLE_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLE_HXX
 
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbcx/XRename.hpp>
-#include <com/sun/star/sdbcx/XAlterTable.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <apitools.hxx>
 #include "datasettings.hxx"
 #include "column.hxx"
 #include <connectivity/CommonTools.hxx>

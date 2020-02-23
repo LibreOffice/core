@@ -10,7 +10,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
 #define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ALTERPARSER_HXX
 
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 namespace dbahsql
 {
