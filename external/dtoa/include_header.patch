@@ -1,0 +1,37 @@
+--- /dev/null
++++ dtoa/include/dtoa.h
+@@ -0,0 +1,3 @@
++extern "C" double strtod_nolocale(const char *s00, char **se);
++extern "C" char *dtoa_nolocale(double d, int mode, int ndigits,
++			int *decpt, int *sign, char **rve);
+--- dtoa/src/dtoa.c.orig
++++ dtoa/src/dtoa.c
+@@ -1502,8 +1502,8 @@ static unsigned int maxthreads = 0;
+ #define Kmax 7
+ 
+ #ifdef __cplusplus
+-extern "C" double strtod(const char *s00, char **se);
+-extern "C" char *dtoa(double d, int mode, int ndigits,
++extern "C" double strtod_nolocale(const char *s00, char **se);
++extern "C" char *dtoa_nolocale(double d, int mode, int ndigits,
+ 			int *decpt, int *sign, char **rve);
+ #endif
+ 
+@@ -3429,7 +3429,7 @@ retlow1:
+ #endif /* NO_STRTOD_BIGCOMP */
+ 
+  double
+-strtod(const char *s00, char **se)
++strtod_nolocale(const char *s00, char **se)
+ {
+ 	int bb2, bb5, bbe, bd2, bd5, bbbits, bs2, c, e, e1;
+ 	int esign, i, j, k, nd, nd0, nf, nz, nz0, nz1, sign;
+@@ -6185,7 +6185,7 @@ dtoa_r(double dd, int mode, int ndigits, int *decpt, int *sign, char **rve, char
+ 	}
+ 
+  char *
+-dtoa(double dd, int mode, int ndigits, int *decpt, int *sign, char **rve)
++dtoa_nolocale(double dd, int mode, int ndigits, int *decpt, int *sign, char **rve)
+ {
+ 	/*	Sufficient space is allocated to the return value
+ 		to hold the suppressed trailing zeros.
