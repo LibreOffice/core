@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -280,7 +281,7 @@ void XmlFilterBase::importDocumentProperties()
     Reference< XComponentContext > xContext = getComponentContext();
     rtl::Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
     xInputStream = xDetector->extractUnencryptedPackage( aMediaDesc );
-    Reference< XComponent > xModel( getModel(), UNO_QUERY );
+    Reference< XComponent > xModel = getModel();
     Reference< XStorage > xDocumentStorage (
             ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
@@ -1036,14 +1037,14 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
 
         aGrabBagProperties["OOXContentTypes"] <<= aContentTypeInfo;
 
-        Reference<XComponent> xModel(getModel(), UNO_QUERY);
+        Reference<XComponent> xModel = getModel();
         oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(xModel, aGrabBagProperties);
     }
 }
 
 void XmlFilterBase::exportCustomFragments()
 {
-    Reference<XComponent> xModel(getModel(), UNO_QUERY);
+    Reference<XComponent> xModel = getModel();
     uno::Reference<beans::XPropertySet> xPropSet(xModel, uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();

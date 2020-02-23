@@ -20,6 +20,7 @@
 #include <AccessiblePresentationOLEShape.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <SdShapeTypes.hxx>
 
@@ -71,9 +72,8 @@ OUString
             break;
         default:
             sName = "UnknownAccessibleImpressOLEShape";
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ": " + xDescriptor->getShapeType();
+            if (mxShape.is())
+                sName += ": " + mxShape->getShapeType();
     }
 
     return sName;

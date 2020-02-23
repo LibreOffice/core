@@ -24,6 +24,7 @@
 #include <AxisHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 namespace chart
 {
@@ -39,7 +40,7 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::D
     , m_xChartModel(xChartModel)
     , m_xCC(xContext)
     , m_bCommitToModel(true)
-    , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
+    , m_aTimerTriggeredControllerLock( m_xChartModel )
     , m_xCB_Grid_X(m_xBuilder->weld_check_button("x"))
     , m_xCB_Grid_Y(m_xBuilder->weld_check_button("y"))
     , m_xCB_Grid_Z(m_xBuilder->weld_check_button("z"))
@@ -63,13 +64,13 @@ void TitlesAndObjectsTabPage::initializePage()
     //init titles
     {
         TitleDialogData aTitleInput;
-        aTitleInput.readFromModel( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
+        aTitleInput.readFromModel( m_xChartModel );
         m_xTitleResources->writeToResources( aTitleInput );
     }
 
     //init legend
     {
-        m_xLegendPositionResources->writeToResources( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
+        m_xLegendPositionResources->writeToResources( m_xChartModel );
     }
 
     //init grid checkboxes
@@ -100,7 +101,7 @@ bool TitlesAndObjectsTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /
 void TitlesAndObjectsTabPage::commitToModel()
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    uno::Reference< frame::XModel >  xModel( m_xChartModel, uno::UNO_QUERY);
+    uno::Reference< frame::XModel >  xModel = m_xChartModel;
 
     ControllerLockGuardUNO aLockedControllers( xModel );
 

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -250,7 +251,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
                     xUndoManager->unlock();
             });
 
-            Reference< XComponent > xDocument(getModel(), UNO_QUERY);
+            Reference< XComponent > xDocument = getModel();
             xExporter->setSourceDocument(xDocument);
             if (xFilter->filter(rDescriptor))
                 return true;

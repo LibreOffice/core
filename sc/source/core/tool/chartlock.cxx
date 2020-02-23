@@ -26,6 +26,7 @@
 #include <document.hxx>
 #include <drwlayer.hxx>
 
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -61,7 +62,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
                 if( ScDocument::IsChart( pObject ) )
                 {
                     uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
-                    uno::Reference< embed::XComponentSupplier > xCompSupp( xIPObj, uno::UNO_QUERY );
+                    uno::Reference< embed::XComponentSupplier > xCompSupp = xIPObj;
                     if( xCompSupp.is())
                     {
                         Reference< frame::XModel > xModel( xCompSupp->getComponent(), uno::UNO_QUERY );
