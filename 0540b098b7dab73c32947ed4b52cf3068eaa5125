@@ -16,6 +16,24 @@
       "revId": "0540b098b7dab73c32947ed4b52cf3068eaa5125",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bbdbcaa_89d2b7d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-23T15:57:16Z",
+      "side": 1,
+      "message": "I know.  I just doubt me or anybody else would wipe the dust from an old-enough MacBook with a built-in IR receiver and search the drawers for an ageing Apple remote control with leaked batteries, only to find out the code has effectively been broken ever since commit XYZ in 2015, anyway...  :)",
+      "parentUuid": "ee901b17_7cf8fe4c",
+      "revId": "0540b098b7dab73c32947ed4b52cf3068eaa5125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
