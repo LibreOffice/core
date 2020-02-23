@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 
@@ -117,11 +118,9 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     std::vector<SearchContext_impl> aContexts;
     if(mpPage)
     {
-        uno::Reference< drawing::XDrawPage > xPage( mpPage );
+        xShapes = mpPage;
 
-        xShapes.set( xPage, uno::UNO_QUERY );
-
-        if( xShapes.is() && (xShapes->getCount() > 0) )
+        if( xShapes->getCount() )
         {
             aContexts.push_back(SearchContext_impl(xShapes));
             xShape = aContexts.back().firstShape();
@@ -204,10 +203,9 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     std::vector<SearchContext_impl> aContexts;
     if(mpPage)
     {
-        uno::Reference< drawing::XDrawPage >  xPage( mpPage );
-        xShapes.set( xPage, uno::UNO_QUERY );
+        xShapes = mpPage;
 
-        if( xShapes.is() && xShapes->getCount() > 0 )
+        if( xShapes->getCount() > 0 )
         {
             aContexts.push_back(SearchContext_impl(xShapes));
             xShape = aContexts.back().firstShape();
@@ -291,18 +289,8 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 {
     uno::Reference< drawing::XShape >  xShape;
 
-    if( mpPage )
-    {
-        uno::Reference< drawing::XDrawPage >  xPage( mpPage );
-        uno::Reference< container::XIndexAccess >  xShapes( xPage, uno::UNO_QUERY );
-        if( xShapes.is() )
-        {
-            if(xShapes->getCount() > 0)
-            {
-                xShapes->getByIndex(0) >>= xShape;
-            }
-        }
-    }
+    if( mpPage && mpPage->getCount() > 0)
+        mpPage->getByIndex(0) >>= xShape;
 
     return xShape;
 
@@ -332,24 +320,17 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNex
 
                 if(mpPage)
                 {
-                    uno::Reference< drawing::XDrawPage >  xPage( mpPage );
-
                     // we do a page wide search, so skip to the next shape here
-                    uno::Reference< container::XIndexAccess > xShapes( xPage, uno::UNO_QUERY );
-
                     // get next shape on our page
-                    if( xShapes.is() )
-                    {
-                        uno::Reference< drawing::XShape > xFound2( GetNextShape( xShapes, xCurrentShape ) );
-                        if( xFound2.is() && (xFound2.get() != xCurrentShape.get()) )
-                            xCurrentShape = xFound2;
-                        else
-                            xCurrentShape = nullptr;
+                    uno::Reference< drawing::XShape > xFound2( GetNextShape( mpPage, xCurrentShape ) );
+                    if( xFound2.is() && (xFound2.get() != xCurrentShape.get()) )
+                        xCurrentShape = xFound2;
+                    else
+                        xCurrentShape = nullptr;
 
-                        xRange.set( xCurrentShape, uno::UNO_QUERY );
-                        if(!(xCurrentShape.is() && (xRange.is())))
-                            xRange = nullptr;
-                    }
+                    xRange.set( xCurrentShape, uno::UNO_QUERY );
+                    if(!(xCurrentShape.is() && (xRange.is())))
+                        xRange = nullptr;
                 }
                 else
                 {

@@ -41,6 +41,7 @@
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -618,7 +619,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
-                                uno::Reference< lang::XComponent > xDoc( GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+                                uno::Reference< lang::XComponent > xDoc = GetDocShell()->GetBaseModel();
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
                                 const OUString& aExpandText = aConversionMap.getViewText();

@@ -25,6 +25,7 @@
 #include <proofreadingiterator.hxx>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
@@ -146,7 +147,7 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( GetGCIterator() );
         if ( xGCIterator.is() )
         {
-            uno::Reference< lang::XComponent >  xDoc( GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+            uno::Reference< lang::XComponent >  xDoc = GetDocShell()->GetBaseModel();
             uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
 
             // start automatic background checking if not active already

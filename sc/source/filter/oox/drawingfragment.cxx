@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
@@ -176,7 +177,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext(
 
 DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
-    mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
+    mxDrawPage( rHelper.getDrawPage() )
 {
     OSL_ENSURE( mxDrawPage.is(), "DrawingFragment::DrawingFragment - missing drawing page" );
 }

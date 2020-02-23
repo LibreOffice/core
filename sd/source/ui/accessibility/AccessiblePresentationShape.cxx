@@ -26,6 +26,7 @@
 #include <svx/ShapeTypeHandler.hxx>
 
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -93,9 +94,8 @@ OUString AccessiblePresentationShape::CreateAccessibleBaseName()
             break;
         default:
             sName = SdResId(SID_SD_A11Y_P_UNKNOWN_N);
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ": " + xDescriptor->getShapeType();
+            if (mxShape.is())
+                sName += ": " + mxShape->getShapeType();
     }
 
     return sName;
@@ -140,9 +140,8 @@ OUString AccessiblePresentationShape::GetStyle()
             break;
         default:
             sName = SdResId(SID_SD_A11Y_P_UNKNOWN_N_STYLE);
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
-            if (xDescriptor.is())
-                sName += ": " + xDescriptor->getShapeType();
+            if (mxShape.is())
+                sName += ": " + mxShape->getShapeType();
     }
 
     return sName;

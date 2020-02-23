@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -61,7 +62,7 @@ namespace
 struct lcl_ObjectToOID
 {
     explicit lcl_ObjectToOID( const Reference< chart2::XChartDocument > & xChartDoc ) :
-            m_xModel( xChartDoc, uno::UNO_QUERY )
+            m_xModel( xChartDoc )
     {}
 
     ::chart::ObjectIdentifier operator() ( const Reference< uno::XInterface > & xObj )
@@ -192,7 +193,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
         return;
 
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
-    Reference< frame::XModel > xModel( xChartDocument, uno::UNO_QUERY );
+    Reference< frame::XModel > xModel = xChartDocument;
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
     ObjectIdentifier aDiaOID;
     if( xDiagram.is() )
@@ -279,7 +280,7 @@ void ImplObjectHierarchy::createLegendTree(
 {
     if( xDiagram.is() && LegendHelper::hasLegend( xDiagram ) )
     {
-        ObjectIdentifier aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) ) );
+        ObjectIdentifier aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), xChartDoc ) ) );
         rContainer.push_back( aLegendOID );
 
         // iterate over child shapes of legend and search for matching CIDs
@@ -315,7 +316,7 @@ void ImplObjectHierarchy::createAxesTree(
         // get all axes, also invisible ones
         aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
         // Grids
-        Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+        Reference< frame::XModel > xChartModel = xChartDoc;
         for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
         {
             Reference< XAxis > xAxis( aAxes[nA] );

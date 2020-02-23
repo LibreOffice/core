@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -2524,7 +2525,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
     uno::Reference< drawing::XShapes > xRet;
-    uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
+    const uno::Reference< drawing::XShapes > xShapes = xDrawPage;
     if( xShapes.is() )
     {
         sal_Int32 nCount = xShapes->getCount();
