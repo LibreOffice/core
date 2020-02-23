@@ -386,7 +386,7 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 // SalGraphics
 
 void
-CairoTextRender::SetTextColor( Color nColor )
+CairoTextRender::SetTextColor(Color nColor, bool isControl)
 {
     if( mnTextColor != nColor )
     {

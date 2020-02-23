@@ -519,6 +519,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         {
             maTextColor = aFont.GetColor();
             mbInitTextColor = true;
+            mbInitControlText = false;
             if( mpMetaFile )
                 mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
         }

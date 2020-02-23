@@ -80,7 +80,9 @@ public:
     virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
-    virtual void            SetTextColor( Color nColor ) override;
+    // set the text color to a specific color, optional default argument isControl allows different text coloring for controls
+    // within non key windows
+    virtual void            SetTextColor(Color nColor, bool isControl = false) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual FontCharMapRef  GetFontCharMap() const override;

@@ -676,7 +676,7 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
                             );
 }
 
-void GenPspGraphics::SetTextColor( Color nColor )
+void GenPspGraphics::SetTextColor(Color nColor, bool isControl)
 {
     psp::PrinterColor aColor (nColor.GetRed(),
                               nColor.GetGreen(),
