@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sidebar/PanelDescriptor.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/bindings.hxx>
@@ -274,6 +275,11 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
                     mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
             if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
                 Close();
+            return true;
+        }
+        if (".uno:Undo" == aCommand || ".uno:Redo" == aCommand)
+        {
+            comphelper::dispatchCommand(aCommand, {});
             return true;
         }
     }
