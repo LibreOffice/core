@@ -12,7 +12,6 @@
 
 #include <vector>
 #include <tools/stream.hxx>
-#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 

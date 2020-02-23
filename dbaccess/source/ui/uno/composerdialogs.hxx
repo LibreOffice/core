@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
 #include <comphelper/proparrhlp.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <apitools.hxx>
 

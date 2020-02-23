@@ -34,6 +34,7 @@
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>

@@ -19,6 +19,7 @@
 
 #include "xmlStyleImport.hxx"
 
+#include <xmloff/maptype.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimppr.hxx>

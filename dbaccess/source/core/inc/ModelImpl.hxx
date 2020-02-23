@@ -20,46 +20,20 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
 
-#include <apitools.hxx>
-#include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
 #include "documentevents.hxx"
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyBag.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/NotInitializedException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbc/XIsolatedConnection.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/solarmutex.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docmacromode.hxx>

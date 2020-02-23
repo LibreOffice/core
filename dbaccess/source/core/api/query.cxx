@@ -19,11 +19,14 @@
 
 #include "query.hxx"
 #include <stringconstants.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/PColumn.hxx>
 #include <connectivity/warningscontainer.hxx>
 #include "HelperCollections.hxx"
 #include <core_resource.hxx>
 #include <strings.hrc>
 
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

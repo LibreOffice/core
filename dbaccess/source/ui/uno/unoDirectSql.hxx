@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/proparrhlp.hxx>
+#include <connectivity/CommonTools.hxx>
 
 namespace dbaui
 {

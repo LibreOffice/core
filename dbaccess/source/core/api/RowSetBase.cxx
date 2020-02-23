@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <comphelper/sequence.hxx>

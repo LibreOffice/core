@@ -26,7 +26,6 @@
 #include <map>
 #include <vector>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <comphelper/stl_types.hxx>

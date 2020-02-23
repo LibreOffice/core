@@ -22,6 +22,8 @@
 #include <stringconstants.hxx>
 #include <strings.hxx>
 
+#include <osl/diagnose.h>
+
 namespace dbaccess
 {
     using namespace dbtools;

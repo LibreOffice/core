@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
 
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace dbaccess
 {

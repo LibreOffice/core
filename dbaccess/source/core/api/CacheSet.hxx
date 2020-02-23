@@ -21,13 +21,9 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include "RowSetRow.hxx"
 #include <cppuhelper/implbase.hxx>
 

@@ -32,7 +32,9 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include "myucp_resultset.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
 

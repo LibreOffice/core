@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
 
+#include <connectivity/CommonTools.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <apitools.hxx>
 

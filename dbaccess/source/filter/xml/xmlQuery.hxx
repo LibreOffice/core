@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLQUERY_HXX
 #define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLQUERY_HXX
 
-#include <xmloff/xmlictxt.hxx>
 #include "xmlTable.hxx"
 
 namespace dbaxml

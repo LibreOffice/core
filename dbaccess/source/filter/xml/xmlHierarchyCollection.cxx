@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 namespace dbaxml

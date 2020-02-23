@@ -28,19 +28,10 @@
 
 #include "ModelImpl.hxx"
 
-#include <com/sun/star/container/ElementExistException.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
-#include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 
 #if HAVE_FEATURE_SCRIPTING
@@ -49,7 +40,6 @@
 
 #include <basic/basicmanagerrepository.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 // needed for registration
 namespace com { namespace sun { namespace star {

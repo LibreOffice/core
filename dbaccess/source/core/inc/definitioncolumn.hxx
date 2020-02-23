@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DEFINITIONCOLUMN_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_DEFINITIONCOLUMN_HXX
 
-#include <apitools.hxx>
 #include "column.hxx"
 #include "columnsettings.hxx"
 

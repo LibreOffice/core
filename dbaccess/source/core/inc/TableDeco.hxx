@@ -29,10 +29,9 @@
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <apitools.hxx>
 #include "datasettings.hxx"
 #include "column.hxx"
 

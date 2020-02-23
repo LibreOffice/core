@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <apitools.hxx>
 #include <tablecontainer.hxx>
 #include <stringconstants.hxx>
 #include <table.hxx>

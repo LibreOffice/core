@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include "xmlStyleImport.hxx"
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 namespace dbaxml

@@ -25,11 +25,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <connectivity/CommonTools.hxx>
 #include <strings.hxx>
 
 // OSubComponent - a component which holds a hard ref to its parent

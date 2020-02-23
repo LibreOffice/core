@@ -20,19 +20,11 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
 
 #include <connectivity/ConnectionWrapper.hxx>
-#include <cppuhelper/component.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdb/XCommandPreparation.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <comphelper/sequence.hxx>
 
 namespace dbaccess

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 

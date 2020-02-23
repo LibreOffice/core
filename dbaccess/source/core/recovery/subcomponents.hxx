@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTS_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTS_HXX
 
-#include <dbaccess/dbaccessdllapi.h>
-
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
 #include <rtl/ustring.hxx>

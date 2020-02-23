@@ -20,8 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLAUTOSTYLE_HXX
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
-#include <xmloff/xmltypes.hxx>
-#include <xmloff/xmlprmap.hxx>
 
 namespace dbaxml
 {

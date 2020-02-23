@@ -27,15 +27,8 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <apitools.hxx>
 
 #include "FilteredContainer.hxx"
 

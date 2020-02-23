@@ -27,13 +27,11 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
-#include <cppuhelper/implementationentry.hxx>
 
 #include <connectivity/parameters.hxx>
 #include <connectivity/filtermanager.hxx>

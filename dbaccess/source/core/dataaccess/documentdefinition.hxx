@@ -31,9 +31,12 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/sdb/XSubDocument.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
+#include <rtl/ref.hxx>
 
 namespace comphelper
 {

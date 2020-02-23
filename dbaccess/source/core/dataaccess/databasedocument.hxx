@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
