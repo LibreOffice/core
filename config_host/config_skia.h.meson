@@ -1,0 +1,6 @@
+#ifndef CONFIG_SKIA_H
+#define CONFIG_SKIA_H
+
+#mesondefine HAVE_FEATURE_SKIA
+
+#endif

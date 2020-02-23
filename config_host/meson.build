@@ -108,6 +108,8 @@ cdata.set10('HAVE_CXXABI_H_VMI_CLASS_TYPE_INFO', true)
 
 cdata.set10('HAVE_DCONF', false)
 
+cdata.set10('HAVE_FEATURE_SKIA', false)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -244,6 +246,6 @@ configure_file(input: 'config_dconf.h.meson',
   output: 'config_dconf.h',
   configuration: cdata)
 
-configure_file(input: 'config_skia.h.in',
+configure_file(input: 'config_skia.h.meson',
   output: 'config_skia.h',
   configuration: cdata)
