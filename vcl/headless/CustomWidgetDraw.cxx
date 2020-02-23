@@ -344,11 +344,26 @@ bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
         aStyleSet.SetLightBorderColor(aStyle.maLightBorderColor);
         aStyleSet.SetShadowColor(aStyle.maShadowColor);
         aStyleSet.SetDarkShadowColor(aStyle.maDarkShadowColor);
+        aStyleSet.SetDefaultButtonTextColor(aStyle.maDefaultButtonTextColor);
         aStyleSet.SetButtonTextColor(aStyle.maButtonTextColor);
-        aStyleSet.SetActionButtonTextColor(aStyle.maActionButtonTextColor);
         aStyleSet.SetDefaultActionButtonTextColor(aStyle.maDefaultActionButtonTextColor);
+        aStyleSet.SetActionButtonTextColor(aStyle.maActionButtonTextColor);
+        aStyleSet.SetFlatButtonTextColor(aStyle.maFlatButtonTextColor);
+        aStyleSet.SetDefaultButtonRolloverTextColor(aStyle.maDefaultButtonRolloverTextColor);
         aStyleSet.SetButtonRolloverTextColor(aStyle.maButtonRolloverTextColor);
+        aStyleSet.SetDefaultActionButtonRolloverTextColor(
+            aStyle.maDefaultActionButtonRolloverTextColor);
         aStyleSet.SetActionButtonRolloverTextColor(aStyle.maActionButtonRolloverTextColor);
+        aStyleSet.SetFlatButtonRolloverTextColor(aStyle.maFlatButtonRolloverTextColor);
+        aStyleSet.SetDefaultButtonPressedRolloverTextColor(
+            aStyle.maDefaultButtonPressedRolloverTextColor);
+        aStyleSet.SetButtonPressedRolloverTextColor(aStyle.maButtonPressedRolloverTextColor);
+        aStyleSet.SetDefaultActionButtonPressedRolloverTextColor(
+            aStyle.maDefaultActionButtonPressedRolloverTextColor);
+        aStyleSet.SetActionButtonPressedRolloverTextColor(
+            aStyle.maActionButtonPressedRolloverTextColor);
+        aStyleSet.SetFlatButtonPressedRolloverTextColor(
+            aStyle.maFlatButtonPressedRolloverTextColor);
         aStyleSet.SetRadioCheckTextColor(aStyle.maRadioCheckTextColor);
         aStyleSet.SetGroupTextColor(aStyle.maGroupTextColor);
         aStyleSet.SetLabelTextColor(aStyle.maLabelTextColor);
