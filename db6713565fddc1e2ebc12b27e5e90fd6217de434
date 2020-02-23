@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "85f4e28f_dffbbd20",
+        "filename": "icon-themes/sukapura/AUTHORS",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-02-23T11:23:07Z",
+      "side": 1,
+      "message": "I have asked this to LibreOffice-ID community, and their answer is yes\n\nSee this page: https://fontsarena.com/licenses-explained/#cc0\n\n\"Sublicense\nYes ✓\nYou can change or extend the original license for derivative work.\"",
+      "parentUuid": "297bd2c1_d3c741a6",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "db6713565fddc1e2ebc12b27e5e90fd6217de434",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d44d4994_c3c4463f",
         "filename": "vcl/source/app/IconThemeSelector.cxx",
         "patchSetId": 4
