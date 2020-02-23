@@ -112,6 +112,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
+		DTOA_TARBALL \
 		$(call fetch_Optional,LIBCMIS,LIBCMIS_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
 		$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \

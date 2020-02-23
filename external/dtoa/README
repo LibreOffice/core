@@ -1,0 +1,3 @@
+dtoa is available from [https://www.netlib.org/fp/].
+
+Used to convert a decimal string to double (until std::from_chars is available on used compilers).

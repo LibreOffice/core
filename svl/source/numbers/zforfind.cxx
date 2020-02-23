@@ -18,6 +18,7 @@
  */
 
 #include <cstdlib>
+#include <dtoa.h>
 #include <float.h>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
@@ -151,35 +152,8 @@ static void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr
  */
 double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFraction )
 {
-    double fNum = 0.0;
-    double fFrac = 0.0;
-    int nExp = 0;
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rStr.getLength();
-    bool bPreSep = !bForceFraction;
-
-    while (nPos < nLen)
-    {
-        if (rStr[nPos] == '.')
-        {
-            bPreSep = false;
-        }
-        else if (bPreSep)
-        {
-            fNum = fNum * 10.0 + static_cast<double>(rStr[nPos] - '0');
-        }
-        else
-        {
-            fFrac = fFrac * 10.0 + static_cast<double>(rStr[nPos] - '0');
-            --nExp;
-        }
-        nPos++;
-    }
-    if ( fFrac )
-    {
-        return fNum + ::rtl::math::pow10Exp( fFrac, nExp );
-    }
-    return fNum;
+    const OString sNum = "." + OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US);
+    return strtod_nolocale(sNum.getStr() + (bForceFraction ? 0 : 1), nullptr);
 }
 
 namespace {
