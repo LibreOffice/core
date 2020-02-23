@@ -676,12 +676,12 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
                             );
 }
 
-void GenPspGraphics::SetTextColor( Color nColor )
+void GenPspGraphics::SetTextColor(Color nColor, [[maybe_unused]] bool isControl)
 {
     psp::PrinterColor aColor (nColor.GetRed(),
                               nColor.GetGreen(),
                               nColor.GetBlue());
-    m_pPrinterGfx->SetTextColor (aColor);
+    m_pPrinterGfx->SetTextColor(aColor);
 }
 
 bool GenPspGraphics::AddTempDevFont( PhysicalFontCollection*, const OUString&,const OUString& )

@@ -36,7 +36,10 @@
 #include <QtGui/QRawFont>
 #include <QtCore/QStringList>
 
-void Qt5Graphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
+void Qt5Graphics::SetTextColor(Color nColor, [[maybe_unused]] bool isControl)
+{
+    m_aTextColor = nColor;
+}
 
 void Qt5Graphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
 {

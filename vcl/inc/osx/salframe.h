@@ -172,6 +172,8 @@ public:
     NSView* getNSView() const { return mpNSView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
 
+    Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin );
+
     void getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY );
 
     // actually the following methods do the same thing: flipping y coordinates

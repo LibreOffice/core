@@ -256,10 +256,13 @@ SalGraphicsImpl* AquaSalGraphics::GetImpl() const
     return nullptr;
 }
 
-void AquaSalGraphics::SetTextColor( Color nColor )
+void AquaSalGraphics::SetTextColor(Color nColor, bool isControl)
 {
-    maTextColor = RGBAColor( nColor );
-    // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
+  const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
+  if (bDrawActive || !isControl)
+      maTextColor = RGBAColor(nColor);
+  else
+      maTextColor = mpFrame->getColor([NSColor disabledControlTextColor], COL_BLACK, mpFrame->getNSWindow());
 }
 
 void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)

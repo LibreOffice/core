@@ -40,6 +40,7 @@ bool VirtualDevice::AcquireGraphics() const
     mbInitFillColor     = true;
     mbInitFont          = true;
     mbInitTextColor     = true;
+    mbInitControlText   = false;
     mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -180,6 +181,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         maTextColor = pOutDev->maTextColor;
         mbInitTextColor = true;
+        mbInitControlText = false;
     }
 
     // virtual devices have white background by default

@@ -76,8 +76,9 @@ void OutputDevice::ImplInitTextColor()
 
     if ( mbInitTextColor )
     {
-        mpGraphics->SetTextColor( GetTextColor() );
+        mpGraphics->SetTextColor( GetTextColor(), mbInitControlText );
         mbInitTextColor = false;
+        mbInitControlText = false;
     }
 }
 
@@ -661,7 +662,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     return nMaxLineWidth;
 }
 
-void OutputDevice::SetTextColor( const Color& rColor )
+void OutputDevice::SetTextColor( const Color& rColor, bool isControl )
 {
 
     Color aColor( rColor );
@@ -690,6 +691,7 @@ void OutputDevice::SetTextColor( const Color& rColor )
     {
         maTextColor = aColor;
         mbInitTextColor = true;
+        mbInitControlText = isControl;
     }
 
     if( mpAlphaVDev )

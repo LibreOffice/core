@@ -344,8 +344,9 @@ public:
     virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
     // set fill color for raster operations
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
-    // set the text color to a specific color
-    virtual void            SetTextColor( Color nColor ) override;
+    // set the text color to a specific color, optional default argument isControl allows different text coloring for controls
+    // within non key windows
+    virtual void            SetTextColor(Color nColor, bool isControl = false) override;
     // set the font
     virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics

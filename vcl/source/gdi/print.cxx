@@ -490,6 +490,7 @@ bool Printer::AcquireGraphics() const
     mbInitFillColor     = true;
     mbInitFont          = true;
     mbInitTextColor     = true;
+    mbInitControlText   = false;
     mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();

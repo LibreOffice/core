@@ -1934,15 +1934,8 @@ static void ImplSalToTop( HWND hWnd, SalFrameToTop nFlags )
 
     if ( nFlags & SalFrameToTop::ForegroundTask )
     {
-        // This magic code is necessary to connect the input focus of the
-        // current window thread and the thread which owns the window that
-        // should be the new foreground window.
-        HWND   hCurrWnd     = GetForegroundWindow();
-        DWORD  myThreadID   = GetCurrentThreadId();
-        DWORD  currThreadID = GetWindowThreadProcessId(hCurrWnd,nullptr);
-        AttachThreadInput(myThreadID, currThreadID,TRUE);
+        // LO used to call AttachThreadInput here, which resulted in deadlocks!
         SetForegroundWindow_Impl(hWnd);
-        AttachThreadInput(myThreadID,currThreadID,FALSE);
     }
 
     if ( nFlags & SalFrameToTop::RestoreWhenMin )
@@ -2604,18 +2597,31 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
 
-    aStyleSettings.SetDialogColor( aStyleSettings.GetFaceColor() );
+    Color aControlTextColor(ImplWinColorToSal(GetSysColor(COLOR_BTNTEXT)));
 
-    aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
-    aStyleSettings.SetButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
-    aStyleSettings.SetDefaultActionButtonTextColor( ImplWinColorToSal( GetSysColor( COLOR_BTNTEXT ) ) );
-    aStyleSettings.SetActionButtonTextColor( aStyleSettings.GetDefaultActionButtonTextColor() );
-    aStyleSettings.SetActionButtonRolloverTextColor( aStyleSettings.GetActionButtonTextColor() );
-    aStyleSettings.SetButtonRolloverTextColor( aStyleSettings.GetButtonTextColor() );
-    aStyleSettings.SetButtonPressedRolloverTextColor( aStyleSettings.GetButtonTextColor() );
-    aStyleSettings.SetTabTextColor( aStyleSettings.GetButtonTextColor() );
-    aStyleSettings.SetTabRolloverTextColor( aStyleSettings.GetButtonTextColor() );
-    aStyleSettings.SetTabHighlightTextColor( aStyleSettings.GetButtonTextColor() );
+    aStyleSettings.SetDialogColor(aStyleSettings.GetFaceColor());
+    aStyleSettings.SetDialogTextColor(aControlTextColor);
+
+    aStyleSettings.SetDefaultButtonTextColor(aControlTextColor);
+    aStyleSettings.SetButtonTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultActionButtonTextColor(aControlTextColor);
+    aStyleSettings.SetActionButtonTextColor(aControlTextColor);
+    aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetActionButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetFlatButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetButtonPressedRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetActionButtonPressedRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetFlatButtonPressedRolloverTextColor(aControlTextColor);
+
+    aStyleSettings.SetTabTextColor(aControlTextColor);
+    aStyleSettings.SetTabRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetTabHighlightTextColor(aControlTextColor);
+
     aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
