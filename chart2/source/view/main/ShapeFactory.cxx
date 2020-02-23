@@ -2524,7 +2524,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
     uno::Reference< drawing::XShapes > xRet;
-    uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
+    uno::Reference< drawing::XShapes > xShapes = xDrawPage;
     if( xShapes.is() )
     {
         sal_Int32 nCount = xShapes->getCount();

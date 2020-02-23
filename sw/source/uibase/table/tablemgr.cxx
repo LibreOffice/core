@@ -222,19 +222,15 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         if (ppFlyFrameFormat)
             *ppFlyFrameFormat = pTmp;
 
-        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-        if( xCompSupp.is())
+        xChartModel.set( xObj->getComponent(), uno::UNO_QUERY );
+        if( xChartModel.is() )
         {
-            xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-            if( xChartModel.is() )
-            {
-                // Create a default chart type.
-                uno::Reference<chart2::XChartDocument> xChartDoc(xChartModel, uno::UNO_QUERY);
-                if (xChartDoc.is())
-                    xChartDoc->createDefaultChart();
+            // Create a default chart type.
+            uno::Reference<chart2::XChartDocument> xChartDoc(xChartModel, uno::UNO_QUERY);
+            if (xChartDoc.is())
+                xChartDoc->createDefaultChart();
 
-                xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
-            }
+            xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
         }
 
         // set the table name at the OLE-node

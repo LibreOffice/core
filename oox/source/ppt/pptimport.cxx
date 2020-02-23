@@ -250,7 +250,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
                     xUndoManager->unlock();
             });
 
-            Reference< XComponent > xDocument(getModel(), UNO_QUERY);
+            Reference< XComponent > xDocument = getModel();
             xExporter->setSourceDocument(xDocument);
             if (xFilter->filter(rDescriptor))
                 return true;

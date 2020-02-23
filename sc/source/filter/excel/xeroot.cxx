@@ -233,7 +233,7 @@ void XclExpRoot::InitializeGlobals()
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no object shell");
                 break;
             }
-            uno::Reference< lang::XComponent > xComponent( pShell->GetModel(), uno::UNO_QUERY);
+            uno::Reference< lang::XComponent > xComponent = pShell->GetModel();
             if (!xComponent.is())
             {
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no component");

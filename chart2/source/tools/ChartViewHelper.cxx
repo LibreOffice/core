@@ -41,7 +41,7 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
                     xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
             if( xModifyListener.is() )
             {
-                lang::EventObject aEvent( Reference< lang::XComponent >( xChartModel, uno::UNO_QUERY ) );
+                lang::EventObject aEvent( xChartModel );
                 xModifyListener->modified( aEvent );
             }
         }
