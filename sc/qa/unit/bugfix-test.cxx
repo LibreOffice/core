@@ -47,6 +47,7 @@ public:
     void testTdf31231();
     void testTdf128951();
     void testTdf129789();
+    void testTdf130725();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST(testTdf31231);
     CPPUNIT_TEST(testTdf128951);
     CPPUNIT_TEST(testTdf129789);
+    CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -468,6 +470,34 @@ void ScFiltersTest::testTdf129789()
     }
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf130725()
+{
+    css::uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // 1. Create spreadsheet
+    css::uno::Sequence<css::beans::PropertyValue> aHiddenArgList(1);
+    aHiddenArgList[0].Name = "Hidden";
+    aHiddenArgList[0].Value <<= true;
+
+    css::uno::Reference<css::lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
+    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(xComponent,
+        css::uno::UNO_QUERY_THROW);
+
+    // 2. Insert 0.0042 into a cell as a formula, to force the conversion from string to double
+    css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
+        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
+    xCell->setFormula("0.0042"); // this assumes en-US locale
+
+    // 3. Check that the value is the nearest double-precision representation of the decimal 0.0042
+    //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value must be the nearest representation of decimal 0.0042",
+        0.0042, xCell->getValue()); // strict equality
 }
 
 ScFiltersTest::ScFiltersTest()
