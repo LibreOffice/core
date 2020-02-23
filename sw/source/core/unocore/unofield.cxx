@@ -3010,21 +3010,11 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     const size_t nCount = pFieldTypes->size();
     for(size_t nType = 0;  nType < nCount;  ++nType)
     {
-        const SwFieldType *pCurType = (*pFieldTypes)[nType].get();
-        SwIterator<SwFormatField,SwFieldType> aIter( *pCurType );
-        const SwFormatField* pCurFieldFormat = aIter.First();
-        while (pCurFieldFormat)
-        {
-            const SwTextField *pTextField = pCurFieldFormat->GetTextField();
-            // skip fields that are currently not in the document
-            // e.g. fields in undo or redo array
-            bool bSkip = !pTextField ||
-                         !pTextField->GetpTextNode()->GetNodes().IsDocNodes();
-            if (!bSkip)
-                m_pImpl->m_Items.push_back( SwXTextField::CreateXTextField(
-                        m_pImpl->m_pDoc, pCurFieldFormat));
-            pCurFieldFormat = aIter.Next();
-        }
+        const SwFieldType* pCurType = (*pFieldTypes)[nType].get();
+        std::vector<SwFormatField*> vFormatFields;
+        pCurType->GatherFields(vFormatFields);
+        std::for_each(vFormatFields.begin(), vFormatFields.end(),
+                [this](SwFormatField* pF) { m_pImpl->m_Items.push_back(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF)); });
     }
     // now handle meta-fields, which are not SwFields
     const std::vector< uno::Reference<text::XTextField> > MetaFields(
