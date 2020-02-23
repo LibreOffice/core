@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee901b17_7cf8fe4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-02-23T15:06:50Z",
+      "side": 1,
+      "message": "Apple remote was used to control presentations - if you got the hardware, in a running slideshow, the thing should essentially send emulated left/right key presses \u0026 gets you next/prev slides..",
+      "revId": "0540b098b7dab73c32947ed4b52cf3068eaa5125",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
