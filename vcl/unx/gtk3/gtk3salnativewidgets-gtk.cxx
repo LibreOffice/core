@@ -3030,10 +3030,13 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // mouse over text colors
     style_context_set_state(pStyle, GTK_STATE_FLAG_PRELIGHT);
     gtk_style_context_get_color(pStyle, gtk_style_context_get_state(pStyle), &text_color);
-    aTextColor = getColor( text_color );
+    aTextColor = getColor(text_color);
+    aStyleSet.SetDefaultButtonRolloverTextColor(aTextColor);
     aStyleSet.SetButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetDefaultActionButtonRolloverTextColor(aTextColor);
     aStyleSet.SetActionButtonRolloverTextColor(aTextColor);
-    aStyleSet.SetFieldRolloverTextColor( aTextColor );
+    aStyleSet.SetFlatButtonRolloverTextColor(aTextColor);
+    aStyleSet.SetFieldRolloverTextColor(aTextColor);
 
     aContextState.restore();
 
