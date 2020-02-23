@@ -1164,15 +1164,19 @@ svx/res/3dlight.png cmd/lc_graphicfiltersolarize.png
 # Style
 cmd/32/editstyled.png cmd/32/editstyle.png
 cmd/32/loadstyles.png cmd/32/open.png
+cmd/32/outlineleft.png cmd/32/incrementlevel.png
+cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/viewsidebarstyles.png cmd/32/designerdialog.png
 cmd/lc_editstyled.png cmd/lc_editstyle.png
 cmd/lc_loadstyles.png cmd/lc_open.png
+cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
+cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
 cmd/sc_editstyled.png cmd/sc_editstyle.png
 cmd/sc_loadstyles.png cmd/sc_open.png
+cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
+cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
-cmd/lc_outlineright.png cmd/lc_decrementlevel.png
-cmd/lc_outlineleft.png cmd/lc_decrementindent.png
 
 # Mirror
 cmd/32/fliphorizontal.png cmd/32/mirror.png
@@ -1653,8 +1657,7 @@ sd/res/displaymode_slidemaster.png cmd/32/slidemasterpage.png
 sd/res/displaymode_slidesorter.png cmd/32/diamode.png
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_shownote.png
-sd/res/get1obj.png cmd/sc_selectobject.png
-sd/res/getallob.png cmd/sc_selectall.png
+sd/res/fade_effect_indicator.png sd/res/effect_16.png
 sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_formatgroup.png
 sd/res/nv010.png cmd/sc_inserthyperlink.png
@@ -1665,10 +1668,11 @@ sd/res/nv05.png cmd/sc_nextrecord.png
 sd/res/nv06.png cmd/sc_lastrecord.png
 sd/res/nv08.png cmd/sc_copy.png
 sd/res/nv09.png cmd/sc_insertbookmark.png
-sd/res/ole.png cmd/lc_insertobject.png
-sd/res/page.png cmd/lc_adddirect.png
+sd/res/ole.png cmd/sc_insertobject.png
+sd/res/page.png cmd/sc_adddirect.png
 sd/res/pipette.png cmd/lc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
+sd/res/sf02.png cmd/sc_dia.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sd/res/waiticon.png cmd/sc_mediapause.png
@@ -1705,8 +1709,8 @@ sfx2/res/styfam3.png cmd/sc_borderdialog.png
 sfx2/res/styfam4.png cmd/sc_adddirect.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
-sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationobjects.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationobjects.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_customanimation.png
+sfx2/res/symphony/sidebar-animation-small.png cmd/sc_customanimation.png
 sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-eyedropper-large.png cmd/lc_bmpmask.png
