@@ -131,7 +131,7 @@ static LogLevel readLogLevelFromConfiguration()
     OUString fileName;
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast<oslGenericFunction>(readLogLevelFromConfiguration), &fileName.pData );
-    fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 ) +
+    fileName = fileName.copy( 0, fileName.lastIndexOf( '/' )+1 ) +
 #ifdef MACOSX
         "../Resources/"
 #endif
