@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbaca628_cad8259a",
+        "filename": "sd/source/ui/animations/STLPropertySet.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-23T17:11:27Z",
+      "side": 0,
+      "message": "Removing this is inconsistent (but of course it\u0027s just a cosmetic issue, having nothing to do with the failure)",
+      "range": {
+        "startLine": 66,
+        "startChar": 57,
+        "endLine": 66,
+        "endChar": 58
+      },
+      "revId": "38dcd3bc735633f2a4857849ef14917bbffcdd11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
