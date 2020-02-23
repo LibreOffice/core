@@ -1271,7 +1271,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     Color aMenuHighlightTextColor( getColor( [NSColor selectedMenuItemTextColor],
                                              aStyleSettings.GetMenuHighlightTextColor(), mpNSWindow ) );
     aStyleSettings.SetMenuHighlightTextColor( aMenuHighlightTextColor );
-
     aStyleSettings.SetMenuColor( aBackgroundColor );
     Color aMenuTextColor( getColor( [NSColor textColor],
                                     aStyleSettings.GetMenuTextColor(), mpNSWindow ) );
@@ -1279,6 +1278,23 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
+
+    // Set white text for certain button types / button states: default buttons, action buttons, mouse rollover across
+    // default buttons or action buttons, pressed buttons
+
+    Color aSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
+    aStyleSettings.SetDefaultButtonTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+
+    // Set white text for selected tabs
+
+    aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 
