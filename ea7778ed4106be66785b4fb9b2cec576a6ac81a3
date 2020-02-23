@@ -42,6 +42,29 @@
     },
     {
       "key": {
+        "uuid": "d6ec6605_4c7fecd1",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 15
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-23T11:17:44Z",
+      "side": 1,
+      "message": "Even if we continue with the current approach (which I\u0027m not very happy with, but won\u0027t block the patch on that ground), this still looks odd to reference an internal enum from a public documentation. Whoever will read this doc (e.g. on api.libreoffice.org), surely will be confused that SfxSlotMode is an UNO enum, and try to find it. Much more helpful might be to describe in general what SlotMode is about, and then add a note that actual values are impl. detail, and that users shouldn\u0027t rely on a particular value to work in a certain way.",
+      "range": {
+        "startLine": 32,
+        "startChar": 40,
+        "endLine": 32,
+        "endChar": 60
+      },
+      "revId": "ea7778ed4106be66785b4fb9b2cec576a6ac81a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab266ae5_d295bdce",
         "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
         "patchSetId": 15
