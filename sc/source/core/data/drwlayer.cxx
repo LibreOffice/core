@@ -1731,7 +1731,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
                 uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject)->GetObjRef();
-                uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
+                uno::Reference< embed::XClassifiedObject > xClassified = xIPObj;
                 SvGlobalName aObjectClassName;
                 if ( xClassified.is() )
                 {

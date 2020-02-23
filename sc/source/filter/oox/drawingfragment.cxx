@@ -176,7 +176,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext(
 
 DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
-    mxDrawPage( rHelper.getDrawPage(), UNO_QUERY )
+    mxDrawPage( rHelper.getDrawPage() )
 {
     OSL_ENSURE( mxDrawPage.is(), "DrawingFragment::DrawingFragment - missing drawing page" );
 }

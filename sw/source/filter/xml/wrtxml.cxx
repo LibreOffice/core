@@ -248,8 +248,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         *pArgs++ <<= xStatusIndicator;
 
     //Get model
-    uno::Reference< lang::XComponent > xModelComp(
-        m_pDoc->GetDocShell()->GetModel(), UNO_QUERY );
+    uno::Reference< lang::XComponent > xModelComp = m_pDoc->GetDocShell()->GetModel();
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
