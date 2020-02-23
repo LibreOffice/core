@@ -2264,9 +2264,9 @@ sd/res/nv05.png cmd/sc_nextrecord.png
 sd/res/nv06.png cmd/sc_lastrecord.png
 sd/res/nv08.png cmd/sc_copy.png
 sd/res/nv09.png cmd/sc_insertbookmark.png
-sd/res/ole.png cmd/lc_insertobject.png
-sd/res/page.png cmd/lc_adddirect.png
-sd/res/pipette.png cmd/lc_bmpmask.png
+sd/res/ole.png cmd/sc_insertobject.png
+sd/res/page.png cmd/sc_adddirect.png
+sd/res/pipette.png cmd/sc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
 sd/res/sf02.png cmd/sc_dia.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
@@ -2456,13 +2456,9 @@ svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/symphony/fill_color.png cmd/sc_formatarea.png
-svx/res/symphony/last_custom_common.png sw/res/sidebar/pageproppanel/last_custom_common.png
-svx/res/symphony/last_custom_common_grey.png sw/res/sidebar/pageproppanel/last_custom_common_grey.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
-svx/res/symphony/last_custom_common_grey.png cmd/last_custom_common_grey.png
-svx/res/symphony/last_custom_common.png cmd/last_custom_common.png
 
 # sw
 # ==============================================
@@ -2536,6 +2532,8 @@ sw/res/sr20019.png cmd/sc_remove.png
 sw/res/sx01.png cmd/sc_dbqueryedit.png
 sw/res/sx02.png cmd/sc_dbviewtables.png
 sw/res/sx03.png cmd/sc_dbviewqueries.png
+sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
+sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
 svx/res/reload.png cmd/sc_reload.png
 svx/res/time.png cmd/sc_timefield.png
 
