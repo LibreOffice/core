@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc0cce21_77ba5053",
+        "filename": "sd/source/ui/animations/STLPropertySet.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-23T17:16:38Z",
+      "side": 1,
+      "message": "Also: is this include needed after your change? I would assume that if you have replaced everything from that obsolete header, it might be removed as well?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "32f5f1b9ace82d34e5356fb466b91a3dd6f10c74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
