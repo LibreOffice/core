@@ -96,12 +96,15 @@ void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel
 
 void ChartColorWrapper::updateData()
 {
+    static const OUStringLiteral aLineColor = "LineColor";
+    static const OUStringLiteral aCommands[2] = {".uno:XLineColor", ".uno:FillColor"};
+
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
     css::util::URL aUrl;
-    aUrl.Complete = ".uno:FillColor";
+    aUrl.Complete = (maPropertyName == aLineColor) ? aCommands[0] : aCommands[1];
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL = aUrl;
