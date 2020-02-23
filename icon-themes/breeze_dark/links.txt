@@ -905,29 +905,17 @@ cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_print.png
 
 # Delete
-cmd/32/dbclearquery.png cmd/32/delete.png
-cmd/32/dbformdelete.png cmd/32/delete.png
-cmd/32/dbquerydelete.png cmd/32/delete.png
-cmd/32/dbreportdelete.png cmd/32/delete.png
-cmd/32/dbtabledelete.png cmd/32/delete.png
+cmd/32/dbclearquery.png cmd/32/dbquerydelete.png
 cmd/32/deletepivottable.png cmd/32/delete.png
 cmd/32/deleteprintarea.png cmd/32/delete.png
 cmd/32/deleterecord.png cmd/32/delete.png
 
-cmd/lc_dbclearquery.png cmd/lc_delete.png
-cmd/lc_dbformdelete.png cmd/lc_delete.png
-cmd/lc_dbquerydelete.png cmd/lc_delete.png
-cmd/lc_dbreportdelete.png cmd/lc_delete.png
-cmd/lc_dbtabledelete.png cmd/lc_delete.png
+cmd/lc_dbclearquery.png cmd/lc_dbquerydelete.png
 cmd/lc_deletepivottable.png cmd/lc_delete.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleterecord.png cmd/lc_delete.png
 
-cmd/sc_dbclearquery.png cmd/sc_delete.png
-cmd/sc_dbformdelete.png cmd/sc_delete.png
-cmd/sc_dbquerydelete.png cmd/sc_delete.png
-cmd/sc_dbreportdelete.png cmd/sc_delete.png
-cmd/sc_dbtabledelete.png cmd/sc_delete.png
+cmd/sc_dbclearquery.png cmd/sc_dbquerydelete.png
 cmd/sc_deletepivottable.png cmd/sc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
@@ -1783,6 +1771,10 @@ cmd/sc_navigationbar.png cmd/sc_navigator.png
 cmd/sc_reportnavigator.png cmd/sc_navigator.png
 
 # Database
+cmd/32/dbnewquerysql.png cmd/32/sbanativesql.png
+cmd/32/dbdtableedit.png cmd/32/dbtableedit.png
+cmd/32/dbnewview.png cmd/32/dbchangedesignmode.png
+
 cmd/lc_dbnewquerysql.png cmd/lc_sbanativesql.png
 cmd/lc_dbdtableedit.png cmd/lc_dbtableedit.png
 cmd/lc_dbnewview.png cmd/lc_dbchangedesignmode.png
@@ -1971,7 +1963,7 @@ dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
 dbaccess/res/exerror.png cmd/sc_cancel.png
 dbaccess/res/exinfo.png cmd/sc_helpindex.png
 
-dbaccess/res/form_16.png cmd/sc_dbformedit.png
+dbaccess/res/form_16.png cmd/sc_dbviewforms.png
 dbaccess/res/forms_16.png cmd/sc_open.png
 dbaccess/res/forms_32.png cmd/32/dbviewforms.png
 
@@ -2529,7 +2521,7 @@ sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
 sw/res/sr20019.png cmd/sc_remove.png
 
-sw/res/sx01.png cmd/sc_dbqueryedit.png
+sw/res/sx01.png cmd/sc_dbviewqueries.png
 sw/res/sx02.png cmd/sc_dbviewtables.png
 sw/res/sx03.png cmd/sc_dbviewqueries.png
 sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
