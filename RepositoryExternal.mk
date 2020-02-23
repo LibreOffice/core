@@ -4206,6 +4206,23 @@ endef
 
 endif # SYSTEM_QRCODEGEN
 
+define gb_LinkTarget__use_dtoa
+$(call gb_LinkTarget_use_unpacked,$(1),dtoa)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,dtoa/include/)\
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	dtoa \
+)
+
+endef
+
+define gb_ExternalProject__use_dtoa
+$(call gb_ExternalProject_use_static_libraries,$(1),dtoa)
+
+endef
+
 $(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
 	$(if $(UCRT_REDISTDIR),ucrt) \
 ))

@@ -1,0 +1,10 @@
+dtoa is available from [ https://www.netlib.org/fp/ ].
+
+Used to convert a decimal string to double (until std::from_chars is available on used compilers).
+Packaged using
+
+  mkdir dtoa && mkdir dtoa/src && wget https://www.netlib.org/fp/dtoa.c -O dtoa/src/dtoa.c && \
+   printf 'd8bab255476f39ea495c8c8ed164f9077da926e6ca7afb9ad3c56d337c4484fe dtoa/src/dtoa.c' | sha256sum -c && \
+   tar -c --owner=0 --group=0 --mode=go=r,u=rw --mtime='Wed, 11 Apr 2018 15:59:39 GMT' dtoa/src/dtoa.c | gzip -n > dtoa-20180411.tgz && \
+   printf '0082d0684f7db6f62361b76c4b7faba19e0c7ce5cb8e36c4b65fea8281e711b4 dtoa-20180411.tgz' | sha256sum -c
+(where the date "Wed, 11 Apr 2018 15:59:39 GMT" is from `wget -S https://www.netlib.org/fp/dtoa.c` "Last-Modified: Wed, 11 Apr 2018 15:59:39 GMT" header).
