@@ -1274,6 +1274,11 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         pSubPop3->CheckItem( nId );
 
     SvTreeListEntry* pEntry = nullptr;
+    if (lcl_IsContent(FirstSelected()))
+    {
+        pPop->InsertItem(900, SwResId(STR_GOTO));
+        pPop->SetAccelKey(900, vcl::KeyCode(KEY_RETURN, false, false, false, false));
+    }
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
             && nullptr != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
@@ -3387,6 +3392,12 @@ void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             // Delete outline selections
             EditEntry(pFirst, EditEntryMode::DELETE);
             break;
+        case 900:
+        {
+            SwContent* pCnt = static_cast<SwContent*>(pFirst->GetUserData());
+            GotoContent(pCnt);
+        }
+        break;
         //Display
         default:
         if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
