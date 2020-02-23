@@ -175,7 +175,7 @@ public:
 
     // Text rendering + font support
 
-    virtual void SetTextColor(Color nColor) override;
+    virtual void SetTextColor(Color nColor, bool isControl = false) override;
     virtual void SetFont(LogicalFontInstance*, int nFallbackLevel) override;
     virtual void GetFontMetric(ImplFontMetricDataRef&, int nFallbackLevel) override;
     virtual FontCharMapRef GetFontCharMap() const override;

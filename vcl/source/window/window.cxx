@@ -823,6 +823,7 @@ bool Window::AcquireGraphics() const
     mbInitFillColor     = true;
     mbInitFont          = true;
     mbInitTextColor     = true;
+    mbInitControlText   = false;
     mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -1821,10 +1822,10 @@ void Window::KeyInput( const KeyEvent& rKEvt )
     KeyCode cod = rKEvt.GetKeyCode ();
     bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
 
-    // do not respond to accelerators unless Alt is held */
+    // do not respond to accelerators unless Alt or Ctrl is held */
     if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
     {
-        if (autoacc && cod.GetModifier () != KEY_MOD2)
+        if (autoacc && cod.GetModifier () != KEY_MOD2 && !(cod.GetModifier() & KEY_MOD1))
             return;
     }
 

@@ -121,8 +121,9 @@ public:
     // set fill color for raster operations
     virtual void                SetROPFillColor( SalROPColor nROPColor ) = 0;
 
-    // set the text color to a specific color
-    virtual void                SetTextColor( Color nColor ) = 0;
+    // set the text color to a specific color, optional default argument isControl allows different text coloring for controls
+    // within non key windows
+    virtual void                SetTextColor(Color nColor, bool isControl = false) = 0;
 
     // set the font
     virtual void                SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;

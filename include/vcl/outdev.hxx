@@ -385,6 +385,7 @@ private:
     mutable bool                    mbInitFillColor : 1;
     mutable bool                    mbInitFont : 1;
     mutable bool                    mbInitTextColor : 1;
+    mutable bool                    mbInitControlText : 1;
     mutable bool                    mbInitClipRegion : 1;
     mutable bool                    mbClipRegionSet : 1;
     mutable bool                    mbNewFont : 1;
@@ -1113,7 +1114,7 @@ public:
                                                     DrawTextFlags    nStyle,
                                                     GDIMetaFile&     rMtf );
 
-    void                        SetTextColor( const Color& rColor );
+    void                        SetTextColor( const Color& rColor, bool isControl = false );
     const Color&                GetTextColor() const { return maTextColor; }
 
     void                        SetTextFillColor();

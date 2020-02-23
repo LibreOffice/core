@@ -739,7 +739,7 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
     }
 }
 
-void WinSalGraphics::SetTextColor( Color nColor )
+void WinSalGraphics::SetTextColor(Color nColor, [[maybe_unused]] bool isControl)
 {
     COLORREF aCol = PALETTERGB( nColor.GetRed(),
                                 nColor.GetGreen(),
