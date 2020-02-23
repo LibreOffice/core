@@ -46,9 +46,9 @@ void X11SalGraphics::SetFont(LogicalFontInstance* pEntry, int nFallbackLevel)
 }
 
 void
-X11SalGraphics::SetTextColor( Color nColor )
+X11SalGraphics::SetTextColor(Color nColor, bool isControl)
 {
-    mxTextRenderImpl->SetTextColor(nColor);
+    mxTextRenderImpl->SetTextColor(nColor, isControl);
     nTextPixel_     = GetPixel( nColor );
 }
 

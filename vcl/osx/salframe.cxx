@@ -1090,13 +1090,13 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     if( it != aKeyMap.end() )
     {
         if( (nKeyCode & KEY_SHIFT) != 0 )
-            aResult.append( u'\x21e7' ); //⇧
+            aResult.append( u'\x21e7' ); // Shift
         if( (nKeyCode & KEY_MOD1) != 0 )
-            aResult.append( u'\x2318' ); //⌘
+            aResult.append( u'\x2318' ); // Command
         if( (nKeyCode & KEY_MOD2) != 0 )
-            aResult.append( u'\x2325' ); //⌥
+            aResult.append( u'\x2325' ); // Alternate
         if( (nKeyCode & KEY_MOD3) != 0 )
-            aResult.append( u'\x2303' ); //⌃
+            aResult.append( u'\x2303' ); // Control
 
         aResult.append( it->second );
     }
@@ -1148,7 +1148,21 @@ static void getAppleScrollBarVariant(StyleSettings &rSettings)
     }
 }
 
-static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin )
+static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
+{
+    vcl::Font aResult( rDefault );
+    if( pFont )
+    {
+        aResult.SetFamilyName( GetOUString( [pFont familyName] ) );
+        aResult.SetFontHeight( static_cast<int>(([pFont pointSize] * 72.0 / static_cast<float>(nDPIY))+0.5) );
+        aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
+        // FIMXE: bold ?
+    }
+
+    return aResult;
+}
+
+Color AquaSalFrame::getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin )
 {
     Color aRet( rDefault );
     if( pSysColor )
@@ -1173,20 +1187,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     }
     return aRet;
-}
-
-static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
-{
-    vcl::Font aResult( rDefault );
-    if( pFont )
-    {
-        aResult.SetFamilyName( GetOUString( [pFont familyName] ) );
-        aResult.SetFontHeight( static_cast<int>(([pFont pointSize] * 72.0 / static_cast<float>(nDPIY))+0.5) );
-        aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
-        // FIMXE: bold ?
-    }
-
-    return aResult;
 }
 
 void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
@@ -1271,7 +1271,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     Color aMenuHighlightTextColor( getColor( [NSColor selectedMenuItemTextColor],
                                              aStyleSettings.GetMenuHighlightTextColor(), mpNSWindow ) );
     aStyleSettings.SetMenuHighlightTextColor( aMenuHighlightTextColor );
-
     aStyleSettings.SetMenuColor( aBackgroundColor );
     Color aMenuTextColor( getColor( [NSColor textColor],
                                     aStyleSettings.GetMenuTextColor(), mpNSWindow ) );
@@ -1279,6 +1278,32 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
+
+    // Set text colors for buttons and their different status according to OS settings, typically white for selected buttons,
+    // black otherwise
+
+    Color aControlTextColor(getColor([NSColor controlTextColor], COL_BLACK, mpNSWindow));
+    Color aSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
+    aStyleSettings.SetDefaultButtonTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetButtonTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultActionButtonTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetActionButtonTextColor(aControlTextColor);
+    aStyleSettings.SetFlatButtonTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetActionButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetFlatButtonRolloverTextColor(aControlTextColor);
+    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    aStyleSettings.SetFlatButtonPressedRolloverTextColor(aControlTextColor);
+
+    // Set text colors for tabs according to OS settings, typically white for selected buttons, black otherwise
+
+    aStyleSettings.SetTabTextColor(aControlTextColor);
+    aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 

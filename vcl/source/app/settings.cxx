@@ -81,12 +81,21 @@ struct ImplStyleData
     Color                           maActiveColor;
     Color                           maActiveTextColor;
     Color                           maAlternatingRowColor;
+    Color                           maDefaultButtonTextColor;
     Color                           maButtonTextColor;
     Color                           maDefaultActionButtonTextColor;
     Color                           maActionButtonTextColor;
-    Color                           maActionButtonRolloverTextColor;
+    Color                           maFlatButtonTextColor;
+    Color                           maDefaultButtonRolloverTextColor;
     Color                           maButtonRolloverTextColor;
+    Color                           maDefaultActionButtonRolloverTextColor;
+    Color                           maActionButtonRolloverTextColor;
+    Color                           maFlatButtonRolloverTextColor;
+    Color                           maDefaultButtonPressedRolloverTextColor;
     Color                           maButtonPressedRolloverTextColor;
+    Color                           maDefaultActionButtonPressedRolloverTextColor;
+    Color                           maActionButtonPressedRolloverTextColor;
+    Color                           maFlatButtonPressedRolloverTextColor;
     Color                           maCheckedColor;
     Color                           maDarkShadowColor;
     Color                           maDeactiveBorderColor;
@@ -492,12 +501,21 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveColor( rData.maActiveColor ),
     maActiveTextColor( rData.maActiveTextColor ),
     maAlternatingRowColor( rData.maAlternatingRowColor ),
+    maDefaultButtonTextColor( rData.maDefaultButtonTextColor ),
     maButtonTextColor( rData.maButtonTextColor ),
     maDefaultActionButtonTextColor( rData.maDefaultActionButtonTextColor ),
     maActionButtonTextColor( rData.maActionButtonTextColor ),
-    maActionButtonRolloverTextColor( rData.maActionButtonRolloverTextColor ),
+    maFlatButtonTextColor( rData.maFlatButtonTextColor ),
+    maDefaultButtonRolloverTextColor( rData.maDefaultButtonRolloverTextColor ),
     maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
+    maDefaultActionButtonRolloverTextColor( rData.maDefaultActionButtonRolloverTextColor ),
+    maActionButtonRolloverTextColor( rData.maActionButtonRolloverTextColor ),
+    maFlatButtonRolloverTextColor( rData.maFlatButtonRolloverTextColor ),
+    maDefaultButtonPressedRolloverTextColor( rData.maDefaultButtonPressedRolloverTextColor ),
     maButtonPressedRolloverTextColor( rData.maButtonPressedRolloverTextColor ),
+    maDefaultActionButtonPressedRolloverTextColor( rData.maDefaultActionButtonPressedRolloverTextColor ),
+    maActionButtonPressedRolloverTextColor( rData.maActionButtonPressedRolloverTextColor ),
+    maFlatButtonPressedRolloverTextColor( rData.maFlatButtonPressedRolloverTextColor ),
     maCheckedColor( rData.maCheckedColor ),
     maDarkShadowColor( rData.maDarkShadowColor ),
     maDeactiveBorderColor( rData.maDeactiveBorderColor ),
@@ -632,12 +650,23 @@ void ImplStyleData::SetStandardStyles()
     maLightBorderColor          = COL_LIGHTGRAY;
     maShadowColor               = COL_GRAY;
     maDarkShadowColor           = COL_BLACK;
-    maButtonTextColor           = COL_BLACK;
-    maDefaultActionButtonTextColor = COL_BLACK;
-    maActionButtonTextColor     = COL_BLACK;
-    maActionButtonRolloverTextColor = COL_BLACK;
-    maButtonRolloverTextColor   = COL_BLACK;
-    maButtonPressedRolloverTextColor = COL_BLACK;
+
+    maDefaultButtonTextColor                      = COL_BLACK;
+    maButtonTextColor                             = COL_BLACK;
+    maDefaultActionButtonTextColor                = COL_BLACK;
+    maActionButtonTextColor                       = COL_BLACK;
+    maFlatButtonTextColor                         = COL_BLACK;
+    maDefaultButtonRolloverTextColor              = COL_BLACK;
+    maButtonRolloverTextColor                     = COL_BLACK;
+    maDefaultActionButtonRolloverTextColor        = COL_BLACK;
+    maActionButtonRolloverTextColor               = COL_BLACK;
+    maFlatButtonRolloverTextColor                 = COL_BLACK;
+    maDefaultButtonPressedRolloverTextColor       = COL_BLACK;
+    maButtonPressedRolloverTextColor              = COL_BLACK;
+    maDefaultActionButtonPressedRolloverTextColor = COL_BLACK;
+    maActionButtonPressedRolloverTextColor        = COL_BLACK;
+    maFlatButtonPressedRolloverTextColor          = COL_BLACK;
+
     maRadioCheckTextColor       = COL_BLACK;
     maGroupTextColor            = COL_BLACK;
     maLabelTextColor            = COL_BLACK;
@@ -683,18 +712,18 @@ void ImplStyleData::SetStandardStyles()
     maFontColor                 = COL_BLACK;
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
-    mnTitleHeight               = 18;
-    mnFloatTitleHeight          = 13;
-    mbHighContrast              = false;
-    mbUseSystemUIFonts          = true;
-    mbUseFontAAFromSystem = true;
-    mnUseFlatBorders            = false;
-    mnUseFlatMenus              = false;
-    mbPreferredUseImagesInMenus = true;
-    mbSkipDisabledInMenus       = false;
-    mbHideDisabledMenuItems     = false;
+    mnTitleHeight                   = 18;
+    mnFloatTitleHeight              = 13;
+    mbHighContrast                  = false;
+    mbUseSystemUIFonts              = true;
+    mbUseFontAAFromSystem           = true;
+    mnUseFlatBorders                = false;
+    mnUseFlatMenus                  = false;
+    mbPreferredUseImagesInMenus     = true;
+    mbSkipDisabledInMenus           = false;
+    mbHideDisabledMenuItems         = false;
     mbPreferredContextMenuShortcuts = true;
-    mbPrimaryButtonWarpsSlider = false;
+    mbPrimaryButtonWarpsSlider      = false;
 }
 
 StyleSettings::StyleSettings()
@@ -781,6 +810,19 @@ StyleSettings::GetDarkShadowColor() const
 }
 
 void
+StyleSettings::SetDefaultButtonTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultButtonTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultButtonTextColor() const
+{
+    return mxData->maDefaultButtonTextColor;
+}
+
+void
 StyleSettings::SetButtonTextColor( const Color& rColor )
 {
     CopyData();
@@ -820,16 +862,29 @@ StyleSettings::GetActionButtonTextColor() const
 }
 
 void
-StyleSettings::SetActionButtonRolloverTextColor( const Color& rColor )
+StyleSettings::SetFlatButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActionButtonRolloverTextColor = rColor;
+    mxData->maFlatButtonTextColor = rColor;
 }
 
 const Color&
-StyleSettings::GetActionButtonRolloverTextColor() const
+StyleSettings::GetFlatButtonTextColor() const
 {
-    return mxData->maActionButtonRolloverTextColor;
+    return mxData->maFlatButtonTextColor;
+}
+
+void
+StyleSettings::SetDefaultButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultButtonRolloverTextColor() const
+{
+    return mxData->maDefaultButtonRolloverTextColor;
 }
 
 void
@@ -846,6 +901,58 @@ StyleSettings::GetButtonRolloverTextColor() const
 }
 
 void
+StyleSettings::SetDefaultActionButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultActionButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultActionButtonRolloverTextColor() const
+{
+    return mxData->maDefaultActionButtonRolloverTextColor;
+}
+
+void
+StyleSettings::SetActionButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maActionButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActionButtonRolloverTextColor() const
+{
+    return mxData->maActionButtonRolloverTextColor;
+}
+
+void
+StyleSettings::SetFlatButtonRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maFlatButtonRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFlatButtonRolloverTextColor() const
+{
+    return mxData->maFlatButtonRolloverTextColor;
+}
+
+void
+StyleSettings::SetDefaultButtonPressedRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultButtonPressedRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultButtonPressedRolloverTextColor() const
+{
+    return mxData->maDefaultButtonPressedRolloverTextColor;
+}
+
+void
 StyleSettings::SetButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
@@ -856,6 +963,45 @@ const Color&
 StyleSettings::GetButtonPressedRolloverTextColor() const
 {
     return mxData->maButtonPressedRolloverTextColor;
+}
+
+void
+StyleSettings::SetDefaultActionButtonPressedRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maDefaultActionButtonPressedRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDefaultActionButtonPressedRolloverTextColor() const
+{
+    return mxData->maDefaultActionButtonPressedRolloverTextColor;
+}
+
+void
+StyleSettings::SetActionButtonPressedRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maActionButtonPressedRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetActionButtonPressedRolloverTextColor() const
+{
+    return mxData->maActionButtonPressedRolloverTextColor;
+}
+
+void
+StyleSettings::SetFlatButtonPressedRolloverTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maFlatButtonPressedRolloverTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetFlatButtonPressedRolloverTextColor() const
+{
+    return mxData->maFlatButtonPressedRolloverTextColor;
 }
 
 void
