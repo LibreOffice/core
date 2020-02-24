@@ -151,6 +151,7 @@ friend class SfxPrinterController;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
     LanguageTag                 maLOKLanguageTag;
+    LanguageTag                 maLOKLocale;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -346,6 +347,11 @@ public:
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
+
+    /// Set the LibreOfficeKit locale of this view.
+    void SetLOKLocale(const OUString& rBcp47LanguageTag);
+    /// Get the LibreOfficeKit locale of this view.
+    const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
 };
 
 
