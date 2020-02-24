@@ -3215,7 +3215,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
 void ScCellRangesBase::ForceChartListener_Impl()
 {
     //  call Update immediately so the caller to setData etc. can
-    //  regognize the listener call
+    //  recognize the listener call
 
     if (!pDocShell)
         return;
