@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6a432217_edfd7b52",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-02-24T20:23:14Z",
+      "side": 1,
+      "message": "Bunch of text colors was added for maximum flexibility. As changing text colors here in macOS specific code, these color changes do not interfere with other backends. Changes of text color for other backends can be done independenty in appropriate backend specific code if required.\n\nInitalizing all text colors was not done within the previous implementation. A complete initalization of all text colors should not be an issue, but scope of this change would be extended.",
+      "parentUuid": "0b167d35_b9070611",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c3bb4f5_0ecc9bad",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-24T13:59:30Z",
       "side": 1,
       "message": "Would be nice if this statement salad could be written in a way that is easier to read. I\u0027m fine if this is done in a follow up commit.",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "828f8687_f5a9b6de",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-02-24T20:23:14Z",
+      "side": 1,
+      "message": "Gladly, this was only for not to change previous code style too much. Is using if/then/else better?",
+      "parentUuid": "5c3bb4f5_0ecc9bad",
       "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
