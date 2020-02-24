@@ -41,7 +41,7 @@ blacklist:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
     svx/source/form/tabwin.cxx:
-    # Needed for UnoType instatiation
+    # Needed for UnoType instantiation
     - com/sun/star/sdbc/XConnection.hpp
     svx/source/form/typemap.cxx:
     # Needed for svxslots.hxx
