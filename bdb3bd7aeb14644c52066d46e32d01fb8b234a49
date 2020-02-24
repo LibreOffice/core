@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58f82562_df067655",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-24T11:11:37Z",
+      "side": 1,
+      "message": "aUIName can be const.",
+      "revId": "bdb3bd7aeb14644c52066d46e32d01fb8b234a49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e447125_d6086b0b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-24T11:11:37Z",
+      "side": 1,
+      "message": "These \"else\" are redundant.",
+      "revId": "bdb3bd7aeb14644c52066d46e32d01fb8b234a49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7092d72_cedbb0e8",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-24T11:11:37Z",
+      "side": 1,
+      "message": "Maybe we can extract this whole block to a separate method, to avoid code repetition?",
+      "revId": "bdb3bd7aeb14644c52066d46e32d01fb8b234a49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
