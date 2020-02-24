@@ -588,7 +588,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
                             css::system::SystemShellExecute::create(
                                 comphelper::getProcessComponentContext()));
                         exec->execute(pUrlField->GetURL(), OUString(),
-                                      css::system::SystemShellExecuteFlags::URIS_ONLY);
+                                      css::system::SystemShellExecuteFlags::DEFAULTS);
                     }
                 }
                 GetEditEnginePtr()->FieldClicked( *pFld );
