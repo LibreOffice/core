@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd1885a8_bb911e2c",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7335,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-24T15:24:46Z",
+      "side": 1,
+      "message": "Would adding a\n\n  default: O3TL_UNREACHABLE;\n\nbranch help as well?  (With the benefit of not falsely silencing bugs should vcl::ImageType ever grow more enumerators but this switch not getting adapted.)",
+      "revId": "13f332c95343c4a7635c2096900ee46667bf72dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
