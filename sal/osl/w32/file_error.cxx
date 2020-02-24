@@ -78,7 +78,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_MAX_THRDS_REACHED,      osl_File_E_AGAIN    },  /* 164 */
   {  ERROR_LOCK_FAILED,            osl_File_E_ACCES    },  /* 167 */
   {  ERROR_ALREADY_EXISTS,         osl_File_E_EXIST    },  /* 183 */
-  {  ERROR_FILENAME_EXCED_RANGE,   osl_File_E_NOENT    },  /* 206 */
+  {  ERROR_FILENAME_EXCEED_RANGE,  osl_File_E_NOENT    },  /* 206 */
   {  ERROR_NESTING_NOT_ALLOWED,    osl_File_E_AGAIN    },  /* 215 */
   {  ERROR_FILE_CHECKED_OUT,       osl_File_E_ACCES    },  /* 220 */
   {  ERROR_DIRECTORY,              osl_File_E_NOTDIR   },  /* 267 */

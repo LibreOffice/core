@@ -97,7 +97,7 @@ WCHAR * buildPath(
         *p = L'\0';
         return p;
     } else {
-        SetLastError(ERROR_FILENAME_EXCED_RANGE);
+        SetLastError(ERROR_FILENAME_EXCEED_RANGE);
         return nullptr;
     }
 }

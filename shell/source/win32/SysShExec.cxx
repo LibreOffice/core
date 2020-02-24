@@ -95,7 +95,7 @@ namespace
         {  ERROR_MAX_THRDS_REACHED,      osl_File_E_AGAIN    },  /* 164 */
         {  ERROR_LOCK_FAILED,            osl_File_E_ACCES    },  /* 167 */
         {  ERROR_ALREADY_EXISTS,         osl_File_E_EXIST    },  /* 183 */
-        {  ERROR_FILENAME_EXCED_RANGE,   osl_File_E_NOENT    },  /* 206 */
+        {  ERROR_FILENAME_EXCEED_RANGE,  osl_File_E_NOENT    },  /* 206 */
         {  ERROR_NESTING_NOT_ALLOWED,    osl_File_E_AGAIN    },  /* 215 */
         {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    }    /* 1816 */
     };
