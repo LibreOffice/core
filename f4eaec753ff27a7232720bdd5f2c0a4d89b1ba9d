@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "407da306_09a70ee9",
+        "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "We better call the related click/selection handler of m_xContentsListBox widget here. Although it only contains the UpdateButtonStates() call at the moment, it might change in the future.",
+      "range": {
+        "startLine": 534,
+        "startChar": 4,
+        "endLine": 534,
+        "endChar": 25
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c33c0a0_0cd7bc39",
+        "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "We better also call the related click handler for the m_xFunctions widget (SelectFunctionHdl()) here so that the description box gets updated correctly.",
+      "range": {
+        "startLine": 573,
+        "startChar": 4,
+        "endLine": 573,
+        "endChar": 29
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05ad04f_fd0f3324",
+        "filename": "cui/source/customize/SvxToolbarConfigPage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "We better call the related click/selection handler of m_xContentsListBox widget here. Although it only contains the UpdateButtonStates() call at the moment, it might change in the future.",
+      "range": {
+        "startLine": 901,
+        "startChar": 4,
+        "endLine": 901,
+        "endChar": 25
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d225749d_bfa82067",
+        "filename": "cui/source/customize/SvxToolbarConfigPage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "We better also call the related click handler for the m_xFunctions widget (SelectFunctionHdl()) here so that the description box gets updated correctly.",
+      "range": {
+        "startLine": 940,
+        "startChar": 4,
+        "endLine": 940,
+        "endChar": 29
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a90115b_c3c70b17",
+        "filename": "cui/uiconfig/ui/entrycontextmenu.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "Two items in the same context must not have the same accelerator. \"Rename...\" also has the accelerator set as R.",
+      "range": {
+        "startLine": 12,
+        "startChar": 84,
+        "endLine": 12,
+        "endChar": 91
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81d550cf_00561e94",
+        "filename": "cui/uiconfig/ui/entrycontextmenu.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-02-24T22:16:26Z",
+      "side": 1,
+      "message": "Two items in the same context must not have the same accelerator. \"Remove\" also has the accelerator set as R.",
+      "range": {
+        "startLine": 20,
+        "startChar": 84,
+        "endLine": 20,
+        "endChar": 94
+      },
+      "revId": "f4eaec753ff27a7232720bdd5f2c0a4d89b1ba9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
