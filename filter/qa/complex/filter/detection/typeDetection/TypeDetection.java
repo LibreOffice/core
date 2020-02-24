@@ -109,7 +109,7 @@ import util.utils;
  * <H3><A name="preselectedFilter.csv"</a>
  * <code>preselectedFilter.csv</code></H3>
  * In this file you can choose a special
- * filter to detect the document. This make sense ie. for csv-files: You can
+ * filter to detect the document. This makes sense ie. for csv-files: You can
  * open csv files as Writer or as Calc. To check this case you have to specify
  * in <code>csv.files</code> a fileAlias like ?csv_writer? and ?csv_calc? with
  * the same fileURL and its specific defaultFileType.
