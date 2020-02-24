@@ -125,39 +125,6 @@ static css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
     return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
 }
 
-static LogLevel readLogLevelFromConfiguration()
-{
-    LogLevel nLogLevel = LogLevel::NONE;
-    OUString fileName;
-    osl_getModuleURLFromFunctionAddress(
-        reinterpret_cast<oslGenericFunction>(readLogLevelFromConfiguration), &fileName.pData );
-    fileName = fileName.copy( 0, fileName.lastIndexOf( '/' )+1 ) +
-#ifdef MACOSX
-        "../Resources/"
-#endif
-        "postgresql-sdbc.ini";
-    rtl::Bootstrap bootstrapHandle( fileName );
-
-    OUString str;
-    if( bootstrapHandle.getFrom( "PQ_LOGLEVEL", str ) )
-    {
-        if ( str == "NONE" )
-            nLogLevel = LogLevel::NONE;
-        else if ( str == "ERROR" )
-            nLogLevel = LogLevel::Error;
-        else if ( str == "SQL" )
-            nLogLevel = LogLevel::Sql;
-        else if ( str == "INFO" )
-            nLogLevel = LogLevel::Info;
-        else
-        {
-            fprintf( stderr, "unknown loglevel %s\n",
-                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-    }
-    return nLogLevel;
-}
-
 Connection::Connection(
     const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
     const css::uno::Reference< css::uno::XComponentContext > & ctx )
@@ -165,21 +132,6 @@ Connection::Connection(
       m_ctx( ctx ) ,
       m_xMutex( refMutex )
 {
-    m_settings.m_nLogLevel = readLogLevelFromConfiguration();
-
-    if (m_settings.m_nLogLevel != LogLevel::NONE)
-    {
-        m_settings.logFile = fopen( "sdbc-pqsql.log", "a" );
-        if( m_settings.logFile )
-        {
-            setvbuf( m_settings.logFile, nullptr, _IONBF, 0 );
-            log(&m_settings, m_settings.m_nLogLevel , "set this loglevel");
-        }
-        else
-        {
-            fprintf( stderr, "Couldn't open sdbc-pqsql.log file\n" );
-        }
-    }
 }
 
 Connection::~Connection()
@@ -188,11 +140,6 @@ Connection::~Connection()
     {
         PQfinish( m_settings.pConnection );
         m_settings.pConnection = nullptr;
-    }
-    if( m_settings.logFile )
-    {
-        fclose( m_settings.logFile );
-        m_settings.logFile = nullptr;
     }
 }
 typedef std::vector< css::uno::Reference< css::sdbc::XCloseable > > CloseableVector;
@@ -208,7 +155,7 @@ void Connection::close()
         // silently ignore, if the connection has been closed already
         if( m_settings.pConnection )
         {
-            log(&m_settings, LogLevel::Info, "closing connection");
+            SAL_INFO("connectivity.postgresql", "closing connection");
             PQfinish( m_settings.pConnection );
             m_settings.pConnection = nullptr;
         }
@@ -576,10 +523,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     m_settings.catalog = OUString( p, strlen(p), RTL_TEXTENCODING_UTF8);
     m_settings.tc = tc;
 
-    if (isLog(&m_settings, LogLevel::Info))
-    {
-        log(&m_settings, LogLevel::Info, "connection to '" + url + "' successfully opened");
-    }
+    SAL_INFO("connectivity.postgresql", "connection to '" << url << "' successfully opened");
 }
 
 void Connection::disposing()
@@ -596,10 +540,7 @@ void Connection::checkClosed()
 
 Reference< XNameAccess > Connection::getTables()
 {
-    if (isLog(&m_settings, LogLevel::Info))
-    {
-        log(&m_settings, LogLevel::Info, "Connection::getTables() got called");
-    }
+    SAL_INFO("connectivity.postgresql", "Connection::getTables() got called");
     MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.tables.is() )
         m_settings.tables = Tables::create( m_xMutex, this, &m_settings , &m_settings.pTablesImpl);
@@ -611,10 +552,7 @@ Reference< XNameAccess > Connection::getTables()
 
 Reference< XNameAccess > Connection::getViews()
 {
-    if (isLog(&m_settings, LogLevel::Info))
-    {
-        log(&m_settings, LogLevel::Info, "Connection::getViews() got called");
-    }
+    SAL_INFO("connectivity.postgresql", "Connection::getViews() got called");
     MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.views.is() )
         m_settings.views = Views::create( m_xMutex, this, &m_settings, &(m_settings.pViewsImpl) );
@@ -627,10 +565,7 @@ Reference< XNameAccess > Connection::getViews()
 
 Reference< XNameAccess > Connection::getUsers()
 {
-    if (isLog(&m_settings, LogLevel::Info))
-    {
-        log(&m_settings, LogLevel::Info, "Connection::getUsers() got called");
-    }
+    SAL_INFO("connectivity.postgresql", "Connection::getUsers() got called");
 
     MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.users.is() )
@@ -646,49 +581,7 @@ static Reference< XInterface >  ConnectionCreateInstance(
     return * new Connection( ref, ctx );
 }
 
-
-bool isLog(ConnectionSettings const *settings, LogLevel nLevel)
-{
-    return static_cast<int>(settings->m_nLogLevel) >= static_cast<int>(nLevel)
-           && settings->logFile;
-}
-
-void log(ConnectionSettings *settings, LogLevel nLevel, const OUString &logString)
-{
-    log( settings, nLevel, OUStringToOString( logString, ConnectionSettings::encoding ).getStr() );
-}
-void log(ConnectionSettings *settings, LogLevel nLevel, const char *str)
-{
-    if (isLog(settings, nLevel))
-    {
-        static const o3tl::enumarray<LogLevel, const char*> strLevel = {"NONE", "ERROR", "SQL", "INFO"};
-
-        time_t t = ::time( nullptr );
-        char *pString;
-#ifdef _WIN32
-        pString = asctime( localtime( &t ) );
-#else
-        struct tm timestruc;
-        char timestr[50];
-        memset( timestr, 0 , 50);
-        pString = timestr;
-        ::localtime_r( &t , &timestruc );
-        asctime_r( &timestruc, timestr );
-#endif
-        for( int i = 0 ; pString[i] ; i ++ )
-        {
-            if( pString[i] <= 13 )
-            {
-                pString[i] = 0;
-                break;
-            }
-        }
-        fprintf(settings->logFile, "%s [%s]: %s\n", pString, strLevel[nLevel], str);
-    }
-}
-
-
-}
+} // end namespace
 
 
 static const struct cppu::ImplementationEntry g_entries[] =

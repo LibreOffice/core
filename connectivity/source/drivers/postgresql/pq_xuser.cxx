@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -119,16 +120,7 @@ void User::changePassword(
 
 sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
 {
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        Statics & st = getStatics();
-
-        OUStringBuffer buf( 128 );
-        buf.append( "User::getPrivileges[" ).append( extractStringProperty( this, st.NAME ) )
-                    .append( "] got called for " ).append( objName ).append( "(type=" )
-                    .append( OUString::number(objType) ).append(")");
-        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
-    }
+    SAL_INFO("connectivity.postgresql", "User::getPrivileges[\"Name\"] got called for " << objName << "(type=" << objType << ")");
     // all privileges
     return 0xffffffff;
 }
