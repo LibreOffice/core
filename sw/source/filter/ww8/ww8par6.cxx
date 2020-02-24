@@ -3589,6 +3589,13 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
     else
     {
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
+
+        // At least when transparency is 0xff and the color is black, Word renders that as black.
+        if (aColor.GetTransparency() && aColor != COL_AUTO)
+        {
+            aColor.SetTransparency(0);
+        }
+
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
         if (m_pCurrentColl && m_xStyles)
             m_xStyles->mbTextColChanged = true;
