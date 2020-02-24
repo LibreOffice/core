@@ -882,6 +882,17 @@ bool ImportContext::importGraphicOrImageProperty(
                 return true;
             }
         }
+        else if (!sURL.isEmpty())
+        {
+            // tdf#130793 Above fails if the dialog is not part of a document.
+            // In this case we need to set the ImageURL.
+            Reference<beans::XPropertySet> xProps = getControlModel();
+            if (xProps.is())
+            {
+                xProps->setPropertyValue("ImageURL", makeAny(sURL));
+                return true;
+            }
+        }
     }
     return false;
 }
