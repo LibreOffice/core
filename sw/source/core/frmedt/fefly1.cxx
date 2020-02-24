@@ -69,6 +69,7 @@
 #include <ndole.hxx>
 #include <fefly.hxx>
 #include <fmtcnct.hxx>
+#include <textboxhelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -439,6 +440,12 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
 
+    bool bTextBox = false;
+    if (rFormat.Which() == RES_DRAWFRMFMT)
+    {
+        bTextBox = SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT);
+    }
+
     SwFlyFrame* pFly = nullptr;
     const SwFrame* pFooterOrHeader = nullptr;
 
@@ -459,6 +466,16 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
             pFooterOrHeader = pContent->FindFooterOrHeader();
         }
     }
+    else if (bTextBox)
+    {
+        auto pFlyFormat = dynamic_cast<const SwFlyFrameFormat*>(
+            SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT));
+        if (pFlyFormat)
+        {
+            pFly = pFlyFormat->GetFrame();
+        }
+    }
+
     // set <pFooterOrHeader> also for drawing
     // objects, but not for control objects.
     // Necessary for moving 'anchor symbol' at the user interface inside header/footer.
@@ -506,7 +523,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
 
     if( pNewAnch && !pNewAnch->IsProtected() )
     {
-        const SwFlyFrame* pCheck = bFlyFrame ? pNewAnch->FindFlyFrame() : nullptr;
+        const SwFlyFrame* pCheck = (bFlyFrame || bTextBox) ? pNewAnch->FindFlyFrame() : nullptr;
         // If we land inside the frame, make sure
         // that the frame does not land inside its own content
         while( pCheck )
