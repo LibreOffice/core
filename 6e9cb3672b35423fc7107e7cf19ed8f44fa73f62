@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b167d35_b9070611",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-24T13:59:30Z",
+      "side": 1,
+      "message": "So now a bunch of other states for text color were added, if I change the text color it will change for macOS backend, but what if I change the text color for other backends? This also needs to be handeled IMHO - if not in any other way then to set the text color to the same one for all states.",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c3bb4f5_0ecc9bad",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-24T13:59:30Z",
+      "side": 1,
+      "message": "Would be nice if this statement salad could be written in a way that is easier to read. I\u0027m fine if this is done in a follow up commit.",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
