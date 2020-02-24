@@ -119,6 +119,8 @@
 #include <unotools/collatorwrapper.hxx>
 #include <boost/property_tree/ptree.hpp>
 
+#include <comphelper/lok.hxx>
+
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
 // don't make more than 15 entries visible at once
@@ -1964,7 +1966,8 @@ namespace
 
     NamedColor GetNoneColor()
     {
-        return std::make_pair(COL_NONE_COLOR, SvxResId(RID_SVXSTR_NONE));
+        return std::make_pair(COL_NONE_COLOR, comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+            : SvxResId(RID_SVXSTR_NONE));
     }
 }
 
@@ -2604,7 +2607,8 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     m_xLineStyleLb->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
     m_xLineStyleLb->SetSourceUnit( FieldUnit::TWIP );
-    m_xLineStyleLb->SetNone( SvxResId(RID_SVXSTR_NONE) );
+    m_xLineStyleLb->SetNone( comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+        :SvxResId(RID_SVXSTR_NONE) );
 
     m_xLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::SOLID ), SvxBorderLineStyle::SOLID );
     m_xLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::DOTTED ), SvxBorderLineStyle::DOTTED );
