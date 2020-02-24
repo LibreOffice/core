@@ -809,7 +809,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = SvUnoImageMapPolygonObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SwServiceType::Chart2DataProvider:
-            // #i64497# If a chart is in a temporary document during clipoard
+            // #i64497# If a chart is in a temporary document during clipboard
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
