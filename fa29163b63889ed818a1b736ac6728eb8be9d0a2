@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfb481b7_4430b8f2",
+        "filename": "reportdesign/inc/RptPage.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-24T10:34:50Z",
+      "side": 1,
+      "message": "i think its better to have this consistent with GetObjCount(), GetObj() and RemoveObject() - all of which use size_t",
+      "revId": "fa29163b63889ed818a1b736ac6728eb8be9d0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c290473f_2542759c",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-24T10:34:50Z",
+      "side": 1,
+      "message": "all of the types you changed in these 2 files should be the same i.e. sal_uInt32",
+      "revId": "fa29163b63889ed818a1b736ac6728eb8be9d0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
