@@ -68,10 +68,9 @@ using namespace ::com::sun::star;
 
 //  Corner-Button
 
-ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional ) :
+ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData ) :
     Window( pParent, WinBits( 0 ) ),
-    pViewData( pData ),
-    bAdd( bAdditional )
+    pViewData( pData )
 {
     EnableRTL( false );
 }
@@ -93,32 +92,6 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;
-
-    if (!bAdd)
-    {
-        // match the shaded look of column/row headers
-
-        Color aFace(rStyleSettings.GetFaceColor());
-        Color aWhite(COL_WHITE);
-        Color aCenter(aFace);
-        aCenter.Merge(aWhite, 0xd0);          // lighten up a bit
-        Color aOuter(aFace );
-        aOuter.Merge(aWhite, 0xa0);           // lighten up more
-
-        long nCenterX = (aSize.Width() / 2) - 1;
-        long nCenterY = (aSize.Height() / 2) - 1;
-
-        rRenderContext.SetLineColor();
-        rRenderContext.SetFillColor(aCenter);
-        rRenderContext.DrawRect(tools::Rectangle(nCenterX, nCenterY, nCenterX, nPosY));
-        rRenderContext.DrawRect(tools::Rectangle(nCenterX, nCenterY, nDarkX, nCenterY));
-        rRenderContext.SetFillColor(aOuter);
-        rRenderContext.DrawRect(tools::Rectangle(0, 0, nPosX, nCenterY - 1));
-        if (bLayoutRTL)
-            rRenderContext.DrawRect(tools::Rectangle(nCenterX + 1, nCenterY, nPosX, nPosY));
-        else
-            rRenderContext.DrawRect(tools::Rectangle(0, nCenterY, nCenterX - 1, nPosY));
-    }
 
     //  both buttons have the same look now - only dark right/bottom lines
     rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
@@ -201,8 +174,8 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aVScrollBottom( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
     aHScrollLeft( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
     aHScrollRight( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
-    aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, false ) ),
-    aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData, true ) ),
+    aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
+    aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
     mxInputHintOO(),
     pTimerWindow( nullptr ),

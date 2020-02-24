@@ -71,14 +71,13 @@ class ScCornerButton : public vcl::Window
 {
 private:
     ScViewData* const     pViewData;
-    bool const            bAdd;
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 public:
-                    ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional );
+                    ScCornerButton( vcl::Window* pParent, ScViewData* pData );
                     virtual ~ScCornerButton() override;
 
     virtual void    StateChanged( StateChangedType nType ) override;
