@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "6a3c6f19_d781e5bb",
+        "filename": "solenv/bin/gentoken.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-02-24T21:19:25Z",
+      "side": 1,
+      "message": "Do we want to be compatible with Python 2?\nLO uses Python 3.7.6 https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003db10be5d48433076f0b7238d818020f708553e114\nFrom Wikipedia:\n\"The Python 2 language, i.e. Python 2.7.x, was officially discontinued on 1 January 2020\"",
+      "parentUuid": "557fdb60_1bf1c253",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "32b3115c716eda29e47626e65f5bfe37e8e2a2ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e94718f_917a4134",
         "filename": "solenv/bin/gentoken.py",
         "patchSetId": 2
