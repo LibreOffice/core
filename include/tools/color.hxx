@@ -242,7 +242,7 @@ inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 // to reduce the noise when moving these into and out of Any
 inline bool operator >>=( const css::uno::Any & rAny, Color & value )
 {
-  sal_Int32 nTmp;
+  sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
   if (!(rAny >>= nTmp))
       return false;
   value = Color(nTmp);

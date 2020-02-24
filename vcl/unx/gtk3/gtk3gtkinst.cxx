@@ -7320,7 +7320,7 @@ public:
 
     GtkIconSize VclToGtk(vcl::ImageType eSize)
     {
-        GtkIconSize eRet;
+        GtkIconSize eRet(GTK_ICON_SIZE_INVALID /* -Werror=maybe-uninitialized */);
         switch (eSize)
         {
             case vcl::ImageType::Size16:

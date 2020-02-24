@@ -101,8 +101,8 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
         return;
     }
 
-    sal_uInt32 nRgb;
-    double fDouble;
+    sal_Int32 nRgb = {}; // spurious -Werror=maybe-uninitialized
+    double fDouble = {}; // spurious -Werror=maybe-uninitialized
 
     TypeClass aClass = rAny.getValueType().getTypeClass();
     bool bWriteToken
@@ -115,11 +115,17 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     switch (rAny.getValueType().getTypeClass())
     {
         case TypeClass_LONG:
-            rAny >>= nRgb;
+            if (!(rAny >>= nRgb))
+            {
+                assert(false);
+            }
             pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nRgb));
             break;
         case TypeClass_DOUBLE:
-            rAny >>= fDouble;
+            if (!(rAny >>= fDouble))
+            {
+                assert(false);
+            }
             pFS->singleElementNS(XML_p, XML_fltVal, XML_val, OString::number(fDouble));
             break;
         case TypeClass_STRING:

@@ -928,8 +928,8 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         //  Attribute
 
-        SCROW nAttrRow1;
-        SCROW nAttrRow2;
+        SCROW nAttrRow1 = {}; // spurious -Werror=maybe-uninitialized
+        SCROW nAttrRow2 = {}; // spurious -Werror=maybe-uninitialized
         const ScPatternAttr* pPattern;
         std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
         while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != nullptr )
