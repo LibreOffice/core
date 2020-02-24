@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include "pq_statement.hxx"
 #include "pq_fakedupdateableresultset.hxx"
 #include "pq_updateableresultset.hxx"
@@ -215,7 +216,7 @@ void Statement::raiseSQLException(
     OUString error = "pq_driver: "
         + OUString( errorMsg, strlen(errorMsg), ConnectionSettings::encoding )
         + " (caused by statement '" + sql + "')";
-    log(m_pSettings, LogLevel::Error, error);
+    SAL_WARN("connectivity.postgresql", error);
     throw SQLException( error, *this, OUString(), 1, Any() );
 }
 
@@ -239,7 +240,6 @@ sal_Int32 Statement::executeUpdate( const OUString& sql )
 
 /// @throws SQLException
 static void raiseSQLException(
-    ConnectionSettings *pSettings,
     const Reference< XInterface> & owner,
     const OString & sql,
     const char * errorMsg,
@@ -259,7 +259,7 @@ static void raiseSQLException(
     buf.append( OStringToOUString( sql, ConnectionSettings::encoding ) );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
-    log(pSettings, LogLevel::Error, error);
+    SAL_WARN("connectivity.postgresql", error);
     throw SQLException( error, owner, OUString(), 1, Any() );
 }
 
@@ -270,8 +270,7 @@ static std::vector< OUString > lookupKeys(
     const Reference< css::container::XNameAccess > &tables,
     const OUString & table,
     OUString *pSchema,
-    OUString *pTable,
-    ConnectionSettings *pSettings)
+    OUString *pTable)
 {
     std::vector< OUString  > ret;
     Reference< XKeysSupplier > keySupplier;
@@ -306,13 +305,7 @@ static std::vector< OUString > lookupKeys(
                         // is ambiguous, as I don't know postgresql searchpath,
                         // I can't continue here, as I may write to a different table
                         keySupplier.clear();
-                        if (isLog(pSettings, LogLevel::Info))
-                        {
-                            OString buf = "Can't offer updateable result set because table "
-                                + OUStringToOString(name, ConnectionSettings::encoding)
-                                + " is duplicated, add schema to resolve ambiguity";
-                            log(pSettings, LogLevel::Info, buf.getStr());
-                        }
+                        SAL_INFO("connectivity.postgresql", "Can't offer updateable result set because table " << name << " is duplicated, add schema to resolve ambiguity");
                         break;
                     }
                     keySupplier.set( set, UNO_QUERY );
@@ -322,12 +315,7 @@ static std::vector< OUString > lookupKeys(
     }
     else
     {
-        if (isLog(pSettings, LogLevel::Info))
-        {
-            OString buf = "Can't offer updateable result set ( table "
-                + OUStringToOString(table, ConnectionSettings::encoding) + " is unknown)";
-            log(pSettings, LogLevel::Info, buf.getStr());
-        }
+        SAL_INFO("connectivity.postgresql", "Can't offer updateable result set ( table " << table << " is unknown)");
     }
 
     if( keySupplier.is() )
@@ -366,13 +354,7 @@ static std::vector< OUString > lookupKeys(
         }
         if( ret.empty() )
         {
-            if (isLog(pSettings, LogLevel::Info))
-            {
-                OString buf = "Can't offer updateable result set ( table "
-                    + OUStringToOString(table, ConnectionSettings::encoding)
-                    + " does not have a primary key)";
-                log(pSettings, LogLevel::Info, buf.getStr());
-            }
+            SAL_INFO("connectivity.postgresql", "Can't offer updateable result set ( table " << table << " does not have a primary key)");
         }
     }
     return ret;
@@ -387,7 +369,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
     duration = osl_getGlobalTimer() - duration;
     if( ! result )
         raiseSQLException(
-            pSettings, data->owner, cmd, PQerrorMessage( pSettings->pConnection ) );
+            data->owner, cmd, PQerrorMessage( pSettings->pConnection ) );
 
     ExecStatusType state = PQresultStatus( result );
     *(data->pLastOidInserted) = 0;
@@ -409,27 +391,17 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // otherwise the table name is empty
         *(data->pLastTableInserted) =
             extractTableFromInsert( OStringToOUString( cmd, ConnectionSettings::encoding ) );
-        if( isLog( pSettings, LogLevel::Sql ) )
+
+        OString strMain = OString("executed command '") + cmd + "' successfully ('" + OString(*( data->pMultipleResultUpdateCount ))
+            + "), duration=" + OString(duration) + "ms";
+
+        OString strOption;
+        if( *(data->pLastOidInserted) )
         {
-            OStringBuffer buf( 128 );
-            buf.append( "executed command '" );
-            buf.append( cmd.getStr() );
-            buf.append( "' successfully (" );
-            buf.append( *( data->pMultipleResultUpdateCount ) );
-            buf.append( ")" );
-            buf.append( ", duration=" );
-            buf.append( duration );
-            buf.append( "ms" );
-            if( *(data->pLastOidInserted) )
-            {
-                buf.append( ", usedOid=" );
-                buf.append( *(data->pLastOidInserted) );
-                buf.append( ", diagnosedTable=" );
-                buf.append(
-                    OUStringToOString( *data->pLastTableInserted, ConnectionSettings::encoding ) );
-            }
-            log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr());
+            strOption += ", usedOid=" + OString( *(data->pLastOidInserted) ) +  ", diagnosedTable="
+                + OUStringToOString(*data->pLastTableInserted, ConnectionSettings::encoding);
         }
+        SAL_INFO("connectivity.postgresql", strMain + strOption);
         PQclear( result );
         break;
     }
@@ -456,8 +428,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                            pSettings->tables : data->tableSupplier->getTables() ,
                     sourceTable,
                     &schema,
-                    &table,
-                    pSettings);
+                    &table);
 
                 // check, whether the columns are in the result set (required !)
                 int i;
@@ -507,16 +478,11 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
             }
             else
             {
-                OString buf = "can't support updateable result for selects with multiple tables ("
-                    + cmd + ")";
-                log(pSettings, LogLevel::Sql, buf.getStr() );
+                SAL_WARN("connectivity.postgresql", "can't support updateable result for selects with multiple tables (" << cmd << ")");
             }
             if( ! (*(data->pLastResultset)).is() )
             {
-                if (isLog( pSettings, LogLevel::Error))
-                {
-                    log(pSettings, LogLevel::Error,  aReason.getStr());
-                }
+                SAL_WARN("connectivity.postgresql", aReason);
 
                 // TODO: How to react here correctly ?
                 // remove this piece of code
@@ -542,13 +508,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                         data->ppSettings,result, schema, table ) );
         *(data->pMultipleResultAvailable) = true;
         ret = true;
-        if (isLog(pSettings, LogLevel::Sql))
-        {
-            OString buf = "executed query '" + cmd + "' successfully, duration="
-                + OString::number(duration) + "ms, returnedRows=" + OString::number(returnedRows)
-                + ".";
-            log(pSettings, LogLevel::Sql, buf.getStr());
-        }
+        SAL_INFO("connectivity.postgresql", "executed query '" << cmd << "' successfully, duration=" << duration << "ms, returnedRows=" << returnedRows << ".");
         break;
     }
     case PGRES_EMPTY_QUERY:
@@ -559,7 +519,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
     case PGRES_FATAL_ERROR:
     default:
         raiseSQLException(
-            pSettings, data->owner, cmd, PQresultErrorMessage( result ) , PQresStatus( state ) );
+            data->owner, cmd, PQresultErrorMessage( result ) , PQresStatus( state ) );
     }
     return ret;
 

@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include <vector>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -98,12 +99,7 @@ void IndexColumns::refresh()
 {
     try
     {
-        if (isLog(m_pSettings, LogLevel::Info))
-        {
-            OString buf = "sdbcx.IndexColumns get refreshed for index " +
-                OUStringToOString( m_indexName, ConnectionSettings::encoding );
-            log( m_pSettings, LogLevel::Info, buf.getStr() );
-        }
+        SAL_INFO("connectivity.postgresql", "sdbcx.IndexColumns get refreshed for index " << m_indexName);
 
         osl::MutexGuard guard( m_xMutex->GetMutex() );
 

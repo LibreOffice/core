@@ -65,6 +65,7 @@
  ************************************************************************/
 
 #include <algorithm>
+#include <sal/log.hxx>
 #include "pq_databasemetadata.hxx"
 #include "pq_driver.hxx"
 #include "pq_sequenceresultset.hxx"
@@ -1111,12 +1112,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
 
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info,
-            ("DatabaseMetaData::getTables got called with " + schemaPattern + "."
-             + tableNamePattern));
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getTables() got called with " << schemaPattern << "." << tableNamePattern);
+
     // ignore catalog, as a single pq connection does not support multiple catalogs
 
     // LEM TODO: this does not give the right column names, not the right number of columns, etc.
@@ -1239,10 +1236,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
 {
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info, "DatabaseMetaData::getSchemas() got called");
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getSchemas() got called");
+
     // <b>TABLE_SCHEM</b> string =&amp;gt; schema name
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
@@ -1442,12 +1437,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     // continue !
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info,
-            ("DatabaseMetaData::getColumns got called with " + schemaPattern + "."
-             + tableNamePattern + "." + columnNamePattern));
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getColumns() got called with "
+        << schemaPattern << "." << tableNamePattern << "." << columnNamePattern);
 
     // ignore catalog, as a single pq connection
     // does not support multiple catalogs anyway
@@ -1618,12 +1609,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
 {
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info,
-            ("DatabaseMetaData::getColumnPrivileges got called with " + schema + "." + table + "."
-             + columnNamePattern));
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getColumnPrivileges() got called with "
+        << schema << "." << table << "." << columnNamePattern);
 
     Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
     parameters->setString( 1 , schema );
@@ -1642,12 +1629,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
 {
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info,
-            ("DatabaseMetaData::getTablePrivileges got called with " + schemaPattern + "."
-             + tableNamePattern));
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getTablePrivileges() got called with "
+        << schemaPattern << "." << tableNamePattern);
 
     Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
@@ -1697,11 +1680,8 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
 //        5. KEY_SEQ short =&gt; sequence number within primary key
 //        6. PK_NAME string =&gt; primary key name (may be NULL )
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info,
-            "DatabaseMetaData::getPrimaryKeys got called with " + schema + "." + table);
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getPrimaryKeys() got called with "
+        << schema << "." << table);
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
             "SELECT nmsp.nspname, "
@@ -2282,10 +2262,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     // Note: Indexes start at 0 (in the API doc, they start at 1)
     MutexGuard guard( m_xMutex->GetMutex() );
 
-    if (isLog(m_pSettings, LogLevel::Info))
-    {
-        log(m_pSettings, LogLevel::Info, "DatabaseMetaData::getTypeInfo() got called");
-    }
+    SAL_INFO("connectivity.postgresql", "DatabaseMetaData::getTypeInfo() got called");
 
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(

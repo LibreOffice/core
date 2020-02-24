@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
@@ -183,10 +184,8 @@ OUString UpdateableResultSet::buildWhereClause()
 void UpdateableResultSet::insertRow(  )
 {
     MutexGuard guard( m_xMutex->GetMutex() );
-    if (isLog(*m_ppSettings, LogLevel::Info))
-    {
-        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::insertRow got called");
-    }
+    SAL_INFO("connectivity.postgresql", "UpdateableResultSet::insertRow() got called");
+
     if( ! m_insertRow )
         throw SQLException(
             "pq_resultset.insertRow: moveToInsertRow has not been called !",
@@ -277,10 +276,8 @@ void UpdateableResultSet::insertRow(  )
 void UpdateableResultSet::updateRow(  )
 {
     MutexGuard guard( m_xMutex->GetMutex() );
-    if (isLog(*m_ppSettings, LogLevel::Info))
-    {
-        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::updateRow got called");
-    }
+    SAL_INFO("connectivity.postgresql", "UpdateableResultSet::updateRow() got called");
+
     if( m_insertRow )
         throw SQLException(
             "pq_resultset.updateRow: moveToCurrentRow has not been called !",
@@ -326,10 +323,8 @@ void UpdateableResultSet::updateRow(  )
 
 void UpdateableResultSet::deleteRow(  )
 {
-    if (isLog(*m_ppSettings, LogLevel::Info))
-    {
-        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::deleteRow got called");
-    }
+    SAL_INFO("connectivity.postgresql", "UpdateableResultSet::deleteRow() got called");
+
     if( m_insertRow )
         throw SQLException(
             "pq_resultset.deleteRow: deleteRow cannot be called when on insert row !",

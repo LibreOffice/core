@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include "pq_preparedstatement.hxx"
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
@@ -267,7 +268,7 @@ void PreparedStatement::raiseSQLException( const char * errorMsg )
     buf.appendAscii( m_executedStatement.getStr() );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
-    log(m_pSettings, LogLevel::Error, error);
+    SAL_WARN("connectivity.postgresql", error);
     throw SQLException( error, *this, OUString(), 1, Any() );
 }
 

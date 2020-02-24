@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -275,14 +276,7 @@ void Columns::refresh()
 {
     try
     {
-        if (isLog(m_pSettings, LogLevel::Info))
-        {
-            OString buf = "sdbcx.Columns get refreshed for table " +
-                OUStringToOString( m_schemaName, ConnectionSettings::encoding ) +
-                "." +
-                OUStringToOString( m_tableName, ConnectionSettings::encoding );
-            log( m_pSettings, LogLevel::Info, buf.getStr() );
-        }
+        SAL_INFO("connectivity.postgresql", "sdbcx.Columns get refreshed for table " << m_schemaName << "." << m_tableName);
         osl::MutexGuard guard( m_xMutex->GetMutex() );
 
         Statics &st = getStatics();
