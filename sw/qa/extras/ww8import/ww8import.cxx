@@ -133,6 +133,18 @@ DECLARE_WW8IMPORT_TEST(testTdf106291, "tdf106291.doc")
     CPPUNIT_ASSERT(cellHeight.toInt32() > 200); // height might depend on font size
 }
 
+DECLARE_WW8IMPORT_TEST(testTransparentText, "transparent-text.doc")
+{
+    uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Standard"), "HeaderText");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xHeaderText);
+    // Without the accompanying fix in place, this test would have failed: transparency was set to
+    // 100%, so the text was not readable.
+    sal_Int32 nExpected(COL_BLACK);
+    sal_Int32 nActual(getProperty<sal_Int16>(xParagraph, "CharTransparence"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
 DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
 {
     /*****
