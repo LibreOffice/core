@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a588e08_e34db5a1",
+        "filename": "solenv/bin/gentoken.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-24T07:08:16Z",
+      "side": 1,
+      "message": "a little more pythonic to do\n    with open(...) as gperf:\nthen no close needed",
+      "revId": "32b3115c716eda29e47626e65f5bfe37e8e2a2ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
