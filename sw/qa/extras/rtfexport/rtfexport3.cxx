@@ -55,6 +55,26 @@ DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
                                  getProperty<sal_Int32>(xFootnote->getAnchor(), "CharColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf130817, "tdf130817.rtf")
+{
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
+
+    uno::Reference<text::XFootnote> xEndnote1;
+    xEndnotes->getByIndex(0) >>= xEndnote1;
+    uno::Reference<text::XText> xEndnoteText1;
+    xEndnotes->getByIndex(0) >>= xEndnoteText1;
+    CPPUNIT_ASSERT_EQUAL(OUString("Titolo 1"), xEndnoteText1->getString().trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("$"), xEndnote1->getAnchor()->getString());
+
+    uno::Reference<text::XFootnote> xEndnote2;
+    xEndnotes->getByIndex(1) >>= xEndnote2;
+    uno::Reference<text::XText> xEndnoteText2;
+    xEndnotes->getByIndex(1) >>= xEndnoteText2;
+    CPPUNIT_ASSERT_EQUAL(OUString("Titolo 2"), xEndnoteText2->getString().trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("$"), xEndnote1->getAnchor()->getString());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
