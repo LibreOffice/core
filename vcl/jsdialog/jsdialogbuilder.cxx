@@ -5,6 +5,23 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+void JSDialogSender::notifyDialogState()
+{
+    if (!m_aOwnedToplevel)
+        return;
+
+    const vcl::ILibreOfficeKitNotifier* pNotifier = m_aOwnedToplevel->GetLOKNotifier();
+    if (pNotifier)
+    {
+        std::stringstream aStream;
+        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
+        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
+        boost::property_tree::write_json(aStream, aTree);
+        const std::string message = aStream.str();
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+    }
+}
+
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
     : SalInstanceBuilder(dynamic_cast<SalInstanceWidget*>(pParent)
@@ -46,25 +63,35 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bo
     return std::make_unique<JSLabel>(m_aOwnedToplevel, pLabel, this, bTakeOwnership);
 }
 
+std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
+{
+    Edit* pEntry = m_xBuilder->get<Edit>(id);
+    return pEntry ? std::make_unique<JSEntry>(m_aOwnedToplevel, pEntry, this, bTakeOwnership)
+                  : nullptr;
+}
+
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceLabel(pLabel, pBuilder, bTakeOwnership)
-    , m_aOwnedToplevel(aOwnedToplevel)
+    , JSDialogSender(aOwnedToplevel)
 {
 }
 
 void JSLabel::set_label(const OUString& rText)
 {
     SalInstanceLabel::set_label(rText);
-
-    const vcl::ILibreOfficeKitNotifier* pNotifier = m_aOwnedToplevel->GetLOKNotifier();
-    if (pNotifier)
-    {
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
-        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-    }
+    notifyDialogState();
 };
+
+JSEntry::JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
+                 bool bTakeOwnership)
+    : SalInstanceEntry(pEntry, pBuilder, bTakeOwnership)
+    , JSDialogSender(aOwnedToplevel)
+{
+}
+
+void JSEntry::set_text(const OUString& rText)
+{
+    SalInstanceEntry::set_text(rText);
+    notifyDialogState();
+}
