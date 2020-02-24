@@ -184,7 +184,6 @@ Connection::Connection(
 
 Connection::~Connection()
 {
-    POSTGRE_TRACE( "dtor connection" );
     if( m_settings.pConnection )
     {
         PQfinish( m_settings.pConnection );
