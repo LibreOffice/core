@@ -738,7 +738,8 @@ void ElementDescriptor::readImageOrGraphicAttr(OUString const & rAttrName)
             }
         }
     }
-    else if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState("ImageURL"))
+    else if (sURL.isEmpty()
+             && beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState("ImageURL"))
     {
         _xProps->getPropertyValue("ImageURL") >>= sURL;
     }
