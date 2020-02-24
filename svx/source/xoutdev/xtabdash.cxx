@@ -27,6 +27,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 
+#include <comphelper/lok.hxx>
+
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -211,7 +213,8 @@ OUString const & XDashList::GetStringForUiNoLine() const
     {
         // formerly was RID_SVXSTR_INVISIBLE, but to make equal
         // everywhere, use RID_SVXSTR_NONE
-        const_cast< XDashList* >(this)->maStringNoLine = SvxResId(RID_SVXSTR_NONE);
+        const_cast< XDashList* >(this)->maStringNoLine = comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE) :
+            SvxResId(RID_SVXSTR_NONE);
     }
 
     return maStringNoLine;

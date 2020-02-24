@@ -117,6 +117,8 @@
 #include <unotools/collatorwrapper.hxx>
 #include <boost/property_tree/ptree.hpp>
 
+#include <comphelper/lok.hxx>
+
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
 // don't make more than 15 entries visible at once
@@ -1971,7 +1973,8 @@ namespace
 
     NamedColor GetNoneColor()
     {
-        return std::make_pair(COL_NONE_COLOR, SvxResId(RID_SVXSTR_NONE));
+        return std::make_pair(COL_NONE_COLOR, comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+            : SvxResId(RID_SVXSTR_NONE));
     }
 }
 
@@ -2709,7 +2712,8 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     SetOutputSizePixel( Size( 114, 144 ) );
 
     m_aLineStyleLb->SetSourceUnit( FieldUnit::TWIP );
-    m_aLineStyleLb->SetNone( SvxResId(RID_SVXSTR_NONE) );
+    m_aLineStyleLb->SetNone( comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+        :SvxResId(RID_SVXSTR_NONE) );
 
     m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::SOLID ), SvxBorderLineStyle::SOLID );
     m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::DOTTED ), SvxBorderLineStyle::DOTTED );
