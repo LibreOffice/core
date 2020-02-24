@@ -54,8 +54,14 @@ public:
     static std::size_t getViewsCount();
     /// Get viewIds of all existing views.
     static bool getViewIds(int* pArray, size_t nSize);
+    /// Get the default language that should be used for views
+    static LanguageTag getDefaultLanguage();
     /// Set language of the given view.
     static void setViewLanguage(int nId, const OUString& rBcp47LanguageTag);
+    /// Set the default language for views.
+    static void setDefaultLanguage(const OUString& rBcp47LanguageTag);
+    /// Set the locale for the given view.
+    static void setViewLocale(int nId, const OUString& rBcp47LanguageTag);
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);

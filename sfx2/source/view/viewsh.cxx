@@ -1069,7 +1069,8 @@ SfxViewShell::SfxViewShell
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 ,   mbPrinterSettingsModified(false)
-,   maLOKLanguageTag("en-US", true)
+,   maLOKLanguageTag(LANGUAGE_NONE)
+,   maLOKLocale(LANGUAGE_NONE)
 {
 
     SetMargin( pViewFrame->GetMargin_Impl() );
@@ -1083,6 +1084,9 @@ SfxViewShell::SfxViewShell
 
     if (comphelper::LibreOfficeKit::isActive())
     {
+        maLOKLanguageTag = SfxLokHelper::getDefaultLanguage();
+        maLOKLocale = SfxLokHelper::getDefaultLanguage();
+
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())
             pFrameWin->SetLOKNotifier(this, true);
@@ -1504,6 +1508,11 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
         maLOKLanguageTag = aTag;
     else
         maLOKLanguageTag = aFallbackTag;
+}
+
+void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
+{
+    maLOKLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
