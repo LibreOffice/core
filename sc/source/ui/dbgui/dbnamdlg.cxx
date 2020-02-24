@@ -156,7 +156,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xFrameLabel(m_xAssignFrame->weld_label_widget())
     , m_xExpander(m_xBuilder->weld_expander("more"))
 {
-    m_xEdName->set_height_request_by_rows(8);
+    m_xEdName->set_height_request_by_rows(4);
     m_xEdAssign->SetReferences(this, m_xFrameLabel.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
     aStrAdd = m_xBtnAdd->get_label();

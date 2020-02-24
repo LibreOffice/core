@@ -12,9 +12,10 @@
   </object>
   <object class="GtkDialog" id="DefineDatabaseRangeDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes" context="definedatabaserangedialog|DefineDatabaseRangeDialog">Define Database Range</property>
-    <property name="resizable">False</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
@@ -24,6 +25,8 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
@@ -323,7 +326,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
+                        <property name="spacing">3</property>
                         <child>
                           <object class="GtkCheckButton" id="ContainsColumnLabels">
                             <property name="label" translatable="yes" context="definedatabaserangedialog|ContainsColumnLabels">Co_ntains column labels</property>
