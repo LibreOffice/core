@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "18392a1a_44d470d9",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002345
+      },
+      "writtenOn": "2020-02-24T13:04:45Z",
+      "side": 1,
+      "message": "\u003e Previously, this only created page when it has changed; now it does it always (and the code is almost completely duplicated)?\n\nthe code runs only when the tabs are changed and each time the DeactivatePage function is called. so creating new pages won\u0027t be an issue as the pages are deactivated when the tabs are changed, I think.",
+      "parentUuid": "893e7c40_9bd2dfab",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 386,
+        "endChar": 57
+      },
+      "revId": "b856134522bc3903abc2283f994a1edbe63af4ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e04a1118_194fdc7b",
         "filename": "uitest/writer_tests/pageDialog.py",
         "patchSetId": 7
