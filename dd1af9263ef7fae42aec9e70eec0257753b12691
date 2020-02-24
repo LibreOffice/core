@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ecf2b2f_8b7c230a",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-02-24T10:14:56Z",
+      "side": 0,
+      "message": "You likely don\u0027t want to remove the command you added a patch before I39a1ebc1ffe91a1fbc036033f95ea6c4d4d885bb",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 57
+      },
+      "revId": "dd1af9263ef7fae42aec9e70eec0257753b12691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
