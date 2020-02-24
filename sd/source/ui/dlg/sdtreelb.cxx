@@ -1081,32 +1081,25 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
 {
     sal_Int8 nResult (DND_ACTION_NONE);
 
-    if ( !bIsInDrag && IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) )
+    SvTreeListEntry* pEntry = GetDropTarget(rEvent.maPosPixel);
+    if (rEvent.mbLeaving || !CheckDragAndDropMode( this, rEvent.mnAction ))
     {
-        nResult = rEvent.mnAction;
+        ImplShowTargetEmphasis( pTargetEntry, false );
     }
-    else
+    else if( GetDragDropMode() == DragDropMode::NONE )
     {
-        SvTreeListEntry* pEntry = GetDropTarget(rEvent.maPosPixel);
-        if (rEvent.mbLeaving || !CheckDragAndDropMode( this, rEvent.mnAction ))
+        SAL_WARN( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
+    }
+    else if (IsDropAllowed(pEntry))
+    {
+        nResult = DND_ACTION_MOVE;
+
+        // Draw emphasis.
+        if (pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS))
         {
             ImplShowTargetEmphasis( pTargetEntry, false );
-        }
-        else if( GetDragDropMode() == DragDropMode::NONE )
-        {
-            SAL_WARN( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
-        }
-        else if (IsDropAllowed(pEntry))
-        {
-            nResult = DND_ACTION_MOVE;
-
-            // Draw emphasis.
-            if (pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS))
-            {
-                ImplShowTargetEmphasis( pTargetEntry, false );
-                pTargetEntry = pEntry;
-                ImplShowTargetEmphasis( pTargetEntry, true );
-            }
+            pTargetEntry = pEntry;
+            ImplShowTargetEmphasis( pTargetEntry, true );
         }
     }
 
@@ -1122,31 +1115,8 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
  */
 sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    sal_Int8 nRet = DND_ACTION_NONE;
-
-    try
-    {
-        if( !bIsInDrag && mpNavigator)
-        {
-            TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
-            OUString                aFile;
-
-            if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
-                mpNavigator->InsertFile( aFile ) )
-            {
-                nRet = rEvt.mnAction;
-            }
-        }
-    }
-    catch (css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("sd");
-    }
-
-    if (nRet == DND_ACTION_NONE)
-        SvTreeListBox::ExecuteDrop(rEvt, this);
-
-    return nRet;
+    SvTreeListBox::ExecuteDrop(rEvt, this);
+    return DND_ACTION_NONE;
 }
 
 /**
