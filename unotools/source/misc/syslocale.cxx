@@ -171,7 +171,7 @@ SvtSysLocaleOptions& SvtSysLocale::GetOptions() const
 const LanguageTag& SvtSysLocale::GetLanguageTag() const
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLanguageTag();
+        return comphelper::LibreOfficeKit::getLocale();
 
     return pImpl->aSysLocaleOptions.GetRealLanguageTag();
 }

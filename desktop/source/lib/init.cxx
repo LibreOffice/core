@@ -47,6 +47,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
+#include <svl/zforlist.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -2092,6 +2093,14 @@ void paintTileIOS(LibreOfficeKitDocument* pThis,
 }
 #endif
 
+void setLanguageAndLocale(OUString const & aLangISO)
+{
+    SvtSysLocaleOptions aLocalOptions;
+    aLocalOptions.SetLocaleConfigString(aLangISO);
+    aLocalOptions.SetUILocaleConfigString(aLangISO);
+    aLocalOptions.Commit();
+}
+
 } // anonymous namespace
 
 // Wonder global state ...
@@ -2148,13 +2157,17 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         if (!aLanguage.isEmpty())
         {
+            SfxLokHelper::setDefaultLanguage(aLanguage);
+            // Set the LOK language tag, used for dialog tunneling.
+            comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
+            comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
+
+            SAL_INFO("lok", "Set document language to " << aLanguage);
             // use with care - it sets it for the entire core, not just the
             // document
-            SvtSysLocaleOptions aSysLocaleOptions;
-            aSysLocaleOptions.SetLocaleConfigString(aLanguage);
-            aSysLocaleOptions.SetUILocaleConfigString(aLanguage);
-            // Set the LOK language tag, used for dialog tunneling.
-            comphelper::LibreOfficeKit::setLanguageTag(aSysLocaleOptions.GetLanguageTag());
+            setLanguageAndLocale(aLanguage);
+            // Need to reset the static initialized values
+            SvNumberFormatter::resetTheCurrencyTable();
         }
 
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
@@ -5012,6 +5025,7 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     {
         // Set the LOK language tag, used for dialog tunneling.
         comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
+        comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
     }
 
     int nId = SfxLokHelper::createView();
@@ -5089,7 +5103,9 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setViewLanguage(nId, OStringToOUString(language, RTL_TEXTENCODING_UTF8));
+    OUString sLanguage = OStringToOUString(language, RTL_TEXTENCODING_UTF8);
+    SfxLokHelper::setViewLanguage(nId, sLanguage);
+    SfxLokHelper::setViewLocale(nId, sLanguage);
 }
 
 
@@ -5660,15 +5676,6 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
     return convertOUString(ReplaceStringHookProc(sVersionStrTemplate));
 }
 
-static void force_c_locale()
-{
-    // force locale (and resource files loaded) to en-US
-    OUString aLangISO("en-US");
-    SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetLocaleConfigString(aLangISO);
-    aLocalOptions.SetUILocaleConfigString(aLangISO);
-}
-
 static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 {
     OString aBuffer = "Unexpected dialog: " +
@@ -6143,7 +6150,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 Application::ReleaseSolarMutex();
             }
 
-            force_c_locale();
+            setLanguageAndLocale("en-US");
         }
 
         if (eStage != PRE_INIT)

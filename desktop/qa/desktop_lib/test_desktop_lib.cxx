@@ -2816,7 +2816,7 @@ void DesktopLOKTest::testSpellcheckerMultiView()
     SvtSysLocaleOptions aSysLocaleOptions;
     aSysLocaleOptions.SetLocaleConfigString(aLangISO);
     aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
-    comphelper::LibreOfficeKit::setLanguageTag(aLangISO, true);
+    comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLangISO, true));
 
     auto aSavedSettings = Application::GetSettings();
     std::unique_ptr<Resetter> pResetter(
