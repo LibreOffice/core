@@ -61,7 +61,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
-    // this make no sense here so you have to change this
+    // this makes no sense here so you have to change this
     return 0;
 }
 

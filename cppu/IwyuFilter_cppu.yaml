@@ -17,10 +17,10 @@ blacklist:
     # Needed by the implementation of Environment_initWithEnterable
     - cppu/helper/purpenv/Environment.hxx
     cppu/source/threadpool/current.cxx:
-    # FIXME removing this make linking fail in binaryurp
+    # FIXME removing this makes linking fail in binaryurp
     - uno/current_context.h
     cppu/source/threadpool/threadident.cxx:
     # Don't replace hxx -> h in URE API
     - rtl/byteseq.hxx
-    # FIXME removing this make linking fail in binaryurp
+    # FIXME removing this makes linking fail in binaryurp
     - uno/threadpool.h
