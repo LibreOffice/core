@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "8379a04a_7c1298eb",
+        "filename": "solenv/bin/gentoken.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2020-02-24T07:42:14Z",
+      "side": 1,
+      "message": "This should use with(..) as token_input: to be more pythonic:\nE.g:\n\nwith open(token_input_file) as input_tokes:\n   for line in input_tokens:\n       ....",
+      "revId": "32b3115c716eda29e47626e65f5bfe37e8e2a2ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1a588e08_e34db5a1",
         "filename": "solenv/bin/gentoken.py",
         "patchSetId": 2
