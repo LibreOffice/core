@@ -8,6 +8,19 @@
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
 
+class JSDialogSender
+{
+    VclPtr<vcl::Window> m_aOwnedToplevel;
+
+public:
+    JSDialogSender(VclPtr<vcl::Window> aOwnedToplevel)
+        : m_aOwnedToplevel(aOwnedToplevel)
+    {
+    }
+
+    void notifyDialogState();
+};
+
 class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
 {
 public:
@@ -16,16 +29,24 @@ public:
                                                       bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
                                                     bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 };
 
-class VCL_DLLPUBLIC JSLabel : public SalInstanceLabel
+class VCL_DLLPUBLIC JSLabel : public SalInstanceLabel, public JSDialogSender
 {
-    VclPtr<vcl::Window> m_aOwnedToplevel;
-
 public:
     JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
+};
+
+class VCL_DLLPUBLIC JSEntry : public SalInstanceEntry, public JSDialogSender
+{
+public:
+    JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
+            bool bTakeOwnership);
+    virtual void set_text(const OUString& rText) override;
 };
 
 #endif
