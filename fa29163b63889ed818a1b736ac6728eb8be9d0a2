@@ -51,6 +51,24 @@
       "revId": "fa29163b63889ed818a1b736ac6728eb8be9d0a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "998d26a1_27e0ffb6",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-24T13:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c290473f_2542759c",
+      "revId": "fa29163b63889ed818a1b736ac6728eb8be9d0a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
