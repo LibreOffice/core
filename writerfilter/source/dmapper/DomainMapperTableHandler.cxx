@@ -1195,6 +1195,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     for (size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
                     {
                         auto rStartPara = m_aTableRanges[nRow][nCell][0];
+                        if (!rStartPara.is())
+                            continue;
                         auto rEndPara = m_aTableRanges[nRow][nCell][1];
                         uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rStartPara->getText(), uno::UNO_QUERY);
                         bool bApply = false;
