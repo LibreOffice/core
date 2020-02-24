@@ -59,6 +59,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
+#include <o3tl/unreachable.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <tools/helpers.hxx>
@@ -7332,6 +7333,8 @@ public:
             case vcl::ImageType::Size32:
                 eRet = GTK_ICON_SIZE_DIALOG;
                 break;
+            default:
+                O3TL_UNREACHABLE;
         }
         return eRet;
     }

@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
     uno::Reference<text::XTextRange> const xParagraph8(xParaEnum->nextElement(),
                                                        uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet8(xParagraph8, uno::UNO_QUERY);
-    sal_Int16 nParaAdjust;
+    sal_Int16 nParaAdjust = {}; // spurious -Werror=maybe-uninitialized
     xPropertySet8->getPropertyValue("ParaAdjust") >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
                          static_cast<style::ParagraphAdjust>(nParaAdjust));

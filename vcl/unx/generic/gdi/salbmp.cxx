@@ -708,7 +708,7 @@ bool X11SalBitmap::Create(
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
-            long pixmapHandle;
+            long pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
                 mbGrey = bMask;
