@@ -722,6 +722,8 @@ public:
     /// Return the decimal separator matching the given locale / LanguageType.
     OUString GetLangDecimalSep( LanguageType nLang ) const;
 
+    static void resetTheCurrencyTable();
+
     /// Return a NfCurrencyTable with pointers to <type>NfCurrencyEntry</type> entries
     static const NfCurrencyTable& GetTheCurrencyTable();
 

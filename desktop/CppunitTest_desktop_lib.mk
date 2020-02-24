@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	sal \
 	sc \
 	scfilt \

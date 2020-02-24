@@ -38,7 +38,55 @@ static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
 
-static LanguageTag g_aLanguageTag("en-US", true);
+namespace
+{
+
+class LanguageAndLocale
+{
+private:
+    LanguageTag maLanguageTag;
+    LanguageTag maLocaleLanguageTag;
+
+public:
+
+    LanguageAndLocale()
+        : maLanguageTag(LANGUAGE_NONE)
+        , maLocaleLanguageTag(LANGUAGE_NONE)
+    {}
+
+    const LanguageTag& getLanguage()
+    {
+        return maLanguageTag;
+    }
+
+    void setLanguage(const LanguageTag& rLanguageTag)
+    {
+        if (maLanguageTag != rLanguageTag)
+        {
+            SAL_INFO("comphelper.lok", "Setting language from " << maLanguageTag.getBcp47() << " to " << rLanguageTag.getBcp47());
+            maLanguageTag = rLanguageTag;
+        }
+    }
+
+    const LanguageTag& getLocale()
+    {
+        return maLocaleLanguageTag;
+    }
+
+    void setLocale(const LanguageTag& rLocaleLanguageTag)
+    {
+        if (maLocaleLanguageTag != rLocaleLanguageTag)
+        {
+            SAL_INFO("comphelper.lok", "Setting locale from " << maLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
+            maLocaleLanguageTag = rLocaleLanguageTag;
+        }
+    }
+
+};
+
+}
+
+static LanguageAndLocale g_aLanguageAndLocale;
 
 /// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
@@ -173,23 +221,28 @@ void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompat
 
 bool isCompatFlagSet(Compat flag) { return (g_eCompatFlags & flag) == flag; }
 
-void setLanguageTag(const OUString& lang, bool bCanonicalize)
+void setLocale(const LanguageTag& rLanguageTag)
 {
-    g_aLanguageTag = LanguageTag(lang, bCanonicalize);
+    g_aLanguageAndLocale.setLocale(rLanguageTag);
 }
 
-void setLanguageTag(const LanguageTag& languageTag)
+const LanguageTag& getLocale()
 {
-    if (g_aLanguageTag != languageTag)
-    {
-        SAL_INFO("comphelper.lok", "setLanguageTag: from " << g_aLanguageTag.getBcp47() << " to " << languageTag.getBcp47());
-        g_aLanguageTag = languageTag;
-    }
+    const LanguageTag& rLocale = g_aLanguageAndLocale.getLocale();
+    SAL_WARN_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Locale not set");
+    return rLocale;
+}
+
+void setLanguageTag(const LanguageTag& rLanguageTag)
+{
+    g_aLanguageAndLocale.setLanguage(rLanguageTag);
 }
 
 const LanguageTag& getLanguageTag()
 {
-    return g_aLanguageTag;
+    const LanguageTag& rLanguage = g_aLanguageAndLocale.getLanguage();
+    SAL_WARN_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Language not set");
+    return rLanguage;
 }
 
 bool isWhitelistedLanguage(const OUString& lang)

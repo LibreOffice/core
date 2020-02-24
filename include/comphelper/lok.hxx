@@ -104,8 +104,11 @@ COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
 /// Set whether clients want viewId in visible cursor invalidation payload.
 COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
 
-/// Update the current LOK's language.
-COMPHELPER_DLLPUBLIC void setLanguageTag(const OUString& lang, bool bCanonicalize = false);
+/// Update the current LOK's locale.
+COMPHELPER_DLLPUBLIC void setLocale(const LanguageTag& languageTag);
+/// Get the current LOK's locale.
+COMPHELPER_DLLPUBLIC const LanguageTag& getLocale();
+
 /// Update the current LOK's language.
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
 /// Get the current LOK's language.

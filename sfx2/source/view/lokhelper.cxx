@@ -62,6 +62,11 @@ private:
 int DisableCallbacks::m_nDisabled = 0;
 }
 
+namespace
+{
+static LanguageTag g_defaultLanguageTag("en-US", true);
+}
+
 int SfxLokHelper::createView()
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
@@ -111,8 +116,9 @@ void SfxLokHelper::setView(int nId)
         {
             DisableCallbacks dc;
 
-            // update the current LOK language for the dialog tunneling
+            // update the current LOK language and locale for the dialog tunneling
             comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+            comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
 
             if (pViewShell == SfxViewShell::Current())
                 return;
@@ -165,6 +171,16 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
     return true;
 }
 
+LanguageTag SfxLokHelper::getDefaultLanguage()
+{
+    return g_defaultLanguageTag;
+}
+
+void SfxLokHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
+{
+    g_defaultLanguageTag = LanguageTag(rBcp47LanguageTag, true);
+}
+
 void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
@@ -174,6 +190,20 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
             pViewShell->SetLOKLanguageTag(rBcp47LanguageTag);
+            return;
+        }
+    }
+}
+
+void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+
+    for (SfxViewShell* pViewShell : rViewArr)
+    {
+        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        {
+            pViewShell->SetLOKLocale(rBcp47LanguageTag);
             return;
         }
     }

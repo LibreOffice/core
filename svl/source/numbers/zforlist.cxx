@@ -3404,6 +3404,16 @@ sal_uInt16 SvNumberFormatter::GetYear2000Default()
     return 1930;
 }
 
+// static
+void SvNumberFormatter::resetTheCurrencyTable()
+{
+    SAL_INFO("svl", "Resetting the currency table.");
+
+    nSystemCurrencyPosition = 0;
+    bCurrencyTableInitialized = false;
+
+    GetFormatterRegistry().ConfigurationChanged(nullptr, ConfigurationHints::Locale | ConfigurationHints::Currency | ConfigurationHints::DatePatterns);
+}
 
 // static
 const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
