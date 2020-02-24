@@ -286,6 +286,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/warnemaildialog \
 	sw/uiconfig/swriter/ui/watermarkdialog \
 	sw/uiconfig/swriter/ui/wordcount \
+	sw/uiconfig/swriter/ui/wordcount-mobile \
 	sw/uiconfig/swriter/ui/wrapdialog \
 	sw/uiconfig/swriter/ui/wrappage \
 ))
