@@ -2854,7 +2854,7 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
             default: break;
         }
 
-        // #i64497# If a chart is in a temporary document during clipoard paste,
+        // #i64497# If a chart is in a temporary document during clipboard paste,
         // there should be no data provider, so that own data is used
         bool bCreate =
             ! ( nType == ServiceType::CHDATAPROV &&
