@@ -38,7 +38,9 @@ class SwWordCountFloatDlg : public SfxModelessDialogController
     std::unique_ptr<weld::Label> m_xDocCharacterFT;
     std::unique_ptr<weld::Label> m_xDocCharacterExcludingSpacesFT;
     std::unique_ptr<weld::Label> m_xDocCjkcharsFT;
+    std::unique_ptr<weld::Label> m_xDocCjkcharsFT2;
     std::unique_ptr<weld::Label> m_xDocStandardizedPagesFT;
+    std::unique_ptr<weld::Label> m_xDocStandardizedPagesFT2;
     std::unique_ptr<weld::Label> m_xCjkcharsLabelFT;
     std::unique_ptr<weld::Label> m_xStandardizedPagesLabelFT;
 
