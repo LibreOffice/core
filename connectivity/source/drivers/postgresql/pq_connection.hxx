@@ -90,9 +90,7 @@ struct ConnectionSettings
         maxNameLen(0),
         maxIndexKeys(0),
         pTablesImpl(nullptr),
-        pViewsImpl(nullptr),
-        logFile( nullptr ),
-        m_nLogLevel(LogLevel::Info)
+        pViewsImpl(nullptr)
     {}
     static const rtl_TextEncoding encoding = RTL_TEXTENCODING_UTF8;
     PGconn *pConnection;
@@ -106,8 +104,6 @@ struct ConnectionSettings
     Views *pViewsImpl;   // needed to implement renaming of tables / views
     OUString user;
     OUString catalog;
-    FILE *logFile;
-    LogLevel m_nLogLevel;
 };
 
 
