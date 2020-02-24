@@ -352,12 +352,13 @@ void DocxExport::DoComboBox(const OUString& rName,
 
     m_pDocumentFS->singleElementNS(XML_w, XML_result, FSNS(XML_w, XML_val), OString::number(nId));
 
-    // Loop over the entries
-
-    for (const auto& rItem : rListItems)
+    // unfortunately Word 2013 refuses to load DOCX with more than 25 listEntry
+    SAL_WARN_IF(25 < rListItems.getLength(), "sw.ww8", "DocxExport::DoComboBox data loss with more than 25 entries");
+    auto const nSize(std::min(sal_Int32(25), rListItems.getLength()));
+    for (auto i = 0; i < nSize; ++i)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
-                FSNS( XML_w, XML_val ), rItem.toUtf8() );
+                FSNS(XML_w, XML_val), rListItems[i].toUtf8() );
     }
 
     m_pDocumentFS->endElementNS( XML_w, XML_ddList );
