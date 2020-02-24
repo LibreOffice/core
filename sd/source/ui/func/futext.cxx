@@ -36,6 +36,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
@@ -523,6 +524,8 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(makeSdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
             pTxtObj->SetMergedItemSet(aSet);
+            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+                pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
         {
