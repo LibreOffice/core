@@ -414,4 +414,29 @@ class formatCell(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
+
+    def test_tdf130762(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        #select cell A1
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+        #format - cell
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "3")  #tab Alignment
+        xspinDegrees = xDialog.getChild("spinDegrees")
+        self.assertEqual(get_state_as_dict(xspinDegrees)["Text"].replace('°', ''), "0")
+        xspinDegrees.executeAction("DOWN", tuple())
+        self.assertEqual(get_state_as_dict(xspinDegrees)["Text"].replace('°', ''), "355")
+        xspinDegrees.executeAction("UP", tuple())
+        self.assertEqual(get_state_as_dict(xspinDegrees)["Text"].replace('°', ''), "0")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
