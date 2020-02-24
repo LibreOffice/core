@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bddfbd7_24a2b1a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-24T11:29:55Z",
+      "side": 1,
+      "message": "Does this mean \"allowed ONLY if they have default values\", or \"allowed ALSO with default values\"?",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "9e0aad9f60f388c59f47fafba239cd54d7127f0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
