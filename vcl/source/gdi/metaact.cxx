@@ -100,7 +100,7 @@ meta_action_name(MetaActionType nMetaAction)
     default:
         // Yes, return a pointer to a static buffer. This is a very
         // local debugging output function, so no big deal.
-        static char buffer[6];
+        static char buffer[11];
         sprintf(buffer, "%u", static_cast<unsigned int>(nMetaAction));
         return buffer;
     }
