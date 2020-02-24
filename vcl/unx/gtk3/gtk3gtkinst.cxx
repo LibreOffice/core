@@ -7536,11 +7536,10 @@ public:
             find_menupeer_button(GTK_WIDGET(pToolButton), &pButton);
             if (pButton)
             {
-                GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
-                auto eState = gtk_style_context_get_state(pWidgetContext) & ~GTK_STATE_FLAG_CHECKED;
+                auto eState = gtk_widget_get_state_flags(GTK_WIDGET(pButton)) & ~GTK_STATE_FLAG_CHECKED;
                 if (bActive)
                     eState |= GTK_STATE_FLAG_CHECKED;
-                gtk_style_context_set_state(pWidgetContext, static_cast<GtkStateFlags>(eState));
+                gtk_widget_set_state_flags(GTK_WIDGET(pButton), static_cast<GtkStateFlags>(eState), true);
             }
         }
         else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
@@ -7562,8 +7561,7 @@ public:
             find_menupeer_button(GTK_WIDGET(pToolButton), &pButton);
             if (pButton)
             {
-                GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
-                return gtk_style_context_get_state(pWidgetContext) & GTK_STATE_FLAG_CHECKED;
+                return gtk_widget_get_state_flags(GTK_WIDGET(pButton)) & GTK_STATE_FLAG_CHECKED;
             }
         }
         else if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
