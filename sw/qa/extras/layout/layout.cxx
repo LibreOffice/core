@@ -3770,7 +3770,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128959)
                 "amet commodo magna eros quis urna.");
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
 static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
 {
     SwRootFrame* pRoot = pWrtShell->GetLayout();
