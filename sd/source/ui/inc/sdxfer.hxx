@@ -37,7 +37,7 @@ class DrawDocShell;
 class View;
 }
 
-class SAL_DLLPUBLIC_RTTI SdTransferable : public TransferableHelper, public SfxListener
+class SAL_DLLPUBLIC_RTTI SdTransferable : public TransferDataContainer, public SfxListener
 {
 public:
 
