@@ -41,6 +41,8 @@
 #include <memory>
 #include <o3tl/make_unique.hxx>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -370,7 +372,9 @@ void SvxLineEndWindow::FillValueSet()
     // First entry: no line end.
     // An entry is temporarily added to get the UI bitmap
     basegfx::B2DPolyPolygon aNothing;
-    mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SvxResId(RID_SVXSTR_NONE)));
+    mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing,
+        comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+            : SvxResId(RID_SVXSTR_NONE)));
     const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
     BitmapEx aBmp = mpLineEndList->GetUiBitmap( nCount );
     OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );

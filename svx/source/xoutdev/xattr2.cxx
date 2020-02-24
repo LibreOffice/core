@@ -34,6 +34,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <comphelper/lok.hxx>
+
 #include <libxml/xmlwriter.h>
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
@@ -99,7 +101,7 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
     {
         case css::drawing::LineJoint::LineJoint_MAKE_FIXED_SIZE:
         case css::drawing::LineJoint_NONE:
-            pId = RID_SVXSTR_NONE;
+            pId = comphelper::LibreOfficeKit::isActive() ? RID_SVXSTR_INVISIBLE : RID_SVXSTR_NONE;
         break;
 
         case css::drawing::LineJoint_MIDDLE:

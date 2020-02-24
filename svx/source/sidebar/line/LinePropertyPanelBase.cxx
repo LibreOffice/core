@@ -47,6 +47,8 @@
 #include <svx/xlinjoit.hxx>
 #include <bitmaps.hlst>
 
+#include <comphelper/lok.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -58,7 +60,8 @@ namespace
 void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const BitmapEx& rBitmapZero)
 {
     const sal_uInt32 nCount(rList.Count());
-    const OUString sNone(SvxResId(RID_SVXSTR_NONE));
+    const OUString sNone(comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+        : SvxResId(RID_SVXSTR_NONE));
 
     rListBoxStart.SetUpdateMode(false);
     rListBoxEnd.SetUpdateMode(false);
