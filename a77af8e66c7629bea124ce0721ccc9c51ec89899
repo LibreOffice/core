@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f179d655_4e2212bd",
+        "filename": "basic/qa/basic_coverage/test_ismissing_basic.vb",
+        "patchSetId": 11
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-24T14:26:11Z",
+      "side": 1,
+      "message": "In this case, TestLog_ASSERT could be simplified according to the specifics of the module:\n\n    Sub TestLog_ASSERT(actual As Integer, expected As Integer, testName As String)\n        If expected \u003d actual Then\n            passCount \u003d passCount + 1\n        Else\n            result \u003d result \u0026 Chr$(10) \u0026 \" Failed: \" \u0026 testName \u0026 \" returned \" \u0026 actual \u0026 \", expected \" \u0026 expected\n            failCount \u003d failCount + 1\n        End If\n    End Sub\n\nand used in the code like\n\n    TestLog_ASSERT TestOptVariant(), IsMissingAB, \"TestOptVariant()\"\n    TestLog_ASSERT TestOptArrayByRefByVal(aA, aB), IsMissingNone, \"TestOptArrayByRefByVal(aA, aB)\"\n\nThis would make the test readable :-)",
+      "range": {
+        "startLine": 284,
+        "startChar": 4,
+        "endLine": 284,
+        "endChar": 18
+      },
+      "revId": "a77af8e66c7629bea124ce0721ccc9c51ec89899",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
