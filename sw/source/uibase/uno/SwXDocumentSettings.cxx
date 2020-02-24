@@ -458,7 +458,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_PAPER:
         {
-            bool bPreferPrinterPapersize;
+            bool bPreferPrinterPapersize = {}; // spurious -Werror=maybe-uninitialized
             if(!(rValue >>= bPreferPrinterPapersize))
                 throw IllegalArgumentException();
             mbPreferPrinterPapersize = bPreferPrinterPapersize;

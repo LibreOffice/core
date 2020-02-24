@@ -451,7 +451,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
         pUndo.reset(new SwUndoChangeFootNote( rPam, rNumStr, bIsEndNote ));
     }
 
-    SwTextFootnote* pTextFootnote;
+    SwTextFootnote* pTextFootnote = nullptr;
     sal_uLong nIdx;
     bool bChg = false;
     bool bTypeChgd = false;

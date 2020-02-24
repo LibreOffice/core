@@ -64,7 +64,7 @@ SwNavigationConfig::SwNavigationConfig() :
                 {
                     case 0:
                     {
-                        sal_Int32 nTmp;
+                        sal_Int32 nTmp = {}; // spurious -Werror=maybe-uninitialized
                         if (pValues[nProp] >>= nTmp)
                         {
                             if (nTmp < sal_Int32(ContentTypeId::UNKNOWN)

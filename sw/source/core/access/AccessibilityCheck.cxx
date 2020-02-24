@@ -339,16 +339,24 @@ private:
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
                         uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode)
     {
-        sal_Int32 nParaBackColor;
+        sal_Int32 nParaBackColor = {}; // spurious -Werror=maybe-uninitialized
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
-        xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor;
+        if (!(xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor))
+        {
+            SAL_WARN("sw.a11y", "ParaBackColor void");
+            return;
+        }
 
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
         if (xProperties.is())
         {
             // Foreground color
-            sal_Int32 nCharColor;
-            xProperties->getPropertyValue("CharColor") >>= nCharColor;
+            sal_Int32 nCharColor = {}; // spurious -Werror=maybe-uninitialized
+            if (!(xProperties->getPropertyValue("CharColor") >>= nCharColor))
+            { // not sure this is impossible, can the default be void?
+                SAL_WARN("sw.a11y", "CharColor void");
+                return;
+            }
             Color aForegroundColor(nCharColor);
             if (aForegroundColor == COL_AUTO)
                 return;
@@ -368,12 +376,13 @@ private:
                 aPageBackground = rXFillColorItem->GetColorValue();
             }
 
-            sal_Int32 nCharBackColor;
-            sal_Int16 eRelief;
+            sal_Int32 nCharBackColor = {}; // spurious -Werror=maybe-uninitialized
 
-            xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor;
-            xProperties->getPropertyValue("CharRelief") >>= eRelief;
-
+            if (!(xProperties->getPropertyValue("CharBackColor") >>= nCharBackColor))
+            {
+                SAL_WARN("sw.a11y", "CharBackColor void");
+                return;
+            }
             // Determine the background color
             // Try Character background (highlight)
             Color aBackgroundColor(nCharBackColor);
