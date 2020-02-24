@@ -28,6 +28,10 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+
+#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
@@ -82,6 +86,8 @@ void SwWordCountFloatDlg::showCJK(bool bShowCJK)
 {
     m_xCurrentCjkcharsFT->set_visible(bShowCJK);
     m_xDocCjkcharsFT->set_visible(bShowCJK);
+    if (m_xCjkcharsLabelFT2)
+        m_xCjkcharsLabelFT2->set_visible(bShowCJK);
     m_xCjkcharsLabelFT->set_visible(bShowCJK);
 }
 
@@ -89,6 +95,8 @@ void SwWordCountFloatDlg::showStandardizedPages(bool bShowStandardizedPages)
 {
     m_xCurrentStandardizedPagesFT->set_visible(bShowStandardizedPages);
     m_xDocStandardizedPagesFT->set_visible(bShowStandardizedPages);
+    if (m_xStandardizedPagesLabelFT2)
+        m_xStandardizedPagesLabelFT2->set_visible(bShowStandardizedPages);
     m_xStandardizedPagesLabelFT->set_visible(bShowStandardizedPages);
 }
 
@@ -96,7 +104,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          weld::Window *pParent,
                                          SfxChildWinInfo const * pInfo)
-    : SfxModelessDialogController(_pBindings, pChild, pParent, "modules/swriter/ui/wordcount.ui", "WordCountDialog")
+    : SfxModelessDialogController(_pBindings, pChild, pParent, IS_MOBILE ? OUString("modules/swriter/ui/wordcount-mobile.ui") : OUString("modules/swriter/ui/wordcount.ui"), "WordCountDialog")
     , m_xCurrentWordFT(m_xBuilder->weld_label("selectwords"))
     , m_xCurrentCharacterFT(m_xBuilder->weld_label("selectchars"))
     , m_xCurrentCharacterExcludingSpacesFT(m_xBuilder->weld_label("selectcharsnospaces"))
@@ -108,7 +116,9 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     , m_xDocCjkcharsFT(m_xBuilder->weld_label("doccjkchars"))
     , m_xDocStandardizedPagesFT(m_xBuilder->weld_label("docstandardizedpages"))
     , m_xCjkcharsLabelFT(m_xBuilder->weld_label("cjkcharsft"))
+    , m_xCjkcharsLabelFT2(m_xBuilder->weld_label("cjkcharsft2"))
     , m_xStandardizedPagesLabelFT(m_xBuilder->weld_label("standardizedpages"))
+    , m_xStandardizedPagesLabelFT2(m_xBuilder->weld_label("standardizedpages2"))
 {
     showCJK(SvtCJKOptions().IsAnyEnabled());
     showStandardizedPages(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
