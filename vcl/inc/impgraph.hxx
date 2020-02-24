@@ -24,6 +24,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include "graphic/Manager.hxx"
+#include "graphic/GraphicID.hxx"
 
 struct ImpSwapInfo
 {
@@ -44,26 +45,6 @@ class GfxLink;
 struct ImpSwapFile;
 class GraphicConversionParameters;
 class ImpGraphic;
-
-class GraphicID
-{
-private:
-    sal_uInt32  mnID1;
-    sal_uInt32  mnID2;
-    sal_uInt32  mnID3;
-    BitmapChecksum  mnID4;
-
-public:
-    GraphicID(ImpGraphic const & rGraphic);
-
-    bool operator==(const GraphicID& rID) const
-    {
-        return rID.mnID1 == mnID1 && rID.mnID2 == mnID2 &&
-               rID.mnID3 == mnID3 && rID.mnID4 == mnID4;
-    }
-
-    OString getIDString() const;
-};
 
 class ImpGraphic final
 {
