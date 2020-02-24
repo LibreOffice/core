@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "dc112e9c_de700e77",
+        "filename": "solenv/bin/gentoken.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-24T09:05:29Z",
+      "side": 1,
+      "message": "token.translate(string.maketrans(\"-.:\", \"___\"))",
+      "range": {
+        "startLine": 31,
+        "startChar": 16,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "32b3115c716eda29e47626e65f5bfe37e8e2a2ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e94718f_917a4134",
         "filename": "solenv/bin/gentoken.py",
         "patchSetId": 2
