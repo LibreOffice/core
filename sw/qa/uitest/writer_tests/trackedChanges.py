@@ -172,7 +172,6 @@ class trackedchanges(UITestCase):
 
         self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
         xTrackDlg = self.xUITest.getTopFocusWindow()
-        print(xTrackDlg.getChildren())
         changesList = xTrackDlg.getChild("writerchanges")
 
         resultsAccept = [
