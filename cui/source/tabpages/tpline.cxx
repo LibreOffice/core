@@ -62,6 +62,7 @@
 #include <svx/strings.hrc>
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
+#include <comphelper/lok.hxx>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -229,7 +230,8 @@ void SvxLineTabPage::FillListboxes()
     m_xLbLineStyle->set_active( nOldSelect );
 
     // Line end style
-    OUString sNone( SvxResId( RID_SVXSTR_NONE ) );
+    OUString sNone( comphelper::LibreOfficeKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
+        : SvxResId( RID_SVXSTR_NONE ) );
     nOldSelect = m_xLbStartStyle->get_active();
     m_xLbStartStyle->clear();
     m_xLbStartStyle->append_text(sNone);
@@ -291,7 +293,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *m_pnLineEndListState = ChangeType::NONE;
 
             nPos = m_xLbLineStyle->get_active();
-            OUString sNone(SvxResId(RID_SVXSTR_NONE));
+            OUString sNone( comphelper::LibreOfficeKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
+                : SvxResId( RID_SVXSTR_NONE ) );
+
             m_xLbStartStyle->clear();
             m_xLbStartStyle->append_text(sNone);
 
