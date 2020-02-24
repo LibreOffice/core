@@ -63,12 +63,6 @@
 
 namespace pq_sdbc_driver
 {
-#ifdef POSTGRE_TRACE
-#define POSTGRE_TRACE( x ) printf( "%s\n" , x )
-#else
-#define POSTGRE_TRACE(x) ((void)0)
-#endif
-
 struct ConnectionSettings;
 
 

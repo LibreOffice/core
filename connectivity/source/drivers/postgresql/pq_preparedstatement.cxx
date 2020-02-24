@@ -191,7 +191,6 @@ PreparedStatement::PreparedStatement(
 
 PreparedStatement::~PreparedStatement()
 {
-    POSTGRE_TRACE( "dtor PreparedStatement" );
 }
 
 void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )

@@ -154,7 +154,6 @@ Statement::Statement( const ::rtl::Reference< comphelper::RefCountedMutex > & re
 
 Statement::~Statement()
 {
-    POSTGRE_TRACE( "dtor Statement" );
 }
 
 void Statement::checkClosed()
@@ -204,7 +203,6 @@ void Statement::close(  )
     if( resultSet.is() )
     {
         resultSet->close();
-        POSTGRE_TRACE( "statement closed" );
     }
 
 }

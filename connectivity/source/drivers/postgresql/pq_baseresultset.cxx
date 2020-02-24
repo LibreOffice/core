@@ -114,7 +114,6 @@ BaseResultSet::BaseResultSet(
     , m_fieldCount( colCount )
     , m_wasNull(false)
 {
-    POSTGRE_TRACE( "ctor BaseResultSet" );
 }
 
 // LEM TODO: refMutex->GetMutex() should live longer than OComponentHelper,
@@ -122,7 +121,6 @@ BaseResultSet::BaseResultSet(
 // BaseResultSet::~BaseResultSet in an infinite loop :(
 BaseResultSet::~BaseResultSet()
 {
-    POSTGRE_TRACE( "dtor BaseResultSet" );
 }
 
 Any BaseResultSet::queryInterface( const Type & rType )
