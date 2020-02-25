@@ -20,73 +20,103 @@ class SalInstanceBuilder : public weld::Builder
 protected:
     std::unique_ptr<VclBuilder> m_xBuilder;
     VclPtr<vcl::Window> m_aOwnedToplevel;
+
 public:
     SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile);
 
     VclBuilder& get_builder() const;
 
-    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString &id, bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::MessageDialog>
+    weld_message_dialog(const OString& id, bool bTakeOwnership = true) override;
 
-    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString &id, bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
+                                                      bool bTakeOwnership = true) override;
 
-    virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Window> weld_window(const OString& id,
+                                                      bool bTakeOwnership = true) override;
 
-    virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id,
+                                                      bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Container> weld_container(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Container> weld_container(const OString& id,
+                                                            bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ScrolledWindow>
+    weld_scrolled_window(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
+                                                          bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Button> weld_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Button> weld_button(const OString& id,
+                                                      bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::MenuButton>
+    weld_menu_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ToggleButton>
+    weld_toggle_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::RadioButton>
+    weld_radio_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::CheckButton>
+    weld_check_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Scale> weld_scale(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Scale> weld_scale(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ProgressBar>
+    weld_progress_bar(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Image> weld_image(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::SpinButton>
+    weld_spin_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
-                                                                            bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::MetricSpinButton>
+    weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                            bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::FormattedSpinButton> weld_formatted_spin_button(const OString& id,
-                                                                                  bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::FormattedSpinButton>
+    weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
-                                                        bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TimeSpinButton>
+    weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
+                          bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
+                                                           bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& containerid, const OString& entryid,
-                                    const OString& treeviewid, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::EntryTreeView>
+    weld_entry_tree_view(const OString& containerid, const OString& entryid,
+                         const OString& treeviewid, bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id,
+                                                           bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
+                                                    bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
+                                                           bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Expander> weld_expander(const OString &id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id,
+                                                          bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::DrawingArea> weld_drawing_area(const OString &id, const a11yref& rA11yImpl = nullptr,
-            FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::DrawingArea>
+    weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
+                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
+                      bool bTakeOwnership = false) override;
 
-    virtual std::unique_ptr<weld::Menu> weld_menu(const OString &id, bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Menu> weld_menu(const OString& id,
+                                                  bool bTakeOwnership = true) override;
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override;
 
@@ -198,7 +228,8 @@ public:
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
 
-    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int &y, int& width, int &height) override;
+    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width,
+                                         int& height) override;
 
     virtual void grab_add() override;
 
@@ -228,7 +259,7 @@ public:
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
 
-    virtual OUString strip_mnemonic(const OUString &rLabel) const override;
+    virtual OUString strip_mnemonic(const OUString& rLabel) const override;
 
     SystemWindow* getSystemWindow();
 };
@@ -237,8 +268,9 @@ class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
 {
 private:
     VclPtr<FixedText> m_xLabel;
+
 public:
-    SalInstanceLabel(FixedText* pLabel, SalInstanceBuilder *pBuilder, bool bTakeOwnership);
+    SalInstanceLabel(FixedText* pLabel, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
     virtual void set_label(const OUString& rText) override;
 
@@ -251,8 +283,10 @@ class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Cont
 {
 private:
     VclPtr<vcl::Window> m_xContainer;
+
 public:
-    SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
+                         bool bTakeOwnership);
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
 };
 
@@ -313,15 +347,18 @@ private:
 public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner, const std::function<void(sal_Int32)> &rEndDialogFn) override;
+    virtual bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                          const std::function<void(sal_Int32)>& rEndDialogFn) override;
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override;
+    virtual void
+    SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override;
 
     virtual int run() override;
 
     virtual void response(int nResponse) override;
 
-    virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId = OString()) override;
+    virtual void add_button(const OUString& rText, int nResponse,
+                            const OString& rHelpId = OString()) override;
 
     virtual weld::Button* get_widget_for_response(int nResponse) override;
 
@@ -334,10 +371,11 @@ class WeldTextFilter : public TextFilter
 {
 private:
     Link<OUString&, bool>& m_rInsertTextHdl;
+
 public:
     WeldTextFilter(Link<OUString&, bool>& rInsertTextHdl);
 
-    virtual OUString filter(const OUString &rText) override;
+    virtual OUString filter(const OUString& rText) override;
 };
 
 class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
@@ -350,6 +388,7 @@ private:
     DECL_LINK(ActivateHdl, Edit&, bool);
 
     WeldTextFilter m_aTextFilter;
+
 public:
     SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -365,7 +404,7 @@ public:
 
     virtual void select_region(int nStartPos, int nEndPos) override;
 
-    bool get_selection_bounds(int& rStartPos, int &rEndPos) override;
+    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
 
     virtual void set_position(int nCursorPos) override;
 
@@ -406,7 +445,8 @@ private:
     int fromField(double fValue) const;
 
 public:
-    SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
+                          bool bTakeOwnership);
 
     virtual int get_value() const override;
 
@@ -440,7 +480,7 @@ class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::Co
 {
 protected:
     // owner for ListBox/ComboBox UserData
-    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    //std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<vcl_type> m_xComboBox;
 
 public:
@@ -493,10 +533,7 @@ public:
         m_xComboBox->SelectEntryPos(pos);
     }
 
-    virtual OUString get_text(int pos) const override
-    {
-        return m_xComboBox->GetEntry(pos);
-    }
+    virtual OUString get_text(int pos) const override { return m_xComboBox->GetEntry(pos); }
 
     virtual OUString get_id(int pos) const override
     {
@@ -508,11 +545,12 @@ public:
 
     virtual void set_id(int row, const OUString& rId) override
     {
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
-        m_xComboBox->SetEntryData(row, m_aUserData.back().get());
+        //m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        //m_xComboBox->SetEntryData(row, m_aUserData.back().get());
     }
 
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
+                               bool bKeepExisting) override
     {
         freeze();
         if (!bKeepExisting)
@@ -525,10 +563,7 @@ public:
         thaw();
     }
 
-    virtual int get_count() const override
-    {
-        return m_xComboBox->GetEntryCount();
-    }
+    virtual int get_count() const override { return m_xComboBox->GetEntryCount(); }
 
     virtual int find_text(const OUString& rStr) const override
     {
@@ -554,7 +589,7 @@ public:
     virtual void clear() override
     {
         m_xComboBox->Clear();
-        m_aUserData.clear();
+        //m_aUserData.clear();
     }
 
     virtual void make_sorted() override
@@ -562,10 +597,7 @@ public:
         m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
     }
 
-    virtual bool get_popup_shown() const override
-    {
-        return m_xComboBox->IsInDropDown();
-    }
+    virtual bool get_popup_shown() const override { return m_xComboBox->IsInDropDown(); }
 };
 
 class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
@@ -574,13 +606,15 @@ private:
     DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
-    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder,
+                                   bool bTakeOwnership);
 
     virtual OUString get_active_text() const override;
 
     virtual void remove(int pos) override;
 
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override;
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos) override;
 
@@ -607,8 +641,10 @@ private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, bool);
     WeldTextFilter m_aTextFilter;
+
 public:
-    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
+                                bool bTakeOwnership);
 
     virtual bool has_entry() const override;
 
@@ -618,7 +654,8 @@ public:
 
     virtual void remove(int pos) override;
 
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override;
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos) override;
 
@@ -639,9 +676,10 @@ class SalInstanceButton : public SalInstanceContainer, public virtual weld::Butt
 {
 private:
     VclPtr<::Button> m_xButton;
-    Link<::Button*,void> const m_aOldClickHdl;
+    Link<::Button*, void> const m_aOldClickHdl;
 
     DECL_LINK(ClickHdl, ::Button*, void);
+
 public:
     SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -697,8 +735,10 @@ class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::
 {
 private:
     VclPtr<::MessageDialog> m_xMessageDialog;
+
 public:
-    SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
+                             bool bTakeOwnership);
 
     virtual void set_primary_text(const OUString& rText) override;
 
@@ -717,6 +757,7 @@ private:
     VclPtr<CheckBox> m_xCheckButton;
 
     DECL_LINK(ToggleHdl, CheckBox&, void);
+
 public:
     SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
