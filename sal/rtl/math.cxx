@@ -38,7 +38,10 @@
 #include <limits>
 #include <limits.h>
 #include <math.h>
+#include <memory>
 #include <stdlib.h>
+
+#include <dtoa.h>
 
 #if !HAVE_GCC_BUILTIN_FFS && !defined _WIN32
     #include <strings.h>
@@ -756,18 +759,6 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
 
 namespace {
 
-// if nExp * 10 + nAdd would result in overflow
-bool long10Overflow( long& nExp, int nAdd )
-{
-    if ( nExp > (LONG_MAX/10)
-         || (nExp == (LONG_MAX/10) && nAdd > (LONG_MAX%10)) )
-    {
-        nExp = LONG_MAX;
-        return true;
-    }
-    return false;
-}
-
 template< typename CharT >
 double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                              CharT cDecSeparator, CharT cGroupSeparator,
@@ -821,6 +812,37 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
     if (!bDone) // do not recognize e.g. NaN1.23
     {
+        std::unique_ptr<char[]> bufInHeap;
+        std::unique_ptr<const CharT * []> bufInHeapMap;
+        constexpr int bufOnStackSize = 256;
+        char bufOnStack[bufOnStackSize];
+        const CharT* bufOnStackMap[bufOnStackSize];
+        char* buf = bufOnStack;
+        const CharT** bufmap = bufOnStackMap;
+        int bufpos = 0;
+        const size_t bufsize = pEnd - p + (bSign ? 2 : 1);
+        if (bufsize > bufOnStackSize)
+        {
+            bufInHeap = std::make_unique<char[]>(bufsize);
+            bufInHeapMap = std::make_unique<const CharT*[]>(bufsize);
+            buf = bufInHeap.get();
+            bufmap = bufInHeapMap.get();
+        }
+
+        if (bSign)
+        {
+            buf[0] = '-';
+            bufmap[0] = p; // yes, this may be the same pointer as for the next mapping
+            bufpos = 1;
+        }
+        // Put first zero to buffer for strings like "-0"
+        if (p != pEnd && *p == CharT('0'))
+        {
+            buf[bufpos] = '0';
+            bufmap[bufpos] = p;
+            ++bufpos;
+            ++p;
+        }
         // Leading zeros and group separators between digits may be safely
         // ignored. p0 < p implies that there was a leading 0 already,
         // consecutive group separators may not happen as *(p+1) is checked for
@@ -831,17 +853,15 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             ++p;
         }
 
-        CharT const * pFirstSignificant = ((p > pBegin && *(p-1) == CharT('0')) ? p-1 : p);
-        long nValExp = 0;       // carry along exponent of mantissa
-
         // integer part of mantissa
         for (; p != pEnd; ++p)
         {
             CharT c = *p;
             if (rtl::isAsciiDigit(c))
             {
-                fVal = fVal * 10.0 + static_cast< double >( c - CharT('0') );
-                ++nValExp;
+                buf[bufpos] = static_cast<char>(c);
+                bufmap[bufpos] = p;
+                ++bufpos;
             }
             else if (c != cGroupSeparator)
             {
@@ -858,21 +878,11 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
         // fraction part of mantissa
         if (p != pEnd && *p == cDecSeparator)
         {
+            buf[bufpos] = '.';
+            bufmap[bufpos] = p;
+            ++bufpos;
             ++p;
-            double fFrac = 0.0;
-            long nFracExp = 0;
-            while (p != pEnd && *p == CharT('0'))
-            {
-                --nFracExp;
-                ++p;
-            }
 
-            if (nValExp == 0)
-                nValExp = nFracExp - 1; // no integer part => fraction exponent
-
-            // one decimal digit needs ld(10) ~= 3.32 bits
-            static const int nSigs = (DBL_MANT_DIG / 3) + 1;
-            int nDigs = 0;
             for (; p != pEnd; ++p)
             {
                 CharT c = *p;
@@ -880,122 +890,38 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 {
                     break;
                 }
-                if ( nDigs < nSigs )
-                {   // further digits (more than nSigs) don't have any
-                    // significance
-                    fFrac = fFrac * 10.0 + static_cast<double>(c - CharT('0'));
-                    --nFracExp;
-                    ++nDigs;
-                }
-            }
-
-            if (fFrac != 0.0)
-            {
-                fVal += rtl::math::pow10Exp( fFrac, nFracExp );
-            }
-            else if (nValExp < 0)
-            {
-                if (pFirstSignificant + 1 == p)
-                {
-                    // No digit at all, only separator(s) without integer or
-                    // fraction part. Bail out. No number. No error.
-                    if (pStatus)
-                        *pStatus = eStatus;
-
-                    if (pParsedEnd)
-                        *pParsedEnd = pBegin;
-
-                    return fVal;
-                }
-                nValExp = 0;    // no digit other than 0 after decimal point
+                buf[bufpos] = static_cast<char>(c);
+                bufmap[bufpos] = p;
+                ++bufpos;
             }
         }
-
-        if (nValExp > 0)
-            --nValExp;  // started with offset +1 at the first mantissa digit
 
         // Exponent
         if (p != p0 && p != pEnd && (*p == CharT('E') || *p == CharT('e')))
         {
-            CharT const * const pExponent = p;
+            buf[bufpos] = 'E';
+            bufmap[bufpos] = p;
+            ++bufpos;
             ++p;
-            bool bExpSign;
             if (p != pEnd && *p == CharT('-'))
             {
-                bExpSign = true;
+                buf[bufpos] = '-';
+                bufmap[bufpos] = p;
+                ++bufpos;
                 ++p;
             }
-            else
+            else if (p != pEnd && *p == CharT('+'))
+                ++p;
+
+            for (; p != pEnd; ++p)
             {
-                bExpSign = false;
-                if (p != pEnd && *p == CharT('+'))
-                    ++p;
-            }
-            CharT const * const pFirstExpDigit = p;
-            if ( fVal == 0.0 )
-            {   // no matter what follows, zero stays zero, but carry on the
-                // offset
-                while (p != pEnd && rtl::isAsciiDigit(*p))
-                {
-                    ++p;
-                }
+                CharT c = *p;
+                if (!rtl::isAsciiDigit(c))
+                    break;
 
-                if (p == pFirstExpDigit)
-                {   // no digits in exponent, reset end of scan
-                    p = pExponent;
-                }
-            }
-            else
-            {
-                bool bOverflow = false;
-                long nExp = 0;
-                for (; p != pEnd; ++p)
-                {
-                    CharT c = *p;
-                    if (!rtl::isAsciiDigit(c))
-                        break;
-
-                    int i = c - CharT('0');
-
-                    if ( long10Overflow( nExp, i ) )
-                        bOverflow = true;
-                    else
-                        nExp = nExp * 10 + i;
-                }
-
-                if ( nExp )
-                {
-                    if ( bExpSign )
-                        nExp = -nExp;
-
-                    long nAllExp(0);
-                    if (!bOverflow)
-                        bOverflow = o3tl::checked_add(nExp, nValExp, nAllExp);
-                    if ( nAllExp > DBL_MAX_10_EXP || (bOverflow && !bExpSign) )
-                    {   // overflow
-                        fVal = HUGE_VAL;
-                        eStatus = rtl_math_ConversionStatus_OutOfRange;
-                    }
-                    else if ((nAllExp < DBL_MIN_10_EXP) ||
-                             (bOverflow && bExpSign) )
-                    {   // underflow
-                        fVal = 0.0;
-                        eStatus = rtl_math_ConversionStatus_OutOfRange;
-                    }
-                    else if ( nExp > DBL_MAX_10_EXP || nExp < DBL_MIN_10_EXP )
-                    {   // compensate exponents
-                        fVal = rtl::math::pow10Exp( fVal, -nValExp );
-                        fVal = rtl::math::pow10Exp( fVal, nAllExp );
-                    }
-                    else
-                    {
-                        fVal = rtl::math::pow10Exp( fVal, nExp );  // normal
-                    }
-                }
-                else if (p == pFirstExpDigit)
-                {   // no digits in exponent, reset end of scan
-                    p = pExponent;
-                }
+                buf[bufpos] = static_cast<char>(c);
+                bufmap[bufpos] = p;
+                ++bufpos;
             }
         }
         else if (p - p0 == 2 && p != pEnd && p[0] == CharT('#')
@@ -1011,6 +937,7 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
                     ++p;
+                bDone = true;
             }
             else if (pEnd - p >= 4 && p[1] == CharT('N') && p[2] == CharT('A')
                 && p[3] == CharT('N'))
@@ -1036,7 +963,21 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 {
                     ++p;
                 }
+                bDone = true;
             }
+        }
+
+        if (!bDone)
+        {
+            buf[bufpos] = '\0';
+            bufmap[bufpos] = p;
+            char* pCharParseEnd;
+            errno = 0;
+            fVal = strtod_nolocale(buf, &pCharParseEnd);
+            if (errno == ERANGE)
+                eStatus = rtl_math_ConversionStatus_OutOfRange;
+            p = bufmap[pCharParseEnd - buf];
+            bSign = false;
         }
     }
 

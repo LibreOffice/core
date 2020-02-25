@@ -1312,11 +1312,11 @@
      <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6];[.J7])" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6];[.J7])" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
@@ -1344,17 +1344,17 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;1)" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;1)" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;1)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;1)</text:p>
+     <table:table-cell table:formula="of:=FORMULA([.A3])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;1)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;1)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>tdf69569, verified with Excel2016</text:p>
@@ -1376,17 +1376,17 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;1)" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;1)" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;1)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;1)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A4])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;1)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;1)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>tdf69569, verified with Excel2016</text:p>
@@ -1408,17 +1408,17 @@
      <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro9">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;0)" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;0)" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;0)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;0)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;0)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;0)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1437,17 +1437,17 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;3)" office:value-type="float" office:value="2808" calcext:value-type="float">
-      <text:p>2808</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;3)" office:value-type="float" office:value="2843" calcext:value-type="float">
+      <text:p>2843</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2808" calcext:value-type="float">
-      <text:p>2808</text:p>
+     <table:table-cell office:value-type="float" office:value="2843" calcext:value-type="float">
+      <text:p>2843</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;3)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;3)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;3)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;3)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Basis 3</text:p>
@@ -1456,8 +1456,8 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>rate</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" office:value-type="percentage" office:value="0.3" calcext:value-type="percentage">
-      <text:p>30,00%</text:p>
+     <table:table-cell table:style-name="ce27" office:value-type="percentage" office:value="0.31" calcext:value-type="percentage">
+      <text:p>31,00%</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce12"/>
      <table:table-cell table:style-name="ce11" office:value-type="float" office:value="1" calcext:value-type="float">
@@ -1469,17 +1469,17 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro9">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;4)" office:value-type="float" office:value="2818" calcext:value-type="float">
-      <text:p>2818</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;4)" office:value-type="float" office:value="2854" calcext:value-type="float">
+      <text:p>2854</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2818" calcext:value-type="float">
-      <text:p>2818</text:p>
+     <table:table-cell office:value-type="float" office:value="2854" calcext:value-type="float">
+      <text:p>2854</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce17" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;4)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;4)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;4)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;4)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Basis 4</text:p>
@@ -1501,11 +1501,11 @@
      <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro9">
-     <table:table-cell table:style-name="Comma_20_2" table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6];)" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p><text:s/>2 813,00 </text:p>
+     <table:table-cell table:style-name="Comma_20_2" table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6];)" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p><text:s/>2 848,00 </text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce17" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
@@ -1527,11 +1527,11 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6])" office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell table:formula="of:=AMORDEGRC([.J1];[.J2];[.J3];[.J4];[.J5];[.J6])" office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2813" calcext:value-type="float">
-      <text:p>2813</text:p>
+     <table:table-cell office:value-type="float" office:value="2848" calcext:value-type="float">
+      <text:p>2848</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce17" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
@@ -1573,7 +1573,7 @@
      <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0.3;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0.31;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1582,8 +1582,8 @@
      <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0,3;4)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0,3;4)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0,31;4)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;-1;0,31;4)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#100523</text:p>
@@ -1596,7 +1596,7 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
-     <table:table-cell table:formula="of:=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1605,8 +1605,8 @@
      <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;4)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;4)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;4)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(-10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;4)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
@@ -1615,7 +1615,7 @@
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0.3;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0.31;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1624,8 +1624,8 @@
      <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0,3;4)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0,3;4)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0,31;4)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);-1500;1;0,31;4)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf #100523</text:p>
@@ -1638,7 +1638,7 @@
      <table:table-cell table:style-name="ce28" table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0.3;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0.31;4)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1647,8 +1647,8 @@
      <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0,3;4)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0,3;4)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0,31;4)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;-0,31;4)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
@@ -1695,13 +1695,13 @@
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro10">
-     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.3;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0.31;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:style-name="ce21"/>
-     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;2)" calcext:value-type="string">
-      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,3;2)</text:p>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;2)" calcext:value-type="string">
+      <text:p>=AMORDEGRC(10000;DATE(2012;3;1);DATE(2012;12;31);1500;1;0,31;2)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Basis 2 <text:s text:c="2"/>tdf#100496</text:p>
