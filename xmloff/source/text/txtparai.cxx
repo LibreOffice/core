@@ -170,6 +170,8 @@ XMLCharContext::XMLCharContext(
                         m_nCount = static_cast<sal_uInt16>(nTmp);
                 }
             }
+            else
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << aIter.toString());
         }
     }
 }

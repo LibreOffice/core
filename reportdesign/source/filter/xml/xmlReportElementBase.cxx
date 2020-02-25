@@ -51,14 +51,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElementBase:
         sal_Int32 nElement,
         const Reference< XFastAttributeList > & xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = createFastChildContext_(nElement,xAttrList);
-    return xContext;
-}
-
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLReportElementBase::createFastChildContext_(
-        sal_Int32 nElement,
-        const Reference< XFastAttributeList > & xAttrList )
-{
     css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     switch( nElement )
