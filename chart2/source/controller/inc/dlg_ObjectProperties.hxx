@@ -48,6 +48,7 @@ public:
     bool HasNumberProperties() const { return m_bHasNumberProperties;}
     bool ProvidesStartingAngle() const { return m_bProvidesStartingAngle;}
     bool ProvidesMissingValueTreatments() const { return m_bProvidesMissingValueTreatments;}
+    bool IsPieChartDataPoint() const { return m_bIsPieChartDataPoint;}
 
     bool HasScaleProperties() const { return m_bHasScaleProperties;}
     bool CanAxisLabelsBeStaggered() const { return m_bCanAxisLabelsBeStaggered;}
@@ -80,6 +81,7 @@ private:
     bool m_bHasNumberProperties;
     bool m_bProvidesStartingAngle;
     bool m_bProvidesMissingValueTreatments;
+    bool m_bIsPieChartDataPoint;
 
     bool m_bHasScaleProperties;
     bool m_bCanAxisLabelsBeStaggered;

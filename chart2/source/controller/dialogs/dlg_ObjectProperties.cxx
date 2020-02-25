@@ -30,6 +30,7 @@
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
 #include "tp_PolarOptions.hxx"
+#include "tp_DataPointOption.hxx"
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
 #include <ChartModelHelper.hxx>
@@ -91,6 +92,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bHasNumberProperties(false)
         , m_bProvidesStartingAngle(false)
         , m_bProvidesMissingValueTreatments(false)
+        , m_bIsPieChartDataPoint(false)
         , m_bHasScaleProperties(false)
         , m_bCanAxisLabelsBeStaggered(false)
         , m_bSupportingAxisPositioning(false)
@@ -123,6 +125,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType, nDimensionCount );
         m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
         m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType, nDimensionCount );
+        m_bIsPieChartDataPoint   = bHasDataPointproperties && ChartTypeHelper::isSupportingStartingAngle( xChartType );
 
         if( bHasSeriesProperties )
         {
@@ -364,6 +367,8 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                 AddTabPage("options", SchResId(STR_PAGE_OPTIONS),SchOptionTabPage::Create);
             if( m_pParameter->ProvidesStartingAngle())
                 AddTabPage("polaroptions", SchResId(STR_PAGE_OPTIONS), PolarOptionsTabPage::Create);
+            if (m_pParameter->IsPieChartDataPoint())
+                AddTabPage("datapointoption", SchResId(STR_PAGE_OPTIONS), DataPointOptionTabPage::Create);
 
             if( m_pParameter->HasGeometryProperties() )
                 AddTabPage("layout", SchResId(STR_PAGE_LAYOUT), SchLayoutTabPage::Create);
