@@ -36,6 +36,7 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
     void GetErrorCorrection(long);
+    bool tolongErrorHand();
     //Function contains QR Code Generating Library Calls
     static OUString GenerateQRCode(OUString aQrText, long aQrECC, int aQrBorder);
 };

@@ -13,7 +13,14 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <utility>
+#include <vcl/dialog.hxx>
+#include <vcl/event.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/xtextedt.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #if defined(SYSTEM_QRCODEGEN)
 #include <qrcodegen/QrCode.hpp>
@@ -56,8 +63,9 @@ using namespace css::drawing;
 using namespace css::graphic;
 using namespace qrcodegen;
 
-QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
-                                 bool bEditExisting)
+weld::Widget* pParent;
+
+QrCodeGenDialog::QrCodeGenDialog(weld::Widget*, Reference<XModel> xModel, bool bEditExisting)
     : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
     , m_xModel(std::move(xModel))
     , m_xEdittext(m_xBuilder->weld_entry("edit_text"))
@@ -99,11 +107,35 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     m_xExistingShapeProperties = xProps;
 }
 
+bool QrCodeGenDialog::tolongErrorHand()
+{
+    try
+    {
+        Apply();
+    }
+    catch (qrcodegen::data_too_long)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            pParent, VclMessageType::Warning, VclButtonsType::Ok,
+            "Text added is too long to process. Please enter shorter text."));
+        xBox->run();
+        return false;
+    }
+    return true;
+}
+
 short QrCodeGenDialog::run()
 {
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
+    bool bSuccess = false;
+    short nRet;
+    while (bSuccess != true)
+    {
+        nRet = GenericDialogController::run();
+        if (nRet == RET_OK)
+            bSuccess = tolongErrorHand();
+        if (nRet == RET_CLOSE || nRet == RET_CANCEL)
+            break;
+    }
     return nRet;
 }
 
@@ -266,7 +298,7 @@ OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRB
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     const char* qrtext = o.pData->buffer;
 
-    //From Qr Code library.
+    // From QR Code library
     qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(qrtext, bqrEcc);
     std::string svg = qr0.toSvgString(aQRBorder);
     //cstring to OUString
