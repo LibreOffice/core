@@ -37,6 +37,7 @@
 #include <unotools/datetime.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 
 #define TYPE_DATE       1
 #define TYPE_TIME       2
@@ -99,6 +100,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 m_aSetting.Name = sValue;
                 break;
             default:
+                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                 break;
         }
     }
@@ -136,6 +138,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLControlProperty::c
 
 void OXMLControlProperty::endFastElement(sal_Int32 )
 {
+    if ( m_pContainer )
+        m_pContainer->addValue(m_aCharBuffer.makeStringAndClear());
     if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
     {
         if ( m_bIsList && !m_aSequence.hasElements() )
@@ -153,8 +157,7 @@ void OXMLControlProperty::endFastElement(sal_Int32 )
 
 void OXMLControlProperty::characters( const OUString& rChars )
 {
-    if ( m_pContainer )
-        m_pContainer->addValue(rChars);
+    m_aCharBuffer.append(rChars);
 }
 
 void OXMLControlProperty::addValue(const OUString& _sValue)
