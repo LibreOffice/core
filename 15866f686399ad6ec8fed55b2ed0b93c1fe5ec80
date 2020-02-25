@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "722b4831_9465ce2a",
+        "filename": "extras/source/autocorr/lang/en-US/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2020-02-25T13:25:42Z",
+      "side": 1,
+      "message": "Surely this was meant to be \"accidentally\".",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 92
+      },
+      "revId": "15866f686399ad6ec8fed55b2ed0b93c1fe5ec80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
