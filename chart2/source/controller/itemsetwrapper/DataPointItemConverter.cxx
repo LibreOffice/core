@@ -47,6 +47,7 @@
 #include <svl/ilstitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
+#include <oox/helper/containerhelper.hxx>
 
 #include <svx/tabline.hxx>
 
@@ -207,7 +208,8 @@ DataPointItemConverter::DataPointItemConverter(
     sal_Int32 nSpecialFillColor,
     bool bOverwriteLabelsForAttributedDataPointsAlso,
     sal_Int32 nNumberFormat,
-    sal_Int32 nPercentNumberFormat ) :
+    sal_Int32 nPercentNumberFormat,
+    sal_Int32 nPointIndex ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_bDataSeries( bDataSeries ),
         m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
@@ -216,7 +218,10 @@ DataPointItemConverter::DataPointItemConverter(
         m_nNumberFormat(nNumberFormat),
         m_nPercentNumberFormat(nPercentNumberFormat),
         m_aAvailableLabelPlacements(),
-        m_bForbidPercentValue(true)
+        m_bForbidPercentValue(true),
+        m_bHideLegendEntry(false),
+        m_nPointIndex(nPointIndex),
+        m_xSeries(xSeries)
 {
     m_aConverters.emplace_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
@@ -235,6 +240,21 @@ DataPointItemConverter::DataPointItemConverter(
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, bSwapXAndY, xSeries );
 
     m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;
+
+    if (!bDataSeries)
+    {
+        uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
+        uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+        xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+        for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+        {
+            if (nPointIndex == deletedLegendEntry)
+            {
+                m_bHideLegendEntry = true;
+                break;
+            }
+        }
+    }
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -539,6 +559,27 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY:
+        {
+            bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
+            if (bHideLegendEntry != m_bHideLegendEntry)
+            {
+                uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
+                xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+                std::vector<sal_Int32> deletedLegendEntries;
+                for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+                {
+                    if (bHideLegendEntry || m_nPointIndex != deletedLegendEntry)
+                        deletedLegendEntries.push_back(deletedLegendEntry);
+                }
+                if (bHideLegendEntry)
+                    deletedLegendEntries.push_back(m_nPointIndex);
+                xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -705,6 +746,13 @@ void DataPointItemConverter::FillSpecialItem(
                 rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fValue * 100.0 ) ) ));
             }
+        }
+        break;
+
+        case SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY:
+        {
+            rOutItemSet.Put(SfxBoolItem(nWhichId, m_bHideLegendEntry));
+            break;
         }
         break;
    }
