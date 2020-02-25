@@ -250,10 +250,13 @@ text_wrapper_get_text (AtkText *text,
             OUString aText;
             sal_Int32 n = pText->getCharacterCount();
 
-            if( -1 == end_offset )
-                aText = pText->getText();
-            else if( start_offset < n )
-                aText = pText->getTextRange(start_offset, end_offset);
+            if( start_offset < n )
+            {
+                if( -1 == end_offset )
+                    aText = pText->getTextRange(start_offset, n - start_offset);
+                else
+                    aText = pText->getTextRange(start_offset, end_offset);
+            }
 
             ret = g_strdup( OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
