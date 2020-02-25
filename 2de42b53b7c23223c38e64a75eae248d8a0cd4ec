@@ -93,6 +93,30 @@
       "revId": "2de42b53b7c23223c38e64a75eae248d8a0cd4ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a0d35e7_7d447726",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-25T12:17:00Z",
+      "side": 1,
+      "message": "Yes, that looks promising. :)  Thanks for checking!",
+      "parentUuid": "05111e50_d99cc2d5",
+      "range": {
+        "startLine": 254,
+        "startChar": 21,
+        "endLine": 254,
+        "endChar": 36
+      },
+      "revId": "2de42b53b7c23223c38e64a75eae248d8a0cd4ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
