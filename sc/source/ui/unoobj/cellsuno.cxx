@@ -3228,7 +3228,7 @@ void ScCellRangesBase::ForceChartListener_Impl()
     for (auto const& it : rListeners)
     {
         ScChartListener *const p = it.second.get();
-        OSL_ASSERT(p);
+        SAL_WARN_IF(!p, "sc.ui", "no ScChartListener available");
         if (p->GetUnoSource() == static_cast<chart::XChartData*>(this) && p->IsDirty())
             p->Update();
     }
