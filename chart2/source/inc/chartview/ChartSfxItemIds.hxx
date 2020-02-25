@@ -141,9 +141,10 @@ class SvxBrushItem;
 #define SCHATTR_STOCK_VOLUME            TypedWhichId<SfxBoolItem>(SCHATTR_AXIS_END + 2)
 #define SCHATTR_STOCK_UPDOWN            TypedWhichId<SfxBoolItem>(SCHATTR_AXIS_END + 3)
 #define SCHATTR_SYMBOL_SIZE             TypedWhichId<SvxSizeItem>(SCHATTR_AXIS_END + 4)
+#define SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY    TypedWhichId<SfxBoolItem>(SCHATTR_AXIS_END + 5)
 
 // non persistent items (binary format)
-#define SCHATTR_CHARTTYPE_START         (SCHATTR_SYMBOL_SIZE + 1)
+#define SCHATTR_CHARTTYPE_START         (SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY + 1)
 
 // new from New Chart
 #define SCHATTR_BAR_OVERLAP             TypedWhichId<SfxInt32Item>(SCHATTR_CHARTTYPE_START )
