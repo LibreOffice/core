@@ -31,6 +31,7 @@
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include <strings.hxx>
 #include "xmlTable.hxx"
+#include <sal/log.hxx>
 
 
 namespace rptxml
@@ -79,9 +80,8 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                 case XML_ELEMENT(REPORT, XML_REPEAT_SECTION):
                     m_xSection->setRepeatSection(sValue == s_sTRUE );
                     break;
-
                 default:
-                    OSL_FAIL("OXMLSection: Unknown attribute!");
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
             }
         }
     }

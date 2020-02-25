@@ -2013,6 +2013,11 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
     return false;
 }
 
+OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
+{
+    return getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
+}
+
 const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 {
     return xTokenHandler->getIdentifier( nToken & TOKEN_MASK );

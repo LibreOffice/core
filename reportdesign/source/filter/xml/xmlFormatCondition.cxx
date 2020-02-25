@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
 #include "xmlStyleImport.hxx"
+#include <sal/log.hxx>
 
 namespace rptxml
 {
@@ -67,6 +68,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
                     m_sStyleName = sValue;
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }

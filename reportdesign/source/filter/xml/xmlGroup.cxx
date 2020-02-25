@@ -30,6 +30,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
+#include <sal/log.hxx>
 
 namespace rptxml
 {
@@ -160,6 +161,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                     m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(sValue));
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
                     break;
             }
         }

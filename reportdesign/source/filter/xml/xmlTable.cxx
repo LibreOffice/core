@@ -35,6 +35,7 @@
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <sal/log.hxx>
 
 #include <numeric>
 
@@ -101,6 +102,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
                     m_sStyleName = sValue;
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }

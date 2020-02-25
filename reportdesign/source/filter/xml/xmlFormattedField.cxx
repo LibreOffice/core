@@ -27,6 +27,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlReportElement.hxx"
 #include "xmlComponent.hxx"
+#include <sal/log.hxx>
 
 
 namespace rptxml
@@ -60,6 +61,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport
                     _xComponent->setDataField("rpt:PageNumber()");
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }
