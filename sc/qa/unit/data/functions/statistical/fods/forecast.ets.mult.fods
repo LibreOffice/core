@@ -7804,7 +7804,7 @@
      <table:table-cell office:value-type="float" office:value="61.9729295871504" calcext:value-type="float">
       <text:p>61.9729295871504</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="61.9729295871504" calcext:value-type="float">
+     <table:table-cell table:style-name="ce14" office:value-type="float" office:value="61.97292958715045" calcext:value-type="float">
       <text:p>61.972930</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A49];12)=ROUND([.B49];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
