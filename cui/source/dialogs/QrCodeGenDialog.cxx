@@ -13,7 +13,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <utility>
-#include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 
 #if defined(SYSTEM_QRCODEGEN)
 #include <qrcodegen/QrCode.hpp>
@@ -56,9 +56,8 @@ using namespace css::drawing;
 using namespace css::graphic;
 using namespace qrcodegen;
 
-QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
-                                 bool bEditExisting)
-    : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
+QrCodeGenDialog::QrCodeGenDialog(weld::Widget*, Reference<XModel> xModel, bool bEditExisting)
+    : GenericDialogController(*mpParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
     , m_xModel(std::move(xModel))
     , m_xEdittext(m_xBuilder->weld_entry("edit_text"))
     , m_xECC{ m_xBuilder->weld_radio_button("button_low"),
@@ -101,9 +100,29 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 
 short QrCodeGenDialog::run()
 {
-    short nRet = GenericDialogController::run();
-    if (nRet == RET_OK)
-        Apply();
+    short nRet;
+    while (true)
+    {
+        nRet = GenericDialogController::run();
+        if (nRet == RET_OK)
+        {
+            try
+            {
+                Apply();
+                break;
+            }
+            catch (qrcodegen::data_too_long)
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    *mpParent, VclMessageType::Warning, VclButtonsType::Ok,
+                    "Text exceeds the maximum bits for the chosen error correction. Enter shorter "
+                    "text."));
+                xBox->run();
+            }
+        }
+        else
+            break;
+    }
     return nRet;
 }
 
@@ -266,12 +285,11 @@ OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRB
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     const char* qrtext = o.pData->buffer;
 
-    //From Qr Code library.
+    // From QR Code library
     qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(qrtext, bqrEcc);
     std::string svg = qr0.toSvgString(aQRBorder);
     //cstring to OUString
-    char* cstr = &svg[0];
-    return OUString::createFromAscii(cstr);
+    return OUString::createFromAscii(svg.c_str());
 #endif
 }
 
