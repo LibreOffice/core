@@ -129,7 +129,10 @@ public:
 
     virtual SvTreeListEntry* GetDropTarget(const Point& rPos) override
     {
+        SvTreeListEntry* pOldTargetEntry = pTargetEntry;
         pTargetEntry = pImpl->GetEntry(rPos);
+        if (pOldTargetEntry != pTargetEntry)
+            ImplShowTargetEmphasis(pOldTargetEntry, false);
 
         // scroll
         if (rPos.Y() < 12)
