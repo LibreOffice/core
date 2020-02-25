@@ -28,6 +28,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/stream.hxx>
 
 namespace sdr
 {
@@ -120,6 +121,9 @@ private:
                             DECL_LINK( ReplacementSwapHdl, const GraphicObject*, SvStream* );
     void onGraphicChanged();
     GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
+
+    BitmapChecksum mnPNGPreviewChecksum = 0;
+    std::vector<sal_Int8> maPNGPreviewData;
 
 protected:
     // protected destructor
@@ -283,6 +287,11 @@ public:
     };
     bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
+
+    void SetPNGPreviewChecksum(BitmapChecksum nPNGPreviewChecksum);
+    BitmapChecksum GetPNGPreviewChecksum() const;
+    void SetPNGPreviewData(SvMemoryStream& rPNGPreviewData);
+    const std::vector<sal_Int8>& GetPNGPreviewData() const;
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX

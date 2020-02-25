@@ -30,6 +30,8 @@
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/svdograf.hxx>
 
 #include <memory>
 
@@ -2675,10 +2677,29 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     }
 }
 
+namespace
+{
+SdrGrafObj* GetSdrGrafObjFromXShape(const css::uno::Reference<css::drawing::XShape>* pShape)
+{
+    if (!pShape)
+    {
+        return nullptr;
+    }
+
+    auto pObject = dynamic_cast<SvxGraphicObject*>(pShape->get());
+    if (!pObject)
+    {
+        return nullptr;
+    }
+
+    return dynamic_cast<SdrGrafObj*>(pObject->GetSdrObject());
+}
+}
 
 void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                                     const Point& rPt, const Size& rSz,
-                                    const Point& rSrcPt, const Size& rSrcSz )
+                                    const Point& rSrcPt, const Size& rSrcSz,
+                                    const css::uno::Reference<css::drawing::XShape>* pShape )
 {
     if( !!rBmpEx )
     {
@@ -2693,8 +2714,27 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         {
             SvMemoryStream aOStm( 65535, 65535 );
 
-            if( GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE )
+            bool bCached = false;
+            SdrGrafObj* pGrafObj = nullptr;
+            if (pShape)
             {
+                pGrafObj = GetSdrGrafObjFromXShape(pShape);
+                if (pGrafObj && pGrafObj->GetPNGPreviewChecksum() == rBmpEx.GetChecksum())
+                {
+                    const std::vector<sal_Int8>& rPreviewData = pGrafObj->GetPNGPreviewData();
+                    aOStm.WriteBytes(rPreviewData.data(), rPreviewData.size());
+                    bCached = true;
+                }
+            }
+
+            if( bCached || GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE )
+            {
+                if (!bCached && pGrafObj)
+                {
+                    pGrafObj->SetPNGPreviewChecksum(rBmpEx.GetChecksum());
+                    pGrafObj->SetPNGPreviewData(aOStm);
+                }
+
                 Point                    aPt;
                 Size                     aSz;
                 Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
@@ -3038,7 +3078,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
                             ImplWriteBmp( BitmapEx(pBmpScaleAction->GetBitmap()),
                                           pA->GetPoint(), pA->GetSize(),
-                                          Point(), pBmpScaleAction->GetBitmap().GetSizePixel() );
+                                          Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), pxShape );
                         }
                     }
                 }
@@ -3421,7 +3461,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ),
-                                  Point(), pA->GetBitmap().GetSizePixel() );
+                                  Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                 }
             }
             break;
@@ -3441,7 +3481,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                       pA->GetPoint(), pA->GetSize(),
-                                      Point(), pA->GetBitmap().GetSizePixel() );
+                                      Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                     }
                 }
             }
@@ -3455,7 +3495,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                   pA->GetDestPoint(), pA->GetDestSize(),
-                                  pA->GetSrcPoint(), pA->GetSrcSize() );
+                                  pA->GetSrcPoint(), pA->GetSrcSize(), pxShape );
                 }
             }
             break;
@@ -3468,7 +3508,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     ImplWriteBmp( pA->GetBitmapEx(),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmapEx().GetSizePixel() ),
-                                  Point(), pA->GetBitmapEx().GetSizePixel() );
+                                  Point(), pA->GetBitmapEx().GetSizePixel(), pxShape );
                 }
             }
             break;
@@ -3488,7 +3528,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         ImplWriteBmp( pA->GetBitmapEx(),
                                       pA->GetPoint(), pA->GetSize(),
-                                      Point(), pA->GetBitmapEx().GetSizePixel() );
+                                      Point(), pA->GetBitmapEx().GetSizePixel(), pxShape );
                     }
                 }
             }
@@ -3502,7 +3542,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     ImplWriteBmp( pA->GetBitmapEx(),
                                   pA->GetDestPoint(), pA->GetDestSize(),
-                                  pA->GetSrcPoint(), pA->GetSrcSize() );
+                                  pA->GetSrcPoint(), pA->GetSrcSize(), pxShape );
                 }
             }
             break;
