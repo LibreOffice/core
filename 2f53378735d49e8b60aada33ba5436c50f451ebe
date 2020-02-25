@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6eed8d7c_bc3d146b",
+        "filename": "reportdesign/source/core/sdr/RptPage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "this should be size_t too",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b78bfb8_608d9118",
+        "filename": "reportdesign/source/core/sdr/RptPage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "this should be size_t too",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d2a24b4_23f019a9",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "but this one is still 64",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7574bf_fcc22923",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "and this one",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d402c542_3ce1f343",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "and this one",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66b2ea02_0f18bc4f",
+        "filename": "sw/source/uibase/inc/optcomp.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T10:22:13Z",
+      "side": 1,
+      "message": "and this one",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
