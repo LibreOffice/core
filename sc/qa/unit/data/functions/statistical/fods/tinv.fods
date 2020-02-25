@@ -4608,11 +4608,11 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce77" office:value-type="float" office:value="0.148831111963765" calcext:value-type="float">
-      <text:p>1.48831111963765E-001</text:p>
+     <table:table-cell table:style-name="ce77" office:value-type="float" office:value="0.148831111963764" calcext:value-type="float">
+      <text:p>1.48831111963764E-001</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.148831111963765" calcext:value-type="float">
-      <text:p>0.148831111963765</text:p>
+     <table:table-cell office:value-type="float" office:value="0.148831111963764" calcext:value-type="float">
+      <text:p>0.148831111963764</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce79" table:formula="of:=ORG.LIBREOFFICE.ROUNDSIG([.A29];15)=ORG.LIBREOFFICE.ROUNDSIG([.B29];15)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
