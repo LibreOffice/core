@@ -16,6 +16,23 @@
       "revId": "d9789425fe9db3bdae81e785e93489724cb08ca3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1957101_ff6bd225",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-25T11:28:34Z",
+      "side": 1,
+      "message": "I\u0027d rather make this an assert() to crash in a debug build.",
+      "revId": "d9789425fe9db3bdae81e785e93489724cb08ca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
