@@ -147,8 +147,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 void PrintDialog::PrintPreviewWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 55,
-                                   pDrawingArea->get_text_height() * 40);
+    pDrawingArea->set_size_request(pDrawingArea->get_approximate_digit_width() * 45,
+                                   pDrawingArea->get_text_height() * 30);
     CustomWidgetController::SetDrawingArea(pDrawingArea);
 }
 
