@@ -73,7 +73,8 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const tools::R
 
     // reserve enough for 3 digit minimum, with a bit to spare for comfort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
-    sal_uInt32 i = (nEndLine + 1) / 1000;
+    auto nMaxLineNumber = std::max(nEndLine, txtEngine->GetParagraphCount() + 1);
+    sal_uInt32 i = (nMaxLineNumber + 1) / 1000;
     while (i)
     {
         i /= 10;
