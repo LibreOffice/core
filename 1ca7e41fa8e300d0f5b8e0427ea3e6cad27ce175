@@ -16,6 +16,24 @@
       "revId": "1ca7e41fa8e300d0f5b8e0427ea3e6cad27ce175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73ed4027_24231778",
+        "filename": "oox/source/helper/propertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-25T09:42:33Z",
+      "side": 1,
+      "message": "assert should be enabled with --enable-dbgutil --enable-optimized\u003ddebug",
+      "parentUuid": "8395b459_d5ae32cd",
+      "revId": "1ca7e41fa8e300d0f5b8e0427ea3e6cad27ce175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
