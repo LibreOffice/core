@@ -26,6 +26,7 @@
 #include "xmlComponent.hxx"
 #include "xmlCondPrtExpr.hxx"
 #include "xmlFormatCondition.hxx"
+#include <sal/log.hxx>
 
 
 namespace rptxml
@@ -62,6 +63,7 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
                     m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE);
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }

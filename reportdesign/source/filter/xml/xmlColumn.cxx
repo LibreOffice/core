@@ -24,6 +24,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
+#include <sal/log.hxx>
 #include "xmlEnums.hxx"
 #include "xmlCell.hxx"
 #include "xmlStyleImport.hxx"
@@ -64,6 +65,7 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
                 fillStyle(sValue);
                 break;
             default:
+                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                 break;
         }
     }
