@@ -70,6 +70,18 @@ std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bo
                   : nullptr;
 }
 
+std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString& id,
+                                                                  bool bTakeOwnership)
+{
+    vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+    ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
+    if (pComboBox)
+        return std::make_unique<JSComboBox>(m_aOwnedToplevel, pComboBox, this, bTakeOwnership);
+    ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
+    return pListBox ? std::make_unique<JSListBox>(m_aOwnedToplevel, pListBox, this, bTakeOwnership)
+                    : nullptr;
+}
+
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceLabel(pLabel, pBuilder, bTakeOwnership)
@@ -93,5 +105,51 @@ JSEntry::JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstance
 void JSEntry::set_text(const OUString& rText)
 {
     SalInstanceEntry::set_text(rText);
+    notifyDialogState();
+}
+
+JSListBox::JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox,
+                     SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceComboBoxWithoutEdit(pListBox, pBuilder, bTakeOwnership)
+    , JSDialogSender(aOwnedToplevel)
+{
+}
+
+void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
+                       const OUString* pIconName, VirtualDevice* pImageSurface)
+{
+    SalInstanceComboBoxWithoutEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    notifyDialogState();
+}
+
+void JSListBox::remove(int pos)
+{
+    SalInstanceComboBoxWithoutEdit::remove(pos);
+    notifyDialogState();
+}
+
+JSComboBox::JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceComboBoxWithEdit(pComboBox, pBuilder, bTakeOwnership)
+    , JSDialogSender(aOwnedToplevel)
+{
+}
+
+void JSComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface)
+{
+    SalInstanceComboBoxWithEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    notifyDialogState();
+}
+
+void JSComboBox::remove(int pos)
+{
+    SalInstanceComboBoxWithEdit::remove(pos);
+    notifyDialogState();
+}
+
+void JSComboBox::set_entry_text(const OUString& rText)
+{
+    SalInstanceComboBoxWithEdit::set_entry_text(rText);
     notifyDialogState();
 }
