@@ -187,6 +187,8 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 #endif  // _COMBOBOX_HXX

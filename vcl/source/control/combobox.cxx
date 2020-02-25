@@ -32,6 +32,7 @@
 #include <listbox.hxx>
 #include <controldata.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
 
 namespace {
 
@@ -1537,6 +1538,27 @@ bool ComboBox::set_property(const OString &rKey, const OUString &rValue)
 FactoryFunction ComboBox::GetUITestFactory() const
 {
     return ComboBoxUIObject::create;
+}
+
+void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Control::DumpAsPropertyTree(rJsonWriter);
+
+    auto entriesNode = rJsonWriter.startNode("entries");
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        auto entryNode = rJsonWriter.startNode("");
+        rJsonWriter.put("", GetEntry(i));
+    }
+
+    auto selectedNode = rJsonWriter.startNode("selectedEntries");
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        auto entryNode = rJsonWriter.startNode("");
+        rJsonWriter.put("", GetSelectedEntryPos(i));
+    }
+
+    rJsonWriter.put("selectedCount", GetSelectedEntryCount());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
