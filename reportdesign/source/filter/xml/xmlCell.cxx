@@ -30,6 +30,7 @@
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <sal/log.hxx>
 #include <strings.hxx>
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
@@ -76,6 +77,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
                 m_pContainer->setRowSpanned(sValue.toInt32());
                 break;
             default:
+                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
                 break;
         }
     }
