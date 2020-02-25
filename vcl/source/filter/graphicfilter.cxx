@@ -64,6 +64,7 @@
 #include <rtl/instance.hxx>
 #include <tools/svlibrary.h>
 #include <comphelper/string.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <vector>
 #include <memory>
 
@@ -101,54 +102,6 @@ public:
     explicit ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
 };
 
-}
-
-static bool DirEntryExists( const INetURLObject& rObj )
-{
-    bool bExists = false;
-
-    try
-    {
-        ::ucbhelper::Content aCnt( rObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                             comphelper::getProcessComponentContext() );
-
-        bExists = aCnt.isDocument();
-    }
-    catch(const css::ucb::CommandAbortedException&)
-    {
-        SAL_WARN( "vcl.filter", "CommandAbortedException" );
-    }
-    catch(const css::ucb::ContentCreationException&)
-    {
-        SAL_WARN( "vcl.filter", "ContentCreationException" );
-    }
-    catch( ... )
-    {
-        SAL_WARN( "vcl.filter", "Any other exception" );
-    }
-    return bExists;
-}
-
-static void KillDirEntry( const OUString& rMainUrl )
-{
-    try
-    {
-        ::ucbhelper::Content aCnt( rMainUrl,
-                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                             comphelper::getProcessComponentContext() );
-
-        aCnt.executeCommand( "delete",
-                             css::uno::makeAny( true ) );
-    }
-    catch(const css::ucb::CommandAbortedException&)
-    {
-        SAL_WARN( "vcl.filter", "CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        SAL_WARN( "vcl.filter", "Any other exception" );
-    }
 }
 
 // Helper functions
@@ -1881,9 +1834,10 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     ErrCode  nRetValue = ERRCODE_GRFILTER_FORMATERROR;
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl.filter", "GraphicFilter::ExportGraphic() : ProtType == INetProtocol::NotValid" );
-    bool bAlreadyExists = DirEntryExists( rPath );
 
-    OUString    aMainUrl( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    OUString aMainUrl(rPath.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    bool bAlreadyExists = utl::UCBContentHelper::IsDocument(aMainUrl);
+
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::WRITE | StreamMode::TRUNC ));
     if (xStream)
     {
@@ -1891,7 +1845,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
         xStream.reset();
 
         if( ( ERRCODE_NONE != nRetValue ) && !bAlreadyExists )
-            KillDirEntry( aMainUrl );
+            utl::UCBContentHelper::Kill(aMainUrl);
     }
     return nRetValue;
 }
