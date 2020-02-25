@@ -2931,330 +2931,180 @@ IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea,
     return m_aQueryTooltipHdl.Call(rHelpArea);
 }
 
-//ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
-//don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
-template <class vcl_type>
-class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
+SalInstanceComboBoxWithoutEdit::SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceComboBox<ListBox>(pListBox, pBuilder, bTakeOwnership)
 {
-protected:
-    // owner for ListBox/ComboBox UserData
-    std::vector<std::unique_ptr<OUString>> m_aUserData;
-    VclPtr<vcl_type> m_xComboBox;
+    m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithoutEdit, SelectHdl));
+}
 
-public:
-    SalInstanceComboBox(vcl_type* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pComboBox, pBuilder, bTakeOwnership)
-        , m_xComboBox(pComboBox)
-    {
-    }
-
-    virtual int get_active() const override
-    {
-        const sal_Int32 nRet = m_xComboBox->GetSelectedEntryPos();
-        if (nRet == LISTBOX_ENTRY_NOTFOUND)
-            return -1;
-        return nRet;
-    }
-
-    const OUString* getEntryData(int index) const
-    {
-        return static_cast<const OUString*>(m_xComboBox->GetEntryData(index));
-    }
-
-    virtual OUString get_active_id() const override
-    {
-        const OUString* pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
-        if (!pRet)
-            return OUString();
-        return *pRet;
-    }
-
-    virtual void set_active_id(const OUString& rStr) override
-    {
-        for (int i = 0; i < get_count(); ++i)
-        {
-            const OUString* pId = getEntryData(i);
-            if (!pId)
-                continue;
-            if (*pId == rStr)
-                m_xComboBox->SelectEntryPos(i);
-        }
-    }
-
-    virtual void set_active(int pos) override
-    {
-        if (pos == -1)
-        {
-            m_xComboBox->SetNoSelection();
-            return;
-        }
-        m_xComboBox->SelectEntryPos(pos);
-    }
-
-    virtual OUString get_text(int pos) const override
-    {
-        return m_xComboBox->GetEntry(pos);
-    }
-
-    virtual OUString get_id(int pos) const override
-    {
-        const OUString* pRet = getEntryData(pos);
-        if (!pRet)
-            return OUString();
-        return *pRet;
-    }
-
-    virtual void set_id(int row, const OUString& rId) override
-    {
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
-        m_xComboBox->SetEntryData(row, m_aUserData.back().get());
-    }
-
-    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
-    {
-        freeze();
-        if (!bKeepExisting)
-            clear();
-        for (const auto& rItem : rItems)
-        {
-            insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
-                   rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
-        }
-        thaw();
-    }
-
-    virtual int get_count() const override
-    {
-        return m_xComboBox->GetEntryCount();
-    }
-
-    virtual int find_text(const OUString& rStr) const override
-    {
-        const sal_Int32 nRet = m_xComboBox->GetEntryPos(rStr);
-        if (nRet == LISTBOX_ENTRY_NOTFOUND)
-            return -1;
-        return nRet;
-    }
-
-    virtual int find_id(const OUString& rStr) const override
-    {
-        for (int i = 0; i < get_count(); ++i)
-        {
-            const OUString* pId = getEntryData(i);
-            if (!pId)
-                continue;
-            if (*pId == rStr)
-                return i;
-        }
-        return -1;
-    }
-
-    virtual void clear() override
-    {
-        m_xComboBox->Clear();
-        m_aUserData.clear();
-    }
-
-    virtual void make_sorted() override
-    {
-        m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
-    }
-
-    virtual bool get_popup_shown() const override
-    {
-        return m_xComboBox->IsInDropDown();
-    }
-};
-
-class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
+OUString SalInstanceComboBoxWithoutEdit::get_active_text() const
 {
-private:
-    DECL_LINK(SelectHdl, ListBox&, void);
+    return m_xComboBox->GetSelectedEntry();
+}
 
-public:
-    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceComboBox<ListBox>(pListBox, pBuilder, bTakeOwnership)
-    {
-        m_xComboBox->SetSelectHdl(LINK(this, SalInstanceComboBoxWithoutEdit, SelectHdl));
-    }
+void SalInstanceComboBoxWithoutEdit::remove(int pos)
+{
+    m_xComboBox->RemoveEntry(pos);
+}
 
-    virtual OUString get_active_text() const override
+void SalInstanceComboBoxWithoutEdit::insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface)
+{
+    auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
+    sal_Int32 nInsertedAt;
+    if (!pIconName && !pImageSurface)
+        nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
+    else if (pIconName)
+        nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pIconName), nInsertPos);
+    else
+        nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
+    if (pId)
     {
-        return m_xComboBox->GetSelectedEntry();
+        m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+        m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
     }
+}
 
-    virtual void remove(int pos) override
-    {
-        m_xComboBox->RemoveEntry(pos);
-    }
+void SalInstanceComboBoxWithoutEdit::insert_separator(int pos)
+{
+    auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
+    m_xComboBox->AddSeparator(nInsertPos - 1);
+}
 
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
-    {
-        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
-        sal_Int32 nInsertedAt;
-        if (!pIconName && !pImageSurface)
-            nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
-        else if (pIconName)
-            nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pIconName), nInsertPos);
-        else
-            nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
-        if (pId)
-        {
-            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
-            m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
-        }
-    }
+bool SalInstanceComboBoxWithoutEdit::has_entry() const
+{
+    return false;
+}
 
-    virtual void insert_separator(int pos) override
-    {
-        auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
-        m_xComboBox->AddSeparator(nInsertPos - 1);
-    }
+void SalInstanceComboBoxWithoutEdit::set_entry_error(bool /*bError*/)
+{
+    assert(false);
+}
 
-    virtual bool has_entry() const override
-    {
-        return false;
-    }
+void SalInstanceComboBoxWithoutEdit::set_entry_text(const OUString& /*rText*/)
+{
+    assert(false);
+}
 
-    virtual void set_entry_error(bool /*bError*/) override
-    {
-        assert(false);
-    }
+void SalInstanceComboBoxWithoutEdit::select_entry_region(int /*nStartPos*/, int /*nEndPos*/)
+{
+    assert(false);
+}
 
-    virtual void set_entry_text(const OUString& /*rText*/) override
-    {
-        assert(false);
-    }
+bool SalInstanceComboBoxWithoutEdit::get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/)
+{
+    assert(false);
+    return false;
+}
 
-    virtual void select_entry_region(int /*nStartPos*/, int /*nEndPos*/) override
-    {
-        assert(false);
-    }
+void SalInstanceComboBoxWithoutEdit::set_entry_width_chars(int /*nChars*/)
+{
+    assert(false);
+}
 
-    virtual bool get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/) override
-    {
-        assert(false);
-        return false;
-    }
+void SalInstanceComboBoxWithoutEdit::set_entry_completion(bool)
+{
+    assert(false);
+}
 
-    virtual void set_entry_width_chars(int /*nChars*/) override
-    {
-        assert(false);
-    }
-
-    virtual void set_entry_completion(bool) override
-    {
-        assert(false);
-    }
-
-    virtual ~SalInstanceComboBoxWithoutEdit() override
-    {
-        m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
-    }
-};
+SalInstanceComboBoxWithoutEdit::~SalInstanceComboBoxWithoutEdit()
+{
+    m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithoutEdit, SelectHdl, ListBox&, void)
 {
     return signal_changed();
 }
 
-class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
+SalInstanceComboBoxWithEdit::SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceComboBox<::ComboBox>(pComboBox, pBuilder, bTakeOwnership)
+    , m_aTextFilter(m_aEntryInsertTextHdl)
 {
-private:
-    DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(EntryActivateHdl, Edit&, bool);
-    WeldTextFilter m_aTextFilter;
-public:
-    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceComboBox<::ComboBox>(pComboBox, pBuilder, bTakeOwnership)
-        , m_aTextFilter(m_aEntryInsertTextHdl)
-    {
-        m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
-        m_xComboBox->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxWithEdit, EntryActivateHdl));
-        m_xComboBox->SetTextFilter(&m_aTextFilter);
-    }
+    m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
+    m_xComboBox->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxWithEdit, EntryActivateHdl));
+    m_xComboBox->SetTextFilter(&m_aTextFilter);
+}
 
-    virtual bool has_entry() const override
-    {
-        return true;
-    }
+bool SalInstanceComboBoxWithEdit::has_entry() const
+{
+    return true;
+}
 
-    virtual void set_entry_error(bool bError) override
-    {
-        if (bError)
-            m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
-        else
-            m_xComboBox->SetControlForeground();
-    }
+void SalInstanceComboBoxWithEdit::set_entry_error(bool bError)
+{
+    if (bError)
+        m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
+    else
+        m_xComboBox->SetControlForeground();
+}
 
-    virtual OUString get_active_text() const override
-    {
-        return m_xComboBox->GetText();
-    }
+OUString SalInstanceComboBoxWithEdit::get_active_text() const
+{
+    return m_xComboBox->GetText();
+}
 
-    virtual void remove(int pos) override
-    {
-        m_xComboBox->RemoveEntryAt(pos);
-    }
+void SalInstanceComboBoxWithEdit::remove(int pos)
+{
+    m_xComboBox->RemoveEntryAt(pos);
+}
 
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
+void SalInstanceComboBoxWithEdit::insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface)
+{
+    auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
+    sal_Int32 nInsertedAt;
+    if (!pIconName && !pImageSurface)
+        nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
+    else if (pIconName)
+        nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pIconName), nInsertPos);
+    else
+        nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
+    if (pId)
     {
-        auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
-        sal_Int32 nInsertedAt;
-        if (!pIconName && !pImageSurface)
-            nInsertedAt = m_xComboBox->InsertEntry(rStr, nInsertPos);
-        else if (pIconName)
-            nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pIconName), nInsertPos);
-        else
-            nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
-        if (pId)
-        {
-            m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
-            m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
-        }
+        m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+        m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
     }
+}
 
-    virtual void insert_separator(int pos) override
-    {
-        auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
-        m_xComboBox->AddSeparator(nInsertPos - 1);
-    }
+void SalInstanceComboBoxWithEdit::insert_separator(int pos)
+{
+    auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
+    m_xComboBox->AddSeparator(nInsertPos - 1);
+}
 
-    virtual void set_entry_text(const OUString& rText) override
-    {
-        m_xComboBox->SetText(rText);
-    }
+void SalInstanceComboBoxWithEdit::set_entry_text(const OUString& rText)
+{
+    m_xComboBox->SetText(rText);
+}
 
-    virtual void set_entry_width_chars(int nChars) override
-    {
-        m_xComboBox->SetWidthInChars(nChars);
-    }
+void SalInstanceComboBoxWithEdit::set_entry_width_chars(int nChars)
+{
+    m_xComboBox->SetWidthInChars(nChars);
+}
 
-    virtual void set_entry_completion(bool bEnable) override
-    {
-        m_xComboBox->EnableAutocomplete(bEnable);
-    }
+void SalInstanceComboBoxWithEdit::set_entry_completion(bool bEnable)
+{
+    m_xComboBox->EnableAutocomplete(bEnable);
+}
 
-    virtual void select_entry_region(int nStartPos, int nEndPos) override
-    {
-        m_xComboBox->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
-    }
+void SalInstanceComboBoxWithEdit::select_entry_region(int nStartPos, int nEndPos)
+{
+    m_xComboBox->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+}
 
-    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
-    {
-        const Selection& rSelection = m_xComboBox->GetSelection();
-        rStartPos = rSelection.Min();
-        rEndPos = rSelection.Max();
-        return rSelection.Len();
-    }
+bool SalInstanceComboBoxWithEdit::get_entry_selection_bounds(int& rStartPos, int& rEndPos)
+{
+    const Selection& rSelection = m_xComboBox->GetSelection();
+    rStartPos = rSelection.Min();
+    rEndPos = rSelection.Max();
+    return rSelection.Len();
+}
 
-    virtual ~SalInstanceComboBoxWithEdit() override
-    {
-        m_xComboBox->SetTextFilter(nullptr);
-        m_xComboBox->SetEntryActivateHdl(Link<Edit&, bool>());
-        m_xComboBox->SetModifyHdl(Link<Edit&, void>());
-    }
-};
+SalInstanceComboBoxWithEdit::~SalInstanceComboBoxWithEdit()
+{
+    m_xComboBox->SetTextFilter(nullptr);
+    m_xComboBox->SetEntryActivateHdl(Link<Edit&, bool>());
+    m_xComboBox->SetModifyHdl(Link<Edit&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
 {

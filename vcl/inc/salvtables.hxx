@@ -9,6 +9,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -426,6 +428,208 @@ public:
     virtual unsigned int get_digits() const override;
 
     virtual ~SalInstanceSpinButton() override;
+};
+
+//ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
+//don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
+template <class vcl_type>
+class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
+{
+protected:
+    // owner for ListBox/ComboBox UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    VclPtr<vcl_type> m_xComboBox;
+
+public:
+    SalInstanceComboBox(vcl_type* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pComboBox, pBuilder, bTakeOwnership)
+        , m_xComboBox(pComboBox)
+    {
+    }
+
+    virtual int get_active() const override
+    {
+        const sal_Int32 nRet = m_xComboBox->GetSelectedEntryPos();
+        if (nRet == LISTBOX_ENTRY_NOTFOUND)
+            return -1;
+        return nRet;
+    }
+
+    const OUString* getEntryData(int index) const
+    {
+        return static_cast<const OUString*>(m_xComboBox->GetEntryData(index));
+    }
+
+    virtual OUString get_active_id() const override
+    {
+        const OUString* pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
+        if (!pRet)
+            return OUString();
+        return *pRet;
+    }
+
+    virtual void set_active_id(const OUString& rStr) override
+    {
+        for (int i = 0; i < get_count(); ++i)
+        {
+            const OUString* pId = getEntryData(i);
+            if (!pId)
+                continue;
+            if (*pId == rStr)
+                m_xComboBox->SelectEntryPos(i);
+        }
+    }
+
+    virtual void set_active(int pos) override
+    {
+        if (pos == -1)
+        {
+            m_xComboBox->SetNoSelection();
+            return;
+        }
+        m_xComboBox->SelectEntryPos(pos);
+    }
+
+    virtual OUString get_text(int pos) const override
+    {
+        return m_xComboBox->GetEntry(pos);
+    }
+
+    virtual OUString get_id(int pos) const override
+    {
+        const OUString* pRet = getEntryData(pos);
+        if (!pRet)
+            return OUString();
+        return *pRet;
+    }
+
+    virtual void set_id(int row, const OUString& rId) override
+    {
+        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        m_xComboBox->SetEntryData(row, m_aUserData.back().get());
+    }
+
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
+    {
+        freeze();
+        if (!bKeepExisting)
+            clear();
+        for (const auto& rItem : rItems)
+        {
+            insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                   rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+        }
+        thaw();
+    }
+
+    virtual int get_count() const override
+    {
+        return m_xComboBox->GetEntryCount();
+    }
+
+    virtual int find_text(const OUString& rStr) const override
+    {
+        const sal_Int32 nRet = m_xComboBox->GetEntryPos(rStr);
+        if (nRet == LISTBOX_ENTRY_NOTFOUND)
+            return -1;
+        return nRet;
+    }
+
+    virtual int find_id(const OUString& rStr) const override
+    {
+        for (int i = 0; i < get_count(); ++i)
+        {
+            const OUString* pId = getEntryData(i);
+            if (!pId)
+                continue;
+            if (*pId == rStr)
+                return i;
+        }
+        return -1;
+    }
+
+    virtual void clear() override
+    {
+        m_xComboBox->Clear();
+        m_aUserData.clear();
+    }
+
+    virtual void make_sorted() override
+    {
+        m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
+    }
+
+    virtual bool get_popup_shown() const override
+    {
+        return m_xComboBox->IsInDropDown();
+    }
+};
+
+class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
+{
+private:
+    DECL_LINK(SelectHdl, ListBox&, void);
+
+public:
+    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual OUString get_active_text() const override;
+
+    virtual void remove(int pos) override;
+
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
+    virtual void insert_separator(int pos) override;
+
+    virtual bool has_entry() const override;
+
+    virtual void set_entry_error(bool /*bError*/) override;
+
+    virtual void set_entry_text(const OUString& /*rText*/) override;
+
+    virtual void select_entry_region(int /*nStartPos*/, int /*nEndPos*/) override;
+
+    virtual bool get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/) override;
+
+    virtual void set_entry_width_chars(int /*nChars*/) override;
+
+    virtual void set_entry_completion(bool) override;
+
+    virtual ~SalInstanceComboBoxWithoutEdit() override;
+};
+
+class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
+{
+private:
+    DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(EntryActivateHdl, Edit&, bool);
+    WeldTextFilter m_aTextFilter;
+public:
+    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual bool has_entry() const override;
+
+    virtual void set_entry_error(bool bError) override;
+
+    virtual OUString get_active_text() const override;
+
+    virtual void remove(int pos) override;
+
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
+    virtual void insert_separator(int pos) override;
+
+    virtual void set_entry_text(const OUString& rText) override;
+
+    virtual void set_entry_width_chars(int nChars) override;
+
+    virtual void set_entry_completion(bool bEnable) override;
+
+    virtual void select_entry_region(int nStartPos, int nEndPos) override;
+
+    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override;
+
+    virtual ~SalInstanceComboBoxWithEdit() override;
 };
 
 #endif
