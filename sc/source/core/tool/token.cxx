@@ -4163,7 +4163,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( const sc::RefUpda
                             if (rCxt.mnDeletePos <= nOldTab)
                             {
                                 aRes.mbNameModified = true;
-                                if (rCxt.mnDeletePos + rCxt.mnSheets < nOldTab)
+                                if (rCxt.mnDeletePos + rCxt.mnSheets <= nOldTab)
                                     (*pp)->SetSheet( nOldTab - rCxt.mnSheets);
                                 else
                                     // Would point to a deleted sheet. Invalidate.
