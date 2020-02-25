@@ -2024,11 +2024,17 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 }
                 pFrame->GetModelPositionForViewPoint( GetPoint(), aPt, &eTmpState );
             }
-            bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         }
         else
-            *GetPoint() = aOldPos;
+        {
+            // Jump to beginning or end of line when the cursor at first or last line.
+            SwNode& rNode = GetPoint()->nNode.GetNode();
+            const sal_Int32 nOffset = bUp ? 0 : rNode.GetTextNode()->GetText().getLength();
+            const SwPosition aPos(*GetContentNode(), nOffset);
+            *GetPoint() = aPos;
+        }
 
+        bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
     return bRet;
