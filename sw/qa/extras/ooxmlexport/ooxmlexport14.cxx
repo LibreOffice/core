@@ -544,6 +544,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123757, "tdf123757.docx")
+{
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "/w:document/w:body/w:tbl", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
 {
     // Load a document with a continuous section break on page 2.

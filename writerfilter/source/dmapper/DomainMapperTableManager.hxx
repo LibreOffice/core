@@ -46,7 +46,7 @@ class DomainMapperTableManager : public TableManager
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     /// Are we in a shape (text append stack is not empty) or in the body document?
     bool m_bIsInShape;
-    OUString m_sTableStyleName;
+    std::vector< OUString > m_aTableStyleNames;
     /// Grab-bag of table look attributes for preserving.
     comphelper::SequenceAsHashMap m_aTableLook;
     std::vector< TablePositionHandlerPtr > m_aTablePositions;

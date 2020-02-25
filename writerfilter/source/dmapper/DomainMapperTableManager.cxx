@@ -238,9 +238,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
             {
-                m_sTableStyleName = pValue->getString();
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::makeAny( m_sTableStyleName ));
+                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::makeAny( pValue->getString() ));
                 insertTableProps(pPropMap);
             }
             break;
@@ -444,6 +443,8 @@ void DomainMapperTableManager::startLevel( )
     m_aGridSpans.push_back( pNewSpans );
     m_aCellWidths.push_back( pNewCellWidths );
     m_aTablePositions.push_back( pNewPositionHandler );
+    // empty name will be replaced by the table style name, if it exists
+    m_aTableStyleNames.push_back( OUString() );
 
     TablePositionHandlerPtr pTmpPosition;
     TablePropertyMapPtr pTmpProperties( new TablePropertyMap( ) );
@@ -500,6 +501,7 @@ void DomainMapperTableManager::endLevel( )
     // Pop back the table position after endLevel as it's used
     // in the endTable method called in endLevel.
     m_aTablePositions.pop_back();
+    m_aTableStyleNames.pop_back();
 }
 
 void DomainMapperTableManager::endOfCellAction()
@@ -521,7 +523,7 @@ void DomainMapperTableManager::endOfRowAction()
     TagLogger::getInstance().startElement("endOfRowAction");
 #endif
 
-    // Compare the table position with the previous ones. We may need to split
+    // Compare the table position and style with the previous ones. We may need to split
     // into two tables if those are different. We surely don't want to do anything
     // if we don't have any row yet.
     TablePositionHandlerPtr pTmpPosition = m_aTmpPosition.back();
@@ -529,7 +531,13 @@ void DomainMapperTableManager::endOfRowAction()
     TablePositionHandlerPtr pCurrentPosition = m_aTablePositions.back();
     bool bSamePosition = ( pTmpPosition == pCurrentPosition ) ||
                          ( pTmpPosition && pCurrentPosition && *pTmpPosition == *pCurrentPosition );
-    if ( !bSamePosition && m_nRow > 0 )
+    bool bIsSetTableStyle = pTablePropMap->isSet(META_PROP_TABLE_STYLE_NAME);
+    OUString sTableStyleName;
+    bool bSameTableStyle = ( !bIsSetTableStyle && m_aTableStyleNames.back().isEmpty()) ||
+            ( bIsSetTableStyle &&
+              (pTablePropMap->getProperty(META_PROP_TABLE_STYLE_NAME)->second >>= sTableStyleName) &&
+              sTableStyleName == m_aTableStyleNames.back() );
+    if ( (!bSamePosition || !bSameTableStyle) && m_nRow > 0 )
     {
         // Save the grid infos to have them survive the end/start level
         IntVectorPtr pTmpTableGrid = m_aTableGrid.back();
@@ -555,6 +563,13 @@ void DomainMapperTableManager::endOfRowAction()
         m_aCellWidths.push_back(pTmpCellWidths);
         m_nCell.push_back(nTmpCell);
         m_aGridBefore.push_back(nTmpGridBefore);
+    }
+    // save table style in the first row for comparison
+    if ( m_nRow == 0 && pTablePropMap->isSet(META_PROP_TABLE_STYLE_NAME) )
+    {
+        pTablePropMap->getProperty(META_PROP_TABLE_STYLE_NAME)->second >>= sTableStyleName;
+        m_aTableStyleNames.pop_back();
+        m_aTableStyleNames.push_back( sTableStyleName );
     }
 
     // Push the tmp position now that we compared it
@@ -772,7 +787,6 @@ void DomainMapperTableManager::endOfRowAction()
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
-    m_sTableStyleName.clear();
 }
 
 }
