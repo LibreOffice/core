@@ -13,11 +13,13 @@ sw_SRC := $(SRCDIR)/sw/source/core/swg
 sw_PY := $(SRCDIR)/solenv/bin/gentoken.py
 sw_INC := $(call gb_CustomTarget_get_workdir,sw/generated)
 
-$(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PY)
+$(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PY) \
+			$(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(sw_INC)
 	$(PYTHON) $(sw_PY) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
 
-$(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PY)
+$(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PY) \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(sw_INC)
 	$(PYTHON) $(sw_PY) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
 
