@@ -1287,15 +1287,15 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     else if (State::HIDDEN == m_eState)
         pSubPop3->CheckItem( nId );
 
-    SvTreeListEntry* pEntry = nullptr;
-    if (lcl_IsContent(FirstSelected()))
+    SvTreeListEntry* pEntry = FirstSelected();
+    if (pEntry && lcl_IsContent(pEntry))
     {
         pPop->InsertItem(900, SwResId(STR_GOTO));
         pPop->SetAccelKey(900, vcl::KeyCode(KEY_RETURN, false, false, false, false));
     }
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
-            && nullptr != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
+            && pEntry && lcl_IsContent(pEntry))
     {
         assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
         const SwContentType* pContType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
@@ -1425,7 +1425,10 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         pPop->SetPopupMenu(1, pSubPop1);
     }
     else
+    {
+        pSubPopOutlineTracking.disposeAndClear();
         pSubPop1.disposeAndClear();
+    }
     pPop->InsertItem(2, m_aContextStrings[IDX_STR_DRAGMODE]);
     pPop->SetPopupMenu(2, pSubPop2);
     pPop->InsertItem(3, m_aContextStrings[IDX_STR_DISPLAY]);
