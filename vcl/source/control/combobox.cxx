@@ -1562,4 +1562,33 @@ FactoryFunction ComboBox::GetUITestFactory() const
     return ComboBoxUIObject::create;
 }
 
+boost::property_tree::ptree ComboBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    boost::property_tree::ptree aEntries;
+
+    for (int i = 0; i < GetEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetEntry(i));
+        aEntries.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.add_child("entries", aEntries);
+
+    boost::property_tree::ptree aSelected;
+
+    for (int i = 0; i < GetSelectedEntryCount(); ++i)
+    {
+        boost::property_tree::ptree aEntry;
+        aEntry.put("", GetSelectedEntryPos(i));
+        aSelected.push_back(std::make_pair("", aEntry));
+    }
+
+    aTree.put("selectedCount", GetSelectedEntryCount());
+    aTree.add_child("selectedEntries", aSelected);
+
+    return aTree;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
