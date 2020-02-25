@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb12cff8_4f3dd581",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-25T12:04:03Z",
+      "side": 0,
+      "message": "So we\u0027ll lose this compensating property I guess (I have no idea what that strtod actually does), but not that I really care..\n(given a max of 1e308 (as a rough example) this allows input of 0.1e309 and such).",
+      "revId": "4dd0630b6aa50983080e6908ee124637e373b0e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

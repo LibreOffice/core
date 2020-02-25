@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f2119c2_22597ae3",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-25T12:04:03Z",
+      "side": 1,
+      "message": "Heap allocations for each number? Please don\u0027t.",
+      "revId": "6b435fde5e3f43c57a3366646ad56e1556383495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
