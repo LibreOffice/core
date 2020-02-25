@@ -30,6 +30,9 @@
 #include <svtools/unitconv.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -135,6 +138,49 @@ void AlignmentPropertyPanel::Initialize()
     mxRefEdgeBottom->connect_toggled(aLink2);
     mxRefEdgeTop->connect_toggled(aLink2);
     mxRefEdgeStd->connect_toggled(aLink2);
+}
+
+namespace {
+
+void eraseNode(boost::property_tree::ptree& pTree, const std::string& aValue)
+{
+    boost::optional<boost::property_tree::ptree&> pId;
+    boost::optional<boost::property_tree::ptree&> pSubTree = pTree.get_child_optional("children");
+
+    if (pSubTree)
+    {
+        boost::property_tree::ptree::iterator itFound = pSubTree.get().end();
+        for (boost::property_tree::ptree::iterator it = pSubTree.get().begin(); it != pSubTree.get().end(); ++it)
+        {
+            pId = it->second.get_child_optional("id");
+            if (pId && pId.get().get_value<std::string>("") == aValue)
+            {
+                itFound = it;
+                break;
+            }
+
+            eraseNode(it->second, aValue);
+        }
+
+        if (itFound != pSubTree.get().end())
+        {
+            pSubTree.get().erase(itFound);
+        }
+    }
+}
+
+}
+
+boost::property_tree::ptree AlignmentPropertyPanel::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = PanelLayout::DumpAsPropertyTree();
+
+    if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+    {
+        eraseNode(aTree, "textorientbox");
+    }
+
+    return aTree;
 }
 
 IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::ToggleButton&, rToggle, void)
