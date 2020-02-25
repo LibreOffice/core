@@ -1551,60 +1551,49 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         if ( pPDFExtOutDevData->GetIsExportNotes() )
         {
-            SwFieldType* pType = mrSh.GetFieldType( SwFieldIds::Postit, OUString() );
-            SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-            for( SwFormatField* pFirst = aIter.First(); pFirst; )
+            std::vector<SwFormatField*> vpFields;
+            mrSh.GetFieldType(SwFieldIds::Postit, OUString())->GatherFields(vpFields);
+            for(auto pFormatField : vpFields)
             {
-                if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
+                const SwTextNode* pTNd = pFormatField->GetTextField()->GetpTextNode();
+                OSL_ENSURE(nullptr != pTNd, "Enhanced pdf export - text node is missing");
+
+                // 1. Check if the whole paragraph is hidden
+                // 2. Move to the field
+                // 3. Check for hidden text attribute
+                if(pTNd->IsHidden() || !mrSh.GotoFormatField(*pFormatField) || mrSh.SelectHiddenRange())
                 {
-                    const SwTextNode* pTNd = pFirst->GetTextField()->GetpTextNode();
-                    OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
-
-                    // 1. Check if the whole paragraph is hidden
-                    // 2. Move to the field
-                    // 3. Check for hidden text attribute
-                    if ( !pTNd->IsHidden() &&
-                          mrSh.GotoFormatField( *pFirst ) &&
-                         !mrSh.SelectHiddenRange() )
-                    {
-                        // Link Rectangle
-                        const SwRect& rNoteRect = mrSh.GetCharRect();
-                        const SwPageFrame* pCurrPage =
-                            static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-
-                        // Link PageNums
-                        std::vector<sal_Int32> aNotePageNums = CalcOutputPageNums( rNoteRect );
-                        for (sal_Int32 aNotePageNum : aNotePageNums)
-                        {
-                            // Link Note
-                            vcl::PDFNote aNote;
-
-                            // Use the NumberFormatter to get the date string:
-                            const SwPostItField* pField = static_cast<SwPostItField*>(pFirst->GetField());
-                            SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
-                            const Date aDateDiff( pField->GetDate() -
-                                                 pNumFormatter->GetNullDate() );
-                            const sal_uLong nFormat =
-                                pNumFormatter->GetStandardFormat( SvNumFormatType::DATE, pField->GetLanguage() );
-                            OUString sDate;
-                            Color* pColor;
-                            pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
-
-                            // The title should consist of the author and the date:
-                            if(pField->GetResolved())
-                                aNote.Title = pField->GetPar1() + ", " + sDate + ", " + SwResId(STR_RESOLVED);
-                            else
-                                aNote.Title = pField->GetPar1() + ", " + sDate;
-                            // Guess what the contents contains...
-                            aNote.Contents = pField->GetText();
-
-                            // Link Export
-                            tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
-                            pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNum);
-                        }
-                    }
+                    mrSh.SwCursorShell::ClearMark();
+                    continue;
                 }
-                pFirst = aIter.Next();
+                // Link Rectangle
+                const SwRect& rNoteRect = mrSh.GetCharRect();
+                const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>(mrSh.GetLayout()->Lower());
+
+                // Link PageNums
+                std::vector<sal_Int32> aNotePageNums = CalcOutputPageNums(rNoteRect);
+                for (sal_Int32 aNotePageNum : aNotePageNums)
+                {
+
+                    // Use the NumberFormatter to get the date string:
+                    const SwPostItField* pField = static_cast<SwPostItField*>(pFormatField->GetField());
+                    SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
+                    const Date aDateDiff(pField->GetDate() - pNumFormatter->GetNullDate());
+                    const sal_uLong nFormat = pNumFormatter->GetStandardFormat(SvNumFormatType::DATE, pField->GetLanguage());
+                    OUString sDate;
+                    Color* pColor;
+                    pNumFormatter->GetOutputString(aDateDiff.GetDate(), nFormat, sDate, &pColor);
+
+                    vcl::PDFNote aNote;
+                    // The title should consist of the author and the date:
+                    aNote.Title = pField->GetPar1() + ", " + sDate + ", " + (pField->GetResolved() ? SwResId(STR_RESOLVED) : "");
+                    // Guess what the contents contains...
+                    aNote.Contents = pField->GetText();
+
+                    // Link Export
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
+                    pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNum);
+                }
                 mrSh.SwCursorShell::ClearMark();
             }
         }
