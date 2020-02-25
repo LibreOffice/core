@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "912d029d_2a7868be",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-25T11:49:49Z",
+      "side": 1,
+      "message": "pParent is needed in creating MessageDialog that\u0027s why I made it global for accessibility.",
+      "parentUuid": "bfd73d25_0c119b17",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0a1f18a_844d5635",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
