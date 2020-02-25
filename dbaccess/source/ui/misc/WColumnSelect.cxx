@@ -130,7 +130,9 @@ void OWizColumnSelect::Activate( )
         {
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new OFieldDescription(*(column->second)))));
             m_xNewColumnNames->append(sId, column->first);
-            m_xOrgColumnNames->remove_text(column->first);
+            int nRemove = m_xOrgColumnNames->find_text(column->first);
+            if (nRemove != -1)
+                m_xOrgColumnNames->remove(nRemove);
         }
     }
     m_pParent->GetOKButton().set_sensitive(m_xNewColumnNames->n_children() != 0);
