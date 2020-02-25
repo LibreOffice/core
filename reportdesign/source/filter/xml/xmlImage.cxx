@@ -89,6 +89,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }

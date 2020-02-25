@@ -24,6 +24,7 @@
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
 #include <strings.hxx>
+#include <sal/log.hxx>
 
 namespace rptxml
 {
@@ -74,6 +75,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                     m_xFunction->setDeepTraversing(sValue == s_sTRUE);
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
         }

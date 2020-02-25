@@ -24,6 +24,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include "xmlReport.hxx"
+#include <sal/log.hxx>
 
 
 namespace rptxml
@@ -55,6 +56,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
                 sDetailField = sValue;
                 break;
             default:
+                SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                 break;
         }
     }

@@ -87,7 +87,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
     switch( _nControl )
     {
         case ControlCharacter::LINE_BREAK:
-            m_pFixedContent->Characters("\n");
+            m_pFixedContent->characters("\n");
             break;
         default:
             OSL_FAIL("Not supported control character");
@@ -97,7 +97,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
 
 void OXMLCharContent::InsertString(const OUString& _sString)
 {
-    m_pFixedContent->Characters(_sString);
+    m_pFixedContent->characters(_sString);
 }
 
 
@@ -119,11 +119,11 @@ OXMLFixedContent::~OXMLFixedContent()
 }
 
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::createFastChildContext_(
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext_(nElement,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext(nElement,xAttrList);
     if (xContext)
         return xContext;
 
@@ -163,7 +163,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::crea
     return xContext;
 }
 
-void OXMLFixedContent::endFastElement(sal_Int32 )
+void OXMLFixedContent::endFastElement(sal_Int32 nElement)
 {
     if ( m_pInP )
     {
@@ -189,7 +189,7 @@ void OXMLFixedContent::endFastElement(sal_Int32 )
         m_pContainer->addCell(m_xReportComponent);
         m_rCell.setComponent(m_xReportComponent);
 
-        OXMLReportElementBase::EndElement();
+        OXMLReportElementBase::endFastElement(nElement);
     }
 }
 
