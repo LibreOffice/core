@@ -59,6 +59,9 @@ public:
 
     virtual ~XMLCharContext() override;
 
+    virtual void SAL_CALL startFastElement(
+            sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
     // EndElement is called before a context will be destructed, but
     // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
