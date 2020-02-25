@@ -60,6 +60,8 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+
     // constructor/destructor
     AlignmentPropertyPanel(
         vcl::Window* pParent,
