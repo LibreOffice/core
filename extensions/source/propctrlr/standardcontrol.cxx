@@ -934,11 +934,10 @@ namespace pcr
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = VclPtr<MultiLineEdit>::Create( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
+        m_pImplEdit = VclPtr<Edit>::Create( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
-        if ( _nStyle & WB_DROPDOWN )
         {
             m_pDropdownButton = VclPtr<PushButton>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
             m_pDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
