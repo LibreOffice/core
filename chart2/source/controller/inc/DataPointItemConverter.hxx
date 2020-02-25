@@ -54,7 +54,8 @@ public:
         sal_Int32 nSpecialFillColor = 0,
         bool bOverwriteLabelsForAttributedDataPointsAlso = false,
         sal_Int32 nNumberFormat = 0,
-        sal_Int32 nPercentNumberFormat = 0 );
+        sal_Int32 nPercentNumberFormat = 0,
+        sal_Int32 nPointIndex = -1 );
 
     virtual ~DataPointItemConverter() override;
 
@@ -78,6 +79,9 @@ private:
     sal_Int32                           m_nPercentNumberFormat;
     css::uno::Sequence<sal_Int32>       m_aAvailableLabelPlacements;
     bool                                m_bForbidPercentValue;
+    bool                                m_bHideLegendEntry;
+    sal_Int32                           m_nPointIndex;
+    css::uno::Reference<css::chart2::XDataSeries> m_xSeries;
 };
 
 }}

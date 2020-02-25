@@ -98,7 +98,8 @@ const sal_uInt16 nDataLabelWhichPairs[] =
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
-    SDRATTR_3D_FIRST, SDRATTR_3D_LAST               /*  1244 -  1334  svx/svddef.hxx */
+    SDRATTR_3D_FIRST, SDRATTR_3D_LAST,              /*  1244 -  1334  svx/svddef.hxx */ \
+    SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY, SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY
 
 const sal_uInt16 nDataPointWhichPairs[] =
 {
