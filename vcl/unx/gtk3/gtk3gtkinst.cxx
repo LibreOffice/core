@@ -2058,7 +2058,7 @@ private:
                     gdk_event_free(pPeekEvent);
                     if (bSkip)
                     {
-                        return true;
+                        return false;
                     }
                 }
                 nEventType = SalEvent::MouseButtonDown;
