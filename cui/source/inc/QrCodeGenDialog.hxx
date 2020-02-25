@@ -32,6 +32,7 @@ private:
     std::unique_ptr<weld::Entry> m_xEdittext;
     std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
+    weld::Widget* mpParent;
 
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 

@@ -400,6 +400,8 @@
 #define RID_SVXSTR_COMMANDNAME                      NC_("RID_SVXSTR_COMMANDLABEL", "Command")
 #define RID_SVXSTR_COMMANDTIP                       NC_("RID_SVXSTR_COMMANDLABEL", "Tooltip")
 
+#define RID_SVXSTR_QRCODEDATALONG                   NC_("RID_SVXSTR_QRCODEDATALONG", "Text exceeds the maximum bits for Error Correction, Enter shorter text")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
