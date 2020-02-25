@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fd4435d3_f8033519",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-25T11:21:51Z",
+      "side": 1,
+      "message": "okay",
+      "parentUuid": "28ff136a_8c5ed9a8",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 25
+      },
+      "revId": "2de42b53b7c23223c38e64a75eae248d8a0cd4ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b1f77d0_e1584630",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 30
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-22T16:39:18Z",
       "side": 1,
       "message": "...and is that string guaranteed to only contain ASCII characters?",
+      "range": {
+        "startLine": 254,
+        "startChar": 21,
+        "endLine": 254,
+        "endChar": 36
+      },
+      "revId": "2de42b53b7c23223c38e64a75eae248d8a0cd4ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05111e50_d99cc2d5",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-25T11:21:51Z",
+      "side": 1,
+      "message": "It looks as it only contains the ASCII characters. toSvgString function https://github.com/nayuki/QR-Code-generator/blob/master/cpp/QrCode.cpp#L388-L413",
+      "parentUuid": "6b1f77d0_e1584630",
       "range": {
         "startLine": 254,
         "startChar": 21,
