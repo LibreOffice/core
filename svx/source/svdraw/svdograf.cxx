@@ -1276,4 +1276,26 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     rTarget.AddHdl(std::make_unique<SdrCropHdl>(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
+void SdrGrafObj::SetPNGPreviewChecksum(BitmapChecksum nPNGPreviewChecksum)
+{
+    mnPNGPreviewChecksum = nPNGPreviewChecksum;
+}
+
+BitmapChecksum SdrGrafObj::GetPNGPreviewChecksum() const
+{
+    return mnPNGPreviewChecksum;
+}
+
+void SdrGrafObj::SetPNGPreviewData(SvMemoryStream& rPNGPreviewData)
+{
+    rPNGPreviewData.Seek(0);
+    maPNGPreviewData.resize(rPNGPreviewData.remainingSize());
+    rPNGPreviewData.ReadBytes(maPNGPreviewData.data(), maPNGPreviewData.size());
+}
+
+const std::vector<sal_Int8>& SdrGrafObj::GetPNGPreviewData() const
+{
+    return maPNGPreviewData;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
