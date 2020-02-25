@@ -127,6 +127,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/tp_AxisPositions \
     chart2/source/controller/dialogs/tp_ChartType \
     chart2/source/controller/dialogs/tp_DataLabel \
+    chart2/source/controller/dialogs/tp_DataPointOption \
     chart2/source/controller/dialogs/tp_DataSource \
     chart2/source/controller/dialogs/tp_ErrorBars \
     chart2/source/controller/dialogs/tp_LegendPosition \
