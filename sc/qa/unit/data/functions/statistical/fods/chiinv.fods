@@ -2925,11 +2925,11 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:formula="of:=LEGACY.CHIINV([.F8];[.G8])" office:value-type="float" office:value="0.005035400390625" calcext:value-type="float">
-      <text:p>0.005035400390625</text:p>
+     <table:table-cell table:formula="of:=LEGACY.CHIINV([.F8];[.G8])" office:value-type="float" office:value="0.00518798828125" calcext:value-type="float">
+      <text:p>0.00518798828125</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.005035400390625" calcext:value-type="float">
-      <text:p>0.005035400390625</text:p>
+     <table:table-cell office:value-type="float" office:value="0.00518798828125" calcext:value-type="float">
+      <text:p>0.00518798828125</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A8];12)=ROUND([.B8];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
