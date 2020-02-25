@@ -16,6 +16,24 @@
       "revId": "4dd0630b6aa50983080e6908ee124637e373b0e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f5d968a_bab03e2a",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T12:15:32Z",
+      "side": 0,
+      "message": "Just checked, and it works OK e.g. for 0.001E311",
+      "parentUuid": "eb12cff8_4f3dd581",
+      "revId": "4dd0630b6aa50983080e6908ee124637e373b0e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
