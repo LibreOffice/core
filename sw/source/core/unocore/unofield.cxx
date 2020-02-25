@@ -979,17 +979,10 @@ void SAL_CALL SwXFieldMaster::dispose()
     }
 
     // first delete all fields
-    SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-    SwFormatField* pField = aIter.First();
-    while(pField)
-    {
-        SwTextField *pTextField = pField->GetTextField();
-        if(pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
-        {
-            SwTextField::DeleteTextField(*pTextField);
-        }
-        pField = aIter.Next();
-    }
+    std::vector<SwFormatField*> vpFields;
+    pFieldType->GatherFields(vpFields);
+    for(auto pField : vpFields)
+        SwTextField::DeleteTextField(*pField->GetTextField());
     // then delete FieldType
     m_pImpl->m_pDoc->getIDocumentFieldsAccess().RemoveFieldType(nTypeIdx);
 }
