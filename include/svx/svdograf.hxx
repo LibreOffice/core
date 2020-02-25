@@ -29,7 +29,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/stream.hxx>
 #include <memory>
 #include <cstddef>
 
@@ -124,9 +123,6 @@ private:
                             DECL_LINK( ReplacementSwapHdl, const GraphicObject*, SvStream* );
     void onGraphicChanged();
     GDIMetaFile             GetMetaFile(GraphicType &rGraphicType) const;
-
-    BitmapChecksum mnPNGPreviewChecksum = 0;
-    std::vector<sal_Int8> maPNGPreviewData;
 
 protected:
     // protected destructor
@@ -303,11 +299,6 @@ public:
     {
         return mpQrCode.get();
     };
-
-    void SetPNGPreviewChecksum(BitmapChecksum nPNGPreviewChecksum);
-    BitmapChecksum GetPNGPreviewChecksum() const;
-    void SetPNGPreviewData(SvMemoryStream& rPNGPreviewData);
-    const std::vector<sal_Int8>& GetPNGPreviewData() const;
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
