@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fe4b935f_9ab1c919",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T11:59:50Z",
+      "side": 1,
+      "message": "Oh! But that doesn\u0027t mean that:\n\n1. You would left it uninitialized;\n2. You would make it global.\n\nYou need a member pointer, and initialize it in the constructor, then use in the method where needed.",
+      "parentUuid": "912d029d_2a7868be",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0a1f18a_844d5635",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
