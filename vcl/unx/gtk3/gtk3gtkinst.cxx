@@ -5694,6 +5694,7 @@ private:
     guint m_nLaunchSplitTimeoutId;
     bool m_bOverFlowBoxActive;
     bool m_bOverFlowBoxIsStart;
+    bool m_bInternalPageChange;
     int m_nStartTabCount;
     int m_nEndTabCount;
     mutable std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
@@ -5726,7 +5727,7 @@ private:
             nNewPage += nOverFlowLen;
         }
 
-        bool bAllow = !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
+        bool bAllow = m_bInternalPageChange || !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
         if (!bAllow)
         {
             g_signal_stop_emission_by_name(m_pNotebook, "switch-page");
@@ -5735,7 +5736,8 @@ private:
         if (m_bOverFlowBoxActive)
             gtk_notebook_set_current_page(m_pOverFlowNotebook, gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1);
         OString sNewIdent(get_page_ident(nNewPage));
-        m_aEnterPageHdl.Call(sNewIdent);
+        if (!m_bInternalPageChange)
+            m_aEnterPageHdl.Call(sNewIdent);
     }
 
     void unsplit_notebooks()
@@ -6133,6 +6135,7 @@ public:
         , m_nLaunchSplitTimeoutId(0)
         , m_bOverFlowBoxActive(false)
         , m_bOverFlowBoxIsStart(false)
+        , m_bInternalPageChange(false)
         , m_nStartTabCount(0)
         , m_nEndTabCount(0)
     {
@@ -6234,6 +6237,13 @@ public:
 
     virtual void set_current_page(int nPage) override
     {
+        // normally we'd call disable_notify_events/enable_notify_events here,
+        // but the notebook is complicated by the need to support the
+        // double-decker hackery so for simplicity just flag that the page
+        // change is not a directly user-triggered one
+        bool bInternalPageChange = m_bInternalPageChange;
+        m_bInternalPageChange = true;
+
         if (m_bOverFlowBoxIsStart)
         {
             auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
@@ -6256,6 +6266,8 @@ public:
                 gtk_notebook_set_current_page(m_pOverFlowNotebook, nPage);
             }
         }
+
+        m_bInternalPageChange = bInternalPageChange;
     }
 
     virtual void set_current_page(const OString& rIdent) override
