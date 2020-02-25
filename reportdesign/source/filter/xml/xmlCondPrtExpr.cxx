@@ -25,6 +25,7 @@
 #include "xmlControlProperty.hxx"
 #include "xmlComponent.hxx"
 #include <strings.hxx>
+#include <sal/log.hxx>
 
 namespace rptxml
 {
@@ -54,6 +55,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport
                     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(sValue)));
                     break;
                 default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << " = " << sValue);
                     break;
             }
 
@@ -73,7 +75,12 @@ OXMLCondPrtExpr::~OXMLCondPrtExpr()
 
 void OXMLCondPrtExpr::characters( const OUString& rChars )
 {
-    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(rChars));
+    m_aCharBuffer.append(rChars);
+}
+
+void OXMLCondPrtExpr::endFastElement( sal_Int32 )
+{
+    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(m_aCharBuffer.makeStringAndClear()));
 }
 
 } // namespace rptxml

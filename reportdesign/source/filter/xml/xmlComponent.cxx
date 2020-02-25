@@ -29,6 +29,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <sal/log.hxx>
 
 namespace rptxml
 {
@@ -59,6 +60,8 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
                 case XML_ELEMENT(DRAW, XML_NAME):
                     m_xComponent->setName(sValue);
                     break;
+                default:
+                    SAL_WARN("reportdesign", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
             }
         }
         catch(const Exception&)

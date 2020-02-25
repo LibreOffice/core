@@ -119,11 +119,11 @@ OXMLFixedContent::~OXMLFixedContent()
 }
 
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::createFastChildContext_(
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext_(nElement,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext(nElement,xAttrList);
     if (xContext)
         return xContext;
 

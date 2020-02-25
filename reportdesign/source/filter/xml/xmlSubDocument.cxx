@@ -80,11 +80,11 @@ SvXMLImportContextRef OXMLSubDocument::CreateChildContext( sal_uInt16 nPrefix,
     return xContext;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::createFastChildContext_(
+css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::createFastChildContext(
         sal_Int32 nElement,
         const Reference< XFastAttributeList > & xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext_(nElement,xAttrList);
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext = OXMLReportElementBase::createFastChildContext(nElement,xAttrList);
     if (xContext)
         return xContext;
 

@@ -748,7 +748,8 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         }
     }
 
-    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
+    if( !xContext.is())
+        SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
 
     if( !xContext.is() )
         xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
@@ -2023,6 +2024,11 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
         return true;
     embeddedFontUrlsKnown.insert( url );
     return false;
+}
+
+OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
+{
+    return getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
 }
 
 const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
