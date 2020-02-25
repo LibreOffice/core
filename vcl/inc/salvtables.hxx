@@ -666,7 +666,7 @@ class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::Co
 {
 protected:
     // owner for ListBox/ComboBox UserData
-    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    std::vector<std::shared_ptr<OUString>> m_aUserData;
     VclPtr<vcl_type> m_xComboBox;
     ScopedVclPtr<::MenuButton> m_xMenuButton;
     OUString m_sMenuButtonRow;
