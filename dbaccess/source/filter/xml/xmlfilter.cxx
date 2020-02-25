@@ -426,6 +426,10 @@ public:
     {
     }
 
+    virtual void SAL_CALL startFastElement(
+            sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
+
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
     {
