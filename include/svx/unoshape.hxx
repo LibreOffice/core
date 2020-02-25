@@ -640,7 +640,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SvxGraphicObject : public SvxShapeText
+class SVX_DLLPUBLIC SvxGraphicObject : public SvxShapeText
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
