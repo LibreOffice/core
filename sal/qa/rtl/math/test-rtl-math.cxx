@@ -149,6 +149,12 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), end);
         CPPUNIT_ASSERT_EQUAL(1234.0, res);
+
+        // Check that the value is the nearest double-precision representation of the decimal 0.0042
+        // (it was 0.0042000000000000006 instead of 0.0041999999999999997)
+        res = rtl::math::stringToDouble(OUString("0,0042"), ',', ' ', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(0.0042, res);
     }
 
     void test_stringToDouble_bad() {

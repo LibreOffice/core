@@ -2764,11 +2764,11 @@
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:formula="of:=RATE([.L19];[.L21];[.L20];[.L22];[.L23];[.L24])" office:value-type="float" office:value="0.2500000946085" calcext:value-type="float">
-      <text:p>0.2500000946085</text:p>
+     <table:table-cell table:formula="of:=RATE([.L19];[.L21];[.L20];[.L22];[.L23];[.L24])" office:value-type="float" office:value="0.250000092908987" calcext:value-type="float">
+      <text:p>0.250000092908987</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="0.2500000946085" calcext:value-type="float">
-      <text:p>0.2500000946085</text:p>
+     <table:table-cell office:value-type="float" office:value="0.250000092908987" calcext:value-type="float">
+      <text:p>0.250000092908987</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=ROUND([.A23];12)=ROUND([.B23];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
