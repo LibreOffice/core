@@ -192,12 +192,15 @@ OrganizeDialog::OrganizeDialog(weld::Window* pParent, sal_Int16 tabId )
 {
     m_xTabCtrl->connect_enter_page(LINK(this, OrganizeDialog, ActivatePageHdl));
 
+    OString sPage;
     if (tabId == 0)
-        m_xTabCtrl->set_current_page("modules");
+        sPage = "modules";
     else if (tabId == 1)
-        m_xTabCtrl->set_current_page("dialogs");
+        sPage = "dialogs";
     else
-        m_xTabCtrl->set_current_page("libraries");
+        sPage = "libraries";
+    m_xTabCtrl->set_current_page(sPage);
+    ActivatePageHdl(sPage);
 
     if (SfxDispatcher* pDispatcher = GetDispatcher())
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
