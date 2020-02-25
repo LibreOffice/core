@@ -463,6 +463,8 @@ custom-iconset
 custom-iconset-index
 custom-iconset-name
 custom-label-field
+custom-label-pos-x
+custom-label-pos-y
 cut
 cut-offs
 cut_offs

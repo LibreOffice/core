@@ -90,6 +90,7 @@
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -120,6 +121,7 @@ namespace
         OUString   maStyleName;
         sal_Int32  mnRepeat;
         CustomLabelSeq   mCustomLabelText;
+        chart2::RelativePosition mCustomLabelPos;
 
         SchXMLDataPointStruct() : mnRepeat( 1 ) {}
     };
@@ -228,6 +230,7 @@ public:
         bool bExportContent );
 
     void exportCustomLabel(const CustomLabelSeq & xCustomLabel);
+    void exportCustomLabelPosition(const chart2::RelativePosition & xCustomLabelPosition);
 
     void exportRegressionCurve(
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
@@ -297,6 +300,28 @@ CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
         }
     }
     return CustomLabelSeq();
+}
+
+css::chart2::RelativePosition lcl_getCustomLabelPosition(sal_Int32 nDataPointIndex,
+    const uno::Reference< chart2::XDataSeries >& rSeries)
+{
+    if (!rSeries.is())
+        return chart2::RelativePosition();
+
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFDefaultVersion());
+    if (nCurrentODFVersion <= SvtSaveOptions::ODFVER_012)//do not export to ODF 1.2 or older
+        return chart2::RelativePosition();
+
+    if (Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
+    {
+        if (Any aAny = xLabels->getPropertyValue("CustomLabelPosition"); aAny.hasValue())
+        {
+            chart2::RelativePosition aCustomLabelPos;
+            aAny >>= aCustomLabelPos;
+            return aCustomLabelPos;
+        }
+    }
+    return chart2::RelativePosition();
 }
 
 class lcl_MatchesRole
@@ -3327,6 +3352,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         SchXMLDataPointStruct aPoint;
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
                         aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
+                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nCurrIndex, xSeries);
                         maAutoStyleNameQueue.pop();
 
                         aDataPointVector.push_back( aPoint );
@@ -3372,7 +3398,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     {
         aPoint = rPoint;
 
-        if( aPoint.maStyleName == aLastPoint.maStyleName && aLastPoint.mCustomLabelText.getLength() < 1 )
+        if( aPoint.maStyleName == aLastPoint.maStyleName && aLastPoint.mCustomLabelText.getLength() < 1 &&
+            aLastPoint.mCustomLabelPos.Primary == 0.0 && aLastPoint.mCustomLabelPos.Secondary == 0.0 )
             aPoint.mnRepeat += aLastPoint.mnRepeat;
         else if( aLastPoint.mnRepeat > 0 )
         {
@@ -3393,6 +3420,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
             }
             nIndex++;
+            exportCustomLabelPosition(aLastPoint.mCustomLabelPos);
             SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
             exportCustomLabel(aLastPoint.mCustomLabelText);
         }
@@ -3417,6 +3445,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             }
         }
 
+        exportCustomLabelPosition(aLastPoint.mCustomLabelPos);
         SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
         exportCustomLabel(aLastPoint.mCustomLabelText);
     }
@@ -3435,6 +3464,19 @@ void SchXMLExportHelper_Impl::exportCustomLabel( const CustomLabelSeq & xCustomL
         SvXMLElementExport aSpan( mrExport, XML_NAMESPACE_TEXT, XML_SPAN, true, false);
         mrExport.GetDocHandler()->characters(label->getString());
     }
+}
+
+void SchXMLExportHelper_Impl::exportCustomLabelPosition( const chart2::RelativePosition & xCustomLabelPosition)
+{
+    if( xCustomLabelPosition.Primary == 0.0 && xCustomLabelPosition.Secondary == 0.0 )
+        return; // nothing to export
+
+    OUStringBuffer aCustomLabelPosString;
+    ::sax::Converter::convertDouble(aCustomLabelPosString, xCustomLabelPosition.Primary);
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CUSTOM_LABEL_POS_X, aCustomLabelPosString.makeStringAndClear());
+
+    ::sax::Converter::convertDouble(aCustomLabelPosString, xCustomLabelPosition.Secondary);
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CUSTOM_LABEL_POS_Y, aCustomLabelPosString.makeStringAndClear());
 }
 
 void SchXMLExportHelper_Impl::addPosition( const awt::Point & rPosition )

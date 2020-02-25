@@ -2180,18 +2180,36 @@ void Chart2ExportTest::testCustomDataLabel()
 void Chart2ExportTest::testCustomPositionofDataLabel()
 {
     load("/chart2/qa/extras/data/xlsx/", "testCustomPosDataLabels.xlsx");
-    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
-    CPPUNIT_ASSERT(pXmlDoc);
+    {
+        xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
 
-    // test custom position of data label
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:idx", "val", "2");
-    OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:x", "val");
-    double nX = aXVal.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.11027682973075476, nX, 1e-7);
+        // test custom position of data label (xlsx)
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:idx", "val", "2");
+        OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:x", "val");
+        double nX = aXVal.toDouble();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.11027682973075476, nX, 1e-7);
 
-    OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:y", "val");
-    double nY = aYVal.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0742140311063737, nY, 1e-7);
+        OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:layout/c:manualLayout/c:y", "val");
+        double nY = aYVal.toDouble();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0742140311063737, nY, 1e-7);
+    }
+
+    load("/chart2/qa/extras/data/docx/", "testTdf108110.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        // test custom position of data label (docx)
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:idx", "val", "2");
+        OUString aXVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:layout/c:manualLayout/c:x", "val");
+        double nX = aXVal.toDouble();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227256488772236, nX, 1e-7);
+
+        OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:layout/c:manualLayout/c:y", "val");
+        double nY = aYVal.toDouble();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.172648731408574, nY, 1e-7);
+    }
 }
 
 void Chart2ExportTest::testCustomDataLabelMultipleSeries()

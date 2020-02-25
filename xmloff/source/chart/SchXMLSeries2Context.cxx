@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
@@ -1100,6 +1101,14 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
                     }
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
+                }
+
+                if( seriesStyle.mCustomLabelPos[0] != 0.0 || seriesStyle.mCustomLabelPos[1] != 0.0 )
+                {
+                    chart2::RelativePosition aCustomlabelPosition;
+                    aCustomlabelPosition.Primary = seriesStyle.mCustomLabelPos[0];
+                    aCustomlabelPosition.Secondary = seriesStyle.mCustomLabelPos[1];
+                    xPointProp->setPropertyValue("CustomLabelPosition", uno::Any(aCustomlabelPosition));
                 }
             }
             catch( const uno::Exception & )
