@@ -131,6 +131,8 @@
   <block-list:block block-list:abbreviated-name="beutiful" block-list:name="beautiful"/>
   <block-list:block block-list:abbreviated-name="blase" block-list:name="blasé"/>
   <block-list:block block-list:abbreviated-name="boxs" block-list:name="boxes"/>
+  <block-list:block block-list:abbreviated-name="breackage" block-list:name="breakage"/>
+  <block-list:block block-list:abbreviated-name="breackages" block-list:name="breakages"/>
   <block-list:block block-list:abbreviated-name="brodcast" block-list:name="broadcast"/>
   <block-list:block block-list:abbreviated-name="butthe" block-list:name="but the"/>
   <block-list:block block-list:abbreviated-name="bve" block-list:name="be"/>
@@ -479,6 +481,8 @@
   <block-list:block block-list:abbreviated-name="marraige" block-list:name="marriage"/>
   <block-list:block block-list:abbreviated-name="may of been" block-list:name="may have been"/>
   <block-list:block block-list:abbreviated-name="may of had" block-list:name="may have had"/>
+  <block-list:block block-list:abbreviated-name="mechine" block-list:name="machine"/>
+  <block-list:block block-list:abbreviated-name="mechines" block-list:name="machines"/>
   <block-list:block block-list:abbreviated-name="memeber" block-list:name="member"/>
   <block-list:block block-list:abbreviated-name="merchent" block-list:name="merchant"/>
   <block-list:block block-list:abbreviated-name="mesage" block-list:name="message"/>
@@ -579,6 +583,8 @@
   <block-list:block block-list:abbreviated-name="presance" block-list:name="presence"/>
   <block-list:block block-list:abbreviated-name="probelm" block-list:name="problem"/>
   <block-list:block block-list:abbreviated-name="probelms" block-list:name="problems"/>
+  <block-list:block block-list:abbreviated-name="problim" block-list:name="problem"/>
+  <block-list:block block-list:abbreviated-name="problims" block-list:name="problems"/>
   <block-list:block block-list:abbreviated-name="prominant" block-list:name="prominent"/>
   <block-list:block block-list:abbreviated-name="psoition" block-list:name="position"/>
   <block-list:block block-list:abbreviated-name="ptogress" block-list:name="progress"/>
@@ -608,6 +614,7 @@
   <block-list:block block-list:abbreviated-name="recrod" block-list:name="record"/>
   <block-list:block block-list:abbreviated-name="religous" block-list:name="religious"/>
   <block-list:block block-list:abbreviated-name="reluctent" block-list:name="reluctant"/>
+  <block-list:block block-list:abbreviated-name="remainig" block-list:name="remaining"/>
   <block-list:block block-list:abbreviated-name="remeber" block-list:name="remember"/>
   <block-list:block block-list:abbreviated-name="reommend" block-list:name="recommend"/>
   <block-list:block block-list:abbreviated-name="representativs" block-list:name="representatives"/>
