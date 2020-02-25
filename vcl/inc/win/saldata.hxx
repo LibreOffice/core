@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALDATA_HXX
 #define INCLUDED_VCL_INC_WIN_SALDATA_HXX
 
+#include <config_features.h>
+
 #include <memory>
 #include <osl/module.h>
 
@@ -43,7 +45,9 @@ struct HDCCache;
 struct TempFontItem;
 class TextOutRenderer;
 class OpenGLControlsCache;
+#if HAVE_FEATURE_SKIA
 class SkiaControlsCache;
+#endif
 
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
@@ -125,7 +129,9 @@ public:
     std::unique_ptr<TextOutRenderer> m_pExTextOutRenderer;
     std::unique_ptr<GlobalWinGlyphCache> m_pGlobalWinGlyphCache;
     std::unique_ptr<OpenGLControlsCache> m_pOpenGLControlsCache;
+#if HAVE_FEATURE_SKIA
     std::unique_ptr<SkiaControlsCache> m_pSkiaControlsCache;
+#endif
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
