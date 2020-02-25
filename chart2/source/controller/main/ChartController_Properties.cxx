@@ -246,7 +246,7 @@ wrapper::ItemConverter* createItemConverter(
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         eMapTo, pRefSize.get(), bDataSeries, bUseSpecialFillColor, nSpecialFillColor, true,
-                                        nNumberFormat, nPercentNumberFormat );
+                                        nNumberFormat, nPercentNumberFormat, nPointIndex );
                 break;
             }
             case OBJECTTYPE_GRID:
