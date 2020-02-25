@@ -2725,29 +2725,52 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
             bool bCached = false;
             SdrGrafObj* pGrafObj = nullptr;
+            bool bPNG = false;
+            bool bJPG = false;
             if (pShape)
             {
                 pGrafObj = GetSdrGrafObjFromXShape(pShape);
-                if (pGrafObj && pGrafObj->GetPNGPreviewChecksum() == rBmpEx.GetChecksum())
+                if (pGrafObj)
                 {
-                    const std::vector<sal_Int8>& rPreviewData = pGrafObj->GetPNGPreviewData();
-                    aOStm.WriteBytes(rPreviewData.data(), rPreviewData.size());
-                    bCached = true;
+                    const Graphic& rGraphic = pGrafObj->GetGraphic();
+                    if (rGraphic.GetType() == GraphicType::Bitmap)
+                    {
+                        const BitmapEx& rGraphicBitmap = rGraphic.GetBitmapExRef();
+                        if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
+                        {
+                            GfxLink aGfxLink = rGraphic.GetGfxLink();
+                            if (aGfxLink.GetType() == GfxLinkType::NativePng)
+                            {
+                                bPNG = true;
+                            }
+                            else if (aGfxLink.GetType() == GfxLinkType::NativeJpg)
+                            {
+                                bJPG = true;
+                            }
+                            if (bPNG || bJPG)
+                            {
+                                aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                                bCached = true;
+                            }
+                        }
+                    }
                 }
             }
 
             if( bCached || GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE )
             {
-                if (!bCached && pGrafObj)
-                {
-                    pGrafObj->SetPNGPreviewChecksum(rBmpEx.GetChecksum());
-                    pGrafObj->SetPNGPreviewData(aOStm);
-                }
-
                 Point                    aPt;
                 Size                     aSz;
                 Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
-                OUStringBuffer aBuffer( "data:image/png;base64," );
+                OUStringBuffer aBuffer;
+                if (bJPG)
+                {
+                    aBuffer.append("data:image/jpeg;base64,");
+                }
+                else
+                {
+                    aBuffer.append("data:image/png;base64,");
+                }
                 ::comphelper::Base64::encode( aBuffer, aSeq );
 
                 ImplMap( rPt, aPt );
