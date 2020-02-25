@@ -148,21 +148,21 @@ bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &
 {
     bool bRet = false;
 
-    if (rExt == "odt" || rExt == "doc" || rExt == "docx" ||
+    if (rExt == "odt" || rExt == "fodt" || rExt == "doc" || rExt == "docx" ||
         rExt == "rtf" || rExt == "txt" || rExt == "odm" || rExt == "otm")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_WRITER);
     }
-    else if (rExt == "ods" || rExt == "xls" || rExt == "xlsx")
+    else if (rExt == "ods" || rExt == "fods" || rExt == "xls" || rExt == "xlsx")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_CALC);
     }
-    else if (rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
+    else if (rExt == "odp" || rExt == "fodp" || rExt == "pps" || rExt == "ppt" ||
             rExt == "pptx")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_IMPRESS);
     }
-    else if (rExt == "odg")
+    else if (rExt == "odg" || rExt == "fodg")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_DRAW);
     }
