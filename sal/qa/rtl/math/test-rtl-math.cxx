@@ -149,6 +149,37 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(5), end);
         CPPUNIT_ASSERT_EQUAL(1234.0, res);
+
+        // Check that the value is the nearest double-precision representation of the decimal 0.0042
+        // (it was 0.0042000000000000006 instead of 0.0041999999999999997)
+        res = rtl::math::stringToDouble(OUString("0,0042"), ',', ' ', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(0.0042, res);
+
+        // "- 1" is nothing
+        res = rtl::math::stringToDouble(OUString("- 1"), '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        // "-1E+E" : no exponent
+        res = rtl::math::stringToDouble(OUString("-1E+E"), '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
+        CPPUNIT_ASSERT_EQUAL(-1.0, res);
+
+        // "-0" is negative zero
+        res = rtl::math::stringToDouble(OUString("-0"), '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+        CPPUNIT_ASSERT(rtl::math::isSignBitSet(res));
+
+        // Compensating: "0.001E311" is 1E308, not overflow/inf
+        res = rtl::math::stringToDouble(OUString("0.001E311"), '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), end);
+        CPPUNIT_ASSERT_EQUAL(1E308, res);
     }
 
     void test_stringToDouble_bad() {
