@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8395b459_d5ae32cd",
+        "filename": "oox/source/helper/propertymap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-25T08:00:47Z",
+      "side": 1,
+      "message": "did you encounter these warnings with --enable-assert-always-abort or with --disable-...?",
+      "revId": "1ca7e41fa8e300d0f5b8e0427ea3e6cad27ce175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
