@@ -4010,16 +4010,20 @@ void Test::testFormulaRefUpdateNameCopySheetCheckTab( SCTAB nTab, bool bCheckNam
 
 void Test::testFormulaRefUpdateSheetLocalMove()
 {
-    m_pDoc->InsertTab(0, "Sheet1");
-    m_pDoc->InsertTab(1, "Sheet2");
+    SCTAB nSheet1 = 0;
+    SCTAB nSheet2 = 1;
+    m_pDoc->InsertTab( nSheet1, "Sheet1");
+    m_pDoc->InsertTab( nSheet2, "Sheet2");
 
-    ScAddress aPos;
+    ScAddress aPos(0,0,nSheet1);
     bool bOk;
     bOk = m_pDoc->InsertNewRangeName( 0, "MyCell", aPos, "$Sheet1.$B$2");
     CPPUNIT_ASSERT(bOk);
+    aPos.SetTab(nSheet2);
     bOk = m_pDoc->InsertNewRangeName( 1, "MyCell", aPos, "$Sheet2.$B$2");
     CPPUNIT_ASSERT(bOk);
 
+    aPos.SetTab(nSheet1);
     aPos.IncCol();
     m_pDoc->SetString( aPos, "x");
     aPos.IncRow();
@@ -4028,7 +4032,7 @@ void Test::testFormulaRefUpdateSheetLocalMove()
     m_pDoc->SetString( aPos, "=MyCell");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1.B3", 1.0, m_pDoc->GetValue(aPos));
 
-    aPos.SetTab(1);
+    aPos.SetTab(nSheet2);
     aPos.SetRow(1);
     m_pDoc->SetString( aPos, "2.0");
     aPos.IncRow();
@@ -4039,66 +4043,128 @@ void Test::testFormulaRefUpdateSheetLocalMove()
     OUString aFormula;
 
     // Move Sheet1.B1 ("x") to Sheet2.B1
-    bOk = rFunc.MoveBlock( ScRange(1,0,0,1,0,0), ScAddress(1,0,1), true, false, false, false);
+    bOk = rFunc.MoveBlock( ScRange(1,0,nSheet1,1,0,nSheet1), ScAddress(1,0,nSheet2), true, false, false, false);
     CPPUNIT_ASSERT(bOk);
     // Results not changed.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
-    m_pDoc->GetFormula( 1,2,0, aFormula);
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 1,2,1, aFormula);
+    m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", OUString("=MyCell"), aFormula);
 
     // Move Sheet2.B2 ("2.0") to Sheet1.C2
-    bOk = rFunc.MoveBlock( ScRange(1,1,1,1,1,1), ScAddress(2,1,0), true, false, false, false);
+    bOk = rFunc.MoveBlock( ScRange(1,1,nSheet2,1,1,nSheet2), ScAddress(2,1,nSheet1), true, false, false, false);
     CPPUNIT_ASSERT(bOk);
     // Results not changed.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
-    m_pDoc->GetFormula( 1,2,0, aFormula);
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 1,2,1, aFormula);
+    m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", OUString("=MyCell"), aFormula);
 
     ScRangeData* pName;
 
     // Check that the sheet-local named reference points to the moved cell, now
     // Sheet1.C2
-    pName = m_pDoc->GetRangeName(1)->findByUpperName("MYCELL");
+    pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
     pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
     // Move Sheet2.B3 ("=MyCell") to Sheet1.C3
-    bOk = rFunc.MoveBlock( ScRange(1,2,1,1,2,1), ScAddress(2,2,0), true, false, false, false);
+    bOk = rFunc.MoveBlock( ScRange(1,2,nSheet2,1,2,nSheet2), ScAddress(2,2,nSheet1), true, false, false, false);
     CPPUNIT_ASSERT(bOk);
     // Results changed.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet2.B3", 0.0, m_pDoc->GetValue(ScAddress(1,2,1)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet2.B3", 0.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     // One formula identical, one adjusted.
-    m_pDoc->GetFormula( 1,2,0, aFormula);
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", OUString("=MyCell"), aFormula);
-    m_pDoc->GetFormula( 2,2,0, aFormula);
+    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
 
     // Check that the sheet-local named reference in Sheet1 still points to the
     // original cell Sheet1.B2
-    pName = m_pDoc->GetRangeName(0)->findByUpperName("MYCELL");
+    pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
     pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
 
     // Check that the sheet-local named reference in Sheet2 still points to the
     // moved cell, now Sheet1.C2
-    pName = m_pDoc->GetRangeName(1)->findByUpperName("MYCELL");
+    pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
     CPPUNIT_ASSERT(pName);
     pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
 
-    m_pDoc->DeleteTab(1);
+    // Insert sheet before the others.
+    m_pDoc->InsertTab(0, "Sheet0");
+    ++nSheet1;
+    ++nSheet2;
+
+    // Nothing changed.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
+    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
+    pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
+    pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
+
+    // Delete sheet before the others.
+    m_pDoc->DeleteTab(0);
+    --nSheet1;
+    --nSheet2;
+
+    // Nothing changed.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
+    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
+    pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
+    pName = m_pDoc->GetRangeName(nSheet2)->findByUpperName("MYCELL");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet2 sheet-local name", OUString("$Sheet1.$C$2"), aFormula);
+
+    // Delete last sheet with sheet-local name.
+    m_pDoc->DeleteTab(nSheet2);
+
+    // XXX we *could* analyze whether the expression points to a different
+    // sheet and then move the name to a remaining sheet. If so, adapt this
+    // test.
+    // Nothing changed except the sheet-local name and its use.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", 0.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("#NAME?"), m_pDoc->GetString(ScAddress(2,2,nSheet1)));
+    m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", OUString("=MyCell"), aFormula);
+    m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("=#NAME?"), aFormula);
+    pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol( aFormula, ScAddress(), formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1 sheet-local name", OUString("$Sheet1.$B$2"), aFormula);
+    CPPUNIT_ASSERT(!m_pDoc->GetRangeName(nSheet2));
+    nSheet2 = -1;
+
     m_pDoc->DeleteTab(0);
 }
 
