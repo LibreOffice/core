@@ -128,6 +128,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_STOCK_VOLUME         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_VOLUME,false);
     rPoolDefaults[SCHATTR_STOCK_UPDOWN         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_UPDOWN,false);
     rPoolDefaults[SCHATTR_SYMBOL_SIZE          - SCHATTR_START] = new SvxSizeItem(SCHATTR_SYMBOL_SIZE,Size(0,0));
+    rPoolDefaults[SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY - SCHATTR_START] = new SfxBoolItem(SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY, false);
 
     // new for New Chart
     rPoolDefaults[SCHATTR_BAR_OVERLAP          - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_OVERLAP,0);
