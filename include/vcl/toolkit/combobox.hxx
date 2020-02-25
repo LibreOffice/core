@@ -27,6 +27,7 @@
 #include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 #define COMBOBOX_APPEND             (SAL_MAX_INT32)
 #define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
@@ -187,6 +188,8 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif  // _COMBOBOX_HXX
