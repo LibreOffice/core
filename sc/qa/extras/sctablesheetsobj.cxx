@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/sheet/xspreadsheets.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
@@ -19,11 +20,12 @@ using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
-
-class ScTableSheetsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess,
-                                                public ::apitest::XSpreadsheets,
-                                                public ::apitest::XSpreadsheets2,
-                                                public apitest::XNameContainer
+class ScTableSheetsObj : public CalcUnoApiTest,
+                         public ::apitest::XEnumerationAccess,
+                         public ::apitest::XNameAccess,
+                         public ::apitest::XNameContainer,
+                         public ::apitest::XSpreadsheets,
+                         public ::apitest::XSpreadsheets2
 {
 public:
     ScTableSheetsObj();
@@ -35,6 +37,11 @@ public:
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
+
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
 
     // XSpreadsheets
     CPPUNIT_TEST(testInsertNewByName);
@@ -69,9 +76,10 @@ protected:
     uno::Reference< lang::XComponent > mxComponent;
 };
 
-ScTableSheetsObj::ScTableSheetsObj():
-            CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-            apitest::XNameContainer("Sheet2")
+ScTableSheetsObj::ScTableSheetsObj()
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , ::apitest::XNameAccess("Sheet1")
+    , ::apitest::XNameContainer("Sheet2")
 {
 }
 
