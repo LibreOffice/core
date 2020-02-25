@@ -3571,9 +3571,11 @@ public:
 
     virtual void swap(int pos1, int pos2) override
     {
+        int min = std::min(pos1, pos2);
+        int max = std::max(pos1, pos2);
         SvTreeList* pModel = m_xTreeView->GetModel();
-        SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, pos1);
-        SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, pos2);
+        SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, min);
+        SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, max);
         pModel->Move(pEntry1, pEntry2);
     }
 
