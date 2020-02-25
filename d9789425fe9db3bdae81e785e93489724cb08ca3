@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd65d01e_18f23963",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-25T07:26:02Z",
+      "side": 1,
+      "message": "can this even hapen? this is list of references, so that would mean someone added an empty ref to the list? perhaps the add function should rather be protcted?",
+      "revId": "d9789425fe9db3bdae81e785e93489724cb08ca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
