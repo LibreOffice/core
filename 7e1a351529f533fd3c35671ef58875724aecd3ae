@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a269c6d9_c76021ce",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "Are all these added headers needed?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 42
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfd73d25_0c119b17",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "What is this???",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a1f18a_844d5635",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "I don\u0027t see a need in additional function here. Everything could be nicely fit into QrCodeGenDialog::run.",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 1
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d9156a_6d73a68e",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "Use\n\n    while (true)\n\nand break below on success",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d38c2805_696baf62",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "Use this (note the break upon success):\n\n    try\n    {\n        Apply();\n        break;\n    }\n    catch(qrcodegen::data_too_long)\n    {\n        std::unique_ptr\u003cweld::MessageDialog\u003e xBox(Application::CreateMessageDialog(\n            pParent, VclMessageType::Warning, VclButtonsType::Ok,\n            \"Text added is too long to process. Please enter shorter text.\"));\n        xBox-\u003erun();\n    }",
+      "range": {
+        "startLine": 135,
+        "startChar": 12,
+        "endLine": 135,
+        "endChar": 41
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "466aea75_f7e03603",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T10:02:12Z",
+      "side": 1,
+      "message": "You didn\u0027t address my comment that you should not use hacks to get c-style string from std::string",
+      "range": {
+        "startLine": 305,
+        "startChar": 17,
+        "endLine": 305,
+        "endChar": 24
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
