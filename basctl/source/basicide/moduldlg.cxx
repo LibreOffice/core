@@ -577,6 +577,7 @@ ObjectPage::~ObjectPage()
 void ObjectPage::ActivatePage()
 {
     m_xBasicBox->UpdateEntries();
+    CheckButtons();
 }
 
 void ObjectPage::CheckButtons()
