@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08d79106_036691ba",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T11:55:40Z",
+      "side": 1,
+      "message": "Still: what is this??\nWhy did you remove initializing the dialog with proper parent, and instead declared some never-initialized global pointer variable, which gets used in the code?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "8a6e3ebc70b65dee7f1b26b59c01fb4acce9034f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4025d7fd_df49747e",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T11:55:40Z",
+      "side": 1,
+      "message": "No need to let this declaration, since it\u0027s only used inside the loop.",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 15
+      },
+      "revId": "8a6e3ebc70b65dee7f1b26b59c01fb4acce9034f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17696738_b96ff501",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T11:55:40Z",
+      "side": 1,
+      "message": "Just declare it here, to make it as before:\n\n    short nRet \u003d ...",
+      "range": {
+        "startLine": 108,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 12
+      },
+      "revId": "8a6e3ebc70b65dee7f1b26b59c01fb4acce9034f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0883e51d_1e76d41d",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-25T11:55:40Z",
+      "side": 1,
+      "message": "Which are the other expected ret codes, which should not break the loop? Possibly the condition should be changed to simply\n\n    else\n        break;",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "8a6e3ebc70b65dee7f1b26b59c01fb4acce9034f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
