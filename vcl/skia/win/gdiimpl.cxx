@@ -297,7 +297,7 @@ std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
-    return sk_app::window_context_factory::MakeVulkanForWin(0, displayParams);
+    return sk_app::window_context_factory::MakeVulkanForWin(nullptr, displayParams);
 }
 
 struct SetFunction
