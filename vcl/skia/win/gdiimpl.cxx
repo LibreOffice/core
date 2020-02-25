@@ -291,6 +291,8 @@ SkiaControlCacheType& SkiaControlsCache::get()
     return data->m_pSkiaControlsCache->cache;
 }
 
+namespace
+{
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
 {
     SkiaZone zone;
@@ -298,8 +300,6 @@ std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
     return sk_app::window_context_factory::MakeVulkanForWin(0, displayParams);
 }
 
-namespace
-{
 struct SetFunction
 {
     SetFunction() { SkiaHelper::setCreateVulkanWindowContext(createVulkanWindowContext); }
