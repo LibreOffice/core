@@ -34,6 +34,24 @@
       "revId": "6b435fde5e3f43c57a3366646ad56e1556383495",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e95023ea_69bf50d7",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-02-25T16:33:44Z",
+      "side": 1,
+      "message": "You can\u0027t rely on that because an arbitrary string length may be passed. However, reserving some stack automatic buffer (let\u0027s say 256 bytes) and only if the to be allocated length surpasses that using a heap buffer could be a solution.",
+      "parentUuid": "6360f116_23442916",
+      "revId": "6b435fde5e3f43c57a3366646ad56e1556383495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
