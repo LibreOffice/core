@@ -199,10 +199,16 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertSeparator (1);
         InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
     }
-    InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::NONE, 3);
-    InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
-    InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
-    InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
+
+    // sigma and euqal buttons
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::NONE, 3);
+        InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
+        InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
+        InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
+    }
+
     if (!comphelper::LibreOfficeKit::isActive())
     {
         InsertSeparator (7);
@@ -224,23 +230,27 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
     }
 
-    SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
-    SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
+    // sigma and euqal buttons
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        SetItemText (SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
+        SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
 
-    SetItemText (SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
-    SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
+        SetItemText (SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
+        SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
 
-    SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
-    SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
+        SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
+        SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
 
-    SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
-    SetHelpId   ( SID_INPUT_OK, HID_INSWIN_OK );
+        SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
+        SetHelpId   ( SID_INPUT_OK, HID_INSWIN_OK );
 
-    EnableItem( SID_INPUT_CANCEL, false );
-    EnableItem( SID_INPUT_OK, false );
+        EnableItem( SID_INPUT_CANCEL, false );
+        EnableItem( SID_INPUT_OK, false );
 
-    HideItem( SID_INPUT_CANCEL );
-    HideItem( SID_INPUT_OK );
+        HideItem( SID_INPUT_CANCEL );
+        HideItem( SID_INPUT_OK );
+    }
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
