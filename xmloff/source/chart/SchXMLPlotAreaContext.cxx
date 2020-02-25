@@ -722,6 +722,14 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
                     xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(::oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
                 }
             }
+            else if( IsXMLToken(aLocalName, XML_CUSTOM_LABEL_POS_X ) )
+            {
+                mDataPoint.mCustomLabelPos[0] = xAttrList->getValueByIndex(i).toDouble();
+            }
+            else if( IsXMLToken(aLocalName, XML_CUSTOM_LABEL_POS_Y) )
+            {
+                mDataPoint.mCustomLabelPos[1] = xAttrList->getValueByIndex(i).toDouble();
+            }
         }
     }
 

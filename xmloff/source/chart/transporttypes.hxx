@@ -172,6 +172,7 @@ struct DataRowPointStyle
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
     ::std::vector<OUString> mCustomLabels;
+    double mCustomLabelPos[2] = { 0.0, 0.0 };
     OUString msSeriesStyleNameForDonuts;
 
     sal_Int32 mnAttachedAxis;
