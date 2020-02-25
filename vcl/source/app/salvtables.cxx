@@ -2922,7 +2922,7 @@ void SalInstanceComboBoxWithoutEdit::insert(int pos, const OUString& rStr, const
         nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
     if (pId)
     {
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+        m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
         m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
     }
 }
@@ -3023,7 +3023,7 @@ void SalInstanceComboBoxWithEdit::insert(int pos, const OUString& rStr, const OU
         nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
     if (pId)
     {
-        m_aUserData.emplace_back(o3tl::make_unique<OUString>(*pId));
+        m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
         m_xComboBox->SetEntryData(nInsertedAt, m_aUserData.back().get());
     }
 }

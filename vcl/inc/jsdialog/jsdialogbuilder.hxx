@@ -7,6 +7,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
+#include <vcl/combobox.hxx>
 
 class JSDialogSender
 {
@@ -31,6 +32,8 @@ public:
                                                     bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
                                                     bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
+                                                           bool bTakeOwnership = false) override;
 };
 
 class VCL_DLLPUBLIC JSLabel : public SalInstanceLabel, public JSDialogSender
@@ -47,6 +50,27 @@ public:
     JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_text(const OUString& rText) override;
+};
+
+class VCL_DLLPUBLIC JSListBox : public SalInstanceComboBoxWithoutEdit, public JSDialogSender
+{
+public:
+    JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
+              bool bTakeOwnership);
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
+    virtual void remove(int pos) override;
+};
+
+class VCL_DLLPUBLIC JSComboBox : public SalInstanceComboBoxWithEdit, public JSDialogSender
+{
+public:
+    JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
+               SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
+    virtual void remove(int pos) override;
+    virtual void set_entry_text(const OUString& rText) override;
 };
 
 #endif
