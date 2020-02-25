@@ -120,7 +120,7 @@ void lcl_DBGCheckStack()
         nElement = rItem;
     }
     (void)nElement;
-}
+};
 
 #endif
 
@@ -263,6 +263,21 @@ bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextN
     }
     return bRet;
 }
+
+bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, SwFormatField& rField)
+{
+    // 1. Check if the whole paragraph is hidden
+    // 2. Move to the field
+    // 3. Check for hidden text attribute
+    if(rNd.IsHidden())
+        return false;
+    if(!rShell.GotoFormatField(rField) || rShell.SelectHiddenRange())
+    {
+        rShell.SwCursorShell::ClearMark();
+        return false;
+    }
+    return true;
+};
 
 } // end namespace
 
@@ -1557,15 +1572,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 const SwTextNode* pTNd = pFormatField->GetTextField()->GetpTextNode();
                 OSL_ENSURE(nullptr != pTNd, "Enhanced pdf export - text node is missing");
-
-                // 1. Check if the whole paragraph is hidden
-                // 2. Move to the field
-                // 3. Check for hidden text attribute
-                if(pTNd->IsHidden() || !mrSh.GotoFormatField(*pFormatField) || mrSh.SelectHiddenRange())
-                {
-                    mrSh.SwCursorShell::ClearMark();
+                if(!lcl_TryMoveToNonHiddenField(mrSh, *pTNd, *pFormatField))
                     continue;
-                }
                 // Link Rectangle
                 const SwRect& rNoteRect = mrSh.GetCharRect();
                 const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>(mrSh.GetLayout()->Lower());
@@ -1838,91 +1846,82 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         // REFERENCES
 
-        SwFieldType* pType = mrSh.GetFieldType( SwFieldIds::GetRef, OUString() );
-        SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-        for( SwFormatField* pFirst = aIter.First(); pFirst; )
+        std::vector<SwFormatField*> vpFields;
+        mrSh.GetFieldType( SwFieldIds::GetRef, OUString() )->GatherFields(vpFields);
+        for(auto pFormatField : vpFields )
         {
-            if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
+            if( pFormatField->GetTextField() && pFormatField->IsFieldInDoc() )
             {
-                const SwTextNode* pTNd = pFirst->GetTextField()->GetpTextNode();
+                const SwTextNode* pTNd = pFormatField->GetTextField()->GetpTextNode();
                 OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
+                if(!lcl_TryMoveToNonHiddenField(mrSh, *pTNd, *pFormatField))
+                    continue;
+                // Select the field:
+                mrSh.SwCursorShell::SetMark();
+                mrSh.SwCursorShell::Right( 1, CRSR_SKIP_CHARS );
 
-                // 1. Check if the whole paragraph is hidden
-                // 2. Move to the field
-                // 3. Check for hidden text attribute
-                if ( !pTNd->IsHidden() &&
-                      mrSh.GotoFormatField( *pFirst ) &&
-                     !mrSh.SelectHiddenRange() )
+                // Link Rectangles
+                SwRects aTmp;
+                aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
+                OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
+
+                mrSh.SwCursorShell::ClearMark();
+
+                // Destination Rectangle
+                const SwGetRefField* pField = static_cast<SwGetRefField*>(pFormatField->GetField());
+                const OUString& rRefName = pField->GetSetRefName();
+                mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
+                const SwRect& rDestRect = mrSh.GetCharRect();
+
+                const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
+
+                // Destination PageNum
+                const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
+
+                if ( -1 != nDestPageNum )
                 {
-                    // Select the field:
-                    mrSh.SwCursorShell::SetMark();
-                    mrSh.SwCursorShell::Right( 1, CRSR_SKIP_CHARS );
+                    // Destination Export
+                    tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
+                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
-                    // Link Rectangles
-                    SwRects aTmp;
-                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
-                    OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
+                    // #i44368# Links in Header/Footer
+                    const SwPosition aPos( *pTNd );
+                    const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
 
-                    mrSh.SwCursorShell::ClearMark();
-
-                    // Destination Rectangle
-                    const SwGetRefField* pField =
-                        static_cast<SwGetRefField*>(pFirst->GetField());
-                    const OUString& rRefName = pField->GetSetRefName();
-                    mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
-                    const SwRect& rDestRect = mrSh.GetCharRect();
-
-                    const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
-
-                    // Destination PageNum
-                    const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
-
-                    if ( -1 != nDestPageNum )
+                    // Create links for all selected rectangles:
+                    const size_t nNumOfRects = aTmp.size();
+                    for ( size_t i = 0; i < nNumOfRects; ++i )
                     {
-                        // Destination Export
-                        tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
+                        // Link rectangle
+                        const SwRect& rLinkRect( aTmp[ i ] );
 
-                        // #i44368# Links in Header/Footer
-                        const SwPosition aPos( *pTNd );
-                        const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                        // Link PageNums
+                        std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
 
-                        // Create links for all selected rectangles:
-                        const size_t nNumOfRects = aTmp.size();
-                        for ( size_t i = 0; i < nNumOfRects; ++i )
+                        for (sal_Int32 aLinkPageNum : aLinkPageNums)
                         {
-                            // Link rectangle
-                            const SwRect& rLinkRect( aTmp[ i ] );
+                            // Link Export
+                            aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
+                            const sal_Int32 nLinkId =
+                                pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
-                            // Link PageNums
-                            std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
+                            // Store link info for tagged pdf output:
+                            const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
+                            aLinkIdMap.push_back( aLinkEntry );
 
-                            for (sal_Int32 aLinkPageNum : aLinkPageNums)
+                            // Connect Link and Destination:
+                            pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+
+                            // #i44368# Links in Header/Footer
+                            if ( bHeaderFooter )
                             {
-                                // Link Export
-                                aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
-                                const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
-
-                                // Store link info for tagged pdf output:
-                                const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                                aLinkIdMap.push_back( aLinkEntry );
-
-                                // Connect Link and Destination:
-                                pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
-
-                                // #i44368# Links in Header/Footer
-                                if ( bHeaderFooter )
-                                {
-                                    const OUString aDummy;
-                                    MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aDummy, true );
-                                }
+                                const OUString aDummy;
+                                MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aDummy, true );
                             }
                         }
                     }
                 }
             }
-            pFirst = aIter.Next();
             mrSh.SwCursorShell::ClearMark();
         }
 
