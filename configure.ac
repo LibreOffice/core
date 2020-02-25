@@ -6563,7 +6563,7 @@ CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     CXXFLAGS_CXX11='-std:c++17 -Zc:__cplusplus'
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    my_flags='-std=c++2a -std=c++17 -std=c++1z'
+    my_flags='-std=c++20 -std=c++2a -std=c++17 -std=c++1z'
     for flag in $my_flags; do
         if test "$COM" = MSC; then
             flag="-Xclang $flag"
