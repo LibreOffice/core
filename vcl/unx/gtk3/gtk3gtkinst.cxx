@@ -1819,6 +1819,7 @@ protected:
 
     DECL_LINK(async_signal_focus_in, void*, void);
     DECL_LINK(async_signal_focus_out, void*, void);
+    DECL_LINK(async_drag_cancel, void*, void);
 
     void launch_signal_focus_in()
     {
@@ -1869,6 +1870,15 @@ protected:
         SolarMutexGuard aGuard;
         pThis->launch_signal_focus_out();
         return false;
+    }
+
+    void launch_drag_cancel(GdkDragContext* context)
+    {
+        // post our drag cancel to happen at the next available event cycle
+        if (m_pDragCancelEvent)
+            return;
+        g_object_ref(context);
+        m_pDragCancelEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_drag_cancel), context);
     }
 
     void signal_focus_out()
@@ -1958,6 +1968,7 @@ private:
     int m_nPressStartY;
     ImplSVEvent* m_pFocusInEvent;
     ImplSVEvent* m_pFocusOutEvent;
+    ImplSVEvent* m_pDragCancelEvent;
     GtkCssProvider* m_pBgCssProvider;
     GdkDragAction m_eDragAction;
     gulong m_nFocusInSignalId;
@@ -2238,7 +2249,7 @@ private:
     {
         if (do_signal_drag_begin())
         {
-            gtk_drag_cancel(context);
+            launch_drag_cancel(context);
             return;
         }
         if (!m_xDragSource)
@@ -2318,6 +2329,7 @@ public:
         , m_nPressStartY(-1)
         , m_pFocusInEvent(nullptr)
         , m_pFocusOutEvent(nullptr)
+        , m_pDragCancelEvent(nullptr)
         , m_pBgCssProvider(nullptr)
         , m_eDragAction(GdkDragAction(0))
         , m_nFocusInSignalId(0)
@@ -2895,6 +2907,8 @@ public:
             Application::RemoveUserEvent(m_pFocusInEvent);
         if (m_pFocusOutEvent)
             Application::RemoveUserEvent(m_pFocusOutEvent);
+        if (m_pDragCancelEvent)
+            Application::RemoveUserEvent(m_pDragCancelEvent);
         if (m_nDragMotionSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragMotionSignalId);
         if (m_nDragDropSignalId)
@@ -3010,6 +3024,14 @@ IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_out, void*, void)
 {
     m_pFocusOutEvent = nullptr;
     signal_focus_out();
+}
+
+IMPL_LINK(GtkInstanceWidget, async_drag_cancel, void*, arg, void)
+{
+    m_pDragCancelEvent = nullptr;
+    GdkDragContext* context = static_cast<GdkDragContext*>(arg);
+    gtk_drag_cancel(context);
+    g_object_unref(context);
 }
 
 namespace
