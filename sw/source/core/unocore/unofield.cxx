@@ -826,27 +826,12 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS)
         {
             //fill all text fields into a sequence
-            std::vector<SwFormatField*>  aFieldArr;
-            SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-            SwFormatField* pField = aIter.First();
-            while(pField)
-            {
-                if(pField->IsFieldInDoc())
-                    aFieldArr.push_back(pField);
-                pField = aIter.Next();
-            }
-
-            uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFieldArr.size());
-            uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
-            for(size_t i = 0; i < aFieldArr.size(); ++i)
-            {
-                pField = aFieldArr[i];
-                uno::Reference<text::XTextField> const xField =
-                    SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pField);
-
-                pRetSeq[i].set(xField, uno::UNO_QUERY);
-            }
-            aRet <<= aRetSeq;
+            std::vector<SwFormatField*> vpFields;
+            pType->GatherFields(vpFields);
+            uno::Sequence<uno::Reference <text::XDependentTextField> > aSeq(vpFields.size());
+            std::transform(vpFields.begin(), vpFields.end(), aSeq.begin(),
+                    [this](SwFormatField* pF) { return uno::Reference<text::XDependentTextField>(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF), uno::UNO_QUERY); });
+            aRet <<= aSeq;
         }
         else
         {
