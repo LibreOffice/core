@@ -2861,7 +2861,7 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
                 ( pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
         // loaded, because this unlinks the data
-        OSL_ASSERT( bCreate );
+        SAL_WARN_IF(!bCreate, "sc.ui", "temporary document loaded");
 
         if ( !xRet.is() && bCreate )
         {
