@@ -1888,28 +1888,28 @@ void SwContentTree::Display( bool bActive )
             Expand(pParent);
 
             // reselect the entry
-            SvTreeListEntry* pChild = pParent;
-            SvTreeListEntry* pTemp = nullptr;
-            sal_uLong nPos = 1;
-            while(nullptr != (pChild = Next(pChild)))
+            if (nEntryRelPos)
             {
-                // The old text will be slightly favored
-                if(sEntryName == GetEntryText(pChild) ||
-                        nPos == nEntryRelPos )
+                SvTreeListEntry* pChild = pParent;
+                sal_uLong nPos = 1;
+                while(nullptr != (pChild = Next(pChild)))
                 {
-                    pSelEntry = pChild;
-                    break;
+                    // The old text will be slightly favored
+                    if(sEntryName == GetEntryText(pChild) ||
+                        nPos == nEntryRelPos)
+                    {
+                        pSelEntry = pChild;
+                        break;
+                    }
+                    nPos++;
                 }
-                pTemp = pChild;
-                nPos++;
+                if(pSelEntry)
+                {
+                    SetCurEntry(pSelEntry); // unselect all entries, make pSelEntry visible, and select
+                }
             }
-            if(!pSelEntry)
-                pSelEntry = pTemp;
-            if(pSelEntry)
-            {
-                MakeVisible(pSelEntry);
-                Select(pSelEntry);
-            }
+            else
+                SetCurEntry(pParent);
         }
     }
     SetUpdateMode( true );
@@ -2754,10 +2754,9 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
     SwView* pView = GetParentWindow()->GetCreateView();
-
-    if(pView && pView->GetWrtShellPtr() &&
-            ((pView->GetWrtShellPtr()->GetWin() == GetFocusedWindow()) || m_bViewHasChanged) &&
-            !bIsInDrag && !m_bIsInternalDrag && !pView->GetWrtShellPtr()->ActionPend())
+    if(pView && pView->GetWrtShellPtr() && pView->GetWrtShellPtr()->GetWin() &&
+        (pView->GetWrtShellPtr()->GetWin()->HasFocus() || m_bViewHasChanged) &&
+        !bIsInDrag && !m_bIsInternalDrag && !pView->GetWrtShellPtr()->ActionPend())
     {
         m_bViewHasChanged = false;
         m_bIsIdleClear = false;
@@ -2797,11 +2796,11 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
                 if (lcl_IsContent(pEntry) &&
                         static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
                 {
-                    // only select if not already selected
                     // might have been scrolled out of view by the user so leave it that way
                     if (static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos() == nActPos)
                     {
-                        if (pEntry != pFirstSelected)
+                        // only select if not already selected or tree has multiple entries selected
+                        if (pEntry != pFirstSelected || GetSelectionCount() > 1)
                         {
                             if (m_nOutlineTracking == 2) // focused outline tracking
                             {
@@ -2814,9 +2813,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
                                         break;
                                 }
                             }
-                            SelectAll(false);
-                            Select(pEntry);
-                            MakeVisible(pEntry);
+                            SetCurEntry(pEntry); // unselect all entries, make pEntry visible, and select
                         }
                         break;
                     }
