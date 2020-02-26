@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8300722_652ce17f",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-26T07:45:53Z",
+      "side": 1,
+      "message": "I prefer template specialization for the hash, so you don\u0027t need to put the function as parameter into lru_map. (See https://en.cppreference.com/w/cpp/utility/hash)",
+      "revId": "48e61b01ad0af18425ea3b8575366d41a7151c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d22ecd8_442b6d40",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-26T07:45:53Z",
+      "side": 1,
+      "message": "operator\u003d\u003d in ScaleCacheKey would be better",
+      "revId": "48e61b01ad0af18425ea3b8575366d41a7151c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
