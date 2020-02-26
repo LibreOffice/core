@@ -28,6 +28,9 @@
 #include <notxtfrm.hxx>
 #include <ndole.hxx>
 #include <swcli.hxx>
+#include <docsh.hxx>
+#include <IDocumentLinksAdministration.hxx>
+#include <sfx2/linkmgr.hxx>
 
 using namespace com::sun::star;
 
@@ -102,8 +105,21 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
             IsCheckForOLEInCaption() )
             SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
 
+        // enable update of the link preview
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = GetDoc()->GetDocShell()->getEmbeddedObjectContainer();
+        const bool aUserAllowsLinkUpdate = rEmbeddedObjectContainer.getUserAllowsLinkUpdate();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
         // leave UIActive state
         pIPClient->DeactivateObject();
+
+        // if we have more than one link let's update them too
+        sfx2::LinkManager& rLinkManager = GetDoc()->getIDocumentLinksAdministration().GetLinkManager();
+        if (rLinkManager.GetLinks().size() > 1)
+            rLinkManager.UpdateAllLinks(false, false, nullptr);
+
+        // return back original value of the "update of the link preview" flag
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(aUserAllowsLinkUpdate);
     }
     return bRet;
 }
