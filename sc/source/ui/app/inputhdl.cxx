@@ -1670,43 +1670,55 @@ void ScInputHandler::PasteFunctionData()
     HideTip();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if (comphelper::LibreOfficeKit::isActive() && pTopView && pInputWin)
+        pInputWin->TextGrabFocus();
     if (pActiveView)
         pActiveView->ShowCursor();
 }
 
 void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 {
-    if (!(pActiveViewSh && (pTopView || pTableView)))
-        return;
+    // in case we have no top view try to create it
+    if (!pTopView && pInputWin)
+    {
+        ScInputMode eCurMode = eMode;
+        SetMode(SC_INPUT_TOP);
+        if (!pTopView)
+            SetMode(eCurMode);
+    }
 
-    bool bEdit = false;
-    OUString aFormula;
     EditView* pEditView = pTopView ? pTopView : pTableView;
-    const EditEngine* pEditEngine = pEditView->GetEditEngine();
-    if (pEditEngine)
+
+    if (pActiveViewSh && pEditView)
     {
-        aFormula = pEditEngine->GetText(0);
-        bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
-    }
-
-    if ( !bEdit )
-    {
-        OUString aNewFormula('=');
-        if ( aFormula.startsWith("=") )
-            aNewFormula = aFormula;
-
-        InputReplaceSelection( aNewFormula );
-    }
-
-    if (pFormulaData)
-    {
-        OUString aNew;
-        ScTypedCaseStrSet::const_iterator aPos = findText(*pFormulaData, pFormulaData->begin(), rFunctionName, aNew, /* backward = */false);
-
-        if (aPos != pFormulaData->end())
+        bool bEdit = false;
+        OUString aFormula;
+        const EditEngine* pEditEngine = pEditView->GetEditEngine();
+        if (pEditEngine)
         {
-            miAutoPosFormula = aPos;
-            PasteFunctionData();
+            aFormula = pEditEngine->GetText(0);
+            bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
+        }
+
+        if ( !bEdit )
+        {
+            OUString aNewFormula('=');
+            if ( aFormula.startsWith("=") )
+                aNewFormula = aFormula;
+
+            InputReplaceSelection( aNewFormula );
+        }
+
+        if (pFormulaData)
+        {
+            OUString aNew;
+            ScTypedCaseStrSet::const_iterator aPos = findText(*pFormulaData, pFormulaData->begin(), rFunctionName, aNew, /* backward = */false);
+
+            if (aPos != pFormulaData->end())
+            {
+                miAutoPosFormula = aPos;
+                PasteFunctionData();
+            }
         }
     }
 }
