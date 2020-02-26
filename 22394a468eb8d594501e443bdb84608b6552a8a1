@@ -46,6 +46,30 @@
       "revId": "22394a468eb8d594501e443bdb84608b6552a8a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c70319dd_2d399658",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2732,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-26T08:55:04Z",
+      "side": 0,
+      "message": "Err, I mean not optimizing a path which is less likely is OK.",
+      "parentUuid": "a13ba6ff_15bdea40",
+      "range": {
+        "startLine": 2732,
+        "startChar": 16,
+        "endLine": 2732,
+        "endChar": 41
+      },
+      "revId": "22394a468eb8d594501e443bdb84608b6552a8a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
