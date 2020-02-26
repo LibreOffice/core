@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5b602a94_8df9bac9",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-02-26T21:07:47Z",
+      "side": 1,
+      "message": "Yes I see. This will be the case if an arbitrary new color is defined. I have choosen this approach, because there have been additional colors for button status definined already (maButtonTextColor, maDefaultActionButtonTextColor, maActionButtonTextColor, maActionButtonRolloverTextColor), but not all possible status have been covered. So, possible button status are covered completely now and macOS requirements are able to be satisfied too. If anyone wants to change button text colors for another backend, the different existing colors have to be adjusted and the new colors as well.\n\nAn alternative implementation would alter the class hierarchy because for drawing text there is no information what the text is about inside the backends. So it is not possible to distinguish wheter text to be drawn belongs to a button or to something else. A change of class hierarchy, but only a little change, is required to cover text drawing within non key windows on macOS. This is not covered by this change to prevent too large changes as possible.\n\nTo sum up: Pro for the choosen implementation is getting the colors for all possible button states completely defined now while allowing the backends to handle them differently.",
+      "parentUuid": "442d38da_1490929c",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c3bb4f5_0ecc9bad",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
