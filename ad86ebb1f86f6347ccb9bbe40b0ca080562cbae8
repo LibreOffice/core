@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84e4902b_8cb94132",
+        "filename": "offapi/com/sun/star/style/ParagraphProperties.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-26T16:45:14Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/89564\u003e \"Fix @since tag\"",
+      "range": {
+        "startLine": 413,
+        "startChar": 12,
+        "endLine": 413,
+        "endChar": 34
+      },
+      "revId": "ad86ebb1f86f6347ccb9bbe40b0ca080562cbae8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
