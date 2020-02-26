@@ -56,13 +56,6 @@
                         generic-name="Page List Control" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
 
-    <glade-widget-class title="Calc Row SpinButton" name="sclo-RowEdit"
-                        generic-name="Calc Row SpinButton" parent="GtkSpinButton"
-                        icon-name="widget-gtk-spinbutton"/>
-    <glade-widget-class title="Calc Column SpinButton" name="sclo-ColumnEdit"
-                        generic-name="Calc Column SpinButton" parent="GtkSpinButton"
-                        icon-name="widget-gtk-spinbutton"/>
-
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>

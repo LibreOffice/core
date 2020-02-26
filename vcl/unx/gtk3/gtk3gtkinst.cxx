@@ -1952,7 +1952,10 @@ protected:
     void ensure_drag_begin_end()
     {
         if (!m_nDragBeginSignalId)
-            m_nDragBeginSignalId = g_signal_connect(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
+        {
+            // using "after" due to https://gitlab.gnome.org/GNOME/pygobject/issues/251
+            m_nDragBeginSignalId = g_signal_connect_after(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
+        }
         if (!m_nDragEndSignalId)
             m_nDragEndSignalId = g_signal_connect(m_pWidget, "drag-end", G_CALLBACK(signalDragEnd), this);
     }
@@ -2129,14 +2132,22 @@ private:
     bool signal_motion(const GdkEventMotion* pEvent)
     {
         GtkTargetList* pDragData = (m_eDragAction != 0 && m_nPressedButton != -1 && m_xDragSource.is()) ? gtk_drag_source_get_target_list(m_pWidget) : nullptr;
-        if (pDragData && gtk_drag_check_threshold(m_pWidget, m_nPressStartX, m_nPressStartY, pEvent->x, pEvent->y) && !do_signal_drag_begin())
+        bool bUnsetDragIcon(false);
+        if (pDragData && gtk_drag_check_threshold(m_pWidget, m_nPressStartX, m_nPressStartY, pEvent->x, pEvent->y) && !do_signal_drag_begin(bUnsetDragIcon))
         {
-            gtk_drag_begin_with_coordinates(m_pWidget,
-                                            pDragData,
-                                            m_eDragAction,
-                                            m_nPressedButton,
-                                            const_cast<GdkEvent*>(reinterpret_cast<const GdkEvent*>(pEvent)),
-                                            m_nPressStartX, m_nPressStartY);
+            GdkDragContext* pContext = gtk_drag_begin_with_coordinates(m_pWidget,
+                                                                       pDragData,
+                                                                       m_eDragAction,
+                                                                       m_nPressedButton,
+                                                                       const_cast<GdkEvent*>(reinterpret_cast<const GdkEvent*>(pEvent)),
+                                                                       m_nPressStartX, m_nPressStartY);
+
+            if (pContext && bUnsetDragIcon)
+            {
+                cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
+                gtk_drag_set_icon_surface(pContext, surface);
+            }
+
             m_nPressedButton = -1;
             return false;
         }
@@ -2240,17 +2251,24 @@ private:
         }
     }
 
-    virtual bool do_signal_drag_begin()
+    virtual bool do_signal_drag_begin(bool& rUnsetDragIcon)
     {
+        rUnsetDragIcon = false;
         return false;
     }
 
     void signal_drag_begin(GdkDragContext* context)
     {
-        if (do_signal_drag_begin())
+        bool bUnsetDragIcon(false);
+        if (do_signal_drag_begin(bUnsetDragIcon))
         {
             launch_drag_cancel(context);
             return;
+        }
+        if (bUnsetDragIcon)
+        {
+            cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 0, 0);
+            gtk_drag_set_icon_surface(context, surface);
         }
         if (!m_xDragSource)
             return;
@@ -3314,7 +3332,7 @@ public:
 
     void insert_item(int pos, const OUString& rId, const OUString& rStr,
                      const OUString* pIconName, const VirtualDevice* pImageSurface,
-                     bool bCheck)
+                     TriState eCheckRadioFalse)
     {
         GtkWidget* pImage = nullptr;
         if (pIconName && !pIconName->isEmpty())
@@ -3334,7 +3352,7 @@ public:
         {
             GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
             GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
-            pItem = bCheck ? gtk_check_menu_item_new() : gtk_menu_item_new();
+            pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
             gtk_container_add(GTK_CONTAINER(pBox), pImage);
             gtk_container_add(GTK_CONTAINER(pBox), pLabel);
             gtk_container_add(GTK_CONTAINER(pItem), pBox);
@@ -3342,9 +3360,13 @@ public:
         }
         else
         {
-            pItem = bCheck ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
-                           : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
+            pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
+                                                       : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
         }
+
+        if (eCheckRadioFalse == TRISTATE_FALSE)
+            gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(pItem), true);
+
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
@@ -6982,9 +7004,9 @@ public:
     }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
+                        const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
     {
-        MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, bCheck);
+        MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -7256,6 +7278,11 @@ public:
         set_item_label(rIdent, rLabel);
     }
 
+    virtual OUString get_label(const OString& rIdent) const override
+    {
+        return get_item_label(rIdent);
+    }
+
     virtual void insert_separator(int pos, const OUString& rId) override
     {
         MenuHelper::insert_separator(pos, rId);
@@ -7269,7 +7296,7 @@ public:
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        bool bCheck) override
+                        TriState eCheckRadioFalse) override
     {
         GtkWidget* pImage = nullptr;
         if (pIconName)
@@ -7290,7 +7317,7 @@ public:
         {
             GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
             GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
-            pItem = bCheck ? gtk_check_menu_item_new() : gtk_menu_item_new();
+            pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
             gtk_container_add(GTK_CONTAINER(pBox), pImage);
             gtk_container_add(GTK_CONTAINER(pBox), pLabel);
             gtk_container_add(GTK_CONTAINER(pItem), pBox);
@@ -7298,9 +7325,13 @@ public:
         }
         else
         {
-            pItem = bCheck ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
-                           : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
+            pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr())
+                                                       : gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
         }
+
+        if (eCheckRadioFalse == TRISTATE_FALSE)
+            gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(pItem), true);
+
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
         gtk_widget_show(pItem);
@@ -10549,9 +10580,9 @@ public:
         return g_DragSource;
     }
 
-    virtual bool do_signal_drag_begin() override
+    virtual bool do_signal_drag_begin(bool& rUnsetDragIcon) override
     {
-        if (m_aDragBeginHdl.Call(*this))
+        if (m_aDragBeginHdl.Call(rUnsetDragIcon))
             return true;
         g_DragSource = this;
         return false;
@@ -11857,8 +11888,9 @@ public:
         do_enable_drag_source(rHelper, eDNDConstants);
     }
 
-    virtual bool do_signal_drag_begin() override
+    virtual bool do_signal_drag_begin(bool& rUnsetDragIcon) override
     {
+        rUnsetDragIcon = false;
         if (m_aDragBeginHdl.Call(*this))
             return true;
         return false;

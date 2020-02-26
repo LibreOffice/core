@@ -643,10 +643,19 @@ Image createImage(const VirtualDevice& rDevice)
 
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId,
                           const OUString& rStr, const OUString* pIconName,
-                          const VirtualDevice* pImageSurface, bool bCheck)
+                          const VirtualDevice* pImageSurface, TriState eCheckRadioFalse)
 {
     const sal_uInt16 nNewid = nLastId + 1;
-    pMenu->InsertItem(nNewid, rStr, bCheck ? MenuItemBits::CHECKABLE : MenuItemBits::NONE,
+
+    MenuItemBits nBits;
+    if (eCheckRadioFalse == TRISTATE_TRUE)
+        nBits = MenuItemBits::CHECKABLE;
+    else if (eCheckRadioFalse == TRISTATE_FALSE)
+        nBits = MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK;
+    else
+        nBits = MenuItemBits::NONE;
+
+    pMenu->InsertItem(nNewid, rStr, nBits,
                       OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
     if (pIconName)
     {
@@ -705,6 +714,10 @@ public:
     {
         m_xMenu->SetItemText(m_xMenu->GetItemId(rIdent), rLabel);
     }
+    virtual OUString get_label(const OString& rIdent) const override
+    {
+        return m_xMenu->GetItemText(m_xMenu->GetItemId(rIdent));
+    }
     virtual void set_visible(const OString& rIdent, bool bShow) override
     {
         m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
@@ -712,10 +725,10 @@ public:
     virtual void clear() override { m_xMenu->Clear(); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        bool bCheck) override
+                        TriState eCheckRadioFalse) override
     {
         m_nLastId
-            = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, bCheck);
+            = insert_to_menu(m_nLastId, m_xMenu, pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
     }
     virtual void insert_separator(int pos, const OUString& rId) override
     {
@@ -2508,10 +2521,10 @@ public:
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
-                             bool bCheck) override
+                             TriState eCheckRadioFalse) override
     {
         m_nLastId = insert_to_menu(m_nLastId, m_xMenuButton->GetPopupMenu(), pos, rId, rStr,
-                                   pIconName, pImageSurface, bCheck);
+                                   pIconName, pImageSurface, eCheckRadioFalse);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -3744,6 +3757,10 @@ public:
     {
         if (col == -1)
         {
+            auto nFlags = pEntry->GetFlags() & ~SvTLEntryFlags::SEMITRANSPARENT;
+            if (!bSensitive)
+                nFlags = nFlags | SvTLEntryFlags::SEMITRANSPARENT;
+            pEntry->SetFlags(nFlags);
             const sal_uInt16 nCount = pEntry->ItemCount();
             for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
             {
@@ -4573,7 +4590,8 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ModelChangedHdl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, bool)
 {
-    if (m_aDragBeginHdl.Call(*this))
+    bool bUnsetDragIcon(false); // ignored for vcl
+    if (m_aDragBeginHdl.Call(bUnsetDragIcon))
         return true;
     g_DragSource = this;
     return false;

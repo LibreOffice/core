@@ -129,7 +129,7 @@ private:
     DECL_LINK(AsyncSelectHdl, void*, void);
     DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
     DECL_LINK(AsyncRowActivatedHdl, void*, void);
-    DECL_LINK(DragBeginHdl, weld::TreeView&, bool);
+    DECL_LINK(DragBeginHdl, bool&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     /** Determine whether the specified page belongs to the current show
