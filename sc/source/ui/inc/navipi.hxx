@@ -21,15 +21,11 @@
 #define INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
 
 #include <vector>
-#include <vcl/toolbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "content.hxx"
-#include <vcl/vclmedit.hxx>
 
 class SfxPoolItem;
 class ScTabViewShell;
@@ -48,6 +44,7 @@ enum NavListMode { NAV_LMODE_NONE       = 0x4000,
                    NAV_LMODE_AREAS      = 0x2000,
                    NAV_LMODE_SCENARIOS  = 0x400 };
 
+#if 0
 class ScScenarioListBox : public ListBox
 {
 public:
@@ -84,7 +81,9 @@ private:
     ScScenarioWindow&   mrParent;
     ScenarioList        maEntries;
 };
+#endif
 
+#if 0
 class ScScenarioWindow : public vcl::Window
 {
 public:
@@ -105,7 +104,9 @@ private:
     VclPtr<ScScenarioListBox>   aLbScenario;
     VclPtr<VclMultiLineEdit>    aEdComment;
 };
+#endif
 
+#if 0
 class ColumnEdit : public SpinField
 {
 public:
@@ -161,6 +162,7 @@ private:
 
     void    ExecuteRow();
 };
+#endif
 
 class ScNavigatorDlg : public PanelLayout, public SfxListener
 {
@@ -175,14 +177,13 @@ private:
 
     SfxBindings&        rBindings;      // must be first member
 
-    VclPtr<ColumnEdit> aEdCol;
-    VclPtr<RowEdit> aEdRow;
-    VclPtr<ToolBox> aTbxCmd;
-    VclPtr<vcl::Window> aContentBox;
-    VclPtr<ScContentTree> aLbEntries;
-    VclPtr<vcl::Window> aScenarioBox;
-    VclPtr<ScScenarioWindow> aWndScenarios;
-    VclPtr<ListBox> aLbDocuments;
+    std::unique_ptr<weld::SpinButton> m_xEdCol;
+    std::unique_ptr<weld::SpinButton> m_xEdRow;
+    std::unique_ptr<weld::Toolbar> m_xTbxCmd1;
+    std::unique_ptr<weld::Toolbar> m_xTbxCmd2;
+    std::unique_ptr<ScContentTree> m_xLbEntries;
+//TODO    VclPtr<ScScenarioWindow> aWndScenarios;
+    std::unique_ptr<weld::ComboBox> m_xLbDocuments;
 
     Size            aExpandedSize;
     Idle            aContentIdle;
@@ -194,13 +195,6 @@ private:
     OUString        aStrHidden;
     OUString const  aStrActiveWin;
 
-    sal_uInt16      nZoomId;
-    sal_uInt16      nChangeRootId;
-    sal_uInt16      nDragModeId;
-    sal_uInt16      nScenarioId;
-    sal_uInt16      nDownId;
-    sal_uInt16      nUpId;
-    sal_uInt16      nDataId;
     std::unique_ptr<ScArea> pMarkArea;
     ScViewData*     pViewData;
 
@@ -213,9 +207,9 @@ private:
     std::array<std::unique_ptr<ScNavigatorControllerItem>,CTRL_ITEMS> mvBoundItems;
 
     DECL_LINK(TimeHdl, Timer*, void);
-    DECL_LINK(DocumentSelectHdl, ListBox&, void);
-    DECL_LINK(ToolBoxSelectHdl, ToolBox*, void);
-    DECL_LINK(ToolBoxDropdownClickHdl, ToolBox*, void);
+    DECL_LINK(DocumentSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(ToolBoxSelectHdl, const OString&, void);
+//TODO    DECL_LINK(ToolBoxDropdownClickHdl, ToolBox*, void);
 
     void    UpdateButtons();
     void    SetCurrentCell( SCCOL nCol, SCROW Row );

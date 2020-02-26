@@ -23,7 +23,6 @@
 #include <sfx2/event.hxx>
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/builderfactory.hxx>
 #include <unotools/charclass.hxx>
 
 #include <viewdata.hxx>
@@ -67,6 +66,7 @@ void ScNavigatorDlg::ReleaseFocus()
     }
 }
 
+#if 0
 ColumnEdit::ColumnEdit(Window* pParent, WinBits nWinBits)
     : SpinField(pParent, nWinBits)
     , nCol(0)
@@ -78,8 +78,6 @@ ColumnEdit::~ColumnEdit()
 {
     disposeOnce();
 }
-
-VCL_BUILDER_FACTORY_ARGS(ColumnEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
 
 bool ColumnEdit::EventNotify( NotifyEvent& rNEvt )
 {
@@ -175,7 +173,7 @@ void ColumnEdit::EvalText()
 
 void ColumnEdit::ExecuteCol()
 {
-    SCROW nRow = xDlg->aEdRow->GetRow();
+    SCROW nRow = xDlg->m_xEdRow->GetRow();
 
     EvalText(); // sets nCol
 
@@ -259,8 +257,6 @@ RowEdit::~RowEdit()
     disposeOnce();
 }
 
-VCL_BUILDER_FACTORY_ARGS(RowEdit, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT)
-
 bool RowEdit::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = NumericField::EventNotify(rNEvt);
@@ -298,31 +294,32 @@ Size RowEdit::GetOptimalSize() const
 
 void RowEdit::ExecuteRow()
 {
-    SCCOL nCol = xDlg->aEdCol->GetCol();
+    SCCOL nCol = xDlg->m_xEdCol->GetCol();
     SCROW nRow = static_cast<SCROW>(GetValue());
 
     if ( (nCol > 0) && (nRow > 0) )
         xDlg->SetCurrentCell(nCol - 1, nRow - 1);
 }
 
-IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
+#endif
+
+IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, weld::ComboBox&, rListBox, void)
 {
     ScNavigatorDlg::ReleaseFocus();
 
-    OUString aDocName = rListBox.GetSelectedEntry();
-    aLbEntries->SelectDoc(aDocName);
+    OUString aDocName = rListBox.get_active_text();
+    m_xLbEntries->SelectDoc(aDocName);
 }
 
-IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OString&, rSelId, void)
 {
-    sal_uInt16 nSelId = pToolBox->GetCurItemId();
     //  Switch the mode?
-    if (nSelId == nZoomId || nSelId == nScenarioId)
+    if (rSelId == "contents" || rSelId == "scenarios")
     {
         NavListMode eOldMode = eListMode;
         NavListMode eNewMode;
 
-        if (nSelId == nScenarioId)
+        if (rSelId == "scenarios")
         {
             if (eOldMode == NAV_LMODE_SCENARIOS)
                 eNewMode = NAV_LMODE_AREAS;
@@ -341,25 +338,26 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
     }
     else
     {
-        if (nSelId == nDataId)
+        if (rSelId == "datarange")
             MarkDataArea();
-        else if (nSelId == nUpId)
+        else if (rSelId == "start")
             StartOfDataArea();
-        else if (nSelId == nDownId)
+        else if (rSelId == "end")
             EndOfDataArea();
-        else if (nSelId == nChangeRootId)
+        else if (rSelId == "toggle")
         {
-            aLbEntries->ToggleRoot();
+            m_xLbEntries->ToggleRoot();
             UpdateButtons();
         }
     }
 }
 
+#if 0
 IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
 {
     // the popup menu of the drop mode has to be called in the
     // click (button down) and not in the select (button up)
-    if (pToolBox->GetCurItemId() == nDragModeId)
+    if (pToolBox->GetCurItemId() == "dragmode")
     {
         VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/dropmenu.ui", "");
         VclPtr<PopupMenu> aPop(aBuilder.get_menu("menu"));
@@ -377,7 +375,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
                 break;
         }
 
-        sal_uInt16 nId = aPop->Execute(pToolBox, pToolBox->GetItemRect(nDragModeId), PopupMenuFlags::ExecuteDown);
+        sal_uInt16 nId = aPop->Execute(pToolBox, pToolBox->GetItemRect("dragmode"), PopupMenuFlags::ExecuteDown);
         OString sIdent = aPop->GetItemIdent(nId);
 
         if (sIdent == "hyperlink")
@@ -390,24 +388,25 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
         pToolBox->EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
     }
 }
+#endif
 
 void ScNavigatorDlg::UpdateButtons()
 {
     NavListMode eMode = eListMode;
-    aTbxCmd->CheckItem(nScenarioId, eMode == NAV_LMODE_SCENARIOS);
-    aTbxCmd->CheckItem(nZoomId, eMode != NAV_LMODE_NONE);
+    m_xTbxCmd2->set_item_active("scenarios", eMode == NAV_LMODE_SCENARIOS);
+    m_xTbxCmd1->set_item_active("contents", eMode != NAV_LMODE_NONE);
 
     // the toggle button:
     if (eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE)
     {
-        aTbxCmd->EnableItem(nChangeRootId, false);
-        aTbxCmd->CheckItem(nChangeRootId, false);
+        m_xTbxCmd2->set_item_sensitive("toggle", false);
+        m_xTbxCmd2->set_item_active("toggle", false);
     }
     else
     {
-        aTbxCmd->EnableItem(nChangeRootId);
-        bool bRootSet = aLbEntries->GetRootType() != ScContentId::ROOT;
-        aTbxCmd->CheckItem(nChangeRootId, bRootSet);
+        m_xTbxCmd2->set_item_sensitive("toggle", true);
+        bool bRootSet = m_xLbEntries->GetRootType() != ScContentId::ROOT;
+        m_xTbxCmd2->set_item_active("toggle", bRootSet);
     }
 
     OUString sImageId;
@@ -423,7 +422,7 @@ void ScNavigatorDlg::UpdateButtons()
             sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    aTbxCmd->SetItemImage(nDragModeId, Image(StockImage::Yes, sImageId));
+    m_xTbxCmd2->set_item_icon_name("dragmode", sImageId);
 }
 
 ScNavigatorSettings::ScNavigatorSettings()
@@ -448,8 +447,15 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
 }
 
 ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr, true)
     , rBindings(*pB)
+    , m_xEdCol(m_xBuilder->weld_spin_button("column"))
+    , m_xEdRow(m_xBuilder->weld_spin_button("row"))
+    , m_xTbxCmd1(m_xBuilder->weld_toolbar("toolbox1"))
+    , m_xTbxCmd2(m_xBuilder->weld_toolbar("toolbox2"))
+//TODO    , aScenarioBox(m_xBuilder->weld_text_view("scenariobox"))
+    , m_xLbEntries(new ScContentTree(m_xBuilder->weld_tree_view("contentbox"), this))
+    , m_xLbDocuments(m_xBuilder->weld_combo_box("documents"))
     , aStrDragMode(ScResId(SCSTR_DRAGMODE))
     , aStrDisplay(ScResId(SCSTR_DISPLAY))
     , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
@@ -460,42 +466,22 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     , nCurRow(0)
     , nCurTab(0)
 {
-    get(aLbDocuments, "documents");
-    get(aEdCol, "column");
-    aEdCol->SetNavigatorDlg(this);
-    get(aEdRow, "row");
-    aEdRow->SetNavigatorDlg(this);
-    get(aTbxCmd, "toolbox");
-    aTbxCmd->SetSelectHdl(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
-    aTbxCmd->SetDropdownClickHdl(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
-    nZoomId = aTbxCmd->GetItemId("contents");
-    nChangeRootId = aTbxCmd->GetItemId("toggle");
-    nDragModeId = aTbxCmd->GetItemId("dragmode");
-    aTbxCmd->SetItemBits(nDragModeId, aTbxCmd->GetItemBits(nDragModeId) | ToolBoxItemBits::DROPDOWNONLY);
-    nScenarioId = aTbxCmd->GetItemId("scenarios");
-    nDownId = aTbxCmd->GetItemId("end");
-    nUpId = aTbxCmd->GetItemId("start");
-    nDataId = aTbxCmd->GetItemId("datarange");
-    get(aContentBox, "contentbox");
-    aLbEntries = VclPtr<ScContentTree>::Create(aContentBox, this);
-    aLbEntries->set_hexpand(true);
-    aLbEntries->set_vexpand(true);
-    aLbEntries->Show();
-    get(aScenarioBox, "scenariobox");
+//TODO    m_xEdCol->SetNavigatorDlg(this);
+//TODO    m_xEdRow->SetNavigatorDlg(this);
+    m_xTbxCmd1->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
+    m_xTbxCmd2->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
+#if 0
+    aTbxCmd1->SetDropdownClickHdl(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
+    aTbxCmd2->SetDropdownClickHdl(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
     aWndScenarios = VclPtr<ScScenarioWindow>::Create(aScenarioBox,
         ScResId(SCSTR_QHLP_SCEN_LISTBOX), ScResId(SCSTR_QHLP_SCEN_COMMENT));
-    aWndScenarios->set_hexpand(true);
-    aWndScenarios->set_vexpand(true);
-    aWndScenarios->Show();
+#endif
 
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     nDropMode = rCfg.GetDragMode();
 
-    aTbxCmd->InsertBreak(3);
-    aTbxCmd->SetLineCount(2);
-    aLbDocuments->SetDropDownLineCount(9);
-    aLbDocuments->setMaxWidthChars(20);
-    aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
+    m_xLbDocuments->set_size_request(42, -1); // set a nominal width so it takes width of surroundings
+    m_xLbDocuments->connect_changed(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
     aStrActive    = " (" + ScResId(SCSTR_ACTIVE) + ")";     // " (active)"
     aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"
     aStrHidden    = " (" + ScResId(SCSTR_HIDDEN) + ")";     // " (hidden)"
@@ -512,20 +498,22 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     StartListening( *(SfxGetpApp()) );
     StartListening( rBindings );
 
-    aLbEntries->InitWindowBits(true);
+    m_xLbEntries->InitWindowBits(true);
 
-    aLbEntries->SetSpaceBetweenEntries(0);
-    aLbEntries->SetSelectionMode( SelectionMode::Single );
-    aLbEntries->SetDragDropMode( DragDropMode::CTRL_MOVE |
+    m_xLbEntries->set_selection_mode( SelectionMode::Single );
+
+#if 0
+    m_xLbEntries->SetDragDropMode( DragDropMode::CTRL_MOVE |
                                  DragDropMode::CTRL_COPY |
                                  DragDropMode::ENABLE_TOP );
+#endif
 
     //  was a category chosen as root?
     ScContentId nLastRoot = rCfg.GetRootType();
     if ( nLastRoot != ScContentId::ROOT )
-        aLbEntries->SetRootType( nLastRoot );
+        m_xLbEntries->SetRootType( nLastRoot );
 
-    aLbEntries->Refresh();
+    m_xLbEntries->Refresh();
     GetDocNames(nullptr);
 
     UpdateButtons();
@@ -533,18 +521,18 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     UpdateColumn();
     UpdateRow();
     UpdateTable(nullptr);
-    aContentBox->Hide();
-    aScenarioBox->Hide();
+    m_xLbEntries->hide();
+//TODO    aScenarioBox->Hide();
 
     aContentIdle.SetInvokeHandler( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( TaskPriority::LOWEST );
 
-    aLbEntries->SetNavigatorDlgFlag(true);
+    m_xLbEntries->SetNavigatorDlgFlag(true);
 
     // if scenario was active, switch on
     NavListMode eNavMode = static_cast<NavListMode>(rCfg.GetListMode());
     if (eNavMode == NAV_LMODE_SCENARIOS)
-        aTbxCmd->CheckItem(nScenarioId);
+        m_xTbxCmd2->set_item_active("scenarios", true);
     else
         eNavMode = NAV_LMODE_AREAS;
     SetListMode(eNavMode);
@@ -560,7 +548,7 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
         // When the navigator is displayed in the sidebar, or is otherwise
         // docked, it has the whole deck to fill. Therefore hide the button that
         // hides all controls below the top two rows of buttons.
-        aTbxCmd->ShowItem(nZoomId, SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+        m_xTbxCmd1->set_item_visible("contents", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
     }
 }
 
@@ -580,14 +568,14 @@ void ScNavigatorDlg::dispose()
     EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
 
-    aEdCol.clear();
-    aEdRow.clear();
-    aTbxCmd.clear();
-    aLbEntries.disposeAndClear();
-    aContentBox.clear();
-    aWndScenarios.disposeAndClear();
-    aScenarioBox.clear();
-    aLbDocuments.clear();
+    m_xEdCol.reset();
+    m_xEdRow.reset();
+    m_xTbxCmd1.reset();
+    m_xTbxCmd2.reset();
+    m_xLbEntries.reset();
+//TODO    aWndScenarios.disposeAndClear();
+//TODO    aScenarioBox.clear();
+    m_xLbDocuments.reset();
     PanelLayout::dispose();
 }
 
@@ -597,7 +585,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         if (pHint->GetEventId() == SfxEventHintId::ActivateDoc)
         {
-            aLbEntries->ActiveDocChanged();
+            m_xLbEntries->ActiveDocChanged();
             UpdateAll();
         }
     }
@@ -607,7 +595,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         if (nHintId == SfxHintId::ScDocNameChanged)
         {
-            aLbEntries->ActiveDocChanged();
+            m_xLbEntries->ActiveDocChanged();
         }
         else if (NAV_LMODE_NONE == eListMode)
         {
@@ -618,25 +606,25 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
             switch ( nHintId )
             {
                 case SfxHintId::ScTablesChanged:
-                    aLbEntries->Refresh( ScContentId::TABLE );
+                    m_xLbEntries->Refresh( ScContentId::TABLE );
                     break;
 
                 case SfxHintId::ScDbAreasChanged:
-                    aLbEntries->Refresh( ScContentId::DBAREA );
+                    m_xLbEntries->Refresh( ScContentId::DBAREA );
                     break;
 
                 case SfxHintId::ScAreasChanged:
-                    aLbEntries->Refresh( ScContentId::RANGENAME );
+                    m_xLbEntries->Refresh( ScContentId::RANGENAME );
                     break;
 
                 case SfxHintId::ScDrawChanged:
-                    aLbEntries->Refresh( ScContentId::GRAPHIC );
-                    aLbEntries->Refresh( ScContentId::OLEOBJECT );
-                    aLbEntries->Refresh( ScContentId::DRAWING );
+                    m_xLbEntries->Refresh( ScContentId::GRAPHIC );
+                    m_xLbEntries->Refresh( ScContentId::OLEOBJECT );
+                    m_xLbEntries->Refresh( ScContentId::DRAWING );
                     break;
 
                 case SfxHintId::ScAreaLinksChanged:
-                    aLbEntries->Refresh( ScContentId::AREALINK );
+                    m_xLbEntries->Refresh( ScContentId::AREALINK );
                     break;
 
                 //  SfxHintId::DocChanged not only at document change
@@ -650,9 +638,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     aContentIdle.Start();      // Do not search notes immediately
                     break;
                 case SfxHintId::ScKillEditView:
-                    aLbEntries->ObjectFresh( ScContentId::OLEOBJECT );
-                    aLbEntries->ObjectFresh( ScContentId::DRAWING );
-                    aLbEntries->ObjectFresh( ScContentId::GRAPHIC );
+                    m_xLbEntries->ObjectFresh( ScContentId::OLEOBJECT );
+                    m_xLbEntries->ObjectFresh( ScContentId::DRAWING );
+                    m_xLbEntries->ObjectFresh( ScContentId::GRAPHIC );
                     break;
                 case SfxHintId::ScSelectionChanged:
                     UpdateSelection();
@@ -669,7 +657,7 @@ IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pIdle, void )
     if ( pIdle != &aContentIdle )
         return;
 
-    aLbEntries->Refresh( ScContentId::NOTE );
+    m_xLbEntries->Refresh( ScContentId::NOTE );
 }
 
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
@@ -797,7 +785,7 @@ void ScNavigatorDlg::UpdateSelection()
             OUString sName = xNamed->getName();
             if (!sName.isEmpty())
             {
-                aLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
+                m_xLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
             }
         }
     }
@@ -833,7 +821,7 @@ void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
     else if ( GetViewData() )
         nCurCol = pViewData->GetCurX() + 1;
 
-    aEdCol->SetCol( nCurCol );
+    m_xEdCol->set_value(nCurCol);
 }
 
 void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
@@ -843,7 +831,7 @@ void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
     else if ( GetViewData() )
         nCurRow = pViewData->GetCurY() + 1;
 
-    aEdRow->SetRow( nCurRow );
+    m_xEdRow->set_value(nCurRow);
 }
 
 void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
@@ -859,7 +847,7 @@ void ScNavigatorDlg::UpdateAll()
     switch (eListMode)
     {
         case NAV_LMODE_AREAS:
-            aLbEntries->Refresh();
+            m_xLbEntries->Refresh();
             break;
         case NAV_LMODE_NONE:
             //! ???
@@ -889,7 +877,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
                 ShowList(false);
                 break;
             case NAV_LMODE_AREAS:
-                aLbEntries->Refresh();
+                m_xLbEntries->Refresh();
                 ShowList(true);
                 break;
             case NAV_LMODE_SCENARIOS:
@@ -923,15 +911,15 @@ void ScNavigatorDlg::ShowList(bool bShow)
 {
     if (bShow)
     {
-        aContentBox->Show();
-        aLbDocuments->Show();
+        m_xLbEntries->show();
+        m_xLbDocuments->show();
     }
     else
     {
-        aContentBox->Hide();
-        aLbDocuments->Hide();
+        m_xLbEntries->hide();
+        m_xLbDocuments->hide();
     }
-    aScenarioBox->Hide();
+//TODO    aScenarioBox->Hide();
 }
 
 void ScNavigatorDlg::ShowScenarios()
@@ -939,17 +927,16 @@ void ScNavigatorDlg::ShowScenarios()
     rBindings.Invalidate( SID_SELECT_SCENARIO );
     rBindings.Update( SID_SELECT_SCENARIO );
 
-    aScenarioBox->Show();
-    aLbDocuments->Show();
-    aContentBox->Hide();
+//TODO    aScenarioBox->Show();
+    m_xLbDocuments->show();
+    m_xLbEntries->hide();
 }
 
 //      documents for Dropdown-Listbox
-
 void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 {
-    aLbDocuments->Clear();
-    aLbDocuments->SetUpdateMode( false );
+    m_xLbDocuments->clear();
+    m_xLbDocuments->freeze();
 
     ScDocShell* pCurrentSh = dynamic_cast<ScDocShell*>( SfxObjectShell::Current()  );
 
@@ -965,7 +952,7 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
                 aEntry += aStrActive;
             else
                 aEntry += aStrNotActive;
-            aLbDocuments->InsertEntry( aEntry );
+            m_xLbDocuments->append_text(aEntry);
 
             if ( pManualSel ? ( aName == *pManualSel )
                             : ( pSh == pCurrentSh ) )
@@ -975,21 +962,21 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    aLbDocuments->InsertEntry( aStrActiveWin );
+    m_xLbDocuments->append_text(aStrActiveWin);
 
-    OUString aHidden =  aLbEntries->GetHiddenTitle();
+    OUString aHidden =  m_xLbEntries->GetHiddenTitle();
     if (!aHidden.isEmpty())
     {
         OUString aEntry = aHidden + aStrHidden;
-        aLbDocuments->InsertEntry( aEntry );
+        m_xLbDocuments->append_text(aEntry);
 
         if ( pManualSel && aHidden == *pManualSel )
             aSelEntry = aEntry;
     }
 
-    aLbDocuments->SetUpdateMode( true );
+    m_xLbDocuments->thaw();
 
-    aLbDocuments->SelectEntry( aSelEntry );
+    m_xLbDocuments->set_active_text(aSelEntry);
 }
 
 void ScNavigatorDlg::MarkDataArea()
@@ -1036,7 +1023,7 @@ void ScNavigatorDlg::StartOfDataArea()
         SCCOL nCol = aMarkRange.aStart.Col();
         SCROW nRow = aMarkRange.aStart.Row();
 
-        if ( (nCol+1 != aEdCol->GetCol()) || (nRow+1 != aEdRow->GetRow()) )
+        if ( (nCol+1 != m_xEdCol->get_value()) || (nRow+1 != m_xEdRow->get_value()) )
             SetCurrentCell( nCol, nRow );
     }
 }
@@ -1054,7 +1041,7 @@ void ScNavigatorDlg::EndOfDataArea()
         SCCOL nCol = aMarkRange.aEnd.Col();
         SCROW nRow = aMarkRange.aEnd.Row();
 
-        if ( (nCol+1 != aEdCol->GetCol()) || (nRow+1 != aEdRow->GetRow()) )
+        if ( (nCol+1 != m_xEdCol->get_value()) || (nRow+1 != m_xEdRow->get_value()) )
             SetCurrentCell( nCol, nRow );
     }
 }
