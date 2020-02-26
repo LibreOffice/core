@@ -3185,14 +3185,39 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
         }
 
     }
-    else if (m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE && aCode.GetCode() == KEY_LEFT)
-    {
-        SelectAll(false);
-        SvTreeListBox::KeyInput(rEvent);
-    }
     else
-        SvTreeListBox::KeyInput(rEvent);
-
+    {
+        SvTreeListEntry* pEntry = GetCurEntry();
+        if (pEntry)
+        {
+            SwContent* pCnt = dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData()));
+            if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE)
+            {
+                if (m_bIsRoot && aCode.GetCode() == KEY_LEFT && aCode.GetModifier() == 0)
+                {
+                    SelectAll(false);
+                    SvTreeListBox::KeyInput(rEvent);
+                }
+                else if (aCode.IsMod1())
+                {
+                    if (aCode.GetCode() == KEY_LEFT)
+                        ExecCommand("promote", !aCode.IsShift());
+                    else if (aCode.GetCode() == KEY_RIGHT)
+                        ExecCommand("demote", !aCode.IsShift());
+                    else if (aCode.GetCode() == KEY_UP)
+                        ExecCommand("up", !aCode.IsShift());
+                    else if (aCode.GetCode() == KEY_DOWN)
+                        ExecCommand("down", !aCode.IsShift());
+                    else
+                        SvTreeListBox::KeyInput(rEvent);
+                }
+                else
+                    SvTreeListBox::KeyInput(rEvent);
+            }
+            else
+                SvTreeListBox::KeyInput(rEvent);
+        }
+    }
 }
 
 void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
