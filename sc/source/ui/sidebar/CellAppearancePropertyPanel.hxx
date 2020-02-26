@@ -22,8 +22,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/image.hxx>
-#include <vcl/toolbox.hxx>
 #include "CellBorderStyleControl.hxx"
 #include "CellLineStyleControl.hxx"
 
