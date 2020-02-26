@@ -66,11 +66,8 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
         ::sfx2::sidebar::ControllerItem maSwULSpacingControl;
 
-        std::unique_ptr<weld::Toolbar> mxWrapOptions1;
-        std::unique_ptr<ToolbarUnoDispatcher> mxWrapOptions1Dispatch;
-
-        std::unique_ptr<weld::Toolbar> mxWrapOptions2;
-        std::unique_ptr<ToolbarUnoDispatcher> mxWrapOptions2Dispatch;
+        std::unique_ptr<weld::Toolbar> mxWrapOptions;
+        std::unique_ptr<ToolbarUnoDispatcher> mxWrapOptionsDispatch;
 
         std::unique_ptr<weld::ComboBox> mxSpacingLB;
 
