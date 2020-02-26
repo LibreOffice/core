@@ -164,7 +164,7 @@
                 <property name="active">0</property>
                 <items>
                   <item id="text" translatable="yes" context="addtargetdialog|type">Text</item>
-                  <item id="regex" translatable="yes" context="addtargetdialog|type">Regex</item>
+                  <item id="regex" translatable="yes" context="addtargetdialog|type">Regular expression</item>
                   <item id="predefined" translatable="yes" context="addtargetdialog|type">Predefined</item>
                 </items>
                 <accessibility>
