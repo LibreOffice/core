@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "0870bab9_1593a2d7",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-26T21:47:49Z",
+      "side": 1,
+      "message": "The approach is fine because there are changes that are already done in the exact same manner. See https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d42494bfdd029c69cca7f0979a0ed3ab920efe45e\n\nYou\u0027re just missing some needed changes which would cause regression in other backends. \n\nYou just must search with something like:\n\ngit grep SetButtonRolloverTextColor\n\nand at places that make sense you have to set the text color for the newly added states.\n\nFor example I see: \nqt5 backend - vcl/qt5/Qt5Frame.cxx:1059:\nwindows backend - vcl/win/window/salframe.cxx:2614:\ngtk3 backend - vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx:3034: (and somewhere around there, needs a bit of code reading)\n\n+ other places whatever makes sense... \n\nCan you do that please?",
+      "parentUuid": "5b602a94_8df9bac9",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c3bb4f5_0ecc9bad",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
