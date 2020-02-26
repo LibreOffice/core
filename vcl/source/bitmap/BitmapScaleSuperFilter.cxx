@@ -936,8 +936,6 @@ BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 {
     Bitmap aBitmap(rBitmap.GetBitmap());
-    SalBitmap* pKey = aBitmap.ImplGetSalBitmap().get();
-
     bool bRet = false;
 
     const Size aSizePix(rBitmap.GetSizePixel());
@@ -957,13 +955,18 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
         return BitmapEx();
 
     // check cache for a previously scaled version of this
+    ScaleCacheKey aKey(aBitmap.ImplGetSalBitmap().get(),
+                       Size(nDstW, nDstH));
+
     ImplSVData* pSVData = ImplGetSVData();
     auto& rCache = pSVData->maGDIData.maScaleCache;
-    auto aFind = rCache.find(pKey);
+    auto aFind = rCache.find(aKey);
     if (aFind != rCache.end())
     {
         if (aFind->second.GetSizePixel().Width() == nDstW && aFind->second.GetSizePixel().Height() == nDstH)
             return aFind->second;
+        else
+            SAL_WARN("vcl.gdi", "Error: size mismatch in scale cache");
     }
 
     {
@@ -1090,7 +1093,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
         tools::Rectangle aRect(Point(0, 0), Point(nDstW, nDstH));
         aBitmap.Crop(aRect);
         BitmapEx aRet(aBitmap);
-        rCache.insert(std::make_pair(pKey, aRet));
+        rCache.insert(std::make_pair(aKey, aRet));
         return aRet;
     }
 
