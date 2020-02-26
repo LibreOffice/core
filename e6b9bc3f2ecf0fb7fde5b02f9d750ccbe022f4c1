@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a8554964_3410bec5",
+        "filename": "editeng/CustomTarget_generated.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002468
+      },
+      "writtenOn": "2020-02-26T11:42:02Z",
+      "side": 1,
+      "message": "I have no idea. I just grepped for PYTHON in makefiles and it seemed to be used:\n\ntesttools/source/bridgetest/pyuno/makefile.mk:    cd $(DLLDEST) \u0026\u0026 $(TEST_ENV) \u0026\u0026 $(PYTHON) main.py\n\nand assumed it it would be set just like PERL was.",
+      "parentUuid": "f613d4dd_6ce9083a",
+      "revId": "e6b9bc3f2ecf0fb7fde5b02f9d750ccbe022f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39b40fb9_e3d11a26",
         "filename": "sw/CustomTarget_generated.mk",
         "patchSetId": 5
