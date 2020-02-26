@@ -154,8 +154,6 @@
 #define SCSTR_CONTENT_NOTE                          NC_("SCSTR_CONTENT_NOTE", "Comments" )
 #define SCSTR_CONTENT_AREALINK                      NC_("SCSTR_CONTENT_AREALINK", "Linked areas" )
 #define SCSTR_CONTENT_DRAWING                       NC_("SCSTR_CONTENT_DRAWING", "Drawing objects")
-#define SCSTR_DRAGMODE                              NC_("SCSTR_DRAGMODE", "Drag Mode" )
-#define SCSTR_DISPLAY                               NC_("SCSTR_DISPLAY", "Display" )
 #define SCSTR_ACTIVE                                NC_("SCSTR_ACTIVE", "active" )
 #define SCSTR_NOTACTIVE                             NC_("SCSTR_NOTACTIVE", "inactive" )
 #define SCSTR_HIDDEN                                NC_("SCSTR_HIDDEN", "hidden" )

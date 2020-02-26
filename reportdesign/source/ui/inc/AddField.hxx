@@ -68,7 +68,7 @@ class  OAddFieldWindow : public weld::GenericDialogController
 
     DECL_LINK( OnDoubleClickHdl, weld::TreeView&, bool );
     DECL_LINK( OnSelectHdl, weld::TreeView&, void );
-    DECL_LINK( DragBeginHdl, weld::TreeView&, bool );
+    DECL_LINK( DragBeginHdl, bool&, bool );
     DECL_LINK( OnSortAction, const OString&, void );
     DECL_LINK( FocusChangeHdl, weld::Widget&, void );
 

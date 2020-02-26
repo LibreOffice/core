@@ -36,45 +36,31 @@
 
 // class ScScenarioWindow ------------------------------------------------
 
-ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
-    ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
-    mrParent( rParent )
+void ScScenarioWindow::UpdateEntries( const std::vector<OUString> &rNewEntryList )
 {
-    vcl::Font aFont( GetFont() );
-    aFont.SetTransparent( true );
-    aFont.SetWeight( WEIGHT_LIGHT );
-    SetFont( aFont );
-}
+    m_xLbScenario->clear();
+    m_aEntries.clear();
 
-ScScenarioListBox::~ScScenarioListBox()
-{
-}
-
-void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryList )
-{
-    Clear();
-    maEntries.clear();
-
-    switch( aNewEntryList.size() )
+    switch( rNewEntryList.size() )
     {
         case 0:
             // no scenarios in current sheet
-            mrParent.SetComment( EMPTY_OUSTRING );
+            SetComment( EMPTY_OUSTRING );
         break;
 
         case 1:
             // sheet is a scenario container, comment only
-            mrParent.SetComment( aNewEntryList[0] );
+            SetComment( rNewEntryList[0] );
         break;
 
         default:
         {
             // sheet contains scenarios
-            assert(aNewEntryList.size() % 3 == 0 && "ScScenarioListBox::UpdateEntries - wrong list size");
-            SetUpdateMode( false );
+            assert(rNewEntryList.size() % 3 == 0 && "ScScenarioListBox::UpdateEntries - wrong list size");
+            m_xLbScenario->freeze();
 
             std::vector<OUString>::const_iterator iter;
-            for (iter = aNewEntryList.begin(); iter != aNewEntryList.end(); ++iter)
+            for (iter = rNewEntryList.begin(); iter != rNewEntryList.end(); ++iter)
             {
                 ScenarioEntry aEntry;
 
@@ -89,135 +75,131 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
                 ++iter;
                 aEntry.mbProtected = !(*iter).isEmpty() && (*iter)[0] != '0';
 
-                maEntries.push_back( aEntry );
-                InsertEntry( aEntry.maName );
+                m_aEntries.push_back( aEntry );
+                m_xLbScenario->append_text(aEntry.maName);
             }
-            SetUpdateMode( true );
-            SetNoSelection();
-            mrParent.SetComment( EMPTY_OUSTRING );
+            m_xLbScenario->thaw();
+            m_xLbScenario->unselect_all();
+            SetComment(EMPTY_OUSTRING);
         }
     }
 }
 
-void ScScenarioListBox::Select()
+IMPL_LINK_NOARG(ScScenarioWindow, SelectHdl, weld::TreeView&, void)
 {
-    if( const ScenarioEntry* pEntry = GetSelectedScenarioEntry() )
-        mrParent.SetComment( pEntry->maComment );
+    if (const ScenarioEntry* pEntry = GetSelectedScenarioEntry())
+        SetComment(pEntry->maComment);
 }
 
-void ScScenarioListBox::DoubleClick()
+IMPL_LINK_NOARG(ScScenarioWindow, DoubleClickHdl, weld::TreeView&, bool)
 {
     SelectScenario();
+    return true;
 }
 
-bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(ScScenarioWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
     bool bHandled = false;
 
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
+    switch( aCode.GetCode() )
     {
-        vcl::KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        switch( aCode.GetCode() )
-        {
-            case KEY_RETURN:
-                SelectScenario();
-                bHandled = true;
-            break;
-            case KEY_DELETE:
-                DeleteScenario();
-                bHandled = true;
-            break;
-        }
-    }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND && GetSelectedEntryCount() )
-    {
-        const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if ( pCEvt && pCEvt->GetCommand() == CommandEventId::ContextMenu )
-        {
-            if( const ScenarioEntry* pEntry = GetSelectedScenarioEntry() )
-            {
-                if( !pEntry->mbProtected )
-                {
-                    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/scenariomenu.ui", "");
-                    VclPtr<PopupMenu> aPopup(aBuilder.get_menu("menu"));
-                    sal_uInt16 nId = aPopup->Execute(this, pCEvt->GetMousePosPixel());
-                    OString sIdent(aPopup->GetItemIdent(nId));
-                    if (sIdent == "delete")
-                        DeleteScenario();
-                    else if (sIdent == "edit")
-                        EditScenario();
-                }
-            }
+        case KEY_RETURN:
+            SelectScenario();
             bHandled = true;
-        }
+        break;
+        case KEY_DELETE:
+            DeleteScenario();
+            bHandled = true;
+        break;
     }
 
-    return bHandled || ListBox::EventNotify(rNEvt);
+    return bHandled;
 }
 
-const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedScenarioEntry() const
+IMPL_LINK(ScScenarioWindow, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
 {
-    size_t nPos = GetSelectedEntryPos();
-    return (nPos < maEntries.size()) ? &maEntries[ nPos ] : nullptr;
+    bool bHandled = false;
+
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        if (const ScenarioEntry* pEntry = GetSelectedScenarioEntry())
+        {
+            if (!pEntry->mbProtected)
+            {
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xLbScenario.get(), "modules/scalc/ui/scenariomenu.ui"));
+                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+                OString sIdent(xPopup->popup_at_rect(m_xLbScenario.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+                if (sIdent == "delete")
+                    DeleteScenario();
+                else if (sIdent == "edit")
+                    EditScenario();
+            }
+        }
+        bHandled = true;
+    }
+
+    return bHandled;
 }
 
-void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )
+const ScScenarioWindow::ScenarioEntry* ScScenarioWindow::GetSelectedScenarioEntry() const
+{
+    size_t nPos = m_xLbScenario->get_selected_index();
+    return (nPos < m_aEntries.size()) ? &m_aEntries[ nPos ] : nullptr;
+}
+
+void ScScenarioWindow::ExecuteScenarioSlot(sal_uInt16 nSlotId)
 {
     if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
     {
-        SfxStringItem aStringItem( nSlotId, GetSelectedEntry() );
+        SfxStringItem aStringItem(nSlotId, m_xLbScenario->get_selected_text());
         pViewFrm->GetDispatcher()->ExecuteList(nSlotId,
                 SfxCallMode::SLOT | SfxCallMode::RECORD, { &aStringItem } );
     }
 }
 
-void ScScenarioListBox::SelectScenario()
+void ScScenarioWindow::SelectScenario()
 {
-    if( GetSelectedEntryCount() > 0 )
-        ExecuteScenarioSlot( SID_SELECT_SCENARIO );
+    if (m_xLbScenario->get_selected_index() != -1)
+        ExecuteScenarioSlot(SID_SELECT_SCENARIO);
 }
 
-void ScScenarioListBox::EditScenario()
+void ScScenarioWindow::EditScenario()
 {
-    if( GetSelectedEntryCount() > 0 )
-        ExecuteScenarioSlot( SID_EDIT_SCENARIO );
+    if (m_xLbScenario->get_selected_index() != -1)
+        ExecuteScenarioSlot(SID_EDIT_SCENARIO);
 }
 
-void ScScenarioListBox::DeleteScenario()
+void ScScenarioWindow::DeleteScenario()
 {
-    if( GetSelectedEntryCount() > 0 )
+    if (m_xLbScenario->get_selected_index() != -1)
     {
-        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xLbScenario.get(),
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        ScResId(STR_QUERY_DELSCENARIO)));
         xQueryBox->set_default_response(RET_YES);
         if (xQueryBox->run() == RET_YES)
-            ExecuteScenarioSlot( SID_DELETE_SCENARIO );
+            ExecuteScenarioSlot(SID_DELETE_SCENARIO);
     }
 }
 
 // class ScScenarioWindow ------------------------------------------------
 
-ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List,
-                                    const OUString& aQH_Comment)
-    :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
-        aLbScenario ( VclPtr<ScScenarioListBox>::Create(*this) ),
-        aEdComment  ( VclPtr<VclMultiLineEdit>::Create(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
+ScScenarioWindow::ScScenarioWindow(weld::Builder& rBuilder, const OUString& aQH_List,
+                                   const OUString& aQH_Comment)
+    : m_xLbScenario(rBuilder.weld_tree_view("scenariolist"))
+    , m_xEdComment(rBuilder.weld_text_view("scenariotext"))
 {
-    vcl::Font aFont( GetFont() );
-    aFont.SetTransparent( true );
-    aFont.SetWeight( WEIGHT_LIGHT );
-    aEdComment->SetFont( aFont );
-    aEdComment->SetMaxTextLen( 512 );
-    aLbScenario->SetPosPixel( Point(0,0) );
-    aLbScenario->SetHelpId(HID_SC_SCENWIN_TOP);
-    aEdComment->SetHelpId(HID_SC_SCENWIN_BOTTOM);
-    aLbScenario->Show();
-    aEdComment->Show();
+    m_xLbScenario->set_help_id(HID_SC_SCENWIN_TOP);
+    m_xEdComment->set_help_id(HID_SC_SCENWIN_BOTTOM);
 
-    aLbScenario->SetQuickHelpText(aQH_List);
-    aEdComment->SetQuickHelpText(aQH_Comment);
-    aEdComment->SetBackground( COL_LIGHTGRAY );
+    m_xLbScenario->set_tooltip_text(aQH_List);
+    m_xEdComment->set_tooltip_text(aQH_Comment);
+
+    m_xLbScenario->connect_changed(LINK(this, ScScenarioWindow, SelectHdl));
+    m_xLbScenario->connect_row_activated(LINK(this, ScScenarioWindow, DoubleClickHdl));
+    m_xLbScenario->connect_key_press(LINK(this, ScScenarioWindow, KeyInputHdl));
+    m_xLbScenario->connect_popup_menu(LINK(this, ScScenarioWindow, ContextMenuHdl));
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -230,65 +212,33 @@ ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_Li
 
 ScScenarioWindow::~ScScenarioWindow()
 {
-    disposeOnce();
-}
-
-void ScScenarioWindow::dispose()
-{
-    aLbScenario.disposeAndClear();
-    aEdComment.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-void ScScenarioWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetFaceColor();
-
-    SetBackground( aBgColor );
-
-    Window::Paint(rRenderContext, rRect);
 }
 
 void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 {
     if( pState )
     {
-        aLbScenario->Enable();
+        m_xLbScenario->set_sensitive(true);
 
         if ( auto pStringItem = dynamic_cast<const SfxStringItem*>( pState) )
         {
             const OUString& aNewEntry( pStringItem->GetValue() );
 
-            if ( !aNewEntry.isEmpty() )
-                aLbScenario->SelectEntry( aNewEntry );
+            if (!aNewEntry.isEmpty())
+                m_xLbScenario->select_text(aNewEntry);
             else
-                aLbScenario->SetNoSelection();
+                m_xLbScenario->unselect_all();
         }
         else if ( auto pStringListItem = dynamic_cast<const SfxStringListItem*>( pState) )
         {
-            aLbScenario->UpdateEntries( pStringListItem->GetList() );
+            UpdateEntries(pStringListItem->GetList());
         }
     }
     else
     {
-        aLbScenario->Disable();
-        aLbScenario->SetNoSelection();
+        m_xLbScenario->set_sensitive(false);
+        m_xLbScenario->unselect_all();
     }
-}
-
-void ScScenarioWindow::Resize()
-{
-    Window::Resize();
-
-    Size aSize(GetSizePixel());
-    long nHeight = aSize.Height() / 2;
-
-    aSize.setHeight( nHeight );
-    aLbScenario->SetSizePixel(aSize);
-
-    aSize.AdjustHeight( -4 );
-    aEdComment->SetPosSizePixel(Point(0, nHeight + 4), aSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
