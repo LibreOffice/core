@@ -85,8 +85,10 @@ void FmFieldWin::addToList(const uno::Reference< container::XNameAccess>& i_xCol
     }
 }
 
-IMPL_LINK_NOARG(FmFieldWin, DragBeginHdl, weld::TreeView&, bool)
+IMPL_LINK(FmFieldWin, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
+    rUnsetDragIcon = false;
+
     ColumnInfo* pSelected = reinterpret_cast<ColumnInfo*>(m_xListBox->get_selected_id().toInt64());
     if (!pSelected)
     {

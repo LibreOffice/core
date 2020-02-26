@@ -476,8 +476,9 @@ bool GalleryBrowser2::StartDrag()
     return m_xHelper->StartDrag();
 }
 
-IMPL_LINK_NOARG(GalleryBrowser2, DragBeginHdl, weld::TreeView&, bool)
+IMPL_LINK(GalleryBrowser2, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
+    rUnsetDragIcon = false;
     return StartDrag();
 }
 
