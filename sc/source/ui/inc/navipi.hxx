@@ -248,7 +248,6 @@ private:
     const OUString& GetStrDragMode() const    { return aStrDragMode; }
     const OUString& GetStrDisplay() const     { return aStrDisplay; }
 
-    void    CheckDataArea   ();
     void    MarkDataArea    ();
     void    UnmarkDataArea  ();
     void    StartOfDataArea ();
