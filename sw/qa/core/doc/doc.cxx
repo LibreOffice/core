@@ -9,7 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <vcl/gdimtf.hxx>
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>

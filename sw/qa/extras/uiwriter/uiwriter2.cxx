@@ -14,7 +14,6 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -38,7 +37,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
-#include <svx/svxids.hrc>
 #include <comphelper/lok.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
