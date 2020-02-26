@@ -412,7 +412,7 @@ published service ParagraphProperties
         /** Specifies whether words written in CAPS will be hyphenated.
             Setting to `true` will disable hyphenation of words written in CAPS for this paragraph.
 
-            @since LibreOffice 7.0
+            @since LibreOffice 6.4
          */
         [optional, property] boolean ParaHyphenationNoCaps;
 
