@@ -995,6 +995,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
+{
+    createDoc("tdf123102.odt");
+    // insert a new row after a vertically merged cell
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was "3." - caused by the hidden numbered paragraph of the new merged cell
+    assertXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/txt/Special", "rText", "2.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 {
     // The floating table in the test document is too small, so we don't provide an unfloat button
