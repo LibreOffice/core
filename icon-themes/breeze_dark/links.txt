@@ -1491,9 +1491,9 @@ cmd/lc_contourdialog.png cmd/lc_imagemapdialog.png
 cmd/sc_contourdialog.png cmd/sc_imagemapdialog.png
 
 # Config
-cmd/32/formatselection.png cmd/32/formproperties.png
-cmd/lc_formatselection.png cmd/lc_formproperties.png
-cmd/sc_formatselection.png cmd/sc_formproperties.png
+cmd/32/formatselection.png cmd/32/configuredialog.png
+cmd/lc_formatselection.png cmd/lc_configuredialog.png
+cmd/sc_formatselection.png cmd/sc_configuredialog.png
 
 # Hyphenation
 cmd/32/hyphenation.png cmd/32/hyphenate.png
