@@ -22,6 +22,30 @@
       "revId": "22394a468eb8d594501e443bdb84608b6552a8a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a13ba6ff_15bdea40",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2732,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-02-26T08:54:13Z",
+      "side": 0,
+      "message": "If bCached is false, then the above GraphicConverter::Export() call writes the PNG data to aOStm. This is not faster than in the past, but produces correct output. The assumption is that large images are typically either JPG or PNG, so not optimizing a hot path is OK.\n\nSee https://gerrit.libreoffice.org/c/core/+/89411 for context, which helped, but was a dirty hack. This change reverts most of that change and tries to not increase memory usage, rather re-use the already compressed original bitmap data. Does this answer your question? :-)",
+      "parentUuid": "bccdcaf7_59c0d2d3",
+      "range": {
+        "startLine": 2732,
+        "startChar": 16,
+        "endLine": 2732,
+        "endChar": 41
+      },
+      "revId": "22394a468eb8d594501e443bdb84608b6552a8a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
