@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "442d38da_1490929c",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-26T10:44:56Z",
+      "side": 1,
+      "message": "What I mean is this:\n\nFor example you have only Color maTextColor, which would set the text color for all states. Now you added maPressedTextColor, which is set to some default value (black) for all backends, but you only set this to a different color for OSX. In button.cxx however you add the pressed state for all backends. Now imagine I change in windows backend the maTextColor to white - that wouldn\u0027t set the maPressedTextColor to white, right? \n\nSo in Windows the text color would be white, but when you press the button, it would turn black because you didn\u0027t set it to another color, but before the change it would be white for all states.\n\nDo you see what I mean?",
+      "parentUuid": "6a432217_edfd7b52",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c3bb4f5_0ecc9bad",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
