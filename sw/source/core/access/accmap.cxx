@@ -24,6 +24,7 @@
 #include <svx/unomod.hxx>
 #include <algorithm>
 #include <map>
+#include <unordered_map>
 #include <list>
 #include <vector>
 #include <accmap.hxx>
@@ -133,7 +134,7 @@ class SwDrawModellListener_Impl : public SfxListener,
 {
     mutable ::osl::Mutex maListenerMutex;
     ::comphelper::OInterfaceContainerHelper2 maEventListeners;
-    std::unordered_map<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
+    std::unordered_multimap<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 protected:
     virtual ~SwDrawModellListener_Impl() override;
@@ -182,9 +183,7 @@ void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
 {
     assert(xShape.is() && "no shape?");
     osl::MutexGuard aGuard(maListenerMutex);
-    auto rv = maShapeListeners.emplace(xShape, xListener);
-    assert(rv.second && "duplicate listener?");
-    (void)rv;
+    maShapeListeners.emplace(xShape, xListener);
 }
 
 void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
@@ -193,11 +192,13 @@ void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
 {
     osl::MutexGuard aGuard(maListenerMutex);
     auto it = maShapeListeners.find(xShape);
-    if (it != maShapeListeners.end())
+    while (it != maShapeListeners.end() && it->first == xShape)
     {
-        assert(it->second == xListener);
-        (void)xListener;
-        maShapeListeners.erase(it);
+        if (it->second == xListener)
+        {
+            maShapeListeners.erase(it);
+            return;
+        }
     }
 }
 
@@ -247,8 +248,11 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
         osl::MutexGuard aGuard(maListenerMutex);
         auto it = maShapeListeners.find(xShape);
-        if (it != maShapeListeners.end())
+        while (it != maShapeListeners.end() && it->first == xShape)
+        {
             it->second->notifyShapeEvent(aEvent);
+            ++it;
+        }
     }
 }
 
