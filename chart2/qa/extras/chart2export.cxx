@@ -154,6 +154,7 @@ public:
     void testTdf122031();
     void testTdf115012();
     void testTdf123206_customLabelText();
+    void testCustomLabelText();
     void testDeletedLegendEntries();
     void testTdf130225();
     void testTdf126076();
@@ -274,6 +275,7 @@ public:
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
+    CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
     CPPUNIT_TEST(testTdf130225);
     CPPUNIT_TEST(testTdf126076);
@@ -2482,6 +2484,25 @@ void Chart2ExportTest::testTdf123206_customLabelText()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r/a:t", "kiscica");
+}
+
+void Chart2ExportTest::testCustomLabelText()
+{
+    load("/chart2/qa/extras/data/docx/", "testCustomlabeltext.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[1]/c:idx", "val", "2");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[1]/c:tx/c:rich/a:p/a:r[1]/a:t", "3.5");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[1]/c:tx/c:rich/a:p/a:r[3]/a:t", "CustomLabel 1");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[2]/c:idx", "val", "3");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r[1]/a:t", "4.5");
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r[3]/a:t", "CustomLabel 2");
 }
 
 void Chart2ExportTest::testDeletedLegendEntries()

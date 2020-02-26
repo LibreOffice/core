@@ -3317,7 +3317,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 SchXMLDataPointStruct aPoint;
                 aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
-                aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
                 aDataPointVector.push_back( aPoint );
             }
 
@@ -3367,7 +3366,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
             // if we get here the property states are empty
             SchXMLDataPointStruct aPoint;
-            aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
             aDataPointVector.push_back( aPoint );
 
             nLastIndex = nCurrIndex;
