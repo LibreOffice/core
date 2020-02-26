@@ -118,7 +118,6 @@ cmd/32/insertobjectdialog.png cmd/32/insertobject.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
-cmd/32/insertrowbreak.png cmd/32/insertpagebreak.png
 cmd/32/inserttextframe.png cmd/32/insertframe.png
 cmd/32/inserttimefield.png cmd/32/timefield.png
 cmd/32/insobjctrl.png cmd/32/newdoc.png
@@ -160,7 +159,6 @@ cmd/lc_insertobjectdialog.png cmd/lc_insertobject.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
-cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/lc_inserttextframe.png cmd/lc_insertframe.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_insobjctrl.png cmd/lc_newdoc.png
@@ -202,7 +200,6 @@ cmd/sc_insertobjectdialog.png cmd/sc_insertobject.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
-cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/sc_inserttextframe.png cmd/sc_insertframe.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_insobjctrl.png cmd/sc_newdoc.png
@@ -1304,6 +1301,7 @@ cmd/32/selectcolumn.png cmd/32/entirecolumn.png
 cmd/32/selectdata.png cmd/32/selectdb.png
 cmd/32/selectrow.png cmd/32/entirerow.png
 cmd/32/sheetcommentmenu.png cmd/32/showannotations.png
+cmd/32/toolsformsmenu.png cmd/32/dbviewforms.png
 
 cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
 cmd/lc_chartmenu.png cmd/lc_drawchart.png
@@ -1326,6 +1324,7 @@ cmd/lc_selectcolumn.png cmd/lc_entirecolumn.png
 cmd/lc_selectdata.png cmd/lc_selectdb.png
 cmd/lc_selectrow.png cmd/lc_entirerow.png
 cmd/lc_sheetcommentmenu.png cmd/lc_showannotations.png
+cmd/lc_toolsformsmenu.png cmd/lc_dbviewforms.png
 
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
@@ -1348,6 +1347,7 @@ cmd/sc_selectcolumn.png cmd/sc_entirecolumn.png
 cmd/sc_selectdata.png cmd/sc_selectdb.png
 cmd/sc_selectrow.png cmd/sc_entirerow.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
+cmd/sc_toolsformsmenu.png cmd/sc_dbviewforms.png
 
 # Shapes
 cmd/32/basicshapes.ellipse.png cmd/32/ellipse.png
@@ -2630,11 +2630,6 @@ cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
 cmd/sc_mirrormenu.png cmd/sc_rotateleft.png
 cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
-
-# calc menubar icons
-cmd/32/chartmenu.png cmd/32/drawchart.png
-cmd/lc_chartmenu.png cmd/lc_drawchart.png
-cmd/sc_chartmenu.png cmd/sc_drawchart.png
 
 # writer
 # ===============================================
