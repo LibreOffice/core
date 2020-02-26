@@ -834,7 +834,6 @@ void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
         nCurCol = pViewData->GetCurX() + 1;
 
     aEdCol->SetCol( nCurCol );
-    CheckDataArea();
 }
 
 void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
@@ -845,7 +844,6 @@ void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
         nCurRow = pViewData->GetCurY() + 1;
 
     aEdRow->SetRow( nCurRow );
-    CheckDataArea();
 }
 
 void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
@@ -854,8 +852,6 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
         nCurTab = *pTab;
     else if ( GetViewData() )
         nCurTab = pViewData->GetTabNo();
-
-    CheckDataArea();
 }
 
 void ScNavigatorDlg::UpdateAll()
@@ -1024,22 +1020,6 @@ void ScNavigatorDlg::UnmarkDataArea()
     {
         pViewSh->Unmark();
         pMarkArea.reset();
-    }
-}
-
-void ScNavigatorDlg::CheckDataArea()
-{
-    if (aTbxCmd->IsItemChecked(nDataId) && pMarkArea)
-    {
-        if (   nCurTab   != pMarkArea->nTab
-            || nCurCol <  pMarkArea->nColStart+1
-            || nCurCol >  pMarkArea->nColEnd+1
-            || nCurRow <  pMarkArea->nRowStart+1
-            || nCurRow >  pMarkArea->nRowEnd+1 )
-        {
-            aTbxCmd->SetItemState(nDataId, TRISTATE_TRUE);
-            aTbxCmd->TriggerItem(nDataId);
-        }
     }
 }
 
