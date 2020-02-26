@@ -34,6 +34,8 @@
 #include <helpids.h>
 #include <global.hxx>
 
+#if 0
+
 // class ScScenarioWindow ------------------------------------------------
 
 ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
@@ -290,5 +292,6 @@ void ScScenarioWindow::Resize()
     aSize.AdjustHeight( -4 );
     aEdComment->SetPosSizePixel(Point(0, nHeight + 4), aSize);
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

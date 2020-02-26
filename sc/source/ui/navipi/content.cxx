@@ -27,7 +27,6 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 
@@ -117,43 +116,30 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 
 //          ScContentTree
 
-ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)
-    : SvTreeListBox(pParent, WB_BORDER | WB_TABSTOP)
+ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNavigatorDlg* pNavigatorDlg)
+    : m_xTreeView(std::move(xTreeView))
     , pParentWindow(pNavigatorDlg)
     , nRootType(ScContentId::ROOT)
     , bHiddenDoc(false)
     , pHiddenDocument(nullptr)
     , bisInNavigatoeDlg(false)
 {
-    SetQuickSearch(true);
     for (sal_uInt16 i = 0; i <= int(ScContentId::LAST); ++i)
         pPosList[pTypeList[i]] = i;         // inverse for searching
 
-    pRootNodes[ScContentId::ROOT] = nullptr;
+    m_aRootNodes[ScContentId::ROOT] = nullptr;
     for (sal_uInt16 i = 1; i < int(ScContentId::LAST); ++i)
         InitRoot(static_cast<ScContentId>(i));
 
-    SetNodeDefaultImages();
-
-    SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
-}
-
-Size ScContentTree::GetOptimalSize() const
-{
-    return LogicToPixel(Size(110, 100), MapMode(MapUnit::MapAppFont));
+    m_xTreeView->connect_row_activated(LINK(this, ScContentTree, ContentDoubleClickHdl));
 }
 
 ScContentTree::~ScContentTree()
 {
-    disposeOnce();
-}
-
-void ScContentTree::dispose()
-{
     pParentWindow.clear();
-    SvTreeListBox::dispose();
 }
 
+#if 0
 // helper function for  GetEntryAltText and GetEntryLongDescription
 OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltText) const
 {
@@ -219,6 +205,8 @@ OUString ScContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     return getAltLongDescText( pEntry, false );
 }
 
+#endif
+
 static const char* SCSTR_CONTENT_ARY[] =
 {
     SCSTR_CONTENT_ROOT,
@@ -239,30 +227,33 @@ void ScContentTree::InitRoot( ScContentId nType )
 
     if ( nRootType != ScContentId::ROOT && nRootType != nType )              // hidden ?
     {
-        pRootNodes[nType] = nullptr;
+        m_aRootNodes[nType] = nullptr;
         return;
     }
 
-    Image aImage(StockImage::Yes, aContentBmps[static_cast<int>(nType) - 1]);
+    OUString aImage(aContentBmps[static_cast<int>(nType) - 1]);
     OUString aName(ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]));
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
-    SvTreeListEntry* pNew = InsertEntry( aName, aImage, aImage, nullptr, false, nPos );
-
-    pRootNodes[nType] = pNew;
+    m_aRootNodes[nType] = m_xTreeView->make_iterator();
+    m_xTreeView->insert(nullptr, nPos, &aName, nullptr, nullptr, nullptr, &aImage, false, m_aRootNodes[nType].get());
 }
 
 void ScContentTree::ClearAll()
 {
+#if 0
     //There are one method in Control::SetUpdateMode(), and one override method SvTreeListBox::SetUpdateMode(). Here although
     //SvTreeListBox::SetUpdateMode() is called in refresh method, it only call SvTreeListBox::SetUpdateMode(), not Control::SetUpdateMode().
-    //In SvTreeList::Clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
+    //In m_xTreeView->clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
     //the InitRoot() method won't be called. Then if a user click or press key to update the navigator tree, crash happens.
     //So the solution is to disable the UpdateMode of Control, then call Clear(), then recover the update mode
     bool bOldUpdate = Control::IsUpdateMode();
     Control::SetUpdateMode(false);
-    Clear();
+    m_xTreeView->clear();
     Control::SetUpdateMode(bOldUpdate);
+#else
+    m_xTreeView->clear();
+#endif
     for (sal_uInt16 i=1; i<=int(ScContentId::LAST); i++)
         InitRoot(static_cast<ScContentId>(i));
 }
@@ -273,11 +264,11 @@ void ScContentTree::ClearType(ScContentId nType)
         ClearAll();
     else
     {
-        SvTreeListEntry* pParent = pRootNodes[nType];
-        if ( !pParent || GetChildCount(pParent) )       // not if no children existing
+        weld::TreeIter* pParent = m_aRootNodes[nType].get();
+        if (!pParent || m_xTreeView->iter_has_child(*pParent)) // not if no children existing
         {
             if (pParent)
-                GetModel()->Remove( pParent );          // with all children
+                m_xTreeView->remove(*pParent);          // with all children
             InitRoot( nType );                          // if needed insert anew
         }
     }
@@ -285,16 +276,16 @@ void ScContentTree::ClearType(ScContentId nType)
 
 void ScContentTree::InsertContent( ScContentId nType, const OUString& rValue )
 {
-    SvTreeListEntry* pParent = pRootNodes[nType];
+    weld::TreeIter* pParent = m_aRootNodes[nType].get();
     if (pParent)
-        InsertEntry( rValue, pParent );
+        m_xTreeView->append(pParent, rValue);
     else
     {
         OSL_FAIL("InsertContent without parent");
     }
 }
 
-void ScContentTree::GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChildIndex, SvTreeListEntry* pEntry ) const
+void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, weld::TreeIter* pEntry) const
 {
     rnRootIndex = ScContentId::ROOT;
     rnChildIndex = SC_CONTENT_NOCHILD;
@@ -302,32 +293,37 @@ void ScContentTree::GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChil
     if( !pEntry )
         return;
 
-    SvTreeListEntry* pParent = GetParent( pEntry );
+    std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(pEntry));
+    if (!m_xTreeView->iter_parent(*xParent))
+        xParent.reset();
     bool bFound = false;
     for( int i = 1; !bFound && (i <= int(ScContentId::LAST)); ++i )
     {
         ScContentId nRoot = static_cast<ScContentId>(i);
-        if( pEntry == pRootNodes[ nRoot ] )
+        if (!m_aRootNodes[nRoot])
+            continue;
+        if (m_xTreeView->iter_compare(*pEntry, *m_aRootNodes[nRoot]) == 0)
         {
             rnRootIndex = nRoot;
             rnChildIndex = ~0UL;
             bFound = true;
         }
-        else if( pParent && (pParent == pRootNodes[ nRoot ]) )
+        else if (xParent && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[nRoot]) == 0)
         {
             rnRootIndex = nRoot;
 
             // search the entry in all child entries of the parent
             sal_uLong nEntry = 0;
-            SvTreeListEntry* pIterEntry = FirstChild( pParent );
-            while( !bFound && pIterEntry )
+            std::unique_ptr<weld::TreeIter> xIterEntry(m_xTreeView->make_iterator(xParent.get()));
+            bool bIterEntry = m_xTreeView->iter_children(*xIterEntry);
+            while (!bFound && bIterEntry)
             {
-                if ( pEntry == pIterEntry )
+                if (m_xTreeView->iter_compare(*pEntry, *xIterEntry) == 0)
                 {
                     rnChildIndex = nEntry;
                     bFound = true;  // exit the while loop
                 }
-                pIterEntry = pIterEntry->NextSibling();
+                bIterEntry = m_xTreeView->iter_next_sibling(*xIterEntry);
                 ++nEntry;
             }
 
@@ -336,7 +332,7 @@ void ScContentTree::GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChil
     }
 }
 
-sal_uLong ScContentTree::GetChildIndex( SvTreeListEntry* pEntry ) const
+sal_uLong ScContentTree::GetChildIndex(weld::TreeIter* pEntry) const
 {
     ScContentId nRoot;
     sal_uLong nChild;
@@ -361,19 +357,21 @@ static OUString lcl_GetDBAreaRange( const ScDocument* pDoc, const OUString& rDBN
     return aRet;
 }
 
-IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 {
     ScContentId nType;
     sal_uLong nChild;
-    SvTreeListEntry* pEntry = GetCurEntry();
-    GetEntryIndexes( nType, nChild, pEntry );
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_cursor(xEntry.get()))
+        xEntry.reset();
+    GetEntryIndexes(nType, nChild, xEntry.get());
 
-    if( pEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD) )
+    if (xEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD))
     {
         if ( bHiddenDoc )
             return false;               //! later...
 
-        OUString aText( GetEntryText( pEntry ) );
+        OUString aText(m_xTreeView->get_text(*xEntry));
 
         if ( !aManualDoc.isEmpty() )
             pParentWindow->SetCurrentDoc( aManualDoc );
@@ -434,6 +432,8 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 
     return true;
 }
+
+#if 0
 
 void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -515,7 +515,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                          {
                             pScDrawView->SelectCurrentViewObject(aText );
                             bool bHasMakredObject = false;
-                            SvTreeListEntry* pParent = pRootNodes[nType];
+                            SvTreeListEntry* pParent = m_aRootNodes[nType];
                             SvTreeListEntry* pBeginEntry = nullptr;
                             if( pParent )
                                 pBeginEntry = FirstChild(pParent);
@@ -701,12 +701,12 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                             " " + GetEntryText(pEntry);
                 bRet = true;
             }
-            else if ( pParent == pRootNodes[ScContentId::NOTE] )
+            else if ( pParent == m_aRootNodes[ScContentId::NOTE] )
             {
                 aHelpText = GetEntryText(pEntry);           // notes as help text
                 bRet = true;
             }
-            else if ( pParent == pRootNodes[ScContentId::AREALINK] )
+            else if ( pParent == m_aRootNodes[ScContentId::AREALINK] )
             {
                 sal_uLong nIndex = GetChildIndex(pEntry);
                 if( nIndex != SC_CONTENT_NOCHILD )
@@ -741,6 +741,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
     if (!bDone)
         Window::RequestHelp( rHEvt );
 }
+#endif
 
 ScDocument* ScContentTree::GetSourceDocument()
 {
@@ -757,39 +758,40 @@ ScDocument* ScContentTree::GetSourceDocument()
 }
 
 //Move along and draw "*" sign .
-void ScContentTree::ObjectFresh( ScContentId nType, const SvTreeListEntry* pEntry )
+void ScContentTree::ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry)
 {
     if ( bHiddenDoc && !pHiddenDocument )
         return;     // other document displayed
     if(nType ==ScContentId::GRAPHIC||nType ==ScContentId::OLEOBJECT||nType ==ScContentId::DRAWING)
     {
-        SetUpdateMode(false);
+        m_xTreeView->freeze();
         ClearType( nType );
         GetDrawNames( nType/*, nId*/ );
         if( !pEntry )
             ApplyNavigatorSettings();
-        SetUpdateMode(true);
-        if( pEntry )
+        m_xTreeView->thaw();
+        if (pEntry)
         {
-            SvTreeListEntry* pParent = pRootNodes[nType];
-            SvTreeListEntry* pBeginEntry = nullptr;
-            SvTreeListEntry* pOldEntry = nullptr;
+            weld::TreeIter* pParent = m_aRootNodes[nType].get();
+            std::unique_ptr<weld::TreeIter> xOldEntry;
+            std::unique_ptr<weld::TreeIter> xBeginEntry(m_xTreeView->make_iterator(pParent));
+            bool bBeginEntry = false;
             if( pParent )
-                pBeginEntry = FirstChild(pParent);
-            while( pBeginEntry )
+                bBeginEntry = m_xTreeView->iter_children(*xBeginEntry);
+            while (bBeginEntry)
             {
-                OUString aTempText( GetEntryText( pBeginEntry ) );
-                if( aTempText ==  sKeyString )
+                OUString aTempText(m_xTreeView->get_text(*xBeginEntry));
+                if (aTempText ==  sKeyString)
                 {
-                    pOldEntry = pBeginEntry;
+                    xOldEntry = m_xTreeView->make_iterator(xBeginEntry.get());
                     break;
                 }
-                pBeginEntry =  Next( pBeginEntry );
+                bBeginEntry = m_xTreeView->iter_next(*xBeginEntry);
             }
-            if( pOldEntry )
+            if (xOldEntry)
             {
-                Expand(pParent);
-                Select( pOldEntry );
+                m_xTreeView->expand_row(*pParent);
+                m_xTreeView->select(*xOldEntry);
             }
         }
     }
@@ -815,7 +817,7 @@ void ScContentTree::Refresh( ScContentId nType )
         if (!DrawNamesChanged(ScContentId::DRAWING))
             return;
 
-    SetUpdateMode(false);
+    m_xTreeView->freeze();
 
     ClearType( nType );
 
@@ -837,7 +839,8 @@ void ScContentTree::Refresh( ScContentId nType )
         GetLinkNames();
 
     ApplyNavigatorSettings();
-    SetUpdateMode(true);
+
+    m_xTreeView->thaw();
 }
 
 void ScContentTree::GetTableNames()
@@ -976,10 +979,10 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                         {
                             if( bisInNavigatoeDlg )
                             {
-                                SvTreeListEntry* pParent = pRootNodes[nType];
+                                weld::TreeIter* pParent = m_aRootNodes[nType].get();
                                 if (pParent)
                                 {
-                                    InsertEntry( aName, pParent );
+                                    m_xTreeView->append(pParent, aName);
                                 }//end if parent
                                 else
                                     SAL_WARN("sc", "InsertContent without parent");
@@ -1099,27 +1102,28 @@ bool ScContentTree::NoteStringsChanged()
     if (!pDoc)
         return false;
 
-    SvTreeListEntry* pParent = pRootNodes[ScContentId::NOTE];
+    weld::TreeIter* pParent = m_aRootNodes[ScContentId::NOTE].get();
     if (!pParent)
         return false;
 
-    SvTreeListEntry* pEntry = FirstChild( pParent );
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pParent));
+    bool bEntry = m_xTreeView->iter_children(*xEntry);
 
     std::vector<sc::NoteEntry> aEntries;
     pDoc->GetAllNoteEntries(aEntries);
     for (const auto& rEntry : aEntries)
     {
         const ScPostIt* pNote = rEntry.mpNote;
-        if (!pEntry)
+        if (!bEntry)
             return true;
 
-        if (lcl_NoteString(*pNote) != GetEntryText(pEntry))
+        if (lcl_NoteString(*pNote) != m_xTreeView->get_text(*xEntry))
             return true;
 
-        pEntry = pEntry->NextSibling();
+        bEntry = m_xTreeView->iter_next_sibling(*xEntry);
     }
 
-    return pEntry != nullptr;
+    return bEntry;
 }
 
 bool ScContentTree::DrawNamesChanged( ScContentId nType )
@@ -1128,11 +1132,12 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
     if (!pDoc)
         return false;
 
-    SvTreeListEntry* pParent = pRootNodes[nType];
+    weld::TreeIter* pParent = m_aRootNodes[nType].get();
     if (!pParent)
         return false;
 
-    SvTreeListEntry* pEntry = FirstChild( pParent );
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pParent));
+    bool bEntry = m_xTreeView->iter_children(*xEntry);
 
     // iterate in flat mode for groups
     SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
@@ -1155,14 +1160,14 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
                 {
                     if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
                     {
-                        if ( !pEntry )
+                        if ( !bEntry )
                             bEqual = false;
                         else
                         {
-                            if ( ScDrawLayer::GetVisibleName( pObject ) != GetEntryText(pEntry) )
+                            if (ScDrawLayer::GetVisibleName(pObject) != m_xTreeView->get_text(*xEntry))
                                 bEqual = false;
 
-                            pEntry = pEntry->NextSibling();
+                            bEntry = m_xTreeView->iter_next_sibling(*xEntry);
                         }
                     }
                     pObject = aIter.Next();
@@ -1171,7 +1176,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
         }
     }
 
-    if ( pEntry )
+    if ( bEntry )
         bEqual = false;             // anything else
 
     return !bEqual;
@@ -1283,6 +1288,7 @@ static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
 
 void ScContentTree::DoDrag()
 {
+#if 0
     std::unique_ptr<ScDocumentLoader> pDocLoader;
     bIsInDrag = true;
 
@@ -1427,6 +1433,7 @@ void ScContentTree::DoDrag()
     }
 
     bIsInDrag = false;              // static member
+#endif
 }
 
 IMPL_LINK_NOARG(ScContentTree, ExecDragHdl, void*, void)
@@ -1466,11 +1473,13 @@ void ScContentTree::LoadFile( const OUString& rUrl )
 
 void ScContentTree::InitWindowBits( bool bButtons )
 {
+#if 0
     WinBits nFlags = GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL;
     if (bButtons)
         nFlags |= WB_HASBUTTONS | WB_HASBUTTONSATROOT;
 
     SetStyle( nFlags );
+#endif
 }
 
 void ScContentTree::SetRootType( ScContentId nNew )
@@ -1488,6 +1497,7 @@ void ScContentTree::SetRootType( ScContentId nNew )
 
 void ScContentTree::ToggleRoot()        // after selection
 {
+#if 0
     ScContentId nNew = ScContentId::ROOT;
     if ( nRootType == ScContentId::ROOT )
     {
@@ -1496,12 +1506,13 @@ void ScContentTree::ToggleRoot()        // after selection
         {
             SvTreeListEntry* pParent = GetParent(pEntry);
             for (sal_uInt16 i=1; i<=int(ScContentId::LAST); i++)
-                if ( pEntry == pRootNodes[static_cast<ScContentId>(i)] || pParent == pRootNodes[static_cast<ScContentId>(i)] )
+                if ( pEntry == m_aRootNodes[static_cast<ScContentId>(i)] || pParent == m_aRootNodes[static_cast<ScContentId>(i)] )
                     nNew = static_cast<ScContentId>(i);
         }
     }
 
     SetRootType( nNew );
+#endif
 }
 
 void ScContentTree::ResetManualDoc()
@@ -1601,36 +1612,26 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
 
 void ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& rName)
 {
-    SvTreeListEntry* pParent = pRootNodes[ nRoot ];
+    weld::TreeIter* pParent = m_aRootNodes[nRoot].get();
 
-    if( !pParent->HasChildren() )
+    if (pParent || !m_xTreeView->iter_has_child(*pParent))
         return;
 
-    SvTreeListEntry* pEntry = FirstChild( pParent );
-    while( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pParent));
+    bool bEntry = m_xTreeView->iter_children(*xEntry);
+
+    while (bEntry)
     {
-        if( GetEntryText( pEntry ) == rName )
+        if (m_xTreeView->get_text(*xEntry) == rName)
         {
-            SvTreeListBox::Select( pEntry );
+            m_xTreeView->select(*xEntry);
 
             // Scroll to the selected item
-            if( SvTreeListBox::GetVScroll()->IsVisible() )
-            {
-                long nBeforeCount = 0;
-                SvTreeList* pList = GetModel();
-                SvTreeListEntry* pRoot = pList->First();
-                while( pRoot != pParent )
-                {
-                    ++nBeforeCount;
-                    pRoot = pList->Next( pRoot );
-                }
-                SvTreeListBox::ScrollToAbsPos( pEntry->GetChildListPos()
-                            + nBeforeCount );
-            }
+            m_xTreeView->scroll_to_row(*xEntry);
 
             return;
         }
-        pEntry = Next( pEntry );
+        bEntry = m_xTreeView->iter_next(*xEntry);
     }
 }
 
@@ -1645,37 +1646,41 @@ void ScContentTree::ApplyNavigatorSettings()
         for( int i = 1; i <= int(ScContentId::LAST); ++i )
         {
             ScContentId nEntry = static_cast<ScContentId>(i);
-            if( pRootNodes[ nEntry ] )
+            if( m_aRootNodes[ nEntry ] )
             {
+#if 0
                 // gray or ungray
-                if( GetChildCount( pRootNodes[ nEntry ] ) == 0 )
+                if( GetChildCount( m_aRootNodes[ nEntry ] ) == 0 )
                 {
-                    pRootNodes[ nEntry ]->SetFlags( pRootNodes[ nEntry ]->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT );
-                    pRootNodes[ nEntry ]->SetTextColor( COL_GRAY );
+                    m_aRootNodes[ nEntry ]->SetFlags( m_aRootNodes[ nEntry ]->GetFlags() | SvTLEntryFlags::SEMITRANSPARENT );
+                    m_aRootNodes[ nEntry ]->SetTextColor( COL_GRAY );
                 }
                 else
                 {
-                   pRootNodes[ nEntry ]->SetFlags( pRootNodes[ nEntry ]->GetFlags() & ~SvTLEntryFlags::SEMITRANSPARENT );
-                   pRootNodes[ nEntry ]->SetTextColor( GetTextColor() );
+                   m_aRootNodes[ nEntry ]->SetFlags( m_aRootNodes[ nEntry ]->GetFlags() & ~SvTLEntryFlags::SEMITRANSPARENT );
+                   m_aRootNodes[ nEntry ]->SetTextColor( GetTextColor() );
                 }
+#endif
 
                 // expand
                 bool bExp = pSettings->IsExpanded( nEntry );
-                if( bExp != IsExpanded( pRootNodes[ nEntry ] ) )
+                if (bExp != m_xTreeView->get_row_expanded(*m_aRootNodes[nEntry]))
                 {
                     if( bExp )
-                        Expand( pRootNodes[ nEntry ] );
+                        m_xTreeView->expand_row(*m_aRootNodes[nEntry]);
                     else
-                        Collapse( pRootNodes[ nEntry ] );
+                        m_xTreeView->collapse_row(*m_aRootNodes[nEntry]);
                 }
 
                 // select
                 if( nRootSel == nEntry )
                 {
+#if 0 //TODO
                     SvTreeListEntry* pEntry = nullptr;
                     if( bExp && (nChildSel != SC_CONTENT_NOCHILD) )
-                        pEntry = GetEntry( pRootNodes[ nEntry ], nChildSel );
-                    Select( pEntry ? pEntry : pRootNodes[ nEntry ] );
+                        pEntry = GetEntry( m_aRootNodes[ nEntry ], nChildSel );
+                    Select( pEntry ? pEntry : m_aRootNodes[ nEntry ] );
+#endif
                 }
             }
         }
@@ -1690,24 +1695,21 @@ void ScContentTree::StoreNavigatorSettings() const
         for( int i = 1; i <= int(ScContentId::LAST); ++i )
         {
             ScContentId nEntry = static_cast<ScContentId>(i);
-            bool bExp = pRootNodes[ nEntry ] && IsExpanded( pRootNodes[ nEntry ] );
+            bool bExp = m_aRootNodes[nEntry] && m_xTreeView->get_row_expanded(*m_aRootNodes[nEntry]);
             pSettings->SetExpanded( nEntry, bExp );
         }
+
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xTreeView->make_iterator());
+        if (!m_xTreeView->get_cursor(xCurEntry.get()))
+            xCurEntry.reset();
+
         ScContentId nRoot;
         sal_uLong nChild;
-        GetEntryIndexes( nRoot, nChild, GetCurEntry() );
+        GetEntryIndexes(nRoot, nChild, xCurEntry.get());
+
         pSettings->SetRootSelected( nRoot );
         pSettings->SetChildSelected( nChild );
     }
-}
-
-void ScContentTree::InitEntry(SvTreeListEntry* pEntry,
-    const OUString& rStr, const Image& rImg1, const Image& rImg2)
-{
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
-    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2 );
-    SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    pEntry->ReplaceItem(std::make_unique<SvLBoxString>(rCol.GetText()), nColToHilite);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
