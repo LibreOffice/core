@@ -1517,7 +1517,22 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         if( nRowSpan == 1 || nRowSpan == -1 )
                             nRowSpan = n + 1;
                         else if( nRowSpan > 1 )
+                        {
                             nRowSpan = - nRowSpan;
+
+                            // tdf#123102 disable numbering of the new hidden
+                            // paragraph in merged cells to avoid of bad
+                            // renumbering of next list elements
+                            SwTableBox* pBox = pNewLine->GetTabBoxes()[nCurrBox];
+                            SwNodeIndex aIdx( *pBox->GetSttNd(), +1 );
+                            SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
+                            if( pCNd && pCNd->IsTextNode() && pCNd->GetTextNode()->GetNumRule() )
+                            {
+                                SwPosition aPos( *pCNd->GetTextNode() );
+                                SwPaM aPam( aPos, aPos );
+                                pDoc->DelNumRules( aPam );
+                            }
+                        }
                     }
                     else
                     {

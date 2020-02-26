@@ -19,6 +19,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <svtools/popupmenucontrollerbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
@@ -993,6 +994,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
     // first paragraph gets the same heading style
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
+{
+    createDoc("tdf123102.odt");
+    // insert a new row after a vertically merged cell
+    lcl_dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was "3." - caused by the hidden numbered paragraph of the new merged cell
+    assertXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/txt/Special", "rText", "2.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
