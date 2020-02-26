@@ -167,6 +167,37 @@ struct ImplSVAppData
     DECL_LINK(VclEventTestingHdl, Timer*, void);
 };
 
+/// Cache multiple scalings for the same bitmap
+struct ScaleCacheKey {
+    SalBitmap *mpBitmap;
+    Size       maDestSize;
+    ScaleCacheKey(SalBitmap *pBitmap, const Size &aDestSize)
+    {
+        mpBitmap = pBitmap;
+        maDestSize = aDestSize;
+    }
+    ScaleCacheKey(const ScaleCacheKey &key)
+    {
+        mpBitmap = key.mpBitmap;
+        maDestSize = key.maDestSize;
+    }
+    struct KeyHash {
+        std::size_t operator()(const ScaleCacheKey& k) const
+        {
+            return reinterpret_cast<std::size_t>(k.mpBitmap) ^ k.maDestSize.getWidth() ^
+                    (k.maDestSize.getHeight() << 16);
+        }
+    };
+    struct KeyEqual {
+        bool operator()(const ScaleCacheKey& l, const ScaleCacheKey& r) const
+        {
+            return l.mpBitmap == r.mpBitmap && l.maDestSize == r.maDestSize;
+        }
+    };
+};
+
+typedef o3tl::lru_map<ScaleCacheKey, BitmapEx, ScaleCacheKey::KeyHash, ScaleCacheKey::KeyEqual> lru_scale_cache;
+
 struct ImplSVGDIData
 {
     ~ImplSVGDIData();
@@ -183,7 +214,7 @@ struct ImplSVGDIData
     std::unique_ptr<ImplPrnQueueList> mpPrinterQueueList;   // List of all printer queue
     std::shared_ptr<PhysicalFontCollection> mxScreenFontList; // Screen-Font-List
     std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
-    o3tl::lru_map<SalBitmap*, BitmapEx> maScaleCache = o3tl::lru_map<SalBitmap*, BitmapEx>(10); // Cache for scaled images
+    lru_scale_cache         maScaleCache = lru_scale_cache(10); // Cache for scaled images
     ImplDirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter = nullptr;       // Converter for graphics
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
