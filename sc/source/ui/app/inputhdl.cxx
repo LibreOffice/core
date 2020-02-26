@@ -1621,17 +1621,29 @@ void ScInputHandler::PasteFunctionData()
     HideTip();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if (comphelper::LibreOfficeKit::isActive() && pTopView && pInputWin)
+        pInputWin->TextGrabFocus();
     if (pActiveView)
         pActiveView->ShowCursor();
 }
 
 void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 {
-    if (pActiveViewSh && (pTopView || pTableView))
+    // in case we have no top view try to create it
+    if (!pTopView && pInputWin)
+    {
+        ScInputMode eCurMode = eMode;
+        SetMode(SC_INPUT_TOP);
+        if (!pTopView)
+            SetMode(eCurMode);
+    }
+
+    EditView* pEditView = pTopView ? pTopView : pTableView;
+
+    if (pActiveViewSh && pEditView)
     {
         bool bEdit = false;
         OUString aFormula;
-        EditView* pEditView = pTopView ? pTopView : pTableView;
         const EditEngine* pEditEngine = pEditView->GetEditEngine();
         if (pEditEngine)
         {
