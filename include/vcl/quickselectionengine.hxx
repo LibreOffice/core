@@ -76,7 +76,6 @@ namespace vcl
 
     private:
         ::std::unique_ptr< QuickSelectionEngine_Data >    m_pData;
-        bool bEnabled;
 
     private:
         QuickSelectionEngine( const QuickSelectionEngine& ) = delete;
