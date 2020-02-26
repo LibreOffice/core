@@ -9051,6 +9051,33 @@ private:
         return true;
     }
 
+    void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren)
+    {
+        gtk_tree_model_iter_nth_child(pModel, result, pParent, nChildren - 1);
+        nChildren = gtk_tree_model_iter_n_children(pModel, result);
+        if (nChildren)
+        {
+            GtkTreeIter newparent(*result);
+            last_child(pModel, result, &newparent, nChildren);
+        }
+    }
+
+    GtkTreePath* get_path_of_last_entry(GtkTreeModel *pModel)
+    {
+        GtkTreePath *lastpath;
+        // find the last entry in the model for comparison
+        int nChildren = gtk_tree_model_iter_n_children(pModel, nullptr);
+        if (!nChildren)
+            lastpath = gtk_tree_path_new_from_indices(0, -1);
+        else
+        {
+            GtkTreeIter iter;
+            last_child(pModel, &iter, nullptr, nChildren);
+            lastpath = gtk_tree_model_get_path(pModel, &iter);
+        }
+        return lastpath;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -10381,12 +10408,7 @@ public:
 
         // find the last entry in the model for comparison
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        int nChildren = gtk_tree_model_iter_n_children(pModel, nullptr);
-        GtkTreePath *lastpath;
-        if (nChildren)
-            lastpath = gtk_tree_path_new_from_indices(nChildren - 1, -1);
-        else
-            lastpath = gtk_tree_path_new_from_indices(0, -1);
+        GtkTreePath *lastpath = get_path_of_last_entry(pModel);
 
         if (!ret)
         {
