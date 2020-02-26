@@ -524,7 +524,8 @@ cmd/id/lc_numberformatincdecimals.png cmd/de/lc_numberformatincdecimals.png
 cmd/id/sc_numberformatdecdecimals.png cmd/de/sc_numberformatdecdecimals.png
 cmd/id/sc_numberformatdecimal.png cmd/de/sc_numberformatdecimal.png
 cmd/id/sc_numberformatthousands.png cmd/de/sc_numberformatthousands.png
-cmd/id/sc_numberformatincdecimals.png cmd/de/sc_numberformatincdecimals.png
+cmd/lc_underlinesimple.png cmd/lc_underline.png
+cmd/sc_underlinesimple.png cmd/sc_underline.png
 cmd/ur/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
@@ -1341,6 +1342,13 @@ cmd/lc_setdefault.png cmd/lc_resetattributes.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_setdefault.png cmd/sc_resetattributes.png
 
+<<<<<<< HEAD   (183294 tdf#130483 prevent pasting cell exceeds the border.)
+=======
+# Impress
+sfx2/res/symphony/sidebar-transition-small.png cmd/sc_slidechangewindow.png
+sfx2/res/symphony/sidebar-transition-large.png cmd/lc_slidechangewindow.png
+
+>>>>>>> CHANGE (79d396 Breeze & Sifr: Fix for tdf#130939)
 # navigator
 cmd/32/dsbdocumentdatasource.png cmd/32/sbaexecutesql.png
 cmd/32/inserttoolbox.png cmd/32/dataimport.png
