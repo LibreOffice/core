@@ -483,7 +483,7 @@ published constants NumberingType
     const short TEXT_ORDINAL = 62;
 
     /** Footnoting symbols according the University of Chicago style:
-          *, &#2020;, &#2021;, &#00a7;, **, &#2020;&#2020; etc.
+          \*, &#2020;, &#2021;, &#00a7;, **, &#2020;&#2020; etc.
 
         @since LibreOffice 6.4
      */
