@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f613d4dd_6ce9083a",
+        "filename": "editeng/CustomTarget_generated.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T11:11:31Z",
+      "side": 1,
+      "message": "i have a very stupid question: how does this work at all? as i just found there is nothing in the buildsystem that sets $(PYTHON) variable so it expands to empty and gentoken.py is exectuable and its #! takes effect?",
+      "revId": "e6b9bc3f2ecf0fb7fde5b02f9d750ccbe022f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39b40fb9_e3d11a26",
         "filename": "sw/CustomTarget_generated.mk",
         "patchSetId": 5
