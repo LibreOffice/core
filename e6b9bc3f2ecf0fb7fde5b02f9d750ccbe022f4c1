@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "8918ae9a_c0fe9e97",
+        "filename": "editeng/CustomTarget_generated.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-26T11:55:03Z",
+      "side": 1,
+      "message": "gb_Python_INSTALLED_EXECUTABLE vs. PYTHON_FOR_BUILD appear to be the relevant vars, see gb_PythonTest_EXECUTABLE in solenv/gbuild/PythonTest.mk",
+      "parentUuid": "46709938_5d7c1add",
+      "revId": "e6b9bc3f2ecf0fb7fde5b02f9d750ccbe022f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39b40fb9_e3d11a26",
         "filename": "sw/CustomTarget_generated.mk",
         "patchSetId": 5
