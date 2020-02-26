@@ -13975,7 +13975,7 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
     // support GtkWidgets within a vcl::Window
     SystemWindowData winData = {};
     winData.bClipUsingNativeWidget = true;
-    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0, &winData, true);
+    auto xEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0, &winData, false);
     xEmbedWindow->Show();
     xEmbedWindow->set_expand(true);
 
