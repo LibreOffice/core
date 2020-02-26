@@ -702,7 +702,8 @@ SwFlyNotify::~SwFlyNotify()
         // #i54138# - suppress restart of the layout process
         // on changed frame height.
         // Note: It doesn't seem to be necessary and can cause layout loops.
-        if ( bPosChgd )
+        // Also suppress on initial positioning - required to trigger text wrapping (tdf#119748).
+        if ( bPosChgd && maFrame.Pos().X() != FAR_AWAY )
         {
             // indicate a restart of the layout process
             pFly->SetRestartLayoutProcess( true );
