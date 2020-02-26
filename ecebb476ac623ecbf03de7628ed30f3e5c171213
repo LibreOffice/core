@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d060ad08_d47ff823",
+        "filename": "unotools/source/ucbhelper/xtempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T10:17:38Z",
+      "side": 1,
+      "message": "it\u0027s not necessarily a document, just call it \"file\"",
+      "revId": "ecebb476ac623ecbf03de7628ed30f3e5c171213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
