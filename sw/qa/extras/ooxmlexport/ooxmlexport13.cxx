@@ -452,13 +452,31 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
                              getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testInputListExport, "tdf122186_input_list.odt")
+DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
-    // We need to make sure we don't export the text itself next to the input list field
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 5);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
+    if (!mbExported) // importing the ODT, an input field
+    {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Any aField = xFields->nextElement();
+        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
+    }
+    else // importing the DOCX, a form control
+    {
+        uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox"));
+        CPPUNIT_ASSERT(getProperty<bool>(xPropertySet, "Dropdown"));
+        auto const items(getProperty<uno::Sequence<OUString>>(xPropertySet, "StringItemList"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), items.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), items[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), items[1]);
+        CPPUNIT_ASSERT_EQUAL(OUString("3"), items[2]);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
