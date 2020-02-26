@@ -11,6 +11,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
+#include <test/container/xnamereplace.hxx>
 #include <test/sheet/xspreadsheets.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
 
@@ -24,6 +25,7 @@ class ScTableSheetsObj : public CalcUnoApiTest,
                          public ::apitest::XEnumerationAccess,
                          public ::apitest::XNameAccess,
                          public ::apitest::XNameContainer,
+                         public ::apitest::XNameReplace,
                          public ::apitest::XSpreadsheets,
                          public ::apitest::XSpreadsheets2
 {
@@ -42,6 +44,9 @@ public:
     CPPUNIT_TEST(testGetByName);
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
+
+    // XNameReplace
+    CPPUNIT_TEST(testReplaceByName);
 
     // XSpreadsheets
     CPPUNIT_TEST(testInsertNewByName);
@@ -80,6 +85,7 @@ ScTableSheetsObj::ScTableSheetsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , ::apitest::XNameAccess("Sheet1")
     , ::apitest::XNameContainer("Sheet2")
+    , ::apitest::XNameReplace("Sheet2")
 {
 }
 
@@ -102,6 +108,10 @@ uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 {
     xDocument.set(mxComponent, UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xReturn( xDocument->getSheets(), UNO_QUERY_THROW);
+
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
+    // XNameReplace
+    setReplacementElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
 
     return xReturn;
 }

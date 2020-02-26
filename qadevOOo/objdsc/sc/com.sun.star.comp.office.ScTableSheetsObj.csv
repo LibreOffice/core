@@ -1,4 +1,3 @@
-"ScTableSheetsObj";"com::sun::star::container::XNameReplace";"replaceByName()"
 "ScTableSheetsObj";"com::sun::star::container::XNameContainer";"insertByName()"
 "ScTableSheetsObj";"com::sun::star::container::XNameContainer";"removeByName()"
 "ScTableSheetsObj";"com::sun::star::container::XIndexAccess";"getCount()"
