@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fd8819e_71a9e23f",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T07:56:17Z",
+      "side": 1,
+      "message": "This must be reverted. You MUST use the pointer that is passed to the constructor. What you are doing now is - again - using an uninitialized member (your unique_ptr will be only initialized after parent ctor finished, and then it will be nullptr). You need to pass the pParent to the parent constructor, *and* also initialize your mpParent with pParent. What you are doing is sure way to crash.",
+      "range": {
+        "startLine": 59,
+        "startChar": 33,
+        "endLine": 59,
+        "endChar": 46
+      },
+      "revId": "97fc120ae07f33b113b415a8dbb10cc382936f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea91b01e_7661461f",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T07:56:17Z",
+      "side": 1,
+      "message": "You are right, I missed it is returned.",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 15
+      },
+      "revId": "97fc120ae07f33b113b415a8dbb10cc382936f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3008ceda_577b25ca",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T07:56:17Z",
+      "side": 1,
+      "message": "This must be a localizable string.\n\nIs there a way to ask the library for the maximum length, so that we could possibly also show the number here?",
+      "range": {
+        "startLine": 118,
+        "startChar": 20,
+        "endLine": 119,
+        "endChar": 27
+      },
+      "revId": "97fc120ae07f33b113b415a8dbb10cc382936f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd920bc4_9c17ef4c",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T07:56:17Z",
+      "side": 1,
+      "message": "You must not use unique_ptr here. you are not managing the lifetime of the pointed object, you cannot destroy it after the dialog closes. just use simple pointer.",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 19
+      },
+      "revId": "97fc120ae07f33b113b415a8dbb10cc382936f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -46,6 +46,29 @@
       "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c20a32b_dd2a2981",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T07:56:17Z",
+      "side": 0,
+      "message": "Agree, this may be left out, since we inherit from GenericDialogController that uses weld::Widget*.",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
