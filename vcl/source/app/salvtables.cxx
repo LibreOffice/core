@@ -137,10 +137,9 @@ void SalBitmap::DropScaledCache()
     if (ImplSVData* pSVData = ImplGetSVData())
     {
         auto& rCache = pSVData->maGDIData.maScaleCache;
-        rCache.remove_if(
-            [this](const o3tl::lru_map<SalBitmap*, BitmapEx>::key_value_pair_t& rKeyValuePair) {
-                return rKeyValuePair.first == this;
-            });
+
+        rCache.remove_if([this] (const lru_scale_cache::key_value_pair_t& rKeyValuePair)
+                         { return rKeyValuePair.first.mpBitmap == this; });
     }
 }
 
