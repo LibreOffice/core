@@ -8,10 +8,8 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>

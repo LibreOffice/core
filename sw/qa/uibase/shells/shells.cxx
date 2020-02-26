@@ -12,9 +12,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>

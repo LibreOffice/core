@@ -436,6 +436,7 @@ blacklist:
     - osl/endian.h
     sw/qa/extras/layout/layout.cxx:
     - comphelper/scopeguard.hxx
+    - com/sun/star/linguistic2/LinguServiceManager.hpp
     sw/source/core/doc/DocumentFieldsManager.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
