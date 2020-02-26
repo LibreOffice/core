@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2050563_351aa8a7",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-26T19:38:27Z",
+      "side": 1,
+      "message": "lcl_ prefix can be dropped (lcl stands for \"local\", which means local function, but this isn\u0027t a local function now, but a class method).",
+      "range": {
+        "startLine": 1091,
+        "startChar": 39,
+        "endLine": 1091,
+        "endChar": 43
+      },
+      "revId": "9f3ffb22e48a49d4cbf283216e4754ac01ca1d59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74d9ddc1_d8e8e8cc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-26T19:38:27Z",
+      "side": 1,
+      "message": "SfxCommonTemplateDialog_Impl:: prefix can be removed.",
+      "range": {
+        "startLine": 1141,
+        "startChar": 23,
+        "endLine": 1141,
+        "endChar": 53
+      },
+      "revId": "9f3ffb22e48a49d4cbf283216e4754ac01ca1d59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3360f05_72c686df",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-02-26T19:38:27Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 1282,
+        "startChar": 23,
+        "endLine": 1282,
+        "endChar": 53
+      },
+      "revId": "9f3ffb22e48a49d4cbf283216e4754ac01ca1d59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
