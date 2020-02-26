@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bccdcaf7_59c0d2d3",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2732,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T08:41:48Z",
+      "side": 0,
+      "message": "How this case is handled now? This happens when pGraphObj-\u003eGetGraphic().GetType() !\u003d GraphicType::Bitmap, or checksums don\u0027t match, or it\u0027s not PNG/BMP? Shouldn\u0027t there be a fallback?",
+      "range": {
+        "startLine": 2732,
+        "startChar": 16,
+        "endLine": 2732,
+        "endChar": 41
+      },
+      "revId": "22394a468eb8d594501e443bdb84608b6552a8a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
