@@ -45,6 +45,30 @@
       "revId": "809953ce9dd310bfcf3ce32e723957c29f97c605",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "552f628c_c701a1af",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-26T14:12:12Z",
+      "side": 1,
+      "message": "Please ignore this one.",
+      "parentUuid": "feef6dd2_7e604226",
+      "range": {
+        "startLine": 2030,
+        "startChar": 15,
+        "endLine": 2030,
+        "endChar": 85
+      },
+      "revId": "809953ce9dd310bfcf3ce32e723957c29f97c605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
