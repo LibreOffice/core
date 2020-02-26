@@ -3595,24 +3595,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         } catch(...) {}
 
         // force resend
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pWindow->GetLOKNotifier();
-        if (!pNotifier)
-        {
-            pWindow->Resize();
-            return;
-        }
-
-        try
-        {
-            // Mobile.
-            std::stringstream aStream;
-            boost::property_tree::ptree aTree = pWindow->DumpAsPropertyTree();
-            aTree.put("id", pWindow->GetLOKWindowId());
-            boost::property_tree::write_json(aStream, aTree);
-            const std::string message = aStream.str();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-        }
-        catch (boost::property_tree::json_parser::json_parser_error&) {}
+        pWindow->Resize();
     }
 }
 
