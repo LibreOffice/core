@@ -229,7 +229,7 @@ void setLocale(const LanguageTag& rLanguageTag)
 const LanguageTag& getLocale()
 {
     const LanguageTag& rLocale = g_aLanguageAndLocale.getLocale();
-    SAL_WARN_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Locale not set");
+    SAL_INFO_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Locale not set");
     return rLocale;
 }
 
@@ -241,7 +241,7 @@ void setLanguageTag(const LanguageTag& rLanguageTag)
 const LanguageTag& getLanguageTag()
 {
     const LanguageTag& rLanguage = g_aLanguageAndLocale.getLanguage();
-    SAL_WARN_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Language not set");
+    SAL_INFO_IF(rLanguage.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Language not set");
     return rLanguage;
 }
 
