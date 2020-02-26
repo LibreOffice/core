@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcfe1242_badb0ec1",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-02-26T12:28:23Z",
+      "side": 1,
+      "message": "boost::hash_combine is nice to use here. For example, the bulk of the top 32 bits are going to be pretty similar here on 64-bit, since they\u0027re likely coming from the same region of the heap.\n\nAlternatively, multiple by 31 and add works better on modern machines than XOR.",
+      "revId": "6dff13bfb2a2cc98d5f832912ae7af8f1aee2c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
