@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d34117f5_7e23d362",
+        "filename": "solenv/gbuild/CustomTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T10:49:52Z",
+      "side": 1,
+      "message": "this needs the dep on $(call gb_ExternalExecutable_get_dependencies,python) again",
+      "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "562c34b4_40d2af83",
+        "filename": "solenv/gbuild/CustomTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T10:49:52Z",
+      "side": 1,
+      "message": "there\u0027s some kind of variable to be used for the executable...\n$(call gb_ExternalExecutable_get_command,python)",
+      "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
