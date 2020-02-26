@@ -171,10 +171,10 @@ void NumberingPopup::GrabFocus()
 
 IMPL_LINK_NOARG(NumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
 {
-    mrController.EndPopupMode();
-
     auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
     mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
+
+    mrController.EndPopupMode();
 }
 
 NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ):
