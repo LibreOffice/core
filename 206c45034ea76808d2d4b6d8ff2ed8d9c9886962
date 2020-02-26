@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f110472f_9e8d4f78",
+        "filename": "cui/source/tabpages/tparea.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T19:18:33Z",
+      "side": 1,
+      "message": "As I said: this \"else\" is almost complete code duplication. If this were to stay, you\u0027d need to refactor this into one code section using some variable that would be set in one if-then-else statement.",
+      "range": {
+        "startLine": 383,
+        "startChar": 4,
+        "endLine": 383,
+        "endChar": 8
+      },
+      "revId": "206c45034ea76808d2d4b6d8ff2ed8d9c9886962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
