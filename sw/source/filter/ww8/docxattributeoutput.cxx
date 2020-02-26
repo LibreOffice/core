@@ -1321,7 +1321,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin() + nFieldsInPrevHyperlink; pIt != m_Fields.end(); )
     {
         // Add the fields starts for all but hyperlinks and TOCs
-        if ( pIt->bOpen && pIt->pField )
+        if (pIt->bOpen && pIt->pField && pIt->eType != ww::eFORMDROPDOWN)
         {
             StartField_Impl( pNode, nPos, *pIt );
 
@@ -1386,7 +1386,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
         // Add the fields starts for hyperlinks, TOCs and index marks
-        if ( pIt->bOpen && !pIt->pField )
+        if (pIt->bOpen && (!pIt->pField || pIt->eType == ww::eFORMDROPDOWN))
         {
             StartRedline( m_pRedlineData );
             StartField_Impl( pNode, nPos, *pIt, true );
@@ -1921,10 +1921,55 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
 }
 
-void DocxAttributeOutput::WriteFormDateEnd()
+void DocxAttributeOutput::WriteSdtEnd()
 {
     m_pSerializer->endElementNS(XML_w, XML_sdtContent);
     m_pSerializer->endElementNS(XML_w, XML_sdt);
+}
+
+void DocxAttributeOutput::WriteSdtDropDownStart(
+        OUString const& rName,
+        OUString const& rSelected,
+        uno::Sequence<OUString> const& rListItems)
+{
+    m_pSerializer->startElementNS(XML_w, XML_sdt);
+    m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+
+    m_pSerializer->singleElementNS(XML_w, XML_alias,
+        FSNS(XML_w, XML_val), OUStringToOString(rName, RTL_TEXTENCODING_UTF8));
+
+    sal_Int32 nId = comphelper::findValue(rListItems, rSelected);
+    if (nId == -1)
+    {
+        nId = 0;
+    }
+
+    m_pSerializer->startElementNS(XML_w, XML_dropDownList,
+            FSNS(XML_w, XML_lastValue), OString::number(nId));
+
+    for (auto const& rItem : rListItems)
+    {
+        auto const item(OUStringToOString(rItem, RTL_TEXTENCODING_UTF8));
+        m_pSerializer->singleElementNS(XML_w, XML_listItem,
+                FSNS(XML_w, XML_value), item,
+                FSNS(XML_w, XML_displayText), item);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_dropDownList);
+    m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+    m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+
+    // the lastValue only identifies the entry in the list, also export
+    // currently selected item's displayText as run content (if one exists)
+    if (rListItems.size())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_r);
+        m_pSerializer->startElementNS(XML_w, XML_t);
+        m_pSerializer->writeEscaped(rListItems[nId]);
+        m_pSerializer->endElementNS(XML_w, XML_t);
+        m_pSerializer->endElementNS(XML_w, XML_r);
+    }
 }
 
 void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
@@ -1962,6 +2007,14 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
 
         WriteFormDateStart( sFullDate, sDateFormat, sLang );
     }
+    else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
+    {
+        assert(!rInfos.pFieldmark);
+        SwDropDownField const& rField2(*static_cast<SwDropDownField const*>(rInfos.pField.get()));
+        WriteSdtDropDownStart(rField2.GetName(),
+                rField2.GetSelectedItem(),
+                rField2.GetItemSequence());
+    }
     else if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
     {
         if ( bWriteRun )
@@ -1969,27 +2022,16 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
 
         if ( rInfos.eType == ww::eFORMDROPDOWN )
         {
-                m_pSerializer->startElementNS( XML_w, XML_fldChar,
-                    FSNS( XML_w, XML_fldCharType ), "begin" );
-                if ( rInfos.pFieldmark && !rInfos.pField )
-                    WriteFFData(  rInfos );
-                if ( rInfos.pField )
-                {
-                    const SwDropDownField& rField2 = *static_cast<const SwDropDownField*>(rInfos.pField.get());
-                    uno::Sequence<OUString> aItems =
-                        rField2.GetItemSequence();
-                    GetExport().DoComboBox(rField2.GetName(),
-                               rField2.GetHelp(),
-                               rField2.GetToolTip(),
-                               rField2.GetSelectedItem(), aItems);
-                }
-                m_pSerializer->endElementNS( XML_w, XML_fldChar );
+            m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                FSNS( XML_w, XML_fldCharType ), "begin" );
+            assert( rInfos.pFieldmark && !rInfos.pField );
+            WriteFFData(rInfos);
+            m_pSerializer->endElementNS( XML_w, XML_fldChar );
 
-                if ( bWriteRun )
-                    m_pSerializer->endElementNS( XML_w, XML_r );
+            if ( bWriteRun )
+                m_pSerializer->endElementNS( XML_w, XML_r );
 
-                if ( !rInfos.pField )
-                    CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
+            CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
         else
         {
@@ -2174,9 +2216,10 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
 void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
-    if ( rInfos.eType == ww::eFORMDATE )
+    if (rInfos.eType == ww::eFORMDATE
+        || (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField))
     {
-        WriteFormDateEnd();
+        WriteSdtEnd();
         return;
     }
 
