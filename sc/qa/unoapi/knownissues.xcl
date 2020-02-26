@@ -38,9 +38,6 @@ sc.ScTableSheetObj::com::sun::star::sheet::XCellRangeData
 ### i84669 ###
 sc.ScTabViewObj::com::sun::star::sheet::XRangeSelection
 
-### i23594 ###
-sc.ScTableSheetsObj::com::sun::star::container::XNameReplace
-
 ### i31378 ###
 sc.ScDocumentConfiguration::com::sun::star::document::Settings
 
