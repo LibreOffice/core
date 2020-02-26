@@ -340,8 +340,9 @@ IMPL_LINK_NOARG(SdPageObjsTLV, MouseReleaseHdl, const MouseEvent&, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(SdPageObjsTLV, DragBeginHdl, weld::TreeView&, bool)
+IMPL_LINK(SdPageObjsTLV, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
+    rUnsetDragIcon = false;
     return StartDrag();
 }
 

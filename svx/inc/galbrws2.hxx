@@ -111,7 +111,7 @@ private:
                         DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
                         DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
                         DECL_LINK( RowActivatedHdl, weld::TreeView&, bool );
-                        DECL_LINK( DragBeginHdl, weld::TreeView&, bool );
+                        DECL_LINK( DragBeginHdl, bool&, bool );
                         DECL_LINK( VisRowsScrolledHdl, weld::TreeView&, void );
                         DECL_LINK( SizeAllocHdl, const Size&, void );
 

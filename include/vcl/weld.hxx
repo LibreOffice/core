@@ -722,8 +722,9 @@ protected:
     Link<TreeView&, void> m_aModelChangedHdl;
     // if handler returns true, then menu has been show and event is consumed
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
-    // if handler returns true, drag is disallowed
-    Link<TreeView&, bool> m_aDragBeginHdl;
+    // if handler returns true, drag is disallowed, consumer can change bool
+    // arg to false to disable the treeview default dnd icon
+    Link<bool&, bool> m_aDragBeginHdl;
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
     std::vector<int> m_aRadioIndexes;
@@ -991,7 +992,7 @@ public:
                                     sal_uInt8 eDNDConstants)
         = 0;
 
-    void connect_drag_begin(const Link<TreeView&, bool>& rLink) { m_aDragBeginHdl = rLink; }
+    void connect_drag_begin(const Link<bool&, bool>& rLink) { m_aDragBeginHdl = rLink; }
 
     //all of them
     void select_all() { unselect(-1); }
@@ -1215,23 +1216,28 @@ public:
     void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                             const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck)
+                             const OUString* pIconName, VirtualDevice* pImageSufface,
+                             TriState eCheckRadioFalse)
         = 0;
     void append_item(const OUString& rId, const OUString& rStr)
     {
-        insert_item(-1, rId, rStr, nullptr, nullptr, false);
+        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_INDET);
     }
     void append_item_check(const OUString& rId, const OUString& rStr)
     {
-        insert_item(-1, rId, rStr, nullptr, nullptr, true);
+        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_TRUE);
+    }
+    void append_item_radio(const OUString& rId, const OUString& rStr)
+    {
+        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_FALSE);
     }
     void append_item(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert_item(-1, rId, rStr, &rImage, nullptr, false);
+        insert_item(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
     }
     void append_item(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert_item(-1, rId, rStr, nullptr, &rImage, false);
+        insert_item(-1, rId, rStr, nullptr, &rImage, TRISTATE_INDET);
     }
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
@@ -1957,12 +1963,14 @@ public:
 
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_label(const OString& rIdent, const OUString& rLabel) = 0;
+    virtual OUString get_label(const OString& rIdent) const = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;
     virtual bool get_active(const OString& rIdent) const = 0;
     virtual void set_visible(const OString& rIdent, bool bVisible) = 0;
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck)
+                        const OUString* pIconName, VirtualDevice* pImageSufface,
+                        TriState eCheckRadioFalse)
         = 0;
 
     virtual void clear() = 0;
@@ -1972,19 +1980,23 @@ public:
 
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr, false);
+        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_INDET);
     }
     void append_check(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr, true);
+        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_TRUE);
+    }
+    void append_radio(const OUString& rId, const OUString& rStr)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr, TRISTATE_FALSE);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr, false);
+        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_FALSE);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage, false);
+        insert(-1, rId, rStr, nullptr, &rImage, TRISTATE_FALSE);
     }
 
     // return the number of toplevel nodes

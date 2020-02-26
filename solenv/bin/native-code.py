@@ -497,7 +497,6 @@ constructor_map = {
 custom_widgets = [
     'BookmarksBox',
     'CategoryListBox',
-    'ColumnEdit',
     'ContentListBox',
     'ContextVBox',
     'CustomAnimationList',
@@ -510,7 +509,6 @@ custom_widgets = [
     'PriorityMergedHBox',
     'PropertyControl',
     'RecentDocsView',
-    'RowEdit',
     'SearchBox',
     'SearchResultsBox',
     'SidebarToolBox',
