@@ -4674,6 +4674,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                             else if ( IsAttrAtPos::InetAttr == aContentAtPos.eContentAtPos )
                             {
+                                if (comphelper::LibreOfficeKit::isActive())
+                                {
+                                    OUString val((*static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)).GetValue());
+                                    if (val.startsWith("#"))
+                                        bExecHyperlinks = true;
+                                }
                                 if ( bExecHyperlinks && aContentAtPos.aFnd.pAttr )
                                     rSh.ClickToINetAttr( *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr), nFilter );
                             }

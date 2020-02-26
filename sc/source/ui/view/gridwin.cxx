@@ -2194,14 +2194,18 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
         {
             nMouseStatus = SC_GM_NONE;              // Ignore double-click
-
+            bool isTiledRendering = comphelper::LibreOfficeKit::isActive();
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().
             if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
             {
+                if (aUrl.startsWith("#")) {
+                        ScGlobal::OpenURL(aUrl, aTarget, isTiledRendering);
+                        return;
+                }
                 // in mobile view there is no ctrl+click and for hyperlink popup
                 // the cell coordinates must be sent along with click position for elegance
-                if (comphelper::LibreOfficeKit::isActive() &&
+                if (isTiledRendering &&
                      comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
                 {
                     ScTabViewShell* pViewShell = pViewData->GetViewShell();
@@ -2252,7 +2256,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     aBuf.append('#');
                     OUString aUrlCalcA1(aTempAddr.Format(ScRefFlags::ADDR_ABS_3D, pDoc, formula::FormulaGrammar::CONV_OOO));
                     aBuf.append(aUrlCalcA1);
-                    ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget);
+                    ScGlobal::OpenURL(aBuf.makeStringAndClear(), aTarget, isTiledRendering);
                 }
             }
 
