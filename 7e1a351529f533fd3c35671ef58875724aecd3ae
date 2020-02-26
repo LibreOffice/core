@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3e00e35a_44fd32fe",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a269c6d9_c76021ce",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 42
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfd73d25_0c119b17",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "91561d59_d514dab5",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done, Please have a look.",
+      "parentUuid": "fe4b935f_9ab1c919",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0a1f18a_844d5635",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
@@ -116,6 +164,30 @@
       "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af37b5d_279bbf04",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0a1f18a_844d5635",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 1
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "ee319d3e_85c395d4",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07d9156a_6d73a68e",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d38c2805_696baf62",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
@@ -165,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "78b0cdca_804a8798",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d38c2805_696baf62",
+      "range": {
+        "startLine": 135,
+        "startChar": 12,
+        "endLine": 135,
+        "endChar": 41
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "466aea75_f7e03603",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
@@ -185,6 +305,30 @@
       "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed1f77d8_326b8fe4",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "466aea75_f7e03603",
+      "range": {
+        "startLine": 305,
+        "startChar": 17,
+        "endLine": 305,
+        "endChar": 24
+      },
+      "revId": "7e1a351529f533fd3c35671ef58875724aecd3ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

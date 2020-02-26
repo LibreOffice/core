@@ -22,6 +22,30 @@
       "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "389f623d_b863e9f2",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-26T07:34:26Z",
+      "side": 0,
+      "message": "Code just builds fine, even without it. It may be it may be somehow included.",
+      "parentUuid": "0f4a5b1f_73d41e19",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
