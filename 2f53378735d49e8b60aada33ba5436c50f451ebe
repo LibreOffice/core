@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "3e128155_b1f02e75",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-02-26T12:27:28Z",
+      "side": 1,
+      "message": "I couldn\u0027t understand this and following two comments, do you suggest me to change or keep them 64? I wrote their types according to assignments.",
+      "parentUuid": "3d2a24b4_23f019a9",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd7574bf_fcc22923",
         "filename": "sw/source/ui/config/optcomp.cxx",
         "patchSetId": 8
