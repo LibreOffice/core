@@ -71,10 +71,8 @@ WrapPropertyPanel::WrapPropertyPanel(
     // controller items
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
-    , mxWrapOptions1(m_xBuilder->weld_toolbar("wrapoptions1"))
-    , mxWrapOptions1Dispatch(new ToolbarUnoDispatcher(*mxWrapOptions1, rxFrame))
-    , mxWrapOptions2(m_xBuilder->weld_toolbar("wrapoptions2"))
-    , mxWrapOptions2Dispatch(new ToolbarUnoDispatcher(*mxWrapOptions2, rxFrame))
+    , mxWrapOptions(m_xBuilder->weld_toolbar("wrapoptions"))
+    , mxWrapOptionsDispatch(new ToolbarUnoDispatcher(*mxWrapOptions, rxFrame))
     , mxSpacingLB(m_xBuilder->weld_combo_box("spacingLB"))
 {
     FieldUnit eMetric = ::GetDfltMetric(false);
@@ -92,10 +90,8 @@ void WrapPropertyPanel::dispose()
 {
     mxSpacingLB.reset();
 
-    mxWrapOptions2Dispatch.reset();
-    mxWrapOptions2.reset();
-    mxWrapOptions1Dispatch.reset();
-    mxWrapOptions1.reset();
+    mxWrapOptionsDispatch.reset();
+    mxWrapOptions.reset();
 
     maSwLRSpacingControl.dispose();
     maSwULSpacingControl.dispose();

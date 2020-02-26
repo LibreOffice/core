@@ -60,7 +60,7 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <child>
-              <object class="GtkToolbar" id="wrapoptions1">
+              <object class="GtkToolbar" id="wrapoptions">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="toolbar_style">icons</property>
@@ -105,20 +105,6 @@
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolbar" id="wrapoptions2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
-                <property name="icon_size">2</property>
                 <child>
                   <object class="GtkRadioToolButton" id=".uno:WrapLeft">
                     <property name="visible">True</property>
@@ -162,7 +148,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </object>
