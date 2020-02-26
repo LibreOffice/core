@@ -3662,6 +3662,9 @@ module com {
      [property, optional] string ListId;
      [property, optional] short OutlineLevel;
      [property, optional] ::com::sun::star::graphic::XGraphic ParaBackGraphic;
+     [property, optional, readonly] boolean ContinueingPreviousSubTree;
+     [property, optional, readonly] string ListLabelString;
+     [property, optional] boolean ParaHyphenationNoCaps;
     };
    };
    module util {
@@ -5607,6 +5610,11 @@ module com {
      interface ::com::sun::star::document::XMimeTypeInfo;
     };
     published service GraphicExportFilter: ::com::sun::star::drawing::XGraphicExportFilter;
+    published struct QRCode {
+     string Payload;
+     long ErrorCorrection;
+     long Border;
+    };
    };
    module graphic {
     published interface XGraphic;
@@ -5640,6 +5648,7 @@ module com {
      [property, optional] boolean SignatureLineCanAddComment;
      [property, optional] ::com::sun::star::graphic::XGraphic SignatureLineUnsignedImage;
      [property, optional] boolean SignatureLineIsSigned;
+     [property, optional] ::com::sun::star::drawing::QRCode QRCodeProperties;
     };
     /** @deprecated */ published interface XShapeGroup {
      interface ::com::sun::star::drawing::XShape;
@@ -5812,6 +5821,12 @@ module com {
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceX;
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceY;
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceZ;
+    };
+    published constants QRCodeErrorCorrection {
+     const long HIGH = 4;
+     const long LOW = 1;
+     const long MEDIUM = 2;
+     const long QUARTILE = 3;
     };
     published service RectangleShape {
      service ::com::sun::star::drawing::Shape;
@@ -7650,6 +7665,12 @@ module com {
     published struct ConfigurationEvent: ::com::sun::star::container::ContainerEvent {
      string ResourceURL;
      any aInfo;
+    };
+    published interface XUIConfigurationListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void elementInserted([in] ::com::sun::star::ui::ConfigurationEvent Event);
+     void elementRemoved([in] ::com::sun::star::ui::ConfigurationEvent Event);
+     void elementReplaced([in] ::com::sun::star::ui::ConfigurationEvent Event);
     };
    };
    module util {
@@ -13491,6 +13512,7 @@ module com {
      const short PAGE_DESCRIPTOR = 7;
      const short ROMAN_LOWER = 3;
      const short ROMAN_UPPER = 2;
+     const short SYMBOL_CHICAGO = 63;
      const short TEXT_CARDINAL = 61;
      const short TEXT_NUMBER = 60;
      const short TEXT_ORDINAL = 62;
@@ -13931,6 +13953,7 @@ module com {
      [property, optional] short RelativeHeightRelation;
      [property, optional] short RelativeWidthRelation;
      [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
+     [property, optional] boolean AllowOverlap;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -14830,6 +14853,7 @@ module com {
      [property, optional] short PositionLayoutDir;
      [property, optional, readonly] ::com::sun::star::awt::Point StartPositionInHoriL2R;
      [property, optional, readonly] ::com::sun::star::awt::Point EndPositionInHoriL2R;
+     [property, optional] boolean AllowOverlap;
     };
     published constants SizeType {
      const short FIX = 1;
@@ -16879,6 +16903,36 @@ module com {
      EXECUTE_MODIFIED = 2,
      CONTINUE_MODIFIED = 3
     };
+    published interface XUIConfiguration {
+     interface ::com::sun::star::uno::XInterface;
+     void addConfigurationListener([in] ::com::sun::star::ui::XUIConfigurationListener Listener);
+     void removeConfigurationListener([in] ::com::sun::star::ui::XUIConfigurationListener Listener);
+    };
+    published interface XUIConfigurationPersistence {
+     interface ::com::sun::star::uno::XInterface;
+     void reload() raises (::com::sun::star::uno::Exception);
+     void store() raises (::com::sun::star::uno::Exception);
+     void storeToStorage([in] ::com::sun::star::embed::XStorage Storage) raises (::com::sun::star::uno::Exception);
+     boolean isModified();
+     boolean isReadOnly();
+    };
+    published interface XUIConfigurationStorage {
+     interface ::com::sun::star::uno::XInterface;
+     void setStorage([in] ::com::sun::star::embed::XStorage Storage);
+     boolean hasStorage();
+    };
+    published interface XAcceleratorConfiguration {
+     interface ::com::sun::star::ui::XUIConfigurationPersistence;
+     interface ::com::sun::star::ui::XUIConfigurationStorage;
+     interface ::com::sun::star::ui::XUIConfiguration;
+     sequence< ::com::sun::star::awt::KeyEvent > getAllKeyEvents();
+     string getCommandByKeyEvent([in] ::com::sun::star::awt::KeyEvent aKeyEvent) raises (::com::sun::star::container::NoSuchElementException);
+     void setKeyEvent([in] ::com::sun::star::awt::KeyEvent aKeyEvent, [in] string sCommand) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
+     void removeKeyEvent([in] ::com::sun::star::awt::KeyEvent aKeyEvent) raises (::com::sun::star::container::NoSuchElementException);
+     sequence< ::com::sun::star::awt::KeyEvent > getKeyEventsByCommand([in] string sCommand) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
+     sequence< any > getPreferredKeyEventsForCommandList([in] sequence< string > lCommandList) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
+     void removeCommandFromAllKeyEvents([in] string sCommand) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
+    };
     published interface XContextMenuInterceptor {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::ui::ContextMenuInterceptorAction notifyContextMenuExecute([in] ::com::sun::star::ui::ContextMenuExecuteEvent aEvent);
@@ -16952,7 +17006,7 @@ module com {
      published interface XFilePreview {
       interface ::com::sun::star::uno::XInterface;
       sequence< short > getSupportedImageFormats();
-      ::com::sun::star::util::Color getTargetColorDepth();
+      /** @deprecated */ ::com::sun::star::util::Color getTargetColorDepth();
       long getAvailableWidth();
       long getAvailableHeight();
       void setImage([in] short aImageFormat, [in] any aImage) raises (::com::sun::star::lang::IllegalArgumentException);
