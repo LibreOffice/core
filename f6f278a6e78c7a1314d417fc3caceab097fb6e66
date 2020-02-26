@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28e89fbf_46bd8ba3",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T10:37:17Z",
+      "side": 1,
+      "message": "doesn\u0027t work?\n\nhttps://en.cppreference.com/w/cpp/container/multimap/find\n\n1,2) Finds an element with key equivalent to key. If there are several elements with key in the container, any of them may be returned.\n\nthis is better: https://en.cppreference.com/w/cpp/container/multimap/equal_range",
+      "revId": "f6f278a6e78c7a1314d417fc3caceab097fb6e66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4532997c_e372f8d2",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T10:37:17Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "f6f278a6e78c7a1314d417fc3caceab097fb6e66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
