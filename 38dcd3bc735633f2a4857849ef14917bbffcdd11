@@ -22,6 +22,29 @@
       "revId": "38dcd3bc735633f2a4857849ef14917bbffcdd11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1495fea8_3150d01e",
+        "filename": "sd/source/ui/animations/STLPropertySet.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-26T18:55:27Z",
+      "side": 0,
+      "message": "Well, you still had not restored the mistakenly removed comma?",
+      "range": {
+        "startLine": 66,
+        "startChar": 57,
+        "endLine": 66,
+        "endChar": 58
+      },
+      "revId": "38dcd3bc735633f2a4857849ef14917bbffcdd11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
