@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "e6439f3a_8709841d",
+        "filename": "editeng/CustomTarget_generated.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-26T11:59:58Z",
+      "side": 1,
+      "message": "suspect that PythonTest.mk predates the introduction of $(call gb_ExternalExecutable_get_command,python)",
+      "parentUuid": "8918ae9a_c0fe9e97",
+      "revId": "e6b9bc3f2ecf0fb7fde5b02f9d750ccbe022f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39b40fb9_e3d11a26",
         "filename": "sw/CustomTarget_generated.mk",
         "patchSetId": 5
