@@ -30,7 +30,7 @@
         <info>
           <desc>A locked user interface element cannot be moved or undocked by the user. This property is only active when the user interface element is in a docked state.</desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="Docked" oor:type="xs:boolean" oor:nillable="false">
         <info>
