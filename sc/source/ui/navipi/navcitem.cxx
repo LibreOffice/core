@@ -88,7 +88,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
             break;
 
         case SID_SELECT_SCENARIO:
-            rNavigatorDlg.aWndScenarios->NotifyState( pItem );
+//TODO            rNavigatorDlg.aWndScenarios->NotifyState( pItem );
             break;
 
         default:

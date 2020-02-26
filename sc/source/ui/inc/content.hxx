@@ -20,15 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 
-#include <vcl/treelistbox.hxx>
+#include <vcl/weld.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>
 
-class ScNavigatorDlg;
+class ScAreaLink;
+class ScLinkTransferObj;
 class ScDocument;
 class ScDocShell;
-class ScAreaLink;
+class ScNavigatorDlg;
 
 enum class ScContentId {
     ROOT, TABLE, RANGENAME, DBAREA,
@@ -38,10 +39,12 @@ enum class ScContentId {
 
 const sal_uLong SC_CONTENT_NOCHILD  = ~0UL;
 
-class ScContentTree : public SvTreeListBox
+class ScContentTree
 {
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    rtl::Reference<ScLinkTransferObj> m_xTransferObj;
     VclPtr<ScNavigatorDlg>  pParentWindow;
-    o3tl::enumarray<ScContentId, SvTreeListEntry*> pRootNodes;
+    o3tl::enumarray<ScContentId, std::unique_ptr<weld::TreeIter>> m_aRootNodes;
     ScContentId             nRootType;          // set as Root
     OUString                aManualDoc;         // Switched in Navigator (Title)
     bool                    bHiddenDoc;         // Hidden active?
@@ -49,7 +52,9 @@ class ScContentTree : public SvTreeListBox
     OUString                aHiddenTitle;       // for display
     ScDocument*             pHiddenDocument;    // temporary
     bool                    bisInNavigatoeDlg;
+    bool                    m_bFreeze;
     OUString                sKeyString;
+    ImplSVEvent*            m_nAsyncMouseReleaseId;
 
     o3tl::enumarray<ScContentId, sal_uInt16> pPosList;     // for the sequence
 
@@ -84,22 +89,38 @@ class ScContentTree : public SvTreeListBox
         @param rnRootIndex  Root index of specified entry is returned.
         @param rnChildIndex  Index of the entry inside its root is returned (or SC_CONTENT_NOCHILD if entry is root).
         @param pEntry  The entry to examine. */
-    void    GetEntryIndexes( ScContentId& rnRootIndex, sal_uLong& rnChildIndex, SvTreeListEntry* pEntry ) const;
+    void    GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, weld::TreeIter* pEntry) const;
 
     /** Returns the child index of the specified listbox entry.
         @param pEntry  The entry to examine or NULL for the selected entry.
         @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
-    sal_uLong   GetChildIndex( SvTreeListEntry* pEntry ) const;
-
-    void    DoDrag();
+    sal_uLong   GetChildIndex(weld::TreeIter* pEntry) const;
 
     ScDocument* GetSourceDocument();
 
-    DECL_LINK( ContentDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( ExecDragHdl, void*, void );
+    void freeze()
+    {
+        m_xTreeView->freeze();
+        m_bFreeze = true;
+    }
+
+    void thaw()
+    {
+        m_xTreeView->thaw();
+        m_bFreeze = false;
+    }
+
+    void LaunchAsyncStoreNavigatorSettings();
+
+    DECL_LINK(ContentDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(AsyncStoreNavigatorSettings, void*, void);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(DragBeginHdl, bool&, bool);
 
 protected:
-
+#if 0
     using SvTreeListBox::ExecuteDrop;
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
@@ -110,23 +131,43 @@ protected:
     virtual void        Command( const CommandEvent& rCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void        InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&) override;
+#endif
 
 public:
-    ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg);
-    virtual ~ScContentTree() override;
-    virtual void dispose() override;
+    ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNavigatorDlg* pNavigatorDlg);
+    ~ScContentTree();
 
+#if 0
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;
     OUString GetEntryAltText( SvTreeListEntry* pEntry ) const override;
     OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
+#endif
 
-    void     ObjectFresh( ScContentId nType, const SvTreeListEntry* pEntry = nullptr);
+    void     ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry = nullptr);
     void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bisInNavigatoeDlg=isInNavigateDlg;};
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+#if 0
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual Size    GetOptimalSize() const override;
+#endif
 
-    void    InitWindowBits( bool bButtons );
+    void    set_selection_mode(SelectionMode eMode)
+    {
+        m_xTreeView->set_selection_mode(eMode);
+    }
+
+    void set_size_request(int nWidth, int nHeight)
+    {
+        m_xTreeView->set_size_request(nWidth, nHeight);
+    }
+
+    void    hide()
+    {
+        m_xTreeView->hide();
+    }
+
+    void    show()
+    {
+        m_xTreeView->show();
+    }
 
     void    Refresh( ScContentId nType = ScContentId::ROOT );
 

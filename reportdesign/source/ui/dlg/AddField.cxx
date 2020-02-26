@@ -55,8 +55,9 @@ using namespace lang;
 using namespace container;
 using namespace ::svx;
 
-IMPL_LINK_NOARG(OAddFieldWindow, DragBeginHdl, weld::TreeView&, bool)
+IMPL_LINK(OAddFieldWindow, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
+    rUnsetDragIcon = false;
     if (m_xListBox->get_selected_index() == -1)
     {
         // no drag without a field
