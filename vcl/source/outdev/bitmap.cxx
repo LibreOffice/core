@@ -1230,10 +1230,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
     if(bAllowPreferDirectPaint && bTryDirectPaint)
     {
-        // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-        // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-        // ImplGetDeviceTransformation declaration
-        const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
+        const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
 
         if(DrawTransformBitmapExDirect(aFullTransform, rBitmapEx))
         {
@@ -1280,10 +1277,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     // to specify order of executions, so give bTryDirectPaint a call
     if(bTryDirectPaint)
     {
-        // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-        // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-        // ImplGetDeviceTransformation declaration
-        const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
+        const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
 
         if(DrawTransformBitmapExDirect(aFullTransform, rBitmapEx))
         {
@@ -1322,10 +1316,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::min(4500000.0, std::max(1000000.0, fOrigAreaScaled)));
-    // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-    // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-    // ImplGetDeviceTransformation declaration
-    basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
+    basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
 
     if(!bMetafile)
     {
