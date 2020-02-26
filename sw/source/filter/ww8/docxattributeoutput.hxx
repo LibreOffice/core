@@ -718,7 +718,8 @@ private:
     void EndSdtBlock();
 
     void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang);
-    void WriteFormDateEnd();
+    void WriteSdtDropDownStart(OUString const& rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
+    void WriteSdtEnd();
 
     void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
