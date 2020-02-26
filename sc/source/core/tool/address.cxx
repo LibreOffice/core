@@ -887,7 +887,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             ScRefFlags::ROW_VALID | ScRefFlags::ROW2_VALID |
             ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS;
         r.aStart.SetRow( 0 );
-        r.aEnd.SetRow( pDoc->MaxRow() );
+        r.aEnd.SetRow( pDoc ? pDoc->MaxRow():MAXROW );
 
         return bOnlyAcceptSingle ? ScRefFlags::ZERO : nFlags;
     }
