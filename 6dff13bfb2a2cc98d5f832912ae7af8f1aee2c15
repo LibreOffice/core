@@ -16,6 +16,24 @@
       "revId": "6dff13bfb2a2cc98d5f832912ae7af8f1aee2c15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a0f9a3_7746cafd",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-02-26T12:46:13Z",
+      "side": 1,
+      "message": "Yes, hash_combine, instead of KeyHash - std::hash template specialization, instead KeyEqual operator\u003d\u003d\n\nControlTypeAndPart is a similar implementation",
+      "parentUuid": "bcfe1242_badb0ec1",
+      "revId": "6dff13bfb2a2cc98d5f832912ae7af8f1aee2c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
