@@ -193,6 +193,7 @@ public:
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
     void testFdo82191();
+    void testTdf119748_pasteImage();
     void testCommentedWord();
     void testTextFieldGetAnchorGetTextInFooter();
     void testChineseConversionBlank();
@@ -402,6 +403,7 @@ public:
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST(testFdo82191);
+    CPPUNIT_TEST(testTdf119748_pasteImage);
     CPPUNIT_TEST(testCommentedWord);
     CPPUNIT_TEST(testTextFieldGetAnchorGetTextInFooter);
     CPPUNIT_TEST(testChineseConversionBlank);
@@ -1408,6 +1410,24 @@ void SwUiWriterTest::testFdo82191()
 
     // This was one: the textbox of the shape wasn't copied.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(pDoc));
+}
+
+void SwUiWriterTest::testTdf119748_pasteImage()
+{
+    SwDoc* pDoc = createDoc("tdf119748_pasteImage.docx");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrObject* pObject = pPage->GetObj(0);
+    // Select it, then copy and paste.
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->StartOfSection();  //goto start of the document
+    pWrtShell->Paste(&aClipboard);
+
+    // This was one: the text wasn't wraping around the pasted image in doc/docx files,
+    // and therefore the image didn't take up any space.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getPages() );
 }
 
 void SwUiWriterTest::testCommentedWord()
