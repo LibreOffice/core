@@ -142,8 +142,6 @@ public:
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
-
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     sal_Int64               GetValue() const;
@@ -182,7 +180,6 @@ protected:
 private:
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
-    bool                    mbShowTrailingZeros;
 
 };
 

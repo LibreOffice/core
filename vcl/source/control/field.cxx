@@ -551,7 +551,6 @@ NumericFormatter::NumericFormatter(Edit* pEdit)
     , mnLast(mnMax)
     , mnDecimalDigits(0)
     , mbThousandSep(true)
-    , mbShowTrailingZeros(true)
 {
     ReformatAll();
 }
@@ -594,7 +593,7 @@ void NumericFormatter::SetValue( sal_Int64 nNewValue )
 
 OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
-    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() );
+    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), /*ShowTrailingZeros*/true );
 }
 
 void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection )
