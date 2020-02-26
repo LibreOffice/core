@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc4ea110_5ccbd662",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-26T14:10:37Z",
+      "side": 1,
+      "message": "I think you should replace these lines with each other. Use \"Cursor jumping fixed\" as first line of commit message. Second line of the commit is for the details.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 21
+      },
+      "revId": "809953ce9dd310bfcf3ce32e723957c29f97c605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feef6dd2_7e604226",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-02-26T14:10:37Z",
+      "side": 1,
+      "message": "That comment seems incomplete. Cursor doesn\u0027t jump to end of the line if the cursor is in first line. Can you correct the comment?",
+      "range": {
+        "startLine": 2030,
+        "startChar": 15,
+        "endLine": 2030,
+        "endChar": 85
+      },
+      "revId": "809953ce9dd310bfcf3ce32e723957c29f97c605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
