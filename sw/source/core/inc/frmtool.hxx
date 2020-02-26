@@ -97,12 +97,6 @@ void paintGraphicUsingPrimitivesHelper(
     GraphicAttr const& rGraphicAttr,
     const basegfx::B2DHomMatrix& rGraphicTransform);
 
-// MM02 new VOC and primitive-based version
-void paintGraphicUsingPrimitivesHelper(
-    vcl::RenderContext & rOutputDevice,
-    drawinglayer::primitive2d::Primitive2DContainer& rContent,
-    const basegfx::B2DHomMatrix& rGraphicTransform);
-
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
 void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContext* pRenderContext );
