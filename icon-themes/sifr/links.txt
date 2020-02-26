@@ -629,7 +629,8 @@ cmd/id/sc_numberformatdecdecimals.png cmd/de/sc_numberformatdecdecimals.png
 cmd/id/sc_numberformatdecimal.png cmd/de/sc_numberformatdecimal.png
 cmd/id/sc_numberformatincdecimals.png cmd/de/sc_numberformatincdecimals.png
 cmd/id/sc_numberformatthousands.png cmd/de/sc_numberformatthousands.png
-cmd/id/sc_numberformatincdecimals.png cmd/de/sc_numberformatincdecimals.png
+cmd/lc_underlinesimple.png cmd/lc_underline.png
+cmd/sc_underlinesimple.png cmd/sc_underline.png
 cmd/ur/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
@@ -1574,7 +1575,7 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 
 # Impress
 sfx2/res/symphony/sidebar-transition-small.png cmd/sc_slidechangewindow.png
-sfx2/res/symphony/sidebar-transition-large.png cmd/lc_slidechangew
+sfx2/res/symphony/sidebar-transition-large.png cmd/lc_slidechangewindow.png
 
 # navigator
 cmd/32/dsbdocumentdatasource.png cmd/32/sbaexecutesql.png
