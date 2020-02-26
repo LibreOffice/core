@@ -612,8 +612,9 @@ ObjectIdentifier ImplObjectHierarchy::getParent(
 ObjectHierarchy::ObjectHierarchy(
     const Reference< XChartDocument > & xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */,
+    bool bFlattenDiagram /* = false */,
     bool bOrderingForElementSelector /* = false */) :
-        m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, /*bFlattenDiagram*/false, bOrderingForElementSelector ))
+        m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, bFlattenDiagram, bOrderingForElementSelector ))
 {}
 
 ObjectHierarchy::~ObjectHierarchy()
