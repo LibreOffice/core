@@ -23,7 +23,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/event.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <tools/debug.hxx>
 
 #include <svx/strings.hrc>

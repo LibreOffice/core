@@ -22,8 +22,6 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <libxml/xmlwriter.h>
 #include <memory>

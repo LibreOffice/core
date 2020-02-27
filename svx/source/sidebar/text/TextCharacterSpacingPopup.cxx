@@ -18,9 +18,7 @@
  */
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include "TextCharacterSpacingControl.hxx"
-#include <unotools/viewoptions.hxx>
 #include <vcl/toolbox.hxx>
-#include <editeng/kernitem.hxx>
 
 using namespace svx;
 

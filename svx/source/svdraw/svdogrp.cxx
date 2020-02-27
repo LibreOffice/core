@@ -17,32 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/linkmgr.hxx>
-
-#include <unotools/datetime.hxx>
-
 #include <svx/svdogrp.hxx>
-
-#include <sfx2/lnkbase.hxx>
-
-#include <svl/urihelper.hxx>
-
-#include <svx/xpool.hxx>
-#include <svx/xpoly.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
-#include <svx/svxids.hrc>
-#include <svl/whiter.hxx>
-#include <svx/svdpool.hxx>
 #include <sdr/properties/groupproperties.hxx>
 #include <sdr/contact/viewcontactofgroup.hxx>
 #include <basegfx/range/b2drange.hxx>

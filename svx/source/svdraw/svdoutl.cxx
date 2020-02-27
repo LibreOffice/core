@@ -21,8 +21,6 @@
 #include <editeng/outliner.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/editstat.hxx>
-#include <svx/svdmodel.hxx>
-#include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editview.hxx>
 

@@ -24,30 +24,13 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdetc.hxx>
-#include <editeng/writingmodeitem.hxx>
 #include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/flditem.hxx>
 #include <svx/sdtfchim.hxx>
 
 
-#include <editeng/editview.hxx>
-#include <svl/whiter.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/fhgtitem.hxx>
-
-#include <editeng/charscaleitem.hxx>
-#include <svl/itemiter.hxx>
-#include <editeng/lrspitem.hxx>
-#include <svl/itempool.hxx>
-#include <editeng/numitem.hxx>
-#include <editeng/postitem.hxx>
-
-#include <set>
 
 namespace {
 // The style family which is appended to the style names is padded to this many characters.

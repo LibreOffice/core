@@ -19,23 +19,17 @@
 
 #include <svx/sdrpagewindow.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
-#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svx/svdouno.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/fmview.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <tools/debug.hxx>
 

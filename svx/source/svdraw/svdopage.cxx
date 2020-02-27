@@ -21,14 +21,8 @@
 #include <svx/svdopage.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdoutl.hxx>
-#include <svtools/colorcfg.hxx>
-#include <svl/itemset.hxx>
 #include <sdr/properties/pageproperties.hxx>
 #include <sdr/contact/viewcontactofpageobj.hxx>
 

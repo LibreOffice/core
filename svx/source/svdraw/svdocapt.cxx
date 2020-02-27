@@ -26,8 +26,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <editeng/eeitem.hxx>
-#include <svl/style.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 
@@ -39,27 +37,18 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/svddrag.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
-#include <sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>
 #include <svx/sxcllitm.hxx>
 #include <svx/sxctitm.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/xpool.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 

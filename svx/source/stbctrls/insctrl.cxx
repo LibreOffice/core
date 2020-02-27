@@ -19,8 +19,6 @@
 
 #include <vcl/status.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
 #include <tools/debug.hxx>
 
 #include <svx/strings.hrc>

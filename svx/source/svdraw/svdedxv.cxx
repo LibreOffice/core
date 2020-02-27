@@ -25,7 +25,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/unotext.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/solar.hrc>
 #include <svl/style.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -33,7 +32,6 @@
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
@@ -43,19 +41,15 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/hatch.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/lok.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sal/log.hxx>
 #include <sdr/overlay/overlaytools.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/globl3d.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
@@ -63,7 +57,6 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrundomanager.hxx>
 #include <svx/strings.hrc>
-#include <svx/svddrgv.hxx>
 #include <svx/svdviter.hxx>
 #include <textchain.hxx>
 #include <textchaincursor.hxx>

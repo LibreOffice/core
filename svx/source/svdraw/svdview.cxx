@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <svx/strings.hrc>
@@ -33,20 +32,16 @@
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdotable.hxx>
 #include <tools/debug.hxx>
-#include <tools/tenccvt.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sal/log.hxx>

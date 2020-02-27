@@ -19,57 +19,14 @@
 
 
 #include <svx/svdoattr.hxx>
-#include <svx/xpool.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdotext.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/svdorect.hxx>
-#include <svx/svdocirc.hxx>
-#include <svx/svdomeas.hxx>
 #include <svl/hint.hxx>
-#include <svl/itemiter.hxx>
-#include <svx/xenum.hxx>
+#include <svl/itemset.hxx>
+#include <svx/xdef.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xflbmtit.hxx>
-#include <svx/xtextit0.hxx>
-#include <svx/xflbstit.hxx>
-#include <svx/xflbtoxy.hxx>
-#include <svx/xftshit.hxx>
-
-#include <editeng/editdata.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
-
-#include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svl/style.hxx>
-#include <svl/whiter.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xlnedcit.hxx>
-#include <editeng/adjustitem.hxx>
-#include <svx/xflbckit.hxx>
-#include <svx/xtable.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xflftrit.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xlnstit.hxx>
 #include <sdr/properties/attributeproperties.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/xlinjoit.hxx>
 
 using namespace com::sun::star;
 

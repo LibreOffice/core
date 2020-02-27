@@ -19,24 +19,16 @@
 
 #include <sal/config.h>
 
-#include <editeng/forbiddencharacterstable.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <svx/dialmgr.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
+#include <svx/svdedxv.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/strings.hrc>
-#include <svx/svdviter.hxx>
-#include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -45,9 +37,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/itempool.hxx>
+#include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
@@ -62,8 +54,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 
 using namespace ::com::sun::star;
 

@@ -28,22 +28,17 @@
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lineitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <osl/diagnose.h>
 #include <i18nutil/unicode.hxx>
-#include <svl/solar.hrc>
 #include <tools/bigint.hxx>
-#include <tools/stream.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
@@ -78,7 +73,6 @@
 #include <sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>
-#include <svx/sxciaitm.hxx>
 #include <sxcikitm.hxx>
 #include <svx/sxcllitm.hxx>
 #include <svx/sxctitm.hxx>
@@ -91,7 +85,6 @@
 #include <svx/sxmbritm.hxx>
 #include <sxmfsitm.hxx>
 #include <sxmkitm.hxx>
-#include <svx/sxmlhitm.hxx>
 #include <sxmoitm.hxx>
 #include <sxmovitm.hxx>
 #include <sxmsitm.hxx>
@@ -114,7 +107,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xtable.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;

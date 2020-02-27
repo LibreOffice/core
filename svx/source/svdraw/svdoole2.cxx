@@ -19,11 +19,10 @@
 
 #include <svx/svdoole2.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ObjectSaveVetoException.hpp>
@@ -42,38 +41,28 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <vcl/graphicfilter.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <tools/stream.hxx>
-#include <comphelper/anytostring.hxx>
-#include <svx/svdpagv.hxx>
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/jobset.hxx>
 #include <comphelper/classids.hxx>
 
 #include <sot/formats.hxx>
-#include <vcl/transfer.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <svl/solar.hrc>
-#include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svx/charthelper.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdetc.hxx>
-#include <svx/svdview.hxx>
 #include <unomlstr.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
@@ -90,7 +79,6 @@
 #include <svx/svdpage.hxx>
 #include <rtl/ref.hxx>
 #include <bitmaps.hlst>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 

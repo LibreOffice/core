@@ -22,13 +22,11 @@
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#include <editeng/unolingu.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/flstitem.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/outdev.hxx>
-#include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -38,22 +36,16 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
-#include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <memory>
 
 using namespace com::sun::star;

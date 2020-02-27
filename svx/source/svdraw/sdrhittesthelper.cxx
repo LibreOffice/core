@@ -29,7 +29,6 @@
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/svdmodel.hxx>
 
 
 // #i101872# new Object HitTest as View-tooling

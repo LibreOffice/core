@@ -19,20 +19,16 @@
 
 
 #include <svx/svdmrkv.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
-#include "svddrgm1.hxx"
 
 #include <osl/thread.h>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
-#include <svx/xlineit0.hxx>
 #include "gradtrns.hxx"
 #include <svx/xflftrit.hxx>
 #include <svx/dialmgr.hxx>
@@ -42,18 +38,15 @@
 #include <svx/scene3d.hxx>
 #include <svx/svdovirt.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/svdograf.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
-#include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>

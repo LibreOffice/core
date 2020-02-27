@@ -19,38 +19,30 @@
 
 #include <memory>
 #include <cassert>
+#include <set>
 #include <unordered_set>
 
 #include <svx/svdpage.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <sot/storage.hxx>
-#include <comphelper/classids.hxx>
-#include <svx/svdview.hxx>
 #include <string.h>
-#include <vcl/svapp.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/helpers.hxx>
 
+#include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdograf.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>
-#include <svx/svdotext.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdundo.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

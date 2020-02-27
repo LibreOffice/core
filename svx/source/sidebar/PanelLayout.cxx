@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <svx/sidebar/PanelLayout.hxx>

@@ -20,11 +20,9 @@
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <svx/TextUnderlinePopup.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
-#include <vcl/settings.hxx>
 #include <helpids.h>
 
 namespace svx {

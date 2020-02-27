@@ -25,16 +25,13 @@
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 
 #include <svx/strings.hrc>
 
 #include <svx/zoomctrl.hxx>
-#include <svx/zoomslideritem.hxx>
 #include <sfx2/zoomitem.hxx>
-#include "stbctrls.h"
 #include <svx/dialmgr.hxx>
 #include "modctrl_internal.hxx"
 #include <bitmaps.hlst>

@@ -19,7 +19,6 @@
 
 #include <textchain.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdpage.hxx>
 
 /*
  * Definition of Properties Interface

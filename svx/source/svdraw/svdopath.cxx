@@ -21,24 +21,16 @@
 #include <tools/helpers.hxx>
 #include <svx/svdopath.hxx>
 #include <math.h>
-#include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/polypolygoneditor.hxx>
-#include <svx/xlntrit.hxx>
 #include <sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
