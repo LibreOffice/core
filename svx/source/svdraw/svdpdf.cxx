@@ -24,16 +24,11 @@
 #if HAVE_FEATURE_PDFIUM
 #include <fpdfview.h>
 #include <fpdf_edit.h>
-#include <fpdf_save.h>
 #include <fpdf_text.h>
 
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 
-#include <editeng/editdata.hxx>
 #include <math.h>
-#include <svx/xpoly.hxx>
-#include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -45,16 +40,12 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/autokernitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>
-#include <svx/xflhtit.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtfsitm.hxx>
@@ -63,7 +54,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/svdocirc.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdetc.hxx>
@@ -77,17 +67,13 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/xfltrit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/svdpntv.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
-#include <vcl/BitmapTools.hxx>
 #include <vcl/dibtools.hxx>
-#include <com/sun/star/geometry/Matrix2D.hpp>
 #include <sal/log.hxx>
 
 namespace

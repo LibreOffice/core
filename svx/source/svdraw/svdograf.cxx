@@ -20,37 +20,24 @@
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>
-#include <math.h>
 #include <tools/helpers.hxx>
+#include <tools/stream.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <svl/style.hxx>
-#include <svl/urihelper.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/docfile.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/svdpool.hxx>
+#include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdmrkv.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdviter.hxx>
-#include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
-#include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
 #include <sdgcoitm.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -59,17 +46,12 @@
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgmoitm.hxx>
 #include <sdgtritm.hxx>
-#include <editeng/eeitem.hxx>
 #include <sdr/properties/graphicproperties.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <osl/thread.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
-#include <vcl/GraphicLoader.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

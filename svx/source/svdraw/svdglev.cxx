@@ -24,7 +24,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdobj.hxx>

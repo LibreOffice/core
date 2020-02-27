@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-#include <editeng/measfld.hxx>
 #include <svx/svdotext.hxx>
 
 bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_uInt16 /*nPos*/,

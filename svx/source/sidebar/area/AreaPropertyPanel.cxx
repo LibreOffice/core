@@ -17,20 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include "AreaPropertyPanel.hxx"
 #include <svx/svxids.hrc>
-#include <sfx2/objsh.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/xtable.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/valueset.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svx/svxitems.hrc>
-#include <vcl/toolbox.hxx>
-#include <svtools/toolbarmenu.hxx>
 
 
 using namespace css;

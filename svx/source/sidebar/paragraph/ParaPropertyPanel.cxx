@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ParaPropertyPanel.hxx"
-#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/weldutils.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>

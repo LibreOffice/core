@@ -9,7 +9,6 @@
 
 #include <memory>
 #include <svdobjuserdatalist.hxx>
-#include <vcl/outdev.hxx>
 
 SdrObjUserDataList::SdrObjUserDataList() {}
 SdrObjUserDataList::~SdrObjUserDataList() {}

@@ -79,3 +79,25 @@ blacklist:
     # Actually used
     - com/sun/star/awt/XControlContainer.hpp
     - comphelper/scopeguard.hxx
+    svx/source/svdraw/charthelper.cxx:
+    # Actually used
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    svx/source/svdraw/svdocapt.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoashp.cxx:
+    # Actually used
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp
+    svx/source/svdraw/svdocirc.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoedge.cxx:
+    # Needed for direct member access
+    - svx/svdopath.hxx
+    svx/source/svdraw/svdoole2.cxx:
+    # Actually used
+    - com/sun/star/embed/XEmbeddedObject.hpp
+    svx/source/svdraw/svdorect.cxx:
+    # Actually used
+    - svx/svdopath.hxx

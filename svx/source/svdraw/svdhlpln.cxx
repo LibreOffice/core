@@ -21,9 +21,6 @@
 #include <svx/svdhlpln.hxx>
 
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
-#include <tools/poly.hxx>
-#include <vcl/lineinfo.hxx>
 #include <vcl/ptrstyle.hxx>
 
 

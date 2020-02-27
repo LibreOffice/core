@@ -19,11 +19,7 @@
 
 
 #include <svx/svdmrkv.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdpage.hxx>
-#include "svddrgm1.hxx"
 
 
 // Point Selection

@@ -18,8 +18,6 @@
  */
 
 #include "EmptyPanel.hxx"
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 
 namespace svx::sidebar {
 

@@ -21,34 +21,26 @@
 
 #include <algorithm>
 
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/weldutils.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/rectenum.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
 
 #include <svtools/unitconv.hxx>
-#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ListsPropertyPanel.hxx"
-#include <vcl/toolbox.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;

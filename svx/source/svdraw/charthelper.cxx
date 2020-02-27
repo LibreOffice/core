@@ -18,10 +18,6 @@
  */
 
 #include <svx/charthelper.hxx>
-#include <tools/globname.hxx>
-#include <comphelper/classids.hxx>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>

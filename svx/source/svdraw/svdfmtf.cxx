@@ -18,10 +18,7 @@
  */
 
 #include "svdfmtf.hxx"
-#include <editeng/editdata.hxx>
 #include <math.h>
-#include <svx/xpoly.hxx>
-#include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -38,7 +35,6 @@
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/autokernitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
@@ -49,7 +45,6 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/sdtakitm.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdmodel.hxx>
@@ -71,7 +66,6 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/svdpntv.hxx>

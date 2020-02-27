@@ -20,7 +20,6 @@
 #include "ParaLineSpacingControl.hxx"
 
 #include <editeng/editids.hrc>
-#include <editeng/kernitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
@@ -28,6 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
 
+#include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 
 #include <svx/ParaLineSpacingPopup.hxx>

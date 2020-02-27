@@ -27,7 +27,6 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace css;
 using namespace css::uno;

@@ -22,12 +22,10 @@
 #include <vcl/menu.hxx>
 #include <vcl/status.hxx>
 #include <svl/intitem.hxx>
-#include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/selctrl.hxx>
 
-#include "stbctrls.h"
 #include <bitmaps.hlst>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

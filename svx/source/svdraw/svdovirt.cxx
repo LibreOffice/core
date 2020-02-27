@@ -19,12 +19,8 @@
 
 
 #include <svx/svdovirt.hxx>
-#include <svx/xpool.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svddrgv.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

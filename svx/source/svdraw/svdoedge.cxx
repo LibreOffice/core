@@ -17,37 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svddrgm1.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <editeng/eeitem.hxx>
 #include <svl/hint.hxx>
-#include <svl/style.hxx>
 
 #include <sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <sdr/properties/connectorproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svddrag.hxx>
-#include <svx/svddrgv.hxx>
-#include <svx/svdetc.hxx>
+#include <svx/svddrgmt.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/xpool.hxx>
 #include <vcl/ptrstyle.hxx>
 
 void SdrObjConnection::ResetVars()

@@ -22,9 +22,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <editeng/eeitem.hxx>
 #include <math.h>
-#include <svl/style.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -32,12 +30,9 @@
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <sdr/properties/circleproperties.hxx>
 #include <svx/svddrag.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxciaitm.hxx>
@@ -49,7 +44,6 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/xpool.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
 

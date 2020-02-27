@@ -20,18 +20,15 @@
 #include "svddrgm1.hxx"
 #include <math.h>
 
-#include <tools/bigint.hxx>
 #include <o3tl/numeric.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdmark.hxx>
-#include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
@@ -42,16 +39,13 @@
 #include <svx/sdtagitm.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
@@ -64,9 +58,6 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/svdovirt.hxx>
-#include <svx/svdouno.hxx>
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>

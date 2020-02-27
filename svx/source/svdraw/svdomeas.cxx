@@ -30,7 +30,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/measfld.hxx>
-#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <math.h>
 #include <svl/style.hxx>
@@ -45,14 +44,10 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxmbritm.hxx>
-#include <sxmfsitm.hxx>
-#include <sxmkitm.hxx>
 #include <svx/sxmlhitm.hxx>
-#include <sxmoitm.hxx>
 #include <sxmsitm.hxx>
 #include <sxmtaitm.hxx>
 #include <svx/sxmtfitm.hxx>

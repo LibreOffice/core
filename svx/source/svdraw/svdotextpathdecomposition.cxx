@@ -24,19 +24,13 @@
 #include <svx/svdoutl.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <algorithm>
-#include <xftshtit.hxx>
-#include <vcl/virdev.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <editeng/unolingu.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -44,16 +38,9 @@
 
 // primitive decomposition helpers
 
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlinjoit.hxx>
-#include <svx/xlndsit.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
-#include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>

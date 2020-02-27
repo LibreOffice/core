@@ -19,10 +19,8 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <math.h>
-#include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
@@ -38,14 +36,12 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/rectenum.hxx>
-#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/svdedtv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/svdlayer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
@@ -64,7 +60,6 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/svdview.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlntrit.hxx>

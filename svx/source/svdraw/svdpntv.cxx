@@ -18,10 +18,8 @@
  */
 
 #include <memory>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdmodel.hxx>
 
@@ -29,18 +27,9 @@
 #include <svx/svdpagv.hxx>
 #include <svl/hint.hxx>
 
-#include <editeng/editdata.hxx>
-#include <svx/svdmrkv.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdograf.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdouno.hxx>
-#include <svx/sdr/overlay/overlayobjectlist.hxx>
-#include <sdr/overlay/overlayrollingrectangle.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sxlayitm.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/eeitem.hxx>
@@ -48,17 +37,12 @@
 #include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
-
-#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 

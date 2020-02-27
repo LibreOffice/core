@@ -19,10 +19,8 @@
 
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmark.hxx>
-#include <svx/scene3d.hxx>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode, bool bReverse)
 :   maObjList(),

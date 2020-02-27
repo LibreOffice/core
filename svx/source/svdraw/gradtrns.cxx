@@ -25,7 +25,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/outdev.hxx>
 
 
 void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& rV, const SdrObject* pObj)

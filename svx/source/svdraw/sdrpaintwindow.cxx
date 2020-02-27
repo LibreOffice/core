@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/lok.hxx>
-#include <comphelper/random.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/svdpntv.hxx>
