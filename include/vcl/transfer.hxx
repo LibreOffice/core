@@ -490,7 +490,6 @@ class VCL_DLLPUBLIC TransferDataContainer : public TransferableHelper
 
     virtual void        AddSupportedFormats() override;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-    virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
 public:
 
@@ -509,6 +508,7 @@ public:
     using TransferableHelper::StartDrag;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
                                    const Link<sal_Int8,void>& rCallbck );
+    virtual void        DragFinished( sal_Int8 nDropAction ) override;
 };
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard> VCL_DLLPUBLIC GetSystemClipboard();
