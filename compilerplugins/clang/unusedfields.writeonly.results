@@ -57,9 +57,9 @@ bridges/source/jni_uno/jni_java2uno.cxx:153
 bridges/source/jni_uno/jni_java2uno.cxx:154
     jni_uno::(anonymous namespace)::largest a uno_Any
 canvas/inc/rendering/irendermodule.hxx:35
-    canvas::Vertex r float
-canvas/inc/rendering/irendermodule.hxx:35
     canvas::Vertex g float
+canvas/inc/rendering/irendermodule.hxx:35
+    canvas::Vertex r float
 canvas/inc/rendering/irendermodule.hxx:35
     canvas::Vertex a float
 canvas/inc/rendering/irendermodule.hxx:35
@@ -222,7 +222,7 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
 cppuhelper/source/typemanager.cxx:825
     (anonymous namespace)::BaseOffset set_ std::set<OUString>
-cui/source/inc/cfg.hxx:408
+cui/source/inc/cfg.hxx:409
     SvxConfigPage m_xDropTargetHelper std::unique_ptr<SvxConfigPageFunctionDropTarget>
 cui/source/inc/cuihyperdlg.hxx:46
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
@@ -246,9 +246,9 @@ dbaccess/source/ui/browser/dbloader.cxx:71
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:250
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1202
+desktop/source/app/app.cxx:1210
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
-desktop/source/app/app.cxx:1203
+desktop/source/app/app.cxx:1211
     desktop::(anonymous namespace)::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -418,6 +418,8 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
+include/vcl/accel.hxx:42
+    Accelerator maCurKeyCode vcl::KeyCode
 include/vcl/menu.hxx:454
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:54
@@ -756,17 +758,17 @@ svx/inc/sdr/overlay/overlaytools.hxx:41
     drawinglayer::primitive2d::OverlayStaticRectanglePrimitive mfRotation const double
 svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:46
     drawinglayer::primitive2d::SdrOleContentPrimitive2D mnGraphicVersion const sal_uInt32
-svx/source/form/dataaccessdescriptor.cxx:42
+svx/source/form/dataaccessdescriptor.cxx:39
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
-svx/source/form/formcontroller.cxx:217
+svx/source/form/formcontroller.cxx:211
     svxform::(anonymous namespace)::ColumnInfo nNullable sal_Int32
 svx/source/inc/docrecovery.hxx:131
     svx::DocRecovery::TURLInfo Module class rtl::OUString
 svx/source/sdr/attribute/sdrformtextattribute.cxx:153
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp const sal_uInt16
-svx/source/sdr/attribute/sdrtextattribute.cxx:51
+svx/source/sdr/attribute/sdrtextattribute.cxx:49
     drawinglayer::attribute::ImpSdrTextAttribute maPropertiesVersion sal_uInt32
-svx/source/sdr/attribute/sdrtextattribute.cxx:65
+svx/source/sdr/attribute/sdrtextattribute.cxx:63
     drawinglayer::attribute::ImpSdrTextAttribute mbWrongSpell const _Bool
 svx/source/sidebar/line/LinePropertyPanel.hxx:81
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
@@ -845,7 +847,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -1024,9 +1026,9 @@ vcl/inc/WidgetThemeLibrary.hxx:95
     vcl::ControlDrawParameters bIsAction _Bool
 vcl/inc/WidgetThemeLibrary.hxx:96
     vcl::ControlDrawParameters nValue int64_t
-vcl/source/filter/graphicfilter.cxx:660
+vcl/source/filter/graphicfilter.cxx:613
     (anonymous namespace)::ImpFilterLibCacheEntry maFiltername const class rtl::OUString
-vcl/source/filter/graphicfilter.cxx:763
+vcl/source/filter/graphicfilter.cxx:716
     (anonymous namespace)::ImpFilterLibCache mpLast struct (anonymous namespace)::ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:51
     Exif::ExifIFD tag sal_uInt8 [2]
@@ -1060,7 +1062,7 @@ vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1610
+vcl/unx/gtk3/gtk3gtkinst.cxx:1611
      in char *
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *

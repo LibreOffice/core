@@ -39,7 +39,6 @@ private:
     Link<Accelerator&,void> maSelectHdl;
 
     // Will be set by AcceleratorManager
-    vcl::KeyCode            maCurKeyCode;
     sal_uInt16              mnCurId;
     bool*                   mpDel;
 

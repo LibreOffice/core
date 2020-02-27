@@ -29,8 +29,6 @@ class ScShapeTest : public CalcUnoApiTest
 public:
     ScShapeTest();
 
-    virtual void tearDown() override;
-
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
 
@@ -38,9 +36,6 @@ public:
     CPPUNIT_TEST(testFitToCellSize);
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScShapeTest::ScShapeTest()
@@ -169,16 +164,6 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     CPPUNIT_ASSERT_EQUAL(sExpected, sActual);
 
     pDocSh->DoClose();
-}
-
-void ScShapeTest::tearDown()
-{
-    if (mxComponent.is())
-    {
-        closeDocument(mxComponent);
-    }
-
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScShapeTest);
