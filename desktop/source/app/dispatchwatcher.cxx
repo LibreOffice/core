@@ -254,7 +254,7 @@ void batchPrint( const OUString &rPrinterName, const Reference< XPrintable > &xD
         aPrinterName=rPrinterName.copy( 0, nPathIndex );
 
     INetURLObject aOutFilename( aObj );
-    aOutFilename.SetExtension( "ps" );
+    aOutFilename.SetExtension( "pdf" );
     FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
     OUString aOutFile = aFilterOut + "/" + aOutFilename.getName();
 
