@@ -2030,6 +2030,11 @@ const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
     return xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
 }
 
+OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
+{
+    return getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
+}
+
 OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
