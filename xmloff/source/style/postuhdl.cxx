@@ -32,8 +32,8 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry<FontItalic> const aPostureGenericMapping[] =
 {
-    { XML_POSTURE_NORMAL,       ITALIC_NONE     },
-    { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
+    { XML_NORMAL,               ITALIC_NONE     },
+    { XML_ITALIC,               ITALIC_NORMAL   },
     { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
     { XML_TOKEN_INVALID,        FontItalic(0)   }
 };
