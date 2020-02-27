@@ -90,7 +90,6 @@
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
