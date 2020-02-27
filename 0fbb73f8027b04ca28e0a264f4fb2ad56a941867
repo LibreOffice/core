@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95fb75d7_c8424566",
+        "filename": "logerrit",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-02-27T20:08:05Z",
+      "side": 1,
+      "message": "Should be two words here: `git fetch \u003crepository\u003e \u003crefspec\u003e`",
+      "revId": "0fbb73f8027b04ca28e0a264f4fb2ad56a941867",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
