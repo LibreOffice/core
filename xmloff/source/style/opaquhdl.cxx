@@ -34,7 +34,7 @@ XMLOpaquePropHdl::~XMLOpaquePropHdl()
 
 bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
+    bool bValue = IsXMLToken( rStrImpValue, XML_FOREGROUND );
     rValue <<= bValue;
 
     return true;
@@ -48,9 +48,9 @@ bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
     if (rValue >>= bValue)
     {
         if( bValue )
-            rStrExpValue = GetXMLToken( XML_OPAQUE_FOREGROUND );
+            rStrExpValue = GetXMLToken( XML_FOREGROUND );
         else
-            rStrExpValue = GetXMLToken( XML_OPAQUE_BACKGROUND );
+            rStrExpValue = GetXMLToken( XML_BACKGROUND );
 
         bRet = true;
     }

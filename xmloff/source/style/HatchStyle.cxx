@@ -56,8 +56,8 @@ enum SvXMLTokenMapAttrs
 
 SvXMLEnumMapEntry<drawing::HatchStyle> const pXML_HatchStyle_Enum[] =
 {
-    { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
-    { XML_HATCHSTYLE_DOUBLE,    drawing::HatchStyle_DOUBLE },
+    { XML_SINGLE,               drawing::HatchStyle_SINGLE },
+    { XML_DOUBLE,               drawing::HatchStyle_DOUBLE },
     { XML_HATCHSTYLE_TRIPLE,    drawing::HatchStyle_TRIPLE },
     { XML_TOKEN_INVALID, drawing::HatchStyle(0) }
 };
@@ -84,9 +84,7 @@ void XMLHatchStyleImport::importXML(
         { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
         { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
         { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
-        { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE,
-            XML_ELEMENT( DRAW, XML_DISTANCE ) },
-        //  XML_HATCH_DISTANCE is a duplicate of XML_DISTANCE
+        { XML_NAMESPACE_DRAW, XML_DISTANCE, XML_TOK_HATCH_DISTANCE },
         { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
         XML_TOKEN_MAP_END
     };
@@ -200,7 +198,7 @@ void XMLHatchStyleExport::exportXML(
                 // Distance
                 rUnitConverter.convertMeasureToXML( aOut, aHatch.Distance );
                 aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
                 // Angle
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, OUString::number(aHatch.Angle) );

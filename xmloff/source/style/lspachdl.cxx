@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_CASEMAP_NORMAL;
+using ::xmloff::token::XML_NORMAL;
 
 
 
@@ -50,7 +50,7 @@ bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             return false;
         aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
-    else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL) )
+    else if( IsXMLToken( rStrImpValue, XML_NORMAL) )
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
         aLSp.Height = 100;
