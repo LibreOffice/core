@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a183b5e_89211b93",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-02-27T19:07:38Z",
+      "side": 1,
+      "message": "Nitpick: echo \"workdir at $WORKDIR\" to style-match other ocurences, for instance 3 lines above.",
+      "revId": "26a372adb47a1c6ef87ca392a3a708b47f4abbc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
