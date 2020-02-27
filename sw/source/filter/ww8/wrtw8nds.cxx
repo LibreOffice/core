@@ -2813,9 +2813,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                     {
                         if (bParaRTL)
-                            aLR.SetTextFirstLineOffsetValue(pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
+                        {
+                            aLR.SetTextFirstLineOffsetValue(aLR.GetTextFirstLineOffset() + pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
+                        }
                         else
-                            aLR.SetTextFirstLineOffset(GetWordFirstLineOffset(*pFormat));
+                        {
+                            aLR.SetTextFirstLineOffset(aLR.GetTextFirstLineOffset() + GetWordFirstLineOffset(*pFormat));
+                        }
                     }
 
                     // correct fix for issue i94187
