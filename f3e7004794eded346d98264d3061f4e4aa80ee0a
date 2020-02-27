@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20352ca6_88bfb858",
+        "filename": "external/dtoa/StaticLibrary_dtoa.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-02-27T13:16:22Z",
+      "side": 1,
+      "message": "is this the correct choice also for big-endian architectures, or should those use IEEE_MC68k?",
+      "range": {
+        "startLine": 14,
+        "startChar": 49,
+        "endLine": 14,
+        "endChar": 58
+      },
+      "revId": "f3e7004794eded346d98264d3061f4e4aa80ee0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
