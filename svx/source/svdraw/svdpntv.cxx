@@ -66,10 +66,20 @@ using namespace ::com::sun::star;
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
-    auto a = std::find_if(maPaintWindows.begin(), maPaintWindows.end(),
-        [&rOut](const std::unique_ptr<SdrPaintWindow>& pWindow) { return &(pWindow->GetOutputDevice()) == &rOut; });
-    if (a != maPaintWindows.end())
-        return a->get();
+    // back to loop - there is more to test than a std::find_if and a lamba can do
+    for(auto& candidate : maPaintWindows)
+    {
+        if(&(candidate->GetOutputDevice()) == &rOut)
+        {
+            return candidate.get();
+        }
+
+        // check for patched to allow finding in that state, too
+        if(nullptr != candidate->getPatched() && &(candidate->getPatched()->GetOutputDevice()) == &rOut)
+        {
+            return candidate->getPatched();
+        }
+    }
 
     return nullptr;
 }

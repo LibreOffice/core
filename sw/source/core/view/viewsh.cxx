@@ -72,6 +72,8 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/svdpagv.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -1715,35 +1717,47 @@ class RenderContextGuard
     VclPtr<vcl::RenderContext>& m_pRef;
     VclPtr<vcl::RenderContext> m_pOriginalValue;
     SwViewShell* m_pShell;
+    std::unique_ptr<SdrPaintWindow> m_TemporaryPaintWindow;
+    SdrPageWindow* m_pPatchedPageWindow;
 
 public:
     RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
         : m_pRef(pRef),
         m_pOriginalValue(m_pRef),
-        m_pShell(pShell)
+        m_pShell(pShell),
+        m_TemporaryPaintWindow(),
+        m_pPatchedPageWindow(nullptr)
     {
         m_pRef = pValue;
-        if (pValue != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
-            m_pShell->Imp()->GetDrawView()->AddWindowToPaintView(pValue, m_pShell->GetWin());
+
+        if (pValue != m_pShell->GetWin())
+        {
+            SdrView* pDrawView(m_pShell->Imp()->GetDrawView());
+
+            if (nullptr != pDrawView)
+            {
+                SdrPageView* pSdrPageView(pDrawView->GetSdrPageView());
+
+                if (nullptr != pSdrPageView)
+                {
+                    m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*m_pShell->GetWin());
+
+                    if (nullptr != m_pPatchedPageWindow)
+                    {
+                        m_TemporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, *pValue));
+                        m_pPatchedPageWindow->patchPaintWindow(*m_TemporaryPaintWindow);
+                    }
+                }
+            }
+        }
     }
 
     ~RenderContextGuard()
     {
-        if (m_pRef != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+        if(nullptr != m_pPatchedPageWindow)
         {
-            // Need to explicitly draw the overlay on m_pRef, since by default
-            // they would be only drawn for m_pOriginalValue.
-            SdrPaintWindow* pOldPaintWindow = m_pShell->Imp()->GetDrawView()->GetPaintWindow(0);
-            const rtl::Reference<sdr::overlay::OverlayManager>& xOldManager = pOldPaintWindow->GetOverlayManager();
-            if (xOldManager.is())
-            {
-                if (SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef))
-                    xOldManager->completeRedraw(pNewPaintWindow->GetRedrawRegion(), m_pRef);
-            }
-
-            m_pShell->Imp()->GetDrawView()->DeleteWindowFromPaintView(m_pRef);
+            m_pPatchedPageWindow->unpatchPaintWindow();
         }
-        m_pRef = m_pOriginalValue;
     }
 };
 }

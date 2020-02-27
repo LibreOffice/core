@@ -89,12 +89,19 @@ private:
 
     bool                                                mbOutputToWindow : 1;
 
+    // ref to patched
+    SdrPaintWindow*                                     mpPatched;
+
     // helpers
     void impCreateOverlayManager();
 
 public:
     SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow = nullptr);
     ~SdrPaintWindow();
+
+    // allow reference to patched, see patchPaintWindow/unpatchPaintWindow
+    void setPatched(SdrPaintWindow* pPaintWindow) { mpPatched = pPaintWindow; }
+    SdrPaintWindow* getPatched() const { return mpPatched; }
 
     // data read accesses
     OutputDevice& GetOutputDevice() const { return *mpOutputDevice; }

@@ -173,6 +173,7 @@ void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
 {
     mpImpl->mpOriginalPaintWindow = mpImpl->mpPaintWindow;
     mpImpl->mpPaintWindow = &rPaintWindow;
+    mpImpl->mpOriginalPaintWindow->setPatched(&rPaintWindow);
 }
 
 void SdrPageWindow::unpatchPaintWindow()
@@ -181,6 +182,7 @@ void SdrPageWindow::unpatchPaintWindow()
     if (mpImpl->mpOriginalPaintWindow)
     {
         mpImpl->mpPaintWindow = mpImpl->mpOriginalPaintWindow;
+        mpImpl->mpOriginalPaintWindow->setPatched(nullptr);
         mpImpl->mpOriginalPaintWindow = nullptr;
     }
 }
