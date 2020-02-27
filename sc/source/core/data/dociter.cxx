@@ -1029,6 +1029,10 @@ bool ScCellIterator::first()
         return false;
 
     maCurPos = maStartPos;
+
+    if (maCurPos.Col() >= mpDoc->GetAllocatedColumnsCount(maCurPos.Tab()))
+        return false;
+
     const ScColumn* pCol = getColumn();
 
     maCurColPos = pCol->maCells.position(maCurPos.Row());
