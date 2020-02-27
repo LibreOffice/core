@@ -591,21 +591,6 @@ com_sun_star_comp_Chart_XMLOasisImporter_get_implementation(uno::XComponentConte
 
 // multiple storage version: one for content / styles / meta
 
-Sequence< OUString > SchXMLImport_Styles_getSupportedServiceNames() throw()
-{
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisStylesImporter" };
-}
-
-OUString SchXMLImport_Styles_getImplementationName() throw()
-{
-    return "SchXMLImport.Styles";
-}
-
-Reference< uno::XInterface > SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES ));
-}
-
 Sequence< OUString > SchXMLImport_Content_getSupportedServiceNames() throw()
 {
     return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisContentImporter" };
@@ -626,6 +611,13 @@ com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation(
     uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport.Meta", SvXMLImportFlags::META));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SchXMLImport(pCtx, "SchXMLImport.Styles", SvXMLImportFlags::STYLES));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
