@@ -898,6 +898,8 @@ void ScCellIterator::init()
         maStartPos = ScAddress(mpDoc->MaxCol()+1, mpDoc->MaxRow()+1, MAXTAB+1); // -> Abort on GetFirst.
         maCurPos = maStartPos;
     }
+    else
+        maCurPos.SetCol(mpDoc->maTabs[maCurPos.Tab()]->ClampToAllocatedColumns(maCurPos.Col()));
 }
 
 bool ScCellIterator::getCurrent()
@@ -1029,6 +1031,7 @@ bool ScCellIterator::first()
         return false;
 
     maCurPos = maStartPos;
+
     const ScColumn* pCol = getColumn();
 
     maCurColPos = pCol->maCells.position(maCurPos.Row());
