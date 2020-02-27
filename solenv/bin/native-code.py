@@ -320,6 +320,7 @@ core_constructor_list = [
     "com_sun_star_comp_Impress_XMLClipboardExporter_get_implementation",
     "com_sun_star_comp_Chart_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Chart_XMLOasisMetaImporter_get_implementation",
+    "com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
