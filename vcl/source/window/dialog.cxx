@@ -1077,6 +1077,15 @@ void Dialog::EndDialog( long nResult )
 
     Hide();
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
+    }
+
     if (bModal)
     {
         SetModalInputMode(false);
