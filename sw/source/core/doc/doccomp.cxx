@@ -149,8 +149,8 @@ public:
 class CompareMainText : public CompareData
 {
 public:
-    CompareMainText(SwDoc &rD)
-        : CompareData(rD, false)
+    CompareMainText(SwDoc &rD, bool bRecordDiff)
+        : CompareData(rD, bRecordDiff)
     {
     }
 
@@ -1780,8 +1780,8 @@ namespace
     {
         Comparators aComparisons;
         //compare main text
-        aComparisons.emplace_back(std::make_shared<CompareMainText>(rSrcDoc),
-                                  std::make_shared<CompareMainText>(rDestDoc));
+        aComparisons.emplace_back(std::make_shared<CompareMainText>(rSrcDoc, true),
+                                  std::make_shared<CompareMainText>(rDestDoc, true));
 
         //if we have the same number of frames then try to compare within them
         const SwFrameFormats *pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
@@ -2082,8 +2082,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
     getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
 
-    CompareMainText aD0(rSrcDoc);
-    CompareMainText aD1(*this);
+    CompareMainText aD0(rSrcDoc, false);
+    CompareMainText aD1(*this, false);
     aD1.CompareLines( aD0 );
     if( !aD1.HasDiffs( aD0 ) )
     {
