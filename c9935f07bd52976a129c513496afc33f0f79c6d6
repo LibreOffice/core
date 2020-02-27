@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8520fbb_1ca73126",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T18:04:29Z",
+      "side": 1,
+      "message": "ah so this is so it gets imported from table-cell-properties in existing documents but not exported - okay...",
+      "revId": "c9935f07bd52976a129c513496afc33f0f79c6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
