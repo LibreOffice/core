@@ -288,9 +288,9 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 GraphicLocation nPos = GraphicLocation_NONE;
                 static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushRepeat[] =
                 {
-                    { XML_BACKGROUND_REPEAT,    GraphicLocation_TILED   },
+                    { XML_REPEAT,               GraphicLocation_TILED   },
                     { XML_BACKGROUND_NO_REPEAT, GraphicLocation_MIDDLE_MIDDLE       },
-                    { XML_BACKGROUND_STRETCH,   GraphicLocation_AREA    },
+                    { XML_STRETCH,              GraphicLocation_AREA    },
                     { XML_TOKEN_INVALID,        GraphicLocation(0)      }
                 };
                 if( SvXMLUnitConverter::convertEnum( nPos, rValue,

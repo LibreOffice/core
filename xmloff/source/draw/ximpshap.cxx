@@ -1557,7 +1557,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         // check if the current document supports presentation shapes
         if( GetImport().GetShapeImport()->IsPresentationShapesSupported() )
         {
-            if( IsXMLToken( maPresentationClass, XML_PRESENTATION_SUBTITLE ))
+            if( IsXMLToken( maPresentationClass, XML_SUBTITLE ))
             {
                 // XmlShapeTypePresSubtitleShape
                 service = "com.sun.star.presentation.SubtitleShape";
@@ -1567,7 +1567,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 // XmlShapeTypePresOutlinerShape
                 service = "com.sun.star.presentation.OutlinerShape";
             }
-            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_NOTES ) )
+            else if( IsXMLToken( maPresentationClass, XML_NOTES ) )
             {
                 // XmlShapeTypePresNotesShape
                 service = "com.sun.star.presentation.NotesShape";
@@ -1596,7 +1596,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 service = "com.sun.star.presentation.DateTimeShape";
                 bClearText = true;
             }
-            else //  IsXMLToken( maPresentationClass, XML_PRESENTATION_TITLE ) )
+            else //  IsXMLToken( maPresentationClass, XML_TITLE ) )
             {
                 // XmlShapeTypePresTitleTextShape
                 service = "com.sun.star.presentation.TitleTextShape";
@@ -2206,7 +2206,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // add, set style and properties from base shape
 
     // #86163# take into account which type of PageShape needs to
-    // be constructed. It's a pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
+    // be constructed. It's a pres shape if presentation:XML_CLASS == XML_PAGE.
     bool bIsPresentation = !maPresentationClass.isEmpty() &&
            GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
@@ -2219,7 +2219,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
     else
     {
-        if(bIsPresentation && !IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
+        if(bIsPresentation && !IsXMLToken( maPresentationClass, XML_PAGE ) )
         {
             bIsPresentation = false;
         }
@@ -2638,15 +2638,15 @@ void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml:
 
     if( bIsPresShape )
     {
-        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) )
+        if( IsXMLToken( maPresentationClass, XML_CHART ) )
         {
             service = "com.sun.star.presentation.ChartShape";
         }
-        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
+        else if( IsXMLToken( maPresentationClass, XML_TABLE ) )
         {
             service = "com.sun.star.presentation.CalcShape";
         }
-        else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
+        else if( IsXMLToken( maPresentationClass, XML_OBJECT ) )
         {
             service = "com.sun.star.presentation.OLE2Shape";
         }
@@ -3007,7 +3007,7 @@ void SdXMLPluginShapeContext::StartElement( const css::uno::Reference< css::xml:
         bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
         if( bIsPresShape )
         {
-            if( IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
+            if( IsXMLToken( maPresentationClass, XML_OBJECT ) )
             {
                 service = "com.sun.star.presentation.MediaShape";
             }
@@ -3612,13 +3612,13 @@ void SdXMLFrameShapeContext::EndElement()
                 eToken = XML_IMAGE;
 
             }
-            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
+            else if( IsXMLToken( maPresentationClass, XML_PAGE ) )
             {
                 eToken = XML_PAGE_THUMBNAIL;
             }
-            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) ||
-                     IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) ||
-                     IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
+            else if( IsXMLToken( maPresentationClass, XML_CHART ) ||
+                     IsXMLToken( maPresentationClass, XML_TABLE ) ||
+                     IsXMLToken( maPresentationClass, XML_OBJECT ) )
             {
                 eToken = XML_OBJECT;
             }
@@ -3916,7 +3916,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
     bool bIsPresShape = !maPresentationClass.isEmpty() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
     if( bIsPresShape )
     {
-        if( IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) )
+        if( IsXMLToken( maPresentationClass, XML_TABLE ) )
         {
             service = "com.sun.star.presentation.TableShape";
         }

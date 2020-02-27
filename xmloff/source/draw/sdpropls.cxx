@@ -660,15 +660,15 @@ static SvXMLEnumMapEntry<drawing::TextFitToSizeType> const pXML_ShrinkToFit_Enum
 static SvXMLEnumMapEntry<sal_Int32> const pXML_MeasureUnit_Enum[] =
 {
     { XML_AUTOMATIC,    0 },
-    { XML_UNIT_MM,      1 },
+    { XML_MM,           1 },
     { XML_UNIT_CM,      2 },
     { XML_UNIT_M,       3 },
-    { XML_UNIT_KM,      4 },
+    { XML_KM,           4 },
     { XML_UNIT_PT,      6 },
     { XML_UNIT_PC,      7 },
-    { XML_UNIT_INCH,    8 },
+    { XML_IN,           8 },
     { XML_UNIT_FOOT,    9 },
-    { XML_UNIT_MILES,   10 },
+    { XML_MI,           10 },
     { XML_TOKEN_INVALID,0 }
 };
 
