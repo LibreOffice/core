@@ -79,7 +79,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptChildContext:
 
         if ( m_aLanguage == aBasic && nElement == XML_ELEMENT(OOO, XML_LIBRARIES) )
         {
-            return new xmloff::BasicLibrariesElement( GetImport(), m_xModel,/*bOasis*/ true );
+            return new xmloff::BasicLibrariesElement( GetImport(), m_xModel );
         }
     }
 

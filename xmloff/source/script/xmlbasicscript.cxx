@@ -40,9 +40,8 @@ namespace xmloff
 {
 // BasicElementBase
 
-BasicElementBase::BasicElementBase(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS)
+BasicElementBase::BasicElementBase(SvXMLImport& rImport)
     : SvXMLImportContext(rImport)
-    , mnExpectedXMLNS(nExpectedXMLNS)
 {
 }
 
@@ -80,9 +79,8 @@ void BasicElementBase::startFastElement(sal_Int32 /*nElement*/,
 // BasicLibrariesElement
 
 BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
-                                             const css::uno::Reference<css::frame::XModel>& rxModel,
-                                             bool bOasis)
-    : BasicElementBase(rImport, bOasis ? XML_NAMESPACE_OOO : XML_NAMESPACE_SCRIPT_OOO)
+                                             const css::uno::Reference<css::frame::XModel>& rxModel)
+    : BasicElementBase(rImport)
 {
     // try the XEmbeddedScripts interface
     Reference<document::XEmbeddedScripts> xDocumentScripts(rxModel, UNO_QUERY_THROW);
@@ -111,18 +109,18 @@ Reference<XFastContextHandler>
 BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
                                               const Reference<XFastAttributeList>& xAttributes)
 {
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(mnExpectedXMLNS))
+    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
     else if ((nElement & TOKEN_MASK) == XML_LIBRARY_LINKED)
     {
-        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(mnExpectedXMLNS) | XML_NAME);
+        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(XML_NAMESPACE_OOO) | XML_NAME);
 
         OUString aStorageURL = xAttributes->getValue(XML_ELEMENT(XLINK, XML_HREF));
 
         bool bReadOnly = false;
-        getBoolAttr(&bReadOnly, NAMESPACE_TOKEN(mnExpectedXMLNS) | XML_READONLY, xAttributes);
+        getBoolAttr(&bReadOnly, NAMESPACE_TOKEN(XML_NAMESPACE_OOO) | XML_READONLY, xAttributes);
 
         if (m_xLibContainer.is())
         {
@@ -131,7 +129,7 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
                 Reference<container::XNameAccess> xLib(
                     m_xLibContainer->createLibraryLink(aName, aStorageURL, bReadOnly));
                 if (xLib.is())
-                    return new BasicElementBase(GetImport(), mnExpectedXMLNS);
+                    return new BasicElementBase(GetImport());
             }
             catch (const container::ElementExistException&)
             {
@@ -149,10 +147,10 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
     {
         // TODO: create password protected libraries
 
-        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(mnExpectedXMLNS) | XML_NAME);
+        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(XML_NAMESPACE_OOO) | XML_NAME);
 
         bool bReadOnly = false;
-        getBoolAttr(&bReadOnly, NAMESPACE_TOKEN(mnExpectedXMLNS) | XML_READONLY, xAttributes);
+        getBoolAttr(&bReadOnly, NAMESPACE_TOKEN(XML_NAMESPACE_OOO) | XML_READONLY, xAttributes);
 
         if (m_xLibContainer.is())
         {
@@ -170,8 +168,8 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
                 }
 
                 if (xLib.is())
-                    return new BasicEmbeddedLibraryElement(GetImport(), mnExpectedXMLNS,
-                                                           m_xLibContainer, aName, bReadOnly);
+                    return new BasicEmbeddedLibraryElement(GetImport(), m_xLibContainer, aName,
+                                                           bReadOnly);
             }
             catch (const lang::IllegalArgumentException&)
             {
@@ -192,10 +190,9 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
 // BasicEmbeddedLibraryElement
 
 BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement(
-    SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
-    const Reference<script::XLibraryContainer2>& rxLibContainer, const OUString& rLibName,
-    bool bReadOnly)
-    : BasicElementBase(rImport, nExpectedXMLNS)
+    SvXMLImport& rImport, const Reference<script::XLibraryContainer2>& rxLibContainer,
+    const OUString& rLibName, bool bReadOnly)
+    : BasicElementBase(rImport)
     , m_xLibContainer(rxLibContainer)
     , m_aLibName(rLibName)
     , m_bReadOnly(bReadOnly)
@@ -214,16 +211,16 @@ BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement(
 Reference<XFastContextHandler> BasicEmbeddedLibraryElement::createFastChildContext(
     sal_Int32 nElement, const Reference<XFastAttributeList>& xAttributes)
 {
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(mnExpectedXMLNS))
+    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
     else if ((nElement & TOKEN_MASK) == XML_MODULE)
     {
-        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(mnExpectedXMLNS) | XML_NAME);
+        OUString aName = xAttributes->getValue(NAMESPACE_TOKEN(XML_NAMESPACE_OOO) | XML_NAME);
 
         if (m_xLib.is() && !aName.isEmpty())
-            return new BasicModuleElement(GetImport(), mnExpectedXMLNS, m_xLib, aName);
+            return new BasicModuleElement(GetImport(), m_xLib, aName);
     }
     else
     {
@@ -241,10 +238,10 @@ void BasicEmbeddedLibraryElement::endFastElement(sal_Int32)
 
 // BasicModuleElement
 
-BasicModuleElement::BasicModuleElement(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
+BasicModuleElement::BasicModuleElement(SvXMLImport& rImport,
                                        const Reference<container::XNameContainer>& rxLib,
                                        const OUString& rName)
-    : BasicElementBase(rImport, nExpectedXMLNS)
+    : BasicElementBase(rImport)
     , m_xLib(rxLib)
     , m_aName(rName)
 {
@@ -256,7 +253,7 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
 {
     // TODO: <byte-code>
 
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(mnExpectedXMLNS))
+    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
@@ -267,7 +264,7 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
         if (xAttributes.is())
         {
             if (m_xLib.is() && !m_aName.isEmpty())
-                return new BasicSourceCodeElement(GetImport(), mnExpectedXMLNS, m_xLib, m_aName);
+                return new BasicSourceCodeElement(GetImport(), m_xLib, m_aName);
         }
     }
     else
@@ -281,10 +278,10 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
 
 // BasicSourceCodeElement
 
-BasicSourceCodeElement::BasicSourceCodeElement(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
+BasicSourceCodeElement::BasicSourceCodeElement(SvXMLImport& rImport,
                                                const Reference<container::XNameContainer>& rxLib,
                                                const OUString& rName)
-    : BasicElementBase(rImport, nExpectedXMLNS)
+    : BasicElementBase(rImport)
     , m_xLib(rxLib)
     , m_aName(rName)
 {
