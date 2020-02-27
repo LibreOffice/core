@@ -1,4 +1,2 @@
 "ScTableSheetsObj";"com::sun::star::container::XNameContainer";"insertByName()"
 "ScTableSheetsObj";"com::sun::star::container::XNameContainer";"removeByName()"
-"ScTableSheetsObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScTableSheetsObj";"com::sun::star::container::XElementAccess";"hasElements()"
