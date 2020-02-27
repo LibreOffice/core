@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aa160a7_4cbd589c",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-02-27T18:44:31Z",
+      "side": 1,
+      "message": "The double quoting looks weird to me, unless that\u0027s your favorite style I suggest:\n\n    git push \"$GERRITURL\" \"HEAD:refs/for/$BRANCH$TYPE\"\n\ninstead.  (While you\u0027re at it, why not quote $GUERRITURL too?  I know it\u0027s a static string, but doesn\u0027t hurt :-)",
+      "revId": "10a568535ab673b9c0ef5452e9d54ab36222fa21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "429a1d94_aea6e7c1",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-02-27T18:44:31Z",
+      "side": 1,
+      "message": "`read -pr foo BAR` sets the prompt to “r”, and splits the standard input into two words, allocating \"foo\" to the first one and \"BAR\" to the second one.  So probably not what you want :-P  (In this case it\u0027ll even fail because ‘Which user name did you choose? ’ isn\u0027t a valid identifier.)",
+      "revId": "10a568535ab673b9c0ef5452e9d54ab36222fa21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dfe88a9_d07d02c5",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001432
+      },
+      "writtenOn": "2020-02-27T18:44:31Z",
+      "side": 1,
+      "message": "One can quote foo$BAR as foo\"$BAR\" or \"foo$BAR\", doesn\u0027t matter which but I\u0027d suggest to settle on one.  (In the rest of the patch too.)  Seems the latter was used previously, cf. line 87, 92 or 124.",
+      "revId": "10a568535ab673b9c0ef5452e9d54ab36222fa21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
