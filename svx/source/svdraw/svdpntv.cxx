@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
-    // back to loop - there is more to test than a std::find_if and a lamba can do
+    // back to loop - there is more to test than a std::find_if and a lambda can do
     for(auto& candidate : maPaintWindows)
     {
         if(&(candidate->GetOutputDevice()) == &rOut)
