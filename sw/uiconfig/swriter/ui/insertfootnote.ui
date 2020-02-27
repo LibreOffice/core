@@ -41,6 +41,7 @@
                     <property name="receives_default">True</property>
                     <property name="image">image1</property>
                     <property name="image_position">right</property>
+                    <property name="tooltip_text" translatable="yes" context="insertfootnote|prev">Previous footnote/endnote</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -52,6 +53,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image2</property>
+                    <property name="tooltip_text" translatable="yes" context="insertfootnote|next">Next footnote/endnote</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -163,7 +165,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="character">
-                            <property name="label" translatable="yes" context="insertfootnote|character">Character</property>
+                            <property name="label" translatable="yes" context="insertfootnote|character">Character:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
