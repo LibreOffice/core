@@ -25,7 +25,6 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdsob.hxx>
-#include <svx/sdrpaintwindow.hxx>
 
 
 void SdrViewIter::ImpInitVars()

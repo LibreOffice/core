@@ -21,7 +21,6 @@
 #include <svx/svdsnpv.hxx>
 #include <math.h>
 
-#include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -30,7 +29,6 @@
 #include <sdr/overlay/overlaycrosshair.hxx>
 #include <sdr/overlay/overlayhelpline.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/debug.hxx>
 #include <vcl/ptrstyle.hxx>

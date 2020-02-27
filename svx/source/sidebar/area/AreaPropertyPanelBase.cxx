@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <osl/diagnose.h>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/svxids.hrc>
@@ -26,14 +25,6 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/bindings.hxx>
-#include <svtools/valueset.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svx/svxitems.hrc>
-#include <vcl/toolbox.hxx>
-#include <svtools/toolbarmenu.hxx>
-#include <svx/tbcontrl.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/weldutils.hxx>
 #include <tools/urlobj.hxx>

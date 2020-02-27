@@ -20,19 +20,15 @@
 
 #include <svx/svdcrtv.hxx>
 #include <svx/xlnclit.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/view3d.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
-#include <sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
@@ -42,7 +38,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/ptrstyle.hxx>
 
 using namespace com::sun::star;

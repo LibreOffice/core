@@ -12,7 +12,6 @@
 #include <o3tl/deleter.hxx>
 #include <svx/svdglue.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <vcl/outdev.hxx>
 
 SdrObjPlusData::SdrObjPlusData()
 {

@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "MediaPlaybackPanel.hxx"
-#include <vcl/outdev.hxx>
-#include <avmedia/mediawindow.hxx>
-#include <avmedia/mediaplayer.hxx>
-#include <svtools/miscopt.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dispatch.hxx>

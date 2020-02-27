@@ -19,8 +19,6 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include <svl/lstner.hxx>
-
 #include <svx/svdundo.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
@@ -32,7 +30,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/scene3d.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <sdr/properties/itemsettools.hxx>
@@ -41,8 +38,6 @@
 #include <svl/whiter.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdviter.hxx>
-#include <svx/svdograf.hxx>
-#include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/svdotable.hxx> // #i124389#
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>

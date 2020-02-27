@@ -18,12 +18,10 @@
  */
 
 #include <svx/sidebar/SelectionAnalyzer.hxx>
-#include <svx/svdmrkv.hxx>
+#include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/fmglob.hxx>
-#include <svx/globl3d.hxx>
 
 using vcl::EnumContext;
 

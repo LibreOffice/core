@@ -35,12 +35,9 @@
 #include <GalleryControl.hxx>
 #include "EmptyPanel.hxx"
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/Tools.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/templdlg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <rtl/ref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

@@ -31,7 +31,6 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/urihelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/tenccvt.hxx>
 #include <memory>

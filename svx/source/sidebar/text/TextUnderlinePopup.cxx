@@ -18,7 +18,6 @@
  */
 #include <svx/TextUnderlinePopup.hxx>
 #include "TextUnderlineControl.hxx"
-#include <editeng/udlnitem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace svx;

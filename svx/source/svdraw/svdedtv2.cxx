@@ -18,11 +18,9 @@
  */
 
 #include <svx/svdedtv.hxx>
-#include <editeng/outliner.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svdovirt.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
@@ -38,7 +36,6 @@
 #include "svdfmtf.hxx"
 #include "svdpdf.hxx"
 #include <svx/svdetc.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

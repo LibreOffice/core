@@ -26,17 +26,13 @@
 #include <com/sun/star/smarttags/XRangeBasedSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -44,8 +40,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
-
-#include <com/sun/star/text/XTextRange.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

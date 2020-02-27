@@ -18,26 +18,14 @@
  */
 
 #include <svx/svdpagv.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <svx/svdoutl.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 
-#include <svx/svdedxv.hxx>
-#include <editeng/outliner.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/svdoole2.hxx>
 
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
-#include <svx/fmview.hxx>
 
 #include <algorithm>
 

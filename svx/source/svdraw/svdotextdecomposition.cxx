@@ -38,10 +38,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <tools/helpers.hxx>
-#include <svx/sdtfchim.hxx>
 #include <svl/itemset.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
@@ -50,7 +47,6 @@
 #include <editeng/flditem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -58,8 +54,6 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/overflowingtxt.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
 

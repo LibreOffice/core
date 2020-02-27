@@ -23,14 +23,10 @@
 
 #include <svx/svdhdl.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svdmrkv.hxx>
-#include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <tools/poly.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <svx/sxekitm.hxx>
 #include <svx/strings.hrc>
@@ -61,7 +57,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>

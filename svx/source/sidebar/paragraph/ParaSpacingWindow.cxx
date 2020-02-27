@@ -24,7 +24,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
-#include <svl/intitem.hxx>
 
 using namespace svx;
 

@@ -20,17 +20,13 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xcolit.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <editeng/lineitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>

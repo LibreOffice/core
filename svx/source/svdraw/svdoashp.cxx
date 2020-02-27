@@ -19,11 +19,6 @@
 
 #include <svx/svdoashp.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/unoshape.hxx>
-#include <ucbhelper/content.hxx>
-#include <unotools/datetime.hxx>
-#include <sfx2/lnkbase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
@@ -33,21 +28,15 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svx/svdogrp.hxx>
 #include <tools/helpers.hxx>
 #include <svx/svddrag.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xpoly.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdoedge.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <editeng/eeitem.hxx>
@@ -68,8 +57,6 @@
 #include <editeng/writingmodeitem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
-#include <svx/svxids.hrc>
-#include <svl/whiter.hxx>
 #include <sdr/properties/customshapeproperties.hxx>
 #include <sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/xlntrit.hxx>
@@ -79,7 +66,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdmetitm.hxx>
@@ -95,6 +81,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
+#include <sal/log.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 
 using namespace ::com::sun::star;

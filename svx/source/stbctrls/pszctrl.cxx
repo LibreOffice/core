@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
@@ -29,11 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
-#include <svl/itempool.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
 
@@ -42,7 +37,6 @@
 #define PAINT_OFFSET    5
 
 #include <editeng/sizeitem.hxx>
-#include <svx/dlgutil.hxx>
 #include "stbctrls.h"
 
 #include <svx/svxids.hrc>

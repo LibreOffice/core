@@ -19,11 +19,8 @@
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <limits.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
-#include <editeng/brushitem.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -25,7 +25,6 @@
 #include <editeng/editids.hrc>
 #include <svx/ParaSpacingControl.hxx>
 #include <vcl/toolbox.hxx>
-#include <svl/itempool.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
 #include <comphelper/processfactory.hxx>

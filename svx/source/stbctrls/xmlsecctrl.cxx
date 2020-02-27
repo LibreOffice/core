@@ -25,15 +25,9 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <sfx2/signaturestate.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxsids.hrc>
 
 #include <svl/intitem.hxx>
-
-#include <svl/eitem.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

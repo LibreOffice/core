@@ -16,28 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sidebar/ControlFactory.hxx>
+
 #include "LinePropertyPanel.hxx"
 #include <svx/svxids.hrc>
-#include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/xtable.hxx>
-#include <svx/xdash.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/svxitems.hrc>
-#include <svtools/valueset.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/viewoptions.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlndsit.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/xlnwtit.hxx>
-#include <vcl/toolbox.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 

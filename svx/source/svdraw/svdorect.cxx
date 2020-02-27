@@ -18,30 +18,17 @@
  */
 
 #include <svx/svdorect.hxx>
-#include <math.h>
-#include <stdlib.h>
-#include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/xflclit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlnwtit.hxx>
 #include <sdr/properties/rectangleproperties.hxx>
 #include <sdr/contact/viewcontactofsdrrectobj.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <tools/debug.hxx>
 #include <vcl/ptrstyle.hxx>
 
 using namespace com::sun::star;

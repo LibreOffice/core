@@ -21,9 +21,6 @@
 #include <tools/debug.hxx>
 #include <svx/svddrgv.hxx>
 #include <svx/svdview.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
@@ -35,9 +32,6 @@
 #include <svx/obj3d.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <svx/polypolygoneditor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
