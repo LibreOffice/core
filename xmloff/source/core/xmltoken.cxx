@@ -3376,7 +3376,7 @@ namespace xmloff::token {
 
                 // verify that we have no duplicates, which can mess us up when doing fast-parser import
                 if (pEntry->nLength && nPos >= XML_MM)
-                    // ignoring the zero-length fake entries and the namespace prefix entrie
+                    // ignoring the zero-length fake entries and the namespace prefix entries
                 {
                     auto pair = tokenSet.insert(OString(pEntry->pChar, pEntry->nLength));
                     if (!pair.second)
