@@ -9078,6 +9078,17 @@ private:
         return lastpath;
     }
 
+    void set_font_color(const GtkTreeIter& iter, const Color& rColor)
+    {
+        if (rColor == COL_AUTO)
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
+        else
+        {
+            GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
+        }
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -9260,20 +9271,14 @@ public:
         enable_notify_events();
     }
 
-    void set_font_color(const GtkTreeIter& iter, const Color& rColor) const
-    {
-        GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
-    }
-
-    virtual void set_font_color(int pos, const Color& rColor) const override
+    virtual void set_font_color(int pos, const Color& rColor) override
     {
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
         set_font_color(iter, rColor);
     }
 
-    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) const override
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         set_font_color(rGtkIter.iter, rColor);

@@ -848,7 +848,7 @@ public:
     virtual bool get_text_emphasis(int row, int col) const = 0;
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
-    virtual void set_font_color(int pos, const Color& rColor) const = 0;
+    virtual void set_font_color(int pos, const Color& rColor) = 0;
     virtual void scroll_to_row(int pos) = 0;
     virtual bool is_selected(int pos) const = 0;
     virtual int get_cursor_index() const = 0;
@@ -932,7 +932,7 @@ public:
     virtual void set_image(const TreeIter& rIter,
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
-    virtual void set_font_color(const TreeIter& rIter, const Color& rColor) const = 0;
+    virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
     virtual bool is_selected(const TreeIter& rIter) const = 0;
 
