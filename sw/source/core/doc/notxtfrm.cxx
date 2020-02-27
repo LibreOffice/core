@@ -1309,13 +1309,25 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     // repaint to VOC and Primitives, too.
                     static const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
                     static bool bUseViewObjectContactMechanism(nullptr == pDisableMM02Goodies);
+                    // tdf#130951 for safety reasons use fallback if ViewObjectContactMechanism
+                    // fails for some reason - usually could only be not to find the correct
+                    // SdrPageWindow
+                    bool bSucceeded(false);
 
                     if(bUseViewObjectContactMechanism)
                     {
                         // MM02 use VOC-mechanism and buffer primitives
                         SwViewShellImp* pImp(pShell->Imp());
-                        SdrPageView* pPageView(nullptr != pImp ? pImp->GetPageView() : nullptr);
-                        SdrPageWindow* pPageWindow(nullptr != pPageView ? pPageView->FindPageWindow(*pShell->GetOut()) : nullptr);
+                        SdrPageView* pPageView(nullptr != pImp
+                            ? pImp->GetPageView()
+                            : nullptr);
+                        // tdf#130951 caution - target may be Window, use the correct OutputDevice
+                        OutputDevice* pTarget(pShell->isOutputToWindow()
+                            ? pShell->GetWin()
+                            : pShell->GetOut());
+                        SdrPageWindow* pPageWindow(nullptr != pPageView && nullptr != pTarget
+                            ? pPageView->FindPageWindow(*pTarget)
+                            : nullptr);
 
                         if(nullptr != pPageWindow)
                         {
@@ -1334,9 +1346,11 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                                 nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
                                 rNoTNd.GetTitle(),
                                 rNoTNd.GetDescription());
+                            bSucceeded = true;
                         }
                     }
-                    else
+
+                    if(!bSucceeded)
                     {
                         // MM02 fallback to direct paint with primitive-recreation
                         // which will block reusage of system-dependent bitmap data
