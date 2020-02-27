@@ -138,7 +138,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
                     // set accelerator of the actual item
                     // and call the handler
                     bool bDel = false;
-                    pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
@@ -146,7 +145,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
                     // did the accelerator survive the call
                     if ( !bDel )
                     {
-                        pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mpDel           = nullptr;
                     }
@@ -206,7 +204,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
                     // define accelerator of the actual item
                     // and call the handler
                     bool bDel = false;
-                    pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
@@ -214,7 +211,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
                     // if the accelerator did survive the call
                     if ( !bDel )
                     {
-                        pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mpDel           = nullptr;
                     }

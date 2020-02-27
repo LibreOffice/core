@@ -220,7 +220,6 @@ Accelerator::Accelerator()
 }
 
 Accelerator::Accelerator(const Accelerator& rAccel)
-    : maCurKeyCode( rAccel.maCurKeyCode )
 {
     ImplInit();
     mpData.reset(new ImplAccelData);
@@ -284,7 +283,6 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
         return *this;
 
     // assign new data
-    maCurKeyCode    = vcl::KeyCode();
     mnCurId         = 0;
 
     // delete and copy tables

@@ -35,8 +35,6 @@ class ScAnchorTest : public CalcUnoApiTest
 public:
     ScAnchorTest();
 
-    virtual void tearDown() override;
-
     void testUndoAnchor();
     void testTdf76183();
     void testODFAnchorTypes();
@@ -56,9 +54,6 @@ public:
     CPPUNIT_TEST(testTdf129552);
     CPPUNIT_TEST(testTdf130556);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScAnchorTest::ScAnchorTest()
@@ -414,16 +409,6 @@ void ScAnchorTest::testTdf130556()
     Scheduler::ProcessEventsToIdle();
 
     xComponent->dispose();
-}
-
-void ScAnchorTest::tearDown()
-{
-    if (mxComponent.is())
-    {
-        closeDocument(mxComponent);
-    }
-
-    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAnchorTest);
