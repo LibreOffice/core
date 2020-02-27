@@ -122,6 +122,8 @@ class SwContentTree final
     // outline root mode drag & drop
     std::vector< SvTreeListEntry* > m_aDndOutlinesSelected;
 
+    bool m_bIsInPromoteDemote = false;
+
     /**
      * Before any data will be deleted, the last active entry has to be found.
      * After this the UserData will be deleted
