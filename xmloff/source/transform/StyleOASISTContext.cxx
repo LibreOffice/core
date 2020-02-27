@@ -401,7 +401,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         GetXMLToken(
                             IsXMLToken( rAttrValue, XML_ALWAYS )
                             ? XML_COLUMNSPLIT_AVOID
-                            : XML_COLUMNSPLIT_AUTO ) );
+                            : XML_AUTO ) );
                     break;
 
                 case XML_OPTACTION_CONTROL_TEXT_ALIGN:

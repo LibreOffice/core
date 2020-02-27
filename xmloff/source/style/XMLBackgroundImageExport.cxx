@@ -124,7 +124,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rGraphicAny,
 
         if( GraphicLocation_AREA == ePos )
         {
-            aOut.append( GetXMLToken(XML_BACKGROUND_STRETCH) );
+            aOut.append( GetXMLToken(XML_STRETCH) );
         }
         else if( GraphicLocation_NONE != ePos && GraphicLocation_TILED != ePos  )
         {

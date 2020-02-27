@@ -86,7 +86,7 @@ bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         rValue <<= sal_Int16(style::CaseMap::SMALLCAPS);
         bRet = true;
     }
-    else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL ) )
+    else if( IsXMLToken( rStrImpValue, XML_NORMAL ) )
     {
         rValue <<= sal_Int16(style::CaseMap::NONE);
         bRet = true;
@@ -105,7 +105,7 @@ bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
         switch( nValue )
         {
         case style::CaseMap::NONE:
-            aOut.append( GetXMLToken(XML_CASEMAP_NORMAL) );
+            aOut.append( GetXMLToken(XML_NORMAL) );
             break;
         case style::CaseMap::SMALLCAPS:
             aOut.append( GetXMLToken(XML_CASEMAP_SMALL_CAPS) );

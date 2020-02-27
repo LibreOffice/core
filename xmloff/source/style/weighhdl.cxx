@@ -68,12 +68,12 @@ bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
     bool bRet = false;
     sal_uInt16 nWeight = 0;
 
-    if( IsXMLToken( rStrImpValue, XML_WEIGHT_NORMAL ) )
+    if( IsXMLToken( rStrImpValue, XML_NORMAL ) )
     {
         nWeight = 400;
         bRet = true;
     }
-    else if( IsXMLToken( rStrImpValue, XML_WEIGHT_BOLD ) )
+    else if( IsXMLToken( rStrImpValue, XML_BOLD ) )
     {
         nWeight = 700;
         bRet = true;
@@ -141,9 +141,9 @@ bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
         }
 
         if( 400 == nWeight )
-            rStrExpValue = GetXMLToken(XML_WEIGHT_NORMAL);
+            rStrExpValue = GetXMLToken(XML_NORMAL);
         else if( 700 == nWeight )
-            rStrExpValue = GetXMLToken(XML_WEIGHT_BOLD);
+            rStrExpValue = GetXMLToken(XML_BOLD);
         else
             rStrExpValue = OUString::number( nWeight );
     }

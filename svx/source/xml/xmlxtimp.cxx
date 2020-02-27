@@ -147,7 +147,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
                                IsXMLToken( aLocalName, XML_DOTS2_LENGTH ) ||
                                IsXMLToken( aLocalName, XML_DISTANCE )) ) ||
                             ( SvxXMLTableImportContextEnum::Hatch == meContext &&
-                              IsXMLToken( aLocalName, XML_HATCH_DISTANCE ) ) ) )
+                              IsXMLToken( aLocalName, XML_DISTANCE ) ) ) )
                 {
                     const OUString rValue = pAttrList->getValueByIndex( i );
                     sal_Int32 nPos = rValue.getLength();

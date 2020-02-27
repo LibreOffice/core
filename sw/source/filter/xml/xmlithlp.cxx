@@ -214,9 +214,9 @@ void sw_frmitems_setXMLBorder( std::unique_ptr<SvxBorderLine>& rpLine,
 
 const struct SvXMLEnumMapEntry<SvxGraphicPosition> psXML_BrushRepeat[] =
 {
-    { XML_BACKGROUND_REPEAT,        GPOS_TILED  },
+    { XML_REPEAT,        GPOS_TILED  },
     { XML_BACKGROUND_NO_REPEAT,     GPOS_MM     },
-    { XML_BACKGROUND_STRETCH,       GPOS_AREA   },
+    { XML_STRETCH,       GPOS_AREA   },
     { XML_TOKEN_INVALID, SvxGraphicPosition(0) }
 };
 
