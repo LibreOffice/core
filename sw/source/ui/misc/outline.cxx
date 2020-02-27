@@ -145,7 +145,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     , bModified(rWrtSh.IsModified())
     , m_xMenuButton(m_xBuilder->weld_menu_button("format"))
 {
-    m_xMenuButton->connect_clicked(LINK(this, SwOutlineTabDialog, FormHdl));
+    m_xMenuButton->connect_toggled(LINK(this, SwOutlineTabDialog, FormHdl));
     m_xMenuButton->connect_selected(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
 
     xNumRule.reset(new SwNumRule(*rSh.GetOutlineNumRule()));
@@ -206,8 +206,11 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Button&, void)
+IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::ToggleButton&, void)
 {
+    if (!m_xMenuButton->get_active())
+        return;
+
     // fill PopupMenu
     for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
