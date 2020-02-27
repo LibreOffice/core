@@ -7,7 +7,7 @@ codemaker/source/javamaker/classfile.hxx:168
 dbaccess/source/filter/xml/xmlExport.hxx:170
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
-include/basegfx/polygon/b2dpolygontools.hxx:144
+include/basegfx/polygon/b2dpolygontools.hxx:146
     enum CutFlagValue findCut(const class basegfx::B2DPoint &,const class basegfx::B2DVector &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,enum CutFlagValue,double *,double *)
     enum CutFlagValue aCutFlags setBits=0x1
 include/framework/framelistanalyzer.hxx:184

@@ -767,7 +767,6 @@ namespace drawinglayer::primitive2d
                 ? mfMinimalNonZeroBorderWidthUsedForDecompose
                 : 0.0);
 
-            if(doMergeResult())
             {
                 // decompose all buffered SdrFrameBorderData entries and try to merge them
                 // to reduce existing number of BorderLinePrimitive2D(s)
@@ -830,29 +829,17 @@ namespace drawinglayer::primitive2d
                     }
                 }
             }
-            else
-            {
-                // just decompose all buffered SdrFrameBorderData entries, do not try to merge
-                for(const auto& rCandidate : *getFrameBorders())
-                {
-                    rCandidate.create2DDecomposition(
-                        aRetval,
-                        fMinimalDiscreteUnit);
-                }
-            }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
         SdrFrameBorderPrimitive2D::SdrFrameBorderPrimitive2D(
             std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
-            bool bMergeResult,
             bool bForceToSingleDiscreteUnit)
         :   BufferedDecompositionPrimitive2D(),
             maFrameBorders(std::move(rFrameBorders)),
             mfMinimalNonZeroBorderWidth(0.0),
             mfMinimalNonZeroBorderWidthUsedForDecompose(0.0),
-            mbMergeResult(bMergeResult),
             mbForceToSingleDiscreteUnit(bForceToSingleDiscreteUnit)
         {
             if(getFrameBorders() && doForceToSingleDiscreteUnit())
@@ -874,7 +861,6 @@ namespace drawinglayer::primitive2d
                 const SdrFrameBorderPrimitive2D& rCompare = static_cast<const SdrFrameBorderPrimitive2D&>(rPrimitive);
 
                 return getFrameBorders() == rCompare.getFrameBorders()
-                    && doMergeResult() == rCompare.doMergeResult()
                     && doForceToSingleDiscreteUnit() == rCompare.doForceToSingleDiscreteUnit();
             }
 

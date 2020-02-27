@@ -94,7 +94,6 @@ namespace drawinglayer
             std::shared_ptr<SdrFrameBorderDataVector>   maFrameBorders;
             double                                      mfMinimalNonZeroBorderWidth;
             double                                      mfMinimalNonZeroBorderWidthUsedForDecompose;
-            bool                                        mbMergeResult;
             bool                                        mbForceToSingleDiscreteUnit;
 
             // local decomposition.
@@ -105,7 +104,6 @@ namespace drawinglayer
         public:
             SdrFrameBorderPrimitive2D(
                 std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
-                bool bMergeResult,
                 bool bForceToSingleDiscreteUnit);
 
             // compare operator
@@ -118,7 +116,6 @@ namespace drawinglayer
 
             // data access
             const std::shared_ptr<SdrFrameBorderDataVector>& getFrameBorders() const { return maFrameBorders; }
-            bool doMergeResult() const { return mbMergeResult; }
             bool doForceToSingleDiscreteUnit() const { return mbForceToSingleDiscreteUnit; }
 
             // provide unique ID

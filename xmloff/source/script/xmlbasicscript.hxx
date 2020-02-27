@@ -32,13 +32,12 @@ namespace xmloff
 class BasicElementBase : public SvXMLImportContext
 {
 protected:
-    sal_Int32 mnExpectedXMLNS;
     static bool
     getBoolAttr(bool* pRet, sal_Int32 nToken,
                 const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
 
 public:
-    BasicElementBase(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS);
+    BasicElementBase(SvXMLImport& rImport);
 
     virtual void SAL_CALL startFastElement(
         sal_Int32 nElement,
@@ -52,7 +51,7 @@ private:
 
 public:
     BasicLibrariesElement(SvXMLImport& rImport,
-                          const css::uno::Reference<css::frame::XModel>& rxModel, bool bOasis);
+                          const css::uno::Reference<css::frame::XModel>& rxModel);
 
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element,
@@ -69,7 +68,7 @@ private:
 
 public:
     BasicEmbeddedLibraryElement(
-        SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
+        SvXMLImport& rImport,
         const css::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
         const OUString& rLibName, bool bReadOnly);
 
@@ -86,7 +85,7 @@ private:
     OUString const m_aName;
 
 public:
-    BasicModuleElement(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
+    BasicModuleElement(SvXMLImport& rImport,
                        const css::uno::Reference<css::container::XNameContainer>& rxLib,
                        const OUString& rName);
 
@@ -103,7 +102,7 @@ private:
     OUStringBuffer m_aBuffer;
 
 public:
-    BasicSourceCodeElement(SvXMLImport& rImport, sal_Int32 nExpectedXMLNS,
+    BasicSourceCodeElement(SvXMLImport& rImport,
                            const css::uno::Reference<css::container::XNameContainer>& rxLib,
                            const OUString& rName);
 
