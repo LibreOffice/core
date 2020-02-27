@@ -2398,7 +2398,6 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
     Display(true);
 }
 
-
 void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 {
     SfxViewEventHint const*const pVEHint(dynamic_cast<SfxViewEventHint const*>(&rHint));
@@ -2416,7 +2415,17 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     switch (rHint.GetId())
     {
         case SfxHintId::DocChanged:
-            m_bViewHasChanged = true;
+            if (!m_bIsInPromoteDemote)
+            {
+                if (!m_bLastDocChangedWasInPromoteDemote)
+                {
+                    m_bViewHasChanged = true;
+                    TimerUpdate(&m_aUpdTimer);
+                }
+                m_bLastDocChangedWasInPromoteDemote = false;
+            }
+            else
+                m_bLastDocChangedWasInPromoteDemote = true;
             break;
         case SfxHintId::ModeChanged:
             if (SwWrtShell* pShell = GetWrtShell())
@@ -2434,8 +2443,6 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
 }
 
-
-
 void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
 {
     const bool bUp = rCmd == "up";
@@ -2450,6 +2457,8 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
     {
         return;
     }
+
+    m_bIsInPromoteDemote = true;
 
     SwWrtShell *const pShell = GetWrtShell();
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
@@ -2684,25 +2693,27 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         pShell->EndAllAction();
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
-        Display(true);
-        if (!m_bIsRoot)
-        {
-            const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
-            SvTreeListEntry* pFirst = First();
 
-            while (nullptr != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
+        // clear all selections to prevent the Display function from trying to reselect selected entries
+        SelectAll(false);
+        Display(true);
+
+        // reselect entries
+        const SwOutlineNodes::size_type nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
+        SvTreeListEntry* pListEntry = First();
+        while (nullptr != (pListEntry = Next(pListEntry)) && lcl_IsContent(pListEntry))
+        {
+            assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pListEntry->GetUserData())));
+            if (static_cast<SwOutlineContent*>(pListEntry->GetUserData())->GetOutlinePos() == nCurrPos)
             {
-                assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pFirst->GetUserData())));
-                if (static_cast<SwOutlineContent*>(pFirst->GetUserData())->GetOutlinePos() == nCurrPos)
-                {
-                    Select(pFirst);
-                    MakeVisible(pFirst);
-                }
+                if (!IsExpanded(pListEntry->GetParent()))
+                    Expand(pListEntry->GetParent());
+                SetCurEntry(pListEntry); // unselect all entries, make entry visible, set focus, and select
+                break;
             }
         }
-        else
+        if (m_bIsRoot)
         {
-            // Reselect entries
             const SwOutlineNodes& rOutLineNds = pShell->GetNodes().GetOutLineNds();
             for (SwTextNode* pNode : selectedOutlineNodes)
             {
@@ -2718,9 +2729,9 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                         Expand(pEntry->GetParent());
                 }
             }
-            SvTreeListBox::Invalidate();
         }
     }
+    m_bIsInPromoteDemote = false;
 }
 
 void SwContentTree::ShowTree()

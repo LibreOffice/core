@@ -122,6 +122,13 @@ class SwContentTree final
     // outline root mode drag & drop
     std::vector< SvTreeListEntry* > m_aDndOutlinesSelected;
 
+    // In some cases, when outlines are moved, layout of the document view is not done until
+    // idle job layout in IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void ).
+    // This causes outline tracking to unwantingly clear selections and select the outline entry at the
+    // document cursor position. m_bLastDocChangedWasInPromoteDemote is used in Notify to prevent this.
+    bool m_bLastDocChangedWasInPromoteDemote = false;
+    bool m_bIsInPromoteDemote = false;
+
     /**
      * Before any data will be deleted, the last active entry has to be found.
      * After this the UserData will be deleted
