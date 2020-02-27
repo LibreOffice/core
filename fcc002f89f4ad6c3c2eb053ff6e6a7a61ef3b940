@@ -87,6 +87,24 @@
       "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "53577c6d_2f63f07c",
+        "filename": "solenv/gbuild/CustomTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:45:41Z",
+      "side": 1,
+      "message": "yes, PYTHON_FOR_BUILD is the variable that is used in RepositoryExternal.mk to initialise via \"$(call gb_ExternalExecutable_set_external,python,...)\" - if it has a value, it is a system python that will be used; if it is empty, then the bundled python will be used.",
+      "parentUuid": "f0845528_776e996b",
+      "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
