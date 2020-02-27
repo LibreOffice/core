@@ -71,6 +71,41 @@
     },
     {
       "key": {
+        "uuid": "a72db57e_7d52cad2",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:15:54Z",
+      "side": 1,
+      "message": "all the changed variables should be the same type, sal_uInt32, because the value that originates in GetDocumentOptions is passed around to all the other places.\n\nSetCurrentOptions is called from line 460...",
+      "parentUuid": "3e128155_b1f02e75",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e655164_3d5fbcf2",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:15:54Z",
+      "side": 1,
+      "message": "GetDocumentOptions returns sal_uInt32",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd7574bf_fcc22923",
         "filename": "sw/source/ui/config/optcomp.cxx",
         "patchSetId": 8
@@ -88,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "8a52a6bf_31b14326",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:15:54Z",
+      "side": 1,
+      "message": "this reads from m_nSavedOptions",
+      "parentUuid": "bd7574bf_fcc22923",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d402c542_3ce1f343",
         "filename": "sw/source/ui/config/optcomp.cxx",
         "patchSetId": 8
@@ -99,6 +152,41 @@
       "writtenOn": "2020-02-25T10:22:13Z",
       "side": 1,
       "message": "and this one",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38264e61_6e59f25a",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:15:54Z",
+      "side": 1,
+      "message": "... this is returned from GetDocumentOptions and passed to SetCurrentOptions...",
+      "parentUuid": "d402c542_3ce1f343",
+      "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e9df65d_9a77958c",
+        "filename": "sw/source/ui/config/optcomp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-27T10:15:54Z",
+      "side": 1,
+      "message": "this assigns to m_nSavedOptions",
       "revId": "2f53378735d49e8b60aada33ba5436c50f451ebe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
