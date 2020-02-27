@@ -241,7 +241,8 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, 
     mpWindow(pWindow),
     mrPaintView(rNewPaintView),
     mbTemporaryTarget(false), // #i72889#
-    mbOutputToWindow(OUTDEV_WINDOW == mpOutputDevice->GetOutDevType())
+    mbOutputToWindow(OUTDEV_WINDOW == mpOutputDevice->GetOutDevType()),
+    mpPatched(nullptr)
 {
 }
 
