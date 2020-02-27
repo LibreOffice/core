@@ -33,4 +33,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
+{
+    load(DATA_DIRECTORY, "tdf126626.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // without the fix, it crashes
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
