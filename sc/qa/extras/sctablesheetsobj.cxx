@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
@@ -15,7 +16,9 @@
 #include <test/container/xnamereplace.hxx>
 #include <test/sheet/xspreadsheets.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
+#include <cppu/unotype.hxx>
 
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 using namespace css;
@@ -23,6 +26,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 class ScTableSheetsObj : public CalcUnoApiTest,
+                         public ::apitest::XElementAccess,
                          public ::apitest::XEnumerationAccess,
                          public ::apitest::XIndexAccess,
                          public ::apitest::XNameAccess,
@@ -38,6 +42,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -89,6 +97,7 @@ protected:
 
 ScTableSheetsObj::ScTableSheetsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , ::apitest::XElementAccess(cppu::UnoType<sheet::XSpreadsheet>::get())
     , ::apitest::XIndexAccess(3)
     , ::apitest::XNameAccess("Sheet1")
     , ::apitest::XNameContainer("Sheet2")
