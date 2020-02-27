@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-    // Make sure the the original JPG data is reused and we don't perform a PNG re-compress.
+    // Make sure that the original JPG data is reused and we don't perform a PNG re-compress.
     xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
     OUString aAttributeValue = getXPath(pXmlDoc, "//svg:image", "href");
 
