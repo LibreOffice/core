@@ -3276,6 +3276,14 @@ private:
         return nullptr;
     }
 
+    static void set_font_color(SvTreeListEntry* pEntry, const Color& rColor)
+    {
+        if (rColor == COL_AUTO)
+            pEntry->SetTextColor(std::optional<Color>());
+        else
+            pEntry->SetTextColor(rColor);
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -3523,16 +3531,16 @@ public:
         thaw();
     }
 
-    virtual void set_font_color(int pos, const Color& rColor) const override
+    virtual void set_font_color(int pos, const Color& rColor) override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        pEntry->SetTextColor(rColor);
+        set_font_color(pEntry, rColor);
     }
 
-    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) const override
+    virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        rVclIter.iter->SetTextColor(rColor);
+        set_font_color(rVclIter.iter, rColor);
     }
 
     virtual void remove(int pos) override
