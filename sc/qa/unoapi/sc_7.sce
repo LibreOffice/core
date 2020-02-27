@@ -18,7 +18,6 @@
 # -o sc.ScStyleObj
 # # i84656 -o sc.ScTabViewObj
 # -o sc.ScTableSheetObj
-# -o sc.ScTableSheetsObj
 # #i89411 -o sc.XMLContentExporter
 # #i89411 -o sc.XMLContentImporter
 # #i89411 -o sc.XMLExporter
