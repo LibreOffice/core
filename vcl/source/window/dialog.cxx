@@ -1134,6 +1134,15 @@ void Dialog::EndDialog( long nResult )
         xOwnerDialogController.reset();
         xOwnerSelf.reset();
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+            ReleaseLOKNotifier();
+        }
+    }
 }
 
 namespace vcl
