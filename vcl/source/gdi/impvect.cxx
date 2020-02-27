@@ -129,7 +129,7 @@ static bool ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs
         const sal_uInt8 cLum2 = rhs.maColor.GetLuminance();
         return cLum1 < cLum2;
     }
-    return lhs.mbSet < rhs.mbSet;
+    return lhs.mbSet > rhs.mbSet;
 }
 
 namespace {
