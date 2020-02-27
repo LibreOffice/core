@@ -3435,6 +3435,9 @@ void ChartExport::exportDataLabels(
             }
         }
 
+        if( GetProperty(xLabelPropSet, "LinkNumberFormatToSource") )
+            mAny >>= bLinkedNumFmt;
+
         if( xLabelPropSet->getPropertyValue("Label") >>= aLabel )
             bLabelIsNumberFormat = aLabel.ShowNumber;
         else
