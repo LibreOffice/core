@@ -508,7 +508,7 @@ AnimationNodeContext::AnimationNodeContext(
 
             const char* pServiceName = nullptr;
 
-            // we see namesspace ANIMATION and ANIMATION_OOO and PRESENTATION_OASIS and PRESENTATION_SO52 and PRESENTATION_OOO
+            // we see namespace ANIMATION and ANIMATION_OOO and PRESENTATION_OASIS and PRESENTATION_SO52 and PRESENTATION_OOO
             switch( nElement & TOKEN_MASK )
             {
             case XML_SEQ:
