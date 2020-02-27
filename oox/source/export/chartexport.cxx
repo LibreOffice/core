@@ -3342,6 +3342,9 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbl));
         pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nIdx));
 
+        if( GetProperty(xLabelPropSet, "LinkNumberFormatToSource") )
+            mAny >>= bLinkedNumFmt;
+
         if( xLabelPropSet->getPropertyValue("Label") >>= aLabel )
             bLabelIsNumberFormat = aLabel.ShowNumber;
         else
