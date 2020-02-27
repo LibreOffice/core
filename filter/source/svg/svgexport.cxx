@@ -693,13 +693,20 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     if (xSelection.is() && xSelection->supportsService("com.sun.star.text.TextGraphicObject"))
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
-        uno::Reference<graphic::XGraphic> xGraphic;
-        xPropertySet->getPropertyValue("TransformedGraphic") >>= xGraphic;
 
-        if (!xGraphic.is())
+        uno::Reference<graphic::XGraphic> xOriginalGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xOriginalGraphic;
+        const Graphic aOriginalGraphic(xOriginalGraphic);
+
+        uno::Reference<graphic::XGraphic> xTransformedGraphic;
+        xPropertySet->getPropertyValue("TransformedGraphic") >>= xTransformedGraphic;
+
+        if (!xTransformedGraphic.is())
             return false;
-
-        const Graphic aGraphic(xGraphic);
+        const Graphic aTransformedGraphic(xTransformedGraphic);
+        bool bChecksumMatches = aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
+        const Graphic aGraphic = bChecksumMatches ? aOriginalGraphic : aTransformedGraphic;
+        uno::Reference<graphic::XGraphic> xGraphic = bChecksumMatches ? xOriginalGraphic : xTransformedGraphic;
 
         // Calculate size from Graphic
         Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );

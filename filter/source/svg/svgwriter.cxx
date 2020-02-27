@@ -2688,20 +2688,22 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 namespace
 {
-SdrGrafObj* GetSdrGrafObjFromXShape(const css::uno::Reference<css::drawing::XShape>* pShape)
+void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShape, Graphic& rGraphic)
 {
     if (!pShape)
     {
-        return nullptr;
+        return;
     }
 
-    auto pObject = dynamic_cast<SvxGraphicObject*>(pShape->get());
-    if (!pObject)
+    uno::Reference<beans::XPropertySet> xPropertySet(*pShape, uno::UNO_QUERY);
+    if (!xPropertySet.is())
     {
-        return nullptr;
+        return;
     }
 
-    return dynamic_cast<SdrGrafObj*>(pObject->GetSdrObject());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    rGraphic= Graphic(xGraphic);
 }
 }
 
@@ -2724,34 +2726,30 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
             SvMemoryStream aOStm( 65535, 65535 );
 
             bool bCached = false;
-            SdrGrafObj* pGrafObj = nullptr;
+            Graphic aGraphic;
             bool bPNG = false;
             bool bJPG = false;
             if (pShape)
             {
-                pGrafObj = GetSdrGrafObjFromXShape(pShape);
-                if (pGrafObj)
+                GetGraphicFromXShape(pShape, aGraphic);
+                if (aGraphic.GetType() == GraphicType::Bitmap)
                 {
-                    const Graphic& rGraphic = pGrafObj->GetGraphic();
-                    if (rGraphic.GetType() == GraphicType::Bitmap)
+                    const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
+                    if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
                     {
-                        const BitmapEx& rGraphicBitmap = rGraphic.GetBitmapExRef();
-                        if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
+                        GfxLink aGfxLink = aGraphic.GetGfxLink();
+                        if (aGfxLink.GetType() == GfxLinkType::NativePng)
                         {
-                            GfxLink aGfxLink = rGraphic.GetGfxLink();
-                            if (aGfxLink.GetType() == GfxLinkType::NativePng)
-                            {
-                                bPNG = true;
-                            }
-                            else if (aGfxLink.GetType() == GfxLinkType::NativeJpg)
-                            {
-                                bJPG = true;
-                            }
-                            if (bPNG || bJPG)
-                            {
-                                aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                                bCached = true;
-                            }
+                            bPNG = true;
+                        }
+                        else if (aGfxLink.GetType() == GfxLinkType::NativeJpg)
+                        {
+                            bJPG = true;
+                        }
+                        if (bPNG || bJPG)
+                        {
+                            aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                            bCached = true;
                         }
                     }
                 }
