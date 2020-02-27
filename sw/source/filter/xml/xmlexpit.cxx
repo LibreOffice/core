@@ -955,7 +955,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     SvxGraphicPosition eGraphicPos = rBrush.GetGraphicPos();
                     if( GPOS_AREA == eGraphicPos )
                     {
-                        aOut.append( GetXMLToken(XML_BACKGROUND_STRETCH)  );
+                        aOut.append( GetXMLToken(XML_STRETCH)  );
                         bOk = true;
                     }
                     else if( GPOS_NONE != eGraphicPos && GPOS_TILED != eGraphicPos  )

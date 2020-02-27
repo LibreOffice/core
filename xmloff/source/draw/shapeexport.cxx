@@ -1924,13 +1924,13 @@ void XMLShapeExport::ImpExportTextBoxShape(
     {
         case XmlShapeTypePresSubtitleShape:
         {
-            aStr = GetXMLToken(XML_PRESENTATION_SUBTITLE);
+            aStr = GetXMLToken(XML_SUBTITLE);
             bIsPresShape = true;
             break;
         }
         case XmlShapeTypePresTitleTextShape:
         {
-            aStr = GetXMLToken(XML_PRESENTATION_TITLE);
+            aStr = GetXMLToken(XML_TITLE);
             bIsPresShape = true;
             break;
         }
@@ -1942,7 +1942,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
         }
         case XmlShapeTypePresNotesShape:
         {
-            aStr = GetXMLToken(XML_PRESENTATION_NOTES);
+            aStr = GetXMLToken(XML_NOTES);
             bIsPresShape = true;
             break;
         }
@@ -2345,7 +2345,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
     if(eShapeType == XmlShapeTypePresGraphicObjectShape)
-        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_GRAPHIC) );
 
     bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
@@ -2844,11 +2844,11 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
     // presentation settings
     if(eShapeType == XmlShapeTypePresOLE2Shape)
-        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_OBJECT) );
     else if(eShapeType == XmlShapeTypePresChartShape)
-        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_CHART) );
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_CHART) );
     else if(eShapeType == XmlShapeTypePresSheetShape)
-        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
+        bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_TABLE) );
 
     bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
     bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
@@ -3006,7 +3006,7 @@ void XMLShapeExport::ImpExportPageShape(
         if(eShapeType == XmlShapeTypePresPageShape)
         {
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_CLASS,
-                                 XML_PRESENTATION_PAGE);
+                                 XML_PAGE);
         }
 
         // write Page shape
@@ -3283,7 +3283,7 @@ void XMLShapeExport::ImpExportMediaShape(
 
     if(eShapeType == XmlShapeTypePresMediaShape)
     {
-        (void)ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
+        (void)ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_OBJECT) );
     }
     bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
@@ -4827,7 +4827,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         // presentation settings
         if(eShapeType == XmlShapeTypePresTableShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_TABLE) );
 
         const bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE );
         const bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);

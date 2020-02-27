@@ -41,7 +41,7 @@ bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, co
     bool bRet = true;
     sal_Int32 nKerning = 0;
 
-    if( ! IsXMLToken( rStrImpValue, XML_KERNING_NORMAL ) )
+    if( ! IsXMLToken( rStrImpValue, XML_NORMAL ) )
     {
         bRet = rUnitConverter.convertMeasureToCore( nKerning, rStrImpValue );
     }
@@ -61,7 +61,7 @@ bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
         OUStringBuffer aOut;
 
         if( nValue == 0 )
-            aOut.append( GetXMLToken(XML_KERNING_NORMAL) );
+            aOut.append( GetXMLToken(XML_NORMAL) );
         else
         {
             rUnitConverter.convertMeasureToXML( aOut, nValue );

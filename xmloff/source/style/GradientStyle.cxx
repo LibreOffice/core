@@ -61,7 +61,7 @@ enum SvXMLTokenMapAttrs
 
 SvXMLEnumMapEntry<awt::GradientStyle> const pXML_GradientStyle_Enum[] =
 {
-    { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
+    { XML_LINEAR,                       awt::GradientStyle_LINEAR },
     { XML_GRADIENTSTYLE_AXIAL,          awt::GradientStyle_AXIAL },
     { XML_GRADIENTSTYLE_RADIAL,         awt::GradientStyle_RADIAL },
     { XML_GRADIENTSTYLE_ELLIPSOID,      awt::GradientStyle_ELLIPTICAL },
@@ -98,9 +98,7 @@ void XMLGradientStyleImport::importXML(
         { XML_NAMESPACE_DRAW, XML_START_INTENSITY, XML_TOK_GRADIENT_STARTINT },
         { XML_NAMESPACE_DRAW, XML_END_INTENSITY, XML_TOK_GRADIENT_ENDINT },
         { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
-        { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER,
-            XML_ELEMENT( DRAW, XML_BORDER ) },
-        //  XML_GRADIENT_BORDER is a duplicate of XML_BORDER
+        { XML_NAMESPACE_DRAW, XML_BORDER, XML_TOK_GRADIENT_BORDER, },
         XML_TOKEN_MAP_END
     };
 
@@ -270,7 +268,7 @@ void XMLGradientStyleExport::exportXML(
                 // Border
                 ::sax::Converter::convertPercent( aOut, aGradient.Border );
                 aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_BORDER, aStrValue );
 
                 // Do Write
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,

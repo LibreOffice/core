@@ -906,7 +906,7 @@ bool XMLTransformerBase::ReplaceInchWithIn( OUString& rValue )
                         if( 'h'==c || 'H'==c )
                         {
                             rValue = rValue.replaceAt( nPos,
-                                4, GetXMLToken(XML_UNIT_INCH) );
+                                4, GetXMLToken(XML_IN) );
                             nPos += 2;
                             bRet = true;
                             continue;
