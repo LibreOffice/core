@@ -59,6 +59,13 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XNameContainer
+    CPPUNIT_TEST(testInsertByName);
+    CPPUNIT_TEST(testInsertByNameEmptyName);
+    CPPUNIT_TEST(testInsertByNameDuplicate);
+    CPPUNIT_TEST(testRemoveByName);
+    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
+
     // XNameReplace
     CPPUNIT_TEST(testReplaceByName);
 
@@ -80,10 +87,6 @@ public:
     CPPUNIT_TEST(testImportNewNamedRange);
     CPPUNIT_TEST(testImportCellStyle);
     CPPUNIT_TEST(testLastAfterInsertCopy);
-
-    // XNameContainer
-    CPPUNIT_TEST(testRemoveByName);
-    CPPUNIT_TEST(testRemoveByNameNoneExistingElement);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -126,6 +129,7 @@ uno::Reference< uno::XInterface > ScTableSheetsObj::init()
     uno::Reference< uno::XInterface > xReturn( xDocument->getSheets(), UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
+    XNameContainer::setElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
     // XNameReplace
     setReplacementElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
 
