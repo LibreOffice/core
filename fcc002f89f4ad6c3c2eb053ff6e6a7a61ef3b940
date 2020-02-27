@@ -69,6 +69,24 @@
       "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0845528_776e996b",
+        "filename": "solenv/gbuild/CustomTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-27T10:36:49Z",
+      "side": 1,
+      "message": "\u003e I used PYTHON_FOR_BUILD instead.\n\nPYTHON_FOR_BUILD seems to be exported empty in case of Windows: see https://ci.libreoffice.org/job/gerrit_windows/58580/console, and possibly related failure?",
+      "parentUuid": "95608808_0501a4e7",
+      "revId": "fcc002f89f4ad6c3c2eb053ff6e6a7a61ef3b940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
