@@ -147,7 +147,10 @@ enum class TimeFormat
 
 enum class ExtTimeFieldFormat
 {
-    Short24H, Long24H
+    /** the first 4 of these are only used by base/dbaccess */
+    Short24H, Long24H,
+    Short12H, Long12H,
+    ShortDuration, LongDuration
 };
 
 enum class ExtDateFieldFormat
