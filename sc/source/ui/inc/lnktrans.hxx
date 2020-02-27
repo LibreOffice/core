@@ -23,7 +23,7 @@
 #include <vcl/transfer.hxx>
 #include <rtl/ustring.hxx>
 
-class ScLinkTransferObj : public TransferableHelper
+class ScLinkTransferObj : public TransferDataContainer
 {
 private:
     OUString  aLinkURL;
