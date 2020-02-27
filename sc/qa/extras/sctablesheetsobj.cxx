@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/container/xnamereplace.hxx>
@@ -23,6 +24,7 @@ using namespace css::uno;
 namespace sc_apitest {
 class ScTableSheetsObj : public CalcUnoApiTest,
                          public ::apitest::XEnumerationAccess,
+                         public ::apitest::XIndexAccess,
                          public ::apitest::XNameAccess,
                          public ::apitest::XNameContainer,
                          public ::apitest::XNameReplace,
@@ -39,6 +41,10 @@ public:
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -83,6 +89,7 @@ protected:
 
 ScTableSheetsObj::ScTableSheetsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , ::apitest::XIndexAccess(3)
     , ::apitest::XNameAccess("Sheet1")
     , ::apitest::XNameContainer("Sheet2")
     , ::apitest::XNameReplace("Sheet2")
