@@ -142,11 +142,10 @@ public:
 class XMLConfigItemContext : public SvXMLImportContext
 {
     OUString               msType;
-    OUString               msValue;
-    uno::Sequence<sal_Int8>     maDecoded;
     css::uno::Any&         mrAny;
     const OUString         mrItemName;
     XMLConfigBaseContext*  mpBaseContext;
+    OUStringBuffer         maCharBuffer;
 
 public:
     XMLConfigItemContext(SvXMLImport& rImport,
@@ -411,89 +410,73 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport,
 
 void XMLConfigItemContext::characters( const OUString& rChars )
 {
-    if (IsXMLToken(msType, XML_BASE64BINARY))
-    {
-        OUString sTrimmedChars( rChars.trim() );
-        if( !sTrimmedChars.isEmpty() )
-        {
-            OUString sChars;
-            if( !msValue.isEmpty() )
-            {
-                sChars = msValue + sTrimmedChars;
-                msValue.clear();
-            }
-            else
-            {
-                sChars = sTrimmedChars;
-            }
-            uno::Sequence<sal_Int8> aBuffer((sChars.getLength() / 4) * 3 );
-            sal_Int32 const nCharsDecoded =
-                ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
-            sal_uInt32 nStartPos(maDecoded.getLength());
-            sal_uInt32 nCount(aBuffer.getLength());
-            maDecoded.realloc(nStartPos + nCount);
-            std::copy(aBuffer.begin(), aBuffer.end(), std::next(maDecoded.begin(), nStartPos));
-            if( nCharsDecoded != sChars.getLength() )
-                msValue = sChars.copy( nCharsDecoded );
-        }
-    }
-    else
-        msValue += rChars;
+    maCharBuffer.append(rChars);
 }
 
 void XMLConfigItemContext::endFastElement(sal_Int32 )
 {
+    OUString sValue;
+    uno::Sequence<sal_Int8> aDecoded;
+    if (IsXMLToken(msType, XML_BASE64BINARY))
+    {
+        OUString sChars = maCharBuffer.makeStringAndClear().trim();
+        if( !sChars.isEmpty() )
+            ::comphelper::Base64::decodeSomeChars( aDecoded, sChars );
+    }
+    else
+        sValue = maCharBuffer.makeStringAndClear();
+
     if (mpBaseContext)
     {
         if (IsXMLToken(msType, XML_BOOLEAN))
         {
             bool bValue(false);
-            if (IsXMLToken(msValue, XML_TRUE))
+            if (IsXMLToken(sValue, XML_TRUE))
                 bValue = true;
             mrAny <<= bValue;
         }
         else if (IsXMLToken(msType, XML_BYTE))
         {
             sal_Int32 nValue(0);
-            ::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, sValue);
             mrAny <<= static_cast<sal_Int8>(nValue);
         }
         else if (IsXMLToken(msType, XML_SHORT))
         {
             sal_Int32 nValue(0);
-            ::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, sValue);
             mrAny <<= static_cast<sal_Int16>(nValue);
         }
         else if (IsXMLToken(msType, XML_INT))
         {
             sal_Int32 nValue(0);
-            ::sax::Converter::convertNumber(nValue, msValue);
+            ::sax::Converter::convertNumber(nValue, sValue);
             mrAny <<= nValue;
         }
         else if (IsXMLToken(msType, XML_LONG))
         {
-            sal_Int64 nValue(msValue.toInt64());
+            sal_Int64 nValue(sValue.toInt64());
             mrAny <<= nValue;
         }
         else if (IsXMLToken(msType, XML_DOUBLE))
         {
             double fValue(0.0);
-            ::sax::Converter::convertDouble(fValue, msValue);
+            ::sax::Converter::convertDouble(fValue, sValue);
             mrAny <<= fValue;
         }
         else if (IsXMLToken(msType, XML_STRING))
         {
-            mrAny <<= msValue;
+            mrAny <<= sValue;
         }
         else if (IsXMLToken(msType, XML_DATETIME))
         {
             util::DateTime aDateTime;
-            ::sax::Converter::parseDateTime(aDateTime, msValue);
+            ::sax::Converter::parseDateTime(aDateTime, sValue);
             mrAny <<= aDateTime;
         }
         else if (IsXMLToken(msType, XML_BASE64BINARY))
         {
-            mrAny <<= maDecoded;
+            mrAny <<= aDecoded;
         }
         else {
             SAL_INFO("xmloff.core",

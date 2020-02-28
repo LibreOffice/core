@@ -30,6 +30,7 @@ namespace rptxml
     {
         css::uno::Reference< css::beans::XPropertySet >   m_xComponent;
         OUStringBuffer m_aCharBuffer;
+
         OXMLCondPrtExpr(const OXMLCondPrtExpr&) = delete;
         void operator =(const OXMLCondPrtExpr&) = delete;
     public:
