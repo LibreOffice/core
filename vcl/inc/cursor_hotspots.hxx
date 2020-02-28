@@ -164,6 +164,9 @@
 #define window_sesize_curs_x_hot 10
 #define window_sesize_curs_y_hot 10
 
+#define fatcross_curs_x_hot 1
+#define fatcross_curs_y_hot 1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
