@@ -87,7 +87,10 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
 
     for (int i = 0, nItems = rToolbar.get_n_items(); i < nItems; ++i)
     {
-        OUString sCommand = OUString::fromUtf8(rToolbar.get_item_ident(i));
+        OString sIdent(rToolbar.get_item_ident(i));
+        if (!sIdent.startsWith(".uno:"))
+            continue;
+        OUString sCommand = OUString::fromUtf8(sIdent);
         if (bRTL && lcl_RTLizeCommandURL(sCommand))
             rToolbar.set_item_ident(i, sCommand.toUtf8());
 
