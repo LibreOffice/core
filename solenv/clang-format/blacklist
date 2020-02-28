@@ -15343,7 +15343,6 @@ sw/source/uibase/app/swdllimpl.hxx
 sw/source/uibase/app/swmodul1.cxx
 sw/source/uibase/app/swmodule.cxx
 sw/source/uibase/app/swwait.cxx
-sw/source/uibase/cctrl/actctrl.cxx
 sw/source/uibase/chrdlg/ccoll.cxx
 sw/source/uibase/config/StoredChapterNumbering.cxx
 sw/source/uibase/config/barcfg.cxx
@@ -15424,7 +15423,6 @@ sw/source/uibase/inc/SidebarWindowsConsts.hxx
 sw/source/uibase/inc/SwSpellDialogChildWindow.hxx
 sw/source/uibase/inc/SwXFilterOptions.hxx
 sw/source/uibase/inc/abstract.hxx
-sw/source/uibase/inc/actctrl.hxx
 sw/source/uibase/inc/annotsh.hxx
 sw/source/uibase/inc/ascfldlg.hxx
 sw/source/uibase/inc/barcfg.hxx

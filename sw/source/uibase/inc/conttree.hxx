@@ -20,8 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTTREE_HXX
 
 #include <svl/lstner.hxx>
-#include <vcl/treelistbox.hxx>
-#include <vcl/svlbitm.hxx>
+#include <ndarr.hxx>
 #include "swcont.hxx"
 
 #include <map>
@@ -67,11 +66,25 @@ namespace o3tl {
     template<> struct typed_flags<MenuEnableFlags> : is_typed_flags<MenuEnableFlags, 0x00ff> {};
 }
 
-/** TreeListBox for content indicator */
-class SwContentTree final
-    : public SvTreeListBox
-    , public SfxListener
+class SwContentTree;
+
+class SwContentTreeDropTarget : public DropTargetHelper
 {
+private:
+    SwContentTree& m_rTreeView;
+
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+public:
+    SwContentTreeDropTarget(SwContentTree& rTreeView);
+};
+
+/** TreeListBox for content indicator */
+class SwContentTree final : public SfxListener
+{
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    SwContentTreeDropTarget m_aDropTargetHelper;
     VclPtr<SwNavigationPI> m_xDialog;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
@@ -79,16 +92,7 @@ class SwContentTree final
     o3tl::enumarray<ContentTypeId,std::unique_ptr<SwContentType>>  m_aActiveContentArr;
     o3tl::enumarray<ContentTypeId,std::unique_ptr<SwContentType>>  m_aHiddenContentArr;
     OUString            m_aContextStrings[CONTEXT_COUNT + 1];
-    OUString            m_sRemoveIdx;
-    OUString            m_sUpdateIdx;
-    OUString            m_sUnprotTable;
-    OUString            m_sRename;
-    OUString            m_sReadonlyIdx;
     OUString            m_sInvisible;
-    OUString            m_sPostItShow;
-    OUString            m_sPostItHide;
-    OUString            m_sPostItDelete;
-    OUString            m_sProtected;
 
     SwWrtShell*         m_pHiddenShell;   // dropped Doc
     SwWrtShell*         m_pActiveShell;   // the active or a const. open view
@@ -98,6 +102,7 @@ class SwContentTree final
 
     sal_Int32           m_nActiveBlock;
     sal_Int32           m_nHiddenBlock;
+    size_t              m_nEntryCount;
     ContentTypeId       m_nRootType;
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
@@ -107,20 +112,14 @@ class SwContentTree final
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
     bool                m_bDocChgdInDragging  :1;
-    bool                m_bIsInternalDrag     :1;
     bool                m_bIsRoot             :1;
     bool                m_bIsIdleClear        :1;
     bool                m_bIsLastReadOnly     :1;
     bool                m_bIsOutlineMoveable  :1;
     bool                m_bViewHasChanged     :1;
 
-    static bool         bIsInDrag;
-
-    bool                m_bIsKeySpace;
-    tools::Rectangle           m_aOldRectangle;
-
     // outline root mode drag & drop
-    std::vector< SvTreeListEntry* > m_aDndOutlinesSelected;
+    std::vector<std::unique_ptr<weld::TreeIter>> m_aDndOutlinesSelected;
 
     bool m_bIsInPromoteDemote = false;
 
@@ -130,20 +129,12 @@ class SwContentTree final
      */
     void                FindActiveTypeAndRemoveUserData();
 
-    using SvTreeListBox::ExecuteDrop;
-    using SvTreeListBox::EditEntry;
+    void insert(const weld::TreeIter* pParent, const OUString& rStr, const OUString& rId,
+                const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet);
 
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    void remove(const weld::TreeIter& rIter);
 
     SwNavigationPI* GetParentWindow();
-
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-    virtual void    DragFinished( sal_Int8 ) override;
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
     bool        FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode );
@@ -151,39 +142,44 @@ class SwContentTree final
     /** Check if the displayed content is valid. */
     bool            HasContentChanged();
 
-    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
-                                        SvTreeListEntry* ) override;
-    virtual bool    NotifyAcceptDrop( SvTreeListEntry* ) override;
+    size_t          GetAbsPos(const weld::TreeIter& rIter);
 
-    virtual TriState NotifyMoving(   SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
-                                ) override;
-    virtual TriState NotifyCopying(  SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
-                                ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-
-    void            EditEntry( SvTreeListEntry const * pEntry, EditEntryMode nMode );
+    void            EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode);
 
     void            GotoContent(const SwContent* pCnt);
-    static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
 
-    virtual VclPtr<PopupMenu> CreateContextMenu() override;
-    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
+    void            ExecuteContextMenuAction(const OString& rSelectedPopupEntry);
 
     void DeleteOutlineSelections();
 
+    size_t GetEntryCount() const;
+
+    size_t GetChildCount(const weld::TreeIter& rParent) const;
+
+    std::unique_ptr<weld::TreeIter> GetEntryAtAbsPos(size_t nAbsPos) const;
+
+    void Expand(const weld::TreeIter& rParent, std::vector<std::unique_ptr<weld::TreeIter>>* pNodesToExpand);
+
+    void MoveOutline(SwOutlineNodes::size_type nTargetPos);
+
+    void UpdateLastSelType();
+
+    /** Expand - Remember the state for content types */
+    DECL_LINK(ExpandHdl, const weld::TreeIter&, bool);
+    /** Collapse - Remember the state for content types. */
+    DECL_LINK(CollapseHdl, const weld::TreeIter&, bool);
+    DECL_LINK(ContentDoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(FocusHdl, weld::Widget&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_LINK(DragBeginHdl, bool&, bool);
+    DECL_LINK(TimerUpdate, Timer *, void);
+
 public:
-    SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog);
-    virtual ~SwContentTree() override;
-    virtual void dispose() override;
-    OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const override;
-    OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
+    SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);
+    ~SwContentTree();
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
     /** Switch the display to Root */
@@ -192,8 +188,8 @@ public:
 
     /** Show the file */
     void            Display( bool bActiveView );
-    /** In the Clear the content types have to be deleted, also. */
-    void            Clear();
+    /** In the clear the content types have to be deleted, also. */
+    void            clear();
 
     /** After a file is dropped on the Navigator, the new shell will be set */
     void            SetHiddenShell(SwWrtShell* pSh);
@@ -209,18 +205,13 @@ public:
     SwWrtShell*     GetWrtShell()
         { return State::HIDDEN == m_eState ? m_pHiddenShell : m_pActiveShell; }
 
-    static bool     IsInDrag() {return bIsInDrag;}
+    bool            IsInDrag() const;
 
     sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
-    /** Expand - Remember the state for content types */
-    virtual bool    Expand( SvTreeListEntry* pParent ) override;
-    /** Collapse - Remember the state for content types. */
-    virtual bool    Collapse( SvTreeListEntry* pParent ) override;
-
     /** Execute commands of the Navigator */
-    void            ExecCommand(const OUString& rCmd, bool bModifier);
+    void            ExecCommand(const OString& rCmd, bool bModifier);
 
     void            ShowTree();
     void            HideTree();
@@ -232,55 +223,78 @@ public:
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
 
-    DECL_LINK( ContentDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK( TimerUpdate, Timer *, void );
+    void Select();
 
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
-    virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
-    virtual void    GetFocus() override;
-    virtual void    KeyInput(const KeyEvent& rKEvt) override;
-
-    virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true ) override;
-    virtual Size    GetOptimalSize() const override;
+    // return true if it has any children
+    bool RequestingChildren(const weld::TreeIter& rParent);
 
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
 
-};
+    sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
+    sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
 
-// TreeListBox for global documents
-
-class SwLBoxString : public SvLBoxString
-{
-public:
-
-    SwLBoxString( const OUString& rStr ) : SvLBoxString(rStr)
+    bool IsDropFormatSupported(SotClipboardFormatId nFormat)
     {
+        return m_aDropTargetHelper.IsDropFormatSupported(nFormat);
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
+    void set_accessible_name(const OUString& rName)
+    {
+        m_xTreeView->set_accessible_name(rName);
+    }
+
+    void grab_focus()
+    {
+        m_xTreeView->grab_focus();
+    }
+
+    int count_selected_rows() const
+    {
+        return m_xTreeView->count_selected_rows();
+    }
+
+    void set_selection_mode(SelectionMode eMode)
+    {
+        m_xTreeView->set_selection_mode(eMode);
+    }
+
+    weld::TreeView& get_widget()
+    {
+        return *m_xTreeView;
+    }
 };
 
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
-class SwGlobalTree final : public SvTreeListBox
+class SwGlobalTree;
+
+class SwGlobalTreeDropTarget : public DropTargetHelper
 {
 private:
+    SwGlobalTree& m_rTreeView;
+
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+public:
+    SwGlobalTreeDropTarget(SwGlobalTree& rTreeView);
+};
+
+class SwGlobalTree final
+{
+private:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+    SwGlobalTreeDropTarget  m_aDropTargetHelper;
     VclPtr<SwNavigationPI>  m_xDialog;
     AutoTimer               m_aUpdateTimer;
     OUString                m_aContextStrings[GLOBAL_CONTEXT_COUNT];
 
     SwWrtShell*             m_pActiveShell;
-    SvTreeListEntry*        m_pEmphasisEntry; // Drag'n Drop emphasis
-    SvTreeListEntry*        m_pDDSource;      // source for Drag'n Drop
     std::unique_ptr<SwGlblDocContents> m_pSwGlblDocContents; // array with sorted content
 
     std::unique_ptr<SwGlblDocContent>       m_pDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
-
-    bool                m_bIsInternalDrag     :1;
-    bool                m_bLastEntryEmphasis  :1; // Drag'n Drop
 
     static const SfxObjectShell* pShowShell;
 
@@ -289,48 +303,15 @@ private:
 
     DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
-    using SvTreeListBox::DoubleClickHdl;
-    using SvTreeListBox::ExecuteDrop;
-    using Window::Update;
+    void Select();
 
-    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
-
-    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
-    virtual TriState NotifyMoving(   SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
-                                ) override;
-    virtual TriState NotifyCopying(  SvTreeListEntry*  pTarget,
-                                    SvTreeListEntry*  pEntry,
-                                    SvTreeListEntry*& rpNewParent,
-                                    sal_uLong&        rNewChildPos
-                                ) override;
-
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-    virtual void    DragFinished( sal_Int8 ) override;
-    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
-                                        SvTreeListEntry* ) override;
-    virtual bool    NotifyAcceptDrop( SvTreeListEntry* ) override;
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    KeyInput(const KeyEvent& rKEvt) override;
-    virtual void    GetFocus() override;
-    virtual void    SelectHdl() override;
-    virtual void    DeselectHdl() override;
-    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
-
-    void            Clear();
-
-    DECL_LINK( PopupHdl, Menu*, bool );
-    DECL_LINK( Timeout, Timer*, void );
-    DECL_LINK( DoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK(Timeout, Timer*, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     SwNavigationPI* GetParentWindow();
 
@@ -341,16 +322,40 @@ private:
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
 
-    virtual VclPtr<PopupMenu> CreateContextMenu() override;
-    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
-
 public:
-    SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog);
-    virtual ~SwGlobalTree() override;
-    virtual void        dispose() override;
-    virtual Size        GetOptimalSize() const override;
+    SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);
+    ~SwGlobalTree();
 
-    void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
+    bool get_visible() const { return m_xTreeView->get_visible(); }
+
+    void set_accessible_name(const OUString& rName)
+    {
+        m_xTreeView->set_accessible_name(rName);
+    }
+
+    void grab_focus()
+    {
+        m_xTreeView->grab_focus();
+    }
+
+    int count_selected_rows() const
+    {
+        return m_xTreeView->count_selected_rows();
+    }
+
+    void set_selection_mode(SelectionMode eMode)
+    {
+        m_xTreeView->set_selection_mode(eMode);
+    }
+
+    weld::TreeView& get_widget()
+    {
+        return *m_xTreeView;
+    }
+
+    void MoveSelectionTo(weld::TreeIter* pDropTarget);
+
+    void                TbxMenuHdl(const OString& rCommand, weld::Menu& rMenu);
     void                InsertRegion( const SwGlblDocContent* pCont,
                                         const OUString* pFileName = nullptr );
     void                EditContent(const SwGlblDocContent* pCont );
@@ -358,11 +363,15 @@ public:
     void                ShowTree();
     void                HideTree();
 
-    void                ExecCommand(const OUString& rCmd);
+    void                ExecCommand(const OString& rCmd);
 
     void                Display(bool bOnlyUpdateUserData = false);
 
     bool                Update(bool bHard);
+
+    void                ExecuteContextMenuAction(const OString& rSelectedPopupEntry);
+
+    const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
 };
 
 #endif

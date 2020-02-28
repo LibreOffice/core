@@ -71,10 +71,11 @@ vcl::ImageType ToolbarUnoDispatcher::GetIconSize() const
     return eType;
 }
 
-ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
+ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
                                            const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_xFrame(rFrame)
     , m_pToolbar(&rToolbar)
+    , m_pBuilder(&rBuilder)
 {
     rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
     rToolbar.connect_menu_toggled(LINK(this, ToolbarUnoDispatcher, ToggleMenuHdl));
@@ -112,7 +113,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
 void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
 {
     css::uno::Reference<css::frame::XToolbarController> xController(
-        sfx2::sidebar::ControllerFactory::CreateToolBoxController(*m_pToolbar, rCommand, m_xFrame));
+        sfx2::sidebar::ControllerFactory::CreateToolBoxController(*m_pToolbar, *m_pBuilder,
+                                                                  rCommand, m_xFrame));
 
     if (xController.is())
         maControllers.insert(std::make_pair(rCommand, xController));
@@ -190,6 +192,7 @@ void ToolbarUnoDispatcher::dispose()
 
     m_pToolbar->connect_clicked(Link<const OString&, void>());
     m_pToolbar = nullptr;
+    m_pBuilder = nullptr;
 }
 
 ToolbarUnoDispatcher::~ToolbarUnoDispatcher() { dispose(); }

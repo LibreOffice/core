@@ -100,7 +100,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
     : SfxModelessDialogController(pBind, pChildWin, pParent, "sfx/ui/floatingrecord.ui",
                                   "FloatingRecord")
     , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
-    , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, pBind->GetActiveFrame()))
+    , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, *m_xBuilder, pBind->GetActiveFrame()))
 {
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );

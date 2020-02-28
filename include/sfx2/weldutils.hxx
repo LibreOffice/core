@@ -24,6 +24,7 @@
 
 namespace weld
 {
+class Builder;
 class Toolbar;
 }
 
@@ -33,6 +34,7 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
     SvtMiscOptions m_aToolbarOptions;
     weld::Toolbar* m_pToolbar;
+    weld::Builder* m_pBuilder;
 
     DECL_LINK(SelectHdl, const OString&, void);
     DECL_LINK(ToggleMenuHdl, const OString&, void);
@@ -47,7 +49,7 @@ private:
 
 public:
     // fill in the label and icons for actions and dispatch the action on item click
-    ToolbarUnoDispatcher(weld::Toolbar& rToolbar,
+    ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
                          const css::uno::Reference<css::frame::XFrame>& rFrame);
 
     css::uno::Reference<css::frame::XToolbarController>
