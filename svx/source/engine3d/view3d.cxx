@@ -737,8 +737,13 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         }
         else
         {
+            // rLatheMat expects coordinates with y-axis up, pPath uses y-axis down
+            basegfx::B2DHomMatrix aFlipVerticalMat(1.0, 0.0, 0.0, 0.0, -1.0, 0.0);
             basegfx::B2DPolyPolygon aPolyPoly2D(pPath->GetPathPoly());
+            aPolyPoly2D.transform(aFlipVerticalMat);
             aPolyPoly2D.transform(rLatheMat);
+            // ctor E3dLatheObj expects coordinates with y-axis down
+            aPolyPoly2D.transform(aFlipVerticalMat);
             p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, aPolyPoly2D);
         }
 
