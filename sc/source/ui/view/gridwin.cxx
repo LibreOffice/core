@@ -1948,7 +1948,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     rMark.SetMarking(false);
 
-    SetPointer( PointerStyle::Arrow );
+    SetPointer( PointerStyle::FatCross );
 
     if (mrViewData.IsFillMode() ||
         ( mrViewData.GetFillMode() == ScFillMode::MATRIX && rMEvt.IsMod1() ))
