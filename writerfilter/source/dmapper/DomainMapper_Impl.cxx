@@ -4622,8 +4622,8 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString const sFirstParam(std::get<1>(field).empty()
                     ? OUString() : std::get<1>(field).front());
 
-            // apply font size to the form control in tables
-            if ( m_nTableDepth > 0 && m_pLastCharacterContext.get() && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
+            // apply font size to the form control
+            if ( m_pLastCharacterContext.get() && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
             {
                 uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                 if (xTextAppend.is())
