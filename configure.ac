@@ -3601,7 +3601,6 @@ if test "$_os" = "WINNT"; then
         COMPATH=`win_short_path_for_make "$formatted_path"`
 
         VCVER=$vcnum
-        MSVSVER=$vcyear
 
         # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
         # are always "better", we list them in reverse chronological order.
@@ -3619,7 +3618,7 @@ if test "$_os" = "WINNT"; then
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
                 ;;
             *)
-                AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
+                AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $vcyear])
                 ;;
             esac
         fi
