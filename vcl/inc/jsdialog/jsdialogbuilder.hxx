@@ -8,6 +8,7 @@
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/button.hxx>
 
 class JSDialogSender
 {
@@ -30,6 +31,8 @@ public:
                                                       bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
                                                     bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Button> weld_button(const OString& id,
+                                                      bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
                                                     bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
@@ -58,6 +61,12 @@ public:
         BaseInstanceClass::hide();
         notifyDialogState();
     }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        BaseInstanceClass::set_sensitive(sensitive);
+        notifyDialogState();
+    }
 };
 
 class VCL_DLLPUBLIC JSLabel : public JSWidget<SalInstanceLabel, FixedText>
@@ -66,6 +75,13 @@ public:
     JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
+};
+
+class VCL_DLLPUBLIC JSButton : public JSWidget<SalInstanceButton, ::Button>
+{
+public:
+    JSButton(VclPtr<vcl::Window> aOwnedToplevel, ::Button* pButton, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership);
 };
 
 class VCL_DLLPUBLIC JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
