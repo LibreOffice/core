@@ -294,6 +294,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 
             MAKE_CURSOR( PointerStyle::HideWhitespace, hidewhitespace_, RID_CURSOR_HIDE_WHITESPACE );
             MAKE_CURSOR( PointerStyle::ShowWhitespace, showwhitespace_, RID_CURSOR_SHOW_WHITESPACE );
+            MAKE_CURSOR( PointerStyle::FatCross, fatcross_, RID_CURSOR_FATCROSS );
 
         default:
             SAL_WARN( "vcl.gtk", "pointer " << static_cast<int>(ePointerStyle) << "not implemented" );

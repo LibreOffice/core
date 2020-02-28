@@ -648,7 +648,7 @@ void ScTabView::ResetBrushDocument()
     if ( HasPaintBrush() )
     {
         SetBrushDocument( nullptr, false );
-        SetActivePointer( PointerStyle::Arrow );   // switch pointers also when ended with escape key
+        SetActivePointer( PointerStyle::FatCross );   // switch pointers also when ended with escape key
     }
 }
 

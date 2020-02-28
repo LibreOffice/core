@@ -240,6 +240,8 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
         MAKE_CURSOR( PointerStyle::HideWhitespace, hidewhitespace_, RID_CURSOR_HIDE_WHITESPACE );
         MAKE_CURSOR( PointerStyle::ShowWhitespace, showwhitespace_, RID_CURSOR_SHOW_WHITESPACE );
 
+        MAKE_CURSOR( PointerStyle::FatCross, fatcross_, RID_CURSOR_FATCROSS );
+
     default:
         SAL_WARN( "vcl", "pointer style " << static_cast<sal_Int32>(i_eStyle) << "not implemented" );
         assert( false && "pointer style not implemented" );

@@ -1991,7 +1991,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     rMark.SetMarking(false);
 
-    SetPointer( PointerStyle::Arrow );
+    SetPointer( PointerStyle::FatCross );
 
     if (mrViewData.IsFillMode() ||
         ( mrViewData.GetFillMode() == ScFillMode::MATRIX && rMEvt.IsMod1() ))
@@ -2577,7 +2577,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             bool bAlt = rMEvt.IsMod2();
 
             if (bEditMode)                                  // First has to be in edit mode!
-                SetPointer( PointerStyle::Arrow );
+                SetPointer( PointerStyle::FatCross );
             else if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() &&
                         GetEditUrl(rMEvt.GetPosPixel()) )
                 SetPointer( PointerStyle::RefHand );

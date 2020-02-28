@@ -83,6 +83,7 @@
 #define SAL_RESID_POINTER_TAB_SELECT_SW             10077
 #define SAL_RESID_POINTER_HIDEWHITESPACE            10079
 #define SAL_RESID_POINTER_SHOWWHITESPACE            10080
+#define SAL_RESID_POINTER_FATCROSS                  10081
 
 #define SAL_RESID_BITMAP_50                                             11000
 
