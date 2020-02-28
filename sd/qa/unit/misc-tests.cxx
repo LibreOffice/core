@@ -55,6 +55,8 @@
 #include <vcl/keycodes.hxx>
 #include <svx/svdoashp.hxx>
 #include <tools/gen.hxx>
+#include <svx/view3d.hxx>
+#include <svx/scene3d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,6 +80,7 @@ public:
     void testTdf119956();
     void testTdf120527();
     void testTdf98839_ShearVFlipH();
+    void testTdf130988();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -96,6 +99,7 @@ public:
     CPPUNIT_TEST(testTdf119956);
     CPPUNIT_TEST(testTdf120527);
     CPPUNIT_TEST(testTdf98839_ShearVFlipH);
+    CPPUNIT_TEST(testTdf130988);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -798,6 +802,28 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
 
     // Error was, that the shear angle had a wrong sign.
     CPPUNIT_ASSERT_MESSAGE("expected: draw:transform='skewX (-0.64350...)", sTransform.startsWith("skewX (-"));
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf130988()
+{
+    const OUString sURL("sd/qa/unit/data/tdf130988_3D_create_lathe.odg");
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+
+    //emulate command .uno:ConvertInto3DLathe
+    sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
+    E3dView* pView = dynamic_cast<E3dView*>(pViewShell->GetView());
+    pView->MarkNextObj();
+    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0), basegfx::B2DPoint(3000.0, -8000.0));
+    E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
+    CPPUNIT_ASSERT(pObj);
+
+    // Error was, that the created 3D object had a wrong path. Instead examining
+    // the path directly, I use the scene distance, because that is easier. The
+    // scene distance is calculated from the object while creating.
+    const double fDistance = pObj->GetDistance();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("D3DSceneDistance", 7071.0, fDistance, 0.5);
 
     xDocShRef->DoClose();
 }
