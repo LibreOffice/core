@@ -2302,6 +2302,31 @@ void SwUiWriterTest::testTextSearch()
     uno::Reference<container::XIndexAccess> xIndex2(xReplace->findAll(xSearchDes));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndex2->getCount());
     // regex tests
+    xSearchDes->setPropertyValue("SearchRegularExpression", uno::makeAny(true));
+    // regex: test correct matching combined with attributes like BOLD
+    xSearchDes->setSearchString(".*"); // should match all bold words in the text
+    xIndex.set(xReplace->findAll(xSearchDes), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndex->getCount());
+    uno::Reference<text::XTextRange> xFound(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xFound->getString());
+    xFound.set(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("This"), xFound->getString());
+    xFound.set(xIndex->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("task"), xFound->getString());
+    // regex: test anchor combined with attributes like BOLD
+    xSearchDes->setSearchString("^.*|.*$"); // should match first and last words (they are bold)
+    xIndex.set(xReplace->findAll(xSearchDes), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndex->getCount());
+    xFound.set(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xFound->getString());
+    xFound.set(xIndex->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("task"), xFound->getString());
+    // regex: test look-ahead/look-behind assertions outside of the bold text
+    xSearchDes->setSearchString("(?<= ).*(?= )"); // should match second bold word
+    xIndex.set(xReplace->findAll(xSearchDes), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndex->getCount());
+    xFound.set(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("This"), xFound->getString());
     xReplaceDes->setPropertyValue("SearchRegularExpression", uno::makeAny(true));
     // regex: test correct match of paragraph start
     xReplaceDes->setSearchString("^."); // should only match first character of the paragraph
