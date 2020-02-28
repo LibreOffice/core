@@ -2144,7 +2144,9 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
 
     { nullptr, nullptr, SAL_RESID_POINTER_HIDEWHITESPACE },     // POINTER_HIDEWHITESPACE
-    { nullptr, nullptr, SAL_RESID_POINTER_SHOWWHITESPACE }      // POINTER_UNHIDEWHITESPACE
+    { nullptr, nullptr, SAL_RESID_POINTER_SHOWWHITESPACE },     // POINTER_UNHIDEWHITESPACE
+
+    { nullptr, nullptr, SAL_RESID_POINTER_FATCROSS }            // POINTER_FATCROSS
     };
 
     // Mousepointer loaded ?

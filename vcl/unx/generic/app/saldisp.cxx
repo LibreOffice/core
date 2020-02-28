@@ -1491,6 +1491,11 @@ static unsigned char nullcurs_bits[] = { 0x00, 0x00, 0x00, 0x00 };
     nXHot = name##curs_x_hot; \
     nYHot = name##curs_y_hot
 
+#define MAKE_CURSOR_ONLY( name ) \
+    aCursBitmap = MAKE_BITMAP( name##curs ); \
+    nXHot = name##curs_x_hot; \
+    nYHot = name##curs_y_hot
+
 Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
 {
     Cursor &aCur = aPointerCache_[ePointerStyle];
@@ -1802,6 +1807,9 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::ShowWhitespace:
             MAKE_CURSOR( showwhitespace_ );
             break;
+        case PointerStyle::FatCross:
+             MAKE_CURSOR_ONLY( fatcross_ );
+             break;
 
         default:
             OSL_FAIL("pointer not implemented");

@@ -218,6 +218,7 @@
 #define RID_CURSOR_WINDOW_NESIZE     "vcl/res/window_nesize.png"
 #define RID_CURSOR_WINDOW_SWSIZE     "vcl/res/window_swsize.png"
 #define RID_CURSOR_WINDOW_SESIZE     "vcl/res/window_sesize.png"
+#define RID_CURSOR_FATCROSS          "vcl/res/fatcross.png"
 
 #define CHEVRON                      "sfx2/res/chevron.png"
 

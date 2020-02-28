@@ -116,7 +116,8 @@ enum class PointerStyle
     TabSelectSW,
     HideWhitespace,
     ShowWhitespace,
-    LAST               = ShowWhitespace,
+    FatCross,
+    LAST               = FatCross,
 };
 
 #endif // INCLUDED_VCL_PTRSTYLE_HXX

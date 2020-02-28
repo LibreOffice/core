@@ -150,6 +150,7 @@
 #include <unx/x11_cursors/wshide_mask.h>
 #include <unx/x11_cursors/wsshow_curs.h>
 #include <unx/x11_cursors/wsshow_mask.h>
+#include <unx/x11_cursors/fatcross_curs.h>
 
 #include <unx/glyphcache.hxx>
 
@@ -181,11 +182,22 @@ static QCursor* getQCursorFromXBM(const unsigned char* pBitmap, const unsigned c
     QBitmap aMask = QBitmap::fromData(QSize(nWidth, nHeight), pMask);
     return new QCursor(aPixmap, aMask, nXHot, nYHot);
 }
-
+static QCursor* getQCursorOnlyFromXBM(const unsigned char* pBitmap, int nWidth, int nHeight,
+                                      int nXHot, int nYHot)
+{
+    QBitmap aPixmap = QBitmap::fromData(QSize(nWidth, nHeight), pBitmap);
+    return new QCursor(aPixmap, nXHot, nYHot);
+}
 #define MAKE_CURSOR(vcl_name, name)                                                                \
     case vcl_name:                                                                                 \
         pCursor = getQCursorFromXBM(name##curs##_bits, name##mask##_bits, name##curs_width,        \
                                     name##curs_height, name##curs_x_hot, name##curs_y_hot);        \
+        break
+
+#define MAKE_CURSOR_ONLY(vcl_name, name)                                                           \
+    case vcl_name:                                                                                 \
+        pCursor = getQCursorOnlyFromXBM(name##curs##_bits, name##curs_width, name##curs_height,    \
+                                        name##curs_x_hot, name##curs_y_hot);                       \
         break
 
 #define MAP_BUILTIN(vcl_name, qt_enum)                                                             \
@@ -302,6 +314,8 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
 
             MAKE_CURSOR(PointerStyle::HideWhitespace, hidewhitespace_);
             MAKE_CURSOR(PointerStyle::ShowWhitespace, showwhitespace_);
+
+            MAKE_CURSOR_ONLY(PointerStyle::FatCross, fatcross_);
             default:
                 break;
         }
