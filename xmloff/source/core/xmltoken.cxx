@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
+#include <optional>
 #include <set>
 
 
@@ -34,7 +35,7 @@ namespace xmloff::token {
         {
             sal_Int32 const nLength;
             const char* pChar;
-            OUString* pOUString;
+            std::optional<OUString> xOUString;
 #if OSL_DEBUG_LEVEL > 0
             XMLTokenEnum const eToken;
 #endif
@@ -43,17 +44,17 @@ namespace xmloff::token {
 
 
 #if OSL_DEBUG_LEVEL > 0
-    #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr, e }
+    #define TOKEN( s, e ) { sizeof(s)-1, s, std::nullopt, e }
 #else
-    #define TOKEN( s, e ) { sizeof(s)-1, s, nullptr }
+    #define TOKEN( s, e ) { sizeof(s)-1, s, std::nullopt }
 #endif
 
     struct XMLTokenEntry aTokenList[] =
     {
 #if OSL_DEBUG_LEVEL > 0
-        { 0, nullptr, nullptr, XML_TOKEN_START },
+        { 0, nullptr, std::nullopt, XML_TOKEN_START },
 #else
-        { 0, nullptr, nullptr },                            // XML_TOKEN_START
+        { 0, nullptr, std::nullopt },                            // XML_TOKEN_START
 #endif
 
         // common XML
@@ -3343,9 +3344,9 @@ namespace xmloff::token {
         TOKEN( "resolved",                        XML_RESOLVED ),
 
 #if OSL_DEBUG_LEVEL > 0
-        { 0, nullptr, nullptr,                       XML_TOKEN_END }
+        { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else
-        { 0, nullptr, nullptr                       /* XML_TOKEN_END */ }
+        { 0, nullptr, std::nullopt             /* XML_TOKEN_END */ }
 #endif
     };
 
@@ -3399,10 +3400,10 @@ namespace xmloff::token {
         assert(sal_uInt16(eToken) < SAL_N_ELEMENTS(aTokenList));
 
         XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
-        if (!pToken->pOUString)
-           pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
-                                             RTL_TEXTENCODING_ASCII_US );
-        return *pToken->pOUString;
+        if (!pToken->xOUString)
+           pToken->xOUString = OUString( pToken->pChar, pToken->nLength,
+                                         RTL_TEXTENCODING_ASCII_US );
+        return *pToken->xOUString;
     }
 
     // does rString represent eToken?
