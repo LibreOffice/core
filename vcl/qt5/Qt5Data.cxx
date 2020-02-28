@@ -150,6 +150,8 @@
 #include <unx/x11_cursors/wshide_mask.h>
 #include <unx/x11_cursors/wsshow_curs.h>
 #include <unx/x11_cursors/wsshow_mask.h>
+#include <unx/x11_cursors/fatcross_curs.h>
+#include <unx/x11_cursors/fatcross_mask.h>
 
 #include <unx/glyphcache.hxx>
 
@@ -302,6 +304,8 @@ QCursor& Qt5Data::getCursor(PointerStyle ePointerStyle)
 
             MAKE_CURSOR(PointerStyle::HideWhitespace, hidewhitespace_);
             MAKE_CURSOR(PointerStyle::ShowWhitespace, showwhitespace_);
+
+            MAKE_CURSOR(PointerStyle::FatCross, fatcross_);
             default:
                 break;
         }
