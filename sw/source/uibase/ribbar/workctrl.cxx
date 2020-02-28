@@ -41,6 +41,7 @@
 #include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
@@ -566,7 +567,9 @@ VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *
 
 namespace {
 
+class NavElementBox_Base;
 class NavElementBox_Impl;
+
 class NavElementToolBoxControl : public svt::ToolboxController,
                                  public lang::XServiceInfo
 {
@@ -601,10 +604,46 @@ class NavElementToolBoxControl : public svt::ToolboxController,
         using svt::ToolboxController::dispatchCommand;
 
     private:
-        VclPtr<NavElementBox_Impl>           m_pBox;
+        VclPtr<NavElementBox_Impl> m_xVclBox;
+        std::unique_ptr<NavElementBox_Base> m_xWeldBox;
+        NavElementBox_Base* m_pBox;
 };
 
+class NavElementBox_Base
+{
+public:
+    NavElementBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
+                       const uno::Reference<frame::XFrame>& _xFrame,
+                       NavElementToolBoxControl& rCtrl);
+
+    virtual ~NavElementBox_Base()
+    {
+    }
+
+    void set_sensitive(bool bSensitive)
+    {
+        m_xWidget->set_sensitive(bSensitive);
+    }
+
+    void                UpdateBox();
+
+protected:
+    std::unique_ptr<weld::ComboBox>            m_xWidget;
+    NavElementToolBoxControl*                  m_pCtrl;
+    bool                                       m_bRelease;
+    uno::Reference< frame::XFrame >            m_xFrame;
+
+    virtual bool DoKeyInput(const KeyEvent& rKEvt);
+
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+    void                ReleaseFocus_Impl();
+};
+
+
 class NavElementBox_Impl final : public InterimItemWindow
+                               , public NavElementBox_Base
 {
 public:
     NavElementBox_Impl(vcl::Window* pParent,
@@ -624,25 +663,35 @@ public:
         InterimItemWindow::GetFocus();
     }
 
+    virtual bool DoKeyInput(const KeyEvent& rKEvt) override;
+
     virtual ~NavElementBox_Impl() override
     {
         disposeOnce();
     }
-
-    void                Update();
-
-private:
-    std::unique_ptr<weld::ComboBox>            m_xWidget;
-    NavElementToolBoxControl*                  m_pCtrl;
-    bool                                       m_bRelease;
-    uno::Reference< frame::XFrame >            m_xFrame;
-
-    DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-
-    void                ReleaseFocus_Impl();
 };
 
+}
+
+NavElementBox_Base::NavElementBox_Base(
+    std::unique_ptr<weld::ComboBox> xWidget,
+    const uno::Reference< frame::XFrame >&            _xFrame,
+    NavElementToolBoxControl&                         _rCtrl )
+    : m_xWidget(std::move(xWidget))
+    , m_pCtrl(&_rCtrl)
+    , m_bRelease(true)
+    , m_xFrame(_xFrame)
+{
+    m_xWidget->set_size_request(150, -1);
+
+    std::map<OUString, std::pair<sal_uInt16, rtl::OUString> > aStoreSortedNavigationIds;
+    for (sal_uInt16 i = 0; i < NID_COUNT; i++)
+        aStoreSortedNavigationIds[SwResId(aNavigationStrIds[i])] = std::make_pair(aNavigationInsertIds[i], aNavigationImgIds[i]);// for ordering of Navigation Pane
+
+    for (auto const &itr : aStoreSortedNavigationIds)
+        m_xWidget->append(OUString::number(itr.second.first), itr.first, itr.second.second);
+    m_xWidget->connect_changed(LINK(this, NavElementBox_Base, SelectHdl));
+    m_xWidget->connect_key_press(LINK(this, NavElementBox_Base, KeyInputHdl));
 }
 
 NavElementBox_Impl::NavElementBox_Impl(
@@ -650,26 +699,12 @@ NavElementBox_Impl::NavElementBox_Impl(
     const uno::Reference< frame::XFrame >&            _xFrame,
     NavElementToolBoxControl&                         _rCtrl )
     : InterimItemWindow(_pParent, "modules/swriter/ui/combobox.ui", "ComboBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
-    , m_pCtrl(&_rCtrl)
-    , m_bRelease(true)
-    , m_xFrame(_xFrame)
+    , NavElementBox_Base(m_xBuilder->weld_combo_box("combobox"), _xFrame, _rCtrl)
 {
-    m_xWidget->set_size_request(42, -1); // set to something small so the size set at the .ui takes precedence
-
-    std::map<OUString, std::pair<sal_uInt16, rtl::OUString> > aStoreSortedNavigationIds;
-    for(sal_uInt16 i = 0; i < NID_COUNT; i++)
-        aStoreSortedNavigationIds[SwResId(aNavigationStrIds[i])] = std::make_pair(aNavigationInsertIds[i], aNavigationImgIds[i]);// for ordering of Navigation Pane
-
-    for (auto const &itr : aStoreSortedNavigationIds)
-        m_xWidget->append(OUString::number(itr.second.first), itr.first, itr.second.second);
-    m_xWidget->connect_changed(LINK(this, NavElementBox_Impl, SelectHdl));
-    m_xWidget->connect_key_press(LINK(this, NavElementBox_Impl, KeyInputHdl));
-
     SetSizePixel(m_xContainer->get_preferred_size());
 }
 
-void NavElementBox_Impl::ReleaseFocus_Impl()
+void NavElementBox_Base::ReleaseFocus_Impl()
 {
     if ( !m_bRelease )
     {
@@ -681,7 +716,7 @@ void NavElementBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK(NavElementBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
+IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
     if (rComboBox.changed_by_direct_pick())  // only when picked from the list
     {
@@ -701,7 +736,7 @@ IMPL_LINK(NavElementBox_Impl, SelectHdl, weld::ComboBox&, rComboBox, void)
     }
 }
 
-void NavElementBox_Impl::Update()
+void NavElementBox_Base::UpdateBox()
 {
     sal_uInt16 nMoveType = SwView::GetMoveType();
     for ( size_t i = 0; i < SAL_N_ELEMENTS( aNavigationInsertIds ); ++i )
@@ -716,7 +751,12 @@ void NavElementBox_Impl::Update()
     }
 }
 
-IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(NavElementBox_Base, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    return DoKeyInput(rKEvt);
+}
+
+bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
 {
     bool bHandled = false;
 
@@ -743,8 +783,14 @@ IMPL_LINK(NavElementBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             break;
     }
 
-    return bHandled || ChildKeyInput(rKEvt);
+    return bHandled;
 }
+
+bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
+{
+    return NavElementBox_Base::DoKeyInput(rKEvt) || ChildKeyInput(rKEvt);
+}
+
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,
@@ -796,24 +842,26 @@ void SAL_CALL NavElementToolBoxControl::dispose()
     svt::ToolboxController::dispose();
 
     SolarMutexGuard aSolarMutexGuard;
-    m_pBox.disposeAndClear();
+    m_xVclBox.disposeAndClear();
+    m_xWeldBox.reset();
+    m_pBox = nullptr;
 }
 
 // XStatusListener
 void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    if ( m_pBox )
+    if (m_pBox)
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( rEvent.FeatureURL.Path == "NavElement" )
         {
             if ( rEvent.IsEnabled )
             {
-                m_pBox->Enable();
-                m_pBox->Update();
+                m_pBox->set_sensitive(true);
+                m_pBox->UpdateBox();
             }
             else
-                m_pBox->Disable();
+                m_pBox->set_sensitive(true);
         }
     }
 }
@@ -841,12 +889,27 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 {
     uno::Reference< awt::XWindow > xItemWindow;
 
-    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
-    if ( pParent )
+    if (m_pBuilder)
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pBox = VclPtr<NavElementBox_Impl>::Create( pParent, m_xFrame, *this );
-        xItemWindow = VCLUnoHelper::GetInterface( m_pBox );
+
+        std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box("NavElementWidget"));
+
+        xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
+
+        m_xWeldBox.reset(new NavElementBox_Base(std::move(xWidget), m_xFrame, *this));
+        m_pBox = m_xWeldBox.get();
+    }
+    else
+    {
+        VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
+        if ( pParent )
+        {
+            SolarMutexGuard aSolarMutexGuard;
+            m_xVclBox = VclPtr<NavElementBox_Impl>::Create( pParent, m_xFrame, *this );
+            m_pBox = m_xVclBox.get();
+            xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
+        }
     }
 
     uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
@@ -970,13 +1033,17 @@ void SAL_CALL PrevNextScrollToolboxController::dispose()
 // XStatusListener
 void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( rEvent.FeatureURL.Path == "NavElement" )
+    if (rEvent.FeatureURL.Path == "NavElement")
     {
-        ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
-        if ( getToolboxId( nId, &pToolBox ) )
-            pToolBox->SetQuickHelpText( nId, ( meType == PrevNextScrollToolboxController::PREVIOUS?lcl_GetScrollToolTip( false ):
-                                                                                                   lcl_GetScrollToolTip( true ) ) );
+        if (m_pToolbar)
+            m_pToolbar->set_item_tooltip_text(m_aCommandURL.toUtf8(), lcl_GetScrollToolTip(meType != PrevNextScrollToolboxController::PREVIOUS));
+        else
+        {
+            ToolBox* pToolBox = nullptr;
+            sal_uInt16 nId = 0;
+            if (getToolboxId(nId, &pToolBox))
+                pToolBox->SetQuickHelpText(nId, lcl_GetScrollToolTip(meType != PrevNextScrollToolboxController::PREVIOUS));
+        }
     }
 }
 
