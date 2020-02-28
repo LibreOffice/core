@@ -251,13 +251,161 @@ namespace
         return pDst;
     }
 
-    class SourceHelper
+    // check for env var that decides for using downscale pattern
+    static const char* pDisableDownScale(getenv("SAL_DISABLE_CAIRO_DOWNSCALE"));
+    static bool bDisableDownScale(nullptr != pDisableDownScale);
+
+    class SurfaceHelper
     {
+    private:
+        cairo_surface_t* pSurface;
+        std::unordered_map<unsigned long long, cairo_surface_t*> maDownscaled;
+
+        SurfaceHelper(const SurfaceHelper&) = delete;
+        SurfaceHelper& operator=(const SurfaceHelper&) = delete;
+
+        cairo_surface_t* implCreateOrReuseDownscale(
+            unsigned long nTargetWidth,
+            unsigned long nTargetHeight)
+        {
+            const unsigned long nSourceWidth(cairo_image_surface_get_width(pSurface));
+            const unsigned long nSourceHeight(cairo_image_surface_get_height(pSurface));
+
+            // zoomed in, need to stretch at paint, no pre-scale useful
+            if(nTargetWidth >= nSourceWidth || nTargetHeight >= nSourceHeight)
+            {
+                return pSurface;
+            }
+
+            // calculate downscale factor
+            unsigned long nWFactor(1);
+            unsigned long nW((nSourceWidth + 1) / 2);
+            unsigned long nHFactor(1);
+            unsigned long nH((nSourceHeight + 1) / 2);
+
+            while(nW > nTargetWidth && nW > 1)
+            {
+                nW = (nW + 1) / 2;
+                nWFactor *= 2;
+            }
+
+            while(nH > nTargetHeight && nH > 1)
+            {
+                nH = (nH + 1) / 2;
+                nHFactor *= 2;
+            }
+
+            if(1 == nWFactor && 1 == nHFactor)
+            {
+                // original size *is* best binary size, use it
+                return pSurface;
+            }
+
+            // go up one scale again - look for no change
+            nW  = (1 == nWFactor) ? nTargetWidth : nW * 2;
+            nH  = (1 == nHFactor) ? nTargetHeight : nH * 2;
+
+            // check if we have a downscaled version of required size
+            const unsigned long long key((nW * LONG_MAX) + nH);
+            auto isHit(maDownscaled.find(key));
+
+            if(isHit != maDownscaled.end())
+            {
+                return isHit->second;
+            }
+
+            // create new surface in the targeted size
+            cairo_surface_t* pSurfaceTarget = cairo_surface_create_similar(
+                pSurface,
+                cairo_surface_get_content(pSurface),
+                nW,
+                nH);
+
+            // did a version to scale self first that worked well, but wouuld've
+            // been hard to support CAIRO_FORMAT_A1 including bit shifting, so
+            // I decided to go with cairo itself - use CAIRO_FILTER_FAST or
+            // CAIRO_FILTER_GOOD though. Please modify as needed for
+            // performance/quality
+            cairo_t* cr = cairo_create(pSurfaceTarget);
+            const double fScaleX(static_cast<double>(nW)/static_cast<double>(nSourceWidth));
+            const double fScaleY(static_cast<double>(nH)/static_cast<double>(nSourceHeight));
+            cairo_scale(cr, fScaleX, fScaleY);
+            cairo_set_source_surface(cr, pSurface, 0.0, 0.0);
+            cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_GOOD);
+            cairo_paint(cr);
+            cairo_destroy(cr);
+
+            // need to set device_scale for downscale surfaces to get
+            // them handled correctly
+            cairo_surface_set_device_scale(pSurfaceTarget, fScaleX, fScaleY);
+
+            // add entry to cached entries
+            maDownscaled[key] = pSurfaceTarget;
+
+            return pSurfaceTarget;
+        }
+
+    protected:
+        cairo_surface_t* implGetSurface() const { return pSurface; }
+        void implSetSurface(cairo_surface_t* pNew) { pSurface = pNew; }
+
+        bool isTrivial() const
+        {
+            static unsigned long nMinimalSquareSizeToBuffer(64*64);
+            const unsigned long nSourceWidth(cairo_image_surface_get_width(pSurface));
+            const unsigned long nSourceHeight(cairo_image_surface_get_height(pSurface));
+
+            return nSourceWidth * nSourceHeight < nMinimalSquareSizeToBuffer;
+        }
+
     public:
-        explicit SourceHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB32 = false)
+        explicit SurfaceHelper()
+        :   pSurface(nullptr),
+            maDownscaled()
+        {
+        }
+        ~SurfaceHelper()
+        {
+            cairo_surface_destroy(pSurface);
+            for(auto& candidate : maDownscaled)
+            {
+                cairo_surface_destroy(candidate.second);
+            }
+        }
+        cairo_surface_t* getSurface(
+            unsigned long nTargetWidth = 0,
+            unsigned long nTargetHeight = 0) const
+        {
+            if(bDisableDownScale || 0 == nTargetWidth || 0 == nTargetHeight || isTrivial())
+            {
+                // caller asks for original or disabled or trivial (smaller then a minimal square size)
+                // also excludes zero cases for width/height after this point if need to prescale
+                return pSurface;
+            }
+
+            return const_cast<SurfaceHelper*>(this)->implCreateOrReuseDownscale(
+                nTargetWidth,
+                nTargetHeight);
+        }
+    };
+
+    class BitmapHelper : public SurfaceHelper
+    {
+    private:
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            : m_bForceARGB32(bForceARGB32)
+        const bool m_bForceARGB32;
 #endif
+        SvpSalBitmap aTmpBmp;
+
+    public:
+        explicit BitmapHelper(
+            const SalBitmap& rSourceBitmap,
+            const bool bForceARGB32 = false)
+        :   SurfaceHelper(),
+#ifdef HAVE_CAIRO_FORMAT_RGB24_888
+            m_bForceARGB32(bForceARGB32),
+#endif
+            aTmpBmp()
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
@@ -277,30 +425,24 @@ namespace
                 aTmpBmp.Create(std::move(pTmp));
 
                 assert(aTmpBmp.GetBitCount() == 32);
-                source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());
+                implSetSurface(SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer()));
             }
             else
-                source = SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer());
-        }
-        ~SourceHelper()
-        {
-            cairo_surface_destroy(source);
-        }
-        cairo_surface_t* getSurface()
-        {
-            return source;
+            {
+                implSetSurface(SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer()));
+            }
         }
         void mark_dirty()
         {
-            cairo_surface_mark_dirty(source);
+            cairo_surface_mark_dirty(implGetSurface());
         }
         unsigned char* getBits(sal_Int32 &rStride)
         {
-            cairo_surface_flush(source);
+            cairo_surface_flush(implGetSurface());
 
-            unsigned char *mask_data = cairo_image_surface_get_data(source);
+            unsigned char *mask_data = cairo_image_surface_get_data(implGetSurface());
 
-            const cairo_format_t nFormat = cairo_image_surface_get_format(source);
+            const cairo_format_t nFormat = cairo_image_surface_get_format(implGetSurface());
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
             if (!m_bForceARGB32)
                 assert(nFormat == CAIRO_FORMAT_RGB24_888 && "Expected RGB24_888 image");
@@ -308,63 +450,72 @@ namespace
 #endif
             assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
 
-            rStride = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(source));
+            rStride = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(implGetSurface()));
 
             return mask_data;
         }
-    private:
-#ifdef HAVE_CAIRO_FORMAT_RGB24_888
-        const bool m_bForceARGB32;
-#endif
-        SvpSalBitmap aTmpBmp;
-        cairo_surface_t* source;
-
-        SourceHelper(const SourceHelper&) = delete;
-        SourceHelper& operator=(const SourceHelper&) = delete;
     };
 
-    class SystemDependentData_SourceHelper : public basegfx::SystemDependentData
-    {
-    private:
-        std::shared_ptr<SourceHelper>       maSourceHelper;
-
-    public:
-        SystemDependentData_SourceHelper(
-            basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-            const std::shared_ptr<SourceHelper>& rSourceHelper)
-        :   basegfx::SystemDependentData(rSystemDependentDataManager),
-            maSourceHelper(rSourceHelper)
-        {
-        }
-
-        const std::shared_ptr<SourceHelper>& getSourceHelper() const { return maSourceHelper; };
-        virtual sal_Int64 estimateUsageInBytes() const override;
-    };
-
-    // MM02 class to allow buffering of SourceHelper
-    sal_Int64 SystemDependentData_SourceHelper::estimateUsageInBytes() const
+    sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
     {
         sal_Int64 nRetval(0);
-        cairo_surface_t* source(maSourceHelper ? maSourceHelper->getSurface() : nullptr);
 
-        if(source)
+        if(nullptr != pHelper)
         {
-            const long nStride(cairo_image_surface_get_stride(source));
-            const long nHeight(cairo_image_surface_get_height(source));
+            cairo_surface_t* pSurface(pHelper->getSurface());
 
-            if(0 != nStride && 0 != nHeight)
+            if(pSurface)
             {
+                const long nStride(cairo_image_surface_get_stride(pSurface));
+                const long nHeight(cairo_image_surface_get_height(pSurface));
+
                 nRetval = nStride * nHeight;
+
+                // if we do downscale, size will grow by 1/4 + 1/16 + 1/32 + ...,
+                // rough estimation just multiplies by 1.25, should be good enough
+                // for estimation of buffer survival time
+                if(!bDisableDownScale)
+                {
+                    nRetval = (nRetval * 5) / 4;
+                }
             }
         }
 
         return nRetval;
     }
 
-    class MaskHelper
+    class SystemDependentData_BitmapHelper : public basegfx::SystemDependentData
     {
+    private:
+        std::shared_ptr<BitmapHelper>       maBitmapHelper;
+
+    public:
+        SystemDependentData_BitmapHelper(
+            basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+            const std::shared_ptr<BitmapHelper>& rBitmapHelper)
+        :   basegfx::SystemDependentData(rSystemDependentDataManager),
+            maBitmapHelper(rBitmapHelper)
+        {
+        }
+
+        const std::shared_ptr<BitmapHelper>& getBitmapHelper() const { return maBitmapHelper; };
+        virtual sal_Int64 estimateUsageInBytes() const override;
+    };
+
+    sal_Int64 SystemDependentData_BitmapHelper::estimateUsageInBytes() const
+    {
+        return estimateUsageInBytesForSurfaceHelper(maBitmapHelper.get());
+    }
+
+    class MaskHelper : public SurfaceHelper
+    {
+    private:
+        std::unique_ptr<unsigned char[]> pAlphaBits;
+
     public:
         explicit MaskHelper(const SalBitmap& rAlphaBitmap)
+        :   SurfaceHelper(),
+            pAlphaBits()
         {
             const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
             const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
@@ -383,10 +534,13 @@ namespace
                     *pLDst = ~*pLDst;
                 assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
 
-                mask = cairo_image_surface_create_for_data(pAlphaBits.get(),
-                                                CAIRO_FORMAT_A8,
-                                                pMaskBuf->mnWidth, pMaskBuf->mnHeight,
-                                                pMaskBuf->mnScanlineSize);
+                implSetSurface(
+                    cairo_image_surface_create_for_data(
+                        pAlphaBits.get(),
+                        CAIRO_FORMAT_A8,
+                        pMaskBuf->mnWidth,
+                        pMaskBuf->mnHeight,
+                        pMaskBuf->mnScanlineSize));
             }
             else
             {
@@ -405,26 +559,15 @@ namespace
                         *pDst = ~*pDst;
                 }
 
-                mask = cairo_image_surface_create_for_data(pAlphaBits.get(),
-                                                CAIRO_FORMAT_A1,
-                                                pMaskBuf->mnWidth, pMaskBuf->mnHeight,
-                                                pMaskBuf->mnScanlineSize);
+                implSetSurface(
+                    cairo_image_surface_create_for_data(
+                        pAlphaBits.get(),
+                        CAIRO_FORMAT_A1,
+                        pMaskBuf->mnWidth,
+                        pMaskBuf->mnHeight,
+                        pMaskBuf->mnScanlineSize));
             }
         }
-        ~MaskHelper()
-        {
-            cairo_surface_destroy(mask);
-        }
-        cairo_surface_t* getMask()
-        {
-            return mask;
-        }
-    private:
-        cairo_surface_t *mask;
-        std::unique_ptr<unsigned char[]> pAlphaBits;
-
-        MaskHelper(const MaskHelper&) = delete;
-        MaskHelper& operator=(const MaskHelper&) = delete;
     };
 
     class SystemDependentData_MaskHelper : public basegfx::SystemDependentData
@@ -445,24 +588,9 @@ namespace
         virtual sal_Int64 estimateUsageInBytes() const override;
     };
 
-    // MM02 class to allow buffering of MaskHelper
     sal_Int64 SystemDependentData_MaskHelper::estimateUsageInBytes() const
     {
-        sal_Int64 nRetval(0);
-        cairo_surface_t* mask(maMaskHelper ? maMaskHelper->getMask() : nullptr);
-
-        if(mask)
-        {
-            const long nStride(cairo_image_surface_get_stride(mask));
-            const long nHeight(cairo_image_surface_get_height(mask));
-
-            if(0 != nStride && 0 != nHeight)
-            {
-                nRetval = nStride * nHeight;
-            }
-        }
-
-        return nRetval;
+        return estimateUsageInBytesForSurfaceHelper(maMaskHelper.get());
     }
 
     // MM02 decide to use buffers or not
@@ -472,35 +600,35 @@ namespace
 
     void tryToUseSourceBuffer(
         const SalBitmap& rSourceBitmap,
-        std::shared_ptr<SourceHelper>& rSurface)
+        std::shared_ptr<BitmapHelper>& rSurface)
     {
-        // MM02 try to access buffered SourceHelper
-        std::shared_ptr<SystemDependentData_SourceHelper> pSystemDependentData_SourceHelper;
+        // MM02 try to access buffered BitmapHelper
+        std::shared_ptr<SystemDependentData_BitmapHelper> pSystemDependentData_BitmapHelper;
         const bool bBufferSource(bUseBuffer
             && rSourceBitmap.GetSize().Width() * rSourceBitmap.GetSize().Height() > nMinimalSquareSizeToBuffer);
 
         if(bBufferSource)
         {
             const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
-            pSystemDependentData_SourceHelper = rSrcBmp.getSystemDependentData<SystemDependentData_SourceHelper>();
+            pSystemDependentData_BitmapHelper = rSrcBmp.getSystemDependentData<SystemDependentData_BitmapHelper>();
 
-            if(pSystemDependentData_SourceHelper)
+            if(pSystemDependentData_BitmapHelper)
             {
                 // reuse buffered data
-                rSurface = pSystemDependentData_SourceHelper->getSourceHelper();
+                rSurface = pSystemDependentData_BitmapHelper->getBitmapHelper();
             }
         }
 
         if(!rSurface)
         {
             // create data on-demand
-            rSurface = std::make_shared<SourceHelper>(rSourceBitmap);
+            rSurface = std::make_shared<BitmapHelper>(rSourceBitmap);
 
             if(bBufferSource)
             {
                 // add to buffering mechanism to potentially reuse next time
                 const SvpSalBitmap& rSrcBmp(static_cast<const SvpSalBitmap&>(rSourceBitmap));
-                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_SourceHelper>(
+                rSrcBmp.addOrReplaceSystemDependentData<SystemDependentData_BitmapHelper>(
                     ImplGetSystemDependentDataManager(),
                     rSurface);
             }
@@ -553,10 +681,12 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
         return false;
     }
 
-    // MM02 try to access buffered SourceHelper
-    std::shared_ptr<SourceHelper> aSurface;
+    // MM02 try to access buffered BitmapHelper
+    std::shared_ptr<BitmapHelper> aSurface;
     tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    cairo_surface_t* source = aSurface->getSurface();
+    cairo_surface_t* source = aSurface->getSurface(
+        rTR.mnDestWidth,
+        rTR.mnDestHeight);
 
     if (!source)
     {
@@ -567,7 +697,9 @@ bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR, const SalBitmap& rS
     // MM02 try to access buffered MaskHelper
     std::shared_ptr<MaskHelper> aMask;
     tryToUseMaskBuffer(rAlphaBitmap, aMask);
-    cairo_surface_t *mask = aMask->getMask();
+    cairo_surface_t *mask = aMask->getSurface(
+        rTR.mnDestWidth,
+        rTR.mnDestHeight);
 
     if (!mask)
     {
@@ -629,10 +761,15 @@ bool SvpSalGraphics::drawTransformedBitmap(
         return false;
     }
 
-    // MM02 try to access buffered SourceHelper
-    std::shared_ptr<SourceHelper> aSurface;
+    // MM02 try to access buffered BitmapHelper
+    std::shared_ptr<BitmapHelper> aSurface;
     tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    cairo_surface_t* source(aSurface->getSurface());
+    const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+    const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+    cairo_surface_t* source(
+        aSurface->getSurface(
+            nDestWidth,
+            nDestHeight));
 
     if(!source)
     {
@@ -642,14 +779,20 @@ bool SvpSalGraphics::drawTransformedBitmap(
 
     // MM02 try to access buffered MaskHelper
     std::shared_ptr<MaskHelper> aMask;
-
     if(nullptr != pAlphaBitmap)
     {
         tryToUseMaskBuffer(*pAlphaBitmap, aMask);
     }
 
     // access cairo_surface_t from MaskHelper
-    cairo_surface_t* mask(aMask ? aMask->getMask() : nullptr);
+    cairo_surface_t* mask(nullptr);
+    if(aMask)
+    {
+        mask = aMask->getSurface(
+            nDestWidth,
+            nDestHeight);
+    }
+
     if(nullptr != pAlphaBitmap && nullptr == mask)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
@@ -1927,10 +2070,12 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
-    // MM02 try to access buffered SourceHelper
-    std::shared_ptr<SourceHelper> aSurface;
+    // MM02 try to access buffered BitmapHelper
+    std::shared_ptr<BitmapHelper> aSurface;
     tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    cairo_surface_t* source = aSurface->getSurface();
+    cairo_surface_t* source = aSurface->getSurface(
+        rTR.mnDestWidth,
+        rTR.mnDestHeight);
 
     if (!source)
     {
@@ -1961,11 +2106,11 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 {
     /** creates an image from the given rectangle, replacing all black pixels
      *  with nMaskColor and make all other full transparent */
-    // MM02 here decided *against* using buffered SourceHelper
+    // MM02 here decided *against* using buffered BitmapHelper
     // because the data gets somehow 'unmuliplied'. This may also be
     // done just once, but I am not sure if this is safe to do.
     // So for now dispense re-using data here.
-    SourceHelper aSurface(rSalBitmap, true); // The mask is argb32
+    BitmapHelper aSurface(rSalBitmap, true); // The mask is argb32
     if (!aSurface.getSurface())
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawMask case");
