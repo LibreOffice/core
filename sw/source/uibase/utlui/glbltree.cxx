@@ -24,6 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
@@ -527,7 +528,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListBox::RequestHelp(rHEvt);
 }
 
-void     SwGlobalTree::SelectHdl()
+void SwGlobalTree::SelectHdl()
 {
 
     sal_uLong nSelCount = GetSelectionCount();
@@ -536,17 +537,17 @@ void     SwGlobalTree::SelectHdl()
     SwNavigationPI* pNavi = GetParentWindow();
     bool bReadonly = !m_pActiveShell ||
                 m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
-    pNavi->m_aGlobalToolBox->EnableItem(pNavi->m_aGlobalToolBox->GetItemId("edit"),  nSelCount == 1 && !bReadonly);
-    pNavi->m_aGlobalToolBox->EnableItem(pNavi->m_aGlobalToolBox->GetItemId("insert"),  nSelCount <= 1 && !bReadonly);
-    pNavi->m_aGlobalToolBox->EnableItem(pNavi->m_aGlobalToolBox->GetItemId("update"),  GetEntryCount() > 0 && !bReadonly);
-    pNavi->m_aGlobalToolBox->EnableItem(pNavi->m_aGlobalToolBox->GetItemId("up"),
+    pNavi->m_xGlobalToolBox->set_item_sensitive("edit",  nSelCount == 1 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive("insert",  nSelCount <= 1 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive("update",  GetEntryCount() > 0 && !bReadonly);
+    pNavi->m_xGlobalToolBox->set_item_sensitive("up",
                     nSelCount == 1 && nAbsPos && !bReadonly);
-    pNavi->m_aGlobalToolBox->EnableItem(pNavi->m_aGlobalToolBox->GetItemId("down"),
+    pNavi->m_xGlobalToolBox->set_item_sensitive("down",
                     nSelCount == 1 && nAbsPos < GetEntryCount() - 1 && !bReadonly);
 
 }
 
-void     SwGlobalTree::DeselectHdl()
+void SwGlobalTree::DeselectHdl()
 {
     SelectHdl();
 }
