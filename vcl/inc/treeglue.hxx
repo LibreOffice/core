@@ -150,6 +150,8 @@ public:
             }
         }
 
+        if (pTargetEntry)
+            ImplShowTargetEmphasis(pTargetEntry, true);
         return pTargetEntry;
     }
 
