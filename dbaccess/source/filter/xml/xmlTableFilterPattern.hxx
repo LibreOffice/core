@@ -28,6 +28,7 @@ namespace dbaxml
     {
         OXMLTableFilterList&    m_rParent;
         bool                m_bNameFilter;
+        OUStringBuffer      maBuffer;
     public:
         OXMLTableFilterPattern( SvXMLImport& rImport
                                 ,bool _bNameFilter
@@ -37,6 +38,7 @@ namespace dbaxml
 
         virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
         virtual void SAL_CALL characters( const OUString& rChars ) override;
     };
 } // namespace dbaxml

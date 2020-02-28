@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace io {
 class XMLOFF_DLLPUBLIC XMLBase64ImportContext final : public SvXMLImportContext
 {
     css::uno::Reference< css::io::XOutputStream > xOut;
-    OUString sBase64CharsLeft;
+    OUStringBuffer maCharBuffer;
 
 public:
 

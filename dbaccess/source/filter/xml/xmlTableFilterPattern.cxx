@@ -42,10 +42,16 @@ OXMLTableFilterPattern::~OXMLTableFilterPattern()
 
 void OXMLTableFilterPattern::characters( const OUString& rChars )
 {
+    maBuffer.append(rChars);
+}
+
+void OXMLTableFilterPattern::endFastElement( sal_Int32 )
+{
+    OUString sChars = maBuffer.makeStringAndClear();
     if ( m_bNameFilter )
-        m_rParent.pushTableFilterPattern(rChars);
+        m_rParent.pushTableFilterPattern(sChars);
     else
-        m_rParent.pushTableTypeFilter(rChars);
+        m_rParent.pushTableTypeFilter(sChars);
 }
 
 } // namespace dbaxml
