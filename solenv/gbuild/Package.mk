@@ -137,7 +137,7 @@ define gb_Package_add_empty_directory
 $(call gb_Package__check,$(1))
 $(if $(strip $(2)),,$(call gb_Output_error,gb_Package_add_directory requires 2 arguments))
 $(call gb_Package_get_target,$(1)) :| $$(gb_Package_OUTDIR_$(1))/$(2)/.dir
-gb_Package_$(1)_FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 
 endef
