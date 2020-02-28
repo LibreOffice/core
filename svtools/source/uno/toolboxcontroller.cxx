@@ -62,6 +62,7 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
     ,   m_pToolbar(nullptr)
+    ,   m_pBuilder(nullptr)
 {
     OSL_ASSERT( m_xContext.is() );
     registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
@@ -87,6 +88,7 @@ ToolboxController::ToolboxController() :
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_aListenerContainer( m_aMutex )
     ,   m_pToolbar(nullptr)
+    ,   m_pBuilder(nullptr)
 {
     registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
@@ -217,6 +219,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
     {
         m_pToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
         assert(m_pToolbar && "must be a toolbar");
+        m_pBuilder = pTunnel->getBuilder();
     }
 }
 

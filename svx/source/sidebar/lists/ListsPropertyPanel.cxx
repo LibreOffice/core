@@ -42,9 +42,9 @@ ListsPropertyPanel::ListsPropertyPanel(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui", rxFrame, true)
     , mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet"))
-    , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, rxFrame))
+    , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, *m_xBuilder, rxFrame))
     , mxTBxOutline(m_xBuilder->weld_toolbar("outline"))
-    , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, rxFrame))
+    , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, *m_xBuilder, rxFrame))
 {
 }
 

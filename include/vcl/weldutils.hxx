@@ -27,6 +27,7 @@ class VCL_DLLPUBLIC TransportAsXWindow : public TransportAsXWindow_Base
 private:
     osl::Mutex m_aHelperMtx;
     weld::Widget* m_pWeldWidget;
+    weld::Builder* m_pWeldWidgetBuilder;
 
     comphelper::OInterfaceContainerHelper2 m_aWindowListeners;
     comphelper::OInterfaceContainerHelper2 m_aKeyListeners;
@@ -36,9 +37,10 @@ private:
     comphelper::OInterfaceContainerHelper2 m_aPaintListeners;
 
 public:
-    TransportAsXWindow(weld::Widget* pWeldWidget)
+    TransportAsXWindow(weld::Widget* pWeldWidget, weld::Builder* pWeldWidgetBuilder = nullptr)
         : TransportAsXWindow_Base(m_aHelperMtx)
         , m_pWeldWidget(pWeldWidget)
+        , m_pWeldWidgetBuilder(pWeldWidgetBuilder)
         , m_aWindowListeners(m_aHelperMtx)
         , m_aKeyListeners(m_aHelperMtx)
         , m_aFocusListeners(m_aHelperMtx)
@@ -50,7 +52,13 @@ public:
 
     weld::Widget* getWidget() const { return m_pWeldWidget; }
 
-    virtual void clear() { m_pWeldWidget = nullptr; }
+    weld::Builder* getBuilder() const { return m_pWeldWidgetBuilder; }
+
+    virtual void clear()
+    {
+        m_pWeldWidget = nullptr;
+        m_pWeldWidgetBuilder = nullptr;
+    }
 
     // css::awt::XWindow
     void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
