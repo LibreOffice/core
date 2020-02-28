@@ -50,6 +50,7 @@ eu \
 fa \
 fi \
 fr \
+fur \
 fy \
 ga \
 gd \
