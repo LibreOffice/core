@@ -2101,9 +2101,9 @@ libo_FUZZ_ARG_WITH(doxygen,
 ,with_doxygen=yes)
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2017/2019>],
+    AS_HELP_STRING([--with-visual-studio=<2019>],
         [Specify which Visual Studio version to use in case several are
-         installed. Currently only 2017 (default) and 2019 are supported.]),
+         installed. Currently only 2019 (default) is supported.]),
 ,)
 
 AC_ARG_WITH(windows-sdk,
@@ -3295,8 +3295,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2017)
-        vsversion=15;;
     2019)
         vsversion=16;;
     *)
@@ -3315,8 +3313,8 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # We accept only 2017
-        vsversions="15"
+        # We accept only 2019
+        vsversions="16"
     fi
 }
 
@@ -3368,7 +3366,7 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2017/2019
+    # Find Visual C++ 2019
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot, $vcbuildnumber
 
@@ -3393,33 +3391,9 @@ find_msvc()
         fi
     done
 
-    # This fallback is needed on *some* (but not all) VS 2017 installations, where vswhere turns up
-    # with the empty list for unclear reason. The below hack does not work for VS 2019 anyway, so
-    # should be removed when upgrading baseline.
-    if ! test -n "$vctest"; then
-        for ver in $vsversions; do
-            reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver.0/Setup/VC/ProductDir
-            if test -n "$regvalue"; then
-                vctest=$regvalue
-                break
-            fi
-            reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/SxS/VS7/$ver.0
-            if test -n "$regvalue"; then
-                AC_MSG_RESULT([found: $regvalue])
-                PathFormat "$regvalue"
-                vctest=$formatted_path
-                break
-            fi
-        done
-    fi
-
     if test -n "$vctest"; then
         vcnumwithdot="$ver.0"
         case "$vcnumwithdot" in
-        15.0)
-            vcyear=2017
-            vcnum=150
-            ;;
         16.0)
             vcyear=2019
             vcnum=160
@@ -3440,7 +3414,7 @@ if test "$_os" = "WINNT"; then
         if test -n "$with_visual_studio"; then
             AC_MSG_ERROR([no Visual Studio $with_visual_studio installation found])
         else
-            AC_MSG_ERROR([no Visual Studio 2017 installation found])
+            AC_MSG_ERROR([no Visual Studio 2019 installation found])
         fi
     fi
 
@@ -3606,7 +3580,7 @@ if test "$_os" = "WINNT"; then
         # are always "better", we list them in reverse chronological order.
 
         case "$vcnum" in
-        150|160)
+        160)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
         esac
@@ -3631,11 +3605,11 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2017 version 15.7])
+    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.4])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
         // between Visual Studio versions and _MSC_VER:
-        #if _MSC_VER < 1914
+        #if _MSC_VER < 1924
         #error
         #endif
     ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
@@ -5662,7 +5636,7 @@ find_msms()
     AC_MSG_CHECKING([for MSVC merge modules directory])
     my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     case "$VCVER" in
-        150|160)
+        160)
         my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
@@ -5702,7 +5676,7 @@ find_msms()
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
     case "$VCVER" in
-    150|160)
+    160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             echo "$as_me:$LINENO: looking in $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])" >&5
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
@@ -5734,7 +5708,7 @@ find_msvc_x64_dlls()
     AC_MSG_CHECKING([for MSVC x64 DLL path])
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
-    150|160)
+    160)
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             echo "$as_me:$LINENO: testing $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT" >&5
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
@@ -13280,7 +13254,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, open "Visual Studio 2017", click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
+ [go to Start menu, open "Visual Studio 2019", click "x86 Native Tools Command Prompt" or "x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
