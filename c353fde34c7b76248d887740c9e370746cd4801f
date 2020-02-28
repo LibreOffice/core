@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaef36f4_d8c6fddb",
+        "filename": "solenv/gbuild/CustomTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-02-28T09:39:28Z",
+      "side": 1,
+      "message": "the problem is here, you need to put get_dependencies *after* : so they are dependencies :)",
+      "revId": "c353fde34c7b76248d887740c9e370746cd4801f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
