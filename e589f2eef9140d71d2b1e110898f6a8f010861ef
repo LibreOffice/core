@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ac88137_b7d7b04e",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T09:45:47Z",
+      "side": 1,
+      "message": "Please move this initialization into member initializer list, right after m_xSpinBorder initialization.",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 23
+      },
+      "revId": "e589f2eef9140d71d2b1e110898f6a8f010861ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
