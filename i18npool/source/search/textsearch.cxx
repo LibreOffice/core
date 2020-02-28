@@ -896,9 +896,15 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
 }
 
 
-static bool lcl_findRegex( std::unique_ptr<icu::RegexMatcher> const & pRegexMatcher, sal_Int32 nStartPos, UErrorCode & rIcuErr )
+static bool lcl_findRegex(std::unique_ptr<icu::RegexMatcher> const& pRegexMatcher,
+                          sal_Int32 nStartPos, sal_Int32 nEndPos, UErrorCode& rIcuErr)
 {
-    if (!pRegexMatcher->find( nStartPos, rIcuErr))
+    pRegexMatcher->region(nStartPos, nEndPos, rIcuErr);
+    pRegexMatcher->useAnchoringBounds(false); // use whole text's anchoring bounds, not region's
+    pRegexMatcher->useTransparentBounds(true); // take text outside of the region into account for
+                                               // look-ahead/behind assertions
+
+    if (!pRegexMatcher->find(rIcuErr))
     {
         /* TODO: future versions could pass the UErrorCode or translations
          * thereof to the caller, for example to inform the user of
@@ -930,7 +936,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     // search until there is a valid match
     for(;;)
     {
-        if (!lcl_findRegex( pRegexMatcher, startPos, nIcuErr))
+        if (!lcl_findRegex( pRegexMatcher, startPos, endPos, nIcuErr))
             return aRet;
 
         // #i118887# ignore zero-length matches e.g. "a*" in "bc"
@@ -979,9 +985,10 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // TODO: use ICU's backward searching once it becomes available
     //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr( reinterpret_cast<const UChar*>(searchStr.getStr()), startPos);
+    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
+                                        searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
-    if (!lcl_findRegex( pRegexMatcher, endPos, nIcuErr))
+    if (!lcl_findRegex( pRegexMatcher, endPos, startPos, nIcuErr))
         return aRet;
 
     // find the last match
@@ -1003,7 +1010,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
         bFirst = false;
         if( nFoundEnd == nLastPos)
             ++nFoundEnd;
-    } while( lcl_findRegex( pRegexMatcher, nFoundEnd, nIcuErr));
+    } while( lcl_findRegex( pRegexMatcher, nFoundEnd, startPos, nIcuErr));
 
     // Ignore all zero-length matches except "$" anchor on first match.
     if (nGoodPos == nGoodEnd)
@@ -1015,7 +1022,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     }
 
     // find last match again to get its details
-    lcl_findRegex( pRegexMatcher, nGoodPos, nIcuErr);
+    lcl_findRegex( pRegexMatcher, nGoodPos, startPos, nIcuErr);
 
     // fill in the details of the last match
     const int nGroupCount = pRegexMatcher->groupCount();
