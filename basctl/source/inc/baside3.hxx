@@ -152,6 +152,4 @@ private:
 
 } // namespace basctl
 
-// INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
