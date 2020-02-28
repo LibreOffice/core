@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 
@@ -27,7 +30,7 @@ tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     QRect qRect = QApplication::desktop()->screenGeometry(nScreen);
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    return toRectangle(qRect);
+    return toRectangle(scaledQRect(qRect, qApp->devicePixelRatio()));
 }
 
 int Qt5System::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
