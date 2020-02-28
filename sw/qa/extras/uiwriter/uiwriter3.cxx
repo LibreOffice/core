@@ -26,12 +26,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
@@ -41,13 +54,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
@@ -57,11 +80,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
+    CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
