@@ -917,6 +917,20 @@ static bool lcl_findRegex(std::unique_ptr<icu::RegexMatcher> const& pRegexMatche
     return true;
 }
 
+namespace
+{
+struct IcuUText : public UText
+{
+    IcuUText(const OUString& s) // The object depends on passed string lifetime!
+        : UText(UTEXT_INITIALIZER)
+    {
+        UErrorCode nIcuErr = U_ZERO_ERROR;
+        utext_openUChars(this, reinterpret_cast<const UChar*>(s.getStr()), s.getLength(), &nIcuErr);
+    }
+    ~IcuUText() { utext_close(this); }
+};
+} // namespace
+
 SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
 {
@@ -930,9 +944,8 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
-                                        searchStr.getLength());
-    pRegexMatcher->reset( aSearchTargetStr);
+    IcuUText aSearchTargetStr(searchStr);
+    pRegexMatcher->reset(&aSearchTargetStr);
     // search until there is a valid match
     for(;;)
     {
@@ -985,9 +998,8 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // TODO: use ICU's backward searching once it becomes available
     //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
-                                        searchStr.getLength());
-    pRegexMatcher->reset( aSearchTargetStr);
+    IcuUText aSearchTargetStr(searchStr);
+    pRegexMatcher->reset(&aSearchTargetStr);
     if (!lcl_findRegex( pRegexMatcher, endPos, startPos, nIcuErr))
         return aRet;
 
