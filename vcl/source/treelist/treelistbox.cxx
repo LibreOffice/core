@@ -1084,7 +1084,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
         // **** draw emphasis ****
         if( DND_ACTION_NONE == nRet )
-               ImplShowTargetEmphasis( pTargetEntry, false );
+            ImplShowTargetEmphasis( pTargetEntry, false );
         else if( pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         {
             ImplShowTargetEmphasis( pTargetEntry, false );
