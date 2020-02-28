@@ -43,7 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_macros, \
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_system_win32_libs,basic_macros, \
 	oleaut32 \
-	$(if $(filter 150 160,$(VCVER)),legacy_stdio_definitions) \
+	legacy_stdio_definitions \
 	odbc32 \
 	odbccp32 \
 ))
