@@ -130,6 +130,8 @@ namespace drawinglayer { namespace attribute {
 class SAL_DLLPUBLIC_RTTI SwFrameAreaDefinition
 {
 private:
+    friend void FriendHackInvalidateRowFrame(SwFrameAreaDefinition &);
+
     // The absolute position and size of the SwFrame in the document.
     // This values are set by the layouter implementations
     SwRect  maFrameArea;
