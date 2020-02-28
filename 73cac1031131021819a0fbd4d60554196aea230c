@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2c2df36_5f165670",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-02-28T15:40:33Z",
+      "side": 1,
+      "message": "With that you broke the build for anyone using (system-)boost \u003c 1.69. in libreoffice-6-4. :(\n\nLOs internal boost contains 1.69, but this happens with 1.67:\n\n/home/rene/LibreOffice/git/libreoffice-6-4/oox/source/drawingml/diagram/diagramlayoutatoms.cxx: In member function \u0027void oox::drawingml::AlgAtom::layoutShape(const ShapePtr\u0026, const std::vector\u003coox::drawingml::Constraint\u003e\u0026)\u0027:\n/home/rene/LibreOffice/git/libreoffice-6-4/oox/source/drawingml/diagram/diagramlayoutatoms.cxx:1227:74: error: \u0027class boost::optional\u003cint\u003e\u0027 has no member named \u0027has_value\u0027\n 1227 |                     if (!aParagraph-\u003egetProperties().getParaLeftMargin().has_value())\n      |                                                                          ^~~~~~~~~\n/home/rene/LibreOffice/git/libreoffice-6-4/oox/source/drawingml/diagram/diagramlayoutatoms.cxx:1233:80: error: \u0027class boost::optional\u003cint\u003e\u0027 has no member named \u0027has_value\u0027\n 1233 |                     if (!aParagraph-\u003egetProperties().getFirstLineIndentation().has_value())\n      |                                                                                ^~~~~~~~~\nmake[3]: *** [/home/rene/LibreOffice/git/libreoffice-6-4/solenv/gbuild/LinkTarget.mk:296: /home/rene/LibreOffice/git/libreoffice-6-4/workdir/CxxObject/oox/source/drawingml/diagram/diagramlayoutatoms.o] Error 1",
+      "revId": "73cac1031131021819a0fbd4d60554196aea230c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
