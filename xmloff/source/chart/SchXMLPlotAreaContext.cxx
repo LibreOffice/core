@@ -591,9 +591,14 @@ SchXMLDataLabelSpanContext::SchXMLDataLabelSpanContext( SvXMLImport& rImport, co
 {
 }
 
-void SchXMLDataLabelSpanContext::Characters(const OUString& sChars)
+void SchXMLDataLabelSpanContext::Characters(const OUString& rChars)
 {
-    mrLabels.push_back(sChars);
+    maCharBuffer.append(rChars);
+}
+
+void SchXMLDataLabelSpanContext::EndElement()
+{
+    mrLabels.push_back(maCharBuffer.makeStringAndClear());
 }
 
 SchXMLDataLabelParaContext::SchXMLDataLabelParaContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels):

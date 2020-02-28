@@ -44,31 +44,19 @@ XMLBase64ImportContext::~XMLBase64ImportContext()
 
 void XMLBase64ImportContext::EndElement()
 {
+    OUString sChars = maCharBuffer.makeStringAndClear().trim();
+    if( !sChars.isEmpty() )
+    {
+        Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
+        ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
+        xOut->writeBytes( aBuffer );
+    }
     xOut->closeOutput();
 }
 
 void XMLBase64ImportContext::Characters( const OUString& rChars )
 {
-    OUString sTrimmedChars( rChars. trim() );
-    if( !sTrimmedChars.isEmpty() )
-    {
-        OUString sChars;
-        if( !sBase64CharsLeft.isEmpty() )
-        {
-            sChars = sBase64CharsLeft + sTrimmedChars;
-            sBase64CharsLeft.clear();
-        }
-        else
-        {
-            sChars = sTrimmedChars;
-        }
-        Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
-        sal_Int32 const nCharsDecoded =
-                ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
-        xOut->writeBytes( aBuffer );
-        if( nCharsDecoded != sChars.getLength() )
-            sBase64CharsLeft = sChars.copy( nCharsDecoded );
-    }
+    maCharBuffer.append(rChars);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
