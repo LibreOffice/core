@@ -22,7 +22,7 @@ class tdf114724(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
-        xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+        xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
         xNavigatorPanel.executeAction("ROOT", tuple())
 
         xWriterEdit.executeAction("FOCUS", tuple())
