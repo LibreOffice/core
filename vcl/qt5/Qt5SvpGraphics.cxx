@@ -83,6 +83,7 @@ void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     assert(pImage);
     if (pImage->width() == 0 || pImage->height() == 0)
         return;
+    pImage->setDevicePixelRatio(1.0);
 
     BitmapBuffer aBuffer;
     QImage2BitmapBuffer(*pImage, aBuffer);

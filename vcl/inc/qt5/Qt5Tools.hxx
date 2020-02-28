@@ -54,6 +54,18 @@ inline QRect toQRect(const tools::Rectangle& rRect)
     return QRect(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
 }
 
+inline QRect toQRect(const tools::Rectangle& rRect, const qreal fScale)
+{
+    return QRect(round(rRect.Left() * fScale), round(rRect.Top() * fScale),
+                 round(rRect.GetWidth() * fScale), round(rRect.GetHeight() * fScale));
+}
+
+inline QRect scaledQRect(const QRect& rRect, const qreal fScale)
+{
+    return QRect(round(rRect.x() * fScale), round(rRect.y() * fScale),
+                 round(rRect.width() * fScale), round(rRect.height() * fScale));
+}
+
 inline tools::Rectangle toRectangle(const QRect& rRect)
 {
     return tools::Rectangle(rRect.left(), rRect.top(), rRect.right(), rRect.bottom());

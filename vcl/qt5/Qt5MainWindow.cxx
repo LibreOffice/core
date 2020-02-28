@@ -38,7 +38,8 @@ void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
 
 void Qt5MainWindow::moveEvent(QMoveEvent* pEvent)
 {
-    m_rFrame.maGeometry.nX = pEvent->pos().x();
-    m_rFrame.maGeometry.nY = pEvent->pos().y();
+    const Point aPos = toPoint(pEvent->pos() * m_rFrame.devicePixelRatio());
+    m_rFrame.maGeometry.nX = aPos.X();
+    m_rFrame.maGeometry.nY = aPos.Y();
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }

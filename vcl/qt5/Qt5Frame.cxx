@@ -284,26 +284,15 @@ Qt5Frame::~Qt5Frame()
 void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                       sal_Int32 nExtentsHeight) const
 {
-    m_pQWidget->update(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
-}
-
-void Qt5Frame::TriggerPaintEvent()
-{
-    QSize aSize(m_pQWidget->size());
-    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
-    CallCallback(SalEvent::Paint, &aPaintEvt);
-}
-
-void Qt5Frame::TriggerPaintEvent(QRect aRect)
-{
-    SalPaintEvent aPaintEvt(aRect.x(), aRect.y(), aRect.width(), aRect.height(), true);
-    CallCallback(SalEvent::Paint, &aPaintEvt);
+    const qreal fRatio = devicePixelRatio();
+    m_pQWidget->update(round(nExtentsX / fRatio), round(nExtentsY / fRatio),
+                       round(nExtentsWidth / fRatio), round(nExtentsHeight / fRatio));
 }
 
 void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
 {
-    int width = 640;
-    int height = 480;
+    const int width = 640;
+    const int height = 480;
     m_pSvpGraphics = pQt5SvpGraphics;
     m_pSurface.reset(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height));
     m_pSvpGraphics->setSurface(m_pSurface.get(), basegfx::B2IVector(width, height));
@@ -360,6 +349,9 @@ bool Qt5Frame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 }
 
 QWidget* Qt5Frame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidget; }
+
+// asChild->windowHandle()->devicePixelRatio() return 1.0 for any QT_SCALE_FACTOR
+qreal Qt5Frame::devicePixelRatio() const { return qApp->devicePixelRatio(); }
 
 bool Qt5Frame::isWindow() const { return asChild()->isWindow(); }
 
@@ -442,13 +434,19 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        asChild()->setMinimumSize(nWidth, nHeight);
+    {
+        const qreal fRatio = devicePixelRatio();
+        asChild()->setMinimumSize(round(nWidth / fRatio), round(nHeight / fRatio));
+    }
 }
 
 void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
 {
     if (!isChild())
-        asChild()->setMaximumSize(nWidth, nHeight);
+    {
+        const qreal fRatio = devicePixelRatio();
+        asChild()->setMaximumSize(round(nWidth / fRatio), round(nHeight / fRatio));
+    }
 }
 
 void Qt5Frame::SetDefaultPos()
@@ -524,25 +522,24 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
             if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
-                nWidth = maGeometry.nWidth;
-            else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
-                nHeight = maGeometry.nHeight;
-
-            if (nWidth > 0 && nHeight > 0)
             {
-                m_bDefaultSize = false;
-                if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
-                    asChild()->resize(nWidth, nHeight);
-                else
-                    asChild()->setFixedSize(nWidth, nHeight);
+                nWidth = maGeometry.nWidth;
+                maGeometry.nHeight = nHeight;
+            }
+            else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
+            {
+                nHeight = maGeometry.nHeight;
+                maGeometry.nWidth = nWidth;
             }
 
-            // assume the resize happened
-            // needed for calculations and will eventually be corrected by events
-            if (nWidth > 0)
-                maGeometry.nWidth = nWidth;
-            if (nHeight > 0)
-                maGeometry.nHeight = nHeight;
+            m_bDefaultSize = false;
+            const qreal fRatio = devicePixelRatio();
+            const int nNewWidth = round(nWidth / fRatio);
+            const int nNewHeight = round(nHeight / fRatio);
+            if (m_nStyle & SalFrameStyleFlags::SIZEABLE)
+                asChild()->resize(nNewWidth, nNewHeight);
+            else
+                asChild()->setFixedSize(nNewWidth, nNewHeight);
         }
     }
 
@@ -559,7 +556,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
 
             Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
             if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-                nY += pTopLevel->menuBar()->geometry().height();
+                nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatio());
         }
 
         if (!(nFlags & SAL_FRAME_POSSIZE_X))
@@ -573,14 +570,17 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
         maGeometry.nY = nY;
 
         m_bDefaultPos = false;
-        asChild()->move(nX, nY);
+        const qreal fRatio = devicePixelRatio();
+        const int nNewX = round(nX / fRatio);
+        const int nNewY = round(nY / fRatio);
+        asChild()->move(nNewX, nNewY);
     }
 }
 
 void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
 {
-    rWidth = m_pQWidget->width();
-    rHeight = m_pQWidget->height();
+    rWidth = round(m_pQWidget->width() * devicePixelRatio());
+    rHeight = round(m_pQWidget->height() * devicePixelRatio());
 }
 
 void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
@@ -591,7 +591,7 @@ void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
     if (!pScreen)
         return;
 
-    QSize aSize = pScreen->availableVirtualSize();
+    QSize aSize = pScreen->availableVirtualSize() * devicePixelRatio();
     rRect = tools::Rectangle(0, 0, aSize.width(), aSize.height());
 }
 
@@ -679,17 +679,11 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     else
     {
         // geometry() is the drawable area, which is wanted here
-        QRect rect = asChild()->geometry();
+        QRect rect = scaledQRect(asChild()->geometry(), devicePixelRatio());
         pState->mnX = rect.x();
         pState->mnY = rect.y();
         pState->mnWidth = rect.width();
         pState->mnHeight = rect.height();
-        // the menubar is drawn natively, adjust for that
-        if (maGeometry.nTopDecoration)
-        {
-            pState->mnY += maGeometry.nTopDecoration;
-            pState->mnHeight -= maGeometry.nTopDecoration;
-        }
         pState->mnMask |= WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
                           | WindowStateMask::Height;
     }
@@ -1142,7 +1136,7 @@ void Qt5Frame::Beep() { QApplication::beep(); }
 SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {
     SalPointerState aState;
-    aState.maPos = toPoint(QCursor::pos());
+    aState.maPos = toPoint(QCursor::pos() * devicePixelRatio());
     aState.maPos.Move(-maGeometry.nX, -maGeometry.nY);
     aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
                      | GetKeyModCode(QGuiApplication::keyboardModifiers());
@@ -1173,7 +1167,7 @@ void Qt5Frame::BeginSetClipRegion(sal_uInt32)
 
 void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
 {
-    m_aRegion = m_aRegion.united(QRegion(nX, nY, nWidth, nHeight));
+    m_aRegion = m_aRegion.united(scaledQRect(QRect(nX, nY, nWidth, nHeight), devicePixelRatio()));
 }
 
 void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
@@ -1340,12 +1334,13 @@ void Qt5Frame::handleDragMove(QDragMoveEvent* pEvent)
     const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
     const QMimeData* pMimeData = pEvent->mimeData();
     const sal_Int8 nUserDropAction = lcl_getUserDropAction(pEvent, nSourceActions, pMimeData);
+    const Point aPos(pEvent->pos().x(), devicePixelRatio());
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
-    aEvent.LocationX = pEvent->pos().x();
-    aEvent.LocationY = pEvent->pos().y();
+    aEvent.LocationX = aPos.X();
+    aEvent.LocationY = aPos.Y();
     aEvent.DropAction = nUserDropAction;
     aEvent.SourceActions = nSourceActions;
 
@@ -1377,12 +1372,13 @@ void Qt5Frame::handleDrop(QDropEvent* pEvent)
     const sal_Int8 nSourceActions = toVclDropActions(pEvent->possibleActions());
     const sal_Int8 nUserDropAction
         = lcl_getUserDropAction(pEvent, nSourceActions, pEvent->mimeData());
+    const Point aPos(pEvent->pos().x(), devicePixelRatio());
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
-    aEvent.LocationX = pEvent->pos().x();
-    aEvent.LocationY = pEvent->pos().y();
+    aEvent.LocationX = aPos.X();
+    aEvent.LocationY = aPos.Y();
     aEvent.SourceActions = nSourceActions;
     aEvent.DropAction = nUserDropAction;
     aEvent.Transferable = lcl_getXTransferable(pEvent->mimeData());

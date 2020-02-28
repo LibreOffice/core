@@ -62,12 +62,17 @@ void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 
     if (m_rFrame.m_bUseCairo)
     {
+        const qreal fRatio = m_rFrame.devicePixelRatio();
+        const QRect aRect = scaledQRect(pEvent->rect(), m_rFrame.devicePixelRatio());
+
         cairo_surface_t* pSurface = m_rFrame.m_pSurface.get();
         cairo_surface_flush(pSurface);
 
-        QImage aImage(cairo_image_surface_get_data(pSurface), size().width(), size().height(),
-                      Qt5_DefaultFormat32);
-        p.drawImage(pEvent->rect().topLeft(), aImage, pEvent->rect());
+        QImage aImage(cairo_image_surface_get_data(pSurface),
+                      cairo_image_surface_get_width(pSurface),
+                      cairo_image_surface_get_height(pSurface), Qt5_DefaultFormat32);
+        aImage.setDevicePixelRatio(fRatio);
+        p.drawImage(pEvent->rect().topLeft(), aImage, aRect);
     }
     else
         p.drawImage(pEvent->rect().topLeft(), *m_rFrame.m_pQImage, pEvent->rect());
@@ -77,28 +82,34 @@ void Qt5Widget::resizeEvent(QResizeEvent* pEvent)
 {
     const int nWidth = pEvent->size().width();
     const int nHeight = pEvent->size().height();
+    const qreal fRatio = m_rFrame.devicePixelRatio();
 
-    m_rFrame.maGeometry.nWidth = nWidth;
-    m_rFrame.maGeometry.nHeight = nHeight;
+    m_rFrame.maGeometry.nWidth = round(nWidth * fRatio);
+    m_rFrame.maGeometry.nHeight = round(nHeight * fRatio);
 
     if (m_rFrame.m_bUseCairo)
     {
         if (m_rFrame.m_pSvpGraphics)
         {
-            cairo_surface_t* pSurface
-                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
-            cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                        &m_rFrame.m_aDamageHandler, nullptr);
-            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
-            UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
-            m_rFrame.m_pSurface.reset(pSurface);
+            const int nNewWidth = m_rFrame.maGeometry.nWidth;
+            const int nNewHeight = m_rFrame.maGeometry.nHeight;
 
-            int min_width = qMin(pEvent->oldSize().width(), nWidth);
-            int min_height = qMin(pEvent->oldSize().height(), nHeight);
+            cairo_surface_t* pNewSurface
+                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nNewWidth, nNewHeight);
+            cairo_surface_set_user_data(pNewSurface, SvpSalGraphics::getDamageKey(),
+                                        &m_rFrame.m_aDamageHandler, nullptr);
+            m_rFrame.m_pSvpGraphics->setSurface(pNewSurface,
+                                                basegfx::B2IVector(nNewWidth, nNewHeight));
+            UniqueCairoSurface pOldSurface(m_rFrame.m_pSurface.release());
+            m_rFrame.m_pSurface.reset(pNewSurface);
+
+            const int min_width = qMin(cairo_image_surface_get_width(pOldSurface.get()), nNewWidth);
+            const int min_height
+                = qMin(cairo_image_surface_get_height(pOldSurface.get()), nNewHeight);
 
             SalTwoRect rect(0, 0, min_width, min_height, 0, 0, min_width, min_height);
 
-            m_rFrame.m_pSvpGraphics->copySource(rect, old_surface.get());
+            m_rFrame.m_pSvpGraphics->copySource(rect, pOldSurface.get());
         }
     }
     else
@@ -139,11 +150,14 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
             return;
     }
 
+    const qreal fRatio = rFrame.devicePixelRatio();
+    const Point aPos = toPoint(pEvent->pos() * fRatio);
+
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = static_cast<long>(QGuiApplication::isLeftToRight()
-                                       ? pEvent->pos().x()
-                                       : rFrame.GetQWidget()->width() - pEvent->pos().x());
-    aEvent.mnY = static_cast<long>(pEvent->pos().y());
+    aEvent.mnX = QGuiApplication::isLeftToRight()
+                     ? aPos.X()
+                     : round(rFrame.GetQWidget()->width() * fRatio) - aPos.X();
+    aEvent.mnY = aPos.Y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     SalEvent nEventType;
@@ -163,12 +177,13 @@ void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
 
 void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
-    QPoint point = pEvent->pos();
+    const qreal fRatio = m_rFrame.devicePixelRatio();
+    const Point aPos = toPoint(pEvent->pos() * fRatio);
 
     SalMouseEvent aEvent;
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = QGuiApplication::isLeftToRight() ? point.x() : width() - point.x();
-    aEvent.mnY = point.y();
+    aEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(width() * fRatio) - aPos.X();
+    aEvent.mnY = aPos.Y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
     aEvent.mnButton = 0;
 
@@ -179,10 +194,11 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
+    const Point aPos = toPoint(pEvent->pos() * m_rFrame.devicePixelRatio());
 
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = pEvent->pos().x();
-    aEvent.mnY = pEvent->pos().y();
+    aEvent.mnX = aPos.X();
+    aEvent.mnY = aPos.Y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     // mouse wheel ticks are 120, which we map to 3 lines.
