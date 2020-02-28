@@ -158,11 +158,13 @@ public:
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const Reference< XAttributeList >& xAttrList ) override;
-
     virtual void EndElement() override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
+protected:
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                               const OUString& rLocalName,
+                               const OUString& rValue ) override;
 private:
     XMLTableTemplate maTableTemplate;
     OUString msTemplateStyleName;
@@ -743,20 +745,15 @@ XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
-void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& xAttrList )
+void XMLTableTemplateContext::SetAttribute( sal_uInt16 nPrefixKey,
+                               const OUString& rLocalName,
+                               const OUString& rValue )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    if( (nPrefixKey == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_STYLE_NAME ))
+        // Writer specific: according to oasis odf 1.2 prefix should be "table" and element name should be "name"
+        || (nPrefixKey == XML_NAMESPACE_TABLE && IsXMLToken( rLocalName, XML_NAME )))
     {
-        OUString sAttrName;
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
-        if( (nAttrPrefix == XML_NAMESPACE_TEXT && IsXMLToken( sAttrName, XML_STYLE_NAME ))
-            // Writer specific: according to oasis odf 1.2 prefix should be "table" and element name should be "name"
-            || (nAttrPrefix == XML_NAMESPACE_TABLE && IsXMLToken( sAttrName, XML_NAME )))
-        {
-            msTemplateStyleName = xAttrList->getValueByIndex( i );
-            break;
-        }
+        msTemplateStyleName = rValue;
     }
 }
 
