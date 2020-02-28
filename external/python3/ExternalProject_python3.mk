@@ -42,7 +42,6 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl)/out32dll \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
 			/maxcpucount \
-			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
 			$(if $(filter 160,$(VCVER)),/p:PlatformToolset=v142 /p:VisualStudioVersion=16.0 /ToolsVersion:Current) \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 	,PCBuild)
