@@ -2170,6 +2170,12 @@ DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fo
                          getProperty<OUString>(xShape, "SignatureLineSigningInstructions"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineCanAddComment"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineShowSignDate"));
+
+    // tdf#130917 This needs to be always set when importing a doc, ooxml export expects it.
+    uno::Reference<graphic::XGraphic> xUnsignedGraphic;
+    uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
+    xProps->getPropertyValue("SignatureLineUnsignedImage") >>= xUnsignedGraphic;
+    CPPUNIT_ASSERT_EQUAL(true, xUnsignedGraphic.is());
 }
 
 DECLARE_ODFEXPORT_TEST(testQrCodeGenProperties, "qrcode-properties.odt")
