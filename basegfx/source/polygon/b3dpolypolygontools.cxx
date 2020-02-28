@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
@@ -27,6 +26,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <sal/log.hxx>
 
 // predefines
 #define nMinSegments sal_uInt32(1)
@@ -470,9 +470,11 @@ namespace basegfx::utils
 
             if(nOuterSequenceCount)
             {
-                OSL_ENSURE(nOuterSequenceCount == rPolyPolygonShape3DSource.SequenceY.getLength()
-                    && nOuterSequenceCount == rPolyPolygonShape3DSource.SequenceZ.getLength(),
-                    "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have the same length (!)");
+                assert(nOuterSequenceCount == rPolyPolygonShape3DSource.SequenceY.getLength()
+                           && nOuterSequenceCount
+                                  == rPolyPolygonShape3DSource.SequenceZ.getLength()&&
+                       "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have the same "
+                       "length (!)" );
 
                 const css::drawing::DoubleSequence* pInnerSequenceX = rPolyPolygonShape3DSource.SequenceX.getConstArray();
                 const css::drawing::DoubleSequence* pInnerSequenceY = rPolyPolygonShape3DSource.SequenceY.getConstArray();
@@ -482,9 +484,10 @@ namespace basegfx::utils
                 {
                     basegfx::B3DPolygon aNewPolygon;
                     const sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
-                    OSL_ENSURE(nInnerSequenceCount == pInnerSequenceY->getLength()
-                        && nInnerSequenceCount == pInnerSequenceZ->getLength(),
-                        "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have the same length (!)");
+                    assert(nInnerSequenceCount == pInnerSequenceY->getLength()
+                           && nInnerSequenceCount == pInnerSequenceZ->getLength()
+                           && "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have "
+                              "the same length (!)");
 
                     const double* pArrayX = pInnerSequenceX->getConstArray();
                     const double* pArrayY = pInnerSequenceY->getConstArray();
