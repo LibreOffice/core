@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53a1319b_cb1c68fb",
+        "filename": "basic/qa/basic_coverage/test_ismissing_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "For the tests that return only one of IsMissing*, may I suggest another readability optimization: extract the repeated code into\n\n    Function WhatIsMissing(is_missingA, is_missingB)\n        If is_missingA And is_missingB Then\n            WhatIsMissing \u003d IsMissingAB\n        ElseIf is_missingA Then\n            WhatIsMissing \u003d IsMissingA\n        ElseIf is_missingB Then\n            WhatIsMissing \u003d IsMissingB\n        Else\n            WhatIsMissing \u003d IsMissingNone\n        End If\n    End Function\n\nand reuse in tests like\n\n    Function TestOptVariant(Optional A, Optional B As Variant)\n        TestOptVariant \u003d WhatIsMissing(IsMissing(A), IsMissing(B))\n    End Function",
+      "range": {
+        "startLine": 136,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 10
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c20ba53b_90239b63",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "These three are unused in this test (and some other) - please drop them",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfa1fa6f_5c3c8eb5",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "And using the numeric constant here seems not safe, given that you return numbers from many functions. Just use 0 (or empty strings where applicable) when returning from functions, that would be clearer here.",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 17
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dfb2fa0_3c221150",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "Here the trick with common function could be repeated, but it should (for reliability) take 4 parameters: 2 booleans (is_missingA, is_missingB) and two real values (A and B). It would not be proper to pass there only A and B themselves, and test there, to not rely on correct passing of missing variables in a unit test which function is to check the correctness of handling of missing variables :-)\n\nI\u0027d even simplified this (for numbers):\n\n    Function OptNumberSum(is_missingA As Boolean, A, is_missingB As Boolean, B)\n        OptNumberSum \u003d 0\n        If Not is_missingA Then OptNumberSum \u003d A\n        If Not is_missingB Then OptNumberSum \u003d OptNumberSum + B\n    End Function",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 10
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62f45eea_5a5d81f5",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "The same for strings:\n\n    Function OptStringConcat(is_missingA As Boolean, A, is_missingB As Boolean, B)\n        OptStringConcat \u003d \"\"\n        If Not is_missingA Then OptStringConcat \u003d A\n        If Not is_missingB Then OptStringConcat \u003d OptStringConcat \u0026 B\n    End Function",
+      "range": {
+        "startLine": 210,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 10
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "136a6e5d_f370fbf3",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T18:43:17Z",
+      "side": 1,
+      "message": "For collections/arrays, the gain is even more:\n\n    Function CollectionSum(is_missingC As Boolean, C)\n        Dim idx As Integer\n        CollectionSum \u003d 0\n        If Not is_missingC Then\n            For idx \u003d 1 To C.Count\n                CollectionSum \u003d CollectionSum + C.Item(idx)\n            Next idx\n        End If\n    End Function\n\n    Function TestOptObject(Optional A As Collection, Optional B As Collection)\n        TestOptObject \u003d CollectionSum(IsMissing(A), A) + CollectionSum(IsMissing(B), B))\n    End Function",
+      "range": {
+        "startLine": 234,
+        "startChar": 4,
+        "endLine": 251,
+        "endChar": 16
+      },
+      "revId": "2aa4e2ec247d0fb203274c6721e6d2b05cafabb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
