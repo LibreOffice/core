@@ -64,7 +64,8 @@ Size PanelLayout::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
     {
-        Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
+        Size aSize = m_xContainer ? m_xContainer->get_preferred_size()
+                                  : VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
         if (mxFrame)
         {
             SidebarController* pController
