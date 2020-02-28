@@ -1828,6 +1828,14 @@ namespace {
         return bRet;
     }
 }
+
+// extern because static can't be friend
+void FriendHackInvalidateRowFrame(SwFrameAreaDefinition & rRowFrame)
+{
+    // hilariously static_cast<SwTabFrame*>(GetLower()) would not require friend declaration, but it's UB...
+    rRowFrame.setFrameAreaPositionValid(false);
+}
+
 void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
@@ -2022,6 +2030,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
                 m_bCalcLowers = true;
+            }
+            if (GetLower())
+            {   // it's possible that the rows already have valid pos - but it is surely wrong if the table's pos changed!
+                FriendHackInvalidateRowFrame(*GetLower());
             }
         }
 
