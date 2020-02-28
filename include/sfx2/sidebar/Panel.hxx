@@ -36,6 +36,10 @@ class PanelDescriptor;
 class PanelTitleBar;
 class Context;
 
+/**
+ * Multiple panels form a single deck.
+ * E.g. the Properties deck has panels like Styles, Character, paragraph.
+ */
 class SFX2_DLLPUBLIC Panel final : public vcl::Window
 {
 public:

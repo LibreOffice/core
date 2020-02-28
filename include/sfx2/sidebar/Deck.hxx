@@ -32,6 +32,9 @@ class DeckTitleBar;
 
 /** This is the parent window of the panels.
     It displays the deck title.
+
+    A deck consists of multiple panels.
+    E.g. Properties, Styles, Navigator.
 */
 class Deck final : public vcl::Window
 {
