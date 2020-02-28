@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-17 14:43:31 using:
+ Generated on 2020-03-04 21:22:05 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,6 +35,7 @@
 #include <map>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -68,6 +69,9 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
@@ -103,7 +107,6 @@
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -274,7 +277,6 @@
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -365,6 +367,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
@@ -532,6 +535,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fntcache.hxx>
 #include <frame.hxx>
+#include <frameformats.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>

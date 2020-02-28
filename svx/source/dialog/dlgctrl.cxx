@@ -1447,7 +1447,7 @@ void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::
         // of a "standard" column in a two column panel
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&rToolbar, "svx/ui/measurewidthbar.ui"));
         std::unique_ptr<weld::Toolbar> xToolbar(xBuilder->weld_toolbar("measurewidth"));
-        std::unique_ptr<ToolbarUnoDispatcher> xDispatcher(new ToolbarUnoDispatcher(*xToolbar, rFrame));
+        std::unique_ptr<ToolbarUnoDispatcher> xDispatcher(new ToolbarUnoDispatcher(*xToolbar, *xBuilder, rFrame));
         nColumnWidth = xToolbar->get_preferred_size().Width();
         eSize = rToolbar.get_icon_size();
     }
