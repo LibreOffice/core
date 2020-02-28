@@ -7699,12 +7699,16 @@ public:
     virtual void set_item_label(int nIndex, const OUString& rLabel) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        if (!GTK_IS_TOOL_BUTTON(pItem))
+            return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
     }
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
     }
 
@@ -7717,6 +7721,8 @@ public:
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
 
         GtkWidget* pImage = nullptr;
 
@@ -7733,18 +7739,24 @@ public:
     virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         set_item_image(pItem, rIcon);
     }
 
     virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         set_item_image(pItem, pDevice);
     }
 
     virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        if (!GTK_IS_TOOL_BUTTON(pItem))
+            return;
         set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
     }
 
@@ -9125,7 +9137,7 @@ private:
         return true;
     }
 
-    void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren)
+    void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren) const
     {
         gtk_tree_model_iter_nth_child(pModel, result, pParent, nChildren - 1);
         nChildren = gtk_tree_model_iter_n_children(pModel, result);
@@ -9430,7 +9442,7 @@ public:
     virtual void make_sorted() override
     {
         // thaw wants to restore sort state of freeze
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
@@ -9540,7 +9552,7 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
@@ -9568,7 +9580,7 @@ public:
 
     virtual void scroll_to_row(int pos) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
@@ -9585,7 +9597,7 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
@@ -10105,7 +10117,7 @@ public:
             rGtkIter.iter = tmp;
             return true;
         }
-        // Move up level(s) until we find the level where the next sibling exists.
+        // Move up level(s) until we find the level where the next node exists.
         while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
         {
             iter = tmp;
@@ -10114,6 +10126,31 @@ public:
                 rGtkIter.iter = tmp;
                 return true;
             }
+        }
+        return false;
+    }
+
+    virtual bool iter_previous(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter = rGtkIter.iter;
+        GtkTreeIter tmp = iter;
+        if (gtk_tree_model_iter_previous(pModel, &tmp))
+        {
+            // Move down level(s) until we find the level where the last node exists.
+            int nChildren = gtk_tree_model_iter_n_children(pModel, &tmp);
+            if (!nChildren)
+                rGtkIter.iter = tmp;
+            else
+                last_child(pModel, &rGtkIter.iter, &tmp, nChildren);
+            return true;
+        }
+        // Move up level
+        if (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        {
+            rGtkIter.iter = tmp;
+            return true;
         }
         return false;
     }
@@ -10174,7 +10211,7 @@ public:
 
     virtual void select(const weld::TreeIter& rIter) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         gtk_tree_selection_select_iter(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
@@ -10183,7 +10220,7 @@ public:
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -10195,7 +10232,7 @@ public:
 
     virtual void unselect(const weld::TreeIter& rIter) override
     {
-        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         gtk_tree_selection_unselect_iter(gtk_tree_view_get_selection(m_pTreeView), const_cast<GtkTreeIter*>(&rGtkIter.iter));
@@ -10961,7 +10998,7 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
@@ -10979,7 +11016,7 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
         {
@@ -11033,7 +11070,7 @@ public:
 
     virtual void scroll_to_item(const weld::TreeIter& rIter) override
     {
-        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen");
+        assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
