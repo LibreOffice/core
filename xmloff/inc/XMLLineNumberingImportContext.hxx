@@ -80,12 +80,9 @@ public:
 
 private:
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
-
-    void ProcessAttribute(
-        enum LineNumberingToken eToken,
-        const OUString& sValue);
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                               const OUString& rLocalName,
+                               const OUString& rValue ) override;
 
     virtual void CreateAndInsert(bool bOverwrite) override;
 
