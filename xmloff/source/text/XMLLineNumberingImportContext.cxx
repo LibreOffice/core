@@ -77,8 +77,9 @@ XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
 {
 }
 
-void XMLLineNumberingImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLLineNumberingImportContext::SetAttribute( sal_uInt16 nPrefixKey,
+                               const OUString& rLocalName,
+                               const OUString& rValue )
 {
     static const SvXMLTokenMapEntry aLineNumberingTokenMap[] =
     {
@@ -109,56 +110,40 @@ void XMLLineNumberingImportContext::StartElement(
 
     static const SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
 
-    // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+    enum LineNumberingToken eToken = static_cast<enum LineNumberingToken>(aTokenMap.Get(nPrefixKey, rLocalName));
 
-        ProcessAttribute(
-            static_cast<enum LineNumberingToken>(aTokenMap.Get(nPrefix, sLocalName)),
-            xAttrList->getValueByIndex(i));
-    }
-}
-
-void XMLLineNumberingImportContext::ProcessAttribute(
-    enum LineNumberingToken eToken,
-    const OUString& sValue)
-{
     bool bTmp(false);
     sal_Int32 nTmp;
 
     switch (eToken)
     {
         case XML_TOK_LINENUMBERING_STYLE_NAME:
-            sStyleName = sValue;
+            sStyleName = rValue;
             break;
 
         case XML_TOK_LINENUMBERING_NUMBER_LINES:
-            if (::sax::Converter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bNumberLines = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES:
-            if (::sax::Converter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCountEmptyLines = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES:
-            if (::sax::Converter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCountInFloatingFrames = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_RESTART_NUMBERING:
-            if (::sax::Converter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bRestartNumbering = bTmp;
             }
@@ -166,18 +151,18 @@ void XMLLineNumberingImportContext::ProcessAttribute(
 
         case XML_TOK_LINENUMBERING_OFFSET:
             if (GetImport().GetMM100UnitConverter().
-                    convertMeasureToCore(nTmp, sValue))
+                    convertMeasureToCore(nTmp, rValue))
             {
                 nOffset = nTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_NUM_FORMAT:
-            sNumFormat = sValue;
+            sNumFormat = rValue;
             break;
 
         case XML_TOK_LINENUMBERING_NUM_LETTER_SYNC:
-            sNumLetterSync = sValue;
+            sNumLetterSync = rValue;
             break;
 
         case XML_TOK_LINENUMBERING_NUMBER_POSITION:
@@ -191,13 +176,13 @@ void XMLLineNumberingImportContext::ProcessAttribute(
                 { XML_TOKEN_INVALID, 0 }
             };
 
-            (void)SvXMLUnitConverter::convertEnum(nNumberPosition, sValue,
+            (void)SvXMLUnitConverter::convertEnum(nNumberPosition, rValue,
                                                   aLineNumberPositionMap);
             break;
         }
 
         case XML_TOK_LINENUMBERING_INCREMENT:
-            if (::sax::Converter::convertNumber(nTmp, sValue, 0))
+            if (::sax::Converter::convertNumber(nTmp, rValue, 0))
             {
                 nIncrement = static_cast<sal_Int16>(nTmp);
             }

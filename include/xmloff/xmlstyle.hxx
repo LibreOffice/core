@@ -101,7 +101,7 @@ public:
     virtual ~SvXMLStyleContext() override;
 
     virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) final override;
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
