@@ -36,7 +36,31 @@ public:
                                                            bool bTakeOwnership = false) override;
 };
 
-class VCL_DLLPUBLIC JSLabel : public SalInstanceLabel, public JSDialogSender
+template <class BaseInstanceClass, class VclClass>
+class JSWidget : public BaseInstanceClass, public JSDialogSender
+{
+public:
+    JSWidget(VclPtr<vcl::Window> aOwnedToplevel, VclClass* pObject, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership)
+        : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
+        , JSDialogSender(aOwnedToplevel)
+    {
+    }
+
+    virtual void show() override
+    {
+        BaseInstanceClass::show();
+        notifyDialogState();
+    }
+
+    virtual void hide() override
+    {
+        BaseInstanceClass::hide();
+        notifyDialogState();
+    }
+};
+
+class VCL_DLLPUBLIC JSLabel : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
     JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel, SalInstanceBuilder* pBuilder,
@@ -44,7 +68,7 @@ public:
     virtual void set_label(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSEntry : public SalInstanceEntry, public JSDialogSender
+class VCL_DLLPUBLIC JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
 {
 public:
     JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
@@ -52,7 +76,7 @@ public:
     virtual void set_text(const OUString& rText) override;
 };
 
-class VCL_DLLPUBLIC JSListBox : public SalInstanceComboBoxWithoutEdit, public JSDialogSender
+class VCL_DLLPUBLIC JSListBox : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
 public:
     JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
@@ -62,7 +86,7 @@ public:
     virtual void remove(int pos) override;
 };
 
-class VCL_DLLPUBLIC JSComboBox : public SalInstanceComboBoxWithEdit, public JSDialogSender
+class VCL_DLLPUBLIC JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
 {
 public:
     JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
