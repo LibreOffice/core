@@ -1802,6 +1802,9 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::ShowWhitespace:
             MAKE_CURSOR( showwhitespace_ );
             break;
+        case PointerStyle::FatCross:
+            MAKE_CURSOR( fatcross_ );
+            break;
 
         default:
             OSL_FAIL("pointer not implemented");
