@@ -1055,6 +1055,8 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
+    fprintf(stderr, "SvTreeListBox::AcceptDrop\n");
+
     if (rEvt.mbLeaving || !CheckDragAndDropMode(g_pDDSource, rEvt.mnAction))
     {
         ImplShowTargetEmphasis( pTargetEntry, false );
@@ -1084,11 +1086,12 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
         // **** draw emphasis ****
         if( DND_ACTION_NONE == nRet )
-               ImplShowTargetEmphasis( pTargetEntry, false );
+            ImplShowTargetEmphasis( pTargetEntry, false );
         else if( pEntry != pTargetEntry || !(nImpFlags & SvTreeListBoxFlags::TARGEMPH_VIS) )
         {
             ImplShowTargetEmphasis( pTargetEntry, false );
             pTargetEntry = pEntry;
+            fprintf(stderr, "emphasis %s\n", GetEntryText(pTargetEntry).toUtf8().getStr());
             ImplShowTargetEmphasis( pTargetEntry, true );
         }
     }
