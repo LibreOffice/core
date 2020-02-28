@@ -163,6 +163,8 @@
 #define window_swsize_curs_y_hot 10
 #define window_sesize_curs_x_hot 10
 #define window_sesize_curs_y_hot 10
+#define fatcross_curs_x_hot 15
+#define fatcross_curs_y_hot 15
 
 #endif
 
