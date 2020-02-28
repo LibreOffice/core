@@ -60,6 +60,12 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
     xPropSet->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
     xPropSet->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComment));
 
+    // Save unsigned graphic (need it when exporting)
+    Reference<XGraphic> xUnsignedGraphic;
+    xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
+    if (xUnsignedGraphic.is())
+        xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
+
     Reference<XGraphic> xGraphic;
     bool bIsSigned(false);
     try
@@ -104,6 +110,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
                     xGraphic = xSignatureInfo[i].InvalidSignatureLineImage;
                 }
 
+<<<<<<< HEAD   (0cc4f7 tdf#130679 Draw: Convert to polygon doesn't work)
                 // Save unsigned graphic
                 Reference<XGraphic> xUnsignedGraphic;
                 xPropSet->getPropertyValue("Graphic") >>= xUnsignedGraphic;
@@ -113,6 +120,9 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
                 xPropSet->setPropertyValue("Graphic", Any(xGraphic));
                 break;
             }
+=======
+            xPropSet->setPropertyValue("Graphic", Any(xGraphic));
+>>>>>>> CHANGE (78731b tdf#130917 Invalid document after odt->docx with signatureli)
         }
         xPropSet->setPropertyValue("SignatureLineIsSigned", Any(bIsSigned));
     }
