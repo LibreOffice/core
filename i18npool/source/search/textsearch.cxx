@@ -930,7 +930,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
+    const IcuUniString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
                                         searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
@@ -985,7 +985,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // TODO: use ICU's backward searching once it becomes available
     //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(reinterpret_cast<const UChar*>(searchStr.getStr()),
+    const IcuUniString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
                                         searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
     if (!lcl_findRegex( pRegexMatcher, endPos, startPos, nIcuErr))
