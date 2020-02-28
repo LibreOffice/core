@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "146adb8e_281613b9",
+        "filename": "vcl/qt5/Qt5SvpGraphics.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-28T14:47:35Z",
+      "side": 1,
+      "message": "That\u0027s the problem of your icon scaling. You\u0027re lying about the DPI value, so scaling is wrong.\n\nYou can test this with QT_SCALE_FACTOR\u003d1.5 so -env:UserInstallation\u003dfile:///tmp/qt5 --writer and breeze_svg. You should get a folder /tmp/qt5/cache/breeze_svg/150, but you get 100. So the output is a scaled pixmap.",
+      "revId": "4b8c6fbc844e10950084c38001fddc2070b1b16c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
