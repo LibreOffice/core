@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "251d4134_67ad4cfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T15:16:07Z",
+      "side": 1,
+      "message": "Do you mean \"adding\"? Is there a bug # you wanted to mention here?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "6dd484e1082af3881c07e9eb9846d813fc33353f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75b0a0de_cf140fe9",
+        "filename": "basctl/source/inc/baside3.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-28T15:16:07Z",
+      "side": 1,
+      "message": "This comment is obsolete now, previously telling that here ends the section started with #define this name",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 41
+      },
+      "revId": "6dd484e1082af3881c07e9eb9846d813fc33353f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
