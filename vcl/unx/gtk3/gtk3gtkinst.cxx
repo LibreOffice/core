@@ -9613,7 +9613,6 @@ public:
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
             gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
-            gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
             gtk_tree_path_free(path);
         }
         enable_notify_events();
@@ -9623,7 +9622,6 @@ public:
     {
         disable_notify_events();
         GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
@@ -10134,7 +10132,6 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
