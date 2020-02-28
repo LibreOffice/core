@@ -209,6 +209,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/mailmerge \
 	sw/uiconfig/swriter/ui/managechangessidebar \
+	sw/uiconfig/swriter/ui/mastercontextmenu \
 	sw/uiconfig/swriter/ui/mmaddressblockpage \
 	sw/uiconfig/swriter/ui/mmcreatingdialog \
 	sw/uiconfig/swriter/ui/mmlayoutpage \
@@ -266,7 +267,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/sidebartableedit \
 	sw/uiconfig/swriter/ui/sidebartheme \
 	sw/uiconfig/swriter/ui/sortdialog \
-	sw/uiconfig/swriter/ui/spinbox \
 	sw/uiconfig/swriter/ui/spellmenu \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
