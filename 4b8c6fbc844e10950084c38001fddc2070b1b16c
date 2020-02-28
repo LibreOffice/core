@@ -34,6 +34,24 @@
       "revId": "4b8c6fbc844e10950084c38001fddc2070b1b16c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c71bddfe_7b371dbd",
+        "filename": "vcl/qt5/Qt5SvpGraphics.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-28T20:29:18Z",
+      "side": 1,
+      "message": "\u003e Yes, but my understanding is that this is intended in LO. Scaling is done by the VCL plugins, and the upper layers are supposed to work transparently. Setting this value to the real DPI value results in scaling done twice. Isn\u0027t this happening to you?\n\nThat is happening due to other problems in your patch. You\u0027re not only lying about DPI, but also about the window geometry in SalFrame::maGeometry. The SVG icons aren\u0027t scaled but rendered, so the renderer has to know the DPI value to get the correct icon size and so the VCL backend won\u0027t have to scale the bitmap that much. That way you can prevent the artifacts from the bitmap image scaling.\n\n\u003e I checked and in my system GTK has the same behavior: it returns 96 and the result is bad icons.\n\ngtk3 isn\u0027t perfect, neither is gen. Just check the amount of bugs each backend has in bugzilla. And as you have probably already seen, the actual VCL backend API basically isn\u0027t documented. There is probably quite some LO code, which was tested with some buggy state and therefore wrong assumptions were made for the implementation. I can\u0027t tell how often I thought I understood something in VCL, implemented my qt5 stuff and then unit test started to fail left and right. Or probably not unit tests locally, but just in the CI. Or I tried to \"clean\" some strange VCL code.\n\nMaybe it\u0027s better to talk in IRC #libreoffice-dev a bit. At least it\u0027s more interactive then Gerrit comments with a multi-hour long reply time. I\u0027m jmux.",
+      "parentUuid": "07e1b520_f44cb404",
+      "revId": "4b8c6fbc844e10950084c38001fddc2070b1b16c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
