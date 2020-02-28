@@ -647,12 +647,7 @@
 #define STR_OUTLINE_TRACKING_DEFAULT            NC_("STR_OUTLINE_TRACKING_DEFAULT", "Default")
 #define STR_OUTLINE_TRACKING_FOCUS              NC_("STR_OUTLINE_TRACKING_FOCUS", "Focus")
 #define STR_OUTLINE_TRACKING_OFF                NC_("STR_OUTLINE_TRACKING_OFF", "Off")
-#define STR_GOTO                                NC_("STR_GOTO", "Go to")
-#define STR_SELECT                              NC_("STR_SELECT", "Select")
-#define STR_DEMOTE_CHAPTER                      NC_("STR_DEMOTE_CHAPTER", "Demote Chapter")
-#define STR_PROMOTE_CHAPTER                     NC_("STR_PROMOTE_CHAPTER", "Promote Chapter")
-#define STR_DEMOTE_LEVEL                        NC_("STR_DEMOTE_LEVEL", "Demote Level")
-#define STR_PROMOTE_LEVEL                       NC_("STR_PROMOTE_LEVEL", "Promote Level")
+
 #define STR_EXPANDALL                           NC_("STR_EXPANDALL", "Expand All")
 #define STR_COLLAPSEALL                         NC_("STR_COLLAPSEALL", "Collapse All")
 #define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Insert as Hyperlink")
@@ -678,15 +673,10 @@
 #define STR_UPDATE_INDEX                        NC_("STR_UPDATE_INDEX", "Indexes")
 #define STR_UPDATE_LINK                         NC_("STR_UPDATE_LINK", "Links")
 #define STR_UPDATE_ALL                          NC_("STR_UPDATE_ALL", "All")
-#define STR_REMOVE_INDEX                        NC_("STR_REMOVE_INDEX", "~Remove Index")
-#define STR_REMOVE_TBL_PROTECTION               NC_("STR_REMOVE_TBL_PROTECTION", "~Unprotect")
+
 #define STR_INVISIBLE                           NC_("STR_INVISIBLE", "hidden")
 #define STR_BROKEN_LINK                         NC_("STR_BROKEN_LINK", "File not found: ")
-#define STR_RENAME                              NC_("STR_RENAME", "~Rename...")
-#define STR_READONLY_IDX                        NC_("STR_READONLY_IDX", "Read-~only")
-#define STR_POSTIT_SHOW                         NC_("STR_POSTIT_SHOW", "Show All")
-#define STR_POSTIT_HIDE                         NC_("STR_POSTIT_HIDE", "Hide All")
-#define STR_POSTIT_DELETE                       NC_("STR_POSTIT_DELETE", "Delete All")
+
 #define STR_RESOLVED                            NC_("STR_RESOLVED", "RESOLVED")
 #define STR_PROTECTED                           NC_("STR_PROTECTED", "Protected")
 

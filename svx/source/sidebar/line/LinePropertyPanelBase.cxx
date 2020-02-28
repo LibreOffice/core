@@ -75,9 +75,9 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     const uno::Reference<css::frame::XFrame>& rxFrame)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame, true),
     mxTBColor(m_xBuilder->weld_toolbar("color")),
-    mxColorDispatch(new ToolbarUnoDispatcher(*mxTBColor, rxFrame)),
+    mxColorDispatch(new ToolbarUnoDispatcher(*mxTBColor, *m_xBuilder, rxFrame)),
     mxLineStyleTB(m_xBuilder->weld_toolbar("linestyle")),
-    mxLineStyleDispatch(new ToolbarUnoDispatcher(*mxLineStyleTB, rxFrame)),
+    mxLineStyleDispatch(new ToolbarUnoDispatcher(*mxLineStyleTB, *m_xBuilder, rxFrame)),
     mxFTWidth(m_xBuilder->weld_label("widthlabel")),
     mxTBWidth(m_xBuilder->weld_toolbar("width")),
     mxFTTransparency(m_xBuilder->weld_label("translabel")),
