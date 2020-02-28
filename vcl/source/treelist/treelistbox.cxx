@@ -2342,7 +2342,15 @@ void SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
 
 void SvTreeListBox::SetUpdateMode( bool bUpdate )
 {
-    pImpl->SetUpdateMode( bUpdate );
+    if (bUpdate && m_nUpdateGuard < 0)
+        ++m_nUpdateGuard;
+    if (!bUpdate)
+        --m_nUpdateGuard;
+    if ((!bUpdate && m_nUpdateGuard == -1) ||
+        (bUpdate && m_nUpdateGuard == 0))
+    {
+        pImpl->SetUpdateMode( bUpdate );
+    }
     mbUpdateAlternatingRows = bUpdate;
     SetAlternatingRowColors( mbAlternatingRowColors );
 }
