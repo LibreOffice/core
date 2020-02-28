@@ -420,7 +420,7 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
                                const ButtonKeyState eState)
 {
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
-    if (eState == ButtonKeyState::Pressed && nCode == 0 && !pEvent->text().isEmpty()
+    if (eState == ButtonKeyState::Pressed && nCode == 0 && pEvent->text().length() > 1
         && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
     {
         commitText(rFrame, pEvent->text());
