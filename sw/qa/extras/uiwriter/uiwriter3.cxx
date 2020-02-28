@@ -63,4 +63,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
+{
+    load(DATA_DIRECTORY, "tdf126340.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    // without the fix, it crashes
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
