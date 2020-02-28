@@ -86,8 +86,7 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : SalInstanceLabel(pLabel, pBuilder, bTakeOwnership)
-    , JSDialogSender(aOwnedToplevel)
+    : JSWidget<SalInstanceLabel, FixedText>(aOwnedToplevel, pLabel, pBuilder, bTakeOwnership)
 {
 }
 
@@ -99,8 +98,7 @@ void JSLabel::set_label(const OUString& rText)
 
 JSEntry::JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
-    : SalInstanceEntry(pEntry, pBuilder, bTakeOwnership)
-    , JSDialogSender(aOwnedToplevel)
+    : JSWidget<SalInstanceEntry, ::Edit>(aOwnedToplevel, pEntry, pBuilder, bTakeOwnership)
 {
 }
 
@@ -112,8 +110,8 @@ void JSEntry::set_text(const OUString& rText)
 
 JSListBox::JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox,
                      SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : SalInstanceComboBoxWithoutEdit(pListBox, pBuilder, bTakeOwnership)
-    , JSDialogSender(aOwnedToplevel)
+    : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(aOwnedToplevel, pListBox, pBuilder,
+                                                          bTakeOwnership)
 {
 }
 
@@ -132,8 +130,8 @@ void JSListBox::remove(int pos)
 
 JSComboBox::JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : SalInstanceComboBoxWithEdit(pComboBox, pBuilder, bTakeOwnership)
-    , JSDialogSender(aOwnedToplevel)
+    : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(aOwnedToplevel, pComboBox, pBuilder,
+                                                        bTakeOwnership)
 {
 }
 
