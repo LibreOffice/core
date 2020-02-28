@@ -1885,6 +1885,7 @@ const PointerData gvPointerData [] = {
     { PointerStyle::TabSelectSW, "TabSelectSW" },
     { PointerStyle::HideWhitespace, "HideWhitespace" },
     { PointerStyle::ShowWhitespace, "ShowWhitespace" },
+    { PointerStyle::FatCross, "FatCross" },
 };
 
 namespace {
