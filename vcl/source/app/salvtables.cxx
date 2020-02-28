@@ -3623,7 +3623,7 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
             m_xTreeView->SelectAll(false);
@@ -3659,7 +3659,7 @@ public:
 
     virtual void scroll_to_row(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->MakeVisible(pEntry);
@@ -3674,7 +3674,7 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1)
             m_xTreeView->SelectAll(true);
@@ -4127,6 +4127,15 @@ public:
         return rVclIter.iter != nullptr;
     }
 
+    virtual bool iter_previous(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = m_xTreeView->Prev(rVclIter.iter);
+        if (rVclIter.iter && IsDummyEntry(rVclIter.iter))
+            return iter_previous(rVclIter);
+        return rVclIter.iter != nullptr;
+    }
+
     virtual bool iter_children(weld::TreeIter& rIter) const override
     {
         SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
@@ -4157,7 +4166,7 @@ public:
 
     virtual void select(const weld::TreeIter& rIter) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->Select(rVclIter.iter, true);
@@ -4166,7 +4175,7 @@ public:
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override
     {
-        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->MakeVisible(rVclIter.iter);
@@ -4845,7 +4854,7 @@ public:
 
     virtual void select(int pos) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1 || (pos == 0 && n_children() == 0))
             m_xIconView->SelectAll(false);
@@ -4860,7 +4869,7 @@ public:
 
     virtual void unselect(int pos) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         if (pos == -1)
             m_xIconView->SelectAll(true);
@@ -4919,7 +4928,7 @@ public:
 
     virtual void scroll_to_item(const weld::TreeIter& rIter) override
     {
-        assert(m_xIconView->IsUpdateMode() && "don't select when frozen");
+        assert(m_xIconView->IsUpdateMode() && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xIconView->MakeVisible(rVclIter.iter);
