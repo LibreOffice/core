@@ -63,6 +63,13 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bo
     return std::make_unique<JSLabel>(m_aOwnedToplevel, pLabel, this, bTakeOwnership);
 }
 
+std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
+{
+    ::Button* pButton = m_xBuilder->get<::Button>(id);
+    return pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
+                   : nullptr;
+}
+
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
@@ -93,6 +100,12 @@ void JSLabel::set_label(const OUString& rText)
     SalInstanceLabel::set_label(rText);
     notifyDialogState();
 };
+
+JSButton::JSButton(VclPtr<vcl::Window> aOwnedToplevel, ::Button* pButton,
+                   SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceButton, ::Button>(aOwnedToplevel, pButton, pBuilder, bTakeOwnership)
+{
+}
 
 JSEntry::JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
