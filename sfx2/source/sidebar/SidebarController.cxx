@@ -427,7 +427,9 @@ void SidebarController::NotifyResize()
                 // it's the PropertyDeck that really has many panes
                 // that can collapse or expand. For others, limit
                 // the height to something sensible.
-                const sal_Int32 nExtHeight = (msCurrentDeckId == "PropertyDeck" ? 2000 : 600);
+                // tdf#130348: Add special case for ChartDeck, too.
+                const sal_Int32 nExtHeight = (msCurrentDeckId == "PropertyDeck" ? 2000 :
+                                              (msCurrentDeckId == "ChartDeck" ? 1200 : 600));
                 // No TabBar in LOK (use nWidth in full).
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nExtHeight);
             }
