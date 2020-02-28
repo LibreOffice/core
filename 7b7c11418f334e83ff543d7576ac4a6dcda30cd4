@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "08ab5005_74ecd3bc",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3349,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-02-28T11:58:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55891cf5_fee74fce",
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fcca6dd_c9322226",
         "filename": "framework/source/services/autorecovery.cxx",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "410fcf35_91a3b42a",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3362,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-02-28T11:58:20Z",
+      "side": 1,
+      "message": "Here I\u0027m not calling generic XFilterDetect but just one specific one for MS formats. \nAs far as I see provided filter name has no affect on that code.",
+      "parentUuid": "9fcca6dd_c9322226",
+      "range": {
+        "startLine": 3362,
+        "startChar": 52,
+        "endLine": 3362,
+        "endChar": 66
+      },
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "109e4fc4_d5de729c",
         "filename": "framework/source/services/autorecovery.cxx",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2020-02-22T11:30:00Z",
       "side": 1,
       "message": "... and possibly also if filter name is same? i.e., to avoid a case when detection changed the filter type.\n\nOr maybe just extract encryption properties from the returned descriptor, and add to the original one, instead of replacing it all?",
+      "range": {
+        "startLine": 3364,
+        "startChar": 22,
+        "endLine": 3364,
+        "endChar": 35
+      },
+      "revId": "7b7c11418f334e83ff543d7576ac4a6dcda30cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae2b442b_f2c514dd",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3364,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-02-28T11:58:20Z",
+      "side": 1,
+      "message": "Added a check for filter name.\n\nAnd rather good idea about just extraction of EncryptionData practically fails: if I do so I receive password prompt two times: one from filterdetect and andother from recoverFromFile.\nIn my mind such extraction just EncryptionData is not critical: normal loading process is using descriptor received from filterdetect without any problems. So I hope here everything should be okay.",
+      "parentUuid": "109e4fc4_d5de729c",
       "range": {
         "startLine": 3364,
         "startChar": 22,
