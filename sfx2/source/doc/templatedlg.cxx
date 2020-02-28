@@ -174,12 +174,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxLocalViewWeld(new weld::CustomWeld(*m_xBuilder, "template_view", *mxLocalView))
 {
     // Create popup menus
-    OUString sBmp(BMP_ACTION_REFRESH);
-    mxActionBar->insert_item(0, MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), &sBmp, nullptr, TRISTATE_INDET);
+    mxActionBar->insert_item(0, MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->insert_item(1, MNI_ACTION_RENAME_FOLDER, SfxResId(STR_CATEGORY_RENAME), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->insert_item(2, MNI_ACTION_DELETE_FOLDER, SfxResId(STR_CATEGORY_DELETE), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->insert_separator(3, "separator");
-    mxActionBar->insert_item(4, MNI_ACTION_REFRESH, SfxResId(STR_ACTION_REFRESH), &sBmp, nullptr, TRISTATE_INDET);
+    mxActionBar->insert_item(4, MNI_ACTION_REFRESH, SfxResId(STR_ACTION_REFRESH), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->connect_selected(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     mxLocalView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
