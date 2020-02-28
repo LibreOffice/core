@@ -51,10 +51,10 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
 
     mxTBCellBorder(m_xBuilder->weld_toolbar("cellbordertype")),
     mxTBCellBackground(m_xBuilder->weld_toolbar("cellbackgroundcolor")),
-    mxBackColorDispatch(new ToolbarUnoDispatcher(*mxTBCellBackground, rxFrame)),
+    mxBackColorDispatch(new ToolbarUnoDispatcher(*mxTBCellBackground, *m_xBuilder, rxFrame)),
     mxTBLineStyle(m_xBuilder->weld_toolbar("borderlinestyle")),
     mxTBLineColor(m_xBuilder->weld_toolbar("borderlinecolor")),
-    mxLineColorDispatch(new ToolbarUnoDispatcher(*mxTBLineColor, rxFrame)),
+    mxLineColorDispatch(new ToolbarUnoDispatcher(*mxTBLineColor, *m_xBuilder, rxFrame)),
 
     mbCellBorderPopoverCreated(false),
     mbLinePopoverCreated(false),

@@ -47,6 +47,7 @@ class ToolBox;
 
 namespace weld
 {
+    class Builder;
     class Toolbar;
 }
 
@@ -184,6 +185,7 @@ class SVT_DLLPUBLIC ToolboxController :
         css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;
         OUString                                                  m_sModuleName;
         weld::Toolbar*                                            m_pToolbar;
+        weld::Builder*                                            m_pBuilder;
 };
 
 }

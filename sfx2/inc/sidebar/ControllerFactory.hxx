@@ -28,7 +28,10 @@ namespace com::sun::star::frame { class XToolbarController; }
 
 class ToolBox;
 
-namespace weld { class Toolbar; }
+namespace weld {
+    class Builder;
+    class Toolbar;
+}
 
 namespace sfx2 { namespace sidebar {
 
@@ -48,6 +51,7 @@ public:
 
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         weld::Toolbar& rToolbar,
+        weld::Builder& rBuilder,
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 

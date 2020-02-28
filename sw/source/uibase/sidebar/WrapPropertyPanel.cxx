@@ -72,7 +72,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
     , mxWrapOptions(m_xBuilder->weld_toolbar("wrapoptions"))
-    , mxWrapOptionsDispatch(new ToolbarUnoDispatcher(*mxWrapOptions, rxFrame))
+    , mxWrapOptionsDispatch(new ToolbarUnoDispatcher(*mxWrapOptions, *m_xBuilder, rxFrame))
     , mxSpacingLB(m_xBuilder->weld_combo_box("spacingLB"))
 {
     FieldUnit eMetric = ::GetDfltMetric(false);

@@ -560,7 +560,7 @@ FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::fr
     : InterimItemWindow(pParent, "svx/ui/fillctrlbox.ui", "FillCtrlBox")
     , mxLbFillType(m_xBuilder->weld_combo_box("type"))
     , mxToolBoxColor(m_xBuilder->weld_toolbar("color"))
-    , mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, rFrame))
+    , mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, *m_xBuilder, rFrame))
     , mxLbFillAttr(m_xBuilder->weld_combo_box("attr"))
     , mnTypeCurPos(0)
     , mnAttrCurPos(0)

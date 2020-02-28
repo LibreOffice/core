@@ -79,7 +79,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mxLbFillGradFrom(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad1"), GetFrameWeld())),
       mxLbFillGradTo(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad2"), GetFrameWeld())),
       mxToolBoxColor(m_xBuilder->weld_toolbar("selectcolor")),
-      mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, rxFrame)),
+      mxColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxColor, *m_xBuilder, rxFrame)),
       mxTrspTextFT(m_xBuilder->weld_label("transparencylabel")),
       mxLBTransType(m_xBuilder->weld_combo_box("transtype")),
       mxMTRTransparent(m_xBuilder->weld_metric_spin_button("settransparency", FieldUnit::PERCENT)),
