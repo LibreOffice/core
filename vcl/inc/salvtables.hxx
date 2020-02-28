@@ -632,4 +632,27 @@ public:
     virtual ~SalInstanceComboBoxWithEdit() override;
 };
 
+class SalInstanceButton : public SalInstanceContainer, public virtual weld::Button
+{
+private:
+    VclPtr<::Button> m_xButton;
+    Link<::Button*,void> const m_aOldClickHdl;
+
+    DECL_LINK(ClickHdl, ::Button*, void);
+public:
+    SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_label(const OUString& rText) override;
+
+    virtual void set_image(VirtualDevice* pDevice) override;
+
+    virtual void set_from_icon_name(const OUString& rIconName) override;
+
+    virtual void set_label_line_wrap(bool wrap) override;
+
+    virtual OUString get_label() const override;
+
+    virtual ~SalInstanceButton() override;
+};
+
 #endif

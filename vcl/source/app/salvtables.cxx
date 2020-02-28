@@ -1172,64 +1172,55 @@ IMPL_LINK_NOARG(SalInstanceNotebook, ActivatePageHdl, TabControl*, void)
     m_aEnterPageHdl.Call(get_current_page_ident());
 }
 
-class SalInstanceButton : public SalInstanceContainer, public virtual weld::Button
+SalInstanceButton::SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
+    , m_xButton(pButton)
+    , m_aOldClickHdl(pButton->GetClickHdl())
 {
-private:
-    VclPtr<::Button> m_xButton;
-    Link<::Button*,void> const m_aOldClickHdl;
+    m_xButton->SetClickHdl(LINK(this, SalInstanceButton, ClickHdl));
+}
 
-    DECL_LINK(ClickHdl, ::Button*, void);
-public:
-    SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pButton, pBuilder, bTakeOwnership)
-        , m_xButton(pButton)
-        , m_aOldClickHdl(pButton->GetClickHdl())
-    {
-        m_xButton->SetClickHdl(LINK(this, SalInstanceButton, ClickHdl));
-    }
+void SalInstanceButton::set_label(const OUString& rText)
+{
+    m_xButton->SetText(rText);
+}
 
-    virtual void set_label(const OUString& rText) override
+void SalInstanceButton::set_image(VirtualDevice* pDevice)
+{
+    m_xButton->SetImageAlign(ImageAlign::Left);
+    if (pDevice)
     {
-        m_xButton->SetText(rText);
+        BitmapEx aBitmap(pDevice->GetBitmap(Point(0, 0), pDevice->GetOutputSize()));
+        m_xButton->SetModeImage(Image(aBitmap));
     }
+    else
+        m_xButton->SetModeImage(Image());
+}
 
-    virtual void set_image(VirtualDevice* pDevice) override
-    {
-        m_xButton->SetImageAlign(ImageAlign::Left);
-        if (pDevice)
-        {
-            BitmapEx aBitmap(pDevice->GetBitmap(Point(0, 0), pDevice->GetOutputSize()));
-            m_xButton->SetModeImage(Image(aBitmap));
-        }
-        else
-            m_xButton->SetModeImage(Image());
-    }
+void SalInstanceButton::set_from_icon_name(const OUString& rIconName)
+{
+    m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
+}
 
-    virtual void set_from_icon_name(const OUString& rIconName) override
-    {
-        m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
-    }
+void SalInstanceButton::set_label_line_wrap(bool wrap)
+{
+    WinBits nBits = m_xButton->GetStyle();
+    nBits &= ~WB_WORDBREAK;
+    if (wrap)
+        nBits |= WB_WORDBREAK;
+    m_xButton->SetStyle(nBits);
+    m_xButton->queue_resize();
+}
 
-    virtual void set_label_line_wrap(bool wrap) override
-    {
-        WinBits nBits = m_xButton->GetStyle();
-        nBits &= ~WB_WORDBREAK;
-        if (wrap)
-            nBits |= WB_WORDBREAK;
-        m_xButton->SetStyle(nBits);
-        m_xButton->queue_resize();
-    }
+OUString SalInstanceButton::get_label() const
+{
+    return m_xButton->GetText();
+}
 
-    virtual OUString get_label() const override
-    {
-        return m_xButton->GetText();
-    }
-
-    virtual ~SalInstanceButton() override
-    {
-        m_xButton->SetClickHdl(Link<::Button*,void>());
-    }
-};
+SalInstanceButton::~SalInstanceButton()
+{
+    m_xButton->SetClickHdl(Link<::Button*,void>());
+}
 
 IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
 {
