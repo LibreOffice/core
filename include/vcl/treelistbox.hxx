@@ -233,6 +233,8 @@ class VCL_DLLPUBLIC SvTreeListBox
 
     rtl::Reference<TransferDataContainer> m_xTransferHelper;
 
+    sal_Int32 m_nUpdateGuard = 0;
+
 protected:
     std::unique_ptr<SvImpLBox>              pImpl;
     short                   nColumns;

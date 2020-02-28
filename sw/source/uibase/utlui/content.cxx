@@ -1773,8 +1773,8 @@ void SwContentTree::Display( bool bActive )
             nEntryRelPos = GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParentEntry);
         }
     }
-    Clear();
     SetUpdateMode( false );
+    SvTreeListBox::Clear();
     if (!bActive)
         m_eState = State::HIDDEN;
     else if (State::HIDDEN == m_eState)
@@ -1912,7 +1912,6 @@ void SwContentTree::Display( bool bActive )
                 SetCurEntry(pParent);
         }
     }
-    SetUpdateMode( true );
     ScrollBar* pVScroll = GetVScroll();
     if(GetEntryCount() == nOldEntryCount &&
         nOldScrollPos && pVScroll && pVScroll->IsVisible()
@@ -1921,6 +1920,7 @@ void SwContentTree::Display( bool bActive )
         sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
         ScrollOutputArea( static_cast<short>(nDelta) );
     }
+    SetUpdateMode( true );
 }
 
 void SwContentTree::Clear()
@@ -2688,6 +2688,8 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
 
+        SetUpdateMode(false);
+
         // clear all selections to prevent the Display function from trying to reselect selected entries
         SelectAll(false);
         Display(true);
@@ -2722,6 +2724,8 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 }
             }
         }
+
+        SetUpdateMode(true);
     }
     m_bIsInPromoteDemote = false;
 }
@@ -2734,6 +2738,10 @@ void SwContentTree::ShowTree()
 void SwContentTree::Paint( vcl::RenderContext& rRenderContext,
                            const tools::Rectangle& rRect )
 {
+    // prevent focus rect from flashing when tree is cleared
+    // SvTreeListBox::Paint shows focus rectangle when tree is empty
+    if (!GetEntryCount())
+        return;
     // Start the update timer on the first paint; avoids
     // flicker on the first reveal.
     m_aUpdTimer.Start();
