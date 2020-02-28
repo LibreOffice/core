@@ -39,7 +39,7 @@
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, const SfxRequest& rReq)
     : FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
-    , aNewPointer(PointerStyle::Arrow)
+    , aNewPointer(PointerStyle::FatCross)
     , aOldPointer(PointerStyle::Arrow)
 {
 }
