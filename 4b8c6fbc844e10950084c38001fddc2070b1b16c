@@ -16,6 +16,24 @@
       "revId": "4b8c6fbc844e10950084c38001fddc2070b1b16c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07e1b520_f44cb404",
+        "filename": "vcl/qt5/Qt5SvpGraphics.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-02-28T18:21:37Z",
+      "side": 1,
+      "message": "Yes, but my understanding is that this is intended in LO. Scaling is done by the VCL plugins, and the upper layers are supposed to work transparently. Setting this value to the real DPI value results in scaling done twice. Isn\u0027t this happening to you?\nI checked and in my system GTK has the same behavior: it returns 96 and the result is bad icons.",
+      "parentUuid": "146adb8e_281613b9",
+      "revId": "4b8c6fbc844e10950084c38001fddc2070b1b16c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
