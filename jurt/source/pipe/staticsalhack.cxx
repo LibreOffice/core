@@ -76,4 +76,10 @@ extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
     std::abort();
 }
 
+#define IEEE_8087 // see external/dtoa/StaticLibrary_dtoa.mk
+#pragma clang diagnostic ignored "-Weverything"
+extern "C" {
+#include <src/dtoa.c> // workdir/UnpackedTarball/dtoa/src/dtoa.c
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

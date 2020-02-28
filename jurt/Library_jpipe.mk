@@ -62,6 +62,8 @@ $(eval $(call gb_Library_set_include,jpipe, \
     -I$(SRCDIR)/sal/osl/unx \
     -I$(SRCDIR)/sal/rtl \
     -I$(SRCDIR)/sal/textenc \
+    -I$(call gb_UnpackedTarball_get_dir,dtoa) \
+    -I$(call gb_UnpackedTarball_get_dir,dtoa/include) \
 ))
 
 $(eval $(call gb_Library_use_externals,jpipe, \
@@ -74,6 +76,8 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,jpipe, \
 ))
 endif
 
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
+    $(call gb_UnpackedTarball_get_target,dtoa)
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
     gb_CC := $(filter-out -fsanitize%,$(gb_CC))
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
