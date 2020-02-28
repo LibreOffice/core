@@ -11,6 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,dtoa))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,dtoa,dtoa))
 
+# A place that duplicates these settings is jurt/source/pipe/staticsalhack.cxx:
 $(eval $(call gb_StaticLibrary_add_cflags,dtoa,-DIEEE_8087))
 
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,dtoa))
