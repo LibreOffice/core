@@ -256,6 +256,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_calc_tests8 \
 	UITest_calc_dialogs \
 	UITest_calc_tests9 \
+	UITest_calc_shortcuts \
 ))
 endif
 
