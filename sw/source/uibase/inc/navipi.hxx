@@ -19,9 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_NAVIPI_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVIPI_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/transfer.hxx>
@@ -30,6 +27,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
 #include <ndarr.hxx>
@@ -39,7 +37,6 @@ class SwWrtShell;
 class SwNavigationPI;
 class SwNavigationChild;
 class SfxBindings;
-class NumEditAction;
 class SwNavigationConfig;
 class SwView;
 class SfxObjectShellLock;
@@ -59,14 +56,15 @@ class SwNavigationPI : public PanelLayout
     ::sfx2::sidebar::ControllerItem m_aDocFullName;
     ::sfx2::sidebar::ControllerItem m_aPageStats;
 
-    VclPtr<sfx2::sidebar::SidebarToolBox> m_aContentToolBox;
-    VclPtr<ToolBox>             m_aGlobalToolBox;
-    VclPtr<NumEditAction>       m_xEdit;
-    VclPtr<VclContainer>        m_aContentBox;
-    VclPtr<SwContentTree>       m_aContentTree;
-    VclPtr<VclContainer>        m_aGlobalBox;
-    VclPtr<SwGlobalTree>        m_aGlobalTree;
-    VclPtr<ListBox>             m_aDocListBox;
+    std::unique_ptr<weld::Toolbar> m_xContentToolBox;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xContentDispatch;
+    std::unique_ptr<weld::Toolbar> m_xGlobalToolBox;
+    std::unique_ptr<weld::SpinButton> m_xEdit;
+    std::unique_ptr<weld::Widget> m_xContentBox;
+    std::unique_ptr<SwContentTree> m_xContentTree;
+    std::unique_ptr<weld::Widget> m_xGlobalBox;
+//TODO    std::unique_ptr<SwGlobalTree> m_xGlobalTree;
+    std::unique_ptr<weld::ComboBox> m_xDocListBox;
     Idle                m_aPageChgIdle;
     OUString            m_sContentFileName;
     OUString            m_aContextArr[3];
@@ -93,10 +91,10 @@ class SwNavigationPI : public PanelLayout
 
     void FillBox();
 
-    DECL_LINK( DocListBoxSelectHdl, ListBox&, void );
-    DECL_LINK( ToolBoxSelectHdl, ToolBox *, void );
-    DECL_LINK( ToolBoxClickHdl, ToolBox *, void );
-    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
+    DECL_LINK( DocListBoxSelectHdl, weld::ComboBox&, void );
+    DECL_LINK( ToolBoxSelectHdl, const OString&, void );
+    DECL_LINK( ToolBoxClickHdl, const OString&, void );
+    DECL_LINK( ToolBoxDropdownClickHdl, const OString&, void );
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
     DECL_LINK( ChangePageHdl, Timer*, void );
@@ -109,7 +107,7 @@ protected:
     // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    NumEditAction&  GetPageEdit();
+    weld::SpinButton& GetPageEdit();
     void            ToggleTree();
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
 
