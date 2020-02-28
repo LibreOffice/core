@@ -69,6 +69,30 @@
       "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da650527_8c663ec4",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-28T10:55:21Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "5c20a32b_dd2a2981",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "e3f70972d2f93ac87ca281ad8655d0f2c13f1f96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

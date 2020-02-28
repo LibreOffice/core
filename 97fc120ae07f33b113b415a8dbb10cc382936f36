@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "cf68f09e_fd5d47d0",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002063
+      },
+      "writtenOn": "2020-02-28T10:55:21Z",
+      "side": 1,
+      "message": "Yes, there are some privates functions in the library, that do the job. But it is uncallable form LO.",
+      "parentUuid": "3008ceda_577b25ca",
+      "range": {
+        "startLine": 118,
+        "startChar": 20,
+        "endLine": 119,
+        "endChar": 27
+      },
+      "revId": "97fc120ae07f33b113b415a8dbb10cc382936f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd920bc4_9c17ef4c",
         "filename": "cui/source/inc/QrCodeGenDialog.hxx",
         "patchSetId": 3
