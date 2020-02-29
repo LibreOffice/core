@@ -115,8 +115,10 @@ void Qt5Graphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     assert(!rDamagedRegion.IsEmpty());
 
     QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    QImage blit(*pImage);
+    blit.setDevicePixelRatio(1);
     Qt5Painter aPainter(*this);
-    aPainter.drawImage(QPoint(rDamagedRegion.getX(), rDamagedRegion.getY()), *pImage);
+    aPainter.drawImage(QPoint(rDamagedRegion.getX(), rDamagedRegion.getY()), blit);
     aPainter.update(toQRect(rDamagedRegion));
 }
 
