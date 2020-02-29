@@ -161,8 +161,8 @@ public:
     void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) = 0;
-    virtual void CreateTextFromNode(OUStringBuffer &rText);
-
+    //virtual void CreateTextFromNode(OUStringBuffer &rText);
+    virtual void SmNodeToTextVisitor( SmNode* pNode, OUString &rText );
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const = 0;
     sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
     void            SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
@@ -332,7 +332,8 @@ public:
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
 
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -387,9 +388,10 @@ public:
 
     sal_uInt16              GetFontDesc() const { return mnFontDesc; }
     void                SetText(const OUString &rText) { maText = rText; }
+    //OUString str2 = maText.toString();
     const OUString &    GetText() const { return maText; }
     /** Change the text of this node, including the underlying token */
-    void                ChangeText(const OUString &rText) {
+    void                ChangeText(const OUString &rText){
         maText = rText;
         SmToken token = GetToken();
         token.aText = rText;
@@ -413,7 +415,8 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    virtual void CreateTextFromNode(OUStringBuffer &rText) override;
+    //virtual void CreateTextFromNode(OUStringBuffer &rText) override;
+    virtual void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
     void Accept(SmVisitor* pVisitor) override;
@@ -493,7 +496,8 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -650,7 +654,8 @@ public:
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -692,7 +697,8 @@ public:
     }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    // void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 
     SmNode* Argument();
@@ -758,7 +764,8 @@ public:
     virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -868,7 +875,8 @@ public:
     void SetSubSup(SmSubSup eSubSup, SmNode* pScript) { SetSubNode( 1 + eSubSup, pScript); }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText )override;
     void Accept(SmVisitor* pVisitor) override;
 
 };
@@ -903,7 +911,8 @@ public:
     const SmMathSymbolNode* ClosingBrace() const;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1034,7 +1043,8 @@ public:
     {}
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 
     SmNode* Attribute();
@@ -1067,7 +1077,8 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1097,7 +1108,8 @@ public:
     virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUStringBuffer &rText) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
+    void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
     void Accept(SmVisitor* pVisitor) override;
 };
 
@@ -1125,7 +1137,8 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, int nDepth) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     void Accept(SmVisitor* pVisitor) override;
-    virtual void CreateTextFromNode(OUStringBuffer &rText) override;
+    //virtual void CreateTextFromNode(OUStringBuffer &rText) override;
+    virtual void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
 };
 
 

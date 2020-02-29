@@ -71,6 +71,7 @@ one go*/
 #include <smdll.hxx>
 #include <unomodel.hxx>
 #include <utility.hxx>
+#include <visitors.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -476,11 +477,13 @@ void SmXMLImport::endDocument()
             pDocShell->SetFormulaTree(static_cast<SmTableNode *>(pTree.release()));
             if (aText.isEmpty())  //If we picked up no annotation text
             {
-                OUStringBuffer aStrBuf;
+                OUString aStrBuf;
+                OUStringBuffer str;
                 // Get text from imported formula
-                pTreeTmp->CreateTextFromNode(aStrBuf);
-                aStrBuf.stripEnd(' ');
-                aText = aStrBuf.makeStringAndClear();
+                SmNodeToTextVisitor( pTreeTmp, aStrBuf );
+                str.append(aStrBuf);
+                str.stripEnd(' ');
+                aText = str.makeStringAndClear();
             }
 
             // Convert symbol names
