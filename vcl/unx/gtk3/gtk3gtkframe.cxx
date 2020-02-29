@@ -1482,6 +1482,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     {
         m_bDefaultSize = false;
 
+        maGeometry.nWidth = nWidth;
+        maGeometry.nHeight = nHeight;
+
         if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
