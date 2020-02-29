@@ -29,7 +29,9 @@ Qt5SvpGraphics::Qt5SvpGraphics(Qt5Frame* pFrame)
     , m_pFrame(pFrame)
 {
     if (!Qt5Data::noNativeControls())
-        m_pWidgetDraw.reset(new Qt5Graphics_Controls());
+        m_pWidgetDraw.reset(new Qt5Graphics_Controls(*this));
+    if (m_pFrame)
+        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
 }
 
 Qt5SvpGraphics::~Qt5SvpGraphics() {}

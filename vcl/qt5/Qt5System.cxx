@@ -27,7 +27,7 @@ tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     QRect qRect = QApplication::desktop()->screenGeometry(nScreen);
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    return toRectangle(qRect);
+    return toRectangle(scaledQRect(qRect, qApp->devicePixelRatio()));
 }
 
 int Qt5System::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
