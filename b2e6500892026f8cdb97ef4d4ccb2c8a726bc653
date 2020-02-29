@@ -16,6 +16,24 @@
       "revId": "b2e6500892026f8cdb97ef4d4ccb2c8a726bc653",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75248a83_38fceb29",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-02-29T20:17:21Z",
+      "side": 1,
+      "message": "Unfortunately I do not remember. I locally removed it yesterday, so I guess I considered it wrong.",
+      "parentUuid": "299e0dbb_be300e0e",
+      "revId": "b2e6500892026f8cdb97ef4d4ccb2c8a726bc653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
