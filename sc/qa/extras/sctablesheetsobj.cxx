@@ -145,7 +145,7 @@ uno::Reference<uno::XInterface> ScTableSheetsObj::init()
     XNameContainer::setElement(
         uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
     // XNameReplace
-    setReplacementElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
+    XNameReplace::setElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
 
     return xReturn;
 }
