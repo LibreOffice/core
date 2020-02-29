@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "bf032b38_0c412d30",
+        "filename": "vcl/osx/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-02-29T23:14:07Z",
+      "side": 1,
+      "message": "Additional color settings have been implemented with patch set 3",
+      "parentUuid": "d105f13e_83d86db3",
+      "revId": "6e9cb3672b35423fc7107e7cf19ed8f44fa73f62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c3bb4f5_0ecc9bad",
         "filename": "vcl/source/control/button.cxx",
         "patchSetId": 1
