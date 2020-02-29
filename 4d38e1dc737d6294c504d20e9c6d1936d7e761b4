@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076413_c6f2c8d0",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_basic.vb",
+        "patchSetId": 16
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-02-29T17:19:52Z",
+      "side": 1,
+      "message": "Oh, that\u0027s unexpected that this fails; then simplify CollectionSum:\n\n    Function CollectionSum(C)\n        Dim idx As Integer\n        CollectionSum \u003d 0\n        For idx \u003d 1 To C.Count\n            CollectionSum \u003d CollectionSum + C.Item(idx)\n        Next idx\n    End Function\n\nand use like\n\n    Function TestOptObject(Optional A As Collection, Optional B As Collection)\n        TestOptObject \u003d 0\n        If (Not IsMissing(A)) Then TestOptObject \u003d CollectionSum(A)\n        If (Not IsMissing(B)) Then TestOptObject \u003d TestOptObject+ CollectionSum(B)\n    End Function",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 198,
+        "endChar": 10
+      },
+      "revId": "4d38e1dc737d6294c504d20e9c6d1936d7e761b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
