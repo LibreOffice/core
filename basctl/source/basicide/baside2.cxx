@@ -505,7 +505,7 @@ void ModulWindow::ImportDialog()
     implImportDialog(GetFrameWeld(), m_sCurPath, rDocument, aLibName);
 }
 
-void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
+void ModulWindow::ToggleBreakPoint( sal_uInt16 nLine )
 {
     DBG_ASSERT( XModule().is(), "No Module!" );
 
@@ -520,12 +520,12 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
         if ( pBrk ) // remove
         {
-            m_xModule->ClearBP( static_cast<sal_uInt16>(nLine) );
+            m_xModule->ClearBP( nLine );
             GetBreakPoints().remove( pBrk );
         }
         else // create one
         {
-            if ( m_xModule->SetBP( static_cast<sal_uInt16>(nLine)) )
+            if ( m_xModule->SetBP( nLine ))
             {
                 GetBreakPoints().InsertSorted( BreakPoint( nLine ) );
                 if ( StarBASIC::IsRunning() )

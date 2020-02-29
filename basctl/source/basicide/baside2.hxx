@@ -341,7 +341,7 @@ public:
 
     void            EditMacro( const OUString& rMacroName );
 
-    void            ToggleBreakPoint( sal_uLong nLine );
+    void            ToggleBreakPoint( sal_uInt16 nLine );
 
     BasicStatus&    GetBasicStatus() { return m_aStatus; }
 
