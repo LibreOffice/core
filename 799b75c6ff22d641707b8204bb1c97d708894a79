@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4a57d92_636cc839",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T22:41:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "97202ba9_a0d79b4a",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6812138_1c96f82e",
         "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
         "patchSetId": 16
@@ -51,6 +69,24 @@
       "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25b17a70_b722963d",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T22:41:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7342c3c_e97546b8",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +158,24 @@
       "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba08a50_0474e602",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T22:41:37Z",
+      "side": 1,
+      "message": "Strange - I don\u0027t see a difference. Maybe it\u0027s just visible in higher scaling. Anyway, since you can see this, I have added it again.",
+      "parentUuid": "6d79e2b1_453e5cd9",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
