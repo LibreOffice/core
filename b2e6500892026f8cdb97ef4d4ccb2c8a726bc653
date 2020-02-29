@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "299e0dbb_be300e0e",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T19:44:28Z",
+      "side": 1,
+      "message": "What was the reason for this?",
+      "revId": "b2e6500892026f8cdb97ef4d4ccb2c8a726bc653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
