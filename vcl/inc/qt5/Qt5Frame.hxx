@@ -132,8 +132,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
 
-    void TriggerPaintEvent();
-    void TriggerPaintEvent(QRect aRect);
     void fixICCCMwindowGroup();
 
 public:
