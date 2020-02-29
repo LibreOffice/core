@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7be12276_b94a84c1",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-02-29T20:10:57Z",
+      "side": 1,
+      "message": "I see you removed here the attribute Qt::AA_UseHighDpiPixmaps. Is there a particular reason? That is needed if you want QIcon to generate pixmaps of the proper size, getting icons in menu properly scaled.",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
