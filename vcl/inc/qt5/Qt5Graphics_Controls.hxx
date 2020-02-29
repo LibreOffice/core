@@ -31,13 +31,16 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QStyleOption>
 
+class Qt5GraphicsBase;
+
 class Qt5Graphics_Controls final : public vcl::WidgetDrawInterface
 {
     std::unique_ptr<QImage> m_image;
     QRect m_lastPopupRect;
+    Qt5GraphicsBase const& m_rGraphics;
 
 public:
-    Qt5Graphics_Controls();
+    Qt5Graphics_Controls(const Qt5GraphicsBase& rGraphics);
 
     QImage* getImage() { return m_image.get(); }
 
@@ -60,19 +63,34 @@ private:
                                   const QSize& contentsSize);
     static QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option,
                                 QStyle::SubControl subControl);
+    static QRect subElementRect(QStyle::SubElement element, const QStyleOption* option);
 
-    static void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
-                     QStyle::State const state = QStyle::State_None, QRect rect = QRect());
-    static void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
-                     QStyle::State const state = QStyle::State_None, QRect rect = QRect());
-    static void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
-                     QStyle::State const state = QStyle::State_None);
-    static void drawFrame(QStyle::PrimitiveElement element, QImage* image,
-                          QStyle::State const& state, bool bClip = true,
-                          QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth);
+    void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
+              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+    void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
+              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+    void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
+              QStyle::State const state = QStyle::State_None);
+    void drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
+                   bool bClip = true,
+                   QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth);
 
     static void fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot);
-    static void fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option);
+    void fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option, bool bDownscale);
+
+    enum class Round
+    {
+        Floor,
+        Ceil,
+    };
+
+    int downscale(int value, Round eRound);
+    int upscale(int value, Round eRound);
+    QRect downscale(const QRect& rect);
+    QRect upscale(const QRect& rect);
+    QSize downscale(const QSize& size, Round eRound);
+    QSize upscale(const QSize& size, Round eRound);
+    QPoint upscale(const QPoint& point, Round eRound);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
