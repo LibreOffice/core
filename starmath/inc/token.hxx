@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // TokenGroups
@@ -106,7 +107,7 @@ enum SmTokenType
 struct SmToken
 {
 
-    OUString        aText;      // token text
+    OUString   aText;      // token text
     SmTokenType     eType;      // token info
     sal_Unicode cMathChar;
 
