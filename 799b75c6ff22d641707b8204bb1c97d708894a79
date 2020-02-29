@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "97202ba9_a0d79b4a",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T20:35:11Z",
+      "side": 1,
+      "message": "There is something still missing, or it\u0027s a bug. See https://doc.qt.io/qt-5/qguiapplication.html#devicePixelRatio, which explicitly mentions to use QWindow…",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6812138_1c96f82e",
         "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
         "patchSetId": 16
@@ -13,6 +30,24 @@
       "writtenOn": "2020-02-29T20:16:10Z",
       "side": 1,
       "message": "I was a bit paranoid here, thinking that Qt may return a null device ratio, crashing LO when used as a divisor. If we assume this never happens, I\u0027d remove this, otherwise I\u0027d probably set 1 as the ratio and we should do this everywhere. What do you think?",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7342c3c_e97546b8",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T20:35:11Z",
+      "side": 1,
+      "message": "If this somehow returns 0, I guess we\u0027ll have way more problems then the eventually divide by 0. I wanted to implement the forwarding of the scale factor from the frame. I actually tried to use the QWindow::devicePxelRatio, but somehow that reported 1 for me - see my other comment.",
+      "parentUuid": "e6812138_1c96f82e",
       "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -66,6 +101,24 @@
       "side": 1,
       "message": "If you read the Qt docs you see it is related to QIcon. I can\u0027t point you to the proper point in LO code, some weeks passed since I followed the path, maybe in Qt5Menu. I added it to make it render icons with the proper scaled size. Look at the icons in menus: if you don\u0027t add this, they are scaled after render.",
       "parentUuid": "8997f4cf_19c9d0c9",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d79e2b1_453e5cd9",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T20:35:11Z",
+      "side": 1,
+      "message": "Makes sense. I\u0027ll check locally and the update the patch.",
+      "parentUuid": "07bf7079_9235b4f9",
       "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
