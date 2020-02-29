@@ -364,11 +364,11 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 
             case ScContentId::AREALINK:
             {
-                const ScAreaLink* pLink = GetLink( nChild );
-                if( pLink )
+                const ScAreaLink* pLink = GetLink(nChild);
+                ScDocument* pSrcDoc = GetSourceDocument();
+                if (pLink && pSrcDoc)
                 {
                     const ScRange& aRange = pLink->GetDestArea();
-                    ScDocument* pSrcDoc = GetSourceDocument();
                     OUString aRangeStr(aRange.Format(*pSrcDoc, ScRefFlags::RANGE_ABS_3D, pSrcDoc->GetAddressConvention()));
                     pParentWindow->SetCurrentCellStr( aRangeStr );
                 }
