@@ -10,7 +10,7 @@
 # This file incorporates work covered by the following license notice:
 #
 #   Copyright (c) 2018 Martin Pieuchot
-#   Copyright (c) 2018-2019 Samuel Thibault <sthibault@hypra.fr>
+#   Copyright (c) 2018-2020 Samuel Thibault <sthibault@hypra.fr>
 #
 #   Permission to use, copy, modify, and distribute this software for any
 #   purpose with or without fee is hereby granted, provided that the above
@@ -677,7 +677,7 @@ def is_orphan_label(filename, tree, root, obj, orphan_root, doprint = False):
         # This label is part of a button
         return False
 
-    oid = obj.attrib.get('oid')
+    oid = obj.attrib.get('id')
     if oid is not None:
         if oid in labelled_by_elm:
             # Some widget is labelled by us, we are not orphan.
