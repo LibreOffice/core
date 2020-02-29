@@ -27,6 +27,8 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
+#include "Qt5GraphicsBase.hxx"
+
 class PhysicalFontCollection;
 class QImage;
 class QPushButton;
@@ -35,7 +37,7 @@ class Qt5FontFace;
 class Qt5Frame;
 class Qt5Painter;
 
-class Qt5Graphics final : public SalGraphics
+class Qt5Graphics final : public SalGraphics, public Qt5GraphicsBase
 {
     friend class Qt5Bitmap;
     friend class Qt5Painter;
