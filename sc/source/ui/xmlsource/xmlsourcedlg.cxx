@@ -282,7 +282,7 @@ void ScXMLSourceDlg::DefaultElementSelected(weld::TreeIter& rEntry)
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
         std::unique_ptr<weld::TreeIter> xChild(mxLbTree->make_iterator(&rEntry));
-        mxLbTree->iter_children(*xChild);
+        (void)mxLbTree->iter_children(*xChild);
         do
         {
             ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mxLbTree, *xChild);

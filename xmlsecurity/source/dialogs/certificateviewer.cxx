@@ -295,7 +295,7 @@ void CertificateViewerCertPathTP::ActivatePage()
             }
             else
             {
-                mxCertPathLB->iter_children(*xParent);
+                (void)mxCertPathLB->iter_children(*xParent);
             }
         }
 

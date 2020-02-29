@@ -61,7 +61,7 @@ void FolderTree::FillTreeEntry(const weld::TreeIter& rEntry)
         while (m_xTreeView->iter_has_child(rEntry))
         {
             std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(&rEntry));
-            m_xTreeView->iter_children(*xChild);
+            (void)m_xTreeView->iter_children(*xChild);
             m_xTreeView->remove(*xChild);
         }
 
@@ -109,7 +109,7 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
     while (m_xTreeView->iter_has_child(*xParent))
     {
         std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xParent.get()));
-        m_xTreeView->iter_children(*xChild);
+        (void)m_xTreeView->iter_children(*xChild);
         m_xTreeView->remove(*xChild);
     }
 
