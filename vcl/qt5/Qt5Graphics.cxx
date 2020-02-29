@@ -19,6 +19,7 @@
 
 #include <Qt5Graphics.hxx>
 
+#include <Qt5Data.hxx>
 #include <Qt5Font.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Graphics_Controls.hxx>
