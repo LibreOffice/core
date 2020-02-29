@@ -33,6 +33,24 @@
       "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8997f4cf_19c9d0c9",
+        "filename": "vcl/qt5/Qt5Instance.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-02-29T20:16:42Z",
+      "side": 1,
+      "message": "No - I\u0027m still trying to understand, when it\u0027s actually needed. I didn\u0027t yet see a difference, but maybe I\u0027m missing something. Was there a particular reason you enabled this? Was it needed for the 2nd approach?",
+      "parentUuid": "7be12276_b94a84c1",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
