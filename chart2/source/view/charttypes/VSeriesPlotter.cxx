@@ -754,7 +754,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         aPoints[0][1].X = nX2;
                         aPoints[0][1].Y = nY2;
 
-                        m_pShapeFactory->createLine2D(xTarget, aPoints, new VLineProperties);
+                        VLineProperties aVLineProperties;
+                        m_pShapeFactory->createLine2D(xTarget, aPoints, &aVLineProperties);
                     }
                 }
             }
