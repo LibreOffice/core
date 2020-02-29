@@ -870,7 +870,7 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                     if (!xPageEntry)
                     {
                         xPageEntry = m_xTreeView->make_iterator(&rFileEntry);
-                        m_xTreeView->iter_children(*xPageEntry);
+                        (void)m_xTreeView->iter_children(*xPageEntry);
                     }
                     else
                         (void)m_xTreeView->iter_next_sibling(*xPageEntry);

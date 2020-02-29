@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
             if (m_xTree->iter_has_child(*xEntry))
             {
                 std::unique_ptr<weld::TreeIter> xChild(m_xTree->make_iterator(xEntry.get()));
-                m_xTree->iter_children(*xChild);
+                (void)m_xTree->iter_children(*xChild);
                 std::unique_ptr<weld::TreeIter> xParent(m_xTree->make_iterator(xEntry.get()));
                 if (!m_xTree->iter_parent(*xParent))
                     xParent.reset();
