@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e6812138_1c96f82e",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-02-29T20:16:10Z",
+      "side": 1,
+      "message": "I was a bit paranoid here, thinking that Qt may return a null device ratio, crashing LO when used as a divisor. If we assume this never happens, I\u0027d remove this, otherwise I\u0027d probably set 1 as the ratio and we should do this everywhere. What do you think?",
+      "revId": "799b75c6ff22d641707b8204bb1c97d708894a79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7be12276_b94a84c1",
         "filename": "vcl/qt5/Qt5Instance.cxx",
         "patchSetId": 16
