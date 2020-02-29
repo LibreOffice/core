@@ -1216,7 +1216,7 @@ public:
     void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                             const OUString* pIconName, VirtualDevice* pImageSufface,
+                             const OUString* pIconName, VirtualDevice* pImageSurface,
                              TriState eCheckRadioFalse)
         = 0;
     void append_item(const OUString& rId, const OUString& rStr)
@@ -1969,7 +1969,7 @@ public:
     virtual void set_visible(const OString& rIdent, bool bVisible) = 0;
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface,
+                        const OUString* pIconName, VirtualDevice* pImageSurface,
                         TriState eCheckRadioFalse)
         = 0;
 
