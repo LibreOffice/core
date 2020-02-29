@@ -287,19 +287,6 @@ void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExten
     m_pQWidget->update(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
 
-void Qt5Frame::TriggerPaintEvent()
-{
-    QSize aSize(m_pQWidget->size());
-    SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height(), true);
-    CallCallback(SalEvent::Paint, &aPaintEvt);
-}
-
-void Qt5Frame::TriggerPaintEvent(QRect aRect)
-{
-    SalPaintEvent aPaintEvt(aRect.x(), aRect.y(), aRect.width(), aRect.height(), true);
-    CallCallback(SalEvent::Paint, &aPaintEvt);
-}
-
 void Qt5Frame::InitQt5SvpGraphics(Qt5SvpGraphics* pQt5SvpGraphics)
 {
     int width = 640;
@@ -684,12 +671,6 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
         pState->mnY = rect.y();
         pState->mnWidth = rect.width();
         pState->mnHeight = rect.height();
-        // the menubar is drawn natively, adjust for that
-        if (maGeometry.nTopDecoration)
-        {
-            pState->mnY += maGeometry.nTopDecoration;
-            pState->mnHeight -= maGeometry.nTopDecoration;
-        }
         pState->mnMask |= WindowStateMask::X | WindowStateMask::Y | WindowStateMask::Width
                           | WindowStateMask::Height;
     }

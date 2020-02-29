@@ -27,8 +27,6 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
-#include "Qt5Data.hxx"
-
 class PhysicalFontCollection;
 class QImage;
 class QPushButton;
