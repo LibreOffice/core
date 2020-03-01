@@ -133,7 +133,7 @@ FunctionDecl const * findOperator(CompilerInstance& compiler, BinaryOperator::Op
         return false;
     };
 
-    lhsRecordDecl->forallBases(ForallBasesCallback, /*AllowShortCircuit*/true);
+    lhsRecordDecl->forallBases(ForallBasesCallback);
     if (foundFunction)
         return foundFunction;
 

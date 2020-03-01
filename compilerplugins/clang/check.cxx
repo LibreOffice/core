@@ -239,7 +239,7 @@ bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSomethingInterestingSubclass, true)) {
+        !decl->forallBases(BaseCheckNotSomethingInterestingSubclass)) {
         return true;
     }
     return false;
@@ -357,8 +357,7 @@ bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base) {
     }
     if (!decl->forallBases(
             [&base](const clang::CXXRecordDecl *BaseDefinition) -> bool
-                { return BaseCheckNotSubclass(BaseDefinition, &base); },
-            true))
+                { return BaseCheckNotSubclass(BaseDefinition, &base); }))
     {
         return true;
     }
