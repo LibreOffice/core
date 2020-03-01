@@ -88,8 +88,7 @@ public:
             return true;
         if ( // not sure what hasAnyDependentBases() does,
             // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
-            !decl->hasAnyDependentBases()
-            && !decl->forallBases(BaseCheckNotExceptionSubclass, true))
+            !decl->hasAnyDependentBases() && !decl->forallBases(BaseCheckNotExceptionSubclass))
         {
             return true;
         }

@@ -73,7 +73,7 @@ bool isDerivedFromVclReferenceBase(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotWindowSubclass, true)) {
+        !decl->forallBases(BaseCheckNotWindowSubclass)) {
         return true;
     }
     return false;

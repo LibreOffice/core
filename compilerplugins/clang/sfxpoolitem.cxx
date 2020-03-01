@@ -52,7 +52,7 @@ bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSfxPoolItemSubclass, true)) {
+        !decl->forallBases(BaseCheckNotSfxPoolItemSubclass)) {
         return true;
     }
     return false;
@@ -77,7 +77,7 @@ bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSwMsgPoolItemSubclass, true)) {
+        !decl->forallBases(BaseCheckNotSwMsgPoolItemSubclass)) {
         return true;
     }
     return false;
