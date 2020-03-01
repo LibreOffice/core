@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af166f9a_9f8dd023",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "no idea why isControl is even needed",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "907cec5a_f657c41d",
+        "filename": "vcl/qt5/Qt5Graphics_Text.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "I don\u0027t get it - isControl is never used!",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fb16b5_8575fdf6",
+        "filename": "vcl/unx/generic/gdi/cairotextrender.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "same here: isControl isn\u0027t used... why the need for it",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b010adf2_d6d67ae5",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3034,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "great",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1f3a7fc_22401a3e",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "also here.. isControl isn\u0027t used",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74fb698c_d7205205",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "Why remove this? Looks like a botched rebase",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884bf3a2_238b5ae1",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-01T19:44:27Z",
+      "side": 1,
+      "message": "This is what I was talking about!",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
