@@ -399,7 +399,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
     DBG_ASSERT(pPara,"SetText:No Para");
 
-    sal_Int32 nPara = pParaList->GetAbsPos( pPara );
+    const sal_Int32 nPara = pParaList->GetAbsPos( pPara );
 
     if (pEditEngine->GetText( nPara ) == rText)
     {
@@ -408,7 +408,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
         return;
     }
 
-    bool bUpdate = pEditEngine->GetUpdateMode();
+    const bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
     ImplBlockInsertionCallbacks( true );
 
@@ -482,7 +482,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!");
     bFirstParaIsEmpty = false;
     ImplBlockInsertionCallbacks( false );
-    pEditEngine->SetUpdateMode( bUpdate );
+    // Restore the update mode.
+    pEditEngine->SetUpdateMode(bUpdate, /*bRestoring=*/true);
 }
 
 // pView == 0 -> Ignore tabs
