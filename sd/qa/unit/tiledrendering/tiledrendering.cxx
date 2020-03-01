@@ -98,6 +98,10 @@ public:
     void testViewCursors();
     void testViewCursorParts();
     void testCursorViews();
+    void testCursorVisibility_SingleClick();
+    void testCursorVisibility_DoubleClick();
+    void testCursorVisibility_MultiView();
+    void testCursorVisibility_Escape();
     void testViewLock();
     void testUndoLimiting();
     void testCreateViewGraphicSelection();
@@ -149,6 +153,10 @@ public:
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testViewCursorParts);
     CPPUNIT_TEST(testCursorViews);
+    CPPUNIT_TEST(testCursorVisibility_SingleClick);
+    CPPUNIT_TEST(testCursorVisibility_DoubleClick);
+    CPPUNIT_TEST(testCursorVisibility_MultiView);
+    CPPUNIT_TEST(testCursorVisibility_Escape);
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
@@ -956,6 +964,7 @@ public:
     /// Our current part, to be able to decide if a view cursor/selection is relevant for us.
     int m_nPart;
     bool m_bCursorVisibleChanged;
+    bool m_bCursorVisible;
     bool m_bViewLock;
     bool m_bTilesInvalidated;
     std::vector<tools::Rectangle> m_aInvalidations;
@@ -969,6 +978,7 @@ public:
           m_bGraphicViewSelectionInvalidated(false),
           m_nPart(0),
           m_bCursorVisibleChanged(false),
+          m_bCursorVisible(false),
           m_bViewLock(false),
           m_bTilesInvalidated(false),
           m_bViewSelectionSet(false)
@@ -1028,6 +1038,7 @@ public:
         case LOK_CALLBACK_CURSOR_VISIBLE:
         {
             m_bCursorVisibleChanged = true;
+            m_bCursorVisible = (OString("true") == pPayload);
         }
         break;
         case LOK_CALLBACK_VIEW_LOCK:
@@ -1052,7 +1063,7 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
-            int nViewId = aTree.get_child("viewId").get_value<int>();
+            const int nViewId = aTree.get_child("viewId").get_value<int>();
             m_aViewCursorVisibilities[nViewId] = OString("true") == pPayload;
         }
         break;
@@ -1167,6 +1178,178 @@ void SdTiledRenderingTest::testCursorViews()
     // This failed: the second view was not invalidated when pressing a key in
     // the first view.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+}
+
+void SdTiledRenderingTest::testCursorVisibility_SingleClick()
+{
+    // Single-clicking in a text box enters editing only
+    // when it's on the text, even if it's the default text.
+
+    // Load doc.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Click once outside of the text (in the first quartile) => no editing.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
+    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      cornerX, cornerY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      cornerX, cornerY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // No editing.
+    CPPUNIT_ASSERT(!pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(!aView1.m_bCursorVisible);
+
+    // Click again, now on the text, in the center, to start editing.
+    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
+    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+}
+
+
+void SdTiledRenderingTest::testCursorVisibility_DoubleClick()
+{
+    // Double-clicking anywhere in the TextBox should start editing.
+
+    // Create the first view.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Double-click outside the text to enter edit mode.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
+    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+}
+
+void SdTiledRenderingTest::testCursorVisibility_MultiView()
+{
+    // Create the first view.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    const int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Make sure that cursor state is not changed just because we create a second view.
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    const int nView2 = SfxLokHelper::getView();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_bCursorVisibleChanged);
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_aViewCursorVisibilities[nView2]);
+
+    // Also check that the second view gets the notifications.
+    ViewCallback aView2;
+
+    SfxLokHelper::setView(nView1);
+
+    ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
+    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      centerX, centerY,
+                                      2, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      centerX, centerY,
+                                      2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_aViewCursorVisibilities[nView2]);
+
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_bCursorVisible);
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_aViewCursorVisibilities[nView1]);
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_aViewCursorVisibilities[nView2]);
+}
+
+void SdTiledRenderingTest::testCursorVisibility_Escape()
+{
+    // Load doc.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Click once on the text to start editing.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
+    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+
+    // End editing by pressing the escape key.
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(!pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_bCursorVisible);
 }
 
 void SdTiledRenderingTest::testViewLock()

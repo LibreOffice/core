@@ -1447,11 +1447,14 @@ sal_uInt32 EditEngine::CalcTextWidth()
     return nWidth;
 }
 
-void EditEngine::SetUpdateMode( bool bUpdate )
+void EditEngine::SetUpdateMode(bool bUpdate, bool bRestoring)
 {
     pImpEditEngine->SetUpdateMode( bUpdate );
-    if ( pImpEditEngine->pActiveView )
-        pImpEditEngine->pActiveView->ShowCursor( false, false, /*bActivate=*/true );
+    if (pImpEditEngine->pActiveView)
+    {
+        // Not an activation if we are restoring the previous update mode.
+        pImpEditEngine->pActiveView->ShowCursor(false, false, /*bActivate=*/!bRestoring);
+    }
 }
 
 bool EditEngine::GetUpdateMode() const

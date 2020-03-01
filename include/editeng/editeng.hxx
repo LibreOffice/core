@@ -207,7 +207,11 @@ public:
     void            SetRefMapMode( const MapMode& rMapMode );
     MapMode const & GetRefMapMode() const;
 
-    void            SetUpdateMode( bool bUpdate );
+    /// Change the update mode per bUpdate and potentially trigger FormatAndUpdate.
+    /// bRestoring is used for LOK to update cursor visibility, specifically,
+    /// when true, it means we are restoring the update mode after internally
+    /// disabling it (f.e. during SetText to set/delete default text in Impress).
+    void            SetUpdateMode(bool bUpdate, bool bRestoring = false);
     bool            GetUpdateMode() const;
 
     void            SetBackgroundColor( const Color& rColor );
