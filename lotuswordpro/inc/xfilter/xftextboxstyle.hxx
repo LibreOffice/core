@@ -74,10 +74,9 @@ public:
     virtual ~XFTextBoxStyle() override;
 
 public:
-
     virtual enumXFStyle GetStyleFamily() override;
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 protected:
 };

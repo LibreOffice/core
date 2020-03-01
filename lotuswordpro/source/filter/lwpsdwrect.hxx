@@ -94,20 +94,18 @@ public:
     std::array<Point, 4> m_nRectCorner;
 
 public:
-
     SdwRectangle();
 
-    SdwRectangle(const Point& rPt0, const Point& rPt1,
-        const Point& rPt2, const Point& rPt3);
+    SdwRectangle(const Point& rPt0, const Point& rPt1, const Point& rPt2, const Point& rPt3);
 
 public:
     /*
      * @short:  Get the flag whether if the rectangle has been rotated.
      * @return: m_bRotated rotation flag.
      */
-    bool IsRectRotated() const { return m_bRotated;}
+    bool IsRectRotated() const { return m_bRotated; }
 
-    Point GetRectCenter() const ;
+    Point GetRectCenter() const;
 
     long GetWidth() const;
 

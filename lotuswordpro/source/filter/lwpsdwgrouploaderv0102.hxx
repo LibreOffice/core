@@ -73,16 +73,16 @@ class LwpSdwGroupLoaderV0102
 private:
     SvStream* m_pStream;
     LwpGraphicObject* m_pGraphicObj;
-    std::vector< rtl::Reference<XFFrame> >* m_pDrawObjVector;
+    std::vector<rtl::Reference<XFFrame>>* m_pDrawObjVector;
 
     DrawingOffsetAndScale m_aTransformData;
 
 public:
     LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj);
     ~LwpSdwGroupLoaderV0102();
-public:
 
-    void BeginDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
+public:
+    void BeginDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);
     XFDrawGroup* CreateDrawGroupObject();
     XFFrame* CreateDrawObject();
 };

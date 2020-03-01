@@ -68,19 +68,19 @@
  * Implement this interface for different sax writer. For OOo,i use the XDocumentHandler stream;
  * for outputting the local file system,It's just a vector container.
  */
-class   IXFAttrList
+class IXFAttrList
 {
 public:
-    virtual ~IXFAttrList(){}
+    virtual ~IXFAttrList() {}
     /**
      * @descr:  Add an attribute to the attribute list.
      */
-    virtual void    AddAttribute(const OUString& name, const OUString& value) = 0;
+    virtual void AddAttribute(const OUString& name, const OUString& value) = 0;
 
     /**
      * @descr:  Clear all the attributes in the attribute list.
      */
-    virtual void    Clear() = 0;
+    virtual void Clear() = 0;
 };
 
 #endif

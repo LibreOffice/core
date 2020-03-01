@@ -73,7 +73,7 @@ public:
     XFDrawPolygon();
 
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
 #endif

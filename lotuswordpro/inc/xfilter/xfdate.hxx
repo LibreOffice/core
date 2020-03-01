@@ -73,22 +73,22 @@ public:
 
     virtual ~XFDate() override;
 
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString  m_strText;
+    OUString m_strText;
 };
 
 class XFDateStart : public XFDate
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
 class XFDateEnd : public XFContent
 {
 public:
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 };
 
 #endif

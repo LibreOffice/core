@@ -76,17 +76,17 @@ public:
     /**
      * @descr   Set line start point.
      */
-    void    SetStartPoint(double x, double y);
+    void SetStartPoint(double x, double y);
 
     /**
      * @descr   Set line end point.
      */
-    void    SetEndPoint(double x, double y);
+    void SetEndPoint(double x, double y);
 
     /**
      * @descr   Output line object.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
     XFPoint m_aPoint1;

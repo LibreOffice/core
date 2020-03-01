@@ -55,10 +55,10 @@
  ************************************************************************/
 #include <lwpbookmarkmgr.hxx>
 
-void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark)
+void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName, XFBookmarkStart* pMark)
 {
     auto iter = m_MapStart.find(sName);
-    if (iter == m_MapStart.end())//not find
+    if (iter == m_MapStart.end()) //not find
     {
         m_MapStart[sName] = pMark;
     }
@@ -71,10 +71,10 @@ void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* p
         m_MapStart[sName] = pMark;
     }
 }
-void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark)
+void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName, XFBookmarkEnd* pMark)
 {
     auto iter = m_MapEnd.find(sName);
-    if (iter == m_MapEnd.end())//not find
+    if (iter == m_MapEnd.end()) //not find
     {
         m_MapEnd[sName] = pMark;
     }

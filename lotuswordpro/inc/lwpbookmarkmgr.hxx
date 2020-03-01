@@ -69,11 +69,12 @@
 class LwpBookmarkMgr
 {
 public:
-    void AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark);
-    void AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark);
+    void AddXFBookmarkEnd(const OUString& sName, XFBookmarkEnd* pMark);
+    void AddXFBookmarkStart(const OUString& sName, XFBookmarkStart* pMark);
     bool FindBookmark(const OUString& sName);
     ~LwpBookmarkMgr();
     LwpBookmarkMgr();
+
 private:
     std::map<OUString, rtl::Reference<XFBookmarkStart>> m_MapStart;
     std::map<OUString, rtl::Reference<XFBookmarkEnd>> m_MapEnd;

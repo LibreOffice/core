@@ -67,11 +67,12 @@
 class LwpVersionedPointer final : public LwpObject
 {
 public:
-    LwpVersionedPointer(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
+    LwpVersionedPointer(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
     void Read() override;
     void RegisterStyle() override;
     void Parse(IXFStream* pOutputStream) override;
-    LwpObjectID& GetPointer(){return m_PointerID;}
+    LwpObjectID& GetPointer() { return m_PointerID; }
+
 private:
     LwpObjectID m_PointerID;
     virtual ~LwpVersionedPointer() override {}

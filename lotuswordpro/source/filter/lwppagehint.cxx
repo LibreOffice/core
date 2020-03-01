@@ -78,8 +78,8 @@ void LwpFootnoteSeenHead::Read(LwpObjectStream* pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-LwpPageHint::LwpPageHint(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
-    : LwpDLVList(objHdr,pStrm)
+LwpPageHint::LwpPageHint(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
+    : LwpDLVList(objHdr, pStrm)
     , m_nLastFootnoteSeen(0)
     , m_nLastFootnoteProcessed(0)
     , m_nFlags(0)
@@ -117,8 +117,6 @@ void LwpPageHint::Read()
     m_pObjStrm->SkipExtra();
 }
 
-void LwpPageHint::Parse(IXFStream * /*pOutputStream*/)
-{
-}
+void LwpPageHint::Parse(IXFStream* /*pOutputStream*/) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@
 
 #include <sal/types.h>
 
-enum    enumXFContent
+enum enumXFContent
 {
     enumXFContentUnknown,
     enumXFContentText,
@@ -78,7 +78,7 @@ enum    enumXFContent
     enumXFContentContainer,
 };
 
-enum    enumXFStyle
+enum enumXFStyle
 {
     enumXFStyleUnknown,
     enumXFStyleText,
@@ -475,16 +475,16 @@ enum enumXFFWStyle
     enumXFFWOff,
     enumXFFWRotate,
     enumXFFWUpright,
-    enumXFFWSlantX,//slant-x
-    enumXFFWSlantY//slant-y
+    enumXFFWSlantX, //slant-x
+    enumXFFWSlantY //slant-y
 };
 
 enum enumXFFWAdjust
 {
-    enumXFFWAdjustAutosize,//autosize
+    enumXFFWAdjustAutosize, //autosize
     enumXFFWAdjustLeft,
-    enumXFFWAdjustCenter,//center
-    enumXFFWAdustRight//right
+    enumXFFWAdjustCenter, //center
+    enumXFFWAdustRight //right
 };
 
 enum enumXFFWShadow

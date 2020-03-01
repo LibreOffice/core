@@ -9,7 +9,7 @@
 
 #include "lwpbackgroundoverride.hxx"
 
-LwpBackgroundOverride::LwpBackgroundOverride(LwpBackgroundOverride const &rOther)
+LwpBackgroundOverride::LwpBackgroundOverride(LwpBackgroundOverride const& rOther)
     : LwpOverride(rOther)
     , m_aStuff(rOther.m_aStuff)
 {

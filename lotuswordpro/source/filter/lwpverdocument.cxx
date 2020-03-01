@@ -67,10 +67,11 @@
 #include <xfilter/xfparastyle.hxx>
 #include <lwptools.hxx>
 
-LwpVerDocument::LwpVerDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
+LwpVerDocument::LwpVerDocument(LwpObjectHeader const& objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nTabSpacing(0)
-{}
+{
+}
 
 void LwpVerDocument::Read()
 {
@@ -92,8 +93,8 @@ void LwpVerDocument::Read()
 void LwpVerDocument::RegisterStyle()
 {
     std::unique_ptr<XFDefaultParaStyle> pDefault(new XFDefaultParaStyle);
-    double len =static_cast<double>(m_nTabSpacing)/UNITS_PER_INCH*CM_PER_INCH;
-    if(len < 0.001)
+    double len = static_cast<double>(m_nTabSpacing) / UNITS_PER_INCH * CM_PER_INCH;
+    if (len < 0.001)
     {
         len = 1.27; //0.5 inch
     }
