@@ -1974,13 +1974,10 @@ OUString SAL_CALL
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleDocument::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+   // uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.AccessibleSpreadsheetDocumentView";
-
-    return aSequence;
+    return {"com.sun.star.AccessibleSpreadsheetDocumentView"};
 }
 
 //=====  XTypeProvider  =======================================================
