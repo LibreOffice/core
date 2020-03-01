@@ -3939,12 +3939,12 @@ EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
 
 void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, bool bForceUpdate )
 {
-    bool bChanged = ( GetUpdateMode() != bUp );
+    const bool bChanged = (GetUpdateMode() != bUp);
 
-    // When switching from sal_True to sal_False, all selections were visible,
+    // When switching from true to false, all selections were visible,
     // => paint over
     // the other hand, were all invisible => paint
-    // If !bFormatted, e.g. after SetText, then if UpdateMode=sal_True
+    // If !bFormatted, e.g. after SetText, then if UpdateMode=true
     // formatting is not needed immediately, probably because more text is coming.
     // At latest it is formatted at a Paint/CalcTextWidth.
     bUpdate = bUp;
