@@ -99,6 +99,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     bool                m_bDocumentModifiedPending:1;
     bool                m_bUpdateEnabled:1;
     bool                m_bUcalcTest:1; // avoid loading the styles in the ucalc test
+    bool                m_bAreasChangedNeedBroadcast:1;
     sal_uInt16          m_nDocumentLock;
     sal_Int16           m_nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
 
@@ -384,6 +385,9 @@ public:
                         { return m_bUpdateEnabled; }
     void            SetUpdateEnabled(bool bValue)
                         { m_bUpdateEnabled = bValue; }
+
+    void            SetAreasChangedNeedBroadcast()
+                        { m_bAreasChangedNeedBroadcast = true; }
 
     OutputDevice*   GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
 
