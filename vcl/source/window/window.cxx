@@ -3237,7 +3237,7 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
         // assign the LOK window id
         assert(mpWindowImpl->mnLOKWindowId == 0);
         mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
-        GetLOKWindowsMap().insert(std::map<vcl::LOKWindowId, VclPtr<vcl::Window>>::value_type(mpWindowImpl->mnLOKWindowId, this));
+        GetLOKWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
     }
     else
         mpWindowImpl->mbLOKParentNotifier = true;
