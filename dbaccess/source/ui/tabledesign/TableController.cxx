@@ -29,6 +29,7 @@
 #include <dbu_reghelper.hxx>
 #include <stringconstants.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
 #include <dsmeta.hxx>

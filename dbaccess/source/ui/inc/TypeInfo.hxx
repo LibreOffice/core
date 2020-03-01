@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <map>
 #include <memory>
 

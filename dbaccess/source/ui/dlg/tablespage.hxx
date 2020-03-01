@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_TABLESPAGE_HXX
 
 #include "adminpages.hxx"
-#include <com/sun/star/i18n/XCollator.hpp>
 #include <tabletree.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 

@@ -19,21 +19,22 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TOKENWRITER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TOKENWRITER_HXX
 
-#include "DExport.hxx"
 #include "commontypes.hxx"
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace sdbc{

@@ -21,7 +21,8 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_IITEMSETHELPER_HXX
 
 #include <sal/types.h>
-#include <dsntypes.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {

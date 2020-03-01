@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JACCESS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JACCESS_HXX
 
+#include "JoinTableView.hxx"
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/vclptr.hxx>

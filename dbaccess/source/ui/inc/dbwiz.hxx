@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZ_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZ_HXX
 
-#include <sfx2/tabdlg.hxx>
 #include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
 #include <vcl/wizardmachine.hxx>

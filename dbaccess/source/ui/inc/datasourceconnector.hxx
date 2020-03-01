@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>

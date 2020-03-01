@@ -20,12 +20,10 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINCONTROLLER_HXX
 
 #include "singledoccontroller.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include "JoinTableView.hxx"
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
-#include <tools/fract.hxx>
 #include <memory>
 
 namespace comphelper

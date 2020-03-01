@@ -25,6 +25,7 @@
 #include <dlgsave.hxx>
 #include <dbtreelistbox.hxx>
 #include <defaultobjectnamecheck.hxx>
+#include <strings.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>

@@ -24,6 +24,7 @@
 #include <dbaccess_slotid.hrc>
 #include <strings.hrc>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
 #include <UITools.hxx>

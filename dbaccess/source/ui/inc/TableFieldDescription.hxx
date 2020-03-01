@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ref.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 

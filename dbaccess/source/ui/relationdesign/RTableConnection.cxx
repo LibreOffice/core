@@ -18,6 +18,7 @@
  */
 
 #include "RTableConnection.hxx"
+#include <RTableConnectionData.hxx>
 #include <RelationTableView.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

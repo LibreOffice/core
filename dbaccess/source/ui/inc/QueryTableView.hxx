@@ -20,8 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTABLEVIEW_HXX
 
 #include "JoinTableView.hxx"
-#include <com/sun/star/container/XNameAccess.hpp>
-#include "querycontroller.hxx"
+#include "TableFieldDescription.hxx"
 
 namespace dbaui
 {

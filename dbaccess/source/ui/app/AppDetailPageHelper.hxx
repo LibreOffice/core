@@ -22,19 +22,17 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <AppElementType.hxx>
 #include <vcl/treelistbox.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <callbacks.hxx>
-#include <memory>
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
 namespace com{ namespace sun { namespace star { namespace frame { class XFrame2; } } } }

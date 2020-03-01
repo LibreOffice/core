@@ -21,6 +21,7 @@
 #include <browserids.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <query.hrc>
 #include <dbu_reghelper.hxx>
 #include <stringconstants.hxx>
@@ -72,6 +73,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/undo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>

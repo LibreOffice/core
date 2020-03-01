@@ -22,7 +22,6 @@
 
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
-#include <map>
 
 namespace dbaui
 {

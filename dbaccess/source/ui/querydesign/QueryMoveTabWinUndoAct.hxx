@@ -21,6 +21,8 @@
 
 #include "QueryDesignUndoAction.hxx"
 #include <strings.hrc>
+#include <JoinTableView.hxx>
+#include <TableWindow.hxx>
 #include <tools/gen.hxx>
 
 namespace dbaui

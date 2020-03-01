@@ -21,26 +21,20 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTROLLER_HXX
 
 #include "JoinController.hxx"
-#include "JoinTableView.hxx"
 #include "querycontainerwindow.hxx"
 #include <svx/ParseContext.hxx>
 #include "TableFieldDescription.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/sqliterator.hxx>
-#include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <svl/undo.hxx>
 
 namespace comphelper
 {

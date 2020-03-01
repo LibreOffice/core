@@ -23,11 +23,8 @@
 #include "imageprovider.hxx"
 #include "marktree.hxx"
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/weld.hxx>
 #include <memory>

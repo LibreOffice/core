@@ -73,6 +73,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <browserids.hxx>
 #include <stringconstants.hxx>
 #include <strings.hrc>

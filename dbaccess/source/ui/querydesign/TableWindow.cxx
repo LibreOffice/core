@@ -33,10 +33,12 @@
 #include <vcl/ptrstyle.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <querycontroller.hxx>
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
