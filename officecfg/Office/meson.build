@@ -238,4 +238,20 @@ draw_hxx = custom_target('draw.hxx',
             '@OUTPUT@',
             '@INPUT@'])
 
+canvas_hxx = custom_target('canvas.hxx',
+  output: 'Canvas.hxx',
+  input: ['../registry/cppheader.xsl',
+          '../registry/schema/org/openoffice/Office/Canvas.xcs'],
+  command: [xslt_bin,
+            '--nonet',
+            '--stringparam',
+            'ns1',
+            'Office',
+            '--stringparam',
+            'ns2',
+            'Canvas',
+            '-o',
+            '@OUTPUT@',
+            '@INPUT@'])
+
 subdir('UI')
