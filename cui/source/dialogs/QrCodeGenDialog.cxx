@@ -115,7 +115,7 @@ short QrCodeGenDialog::run()
                 Apply();
                 break;
             }
-            catch (qrcodegen::data_too_long)
+            catch (const qrcodegen::data_too_long&)
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     mpParent, VclMessageType::Warning, VclButtonsType::Ok,
