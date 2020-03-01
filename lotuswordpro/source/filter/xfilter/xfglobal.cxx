@@ -113,7 +113,7 @@ OUString XFGlobal::GenImageName()
     return sResult;
 }
 
-void    XFGlobal::Reset()
+void XFGlobal::Reset()
 {
     s_nSectionID = 1;
     s_nFrameID = 1;
@@ -122,10 +122,10 @@ void    XFGlobal::Reset()
     s_nAreaID = 1;
 }
 
-void    XFGlobalReset()
+void XFGlobalReset()
 {
-//  XFFontFactory::Reset();
-//  XFStyleManager::Reset();
+    //  XFFontFactory::Reset();
+    //  XFStyleManager::Reset();
     XFGlobal::Reset();
 }
 

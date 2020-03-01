@@ -62,14 +62,13 @@
 class LwpObjectStream;
 class LwpBackgroundOverride : public LwpOverride
 {
-
 public:
-    LwpBackgroundOverride(){}
+    LwpBackgroundOverride() {}
 
     virtual LwpBackgroundOverride* clone() const override;
 
 public:
-    virtual void Read(LwpObjectStream *pStrm) override
+    virtual void Read(LwpObjectStream* pStrm) override
     {
         if (pStrm->QuickReadBool())
         {
@@ -91,7 +90,7 @@ private:
     LwpBackgroundOverride& operator=(LwpBackgroundOverride const& rOther) = delete;
 
 private:
-    LwpBackgroundStuff  m_aStuff;
+    LwpBackgroundStuff m_aStuff;
 };
 
 #endif

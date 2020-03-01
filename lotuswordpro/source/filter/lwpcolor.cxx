@@ -65,15 +65,13 @@
 */
 sal_uInt32 LwpColor::To24Color()
 {
-    return ((m_nRed >> 8) |
-            (m_nGreen & 0xFF00) |
-            static_cast<sal_uInt32>((m_nBlue & 0xFF00) << 8));
+    return ((m_nRed >> 8) | (m_nGreen & 0xFF00) | static_cast<sal_uInt32>((m_nBlue & 0xFF00) << 8));
 }
 
 /**
  * @descr       read color and then resolve the RGB values
 */
-void LwpColor::Read(LwpObjectStream *pStrm)
+void LwpColor::Read(LwpObjectStream* pStrm)
 {
     m_nRed = pStrm->QuickReaduInt16();
     m_nGreen = pStrm->QuickReaduInt16();
@@ -81,7 +79,7 @@ void LwpColor::Read(LwpObjectStream *pStrm)
     m_nExtra = pStrm->QuickReaduInt16();
 
     // resolve RGB values per the extra bytes
-    switch(m_nExtra)
+    switch (m_nExtra)
     {
         case AGLRGB_RGB:
             break;

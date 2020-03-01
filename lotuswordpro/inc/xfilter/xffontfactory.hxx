@@ -80,24 +80,24 @@ public:
     XFFontFactory();
     ~XFFontFactory();
     XFFontFactory(const XFFontFactory&) = delete;
-    XFFontFactory& operator=(XFFontFactory const &) = delete;
+    XFFontFactory& operator=(XFFontFactory const&) = delete;
 
 private:
     /**
      * @descr   Add a font. if there exist a font with same properties with pFont, them the font object
      *          will not be added.
      */
-    void    AddFont(rtl::Reference<XFFont> const & pFont);
+    void AddFont(rtl::Reference<XFFont> const& pFont);
 
     /**
      * @descr   Find whether same font object exists.
      */
-    rtl::Reference<XFFont> FindSameFont(rtl::Reference<XFFont> const & pFont);
+    rtl::Reference<XFFont> FindSameFont(rtl::Reference<XFFont> const& pFont);
 
     friend class XFStyleContainer;
 
 private:
-    std::vector< rtl::Reference<XFFont> > s_aFonts;
+    std::vector<rtl::Reference<XFFont>> s_aFonts;
 };
 
 #endif

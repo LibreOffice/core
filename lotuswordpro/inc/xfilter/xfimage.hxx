@@ -76,22 +76,22 @@ public:
     /**
      * @descr   Use file link source.a
      */
-    void    SetFileURL(const OUString& url);
+    void SetFileURL(const OUString& url);
 
     /**
      * @descr   Use base64 stream.
      */
-    void    SetImageData(sal_uInt8 const *buf, int len);
+    void SetImageData(sal_uInt8 const* buf, int len);
 
     /**
      * @descr   Output image.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
     OUString m_strImageFile;
     OUString m_strData;
-    bool    m_bUseLink;
+    bool m_bUseLink;
 };
 
 #endif

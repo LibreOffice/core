@@ -79,11 +79,11 @@ public:
     /**
      * @descr   Output section object.
      */
-    virtual void    ToXml(IXFStream *pStrm) override;
+    virtual void ToXml(IXFStream* pStrm) override;
 
 private:
-    OUString   m_strSectionName;
-    OUString   m_strSourceLink;
+    OUString m_strSectionName;
+    OUString m_strSourceLink;
 };
 
 #endif

@@ -74,12 +74,13 @@ class LwpSdwFileLoader
 private:
     SvStream* m_pStream;
     LwpGraphicObject* m_pGraphicObj;
+
 public:
     LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
     ~LwpSdwFileLoader();
-public:
 
-    void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
+public:
+    void CreateDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);
 };
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX

@@ -58,7 +58,6 @@
 
 namespace OpenStormBento
 {
-
 #define BEN_OBJID_TOC 1 // TOC object ID
 #define BEN_PROPID_TOC_SEED 2 // TOC object starting seed
 #define BEN_TYPEID_TOC_TYPE 19 // TOC object property value type
@@ -90,7 +89,7 @@ namespace OpenStormBento
 #define BEN_READ_PAST_END_OF_TOC 50 // Our code
 #define BEN_NOOP 0xFF
 
-}// end OpenStormBento namespace
+} // end OpenStormBento namespace
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

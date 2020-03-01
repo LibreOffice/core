@@ -156,24 +156,27 @@ struct LwpEditorAttr
 class LwpDocData : public LwpObject
 {
 public:
-    LwpDocData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
+    LwpDocData(LwpObjectHeader const& objHdr, LwpSvStream* pStrm);
+
 private:
     virtual ~LwpDocData() override;
 
     LwpDocOptions m_DocOptions;
     LwpDocInfo m_DocInfo;
     LwpDocControl m_DocControl;
+
 private:
     LtTm m_nCreationTime;
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
+
 private:
-    static OUString DateTimeToOUString(LtTm const & dt);
-    static OUString TimeToOUString(LtTm const & dt);
+    static OUString DateTimeToOUString(LtTm const& dt);
+    static OUString TimeToOUString(LtTm const& dt);
 
 public:
     void Read() override;
-    void Parse(IXFStream *pOutputStream) override;
+    void Parse(IXFStream* pOutputStream) override;
 };
 #endif
 

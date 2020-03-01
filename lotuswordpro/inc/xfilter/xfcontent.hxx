@@ -75,23 +75,23 @@ class IXFStream;
  * Base class for all content object.
  * There is only two properties:style name and content type in this class.
  */
-class XFContent: public salhelper::SimpleReferenceObject
+class XFContent : public salhelper::SimpleReferenceObject
 {
 public:
     /**
      * @short:  return the content type.
      */
-    virtual enumXFContent   GetContentType() { return enumXFContentUnknown; }
+    virtual enumXFContent GetContentType() { return enumXFContentUnknown; }
 
     /**
      * @short:  All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(const OUString& style) {m_strStyleName = style;}
+    virtual void SetStyleName(const OUString& style) { m_strStyleName = style; }
 
     /**
      * @short:  return the style name.
      */
-    const OUString& GetStyleName() const {return m_strStyleName;}
+    const OUString& GetStyleName() const { return m_strStyleName; }
 
     void DoToXml(IXFStream* stream)
     {
@@ -113,6 +113,7 @@ protected:
     virtual ~XFContent() override {}
 
     OUString m_strStyleName;
+
 private:
     bool m_bDoingToXml;
 };
