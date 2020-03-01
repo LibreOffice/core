@@ -55,6 +55,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
+#include <ucbhelper/content.hxx>
 #include "finteraction.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <tools/urlobj.hxx>

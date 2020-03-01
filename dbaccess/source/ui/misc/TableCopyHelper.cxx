@@ -32,6 +32,7 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/DataAccessDescriptorFactory.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 
 #include <RtfReader.hxx>
 #include <HtmlReader.hxx>
@@ -42,6 +43,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>

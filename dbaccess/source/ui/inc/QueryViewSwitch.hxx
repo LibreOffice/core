@@ -19,7 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYVIEWSWITCH_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYVIEWSWITCH_HXX
 
-#include "JoinDesignView.hxx"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <tools/gen.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbtools
 {

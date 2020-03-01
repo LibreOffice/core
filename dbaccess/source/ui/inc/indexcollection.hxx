@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXCOLLECTION_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "indexes.hxx"
 

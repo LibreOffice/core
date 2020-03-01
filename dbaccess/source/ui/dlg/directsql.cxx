@@ -27,6 +27,7 @@
 #include <editeng/eeitem.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
+#include <svtools/editsyntaxhighlighter.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/event.hxx>

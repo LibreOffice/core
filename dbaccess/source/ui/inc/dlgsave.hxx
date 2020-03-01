@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 
-#include <apitools.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/weld.hxx>

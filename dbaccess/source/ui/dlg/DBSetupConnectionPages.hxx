@@ -24,11 +24,7 @@
 
 #include "adminpages.hxx"
 #include "admincontrols.hxx"
-#include <curledit.hxx>
 #include "TextConnectionHelper.hxx"
-
-#include <vcl/roadmapwizard.hxx>
-#include <ucbhelper/content.hxx>
 
 namespace dbaui
 {

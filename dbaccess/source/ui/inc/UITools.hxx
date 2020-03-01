@@ -23,7 +23,6 @@
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
 #include <editeng/svxenum.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <connectivity/dbtools.hxx>
 

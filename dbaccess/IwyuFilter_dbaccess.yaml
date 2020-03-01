@@ -21,3 +21,12 @@ blacklist:
     dbaccess/source/filter/xml/xmlExport.hxx:
     # Needed for implicit dtor
     - xmloff/txtprmap.hxx
+    dbaccess/source/ui/inc/sbamultiplex.hxx:
+    # Needed for macros
+    - cppuhelper/queryinterface.hxx
+    dbaccess/source/ui/dlg/odbcconfig.hxx:
+    # Needed on WIN32
+    - tools/link.hxx
+    dbaccess/source/ui/querydesign/QueryTabConnUndoAction.hxx:
+    # Needed for direct member access
+    - JoinTableView.hxx

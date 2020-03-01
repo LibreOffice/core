@@ -20,6 +20,8 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABCONNUNDOACTION_HXX
 
 #include "QueryDesignUndoAction.hxx"
+#include "QTableConnection.hxx"
+#include <JoinTableView.hxx>
 
 namespace dbaui
 {

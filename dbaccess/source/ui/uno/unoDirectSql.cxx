@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <directsql.hxx>
 #include <stringconstants.hxx>
 #include <datasourceconnector.hxx>
@@ -47,7 +48,6 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::sdb;
 
     // ODirectSQLDialog
     ODirectSQLDialog::ODirectSQLDialog(const Reference< XComponentContext >& _rxORB)

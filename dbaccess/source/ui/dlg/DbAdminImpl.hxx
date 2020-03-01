@@ -23,9 +23,7 @@
 #include <sal/config.h>
 
 #include <map>
-#include <set>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>

@@ -31,17 +31,14 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <sot/storage.hxx>
 #include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <vcl/timer.hxx>
 
 #include <memory>
 

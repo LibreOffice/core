@@ -21,9 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_CALLBACKS_HXX
 
 #include <sot/exchange.hxx>
-#include <sot/formats.hxx>
-#include <vcl/vclptr.hxx>
-#include <com/sun/star/container/XContainer.hpp>
 
 class SvTreeListEntry;
 class Point;

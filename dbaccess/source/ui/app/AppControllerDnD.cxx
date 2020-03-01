@@ -22,6 +22,7 @@
 #include <comphelper/property.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

@@ -23,7 +23,6 @@
 #include "objectnamecheck.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <memory>

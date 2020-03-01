@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_BROWSER_DBTREEMODEL_HXX
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <unodatbr.hxx>
 #include <commontypes.hxx>
 

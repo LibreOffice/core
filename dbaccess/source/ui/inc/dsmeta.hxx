@@ -24,8 +24,9 @@
 
 #include <set>
 
-#include <dsntypes.hxx>
 #include "dsitems.hxx"
+
+#include <rtl/ustring.hxx>
 
 #include <memory>
 

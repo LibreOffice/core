@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNCONTROL_HXX
 
-#include <svtools/tabbar.hxx>
 #include <svtools/editbrowsebox.hxx>
 
 #include "IClipBoardTest.hxx"

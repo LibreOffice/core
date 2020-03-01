@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 
 #include <GeneralUndo.hxx>
+#include <JoinTableView.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui

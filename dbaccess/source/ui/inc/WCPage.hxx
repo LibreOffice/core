@@ -21,8 +21,6 @@
 
 #include "WTabPage.hxx"
 
-#include "QEnumTypes.hxx"
-
 namespace dbaui
 {
     class OWizColumnSelect;

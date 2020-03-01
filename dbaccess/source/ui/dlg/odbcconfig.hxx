@@ -20,8 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 
-#include <commontypes.hxx>
-
 #if defined(_WIN32) || (defined (UNX) && !defined(ANDROID) && !defined(IOS))
 #define HAVE_ODBC_SUPPORT
 #endif
@@ -30,6 +28,7 @@
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 
+#include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <osl/module.h>
 

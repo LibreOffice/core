@@ -20,6 +20,7 @@
 #include "SelectionBrowseBox.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <JoinExchange.hxx>
 #include <QueryDesignView.hxx>
 #include <querycontroller.hxx>
 #include <sqlbison.hxx>

@@ -21,20 +21,12 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_SBAMULTIPLEX_HXX
 
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#include <com/sun/star/form/XUpdateListener.hpp>
-#include <com/sun/star/form/XErrorListener.hpp>
-#include <com/sun/star/form/XRestoreListener.hpp>
-#include <com/sun/star/form/XInsertListener.hpp>
-#include <com/sun/star/form/XDeleteListener.hpp>
-#include <com/sun/star/form/XPositioningListener.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/form/XSubmitListener.hpp>
 #include <com/sun/star/form/XResetListener.hpp>
-#include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>

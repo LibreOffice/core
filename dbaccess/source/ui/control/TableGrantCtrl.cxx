@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>

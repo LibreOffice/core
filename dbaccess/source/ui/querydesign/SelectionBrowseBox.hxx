@@ -21,10 +21,9 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <TableFieldDescription.hxx>
-#include <JoinExchange.hxx>
+#include <TableWindowListBox.hxx>
 #include <QEnumTypes.hxx>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <vcl/transfer.hxx>
+#include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace connectivity
 {

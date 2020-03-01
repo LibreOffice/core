@@ -11,12 +11,11 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_LIMITBOXCONTROLLER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/vclptr.hxx>
-
-#include <apitools.hxx>
 
 namespace dbaui
 {

@@ -19,9 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELCONTROLIFACE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELCONTROLIFACE_HXX
 
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include "TableConnectionData.hxx"
-
 namespace dbaui
 {
     class IRelationControlInterface

@@ -20,11 +20,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#include <vcl/fixed.hxx>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 #include <IClipBoardTest.hxx>
 #include <AppElementType.hxx>

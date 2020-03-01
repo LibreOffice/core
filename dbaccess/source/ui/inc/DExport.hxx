@@ -22,14 +22,10 @@
 #include <sal/config.h>
 
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <map>

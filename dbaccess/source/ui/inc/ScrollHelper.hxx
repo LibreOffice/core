@@ -21,7 +21,6 @@
 
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
-#include <vcl/timer.hxx>
 
 namespace dbaui
 {

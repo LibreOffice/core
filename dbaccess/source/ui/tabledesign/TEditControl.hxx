@@ -23,7 +23,6 @@
 #include <TableDesignView.hxx>
 #include "TableFieldDescWin.hxx"
 #include <TableRow.hxx>
-#include <QEnumTypes.hxx>
 #include <TypeInfo.hxx>
 
 class Edit;

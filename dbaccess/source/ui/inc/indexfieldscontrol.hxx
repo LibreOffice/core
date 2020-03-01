@@ -21,9 +21,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
 
 #include <svtools/editbrowsebox.hxx>
-#include "indexcollection.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include "indexes.hxx"
 
 namespace dbaui
 {

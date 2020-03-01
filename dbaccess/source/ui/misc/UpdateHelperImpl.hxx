@@ -19,12 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_MISC_UPDATEHELPERIMPL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_MISC_UPDATEHELPERIMPL_HXX
 
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <IUpdateHelper.hxx>
 
 namespace dbaui

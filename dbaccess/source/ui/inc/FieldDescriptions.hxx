@@ -19,10 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCRIPTIONS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDDESCRIPTIONS_HXX
 
-#include "QEnumTypes.hxx"
 #include <editeng/svxenum.hxx>
 #include "TypeInfo.hxx"
-#include <osl/diagnose.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 

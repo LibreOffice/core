@@ -21,11 +21,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <unotools/viewoptions.hxx>
 #include <vcl/weld.hxx>
 #include "indexes.hxx"
 

@@ -20,14 +20,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 
-#include <dsntypes.hxx>
-#include "odbcconfig.hxx"
-#include <commontypes.hxx>
-
 #include <rtl/ustring.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
+#include <set>
 
 class SfxItemSet;
 namespace dbaui

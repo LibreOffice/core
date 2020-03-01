@@ -8,6 +8,7 @@
  */
 
 #include "limitboxcontroller.hxx"
+#include <apitools.hxx>
 #include <uiservices.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>

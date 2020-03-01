@@ -20,10 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX
 
 #include "singledoccontroller.hxx"
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "TypeInfo.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

@@ -31,6 +31,7 @@
 #include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

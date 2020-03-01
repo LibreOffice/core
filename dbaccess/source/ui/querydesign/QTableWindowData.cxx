@@ -20,7 +20,6 @@
 #include "QTableWindowData.hxx"
 
 using namespace dbaui;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
 OQueryTableWindowData::OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias )

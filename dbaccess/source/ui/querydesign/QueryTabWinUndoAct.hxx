@@ -20,8 +20,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYTABWINUNDOACT_HXX
 
 #include "QueryDesignUndoAction.hxx"
+#include "QTableWindow.hxx"
+#include <TableConnection.hxx>
 #include <vector>
-#include <algorithm>
 
 namespace dbaui
 {

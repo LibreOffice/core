@@ -37,10 +37,8 @@ namespace dbaui
 {
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::comphelper;
 
 ODatasourceSelectDialog::ODatasourceSelectDialog(weld::Window* _pParent, const std::set<OUString>& _rDatasources)
     : GenericDialogController(_pParent, "dbaccess/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")

@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DETAILPAGES_HXX
 
 #include "adminpages.hxx"
-#include <charsets.hxx>
 #include <charsetlistbox.hxx>
 #include "TextConnectionHelper.hxx"
 #include "admincontrols.hxx"

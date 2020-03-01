@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <strings.hrc>
 #include <rtl/tencinfo.h>
+#include <svx/txenctab.hxx>
 
 namespace dbaui
 {

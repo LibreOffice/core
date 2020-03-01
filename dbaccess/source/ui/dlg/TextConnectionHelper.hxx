@@ -20,12 +20,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
 
-#include "ConnectionPageSetup.hxx"
 #include "adminpages.hxx"
 #include <charsetlistbox.hxx>
-#include <ucbhelper/content.hxx>
-#include <curledit.hxx>
-#include <vcl/roadmapwizard.hxx>
 #include <rtl/ustring.hxx>
 
 namespace dbaui

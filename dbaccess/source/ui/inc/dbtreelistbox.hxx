@@ -22,11 +22,9 @@
 #include "ScrollHelper.hxx"
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/weld.hxx>
 
 #include <memory>
 #include <set>

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
 
+#include <sal/types.h>
+
 typedef sal_Int32   ItemID;
 
 // item ids for the data source administration dialog

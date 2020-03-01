@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_RELATIONDESIGN_RTABLECONNECTION_HXX
 
 #include <TableConnection.hxx>
-#include <RTableConnectionData.hxx>
 
 namespace dbaui
 {

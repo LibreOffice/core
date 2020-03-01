@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX
 
 #include "GeneralUndo.hxx"
+#include "sqledit.hxx"
 #include <vcl/vclptr.hxx>
 #include <strings.hrc>
 
