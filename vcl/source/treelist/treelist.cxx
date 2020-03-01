@@ -526,8 +526,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
 {
     DBG_ASSERT(pActEntry!=nullptr,"Entry?");
 
-    sal_uInt16 nDepth = 0;
-
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uLong nActualPos = pActEntry->GetChildListPos();
 
@@ -537,7 +535,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
         while (!pActEntry->m_Children.empty())
         {
             pActualList = &pActEntry->m_Children;
-            nDepth++;
             pActEntry = pActualList->back().get();
         }
         return pActEntry;
@@ -549,7 +546,6 @@ SvTreeListEntry* SvTreeList::Prev( SvTreeListEntry* pActEntry ) const
 
     if ( pActEntry )
     {
-        nDepth--;
         return pActEntry;
     }
     return nullptr;
