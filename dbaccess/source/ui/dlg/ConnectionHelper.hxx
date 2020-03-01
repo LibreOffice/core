@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_CONNECTIONHELPER_HXX
 
 #include "adminpages.hxx"
-#include <ucbhelper/content.hxx>
 #include <curledit.hxx>
 #include <sfx2/filedlghelper.hxx>
 

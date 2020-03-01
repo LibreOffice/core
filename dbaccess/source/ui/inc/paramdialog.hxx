@@ -20,15 +20,12 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
 
-#include "commontypes.hxx"
-
 #include <vcl/weld.hxx>
 #include <vcl/timer.hxx>
 
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/predicateinput.hxx>
 #include <svx/ParseContext.hxx>

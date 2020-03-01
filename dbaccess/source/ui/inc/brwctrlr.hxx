@@ -40,7 +40,6 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <osl/thread.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/cliplistener.hxx>
 

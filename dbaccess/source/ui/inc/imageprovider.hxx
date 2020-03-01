@@ -24,7 +24,6 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
 #include <memory>
 

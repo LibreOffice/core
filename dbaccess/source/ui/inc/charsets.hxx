@@ -22,7 +22,6 @@
 
 #include <connectivity/dbcharset.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/txenctab.hxx>
 
 namespace dbaui
 {

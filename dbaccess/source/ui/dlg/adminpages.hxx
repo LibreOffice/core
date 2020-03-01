@@ -21,8 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <dsntypes.hxx>
-#include <commontypes.hxx>
 #include <vcl/wizardmachine.hxx>
 #include <curledit.hxx>
 

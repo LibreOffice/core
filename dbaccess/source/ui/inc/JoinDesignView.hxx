@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINDESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#include "QEnumTypes.hxx"
 
 class Splitter;
 

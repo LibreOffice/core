@@ -29,6 +29,7 @@
 #include <strings.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <UITools.hxx>
 #include <osl/diagnose.h>
 

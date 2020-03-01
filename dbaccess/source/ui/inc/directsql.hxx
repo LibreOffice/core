@@ -22,9 +22,11 @@
 
 #include <sal/config.h>
 
+#include <comphelper/syntaxhighlight.hxx>
 #include <sal/log.hxx>
+#include <svtools/colorcfg.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/editsyntaxhighlighter.hxx>
 #include <deque>
 
 #include <com/sun/star/sdbc/XConnection.hpp>

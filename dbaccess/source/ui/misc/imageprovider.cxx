@@ -23,6 +23,7 @@
 
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 
 #include <tools/diagnose_ex.h>

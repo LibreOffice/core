@@ -30,6 +30,8 @@
 #include <querycontroller.hxx>
 #include <connectivity/dbtools.hxx>
 #include <browserids.hxx>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

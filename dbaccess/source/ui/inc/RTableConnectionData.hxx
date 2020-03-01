@@ -21,7 +21,6 @@
 
 #include "TableConnectionData.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include "QEnumTypes.hxx"
 
 namespace dbaui

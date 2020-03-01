@@ -22,6 +22,7 @@
 #include <GeneralUndo.hxx>
 #include <strings.hrc>
 #include "SelectionBrowseBox.hxx"
+#include <osl/diagnose.h>
 
 namespace dbaui
 {

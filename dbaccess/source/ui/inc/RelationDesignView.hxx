@@ -21,9 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDESIGNVIEW_HXX
 
 #include "JoinDesignView.hxx"
-#include <vector>
-#include "QEnumTypes.hxx"
-#include "RelationTableView.hxx"
 
 namespace dbaui
 {

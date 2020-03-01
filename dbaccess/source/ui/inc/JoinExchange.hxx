@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JOINEXCHANGE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINEXCHANGE_HXX
 
-#include "dbexchange.hxx"
 #include "TableWindowListBox.hxx"
 
 #include <vcl/transfer.hxx>

@@ -21,6 +21,7 @@
 #include "AppController.hxx"
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <advancedsettingsdlg.hxx>
 #include "subcomponentmanager.hxx"
 #include <uiservices.hxx>

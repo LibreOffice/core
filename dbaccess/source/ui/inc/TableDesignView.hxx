@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEDESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <vcl/split.hxx>
 #include "IClipBoardTest.hxx"

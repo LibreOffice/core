@@ -18,6 +18,7 @@
  */
 
 #include "dbinteraction.hxx"
+#include <apitools.hxx>
 #include <dbu_reghelper.hxx>
 #include <uiservices.hxx>
 #include <tools/diagnose_ex.h>

@@ -21,6 +21,7 @@
 
 #include "QueryDesignUndoAction.hxx"
 #include <strings.hrc>
+#include <TableWindow.hxx>
 
 namespace dbaui
 {

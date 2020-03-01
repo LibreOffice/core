@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWACCESS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWACCESS_HXX
 
+#include "TableWindow.hxx"
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

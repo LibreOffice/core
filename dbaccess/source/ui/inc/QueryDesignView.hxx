@@ -21,10 +21,8 @@
 
 #include "JoinDesignView.hxx"
 #include <vcl/split.hxx>
-#include "QEnumTypes.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "querycontroller.hxx"
-#include "ConnectionLineData.hxx"
 
 namespace connectivity
 {

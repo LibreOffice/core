@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROWEXCHANGE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROWEXCHANGE_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/transfer.hxx>
 #include <memory>
 

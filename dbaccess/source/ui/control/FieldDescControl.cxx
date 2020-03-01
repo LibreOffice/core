@@ -36,6 +36,7 @@
 #include <svl/numuno.hxx>
 #include <vcl/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>

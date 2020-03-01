@@ -37,6 +37,7 @@
 #include <sbagrid.hrc>
 #include <sbagrid.hxx>
 #include <sqlmessage.hxx>
+#include <strings.hxx>
 #include <TokenWriter.hxx>
 #include <UITools.hxx>
 #include <unodatbr.hxx>
