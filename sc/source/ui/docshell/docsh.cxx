@@ -2743,6 +2743,7 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     m_bDocumentModifiedPending( false ),
     m_bUpdateEnabled  ( true ),
     m_bUcalcTest     ( false ),
+    m_bAreasChangedNeedBroadcast( false ),
     m_nDocumentLock   ( 0 ),
     m_nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG)
 {
@@ -2861,6 +2862,12 @@ void ScDocShell::SetDocumentModified()
             GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
         }
         m_aDocument.SetDetectiveDirty(false);         // always reset, also if not refreshed
+    }
+
+    if (m_bAreasChangedNeedBroadcast)
+    {
+        m_bAreasChangedNeedBroadcast = false;
+        SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreasChanged));
     }
 
     // notify UNO objects after BCA_BRDCST_ALWAYS etc.

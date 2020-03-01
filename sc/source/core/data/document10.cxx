@@ -26,6 +26,7 @@
 #include <editeng/colritem.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>
+#include <docsh.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -884,7 +885,15 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
             rpRangeData = copyRangeName( pOldRangeData, rNewDoc, this, rNewPos, rOldPos, bGlobalNamesToLocal,
                     nOldSheet, nNewSheet, bSameDoc);
         }
+
+        if (rpRangeData && !rNewDoc.IsClipOrUndo())
+        {
+            ScDocShell* pDocSh = static_cast<ScDocShell*>(rNewDoc.GetDocumentShell());
+            if (pDocSh)
+                pDocSh->SetAreasChangedNeedBroadcast();
+        }
     }
+
     rSheet = nNewSheet;
     rIndex = rpRangeData ? rpRangeData->GetIndex() : 0;     // 0 means not inserted
     return true;
