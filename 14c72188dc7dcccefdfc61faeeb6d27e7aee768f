@@ -104,6 +104,24 @@
     },
     {
       "key": {
+        "uuid": "56b60d2e_d3bc01ed",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-03-01T21:04:20Z",
+      "side": 1,
+      "message": "Removal was not intended",
+      "parentUuid": "74fb698c_d7205205",
+      "revId": "14c72188dc7dcccefdfc61faeeb6d27e7aee768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "884bf3a2_238b5ae1",
         "filename": "vcl/win/window/salframe.cxx",
         "patchSetId": 6

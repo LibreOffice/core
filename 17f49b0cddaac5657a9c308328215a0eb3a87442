@@ -16,6 +16,24 @@
       "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bef616d_d662ae02",
+        "filename": "cui/uiconfig/ui/cellalignment.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-03-01T21:04:20Z",
+      "side": 0,
+      "message": "It has been left from tdf#128943 which is outstanding for review too - will be removed for the next patch set from this change.",
+      "parentUuid": "8cdebad8_0f135a88",
+      "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
