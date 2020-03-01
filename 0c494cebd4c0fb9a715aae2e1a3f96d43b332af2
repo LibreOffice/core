@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02e99e91_e9fbba54",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-03-01T12:45:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this, but my guess is that upscaling here is wrong in principle. It was wrong even in my original patch, but my assumption is that QStyleOptionFrame should not be scaled, as scaling happens after sizeFromContents. I tested and I can see no visible difference. This should probably be identical to fullQStyleOptionTabWidgetFrame above?",
+      "revId": "0c494cebd4c0fb9a715aae2e1a3f96d43b332af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415df758_284b35e7",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1002335
+      },
+      "writtenOn": "2020-03-01T12:45:13Z",
+      "side": 1,
+      "message": "Same doubt I wrote above.",
+      "revId": "0c494cebd4c0fb9a715aae2e1a3f96d43b332af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
