@@ -203,3 +203,7 @@ configure_file(input: 'config_fuzzers.h.meson',
 configure_file(input: 'config_options_calc.h.meson',
   output: 'config_options_calc.h',
   configuration: cdata)
+
+configure_file(input: 'config_lgpl.h.meson',
+  output: 'config_lgpl.h',
+  configuration: cdata)
