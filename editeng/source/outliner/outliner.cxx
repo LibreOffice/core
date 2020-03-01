@@ -407,7 +407,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
     DBG_ASSERT(pPara,"SetText:No Para");
 
-    bool bUpdate = pEditEngine->GetUpdateMode();
+    const bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
     ImplBlockInsertionCallbacks( true );
 
@@ -483,7 +483,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!");
     bFirstParaIsEmpty = false;
     ImplBlockInsertionCallbacks( false );
-    pEditEngine->SetUpdateMode( bUpdate );
+    // Restore the update mode.
+    pEditEngine->SetUpdateMode(bUpdate, /*bRestoring=*/true);
 }
 
 // pView == 0 -> Ignore tabs
