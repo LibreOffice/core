@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfb4f99e_34cc8f6a",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 1,
+      "message": "if the condition that all sequences have the same length isn\u0027t met, then the code will unconditionally do out-of-bounds accesses \u003d\u003e just a warning isn\u0027t appropriate, this should use assert()\n\nnote: you can add a message to assert like this:\n\nassert( condition \u0026\u0026 \"message\" );\n\nthis works because the string literal always evaluates as true so only the condition determines the outcome.",
+      "revId": "ba23317451c055e5603707c19f98fc7822284418",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

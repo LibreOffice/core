@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "073a5bba_40afbfd7",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 0,
+      "message": "this is length of SequenceX",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bf0efda_44e256b1",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 0,
+      "message": "pInnerSequenceY/Z point to elements of the containers SequenceY/Z",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4056542f_2d32c130",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 0,
+      "message": "the only condition that is checked is the one for SequenceX",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c4f037_04ea6151",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 0,
+      "message": "the inner loop: same situation",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8863244a_46b3836c",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T10:59:12Z",
+      "side": 0,
+      "message": "here the pInnerSequenceY/Z are incremented without checking the length",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
