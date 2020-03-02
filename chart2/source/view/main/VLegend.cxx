@@ -664,10 +664,8 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
                     0.5, 1.0 - fDistance, drawing::Alignment_BOTTOM );
             }
             break;
-
-        case LegendPosition_CUSTOM:
-            // to avoid warning
         case LegendPosition::LegendPosition_MAKE_FIXED_SIZE:
+        default:
             // nothing to be set
             break;
     }
@@ -684,7 +682,8 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
     const awt::Size & rPageSize,
     const chart2::RelativePosition& rRelPos,
     LegendPosition ePos,
-    const awt::Size& aLegendSize )
+    const awt::Size& aLegendSize,
+    bool bOverlay )
 {
     // calculate position
     awt::Point aResult(
@@ -698,7 +697,7 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
     // #i109336# Improve auto positioning in chart
     sal_Int32 nXDistance = lcl_getLegendLeftRightMargin();
     sal_Int32 nYDistance = lcl_getLegendTopBottomMargin();
-    switch( ePos )
+    if (!bOverlay) switch( ePos )
     {
         case LegendPosition_LINE_START:
         {
@@ -899,7 +898,7 @@ void VLegend::createShapes(
             awt::Size aLegendSize( rAvailableSpace );
 
             bool bCustom = false;
-            LegendPosition eLegendPosition = LegendPosition_CUSTOM;
+            LegendPosition eLegendPosition = LegendPosition_LINE_END;
             if (xLegendProp.is())
             {
                 // get Expansion property
@@ -1027,16 +1026,18 @@ void VLegend::changePosition(
         bool bAutoPosition =
             ! (xLegendProp->getPropertyValue( "RelativePosition") >>= aRelativePosition);
 
-        LegendPosition ePos = LegendPosition_CUSTOM;
+        LegendPosition ePos = LegendPosition_LINE_END;
         xLegendProp->getPropertyValue( "AnchorPosition") >>= ePos;
 
+        bool bOverlay = false;
+        xLegendProp->getPropertyValue("Overlay") >>= bOverlay;
         //calculate position
         if( bAutoPosition )
         {
             // auto position: relative to remaining space
             aRelativePosition = lcl_getDefaultPosition( ePos, rOutAvailableSpace, rPageSize );
             awt::Point aPos = lcl_calculatePositionAndRemainingSpace(
-                rOutAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize );
+                rOutAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize, bOverlay );
             m_xShape->setPosition( aPos );
         }
         else
@@ -1044,15 +1045,15 @@ void VLegend::changePosition(
             // manual position: relative to whole page
             awt::Rectangle aAvailableSpace( 0, 0, rPageSize.Width, rPageSize.Height );
             awt::Point aPos = lcl_calculatePositionAndRemainingSpace(
-                aAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize );
+                aAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize, bOverlay );
             m_xShape->setPosition( aPos );
 
-            if( ePos != LegendPosition_CUSTOM )
+            if (!bOverlay)
             {
                 // calculate remaining space as if having autoposition:
                 aRelativePosition = lcl_getDefaultPosition( ePos, rOutAvailableSpace, rPageSize );
                 lcl_calculatePositionAndRemainingSpace(
-                    rOutAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize );
+                    rOutAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize, bOverlay );
             }
         }
     }

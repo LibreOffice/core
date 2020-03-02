@@ -58,6 +58,7 @@ ChartItemPool::ChartItemPool():
     //legend
     rPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SfxInt32Item(SCHATTR_LEGEND_POS, sal_Int32(css::chart2::LegendPosition_LINE_END) );
     rPoolDefaults[SCHATTR_LEGEND_SHOW              - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_SHOW, true);
+    rPoolDefaults[SCHATTR_LEGEND_NO_OVERLAY        - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, true);
 
     //text
     rPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);

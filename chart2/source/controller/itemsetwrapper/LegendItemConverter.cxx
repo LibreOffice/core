@@ -152,6 +152,23 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             }
         }
         break;
+        case SCHATTR_LEGEND_NO_OVERLAY:
+        {
+            const SfxPoolItem* pPoolItem = nullptr;
+            if(rInItemSet.GetItemState(SCHATTR_LEGEND_NO_OVERLAY, true, &pPoolItem) == SfxItemState::SET)
+            {
+                bool bOverlay = !static_cast<const SfxBoolItem *>(pPoolItem)->GetValue();
+                bool bOldOverlay = false;
+                if(!(GetPropertySet()->getPropertyValue("Overlay") >>= bOldOverlay) ||
+                    (bOldOverlay != bOverlay))
+                {
+                    GetPropertySet()->setPropertyValue("Overlay", uno::Any(bOverlay));
+                    bChanged = true;
+                }
+            }
+
+        }
+        break;
     }
 
     return bChanged;
@@ -174,6 +191,13 @@ void LegendItemConverter::FillSpecialItem(
             chart2::LegendPosition eLegendPos( chart2::LegendPosition_LINE_END );
             GetPropertySet()->getPropertyValue( "AnchorPosition" ) >>= eLegendPos;
             rOutItemSet.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(eLegendPos) ) );
+        }
+        break;
+        case SCHATTR_LEGEND_NO_OVERLAY:
+        {
+            bool bOverlay = false;
+            GetPropertySet()->getPropertyValue("Overlay") >>= bOverlay;
+            rOutItemSet.Put(SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, !bOverlay));
         }
         break;
    }

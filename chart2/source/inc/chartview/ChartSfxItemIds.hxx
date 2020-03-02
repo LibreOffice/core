@@ -52,7 +52,8 @@ class SvxBrushItem;
 #define SCHATTR_LEGEND_START                (SCHATTR_DATADESCR_END + 1)
 #define SCHATTR_LEGEND_POS                  TypedWhichId<SfxInt32Item>(SCHATTR_LEGEND_START)
 #define SCHATTR_LEGEND_SHOW                 TypedWhichId<SfxBoolItem>(SCHATTR_LEGEND_START + 1)
-#define SCHATTR_LEGEND_END                  SCHATTR_LEGEND_SHOW
+#define SCHATTR_LEGEND_NO_OVERLAY           TypedWhichId<SfxBoolItem>(SCHATTR_LEGEND_START + 2)
+#define SCHATTR_LEGEND_END                  SCHATTR_LEGEND_NO_OVERLAY
 
 //text
 #define SCHATTR_TEXT_START                  (SCHATTR_LEGEND_END + 1)
