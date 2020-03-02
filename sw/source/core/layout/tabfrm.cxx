@@ -63,6 +63,7 @@
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star;
 

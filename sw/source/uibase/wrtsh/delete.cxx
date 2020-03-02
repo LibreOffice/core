@@ -31,6 +31,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/character.hxx>
+#include <doc.hxx>
 
 inline void SwWrtShell::OpenMark()
 {

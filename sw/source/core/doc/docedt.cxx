@@ -38,6 +38,7 @@
 #include <frmfmt.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
+#include <frameformats.hxx>
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>

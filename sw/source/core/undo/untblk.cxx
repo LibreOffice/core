@@ -30,6 +30,7 @@
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
+#include <frameformats.hxx>
 
 namespace sw {
 

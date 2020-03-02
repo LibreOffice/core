@@ -43,6 +43,7 @@
 #include <cellatr.hxx>
 #include <redline.hxx>
 #include <node2lay.hxx>
+#include <frameformats.hxx>
 
 #include <set>
 #include <utility>

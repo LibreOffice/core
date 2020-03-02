@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <swevent.hxx>
+#include <frameformats.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

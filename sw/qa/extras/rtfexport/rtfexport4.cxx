@@ -20,6 +20,7 @@
 #include <unotxdoc.hxx>
 #include <pam.hxx>
 #include <fmtanchr.hxx>
+#include <frameformats.hxx>
 
 /**
   Split these tests into their own file because they are really really slow

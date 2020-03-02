@@ -89,6 +89,7 @@
 #include <fmtfsize.hxx>
 #include <numrule.hxx>
 #include <tblafmt.hxx>
+#include <frameformats.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

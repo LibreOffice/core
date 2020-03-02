@@ -34,6 +34,7 @@
 #include <txtfrm.hxx>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
+#include <frameformats.hxx>
 
 // masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )

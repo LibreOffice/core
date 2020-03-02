@@ -26,6 +26,7 @@
 #include <txatbase.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtfsize.hxx>
+#include <frameformats.hxx>
 
 class HtmlImportTest : public SwModelTestBase
 {

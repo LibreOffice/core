@@ -70,6 +70,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <docufld.hxx>
 #include <svx/srchdlg.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star;
 

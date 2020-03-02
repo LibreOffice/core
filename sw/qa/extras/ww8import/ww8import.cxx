@@ -16,6 +16,7 @@
 #include <wrtsh.hxx>
 #include <ndgrf.hxx>
 #include <fmtsrnd.hxx>
+#include <frameformats.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

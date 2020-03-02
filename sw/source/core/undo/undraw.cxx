@@ -41,6 +41,7 @@
 #include <UndoCore.hxx>
 #include <dcontact.hxx>
 #include <viewsh.hxx>
+#include <frameformats.hxx>
 
 struct SwUndoGroupObjImpl
 {

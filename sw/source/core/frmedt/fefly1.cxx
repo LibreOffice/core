@@ -69,6 +69,7 @@
 #include <ndole.hxx>
 #include <fefly.hxx>
 #include <fmtcnct.hxx>
+#include <frameformats.hxx>
 #include <textboxhelper.hxx>
 
 

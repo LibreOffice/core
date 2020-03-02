@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
 

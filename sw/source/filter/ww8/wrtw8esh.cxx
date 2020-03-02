@@ -85,6 +85,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <fmturl.hxx>
+#include <frameformats.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/saveopt.hxx>
 #include <o3tl/enumrange.hxx>

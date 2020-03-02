@@ -54,6 +54,7 @@
 #include <dflyobj.hxx>
 #include <undoflystrattr.hxx>
 #include <calbck.hxx>
+#include <frameformats.hxx>
 #include <memory>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>

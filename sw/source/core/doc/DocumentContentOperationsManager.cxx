@@ -66,6 +66,7 @@
 #include <hints.hxx>
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
+#include <frameformats.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
