@@ -1826,26 +1826,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
 
                 // fix table paragraph properties
-                if ( xParaProps && m_nTableDepth > 0 )
+                if ( xTextRange.is() && xParaProps && m_nTableDepth > 0 )
                 {
                     uno::Sequence< beans::PropertyValue > aParaProps = pParaContext->GetPropertyValues(false);
-
+                    uno::Reference<text::XTextCursor> xCur =  xTextRange->getText()->createTextCursorByRange(xTextRange);
+                    uno::Reference< beans::XPropertyState > xRunProperties( xCur, uno::UNO_QUERY_THROW );
                     // tdf#90069 in tables, apply paragraph level character style also on
                     // paragraph level to support its copy during insertion of new table rows
                     for( const auto& rParaProp : std::as_const(aParaProps) )
                     {
-                        if ( m_pLastCharacterContext.get() && rParaProp.Name.startsWith("Char") && rParaProp.Name != "CharStyleName" && rParaProp.Name != "CharInteropGrabBag" )
+                        if ( rParaProp.Name.startsWith("Char") && rParaProp.Name != "CharStyleName" && rParaProp.Name != "CharInteropGrabBag" &&
+                            // all text portions contain the same value, so next setPropertyValue() won't overwrite part of them
+                            xRunProperties->getPropertyState(rParaProp.Name) == css::beans::PropertyState_DIRECT_VALUE )
                         {
-                            const uno::Sequence< beans::PropertyValue > aLastCharProps = m_pLastCharacterContext->GetPropertyValues( );
-
-                            for( const auto& rLastCharProp : std::as_const(aLastCharProps) )
-                            {
-                                if ( rLastCharProp == rParaProp )
-                                {
-                                    xParaProps->setPropertyValue( rParaProp.Name, rParaProp.Value );
-                                    break;
-                                }
-                            }
+                            xParaProps->setPropertyValue( rParaProp.Name, rParaProp.Value );
                         }
                     }
 
