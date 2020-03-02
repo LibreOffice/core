@@ -73,6 +73,8 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -85,6 +87,8 @@ using namespace comphelper;
 
 
 #define REMEMBER_SIZE       10
+
+#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
 enum class ModifyFlags {
     NONE         = 0x000000,
@@ -317,6 +321,9 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xColumnsBtn(m_xBuilder->weld_radio_button("cols"))
     , m_xAllSheetsCB(m_xBuilder->weld_check_button("allsheets"))
     , m_xCalcStrFT(m_xBuilder->weld_label("entirecells"))
+    , m_xSearchLabelFT(m_xBuilder->weld_label("searchframelabel"))
+    , m_xReplaceLabelFT(m_xBuilder->weld_label("replacelabel"))
+    , m_xHelpBtn(m_xBuilder->weld_button("help"))
 {
     m_xSearchTmplLB->make_sorted();
     m_xSearchAttrText->hide();
@@ -337,6 +344,16 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xReplaceTmplLB->set_size_request(nTermWidth, -1);
 
     Construct_Impl();
+
+    if (IS_MOBILE)
+    {
+        m_xOtherOptionsExpander->hide();
+        m_xSearchLabelFT->hide();
+        m_xReplaceLabelFT->hide();
+        m_xComponentFrame->hide();
+        m_xHelpBtn->hide();
+        m_xCloseBtn->hide();
+    }
 }
 
 SvxSearchDialog::~SvxSearchDialog()

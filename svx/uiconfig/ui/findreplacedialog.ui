@@ -301,7 +301,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="searchframelabel">
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="findreplacedialog|label1">_Search For</property>
                     <property name="use_underline">True</property>
@@ -426,7 +426,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkLabel" id="replacelabel">
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="findreplacedialog|label2">Re_place With</property>
                     <property name="use_underline">True</property>
