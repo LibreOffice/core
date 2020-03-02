@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0805f18_edff2e7a",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-02T07:49:38Z",
+      "side": 1,
+      "message": "why split this declaration with initialization up into declaration and separate assignment?",
+      "range": {
+        "startLine": 454,
+        "startChar": 21,
+        "endLine": 455,
+        "endChar": 13
+      },
+      "revId": "4e5c636efe92acb5133aff18249a1401c1573a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebfc80a2_c29f9253",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-02T07:49:38Z",
+      "side": 1,
+      "message": "what does that comment mean?",
+      "range": {
+        "startLine": 456,
+        "startChar": 4,
+        "endLine": 456,
+        "endChar": 27
+      },
+      "revId": "4e5c636efe92acb5133aff18249a1401c1573a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
