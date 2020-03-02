@@ -8604,6 +8604,7 @@ private:
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
+    gulong m_nTestCollapseRowSignalId;
     gulong m_nVAdjustmentChangedSignalId;
     gulong m_nRowDeletedSignalId;
     gulong m_nRowInsertedSignalId;
@@ -8801,6 +8802,12 @@ private:
         return !pThis->signal_test_expand_row(*iter);
     }
 
+    static gboolean signalTestCollapseRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        return !pThis->signal_test_collapse_row(*iter);
+    }
+
     bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
         bool bPlaceHolder = false;
@@ -8838,6 +8845,17 @@ private:
             OUString sDummy("<dummy>");
             insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
         }
+
+        enable_notify_events();
+        return bRet;
+    }
+
+    bool signal_test_collapse_row(GtkTreeIter& iter)
+    {
+        disable_notify_events();
+
+        GtkInstanceTreeIter aIter(iter);
+        bool bRet = signal_collapsing(aIter);
 
         enable_notify_events();
         return bRet;
@@ -9134,6 +9152,7 @@ public:
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
+        , m_nTestCollapseRowSignalId(g_signal_connect(pTreeView, "test-collapse-row", G_CALLBACK(signalTestCollapseRow), this))
         , m_nVAdjustmentChangedSignalId(0)
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
@@ -10643,6 +10662,7 @@ public:
             g_signal_handler_disconnect(pVAdjustment, m_nVAdjustmentChangedSignalId);
         }
 
+        g_signal_handler_disconnect(m_pTreeView, m_nTestCollapseRowSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nTestExpandRowSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
