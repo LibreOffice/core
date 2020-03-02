@@ -49,7 +49,9 @@ enum LegendPosition
     PAGE_END,
 
     /** The position of the legend is given by an offset value
-     */
+
+        @deprecated
+      */
     CUSTOM
 };
 

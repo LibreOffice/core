@@ -53,6 +53,7 @@ enum
     PROP_LEGEND_ANCHOR_POSITION,
     PROP_LEGEND_EXPANSION,
     PROP_LEGEND_SHOW,
+    PROP_LEGEND_OVERLAY,
     PROP_LEGEND_REF_PAGE_SIZE,
     PROP_LEGEND_REL_POS,
     PROP_LEGEND_REL_SIZE
@@ -78,6 +79,13 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "Overlay",
+                  PROP_LEGEND_OVERLAY,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "ReferencePageSize",
                   PROP_LEGEND_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
@@ -116,6 +124,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, css::chart::ChartLegendExpansion_HIGH );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_OVERLAY, false );
 
         float fDefaultCharHeight = 10.0;
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );

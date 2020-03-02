@@ -2324,7 +2324,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
     }
     else
     {
-        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_LINE_END;
         rPropSet.GetProperty( eApiPos, EXC_CHPROP_ANCHORPOSITION );
         switch( eApiPos )
         {
