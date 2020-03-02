@@ -9,13 +9,12 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
-MAKECMDGOALS?=all
-build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
- $(if $(filter build-nocheck slowcheck uicheck,$(MAKECMDGOALS)),build)\
- $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck $(if $(filter Linux, $(shell uname)), uicheck))\
- $(filter all build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
+MAKECMDGOALS?=build
+build_goal:=$(if $(filter build build-nocheck slowcheck uicheck,$(MAKECMDGOALS)),build)\
+ $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck $(if $(filter Linux, $(shell uname)), uicheck))\
+ $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
 
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
@@ -57,7 +56,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 
 else # MAKE_RESTARTS
 
-all: build
+.DEFAULT_GOAL := build
 
 check-if-root:
 	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && ! grep -q 'lxc\|docker' /proc/self/cgroup && ! grep -q 'libpod_parent' /proc/self/cgroup; then \
@@ -90,7 +89,7 @@ iwyudummy.generate:
 # Partial Build
 #
 define gb_Top_GbuildModuleRules
-.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target))
+.PHONY: $(1) $(1).build $(1).all $(1).check $(1).clean $(1).showdeliverables $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target))
 
 $(1): bootstrap fetch
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(IWYU_OPTION) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
@@ -274,7 +273,7 @@ bootstrap: check-if-root compilerplugins
 # Build
 #
 # Note: this will pipe through all gbuild targets to ... gbuild
-#       with some translations like "build"->"all" for historic reasons
+#       with some translations like "check"->"unitcheck subsequentcheck uicheck" for historic reasons
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset) \
         $(if $(filter check,$(MAKECMDGOALS)),$(if $(COMPILER_PLUGINS),$(if $(LODE_HOME),clang-format-check))) \
