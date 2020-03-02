@@ -1858,6 +1858,12 @@
           <value>trellis</value>
           <!-- Zig Zag -->
           <value>zigZag</value>
+          <!-- Dashed Dotted -->
+          <value>dashDot</value>
+          <!-- Dashed Dotted Upward Diagonal -->
+          <value>dashdotUpDiag</value>
+          <!-- Solid Dotted -->
+          <value>lsolidDoted</value>
         </choice>
       </define>
       <define name="CT_PatternFillProperties">

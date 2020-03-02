@@ -293,6 +293,9 @@
 #define RID_SVXSTR_BMP73_DEF                        "Upward Diagonal"
 #define RID_SVXSTR_BMP74_DEF                        "Cross"
 #define RID_SVXSTR_BMP75_DEF                        "Diagonal Cross"
+#define RID_SVXSTR_BMP76_DEF                        "Dashed Dotted"
+#define RID_SVXSTR_BMP77_DEF                        "Dashed Dotted Upward Diagonal"
+#define RID_SVXSTR_BMP78_DEF                        "Solid Dotted"
 // Reference-strings for standard-dash-table
 #define RID_SVXSTR_DASH0_DEF                        "Ultrafine Dashed"
 #define RID_SVXSTR_DASH1_DEF                        "Fine Dashed"
