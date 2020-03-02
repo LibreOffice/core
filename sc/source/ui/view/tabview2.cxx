@@ -745,6 +745,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
     bool bSkipCell = false;
     bool bHFlip = false;
+    auto nMaxCol = pDoc->ClampToAllocatedColumns(nTab, MAXCOL);
     do
     {
         bSkipCell = pDoc->ColHidden(rCurX, nTab) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
@@ -755,7 +756,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
         if (bSkipCell)
         {
-            if (rCurX <= 0 || rCurX >= MAXCOL)
+            if (rCurX <= 0 || rCurX >= nMaxCol)
             {
                 if (bHFlip)
                 {
