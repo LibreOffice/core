@@ -52,6 +52,9 @@ namespace com::sun::star::lang { struct Locale; }
 
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
+
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 class EDITENG_DLLPUBLIC SvxNumberType
 {
     static sal_Int32 nRefCount;
@@ -81,6 +84,8 @@ public:
                                css::style::NumberingType::CHAR_SPECIAL != nNumType &&
                                css::style::NumberingType::BITMAP != nNumType;
                     }
+
+    void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
 class EDITENG_DLLPUBLIC SvxNumberFormat : public SvxNumberType
