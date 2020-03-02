@@ -80,6 +80,7 @@ private:
     std::unique_ptr<weld::CheckButton> mxCB2ndYAxis;
     std::unique_ptr<weld::CheckButton> mxCB2ndYAxisTitle;
     std::unique_ptr<weld::CheckButton> mxCBLegend;
+    std::unique_ptr<weld::CheckButton> mxCBLegendNoOverlay;
     std::unique_ptr<weld::CheckButton> mxCBGridVerticalMajor;
     std::unique_ptr<weld::CheckButton> mxCBGridHorizontalMajor;
     std::unique_ptr<weld::CheckButton> mxCBGridVerticalMinor;

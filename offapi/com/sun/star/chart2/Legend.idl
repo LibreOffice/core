@@ -67,6 +67,8 @@ service Legend
      */
     [property] boolean Show;
 
+    [property] boolean Overlay;
+
     /** contains the size of the page at the time when properties were
         set (e.g. the CharHeight).
 

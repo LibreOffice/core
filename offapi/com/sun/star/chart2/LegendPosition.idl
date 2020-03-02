@@ -46,11 +46,7 @@ enum LegendPosition
 
     /** In LTR mode this is the bottom side
      */
-    PAGE_END,
-
-    /** The position of the legend is given by an offset value
-     */
-    CUSTOM
+    PAGE_END
 };
 
 } ; // chart2
