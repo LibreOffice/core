@@ -120,6 +120,10 @@ static const sal_Unicode aWhiteSpaces[] =
     0xfffb    /* INTERLINEAR ANNOTATION TERMINATOR */
 };
 
+//  Information about reason for proofreading (ProofInfo)
+   static const sal_Int32 PROOFINFO_GET_PROOFRESULT = 1;
+   static const sal_Int32 PROOFINFO_MARK_PARAGRAPH = 2;
+
 static const int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
@@ -545,13 +549,15 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
 }
 
 static uno::Sequence<beans::PropertyValue>
-lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara)
+lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_Int32 nProofInfo)
 {
     uno::Reference<beans::XPropertySet> const xProps(
             xFlatPara, uno::UNO_QUERY_THROW);
+    css::uno::Any a (nProofInfo);
     return comphelper::InitPropertySequence({
         { "FieldPositions", xProps->getPropertyValue("FieldPositions") },
-        { "FootnotePositions", xProps->getPropertyValue("FootnotePositions") }
+        { "FootnotePositions", xProps->getPropertyValue("FootnotePositions") },
+        { "ProofInfo", a }
     });
 }
 
@@ -619,7 +625,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                             {
                                 aGuard.clear();
                                 uno::Sequence<beans::PropertyValue> const aProps(
-                                    lcl_makeProperties(xFlatPara));
+                                    lcl_makeProperties(xFlatPara, PROOFINFO_MARK_PARAGRAPH));
                                 aRes = xGC->doProofreading(aCurDocId, aCurTxt, aCurLocale,
                                                            nStartPos, nSuggestedEnd, aProps);
 
@@ -772,7 +778,7 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
             if (xGC.is())
             {
                 uno::Sequence<beans::PropertyValue> const aProps(
-                        lcl_makeProperties(xFlatPara));
+                        lcl_makeProperties(xFlatPara, PROOFINFO_GET_PROOFRESULT));
                 aTmpRes = xGC->doProofreading( aDocId, rText,
                     aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aProps );
 
