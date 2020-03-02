@@ -3353,7 +3353,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                 && (   sFilterName == "Calc MS Excel 2007 XML"
                     || sFilterName == "Impress MS PowerPoint 2007 XML"
                     || sFilterName == "MS Word 2007 XML"))
-                // TODO: Propbably need to check other affected formats + templates?
+                // TODO: Probably need to check other affected formats + templates?
             {
                 // tdf#129096: in case of recovery of password protected OOXML document it is done not
                 // the same way as ordinal loading. Inside XDocumentRecovery::recoverFromFile
