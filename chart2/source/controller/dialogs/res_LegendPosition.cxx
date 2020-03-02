@@ -95,16 +95,13 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
                 case chart2::LegendPosition_LINE_START:
                     m_xRbtLeft->set_active(true);
                     break;
-                case chart2::LegendPosition_LINE_END:
-                    m_xRbtRight->set_active(true);
-                    break;
                 case chart2::LegendPosition_PAGE_START:
                     m_xRbtTop->set_active(true);
                     break;
                 case chart2::LegendPosition_PAGE_END:
                     m_xRbtBottom->set_active(true);
                     break;
-                case chart2::LegendPosition_CUSTOM:
+                case chart2::LegendPosition_LINE_END:
                 default:
                     m_xRbtRight->set_active(true);
                     break;
@@ -207,7 +204,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 
 void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 {
-    chart2::LegendPosition nLegendPosition = chart2::LegendPosition_CUSTOM;
+    chart2::LegendPosition nLegendPosition = chart2::LegendPosition_LINE_END;
     if( m_xRbtLeft->get_active() )
         nLegendPosition = chart2::LegendPosition_LINE_START;
     else if( m_xRbtTop->get_active() )

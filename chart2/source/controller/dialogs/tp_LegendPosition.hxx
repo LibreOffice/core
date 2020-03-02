@@ -34,6 +34,7 @@ private:
 
     LegendPositionResources  m_aLegendPositionResources;
     std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
+    std::unique_ptr<weld::CheckButton> m_xCBLegendNoOverlay;
 
 public:
     SchLegendPosTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

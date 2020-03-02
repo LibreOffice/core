@@ -94,68 +94,96 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid5">
+                  <object class="GtkBox" id="box_legend2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="checkbutton_legend">
+                      <object class="GtkGrid" id="grid5">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkCheckButton" id="checkbutton_legend">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes" context="sidebarelements|checkbutton_legend|tooltip_text">Show Legend</property>
+                            <property name="margin_right">5</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box_legend">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="placement_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes" context="sidebarelements|placement_label">_Placement:</property>
+                                <property name="use_underline">True</property>
+                                <property name="ellipsize">end</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboboxtext_legend">
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <items>
+                                  <item translatable="yes" context="sidebarelements|comboboxtext_legend">Right</item>
+                                  <item translatable="yes" context="sidebarelements|comboboxtext_legend">Top</item>
+                                  <item translatable="yes" context="sidebarelements|comboboxtext_legend">Bottom</item>
+                                  <item translatable="yes" context="sidebarelements|comboboxtext_legend">Left</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbutton_no_overlay">
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_no_overlay">Show the legend without overlapping the chart</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes" context="sidebarelements|checkbutton_legend|tooltip_text">Show Legend</property>
-                        <property name="margin_right">5</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box_legend">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="placement_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes" context="sidebarelements|placement_label">_Placement:</property>
-                            <property name="use_underline">True</property>
-                            <property name="ellipsize">end</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="comboboxtext_legend">
-                            <property name="width_request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <items>
-                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Right</item>
-                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Top</item>
-                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Bottom</item>
-                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Left</item>
-                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Manual</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>

@@ -2562,7 +2562,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             plot area is positioned automatically (Excel sets the plot area to
             manual mode, if the legend is moved or resized). With manual plot
             areas, Excel ignores the value in maData.mnDockMode completely. */
-        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_LINE_END;
         cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
         if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
         {
@@ -2587,7 +2587,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
         }
 
         // no automatic position/size: try to find the correct position and size
-        if( eApiPos == cssc2::LegendPosition_CUSTOM )
+        if( GetChartData().IsManualPlotArea() || maData.mnDockMode == EXC_CHLEGEND_NOTDOCKED )
         {
             const XclChFramePos* pFramePos = mxFramePos ? &mxFramePos->GetFramePosData() : nullptr;
 
