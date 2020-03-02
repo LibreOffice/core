@@ -26,6 +26,7 @@
 #include <mvsave.hxx>
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
+#include <frameformats.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>

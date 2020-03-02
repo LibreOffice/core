@@ -34,6 +34,7 @@
 #include <sal/types.h>
 #include <unocrsr.hxx>
 #include <txtfrm.hxx>
+#include <frameformats.hxx>
 #include <memory>
 
 using namespace ::boost;

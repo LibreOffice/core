@@ -56,6 +56,7 @@
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
 #include <frmfmt.hxx>
+#include <frameformats.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

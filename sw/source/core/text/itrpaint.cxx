@@ -38,6 +38,7 @@
 #include "redlnitr.hxx"
 #include "porrst.hxx"
 #include "pormulti.hxx"
+#include <doc.hxx>
 
 // Returns, if we have an underline breaking situation
 // Adding some more conditions here means you also have to change them

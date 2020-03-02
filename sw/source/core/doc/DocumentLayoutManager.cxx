@@ -39,6 +39,7 @@
 #include <textboxhelper.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 using namespace ::com::sun::star;

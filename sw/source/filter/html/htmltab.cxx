@@ -64,6 +64,7 @@
 #include <itabenum.hxx>
 #include <tblafmt.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <frameformats.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2

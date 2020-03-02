@@ -41,6 +41,7 @@
 #include <hints.hxx>
 #include <UndoTable.hxx>
 #include <fmtfsize.hxx>
+#include <frameformats.hxx>
 #include <deque>
 #include <memory>
 #include <numeric>

@@ -46,6 +46,7 @@
 #include <ndindex.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
+#include <frameformats.hxx>
 
 #include <limits>
 #include <set>

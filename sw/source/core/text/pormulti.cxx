@@ -44,6 +44,7 @@
 #include <tgrditem.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 

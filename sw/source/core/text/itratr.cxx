@@ -56,6 +56,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <editeng/lrspitem.hxx>
 #include <calbck.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;

@@ -34,6 +34,7 @@
 #include <swtable.hxx>
 #include <shellio.hxx>
 #include <iodetect.hxx>
+#include <frameformats.hxx>
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {

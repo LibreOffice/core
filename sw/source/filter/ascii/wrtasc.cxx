@@ -27,6 +27,7 @@
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 #include "wrtasc.hxx"
+#include <frameformats.hxx>
 
 #include <strings.hrc>
 

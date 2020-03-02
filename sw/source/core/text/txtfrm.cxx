@@ -1386,18 +1386,18 @@ bool SwTextFrame::IsHiddenNow() const
             {
                 // see also SwpHints::CalcHiddenParaField()
                 const SwFormatField& rField = pHint->GetFormatField();
-                int nCurWeight = pNode->FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
+                int nCurWeight = pNode->GetDoc()->FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
                 if (nCurWeight > nNewResultWeight)
                 {
                     nNewResultWeight = nCurWeight;
-                    bHiddenParaField = pNode->FieldHidesPara(*rField.GetField());
+                    bHiddenParaField = pNode->GetDoc()->FieldHidesPara(*rField.GetField());
                 }
                 else if (nCurWeight == nNewResultWeight && bHiddenParaField)
                 {
                     // Currently, for both supported hiding types (HiddenPara, Database), "Don't hide"
                     // takes precedence - i.e., if there's a "Don't hide" field of that weight, we only
                     // care about fields of higher weight.
-                    bHiddenParaField = pNode->FieldHidesPara(*rField.GetField());
+                    bHiddenParaField = pNode->GetDoc()->FieldHidesPara(*rField.GetField());
                 }
             }
         }

@@ -22,6 +22,7 @@
 #include <docary.hxx>
 #include <fmtanchr.hxx>
 #include <ndindex.hxx>
+#include <frameformats.hxx>
 #include <svx/swframetypes.hxx>
 
 bool SwPosFlyFrameCmp::operator()(const SwPosFlyFramePtr& rA, const SwPosFlyFramePtr& rB) const

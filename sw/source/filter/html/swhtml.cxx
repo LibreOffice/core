@@ -123,6 +123,7 @@
 #include <ndole.hxx>
 #include <unoframe.hxx>
 #include "css1atr.hxx"
+#include <frameformats.hxx>
 
 #define FONTSIZE_MASK           7
 

@@ -80,6 +80,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <strings.hrc>
+#include <frameformats.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <sortedobjs.hxx>

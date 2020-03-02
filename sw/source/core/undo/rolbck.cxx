@@ -53,6 +53,7 @@
 #include <charfmt.hxx>
 #include <strings.hrc>
 #include <bookmrk.hxx>
+#include <frameformats.hxx>
 #include <memory>
 
 OUString SwHistoryHint::GetDescription() const

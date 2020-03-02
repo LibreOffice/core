@@ -760,8 +760,7 @@ public:
     SwFrameFormat  *MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
-    SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const
-        {   return static_cast<SwFrameFormat*>(FindFormatByName( static_cast<SwFormatsBase&>(*mpFrameFormatTable), rName )); }
+    SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const;
 
     SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
                            bool bBroadcast = false );

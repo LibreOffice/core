@@ -39,6 +39,7 @@
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <strings.hrc>
+#include <frameformats.hxx>
 #include <vector>
 
 // DELETE

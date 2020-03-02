@@ -44,6 +44,7 @@
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
 #include <calbck.hxx>
+#include <frameformats.hxx>
 #include <deque>
 #include <memory>
 

@@ -92,6 +92,7 @@
 #include <wrtsh.hxx>
 #include <unocrsr.hxx>
 #include <fmthdft.hxx>
+#include <frameformats.hxx>
 
 #include <numrule.hxx>
 

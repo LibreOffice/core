@@ -65,6 +65,7 @@
 #include "swhtml.hxx"
 #include <numrule.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <frameformats.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>
