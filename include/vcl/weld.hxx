@@ -718,6 +718,8 @@ protected:
     Link<const std::pair<const TreeIter&, OUString>&, bool> m_aEditingDoneHdl;
     // if handler returns false, the expansion of the row is refused
     Link<const TreeIter&, bool> m_aExpandingHdl;
+    // if handler returns false, the collapse of the row is refused
+    Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
     // if handler returns true, then menu has been show and event is consumed
@@ -735,6 +737,10 @@ protected:
     bool signal_expanding(const TreeIter& rIter)
     {
         return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
+    }
+    bool signal_collapsing(const TreeIter& rIter)
+    {
+        return !m_aCollapsingHdl.IsSet() || m_aCollapsingHdl.Call(rIter);
     }
     void signal_visible_range_changed() { m_aVisibleRangeChangedHdl.Call(*this); }
     void signal_model_changed() { m_aModelChangedHdl.Call(*this); }
@@ -962,6 +968,7 @@ public:
         = 0;
 
     void connect_expanding(const Link<const TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
+    void connect_collapsing(const Link<const TreeIter&, bool>& rLink) { m_aCollapsingHdl = rLink; }
 
     // rStartLink returns true to allow editing, false to disallow
     // rEndLink returns true to accept the edit, false to reject
