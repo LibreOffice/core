@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UITest_UITest,writer_demo))
+$(eval $(call gb_UITest_UITest,writer_demo7))
 
-$(eval $(call gb_UITest_add_modules,writer_demo,$(SRCDIR)/uitest,\
-	writer_tests/ \
+$(eval $(call gb_UITest_add_modules,writer_demo7,$(SRCDIR)/uitest,\
+	writer_tests7/ \
 ))
 
-$(eval $(call gb_UITest_set_defs,writer_demo, \
+$(eval $(call gb_UITest_set_defs,writer_demo7, \
     TDOC="$(SRCDIR)/uitest/writer_tests/data" \
 ))
 
