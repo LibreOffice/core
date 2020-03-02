@@ -46,6 +46,11 @@ $(eval $(call gb_Library_add_cobjects,jpipe, \
     jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection \
 ))
 
+# see external/dtoa/StaticLibrary_dtoa.mk
+$(eval $(call gb_Library_add_defs,jpipe,\
+    $(if $(filter little,$(ENDIANNESS)),-DIEEE_8087,-DIEEE_MC68k)\
+))
+
 $(eval $(call gb_Library_add_exception_objects,jpipe, \
     jurt/source/pipe/staticsalhack \
 ))

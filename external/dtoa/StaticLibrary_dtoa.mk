@@ -11,13 +11,20 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,dtoa))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,dtoa,dtoa))
 
-# A place that duplicates these settings is jurt/source/pipe/staticsalhack.cxx:
-$(eval $(call gb_StaticLibrary_add_cflags,dtoa,-DIEEE_8087))
+# A place that duplicates these settings is jurt/Library_jpipe.mk
+$(eval $(call gb_StaticLibrary_add_defs,dtoa,\
+    $(if $(filter little,$(ENDIANNESS)),-DIEEE_8087,-DIEEE_MC68k)\
+))
 
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,dtoa))
 
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,dtoa,\
-    UnpackedTarball/dtoa/src/dtoa \
+$(eval $(call gb_StaticLibrary_set_include,dtoa,\
+    -I$(call gb_UnpackedTarball_get_dir,dtoa/src/)\
+    $$(INCLUDE)\
+))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,dtoa,\
+    external/dtoa/source/dtoa \
 ))
 
 # vim: set noet sw=4 ts=4:
