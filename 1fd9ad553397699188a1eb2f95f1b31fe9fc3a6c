@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edbc8dad_155643c0",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-03-02T19:39:53Z",
+      "side": 1,
+      "message": "We need a documentation :)",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86880faf_6c1da120",
+        "filename": "sw/source/core/access/accpara.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-03-02T19:39:53Z",
+      "side": 1,
+      "message": "Better replace this with only a TODO comment",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fef2969_17e6b278",
+        "filename": "vcl/unx/gtk3/a11y/gtk3atktext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-03-02T19:39:53Z",
+      "side": 1,
+      "message": "Please remove this :)",
+      "range": {
+        "startLine": 931,
+        "startChar": 2,
+        "endLine": 931,
+        "endChar": 11
+      },
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
