@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92b24e88_2063e206",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T11:02:35Z",
+      "side": 1,
+      "message": "apparently every use of nLine is converting it to sal_uInt16, so it looks better than sal_uInt32 here",
+      "revId": "99378b64c926b18338f89c89dd8340376a48e55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce080301_057b3eeb",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T11:02:35Z",
+      "side": 1,
+      "message": "FindBreakPoint takes sal_uInt16",
+      "revId": "99378b64c926b18338f89c89dd8340376a48e55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77f4634_7f214b03",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-02T11:02:35Z",
+      "side": 1,
+      "message": "BreakPoint takes sal_uInt16",
+      "revId": "99378b64c926b18338f89c89dd8340376a48e55a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
