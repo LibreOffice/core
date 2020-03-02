@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0e9dfbda_2863c09a",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-02T20:20:56Z",
+      "side": 1,
+      "message": "Probably. If empty this would crash anyway the next line so the warning is rather useless.",
+      "parentUuid": "cd65d01e_18f23963",
+      "revId": "d9789425fe9db3bdae81e785e93489724cb08ca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1957101_ff6bd225",
         "filename": "sc/source/ui/unoobj/docuno.cxx",
         "patchSetId": 2
