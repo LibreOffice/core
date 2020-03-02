@@ -201,7 +201,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
 
         // predefined legend position and expansion
-        cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_LINE_END;
         cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         RelativePosition eRelPos;
         bool bTopRight=false;
@@ -216,7 +216,6 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
             case XML_tr:    // top-right not supported
-                eLegendPos = LegendPosition_CUSTOM;
                 eRelPos.Primary = 1;
                 eRelPos.Secondary =0;
                 eRelPos.Anchor = Alignment_TOP_RIGHT;
@@ -248,7 +247,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
-        if(eLegendPos == LegendPosition_CUSTOM && bTopRight && !bManualLayout)
+        if (bTopRight && !bManualLayout)
             aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
         if (mrModel.maLegendEntries.size() > 0)
             legendEntriesFormatting(rxDiagram);

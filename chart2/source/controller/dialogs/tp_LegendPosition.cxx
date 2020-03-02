@@ -20,6 +20,7 @@
 #include "tp_LegendPosition.hxx"
 #include <res_LegendPosition.hxx>
 #include <TextDirectionListBox.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
@@ -30,6 +31,7 @@ SchLegendPosTabPage::SchLegendPosTabPage(weld::Container* pPage, weld::DialogCon
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_LegendPosition.ui", "tp_LegendPosition", &rInAttrs)
     , m_aLegendPositionResources(*m_xBuilder)
     , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR")))
+    , m_xCBLegendNoOverlay(m_xBuilder->weld_check_button("CB_NO_OVERLAY"))
 {
 }
 
@@ -50,6 +52,9 @@ bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     if (m_xLbTextDirection->get_active() != -1)
         rOutAttrs->Put(SvxFrameDirectionItem(m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR));
 
+    if (m_xCBLegendNoOverlay->get_visible())
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, m_xCBLegendNoOverlay->get_active()));
+
     return true;
 }
 
@@ -60,6 +65,12 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
     const SfxPoolItem* pPoolItem = nullptr;
     if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
         m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+
+    if (rInAttrs->GetItemState(SCHATTR_LEGEND_NO_OVERLAY, true, &pPoolItem) == SfxItemState::SET)
+    {
+        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        m_xCBLegendNoOverlay->set_active(bVal);
+    }
 }
 
 } //namespace chart
