@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vclpluginapi.h>
 #include <PhysicalFontFace.hxx>
 
 #include <tools/ref.hxx>
@@ -26,10 +27,10 @@
 #include <vcl/fontcharmap.hxx>
 
 #include <QtCore/QString>
+#include <QtGui/QFont>
 
 class FontAttributes;
 class FontSelectPattern;
-class QFont;
 
 class Qt5FontFace final : public PhysicalFontFace
 {
@@ -37,6 +38,10 @@ public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
     static Qt5FontFace* fromQFontDatabase(const QString& aFamily, const QString& aStyle);
     static void fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA);
+
+    VCLPLUG_QT5_PUBLIC static FontWeight toFontWeight(const int nWeight);
+    VCLPLUG_QT5_PUBLIC static FontWidth toFontWidth(const int nStretch);
+    VCLPLUG_QT5_PUBLIC static FontItalic toFontItalic(const QFont::Style eStyle);
 
     sal_IntPtr GetFontId() const override;
 

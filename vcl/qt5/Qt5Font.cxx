@@ -23,7 +23,7 @@
 #include <QtGui/QFont>
 #include <QtGui/QRawFont>
 
-static QFont::Weight GetQFontWeight(FontWeight eWeight)
+static QFont::Weight toWeight(FontWeight eWeight)
 {
     switch (eWeight)
     {
@@ -57,27 +57,66 @@ static QFont::Weight GetQFontWeight(FontWeight eWeight)
     return QFont::Normal;
 }
 
+static int toStretch(FontWidth eWidthType)
+{
+    switch (eWidthType)
+    {
+        case WIDTH_DONTKNOW:
+            return QFont::AnyStretch;
+        case WIDTH_ULTRA_CONDENSED:
+            return QFont::UltraCondensed;
+        case WIDTH_EXTRA_CONDENSED:
+            return QFont::ExtraCondensed;
+        case WIDTH_CONDENSED:
+            return QFont::Condensed;
+        case WIDTH_SEMI_CONDENSED:
+            return QFont::SemiCondensed;
+        case WIDTH_NORMAL:
+            return QFont::Unstretched;
+        case WIDTH_SEMI_EXPANDED:
+            return QFont::SemiExpanded;
+        case WIDTH_EXPANDED:
+            return QFont::Expanded;
+        case WIDTH_EXTRA_EXPANDED:
+            return QFont::ExtraExpanded;
+        case WIDTH_ULTRA_EXPANDED:
+            return QFont::UltraExpanded;
+        case FontWidth_FORCE_EQUAL_SIZE:
+            assert(false && "FontWidth_FORCE_EQUAL_SIZE not implementable for QFont");
+    }
+
+    // so we would get enum not handled warning
+    return QFont::AnyStretch;
+}
+
+static QFont::Style toStyle(FontItalic eItalic)
+{
+    switch (eItalic)
+    {
+        case ITALIC_DONTKNOW:
+            [[fallthrough]];
+        case ITALIC_NONE:
+            return QFont::Style::StyleNormal;
+        case ITALIC_OBLIQUE:
+            return QFont::Style::StyleOblique;
+        case ITALIC_NORMAL:
+            return QFont::Style::StyleItalic;
+        case FontItalic_FORCE_EQUAL_SIZE:
+            assert(false && "FontItalic_FORCE_EQUAL_SIZE not implementable for QFont");
+    }
+
+    // so we would get enum not handled warning
+    return QFont::Style::StyleNormal;
+}
+
 Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));
-    setWeight(GetQFontWeight(rPFF.GetWeight()));
+    setWeight(toWeight(rPFF.GetWeight()));
     setPixelSize(rFSP.mnHeight);
-    switch (rFSP.GetItalic())
-    {
-        case ITALIC_DONTKNOW:
-        case FontItalic_FORCE_EQUAL_SIZE:
-            break;
-        case ITALIC_NONE:
-            setStyle(Style::StyleNormal);
-            break;
-        case ITALIC_OBLIQUE:
-            setStyle(Style::StyleOblique);
-            break;
-        case ITALIC_NORMAL:
-            setStyle(Style::StyleItalic);
-            break;
-    }
+    setStretch(toStretch(rPFF.GetWidthType()));
+    setStyle(toStyle(rFSP.GetItalic()));
 }
 
 static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
