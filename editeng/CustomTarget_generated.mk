@@ -16,7 +16,7 @@ editeng_INC := $(call gb_CustomTarget_get_workdir,editeng/generated)
 $(editeng_INC)/tokens.hxx $(editeng_INC)/tokens.gperf : $(editeng_SRC)/tokens.txt $(editeng_PY) \
         $(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(editeng_INC)
-	$(PYTHON) $(editeng_PY) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
+	$(call gb_ExternalExecutable_get_command,python) $(editeng_PY) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
 
 $(editeng_INC)/tokens.cxx : $(editeng_INC)/tokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(editeng_INC)/tokens.cxx $(editeng_INC)/tokens.gperf
