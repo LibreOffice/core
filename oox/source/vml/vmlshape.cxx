@@ -488,6 +488,10 @@ void ShapeBase::convertFormatting( const Reference< XShape >& rxShape ) const
     }
 }
 
+void ShapeBase::setContainer(ShapeContainer* pContainer) { mpContainer = pContainer; }
+
+ShapeContainer* ShapeBase::getContainer() const { return mpContainer; }
+
 // protected ------------------------------------------------------------------
 
 awt::Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const

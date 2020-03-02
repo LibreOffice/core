@@ -72,6 +72,25 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testLayoutFlowAltAlone)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nWritingMode);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
+{
+    // Load a document with a groupshape, 2nd child is a <v:shape>, its type has o:spt set to 202
+    // (TextBox).
+    load("group-spt202.docx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: com.sun.star.drawing.TextShape
+    // - Actual  : com.sun.star.drawing.CustomShape
+    // and then the size of the group shape was incorrect, e.g. its right edge was outside the page
+    // boundaries.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShape->getShapeType());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
