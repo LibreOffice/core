@@ -1370,6 +1370,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xProp.is())
             {
+                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+
                 // export legend anchor position
                 try
                 {
@@ -1382,12 +1384,26 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                     SAL_WARN("xmloff.chart", "Property Align not found in ChartLegend" );
                 }
 
+                // export legend overlay
+                try
+                {
+                    if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012)
+                    {
+                        Any aAny( xProp->getPropertyValue("Overlay"));
+                        if(aAny.get<bool>())
+                            mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_OVERLAY, OUString::boolean(true));
+                    }
+                }
+                catch( const beans::UnknownPropertyException & )
+                {
+                    SAL_WARN("xmloff.chart", "Property Overlay not found in ChartLegend" );
+                }
+
                 // export absolute legend position
                 Reference< drawing::XShape > xLegendShape( xProp, uno::UNO_QUERY );
                 addPosition( xLegendShape );
 
                 // export legend size
-                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
                 if( xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
                 {
                     try
