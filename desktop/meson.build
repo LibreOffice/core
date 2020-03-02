@@ -10,11 +10,45 @@ deploymentmisc_lib = shared_library('deploymentmisc',
   'source/deployment/misc/dp_update.cxx',
   'source/deployment/misc/dp_version.cxx',
   'source/deployment/misc/lockfile.cxx',
-   udk_fake_h, off_fake_h,
+  udk_fake_h, off_fake_h,
   cpp_args: ['-DESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/deployment/inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib, xmlscript_lib, i18nlangtag_lib],
+  dependencies: [],
+)
+
+crashreport_lib = shared_library('crashlib',
+  'source/app/crashreport.cxx',
+  'source/minidump/minidump.cxx',
+   udk_fake_h, off_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             '-DCRASHREPORT_DLLIMPLEMENTATION'],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  link_with: [],
+  dependencies: [curl_dep],
+)
+
+unopkgapp_lib = shared_library('unopkgapp',
+  'source/pkgchk/unopkg/unopkg_app.cxx',
+  'source/pkgchk/unopkg/unopkg_cmdenv.cxx',
+  'source/pkgchk/unopkg/unopkg_misc.cxx',
+
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             '-DDESKTOP_DLLIMPLEMENTATION'],
+  include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/deployment/inc'],
+  link_with: [comphelper_lib,
+    cppu_lib,
+    cppuhelper_lib,
+    deploymentmisc_lib,
+    sal_lib,
+    tl_lib,
+    ucbhelper_lib,
+    utl_lib,
+    vcl_lib,
+    i18nlangtag_lib,
+  ],
   dependencies: [],
 )
 
@@ -45,3 +79,24 @@ soffice_bin = executable('soffice', 'source/app/main.c',
   link_with: [sofficeapp_lib, sal_lib],
 )
 
+minidump_bin = executable('minidump_upload',
+  'source/minidump/minidump_upload.cxx',
+  include_directories: [main_inc],
+  link_with: [crashreport_lib, sal_lib],
+)
+
+unopkg_bin = executable('unopkg',
+  'source/pkgchk/unopkg/unopkg_main.c',
+  include_directories: [main_inc],
+  link_with: [sal_lib, comphelper_lib, tl_lib, unopkgapp_lib],
+)
+
+oosplash_bin = executable('oosplash',
+  'unx/source/args.c',
+  'unx/source/file_image_unx.c',
+  'unx/source/pagein.c',
+  'unx/source/splashx.c',
+  'unx/source/start.c',
+  include_directories: [main_inc],
+  link_with: [sal_lib],
+)

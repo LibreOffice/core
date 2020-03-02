@@ -137,6 +137,7 @@ libebook_dep = dependency('libe-book-0.1')
 raptor2_dep = dependency('raptor2')
 rasqal_dep = dependency('rasqal')
 librdf_dep = cpp.find_library('rdf')
+curl_dep = cpp.find_library('libcurl')
 
 # The version in Ubuntu eoan is too old.
 #mdds_dep = dependency('mdds-1.5')
