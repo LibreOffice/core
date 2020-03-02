@@ -333,7 +333,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_INSERT_DIAGRAM:
-            pFuInsertChart.reset(new FuInsertChart(*this, pWin, pView, pDrModel, rReq));
+            FuInsertChart(*this, pWin, pView, pDrModel, rReq);
             break;
 
         case SID_INSERT_OBJECT:

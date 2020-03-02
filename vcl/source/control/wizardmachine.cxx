@@ -1387,9 +1387,6 @@ namespace vcl
 
     void WizardMachine::resumeTraveling( AccessGuard )
     {
-        if (!m_pImpl)
-            return;
-
         DBG_ASSERT( m_pImpl->m_bTravelingSuspended, "WizardMachine::resumeTraveling: nothing to resume!" );
         m_pImpl->m_bTravelingSuspended = false;
     }
