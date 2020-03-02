@@ -46,40 +46,63 @@ Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
         m_xCharMap = rSrc.m_xCharMap;
 }
 
-static FontWeight fromQFontWeight(int nWeight)
+FontWeight Qt5FontFace::toFontWeight(const int nWeight)
 {
-    FontWeight eWeight = WEIGHT_DONTKNOW;
-    switch (nWeight)
+    if (nWeight <= QFont::Thin)
+        return WEIGHT_THIN;
+    if (nWeight <= QFont::ExtraLight)
+        return WEIGHT_ULTRALIGHT;
+    if (nWeight <= QFont::Light)
+        return WEIGHT_LIGHT;
+    if (nWeight <= QFont::Normal)
+        return WEIGHT_NORMAL;
+    if (nWeight <= QFont::Medium)
+        return WEIGHT_MEDIUM;
+    if (nWeight <= QFont::DemiBold)
+        return WEIGHT_SEMIBOLD;
+    if (nWeight <= QFont::Bold)
+        return WEIGHT_BOLD;
+    if (nWeight <= QFont::ExtraBold)
+        return WEIGHT_ULTRABOLD;
+    return WEIGHT_BLACK;
+}
+
+FontWidth Qt5FontFace::toFontWidth(const int nStretch)
+{
+    if (nStretch == 0) // QFont::AnyStretch since Qt 5.8
+        return WIDTH_DONTKNOW;
+    if (nStretch <= QFont::UltraCondensed)
+        return WIDTH_ULTRA_CONDENSED;
+    if (nStretch <= QFont::ExtraCondensed)
+        return WIDTH_EXTRA_CONDENSED;
+    if (nStretch <= QFont::Condensed)
+        return WIDTH_CONDENSED;
+    if (nStretch <= QFont::SemiCondensed)
+        return WIDTH_SEMI_CONDENSED;
+    if (nStretch <= QFont::Unstretched)
+        return WIDTH_NORMAL;
+    if (nStretch <= QFont::SemiExpanded)
+        return WIDTH_SEMI_EXPANDED;
+    if (nStretch <= QFont::Expanded)
+        return WIDTH_EXPANDED;
+    if (nStretch <= QFont::ExtraExpanded)
+        return WIDTH_EXTRA_EXPANDED;
+    return WIDTH_ULTRA_EXPANDED;
+}
+
+FontItalic Qt5FontFace::toFontItalic(const QFont::Style eStyle)
+{
+    switch (eStyle)
     {
-        case QFont::Thin:
-            eWeight = WEIGHT_THIN;
-            break;
-        case QFont::ExtraLight:
-            eWeight = WEIGHT_ULTRALIGHT;
-            break;
-        case QFont::Light:
-            eWeight = WEIGHT_LIGHT;
-            break;
-        case QFont::Normal:
-            eWeight = WEIGHT_NORMAL;
-            break;
-        case QFont::Medium:
-            eWeight = WEIGHT_MEDIUM;
-            break;
-        case QFont::DemiBold:
-            eWeight = WEIGHT_SEMIBOLD;
-            break;
-        case QFont::Bold:
-            eWeight = WEIGHT_BOLD;
-            break;
-        case QFont::ExtraBold:
-            eWeight = WEIGHT_ULTRABOLD;
-            break;
-        case QFont::Black:
-            eWeight = WEIGHT_BLACK;
-            break;
+        case QFont::StyleNormal:
+            return ITALIC_NONE;
+        case QFont::StyleItalic:
+            return ITALIC_NORMAL;
+        case QFont::StyleOblique:
+            return ITALIC_OBLIQUE;
     }
-    return eWeight;
+
+    return ITALIC_NONE;
 }
 
 void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rFA)
@@ -91,20 +114,9 @@ void Qt5FontFace::fillAttributesFromQFont(const QFont& rFont, FontAttributes& rF
         rFA.SetSymbolFlag(true);
     rFA.SetStyleName(toOUString(aFontInfo.styleName()));
     rFA.SetPitch(aFontInfo.fixedPitch() ? PITCH_FIXED : PITCH_VARIABLE);
-    rFA.SetWeight(fromQFontWeight(aFontInfo.weight()));
-
-    switch (aFontInfo.style())
-    {
-        case QFont::StyleNormal:
-            rFA.SetItalic(ITALIC_NONE);
-            break;
-        case QFont::StyleItalic:
-            rFA.SetItalic(ITALIC_NORMAL);
-            break;
-        case QFont::StyleOblique:
-            rFA.SetItalic(ITALIC_OBLIQUE);
-            break;
-    }
+    rFA.SetWeight(Qt5FontFace::toFontWeight(aFontInfo.weight()));
+    rFA.SetItalic(Qt5FontFace::toFontItalic(aFontInfo.style()));
+    rFA.SetWidthType(Qt5FontFace::toFontWidth(rFont.stretch()));
 }
 
 Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
@@ -123,7 +135,7 @@ Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QStrin
         aFA.SetSymbolFlag(true);
     aFA.SetStyleName(toOUString(aStyle));
     aFA.SetPitch(aFDB.isFixedPitch(aFamily, aStyle) ? PITCH_FIXED : PITCH_VARIABLE);
-    aFA.SetWeight(fromQFontWeight(aFDB.weight(aFamily, aStyle)));
+    aFA.SetWeight(Qt5FontFace::toFontWeight(aFDB.weight(aFamily, aStyle)));
     aFA.SetItalic(aFDB.italic(aFamily, aStyle) ? ITALIC_NORMAL : ITALIC_NONE);
     return new Qt5FontFace(aFA, aFamily + "," + aStyle);
 }
