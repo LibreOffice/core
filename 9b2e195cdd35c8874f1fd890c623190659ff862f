@@ -34,6 +34,24 @@
       "revId": "9b2e195cdd35c8874f1fd890c623190659ff862f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a70c9c_f0b76762",
+        "filename": "vcl/unx/gtk3/a11y/gtk3atktext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-03-02T02:23:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f36d2ef1_56060a30",
+      "revId": "9b2e195cdd35c8874f1fd890c623190659ff862f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
