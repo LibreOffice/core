@@ -2437,6 +2437,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122800)
     // This failed, if the textarray length of the first axis label not 22.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTruncatedAxisLabel)
+{
+    SwDoc* pDoc = createDoc("testTruncatedAxisLabel.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test the X axis label visibility
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[1]/text",
+        "Long axis label truncated 1");
+
+    // test the Y axis label visibility
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[3]/text",
+        "-5.00");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128996)
 {
     SwDoc* pDoc = createDoc("tdf128996.docx");
