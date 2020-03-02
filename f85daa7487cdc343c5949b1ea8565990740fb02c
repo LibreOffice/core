@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca791f17_c977537b",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4192,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-02T20:29:38Z",
+      "side": 1,
+      "message": "What is this 500 supposed to be? All other values are known existing LCIDs.\nI guess this should be \"[$-412]\" for ko-KR LANGUAGE_KOREAN instead.",
+      "range": {
+        "startLine": 4192,
+        "startChar": 80,
+        "endLine": 4192,
+        "endChar": 83
+      },
+      "revId": "f85daa7487cdc343c5949b1ea8565990740fb02c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
