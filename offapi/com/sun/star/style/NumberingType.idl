@@ -492,6 +492,13 @@ published constants NumberingType
         ASTERISK ASTERISK, DAGGER DAGGER, etc.
       */
     const short SYMBOL_CHICAGO = 63;
+
+    /** Numbering is in Arabic numbers, padded with zero to have a length of at least two, as "01,
+        02, ..., 10, 11, ...".
+
+        @since LibreOffice 7.0
+     */
+    const short ARABIC_ZERO = 64;
 };
 
 
