@@ -25,11 +25,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/link.hxx>
-#include <tools/wintypes.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <type_traits>
 
 class NotifyEvent;
 class ColorListBox;

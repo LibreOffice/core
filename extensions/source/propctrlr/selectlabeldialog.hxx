@@ -22,7 +22,6 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "modulepcr.hxx"
 
 namespace pcr
 {

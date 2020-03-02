@@ -21,7 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 

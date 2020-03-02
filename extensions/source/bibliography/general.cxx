@@ -28,6 +28,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/fixed.hxx>
 #include "general.hxx"

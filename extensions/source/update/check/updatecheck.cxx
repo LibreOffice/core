@@ -23,6 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/office/Quickstart.hpp>

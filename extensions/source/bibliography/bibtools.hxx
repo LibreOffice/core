@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBTOOLS_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBTOOLS_HXX
 
-#include <vcl/taskpanelist.hxx>
+#include <vcl/window.hxx>
 
 namespace bib
 {
