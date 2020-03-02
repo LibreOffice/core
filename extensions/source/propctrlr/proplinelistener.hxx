@@ -21,7 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPLINELISTENER_HXX
 
 #include <rtl/ustring.hxx>
-
+#include <com/sun/star/uno/Any.hxx>
 
 namespace pcr
 {

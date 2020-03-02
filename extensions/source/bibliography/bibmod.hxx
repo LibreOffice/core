@@ -20,6 +20,8 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
 
+#include <locale>
+
 class BibDataManager;
 class BibConfig;
 

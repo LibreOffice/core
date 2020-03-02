@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 extern "C" {
 
 void createRegistryInfo_OGridWizard();

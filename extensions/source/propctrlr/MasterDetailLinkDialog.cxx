@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include "MasterDetailLinkDialog.hxx"
 #include "formlinkdialog.hxx"
+#include "modulepcr.hxx"
 #include "pcrservices.hxx"
 
 extern "C" void createRegistryInfo_MasterDetailLinkDialog()
