@@ -8575,6 +8575,14 @@ static GtkInstanceTreeView* g_DragSource;
 
 namespace {
 
+struct CompareGtkTreeIter
+{
+    bool operator()(const GtkTreeIter& lhs, const GtkTreeIter& rhs) const
+    {
+        return memcmp(&lhs, &rhs, sizeof(GtkTreeIter)) < 0;
+    }
+};
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -8591,6 +8599,9 @@ private:
     std::map<int, int> m_aWeightMap;
     // map from text column to sensitive column
     std::map<int, int> m_aSensitiveMap;
+    // currently expanding parent that logically, but not currently physically,
+    // contain placeholders
+    o3tl::sorted_vector<GtkTreeIter, CompareGtkTreeIter> m_aExpandingPlaceHolderParents;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -8810,6 +8821,8 @@ private:
 
     bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
+        if (m_aExpandingPlaceHolderParents.count(rGtkIter.iter))
+            return true;
         bool bPlaceHolder = false;
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
@@ -8833,17 +8846,24 @@ private:
         GtkInstanceTreeIter aIter(iter);
         bool bPlaceHolder = child_is_placeholder(aIter);
         if (bPlaceHolder)
+        {
             gtk_tree_store_remove(m_pTreeStore, &aIter.iter);
+            m_aExpandingPlaceHolderParents.insert(iter);
+        }
 
         aIter.iter = iter;
         bool bRet = signal_expanding(aIter);
 
-        //expand disallowed, restore placeholder
-        if (!bRet && bPlaceHolder)
+        if (bPlaceHolder)
         {
-            GtkTreeIter subiter;
-            OUString sDummy("<dummy>");
-            insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+            //expand disallowed, restore placeholder
+            if (!bRet)
+            {
+                GtkTreeIter subiter;
+                OUString sDummy("<dummy>");
+                insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+            }
+            m_aExpandingPlaceHolderParents.erase(iter);
         }
 
         enable_notify_events();
