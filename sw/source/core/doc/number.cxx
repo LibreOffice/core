@@ -1029,6 +1029,17 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("msName"), BAD_CAST(msName.toUtf8().getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnPoolFormatId"), BAD_CAST(OString::number(mnPoolFormatId).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAutoRuleFlag"), BAD_CAST(OString::boolean(mbAutoRuleFlag).getStr()));
+
+    for (const auto& pFormat : maFormats)
+    {
+        if (!pFormat)
+        {
+            continue;
+        }
+
+        pFormat->dumpAsXml(pWriter);
+    }
+
     xmlTextWriterEndElement(pWriter);
 }
 
