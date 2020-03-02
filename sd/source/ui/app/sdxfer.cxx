@@ -243,7 +243,7 @@ void SdTransferable::CreateData()
 
         SdPage* pPage = mpSdDrawDocument->GetSdPage(0, PageKind::Standard);
 
-        if( 1 == pPage->GetObjCount() )
+        if( pPage && 1 == pPage->GetObjCount() )
             CreateObjectReplacement( pPage->GetObj( 0 ) );
 
         mpVDev = VclPtr<VirtualDevice>::Create( *Application::GetDefaultDevice() );
