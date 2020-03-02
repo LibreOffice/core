@@ -19,7 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <iconview.hxx>
 #include <salframe.hxx>
@@ -3251,6 +3251,9 @@ private:
     VclPtr<SvTabListBox> m_xTreeView;
     SvLBoxButtonData m_aCheckButtonData;
     SvLBoxButtonData m_aRadioButtonData;
+    // currently expanding parent that logically, but not currently physically,
+    // contain placeholders
+    o3tl::sorted_vector<SvTreeListEntry*> m_aExpandingPlaceHolderParents;
     bool m_bDisableCheckBoxAutoWidth;
     int m_nSortColumn;
 
@@ -4197,6 +4200,8 @@ public:
     virtual bool get_children_on_demand(const weld::TreeIter& rIter) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        if (m_aExpandingPlaceHolderParents.count(rVclIter.iter))
+            return true;
         return GetPlaceHolderChild(rVclIter.iter) != nullptr;
     }
 
@@ -4690,14 +4695,21 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     // potentially expandable in the first place, now we remove it
     SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(pEntry);
     if (pPlaceHolder)
+    {
+        m_aExpandingPlaceHolderParents.insert(pEntry);
         m_xTreeView->RemoveEntry(pPlaceHolder);
+    }
 
     bool bRet = signal_expanding(aIter);
 
-    //expand disallowed, restore placeholder
-    if (!bRet && pPlaceHolder)
+    if (pPlaceHolder)
     {
-        m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+        //expand disallowed, restore placeholder
+        if (!bRet)
+        {
+            m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+        }
+        m_aExpandingPlaceHolderParents.erase(pEntry);
     }
 
     return bRet;
