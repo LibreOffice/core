@@ -16,12 +16,12 @@ sw_INC := $(call gb_CustomTarget_get_workdir,sw/generated)
 $(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PY) \
 			$(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(sw_INC)
-	$(PYTHON) $(sw_PY) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
+	$(call gb_ExternalExecutable_get_command,python) $(sw_PY) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
 
 $(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PY) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(sw_INC)
-	$(PYTHON) $(sw_PY) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
+	$(call gb_ExternalExecutable_get_command,python) $(sw_PY) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
 
 $(sw_INC)/tokens.cxx : $(sw_INC)/TextBlockTokens.gperf $(sw_INC)/BlockListTokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(sw_INC)/tokens.cxx \
