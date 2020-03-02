@@ -79,6 +79,7 @@
 #include <stack>
 #include <frmtool.hxx>
 #include <strings.hrc>
+#include <frameformats.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>

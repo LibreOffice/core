@@ -72,6 +72,7 @@
 #include <UndoManager.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
+#include <frameformats.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::i18n;
@@ -727,6 +728,11 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
     OSL_ENSURE( it != mpTableFrameFormatTable->end(), "Format not found," );
     mpTableFrameFormatTable->erase( it );
     delete pFormat;
+}
+
+SwFrameFormat* SwDoc::FindFrameFormatByName( const OUString& rName ) const
+{
+    return static_cast<SwFrameFormat*>(FindFormatByName( static_cast<SwFormatsBase&>(*mpFrameFormatTable), rName ));
 }
 
 /// Create the formats

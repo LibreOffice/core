@@ -43,6 +43,7 @@
 #include <flddat.hxx>
 #include <cellatr.hxx>
 #include <ndindex.hxx>
+#include <frameformats.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
 

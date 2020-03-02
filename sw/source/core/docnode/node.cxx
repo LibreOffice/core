@@ -68,6 +68,7 @@
 #include <memory>
 #include <swcrsr.hxx>
 #include <hints.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star::i18n;
 

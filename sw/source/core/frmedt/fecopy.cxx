@@ -67,6 +67,7 @@
 #include <pagedesc.hxx>
 #include <mvsave.hxx>
 #include <textboxhelper.hxx>
+#include <frameformats.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
 

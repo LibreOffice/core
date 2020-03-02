@@ -72,6 +72,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
+#include <frameformats.hxx>
 #include <boost/circular_buffer.hpp>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
