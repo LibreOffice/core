@@ -29,13 +29,13 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
                               const bool bResetListAttrs )
     : SwUndo( SwUndoId::SETFMTCOLL, rRange.GetDoc() ),
       SwUndRng( rRange ),
-      pHistory( new SwHistory ),
+      mpHistory( new SwHistory ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
 {
     // #i31191#
     if ( pColl )
-        aFormatName = pColl->GetName();
+        maFormatName = pColl->GetName();
 }
 
 SwUndoFormatColl::~SwUndoFormatColl()
@@ -45,8 +45,8 @@ SwUndoFormatColl::~SwUndoFormatColl()
 void SwUndoFormatColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     // restore old values
-    pHistory->TmpRollback(& rContext.GetDoc(), 0);
-    pHistory->SetTmpEnd( pHistory->Count() );
+    mpHistory->TmpRollback(& rContext.GetDoc(), 0);
+    mpHistory->SetTmpEnd( mpHistory->Count() );
 
     // create cursor for undo range
     AddUndoRedoPaM(rContext);
@@ -68,7 +68,7 @@ void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM const & rPaM)
 {
     // Only one TextFrameColl can be applied to a section, thus request only in
     // this array.
-    SwTextFormatColl * pFormatColl = rDoc.FindTextFormatCollByName(aFormatName);
+    SwTextFormatColl * pFormatColl = rDoc.FindTextFormatCollByName(maFormatName);
     if (pFormatColl)
     {
         rDoc.SetTextFormatColl(rPaM, pFormatColl, mbReset, mbResetListAttrs);
@@ -79,7 +79,7 @@ SwRewriter SwUndoFormatColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UndoArg1, aFormatName );
+    aResult.AddRule(UndoArg1, maFormatName );
 
     return aResult;
 }

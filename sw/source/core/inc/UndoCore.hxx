@@ -60,7 +60,7 @@ public:
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 nRedlineCount;
+    sal_uInt16 m_nRedlineCount;
 #endif
 };
 
@@ -143,8 +143,8 @@ private:
 
 class SwUndoFormatColl : public SwUndo, private SwUndRng
 {
-    OUString aFormatName;
-    std::unique_ptr<SwHistory> pHistory;
+    OUString maFormatName;
+    std::unique_ptr<SwHistory> mpHistory;
     // for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reset at the nodes
     // before the format has been applied.
@@ -180,7 +180,7 @@ public:
     */
     virtual SwRewriter GetRewriter() const override;
 
-    SwHistory* GetHistory() { return pHistory.get(); }
+    SwHistory* GetHistory() { return mpHistory.get(); }
 
 };
 
