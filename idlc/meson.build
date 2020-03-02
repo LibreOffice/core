@@ -33,5 +33,5 @@ idlc = executable('idlc',
   cpp_args: ['-DLIBO_INTERNAL_ONLY',
              '-DSYSTEM_UCPP',
              '-DUCPP="file:///usr/bin/ucpp"'],
-  link_with: [registry_lib, sal_lib],
+  link_with: [reg_lib, sal_lib],
 )
