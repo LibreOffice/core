@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a768ebf1_fdae7549",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-02T09:50:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02e99e91_e9fbba54",
+      "revId": "0c494cebd4c0fb9a715aae2e1a3f96d43b332af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "415df758_284b35e7",
         "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
         "patchSetId": 17
@@ -33,6 +51,24 @@
       "revId": "0c494cebd4c0fb9a715aae2e1a3f96d43b332af2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d0224c1_4562c651",
+        "filename": "vcl/qt5/Qt5Graphics_Controls.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-02T09:50:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "415df758_284b35e7",
+      "revId": "0c494cebd4c0fb9a715aae2e1a3f96d43b332af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
