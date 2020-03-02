@@ -102,7 +102,7 @@ class SwContentTree final
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
 
-    sal_uInt32          m_nOutlineTracking = 1;
+    sal_uInt32          m_nOutlineTracking = 3; // 1 default, 2 focused, 3 off
 
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
