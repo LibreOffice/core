@@ -56,7 +56,6 @@
 #include <inputwin.hxx>
 #include <dbdata.hxx>
 #include <reffact.hxx>
-#include <fuinsert.hxx>
 #include <viewuno.hxx>
 #include <dispuno.hxx>
 #include <chgtrack.hxx>
