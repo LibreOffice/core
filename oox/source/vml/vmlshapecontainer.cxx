@@ -78,6 +78,11 @@ void ShapeContainer::finalizeFragmentImport()
 
 const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId ) const
 {
+    if (maTypesById.empty() && !maTypes.empty())
+    {
+        lclMapShapesById(const_cast<ShapeTypeMap&>(maTypesById), maTypes);
+    }
+
     // search in own shape template list
     if( const ShapeType* pType = maTypesById.get( rShapeId ).get() )
         return pType;
