@@ -11,6 +11,10 @@ $(eval $(call gb_Executable_Executable,cppumaker))
 
 $(eval $(call gb_Executable_use_external,cppumaker,boost_headers))
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(eval $(call gb_Executable_use_external,cppumaker,dtoa))
+endif
+
 $(eval $(call gb_Executable_use_libraries,cppumaker,\
     unoidl \
     $(if $(filter TRUE,$(DISABLE_DYNLOADING)),reg) \
