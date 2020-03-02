@@ -9,6 +9,10 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <thumbnailviewitem.hxx>
+#include <tools/urlobj.hxx>
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <unotools/historyoptions.hxx>
 
 #include <utility>
 
@@ -23,7 +27,6 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
@@ -47,6 +50,46 @@ using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 constexpr int gnFineness = 5;
+
+bool ViewFilter::isFilteredModule(FILTER_MODULE module, const OUString &rExt)
+{
+    if (module == FILTER_MODULE::ALL_MODULES)
+    {
+        return true;
+    }
+    else if (module == FILTER_MODULE::WRITER)
+    {
+        return rExt == "odt" || rExt == "fodt" || rExt == "doc" || rExt == "docx";
+    }
+    else if (module == FILTER_MODULE::CALC)
+    {
+        return rExt == "ods" || rExt == "fods" || rExt == "xls" || rExt == "xlsx";
+    }
+    else if (module == FILTER_MODULE::IMPRESS)
+    {
+        return rExt == "odp" || rExt == "fodp" || rExt == "ppt" || rExt == "pptx";
+    }
+    else if (module == FILTER_MODULE::DRAW)
+    {
+        return rExt == "odg" || rExt == "fodg";
+    }
+    else
+        return false;
+}
+
+bool ViewFilter::operator () (const ThumbnailViewItem *pItem)
+{
+    OUString aFileExtension = pItem->getHelpText();
+    sal_Int32 const nIndex( aFileExtension.lastIndexOf('.') );
+    if ( nIndex > 0 )
+    {
+        aFileExtension = aFileExtension.copy( nIndex+1 );
+        return isFilteredModule(mModule, aFileExtension );
+    } else
+    {
+        return (mModule == FILTER_MODULE::ALL_MODULES);
+    }
+}
 
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
@@ -133,7 +176,8 @@ void ThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
-    maFilterFunc = ViewFilterAll();
+    aFilter = static_cast<sal_uInt16>(FILTER_MODULE::ALL_MODULES);
+    maFilterFunc = ViewFilter( FILTER_MODULE(aFilter) );
     maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     maHighlightColor = GetSettings().GetStyleSettings().GetHighlightColor();
@@ -190,7 +234,9 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);
 
-    mpItemAttrs->aFillColor = maFillColor.getBColor();
+    Color aColor = maFillColor;
+    aColor.Merge(maHighlightColor, 0xE0);
+    mpItemAttrs->aFillColor = aColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
     mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
@@ -649,6 +695,31 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
+IMPL_LINK( ThumbnailView, MenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+    switch (nMenuId)
+    {
+        case 1: //Open
+        {
+            OnItemDblClicked( static_cast<ThumbnailViewItem*>( pMenu->GetUserValue(nMenuId) ) );
+        }
+        break;
+        case 2: //Remove
+        {
+            SvtHistoryOptions().DeleteItem(ePICKLIST, static_cast<ThumbnailViewItem*>( pMenu->GetUserValue(nMenuId) )->getHelpText() );
+        }
+        break;
+        case static_cast<sal_uInt16>(FILTER_MODULE::ALL_MODULES) ... static_cast<sal_uInt16>(FILTER_MODULE::DRAW):
+        {
+            aFilter = nMenuId;
+            ThumbnailView::filterItems( ViewFilter(FILTER_MODULE(aFilter)) );
+        }
+        break;
+    }
+    return false;
+}
+
 void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 {
     // Get the item row
@@ -677,14 +748,36 @@ void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !rMEvt.IsLeft() )
-    {
-        Control::MouseButtonDown( rMEvt );
-        return;
-    }
+    const MenuItemBits miBits = MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK;
 
     size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
+
+    if ( rMEvt.IsRight() )
+    {
+        SelectItem(pItem->mnId);
+
+        ScopedVclPtrInstance<PopupMenu> pMenu;
+        pMenu->SetMenuFlags(MenuFlags::AlwaysShowDisabledEntries);
+        pMenu->InsertItem( 1, SfxResId(STR_OPEN) );
+        pMenu->InsertItem( 2, SfxResId(STR_REMOVERECENTFILE) );
+        pMenu->EnableItem( 1, pItem); //disable when not on a thumbnail
+        pMenu->EnableItem( 2, pItem);
+        pMenu->SetUserValue( 1, pItem);
+        pMenu->SetUserValue( 2, pItem);
+        pMenu->InsertSeparator();
+        pMenu->InsertItem( static_cast<sal_uInt16>(FILTER_MODULE::ALL_MODULES), SfxResId(STR_SFX_FILTERNAME_ALL), miBits);
+        pMenu->InsertItem( static_cast<sal_uInt16>(FILTER_MODULE::WRITER), "Writer", miBits );
+        pMenu->InsertItem( static_cast<sal_uInt16>(FILTER_MODULE::CALC), "Calc", miBits );
+        pMenu->InsertItem( static_cast<sal_uInt16>(FILTER_MODULE::IMPRESS), "Impress", miBits );
+        pMenu->InsertItem( static_cast<sal_uInt16>(FILTER_MODULE::DRAW), "Draw", miBits );
+        pMenu->CheckItem( aFilter );
+        pMenu->SetSelectHdl(LINK(this, ThumbnailView, MenuSelectHdl));
+        pMenu->Execute( this, rMEvt.GetPosPixel() );
+
+        deselectItems();
+        return;
+    };
 
     if ( !pItem )
     {
@@ -1316,7 +1409,7 @@ void SfxThumbnailView::ImplInit()
     mbHasVisibleItems = false;
     mbShowTooltips = false;
     mbIsMultiSelectionEnabled = true;
-    maFilterFunc = ViewFilterAll();
+    maFilterFunc = ViewFilter(FILTER_MODULE::ALL_MODULES);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     maFillColor = rSettings.GetFieldColor();

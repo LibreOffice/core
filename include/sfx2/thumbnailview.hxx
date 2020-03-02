@@ -143,15 +143,26 @@ struct ThumbnailItemAttributes;
 
 #define THUMBNAILVIEW_ITEM_NOTFOUND  (sal_uInt16(-1))
 
+enum class FILTER_MODULE
+{
+    ALL_MODULES = 100,
+    WRITER = 101,
+    CALC = 102,
+    IMPRESS = 103,
+    DRAW = 104
+};
+
 // Display all the available items in the thumbnail.
-class ViewFilterAll
+class ViewFilter
 {
 public:
-
-    bool operator () (const ThumbnailViewItem*) const
-    {
-        return true;
-    }
+    ViewFilter (FILTER_MODULE Module)
+        : mModule(Module)
+    {}
+    bool operator () (const ThumbnailViewItem*);
+private:
+    FILTER_MODULE const mModule;
+    static bool isFilteredModule(FILTER_MODULE module, const OUString &rExt);
 };
 
 /**
@@ -252,6 +263,10 @@ protected:
 
     virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() override;
 
+private:
+
+   DECL_LINK( MenuSelectHdl, Menu*, bool );
+
 protected:
 
     // Drawing item related functions, override them to make your own custom ones.
@@ -301,6 +316,7 @@ protected:
     bool mbScroll : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
+    sal_uInt16 aFilter;
     Color maFillColor;              ///< Background color of the thumbnail view widget.
     Color maTextColor;              ///< Text color.
     Color maHighlightColor;         ///< Color of the highlight (background) of the hovered item.
