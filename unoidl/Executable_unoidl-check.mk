@@ -21,4 +21,8 @@ $(eval $(call gb_Executable_use_libraries,unoidl-check, \
     sal \
 ))
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(eval $(call gb_Executable_use_external,unoidl-check,dtoa))
+endif
+
 # vim: set noet sw=4 ts=4:
