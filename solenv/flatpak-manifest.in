@@ -183,10 +183,10 @@
                     "dest-filename": "external/tarballs/Firebird-3.0.0.32483-0.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/bae83fa5dc7f081768daace6e199adc3-glm-0.9.4.6-libreoffice.zip",
-                    "sha256": "d0312c360efe04dd048b3311fe375ff36f1993b4c2e3cb58c81062990532904a",
+                    "url": "https://dev-www.libreoffice.org/src/glm-0.9.9.7.zip",
+                    "sha256": "c5e167c042afd2d7ad642ace6b643863baeb33880781983563e1ab68a30d3e95",
                     "type": "file",
-                    "dest-filename": "external/tarballs/bae83fa5dc7f081768daace6e199adc3-glm-0.9.4.6-libreoffice.zip"
+                    "dest-filename": "external/tarballs/glm-0.9.9.7.zip"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/gpgme-1.9.0.tar.bz2",
@@ -345,10 +345,10 @@
                     "dest-filename": "external/tarballs/a233181e03d3c307668b4c722d881661-mariadb_client-2.0.0-src.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/mdds-1.5.0.tar.bz2",
-                    "sha256": "144d6debd7be32726f332eac14ef9f17e2d3cf89cb3250eb31a7127e0789680d",
+                    "url": "https://dev-www.libreoffice.org/src/mdds-1.6.0.tar.bz2",
+                    "sha256": "f1585c9cbd12f83a6d43d395ac1ab6a9d9d5d77f062c7b5f704e24ed72dae07d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/mdds-1.5.0.tar.bz2"
+                    "dest-filename": "external/tarballs/mdds-1.6.0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/neon-0.30.2.tar.gz",
@@ -573,10 +573,16 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m80-0af13b3caf0384981f50e073ebc7bd0f3f751711.tar.xz",
-                    "sha256": "f1b3be9d9468c20a84fa21aea44b19daa48bca8fd2c7f9ea6fe76d6e31f54530",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m81-3e98c0e1d11516347ecc594959af2c1da4d04fc9.tar.xz",
+                    "sha256": "af190451976580081b0133a37ea6fa1434a8f3056f76d42ffb65ac8c79b223b7",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m80-0af13b3caf0384981f50e073ebc7bd0f3f751711.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m81-3e98c0e1d11516347ecc594959af2c1da4d04fc9.tar.xz"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
+                    "sha256": "0082d0684f7db6f62361b76c4b7faba19e0c7ce5cb8e36c4b65fea8281e711b4",
+                    "type": "file",
+                    "dest-filename": "external/tarballs/dtoa-20180411.tgz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/extern/884ed41809687c3e168fc7c19b16585149ff058eca79acbf3ee784f6630704cc-opens___.ttf",
