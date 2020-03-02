@@ -30,6 +30,7 @@
 #include <oox/vml/vmltextboxcontext.hxx>
 
 #include <osl/diagnose.h>
+#include <filter/msfilter/escherex.hxx>
 
 namespace oox::vml {
 
@@ -477,17 +478,35 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( textbox ):
+        {
+            // Calculate the shape type: map both <rect> and <v:shape> with a textbox shape type to
+            // a TextShape.
+            sal_Int32 nShapeType = 0;
+            if (ShapeContainer* pShapeContainer = mrShape.getContainer())
+            {
+                OUString aType = mrShapeModel.maType;
+                if (!aType.isEmpty() && aType[0] == '#')
+                {
+                    aType = aType.copy(1);
+                }
+                if (const ShapeType* pShapeType = pShapeContainer->getShapeTypeById(aType))
+                {
+                    nShapeType = pShapeType->getTypeModel().moShapeType.get();
+                }
+            }
+
             if (getParentElement() != VML_TOKEN( group ))
             {
                 // Custom shape in Writer with a textbox are transformed into a frame
                 dynamic_cast<SimpleShape&>( mrShape ).setService(
                         "com.sun.star.text.TextFrame");
             }
-            else if (getCurrentElement() == VML_TOKEN(rect))
+            else if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
                 // Transform only rectangles into a TextShape inside a groupshape.
                 dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
                 mrShape.getDrawing().getFilter().getGraphicHelper());
+        }
         case VMLX_TOKEN( ClientData ):
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
         case VMLPPT_TOKEN( textdata ):
