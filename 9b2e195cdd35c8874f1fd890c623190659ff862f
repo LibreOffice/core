@@ -16,6 +16,24 @@
       "revId": "9b2e195cdd35c8874f1fd890c623190659ff862f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f36d2ef1_56060a30",
+        "filename": "vcl/unx/gtk3/a11y/gtk3atktext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-03-02T01:35:21Z",
+      "side": 1,
+      "message": "I\u0027m sorry: which second change?\n\n    aText \u003d pText-\u003egetTextRange(start_offset, end_offset);\n\nis still getting executing exactly when end_offset !\u003d -1 and start_offset \u003c n like before, and\n\n    aText \u003d pText-\u003egetTextRange(start_offset, end_offset);\n\nis being replaced by\n\n    aText \u003d pText-\u003egetTextRange(start_offset, n - start_offset);\n\nexcept when start_offset \u003e\u003d n, in which case aText is left to an empty string, which is indeed now expected to be in that case. I indeed preferred to exchange the two ifs to keep the code simpler, but only the behavior documented in the log is changed in the end.",
+      "parentUuid": "26854b4e_4dcda481",
+      "revId": "9b2e195cdd35c8874f1fd890c623190659ff862f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
