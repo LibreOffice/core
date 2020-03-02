@@ -152,6 +152,13 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
     return OUString();
 }
 
+void SvxNumberType::dumpAsXml( xmlTextWriterPtr pWriter ) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxNumberType"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("NumType"), BAD_CAST(OString::number(nNumType).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
     : SvxNumberType(eType),
       eNumAdjust(SvxAdjust::Left),
