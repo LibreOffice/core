@@ -190,7 +190,9 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);
 
-    mpItemAttrs->aFillColor = maFillColor.getBColor();
+    Color aColor = maFillColor;
+    aColor.Merge(maSelectHighlightColor, 0xA0);
+    mpItemAttrs->aFillColor = aColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
     mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
