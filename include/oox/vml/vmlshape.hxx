@@ -264,6 +264,9 @@ public:
     void                convertFormatting(
                             const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
 
+    void setContainer(ShapeContainer* pContainer);
+    ShapeContainer* getContainer() const;
+
 protected:
     explicit            ShapeBase( Drawing& rDrawing );
 
@@ -284,6 +287,7 @@ protected:
 
 protected:
     ShapeModel          maShapeModel;       ///< The model structure containing shape data.
+    ShapeContainer*     mpContainer = nullptr;
 };
 
 
