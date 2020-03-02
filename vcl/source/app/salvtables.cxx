@@ -4227,7 +4227,7 @@ public:
     virtual void collapse_row(const weld::TreeIter& rIter) override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        if (m_xTreeView->IsExpanded(rVclIter.iter))
+        if (m_xTreeView->IsExpanded(rVclIter.iter) && signal_collapsing(rIter))
             m_xTreeView->Collapse(rVclIter.iter);
     }
 
@@ -4676,11 +4676,15 @@ IMPL_LINK(SalInstanceTreeView, HeaderBarClickedHdl, HeaderBar*, pHeaderBar, void
 IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetHdlEntry();
+    SalInstanceTreeIter aIter(pEntry);
+
     if (m_xTreeView->IsExpanded(pEntry))
     {
         //collapsing;
-        return true;
+        return signal_collapsing(aIter);
     }
+
+    // expanding
 
     // if there's a preexisting placeholder child, required to make this
     // potentially expandable in the first place, now we remove it
@@ -4688,7 +4692,6 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     if (pPlaceHolder)
         m_xTreeView->RemoveEntry(pPlaceHolder);
 
-    SalInstanceTreeIter aIter(pEntry);
     bool bRet = signal_expanding(aIter);
 
     //expand disallowed, restore placeholder
