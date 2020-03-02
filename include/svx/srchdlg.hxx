@@ -229,6 +229,10 @@ private:
     std::unique_ptr<weld::CheckButton> m_xAllSheetsCB;
     std::unique_ptr<weld::Label> m_xCalcStrFT;
 
+    std::unique_ptr<weld::Label> m_xSearchLabelFT;
+    std::unique_ptr<weld::Label> m_xReplaceLabelFT;
+    std::unique_ptr<weld::Button> m_xHelpBtn;
+
     DECL_DLLPRIVATE_LINK( ModifyHdl_Impl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK( FlagHdl_Impl, weld::Button&, void );
     DECL_DLLPRIVATE_LINK( CommandHdl_Impl, weld::Button&, void );
