@@ -123,7 +123,8 @@ Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_In
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), str1.getLength(),
+                             reinterpret_cast<const UChar *>(str2.getStr()), str2.getLength());
 }
 
 #ifndef DISABLE_DYNLOADING
