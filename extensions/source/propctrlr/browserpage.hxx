@@ -21,7 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERPAGE_HXX
 
 #include <o3tl/deleter.hxx>
-#include <vcl/builderpage.hxx>
 #include "browserlistbox.hxx"
 
 namespace pcr

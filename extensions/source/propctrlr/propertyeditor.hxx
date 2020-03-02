@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYEDITOR_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYEDITOR_HXX
 
+#include "browserpage.hxx"
 #include "pcrcommon.hxx"
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>

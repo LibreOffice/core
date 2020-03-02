@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/scanner/ScannerException.hpp>
 
 #include "twain32shim.hxx"
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 class IActionListener : public virtual salhelper::SimpleReferenceObject

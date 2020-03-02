@@ -36,9 +36,7 @@
 
 #include <com/sun/star/ldap/LdapGenericException.hpp>
 
-#include <com/sun/star/ldap/LdapConnectionException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <osl/module.h>
 
 namespace extensions { namespace config { namespace ldap {
 

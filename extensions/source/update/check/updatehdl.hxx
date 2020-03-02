@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include "actionlistener.hxx"
 

@@ -24,7 +24,6 @@
 #include "propertyhandler.hxx"
 #include "eformshelper.hxx"
 
-#include <com/sun/star/xforms/XSubmission.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <rtl/ref.hxx>
 

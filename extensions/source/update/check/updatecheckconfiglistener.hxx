@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIGLISTENER_HXX
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 /* This interface should be implemented by classes acting

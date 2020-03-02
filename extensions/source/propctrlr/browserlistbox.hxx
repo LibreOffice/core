@@ -21,19 +21,13 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_BROWSERLISTBOX_HXX
 
 #include "browserline.hxx"
-#include "modulepcr.hxx"
-#include "pcrcommon.hxx"
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <vcl/weld.hxx>
-#include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
-#include <limits>
 #include <memory>
-#include <set>
-#include <unordered_map>
 #include <vector>
 
 #define EDITOR_LIST_REPLACE_EXISTING \

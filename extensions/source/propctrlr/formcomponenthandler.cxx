@@ -34,6 +34,7 @@
 #include "listselectiondlg.hxx"
 #include "pcrcommon.hxx"
 #include "selectlabeldialog.hxx"
+#include "standardcontrol.hxx"
 #include "taborder.hxx"
 #include "usercontrol.hxx"
 

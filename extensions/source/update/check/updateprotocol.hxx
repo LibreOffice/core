@@ -22,9 +22,8 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
 
-#include <vector>
 #include "updateinfo.hxx"
 
 // Returns 'true' if successfully connected to the update server
