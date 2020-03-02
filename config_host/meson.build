@@ -88,6 +88,8 @@ cdata.set_quoted('EXTRA_BUILDID', 'buildid')
 
 cdata.set10('ENABLE_FORMULA_LOGGER', true)
 
+cdata.set_quoted('PYTHON_VERSION_STRING', '3.2.1')
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -206,4 +208,8 @@ configure_file(input: 'config_options_calc.h.meson',
 
 configure_file(input: 'config_lgpl.h.meson',
   output: 'config_lgpl.h',
+  configuration: cdata)
+
+configure_file(input: 'config_python.h.meson',
+  output: 'config_python.h',
   configuration: cdata)
