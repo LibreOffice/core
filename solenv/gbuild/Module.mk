@@ -37,7 +37,6 @@
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
 # perfcheck (global)          run performance unit tests   top-level Module/perfcheck
 # uicheck (global) 	      run the uitests 		   run all uitests
-# all (global)                default goal                 build unitcheck
 
 
 # Module class
@@ -149,10 +148,8 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : all build build-l10n-only build-non-l10n-only unitcheck slowcheck screenshot subsequentcheck stagingcheck perfcheck uicheck clean check debugrun help showmodules translations
-.DEFAULT_GOAL := all
-
-all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck))
+.PHONY : build build-l10n-only build-non-l10n-only unitcheck slowcheck screenshot subsequentcheck stagingcheck perfcheck uicheck clean check debugrun help showmodules translations
+.DEFAULT_GOAL := build
 
 ifeq ($(gb_Side),build)
 build-tools : $(gb_BUILD_TOOLS)
@@ -199,7 +196,7 @@ screenshot :
 	$(call gb_Output_announce_bell)
 
 # removing the dependency on build for now until we can make a full build with gbuild
-#subsequentcheck : all
+#subsequentcheck : build
 subsequentcheck :
 	$(if $(gb_VERBOSE),$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6))
 	$(call gb_Output_announce_title,all subsequent tests checked.)
