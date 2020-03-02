@@ -5,7 +5,7 @@ GERRITHOST=logerrit
 GERRITURL="ssh://$GERRITHOST/core"
 
 get_SHA_for_change() {
-    SHA=$(ssh "${GERRITHOST?}" gerrit query --all-approvals change:"$1"|grep ref|tail -1|cut -d: -f2)
+    SHA=$(ssh "${GERRITHOST?}" gerrit query --all-approvals change:"$1" | grep ref | tail -1 | cut -d: -f2 | sed 's/^ *//')
 }
 
 submit() {
