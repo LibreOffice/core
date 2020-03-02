@@ -25,7 +25,7 @@ def getgbuildtesttools(testcase):
     testcase.bash = gbuildtesttools['BASH']
     testcase.gbuildtojson = gbuildtesttools['GBUILDTOJSON']
 
-makeenvvars = ['MAKEOVERRIDES', 'MAKEFLAGS', 'MAKE_TERMERR', 'MAKE_TERMOUT', 'MAKELEVEL', 'MFLAGS']
+makeenvvars = ['MAKEOVERRIDES', 'MAKEFLAGS', 'MAKE_TERMERR', 'MAKE_TERMOUT', 'MAKELEVEL', 'MFLAGS', 'GBUILD_TRACE']
 def clearmakevars():
     if 'LD_LIBRARY_PATH' in os.environ:
         os.environ['GBUILDTOJSON_LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH']
