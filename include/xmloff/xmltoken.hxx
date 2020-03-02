@@ -1383,6 +1383,7 @@ namespace xmloff { namespace token {
         XML_OUTSET,
         XML_OUTSIDE,
         XML_OVERLAP,
+        XML_OVERLAY,
         XML_P,
         XML_PACKAGE_NAME,
         XML_PADDING,
