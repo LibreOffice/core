@@ -124,9 +124,9 @@ public:
 
 class SwUndoAttrTable : public SwUndo
 {
-    sal_uLong nSttNode;
-    std::unique_ptr<SaveTable> pSaveTable;
-    bool bClearTabCol : 1;
+    sal_uLong m_nStartNode;
+    std::unique_ptr<SaveTable> m_pSaveTable;
+    bool m_bClearTableCol : 1;
 
 public:
     SwUndoAttrTable( const SwTableNode& rTableNd, bool bClearTabCols = false );
@@ -292,8 +292,8 @@ public:
 
 class SwUndoCpyTable : public SwUndo
 {
-    std::unique_ptr<SwUndoDelete> pDel;
-    sal_uLong nTableNode;
+    std::unique_ptr<SwUndoDelete> m_pDelete;
+    sal_uLong m_nTableNode;
 
 public:
     SwUndoCpyTable(const SwDoc* pDoc);
@@ -303,7 +303,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
-    void SetTableSttIdx( sal_uLong nIdx )           { nTableNode = nIdx; }
+    void SetTableSttIdx( sal_uLong nIdx )           { m_nTableNode = nIdx; }
 };
 
 class SwUndoSplitTable : public SwUndo
