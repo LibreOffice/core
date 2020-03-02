@@ -1358,10 +1358,10 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
 // UndoObject for attribute changes on table
 SwUndoAttrTable::SwUndoAttrTable( const SwTableNode& rTableNd, bool bClearTabCols )
     : SwUndo( SwUndoId::TABLE_ATTR, rTableNd.GetDoc() ),
-    nSttNode( rTableNd.GetIndex() )
+    m_nStartNode( rTableNd.GetIndex() )
 {
-    bClearTabCol = bClearTabCols;
-    pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
+    m_bClearTableCol = bClearTabCols;
+    m_pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
 }
 
 SwUndoAttrTable::~SwUndoAttrTable()
@@ -1371,17 +1371,17 @@ SwUndoAttrTable::~SwUndoAttrTable()
 void SwUndoAttrTable::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    SwTableNode* pTableNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
+    SwTableNode* pTableNd = rDoc.GetNodes()[ m_nStartNode ]->GetTableNode();
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     if (pTableNd)
     {
         SaveTable* pOrig = new SaveTable( pTableNd->GetTable() );
-        pSaveTable->RestoreAttr( pTableNd->GetTable() );
-        pSaveTable.reset( pOrig );
+        m_pSaveTable->RestoreAttr( pTableNd->GetTable() );
+        m_pSaveTable.reset( pOrig );
     }
 
-    if( bClearTabCol )
+    if( m_bClearTableCol )
     {
         ClearFEShellTabCols(rDoc, nullptr);
     }
@@ -2729,7 +2729,7 @@ bool SwUndoTableCpyTable::IsEmpty() const
 }
 
 SwUndoCpyTable::SwUndoCpyTable(const SwDoc* pDoc)
-    : SwUndo( SwUndoId::CPYTBL, pDoc ), nTableNode( 0 )
+    : SwUndo( SwUndoId::CPYTBL, pDoc ), m_nTableNode( 0 )
 {
 }
 
@@ -2740,7 +2740,7 @@ SwUndoCpyTable::~SwUndoCpyTable()
 void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    SwTableNode* pTNd = rDoc.GetNodes()[ nTableNode ]->GetTableNode();
+    SwTableNode* pTNd = rDoc.GetNodes()[ m_nTableNode ]->GetTableNode();
 
     // move hard page breaks into next node
     SwContentNode* pNextNd = rDoc.GetNodes()[ pTNd->EndOfSectionIndex()+1 ]->GetContentNode();
@@ -2759,13 +2759,13 @@ void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwPaM aPam( *pTNd, *pTNd->EndOfSectionNode(), 0 , 1 );
-    pDel.reset( new SwUndoDelete( aPam, true ) );
+    m_pDelete.reset( new SwUndoDelete( aPam, true ) );
 }
 
 void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    pDel->UndoImpl(rContext);
-    pDel.reset();
+    m_pDelete->UndoImpl(rContext);
+    m_pDelete.reset();
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
