@@ -9,6 +9,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <thumbnailviewitem.hxx>
+#include <tools/urlobj.hxx>
 
 #include <utility>
 
@@ -47,6 +48,38 @@ using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 constexpr int gnFineness = 5;
+
+bool ViewFilter::isFilteredModule(FILTER_MODULE module, const OUString &rExt)
+{
+    if (module == FILTER_MODULE::ALL_MODULES)
+    {
+        return true;
+    }
+    else if (module == FILTER_MODULE::WRITER)
+    {
+        return rExt == "odt" || rExt == "fodt" || rExt == "doc" || rExt == "docx";
+    }
+    else if (module == FILTER_MODULE::CALC)
+    {
+        return rExt == "ods" || rExt == "fods" || rExt == "xls" || rExt == "xlsx";
+    }
+    else if (module == FILTER_MODULE::IMPRESS)
+    {
+        return rExt == "odp" || rExt == "fodp" || rExt == "ppt" || rExt == "pptx";
+    }
+    else if (module == FILTER_MODULE::DRAW)
+    {
+        return rExt == "odg" || rExt == "fodg";
+    }
+    else
+        return false;
+}
+
+bool ViewFilter::operator () (const ThumbnailViewItem *pItem)
+{
+    INetURLObject aUrl( pItem->getHelpText() );
+    return isFilteredModule(mModule, aUrl.getExtension());
+}
 
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
@@ -133,7 +166,7 @@ void ThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
-    maFilterFunc = ViewFilterAll();
+    maFilterFunc = ViewFilter(FILTER_MODULE::ALL_MODULES);
     maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     maHighlightColor = GetSettings().GetStyleSettings().GetHighlightColor();
@@ -190,7 +223,9 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);
 
-    mpItemAttrs->aFillColor = maFillColor.getBColor();
+    Color aColor = maFillColor;
+    aColor.Merge(maHighlightColor, 0xE0);
+    mpItemAttrs->aFillColor = aColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
     mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
@@ -649,6 +684,22 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
+IMPL_LINK( ThumbnailView, MenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+    switch (nMenuId)
+    {
+        case 3:; ThumbnailView::filterItems( ViewFilter(FILTER_MODULE::ALL_MODULES) ); break;
+        case 4:; ThumbnailView::filterItems( ViewFilter(FILTER_MODULE::WRITER) ); break;
+        case 5:; ThumbnailView::filterItems( ViewFilter(FILTER_MODULE::CALC) ); break;
+        case 6:; ThumbnailView::filterItems( ViewFilter(FILTER_MODULE::IMPRESS) ); break;
+        case 7:; ThumbnailView::filterItems( ViewFilter(FILTER_MODULE::DRAW) ); break;
+    }
+    pMenu->SelectItem(nMenuId);
+//    ActionSelect(nMenuId);
+    return false;
+}
+
 void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 {
     // Get the item row
@@ -677,11 +728,24 @@ void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !rMEvt.IsLeft() )
+    if ( rMEvt.IsRight() )
     {
-        Control::MouseButtonDown( rMEvt );
+        ScopedVclPtrInstance<PopupMenu> pMenu;
+    //        OUString sLabel = vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties);
+        pMenu->InsertItem( 1, "Open" );
+        pMenu->InsertItem( 2, "Remove" );
+        pMenu->InsertSeparator();
+        pMenu->InsertItem( 3, "All", MenuItemBits::RADIOCHECK);
+        pMenu->InsertItem( 4, "Writer", MenuItemBits::RADIOCHECK );
+        pMenu->InsertItem( 5, "Calc", MenuItemBits::RADIOCHECK );
+        pMenu->InsertItem( 6, "Impress", MenuItemBits::RADIOCHECK );
+        pMenu->InsertItem( 7, "Draw", MenuItemBits::RADIOCHECK );
+        pMenu->SelectItem(3);
+
+        pMenu->SetSelectHdl(LINK(this, ThumbnailView, MenuSelectHdl));
+        pMenu->Execute( this, rMEvt.GetPosPixel() );
         return;
-    }
+    };
 
     size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
@@ -1316,7 +1380,7 @@ void SfxThumbnailView::ImplInit()
     mbHasVisibleItems = false;
     mbShowTooltips = false;
     mbIsMultiSelectionEnabled = true;
-    maFilterFunc = ViewFilterAll();
+    maFilterFunc = ViewFilter(FILTER_MODULE::ALL_MODULES);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     maFillColor = rSettings.GetFieldColor();

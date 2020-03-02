@@ -143,15 +143,26 @@ struct ThumbnailItemAttributes;
 
 #define THUMBNAILVIEW_ITEM_NOTFOUND  (sal_uInt16(-1))
 
+enum class FILTER_MODULE
+{
+    ALL_MODULES,
+    WRITER,
+    CALC,
+    IMPRESS,
+    DRAW
+};
+
 // Display all the available items in the thumbnail.
-class ViewFilterAll
+class ViewFilter
 {
 public:
-
-    bool operator () (const ThumbnailViewItem*) const
-    {
-        return true;
-    }
+    ViewFilter (FILTER_MODULE Module)
+        : mModule(Module)
+    {}
+    bool operator () (const ThumbnailViewItem*);
+private:
+    FILTER_MODULE const mModule;
+    static bool isFilteredModule(FILTER_MODULE module, const OUString &rExt);
 };
 
 /**
@@ -251,6 +262,10 @@ protected:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() override;
+
+private:
+
+   DECL_LINK( MenuSelectHdl, Menu*, bool );
 
 protected:
 
