@@ -1304,6 +1304,7 @@ outline-style
 outset
 outside
 overlap
+overlay
 p
 package-name
 padding

@@ -1391,6 +1391,7 @@ namespace xmloff::token {
         TOKEN( "outset",                          XML_OUTSET ),
         TOKEN( "outside",                         XML_OUTSIDE ),
         TOKEN( "overlap",                         XML_OVERLAP ),
+        TOKEN( "overlay",                         XML_OVERLAY ),
         TOKEN( "p",                               XML_P ),
         TOKEN( "package-name",                    XML_PACKAGE_NAME ),
         TOKEN( "padding",                         XML_PADDING ),

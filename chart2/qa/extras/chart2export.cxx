@@ -158,6 +158,7 @@ public:
     void testDeletedLegendEntries();
     void testTdf130225();
     void testTdf126076();
+    void testTdf75330();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -279,6 +280,7 @@ public:
     CPPUNIT_TEST(testDeletedLegendEntries);
     CPPUNIT_TEST(testTdf130225);
     CPPUNIT_TEST(testTdf126076);
+    CPPUNIT_TEST(testTdf75330);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2578,6 +2580,20 @@ void Chart2ExportTest::testTdf126076()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
     // instead of skipping markers
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
+}
+
+void Chart2ExportTest::testTdf75330()
+{
+    mbSkipValidation = true;
+    load("/chart2/qa/extras/data/ods/", "legend_overlay.ods");
+    reload("calc8");
+    uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference< chart::XChartDocument > xChartDoc (xChart2Doc, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
+    Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
+    bool bOverlay = false;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
+    CPPUNIT_ASSERT(bOverlay);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
