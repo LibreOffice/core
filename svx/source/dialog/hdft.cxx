@@ -619,12 +619,12 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
         GetFrameWeld(),
         *pBBSet,
         mbEnableDrawingLayerFillStyles));
 
-    pDlg->StartExecuteAsync([&](sal_Int32 nResult) {
+    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult) {
         if (nResult == RET_OK && pDlg->GetOutputItemSet())
         {
             SfxItemIter aIter(*pDlg->GetOutputItemSet());
@@ -676,6 +676,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                 }
             }
         }
+        pDlg->disposeOnce();
     });
 
     UpdateExample();
