@@ -79,6 +79,7 @@
 #include <memory>
 #include <unoparagraph.hxx>
 #include <wrtsh.hxx>
+#include <frameformats.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
 

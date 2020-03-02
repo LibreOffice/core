@@ -1184,7 +1184,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                 // certain fields must update the SwDoc's calculation flags
 
                 // Certain fields (like HiddenParaField) must trigger recalculation of visible flag
-                if (FieldCanHideParaWeight(pFieldType->Which()))
+                if (GetDoc()->FieldCanHideParaWeight(pFieldType->Which()))
                     SetCalcHiddenParaField();
 
                 switch( pFieldType->Which() )
@@ -1494,7 +1494,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         case RES_TXTATR_FIELD:
                 {
                     // trigger notification for relevant fields, like HiddenParaFields
-                    if (FieldCanHideParaWeight(
+                    if (GetDoc()->FieldCanHideParaWeight(
                             pAttr->GetFormatField().GetField()->GetTyp()->Which()))
                     {
                         bHiddenPara = true;
@@ -2628,18 +2628,18 @@ bool SwpHints::CalcHiddenParaField() const
         {
             // see also SwTextFrame::IsHiddenNow()
             const SwFormatField& rField = pTextHt->GetFormatField();
-            int nCurWeight = m_rParent.FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
+            int nCurWeight = m_rParent.GetDoc()->FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
             if (nCurWeight > nNewResultWeight)
             {
                 nNewResultWeight = nCurWeight;
-                bNewHiddenByParaField = m_rParent.FieldHidesPara(*rField.GetField());
+                bNewHiddenByParaField = m_rParent.GetDoc()->FieldHidesPara(*rField.GetField());
             }
             else if (nCurWeight == nNewResultWeight && bNewHiddenByParaField)
             {
                 // Currently, for both supported hiding types (HiddenPara, Database), "Don't hide"
                 // takes precedence - i.e., if there's a "Don't hide" field of that weight, we only
                 // care about fields of higher weight.
-                bNewHiddenByParaField = m_rParent.FieldHidesPara(*rField.GetField());
+                bNewHiddenByParaField = m_rParent.GetDoc()->FieldHidesPara(*rField.GetField());
             }
         }
     }
@@ -3336,7 +3336,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
             pTextField->ChgTextNode(nullptr);
         }
         else if (m_bHiddenByParaField
-                 && m_rParent.FieldCanHideParaWeight(pFieldTyp->Which()))
+                 && m_rParent.GetDoc()->FieldCanHideParaWeight(pFieldTyp->Which()))
         {
             m_bCalcHiddenParaField = true;
         }

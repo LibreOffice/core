@@ -58,6 +58,7 @@
 #include <strings.hrc>
 #include <unochart.hxx>
 #include <calbck.hxx>
+#include <frameformats.hxx>
 
 #include <memory>
 #include <utility>

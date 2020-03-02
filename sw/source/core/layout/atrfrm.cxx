@@ -84,6 +84,7 @@
 #include <pagedeschint.hxx>
 #include <drawdoc.hxx>
 #include <hints.hxx>
+#include <frameformats.hxx>
 
 #include <ndtxt.hxx>
 

@@ -41,6 +41,7 @@
 #include <fmtcntnt.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <frameformats.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>

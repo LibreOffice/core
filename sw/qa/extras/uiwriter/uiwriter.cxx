@@ -128,6 +128,7 @@
 #include <iodetect.hxx>
 #include <wrthtml.hxx>
 #include <dbmgr.hxx>
+#include <frameformats.hxx>
 
 namespace
 {

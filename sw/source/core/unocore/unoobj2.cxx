@@ -68,6 +68,7 @@
 #include <fmtflcnt.hxx>
 #include <vector>
 #include <sortedobjs.hxx>
+#include <frameformats.hxx>
 #include <algorithm>
 #include <iterator>
 

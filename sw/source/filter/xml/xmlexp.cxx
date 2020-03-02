@@ -52,6 +52,7 @@
 #include "xmlexpit.hxx"
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <IDocumentSettingAccess.hxx>

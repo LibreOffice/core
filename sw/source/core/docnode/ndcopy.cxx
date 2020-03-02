@@ -28,6 +28,7 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <ndindex.hxx>
+#include <frameformats.hxx>
 #include <vector>
 #include <osl/diagnose.h>
 

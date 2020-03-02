@@ -67,6 +67,7 @@
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>
 #include <strings.hrc>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star;
 

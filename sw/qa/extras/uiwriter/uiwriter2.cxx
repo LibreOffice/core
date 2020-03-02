@@ -46,6 +46,7 @@
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
 #include <fmtcntnt.hxx>
+#include <frameformats.hxx>
 #include <shellio.hxx>
 #include <editeng/fontitem.hxx>
 

@@ -23,6 +23,7 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <frameformats.hxx>
 
 class Test : public SwModelTestBase
 {

@@ -130,6 +130,7 @@
 #include <i18nutil/searchopt.hxx>
 #include <paratr.hxx>
 #include <rootfrm.hxx>
+#include <frameformats.hxx>
 
 #include <memory>
 

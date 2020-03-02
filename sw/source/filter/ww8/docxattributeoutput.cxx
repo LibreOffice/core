@@ -126,6 +126,7 @@
 #include <grfatr.hxx>
 #include <frmatr.hxx>
 #include <txtatr.hxx>
+#include <frameformats.hxx>
 
 #include <osl/file.hxx>
 #include <utility>

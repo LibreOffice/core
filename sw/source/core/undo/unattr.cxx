@@ -52,6 +52,7 @@
 #include <section.hxx>
 #include <charfmt.hxx>
 #include <calbck.hxx>
+#include <frameformats.hxx>
 
 SwUndoFormatAttrHelper::SwUndoFormatAttrHelper( SwFormat& rFormat, bool bSvDrwPt )
     : SwClient( &rFormat )

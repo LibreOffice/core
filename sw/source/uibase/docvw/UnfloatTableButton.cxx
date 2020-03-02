@@ -39,6 +39,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <svl/grabbagitem.hxx>
+#include <doc.hxx>
 
 #define TEXT_PADDING 3
 #define BOX_DISTANCE 3

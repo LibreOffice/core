@@ -59,6 +59,7 @@
 #include <redline.hxx>
 #include <swerror.h>
 #include <pausethreadstarting.hxx>
+#include <frameformats.hxx>
 
 using namespace ::com::sun::star;
 

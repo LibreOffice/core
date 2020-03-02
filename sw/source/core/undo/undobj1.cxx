@@ -36,6 +36,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <ndole.hxx>
+#include <frameformats.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
     : SwUndo(nUndoId, pFormat->GetDoc())
