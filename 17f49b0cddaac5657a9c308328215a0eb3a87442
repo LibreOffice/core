@@ -34,6 +34,23 @@
       "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daab0166_1dab4ac7",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2020-03-02T00:53:12Z",
+      "side": 0,
+      "message": "Strange replacement is back here again - not intended",
+      "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
