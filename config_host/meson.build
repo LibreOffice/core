@@ -90,6 +90,9 @@ cdata.set10('ENABLE_FORMULA_LOGGER', true)
 
 cdata.set_quoted('PYTHON_VERSION_STRING', '3.2.1')
 
+cdata.set10('ENABLE_FIREBIRD_SDBC', false)
+cdata.set10('HAVE_FIREBIRD_30', false)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -212,4 +215,8 @@ configure_file(input: 'config_lgpl.h.meson',
 
 configure_file(input: 'config_python.h.meson',
   output: 'config_python.h',
+  configuration: cdata)
+
+configure_file(input: 'config_firebird.h.meson',
+  output: 'config_firebird.h',
   configuration: cdata)

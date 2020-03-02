@@ -1,0 +1,12 @@
+/*
+Settings for Firebird
+*/
+
+#ifndef CONFIG_FIREBIRD_H
+#define CONFIG_FIREBIRD_H
+
+#mesondefine ENABLE_FIREBIRD_SDBC
+
+#mesondefine HAVE_FIREBIRD_30
+
+#endif
