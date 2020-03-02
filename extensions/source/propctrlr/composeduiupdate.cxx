@@ -18,16 +18,20 @@
  */
 
 #include "composeduiupdate.hxx"
+#include "pcrcommon.hxx"
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <algorithm>
+#include <map>
+#include <set>
 
 
 namespace pcr

@@ -19,11 +19,10 @@
 
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <cppuhelper/implbase.hxx>

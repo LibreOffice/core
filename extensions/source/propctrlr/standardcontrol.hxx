@@ -30,8 +30,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 
-#include <set>
-
 namespace pcr
 {
 

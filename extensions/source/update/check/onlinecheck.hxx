@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 #if defined(_WIN32)
 extern "C" bool WNT_hasInternetConnection();
 #endif

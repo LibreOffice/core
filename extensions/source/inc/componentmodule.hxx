@@ -25,14 +25,10 @@
     More precise, you find helper classes to ease the use of resources and the registration of services.
 */
 
-#include <osl/mutex.hxx>
-#include <unotools/resmgr.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
-#include <rtl/string.hxx>
 #include <vector>
 
 namespace compmodule

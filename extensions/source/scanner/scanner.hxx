@@ -30,9 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
-#include <com/sun/star/scanner/ScannerException.hpp>
 
 using namespace cppu;
 using namespace com::sun::star::uno;

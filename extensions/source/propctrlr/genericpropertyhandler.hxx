@@ -20,15 +20,17 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_GENERICPROPERTYHANDLER_HXX
 
-#include "propertyhandler.hxx"
 #include "pcrcommontypes.hxx"
 #include "pcrcommon.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ref.hxx>
 
 #include <map>

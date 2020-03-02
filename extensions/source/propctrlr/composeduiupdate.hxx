@@ -20,12 +20,9 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_COMPOSEDUIUPDATE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_COMPOSEDUIUPDATE_HXX
 
-#include "propertyhandler.hxx"
-
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
 
-#include <map>
-#include <set>
 #include <memory>
 
 

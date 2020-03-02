@@ -19,6 +19,7 @@
 
 #include "formmetadata.hxx"
 #include "formstrings.hxx"
+#include "modulepcr.hxx"
 #include <command.hrc>
 #include <helpids.h>
 #include <strings.hrc>

@@ -20,9 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_DATMAN_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_DATMAN_HXX
 
+#include "bibview.hxx"
+
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <cppuhelper/compbase.hxx>

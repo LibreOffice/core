@@ -27,6 +27,8 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 
+#include <com/sun/star/scanner/ScannerException.hpp>
+
 BitmapTransporter::BitmapTransporter()
 {
     SAL_INFO("extensions.scanner", "BitmapTransporter");

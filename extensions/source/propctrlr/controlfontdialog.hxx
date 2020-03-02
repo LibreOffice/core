@@ -22,7 +22,6 @@
 
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
-#include "modulepcr.hxx"
 
 class SfxItemSet;
 class SfxItemPool;

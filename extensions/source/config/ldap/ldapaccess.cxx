@@ -25,6 +25,8 @@
 #include <rtl/strbuf.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include <com/sun/star/ldap/LdapConnectionException.hpp>
+
 
 namespace extensions::config::ldap {
 

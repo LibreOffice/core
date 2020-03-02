@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 
-#include "pcrcommontypes.hxx"
 #include "pcrcommon.hxx"
 
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>

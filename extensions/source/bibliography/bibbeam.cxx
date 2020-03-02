@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/edit.hxx>
+#include <vcl/taskpanelist.hxx>
 #include <tools/debug.hxx>
 #include "bibbeam.hxx"
 #include "bibview.hxx"

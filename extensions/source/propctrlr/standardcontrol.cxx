@@ -31,6 +31,7 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 // ugly dependencies for the OColorControl

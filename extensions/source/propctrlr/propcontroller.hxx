@@ -21,35 +21,24 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PROPCONTROLLER_HXX
 
 #include "composeduiupdate.hxx"
-#include "formbrowsertools.hxx"
-#include "formmetadata.hxx"
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "browserview.hxx"
-#include "modulepcr.hxx"
-#include "propertyinfo.hxx"
 
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <connectivity/dbtools.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <vcl/weld.hxx>

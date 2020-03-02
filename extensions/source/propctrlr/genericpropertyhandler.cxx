@@ -21,6 +21,7 @@
 #include "formmetadata.hxx"
 #include "handlerhelper.hxx"
 #include "pcrservices.hxx"
+#include "propertyhandler.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>

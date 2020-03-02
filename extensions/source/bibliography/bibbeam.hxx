@@ -21,9 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBBEAM_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include "toolbar.hxx"
 #include "formcontrolcontainer.hxx"

@@ -23,7 +23,6 @@
 #include "commoncontrol.hxx"
 #include <svtools/inettbc.hxx>
 #include <svl/zforlist.hxx>
-#include "standardcontrol.hxx"
 
 class SvNumberFormatsSupplierObj;
 

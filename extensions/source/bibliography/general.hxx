@@ -27,7 +27,6 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/scrbar.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include "bibshortcuthandler.hxx"
 

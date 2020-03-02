@@ -20,7 +20,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRUNODIALOGS_HXX
 
 #include <svtools/genericunodialog.hxx>
-#include "modulepcr.hxx"
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <comphelper/proparrhlp.hxx>

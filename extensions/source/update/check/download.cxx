@@ -21,6 +21,7 @@
 #include <curl/curl.h>
 
 #include <osl/diagnose.h>
+#include <osl/file.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

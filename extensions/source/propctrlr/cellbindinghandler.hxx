@@ -22,7 +22,6 @@
 
 #include "propertyhandler.hxx"
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>
 
 #include <memory>

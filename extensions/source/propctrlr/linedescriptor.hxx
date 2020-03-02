@@ -19,8 +19,8 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LINEDESCRIPTOR_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LINEDESCRIPTOR_HXX
 
-#include <vcl/image.hxx>
 #include <com/sun/star/inspection/LineDescriptor.hpp>
+#include <com/sun/star/inspection/XPropertyHandler.hpp>
 
 namespace pcr
 {

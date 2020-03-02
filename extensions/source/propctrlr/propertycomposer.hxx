@@ -24,11 +24,8 @@
 #include "composeduiupdate.hxx"
 #include "formbrowsertools.hxx"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 

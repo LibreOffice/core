@@ -18,12 +18,17 @@
  */
 #pragma once
 
+#include <cppuhelper/implbase.hxx>
 #include <osl/thread.h>
 #include <osl/module.h>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
 #include <sane/sane.h>
-#include "scanner.hxx"
+
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+using namespace com::sun::star::uno;
 
 
 class BitmapTransporter: public cppu::WeakImplHelper<css::awt::XBitmap>

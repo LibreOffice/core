@@ -21,7 +21,6 @@
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMMETADATA_HXX
 
 #include "propertyinfo.hxx"
-#include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
 
 

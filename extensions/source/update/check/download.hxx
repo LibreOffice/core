@@ -25,7 +25,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/conditn.hxx>
-#include <osl/file.h>
 #include <salhelper/simplereferenceobject.hxx>
 
 struct DownloadInteractionHandler : public virtual salhelper::SimpleReferenceObject

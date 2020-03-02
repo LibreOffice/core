@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONT_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONT_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include "bibshortcuthandler.hxx"
