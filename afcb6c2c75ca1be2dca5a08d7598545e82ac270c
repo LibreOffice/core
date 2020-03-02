@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "318d4872_19fece7a",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-02T10:36:47Z",
+      "side": 1,
+      "message": "This should already have been translated into an actual nEsc by this point. Just leave it as \"automatic\" in case it somehow slips through to here, and hope that \"automatic\" handles the fake fontsize well.",
+      "range": {
+        "startLine": 2764,
+        "startChar": 61,
+        "endLine": 2764,
+        "endChar": 80
+      },
+      "revId": "afcb6c2c75ca1be2dca5a08d7598545e82ac270c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
