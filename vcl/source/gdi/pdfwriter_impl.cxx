@@ -9849,8 +9849,15 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 if ( rNewState.m_aClipRegion.count() )
                 {
                     m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
-                    aLine.append( "W* n\n" );
                 }
+                else
+                {
+                    // tdf#130150 Need to revert tdf#99680, that breaks the
+                    // rule that an set but empty clip-region clips everything
+                    // aka draws nothing -> nothing is in an empty clip-region
+                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
+                }
+                aLine.append( "W* n\n" );
 
                 rNewState.m_aMapMode = aNewMapMode;
                 SetMapMode( rNewState.m_aMapMode );
@@ -9995,8 +10002,12 @@ void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
 
 void PDFWriterImpl::setClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    basegfx::B2DPolyPolygon aRegion = LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
-    aRegion = PixelToLogic( aRegion, m_aMapMode );
+    // tdf#130150 improve coordinate manipulations to double precision transformations
+    const basegfx::B2DHomMatrix aCurrentTransform(
+        GetInverseViewTransformation(m_aMapMode) * GetViewTransformation(m_aGraphicsStack.front().m_aMapMode));
+    basegfx::B2DPolyPolygon aRegion(rRegion);
+
+    aRegion.transform(aCurrentTransform);
     m_aGraphicsStack.front().m_aClipRegion = aRegion;
     m_aGraphicsStack.front().m_bClipRegion = true;
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
@@ -10006,16 +10017,26 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
     if( m_aGraphicsStack.front().m_bClipRegion && m_aGraphicsStack.front().m_aClipRegion.count() )
     {
-        Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                   m_aMapMode,
-                                   this,
-                                   Point( nX, nY ) ) );
-        aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                               m_aMapMode,
-                               this,
-                               Point() );
+        // tdf#130150 improve coordinate manipulations to double precision transformations
+        basegfx::B2DHomMatrix aConvertA;
+
+        if(MapUnit::MapPixel == m_aGraphicsStack.front().m_aMapMode.GetMapUnit())
+        {
+            aConvertA = GetInverseViewTransformation(m_aMapMode);
+        }
+        else
+        {
+            aConvertA = LogicToLogic(m_aGraphicsStack.front().m_aMapMode, m_aMapMode);
+        }
+
+        basegfx::B2DPoint aB2DPointA(nX, nY);
+        basegfx::B2DPoint aB2DPointB(0.0, 0.0);
+        aB2DPointA *= aConvertA;
+        aB2DPointB *= aConvertA;
+        aB2DPointA -= aB2DPointB;
         basegfx::B2DHomMatrix aMat;
-        aMat.translate( aPoint.X(), aPoint.Y() );
+
+        aMat.translate(aB2DPointA.getX(), aB2DPointA.getY());
         m_aGraphicsStack.front().m_aClipRegion.transform( aMat );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
     }
@@ -10030,9 +10051,14 @@ void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
 
 void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    basegfx::B2DPolyPolygon aRegion( LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode ) );
-    aRegion = PixelToLogic( aRegion, m_aMapMode );
+    // tdf#130150 improve coordinate manipulations to double precision transformations
+    const basegfx::B2DHomMatrix aCurrentTransform(
+        GetInverseViewTransformation(m_aMapMode) * GetViewTransformation(m_aGraphicsStack.front().m_aMapMode));
+    basegfx::B2DPolyPolygon aRegion(rRegion);
+
+    aRegion.transform(aCurrentTransform);
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
+
     if( m_aGraphicsStack.front().m_bClipRegion )
     {
         basegfx::B2DPolyPolygon aOld( basegfx::utils::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );

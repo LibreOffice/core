@@ -811,15 +811,17 @@ void PdfExportTest::testTdf99680()
     aZCodec.Decompress(rObjectStream, aUncompressed);
     CPPUNIT_ASSERT(aZCodec.EndCompression());
 
-    // Make sure there are no empty clipping regions.
-    OString aEmptyRegion("0 0 m h W* n");
-    auto pStart = static_cast<const char*>(aUncompressed.GetData());
-    const char* pEnd = pStart + aUncompressed.GetSize();
-    auto it = std::search(pStart, pEnd, aEmptyRegion.getStr(), aEmptyRegion.getStr() + aEmptyRegion.getLength());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
+    // tdf#130150 See infos in task - short: tdf#99680 was not the
+    // correct fix, so empty clip regions are valid - allow again in tests
+    //      Make sure there are no empty clipping regions.
+    //      OString aEmptyRegion("0 0 m h W* n");
+    //      auto it = std::search(pStart, pEnd, aEmptyRegion.getStr(), aEmptyRegion.getStr() + aEmptyRegion.getLength());
+    //      CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
 
     // Count save graphic state (q) and restore (Q) operators
     // and ensure their amount is equal
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
     size_t nSaveCount = std::count(pStart, pEnd, 'q');
     size_t nRestoreCount = std::count(pStart, pEnd, 'Q');
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mismatch!", nSaveCount, nRestoreCount);
@@ -850,15 +852,17 @@ void PdfExportTest::testTdf99680_2()
         aZCodec.Decompress(rObjectStream, aUncompressed);
         CPPUNIT_ASSERT(aZCodec.EndCompression());
 
-        // Make sure there are no empty clipping regions.
-        OString aEmptyRegion("0 0 m h W* n");
-        auto pStart = static_cast<const char*>(aUncompressed.GetData());
-        const char* pEnd = pStart + aUncompressed.GetSize();
-        auto it = std::search(pStart, pEnd, aEmptyRegion.getStr(), aEmptyRegion.getStr() + aEmptyRegion.getLength());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
+        // tdf#130150 See infos in task - short: tdf#99680 was not the
+        // correct fix, so empty clip regions are valid - allow again in tests
+        //      Make sure there are no empty clipping regions.
+        //      OString aEmptyRegion("0 0 m h W* n");
+        //      auto it = std::search(pStart, pEnd, aEmptyRegion.getStr(), aEmptyRegion.getStr() + aEmptyRegion.getLength());
+        //      CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
 
         // Count save graphic state (q) and restore (Q) operators
         // and ensure their amount is equal
+        auto pStart = static_cast<const char*>(aUncompressed.GetData());
+        const char* pEnd = pStart + aUncompressed.GetSize();
         size_t nSaveCount = std::count(pStart, pEnd, 'q');
         size_t nRestoreCount = std::count(pStart, pEnd, 'Q');
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mismatch!", nSaveCount, nRestoreCount);
