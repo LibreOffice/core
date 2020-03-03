@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b79acda9_5cee4a33",
+        "filename": "vcl/qt5/Qt5Font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-03-03T06:44:46Z",
+      "side": 1,
+      "message": "At first, I was wondering whether it was a good idea to have LO crash in case \u0027FontWidth_FORCE_EQUAL_SIZE\u0027 was used, rather than falling back to any of the other cases, even if it does not result exactly in the \"expected\" behaviour...\n\nHowever, since \u0027git grep FontWidth_FORCE_EQUAL_SIZE\u0027 on current master gives \n\n\u003e include/tools/fontenum.hxx:                 FontWidth_FORCE_EQUAL_SIZE\u003dSAL_MAX_ENUM };\n\u003e vcl/qt5/Qt5Font.cxx:        case FontWidth_FORCE_EQUAL_SIZE:\n\u003e vcl/qt5/Qt5Font.cxx:            assert(false \u0026\u0026 \"FontWidth_FORCE_EQUAL_SIZE not implementable for QFont\");\n\nthat is maybe only a theoretical question in the end? (haven\u0027t looked at it further, but it\u0027s not apparent what that value is used for then, other than possibly providing a dummy default value to initialize variables with?)",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 86
+      },
+      "revId": "ccb4d00b9d50bb5a3e7e6e5e3ddd6798068f2caa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
