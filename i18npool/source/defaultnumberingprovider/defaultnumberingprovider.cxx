@@ -552,6 +552,30 @@ bool should_ignore( const OUString& s )
         return s == " " || (!s.isEmpty() && s[0]==0);
 }
 
+/**
+ * Turn nNumber into a string and pad the result to 2 using zero characters.
+ */
+static OUString lcl_formatArabicZero(sal_Int32 nNumber)
+{
+    sal_Int32 nLimit = 2;
+    OUString aRet = OUString::number(nNumber);
+    sal_Int32 nDiff = nLimit - aRet.getLength();
+
+    if (nDiff <= 0)
+    {
+        return aRet;
+    }
+
+    OUStringBuffer aBuffer;
+    aBuffer.setLength(nDiff);
+    for (sal_Int32 i = 0; i < nDiff; ++i)
+    {
+        aBuffer[i] = '0';
+    }
+    aBuffer.append(aRet);
+    return aBuffer.makeStringAndClear();
+}
+
 static
 Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
                                                 const char* name, bool bRequired )
@@ -912,6 +936,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case SYMBOL_CHICAGO:
              lcl_formatChars1( table_Chicago, 4, number-1, result );  // *, +, |, S, **, ++, ...
              break;
+
+          case ARABIC_ZERO:
+               result += lcl_formatArabicZero(number);
+               break;
 
           default:
                OSL_ASSERT(false);
