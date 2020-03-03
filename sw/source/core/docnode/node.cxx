@@ -1387,15 +1387,26 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                             }
                         }
                     }
+                    assert(GetIndex() <= pMerged->pLastNode->GetIndex());
                     if (this == pMerged->pLastNode)
                     {
-                        pMerged->pLastNode = GetNodes()[GetIndex()-1]->GetTextNode();
-                        // at first glance nothing guarantees this...
-                        // but the redline must end on a text-node...
-                        // so everything before this node that isn't a text
-                        // node should have been deleted already so that
-                        // there's a text node before.
-                        assert(pMerged->pLastNode->IsTextNode());
+                        // tdf#130680 find the previous node that is a
+                        // listener of pMerged; see CheckParaRedlineMerge()
+                        for (sal_uLong i = GetIndex() - 1;
+                             this == pMerged->pLastNode; --i)
+                        {
+                            SwNode *const pNode = GetNodes()[i];
+                            if (pNode->IsTextNode())
+                            {
+                                pMerged->pLastNode = pNode->GetTextNode();
+                            }
+                            else if (SwEndNode const*const pEnd = pNode->GetEndNode())
+                            {
+                                SwStartNode const*const pStart(pEnd->StartOfSectionNode());
+                                i = pStart->GetIndex(); // skip table or section
+                            }
+                        }
+                        assert(pMerged->pFirstNode->GetIndex() <= pMerged->pLastNode->GetIndex());
                     }
                     // avoid re-parenting mess (ModifyChangedHint)
                     pMerged->listener.EndListening(this);
