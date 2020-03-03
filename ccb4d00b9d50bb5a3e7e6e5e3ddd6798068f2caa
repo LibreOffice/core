@@ -46,6 +46,30 @@
       "revId": "ccb4d00b9d50bb5a3e7e6e5e3ddd6798068f2caa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a20b6c_b272d34f",
+        "filename": "vcl/qt5/Qt5Font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-03T16:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb3a9f94_53bcb782",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 86
+      },
+      "revId": "ccb4d00b9d50bb5a3e7e6e5e3ddd6798068f2caa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
