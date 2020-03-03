@@ -81,7 +81,6 @@ RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
 
 sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    sal_uInt32 nStartTime = osl_getGlobalTimer();
     if (m_xSrcDoc.is())
     {
         uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
@@ -148,9 +147,6 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
                 m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, aMediaDesc));
         pDocument->resolve(*pStream);
         bResult = true;
-        sal_uInt32 nEndTime = osl_getGlobalTimer();
-        SAL_INFO("writerfilter.profile",
-                 "RtfFilter::filter: finished in " << nEndTime - nStartTime << " ms");
     }
     catch (const io::WrongFormatException&)
     {

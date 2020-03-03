@@ -38,22 +38,46 @@ class COMPHELPER_DLLPUBLIC ProfileZone
 {
 private:
     const char * m_sProfileId;
-    long long const m_aCreateTime;
+    long long m_aCreateTime;
+    bool m_bConsole;
+    void startConsole();
+    void stopConsole();
 public:
     static std::atomic<bool> g_bRecording; // true during recording
 
-    // Note that the char pointer is stored as such in the ProfileZone object and used in the
-    // destructor, so be sure to pass a pointer that stays valid for the duration of the object's
-    // lifetime.
-    ProfileZone(const char *sProfileId)
+    /**
+     * Starts measuring the cost of a C++ scope.
+     *
+     * Note that the char pointer is stored as such in the ProfileZone object and used in the
+     * destructor, so be sure to pass a pointer that stays valid for the duration of the object's
+     * lifetime.
+     *
+     * The second parameter can be used for ad-hoc local measuring by adding a single line of code
+     * at a C++ scope start. Example:
+     *
+     * comphelper::ProfileZone aZone("RtfFilter::filter", true);
+     *
+     * Similar to the DEBUG macro in sal/log.hxx, don't forget to remove these lines before
+     * committing.
+     */
+    ProfileZone(const char *sProfileId, bool bConsole = false)
         : m_sProfileId(sProfileId),
-          m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : 0)
+          m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : 0),
+          m_bConsole(bConsole)
     {
+        if (m_bConsole)
+        {
+            startConsole();
+        }
     }
     ~ProfileZone()
     {
         if (g_bRecording)
             ProfileRecording::addRecording(m_sProfileId, m_aCreateTime);
+        if (m_bConsole)
+        {
+            stopConsole();
+        }
     }
 };
 
