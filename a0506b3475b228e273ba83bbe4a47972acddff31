@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41a7c68c_77028072",
+        "filename": "external/boost/repack_tarball.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-03T10:15:11Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/88854/11#message-6aef53e4fc072a220be39bd648f45f913479325c\u003e and following commits, building up to \u003chttps://gerrit.libreoffice.org/c/core/+/88854/11//COMMIT_MSG#28\u003e, might be inspiration for attempts of generating *.tgz files in reproducible ways (one further item that is only relevant for tarballs containing multiple files is GNU tar\u0027s --sort\u003dname)",
+      "revId": "a0506b3475b228e273ba83bbe4a47972acddff31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
