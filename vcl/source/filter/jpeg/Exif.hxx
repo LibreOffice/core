@@ -22,6 +22,7 @@
 
 #include <tools/stream.hxx>
 
+namespace exif {
 enum Orientation {
     TOP_LEFT        = 1,
     TOP_RIGHT       = 2,
@@ -32,6 +33,7 @@ enum Orientation {
     RIGHT_BOTTOM    = 7,
     LEFT_BOTTOM     = 8
 };
+};
 
 enum Tag {
     ORIENTATION         = 0x0112
@@ -40,7 +42,7 @@ enum Tag {
 class Exif final
 {
 private:
-    Orientation maOrientation;
+    exif::Orientation maOrientation;
     bool mbExifPresent;
 
     bool processJpeg(SvStream& rStream, bool bSetValue);
@@ -60,7 +62,7 @@ private:
         sal_uInt32 offset;
     };
 
-    static Orientation convertToOrientation(sal_Int32 value);
+    static exif::Orientation convertToOrientation(sal_Int32 value);
 
 public:
     Exif();
@@ -68,10 +70,10 @@ public:
 
     bool hasExif() const { return mbExifPresent;}
 
-    Orientation getOrientation() const { return maOrientation;}
+    exif::Orientation getOrientation() const { return maOrientation;}
     sal_Int32 getRotation() const;
 
-    void setOrientation(Orientation orientation);
+    void setOrientation(exif::Orientation orientation);
 
     bool read(SvStream& rStream);
     void write(SvStream& rStream);

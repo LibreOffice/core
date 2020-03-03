@@ -28,6 +28,8 @@
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"
 
+using namespace ::exif;
+
 GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
     mrGraphic(rGraphic)
 {}
