@@ -168,7 +168,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 
             sal_Int32 nResolution = mxNfResolution->get_value();
             if ( nResolution < 1 )
-                nResolution = 96;
+                nResolution = 300;
 
             mpOptionsItem->WriteInt32("PixelExportUnit", nUnit);
             mpOptionsItem->WriteInt32("PixelExportResolution", nResolution);
@@ -731,9 +731,9 @@ void ExportDialog::setupSizeControls()
 
 // sense eg for bitmap fillings in metafiles, to preserve high dpi output
                             // (atm without special vector support the bitmaps are rendered with 96dpi)
-    sal_Int32 nResolution = mpOptionsItem->ReadInt32("PixelExportResolution", 96);
+    sal_Int32 nResolution = mpOptionsItem->ReadInt32("PixelExportResolution", 300);
     if ( nResolution < 1 )
-        nResolution = 96;
+        nResolution = 300;
     mxNfResolution->set_value( nResolution );
 
     sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32("PixelExportResolutionUnit", 1);
@@ -760,9 +760,9 @@ void ExportDialog::createFilterOptions()
 
             // Quality
             mxJPGQuality->show();
-            sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32("Quality", 75);
+            sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32("Quality", 80);
             if ((nQuality < 1 ) || (nQuality > 100))
-                nQuality = 75;
+                nQuality = 80;
             mpSbCompression = mxSbJpgCompression.get();
             mpNfCompression = mxNfJpgCompression.get();
             mpSbCompression->set_range(1, 100);
