@@ -146,6 +146,24 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
     }
 }
 
+//tdf130802: frame goes out of shape on moving
+//two new functions for getting the frame of the shape
+//(because of the scope this needed, public)
+
+SwFrameFormat& SwTextBoxHelper::getChildrenFormat(SwFrameFormat& rFormat)
+{
+    if (rFormat.GetAttrSet().HasItem(RES_CNTNT))
+        return (*rFormat.GetOtherTextBoxFormat());
+    return rFormat;
+}
+
+SwFrameFormat* SwTextBoxHelper::getChildrenFormat(SwFrameFormat* pFormat)
+{
+    if (pFormat->GetAttrSet().HasItem(RES_CNTNT))
+        return pFormat->GetOtherTextBoxFormat();
+    return nullptr;
+}
+
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType)
 {
     assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
