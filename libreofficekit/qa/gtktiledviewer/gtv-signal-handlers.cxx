@@ -12,9 +12,9 @@
 #include "gtv-application-window.hxx"
 #include "gtv-helpers.hxx"
 #include "gtv-lokdocview-signal-handlers.hxx"
-#include "gtv-lok-dialog.hxx"
+#include "gtv-signal-handlers.hxx"
 
-#include <sal/types.h>
+#include <sal/macros.h>
 
 #include <map>
 #include <vector>

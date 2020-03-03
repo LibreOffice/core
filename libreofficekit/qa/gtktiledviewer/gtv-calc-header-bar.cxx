@@ -12,14 +12,9 @@
 #include <cmath>
 #include <iostream>
 
-#include "gtv-application-window.hxx"
-#include "gtv-signal-handlers.hxx"
-#include "gtv-helpers.hxx"
 #include "gtv-calc-header-bar.hxx"
 
-#include <map>
-#include <boost/property_tree/json_parser.hpp>
-#include <optional>
+#include <boost/property_tree/ptree.hpp>
 #include <o3tl/unreachable.hxx>
 
 namespace {
