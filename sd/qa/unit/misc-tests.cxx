@@ -81,6 +81,7 @@ public:
     void testTdf120527();
     void testTdf98839_ShearVFlipH();
     void testTdf130988();
+    void testTdf131033();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testTdf120527);
     CPPUNIT_TEST(testTdf98839_ShearVFlipH);
     CPPUNIT_TEST(testTdf130988);
+    CPPUNIT_TEST(testTdf131033);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -824,6 +826,30 @@ void SdMiscTest::testTdf130988()
     // scene distance is calculated from the object while creating.
     const double fDistance = pObj->GetDistance();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("D3DSceneDistance", 7071.0, fDistance, 0.5);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf131033()
+{
+    const OUString sURL("sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg");
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+
+    // The document contains a polygon, so that emulate command .uno:ConvertInto3DLathe
+    // by direct call of ConvertMarkedObjTo3D works.
+    // It produces a rotation around a vertical axis, which is far away from the
+    // generating shape.
+    sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
+    E3dView* pView = dynamic_cast<E3dView*>(pViewShell->GetView());
+    pView->MarkNextObj();
+    pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0), basegfx::B2DPoint(11000.0, -9000.0));
+    E3dScene* pObj = dynamic_cast<E3dScene*>(pView->GetMarkedObjectByIndex(0));
+    CPPUNIT_ASSERT(pObj);
+
+    // Error was, that the 2D representation of the scene did not contain the default 20°
+    // rotation of the new scene around x-axis and therefore was not high enough.
+    const double fSnapRectHeight = pObj->GetSnapRect().getHeight();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2D height", 7096.0, fSnapRectHeight, 1.0);
 
     xDocShRef->DoClose();
 }
