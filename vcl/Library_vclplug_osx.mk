@@ -65,10 +65,6 @@ $(eval $(call gb_Library_use_externals,vclplug_osx,\
 ))
 endif
 
-$(eval $(call gb_Library_add_cxxflags,vclplug_osx,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vclplug_osx,\
     -DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
