@@ -1422,7 +1422,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
     Size                aPreviewSizeHint( 0, 0 );
     bool                bAllowPartialStreamRead = false;
-    bool                bCreateNativeLink = true;
 
     std::unique_ptr<sal_uInt8[]> pGraphicContent;
     sal_Int32  nGraphicContentSize = 0;
@@ -1448,10 +1447,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             else if ( rPropVal.Name == "AllowPartialStreamRead" )
             {
                 rPropVal.Value >>= bAllowPartialStreamRead;
-            }
-            else if ( rPropVal.Name == "CreateNativeLink" )
-            {
-                rPropVal.Value >>= bCreateNativeLink;
             }
         }
     }
@@ -1786,7 +1781,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
     }
 
-    if( nStatus == ERRCODE_NONE && bCreateNativeLink && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetReaderContext() && !bLinkSet )
+    if( nStatus == ERRCODE_NONE && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetReaderContext() && !bLinkSet )
     {
         if (!pGraphicContent)
         {
