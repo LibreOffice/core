@@ -4033,22 +4033,19 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxDataType eType = static_cast<SbxDataType>(nOp2);
     SbxVariable* pVar;
 
-    // #57915 solve missing in a cleaner way
-    sal_uInt32 nParamCount = refParams->Count32();
-    if( nIdx >= nParamCount )
+    // tdf#79426 - check for optionals only if the parameter is actually missing
+    sal_Bool bVarIsMissing = false;
+    if( nIdx == refParams->Count32() )
     {
-        sal_uInt16 iLoop = nIdx;
-        while( iLoop >= nParamCount )
-        {
-            pVar = new SbxVariable();
-            pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
-            refParams->Put32( pVar, iLoop );
-            iLoop--;
-        }
+        pVar = new SbxVariable();
+        pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
+        refParams->Put32( pVar, nIdx );
+        bVarIsMissing = true;
     }
     pVar = refParams->Get32( nIdx );
 
-    if( pVar->GetType() == SbxERROR && nIdx )
+    // tdf#79426 - check for optionals only if the parameter is actually missing
+    if( pVar->GetType() == SbxERROR && bVarIsMissing && nIdx )
     {
         // if there's a parameter missing, it can be OPTIONAL
         bool bOpt = false;
