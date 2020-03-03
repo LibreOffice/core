@@ -11,6 +11,10 @@
 #include <swmodeltestbase.hxx>
 #include <config_features.h>
 
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -20,6 +24,8 @@
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -31,6 +37,7 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/view/XControlAccess.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
@@ -252,6 +259,58 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1718), rect.Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1347), rect.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
+}
+
+DECLARE_ODFEXPORT_TEST(testTimeFormFormats, "timeFormFormats.odt")
+{
+    uno::Reference<frame::XModel> const xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> const xDP = xDPS->getDrawPage();
+    CPPUNIT_ASSERT(xDP.is());
+    uno::Reference<form::XFormsSupplier> const xFS(xDP, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFS.is());
+    uno::Reference<container::XIndexContainer> const xForms(xFS->getForms(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xForms.is());
+    uno::Reference<form::XForm> xForm(xForms->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xForm.is());
+    uno::Reference<container::XNameContainer> xFormNC(xForm, uno::UNO_QUERY);
+
+    // HH:MM
+    uno::Any aAny = xFormNC->getByName("Time Field 1");
+    uno::Reference<awt::XControlModel> xControlModel(aAny, uno::UNO_QUERY);
+    uno::Reference<view::XControlAccess> xController(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    uno::Reference<awt::XControl> xControl(xController->getControl(xControlModel), uno::UNO_QUERY);
+    uno::Reference<awt::XWindowPeer> xWindowPeer(xControl->getPeer(), uno::UNO_QUERY);
+    uno::Reference<awt::XTextComponent> xTextComponent(xWindowPeer, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("12:12"), xTextComponent->getText());
+
+    // HH:MM:SS
+    aAny = xFormNC->getByName("Time Field 2");
+    xControlModel.set(aAny, uno::UNO_QUERY);
+    xController.set(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    xControl.set(xController->getControl(xControlModel), uno::UNO_QUERY);
+    xWindowPeer.set(xControl->getPeer(), uno::UNO_QUERY);
+    xTextComponent.set(xWindowPeer, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("12:12:00"), xTextComponent->getText());
+
+    // HH:MM PM
+    aAny = xFormNC->getByName("Time Field 3");
+    xControlModel.set(aAny, uno::UNO_QUERY);
+    xController.set(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    xControl.set(xController->getControl(xControlModel), uno::UNO_QUERY);
+    xWindowPeer.set(xControl->getPeer(), uno::UNO_QUERY);
+    xTextComponent.set(xWindowPeer, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("12:12PM"), xTextComponent->getText());
+
+    // HH:MM:SS PM with default time
+    aAny = xFormNC->getByName("Time Field 4");
+    xControlModel.set(aAny, uno::UNO_QUERY);
+    xController.set(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    xControl.set(xController->getControl(xControlModel), uno::UNO_QUERY);
+    xWindowPeer.set(xControl->getPeer(), uno::UNO_QUERY);
+    xTextComponent.set(xWindowPeer, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("06:00:00AM"), xTextComponent->getText());
 }
 
 DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
