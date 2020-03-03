@@ -1043,6 +1043,7 @@ Reference< XShape > const & Shape::createAndInsert(
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
+        getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic)
             aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV );
         LineProperties aLineProperties = getActualLineProperties(pTheme);
