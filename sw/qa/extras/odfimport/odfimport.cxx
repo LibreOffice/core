@@ -11,9 +11,15 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/FootnoteLineStyle.hpp>
@@ -23,6 +29,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/view/XControlAccess.hpp>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -256,6 +263,46 @@ DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Page Style"), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTimeFormFormats, "timeFormFormats.odt")
+{
+    //FIXME: make it an ODFEXPORT_TEST. Validator fails with
+    //attribute "form:current-value" has a bad value: "PT12H12M" does not satisfy the "time" type
+
+    uno::Reference<frame::XModel> const xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> const xDP = xDPS->getDrawPage();
+    CPPUNIT_ASSERT(xDP.is());
+    uno::Reference<form::XFormsSupplier> const xFS(xDP, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFS.is());
+    uno::Reference<container::XIndexContainer> const xForms(xFS->getForms(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xForms.is());
+    uno::Reference<form::XForm> xForm(xForms->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xForm.is());
+    uno::Reference<container::XNameContainer> xFormNC(xForm, uno::UNO_QUERY);
+
+    uno::Any aAny;
+    uno::Reference<awt::XControlModel> xControlModel;
+    uno::Reference<view::XControlAccess> xController;
+    uno::Reference<awt::XControl> xControl;
+    uno::Reference<awt::XWindowPeer> xWindowPeer;
+    uno::Reference<awt::XTextComponent> xTextComponent;
+    OUString aName = "Time Field ";
+
+    static const char* const aExpectedResults[] = { "12:12", "12:12:00", "12:12PM", "06:00:00AM"};
+
+    for (size_t i = 1; i <= 4; ++i)
+    {
+        aAny = xFormNC->getByName(aName + OUString::number(i));
+        xControlModel.set(aAny, uno::UNO_QUERY);
+        xController.set(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+        xControl = xController->getControl(xControlModel);
+        xWindowPeer = xControl->getPeer();
+        xTextComponent.set(xWindowPeer, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(aExpectedResults[i - 1]), xTextComponent->getText());
+    }
 }
 
 DECLARE_ODFIMPORT_TEST(testTdf64038, "space.odt")
