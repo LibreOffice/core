@@ -50,6 +50,7 @@
 #include <biffhelper.hxx>
 
 #include <document.hxx>
+#include <drwlayer.hxx>
 #include <docsh.hxx>
 #include <calcconfig.hxx>
 #include <globstr.hrc>
@@ -343,6 +344,12 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
 
 void WorkbookFragment::finalizeImport()
 {
+    // lock the model to prevent broadcasting, speeds up load a lot
+    getScDocument().InitDrawLayer();
+    auto pModel = getScDocument().GetDrawLayer();
+    bool bWasLocked = pModel->isLocked();
+    pModel->setLock(true);
+
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
@@ -504,6 +511,8 @@ void WorkbookFragment::finalizeImport()
 
     // attach macros to registered objects now that all objects have been created.
     getBaseFilter().getVbaProject().attachMacros();
+
+    pModel->setLock(bWasLocked);
 }
 
 namespace {
