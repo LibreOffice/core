@@ -22,6 +22,8 @@
 #include <osl/endian.h>
 #include <tools/stream.hxx>
 
+using namespace ::exif;
+
 Exif::Exif() :
     maOrientation(TOP_LEFT),
     mbExifPresent(false)
