@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d32b7fe4_b2fa7d84",
+        "filename": "linguistic/source/gciterator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-03T10:27:04Z",
+      "side": 1,
+      "message": "if you put it into \"Any\" you have to use uno types not \"int\", .e.g. sal_Int32.",
+      "revId": "e8443995d71fb761aa5be932aad2111913deb599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
