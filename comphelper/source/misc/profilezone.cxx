@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <atomic>
+#include <iostream>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/profilezone.hxx>
@@ -98,6 +99,14 @@ css::uno::Sequence<OUString> getRecordingAndClear()
 
 } // namespace ProfileRecording
 
+void ProfileZone::startConsole() { m_aCreateTime = osl_getGlobalTimer(); }
+
+void ProfileZone::stopConsole()
+{
+    sal_uInt32 nEndTime = osl_getGlobalTimer();
+    std::cerr << "comphelper::ProfileZone: " << m_sProfileId << " finished in "
+              << nEndTime - m_aCreateTime << " ms" << std::endl;
+}
 
 } // namespace comphelper
 
