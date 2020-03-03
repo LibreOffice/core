@@ -986,6 +986,42 @@ namespace basegfx
             }
             else
             {
+                // tdf#130150 shortcut & precision: If both are simple ranges,
+                // solve based on ranges
+                if(basegfx::utils::isRectangle(rCandidateA) && basegfx::utils::isRectangle(rCandidateB))
+                {
+                    // *if* both are ranges, AND always can be solved
+                    const basegfx::B2DRange aRangeA(rCandidateA.getB2DRange());
+                    const basegfx::B2DRange aRangeB(rCandidateB.getB2DRange());
+
+                    if(aRangeA.isInside(aRangeB))
+                    {
+                        // 2nd completely inside 1st -> 2nd is result of AND
+                        return rCandidateB;
+                    }
+
+                    if(aRangeB.isInside(aRangeA))
+                    {
+                        // 2nd completely inside 1st -> 2nd is result of AND
+                        return rCandidateA;
+                    }
+
+                    // solve by intersection
+                    basegfx::B2DRange aIntersect(aRangeA);
+                    aIntersect.intersect(aRangeB);
+
+                    if(aIntersect.isEmpty())
+                    {
+                        // no overlap -> empty polygon as result of AND
+                        return B2DPolyPolygon();
+                    }
+
+                    // create polygon result
+                    return B2DPolyPolygon(
+                        basegfx::utils::createPolygonFromRect(
+                            aIntersect));
+                }
+
                 // concatenate polygons, solve crossovers and throw away all sub-polygons
                 // with a depth of < 1. This means to keep all polygons where at least two
                 // polygons do overlap.
