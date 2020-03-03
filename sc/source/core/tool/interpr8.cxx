@@ -372,6 +372,9 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         }
     }
 
+    if ( !initData() )
+        return false;  // note: mnErrorValue is set in called function(s)
+
     if ( nSmplInPrd != 1 )
         mnSmplInPrd = nSmplInPrd;
     else
@@ -380,9 +383,6 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         if ( mnSmplInPrd == 1 )
             bEDS = true; // period length 1 means no periodic data: EDS suffices
     }
-
-    if ( !initData() )
-        return false;  // note: mnErrorValue is set in called function(s)
 
     return true;
 }
