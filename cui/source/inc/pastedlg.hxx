@@ -32,6 +32,8 @@ class TransferableDataHelper;
 class SvPasteObjectDialog : public weld::GenericDialogController
 {
     std::map< SotClipboardFormatId, OUString > aSupplementMap;
+    // Additional UNO command to be displayed along the supported paste formats
+    std::pair<OUString, OUString> aExtraCommand;
     SvGlobalName    aObjClassName;
     OUString        aObjName;
 
@@ -49,6 +51,7 @@ public:
     SvPasteObjectDialog(weld::Window* pParent);
 
     void        Insert( SotClipboardFormatId nFormat, const OUString & rFormatName );
+    void        InsertUno( const OUString& sUnoCmd, const OUString& sLabel);
     void        SetObjName( const SvGlobalName & rClass, const OUString & rObjName );
     /**
      * @brief PreGetFormat Prepares the dialog for running to get format of paste as a SotClipboardFormatId value by calling GetFormatOnly()

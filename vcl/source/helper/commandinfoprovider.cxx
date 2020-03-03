@@ -262,6 +262,14 @@ OUString GetPopupLabelForCommand(const css::uno::Sequence<css::beans::PropertyVa
     return GetCommandProperty("Label", rProperties);
 }
 
+OUString GetTooltipLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
+{
+    OUString sLabel(GetCommandProperty("TooltipLabel", rProperties));
+    if (!sLabel.isEmpty())
+        return sLabel;
+    return GetCommandProperty("Label", rProperties);
+}
+
 OUString GetTooltipForCommand(
     const OUString& rsCommandName,
     const css::uno::Sequence<css::beans::PropertyValue>& rProperties,

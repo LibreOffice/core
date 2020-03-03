@@ -609,6 +609,7 @@ public:
     virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
+    virtual void InsertUno( const OUString & sCmd, const OUString& sLabel ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;
     virtual void PreGetFormat( const TransferableDataHelper& aHelper ) override;
     virtual SotClipboardFormatId GetFormatOnly() override;
