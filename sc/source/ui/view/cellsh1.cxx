@@ -74,6 +74,7 @@
 #include <condformatdlg.hxx>
 #include <attrib.hxx>
 #include <condformatdlgitem.hxx>
+#include <impex.hxx>
 
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -1493,6 +1494,62 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = fail
             break;
         }
+        case SID_PASTE_TEXTIMPORT_DIALOG:
+        {
+            vcl::Window* pWin = GetViewData()->GetActiveWin();
+            TransferableDataHelper aDataHelper(
+                TransferableDataHelper::CreateFromSystemClipboard(pWin));
+            const uno::Reference<datatransfer::XTransferable>& xTransferable
+                = aDataHelper.GetTransferable();
+            SotClipboardFormatId format = SotClipboardFormatId::STRING;
+            if (xTransferable.is() && HasClipboardFormat(format))
+            {
+                auto pStrBuffer = std::make_shared<OUString>();
+                aDataHelper.GetString(format, *pStrBuffer);
+                auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                VclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
+                    pWin ? pWin->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
+                ScViewData* pViewData = GetViewData();
+                ScRange aRange;
+                SCCOL nPosX = 0;
+                SCROW nPosY = 0;
+                if (pViewData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+                {
+                    nPosX = aRange.aStart.Col();
+                    nPosY = aRange.aStart.Row();
+                }
+                else
+                {
+                    nPosX = pViewData->GetCurX();
+                    nPosY = pViewData->GetCurY();
+                }
+                ScAddress aCellPos(nPosX, nPosY, pViewData->GetTabNo());
+                auto pObj = std::make_shared<ScImportExport>(pViewData->GetDocument(), aCellPos);
+                pObj->SetOverwriting(true);
+                pDlg->StartExecuteAsync(
+                    [pDlg, format, pStrBuffer, pObj](sal_Int32 nResult) {
+                        if (RET_OK == nResult)
+                        {
+                            ScAsciiOptions aOptions;
+                            pDlg->GetOptions(aOptions);
+                            pDlg->SaveParameters();
+                            pObj->SetExtOptions(aOptions);
+                            pObj->ImportString(*pStrBuffer, format);
+                        }
+                        pDlg->disposeOnce();
+                    });
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success, 0 = fail
+                rReq.Done();
+            }
+            else
+            {
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
+                rReq.Ignore();
+            }
+        }
+        break;
         case SID_PASTE_SPECIAL:
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous
