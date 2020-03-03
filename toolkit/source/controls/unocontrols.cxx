@@ -96,7 +96,7 @@ UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& 
 
 OUString UnoControlEditModel::getServiceName( )
 {
-    return OUString::createFromAscii( szServiceName_UnoControlEditModel );
+    return "stardiv.vcl.controlmodel.Edit";
 }
 
 uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -109,7 +109,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         aReturn <<= sal_Int16(awt::LineEndFormat::LINE_FEED);   // LF
         break;
     case BASEPROPERTY_DEFAULTCONTROL:
-        aReturn <<= OUString::createFromAscii( szServiceName_UnoControlEdit );
+        aReturn <<= OUString( "stardiv.vcl.control.Edit" );
         break;
     default:
         aReturn = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -463,7 +463,7 @@ uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aNames = UnoControlBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 2 );
-    aNames[ aNames.getLength() - 2 ] = OUString::createFromAscii( szServiceName2_UnoControlEdit );
+    aNames[ aNames.getLength() - 2 ] = "com.sun.star.awt.UnoControlEdit";
     aNames[ aNames.getLength() - 1 ] = "stardiv.vcl.control.Edit";
     return aNames;
 }
@@ -503,14 +503,14 @@ UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XCompon
 
 OUString UnoControlFileControlModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlFileControlModel );
+    return "stardiv.vcl.controlmodel.FileControl";
 }
 
 uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFileControl ) );
+        return uno::Any( OUString( "stardiv.vcl.control.FileControl" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -673,7 +673,7 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
 
 OUString UnoControlButtonModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlButtonModel );
+    return "stardiv.vcl.controlmodel.Button";
 }
 
 uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -681,7 +681,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlButton ) );
+        return uno::makeAny( OUString( "stardiv.vcl.control.Button" ) );
     case BASEPROPERTY_TOGGLE:
         return uno::makeAny( false );
     case BASEPROPERTY_ALIGN:
@@ -896,7 +896,7 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
 
 OUString UnoControlImageControlModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
+    return "stardiv.vcl.controlmodel.ImageControl";
 }
 
 OUString UnoControlImageControlModel::getImplementationName()
@@ -919,7 +919,7 @@ UnoControlImageControlModel::getSupportedServiceNames()
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlImageControl ) );
+        return uno::makeAny( OUString( "stardiv.vcl.control.ImageControl" ) );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
         return makeAny( awt::ImageScaleMode::ANISOTROPIC );
@@ -1064,7 +1064,7 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XCompon
 
 OUString UnoControlRadioButtonModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel );
+    return "stardiv.vcl.controlmodel.RadioButton";
 }
 
 uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1072,7 +1072,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlRadioButton ) );
+        return uno::makeAny( OUString( "stardiv.vcl.control.RadioButton" ) );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
@@ -1304,7 +1304,7 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentCon
 
 OUString UnoControlCheckBoxModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel );
+    return "stardiv.vcl.controlmodel.CheckBox";
 }
 
 uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1312,7 +1312,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlCheckBox ) );
+        return uno::makeAny( OUString( "stardiv.vcl.control.CheckBox" ) );
 
     case BASEPROPERTY_VISUALEFFECT:
         return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
@@ -1714,7 +1714,7 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFixedText ) );
+        return uno::Any( OUString( "stardiv.vcl.control.FixedText" ) );
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
     {
@@ -1884,14 +1884,14 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentCon
 
 OUString UnoControlGroupBoxModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel );
+    return "stardiv.vcl.controlmodel.GroupBox";
 }
 
 uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any(OUString::createFromAscii( szServiceName_UnoControlGroupBox ) );
+        return uno::Any(OUString( "stardiv.vcl.control.GroupBox" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2124,7 +2124,7 @@ css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
 
 OUString UnoControlListBoxModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
+    return "stardiv.vcl.controlmodel.ListBox";
 }
 
 
@@ -2132,7 +2132,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlListBox ) );
+        return uno::Any( OUString( "stardiv.vcl.control.ListBox" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -2983,8 +2983,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
 
 OUString UnoControlComboBoxModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
+    return "stardiv.vcl.controlmodel.ComboBox";
 }
+
 void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -3021,7 +3022,7 @@ uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlComboBox ) );
+        return uno::Any( OUString( "stardiv.vcl.control.ComboBox" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3459,14 +3460,14 @@ UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentC
 
 OUString UnoControlDateFieldModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlDateFieldModel );
+    return "stardiv.vcl.controlmodel.DateField";
 }
 
 uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlDateField ) );
+        return uno::Any( OUString( "stardiv.vcl.control.DateField" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3734,14 +3735,14 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentC
 
 OUString UnoControlTimeFieldModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel );
+    return "stardiv.vcl.controlmodel.TimeField";
 }
 
 uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlTimeField ) );
+        return uno::Any( OUString( "stardiv.vcl.control.TimeField" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -3968,14 +3969,14 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComp
 
 OUString UnoControlNumericFieldModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel );
+    return "stardiv.vcl.controlmodel.NumericField";
 }
 
 uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlNumericField ) );
+        return uno::Any( OUString( "stardiv.vcl.control.NumericField" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4193,14 +4194,14 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XCo
 
 OUString UnoControlCurrencyFieldModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel );
+    return "stardiv.vcl.controlmodel.CurrencyField";
 }
 
 uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlCurrencyField ) );
+        return uno::Any( OUString( "stardiv.vcl.control.CurrencyField" ) );
     }
     if ( nPropId == BASEPROPERTY_CURSYM_POSITION )
     {
@@ -4422,14 +4423,14 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComp
 
 OUString UnoControlPatternFieldModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel );
+    return "stardiv.vcl.controlmodel.PatternField";
 }
 
 uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlPatternField ) );
+        return uno::Any( OUString( "stardiv.vcl.control.PatternField" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -4604,14 +4605,14 @@ UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XCompon
 
 OUString UnoControlProgressBarModel::getServiceName( )
 {
-    return OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
+    return "stardiv.vcl.controlmodel.ProgressBar";
 }
 
 uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlProgressBar ) );
+        return uno::Any( OUString( "stardiv.vcl.control.ProgressBar" ) );
     }
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -4770,14 +4771,14 @@ UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentC
 
 OUString UnoControlFixedLineModel::getServiceName( )
 {
-    return OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
+    return "stardiv.vcl.controlmodel.FixedLine";
 }
 
 uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
-        return uno::Any( OUString::createFromAscii( szServiceName_UnoControlFixedLine ) );
+        return uno::Any( OUString( "stardiv.vcl.control.FixedLine" ) );
     }
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }

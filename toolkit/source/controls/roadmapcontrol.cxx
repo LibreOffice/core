@@ -79,7 +79,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     OUString UnoControlRoadmapModel::getServiceName()
     {
-        return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
+        return "stardiv.vcl.controlmodel.Roadmap";
     }
 
     OUString UnoControlRoadmapModel::getImplementationName()
@@ -117,7 +117,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                     aReturn <<= sal_Int16(2);              // No Border
                     break;
                 case BASEPROPERTY_DEFAULTCONTROL:
-                    aReturn <<= OUString::createFromAscii( szServiceName_UnoControlRoadmap );
+                    aReturn <<= OUString( "stardiv.vcl.control.Roadmap" );
                     break;
             default : aReturn = UnoControlRoadmapModel_Base::ImplGetDefaultValue( nPropId ); break;
         }
