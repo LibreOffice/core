@@ -669,8 +669,8 @@ bool XPMReader::ImplGetString()
 
 VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
-    rGraphic.SetContext(nullptr);
+    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
+    rGraphic.SetReaderContext(nullptr);
     XPMReader* pXPMReader = dynamic_cast<XPMReader*>( pContext.get() );
     if (!pXPMReader)
     {
@@ -687,7 +687,7 @@ VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
         bRet = false;
     }
     else if( eReadState == XPMREAD_NEED_MORE )
-        rGraphic.SetContext( pContext );
+        rGraphic.SetReaderContext( pContext );
 
     return bRet;
 }

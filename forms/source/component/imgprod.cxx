@@ -241,7 +241,7 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const
 
 void ImageProducer::NewDataAvailable()
 {
-    if( ( GraphicType::NONE == mpGraphic->GetType() ) || mpGraphic->GetContext() )
+    if( ( GraphicType::NONE == mpGraphic->GetType() ) || mpGraphic->GetReaderContext() )
         startProduction();
 }
 
@@ -257,7 +257,7 @@ void ImageProducer::startProduction()
         {
             // if we already have a graphic, we don't have to import again;
             // graphic is cleared if a new Stream is set
-            if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetContext() )
+            if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetReaderContext() )
             {
                 if ( ImplImportGraphic( *mpGraphic ) )
                     maDoneHdl.Call( mpGraphic.get() );
