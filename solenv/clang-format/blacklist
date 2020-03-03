@@ -7820,10 +7820,8 @@ linguistic/workben/sspellimp.hxx
 lotuswordpro/inc/localtime.hxx
 lotuswordpro/inc/lwpatomholder.hxx
 lotuswordpro/inc/lwpbasetype.hxx
-lotuswordpro/inc/lwpbookmarkmgr.hxx
 lotuswordpro/inc/lwpcolor.hxx
 lotuswordpro/inc/lwpdefs.hxx
-lotuswordpro/inc/lwpdocdata.hxx
 lotuswordpro/inc/lwpfilehdr.hxx
 lotuswordpro/inc/lwpfont.hxx
 lotuswordpro/inc/lwpfoundry.hxx
@@ -7839,7 +7837,6 @@ lotuswordpro/inc/lwpobjtags.hxx
 lotuswordpro/inc/lwpoverride.hxx
 lotuswordpro/inc/lwpsvstream.hxx
 lotuswordpro/inc/lwptools.hxx
-lotuswordpro/inc/xfilter/ixfattrlist.hxx
 lotuswordpro/inc/xfilter/ixfstream.hxx
 lotuswordpro/inc/xfilter/ixfstyle.hxx
 lotuswordpro/inc/xfilter/xfannotation.hxx
@@ -7857,11 +7854,9 @@ lotuswordpro/inc/xfilter/xfcolumns.hxx
 lotuswordpro/inc/xfilter/xfconfigmanager.hxx
 lotuswordpro/inc/xfilter/xfcontentcontainer.hxx
 lotuswordpro/inc/xfilter/xfcrossref.hxx
-lotuswordpro/inc/xfilter/xfdate.hxx
 lotuswordpro/inc/xfilter/xfdatestyle.hxx
 lotuswordpro/inc/xfilter/xfdocfield.hxx
 lotuswordpro/inc/xfilter/xfdrawgroup.hxx
-lotuswordpro/inc/xfilter/xfdrawline.hxx
 lotuswordpro/inc/xfilter/xfdrawlinestyle.hxx
 lotuswordpro/inc/xfilter/xfdrawobj.hxx
 lotuswordpro/inc/xfilter/xfdrawpath.hxx
@@ -7870,7 +7865,6 @@ lotuswordpro/inc/xfilter/xfdrawrect.hxx
 lotuswordpro/inc/xfilter/xfdrawstyle.hxx
 lotuswordpro/inc/xfilter/xfdropcap.hxx
 lotuswordpro/inc/xfilter/xfendnote.hxx
-lotuswordpro/inc/xfilter/xfendnoteconfig.hxx
 lotuswordpro/inc/xfilter/xfentry.hxx
 lotuswordpro/inc/xfilter/xffloatframe.hxx
 lotuswordpro/inc/xfilter/xffont.hxx
@@ -7885,7 +7879,6 @@ lotuswordpro/inc/xfilter/xfglobal.hxx
 lotuswordpro/inc/xfilter/xfheader.hxx
 lotuswordpro/inc/xfilter/xfheaderstyle.hxx
 lotuswordpro/inc/xfilter/xfhyperlink.hxx
-lotuswordpro/inc/xfilter/xfimage.hxx
 lotuswordpro/inc/xfilter/xfimagestyle.hxx
 lotuswordpro/inc/xfilter/xfindex.hxx
 lotuswordpro/inc/xfilter/xfinputlist.hxx
@@ -7913,7 +7906,6 @@ lotuswordpro/inc/xfilter/xfrowstyle.hxx
 lotuswordpro/inc/xfilter/xfruby.hxx
 lotuswordpro/inc/xfilter/xfrubystyle.hxx
 lotuswordpro/inc/xfilter/xfsaxstream.hxx
-lotuswordpro/inc/xfilter/xfsection.hxx
 lotuswordpro/inc/xfilter/xfsectionstyle.hxx
 lotuswordpro/inc/xfilter/xfshadow.hxx
 lotuswordpro/inc/xfilter/xfstyle.hxx
@@ -7922,7 +7914,6 @@ lotuswordpro/inc/xfilter/xfstylemanager.hxx
 lotuswordpro/inc/xfilter/xftable.hxx
 lotuswordpro/inc/xfilter/xftablestyle.hxx
 lotuswordpro/inc/xfilter/xftabstop.hxx
-lotuswordpro/inc/xfilter/xftextcontent.hxx
 lotuswordpro/inc/xfilter/xftextspan.hxx
 lotuswordpro/inc/xfilter/xftextstyle.hxx
 lotuswordpro/inc/xfilter/xftimestyle.hxx
@@ -7943,9 +7934,7 @@ lotuswordpro/source/filter/first.hxx
 lotuswordpro/source/filter/localtime.cxx
 lotuswordpro/source/filter/lwp9reader.cxx
 lotuswordpro/source/filter/lwp9reader.hxx
-lotuswordpro/source/filter/lwparrowstyles.hxx
 lotuswordpro/source/filter/lwpatomholder.cxx
-lotuswordpro/source/filter/lwpbackgroundoverride.hxx
 lotuswordpro/source/filter/lwpbackgroundstuff.cxx
 lotuswordpro/source/filter/lwpbackgroundstuff.hxx
 lotuswordpro/source/filter/lwpbasetype.cxx
@@ -7957,12 +7946,10 @@ lotuswordpro/source/filter/lwpbulletstylemgr.cxx
 lotuswordpro/source/filter/lwpbulletstylemgr.hxx
 lotuswordpro/source/filter/lwpcelllayout.cxx
 lotuswordpro/source/filter/lwpcelllayout.hxx
-lotuswordpro/source/filter/lwpchangemgr.cxx
 lotuswordpro/source/filter/lwpcharacterstyle.cxx
 lotuswordpro/source/filter/lwpcharacterstyle.hxx
 lotuswordpro/source/filter/lwpcharborderoverride.hxx
 lotuswordpro/source/filter/lwpcharsetmgr.cxx
-lotuswordpro/source/filter/lwpcharsetmgr.hxx
 lotuswordpro/source/filter/lwpcontent.cxx
 lotuswordpro/source/filter/lwpcontent.hxx
 lotuswordpro/source/filter/lwpdivinfo.cxx
@@ -7979,7 +7966,6 @@ lotuswordpro/source/filter/lwpdrawobj.hxx
 lotuswordpro/source/filter/lwpdropcapmgr.cxx
 lotuswordpro/source/filter/lwpfilehdr.cxx
 lotuswordpro/source/filter/lwpfilter.cxx
-lotuswordpro/source/filter/lwpfilter.hxx
 lotuswordpro/source/filter/lwpfnlayout.cxx
 lotuswordpro/source/filter/lwpfnlayout.hxx
 lotuswordpro/source/filter/lwpfont.cxx
@@ -8009,7 +7995,6 @@ lotuswordpro/source/filter/lwpgrfobj.hxx
 lotuswordpro/source/filter/lwpholder.cxx
 lotuswordpro/source/filter/lwpholder.hxx
 lotuswordpro/source/filter/lwphyperlinkmgr.cxx
-lotuswordpro/source/filter/lwphyperlinkmgr.hxx
 lotuswordpro/source/filter/lwpidxmgr.cxx
 lotuswordpro/source/filter/lwplayout.cxx
 lotuswordpro/source/filter/lwplayout.hxx
@@ -8027,7 +8012,6 @@ lotuswordpro/source/filter/lwpnumberingoverride.hxx
 lotuswordpro/source/filter/lwpnumericfmt.cxx
 lotuswordpro/source/filter/lwpnumericfmt.hxx
 lotuswordpro/source/filter/lwpobj.cxx
-lotuswordpro/source/filter/lwpobjfactory.cxx
 lotuswordpro/source/filter/lwpobjhdr.cxx
 lotuswordpro/source/filter/lwpobjid.cxx
 lotuswordpro/source/filter/lwpobjstrm.cxx
@@ -8050,7 +8034,6 @@ lotuswordpro/source/filter/lwppiece.hxx
 lotuswordpro/source/filter/lwpproplist.cxx
 lotuswordpro/source/filter/lwpproplist.hxx
 lotuswordpro/source/filter/lwpprtinfo.cxx
-lotuswordpro/source/filter/lwpprtinfo.hxx
 lotuswordpro/source/filter/lwppttntbl.hxx
 lotuswordpro/source/filter/lwpresource.hxx
 lotuswordpro/source/filter/lwprowlayout.cxx
@@ -8058,7 +8041,6 @@ lotuswordpro/source/filter/lwprowlayout.hxx
 lotuswordpro/source/filter/lwpsdwdrawheader.hxx
 lotuswordpro/source/filter/lwpsdwfileloader.cxx
 lotuswordpro/source/filter/lwpsdwgrouploaderv0102.cxx
-lotuswordpro/source/filter/lwpsdwgrouploaderv0102.hxx
 lotuswordpro/source/filter/lwpsdwrect.cxx
 lotuswordpro/source/filter/lwpsection.cxx
 lotuswordpro/source/filter/lwpsection.hxx
@@ -8090,8 +8072,6 @@ lotuswordpro/source/filter/lwpuidoc.cxx
 lotuswordpro/source/filter/lwpuidoc.hxx
 lotuswordpro/source/filter/lwpusewhen.hxx
 lotuswordpro/source/filter/lwpusrdicts.cxx
-lotuswordpro/source/filter/lwpusrdicts.hxx
-lotuswordpro/source/filter/lwpverdocument.hxx
 lotuswordpro/source/filter/lwpvpointer.cxx
 lotuswordpro/source/filter/tocread.cxx
 lotuswordpro/source/filter/tocread.hxx
@@ -8100,7 +8080,6 @@ lotuswordpro/source/filter/utbenvs.cxx
 lotuswordpro/source/filter/utlist.cxx
 lotuswordpro/source/filter/utlist.hxx
 lotuswordpro/source/filter/xfilter/xfbase64.cxx
-lotuswordpro/source/filter/xfilter/xfbase64.hxx
 lotuswordpro/source/filter/xfilter/xfbgimage.cxx
 lotuswordpro/source/filter/xfilter/xfborders.cxx
 lotuswordpro/source/filter/xfilter/xfcell.cxx
@@ -8127,7 +8106,6 @@ lotuswordpro/source/filter/xfilter/xfdrawrect.cxx
 lotuswordpro/source/filter/xfilter/xfdrawstyle.cxx
 lotuswordpro/source/filter/xfilter/xfentry.cxx
 lotuswordpro/source/filter/xfilter/xffont.cxx
-lotuswordpro/source/filter/xfilter/xffontdecl.cxx
 lotuswordpro/source/filter/xfilter/xffontfactory.cxx
 lotuswordpro/source/filter/xfilter/xffontworkstyle.hxx
 lotuswordpro/source/filter/xfilter/xfframe.cxx
