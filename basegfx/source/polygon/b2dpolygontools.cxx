@@ -333,15 +333,15 @@ namespace basegfx
                         const B2DPoint aPreviousPoint(aCurrentPoint);
                         aCurrentPoint = aCandidate.getB2DPoint(a);
 
-                        // cross-over in Y?
-                        const bool bCompYA(fTools::more(aPreviousPoint.getY(), rPoint.getY()));
-                        const bool bCompYB(fTools::more(aCurrentPoint.getY(), rPoint.getY()));
+                        // cross-over in Y? tdf#130150 use full precision, no need for epsilon
+                        const bool bCompYA(aPreviousPoint.getY() > rPoint.getY());
+                        const bool bCompYB(aCurrentPoint.getY() > rPoint.getY());
 
                         if(bCompYA != bCompYB)
                         {
-                            // cross-over in X?
-                            const bool bCompXA(fTools::more(aPreviousPoint.getX(), rPoint.getX()));
-                            const bool bCompXB(fTools::more(aCurrentPoint.getX(), rPoint.getX()));
+                            // cross-over in X? tdf#130150 use full precision, no need for epsilon
+                            const bool bCompXA(aPreviousPoint.getX() > rPoint.getX());
+                            const bool bCompXB(aCurrentPoint.getX() > rPoint.getX());
 
                             if(bCompXA == bCompXB)
                             {
@@ -357,7 +357,8 @@ namespace basegfx
                                     (aPreviousPoint.getX() - aCurrentPoint.getX()) /
                                     (aPreviousPoint.getY() - aCurrentPoint.getY()));
 
-                                if(fTools::more(fCompare, rPoint.getX()))
+                                // tdf#130150 use full precision, no need for epsilon
+                                if(fCompare > rPoint.getX())
                                 {
                                     bRetval = !bRetval;
                                 }
