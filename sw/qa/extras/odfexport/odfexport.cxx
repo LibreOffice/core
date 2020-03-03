@@ -2230,5 +2230,18 @@ DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
 }
 #endif
 
+DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+                         aMap["NumberingType"].get<sal_uInt16>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
