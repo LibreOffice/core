@@ -45,6 +45,15 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+<<<<<<< HEAD   (612a8b tdf#123873 DOCX IMPORT: fix unhandled textwrap for objects)
+=======
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">1</property>
+    <property name="upper">256</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+>>>>>>> CHANGE (3d3851 tdf#131044: 3D Effects dialog should allow to set 1 vertical)
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
