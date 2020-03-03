@@ -9641,8 +9641,15 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 if ( rNewState.m_aClipRegion.count() )
                 {
                     m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
-                    aLine.append( "W* n\n" );
                 }
+                else
+                {
+                    // tdf#130150 Need to revert tdf#99680, that breaks the
+                    // rule that an set but empty clip-region clips everything
+                    // aka draws nothing -> nothing is in an empty clip-region
+                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
+                }
+                aLine.append( "W* n\n" );
 
                 rNewState.m_aMapMode = aNewMapMode;
                 SetMapMode( rNewState.m_aMapMode );
