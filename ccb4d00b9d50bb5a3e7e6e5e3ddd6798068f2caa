@@ -22,6 +22,30 @@
       "revId": "ccb4d00b9d50bb5a3e7e6e5e3ddd6798068f2caa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb3a9f94_53bcb782",
+        "filename": "vcl/qt5/Qt5Font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-03T11:24:28Z",
+      "side": 1,
+      "message": "As I understand these *FORCE_EQUAL_SIZE values, they are just there for UNO compatibility. Actually greping for it doesn\u0027t find any assignment, then one in vcl/source/app/unohelp.cxx. The other similar convert functions in there don\u0027t handle *FORCE_EQUAL_SIZE at all. In any case it seems I originally wanted to avoid the default switch to get an warning about unhandled enums (if they ever get expanded, which I also doubt). And it\u0027s an assert, so will never hit in a release.\n\nIn hindsight, all this seems just cargo cult. I\u0027ll prepare 2nd patch to get rid of it.",
+      "parentUuid": "b79acda9_5cee4a33",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 86
+      },
+      "revId": "ccb4d00b9d50bb5a3e7e6e5e3ddd6798068f2caa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
