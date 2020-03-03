@@ -376,7 +376,7 @@ sal_Bool StdTabController::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        OUString::createFromAscii(szServiceName2_TabController),
+        "com.sun.star.awt.TabController",
         "stardiv.vcl.control.TabController"};
 }
 

@@ -384,7 +384,7 @@ sal_Bool UnoDialogControl::supportsService(OUString const & ServiceName)
 css::uno::Sequence<OUString> UnoDialogControl::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
-        OUString::createFromAscii(szServiceName2_UnoControlDialog),
+        "com.sun.star.awt.UnoControlDialog",
         "stardiv.vcl.control.Dialog"};
 }
 

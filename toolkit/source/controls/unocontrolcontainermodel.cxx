@@ -41,7 +41,7 @@ UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< c
 
 OUString UnoControlContainerModel::getServiceName()
 {
-    return OUString::createFromAscii( szServiceName_UnoControlContainerModel );
+    return "stardiv.vcl.controlmodel.ControlContainer";
 }
 
 OUString UnoControlContainerModel::getImplementationName()

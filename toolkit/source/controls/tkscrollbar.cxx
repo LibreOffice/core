@@ -47,7 +47,7 @@ namespace toolkit
 
     OUString UnoControlScrollBarModel::getServiceName( )
     {
-        return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
+        return "stardiv.vcl.controlmodel.ScrollBar";
     }
 
     OUString UnoControlScrollBarModel::getImplementationName()
@@ -72,7 +72,7 @@ namespace toolkit
         case BASEPROPERTY_LIVE_SCROLL:
             return uno::makeAny( false );
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlScrollBar ) );
+            return uno::makeAny( OUString( "stardiv.vcl.control.ScrollBar" ) );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );

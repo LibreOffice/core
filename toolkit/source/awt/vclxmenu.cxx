@@ -187,11 +187,11 @@ css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 
     if ( bIsPopupMenu )
         return css::uno::Sequence<OUString>{
-            OUString::createFromAscii(szServiceName2_PopupMenu),
+            "com.sun.star.awt.PopupMenu",
             "stardiv.vcl.PopupMenu"};
     else
         return css::uno::Sequence<OUString>{
-            OUString::createFromAscii(szServiceName2_MenuBar),
+            "com.sun.star.awt.MenuBar",
             "stardiv.vcl.MenuBar"};
 }
 
