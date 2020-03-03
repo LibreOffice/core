@@ -43,7 +43,7 @@ public:
 
     /* an empty preview size hint (=default) will read the whole image
     */
-    BitmapEx Read(const Size& i_rPreviewHint = Size());
+    BitmapEx Read();
 
     // retrieve every chunk that resides inside the PNG
     struct ChunkData

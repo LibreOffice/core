@@ -154,7 +154,7 @@ struct JpegStuff
 }
 
 static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-              Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+              GraphicFilterImportFlags nImportFlags,
               BitmapScopedWriteAccess* ppAccess)
 {
     if (setjmp(rContext.jerr.setjmp_buffer))
@@ -178,44 +178,6 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     rContext.cinfo.output_gamma = 1.0;
     rContext.cinfo.raw_data_out = FALSE;
     rContext.cinfo.quantize_colors = FALSE;
-
-    /* change scale for preview import */
-    long nPreviewWidth = previewSize.Width();
-    long nPreviewHeight = previewSize.Height();
-    if( nPreviewWidth || nPreviewHeight )
-    {
-        if( nPreviewWidth == 0 )
-        {
-            nPreviewWidth = (rContext.cinfo.image_width * nPreviewHeight) / rContext.cinfo.image_height;
-            if( nPreviewWidth <= 0 )
-            {
-                nPreviewWidth = 1;
-            }
-        }
-        else if( nPreviewHeight == 0 )
-        {
-            nPreviewHeight = (rContext.cinfo.image_height * nPreviewWidth) / rContext.cinfo.image_width;
-            if( nPreviewHeight <= 0 )
-            {
-                nPreviewHeight = 1;
-            }
-        }
-
-        for (rContext.cinfo.scale_denom = 1; rContext.cinfo.scale_denom < 8; rContext.cinfo.scale_denom *= 2)
-        {
-            if (rContext.cinfo.image_width < nPreviewWidth * rContext.cinfo.scale_denom)
-                break;
-            if (rContext.cinfo.image_height < nPreviewHeight * rContext.cinfo.scale_denom)
-                break;
-        }
-
-        if (rContext.cinfo.scale_denom > 1)
-        {
-            rContext.cinfo.dct_method            = JDCT_FASTEST;
-            rContext.cinfo.do_fancy_upsampling   = FALSE;
-            rContext.cinfo.do_block_smoothing    = FALSE;
-        }
-    }
 
     jpeg_calc_output_dimensions(&rContext.cinfo);
 
@@ -356,11 +318,11 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
 }
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+               GraphicFilterImportFlags nImportFlags,
                BitmapScopedWriteAccess* ppAccess )
 {
     JpegStuff aContext;
-    ReadJPEG(aContext, pJPEGReader, pInputStream, pLines, previewSize, nImportFlags, ppAccess);
+    ReadJPEG(aContext, pJPEGReader, pInputStream, pLines, nImportFlags, ppAccess);
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,

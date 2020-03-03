@@ -24,8 +24,6 @@
 #include <tools/gen.hxx>
 #include <memory>
 
-class ReaderData;
-
 class GraphicReader
 {
 public:
@@ -33,19 +31,10 @@ public:
 
     const OUString& GetUpperFilterName() const { return maUpperName; }
 
-    // TODO: when incompatible changes are possible again
-    // the preview size hint should be redone
-    void DisablePreviewMode();
-    void SetPreviewSize(const Size&);
-    Size GetPreviewSize() const;
-
 protected:
     OUString maUpperName;
 
     GraphicReader();
-
-private:
-    std::unique_ptr<ReaderData> mpReaderData;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

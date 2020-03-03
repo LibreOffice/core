@@ -36,15 +36,6 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, Graphi
         pJPEGReader = static_cast<JPEGReader*>( pContext.get() );
     }
 
-    if( nImportFlags & GraphicFilterImportFlags::ForPreview )
-    {
-        pJPEGReader->SetPreviewSize( Size(128,128) );
-    }
-    else
-    {
-        pJPEGReader->DisablePreviewMode();
-    }
-
     ReadState eReadState = pJPEGReader->Read( rGraphic, nImportFlags, ppAccess );
 
     if( eReadState == JPEGREAD_ERROR )

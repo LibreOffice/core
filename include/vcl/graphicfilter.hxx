@@ -55,7 +55,6 @@ enum class GraphicFilterImportFlags
     NONE                   = 0x000,
     SetLogsizeForJpeg      = 0x001,
     DontSetLogsizeForJpeg  = 0x002,
-    ForPreview             = 0x004,
     /// Only create a bitmap, do not read pixel data.
     OnlyCreateBitmap       = 0x020,
     /// Read pixel data into an existing bitmap.

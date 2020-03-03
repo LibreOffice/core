@@ -292,7 +292,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportF
 
     // read the (partial) image
     long nLines;
-    ReadJPEG( this, &mrStream, &nLines, GetPreviewSize(), nImportFlags, ppAccess );
+    ReadJPEG( this, &mrStream, &nLines, nImportFlags, ppAccess );
 
     auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
     if (bUseExistingBitmap || !mpBitmap->IsEmpty())
