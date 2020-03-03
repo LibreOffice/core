@@ -14,6 +14,9 @@
 #include <cstring>
 
 #include "gtv-helpers.hxx"
+#include "gtv-signal-handlers.hxx"
+
+#include <boost/property_tree/ptree.hpp>
 
 void GtvHelpers::userPromptDialog(GtkWindow* pWindow, const std::string& aTitle, std::map<std::string, std::string>& aEntries)
 {

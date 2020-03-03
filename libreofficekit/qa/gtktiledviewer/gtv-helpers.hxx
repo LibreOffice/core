@@ -12,13 +12,12 @@
 
 #include <gtk/gtk.h>
 
-#include "gtv-signal-handlers.hxx"
-
 #include <map>
+#include <sstream>
 #include <string>
 #include <memory>
 
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 #define UI_FILE_NAME "gtv.ui"
 

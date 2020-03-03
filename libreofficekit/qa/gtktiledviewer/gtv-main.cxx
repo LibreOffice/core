@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <gtk/gtk.h>
+#include <gio/gio.h>
 
 #include "gtv-application.hxx"
 
