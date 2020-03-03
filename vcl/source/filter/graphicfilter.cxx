@@ -1421,7 +1421,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     const bool                     bLinkSet = rGraphic.IsGfxLink();
 
     Size                aPreviewSizeHint( 0, 0 );
-    bool                bAllowPartialStreamRead = false;
 
     std::unique_ptr<sal_uInt8[]> pGraphicContent;
     sal_Int32  nGraphicContentSize = 0;
@@ -1443,10 +1442,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                     else
                         nImportFlags &=~GraphicFilterImportFlags::ForPreview;
                 }
-            }
-            else if ( rPropVal.Name == "AllowPartialStreamRead" )
-            {
-                rPropVal.Value >>= bAllowPartialStreamRead;
             }
         }
     }
@@ -1510,8 +1505,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             if( aPreviewSizeHint.Width() || aPreviewSizeHint.Height() )
             {
                 // position the stream at the end of the image if requested
-                if( !bAllowPartialStreamRead )
-                    aPNGReader.GetChunks();
+                aPNGReader.GetChunks();
             }
             else
             {
