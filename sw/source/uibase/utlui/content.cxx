@@ -2793,50 +2793,54 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
         // track document outline position at cursor
         if (m_nOutlineTracking == 3) // no outline tracking
             return;
+
         const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL); // find out where the cursor is
         if (nActPos == SwOutlineNodes::npos)
+            return;
+
+        // only track if selection is already an outline
+        SvTreeListEntry* pFirstSelected = FirstSelected();
+        if (pFirstSelected && lcl_IsContent(pFirstSelected) &&
+                static_cast<SwContent*>(pFirstSelected->GetUserData())->GetParent()->GetType() != ContentTypeId::OUTLINE)
+            return;
+        if (pFirstSelected && lcl_IsContentType(pFirstSelected) &&
+                static_cast<SwContentType*>(pFirstSelected->GetUserData())->GetType() != ContentTypeId::OUTLINE)
+            return;
+
+        // find the outline in the tree and select it
+        for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
         {
-            // cursor is not in an outline position so clear any selections in the tree list
-            if (FirstSelected())
-                SelectAll(false);
-        }
-        else
-        {
-            SvTreeListEntry* pFirstSelected = FirstSelected();
-            for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+            if (lcl_IsContent(pEntry) &&
+                    static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
             {
-                if (lcl_IsContent(pEntry) &&
-                        static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                // might have been scrolled out of view by the user so leave it that way
+                if (static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos() == nActPos)
                 {
-                    // might have been scrolled out of view by the user so leave it that way
-                    if (static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlinePos() == nActPos)
+                    // only select if not already selected or tree has multiple entries selected
+                    if (pEntry != pFirstSelected || GetSelectionCount() > 1)
                     {
-                        // only select if not already selected or tree has multiple entries selected
-                        if (pEntry != pFirstSelected || GetSelectionCount() > 1)
+                        if (m_nOutlineTracking == 2) // focused outline tracking
                         {
-                            if (m_nOutlineTracking == 2) // focused outline tracking
+                            // collapse to children of root node
+                            for (SvTreeListEntry* pChildEntry = FirstChild(First()); pChildEntry; pChildEntry = Next(pChildEntry))
                             {
-                                // collapse to children of root node
-                                for (SvTreeListEntry* pChildEntry = FirstChild(First()); pChildEntry; pChildEntry = Next(pChildEntry))
-                                {
-                                    if (static_cast<SwContent*>(pChildEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
-                                        Collapse(pChildEntry);
-                                    else
-                                        break;
-                                }
+                                if (static_cast<SwContent*>(pChildEntry->GetUserData())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                                    Collapse(pChildEntry);
+                                else
+                                    break;
                             }
-                            SetCurEntry(pEntry); // unselect all entries, make pEntry visible, and select
                         }
-                        break;
+                        SetCurEntry(pEntry); // unselect all entries, make pEntry visible, and select
                     }
+                    break;
                 }
-                else
-                {
-                    // use of this break assumes outline content type is first in tree
-                    if (lcl_IsContentType(pEntry) &&
-                            static_cast<SwContentType*>(pEntry->GetUserData())->GetType() != ContentTypeId::OUTLINE)
-                        break;
-                }
+            }
+            else
+            {
+                // use of this break assumes outline content type is first in tree
+                if (lcl_IsContentType(pEntry) &&
+                        static_cast<SwContentType*>(pEntry->GetUserData())->GetType() != ContentTypeId::OUTLINE)
+                    break;
             }
         }
     }
