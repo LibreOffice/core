@@ -1047,6 +1047,9 @@ public:
 
     void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
 
+    virtual void vadjustment_set_value(int value) = 0;
+    virtual int vadjustment_get_value() const = 0;
+
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }

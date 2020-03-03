@@ -4484,6 +4484,18 @@ public:
 
     virtual TreeView* get_drag_source() const override { return g_DragSource; }
 
+    virtual int vadjustment_get_value() const override
+    {
+        ScrollBar* pVertScrollBar = m_xTreeView->GetVScroll();
+        return pVertScrollBar->GetThumbPos();
+    }
+
+    virtual void vadjustment_set_value(int value) override
+    {
+        ScrollBar* pVertScrollBar = m_xTreeView->GetVScroll();
+        pVertScrollBar->SetThumbPos(value);
+    }
+
     virtual ~SalInstanceTreeView() override
     {
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
