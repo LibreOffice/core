@@ -371,7 +371,7 @@
    <draw:page draw:name="page1" draw:style-name="dp2" draw:master-page-name="Default">
     <draw:frame draw:name="Zoomed Textbox" draw:style-name="gr1" draw:text-style-name="P1" draw:layer="layout" svg:width="8.2cm" svg:height="4.5cm" svg:x="3.9cm" svg:y="19.2cm">
      <draw:text-box>
-      <text:p>Subscript shouldn’t drop below decender: q<text:span text:style-name="T1">p</text:span></text:p>
+      <text:p>Subscript shouldn’t drop below descender: q<text:span text:style-name="T1">p</text:span></text:p>
       <text:p><text:span text:style-name="T2"/></text:p>
       <text:p><text:span text:style-name="T2">Superscript shouldn’t raise above ascender: d</text:span><text:span text:style-name="T3">L</text:span></text:p>
      </draw:text-box>
