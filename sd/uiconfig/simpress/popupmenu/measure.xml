@@ -69,6 +69,7 @@
   <menu:menuitem menu:id=".uno:NameGroup"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:CustomAnimation"/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
   <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
