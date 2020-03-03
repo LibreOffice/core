@@ -69,6 +69,7 @@
 #include <ndole.hxx>
 #include <fefly.hxx>
 #include <fmtcnct.hxx>
+#include <textboxhelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -592,6 +593,15 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
+
+                        //tdf#130802: Frame goes out of shape on moving
+                        //If the Anchor of the shape and frame differ...
+                        if ( rFormat.GetAnchor() != SwTextBoxHelper::getChildrenFormat(rFormat).GetAnchor())
+                        {
+                            //Set the anchor of the shape for the frame...
+                            rFormat.GetDoc()->SetAttr(aAnch, SwTextBoxHelper::getChildrenFormat(rFormat));
+                        }
+                        //tdf130802end
                     }
                     // #i28701# - no call of method
                     // <CheckCharRectAndTopOfLine()> for to-character anchored

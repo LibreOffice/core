@@ -54,6 +54,10 @@ class XShape;
 class SW_DLLPUBLIC SwTextBoxHelper
 {
 public:
+    ///Returns with a fly-frame-format-reference of the textbox (shape+textframe)
+    static SwFrameFormat& getChildrenFormat(SwFrameFormat& rFormat);
+    ///Returns with a fly-frame-format-adress of the textbox (shape+textframe)
+    static SwFrameFormat* getChildrenFormat(SwFrameFormat* pFormat);
     /// Maps a draw format to a fly format.
     using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
