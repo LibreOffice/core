@@ -40,7 +40,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <XMLBase64Export.hxx>
-#include <xmloff/AutoStyleEntry.hxx>
+#include <AutoStyleEntry.hxx>
 #include <comphelper/hash.hxx>
 
 using namespace ::com::sun::star;

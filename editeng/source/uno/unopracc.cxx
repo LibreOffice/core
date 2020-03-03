@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <editeng/unopracc.hxx>
+#include <unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
 
 using namespace ::com::sun::star;

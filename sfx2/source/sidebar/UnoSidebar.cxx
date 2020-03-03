@@ -9,7 +9,7 @@
  */
 
 #include <sfx2/sidebar/UnoSidebar.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sidebar/UnoDecks.hxx>
