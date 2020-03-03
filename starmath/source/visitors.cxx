@@ -1914,7 +1914,6 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 }
 
 // SmNodeToTextVisitor
-
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
     pNode->Accept( this );

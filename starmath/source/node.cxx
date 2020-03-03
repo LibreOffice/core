@@ -759,9 +759,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     if (pExtra)
         ExtendBy(*pExtra, RectCopyMBL::This, true);
 }
-
-
-void SmRootNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmRootNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -887,7 +885,7 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
 }
 
-void SmBinVerNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmBinVerNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -1325,7 +1323,7 @@ void SmSubSupNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
 
 /**************************************************************************/
 
-void SmBraceNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmBraceNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -1752,7 +1750,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pAttr, RectCopyMBL::This, true);
 }
 
-void SmFontNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmFontNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -2139,7 +2137,7 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, maText, GetFont().GetBorderWidth()));
 }
 
-void SmTextNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmTextNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -2505,7 +2503,7 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-void SmMathSymbolNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmMathSymbolNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -2516,7 +2514,7 @@ void SmMathSymbolNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
         MathType::LookupChar(cChar, rText, 3);
 }
 
-void SmRectangleNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmRectangleNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
@@ -2845,7 +2843,7 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
-void SmBlankNode::SmNodeToTextVisitor( SmNode* pNode, OUString &eText )
+void SmBlankNode::SmNodeToTextVisitor( SmNode* /*pNode*/, OUString &eText )
 {
     OUStringBuffer rText;
     rText.append(eText);
