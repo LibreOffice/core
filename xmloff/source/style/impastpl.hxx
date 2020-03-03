@@ -31,7 +31,7 @@
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
-#include <xmloff/AutoStyleEntry.hxx>
+#include <AutoStyleEntry.hxx>
 
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;

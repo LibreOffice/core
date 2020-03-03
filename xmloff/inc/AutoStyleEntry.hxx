@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
-#define INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -20,13 +19,11 @@
 
 namespace xmloff
 {
-struct XMLOFF_DLLPUBLIC AutoStyleEntry
+struct AutoStyleEntry
 {
     std::vector<std::pair<OUString, css::uno::Any>> m_aXmlProperties;
 };
 
 } // end xmloff
-
-#endif // INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

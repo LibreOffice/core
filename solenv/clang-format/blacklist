@@ -3849,6 +3849,7 @@ dtrans/test/win32/dnd/targetlistener.cxx
 dtrans/test/win32/dnd/targetlistener.hxx
 dtrans/test/win32/dnd/transferable.cxx
 dtrans/test/win32/dnd/transferable.hxx
+editeng/inc/AccessibleStringWrap.hxx
 editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
 editeng/inc/editeng.hxx
@@ -3857,6 +3858,7 @@ editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
 editeng/inc/helpids.h
 editeng/inc/unomodel.hxx
+editeng/inc/unopracc.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
 editeng/qa/unit/core-test.cxx
@@ -5939,7 +5941,6 @@ include/editeng/AccessibleEditableTextPara.hxx
 include/editeng/AccessibleParaManager.hxx
 include/editeng/AccessibleSelectionBase.hxx
 include/editeng/AccessibleStaticTextBase.hxx
-include/editeng/AccessibleStringWrap.hxx
 include/editeng/CustomPropertyField.hxx
 include/editeng/SpellPortions.hxx
 include/editeng/Trie.hxx
@@ -6048,7 +6049,6 @@ include/editeng/unoipset.hxx
 include/editeng/unolingu.hxx
 include/editeng/unonames.hxx
 include/editeng/unonrule.hxx
-include/editeng/unopracc.hxx
 include/editeng/unoprnms.hxx
 include/editeng/unotext.hxx
 include/editeng/unoviwou.hxx
@@ -6486,7 +6486,6 @@ include/sfx2/sidebar/SidebarPanelBase.hxx
 include/sfx2/sidebar/SidebarToolBox.hxx
 include/sfx2/sidebar/TabBar.hxx
 include/sfx2/sidebar/Theme.hxx
-include/sfx2/sidebar/Tools.hxx
 include/sfx2/sidebar/UnoSidebar.hxx
 include/sfx2/signaturestate.hxx
 include/sfx2/stbitem.hxx
@@ -12074,6 +12073,7 @@ sfx2/inc/sidebar/PanelDescriptor.hxx
 sfx2/inc/sidebar/PanelTitleBar.hxx
 sfx2/inc/sidebar/TabItem.hxx
 sfx2/inc/sidebar/TitleBar.hxx
+sfx2/inc/sidebar/Tools.hxx
 sfx2/inc/sidebar/UnoDeck.hxx
 sfx2/inc/sidebar/UnoDecks.hxx
 sfx2/inc/sidebar/UnoPanel.hxx

@@ -22,7 +22,7 @@
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/strings.hrc>

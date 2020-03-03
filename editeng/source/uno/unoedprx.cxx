@@ -36,7 +36,7 @@
 #include <editeng/unoedprx.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/AccessibleStringWrap.hxx>
+#include <AccessibleStringWrap.hxx>
 #include <editeng/outliner.hxx>
 
 using namespace ::com::sun::star;

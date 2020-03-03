@@ -23,7 +23,7 @@
 #include <vcl/outdev.hxx>
 
 #include <editeng/svxfont.hxx>
-#include <editeng/AccessibleStringWrap.hxx>
+#include <AccessibleStringWrap.hxx>
 
 
 // AccessibleStringWrap implementation

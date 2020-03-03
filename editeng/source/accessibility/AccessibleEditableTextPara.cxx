@@ -63,7 +63,7 @@
 
 #include <com/sun/star/beans/PropertyState.hpp>
 
-#include <editeng/unopracc.hxx>
+#include <unopracc.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include "AccessibleHyperlink.hxx"
 #include "AccessibleImageBullet.hxx"
