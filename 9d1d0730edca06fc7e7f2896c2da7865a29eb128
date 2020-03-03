@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c004843_c1c6b809",
+        "filename": "offapi/com/sun/star/chart2/Legend.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-03T12:07:09Z",
+      "side": 1,
+      "message": "missing @since",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 31
+      },
+      "revId": "9d1d0730edca06fc7e7f2896c2da7865a29eb128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

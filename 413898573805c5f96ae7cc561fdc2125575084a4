@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0848db83_191f21e1",
+        "filename": "offapi/com/sun/star/chart2/LegendPosition.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-03T12:07:09Z",
+      "side": 0,
+      "message": "It\u0027s not possible to remove something from the UNO API in one step. First we must add only the @deprecated label for the next big release, if removing is really needed. How the outside world (other applications using UNO) can be informed about custom (not automatic) legend position otherwise?",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 10
+      },
+      "revId": "413898573805c5f96ae7cc561fdc2125575084a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
