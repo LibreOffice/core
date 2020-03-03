@@ -53,6 +53,8 @@ namespace vcl { namespace CommandInfoProvider {
 
     VCL_DLLPUBLIC OUString GetPopupLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
+    VCL_DLLPUBLIC OUString GetTooltipLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+
     /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
         @param rsCommandName
             The command name is expected to start with .uno:

@@ -91,6 +91,7 @@ protected:
     virtual ~SfxAbstractPasteDialog() override = default;
 public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) = 0;
+    virtual void InsertUno( const OUString& sCmd, const OUString& sLabel ) = 0;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) = 0;
     virtual void PreGetFormat( const TransferableDataHelper& aHelper ) = 0;
     virtual SotClipboardFormatId GetFormatOnly() = 0;

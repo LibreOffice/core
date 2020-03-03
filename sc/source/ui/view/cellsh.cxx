@@ -223,6 +223,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_PASTE_ONLY_VALUE:
             case SID_PASTE_ONLY_TEXT:
             case SID_PASTE_ONLY_FORMULA:
+            case SID_PASTE_TEXTIMPORT_DIALOG:
                 bDisable = GetViewData()->SelectionForbidsCellFill();
                 break;
 
@@ -528,6 +529,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, 
     rBindings.Invalidate( SID_PASTE_ONLY_VALUE );
     rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
     rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
+    rBindings.Invalidate( SID_PASTE_TEXTIMPORT_DIALOG );
     rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
 }
 
@@ -621,6 +623,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         rSet.DisableItem( SID_PASTE_ONLY_VALUE );
         rSet.DisableItem( SID_PASTE_ONLY_TEXT );
         rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
+        rSet.DisableItem( SID_PASTE_TEXTIMPORT_DIALOG );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SfxItemState::UNKNOWN )

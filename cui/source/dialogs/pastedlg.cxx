@@ -26,6 +26,8 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/lineend.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")
@@ -69,6 +71,13 @@ void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& 
 {
     aSupplementMap.insert( std::make_pair( nFormat, rFormatName ) );
 }
+
+void SvPasteObjectDialog::InsertUno(const OUString& sCmd, const OUString& sLabel)
+{
+    aExtraCommand.first = sCmd;
+    aExtraCommand.second = sLabel;
+}
+
 
 void SvPasteObjectDialog::PreGetFormat( const TransferableDataHelper &rHelper )
 {
@@ -286,6 +295,11 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         }
     }
 
+    if (!aExtraCommand.first.isEmpty())
+    {
+        ObjectLB().append(aExtraCommand.first, aExtraCommand.second);
+    }
+
     ObjectLB().thaw();
     SelectObject();
 
@@ -302,7 +316,15 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
     if (run() == RET_OK)
     {
-        nSelFormat = static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
+        if (ObjectLB().get_selected_id().startsWithIgnoreAsciiCase(".uno"))
+        {
+            comphelper::dispatchCommand(aExtraCommand.first, {});
+            nSelFormat = SotClipboardFormatId::NONE;
+        }
+        else
+        {
+            nSelFormat = static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
+        }
     }
 
     return nSelFormat;
