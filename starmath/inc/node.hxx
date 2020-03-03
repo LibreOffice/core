@@ -239,7 +239,8 @@ public:
             void SetSubNodes(SmNodeArray&& rNodeArray);
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
-
+    virtual void SmNodeToTextVisitor( SmNode* pNode, OUString &rText ) override;
+    //void CreateTextFromNode(OUStringBuffer &rText) override;
     SmNodeArray::iterator begin() {return maSubNodes.begin();}
     SmNodeArray::iterator end() {return maSubNodes.end();}
     SmNodeArray::reverse_iterator rbegin() {return maSubNodes.rbegin();}
