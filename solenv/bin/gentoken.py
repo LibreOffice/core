@@ -44,12 +44,12 @@ with open(token_input_file) as ifile:
             token = token.replace("+", "PLUS")
             tokens[line] = token.upper()
 
-with open(gperf_output_file, "w") as gperf:
-    gperf.write(gperf_header)
+with open(gperf_output_file, "wb") as gperf:
+    gperf.write(gperf_header.encode("utf-8"))
 
     for token in sorted(tokens.keys()):
-        gperf.write("{},{}\n".format(token, tokens[token]))
+        gperf.write("{},{}\n".format(token, tokens[token]).encode("utf-8"))
 
-    gperf.write("%%\n")
+    gperf.write("%%\n".encode("utf-8"))
 
 # vim: set noet sw=4 ts=4:
