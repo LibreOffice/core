@@ -476,13 +476,13 @@ void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
 
 /**
  * Implementation of stack blur - a fast Gaussian blur approximation.
- * nRadius - blur radious, valid values are between 2 and 254
+ * nRadius - blur radius, valid values are between 2 and 254
  * bExtend - extend the bitmap in all directions by the radius
  *
  * Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
  * (http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html)
  *
- * Additionally eferences and implementations:
+ * Additionally references and implementations:
  * - Blur.js by Jacob Kelley
  *   (http://www.blurjs.com)
  * - BlurEffectForAndroidDesign by Nicolas Pomepuy
