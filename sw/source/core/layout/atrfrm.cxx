@@ -91,6 +91,7 @@
 #include <svl/itemiter.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2576,6 +2577,33 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             const_cast<SwFormatFooter *>(pF)->RegisterToFormat( *pFormat );
         }
     }
+
+    //>>tdf#130802: Frame goes out of shape, on moving...
+    //WARNING: the following block if enabled can cause crash!
+    if (0)
+    {
+        //pTxBxFmt: the format of the lower frame (the text part of shape)
+        SwFrameFormat* pTxBxFmt = SwTextBoxHelper::getChildrenFormat(this);
+        //Checking if there is nullptr and the textframe and shape anchor is
+        //different and this is a textbox:
+        if (pTxBxFmt && SwTextBoxHelper::isTextBox(this, RES_DRAWFRMFMT)
+            && this->GetAnchor() != pTxBxFmt->GetAnchor())
+        {
+            //setting the same anchor for the frame what the shape has
+            this->GetDoc()->SetAttr(this->GetAnchor(), *pTxBxFmt);
+
+            //Converting frame formats to objects:
+            SdrObject* pTxFrmObj = pTxBxFmt->FindRealSdrObject();//the crash in this line
+            SdrObject* pShpFrmObj = this->FindRealSdrObject();
+
+            if (pTxFrmObj && pShpFrmObj)
+            {
+                //Trying to set the position of the shape to the frame
+                pTxFrmObj->NbcSetRelativePos(pShpFrmObj->GetRelativePos());
+            }
+        }
+    }
+    //>>tdf130802: end of patch in this file
 
     SwFormat::Modify( pOld, pNew );
 
