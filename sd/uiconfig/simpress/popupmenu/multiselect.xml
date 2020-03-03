@@ -82,4 +82,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnimationEffects"/>
   <menu:menuitem menu:id=".uno:ExecuteAnimationEffect"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ExportTo"/>
 </menu:menupopup>
