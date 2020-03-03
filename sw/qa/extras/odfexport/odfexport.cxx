@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -252,6 +253,14 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1718), rect.Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1347), rect.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf130515, "tdf130515.odt")
+{
+    uno::Reference<drawing::XControlShape> xControl1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xPara(xControl1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("12:12"), getProperty<OUString>(xControl1->getControl(), "Text"));
 }
 
 DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
