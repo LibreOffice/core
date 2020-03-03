@@ -1,0 +1,34 @@
+--- dtor/src/dtoa.c.coverity
++++ dtor/src/dtoa.c
+@@ -2303,6 +2303,7 @@
+ 	if ((y = d1)) {
+ 		if ((k = lo0bits(&y))) {
+ 			x[0] = y | z << (32 - k);
++			assert(k < 32); /* https://bugs.python.org/issue23999 */
+ 			z >>= k;
+ 			}
+ 		else
+@@ -3031,6 +3032,7 @@
+ 			 || ((n = nbits & kmask) !=0
+ 			     && hi0bits(x[k-1]) < 32-n)) {
+ 				rshift(b,1);
++			        /* coverity[dead_error_line] - not worth investigating */
+ 				if (++e > Emax)
+ 					goto ovfl;
+ 				}
+@@ -3347,6 +3349,7 @@
+ 		if ((dd = s0[j++] - '0' - dig))
+ 			goto ret;
+ 		if (!b->x[0] && b->wds == 1) {
++			/* coverity[copy_paste_error : FALSE] */
+ 			if (i < nd)
+ 				dd = 1;
+ 			goto ret;
+@@ -3609,6 +3612,7 @@
+ 		switch(c = *++s) {
+ 			case '-':
+ 				esign = 1;
++				/* fall through */
+ 			case '+':
+ 				c = *++s;
+ 			}
