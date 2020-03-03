@@ -533,6 +533,11 @@ void AbstractPasteDialog_Impl::Insert(SotClipboardFormatId nFormat, const OUStri
     m_xDlg->Insert(nFormat, rFormatName);
 }
 
+void AbstractPasteDialog_Impl::InsertUno(const OUString& sCmd, const OUString& sLabel)
+{
+    m_xDlg->InsertUno(sCmd, sLabel);
+}
+
 void AbstractPasteDialog_Impl::SetObjName(const SvGlobalName & rClass, const OUString& rObjName)
 {
     m_xDlg->SetObjName(rClass, rObjName);
