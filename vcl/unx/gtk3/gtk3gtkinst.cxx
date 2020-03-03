@@ -8622,6 +8622,7 @@ private:
     gulong m_nPopupMenuSignalId;
     gulong m_nKeyPressSignalId;
     gulong m_nQueryTooltipSignalId;
+    GtkAdjustment* m_pVAdjustment;
     ImplSVEvent* m_pChangeEvent;
 
     DECL_LINK(async_signal_changed, void*, void);
@@ -9177,6 +9178,7 @@ public:
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
         , m_nQueryTooltipSignalId(0)
+        , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
@@ -10662,6 +10664,18 @@ public:
         }
         // unhighlight the row
         gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, GTK_TREE_VIEW_DROP_BEFORE);
+    }
+
+    virtual int vadjustment_get_value() const override
+    {
+        return gtk_adjustment_get_value(m_pVAdjustment);
+    }
+
+    virtual void vadjustment_set_value(int value) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pVAdjustment, value);
+        enable_notify_events();
     }
 
     virtual ~GtkInstanceTreeView() override
