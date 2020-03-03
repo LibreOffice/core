@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "058e552c_937d4f06",
+        "filename": "sw/uiconfig/swriter/ui/insertfootnote.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-03T09:09:02Z",
+      "side": 1,
+      "message": "For my taste the tooltip can be a bit more informative. Including the verb is not prejudicial: \"Go to previous footnote/endnote\" (don\u0027t know what exactly this button does). Not a blocker though.",
+      "range": {
+        "startLine": 44,
+        "startChar": 99,
+        "endLine": 44,
+        "endChar": 124
+      },
+      "revId": "24bd8f62de80ba55c4cbb4bee1cc6b27a9986095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
