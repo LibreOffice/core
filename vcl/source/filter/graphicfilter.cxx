@@ -1410,7 +1410,7 @@ void GraphicFilter::preload()
 
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                     const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                                     const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
                                      WmfExternal const *pExtHeader )
 {
     OUString                       aFilterName;
@@ -1420,31 +1420,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
     const bool                     bLinkSet = rGraphic.IsGfxLink();
 
-    Size                aPreviewSizeHint( 0, 0 );
-
     std::unique_ptr<sal_uInt8[]> pGraphicContent;
     sal_Int32  nGraphicContentSize = 0;
 
     ResetLastError();
-
-    if ( pFilterData )
-    {
-        for ( const auto& rPropVal : *pFilterData )
-        {
-            if ( rPropVal.Name == "PreviewSizeHint" )
-            {
-                css::awt::Size aSize;
-                if ( rPropVal.Value >>= aSize )
-                {
-                    aPreviewSizeHint = Size( aSize.Width, aSize.Height );
-                    if ( aSize.Width || aSize.Height )
-                        nImportFlags |= GraphicFilterImportFlags::ForPreview;
-                    else
-                        nImportFlags &=~GraphicFilterImportFlags::ForPreview;
-                }
-            }
-        }
-    }
 
     std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
     bool  bDummyContext = rGraphic.IsDummyContext();
@@ -1501,13 +1480,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         {
             vcl::PNGReader aPNGReader( rIStream );
 
-            // ignore animation for previews and set preview size
-            if( aPreviewSizeHint.Width() || aPreviewSizeHint.Height() )
-            {
-                // position the stream at the end of the image if requested
-                aPNGReader.GetChunks();
-            }
-            else
             {
                 // check if this PNG contains a GIF chunk!
                 const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
@@ -1537,7 +1509,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
             if ( eLinkType == GfxLinkType::NONE )
             {
-                BitmapEx aBmpEx( aPNGReader.Read( aPreviewSizeHint ) );
+                BitmapEx aBmpEx( aPNGReader.Read() );
                 if ( aBmpEx.IsEmpty() )
                     nStatus = ERRCODE_GRFILTER_FILTERERROR;
                 else

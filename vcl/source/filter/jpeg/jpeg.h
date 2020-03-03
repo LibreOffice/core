@@ -47,7 +47,7 @@ bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-                  Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+                  GraphicFilterImportFlags nImportFlags,
                   BitmapScopedWriteAccess* ppAccess );
 
 void    Transform(void* pInputStream, void* pOutputStream, long nAngle);
