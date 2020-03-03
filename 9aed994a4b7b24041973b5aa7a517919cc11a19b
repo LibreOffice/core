@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8247eceb_16af5859",
+        "filename": "external/dtoa/StaticLibrary_dtoa.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-03T12:39:24Z",
+      "side": 1,
+      "message": "can you please adapt that place accordingly?",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 78
+      },
+      "revId": "9aed994a4b7b24041973b5aa7a517919cc11a19b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
