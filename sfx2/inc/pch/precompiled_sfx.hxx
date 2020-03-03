@@ -445,7 +445,7 @@
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/styfitem.hxx>

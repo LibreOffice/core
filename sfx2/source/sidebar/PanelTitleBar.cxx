@@ -24,7 +24,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/ControllerFactory.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

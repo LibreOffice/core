@@ -20,7 +20,7 @@
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <unotools/confignode.hxx>
