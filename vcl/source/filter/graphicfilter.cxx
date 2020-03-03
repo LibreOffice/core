@@ -1109,7 +1109,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     {
         rContext.m_pAccess.reset();
 
-        if (rContext.m_nStatus == ERRCODE_NONE && (rContext.m_eLinkType != GfxLinkType::NONE) && !rContext.m_pGraphic->GetContext())
+        if (rContext.m_nStatus == ERRCODE_NONE && (rContext.m_eLinkType != GfxLinkType::NONE) && !rContext.m_pGraphic->GetReaderContext())
         {
             std::unique_ptr<sal_uInt8[]> pGraphicContent;
 
@@ -1456,7 +1456,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
     }
 
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
+    std::shared_ptr<GraphicReader> pContext = rGraphic.GetReaderContext();
     bool  bDummyContext = rGraphic.IsDummyContext();
     if( !pContext || bDummyContext )
     {
@@ -1786,7 +1786,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
     }
 
-    if( nStatus == ERRCODE_NONE && bCreateNativeLink && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetContext() && !bLinkSet )
+    if( nStatus == ERRCODE_NONE && bCreateNativeLink && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetReaderContext() && !bLinkSet )
     {
         if (!pGraphicContent)
         {
@@ -2237,7 +2237,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         default:
         break;
     }
-    if( GraphicType::NONE == rData.maGraphic.GetType() || rData.maGraphic.GetContext() ) // Import
+    if( GraphicType::NONE == rData.maGraphic.GetType() || rData.maGraphic.GetReaderContext() ) // Import
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );

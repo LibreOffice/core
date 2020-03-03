@@ -493,12 +493,12 @@ sal_uInt32 Graphic::GetAnimationLoopCount() const
     return mxImpGraphic->ImplGetAnimationLoopCount();
 }
 
-std::shared_ptr<GraphicReader>& Graphic::GetContext()
+std::shared_ptr<GraphicReader>& Graphic::GetReaderContext()
 {
     return mxImpGraphic->ImplGetContext();
 }
 
-void Graphic::SetContext( const std::shared_ptr<GraphicReader> &pReader )
+void Graphic::SetReaderContext( const std::shared_ptr<GraphicReader> &pReader )
 {
     mxImpGraphic->ImplSetContext( pReader );
 }

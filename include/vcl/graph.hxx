@@ -182,8 +182,8 @@ public:
 
 public:
 
-    std::shared_ptr<GraphicReader>& GetContext();
-    void                            SetContext( const std::shared_ptr<GraphicReader> &pReader );
+    std::shared_ptr<GraphicReader>& GetReaderContext();
+    void                            SetReaderContext( const std::shared_ptr<GraphicReader> &pReader );
     void                            SetDummyContext(bool value);
     bool                            IsDummyContext() const;
 private:
