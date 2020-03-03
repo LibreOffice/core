@@ -9,15 +9,14 @@
 
 #include <gtk/gtk.h>
 
-#include <cmath>
 #include <iostream>
 
 #include "gtv-application-window.hxx"
-#include "gtv-signal-handlers.hxx"
 #include "gtv-helpers.hxx"
 #include "gtv-comments-sidebar.hxx"
 
-#include <map>
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+
 #include <boost/property_tree/json_parser.hpp>
 
 #ifdef __GNUC__

@@ -13,14 +13,12 @@
 #include "gtv-main-toolbar.hxx"
 #include "gtv-signal-handlers.hxx"
 #include "gtv-helpers.hxx"
-#include "gtv-calc-header-bar.hxx"
-#include "gtv-lok-dialog.hxx"
 
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+
+#include <fstream>
 #include <map>
 #include <memory>
-
-#include <boost/property_tree/json_parser.hpp>
-#include <optional>
 
 namespace {
 

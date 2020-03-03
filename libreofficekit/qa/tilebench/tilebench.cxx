@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
@@ -15,7 +14,6 @@
 #include <vector>
 #include <atomic>
 #include <iostream>
-#include <fstream>
 #include <osl/time.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -23,7 +21,6 @@
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
-#include <optional>
 
 using namespace lok;
 

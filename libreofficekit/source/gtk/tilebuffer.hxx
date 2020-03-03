@@ -10,13 +10,11 @@
 #ifndef INCLUDED_TILEBUFFER_HXX
 #define INCLUDED_TILEBUFFER_HXX
 
-#include <gdk/gdkkeysyms.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <map>
+#include <cairo.h>
+#include <gio/gio.h>
+#include <glib.h>
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <map>
 
 #define LOK_TILEBUFFER_ERROR (LOKTileBufferErrorQuark())
 

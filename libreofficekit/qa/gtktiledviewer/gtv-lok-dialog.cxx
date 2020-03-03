@@ -10,23 +10,16 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#include <cmath>
 #include <iostream>
-#include <sstream>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "gtv-application-window.hxx"
-#include "gtv-signal-handlers.hxx"
-#include "gtv-helpers.hxx"
 #include "gtv-lok-dialog.hxx"
 
 #include <com/sun/star/awt/Key.hpp>
 #include <vcl/event.hxx>
-
-#include <map>
-#include <boost/property_tree/json_parser.hpp>
 
 namespace {
 

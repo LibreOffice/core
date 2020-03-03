@@ -12,7 +12,6 @@
 
 #include <gtk/gtk.h>
 
-#include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "gtv-main-toolbar.hxx"
