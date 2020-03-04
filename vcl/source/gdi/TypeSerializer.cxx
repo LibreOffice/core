@@ -19,6 +19,7 @@
 
 #include <TypeSerializer.hxx>
 #include <tools/vcompat.hxx>
+#include <sal/log.hxx>
 
 TypeSerializer::TypeSerializer(SvStream& rStream)
     : GenericTypeSerializer(rStream)
@@ -78,3 +79,73 @@ void TypeSerializer::writeGradient(const Gradient& rGradient)
     mrStream.WriteUInt16(rGradient.GetEndIntensity());
     mrStream.WriteUInt16(rGradient.GetSteps());
 }
+
+void TypeSerializer::readGfxLink(GfxLink& rGfxLink)
+{
+    sal_uInt16 nType = 0;
+    sal_uInt32 nDataSize = 0;
+    sal_uInt32 nUserId = 0;
+
+    Size aSize;
+    MapMode aMapMode;
+    bool bMapAndSizeValid = false;
+
+    {
+        VersionCompat aCompat(mrStream, StreamMode::READ);
+
+        // Version 1
+        mrStream.ReadUInt16(nType);
+        mrStream.ReadUInt32(nDataSize);
+        mrStream.ReadUInt32(nUserId);
+
+        if (aCompat.GetVersion() >= 2)
+        {
+            readSize(aSize);
+            ReadMapMode(mrStream, aMapMode);
+            bMapAndSizeValid = true;
+        }
+    }
+
+    auto nRemainingData = mrStream.remainingSize();
+    if (nDataSize > nRemainingData)
+    {
+        SAL_WARN("vcl", "graphic link stream is smaller than requested size");
+        nDataSize = nRemainingData;
+    }
+
+    std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nDataSize]);
+    mrStream.ReadBytes(pBuffer.get(), nDataSize);
+
+    rGfxLink = GfxLink(std::move(pBuffer), nDataSize, static_cast<GfxLinkType>(nType));
+    rGfxLink.SetUserId(nUserId);
+
+    if (bMapAndSizeValid)
+    {
+        rGfxLink.SetPrefSize(aSize);
+        rGfxLink.SetPrefMapMode(aMapMode);
+    }
+}
+
+void TypeSerializer::writeGfxLink(const GfxLink& rGfxLink)
+{
+    {
+        VersionCompat aCompat(mrStream, StreamMode::WRITE, 2);
+
+        // Version 1
+        mrStream.WriteUInt16(sal_uInt16(rGfxLink.GetType()));
+        mrStream.WriteUInt32(rGfxLink.GetDataSize());
+        mrStream.WriteUInt32(rGfxLink.GetUserId());
+
+        // Version 2
+        writeSize(rGfxLink.GetPrefSize());
+        WriteMapMode(mrStream, rGfxLink.GetPrefMapMode());
+    }
+
+    if (rGfxLink.GetDataSize())
+    {
+        if (rGfxLink.GetData())
+            mrStream.WriteBytes(rGfxLink.GetData(), rGfxLink.GetDataSize());
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
