@@ -110,7 +110,7 @@ void XMLLineNumberingImportContext::SetAttribute( sal_uInt16 nPrefixKey,
 
     static const SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
 
-    enum LineNumberingToken eToken = static_cast<enum LineNumberingToken>(aTokenMap.Get(nPrefixKey, rLocalName));
+    auto eToken = aTokenMap.Get(nPrefixKey, rLocalName);
 
     bool bTmp(false);
     sal_Int32 nTmp;
