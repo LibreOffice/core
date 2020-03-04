@@ -290,6 +290,10 @@ static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
     case style::NumberingType::NUMBER_HANGUL_KO: nRet = 41; break;
     case style::NumberingType::NUMBER_UPPER_KO: nRet = 44; break;
     case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
+    case SVX_NUM_ARABIC_ZERO:
+        // 0x16, msonfcArabicLZ
+        nRet = 22;
+        break;
     }
     return nRet;
 }

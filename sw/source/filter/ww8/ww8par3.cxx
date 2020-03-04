@@ -763,6 +763,10 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             // actually: ORDINAL
             nType = SVX_NUM_ARABIC;
             break;
+        case 22:
+            // 0x16, msonfcArabicLZ
+            nType = SVX_NUM_ARABIC_ZERO;
+            break;
         case 23:
             nType = SVX_NUM_CHAR_SPECIAL;
             //For i120928,type info
