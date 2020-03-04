@@ -150,11 +150,8 @@ static const OUStringLiteral g_sRowStyleFamilyName( XML_STYLE_FAMILY_TABLE_ROW_S
 static const OUStringLiteral g_sCellStyleFamilyName( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
-        sal_uInt16 nPrfx ,
-        const OUString& rLName ,
-        const Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStylesContext( rImport ),
     m_rImport(rImport),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
@@ -169,9 +166,9 @@ OReportStylesContext::~OReportStylesContext()
 }
 
 
-void OReportStylesContext::EndElement()
+void OReportStylesContext::endFastElement(sal_Int32 nElement)
 {
-    SvXMLStylesContext::EndElement();
+    SvXMLStylesContext::endFastElement(nElement);
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else

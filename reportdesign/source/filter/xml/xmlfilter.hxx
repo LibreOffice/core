@@ -84,8 +84,7 @@ private:
 
 public:
     using SvXMLImport::SetMasterStyles;
-    SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
-                                            const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
+    SvXMLImportContext* CreateStylesContext( bool bIsAutoStyle );
     SvXMLImportContext* CreateMetaContext(const sal_Int32 nElement);
     SvXMLImportContext* CreateFontDeclsContext();
 protected:
@@ -118,7 +117,6 @@ public:
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
 
-    const SvXMLTokenMap& GetDocContentElemTokenMap() const;
     const SvXMLTokenMap& GetReportElemTokenMap() const;
     const SvXMLTokenMap& GetCellElemTokenMap() const;
 
