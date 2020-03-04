@@ -998,7 +998,8 @@ namespace pcr
         case PROPERTY_ID_IMAGE_URL:
         {
             std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/urlcontrol.ui", m_xContext));
-            auto pControl = new OFileUrlControl(std::make_unique<SvtURLBox>(xBuilder->weld_combo_box("urlcontrol")), std::move(xBuilder), false);
+            auto pURLBox = std::make_unique<SvtURLBox>(xBuilder->weld_combo_box("urlcontrol"));
+            auto pControl = new OFileUrlControl(std::move(pURLBox), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
@@ -1100,7 +1101,8 @@ namespace pcr
                     if ( bIsFormatKey )
                     {
                         std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedsample.ui", m_xContext));
-                        auto pControl = new OFormatSampleControl(xBuilder->weld_container("formattedsample"), std::move(xBuilder), false);
+                        auto pContainer = xBuilder->weld_container("formattedsample");
+                        auto pControl = new OFormatSampleControl(std::move(pContainer), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
                         pControl->SetFormatSupplier(pSupplier);
@@ -1112,7 +1114,8 @@ namespace pcr
                     else
                     {
                         std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
-                        auto pControl = new OFormattedNumericControl(xBuilder->weld_formatted_spin_button("formattedcontrol"), std::move(xBuilder), false);
+                        auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
+                        auto pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
                         FormatDescription aDesc;
@@ -1150,7 +1153,8 @@ namespace pcr
         case PROPERTY_ID_VALUE:
         {
             std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
-            auto pControl = new OFormattedNumericControl(xBuilder->weld_formatted_spin_button("formattedcontrol"), std::move(xBuilder), false);
+            auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
+            auto pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
@@ -1283,7 +1287,8 @@ namespace pcr
             case PROPERTY_ID_REPEAT_DELAY:
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/numericfield.ui", m_xContext));
-                auto pControl = new ONumericControl(xBuilder->weld_metric_spin_button("numericfield", FieldUnit::MILLISECOND), std::move(xBuilder), bReadOnly);
+                auto pSpinButton = xBuilder->weld_metric_spin_button("numericfield", FieldUnit::MILLISECOND);
+                auto pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bReadOnly);
                 pControl->SetModifyHandler();
                 pControl->setMinValue( Optional< double >( true, 0 ) );
                 pControl->setMaxValue( Optional< double >( true, std::numeric_limits< double >::max() ) );
