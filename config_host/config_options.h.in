@@ -11,6 +11,17 @@
  */
 #define STATIC_LINKING 0
 
+#define ENABLE_MERGELIBS 0
+
 #define ENABLE_RUNTIME_OPTIMIZATIONS 0
+
+// Used to turn off visibility for some classes/symbols when linking with --enable-mergelibs
+//
+#if ENABLE_MERGELIBS
+#define UNLESS_MERGELIBS(x)
+#else
+#define UNLESS_MERGELIBS(x) x
+#endif
+
 
 #endif
