@@ -738,9 +738,9 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
             if (pObj->GetObjIdentifier() == OBJ_OLE2)
             {
                 // tdf#125520 - temp SdrModel will need a comphelper::IEmbeddedHelper
-                // to succesfully clone the OLE content,  use the one from source model
+                // to successfully clone the OLE content,  use the one from source model
                 // in the temporary SdrModel - it gets not deleted in SdrModel destructor.
-                // As long as the temporary SdrModel is used temprary (and does NOT get
+                // As long as the temporary SdrModel is used temporarily (and does NOT get
                 // extended to a full document) this *should* work. There stay some
                 // concerns about what may happen in BG and if saved/loaded from clipboard,
                 // so this *might* need to be enhanced in the future.
