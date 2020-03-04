@@ -162,21 +162,19 @@ class UITest(object):
         raise DialogNotClosedException()
 
     def close_doc(self):
-        with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
-            if not self._xUITest.executeDialog(".uno:CloseDoc"):
-                print(".uno:CloseDoc failed")
-            time_ = 0
-            while time_ < MAX_WAIT:
-                if event.hasExecuted("DialogExecute"):
-                    xCloseDlg = self._xUITest.getTopFocusWindow()
-                    xNoBtn = xCloseDlg.getChild("discard")
-                    xNoBtn.executeAction("CLICK", tuple())
-                    return
-                elif event.hasExecuted("OnViewClosed"):
-                    return
-
-                time_ += DEFAULT_SLEEP
-                time.sleep(DEFAULT_SLEEP)
+        desktop = self.get_desktop()
+        active_frame = desktop.getActiveFrame()
+        if not active_frame:
+            print("close_doc: no active frame")
+            return
+        component = active_frame.getController().getModel()
+        if not component:
+            print("close_doc: active frame has no component")
+            return
+        component.dispose()
+        frames = desktop.getFrames()
+        if frames:
+            frames[0].activate()
 
     def execute_blocking_action(self, action, dialog_element=None,
             args=(), dialog_handler=None, printNames=False):
