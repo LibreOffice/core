@@ -23,9 +23,10 @@
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>
+#include <config_options.h>
 
 
-class VCL_DLLPUBLIC SpinField : public Edit
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SpinField : public Edit
 {
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle );
