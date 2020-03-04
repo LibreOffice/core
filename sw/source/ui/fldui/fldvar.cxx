@@ -395,7 +395,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                 m_xNameED->set_text( sName );
 
                 // User- or SetField ?
-                if (GetFieldMgr().GetFieldType(SwFieldIds::User, sName))
+                if (!GetFieldMgr().GetFieldType(SwFieldIds::User, sName)) // SetExp
                 {
                     // is there a corresponding SetField
                     SwSetExpFieldType* pSetTyp = static_cast<SwSetExpFieldType*>(
