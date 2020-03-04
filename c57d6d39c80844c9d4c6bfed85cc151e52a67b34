@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b1f872b_68a44b03",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-04T08:05:52Z",
+      "side": 1,
+      "message": "Noel: is there some way to mark this in some way, so it is not caught by your unused parameters GC? See the doc above, this is useful to keep. Or just talking to you like this is enough as you manually review the result anyway? :-)",
+      "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
