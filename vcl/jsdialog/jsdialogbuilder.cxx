@@ -68,7 +68,7 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bo
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    return pButton ? o3tl::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
+    return pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
                    : nullptr;
 }
 
@@ -89,6 +89,15 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
     ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
     return pListBox ? std::make_unique<JSListBox>(m_aOwnedToplevel, pListBox, this, bTakeOwnership)
                     : nullptr;
+}
+
+std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id,
+                                                                 bool bTakeOwnership)
+{
+    TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
+    return pNotebook
+               ? std::make_unique<JSNotebook>(m_aOwnedToplevel, pNotebook, this, bTakeOwnership)
+               : nullptr;
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
@@ -164,5 +173,36 @@ void JSComboBox::remove(int pos)
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
+    notifyDialogState();
+}
+
+JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceNotebook, ::TabControl>(aOwnedToplevel, pControl, pBuilder,
+                                                  bTakeOwnership)
+{
+}
+
+void JSNotebook::set_current_page(int nPage)
+{
+    SalInstanceNotebook::set_current_page(nPage);
+    notifyDialogState();
+}
+
+void JSNotebook::set_current_page(const OString& rIdent)
+{
+    SalInstanceNotebook::set_current_page(rIdent);
+    notifyDialogState();
+}
+
+void JSNotebook::remove_page(const OString& rIdent)
+{
+    SalInstanceNotebook::remove_page(rIdent);
+    notifyDialogState();
+}
+
+void JSNotebook::append_page(const OString& rIdent, const OUString& rLabel)
+{
+    SalInstanceNotebook::append_page(rIdent, rLabel);
     notifyDialogState();
 }
