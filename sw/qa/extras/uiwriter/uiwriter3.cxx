@@ -105,4 +105,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
+{
+    load(DATA_DIRECTORY, "tdf130680.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // without the fix, it crashes
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    //FIXME: See https://bugs.documentfoundation.org/show_bug.cgi?id=130680#c5
+    //dispatchCommand(mxComponent, ".uno:Undo", {});
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    //dispatchCommand(mxComponent, ".uno:Undo", {});
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
