@@ -26,6 +26,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 class ImplTabItem;
 struct ImplTabCtrlData;
@@ -185,6 +186,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class NotebookBar;
