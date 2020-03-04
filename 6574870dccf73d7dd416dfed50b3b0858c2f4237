@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0156d766_e9131374",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-03-04T15:44:23Z",
+      "side": 1,
+      "message": "How is this related to tdf#99116?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 72
+      },
+      "revId": "6574870dccf73d7dd416dfed50b3b0858c2f4237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c7c578f_3a14bf3e",
         "filename": "sfx2/source/control/thumbnailview.cxx",
         "patchSetId": 3
@@ -18,6 +41,29 @@
         "startChar": 119,
         "endLine": 710,
         "endChar": 132
+      },
+      "revId": "6574870dccf73d7dd416dfed50b3b0858c2f4237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a12837_15986bae",
+        "filename": "sfx2/source/control/thumbnailview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-03-04T15:44:23Z",
+      "side": 1,
+      "message": "We already have such a filter in sfx2/source/control/templatelocalview.cxx. If you want it here too, you should move that code into the base class.\n\nHowever, when we redesigned the template manager and the start center, the decision was that the start center should *not* have filtering. When did this change?",
+      "range": {
+        "startLine": 1412,
+        "startChar": 4,
+        "endLine": 1412,
+        "endChar": 58
       },
       "revId": "6574870dccf73d7dd416dfed50b3b0858c2f4237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
