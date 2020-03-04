@@ -32,11 +32,9 @@ DataTransformation::~DataTransformation()
 
 SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
 {
-    SCROW nStartRow = 0;
     SCROW nEndRow = MAXROW;
-    rDoc.ShrinkToDataArea(0, nCol, nStartRow, nCol, nEndRow);
 
-    return nEndRow;
+    return rDoc.GetLastDataRow(0, nCol, nCol, nEndRow);
 }
 
 ColumnRemoveTransformation::ColumnRemoveTransformation(const std::set<SCCOL>& rColumns):
@@ -673,15 +671,15 @@ void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
     if (mnCol.empty())
         return;
 
-    SCROW nEndRow = 0;
+    std::map<SCCOL, SCROW> nEndRow;
     for(auto& rCol : mnCol)
     {
-        nEndRow = getLastRow(rDoc, rCol);
+        nEndRow.insert(std::pair<SCCOL, SCROW>(rCol, getLastRow(rDoc, rCol)));
     }
 
     for(auto& rCol : mnCol)
     {
-        for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+        for (SCROW nRow = 0; nRow <= nEndRow[rCol]; ++nRow)
         {
             CellType eType;
             rDoc.GetCellType(rCol, nRow, 0, eType);
