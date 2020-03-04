@@ -7471,6 +7471,10 @@ private:
         if (pMenuButton)
         {
             m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, m_pBuilder, false);
+            // so that, e.g. with focus initially in writer main document then
+            // after clicking the heading menu in the writer navigator focus is
+            // left in the main document and not in the toolbar
+            gtk_button_set_focus_on_click(GTK_BUTTON(pMenuButton), false);
             g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
         }
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
