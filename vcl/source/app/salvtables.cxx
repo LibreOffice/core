@@ -2157,7 +2157,7 @@ weld::Container* SalInstanceNotebook::get_page(const OString& rIdent) const
     if (m_aPages.size() < nPageIndex + 1U)
         m_aPages.resize(nPageIndex + 1U);
     if (!m_aPages[nPageIndex])
-        m_aPages[nPageIndex].reset(new SalInstanceContainer(pChild, m_pBuilder, false));
+        m_aPages[nPageIndex] = std::make_shared<SalInstanceContainer>(pChild, m_pBuilder, false);
     return m_aPages[nPageIndex].get();
 }
 
