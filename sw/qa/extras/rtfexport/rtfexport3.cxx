@@ -143,6 +143,19 @@ DECLARE_RTFEXPORT_TEST(testTdf115180, "tdf115180.docx")
     CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width >= 218 && cell2Width <= 220);
 }
 
+DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.rtf")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+                         aMap["NumberingType"].get<sal_uInt16>());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf116841, "tdf116841.rtf")
 {
     // This was 0, left margin was ignored as we assumed the default is already
