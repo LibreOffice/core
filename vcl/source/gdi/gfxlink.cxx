@@ -71,7 +71,7 @@ bool GfxLink::operator==( const GfxLink& rGfxLink ) const
 
 bool GfxLink::IsNative() const
 {
-    return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
+    return meType >= GfxLinkType::NativeFirst && meType <= GfxLinkType::NativeLast;
 }
 
 
