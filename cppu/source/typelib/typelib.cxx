@@ -93,11 +93,6 @@ static sal_Int32 newAlignedSize(
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
-static bool reallyWeak( typelib_TypeClass eTypeClass )
-{
-    return TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass );
-}
-
 static sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 {
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
@@ -433,7 +428,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                      typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
                      typelib_TypeClass_ENUM == (*ppTypeDescr)->eTypeClass ||
                      typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
-                    !reallyWeak( (*ppTypeDescr)->eTypeClass ) );
+                    !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( (*ppTypeDescr)->eTypeClass ) );
 
         if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
             reinterpret_cast<typelib_InterfaceTypeDescription *>(*ppTypeDescr)->ppAllMembers)
@@ -792,7 +787,7 @@ void newTypeDescription(
         break;
     }
 
-    if( !reallyWeak( eTypeClass ) )
+    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass ) )
         (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
     if( eTypeClass != typelib_TypeClass_VOID )
     {
@@ -1046,7 +1041,7 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     }
 
     typelib_TypeDescription * pTmp = &pITD->aBase;
-    if( !reallyWeak( typelib_TypeClass_INTERFACE ) )
+    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE ) )
         pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
     pTmp->nSize = typelib_typedescription_getAlignedUnoSize( pTmp, 0, pTmp->nAlignment );
     pTmp->nAlignment = adjustAlignment( pTmp->nAlignment );
@@ -1151,7 +1146,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
         - (pInterface->nAllMembers - pInterface->nMembers);
-    if( !reallyWeak( typelib_TypeClass_INTERFACE_METHOD ) )
+    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_METHOD ) )
         pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
 }
 
@@ -1229,7 +1224,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     (*ppRet)->nSetExceptions = nSetExceptions;
     (*ppRet)->ppSetExceptions = copyExceptions(
         nSetExceptions, ppSetExceptionNames);
-    if( !reallyWeak( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
+    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
         pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
 }
 
@@ -1371,7 +1366,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
     if (0 == ref)
     {
         TypeDescriptor_Init_Impl &rInit = Init::get();
-        if( reallyWeak( pTD->eTypeClass ) )
+        if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pTD->eTypeClass ) )
         {
             if( pTD->pWeakRef )
             {
@@ -1444,13 +1439,13 @@ extern "C" void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescriptionReference * pTDR = nullptr;
     typelib_typedescriptionreference_getByName( &pTDR, (*ppNewDescription)->pTypeName );
 
-    OSL_ASSERT( (*ppNewDescription)->pWeakRef || reallyWeak( (*ppNewDescription)->eTypeClass ) );
+    OSL_ASSERT( (*ppNewDescription)->pWeakRef || TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( (*ppNewDescription)->eTypeClass ) );
     if( pTDR )
     {
         OSL_ASSERT( (*ppNewDescription)->eTypeClass == pTDR->eTypeClass );
         if( pTDR->pType )
         {
-            if (reallyWeak( pTDR->eTypeClass ))
+            if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pTDR->eTypeClass ))
             {
                 // pRef->pType->pWeakRef == 0 means that the description is empty
                 if (pTDR->pType->pWeakRef)
@@ -1535,7 +1530,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
             return;
         }
     }
-    else if( reallyWeak( (*ppNewDescription)->eTypeClass) )
+    else if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( (*ppNewDescription)->eTypeClass) )
     {
         typelib_typedescriptionreference_new(
             &pTDR, (*ppNewDescription)->eTypeClass, (*ppNewDescription)->pTypeName );
@@ -2072,7 +2067,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     if( *ppTDR )
         return;
 
-    if( reallyWeak( eTypeClass ) )
+    if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass ) )
     {
         typelib_TypeDescriptionReference * pTDR = new typelib_TypeDescriptionReference;
 #if OSL_DEBUG_LEVEL > 0
@@ -2116,7 +2111,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
     SAL_THROW_EXTERN_C()
 {
     // Is it a type description?
-    if( reallyWeak( pRef->eTypeClass ) )
+    if( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pRef->eTypeClass ) )
     {
         if( ! osl_atomic_decrement( &pRef->nRefCount ) )
         {
@@ -2157,7 +2152,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
         *ppRet = nullptr;
     }
 
-    if( !reallyWeak( pRef->eTypeClass ) && pRef->pType && pRef->pType->pWeakRef )
+    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pRef->eTypeClass ) && pRef->pType && pRef->pType->pWeakRef )
     {
         // reference is a description and initialized
         osl_atomic_increment( &reinterpret_cast<typelib_TypeDescription *>(pRef)->nRefCount );
