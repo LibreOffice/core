@@ -10,16 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 
