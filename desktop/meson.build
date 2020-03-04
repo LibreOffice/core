@@ -81,18 +81,21 @@ sofficeapp_lib = shared_library('sofficeapp',
 soffice_bin = executable('soffice', 'source/app/main.c',
   include_directories: [main_inc],
   link_with: [sofficeapp_lib, sal_lib],
+  install: true,
 )
 
 minidump_bin = executable('minidump_upload',
   'source/minidump/minidump_upload.cxx',
   include_directories: [main_inc],
   link_with: [crashreport_lib, sal_lib],
+  install: true,
 )
 
 unopkg_bin = executable('unopkg',
   'source/pkgchk/unopkg/unopkg_main.c',
   include_directories: [main_inc],
   link_with: [sal_lib, comphelper_lib, tl_lib, unopkgapp_lib],
+  install: true,
 )
 
 oosplash_bin = executable('oosplash',
@@ -103,4 +106,5 @@ oosplash_bin = executable('oosplash',
   'unx/source/start.c',
   include_directories: [main_inc],
   link_with: [sal_lib],
+  install: true,
 )

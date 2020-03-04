@@ -59,6 +59,7 @@ bestreversemap_exe = executable('bestreversemap',
   'source/reversemap/bestreversemap.cxx',
   include_directories: [main_inc],
   link_with: [sal_lib],
+  install: true,
 )
 
 # FIXME, add custom target to generate reverse map.

@@ -16,4 +16,5 @@ svidl_bin = executable('svidl',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, 'inc', udkh_inc, offapi_inc],
   link_with: [tl_lib, sal_lib],
+  install: true,
 )

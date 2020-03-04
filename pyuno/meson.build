@@ -42,5 +42,6 @@ if host_machine.system() == 'windows'
     cpp_args: ['-DLIBO_INTERNAL_ONLY'],
     include_directories: [main_inc, 'inc'],
     link_with: [oopathutils_lib],
+  install: true,
   )
 endif

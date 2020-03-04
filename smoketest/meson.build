@@ -14,4 +14,5 @@ libtest_bin = executable('libtest',
   udk_fake_h, off_fake_h,
   include_directories: [main_inc, udkh_inc, offapi_inc],
   dependencies: [dl_dep],
+  install: true,
 )

@@ -20,5 +20,6 @@ cppumaker_exe = executable('cppumaker',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [codemaker_st_lib, unoidl_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 

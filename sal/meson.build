@@ -139,7 +139,8 @@ if cppunit_dep.found()
     include_directories: [main_inc],
     cpp_args:  ['-DLIBO_INTERNAL_ONLY'],
     link_with: sal_lib,
-    dependencies: [cppunit_dep]
+    dependencies: [cppunit_dep],
+  install: true,
     )
 
   plib = shared_library('osl_test',
@@ -148,18 +149,22 @@ if cppunit_dep.found()
     link_with: sal_lib,
     dependencies: [cppunit_dep, thread_dep],
     include_directories: [main_inc],
-  install: true,
+    install: true,
   )
 
   test('sal_test', unittester,
     args: [plib])
 
   #pc = executable('process_child', 'qa/osl/process/osl_process_child.cxx',
-  #  dependencies: [])
+  #  dependencies: []
+  #)
 
   test('osl_security', executable('osl_security', 'qa/osl/security/osl_Security.cxx',
       include_directories: [main_inc],
       cpp_args: ['-DLIBO_INTERNAL_ONLY'],
       link_with: sal_lib,
-      dependencies: [cppunit_dep]))
+      dependencies: [cppunit_dep],
+      install: true,
+    )
+  )
 endif

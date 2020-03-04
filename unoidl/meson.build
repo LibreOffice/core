@@ -27,6 +27,7 @@ executable('unoidl-check',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [unoidl_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 
 executable('unoidl-read',
@@ -34,6 +35,7 @@ executable('unoidl-read',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [unoidl_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 
 unoidl_write_exe = executable('unoidl-write',
@@ -41,4 +43,5 @@ unoidl_write_exe = executable('unoidl-write',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [unoidl_lib, salhelper_lib, sal_lib],
+  install: true,
 )

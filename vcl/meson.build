@@ -479,5 +479,6 @@ executable('svdem',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc],
-  link_with: [tl_lib, sal_lib, vcl_lib, cppu_lib, cppuhelper_lib, comphelper_lib]
+  link_with: [tl_lib, sal_lib, vcl_lib, cppu_lib, cppuhelper_lib, comphelper_lib],
+  install: true,
 )

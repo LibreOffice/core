@@ -34,4 +34,5 @@ idlc = executable('idlc',
              '-DSYSTEM_UCPP',
              '-DUCPP="file:///usr/bin/ucpp"'],
   link_with: [reg_lib, sal_lib],
+  install: true,
 )
