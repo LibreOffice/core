@@ -26,6 +26,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 class ImplTabItem;
 struct ImplTabCtrlData;
