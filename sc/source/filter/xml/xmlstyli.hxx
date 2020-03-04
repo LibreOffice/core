@@ -155,7 +155,7 @@ public:
     XMLTableStylesContext( SvXMLImport& rImport, bool bAutoStyles );
     virtual ~XMLTableStylesContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const override;
