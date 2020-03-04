@@ -253,12 +253,12 @@ void SmNode::Move(const Point& rPosition)
     ForEachNonNull(this, [&rPosition](SmNode *pNode){pNode->Move(rPosition);});
 }
 
-void SmNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     auto nSize = GetNumSubNodes();
     if (nSize > 1)
         rText.append("{");
-    ForEachNonNull(this, [&rText](SmNode *pNode){pNode->NodeToTextVisitor(rText);});
+    ForEachNonNull(this, [&rText](SmNode *pNode){pNode->CreateTextFromNode(rText);});
     if (nSize > 1)
     {
         rText.stripEnd(' ');
@@ -456,7 +456,7 @@ void SmGraphicNode::GetAccessibleText( OUStringBuffer &rText ) const
     rText.append(GetToken().aText);
 }
 
-void SmExpressionNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmExpressionNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     size_t nSize = GetNumSubNodes();
     if (nSize > 1)
@@ -466,7 +466,7 @@ void SmExpressionNode::NodeToTextVisitor(OUStringBuffer &rText)
         SmNode *pNode = GetSubNode(i);
         if (pNode)
         {
-            pNode->NodeToTextVisitor(rText);
+            pNode->CreateTextFromNode(rText);
             //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
             if (pNode->GetType() == SmNodeType::Math)
                 if ((nSize != 2) || rText.isEmpty() ||
@@ -756,13 +756,13 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmRootNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmRootNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pExtra = GetSubNode(0);
     if (pExtra)
     {
         rText.append("nroot ");
-        pExtra->NodeToTextVisitor(rText);
+        pExtra->CreateTextFromNode(rText);
     }
     else
         rText.append("sqrt ");
@@ -770,7 +770,7 @@ void SmRootNode::NodeToTextVisitor(OUStringBuffer &rText)
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
         rText.append("{ ");
 
-    GetSubNode(2)->NodeToTextVisitor(rText);
+    GetSubNode(2)->CreateTextFromNode(rText);
 
     if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
         rText.append("} ");
@@ -875,13 +875,13 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pDenom, RectCopyMBL::None).ExtendBy(*pLine, RectCopyMBL::None, pLine->GetCenterY());
 }
 
-void SmBinVerNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmBinVerNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNum   = GetSubNode(0),
            *pDenom = GetSubNode(2);
-    pNum->NodeToTextVisitor(rText);
+    pNum->CreateTextFromNode(rText);
     rText.append("over ");
-    pDenom->NodeToTextVisitor(rText);
+    pDenom->CreateTextFromNode(rText);
 }
 
 const SmNode * SmBinVerNode::GetLeftMost() const
@@ -1251,55 +1251,55 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 }
 
-void SmSubSupNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmSubSupNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNode;
-    GetSubNode(0)->NodeToTextVisitor(rText);
+    GetSubNode(0)->CreateTextFromNode(rText);
 
     if (nullptr != (pNode = GetSubNode(LSUB+1)))
     {
         rText.append("lsub ");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(LSUP+1)))
     {
         rText.append("lsup ");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(CSUB+1)))
     {
         rText.append("csub ");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(CSUP+1)))
     {
         rText.append("csup ");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(RSUB+1)))
     {
         rText.stripEnd(' ');
         rText.append("_");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
     if (nullptr != (pNode = GetSubNode(RSUP+1)))
     {
         rText.stripEnd(' ');
         rText.append("^");
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
     }
 }
 
 
 /**************************************************************************/
 
-void SmBraceNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmBraceNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     if (GetScaleMode() == SmScaleMode::Height)
         rText.append("left ");
     {
         OUStringBuffer aStrBuf;
-        OpeningBrace()->NodeToTextVisitor(aStrBuf);
+        OpeningBrace()->CreateTextFromNode(aStrBuf);
         OUString aStr = aStrBuf.makeStringAndClear();
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
@@ -1318,12 +1318,12 @@ void SmBraceNode::NodeToTextVisitor(OUStringBuffer &rText)
         else
             rText.append("none ");
     }
-    Body()->NodeToTextVisitor(rText);
+    Body()->CreateTextFromNode(rText);
     if (GetScaleMode() == SmScaleMode::Height)
         rText.append("right ");
     {
         OUStringBuffer aStrBuf;
-        ClosingBrace()->NodeToTextVisitor(aStrBuf);
+        ClosingBrace()->CreateTextFromNode(aStrBuf);
         OUString aStr = aStrBuf.makeStringAndClear();
         aStr = comphelper::string::strip(aStr, ' ');
         aStr = comphelper::string::stripStart(aStr, '\\');
@@ -1711,7 +1711,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pAttr, RectCopyMBL::This, true);
 }
 
-void SmFontNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmFontNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     rText.append("{");
 
@@ -1827,7 +1827,7 @@ void SmFontNode::NodeToTextVisitor(OUStringBuffer &rText)
             break;
     }
     if (GetNumSubNodes() > 1)
-        GetSubNode(1)->NodeToTextVisitor(rText);
+        GetSubNode(1)->CreateTextFromNode(rText);
 
     rText.stripEnd(' ');
     rText.append("} ");
@@ -2093,7 +2093,7 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, maText, GetFont().GetBorderWidth()));
 }
 
-void SmTextNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmTextNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     bool bQuoted=false;
     if (GetToken().eType == TTEXT)
@@ -2210,7 +2210,7 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 
 /**************************************************************************/
 
-void SmMatrixNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmMatrixNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     rText.append("matrix {");
     for (size_t i = 0;  i < mnNumRows; ++i)
@@ -2219,7 +2219,7 @@ void SmMatrixNode::NodeToTextVisitor(OUStringBuffer &rText)
         {
             SmNode *pNode = GetSubNode(i * mnNumCols + j);
             if (pNode)
-                pNode->NodeToTextVisitor(rText);
+                pNode->CreateTextFromNode(rText);
             if (j != mnNumCols - 1U)
                 rText.append("# ");
         }
@@ -2449,7 +2449,7 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 
-void SmMathSymbolNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmMathSymbolNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     sal_Unicode cChar = GetToken().cMathChar;
     if (cChar == MS_INT && GetScaleMode() == SmScaleMode::Height)
@@ -2458,7 +2458,7 @@ void SmMathSymbolNode::NodeToTextVisitor(OUStringBuffer &rText)
         MathType::LookupChar(cChar, rText, 3);
 }
 
-void SmRectangleNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmRectangleNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     switch (GetToken().eType)
     {
@@ -2476,7 +2476,7 @@ void SmRectangleNode::NodeToTextVisitor(OUStringBuffer &rText)
     }
 }
 
-void SmAttributNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmAttributNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     SmNode *pNode;
     assert(GetNumSubNodes() == 2);
@@ -2485,7 +2485,7 @@ void SmAttributNode::NodeToTextVisitor(OUStringBuffer &rText)
     if (nullptr != (pNode = Attribute()))
     {
         OUStringBuffer aStr;
-        pNode->NodeToTextVisitor(aStr);
+        pNode->CreateTextFromNode(aStr);
         if (aStr.getLength() > 1)
             rText.append(aStr);
         else
@@ -2557,7 +2557,7 @@ void SmAttributNode::NodeToTextVisitor(OUStringBuffer &rText)
     }
 
     if (nullptr != (pNode = Body()))
-        pNode->NodeToTextVisitor(rText);
+        pNode->CreateTextFromNode(rText);
 
     rText.stripEnd(' ');
 
@@ -2780,7 +2780,7 @@ void SmBlankNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     SetWidth(nSpace);
 }
 
-void SmBlankNode::NodeToTextVisitor(OUStringBuffer &rText)
+void SmBlankNode::CreateTextFromNode(OUStringBuffer &rText)
 {
     if (mnNum <= 0)
         return;
@@ -2904,6 +2904,5 @@ void SmRectangleNode::Accept(SmVisitor* pVisitor) {
 void SmVerticalBraceNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

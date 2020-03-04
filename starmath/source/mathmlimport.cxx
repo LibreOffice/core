@@ -478,7 +478,7 @@ void SmXMLImport::endDocument()
             {
                 OUStringBuffer aStrBuf;
                 // Get text from imported formula
-                pTreeTmp->NodeToTextVisitor(aStrBuf);
+                pTreeTmp->CreateTextFromNode(aStrBuf);
                 aStrBuf.stripEnd(' ');
                 aText = aStrBuf.makeStringAndClear();
             }
@@ -2764,4 +2764,3 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
