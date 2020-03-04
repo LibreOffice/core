@@ -1082,8 +1082,8 @@ tools::Rectangle WeldTextForwarder::GetParaBounds(sal_Int32 nPara) const
     if (pEditEngine)
     {
         const Point aPnt = pEditEngine->GetDocPosTopLeft(nPara);
-        const sal_uLong nWidth = pEditEngine->CalcTextWidth();
-        const sal_uLong nHeight = pEditEngine->GetTextHeight(nPara);
+        const sal_Int32 nWidth = pEditEngine->CalcTextWidth();
+        const sal_Int32 nHeight = pEditEngine->GetTextHeight(nPara);
         aRect = tools::Rectangle(aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight);
     }
 
