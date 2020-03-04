@@ -97,16 +97,16 @@ class XParaPortionList
     VclPtr<OutputDevice> pRefDevPtr;
     sal_uInt16  nStretchX;
     sal_uInt16  nStretchY;
-    sal_uLong   nPaperWidth;
+    sal_uInt32  nPaperWidth;
 
 public:
-    XParaPortionList(OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY);
+    XParaPortionList(OutputDevice* pRefDev, sal_uInt32 nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY);
 
     void push_back(XParaPortion* p);
     const XParaPortion& operator[](size_t i) const;
 
     OutputDevice*       GetRefDevPtr() const        { return pRefDevPtr; }
-    sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
+    sal_uInt32          GetPaperWidth() const       { return nPaperWidth; }
     bool                RefDevIsVirtual() const {return pRefDevPtr->IsVirtual();}
     const MapMode&  GetRefMapMode() const       { return pRefDevPtr->GetMapMode(); }
     sal_uInt16  GetStretchX() const         { return nStretchX; }
