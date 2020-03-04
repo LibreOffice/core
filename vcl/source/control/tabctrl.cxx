@@ -2161,6 +2161,24 @@ FactoryFunction TabControl::GetUITestFactory() const
     return TabControlUIObject::create;
 }
 
+boost::property_tree::ptree TabControl::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = Control::DumpAsPropertyTree();
+
+    boost::property_tree::ptree aTabs;
+    for(auto id : GetPageIDs())
+    {
+        boost::property_tree::ptree aTab;
+        aTab.put("text", GetPageText(id));
+        aTab.put("id", id);
+        aTabs.push_back(std::make_pair("", aTab));
+    }
+
+    aTree.add_child("tabs", aTabs);
+
+    return aTree;
+}
+
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
 IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
