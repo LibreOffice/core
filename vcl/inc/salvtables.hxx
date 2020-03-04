@@ -11,6 +11,8 @@
 #include <vcl/spinfld.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/layout.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -860,6 +862,45 @@ public:
     virtual OUString get_label() const override;
 
     virtual ~SalInstanceButton() override;
+};
+
+class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
+{
+private:
+    VclPtr<TabControl> m_xNotebook;
+    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::vector<VclPtr<TabPage>> m_aAddedPages;
+    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
+
+    DECL_LINK(DeactivatePageHdl, TabControl*, bool);
+    DECL_LINK(ActivatePageHdl, TabControl*, void);
+
+public:
+    SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual int get_current_page() const override;
+
+    virtual OString get_page_ident(int nPage) const override;
+
+    virtual OString get_current_page_ident() const override;
+
+    virtual weld::Container* get_page(const OString& rIdent) const override;
+
+    virtual void set_current_page(int nPage) override;
+
+    virtual void set_current_page(const OString& rIdent) override;
+
+    virtual void remove_page(const OString& rIdent) override;
+
+    virtual void append_page(const OString& rIdent, const OUString& rLabel) override;
+
+    virtual int get_n_pages() const override;
+
+    virtual OUString get_tab_label_text(const OString& rIdent) const override;
+
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override;
+
+    virtual ~SalInstanceNotebook() override;
 };
 
 #endif
