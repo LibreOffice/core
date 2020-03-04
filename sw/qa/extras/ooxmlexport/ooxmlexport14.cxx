@@ -254,6 +254,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123116_oversizedRowSplit, "tdf123116_oversizedRowSplit.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 3 pages", 3, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
 {
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");

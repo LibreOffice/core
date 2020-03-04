@@ -4693,6 +4693,11 @@ bool SwRowFrame::IsRowSplitAllowed() const
          pTabFrame->IsInHeadline( *this ) )
         return false;
 
+    // A row larger than the entire page ought to be allowed to split regardless of setting,
+    // otherwise it has hidden content and that makes no sense
+    if ( getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
+        return true;
+
     const SwTableLineFormat* pFrameFormat = static_cast<SwTableLineFormat*>(GetTabLine()->GetFrameFormat());
     const SwFormatRowSplit& rLP = pFrameFormat->GetRowSplit();
     return rLP.GetValue();
