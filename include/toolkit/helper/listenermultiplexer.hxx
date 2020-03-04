@@ -220,14 +220,14 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class TreeSelectionListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeSelectionListenerMultiplexer, css::view::XSelectionChangeListener )
+DECL_LISTENERMULTIPLEXER_START( TreeSelectionListenerMultiplexer, css::view::XSelectionChangeListener )
     virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
 DECL_LISTENERMULTIPLEXER_END
 
 
 //  class TreeExpansionListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener )
+DECL_LISTENERMULTIPLEXER_START( TreeExpansionListenerMultiplexer, css::awt::tree::XTreeExpansionListener )
     virtual void SAL_CALL requestChildNodes( const css::awt::tree::TreeExpansionEvent& aEvent ) override;
     virtual void SAL_CALL treeExpanding( const css::awt::tree::TreeExpansionEvent& aEvent ) override;
     virtual void SAL_CALL treeCollapsing( const css::awt::tree::TreeExpansionEvent& aEvent ) override;
@@ -238,7 +238,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class TreeEditListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeEditListenerMultiplexer, css::awt::tree::XTreeEditListener )
+DECL_LISTENERMULTIPLEXER_START( TreeEditListenerMultiplexer, css::awt::tree::XTreeEditListener )
     virtual void SAL_CALL nodeEditing( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual void SAL_CALL nodeEdited( const css::uno::Reference< css::awt::tree::XTreeNode >& Node, const OUString& NewText ) override;
 DECL_LISTENERMULTIPLEXER_END

@@ -47,7 +47,7 @@ public:
     virtual ~SvxLineBox() override;
 };
 
-class SVX_DLLPUBLIC SvxMetricField final : public InterimItemWindow
+class SvxMetricField final : public InterimItemWindow
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xWidget;
