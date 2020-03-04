@@ -43,6 +43,7 @@ class SwRowFrame: public SwLayoutFrame
     bool m_bIsRepeatedHeadline;
     bool m_bIsRowSpanLine;
 
+    bool m_bForceRowSplitAllowed;
     bool m_bIsInSplit;
 
     virtual void DestroyImpl() override;
@@ -90,6 +91,8 @@ public:
 
     // --> split table rows
     bool IsRowSplitAllowed() const;
+    bool IsForceRowSplitAllowed() const { return m_bForceRowSplitAllowed; }
+    void SetForceRowSplitAllowed( bool bNew) { m_bForceRowSplitAllowed = bNew; };
     bool IsFollowFlowRow() const { return m_bIsFollowFlowRow; }
     void SetFollowFlowRow( bool bNew ) { m_bIsFollowFlowRow = bNew; }
     // <-- split table rows

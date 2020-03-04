@@ -1055,7 +1055,16 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
-    bool bSplitRowAllowed = pRow->IsRowSplitAllowed() && !IsSplitRowDisabled();
+    bool bSplitRowAllowed = !IsSplitRowDisabled();
+    if ( bSplitRowAllowed && !pRow->IsRowSplitAllowed() )
+    {
+        // A row larger than the entire page ought to be allowed to split regardless of setting,
+        // otherwise it has hidden content and that makes no sense
+        if ( !pRow->GetPrev() && pRow->getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
+            pRow->SetForceRowSplitAllowed( true );
+        else
+            bSplitRowAllowed = false;
+    }
 
     // #i29438#
     // #i26945# - Floating screen objects no longer forbid
@@ -3695,6 +3704,13 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             rReformat = true;
             return true;
         }
+
+        // Unsplitable rows have always started on a new page, so don't movebwd, even though we now allow splitting in some cases.
+        // This also matches Word - so good for interoperability (tdf#123116)
+        const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
+        if ( pFirstRow && pFirstRow->IsForceRowSplitAllowed() )
+            return false;
+
         bool bFits = nSpace > 0;
         if (!bFits && aRectFnSet.GetHeight(getFrameArea()) == 0)
             // This frame fits into pNewUpper in case it has no space, but this
@@ -3705,7 +3721,6 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
             // positioning.
-            SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
             if ( pFirstRow && pFirstRow->IsInFollowFlowRow() &&
                  SwLayouter::DoesRowContainMovedFwdFrame(
                                             *(pFirstRow->GetFormat()->GetDoc()),
@@ -3909,6 +3924,7 @@ SwRowFrame::SwRowFrame(const SwTableLine &rLine, SwFrame* pSib, bool bInsertCont
     // <-- split table rows
     , m_bIsRepeatedHeadline( false )
     , m_bIsRowSpanLine( false )
+    , m_bForceRowSplitAllowed( false )
     , m_bIsInSplit( false )
 {
     mnFrameType = SwFrameType::Row;
@@ -4856,6 +4872,9 @@ bool SwRowFrame::IsRowSplitAllowed() const
     if ( pTabFrame->GetTable()->GetRowsToRepeat() > 0 &&
          pTabFrame->IsInHeadline( *this ) )
         return false;
+
+    if ( IsForceRowSplitAllowed() )
+        return true;
 
     const SwTableLineFormat* pFrameFormat = static_cast<SwTableLineFormat*>(GetTabLine()->GetFrameFormat());
     const SwFormatRowSplit& rLP = pFrameFormat->GetRowSplit();

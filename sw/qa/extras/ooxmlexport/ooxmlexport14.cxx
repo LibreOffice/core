@@ -198,6 +198,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123116_oversizedRowSplit, "tdf123116_oversizedRowSplit.odt")
+{
+    // For highest backward compatibility and interoperability, the now-splitable-row
+    // should start on a new page.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 5 pages", 5, getPages());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
 {
     OUString aActual = getParagraph(1)->getString();
