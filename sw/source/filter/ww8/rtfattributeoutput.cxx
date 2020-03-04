@@ -1488,6 +1488,9 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         case SVX_NUM_NUMBER_NONE:
             nVal = 255;
             break;
+        case SVX_NUM_ARABIC_ZERO:
+            nVal = 22;
+            break;
     }
     m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LEVELNFC);
     m_rExport.OutULong(nVal);
