@@ -68,6 +68,30 @@
       "revId": "6574870dccf73d7dd416dfed50b3b0858c2f4237",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a27876_f9b0604c",
+        "filename": "sfx2/source/control/thumbnailview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-04T16:13:13Z",
+      "side": 1,
+      "message": "Wasn\u0027t able to cast Thumbnailview to TemplateView (works but pointer is nil) and the templates are not documents, eg. ott vs. odt. So I thought a special filter is better. Filtering is a recurring request and we have a couple of tickets that boil down to the fact that you sometimes might have too many items in the start center. The popup menu is an unobtrusive method to filter, nothing that brings the SC closer to file management. Planning also to have an alternative list view without thumbnails.\nCommit message needs an update, it\u0027s on the todo list.",
+      "parentUuid": "37a12837_15986bae",
+      "range": {
+        "startLine": 1412,
+        "startChar": 4,
+        "endLine": 1412,
+        "endChar": 58
+      },
+      "revId": "6574870dccf73d7dd416dfed50b3b0858c2f4237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
