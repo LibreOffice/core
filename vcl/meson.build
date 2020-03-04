@@ -430,7 +430,7 @@ vcl_lib = shared_library('vcl',
 )
 
 
-vclplug_gtk3 = shared_library('vclplug_gtk3',
+vclplug_gtk3 = shared_library('vclplug_gtk3lo',
   'unx/gtk3/a11y/gtk3atkaction.cxx',
   'unx/gtk3/a11y/gtk3atkbridge.cxx',
   'unx/gtk3/a11y/gtk3atkcomponent.cxx',

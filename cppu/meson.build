@@ -22,7 +22,7 @@ cppu_lib = shared_library('cppu',
   udk_fake_h,
   include_directories: [main_inc, udkh_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY',
-             '-DCPPU_IMPLEMENTATION'],
+             '-DCPPU_DLLIMPLEMENTATION'],
   link_with: [salhelper_lib, sal_lib],
   install: true,
 )

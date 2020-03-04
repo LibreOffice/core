@@ -25,7 +25,7 @@ if host_machine.system() == 'linux'
   add_global_arguments('-DX86_64', language: 'cpp')
   add_global_arguments('-DX86_64', language: 'c')
   add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
-  rtl_os = 'linux'
+  rtl_os = 'Linux'
 elif host_machine.system() == 'windows'
   # HACK: just random values thrown in to make
   # sal compile.
@@ -236,3 +236,4 @@ subdir('svgio')
 subdir('dbaccess')
 subdir('reportdesign')
 subdir('wizards')
+subdir('bridges')

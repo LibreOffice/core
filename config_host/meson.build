@@ -93,6 +93,17 @@ cdata.set_quoted('PYTHON_VERSION_STRING', '3.2.1')
 cdata.set10('ENABLE_FIREBIRD_SDBC', false)
 cdata.set10('HAVE_FIREBIRD_30', false)
 
+cdata.set10('HAVE_CXXABI_H_BASE_CLASS_TYPE_INFO', true)
+cdata.set10('HAVE_CXXABI_H_CLASS_TYPE_INFO', true)
+cdata.set10('HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION', true)
+cdata.set10('HAVE_CXXABI_H_CXA_EH_GLOBALS', false)
+cdata.set10('HAVE_CXXABI_H_CXA_EXCEPTION', false)
+cdata.set10('HAVE_CXXABI_H_CXA_GET_GLOBALS', true)
+cdata.set10('HAVE_CXXABI_H_CXA_CURRENT_EXCEPTION_TYPE', true)
+cdata.set10('HAVE_CXXABI_H_CXA_THROW', true)
+cdata.set10('HAVE_CXXABI_H_SI_CLASS_TYPE_INFO', true)
+cdata.set10('HAVE_CXXABI_H_VMI_CLASS_TYPE_INFO', true)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -219,4 +230,8 @@ configure_file(input: 'config_python.h.meson',
 
 configure_file(input: 'config_firebird.h.meson',
   output: 'config_firebird.h',
+  configuration: cdata)
+
+configure_file(input: 'config_cxxabi.h.meson',
+  output: 'config_cxxabi.h',
   configuration: cdata)
