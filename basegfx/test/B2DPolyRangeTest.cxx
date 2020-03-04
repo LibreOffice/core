@@ -43,7 +43,7 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("simple poly range - second element", B2DRange(2, 2, 3, 3),
                                      std::get<0>(aRange.getElement(1)));
 
-        // B2DPolyRange relies on correctly orientated rects
+        // B2DPolyRange relies on correctly oriented rects
         const B2DRange aRect(0, 0, 1, 1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("createPolygonFromRect - correct orientation",
                                      B2VectorOrientation::Positive,
