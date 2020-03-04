@@ -456,7 +456,7 @@ void DrawView::BlockPageOrderChangedHint(bool bBlock)
 }
 
 /**
- * If presentation objects are selected, intercept stylesheet-positing at
+ * If presentation objects are selected, intercept stylesheet-positioning at
  * masterpage.
  */
 
