@@ -15,7 +15,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>

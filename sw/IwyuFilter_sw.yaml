@@ -417,6 +417,8 @@ blacklist:
     # Needed for direct member access
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/text/XDocumentIndexMark.hpp
+    # Needed in C++20 mode
+    - o3tl/cppunittraitshelper.hxx
     sw/qa/extras/uiwriter/uiwriter.cxx:
     # Needed for for-loop range
     - PostItMgr.hxx

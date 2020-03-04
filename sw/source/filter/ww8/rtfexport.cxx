@@ -43,11 +43,9 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <lineinfo.hxx>
-#include <poolfmt.hxx>
 #include <redline.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
@@ -59,7 +57,6 @@
 #include <iostream>
 #endif
 #include <svx/xflclit.hxx>
-#include <editeng/hyphenzoneitem.hxx>
 #include <fmtmeta.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
