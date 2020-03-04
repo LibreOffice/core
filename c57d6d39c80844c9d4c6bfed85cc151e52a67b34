@@ -16,6 +16,29 @@
       "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4dce422_46a2c4a0",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-04T08:24:01Z",
+      "side": 1,
+      "message": "Possibly to avoid setting m_aCreateTime twice, it\u0027s better to set it to const again, and instead modify its initializer to\n\n    m_aCreateTime(g_bRecording ? ProfileRecording::addRecording(sProfileId, 0) : bConsole ? osl_getGlobalTimer() : 0),\n\n(or to call to its static function returning the timer, if using osl_getGlobalTimer in header is not OK)",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
