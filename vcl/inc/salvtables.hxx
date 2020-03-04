@@ -10,9 +10,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
 
-class SalInstanceBuilder : public weld::Builder
+class VCL_DLLPUBLIC SalInstanceBuilder : public weld::Builder
 {
-private:
+protected:
     std::unique_ptr<VclBuilder> m_xBuilder;
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
@@ -144,7 +144,7 @@ public:
     virtual ~SalInstanceBuilder() override;
 };
 
-class SalInstanceWidget : public virtual weld::Widget
+class VCL_DLLPUBLIC SalInstanceWidget : public virtual weld::Widget
 {
 protected:
     VclPtr<vcl::Window> m_xWidget;
@@ -450,7 +450,7 @@ public:
     virtual ~SalInstanceWindow() override;
 };
 
-class SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
+class VCL_DLLPUBLIC SalInstanceDialog : public SalInstanceWindow, public virtual weld::Dialog
 {
 private:
     VclPtr<::Dialog> m_xDialog;

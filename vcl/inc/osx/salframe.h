@@ -159,6 +159,8 @@ public:
     // done setting up the clipregion
     virtual void EndSetClipRegion() override;
 
+    virtual weld::Window* GetFrameWeld() const override;
+
     void UpdateFrameGeometry();
 
     // trigger painting of the window

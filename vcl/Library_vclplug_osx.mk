@@ -51,7 +51,9 @@ $(eval $(call gb_Library_use_libraries,vclplug_osx,\
     sal \
     salhelper \
     tl \
+    utl \
     vcl \
+    xmlreader \
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_osx,\

@@ -32,6 +32,8 @@
 #include <osl/thread.hxx>
 
 #ifdef MACOSX
+#include <com/sun/star/awt/XWindow.hpp>
+#include <cppuhelper/compbase.hxx>
 #include <osx/osxvcltypes.h>
 #endif
 #include <salinst.hxx>
@@ -142,6 +144,9 @@ public:
     // Is this the NSAppThread?
     virtual bool IsMainThread() const override;
 
+    virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;    virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
+    virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
+
     void startedPrintJob() { mnActivePrintJobs++; }
     void endedPrintJob() { mnActivePrintJobs--; }
 
@@ -156,6 +161,130 @@ public:
 
 CGImageRef CreateCGImage( const Image& );
 NSImage*   CreateNSImage( const Image& );
+
+#ifdef MACOSX
+
+typedef cppu::WeakComponentImplHelper<css::awt::XWindow> SalAppKitXWindow_Base;
+
+class SalAppKitXWindow : public SalAppKitXWindow_Base
+{
+private:
+    osl::Mutex m_aHelperMtx;
+    weld::Window* m_pWeldWidget;
+    NSView* m_pView;
+
+public:
+
+    SalAppKitXWindow(weld::Window* pWeldWidget, NSView* pView)
+        : SalAppKitXWindow_Base(m_aHelperMtx)
+        , m_pWeldWidget(pWeldWidget)
+        , m_pView(pView)
+    {
+    }
+
+    void clear()
+    {
+        m_pWeldWidget = nullptr;
+        m_pView = nullptr;
+    }
+
+    NSView* getView() const
+    {
+        return m_pView;
+    }
+
+    weld::Window* getFrameWeld() const
+    {
+        return m_pWeldWidget;
+    }
+
+    // css::awt::XWindow
+    void SAL_CALL setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    css::awt::Rectangle SAL_CALL getPosSize() override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL setVisible(sal_Bool) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL setEnable(sal_Bool) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL setFocus() override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addWindowListener(const css::uno::Reference< css::awt::XWindowListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+    void SAL_CALL removeWindowListener(const css::uno::Reference< css::awt::XWindowListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addFocusListener(const css::uno::Reference< css::awt::XFocusListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL removeFocusListener(const css::uno::Reference< css::awt::XFocusListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addKeyListener(const css::uno::Reference< css::awt::XKeyListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL removeKeyListener(const css::uno::Reference< css::awt::XKeyListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addMouseListener(const css::uno::Reference< css::awt::XMouseListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL removeMouseListener(const css::uno::Reference< css::awt::XMouseListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addMouseMotionListener(const css::uno::Reference< css::awt::XMouseMotionListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL removeMouseMotionListener(const css::uno::Reference< css::awt::XMouseMotionListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL addPaintListener(const css::uno::Reference< css::awt::XPaintListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+
+    void SAL_CALL removePaintListener(const css::uno::Reference< css::awt::XPaintListener >& ) override
+    {
+        throw css::uno::RuntimeException("not implemented");
+    }
+};
+
+#endif
 
 #endif // INCLUDED_VCL_INC_OSX_SALINST_H
 

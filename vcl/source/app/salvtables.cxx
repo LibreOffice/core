@@ -6598,6 +6598,7 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
                                                       VclButtonsType eButtonsType,
                                                       const OUString& rPrimaryMessage)
 {
+    SAL_DEBUG("SalInstance::CreateMessageDialog");
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
@@ -6607,6 +6608,7 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
 
 weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
 {
+    SAL_DEBUG("SalInstance::GetFrameWeld");
     UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     if (!pWrapper)
         return nullptr;
@@ -6618,6 +6620,7 @@ weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWin
 
 weld::Window* SalFrame::GetFrameWeld() const
 {
+    SAL_DEBUG("SalFrame::GetFrameWeld");
     if (!m_xFrameWeld)
     {
         vcl::Window* pWindow = GetWindow();

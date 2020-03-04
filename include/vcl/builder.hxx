@@ -504,7 +504,7 @@ protected:
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */
-bool toBool(const OUString &rValue);
+bool VCL_DLLPUBLIC toBool(const OUString &rValue);
 
 #endif
 
