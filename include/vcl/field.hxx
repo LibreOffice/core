@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <vcl/dllapi.h>
+#include <config_options.h>
 #include <tools/link.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -228,7 +229,7 @@ private:
     OUString                maCustomUnitText;
 };
 
-class VCL_DLLPUBLIC DateFormatter : public FormatterBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateFormatter : public FormatterBase
 {
 private:
     std::unique_ptr<CalendarWrapper> mxCalendarWrapper;
@@ -474,7 +475,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC TimeField final : public SpinField, public TimeFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TimeField final : public SpinField, public TimeFormatter
 {
 private:
     tools::Time                    maFirst;
