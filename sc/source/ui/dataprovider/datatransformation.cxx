@@ -673,15 +673,18 @@ void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
     if (mnCol.empty())
         return;
 
-    SCROW nEndRow = 0;
+    //SCROW nEndRow = 0;
+    std::vector<SCROW> nEndRow;
+    unsigned int i;
     for(auto& rCol : mnCol)
     {
-        nEndRow = getLastRow(rDoc, rCol);
+        nEndRow.push_back(getLastRow(rDoc, rCol));
     }
 
     for(auto& rCol : mnCol)
     {
-        for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+        i = 0;
+        for (SCROW nRow = 0; i < nEndRow.size() && nRow <= nEndRow[i]; ++nRow)
         {
             CellType eType;
             rDoc.GetCellType(rCol, nRow, 0, eType);
@@ -692,6 +695,7 @@ void ReplaceNullTransformation::Transform(ScDocument& rDoc) const
                     rDoc.SetString(rCol, nRow, 0, msReplaceWith);
             }
         }
+        i++;
     }
 
 }
