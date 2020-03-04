@@ -6197,21 +6197,21 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::weld_window(const OString& id,
 std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id,
                                                               bool bTakeOwnership)
 {
-    vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+    vcl::Window* pWidget = m_xBuilder->get(id);
     return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, bTakeOwnership) : nullptr;
 }
 
 std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString& id,
                                                                     bool bTakeOwnership)
 {
-    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+    vcl::Window* pContainer = m_xBuilder->get(id);
     return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, bTakeOwnership)
                       : nullptr;
 }
 
 std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id, bool bTakeOwnership)
 {
-    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(id);
+    vcl::Window* pContainer = m_xBuilder->get(id);
     return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership)
                       : nullptr;
 }
@@ -6241,7 +6241,7 @@ std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(c
 std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString& id,
                                                                   bool bTakeOwnership)
 {
-    vcl::Window* pNotebook = m_xBuilder->get<vcl::Window>(id);
+    vcl::Window* pNotebook = m_xBuilder->get(id);
     if (!pNotebook)
         return nullptr;
     if (pNotebook->GetType() == WindowType::TABCONTROL)
@@ -6388,7 +6388,7 @@ SalInstanceBuilder::weld_time_spin_button(const OString& id, TimeFieldFormat eFo
 std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id,
                                                                    bool bTakeOwnership)
 {
-    vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
+    vcl::Window* pWidget = m_xBuilder->get(id);
     ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
     if (pComboBox)
         return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, bTakeOwnership);
@@ -6402,7 +6402,7 @@ std::unique_ptr<weld::EntryTreeView>
 SalInstanceBuilder::weld_entry_tree_view(const OString& containerid, const OString& entryid,
                                          const OString& treeviewid, bool bTakeOwnership)
 {
-    vcl::Window* pContainer = m_xBuilder->get<vcl::Window>(containerid);
+    vcl::Window* pContainer = m_xBuilder->get(containerid);
     return pContainer ? std::make_unique<SalInstanceEntryTreeView>(
                             pContainer, this, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
                             weld_tree_view(treeviewid, bTakeOwnership))
