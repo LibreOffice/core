@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e3faf36_eea67097",
+        "filename": "include/vcl/gfxlink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-04T18:43:16Z",
+      "side": 1,
+      "message": "these comments can be removed now...",
+      "range": {
+        "startLine": 45,
+        "startChar": 26,
+        "endLine": 45,
+        "endChar": 73
+      },
+      "revId": "cc45ae0fa9ff115e59b2453fa3ef81a2df2c7790",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
