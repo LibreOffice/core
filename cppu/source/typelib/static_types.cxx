@@ -302,7 +302,7 @@ void SAL_CALL typelib_static_sequence_type_init(
         {
             OUString aTypeName = "[]" + OUString::unacquired(&pElementType->pTypeName);
 
-            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
+            static_assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
@@ -451,7 +451,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
+            static_assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
@@ -514,7 +514,7 @@ void SAL_CALL typelib_static_enum_type_init(
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
+            static_assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
