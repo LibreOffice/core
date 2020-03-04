@@ -468,7 +468,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     for (auto const& mnemonicWidget : m_pParserState->m_aMnemonicWidgetMaps)
     {
         FixedText *pOne = get<FixedText>(mnemonicWidget.m_sID);
-        vcl::Window *pOther = get<vcl::Window>(mnemonicWidget.m_sValue.toUtf8());
+        vcl::Window *pOther = get(mnemonicWidget.m_sValue.toUtf8());
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << mnemonicWidget.m_sID
             << " or target " << mnemonicWidget.m_sValue << " member of Mnemonic Widget Mapping");
         if (pOne && pOther)
@@ -493,7 +493,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
             }
             else
             {
-                vcl::Window *pTarget = get<vcl::Window>(rParam.toUtf8());
+                vcl::Window *pTarget = get(rParam.toUtf8());
                 SAL_WARN_IF(!pTarget, "vcl", "missing parameter of a11y relation: " << rParam);
                 if (!pTarget)
                     continue;
@@ -532,7 +532,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     //Set ComboBox models when everything has been imported
     for (auto const& elem : m_pParserState->m_aModelMaps)
     {
-        vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
+        vcl::Window* pTarget = get(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
         SvTabListBox *pTreeBoxTarget = dynamic_cast<SvTabListBox*>(pTarget);
@@ -560,7 +560,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     //Set SpinButton adjustments when everything has been imported
     for (auto const& elem : m_pParserState->m_aNumericFormatterAdjustmentMaps)
     {
-        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<vcl::Window>(elem.m_sID));
+        NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get(elem.m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget, "vcl", "missing NumericFormatter element of spinbutton/adjustment");
         SAL_WARN_IF(!pAdjustment, "vcl", "missing Adjustment element of spinbutton/adjustment");
@@ -570,7 +570,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
 
     for (auto const& elem : m_pParserState->m_aFormattedFormatterAdjustmentMaps)
     {
-        FormattedField *pTarget = dynamic_cast<FormattedField*>(get<vcl::Window>(elem.m_sID));
+        FormattedField *pTarget = dynamic_cast<FormattedField*>(get(elem.m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget, "vcl", "missing FormattedField element of spinbutton/adjustment");
         SAL_WARN_IF(!pAdjustment, "vcl", "missing Adjustment element of spinbutton/adjustment");
@@ -580,7 +580,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
 
     for (auto const& elem : m_pParserState->m_aTimeFormatterAdjustmentMaps)
     {
-        TimeField *pTarget = dynamic_cast<TimeField*>(get<vcl::Window>(elem.m_sID));
+        TimeField *pTarget = dynamic_cast<TimeField*>(get(elem.m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -589,7 +589,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
 
     for (auto const& elem : m_pParserState->m_aDateFormatterAdjustmentMaps)
     {
-        DateField *pTarget = dynamic_cast<DateField*>(get<vcl::Window>(elem.m_sID));
+        DateField *pTarget = dynamic_cast<DateField*>(get(elem.m_sID));
         const Adjustment *pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
@@ -609,7 +609,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     //Set Scale(Slider) adjustments
     for (auto const& elem : m_pParserState->m_aSliderAdjustmentMaps)
     {
-        Slider* pTarget = dynamic_cast<Slider*>(get<vcl::Window>(elem.m_sID));
+        Slider* pTarget = dynamic_cast<Slider*>(get(elem.m_sID));
         const Adjustment* pAdjustment = get_adjustment_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scale(slider)/adjustment");
         if (pTarget && pAdjustment)
@@ -632,7 +632,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
 
         for (auto const& elem : sizeGroup.m_aWidgets)
         {
-            vcl::Window* pWindow = get<vcl::Window>(elem.getStr());
+            vcl::Window* pWindow = get(elem.getStr());
             pWindow->add_to_size_group(xGroup);
         }
     }
@@ -827,7 +827,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
     if (bHideHelp)
     {
-        if (vcl::Window *pHelpButton = get<vcl::Window>("help"))
+        if (vcl::Window *pHelpButton = get("help"))
             pHelpButton->Hide();
     }
 }
