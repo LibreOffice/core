@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6144b511_61219190",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-04T13:33:23Z",
+      "side": 1,
+      "message": "Why do we need to declare i here",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35d281da_a32aa642",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-04T13:33:23Z",
+      "side": 1,
+      "message": "If you print the result of getLastRow for different cases you should notice that there is another issue here.",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f6019a6_7db0fa93",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-04T13:33:23Z",
+      "side": 1,
+      "message": "Is there a reason that you did not just combine the two loops",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34c75517_af51e9e8",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-04T13:33:23Z",
+      "side": 1,
+      "message": "We don\u0027t want to include this part in the patch.",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
