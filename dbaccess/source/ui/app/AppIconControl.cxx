@@ -65,8 +65,8 @@ OApplicationIconControl::~OApplicationIconControl()
 
 void OApplicationIconControl::dispose()
 {
-    sal_uLong nCount = GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    sal_Int32 nCount = GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )
