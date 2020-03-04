@@ -25,6 +25,7 @@
 #endif
 
 #include <vcl/field.hxx>
+#include <config_options.h>
 
 class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
@@ -42,7 +43,7 @@ public:
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const override;
 };
 
-class VCL_DLLPUBLIC CurrencyField final : public SpinField, public CurrencyFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyField final : public SpinField, public CurrencyFormatter
 {
 public:
     CurrencyField( vcl::Window* pParent, WinBits nWinStyle );
