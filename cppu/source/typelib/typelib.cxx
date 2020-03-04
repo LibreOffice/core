@@ -848,6 +848,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     pEnum->pEnumValues      = new sal_Int32[ nEnumValues ];
     ::memcpy( pEnum->pEnumValues, pEnumValues, nEnumValues * sizeof(sal_Int32) );
 
+    static_assert(!TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM));
     (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
     // sizeof(void) not allowed
     (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
@@ -1041,8 +1042,8 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     }
 
     typelib_TypeDescription * pTmp = &pITD->aBase;
-    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE ) )
-        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
+    static_assert( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE ) );
+    pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
     pTmp->nSize = typelib_typedescription_getAlignedUnoSize( pTmp, 0, pTmp->nAlignment );
     pTmp->nAlignment = adjustAlignment( pTmp->nAlignment );
     pTmp->bComplete = false;
@@ -1146,8 +1147,8 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
         - (pInterface->nAllMembers - pInterface->nMembers);
-    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_METHOD ) )
-        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
+    static_assert( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_METHOD ) );
+    assert(pTmp->pWeakRef == nullptr);
 }
 
 
@@ -1224,8 +1225,8 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     (*ppRet)->nSetExceptions = nSetExceptions;
     (*ppRet)->ppSetExceptions = copyExceptions(
         nSetExceptions, ppSetExceptionNames);
-    if( !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
-        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
+    static_assert( TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( typelib_TypeClass_INTERFACE_ATTRIBUTE ) );
+    assert(pTmp->pWeakRef == nullptr);
 }
 
 

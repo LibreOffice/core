@@ -987,6 +987,9 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_complete(
     description is not initialized.
     @internal
 */
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+constexpr
+#endif
 inline bool TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( _typelib_TypeClass eTypeClass )
 {
     return (eTypeClass == typelib_TypeClass_INTERFACE_METHOD) ||
