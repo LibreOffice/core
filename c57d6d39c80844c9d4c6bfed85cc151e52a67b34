@@ -39,6 +39,30 @@
       "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5898f830_8ba7ae8c",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-04T08:27:13Z",
+      "side": 1,
+      "message": "I would not pollute the header needed to call osl_getGlobalTimer(), the build is slow enough already. I have no problems with introducing a static function to be able to get const back if you want to do that. :-)",
+      "parentUuid": "c4dce422_46a2c4a0",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
