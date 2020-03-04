@@ -37,6 +37,8 @@ public:
                                                     bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
                                                            bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
+                                                          bool bTakeOwnership = false) override;
 };
 
 template <class BaseInstanceClass, class VclClass>
@@ -111,6 +113,21 @@ public:
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
     virtual void set_entry_text(const OUString& rText) override;
+};
+
+class VCL_DLLPUBLIC JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
+{
+public:
+    JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
+               SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_current_page(int nPage) override;
+
+    virtual void set_current_page(const OString& rIdent) override;
+
+    virtual void remove_page(const OString& rIdent) override;
+
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
 };
 
 #endif

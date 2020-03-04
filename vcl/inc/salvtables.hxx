@@ -1028,7 +1028,7 @@ class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::No
 {
 private:
     VclPtr<TabControl> m_xNotebook;
-    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    mutable std::vector<std::shared_ptr<SalInstanceContainer>> m_aPages;
     std::map<OString, std::pair<VclPtr<TabPage>, VclPtr<VclGrid>>> m_aAddedPages;
 
     DECL_LINK(DeactivatePageHdl, TabControl*, bool);
