@@ -11409,6 +11409,24 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    // tdf#131076 we want return in a GtkComboBox to act like return in a
+    // GtkEntry and activate the default dialog/assistant button
+    bool combobox_activate()
+    {
+        GtkWidget *pComboBox = GTK_WIDGET(m_pComboBox);
+        GtkWidget *pToplevel = gtk_widget_get_toplevel(pComboBox);
+        GtkWindow *pWindow = GTK_WINDOW(pToplevel);
+        if (!pWindow)
+            return false;
+        if (!GTK_IS_DIALOG(pWindow) && !GTK_IS_ASSISTANT(pWindow))
+            return false;
+        bool bDone = false;
+        GtkWidget *pDefaultWidget = gtk_window_get_default_widget(pWindow);
+        if (pDefaultWidget && pDefaultWidget != m_pToggleButton && gtk_widget_get_sensitive(pDefaultWidget))
+            bDone = gtk_widget_activate(pDefaultWidget);
+        return bDone;
+    }
+
     bool signal_key_press(const GdkEventKey* pEvent)
     {
         KeyEvent aKEvt(GtkToVcl(*pEvent));
@@ -11417,7 +11435,8 @@ private:
 
         bool bDone = false;
 
-        switch (aKeyCode.GetCode())
+        auto nCode = aKeyCode.GetCode();
+        switch (nCode)
         {
             case KEY_DOWN:
             case KEY_UP:
@@ -11429,9 +11448,16 @@ private:
             case KEY_RIGHT:
             case KEY_RETURN:
                 m_aQuickSelectionEngine.Reset();
+                // tdf#131076 don't let bare return toggle menu popup active, but do allow deactive
+                if (nCode == KEY_RETURN && !pEvent->state && !m_bPopupActive)
+                    bDone = combobox_activate();
                 break;
             default:
-                bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
+                // tdf#131076 let base space toggle menu popup when its not already visible
+                if (nCode == KEY_SPACE && !pEvent->state && !m_bPopupActive)
+                    bDone = false;
+                else
+                    bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
                 break;
         }
 
