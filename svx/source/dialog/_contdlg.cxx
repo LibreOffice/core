@@ -623,17 +623,15 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 {
     if ( rWnd.IsClickValid() )
     {
-        Bitmap          aMask;
         const Color&    rColor = rWnd.GetPipetteColor();
 
         weld::WaitObject aWaitObj(&m_rDialog);
 
         if( aGraphic.GetType() == GraphicType::Bitmap )
         {
-            const Bitmap & rBmp( aGraphic.GetBitmapEx().GetBitmap() );
             const long  nTol = static_cast<long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255 / 100);
 
-            aMask = rBmp.CreateMask( rColor, nTol );
+            Bitmap aMask = aGraphic.GetBitmapEx().GetBitmap().CreateMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
                 aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
@@ -647,7 +645,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
-                aGraphic = Graphic( BitmapEx( rBmp, aMask ) );
+                Bitmap aBmp = aGraphic.GetBitmapEx().GetBitmap();
+                aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);
