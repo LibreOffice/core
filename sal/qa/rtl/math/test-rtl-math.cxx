@@ -180,6 +180,11 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), end);
         CPPUNIT_ASSERT_EQUAL(1E308, res);
+
+        res = rtl::math::stringToDouble(OUString("1E8589934590"), '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_OutOfRange, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(12), end);
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<double>::infinity(), res);
     }
 
     void test_stringToDouble_bad() {
