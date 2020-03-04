@@ -360,6 +360,15 @@
 		BEB6E3111FFF988800B0BDB0 /* macavfuno.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = macavfuno.mm; path = ../../../avmedia/source/macavf/macavfuno.mm; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BECB749D17189A3B001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
+		BEE4DC66240E50CE009FC4A7 /* customweld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customweld.cxx; path = ../vcl/source/app/customweld.cxx; sourceTree = "<group>"; };
+		BEE4DC67240E50CE009FC4A7 /* ITiledRenderable.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ITiledRenderable.cxx; path = ../vcl/source/app/ITiledRenderable.cxx; sourceTree = "<group>"; };
+		BEE4DC68240E50CE009FC4A7 /* winscheduler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winscheduler.cxx; path = ../vcl/source/app/winscheduler.cxx; sourceTree = "<group>"; };
+		BEE4DC69240E50CE009FC4A7 /* scheduler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scheduler.cxx; path = ../vcl/source/app/scheduler.cxx; sourceTree = "<group>"; };
+		BEE4DC6A240E50CE009FC4A7 /* idle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = idle.cxx; path = ../vcl/source/app/idle.cxx; sourceTree = "<group>"; };
+		BEE4DC6B240E50CE009FC4A7 /* salusereventlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salusereventlist.cxx; path = ../vcl/source/app/salusereventlist.cxx; sourceTree = "<group>"; };
+		BEE4DC6C240E50CE009FC4A7 /* watchdog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = watchdog.cxx; path = ../vcl/source/app/watchdog.cxx; sourceTree = "<group>"; };
+		BEE4DC6D240E50CE009FC4A7 /* weldutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weldutils.cxx; path = ../vcl/source/app/weldutils.cxx; sourceTree = "<group>"; };
+		BEE4DC6E240E50CE009FC4A7 /* salplug.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salplug.cxx; path = ../vcl/source/app/salplug.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -580,6 +589,7 @@
 			isa = PBXGroup;
 			children = (
 				BE82C3AA18C86D440050EB79 /* brand.cxx */,
+				BEE4DC66240E50CE009FC4A7 /* customweld.cxx */,
 				BEC676DE17461A720069E01D /* dbggui.cxx */,
 				BE82C3AB18C86D440050EB79 /* dndhelp.cxx */,
 				BE82C3AC18C86D440050EB79 /* help.cxx */,
@@ -587,8 +597,13 @@
 				BE82C3AE18C86D440050EB79 /* IconThemeInfo.cxx */,
 				BE82C3AF18C86D440050EB79 /* IconThemeScanner.cxx */,
 				BE82C3B018C86D440050EB79 /* IconThemeSelector.cxx */,
+				BEE4DC6A240E50CE009FC4A7 /* idle.cxx */,
 				BE82C3B118C86D440050EB79 /* idlemgr.cxx */,
+				BEE4DC67240E50CE009FC4A7 /* ITiledRenderable.cxx */,
+				BEE4DC6E240E50CE009FC4A7 /* salplug.cxx */,
+				BEE4DC6B240E50CE009FC4A7 /* salusereventlist.cxx */,
 				BE82C3B218C86D440050EB79 /* salvtables.cxx */,
+				BEE4DC69240E50CE009FC4A7 /* scheduler.cxx */,
 				BE82C3B318C86D440050EB79 /* session.cxx */,
 				BE82C3B418C86D440050EB79 /* settings.cxx */,
 				BE82C3B518C86D440050EB79 /* solarmutex.cxx */,
@@ -602,6 +617,9 @@
 				BE82C3BD18C86D440050EB79 /* unohelp.cxx */,
 				BE82C3BE18C86D440050EB79 /* unohelp2.cxx */,
 				BE82C3BF18C86D440050EB79 /* vclevent.cxx */,
+				BEE4DC6C240E50CE009FC4A7 /* watchdog.cxx */,
+				BEE4DC6D240E50CE009FC4A7 /* weldutils.cxx */,
+				BEE4DC68240E50CE009FC4A7 /* winscheduler.cxx */,
 			);
 			name = app;
 			sourceTree = "<group>";
