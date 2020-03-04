@@ -3595,6 +3595,17 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                         pUIWindow->execute(sClearAction, aMap);
                         pUIWindow->execute(sTypeAction, aMap);
                     }
+                    else if (aMap["cmd"] == "value")
+                    {
+                        aMap["VALUE"] = aMap["data"];
+                        pUIWindow->execute(sValue, aMap);
+                    }
+                    else if (aMap["cmd"] == "selecttab")
+                    {
+                        aMap["POS"] = aMap["data"];
+
+                        pUIWindow->execute(sSelectAction, aMap);
+                    }
                     else
                         bIsClickAction = true;
                 }
