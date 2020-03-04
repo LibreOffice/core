@@ -93,7 +93,7 @@ private:
 
 };
 
-class XMLOFF_DLLPUBLIC XMLCellStyleExport final : public XMLStyleExport
+class SAL_DLLPUBLIC_RTTI XMLCellStyleExport final : public XMLStyleExport
 {
     using XMLStyleExport::XMLStyleExport;
     virtual void exportStyleAttributes(const css::uno::Reference<css::style::XStyle>& rStyle) override;

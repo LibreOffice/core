@@ -641,7 +641,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SVXCORE_DLLPUBLIC SvxGraphicObject final : public SvxShapeText
+class SvxGraphicObject final : public SvxShapeText
 {
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;

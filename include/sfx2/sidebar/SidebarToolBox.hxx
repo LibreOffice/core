@@ -32,7 +32,7 @@ namespace sfx2 { namespace sidebar {
        background window.
     2. Create and handle tool bar controller for its items.
 */
-class SFX2_DLLPUBLIC SidebarToolBox : public ToolBox
+class SAL_DLLPUBLIC_RTTI SidebarToolBox : public ToolBox
 {
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
