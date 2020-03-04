@@ -12353,7 +12353,7 @@ private:
                     bDone = combobox_activate();
                 break;
             default:
-                // tdf#131076 let base space toggle menu popup when its not already visible
+                // tdf#131076 let base space toggle menu popup when it's not already visible
                 if (nCode == KEY_SPACE && !pEvent->state && !m_bPopupActive)
                     bDone = false;
                 else
