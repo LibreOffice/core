@@ -1678,7 +1678,9 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         {
             VersionCompat aCompat( rIStm, StreamMode::READ );
         }
-        ReadGfxLink( rIStm, aLink );
+
+        TypeSerializer aSerializer(rIStm);
+        aSerializer.readGfxLink(aLink);
 
         // set dummy link to avoid creation of additional link after filtering;
         // we set a default link to avoid unnecessary swapping of native data
@@ -1855,7 +1857,8 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
         }
         rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );
         rImpGraphic.mpGfxLink->SetPrefSize( rImpGraphic.ImplGetPrefSize() );
-        WriteGfxLink( rOStm, *rImpGraphic.mpGfxLink );
+        TypeSerializer aSerializer(rOStm);
+        aSerializer.writeGfxLink(*rImpGraphic.mpGfxLink);
     }
     else
     {

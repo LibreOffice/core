@@ -96,10 +96,6 @@ public:
     bool                ExportNative( SvStream& rOStream ) const;
 
     bool                IsEMF() const; // WMF & EMF stored under the same type (NativeWmf)
-public:
-
-    friend SvStream&  WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink );
-    friend SvStream&  ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink );
 };
 
 #endif
