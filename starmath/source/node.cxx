@@ -2905,4 +2905,5 @@ void SmVerticalBraceNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

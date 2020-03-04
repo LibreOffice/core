@@ -2764,3 +2764,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream &rStream)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
