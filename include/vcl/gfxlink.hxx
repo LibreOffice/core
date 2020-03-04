@@ -42,11 +42,11 @@ enum class GfxLinkType
     NativeSvg    = 9,    // Don't forget to update the following defines
     NativeMov    = 10,   // Don't forget to update the following defines
     NativeBmp    = 11,
-    NativePdf    = 12    // Don't forget to update the following defines
-};
+    NativePdf    = 12,    // Don't forget to update the following defines
 
-#define GFX_LINK_FIRST_NATIVE_ID    GfxLinkType::NativeGif
-#define GFX_LINK_LAST_NATIVE_ID     GfxLinkType::NativePdf
+    NativeFirst  = NativeGif,
+    NativeLast   = NativePdf,
+};
 
 class Graphic;
 
