@@ -1,14 +1,13 @@
 GrGLAssembleInterface(void*, void (*(*)(void*, char const*))())
 ImplCallPreNotify(NotifyEvent&)
-ImplDestroyHelpWindow(ImplSVHelpData&, bool)
 ImplDestroyHelpWindow(bool)
 ImplFastBitmapConversion(BitmapBuffer&, BitmapBuffer const&, SalTwoRect const&)
 ImplGetSalSystem()
 ImplHideSplash()
 ImplSVMain()
 ScFilterCreate
+SdResId(char const*, int)
 Simplify(SkPath const&, SkPath*)
-SvxUnogetInternalNameForItem(unsigned short, rtl::OUString const&)
 clewErrorString
 component_getImplementationEnvironment
 createLink
@@ -22,7 +21,6 @@ heuristics
 invert
 libreofficekit_hook
 libreofficekit_hook_2
-limitWidthForSidebar(weld::SpinButton&)
 main
 mod
 privateSnippetExecutor
