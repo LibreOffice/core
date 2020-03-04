@@ -168,7 +168,7 @@ void XSheetOutline::testShowLevel()
     aSheetOutline->hideDetail(aLevel3);
     aSheetOutline->hideDetail(aLevel4);
 
-    std::cout << " verify showLevel row juste avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verify showLevel row just avant" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
 
     aSheetOutline->showLevel(2, table::TableOrientation_ROWS);
 
