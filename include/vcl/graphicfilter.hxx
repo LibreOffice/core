@@ -62,7 +62,7 @@ enum class GraphicFilterImportFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<GraphicFilterImportFlags> : is_typed_flags<GraphicFilterImportFlags, 0x0067> {};
+    template<> struct typed_flags<GraphicFilterImportFlags> : is_typed_flags<GraphicFilterImportFlags, 0x0063> {};
 }
 
 #define IMP_BMP                 "SVBMP"
