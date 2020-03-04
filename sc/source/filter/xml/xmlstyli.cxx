@@ -943,7 +943,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
     return nullptr;
 }
 
-void ScXMLMasterStylesContext::EndElement()
+void ScXMLMasterStylesContext::endFastElement(sal_Int32 )
 {
     FinishStyles(true);
 }
