@@ -81,6 +81,30 @@
       "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92bb8fc5_a059bdac",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-04T09:10:51Z",
+      "side": 1,
+      "message": "Heh no, this now looks inconsistent (addRecording returns microseconds, osl_getGlobalTimer returns milliseconds iiuc), and I don\u0027t know what is intended behaviour (and now it will record strange things in addRecording in dtor).",
+      "parentUuid": "5898f830_8ba7ae8c",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "c57d6d39c80844c9d4c6bfed85cc151e52a67b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
