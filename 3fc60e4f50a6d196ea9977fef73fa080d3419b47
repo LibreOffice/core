@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb0c8353_2e43a377",
+        "filename": "basegfx/source/polygon/b2dpolypolygoncutter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-03-04T00:27:48Z",
+      "side": 1,
+      "message": "ah nice catch! :)",
+      "revId": "3fc60e4f50a6d196ea9977fef73fa080d3419b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
