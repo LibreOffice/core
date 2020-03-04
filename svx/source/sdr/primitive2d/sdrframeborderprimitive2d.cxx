@@ -654,6 +654,13 @@ namespace drawinglayer::primitive2d
         {
         }
 
+        bool SdrFrameBorderData::SdrConnectStyleData::operator==(const SdrFrameBorderData::SdrConnectStyleData& rCompare) const
+        {
+            return mbStyleMirrored == rCompare.mbStyleMirrored
+                && maStyle == rCompare.maStyle
+                && maNormalizedPerpendicular == rCompare.maNormalizedPerpendicular;
+        }
+
         SdrFrameBorderData::SdrFrameBorderData(
             const basegfx::B2DPoint& rOrigin,
             const basegfx::B2DVector& rX,
@@ -748,6 +755,16 @@ namespace drawinglayer::primitive2d
         }
 
 
+        bool SdrFrameBorderData::operator==(const SdrFrameBorderData& rCompare) const
+        {
+            return maOrigin == rCompare.maOrigin
+                && maX == rCompare.maX
+                && maStyle == rCompare.maStyle
+                && maColor == rCompare.maColor
+                && mbForceColor == rCompare.mbForceColor
+                && maStart == rCompare.maStart
+                && maEnd == rCompare.maEnd;
+        }
 
 
         void SdrFrameBorderPrimitive2D::create2DDecomposition(
@@ -860,7 +877,9 @@ namespace drawinglayer::primitive2d
             {
                 const SdrFrameBorderPrimitive2D& rCompare = static_cast<const SdrFrameBorderPrimitive2D&>(rPrimitive);
 
-                return getFrameBorders() == rCompare.getFrameBorders()
+                return (getFrameBorders() == rCompare.getFrameBorders()
+                    || (getFrameBorders() && rCompare.getFrameBorders()
+                        && *getFrameBorders() == *rCompare.getFrameBorders()))
                     && doForceToSingleDiscreteUnit() == rCompare.doForceToSingleDiscreteUnit();
             }
 

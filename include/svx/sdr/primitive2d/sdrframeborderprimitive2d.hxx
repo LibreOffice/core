@@ -54,6 +54,7 @@ namespace drawinglayer
                 const svx::frame::Style& getStyle() const { return maStyle; }
                 const basegfx::B2DVector& getNormalizedPerpendicular() const { return maNormalizedPerpendicular; }
                 bool getStyleMirrored() const { return  mbStyleMirrored; }
+                bool operator==(const SdrConnectStyleData& rCompare) const;
             };
 
             std::vector<SdrConnectStyleData>   maStart;
@@ -77,6 +78,7 @@ namespace drawinglayer
                 double fMinDiscreteUnit) const;
 
             double getMinimalNonZeroBorderWidth() const;
+            bool operator==(const SdrFrameBorderData& rCompare) const;
         };
 
         typedef std::vector<SdrFrameBorderData> SdrFrameBorderDataVector;
