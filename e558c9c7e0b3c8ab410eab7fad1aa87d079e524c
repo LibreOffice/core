@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9da49654_4a9c2cec",
+        "filename": "config_host/config_options.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2020-03-04T18:50:54Z",
+      "side": 1,
+      "message": "I thought this would be UNLESS_MERGELIBS(SAL_DLLPUBLIC) which would evaporate if in the mergelibs case, on that basis:\n\nSPLITLIBS(VCL_DLLPUBLIC)\n\nmight be a better approach (shorter too). Would compile to nothing in the mergelibs case, vs. compiling to VCL_DLLPUBLIC in the split libraries case (?) \u003d)",
+      "revId": "e558c9c7e0b3c8ab410eab7fad1aa87d079e524c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
