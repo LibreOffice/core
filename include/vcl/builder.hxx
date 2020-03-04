@@ -82,7 +82,7 @@ public:
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID);
 
     //sID may not exist, but must be of type T if it does
-    template <typename T /*= vcl::Window if we had c++11*/> T* get(const OString& sID);
+    template <typename T = vcl::Window> T* get(const OString& sID);
 
     vcl::Window*    get_widget_root();
 
@@ -435,7 +435,7 @@ inline T* VclBuilder::get(VclPtr<T>& ret, const OString& sID)
 }
 
 //sID may not exist, but must be of type T if it does
-template <typename T /*= vcl::Window if we had c++11*/>
+template <typename T>
 inline T* VclBuilder::get(const OString& sID)
 {
     vcl::Window *w = get_by_name(sID);
@@ -474,7 +474,7 @@ public:
     {
         return m_pUIBuilder->get<T>(ret, sID);
     }
-    template <typename T /*= vcl::Window if we had c++11*/> T* get(const OString & sID)
+    template <typename T = vcl::Window> T* get(const OString & sID)
     {
         return m_pUIBuilder->get<T>(sID);
     }
