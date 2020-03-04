@@ -17,4 +17,5 @@ io_lib = shared_library('io',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source'],
   link_with: [cppuhelper_lib, cppu_lib, tl_lib, sal_lib],
+  install: true,
 )

@@ -52,6 +52,7 @@ tl_lib = shared_library('tl',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [basegfx_lib, comphelper_lib, i18nlangtag_lib, cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [libxml_dep, zlib_dep],
+  install: true,
 )
 
 bestreversemap_exe = executable('bestreversemap',

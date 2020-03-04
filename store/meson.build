@@ -13,5 +13,6 @@ store_lib = shared_library('store',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [salhelper_lib, sal_lib],
+  install: true,
 )
 

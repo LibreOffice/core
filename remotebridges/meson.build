@@ -4,4 +4,5 @@ uuresolver_lib = shared_library('uuresolver',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppuhelper_lib, cppu_lib, sal_lib],
+  install: true,
 )

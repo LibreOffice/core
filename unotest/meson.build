@@ -13,4 +13,5 @@ unotest_lib = shared_library('unotest',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, sb_lib],
   dependencies: [cppunit_dep],
+  install: true,
 )

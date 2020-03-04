@@ -117,5 +117,6 @@ frm_lib = shared_library('frm',
     utl_lib,
     vcl_lib,
   ],
-  dependencies: [libxml_dep, icuuc_dep, icu18_dep]
+  dependencies: [libxml_dep, icuuc_dep, icu18_dep],
+  install: true,
 )

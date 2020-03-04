@@ -6,6 +6,7 @@ smoketest_lib = shared_library('smoketest',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib, unotest_lib],
   dependencies: [cppunit_dep],
+  install: true,
 )
 
 libtest_bin = executable('libtest',

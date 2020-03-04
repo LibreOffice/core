@@ -11,5 +11,6 @@ i18nutil_lib = shared_library('i18nutil',
              '-DLIBO_INTERNAL_ONLY'],
   link_with: [utl_lib, i18nlangtag_lib, comphelper_lib, cppu_lib, sal_lib],
   dependencies: [icuuc_dep, icu18_dep],
+  install: true,
 )
 

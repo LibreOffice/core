@@ -33,6 +33,7 @@ package2_lib = shared_library('package2',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, ucbhelper_lib, salhelper_lib, sal_lib],
   dependencies: [zlib_dep],
+  install: true,
 )
 
 xstor_lib = shared_library('xstor',
@@ -51,5 +52,6 @@ xstor_lib = shared_library('xstor',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, tl_lib],
   dependencies: [],
+  install: true,
 )
 

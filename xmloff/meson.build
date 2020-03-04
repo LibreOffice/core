@@ -316,7 +316,8 @@ xo_lib = shared_library('xo',
   cpp_args: ['-DXMLOFF_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', setup_inc, '..'],
-  link_with: [basegfx_lib, comphelper_lib, cppuhelper_lib, cppu_lib, i18nlangtag_lib, salhelper_lib, sal_lib, sax_lib, svl_lib, tl_lib, utl_lib, vcl_lib]
+  link_with: [basegfx_lib, comphelper_lib, cppuhelper_lib, cppu_lib, i18nlangtag_lib, salhelper_lib, sal_lib, sax_lib, svl_lib, tl_lib, utl_lib, vcl_lib],
+  install: true,
 )
 
 xof_lib = shared_library('xof',
@@ -362,5 +363,6 @@ xof_lib = shared_library('xof',
   udk_fake_h, off_fake_h, tokens_hxx,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', setup_inc, '..'],
-  link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, salhelper_lib, sax_lib, xo_lib]
+  link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, salhelper_lib, sax_lib, xo_lib],
+  install: true,
 )

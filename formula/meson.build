@@ -12,6 +12,7 @@ for_lib = shared_library('for',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, i18nlangtag_lib, svl_lib, svt_lib, tl_lib, utl_lib, vcl_lib],
   dependencies: [],
+  install: true,
 )
 
 forui_lib = shared_library('forui',
@@ -27,4 +28,5 @@ forui_lib = shared_library('forui',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, for_lib, sal_lib, sfx_lib, svl_lib, svt_lib, tl_lib, utl_lib, vcl_lib, i18nlangtag_lib],
   dependencies: [],
+  install: true,
 )

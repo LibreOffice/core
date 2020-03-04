@@ -35,4 +35,5 @@ cppuhelper_lib = shared_library('cpphelper',
   include_directories: [main_inc, udkh_inc, offapi_inc, cpphelper_uno_inc],
   cpp_args: ['-DCPPUHELPER_DLLIMPLEMENTATION', '-DLIBO_INTERNAL_ONLY'],
   link_with: [temp_hack, cppu_lib, reg_lib, salhelper_lib, sal_lib, unoidl_lib, xmlreader_lib],
+  install: true,
 )

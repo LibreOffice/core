@@ -30,6 +30,7 @@ vbahelper_lib = shared_library('vbahelper',
   include_directories: [main_inc, udkh_inc, offapi_inc, oovbaapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, msfilter_lib, sal_lib, sb_lib, sfx_lib, svl_lib, svt_lib, svxcore_lib, tk_lib, tl_lib, utl_lib, vcl_lib],
   dependencies: [],
+  install: true,
 )
 
 
@@ -60,5 +61,6 @@ msforms_lib = shared_library('msforms',
   include_directories: [main_inc, udkh_inc, offapi_inc, oovbaapi_inc, 'inc'],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib, sb_lib, sfx_lib, svl_lib, svt_lib, svx_lib, svxcore_lib, tk_lib, tl_lib, vbahelper_lib, vcl_lib],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )

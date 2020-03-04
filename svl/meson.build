@@ -82,4 +82,5 @@ svl_lib = shared_library('svl',
   include_directories: [main_inc, udkh_inc, offapi_inc, setup_inc, 'source/inc'],
   link_with: [basegfx_lib, comphelper_lib, cppuhelper_lib, cppu_lib, i18nutil_lib, i18nlangtag_lib, sal_lib, sot_lib, jvmfwk_lib, tl_lib, ucbhelper_lib, utl_lib],
   dependencies: [icuuc_dep, icu18_dep, libxml_dep, mdds_dep],
+  install: true,
 )

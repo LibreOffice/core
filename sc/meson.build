@@ -624,6 +624,7 @@ sc_lib = shared_library('sc',
     xo_lib,
     ],
   dependencies: [libxml_dep, icuuc_dep, icu18_dep, broken_mdds_dep, orcus_dep],
+  install: true,
 )
 
 scui_lib = shared_library('scui',
@@ -706,6 +707,7 @@ scui_lib = shared_library('scui',
     vcl_lib,
   ],
   dependencies: [broken_mdds_dep],
+  install: true,
 )
 # I had to disable this because it gave a compiler error:
 #
@@ -994,4 +996,5 @@ vbaobj_lib = shared_library('vbaobj',
     vcl_lib,
   ],
   dependencies: [broken_mdds_dep],
+  install: true,
 )

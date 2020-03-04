@@ -426,6 +426,7 @@ vcl_lib = shared_library('vcl',
              '-DTK_DLL_NAME="libtk.so"'],
   link_with: [svl_lib, tl_lib, utl_lib, sot_lib, ucbhelper_lib, basegfx_lib, comphelper_lib, cppuhelper_lib, i18nlangtag_lib, i18nutil_lib, cppu_lib, salhelper_lib, sal_lib, xmlreader_lib],
   dependencies: [harfbuzz_dep, harfbuzz_icu_dep, fc_dep, glm_dep, cairo_dep, eot_dep, jpg_dep, png_dep, icuuc_dep, graphite_dep, dl_dep, lcms_dep, epoxy_dep, gio_dep, dbus_dep, xext_dep, x11_dep],
+  install: true,
 )
 
 
@@ -470,6 +471,7 @@ vclplug_gtk3 = shared_library('vclplug_gtk3',
              '-Wno-deprecated-declarations'],
   link_with: [vcl_lib, svl_lib, utl_lib, ucbhelper_lib, basegfx_lib, comphelper_lib, cppuhelper_lib, tl_lib, sot_lib, i18nlangtag_lib, i18nutil_lib, cppu_lib, sal_lib],
   dependencies: [gtk3_dep, gtkprint_dep, epoxy_dep, dl_dep, x11_dep],
+  install: true,
 )
 
 executable('svdem',

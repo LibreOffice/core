@@ -11,6 +11,7 @@ stocservice_lib = shared_library('stocservices',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 reflection_lib = shared_library('reflection',
@@ -25,6 +26,7 @@ reflection_lib = shared_library('reflection',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 invocation_lib = shared_library('invocation',
@@ -34,6 +36,7 @@ invocation_lib = shared_library('invocation',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 proxyfac_lib = shared_library('proxyfac',
@@ -43,6 +46,7 @@ proxyfac_lib = shared_library('proxyfac',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 invocadapt_lib = shared_library('invocadapt',
@@ -52,6 +56,7 @@ invocadapt_lib = shared_library('invocadapt',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 namingservice_lib = shared_library('namingservice',
@@ -61,6 +66,7 @@ namingservice_lib = shared_library('namingservice',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib],
   dependencies: [],
+  install: true,
 )
 
 introspection_lib = shared_library('introspection',
@@ -70,6 +76,7 @@ introspection_lib = shared_library('introspection',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib, salhelper_lib],
   dependencies: [],
+  install: true,
 )
 
 boostrap_lib = shared_library('bootstrap',
@@ -87,4 +94,5 @@ boostrap_lib = shared_library('bootstrap',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, reg_lib, sal_lib, salhelper_lib, tl_lib],
   dependencies: [],
+  install: true,
 )

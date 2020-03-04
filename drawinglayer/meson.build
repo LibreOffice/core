@@ -140,5 +140,6 @@ drawinglayer_lib = shared_library('drawinglayer',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [basegfx_lib, comphelper_lib, i18nlangtag_lib, cppuhelper_lib, cppu_lib, tl_lib, svl_lib, svt_lib, vcl_lib, salhelper_lib, tk_lib, sal_lib],
   dependencies: [libxml_dep],
+  install: true,
 )
 

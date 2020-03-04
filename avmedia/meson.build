@@ -15,5 +15,6 @@ avmedia_lib = shared_library('avmedia',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc'],
   link_with: [comphelper_lib, ucbhelper_lib, cppuhelper_lib, cppu_lib, sal_lib, i18nlangtag_lib, sfx_lib, svl_lib, svt_lib, tl_lib, utl_lib, vcl_lib],
   dependencies: [],
+  install: true,
 )
 

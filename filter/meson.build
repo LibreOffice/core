@@ -15,6 +15,7 @@ filterconfig_lib = shared_library('filterconfig',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', setup_inc],
   link_with: [fwe_lib, utl_lib, tl_lib, comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, i18nlangtag_lib],
   dependencies: [],
+  install: true,
 )
 
 # Requires too much custom target work. Fix later.
@@ -56,4 +57,5 @@ msfilter_lib = shared_library('msfilter',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', setup_inc],
   link_with: [svxcore_lib, editeng_lib, sfx_lib, xo_lib, sb_lib, salhelper_lib, svt_lib, tk_lib, vcl_lib, svl_lib, sot_lib, xmlscript_lib, utl_lib, tl_lib, comphelper_lib, basegfx_lib, cppuhelper_lib, cppu_lib, sal_lib],
   dependencies: [],
+  install: true,
 )

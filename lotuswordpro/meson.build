@@ -181,4 +181,5 @@ lwpft_lib = shared_library('lwpft',
     xo_lib,
   ],
   dependencies: [icuuc_dep, icu18_dep],
+  install: true,
 )

@@ -116,6 +116,7 @@ slideshow_lib = shared_library('slideshow',
     utl_lib,
     vcl_lib,
   ],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )
 

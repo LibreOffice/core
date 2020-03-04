@@ -10,4 +10,5 @@ helplinker_lib = shared_library('helplinker',
   include_directories: [main_inc, 'inc'],
   link_with: [comphelper_lib, sal_lib],
   dependencies: [libxml_dep, clucene_dep, libxslt_dep],
+  install: true,
 )

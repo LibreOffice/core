@@ -88,4 +88,5 @@ dbtools_lib = shared_library('dbtools',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc'],
   link_with: [cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, utl_lib, tl_lib, comphelper_lib, i18nlangtag_lib, svt_lib, vcl_lib],
   dependencies: [],
+  install: true,
 )

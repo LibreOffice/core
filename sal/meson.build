@@ -129,8 +129,9 @@ sal_lib = shared_library('sal',
              '-DLIBO_INTERNAL_ONLY',
              '-DSAL_DLLIMPLEMENTATION'],
   link_args: system_link_args,
-  dependencies: [thread_dep, osx_frameworks_dep, dl_dep]
-  )
+  dependencies: [thread_dep, osx_frameworks_dep, dl_dep],
+  install: true,
+)
 
 if cppunit_dep.found()
 
@@ -147,6 +148,7 @@ if cppunit_dep.found()
     link_with: sal_lib,
     dependencies: [cppunit_dep, thread_dep],
     include_directories: [main_inc],
+  install: true,
   )
 
   test('sal_test', unittester,

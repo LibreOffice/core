@@ -19,6 +19,7 @@ unoidl_lib = shared_library('unoidl',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, 'source'],
   link_with: [reg_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 
 executable('unoidl-check',

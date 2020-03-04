@@ -69,4 +69,5 @@ tk_lib = shared_library('tk',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, i18nlangtag_lib, tl_lib, utl_lib, vcl_lib],
   dependencies: [],
+  install: true,
 )

@@ -16,6 +16,7 @@ deploymentmisc_lib = shared_library('deploymentmisc',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/deployment/inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib, xmlscript_lib, i18nlangtag_lib],
   dependencies: [],
+  install: true,
 )
 
 crashreport_lib = shared_library('crashlib',
@@ -27,6 +28,7 @@ crashreport_lib = shared_library('crashlib',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [],
   dependencies: [curl_dep],
+  install: true,
 )
 
 unopkgapp_lib = shared_library('unopkgapp',
@@ -50,6 +52,7 @@ unopkgapp_lib = shared_library('unopkgapp',
     i18nlangtag_lib,
   ],
   dependencies: [],
+  install: true,
 )
 
 sofficeapp_lib = shared_library('sofficeapp',
@@ -72,6 +75,7 @@ sofficeapp_lib = shared_library('sofficeapp',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/deployment/inc', setup_inc],
   link_with: [glxtest_lib, comphelper_lib, cppuhelper_lib, cppu_lib, deploymentmisc_lib, editeng_lib, i18nlangtag_lib, sal_lib, salhelper_lib, sb_lib, sfx_lib, svl_lib, svx_lib, svxcore_lib, svt_lib, tk_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib],
   dependencies: [dbus_dep],
+  install: true,
 )
 
 soffice_bin = executable('soffice', 'source/app/main.c',

@@ -62,7 +62,8 @@ starmath_lib = shared_library('starmath',
         vcl_lib,
         xo_lib,
 ],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )
 
 
@@ -73,5 +74,6 @@ smd_lib = shared_library('smd',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, sfx_lib, sot_lib, tl_lib, utl_lib],
+  install: true,
 )
 

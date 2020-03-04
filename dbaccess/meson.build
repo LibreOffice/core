@@ -23,6 +23,7 @@ dbahsql_lib = shared_library('dbahsql',
     tl_lib,
   ],
   dependencies: [boost_datetime_dep],
+  install: true,
 )
 
 dba_lib = shared_library('dba',
@@ -129,6 +130,7 @@ dba_lib = shared_library('dba',
     xo_lib,
   ],
   dependencies: [],
+  install: true,
 )
 
 dbu_lib = shared_library('dbu',
@@ -336,6 +338,6 @@ dbu_lib = shared_library('dbu',
     utl_lib,
     vcl_lib,
   ],
-  dependencies: [odbc_dep]
+  dependencies: [odbc_dep],
+  install: true,
 )
-

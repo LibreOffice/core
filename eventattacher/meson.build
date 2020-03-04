@@ -4,4 +4,5 @@ evtatt_lib = shared_library('evtatt',
   include_directories: [main_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY' ],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib],
+  install: true,
 )

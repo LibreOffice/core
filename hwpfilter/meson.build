@@ -28,4 +28,5 @@ hwp_lib = shared_library('hwp',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib, utl_lib, tl_lib],
   dependencies: [zlib_dep],
+  install: true,
 )

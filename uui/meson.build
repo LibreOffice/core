@@ -42,4 +42,5 @@ uui_lib = shared_library('uui',
     vcl_lib,
   ],
   dependencies: [],
+  install: true,
 )

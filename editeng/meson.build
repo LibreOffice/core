@@ -98,4 +98,5 @@ editeng_lib = shared_library('editeng',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [xo_lib, basegfx_lib, lng_lib, svt_lib, tk_lib, vcl_lib, svl_lib, sot_lib, sfx_lib, utl_lib, tl_lib, comphelper_lib, ucbhelper_lib, cppuhelper_lib, cppu_lib, sal_lib, salhelper_lib, sax_lib, i18nlangtag_lib, i18nutil_lib],
   dependencies: [libxml_dep, icuuc_dep],
+  install: true,
 )

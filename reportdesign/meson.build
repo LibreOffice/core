@@ -56,4 +56,5 @@ rpt_lib = shared_library('rpt',
     vcl_lib,
   ],
   dependencies: [],
+  install: true,
 )

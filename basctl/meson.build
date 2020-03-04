@@ -71,5 +71,6 @@ basctl_lib = shared_library('basctl',
     vcl_lib,
     xmlscript_lib,
   ],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )

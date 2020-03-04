@@ -77,5 +77,6 @@ sb_lib = shared_library('sb',
   cpp_args: ['-DBASIC_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, oovbaapi_inc, 'source/inc', 'inc', setup_inc],
-  link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, i18nlangtag_lib, sot_lib, svl_lib, svt_lib, tl_lib, utl_lib, vcl_lib, xmlscript_lib]
+  link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, i18nlangtag_lib, sot_lib, svl_lib, svt_lib, tl_lib, utl_lib, vcl_lib, xmlscript_lib],
+  install: true,
 )

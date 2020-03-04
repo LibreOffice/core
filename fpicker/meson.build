@@ -35,4 +35,5 @@ fps_office_lib = shared_library('fps_office',
     i18nlangtag_lib,
   ],
   dependencies: [],
+  install: true,
 )

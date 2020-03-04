@@ -18,4 +18,5 @@ xmlscript_lib = shared_library('xmlscript',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib, tl_lib, i18nlangtag_lib],
+  install: true,
 )

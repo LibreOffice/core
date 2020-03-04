@@ -45,6 +45,7 @@ unoxml_lib = shared_library('unoxml',
     xo_lib,
   ],
   dependencies: [libxml_dep],
+  install: true,
 )
 
 unordf_lib = shared_library('unordf',
@@ -59,5 +60,6 @@ unordf_lib = shared_library('unordf',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib],
-  dependencies: [libxml_dep, raptor2_dep, rasqal_dep, librdf_dep, libxslt_dep]
+  dependencies: [libxml_dep, raptor2_dep, rasqal_dep, librdf_dep, libxslt_dep],
+  install: true,
 )

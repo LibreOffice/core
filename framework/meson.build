@@ -14,6 +14,7 @@ fwi_lib = shared_library('fwi',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', 'inc'],
   link_with: [i18nlangtag_lib, cppuhelper_lib, cppu_lib, comphelper_lib, vcl_lib, svl_lib, svt_lib, tl_lib, utl_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 
 fwe_lib = shared_library('fwe',
@@ -48,6 +49,7 @@ fwe_lib = shared_library('fwe',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', 'inc'],
   link_with: [cppuhelper_lib, fwi_lib, cppu_lib, comphelper_lib, vcl_lib, svl_lib, svt_lib, tl_lib, utl_lib, salhelper_lib, sal_lib],
+  install: true,
 )
 
 fwl_lib = shared_library('fwl',
@@ -75,6 +77,7 @@ fwl_lib = shared_library('fwl',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', 'inc', setup_inc],
   link_with: [fwe_lib, fwi_lib, cppuhelper_lib, i18nlangtag_lib, cppu_lib, comphelper_lib, svt_lib, svl_lib, svt_lib, tk_lib, tl_lib, utl_lib, vcl_lib, sal_lib],
+  install: true,
 )
 
 fwm_lib = shared_library('fwm',
@@ -86,7 +89,8 @@ fwm_lib = shared_library('fwm',
   cpp_args: ['-DFWM_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', 'inc', setup_inc],
-  link_with: [comphelper_lib, fwi_lib, cppuhelper_lib, cppu_lib, vcl_lib, sal_lib]
+  link_with: [comphelper_lib, fwi_lib, cppuhelper_lib, cppu_lib, vcl_lib, sal_lib],
+  install: true,
 )
 
 fwk_lib = shared_library('fwk',
@@ -208,5 +212,6 @@ fwk_lib = shared_library('fwk',
   cpp_args: ['-DFWK_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', 'inc', setup_inc],
-  link_with: [comphelper_lib, i18nlangtag_lib, cppuhelper_lib, cppu_lib, svt_lib, svl_lib, tk_lib, tl_lib, vcl_lib, ucbhelper_lib, utl_lib, fwe_lib, fwi_lib, salhelper_lib, sal_lib]
+  link_with: [comphelper_lib, i18nlangtag_lib, cppuhelper_lib, cppu_lib, svt_lib, svl_lib, tk_lib, tl_lib, vcl_lib, ucbhelper_lib, utl_lib, fwe_lib, fwi_lib, salhelper_lib, sal_lib],
+  install: true,
 )

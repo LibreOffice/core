@@ -16,12 +16,14 @@ pyuno_lib = shared_library('pyuno',
   include_directories: [main_inc, udkh_inc, 'inc'],
   link_with: [cppu_lib, cppuhelper_lib, sal_lib, salhelper_lib],
   dependencies: [python3_dep],
+  install: true,
 )
 
 pyuno_wrapper_lib = shared_library('pyuno_wrapper',
   'source/module/pyuno_dlopenwrapper.c',
   include_directories: [main_inc],
   dependencies: [python3_dep.partial_dependency(compile_args: true), dl_dep],
+  install: true,
 )
 
 pythonloader_lib = shared_library('pythonloader',
@@ -31,6 +33,7 @@ pythonloader_lib = shared_library('pythonloader',
   include_directories: [main_inc, udkh_inc, 'inc'],
   link_with: [cppu_lib, cppuhelper_lib, pyuno_lib, sal_lib],
   dependencies: [python3_dep],
+  install: true,
 )
 
 if host_machine.system() == 'windows'

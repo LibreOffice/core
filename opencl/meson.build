@@ -10,4 +10,5 @@ opencl_lib = shared_library('opencl',
   include_directories: [main_inc,udkh_inc, offapi_inc, 'inc', setup_inc],
   link_with: [comphelper_lib, cppu_lib, salhelper_lib, sal_lib, tl_lib],
   dependencies: [icuuc_dep, icu18_dep, clew_dep],
+  install: true,
 )

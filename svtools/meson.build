@@ -120,4 +120,5 @@ svt_lib = shared_library('svt',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc', setup_inc],
   link_with: [basegfx_lib, vcl_lib, i18nlangtag_lib, i18nutil_lib, utl_lib, cppuhelper_lib, cppu_lib, comphelper_lib, sot_lib, svl_lib, tk_lib, tl_lib, ucbhelper_lib, salhelper_lib, sal_lib],
+  install: true,
 )

@@ -223,4 +223,5 @@ oox_lib = shared_library('oox',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', oovbaapi_inc],
   link_with: [avmedia_lib, basegfx_lib, comphelper_lib, cppuhelper_lib, cppu_lib, editeng_lib, expwrap_lib, drawinglayer_lib, sal_lib, i18nlangtag_lib, msfilter_lib, sax_lib, sfx_lib, svl_lib, svt_lib, svx_lib, svxcore_lib, sot_lib, tl_lib, utl_lib, vcl_lib, xo_lib, xmlscript_lib],
   dependencies: [nss_dep],
+  install: true,
 )

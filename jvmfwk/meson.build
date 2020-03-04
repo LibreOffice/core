@@ -17,4 +17,5 @@ jvmfwk_lib = shared_library('jvmfwk',
   include_directories: [main_inc, 'inc'],
   link_with: [cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib],
   dependencies: [libxml_dep, jni_dep],
+  install: true,
 )

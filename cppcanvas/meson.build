@@ -24,5 +24,6 @@ cppcanvas_lib = shared_library('cppcanvas',
   cpp_args: ['-DCPPCANVAS_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc'],
-  link_with: [basegfx_lib, canvastools_lib, vcl_lib, svt_lib, tl_lib, cppu_lib, cppuhelper_lib, i18nlangtag_lib, sal_lib]
+  link_with: [basegfx_lib, canvastools_lib, vcl_lib, svt_lib, tl_lib, cppu_lib, cppuhelper_lib, i18nlangtag_lib, sal_lib],
+  install: true,
 )

@@ -13,4 +13,5 @@ ctl_lib = shared_library('ctl',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, tl_lib, sal_lib],
+  install: true,
 )

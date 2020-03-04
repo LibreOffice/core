@@ -381,6 +381,7 @@ svxcore_lib = shared_library('svxcore',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc', setup_inc],
   link_with: [avmedia_lib, basegfx_lib, fwe_lib, sb_lib, comphelper_lib, cppuhelper_lib, cppu_lib, dbtools_lib, dbtools_lib, drawinglayer_lib, editeng_lib, i18nutil_lib, i18nlangtag_lib, lng_lib, sal_lib, salhelper_lib, sax_lib, sfx_lib, sot_lib, svl_lib, svt_lib, tk_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib, xo_lib],
   dependencies: [libxml_dep, icuuc_dep],
+  install: true,
 )
 
 svx_lib = shared_library('svx',
@@ -564,4 +565,5 @@ svx_lib = shared_library('svx',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc', setup_inc],
   link_with: [avmedia_lib, basegfx_lib, sb_lib, comphelper_lib, cppuhelper_lib, cppu_lib, dbtools_lib, drawinglayer_lib, editeng_lib, fwe_lib, i18nlangtag_lib, i18nutil_lib, sal_lib, salhelper_lib, sfx_lib, sot_lib, svl_lib, svt_lib, svxcore_lib, tk_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib, xo_lib, xmlscript_lib],
   dependencies: [icuuc_dep],
+  install: true,
 )

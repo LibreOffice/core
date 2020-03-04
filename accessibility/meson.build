@@ -83,4 +83,5 @@ acc_lib = shared_library('acc',
     vcl_lib,
   ],
   dependencies: [],
+  install: true,
 )

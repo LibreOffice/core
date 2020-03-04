@@ -10,4 +10,5 @@ i18nlangtag_lib = shared_library('i18nlangtag',
   cpp_args: ['-DLIBO_INTERNAL_ONLY',
             '-DI18NLANGTAG_DLLIMPLEMENTATION'],
   link_with: [sal_lib],
+  install: true,
 )

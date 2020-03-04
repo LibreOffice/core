@@ -20,5 +20,6 @@ emfio_lib = shared_library('emfio',
     svt_lib,
     utl_lib,
   ],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )

@@ -16,6 +16,7 @@ embobj_lib = shared_library('embobj',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', setup_inc],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, svt_lib, utl_lib, vcl_lib, tl_lib, i18nlangtag_lib],
   dependencies: [],
+  install: true,
 )
 
 emboleobj_lib = shared_library('emboleobj',
@@ -32,4 +33,5 @@ emboleobj_lib = shared_library('emboleobj',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc', setup_inc],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib, utl_lib, vcl_lib, tl_lib],
   dependencies: [],
+  install: true,
 )

@@ -50,4 +50,5 @@ svgio_lib = shared_library('svgio',
     svt_lib,
   ],
   dependencies: [],
+  install: true,
 )

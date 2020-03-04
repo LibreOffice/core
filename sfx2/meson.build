@@ -248,5 +248,6 @@ sfx_lib = shared_library('sfx',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/inc', setup_inc],
   link_with: [comphelper_lib, basegfx_lib, cppuhelper_lib, cppu_lib, drawinglayer_lib, fwe_lib, i18nutil_lib, i18nlangtag_lib, salhelper_lib, sal_lib, sax_lib, sb_lib, sot_lib, svl_lib, svt_lib, tk_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib],
-  dependencies: [orcus_dep, libxml_dep]
+  dependencies: [orcus_dep, libxml_dep],
+  install: true,
 )

@@ -189,7 +189,8 @@ chartcore_lib = shared_library('chartcore',
     utl_lib,
     vcl_lib,
   ],
-  dependencies: []
+  dependencies: [],
+  install: true,
 )
 
 chartcontroller_lib = shared_library('chartcontroller',
@@ -369,5 +370,6 @@ chartcontroller_lib = shared_library('chartcontroller',
     utl_lib,
     vcl_lib,
   ],
-  dependencies: []
-  )
+  dependencies: [],
+  install: true,
+)

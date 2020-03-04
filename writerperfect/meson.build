@@ -19,6 +19,7 @@ writerperfect_lib = shared_library('writerperfect',
     xo_lib,
   ],
   dependencies: [revenge_dep, odfgen_dep],
+  install: true,
 )
 
 wpftwriter_lib = shared_library('wpftwriter',
@@ -70,5 +71,6 @@ wpftwriter_lib = shared_library('wpftwriter',
     xo_lib,
   ],
   dependencies: [revenge_dep, epubgen_dep, staroffice_dep, odfgen_dep, abw_dep, mwaw_dep, etonyek_dep, wps_dep, libebook_dep, wpd_dep, wpg_dep],
+  install: true,
 )
 

@@ -17,6 +17,7 @@ canvastools_lib = shared_library('canvastools',
   cpp_args: ['-DLIBO_INTERNAL_ONLY',
              '-DCANVASTOOLS_DLLIMPLEMENTATION'],
   link_with: [basegfx_lib, comphelper_lib, cppuhelper_lib, cppu_lib, tk_lib, tl_lib, vcl_lib, sal_lib],
+  install: true,
 )
 
 vclcanvas_lib = shared_library('vclcanvas',
@@ -43,6 +44,7 @@ vclcanvas_lib = shared_library('vclcanvas',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [basegfx_lib, canvastools_lib, vcl_lib, svt_lib, tk_lib, tl_lib, cppuhelper_lib, cppu_lib, comphelper_lib, i18nlangtag_lib, sal_lib],
+  install: true,
 )
 
 cairocanvas_lib = shared_library('cairocanvas',
@@ -65,4 +67,5 @@ cairocanvas_lib = shared_library('cairocanvas',
   include_directories: [main_inc, udkh_inc, offapi_inc],
   link_with: [cppuhelper_lib, cppu_lib, basegfx_lib, canvastools_lib, vcl_lib, tk_lib, tl_lib, comphelper_lib, i18nlangtag_lib, sal_lib],
   dependencies: [cairo_dep],
+  install: true,
 )
