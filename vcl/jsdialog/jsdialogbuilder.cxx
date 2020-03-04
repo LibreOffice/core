@@ -91,6 +91,15 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
                     : nullptr;
 }
 
+std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id,
+                                                                 bool bTakeOwnership)
+{
+    TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
+    return pNotebook
+               ? std::make_unique<JSNotebook>(m_aOwnedToplevel, pNotebook, this, bTakeOwnership)
+               : nullptr;
+}
+
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLabel, FixedText>(aOwnedToplevel, pLabel, pBuilder, bTakeOwnership)
@@ -164,5 +173,36 @@ void JSComboBox::remove(int pos)
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
+    notifyDialogState();
+}
+
+JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceNotebook, ::TabControl>(aOwnedToplevel, pControl, pBuilder,
+                                                  bTakeOwnership)
+{
+}
+
+void JSNotebook::set_current_page(int nPage)
+{
+    SalInstanceNotebook::set_current_page(nPage);
+    notifyDialogState();
+}
+
+void JSNotebook::set_current_page(const OString& rIdent)
+{
+    SalInstanceNotebook::set_current_page(rIdent);
+    notifyDialogState();
+}
+
+void JSNotebook::remove_page(const OString& rIdent)
+{
+    SalInstanceNotebook::remove_page(rIdent);
+    notifyDialogState();
+}
+
+void JSNotebook::append_page(const OString& rIdent, const OUString& rLabel)
+{
+    SalInstanceNotebook::append_page(rIdent, rLabel);
     notifyDialogState();
 }

@@ -869,7 +869,7 @@ class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::No
 {
 private:
     VclPtr<TabControl> m_xNotebook;
-    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    mutable std::vector<std::shared_ptr<SalInstanceContainer>> m_aPages;
     std::vector<VclPtr<TabPage>> m_aAddedPages;
     std::vector<VclPtr<VclGrid>> m_aAddedGrids;
 
