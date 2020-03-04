@@ -10083,6 +10083,13 @@ public:
         return gtk_tree_model_iter_next(pModel, &rGtkIter.iter);
     }
 
+    virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_iter_previous(pModel, &rGtkIter.iter);
+    }
+
     virtual bool iter_next(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);

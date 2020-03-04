@@ -4111,6 +4111,13 @@ public:
         return rVclIter.iter != nullptr;
     }
 
+    virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        rVclIter.iter = rVclIter.iter->PrevSibling();
+        return rVclIter.iter != nullptr;
+    }
+
     virtual bool iter_next(weld::TreeIter& rIter) const override
     {
         SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
