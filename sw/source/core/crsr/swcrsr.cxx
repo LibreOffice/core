@@ -53,6 +53,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
+#include <editsh.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -2031,7 +2032,13 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             SwNode& rNode = GetPoint()->nNode.GetNode();
             const sal_Int32 nOffset = bUp ? 0 : rNode.GetTextNode()->GetText().getLength();
             const SwPosition aPos(*GetContentNode(), nOffset);
-            *GetPoint() = aPos;
+
+            //if cursor has already been at start or end of file,
+            //Update cursor to change nUpDownX.
+            if ( aOldPos.nContent.GetIndex() == nOffset )
+                GetDoc()->GetEditShell()->UpdateCursor();
+            else
+                *GetPoint() = aPos; // just give a new position
         }
 
         bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
