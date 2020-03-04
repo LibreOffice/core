@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <tools/GenericTypeSerializer.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/gfxlink.hxx>
 
 class TypeSerializer : public tools::GenericTypeSerializer
 {
@@ -31,6 +32,9 @@ public:
 
     void readGradient(Gradient& rGradient);
     void writeGradient(const Gradient& rGradient);
+
+    void readGfxLink(GfxLink& rGfxLink);
+    void writeGfxLink(const GfxLink& rGfxLink);
 };
 
 #endif

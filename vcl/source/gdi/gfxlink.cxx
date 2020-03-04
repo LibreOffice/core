@@ -24,8 +24,6 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
-#include <TypeSerializer.hxx>
-
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)
@@ -145,75 +143,6 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
     }
 
     return ( rOStream.GetError() == ERRCODE_NONE );
-}
-
-SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
-{
-    std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStream, StreamMode::WRITE, 2 ));
-    TypeSerializer aSerializer(rOStream);
-
-    // Version 1
-    rOStream.WriteUInt16( static_cast<sal_uInt16>(rGfxLink.GetType()) ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
-
-    // Version 2
-    aSerializer.writeSize(rGfxLink.GetPrefSize());
-    WriteMapMode( rOStream, rGfxLink.GetPrefMapMode() );
-
-    pCompat.reset(); // destructor writes stuff into the header
-
-    if( rGfxLink.GetDataSize() )
-    {
-        auto pData = rGfxLink.GetSwapInData();
-        if (pData)
-            rOStream.WriteBytes( pData.get(), rGfxLink.mnSwapInDataSize );
-    }
-
-    return rOStream;
-}
-
-SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
-{
-    Size            aSize;
-    MapMode         aMapMode;
-    bool            bMapAndSizeValid( false );
-    std::unique_ptr<VersionCompat>  pCompat(new VersionCompat( rIStream, StreamMode::READ ));
-
-    TypeSerializer aSerializer(rIStream);
-
-    // Version 1
-    sal_uInt16 nType(0);
-    sal_uInt32 nSize(0), nUserId(0);
-    rIStream.ReadUInt16(nType).ReadUInt32(nSize).ReadUInt32(nUserId);
-
-    if( pCompat->GetVersion() >= 2 )
-    {
-        aSerializer.readSize(aSize);
-        ReadMapMode( rIStream, aMapMode );
-        bMapAndSizeValid = true;
-    }
-
-    pCompat.reset(); // destructor writes stuff into the header
-
-    auto nRemainingData = rIStream.remainingSize();
-    if (nSize > nRemainingData)
-    {
-        SAL_WARN("vcl", "graphic link stream is smaller than requested size");
-        nSize = nRemainingData;
-    }
-
-    std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSize ]);
-    rIStream.ReadBytes( pBuf.get(), nSize );
-
-    rGfxLink = GfxLink( std::move(pBuf), nSize, static_cast<GfxLinkType>(nType) );
-    rGfxLink.SetUserId( nUserId );
-
-    if( bMapAndSizeValid )
-    {
-        rGfxLink.SetPrefSize( aSize );
-        rGfxLink.SetPrefMapMode( aMapMode );
-    }
-
-    return rIStream;
 }
 
 std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
