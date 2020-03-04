@@ -1,6 +1,23 @@
 --- dtor/src/dtoa.c.coverity
 +++ dtor/src/dtoa.c
-@@ -2303,6 +2303,7 @@
+@@ -216,14 +216,14 @@
+ typedef unsigned Long ULong;
+ #endif
+ 
+-#ifdef DEBUG
+ #include <assert.h>
++
++#ifdef DEBUG
+ #include "stdio.h"
+ #define Bug(x) {fprintf(stderr, "%s\n", x); exit(1);}
+ #define Debug(x) x
+ int dtoa_stats[7]; /* strtod_{64,96,bigcomp},dtoa_{exact,64,96,bigcomp} */
+ #else
+-#define assert(x) /*nothing*/
+ #define Debug(x) /*nothing*/
+ #endif
+ 
+@@ -2301,6 +2301,7 @@
  	if ((y = d1)) {
  		if ((k = lo0bits(&y))) {
  			x[0] = y | z << (32 - k);
@@ -8,7 +25,7 @@
  			z >>= k;
  			}
  		else
-@@ -3031,6 +3032,7 @@
+@@ -3029,6 +3030,7 @@
  			 || ((n = nbits & kmask) !=0
  			     && hi0bits(x[k-1]) < 32-n)) {
  				rshift(b,1);
@@ -16,7 +33,7 @@
  				if (++e > Emax)
  					goto ovfl;
  				}
-@@ -3347,6 +3349,7 @@
+@@ -3345,6 +3347,7 @@
  		if ((dd = s0[j++] - '0' - dig))
  			goto ret;
  		if (!b->x[0] && b->wds == 1) {
@@ -24,7 +41,7 @@
  			if (i < nd)
  				dd = 1;
  			goto ret;
-@@ -3609,6 +3612,7 @@
+@@ -3607,6 +3610,7 @@
  		switch(c = *++s) {
  			case '-':
  				esign = 1;
