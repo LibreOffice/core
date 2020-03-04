@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8c1a42c_3c52848c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-04T06:12:48Z",
+      "side": 1,
+      "message": "Please make the summary easier to read. Something like \"tdf#104169: Cross mouse cursor in spreadsheet\".",
+      "revId": "ebb09a1d9bc9fa7e223c65e0a284bda5f7b5cd85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
