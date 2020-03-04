@@ -184,7 +184,7 @@ public:
     ScXMLMasterStylesContext( SvXMLImport& rImport );
 
     virtual ~ScXMLMasterStylesContext() override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class ScMasterPageContext : public XMLTextMasterPageContext
