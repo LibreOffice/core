@@ -1146,13 +1146,14 @@ bool    SwGlobalTree::Update(bool bHard)
                          )
                        )
                     {
-                        bCopy = bRet = true;
+                        bCopy = true;
                     }
                 }
             }
             if(bCopy || bHard)
             {
                 *m_pSwGlblDocContents = std::move( *pTempContents );
+                bRet = true;
             }
         }
     }
