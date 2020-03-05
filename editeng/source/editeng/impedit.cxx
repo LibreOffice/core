@@ -1196,8 +1196,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                     }
                 }
 
-                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong, sHyperlink);
-                mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                // We need to avoid to grab the focus from the formula bar
+                vcl::Window* pWindow = Application::GetFocusWindow();
+                if (pWindow && pWindow == pOutWin)
+                {
+                    SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong, sHyperlink);
+                    mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                }
             }
         }
 
