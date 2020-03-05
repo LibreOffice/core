@@ -28,38 +28,16 @@
 #include <o3tl/cow_wrapper.hxx>
 
 
-namespace tools
-{
-class Rectangle;
-}
+namespace tools { class Rectangle; }
+
 class Point;
 class SvStream;
-
-class Impl_Gradient
-{
-public:
-    GradientStyle       meStyle;
-    Color               maStartColor;
-    Color               maEndColor;
-    sal_uInt16          mnAngle;
-    sal_uInt16          mnBorder;
-    sal_uInt16          mnOfsX;
-    sal_uInt16          mnOfsY;
-    sal_uInt16          mnIntensityStart;
-    sal_uInt16          mnIntensityEnd;
-    sal_uInt16          mnStepCount;
-
-    Impl_Gradient();
-    Impl_Gradient( const Impl_Gradient& rImplGradient );
-
-    bool operator==( const Impl_Gradient& rImpl_Gradient ) const;
-};
-
 
 class VCL_DLLPUBLIC Gradient
 {
 private:
-    ::o3tl::cow_wrapper< Impl_Gradient >  mpImplGradient;
+    class Impl;
+    ::o3tl::cow_wrapper<Impl>  mpImplGradient;
 
 public:
                     Gradient();
@@ -71,30 +49,30 @@ public:
                     ~Gradient();
 
     void            SetStyle( GradientStyle eStyle );
-    GradientStyle   GetStyle() const { return mpImplGradient->meStyle; }
+    GradientStyle   GetStyle() const;
 
     void            SetStartColor( const Color& rColor );
-    const Color&    GetStartColor() const { return mpImplGradient->maStartColor; }
+    const Color&    GetStartColor() const;
     void            SetEndColor( const Color& rColor );
-    const Color&    GetEndColor() const { return mpImplGradient->maEndColor; }
+    const Color&    GetEndColor() const;
 
     void            SetAngle( sal_uInt16 nAngle );
-    sal_uInt16          GetAngle() const { return mpImplGradient->mnAngle; }
+    sal_uInt16          GetAngle() const;
 
     void            SetBorder( sal_uInt16 nBorder );
-    sal_uInt16          GetBorder() const { return mpImplGradient->mnBorder; }
+    sal_uInt16          GetBorder() const;
     void            SetOfsX( sal_uInt16 nOfsX );
-    sal_uInt16          GetOfsX() const { return mpImplGradient->mnOfsX; }
+    sal_uInt16          GetOfsX() const;
     void            SetOfsY( sal_uInt16 nOfsY );
-    sal_uInt16          GetOfsY() const { return mpImplGradient->mnOfsY; }
+    sal_uInt16          GetOfsY() const;
 
     void            SetStartIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetStartIntensity() const { return mpImplGradient->mnIntensityStart; }
+    sal_uInt16          GetStartIntensity() const;
     void            SetEndIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetEndIntensity() const { return mpImplGradient->mnIntensityEnd; }
+    sal_uInt16          GetEndIntensity() const;
 
     void            SetSteps( sal_uInt16 nSteps );
-    sal_uInt16          GetSteps() const { return mpImplGradient->mnStepCount; }
+    sal_uInt16          GetSteps() const;
 
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 
