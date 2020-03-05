@@ -96,7 +96,7 @@ if (get first item of found_ooos as string) is "" then
   else if (choice as string) is chooseMyOwn then
 	  -- yeah, one needs to use "choose file", otherwise
 	  -- the user would not be able to select the .app
-	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
+	  set the choice to POSIX path of (choose file default location (path to applications folder) with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
   end if
 else if (get first item of found_ooos as string) is chooseMyOwn then
   set the choice to (choose from list found_ooos default items (get first item of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
@@ -106,7 +106,7 @@ else if (get first item of found_ooos as string) is chooseMyOwn then
   else if (choice as string) is chooseMyOwn then
 	  -- yeah, one needs to use "choose file", otherwise
 	  -- the user would not be able to select the .app
-	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
+	  set the choice to POSIX path of (choose file default location (path to applications folder) with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
   end if
 else if (get second item of found_ooos as string) is chooseMyOwn then
   -- set choice to found installation
@@ -120,7 +120,7 @@ else
   else if (choice as string) is chooseMyOwn then
 	  -- yeah, one needs to use "choose file", otherwise
 	  -- the user would not be able to select the .app
-	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
+	  set the choice to POSIX path of (choose file default location (path to applications folder) with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
   end if
 end if	
 
