@@ -1032,6 +1032,17 @@ void DocxExport::WriteSettings()
         pFS->endElementNS( XML_w, XML_compat );
     }
 
+    // Compatibility mode (some features require a certain value here)
+    if (m_aSettings.compatVersion != DocxCompatibility::None)
+    {
+        OUString version = OUString::number(static_cast<int>(m_aSettings.compatVersion));
+        pFS->startElementNS(XML_w, XML_compat);
+        pFS->singleElementNS(XML_w, XML_compatSetting, FSNS(XML_w, XML_name), "compatibilityMode",
+                             FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
+                             FSNS(XML_w, XML_val), version.toUtf8());
+        pFS->endElementNS(XML_w, XML_compat);
+    }
+
     // export current mail merge database and table names
     SwDBData aData = m_pDoc->GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
