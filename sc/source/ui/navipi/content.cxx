@@ -139,6 +139,7 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     m_xTreeView->connect_mouse_release(LINK(this, ScContentTree, MouseReleaseHdl));
     m_xTreeView->connect_key_press(LINK(this, ScContentTree, KeyInputHdl));
     m_xTreeView->connect_popup_menu(LINK(this, ScContentTree, CommandHdl));
+    m_xTreeView->connect_query_tooltip(LINK(this, ScContentTree, QueryTooltipHdl));
 
     rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj.get());
     m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
@@ -235,7 +236,7 @@ void ScContentTree::InsertContent( ScContentId nType, const OUString& rValue )
     }
 }
 
-void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, weld::TreeIter* pEntry) const
+void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, const weld::TreeIter* pEntry) const
 {
     rnRootIndex = ScContentId::ROOT;
     rnChildIndex = SC_CONTENT_NOCHILD;
@@ -282,11 +283,11 @@ void ScContentTree::GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChild
     }
 }
 
-sal_uLong ScContentTree::GetChildIndex(weld::TreeIter* pEntry) const
+sal_uLong ScContentTree::GetChildIndex(const weld::TreeIter* pEntry) const
 {
     ScContentId nRoot;
     sal_uLong nChild;
-    GetEntryIndexes( nRoot, nChild, pEntry );
+    GetEntryIndexes(nRoot, nChild, pEntry);
     return nChild;
 }
 
@@ -604,6 +605,39 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
 
     return bDone;
+}
+
+IMPL_LINK(ScContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUString)
+{
+    OUString aHelpText;
+
+    std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(&rEntry));
+    if (!m_xTreeView->iter_parent(*xParent))
+        xParent.reset();
+
+    if (!xParent)                                 // Top-Level ?
+    {
+        aHelpText = OUString::number(m_xTreeView->iter_n_children(rEntry)) +
+                    " " + m_xTreeView->get_text(rEntry);
+    }
+    else if (m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::NOTE]) == 0)
+    {
+        aHelpText = m_xTreeView->get_text(rEntry);     // notes as help text
+    }
+    else if (m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::AREALINK]) == 0)
+    {
+        auto nIndex = GetChildIndex(&rEntry);
+        if (nIndex != SC_CONTENT_NOCHILD)
+        {
+            const ScAreaLink* pLink = GetLink(nIndex);
+            if (pLink)
+            {
+                aHelpText = pLink->GetFile();           // source file as help text
+            }
+        }
+    }
+
+    return aHelpText;
 }
 
 ScDocument* ScContentTree::GetSourceDocument()
