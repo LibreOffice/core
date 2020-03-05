@@ -1,3 +1,5 @@
+#!/usr/bin/osascript
+
 (*
 
  This file is part of the LibreOffice project.
