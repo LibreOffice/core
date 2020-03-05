@@ -371,30 +371,30 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <items>
-                      <item translatable="yes" context="conditionalentry|typeis">equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">less than</item>
-                      <item translatable="yes" context="conditionalentry|typeis">greater than</item>
-                      <item translatable="yes" context="conditionalentry|typeis">less than or equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">greater than or equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">not equal to</item>
-                      <item translatable="yes" context="conditionalentry|typeis">between</item>
-                      <item translatable="yes" context="conditionalentry|typeis">not between</item>
-                      <item translatable="yes" context="conditionalentry|typeis">duplicate</item>
-                      <item translatable="yes" context="conditionalentry|typeis">not duplicate</item>
-                      <item translatable="yes" context="conditionalentry|typeis">top N elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">bottom N elements</item>
-                      <item translatable="yes" context="conditionalentry|typeis">top N percent</item>
-                      <item translatable="yes" context="conditionalentry|typeis">bottom N percent</item>
-                      <item translatable="yes" context="conditionalentry|typeis">above average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">below average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">above or equal average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">below or equal average</item>
-                      <item translatable="yes" context="conditionalentry|typeis">Error</item>
-                      <item translatable="yes" context="conditionalentry|typeis">No Error</item>
-                      <item translatable="yes" context="conditionalentry|typeis">Begins with</item>
-                      <item translatable="yes" context="conditionalentry|typeis">Ends with</item>
-                      <item translatable="yes" context="conditionalentry|typeis">Contains</item>
-                      <item translatable="yes" context="conditionalentry|typeis">Not Contains</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is less than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is greater than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is less than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is greater than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in top N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in top N percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is in bottom N percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is above average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is below average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is above or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is below or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">is not error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">begins with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">ends with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">contains</item>
+                      <item translatable="yes" context="conditionalentry|typeis">does not contain</item>
                     </items>
                   </object>
                   <packing>
@@ -459,7 +459,7 @@
                     <property name="can_focus">False</property>
                     <items>
                       <item translatable="yes" context="conditionalentry|type">All Cells</item>
-                      <item translatable="yes" context="conditionalentry|type">Cell value is</item>
+                      <item translatable="yes" context="conditionalentry|type">Cell value</item>
                       <item translatable="yes" context="conditionalentry|type">Formula is</item>
                       <item translatable="yes" context="conditionalentry|type">Date is</item>
                     </items>
