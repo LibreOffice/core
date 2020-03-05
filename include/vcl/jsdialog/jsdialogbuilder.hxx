@@ -123,6 +123,7 @@ public:
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
     virtual void set_entry_text(const OUString& rText) override;
+    virtual void set_active(int pos) override;
 };
 
 class VCL_DLLPUBLIC JSNotebook : public JSWidget<SalInstanceNotebook, ::TabControl>
