@@ -231,14 +231,6 @@ SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
             pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport(), nPrefix, rLName );
         }
         break;
-    case XML_TOK_TABLE_EVENT_LISTENERS:
-    case XML_TOK_TABLE_EVENT_LISTENERS_EXT:
-        {
-            // use XEventsSupplier interface of the sheet
-            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
-            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
-        }
-        break;
     default:
         ;
     }
@@ -335,6 +327,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
         pContext = new ScXMLConditionalFormatsContext( GetScImport() );
+        break;
+    case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
+    case XML_ELEMENT(OFFICE_EXT, XML_EVENT_LISTENERS):
+        {
+            // use XEventsSupplier interface of the sheet
+            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            pContext = new XMLEventsImportContext( GetImport(), xSupplier );
+        }
         break;
     }
 
