@@ -90,12 +90,12 @@ class ScContentTree
         @param rnRootIndex  Root index of specified entry is returned.
         @param rnChildIndex  Index of the entry inside its root is returned (or SC_CONTENT_NOCHILD if entry is root).
         @param pEntry  The entry to examine. */
-    void    GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, weld::TreeIter* pEntry) const;
+    void GetEntryIndexes(ScContentId& rnRootIndex, sal_uLong& rnChildIndex, const weld::TreeIter* pEntry) const;
 
     /** Returns the child index of the specified listbox entry.
         @param pEntry  The entry to examine or NULL for the selected entry.
         @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
-    sal_uLong   GetChildIndex(weld::TreeIter* pEntry) const;
+    sal_uLong GetChildIndex(const weld::TreeIter* pEntry) const;
 
     ScDocument* GetSourceDocument();
 
@@ -118,6 +118,7 @@ class ScContentTree
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(AsyncStoreNavigatorSettings, void*, void);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(DragBeginHdl, bool&, bool);
 
 public:
