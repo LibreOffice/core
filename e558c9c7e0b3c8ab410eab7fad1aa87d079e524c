@@ -16,6 +16,24 @@
       "revId": "e558c9c7e0b3c8ab410eab7fad1aa87d079e524c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93e04167_5c3c69be",
+        "filename": "config_host/config_options.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-05T06:56:40Z",
+      "side": 1,
+      "message": "I can certainly make UNLESS_MERGELIBS evaporate in the mergelibs case, just thought that being explicit was better.\n\nAnd it is UNLESS_MERGELIBS(SALL_DLLPUBLIC) when actually used??",
+      "parentUuid": "9da49654_4a9c2cec",
+      "revId": "e558c9c7e0b3c8ab410eab7fad1aa87d079e524c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
