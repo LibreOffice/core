@@ -102,7 +102,7 @@ private:
     std::unique_ptr<weld::Label> m_xHeightLb;
     std::unique_ptr<weld::Label> m_xFiInfo2;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldOriginalHeight;
-    std::unique_ptr<weld::CheckButton> m_xCbxDistrot;
+    std::unique_ptr<weld::CheckButton> m_xCbxDistort;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldInfo1;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldInfo2;
 
