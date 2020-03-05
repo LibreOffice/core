@@ -5,6 +5,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/toolkit/combobox.hxx>
 
 void JSDialogSender::notifyDialogState()
 {

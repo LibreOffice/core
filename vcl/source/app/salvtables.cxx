@@ -72,6 +72,8 @@
 #include <bitmaps.hlst>
 #include <wizdlg.hxx>
 #include <vcl/salvtables.hxx>
+#include <messagedialog.hxx>
+#include <vcl/toolkit/combobox.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
