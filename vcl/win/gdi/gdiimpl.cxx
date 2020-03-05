@@ -2111,7 +2111,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         // and embed into a TransformPrimitive2D containing the transformation.
         //
         // A 2nd problem is that the NoLineJoin mode (basegfx::B2DLineJoin::NONE
-        // && rLineWidths > 0.0) creates polygon fill infos that are not reusable
+        // && !bIsHairline) creates polygon fill infos that are not reusable
         // for the fill case (see ::drawPolyLine below) - thus we would need a
         // bool and/or two system-dependent paths buffered - doable, but complicated.
         //
@@ -2204,7 +2204,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidths,
+    const basegfx::B2DVector& rLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -2217,14 +2217,34 @@ bool WinSalGraphicsImpl::drawPolyLine(
         return true;
     }
 
+    // need to check/handle LineWidth when ObjectToDevice transformation is used
+    basegfx::B2DVector aLineWidth(rLineWidth);
+    const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
+    const bool bIsHairline(aLineWidth.equalZero());
+
+    // tdf#124848 calculate-back logical LineWidth for a hairline
+    // since this implementation hands over the transformation to
+    // the graphic sub-system
+    if(bIsHairline)
+    {
+        aLineWidth = basegfx::B2DVector(1.0, 1.0);
+
+        if(!bObjectToDeviceIsIdentity)
+        {
+            basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            aObjectToDeviceInv.invert();
+            aLineWidth = aObjectToDeviceInv * aLineWidth;
+        }
+    }
+
     Gdiplus::Graphics aGraphics(mrParent.getHDC());
     const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
     const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
-    Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
+    Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(aLineWidth.getX()));
     bool bNoLineJoin(false);
 
     // Set full (Object-to-Device) transformation - if used
-    if(rObjectToDevice.isIdentity())
+    if(bObjectToDeviceIsIdentity)
     {
         aGraphics.ResetTransform();
     }
@@ -2246,7 +2266,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     {
         case basegfx::B2DLineJoin::NONE :
         {
-            if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
+            if(!bIsHairline)
             {
                 bNoLineJoin = true;
             }
@@ -2315,44 +2335,12 @@ bool WinSalGraphicsImpl::drawPolyLine(
     // activate to stroke directly
     if(bDoDirectGDIPlusStroke && bStrokeUsed)
     {
-        // tdf#130478
-        // Unfortunately GDIPlus wants to have the dash pattern relative to line width
-        // which gets problematic due to the good old office's hairline definition. This
-        // means that we do not *have* the real line width here, but 0.0 - or in the case
-        // of GDIPlus (here) 1.0.
-        // This is 'corrected' in several locations, e.g. OutputDevice::DrawPolyLineDirect
-        // to 1.0 and VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect to 0.0.
-        // This would need some cleanup what will be highly problematic due to the usage
-        // of hairlines with line width of 0.0 being a pixel always and leading to different
-        // visualizations. More bad - the potential of having pretty 'invisible' lines
-        // in unexpected places when zooming far out. Another problematic aspect of that hairline
-        // definition is that this makes hairlines per definition view-transformation dependent
-        // regarding their 'core' line width and the area they cover - handled in Primitives,
-        // but not easy to do.
-        // The way out here is to calculate back a single pixel from device to logic
-        // (Object coordinates) to have the 'logic', view-dependent line width and use it.
-        // That works for the cost of a matrix inversion - sigh.
+        // tdf#124848 the fix of tdf#130478 that was needed here before
+        // gets much easier when already handling the hairline case above,
+        // the back-calculated logical linewidth is already here, just use it.
+        // Still be careful - a zero LineWidth *should* not happen, but...
         std::vector<Gdiplus::REAL> aDashArray(pStroke->size());
-        double fFactor(1.0);
-
-        if(rLineWidths.getX() <= 1.0)
-        {
-            // no 'real' line width, need to calculate back the logic line width
-            // for a one pixel hairline
-            basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
-            aObjectToDeviceInv.invert();
-            const basegfx::B2DVector aOnePixel(aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0));
-
-            if(aOnePixel.getX() > 0.0)
-            {
-                fFactor = 1.0 / aOnePixel.getX();
-            }
-        }
-        else
-        {
-            // use logic line width
-            fFactor = 1.0 / rLineWidths.getX();
-        }
+        const double fFactor(aLineWidth.equalZero() ? 1.0 : 1.0 / aLineWidth.getX());
 
         for(size_t a(0); a < pStroke->size(); a++)
         {

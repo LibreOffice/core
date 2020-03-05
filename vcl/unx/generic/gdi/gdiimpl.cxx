@@ -1665,20 +1665,27 @@ bool X11SalGraphicsImpl::drawPolyLine(
     // need to check/handle LineWidth when ObjectToDevice transformation is used
     basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    const basegfx::B2DVector aDeviceLineWidths(bObjectToDeviceIsIdentity ? rLineWidth : rObjectToDevice * rLineWidth);
-    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidths.getX() < 1.0 && aLineWidth.getX() >= 1.0);
     basegfx::B2DHomMatrix aObjectToDeviceInv;
 
-    if(bCorrectLineWidth)
+    // tdf#124848 calculate-back logical LineWidth for a hairline.
+    // This implementation does not hand over the transformation to
+    // the graphic sub-system, but the triangulation data is prepared
+    // view-independent based on the logic LineWidth, so we need to
+    // know it
+    if(aLineWidth.equalZero())
     {
-        if(aObjectToDeviceInv.isIdentity())
-        {
-            aObjectToDeviceInv = rObjectToDevice;
-            aObjectToDeviceInv.invert();
-        }
+        aLineWidth = basegfx::B2DVector(1.0, 1.0);
 
-        // calculate-back logical LineWidth for a hairline
-        aLineWidth = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+        if(!bObjectToDeviceIsIdentity)
+        {
+            if(aObjectToDeviceInv.isIdentity())
+            {
+                aObjectToDeviceInv = rObjectToDevice;
+                aObjectToDeviceInv.invert();
+            }
+
+            aLineWidth = aObjectToDeviceInv * aLineWidth;
+        }
     }
 
     // try to access buffered data

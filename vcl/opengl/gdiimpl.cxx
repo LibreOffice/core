@@ -1678,7 +1678,12 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
     aPolyPolygonLine.transform(rObjectToDevice);
     if(bPixelSnapHairline) { aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine); }
-    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
+
+    // tdf#124848 get correct LineWidth in discrete coordinates,
+    // take hairline case into account
+    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero()
+        ? basegfx::B2DVector(1.0, 1.0)
+        : rObjectToDevice * rLineWidth);
 
     for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
     {

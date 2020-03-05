@@ -369,7 +369,11 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     {
         aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine);
     }
-    const basegfx::B2DVector aLineWidth(rObjectToDevice * rLineWidth);
+
+    // tdf#124848 get correct LineWidth in discrete coordinates,
+    // take hairline case into account
+    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero() ? basegfx::B2DVector(1.0, 1.0)
+                                                               : rObjectToDevice * rLineWidth);
 
     // setup poly-polygon path
     QPainterPath aPath;

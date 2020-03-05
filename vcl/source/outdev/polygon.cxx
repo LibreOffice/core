@@ -88,7 +88,6 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
         if(bSuccess && IsLineColor())
         {
-            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
             for(auto const& rPolygon : aB2DPolyPolygon)
@@ -97,7 +96,8 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                     aTransform,
                     rPolygon,
                     0.0,
-                    aB2DLineWidth,
+                    // tdf#124848 hairline
+                    basegfx::B2DVector::getEmptyVector(),
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
@@ -209,14 +209,14 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
 
         if(bSuccess && IsLineColor())
         {
-            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
             bSuccess = mpGraphics->DrawPolyLine(
                 aTransform,
                 aB2DPolygon,
                 0.0,
-                aB2DLineWidth,
+                // tdf#124848 hairline
+                basegfx::B2DVector::getEmptyVector(),
                 nullptr, // MM01
                 basegfx::B2DLineJoin::NONE,
                 css::drawing::LineCap_BUTT,
@@ -318,7 +318,6 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
         if(bSuccess && IsLineColor())
         {
-            const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
             for(auto const& rPolygon : aB2DPolyPolygon)
@@ -327,7 +326,8 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     aTransform,
                     rPolygon,
                     0.0,
-                    aB2DLineWidth,
+                    // tdf#124848 hairline
+                    basegfx::B2DVector::getEmptyVector(),
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,

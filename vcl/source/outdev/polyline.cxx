@@ -65,14 +65,14 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 
     const basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
     const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
-    const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
     const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
     if(mpGraphics->DrawPolyLine(
         aTransform,
         aB2DPolyLine,
         0.0,
-        aB2DLineWidth,
+        // tdf#124848 hairline
+        basegfx::B2DVector::getEmptyVector(),
         nullptr, // MM01
         basegfx::B2DLineJoin::NONE,
         css::drawing::LineCap_BUTT,
@@ -341,8 +341,6 @@ bool OutputDevice::DrawPolyLineDirect(
     {
         // combine rObjectTransform with WorldToDevice
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
-        const bool bLineWidthZero(basegfx::fTools::equalZero(fLineWidth));
-        const basegfx::B2DVector aB2DLineWidth(bLineWidthZero ? 1.0 : fLineWidth, bLineWidthZero ? 1.0 : fLineWidth);
         const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
 
         // draw the polyline
@@ -350,7 +348,8 @@ bool OutputDevice::DrawPolyLineDirect(
             aTransform,
             rB2DPolygon,
             fTransparency,
-            aB2DLineWidth,
+            // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
+            basegfx::B2DVector(fLineWidth, fLineWidth),
             pStroke, // MM01
             eLineJoin,
             eLineCap,
