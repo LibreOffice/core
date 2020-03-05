@@ -246,6 +246,12 @@ void JSComboBox::set_entry_text(const OUString& rText)
     notifyDialogState();
 }
 
+void JSComboBox::set_active(int pos)
+{
+    SalInstanceComboBoxWithEdit::set_active(pos);
+    notifyDialogState();
+}
+
 JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceNotebook, ::TabControl>(aOwnedToplevel, pControl, pBuilder,
