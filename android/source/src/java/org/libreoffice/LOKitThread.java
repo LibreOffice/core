@@ -436,7 +436,7 @@ class LOKitThread extends Thread {
      * Processes touch events.
      */
     private void touch(String touchType, PointF documentCoordinate) {
-        if (mTileProvider == null) {
+        if (mTileProvider == null || mViewportMetrics == null) {
             return;
         }
 
