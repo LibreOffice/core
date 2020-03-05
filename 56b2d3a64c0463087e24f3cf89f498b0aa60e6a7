@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "509f3d25_dcc8c893",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T10:03:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6144b511_61219190",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35d281da_a32aa642",
         "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a62e598e_3b82f2f5",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T10:03:14Z",
+      "side": 1,
+      "message": "I assume the issue is that it always returns the index of filled cell with greatest index, e.g. in col2 rows 5 and 6 should be empty in the screenshot you shared",
+      "parentUuid": "35d281da_a32aa642",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "95afc701_ed0f8bcb",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T10:03:14Z",
+      "side": 1,
+      "message": "Sorry, I dont get it. We will need two loops to iterate each cell of the sheet.",
+      "parentUuid": "8f6019a6_7db0fa93",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34c75517_af51e9e8",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49089387_dd1c32d3",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T10:03:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34c75517_af51e9e8",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
