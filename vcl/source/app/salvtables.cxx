@@ -52,7 +52,7 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
-#include <salvtables.hxx>
+#include <vcl/salvtables.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
