@@ -68,7 +68,8 @@
 #include <tools/diagnose_ex.h>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
-#include <jsdialog/jsdialogbuilder.hxx>
+#include <comphelper/lok.hxx>
+#include <vcl/jsdialog/jsdialogbuilder.hxx>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>
