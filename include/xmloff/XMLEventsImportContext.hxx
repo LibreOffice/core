@@ -67,6 +67,8 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
 
+    XMLEventsImportContext(SvXMLImport& rImport);
+
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
