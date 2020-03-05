@@ -79,6 +79,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTextImportContex
     {
         pContext = new SvxXMLTextImportContext( GetImport(), mxText );
     }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES ) )
+    {
+        pContext = new SvXMLStylesContext( GetImport() );
+        GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
+    }
     return pContext;
 }
 
@@ -91,8 +96,7 @@ SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nP
     }
     else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
     {
-        pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
+        // dealt with in createFastChildContext
     }
     else
     {
