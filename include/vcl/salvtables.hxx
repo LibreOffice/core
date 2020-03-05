@@ -22,7 +22,8 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-#include <messagedialog.hxx>
+
+class MessageDialog;
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -158,7 +159,7 @@ public:
     virtual ~SalInstanceBuilder() override;
 };
 
-class SalInstanceMenu : public weld::Menu
+class SAL_DLLPUBLIC_RTTI SalInstanceMenu : public weld::Menu
 {
 private:
     VclPtr<PopupMenu> m_xMenu;
