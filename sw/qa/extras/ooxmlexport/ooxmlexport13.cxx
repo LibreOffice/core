@@ -19,6 +19,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XTextContentAppend.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -554,6 +555,34 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     // Without the accompanying fix in place, this test would have failed, as the w14:textFill
     // element was missing.
     CPPUNIT_ASSERT_EQUAL(nTransparence, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
+{
+    // Create a document, set footnote numbering type to ARABIC_ZERO.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings
+        = xFootnotesSupplier->getFootnoteSettings();
+    sal_uInt16 nNumberingType = style::NumberingType::ARABIC_ZERO;
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+
+    // Insert a footnote.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFootnote(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                uno::UNO_QUERY);
+    xTextContentAppend->appendTextContent(xFootnote, {});
+
+    reload("Office Open XML Text", "");
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
+    // because the exporter had no idea what markup to use for ARABIC_ZERO.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "decimalZero");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
