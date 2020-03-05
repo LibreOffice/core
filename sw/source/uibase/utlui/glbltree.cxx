@@ -1267,13 +1267,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     if ( !nFiles )
         return;
 
-    bool bMove = false;
-    if ( !_pContent )
-    {
-        SvTreeListEntry* pLast = LastVisible();
-        _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
-        bMove = true;
-    }
+    bool bMove = _pContent == nullptr;;
     sal_uLong nEntryCount = GetEntryCount();
     const OUString* pFileNames = _rFiles.getConstArray();
     SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
@@ -1281,7 +1275,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     // after insertion of the first new content the 'pCont' parameter becomes invalid
     // find the index of the 'anchor' content to always use a current anchor content
     size_t nAnchorContent = m_pSwGlblDocContents->size() - 1;
-    if ( !bMove )
+    if (!bMove)
     {
         for (size_t nContent = 0; nContent < m_pSwGlblDocContents->size();
                 ++nContent)
@@ -1341,7 +1335,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
 
         rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );
     }
-    if ( bMove )
+    if (bMove)
     {
         Update( false );
         rSh.MoveGlobalDocContent(
