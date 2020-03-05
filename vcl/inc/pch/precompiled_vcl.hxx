@@ -261,7 +261,7 @@
 #include <saltimer.hxx>
 #include <salusereventlist.hxx>
 #include <salvd.hxx>
-#include <salvtables.hxx>
+#include <vcl/salvtables.hxx>
 #include <svdata.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
