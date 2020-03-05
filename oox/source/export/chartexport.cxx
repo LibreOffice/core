@@ -2304,6 +2304,8 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                             if( xValues.is() )
                                 exportSeriesValues( xValues, XML_xVal );
                         }
+                        else if( mxCategoriesValues.is() )
+                            exportSeriesCategory( mxCategoriesValues, XML_xVal );
                     }
 
                     if( eChartType == chart::TYPEID_BUBBLE )
@@ -2429,13 +2431,13 @@ void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence
     pFS->endElement( FSNS( XML_c, XML_tx ) );
 }
 
-void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequence > & xValueSeq )
+void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequence > & xValueSeq, sal_Int32 nValueType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement(FSNS(XML_c, XML_cat));
+    pFS->startElement(FSNS(XML_c, nValueType));
 
     OUString aCellRange = xValueSeq.is() ? xValueSeq->getSourceRangeRepresentation() : OUString();
-    const Sequence< Sequence< OUString >> aFinalSplitSource = getSplitCategoriesList(aCellRange);
+    const Sequence< Sequence< OUString >> aFinalSplitSource = (nValueType == XML_cat) ? getSplitCategoriesList(aCellRange) : Sequence< Sequence< OUString>>(0);
     aCellRange = parseFormula( aCellRange );
 
     if(aFinalSplitSource.getLength() > 1)
@@ -2496,7 +2498,7 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
         pFS->endElement(FSNS(XML_c, XML_strRef));
     }
 
-    pFS->endElement( FSNS( XML_c, XML_cat ) );
+    pFS->endElement( FSNS( XML_c, nValueType ) );
 }
 
 void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequence > & xValueSeq, sal_Int32 nValueType )
