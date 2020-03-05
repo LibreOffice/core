@@ -573,7 +573,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
 
     m_xDragSourceRanges = nullptr;       // don't keep source after dropping
 
-    TransferableHelper::DragFinished( nDropAction );
+    TransferDataContainer::DragFinished( nDropAction );
 }
 
 void ScTransferObj::SetDragHandlePos( SCCOL nX, SCROW nY )
@@ -932,7 +932,7 @@ sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_In
         nRet = reinterpret_cast< sal_Int64 >( this );
     }
     else
-        nRet = TransferableHelper::getSomething(rId);
+        nRet = TransferDataContainer::getSomething(rId);
     return nRet;
 }
 

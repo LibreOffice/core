@@ -584,7 +584,7 @@ void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
 
     m_pDragSourceView.reset();
 
-    TransferableHelper::DragFinished( nDropAction );
+    TransferDataContainer::DragFinished( nDropAction );
 }
 
 void ScDrawTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
@@ -755,7 +755,7 @@ sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sa
         nRet = reinterpret_cast< sal_Int64 >( this );
     }
     else
-        nRet = TransferableHelper::getSomething(rId);
+        nRet = TransferDataContainer::getSomething(rId);
     return nRet;
 }
 
