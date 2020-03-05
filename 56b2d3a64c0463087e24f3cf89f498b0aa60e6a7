@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "cf5f173b_c636bd5f",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T16:57:31Z",
+      "side": 1,
+      "message": "I found the right function to find the last row of a specific column: GetLastDataRow(). Checkout patchset 3.",
+      "parentUuid": "eb45e180_28e202a0",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f6019a6_7db0fa93",
         "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
         "patchSetId": 1
@@ -158,6 +176,24 @@
       "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09961b1c_1f360fad",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T16:57:31Z",
+      "side": 1,
+      "message": "Now nEndRow has different values for different columns.",
+      "parentUuid": "6b1e50c5_32ade095",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
