@@ -57,7 +57,6 @@ def main():
     print('{{TopMenu}}')
     print('{{Menu}}')
     print('{{Menu.Development}}')
-    print('{{OrigLang|}}')
     print()
     print('Generated on ' + str(datetime.datetime.now()))
     for k,v in uitest_dirs.items():
