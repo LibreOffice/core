@@ -65,7 +65,7 @@
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
 #include <comphelper/lok.hxx>
-#include <jsdialog/jsdialogbuilder.hxx>
+#include <vcl/jsdialog/jsdialogbuilder.hxx>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>

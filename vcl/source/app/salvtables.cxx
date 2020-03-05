@@ -71,7 +71,7 @@
 #include <aboutdialog.hxx>
 #include <bitmaps.hlst>
 #include <wizdlg.hxx>
-#include <salvtables.hxx>
+#include <vcl/salvtables.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)

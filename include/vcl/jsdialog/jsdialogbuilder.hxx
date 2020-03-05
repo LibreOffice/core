@@ -6,7 +6,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
-#include <salvtables.hxx>
+#include <vcl/salvtables.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
 
@@ -25,8 +25,11 @@ public:
 
 class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
 {
+    vcl::LOKWindowId m_nWindowId;
+
 public:
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
@@ -39,10 +42,13 @@ public:
                                                            bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
                                                           bool bTakeOwnership = false) override;
+
+    static std::map<vcl::LOKWindowId, JSInstanceBuilder*>& GetLOKWeldBuilderMap();
+    static JSInstanceBuilder* FindLOKWeldBuilder(vcl::LOKWindowId nWindowId);
 };
 
 template <class BaseInstanceClass, class VclClass>
-class JSWidget : public BaseInstanceClass, public JSDialogSender
+class VCL_DLLPUBLIC JSWidget : public BaseInstanceClass, public JSDialogSender
 {
 public:
     JSWidget(VclPtr<vcl::Window> aOwnedToplevel, VclClass* pObject, SalInstanceBuilder* pBuilder,

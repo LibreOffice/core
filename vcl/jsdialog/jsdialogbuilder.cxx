@@ -1,4 +1,4 @@
-#include <jsdialog/jsdialogbuilder.hxx>
+#include <vcl/jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
@@ -30,12 +30,41 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
                              ? dynamic_cast<SalInstanceWidget*>(pParent)->getWidget()
                              : nullptr,
                          rUIRoot, rUIFile)
+    , m_nWindowId(0)
 {
+}
+
+JSInstanceBuilder::~JSInstanceBuilder()
+{
+    if (m_nWindowId)
+        GetLOKWeldBuilderMap().erase(m_nWindowId);
+}
+
+std::map<vcl::LOKWindowId, JSInstanceBuilder*>& JSInstanceBuilder::GetLOKWeldBuilderMap()
+{
+    // Map to remember the LOKWindowId <-> Builder binding.
+    static std::map<vcl::LOKWindowId, JSInstanceBuilder*> s_aLOKWeldBuildersMap;
+
+    return s_aLOKWeldBuildersMap;
+}
+
+JSInstanceBuilder* JSInstanceBuilder::FindLOKWeldBuilder(vcl::LOKWindowId nWindowId)
+{
+    const auto it = GetLOKWeldBuilderMap().find(nWindowId);
+    if (it != GetLOKWeldBuilderMap().end())
+        return it->second;
+
+    return nullptr;
 }
 
 std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, bool bTakeOwnership)
 {
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
+    m_nWindowId = pDialog->GetLOKWindowId();
+
+    GetLOKWeldBuilderMap().insert(
+        std::map<vcl::LOKWindowId, JSInstanceBuilder*>::value_type(m_nWindowId, this));
+
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
                                                : nullptr);
     if (bTakeOwnership && pDialog)
