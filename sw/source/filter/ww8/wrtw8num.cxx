@@ -241,6 +241,11 @@ void MSWordExportBase::NumberingDefinitions()
     }
 }
 
+/**
+ * Converts the SVX numbering type to MSONFC.
+ *
+ * This is used for paragraph numbering purposes.
+ */
 static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
 {
     sal_uInt8 nRet = 0;
