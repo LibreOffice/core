@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "033ece29_00f88693",
+        "filename": "bin/find-mergedlib-can-be-private.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-05T08:29:57Z",
+      "side": 1,
+      "message": "Nitpick: can this be python3? python2 is almost EOL, the sole use of it is our linux baseline builds, AFAIK. Certainly not a great choice in new code.",
+      "revId": "69ade2c82838b624eefd44825166a3a998329266",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
