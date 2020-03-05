@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9c3daa2e_4b7c4097",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002138
+      },
+      "writtenOn": "2020-03-05T10:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a62e598e_3b82f2f5",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f6019a6_7db0fa93",
         "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
         "patchSetId": 1
