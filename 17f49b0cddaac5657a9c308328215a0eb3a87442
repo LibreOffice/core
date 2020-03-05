@@ -69,6 +69,24 @@
       "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "febc439a_b45c75bf",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-05T07:48:50Z",
+      "side": 0,
+      "message": "It is the \"correct\" one but it shouldn\u0027t be as a change in you patch. Did you do a \"git rebase -r\" and checked fixed the potential merge conflicts? Also after a rebase you should be able to upload again even if you don\u0027t change anything.",
+      "parentUuid": "59cb9c56_90b24063",
+      "revId": "17f49b0cddaac5657a9c308328215a0eb3a87442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
