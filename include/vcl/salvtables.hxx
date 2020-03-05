@@ -19,10 +19,11 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-#include <messagedialog.hxx>
+
+class MessageDialog;
+class ComboBox;
 
 class SalInstanceBuilder : public weld::Builder
 {
