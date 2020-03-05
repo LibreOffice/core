@@ -937,24 +937,12 @@ cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 
 # Folder
-cmd/32/dbformopen.png cmd/32/open.png
-cmd/32/dbqueryopen.png cmd/32/open.png
-cmd/32/dbreportopen.png cmd/32/open.png
-cmd/32/dbtableopen.png cmd/32/open.png
 cmd/32/insertdoc.png cmd/32/open.png
 cmd/32/open_h.png cmd/32/open.png
 
-cmd/lc_dbformopen.png cmd/lc_open.png
-cmd/lc_dbqueryopen.png cmd/lc_open.png
-cmd/lc_dbreportopen.png cmd/lc_open.png
-cmd/lc_dbtableopen.png cmd/lc_open.png
 cmd/lc_insertdoc.png cmd/lc_open.png
 cmd/lc_open_h.png cmd/lc_open.png
 
-cmd/sc_dbformopen.png cmd/sc_open.png
-cmd/sc_dbqueryopen.png cmd/sc_open.png
-cmd/sc_dbreportopen.png cmd/sc_open.png
-cmd/sc_dbtableopen.png cmd/sc_open.png
 cmd/sc_insertdoc.png cmd/sc_open.png
 cmd/sc_open_h.png cmd/sc_open.png
 
@@ -1595,18 +1583,18 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Outline
 cmd/32/outlinedown.png cmd/32/movedown.png
-cmd/32/outlineleft.png cmd/32/decrementindent.png
-cmd/32/outlineright.png cmd/32/incrementindent.png
+cmd/32/outlineleft.png cmd/32/decrementlevel.png
+cmd/32/outlineright.png cmd/32/incrementlevel.png
 cmd/32/outlineup.png cmd/32/moveup.png
 
 cmd/lc_outlinedown.png cmd/lc_movedown.png
-cmd/lc_outlineleft.png cmd/lc_decrementindent.png
-cmd/lc_outlineright.png cmd/lc_incrementindent.png
+cmd/lc_outlineleft.png cmd/lc_decrementlevel.png
+cmd/lc_outlineright.png cmd/lc_incrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
 
 cmd/sc_outlinedown.png cmd/sc_movedown.png
-cmd/sc_outlineleft.png cmd/sc_decrementindent.png
-cmd/sc_outlineright.png cmd/sc_incrementindent.png
+cmd/sc_outlineleft.png cmd/sc_decrementlevel.png
+cmd/sc_outlineright.png cmd/sc_incrementlevel.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
 
 # Index
