@@ -71,7 +71,7 @@
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <wizdlg.hxx>
-#include <salvtables.hxx>
+#include <vcl/salvtables.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
