@@ -403,6 +403,8 @@ void ScInputWindow::Select()
                 EditView* pView = aTextWindow.GetEditView();
                 if (pView)
                 {
+                    if (comphelper::LibreOfficeKit::isActive())
+                        TextGrabFocus();
                     pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
                     pScMod->InputChanged(pView);
                     SetOkCancelMode();
