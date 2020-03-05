@@ -5079,6 +5079,8 @@ void DocxAttributeOutput::WritePostponedChart()
             SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
 
             m_rExport.SdrExporter().startDMLAnchorInline(rChart.frame, rChart.size);
+            // tdf#131121 This is only rendered correctly in Word when setting the compat version accordingly
+            m_rExport.setCompatibilityVersion(DocxCompatibility::Version15);
 
             OUString sName("Object 1");
             uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );

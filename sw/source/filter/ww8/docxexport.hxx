@@ -51,6 +51,15 @@ namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
 } } }
 
+// https://docs.microsoft.com/en-us/openspecs/office_standards/ms-docx/90138c4d-eb18-4edc-aa6c-dfb799cb1d0d
+enum class DocxCompatibility {
+    None = 0, // binary doc
+    Version11 = 11, // binary doc
+    Version12 = 12, // ECMA-376 (default)
+    Version14 = 14,
+    Version15 = 15,
+};
+
 /// Data to be written in the document settings part of the document
 struct DocxSettingsData
 {
@@ -60,6 +69,7 @@ struct DocxSettingsData
     int defaultTabStop;
     bool revisionView;      // don't show tracked changes
     bool trackRevisions;    // Should 'Track Revisions' be set
+    DocxCompatibility compatVersion = DocxCompatibility::None;    // Set a certain ooxml compatibility version
 };
 
 /// The class that does all the actual DOCX export-related work.
@@ -290,6 +300,8 @@ public:
 
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }
+
+    void setCompatibilityVersion( DocxCompatibility version ) { m_aSettings.compatVersion = version; }
 
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
 
