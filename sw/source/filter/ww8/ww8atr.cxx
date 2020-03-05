@@ -730,6 +730,10 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
 
     // nothing, WW does the same (undocumented)
     case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
+    case SVX_NUM_ARABIC_ZERO:
+        // 0x16, msonfcArabicLZ
+        nRet = 22;
+        break;
     }
     return nRet;
 }

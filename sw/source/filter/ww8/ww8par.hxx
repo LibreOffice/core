@@ -157,6 +157,8 @@ public:
     ~WW8ListManager() COVERITY_NOEXCEPT_FALSE;
     SwNumRule* GetNumRule(size_t i);
     size_t GetWW8LSTInfoNum() const{return maLSTInfos.size();}
+    static SvxNumType GetSvxNumTypeFromMSONFC(sal_uInt16 nMSONFC);
+
 private:
     wwSprmParser const maSprmParser;
     SwWW8ImplReader& rReader;

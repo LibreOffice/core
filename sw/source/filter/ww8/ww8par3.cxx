@@ -527,6 +527,102 @@ static OUString sanitizeString(const OUString& rString)
     return rString;
 }
 
+SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
+{
+    SvxNumType nType(SVX_NUM_ARABIC);
+
+    switch (nNFC)
+    {
+        case 0:
+            nType = SVX_NUM_ARABIC;
+            break;
+        case 1:
+            nType = SVX_NUM_ROMAN_UPPER;
+            break;
+        case 2:
+            nType = SVX_NUM_ROMAN_LOWER;
+            break;
+        case 3:
+            nType = SVX_NUM_CHARS_UPPER_LETTER_N;
+            break;
+        case 4:
+            nType = SVX_NUM_CHARS_LOWER_LETTER_N;
+            break;
+        case 5:
+            // actually: ORDINAL
+            nType = SVX_NUM_ARABIC;
+            break;
+        case 22:
+            // 0x16, msonfcArabicLZ
+            nType = SVX_NUM_ARABIC_ZERO;
+            break;
+        case 23:
+            nType = SVX_NUM_CHAR_SPECIAL;
+
+            break;
+        case 255:
+            nType = SVX_NUM_NUMBER_NONE;
+            break;
+        case 14:
+        case 19:
+            nType = SVX_NUM_FULL_WIDTH_ARABIC;
+            break;
+        case 30:
+            nType = SVX_NUM_TIAN_GAN_ZH;
+            break;
+        case 31:
+            nType = SVX_NUM_DI_ZI_ZH;
+            break;
+        case 35:
+        case 36:
+        case 37:
+        case 11:
+        case 39:
+            nType = SVX_NUM_NUMBER_LOWER_ZH;
+            break;
+        case 34:
+            nType = SVX_NUM_NUMBER_UPPER_ZH_TW;
+            break;
+        case 38:
+            nType = SVX_NUM_NUMBER_UPPER_ZH;
+            break;
+        case 10:
+            nType = SVX_NUM_NUMBER_TRADITIONAL_JA;
+            break;
+        case 20:
+            nType = SVX_NUM_AIU_FULLWIDTH_JA;
+            break;
+        case 12:
+            nType = SVX_NUM_AIU_HALFWIDTH_JA;
+            break;
+        case 21:
+            nType = SVX_NUM_IROHA_FULLWIDTH_JA;
+            break;
+        case 13:
+            nType = SVX_NUM_IROHA_HALFWIDTH_JA;
+            break;
+        case 24:
+            nType = SVX_NUM_HANGUL_SYLLABLE_KO;
+            break;
+        case 25:
+            nType = SVX_NUM_HANGUL_JAMO_KO;
+            break;
+        case 41:
+            nType = SVX_NUM_NUMBER_HANGUL_KO;
+            break;
+        //case 42:
+        //case 43:
+        case 44:
+            nType = SVX_NUM_NUMBER_UPPER_KO;
+            break;
+        default:
+            nType = SVX_NUM_ARABIC;
+            break;
+    }
+
+    return nType;
+}
+
 bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet>& rpItemSet,
     sal_uInt16 nLevelStyle, bool bSetStartNo,
     std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
@@ -742,67 +838,11 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     if( 0 <= aLVL.nStartAt )
         nStartNo = static_cast<sal_uInt16>(aLVL.nStartAt);
 
-    switch( aLVL.nNFC )
+    nType = GetSvxNumTypeFromMSONFC(aLVL.nNFC);
+    //For i120928,type info
+    if (bIsPicBullet)
     {
-        case 0:
-            nType = SVX_NUM_ARABIC;
-            break;
-        case 1:
-            nType = SVX_NUM_ROMAN_UPPER;
-            break;
-        case 2:
-            nType = SVX_NUM_ROMAN_LOWER;
-            break;
-        case 3:
-            nType = SVX_NUM_CHARS_UPPER_LETTER_N;
-            break;
-        case 4:
-            nType = SVX_NUM_CHARS_LOWER_LETTER_N;
-            break;
-        case 5:
-            // actually: ORDINAL
-            nType = SVX_NUM_ARABIC;
-            break;
-        case 22:
-            // 0x16, msonfcArabicLZ
-            nType = SVX_NUM_ARABIC_ZERO;
-            break;
-        case 23:
-            nType = SVX_NUM_CHAR_SPECIAL;
-            //For i120928,type info
-            if (bIsPicBullet)
-            {
-                nType = SVX_NUM_BITMAP;
-            }
-
-            break;
-        case 255:
-            nType = SVX_NUM_NUMBER_NONE;
-            break;
-        case 14:
-        case 19:nType = SVX_NUM_FULL_WIDTH_ARABIC; break;
-        case 30:nType = SVX_NUM_TIAN_GAN_ZH; break;
-        case 31:nType = SVX_NUM_DI_ZI_ZH; break;
-        case 35:
-        case 36:
-        case 37:
-        case 11:
-        case 39:nType = SVX_NUM_NUMBER_LOWER_ZH; break;
-        case 34:nType = SVX_NUM_NUMBER_UPPER_ZH_TW; break;
-        case 38:nType = SVX_NUM_NUMBER_UPPER_ZH; break;
-        case 10:nType = SVX_NUM_NUMBER_TRADITIONAL_JA; break;
-        case 20:nType = SVX_NUM_AIU_FULLWIDTH_JA; break;
-        case 12:nType = SVX_NUM_AIU_HALFWIDTH_JA; break;
-        case 21:nType = SVX_NUM_IROHA_FULLWIDTH_JA; break;
-        case 13:nType = SVX_NUM_IROHA_HALFWIDTH_JA; break;
-        case 24:nType = SVX_NUM_HANGUL_SYLLABLE_KO; break;
-        case 25:nType = SVX_NUM_HANGUL_JAMO_KO; break;
-        case 41:nType = SVX_NUM_NUMBER_HANGUL_KO; break;
-        //case 42:
-        //case 43:
-        case 44:nType = SVX_NUM_NUMBER_UPPER_KO; break;
-        default:
-                nType= SVX_NUM_ARABIC; break;
+        nType = SVX_NUM_BITMAP;
     }
 
     //If a number level is not going to be used, then record this fact

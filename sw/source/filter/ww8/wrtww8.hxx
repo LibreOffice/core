@@ -1136,7 +1136,11 @@ public:
     void SetHdFtIndex(unsigned int nHdFtIndex) { m_nHdFtIndex = nHdFtIndex; }
     void IncrementHdFtIndex() { ++m_nHdFtIndex; }
 
-    /// Convert the SVX numbering type to id
+    /**
+     * Converts the SVX numbering type to MSONFC.
+     *
+     * This is used for section, footnote and endnote numbering purposes.
+     */
     static sal_uInt8 GetNumId( sal_uInt16 eNumType );
 
     /// Guess the script (asian/western).
