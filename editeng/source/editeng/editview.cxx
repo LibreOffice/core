@@ -486,6 +486,11 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
             if (pParent && pParent->GetLOKWindowId() != 0)
                 return;
 
+            // We need to avoid to grab the focus from the formula bar
+            vcl::Window* pWindow = Application::GetFocusWindow();
+            if (!pWindow || pWindow != pImpEditView->pOutWin)
+                return;
+
             static const OString aPayload = OString::boolean(true);
             pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
             pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
