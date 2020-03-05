@@ -821,19 +821,16 @@ cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 cmd/32/colorview.png cmd/32/graphicfilterinvert.png
 cmd/32/grafinvert.png cmd/32/graphicfilterinvert.png
 cmd/32/grafmode.png cmd/32/graphicdialog.png
-cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
 cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
-cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
 cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
-cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
 cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 
 # shapes
@@ -961,11 +958,6 @@ cmd/sc_dbtableopen.png cmd/sc_open.png
 cmd/sc_insertdoc.png cmd/sc_open.png
 cmd/sc_open_h.png cmd/sc_open.png
 
-# Import
-cmd/32/importfromfile.png cmd/32/dataimport.png
-cmd/lc_importfromfile.png cmd/lc_dataimport.png
-cmd/sc_importfromfile.png cmd/sc_dataimport.png
-
 # Wizard
 cmd/32/commontaskbarvisible.png cmd/32/autopilotmenu.png
 cmd/32/dbnewformautopilot.png cmd/32/autopilotmenu.png
@@ -1064,13 +1056,10 @@ cmd/sc_fieldnames.png cmd/sc_addfield.png
 
 # Edit
 cmd/32/dsbeditdoc.png cmd/32/editdoc.png
-cmd/32/quickedit.png cmd/32/editdoc.png
 
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
-cmd/lc_quickedit.png cmd/lc_editdoc.png
 
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
-cmd/sc_quickedit.png cmd/sc_editdoc.png
 
 # Quit
 cmd/32/closewin.png cmd/32/quit.png
@@ -1097,13 +1086,10 @@ cmd/sc_protecttracechangemode.png cmd/sc_cellprotection.png
 
 # Page
 cmd/32/insertobjctrl.png cmd/32/drawchart.png
-cmd/32/modifypage.png cmd/32/pagedialog.png
 
 cmd/lc_insertobjctrl.png cmd/lc_drawchart.png
-cmd/lc_modifypage.png cmd/lc_pagedialog.png
 
 cmd/sc_insertobjctrl.png cmd/sc_drawchart.png
-cmd/sc_modifypage.png cmd/sc_pagedialog.png
 
 # Line
 cmd/32/shapeslinemenu.png cmd/32/line.png
@@ -1148,7 +1134,6 @@ cmd/lc_pageup.png cmd/lc_previouspage.png
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_pageup.png cmd/sc_previouspage.png
-
 
 # >
 cmd/32/navigateforward.png cmd/32/nextrecord.png
@@ -2069,7 +2054,7 @@ res/lx03163.png res/ott_32_8.png
 res/lx03164.png cmd/32/open.png
 res/lx03165.png cmd/32/save.png
 res/lx03167.png cmd/32/openremote.png
-res/lx03188.png res/ods_32_8.png
+res/lx03188.png cmd/32/dbviewtables.png
 res/lx03189.png cmd/32/open.png
 res/lx03217.png res/odg_32_8.pn
 res/lx03218.png res/odg_32_8.png
@@ -2160,7 +2145,7 @@ res/sx03164.png cmd/sc_open.png
 res/sx03165.png cmd/sc_save.png
 res/sx03167.png cmd/sc_openremote.png
 res/sx03187.png cmd/sc_dbviewtables.png
-res/sx03188.png res/ods_16_8.png
+res/sx03188.png cmd/sc_dbviewtables.png
 res/sx03189.png cmd/sc_open.png
 res/sx03201.png cmd/sc_dbviewqueries.png
 res/sx03202.png cmd/sc_copy.png
