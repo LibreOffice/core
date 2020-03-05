@@ -791,6 +791,8 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu, bool)
 
 void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
+    bool bUpdateHard = false;
+
     SvTreeListEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? static_cast<SwGlblDocContent*>(pEntry->GetUserData()) : nullptr;
     // If a RequestHelp is called during the dialogue,
@@ -826,12 +828,13 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                     m_pActiveShell->UpdateTableOf(*pContent->GetTOX());
                 pSelEntry = NextSelected(pSelEntry);
             }
-
+            bUpdateHard = true;
         }
         break;
         case CTX_UPDATE_INDEX:
         {
             nSlot = FN_UPDATE_TOX;
+            bUpdateHard = true;
         }
         break;
         case CTX_UPDATE_LINK:
@@ -841,6 +844,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
             if(CTX_UPDATE_ALL == nSelectedPopupEntry)
                 nSlot = FN_UPDATE_TOX;
             pCont = nullptr;
+            bUpdateHard = true;
         }
         break;
         case CTX_EDIT:
@@ -1012,7 +1016,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         GotoContent(pCont);
     if(nSlot)
         rDispatch.Execute(nSlot);
-    if(Update( false ))
+    if (Update(bUpdateHard))
         Display();
 }
 
@@ -1096,7 +1100,7 @@ bool    SwGlobalTree::Update(bool bHard)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
     bool bRet = false;
-    if(pActView && pActView->GetWrtShellPtr())
+    if (pActView && pActView->GetWrtShellPtr())
     {
         const SwWrtShell* pOldShell = m_pActiveShell;
         m_pActiveShell = pActView->GetWrtShellPtr();
@@ -1151,7 +1155,6 @@ bool    SwGlobalTree::Update(bool bHard)
                 *m_pSwGlblDocContents = std::move( *pTempContents );
             }
         }
-
     }
     else
     {
