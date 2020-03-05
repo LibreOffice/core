@@ -7734,6 +7734,9 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         case SVX_NUM_CHAR_SPECIAL:
             fmt = "bullet";
             break;
+        case SVX_NUM_ARABIC_ZERO:
+            fmt = "decimalZero";
+            break;
         case SVX_NUM_PAGEDESC:
         case SVX_NUM_BITMAP:
         default:
