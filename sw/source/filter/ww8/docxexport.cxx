@@ -57,8 +57,10 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include "wrtww8.hxx"
+#include <fmtcntnt.hxx>
 #include <fmtline.hxx>
 #include <fmtpdsc.hxx>
+#include <frameformats.hxx>
 #include <frmfmt.hxx>
 #include <section.hxx>
 #include <ftninfo.hxx>
@@ -510,6 +512,8 @@ ErrCode DocxExport::ExportDocument_Impl()
 
     // Make sure images are counted from one, even when exporting multiple documents.
     oox::drawingml::DrawingML::ResetCounters();
+
+    SetCompatVersion();
 
     WriteMainText();
 
@@ -1032,6 +1036,17 @@ void DocxExport::WriteSettings()
         pFS->endElementNS( XML_w, XML_compat );
     }
 
+    // Compatibility mode (some features require a certain value here)
+    if (m_aSettings.compatVersion != DocxCompatibility::None)
+    {
+        OUString version = OUString::number(static_cast<int>(m_aSettings.compatVersion));
+        pFS->startElementNS(XML_w, XML_compat);
+        pFS->singleElementNS(XML_w, XML_compatSetting, FSNS(XML_w, XML_name), "compatibilityMode",
+                             FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
+                             FSNS(XML_w, XML_val), version.toUtf8());
+        pFS->endElementNS(XML_w, XML_compat);
+    }
+
     // export current mail merge database and table names
     SwDBData aData = m_pDoc->GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
@@ -1142,10 +1157,17 @@ void DocxExport::WriteSettings()
                         else if( rPropVal.Name == "val" )
                             rPropVal.Value >>= aValue;
                     }
-                    pFS->singleElementNS( XML_w, XML_compatSetting,
-                        FSNS( XML_w, XML_name ), aName.toUtf8(),
-                        FSNS( XML_w, XML_uri ),  aUri.toUtf8(),
-                        FSNS( XML_w, XML_val ),  aValue.toUtf8());
+
+                    // Only use the grabbag compat version if it's larger than
+                    // the version requested by our own export
+                    if (aValue.toInt32() >  static_cast<sal_Int32>(m_aSettings.compatVersion))
+                    {
+                        pFS->singleElementNS( XML_w, XML_compatSetting,
+                            FSNS( XML_w, XML_name ), aName.toUtf8(),
+                            FSNS( XML_w, XML_uri ),  aUri.toUtf8(),
+                            FSNS( XML_w, XML_val ),  aValue.toUtf8());
+                    }
+
                 }
 
                 pFS->endElementNS( XML_w, XML_compat );
@@ -1528,6 +1550,32 @@ bool DocxExport::isMirroredMargin()
         bMirroredMargins = true;
     }
     return bMirroredMargins;
+}
+
+void DocxExport::SetCompatVersion()
+{
+    SwFrameFormats* pFormats = m_pDoc->GetSpzFrameFormats();
+    bool bFoundChart = false;
+
+    SwFrameFormat* pFormat(nullptr);
+    for (size_t i = 0; i < pFormats->size(); ++i)
+    {
+        pFormat = (*pFormats)[i];
+        if (pFormat->Which() != RES_FLYFRMFMT)
+            continue;
+        const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
+        if (!pIdx || !pIdx->GetNodes().IsDocNodes())
+            continue;
+        SwNode* pNd = m_pDoc->GetNodes()[pIdx->GetIndex() + 1];
+        SwOLENode* pOLEnd = dynamic_cast<SwOLENode*>(pNd);
+        if (pOLEnd && pOLEnd->GetOLEObj().GetObject().IsChart())
+            bFoundChart = true;
+    }
+
+    // tdf#131121 Some documents with charts are only rendered correctly in Word
+    // when setting the compat version to 15.
+    if (bFoundChart)
+        m_aSettings.compatVersion = DocxCompatibility::Version15;
 }
 
 void DocxExport::WriteMainText()
