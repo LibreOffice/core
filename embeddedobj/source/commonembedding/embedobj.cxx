@@ -91,6 +91,10 @@ void OCommonEmbeddedObject::Deactivate()
     if ( !xClientSite.is() )
         throw embed::WrongStateException(); //TODO: client site is not set!
 
+    // tdf#131146 close frame before saving of the document
+    // (during CloseFrame() call some changes could be detected not registered in util::XModifiable)
+    m_xDocHolder->CloseFrame();
+
     // store document if it is modified
     if ( xModif.is() && xModif->isModified() )
     {
@@ -109,8 +113,6 @@ void OCommonEmbeddedObject::Deactivate()
                 anyEx );
         }
     }
-
-    m_xDocHolder->CloseFrame();
 
     xClientSite->visibilityChanged( false );
 }
