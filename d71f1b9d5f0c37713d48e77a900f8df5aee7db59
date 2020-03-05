@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "437b14c7_ed912a5a",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-05T17:42:33Z",
+      "side": 1,
+      "message": "We can still combine the two loops over mnCol. We don\u0027t need a map to hold our row values because the value is used only once in the next loop.",
+      "revId": "d71f1b9d5f0c37713d48e77a900f8df5aee7db59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
