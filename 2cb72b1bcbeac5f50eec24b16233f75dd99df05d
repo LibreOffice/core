@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "626d270d_1a7e647f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-05T14:07:30Z",
+      "side": 1,
+      "message": "A space between the colon and \"Condition\" would make it neater",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "2cb72b1bcbeac5f50eec24b16233f75dd99df05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "700e1668_3947b2fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-05T14:07:30Z",
+      "side": 1,
+      "message": "\"are fixed as desired\" sounds like \"I made what you asked me to\". This is not how you write commit messages. They are not for \"mentors\", they are for some unknown future readers who would wonder why was this renamed, for what purpose. So a good message would make a brief description in its first line, like \"tdf#131045: Make condition names grammatically correct\", and then in following lines would expand that, e.g. giving examples how it was and how it now is...",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "2cb72b1bcbeac5f50eec24b16233f75dd99df05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5250ce7c_7cbeae05",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-05T14:07:30Z",
+      "side": 1,
+      "message": "Not all \"Cell value\" variants should start with \"is\": that was the whole point, and here you should had only added \"is\" in front of those variants that make grammatically proper phrase. This, and some other, cases are clearly wrong to change.",
+      "range": {
+        "startLine": 444,
+        "startChar": 71,
+        "endLine": 444,
+        "endChar": 74
+      },
+      "revId": "2cb72b1bcbeac5f50eec24b16233f75dd99df05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dda54048_a17f51f9",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-05T14:07:30Z",
+      "side": 1,
+      "message": "And \"Date is\" should not had been changed, as I explained in the bug.",
+      "range": {
+        "startLine": 459,
+        "startChar": 71,
+        "endLine": 459,
+        "endChar": 74
+      },
+      "revId": "2cb72b1bcbeac5f50eec24b16233f75dd99df05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
