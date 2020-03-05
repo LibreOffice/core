@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "eb45e180_28e202a0",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-05T16:27:39Z",
+      "side": 1,
+      "message": "Yes. The used function in getLastRow actually returns the whole data range as a rectangular area and not the last row for a specific column. I\u0027m not yet sure about the correct behavior for data transformations.",
+      "parentUuid": "9c3daa2e_4b7c4097",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f6019a6_7db0fa93",
         "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
         "patchSetId": 1
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Sorry, I dont get it. We will need two loops to iterate each cell of the sheet.",
       "parentUuid": "8f6019a6_7db0fa93",
+      "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1e50c5_32ade095",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-03-05T16:27:39Z",
+      "side": 1,
+      "message": "This was meant about the two loops over mnCol. The two could be combined but as mentioned about the end row issue currently we will always get the same end row for all columns anyway.",
+      "parentUuid": "95afc701_ed0f8bcb",
       "revId": "56b2d3a64c0463087e24f3cf89f498b0aa60e6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
