@@ -91,6 +91,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
+{
+    load(DATA_DIRECTORY, "tdf125261.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    //apply autocorrect StartAutoCorrect
+    dispatchCommand(mxComponent, ".uno:AutoFormatApply", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+    // without the fix, it hangs
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("https://www.example.com/"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
 {
     load(DATA_DIRECTORY, "tdf126340.odt");
