@@ -20,47 +20,62 @@
 #include <tools/gen.hxx>
 #include <vcl/gradient.hxx>
 
-Impl_Gradient::Impl_Gradient() :
-    maStartColor( COL_BLACK ),
-    maEndColor( COL_WHITE )
+class Gradient::Impl
 {
-    meStyle             = GradientStyle::Linear;
-    mnAngle             = 0;
-    mnBorder            = 0;
-    mnOfsX              = 50;
-    mnOfsY              = 50;
-    mnIntensityStart    = 100;
-    mnIntensityEnd      = 100;
-    mnStepCount         = 0;
-}
+public:
+    GradientStyle       meStyle;
+    Color               maStartColor;
+    Color               maEndColor;
+    sal_uInt16          mnAngle;
+    sal_uInt16          mnBorder;
+    sal_uInt16          mnOfsX;
+    sal_uInt16          mnOfsY;
+    sal_uInt16          mnIntensityStart;
+    sal_uInt16          mnIntensityEnd;
+    sal_uInt16          mnStepCount;
 
-Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
-    maStartColor( rImplGradient.maStartColor ),
-    maEndColor( rImplGradient.maEndColor )
-{
-    meStyle             = rImplGradient.meStyle;
-    mnAngle             = rImplGradient.mnAngle;
-    mnBorder            = rImplGradient.mnBorder;
-    mnOfsX              = rImplGradient.mnOfsX;
-    mnOfsY              = rImplGradient.mnOfsY;
-    mnIntensityStart    = rImplGradient.mnIntensityStart;
-    mnIntensityEnd      = rImplGradient.mnIntensityEnd;
-    mnStepCount         = rImplGradient.mnStepCount;
-}
+    Impl()
+        : meStyle (GradientStyle::Linear)
+        , maStartColor(COL_BLACK)
+        , maEndColor(COL_WHITE)
+        , mnAngle(0)
+        , mnBorder(0)
+        , mnOfsX(50)
+        , mnOfsY(50)
+        , mnIntensityStart(100)
+        , mnIntensityEnd(100)
+        , mnStepCount(0)
+    {
+    }
 
-bool Impl_Gradient::operator==( const Impl_Gradient& rImpl_Gradient ) const
-{
-    return (meStyle           == rImpl_Gradient.meStyle)           &&
-         (mnAngle           == rImpl_Gradient.mnAngle)           &&
-         (mnBorder          == rImpl_Gradient.mnBorder)          &&
-         (mnOfsX            == rImpl_Gradient.mnOfsX)            &&
-         (mnOfsY            == rImpl_Gradient.mnOfsY)            &&
-         (mnStepCount       == rImpl_Gradient.mnStepCount)       &&
-         (mnIntensityStart  == rImpl_Gradient.mnIntensityStart)  &&
-         (mnIntensityEnd    == rImpl_Gradient.mnIntensityEnd)    &&
-         (maStartColor      == rImpl_Gradient.maStartColor)      &&
-         (maEndColor        == rImpl_Gradient.maEndColor);
-}
+    Impl(const Impl& rImplGradient)
+        : meStyle (rImplGradient.meStyle)
+        , maStartColor(rImplGradient.maStartColor)
+        , maEndColor(rImplGradient.maEndColor)
+        , mnAngle(rImplGradient.mnAngle)
+        , mnBorder(rImplGradient.mnBorder)
+        , mnOfsX(rImplGradient.mnOfsX)
+        , mnOfsY(rImplGradient.mnOfsY)
+        , mnIntensityStart(rImplGradient.mnIntensityStart)
+        , mnIntensityEnd(rImplGradient.mnIntensityEnd)
+        , mnStepCount(rImplGradient.mnStepCount)
+    {
+    }
+
+    bool operator==(const Impl& rImpl_Gradient) const
+    {
+        return (meStyle == rImpl_Gradient.meStyle)
+            && (mnAngle  == rImpl_Gradient.mnAngle)
+            && (mnBorder == rImpl_Gradient.mnBorder)
+            && (mnOfsX == rImpl_Gradient.mnOfsX)
+            && (mnOfsY == rImpl_Gradient.mnOfsY)
+            && (mnStepCount == rImpl_Gradient.mnStepCount)
+            && (mnIntensityStart == rImpl_Gradient.mnIntensityStart)
+            && (mnIntensityEnd == rImpl_Gradient.mnIntensityEnd)
+            && (maStartColor == rImpl_Gradient.maStartColor)
+            && (maEndColor == rImpl_Gradient.maEndColor);
+    }
+};
 
 Gradient::Gradient() = default;
 
@@ -79,9 +94,20 @@ Gradient::Gradient( GradientStyle eStyle,
 
 Gradient::~Gradient() = default;
 
+
+GradientStyle Gradient::GetStyle() const
+{
+    return mpImplGradient->meStyle;
+}
+
 void Gradient::SetStyle( GradientStyle eStyle )
 {
     mpImplGradient->meStyle = eStyle;
+}
+
+const Color& Gradient::GetStartColor() const
+{
+    return mpImplGradient->maStartColor;
 }
 
 void Gradient::SetStartColor( const Color& rColor )
@@ -89,9 +115,19 @@ void Gradient::SetStartColor( const Color& rColor )
     mpImplGradient->maStartColor = rColor;
 }
 
+const Color& Gradient::GetEndColor() const
+{
+    return mpImplGradient->maEndColor;
+}
+
 void Gradient::SetEndColor( const Color& rColor )
 {
     mpImplGradient->maEndColor = rColor;
+}
+
+sal_uInt16 Gradient::GetAngle() const
+{
+    return mpImplGradient->mnAngle;
 }
 
 void Gradient::SetAngle( sal_uInt16 nAngle )
@@ -99,9 +135,19 @@ void Gradient::SetAngle( sal_uInt16 nAngle )
     mpImplGradient->mnAngle = nAngle;
 }
 
+sal_uInt16 Gradient::GetBorder() const
+{
+    return mpImplGradient->mnBorder;
+}
+
 void Gradient::SetBorder( sal_uInt16 nBorder )
 {
     mpImplGradient->mnBorder = nBorder;
+}
+
+sal_uInt16 Gradient::GetOfsX() const
+{
+    return mpImplGradient->mnOfsX;
 }
 
 void Gradient::SetOfsX( sal_uInt16 nOfsX )
@@ -109,9 +155,19 @@ void Gradient::SetOfsX( sal_uInt16 nOfsX )
     mpImplGradient->mnOfsX = nOfsX;
 }
 
+sal_uInt16 Gradient::GetOfsY() const
+{
+    return mpImplGradient->mnOfsY;
+}
+
 void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
     mpImplGradient->mnOfsY = nOfsY;
+}
+
+sal_uInt16 Gradient::GetStartIntensity() const
+{
+    return mpImplGradient->mnIntensityStart;
 }
 
 void Gradient::SetStartIntensity( sal_uInt16 nIntens )
@@ -119,9 +175,19 @@ void Gradient::SetStartIntensity( sal_uInt16 nIntens )
     mpImplGradient->mnIntensityStart = nIntens;
 }
 
+sal_uInt16 Gradient::GetEndIntensity() const
+{
+    return mpImplGradient->mnIntensityEnd;
+}
+
 void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
     mpImplGradient->mnIntensityEnd = nIntens;
+}
+
+sal_uInt16 Gradient::GetSteps() const
+{
+    return mpImplGradient->mnStepCount;
 }
 
 void Gradient::SetSteps( sal_uInt16 nSteps )
