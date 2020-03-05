@@ -718,10 +718,10 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     preDraw();
     SAL_INFO("vcl.skia", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
-    // need to check/handle LineWidth when ObjectToDevice transformation is used
-    const basegfx::B2DVector aDeviceLineWidth(rObjectToDevice * rLineWidth);
-    const bool bCorrectLineWidth(aDeviceLineWidth.getX() < 1.0 && rLineWidth.getX() >= 1.0);
-    const basegfx::B2DVector aLineWidth(bCorrectLineWidth ? rLineWidth : aDeviceLineWidth);
+    // tdf#124848 get correct LineWidth in discrete coordinates,
+    // take hairline case into account
+    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero() ? basegfx::B2DVector(1.0, 1.0)
+                                                               : rObjectToDevice * rLineWidth);
 
     // Skia does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation),

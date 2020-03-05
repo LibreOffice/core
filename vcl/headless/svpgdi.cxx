@@ -1525,22 +1525,20 @@ bool SvpSalGraphics::drawPolyLine(
     // need to check/handle LineWidth when ObjectToDevice transformation is used
     basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    const basegfx::B2DVector aDeviceLineWidth(bObjectToDeviceIsIdentity ? rLineWidth : rObjectToDevice * rLineWidth);
-    const bool bCorrectLineWidth(!bObjectToDeviceIsIdentity && aDeviceLineWidth.getX() < 1.0 && aLineWidth.getX() >= 1.0);
 
-    // on-demand inverse of ObjectToDevice transformation
-    basegfx::B2DHomMatrix aObjectToDeviceInv;
-
-    if(bCorrectLineWidth)
+    // tdf#124848 calculate-back logical LineWidth for a hairline
+    // since this implementation hands over the transformation to
+    // the graphic sub-system
+    if(aLineWidth.equalZero())
     {
-        if(aObjectToDeviceInv.isIdentity())
-        {
-            aObjectToDeviceInv = rObjectToDevice;
-            aObjectToDeviceInv.invert();
-        }
+        aLineWidth = basegfx::B2DVector(1.0, 1.0);
 
-        // calculate-back logical LineWidth for a hairline
-        aLineWidth = aObjectToDeviceInv * basegfx::B2DVector(1.0, 1.0);
+        if(!bObjectToDeviceIsIdentity)
+        {
+            basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+            aObjectToDeviceInv.invert();
+            aLineWidth = aObjectToDeviceInv * aLineWidth;
+        }
     }
 
     // PixelOffset used: Need to reflect in linear transformation

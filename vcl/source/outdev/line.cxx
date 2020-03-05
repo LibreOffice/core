@@ -116,7 +116,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         // at least transform with double precision to device coordinates; this will
         // avoid pixel snap of single, appended lines
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
-        const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
         basegfx::B2DPolygon aB2DPolyLine;
 
         aB2DPolyLine.append(basegfx::B2DPoint(rStartPt.X(), rStartPt.Y()));
@@ -129,7 +128,8 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
-            aB2DLineWidth,
+            // tdf#124848 hairline
+            basegfx::B2DVector::getEmptyVector(),
             nullptr, // MM01
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,
@@ -241,7 +241,8 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                     basegfx::B2DHomMatrix(),
                     rB2DPolygon,
                     0.0,
-                    basegfx::B2DVector(1.0,1.0),
+                    // tdf#124848 hairline
+                    basegfx::B2DVector::getEmptyVector(),
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
