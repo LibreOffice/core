@@ -50,7 +50,7 @@ class tdf62267(UITestCase):
         self.assertEqual(list_state['Children'], '1')
 
         xTreeEntry = xList.getChild('0')
-        self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1\tCell value is = 1")
+        self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1\tCell value = 1")
 
         xCancelBtn = xCondFormatMgr.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
