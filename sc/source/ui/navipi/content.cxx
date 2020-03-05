@@ -1117,7 +1117,7 @@ static bool lcl_GetRange( const ScDocument* pDoc, ScContentId nType, const OUStr
     return bFound;
 }
 
-static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScContentId nType, vcl::Window* pWin )
+static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScContentId nType, weld::TreeView& rTreeView )
 {
     bool bDisallow = true;
 
@@ -1150,7 +1150,9 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
 
             SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
-            pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+
+            rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
+            rTreeView.enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
 
             bDisallow = false;
         }
@@ -1159,7 +1161,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
     return bDisallow;
 }
 
-static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDragSrc nFlags, vcl::Window* pWin )
+static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDragSrc nFlags, weld::TreeView& rTreeView )
 {
     bool bDisallow = true;
 
@@ -1188,7 +1190,9 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         pTransferObj->SetDragSourceFlags( nFlags );
 
         SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
-        pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+
+        rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
+        rTreeView.enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
 
         bDisallow = false;
     }
@@ -1312,7 +1316,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                             ScRange aRange;
                             if ( lcl_GetRange( &rSrcDoc, nType, aText, aRange ) )
                             {
-                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, ScDragSrc::Navigator, pParentWindow );
+                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, ScDragSrc::Navigator, *m_xTreeView );
                             }
                         }
                         else if ( nType == ScContentId::TABLE )
@@ -1321,13 +1325,13 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                             if ( rSrcDoc.GetTable( aText, nTab ) )
                             {
                                 ScRange aRange(0, 0, nTab, rSrcDoc.MaxCol(), rSrcDoc.MaxRow(), nTab);
-                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), pParentWindow );
+                                bDisallow = lcl_DoDragCells( pSrcShell, aRange, (ScDragSrc::Navigator | ScDragSrc::Table), *m_xTreeView );
                             }
                         }
                         else if ( nType == ScContentId::GRAPHIC || nType == ScContentId::OLEOBJECT ||
                                     nType == ScContentId::DRAWING )
                         {
-                            bDisallow = lcl_DoDragObject( pSrcShell, aText, nType, pParentWindow );
+                            bDisallow = lcl_DoDragObject( pSrcShell, aText, nType, *m_xTreeView );
 
                             //  during ExecuteDrag the navigator can be deleted
                             //  -> don't access member anymore !!!
@@ -1342,7 +1346,8 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
             if (!aLinkURL.isEmpty())
                 m_xTransferObj->SetLinkURL(aLinkURL, aLinkText);
 
-            m_xTransferObj->StartDrag(pParentWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
+            rtl::Reference<TransferDataContainer> xHelper(m_xTransferObj.get());
+            m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
 
             bDisallow = false;
         }

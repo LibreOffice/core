@@ -292,6 +292,7 @@
                 <property name="vexpand">True</property>
                 <property name="model">liststore1</property>
                 <property name="headers_visible">False</property>
+                <property name="reorderable">True</property>
                 <property name="search_column">1</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
