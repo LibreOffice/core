@@ -5075,16 +5075,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     m_xSBase.reset(new WW8ScannerBase(m_pStrm,m_pTableStream,m_pDataStream, m_xWwFib.get()));
 
-    static const SvxNumType eNumTA[16] =
-    {
-        SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-        SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-        SVX_NUM_ARABIC, SVX_NUM_ARABIC
-    };
-
     if (m_xSBase->AreThereFootnotes())
     {
         static const SwFootnoteNum eNumA[4] =
@@ -5097,8 +5087,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
         aInfo.ePos = FTNPOS_PAGE;
         aInfo.eNum = eNumA[m_xWDop->rncFootnote];
-        sal_uInt16 nfcFootnoteRef = m_xWDop->nfcFootnoteRef & 0xF;
-        aInfo.aFormat.SetNumberingType( eNumTA[nfcFootnoteRef] );
+        sal_uInt16 nfcFootnoteRef = m_xWDop->nfcFootnoteRef;
+        aInfo.aFormat.SetNumberingType( WW8ListManager::GetSvxNumTypeFromMSONFC(nfcFootnoteRef)  );
         if( m_xWDop->nFootnote )
             aInfo.nFootnoteOffset = m_xWDop->nFootnote - 1;
         m_rDoc.SetFootnoteInfo( aInfo );
@@ -5107,8 +5097,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     {
         SwEndNoteInfo aInfo;
         aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
-        sal_uInt16 nfcEdnRef = m_xWDop->nfcEdnRef & 0xF;
-        aInfo.aFormat.SetNumberingType( eNumTA[nfcEdnRef] );
+        sal_uInt16 nfcEdnRef = m_xWDop->nfcEdnRef;
+        aInfo.aFormat.SetNumberingType( WW8ListManager::GetSvxNumTypeFromMSONFC(nfcEdnRef) );
         if( m_xWDop->nEdn )
             aInfo.nFootnoteOffset = m_xWDop->nEdn - 1;
         m_rDoc.SetEndNoteInfo( aInfo );
