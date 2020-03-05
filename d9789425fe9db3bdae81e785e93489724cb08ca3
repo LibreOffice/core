@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "88e61b3b_7ad22ab7",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2020-03-05T05:28:20Z",
+      "side": 1,
+      "message": "Converting to a assert() or removing the line?",
+      "parentUuid": "0e9dfbda_2863c09a",
+      "revId": "d9789425fe9db3bdae81e785e93489724cb08ca3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1957101_ff6bd225",
         "filename": "sc/source/ui/unoobj/docuno.cxx",
         "patchSetId": 2
