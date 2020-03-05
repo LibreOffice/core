@@ -175,7 +175,7 @@ private:
     void exportSeriesText(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_cat );
     void exportSeriesValues(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_val );
     void exportShapeProps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
