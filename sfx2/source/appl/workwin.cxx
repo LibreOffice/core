@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <config_feature_desktop.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -459,7 +460,11 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     bDockingAllowed(true),
     bInternalDockingAllowed(true),
     bAllChildrenVisible(true),
+#if !defined(ANDROID) || HAVE_FEATURE_ANDROID_LOK
     bIsFullScreen( false ),
+#else // Fennec-based Android Viewer
+    bIsFullScreen( true ),
+#endif
 #if HAVE_FEATURE_DESKTOP
     bShowStatusBar( true ),
 #else
