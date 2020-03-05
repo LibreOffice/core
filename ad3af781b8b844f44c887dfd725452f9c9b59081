@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bc0b065_769245b2",
+        "filename": "include/rtl/ustring.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-05T11:03:43Z",
+      "side": 1,
+      "message": "Please don\u0027t change this one since there\u0027s nothing wrong here and changing this file is almost equivalent to a full rebuild.",
+      "range": {
+        "startLine": 2371,
+        "startChar": 0,
+        "endLine": 2371,
+        "endChar": 51
+      },
+      "revId": "ad3af781b8b844f44c887dfd725452f9c9b59081",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b200e81_a14f502d",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 40
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-05T11:03:43Z",
+      "side": 1,
+      "message": "It seems you must use \"GetLongPathNameW\" instead of \"GetLongPathName\"",
+      "range": {
+        "startLine": 1680,
+        "startChar": 33,
+        "endLine": 1680,
+        "endChar": 48
+      },
+      "revId": "ad3af781b8b844f44c887dfd725452f9c9b59081",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a584274_d5be46d7",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 40
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-05T11:03:43Z",
+      "side": 1,
+      "message": "You should use \"GetLongPathNameW\" instead and let the other 3 args unchanged.\nOnly the last arg \"false\" must be removed",
+      "range": {
+        "startLine": 696,
+        "startChar": 41,
+        "endLine": 696,
+        "endChar": 56
+      },
+      "revId": "ad3af781b8b844f44c887dfd725452f9c9b59081",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
