@@ -207,6 +207,7 @@ public:
                 || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")
                     .Class("ScDocument").GlobalNamespace()) // not owning
                 || name == "s_aLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
+                || name == "s_aLOKWeldBuildersMap" // LOK only, similar case as above
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                 || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning
