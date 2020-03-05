@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextContentAppend.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -52,7 +53,7 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
 }
 
-DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
+DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 {
     auto xNumberingRules
         = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
@@ -63,6 +64,36 @@ DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
     // i.e. numbering type was ARABIC, not ARABIC_ZERO.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
                          aMap["NumberingType"].get<sal_uInt16>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
+{
+    // Create a document, set footnote numbering type to ARABIC_ZERO.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings
+        = xFootnotesSupplier->getFootnoteSettings();
+    sal_uInt16 nNumberingType = style::NumberingType::ARABIC_ZERO;
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+
+    // Insert a footnote.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFootnote(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                uno::UNO_QUERY);
+    xTextContentAppend->appendTextContent(xFootnote, {});
+
+    reload("MS Word 97", "");
+    xFootnotesSupplier.set(mxComponent, uno::UNO_QUERY);
+    sal_uInt16 nExpected = style::NumberingType::ARABIC_ZERO;
+    auto nActual = getProperty<sal_uInt16>(xFootnotesSupplier->getFootnoteSettings(), "NumberingType");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64
+    // - Actual  : 4
+    // i.e. the numbering type was ARABIC, not ARABIC_ZERO.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")

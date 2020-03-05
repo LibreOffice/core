@@ -1329,6 +1329,7 @@ void WW8AttributeOutput::StartSection()
 void WW8AttributeOutput::SectFootnoteEndnotePr()
 {
     const SwFootnoteInfo& rInfo = m_rWW8Export.m_pDoc->GetFootnoteInfo();
+    const SwEndNoteInfo& rEndNoteInfo = m_rWW8Export.m_pDoc->GetEndNoteInfo();
     m_rWW8Export.InsUInt16( NS_sprm::sprmSRncFtn );
     switch( rInfo.m_eNum )
     {
@@ -1336,6 +1337,13 @@ void WW8AttributeOutput::SectFootnoteEndnotePr()
     case FTNNUM_CHAPTER:  m_rWW8Export.pO->push_back( sal_uInt8/*rncRstSect*/ (1) ); break;
     default:              m_rWW8Export.pO->push_back( sal_uInt8/*rncCont*/ (0) ); break;
     }
+
+    m_rWW8Export.InsUInt16(NS_sprm::sprmSNfcFtnRef);
+    sal_uInt8 nId = WW8Export::GetNumId(rInfo.m_aFormat.GetNumberingType());
+    SwWW8Writer::InsUInt16(*m_rWW8Export.pO, nId);
+    m_rWW8Export.InsUInt16(NS_sprm::sprmSNfcEdnRef);
+    nId = WW8Export::GetNumId(rEndNoteInfo.m_aFormat.GetNumberingType());
+    SwWW8Writer::InsUInt16(*m_rWW8Export.pO, nId);
 }
 
 void WW8AttributeOutput::SectionFormProtection( bool bProtected )
