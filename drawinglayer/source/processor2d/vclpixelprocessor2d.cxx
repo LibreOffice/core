@@ -166,26 +166,6 @@ namespace drawinglayer::processor2d
             const bool bStrokeAttributeNotUsed(rSource.getStrokeAttribute().isDefault()
                 || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen());
 
-            // check if LineWidth can be simplified in world coordinates
-            double fLineWidth(rSource.getLineAttribute().getWidth());
-
-            if(basegfx::fTools::more(fLineWidth, 0.0))
-            {
-                basegfx::B2DVector aLineWidth(fLineWidth, 0.0);
-                aLineWidth = maCurrentTransformation * aLineWidth;
-                const double fWorldLineWidth(aLineWidth.getLength());
-
-                // draw simple hairline for small line widths
-                // see also RenderPolygonStrokePrimitive2D which is used if this try fails
-                bool bIsAntiAliasing = getOptionsDrawinglayer().IsAntiAliasing();
-                if (   (basegfx::fTools::lessOrEqual(fWorldLineWidth, 1.0) && bIsAntiAliasing)
-                    || (basegfx::fTools::lessOrEqual(fWorldLineWidth, 1.5) && !bIsAntiAliasing))
-                {
-                    // draw simple hairline
-                    fLineWidth = 0.0;
-                }
-            }
-
             const basegfx::BColor aLineColor(
                 maBColorModifierStack.getModifiedColor(
                     rSource.getLineAttribute().getColor()));
@@ -197,7 +177,8 @@ namespace drawinglayer::processor2d
             return mpOutputDevice->DrawPolyLineDirect(
                 maCurrentTransformation,
                 rLocalPolygon,
-                fLineWidth,
+                // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
+                rSource.getLineAttribute().getWidth(),
                 fTransparency,
                 bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(),
                 rSource.getLineAttribute().getLineJoin(),

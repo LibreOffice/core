@@ -997,7 +997,8 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
     if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize())
     {
         nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
-        nLineWidth = 1;
+        // tdf#124848 hairline
+        nLineWidth = 0;
     }
 
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);

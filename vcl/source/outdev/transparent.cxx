@@ -260,7 +260,6 @@ void OutputDevice::DrawTransparent(
 
         if( bDrawnOk && IsLineColor() )
         {
-            const basegfx::B2DVector aHairlineWidth(1,1);
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
             for(auto const& rPolygon : aB2DPolyPolygon)
@@ -269,7 +268,8 @@ void OutputDevice::DrawTransparent(
                     aFullTransform,
                     rPolygon,
                     fTransparency,
-                    aHairlineWidth,
+                    // tdf#124848 hairline
+                    basegfx::B2DVector::getEmptyVector(),
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
@@ -383,7 +383,6 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             mpGraphics->SetFillColor();
 
             // draw the border line
-            const basegfx::B2DVector aLineWidths( 1, 1 );
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
             for(auto const& rPolygon : aB2DPolyPolygon)
@@ -392,7 +391,8 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     aTransform,
                     rPolygon,
                     fTransparency,
-                    aLineWidths,
+                    // tdf#124848 hairline
+                    basegfx::B2DVector::getEmptyVector(),
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
