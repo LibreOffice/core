@@ -798,13 +798,11 @@ public:
     ONavigatorImpl& operator=(const ONavigatorImpl&) = delete;
 
     uno::Reference< report::XReportDefinition>  m_xReport;
-    ::rptui::OReportController&                 m_rController;
     std::unique_ptr<NavigatorTree>              m_xNavigatorTree;
 };
 
 ONavigatorImpl::ONavigatorImpl(OReportController& rController, weld::Builder& rBuilder)
     : m_xReport(rController.getReportDefinition())
-    , m_rController(rController)
     , m_xNavigatorTree(std::make_unique<NavigatorTree>(rBuilder.weld_tree_view("treeview"), rController))
 {
     reportdesign::OReportVisitor aVisitor(m_xNavigatorTree.get());
@@ -812,7 +810,7 @@ ONavigatorImpl::ONavigatorImpl(OReportController& rController, weld::Builder& rB
     std::unique_ptr<weld::TreeIter> xScratch = m_xNavigatorTree->make_iterator();
     if (m_xNavigatorTree->find(m_xReport, *xScratch))
         m_xNavigatorTree->expand_row(*xScratch);
-    lang::EventObject aEvent(m_rController);
+    lang::EventObject aEvent(rController);
     m_xNavigatorTree->_selectionChanged(aEvent);
 }
 

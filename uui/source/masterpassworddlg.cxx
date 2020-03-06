@@ -37,13 +37,12 @@ MasterPasswordDialog::MasterPasswordDialog
     const std::locale&                          rLocale
 )
     : GenericDialogController(pParent, "uui/ui/masterpassworddlg.ui", "MasterPasswordDialog")
-    , rResLocale(rLocale)
     , m_xEDMasterPassword(m_xBuilder->weld_entry("password"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
     if( nDialogMode == css::task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        OUString aErrorMsg(Translate::get(STR_ERROR_MASTERPASSWORD_WRONG, rResLocale));
+        OUString aErrorMsg(Translate::get(STR_ERROR_MASTERPASSWORD_WRONG, rLocale));
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pParent,
                                                        VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
         xErrorBox->run();

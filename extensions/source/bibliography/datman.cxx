@@ -406,7 +406,6 @@ namespace {
 class DBChangeDialog_Impl : public weld::GenericDialogController
 {
     DBChangeDialogConfig_Impl aConfig;
-    BibDataManager* pDatMan;
 
     std::unique_ptr<weld::TreeView> m_xSelectionLB;
 
@@ -419,9 +418,8 @@ public:
 
 }
 
-DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pMan )
+DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pDatMan )
     : GenericDialogController(pParent, "modules/sbibliography/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
-    , pDatMan(pMan)
     , m_xSelectionLB(m_xBuilder->weld_tree_view("treeview"))
 {
     m_xSelectionLB->set_size_request(-1, m_xSelectionLB->get_height_rows(6));

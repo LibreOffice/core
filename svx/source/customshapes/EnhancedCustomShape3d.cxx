@@ -173,14 +173,13 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 
 EnhancedCustomShape3d::Transformation2D::Transformation2D(
     const SdrObjCustomShape& rSdrObjCustomShape,
-    const double *pM)
+    const double *pMap)
 :   aCenter(rSdrObjCustomShape.GetSnapRect().Center())
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
     , fSkewAngle(0.0)
     , fSkew(0.0)
     , fOriginX(0.0)
     , fOriginY(0.0)
-    , pMap( pM )
 {
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );

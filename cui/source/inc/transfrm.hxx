@@ -164,7 +164,6 @@ class SvxAngleTabPage : public SvxTabPage
     static const sal_uInt16 pAngleRanges[];
 
 private:
-    const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
 
     // #i75273#
@@ -214,8 +213,6 @@ class SvxSlantTabPage : public SfxTabPage
     static const sal_uInt16 pSlantRanges[];
 
 private:
-    const SfxItemSet&   rOutAttrs;
-
     const SdrView*      pView;
 
     MapUnit             ePoolUnit;

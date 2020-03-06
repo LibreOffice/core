@@ -35,24 +35,24 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
     , mnLevel(0)
     , mpReduce(OCTREE_BITS + 1, nullptr)
     , mpColor(nullptr)
-    , mpAccess(&rReadAcc)
     , mnPalIndex(0)
 {
+    const BitmapReadAccess* pAccess = &rReadAcc;
     sal_uLong nMax(nColors);
 
-    if (!!*mpAccess)
+    if (!!*pAccess)
     {
-        const long nWidth = mpAccess->Width();
-        const long nHeight = mpAccess->Height();
+        const long nWidth = pAccess->Width();
+        const long nHeight = pAccess->Height();
 
-        if (mpAccess->HasPalette())
+        if (pAccess->HasPalette())
         {
             for (long nY = 0; nY < nHeight; nY++)
             {
-                Scanline pScanline = mpAccess->GetScanline(nY);
+                Scanline pScanline = pAccess->GetScanline(nY);
                 for (long nX = 0; nX < nWidth; nX++)
                 {
-                    mpColor = &mpAccess->GetPaletteColor(mpAccess->GetIndexFromData(pScanline, nX));
+                    mpColor = &pAccess->GetPaletteColor(pAccess->GetIndexFromData(pScanline, nX));
                     mnLevel = 0;
                     add(pTree);
 
@@ -69,10 +69,10 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 
             for (long nY = 0; nY < nHeight; nY++)
             {
-                Scanline pScanline = mpAccess->GetScanline(nY);
+                Scanline pScanline = pAccess->GetScanline(nY);
                 for (long nX = 0; nX < nWidth; nX++)
                 {
-                    aColor = mpAccess->GetPixelFromData(pScanline, nX);
+                    aColor = pAccess->GetPixelFromData(pScanline, nX);
                     mnLevel = 0;
                     add(pTree);
 

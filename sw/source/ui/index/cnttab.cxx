@@ -134,13 +134,6 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     VclPtr<Edit>                    m_aCellEdit;
     VclPtr< ::svt::CheckBoxControl>  m_aCellCheckBox;
 
-    OUString  m_sSearch;
-    OUString  m_sAlternative;
-    OUString  m_sPrimKey;
-    OUString  m_sSecKey;
-    OUString  m_sComment;
-    OUString  m_sCaseSensitive;
-    OUString  m_sWordOnly;
     OUString  m_sYes;
     OUString  m_sNo;
 
@@ -3565,13 +3558,13 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
     , m_nCurrentRow(0)
     , m_bModified(false)
 {
-    m_sSearch = SwResId(STR_AUTOMARK_SEARCHTERM);
-    m_sAlternative = SwResId(STR_AUTOMARK_ALTERNATIVE);
-    m_sPrimKey = SwResId(STR_AUTOMARK_KEY1);
-    m_sSecKey = SwResId(STR_AUTOMARK_KEY2);
-    m_sComment = SwResId(STR_AUTOMARK_COMMENT);
-    m_sCaseSensitive = SwResId(STR_AUTOMARK_CASESENSITIVE);
-    m_sWordOnly = SwResId(STR_AUTOMARK_WORDONLY);
+    OUString sSearch = SwResId(STR_AUTOMARK_SEARCHTERM);
+    OUString sAlternative = SwResId(STR_AUTOMARK_ALTERNATIVE);
+    OUString sPrimKey = SwResId(STR_AUTOMARK_KEY1);
+    OUString sSecKey = SwResId(STR_AUTOMARK_KEY2);
+    OUString sComment = SwResId(STR_AUTOMARK_COMMENT);
+    OUString sCaseSensitive = SwResId(STR_AUTOMARK_CASESENSITIVE);
+    OUString sWordOnly = SwResId(STR_AUTOMARK_WORDONLY);
     m_sYes = SwResId(STR_AUTOMARK_YES);
     m_sNo = SwResId(STR_AUTOMARK_NO);
 
@@ -3591,13 +3584,13 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
 
     const OUString* aTitles[7] =
     {
-        &m_sSearch,
-        &m_sAlternative,
-        &m_sPrimKey,
-        &m_sSecKey,
-        &m_sComment,
-        &m_sCaseSensitive,
-        &m_sWordOnly
+        &sSearch,
+        &sAlternative,
+        &sPrimKey,
+        &sSecKey,
+        &sComment,
+        &sCaseSensitive,
+        &sWordOnly
     };
 
     long nWidth = GetSizePixel().Width();

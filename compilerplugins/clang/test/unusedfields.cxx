@@ -6,8 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include "config_clang.h"
 
-#if defined _WIN32 //TODO, see corresponding TODO in compilerplugins/clang/unusedfields.cxx
+// CLANG_VERSION = older versions of clang need something different in getParentFunctionDecl
+// WIN32 = TODO, see corresponding TODO in compilerplugins/clang/unusedfields.cxx
+#if CLANG_VERSION < 110000 || defined _WIN32
 // expected-no-diagnostics
 #else
 
@@ -20,6 +23,7 @@
 
 struct Foo
 // expected-error@-1 {{read m_foo1 [loplugin:unusedfields]}}
+// expected-error@-2 {{outside m_foo1 [loplugin:unusedfields]}}
 {
     int m_foo1;
 };
@@ -41,6 +45,20 @@ struct Bar
 // expected-error@-14 {{write m_bar7 [loplugin:unusedfields]}}
 // expected-error@-15 {{write m_bar9 [loplugin:unusedfields]}}
 // expected-error@-16 {{write m_bar12 [loplugin:unusedfields]}}
+// expected-error@-17 {{outside-constructor m_bar2 [loplugin:unusedfields]}}
+// expected-error@-18 {{outside-constructor m_bar3 [loplugin:unusedfields]}}
+// expected-error@-19 {{outside-constructor m_bar3b [loplugin:unusedfields]}}
+// expected-error@-20 {{outside-constructor m_bar4 [loplugin:unusedfields]}}
+// expected-error@-21 {{outside-constructor m_bar5 [loplugin:unusedfields]}}
+// expected-error@-22 {{outside-constructor m_bar6 [loplugin:unusedfields]}}
+// expected-error@-23 {{outside-constructor m_bar7 [loplugin:unusedfields]}}
+// expected-error@-24 {{outside-constructor m_bar8 [loplugin:unusedfields]}}
+// expected-error@-25 {{outside-constructor m_bar9 [loplugin:unusedfields]}}
+// expected-error@-26 {{outside-constructor m_bar10 [loplugin:unusedfields]}}
+// expected-error@-27 {{outside-constructor m_bar11 [loplugin:unusedfields]}}
+// expected-error@-28 {{outside-constructor m_bar12 [loplugin:unusedfields]}}
+// expected-error@-29 {{outside-constructor m_barfunctionpointer [loplugin:unusedfields]}}
+// expected-error@-30 {{outside m_barstream [loplugin:unusedfields]}}
 {
     int  m_bar1;
     int  m_bar2 = 1;
@@ -145,6 +163,11 @@ struct ReadOnlyAnalysis
 // expected-error@-7 {{write m_f4 [loplugin:unusedfields]}}
 // expected-error@-8 {{write m_f5 [loplugin:unusedfields]}}
 // expected-error@-9 {{write m_f6 [loplugin:unusedfields]}}
+// expected-error@-10 {{outside-constructor m_f2 [loplugin:unusedfields]}}
+// expected-error@-11 {{outside-constructor m_f3 [loplugin:unusedfields]}}
+// expected-error@-12 {{outside-constructor m_f4 [loplugin:unusedfields]}}
+// expected-error@-13 {{outside-constructor m_f5 [loplugin:unusedfields]}}
+// expected-error@-14 {{outside-constructor m_f6 [loplugin:unusedfields]}}
 {
     int m_f1;
     int m_f2;
@@ -186,6 +209,7 @@ ReadOnlyAnalysis2 global { 1 };
 
 struct ReadOnlyAnalysis3
 // expected-error@-1 {{read m_f1 [loplugin:unusedfields]}}
+// expected-error@-2 {{outside-constructor m_f1 [loplugin:unusedfields]}}
 {
     int m_f1;
 
@@ -202,6 +226,9 @@ struct ReadOnlyAnalysis4
 // expected-error@-1 {{read m_readonly [loplugin:unusedfields]}}
 // expected-error@-2 {{write m_writeonly [loplugin:unusedfields]}}
 // expected-error@-3 {{read m_readonlyCss [loplugin:unusedfields]}}
+// expected-error@-4 {{outside-constructor m_readonly [loplugin:unusedfields]}}
+// expected-error@-5 {{outside-constructor m_readonlyCss [loplugin:unusedfields]}}
+// expected-error@-6 {{outside-constructor m_writeonly [loplugin:unusedfields]}}
 {
     std::vector<int> m_readonly;
     std::vector<int> m_writeonly;
@@ -230,6 +257,7 @@ struct VclPtr
 // Check calls to operators
 struct WriteOnlyAnalysis2
 // expected-error@-1 {{write m_vclwriteonly [loplugin:unusedfields]}}
+// expected-error@-2 {{outside-constructor m_vclwriteonly [loplugin:unusedfields]}}
 {
     VclPtr<int> m_vclwriteonly;
 
@@ -250,6 +278,7 @@ namespace WriteOnlyAnalysis3
     struct Foo1
     // expected-error@-1 {{read m_field1 [loplugin:unusedfields]}}
     // expected-error@-2 {{write m_field1 [loplugin:unusedfields]}}
+    // expected-error@-3 {{outside-constructor m_field1 [loplugin:unusedfields]}}
     {
         int m_field1;
         Foo1() : m_field1(1) {}
@@ -273,6 +302,9 @@ namespace ReadOnlyAnalysis5
     // expected-error@-1 {{read m_field1 [loplugin:unusedfields]}}
     // expected-error@-2 {{read m_field2 [loplugin:unusedfields]}}
     // expected-error@-3 {{read m_field3xx [loplugin:unusedfields]}}
+    // expected-error@-4 {{outside-constructor m_field1 [loplugin:unusedfields]}}
+    // expected-error@-5 {{outside-constructor m_field2 [loplugin:unusedfields]}}
+    // expected-error@-6 {{outside-constructor m_field3xx [loplugin:unusedfields]}}
     {
         std::unique_ptr<int> m_field1;
         rtl::Reference<RefTarget> m_field2;
@@ -292,6 +324,57 @@ namespace ReadOnlyAnalysis5
             if (m_field3xx.get())
                 m_field3xx = a;
         }
+    };
+};
+
+
+namespace TouchFromOutsideConstructorAnalysis1
+{
+    struct RenderContextGuard
+    // expected-error@-1 {{write m_pRef [loplugin:unusedfields]}}
+    // expected-error@-2 {{read m_pRef [loplugin:unusedfields]}}
+    // expected-error@-3 {{write m_pOriginalValue [loplugin:unusedfields]}}
+    {
+        int& m_pRef;
+        int m_pOriginalValue;
+
+        RenderContextGuard(int& pRef, int pValue)
+            : m_pRef(pRef),
+              m_pOriginalValue(m_pRef)
+        {
+            m_pRef = pValue;
+        }
+    };
+};
+
+namespace TouchFromOutsideAnalysis1
+{
+    struct SwViewShell
+    {
+        int* GetWin();
+        int* Imp();
+    };
+    struct RenderContextGuard
+    // expected-error@-1 {{write m_pShell [loplugin:unusedfields]}}
+    // expected-error@-2 {{read m_pShell [loplugin:unusedfields]}}
+    {
+        SwViewShell* m_pShell;
+
+        RenderContextGuard(SwViewShell* pShell)
+            : m_pShell(pShell)
+        {
+            if (m_pShell->GetWin())
+            {
+                int* pDrawView(m_pShell->Imp());
+
+                if (nullptr != pDrawView)
+                {
+                    FindPageWindow(*m_pShell->GetWin());
+                }
+            }
+        }
+
+        void FindPageWindow(int x);
     };
 };
 

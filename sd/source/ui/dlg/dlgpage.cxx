@@ -37,15 +37,14 @@
  */
 SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc)
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
-    , mpDocShell(pDocSh)
     , mbIsImpressDoc(bIsImpressDoc)
 {
 
-    SvxColorListItem const * pColorListItem = mpDocShell->GetItem( SID_COLOR_TABLE );
-    SvxGradientListItem const * pGradientListItem = mpDocShell->GetItem( SID_GRADIENT_LIST );
-    SvxBitmapListItem const * pBitmapListItem = mpDocShell->GetItem( SID_BITMAP_LIST );
-    SvxPatternListItem const * pPatternListItem = mpDocShell->GetItem( SID_PATTERN_LIST );
-    SvxHatchListItem const * pHatchListItem = mpDocShell->GetItem( SID_HATCH_LIST );
+    SvxColorListItem const * pColorListItem = pDocSh->GetItem( SID_COLOR_TABLE );
+    SvxGradientListItem const * pGradientListItem = pDocSh->GetItem( SID_GRADIENT_LIST );
+    SvxBitmapListItem const * pBitmapListItem = pDocSh->GetItem( SID_BITMAP_LIST );
+    SvxPatternListItem const * pPatternListItem = pDocSh->GetItem( SID_PATTERN_LIST );
+    SvxHatchListItem const * pHatchListItem = pDocSh->GetItem( SID_HATCH_LIST );
 
     mpColorList = pColorListItem->GetColorList();
     mpGradientList = pGradientListItem->GetGradientList();

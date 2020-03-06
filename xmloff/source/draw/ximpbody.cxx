@@ -46,7 +46,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 ,   mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
-    OUString sXmlId, sStyleName, sContextName;
+    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF;
 
     sax_fastparser::FastAttributeList *pAttribList =
         sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
@@ -67,7 +67,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
             case XML_ELEMENT(DRAW, XML_MASTER_PAGE_NAME):
             {
-                maMasterPageName = sValue;
+                sMasterPageName = sValue;
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME):
@@ -111,7 +111,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             break;
             case XML_ELEMENT(XLINK, XML_HREF):
             {
-                maHREF = sValue;
+                sHREF = sValue;
                 break;
             }
         }
@@ -139,7 +139,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     }
 
     // set MasterPage?
-    if(!maMasterPageName.isEmpty())
+    if(!sMasterPageName.isEmpty())
     {
         // #85906# Code for setting masterpage needs complete rework
         // since GetSdImport().GetMasterStylesContext() gives always ZERO
@@ -154,7 +154,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         {
             bool bDone(false);
             OUString sDisplayName( rImport.GetStyleDisplayName(
-                            XmlStyleFamily::MASTER_PAGE, maMasterPageName ) );
+                            XmlStyleFamily::MASTER_PAGE, sMasterPageName ) );
 
             for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {
@@ -166,9 +166,9 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     uno::Reference < container::XNamed > xMasterNamed(xMasterPage, uno::UNO_QUERY);
                     if(xMasterNamed.is())
                     {
-                        OUString sMasterPageName = xMasterNamed->getName();
+                        OUString sLoopMasterPageName = xMasterNamed->getName();
 
-                        if(!sMasterPageName.isEmpty() && sMasterPageName == sDisplayName)
+                        if(!sLoopMasterPageName.isEmpty() && sLoopMasterPageName == sDisplayName)
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = true;
@@ -183,22 +183,22 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
     SetStyle( sStyleName );
 
-    if( !maHREF.isEmpty() )
+    if( !sHREF.isEmpty() )
     {
         uno::Reference< beans::XPropertySet > xProps( xShapeDrawPage, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            sal_Int32 nIndex = maHREF.lastIndexOf( '#' );
+            sal_Int32 nIndex = sHREF.lastIndexOf( '#' );
             if( nIndex != -1 )
             {
-                OUString aFileName( maHREF.copy( 0, nIndex ) );
-                OUString aBookmarkName( maHREF.copy( nIndex+1 ) );
+                OUString aFileName( sHREF.copy( 0, nIndex ) );
+                OUString aBookmarkName( sHREF.copy( nIndex+1 ) );
 
-                maHREF = GetImport().GetAbsoluteReference( aFileName ) + "#"
+                sHREF = GetImport().GetAbsoluteReference( aFileName ) + "#"
                     + aBookmarkName;
             }
 
-            xProps->setPropertyValue("BookmarkURL", uno::makeAny( maHREF ) );
+            xProps->setPropertyValue("BookmarkURL", uno::makeAny( sHREF ) );
         }
     }
 

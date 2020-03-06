@@ -2518,10 +2518,9 @@ Pixel SalVisual::GetTCPixel( Color nColor ) const
 SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
                           SalX11Screen nXScreen )
     : m_pDisplay( pDisplay ),
-      m_hColormap( hColormap ),
-      m_nXScreen( nXScreen )
+      m_hColormap( hColormap )
 {
-    m_aVisual = m_pDisplay->GetVisual( m_nXScreen );
+    m_aVisual = m_pDisplay->GetVisual( nXScreen );
 
     XColor aColor;
 
@@ -2587,8 +2586,7 @@ SalColormap::SalColormap()
       m_hColormap( None ),
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
-      m_nUsed( 2 ),
-      m_nXScreen( m_pDisplay != nullptr ? m_pDisplay->GetDefaultXScreen() : SalX11Screen( 0 ) )
+      m_nUsed( 2 )
 {
     m_aPalette = std::vector<Color>(m_nUsed);
 
@@ -2602,10 +2600,10 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
       m_hColormap( None ),
       m_nWhitePixel( (1 << nDepth) - 1 ),
       m_nBlackPixel( 0x00000000 ),
-      m_nUsed( 1 << nDepth ),
-      m_nXScreen( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen() )
+      m_nUsed( 1 << nDepth )
 {
-    const SalVisual *pVisual = &m_pDisplay->GetVisual( m_nXScreen );
+    SalX11Screen nXScreen( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen() );
+    const SalVisual *pVisual = &m_pDisplay->GetVisual( nXScreen );
 
     if( pVisual->GetClass() == TrueColor && pVisual->GetDepth() == nDepth )
         m_aVisual = *pVisual;

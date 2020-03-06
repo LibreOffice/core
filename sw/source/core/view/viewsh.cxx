@@ -1714,25 +1714,18 @@ namespace
 /// Similar to comphelper::FlagRestorationGuard, but for vcl::RenderContext.
 class RenderContextGuard
 {
-    VclPtr<vcl::RenderContext>& m_pRef;
-    VclPtr<vcl::RenderContext> m_pOriginalValue;
-    SwViewShell* m_pShell;
     std::unique_ptr<SdrPaintWindow> m_TemporaryPaintWindow;
     SdrPageWindow* m_pPatchedPageWindow;
 
 public:
     RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
-        : m_pRef(pRef),
-        m_pOriginalValue(m_pRef),
-        m_pShell(pShell),
-        m_TemporaryPaintWindow(),
-        m_pPatchedPageWindow(nullptr)
+        : m_pPatchedPageWindow(nullptr)
     {
-        m_pRef = pValue;
+        pRef = pValue;
 
-        if (pValue != m_pShell->GetWin())
+        if (pValue != pShell->GetWin())
         {
-            SdrView* pDrawView(m_pShell->Imp()->GetDrawView());
+            SdrView* pDrawView(pShell->Imp()->GetDrawView());
 
             if (nullptr != pDrawView)
             {
@@ -1740,7 +1733,7 @@ public:
 
                 if (nullptr != pSdrPageView)
                 {
-                    m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*m_pShell->GetWin());
+                    m_pPatchedPageWindow = pSdrPageView->FindPageWindow(*pShell->GetWin());
 
                     if (nullptr != m_pPatchedPageWindow)
                     {

@@ -40,11 +40,6 @@ namespace chelp {
                            const css::uno::Sequence< css::beans::Property >& seq,
                            const URLParameter& aURLParameter,
                            Databases* pDatabases );
-
-
-    private:
-
-        URLParameter const m_aURLParameter;
     };
 
 }

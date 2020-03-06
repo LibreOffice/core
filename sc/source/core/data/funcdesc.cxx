@@ -1034,9 +1034,11 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 }
 
 
-ScFunctionMgr::ScFunctionMgr() :
-    pFuncList( ScGlobal::GetStarCalcFunctionList() )
+ScFunctionMgr::ScFunctionMgr()
 {
+    ScFunctionList* pFuncList /**< list of all calc functions */
+        = ScGlobal::GetStarCalcFunctionList();
+
     OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 

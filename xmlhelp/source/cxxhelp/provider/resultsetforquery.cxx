@@ -76,8 +76,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                                       const uno::Sequence< beans::Property >& seq,
                                       const URLParameter& aURLParameter,
                                       Databases* pDatabases )
-    : ResultSetBase( rxContext,xProvider,seq ),
-      m_aURLParameter( aURLParameter )
+    : ResultSetBase( rxContext,xProvider,seq )
 {
     Reference< XExtendedTransliteration > xTrans = Transliteration::create( rxContext );
     Locale aLocale( aURLParameter.get_language(),
@@ -89,7 +88,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     vector< vector< OUString > > queryList;
     {
         sal_Int32 idx;
-        OUString query = m_aURLParameter.get_query();
+        OUString query = aURLParameter.get_query();
         while( !query.isEmpty() )
         {
             idx = query.indexOf( ' ' );
@@ -114,11 +113,11 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     }
 
     vector< OUString > aCompleteResultVector;
-    OUString scope = m_aURLParameter.get_scope();
+    OUString scope = aURLParameter.get_scope();
     bool bCaptionsOnly = scope == "Heading";
-    sal_Int32 hitCount = m_aURLParameter.get_hitCount();
+    sal_Int32 hitCount = aURLParameter.get_hitCount();
 
-    IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
+    IndexFolderIterator aIndexFolderIt( *pDatabases, aURLParameter.get_module(), aURLParameter.get_language() );
     OUString idxDir;
     bool bExtension = false;
     vector< vector<HitItem> > aIndexFolderResultVectorVector;
@@ -253,7 +252,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     for( int j = 0 ; j < nVectorCount ; ++j )
         pCurrentVectorIndex[j] = 0;
 
-    sal_Int32 nTotalHitCount = m_aURLParameter.get_hitCount();
+    sal_Int32 nTotalHitCount = aURLParameter.get_hitCount();
     sal_Int32 nHitCount = 0;
     while( nHitCount < nTotalHitCount )
     {
@@ -312,9 +311,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         m_aPath[m_nRow] =
             m_aPath[m_nRow] +
             "?Language=" +
-            m_aURLParameter.get_language() +
+            aURLParameter.get_language() +
             "&System=" +
-            m_aURLParameter.get_system();
+            aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();
         if( content.is() )

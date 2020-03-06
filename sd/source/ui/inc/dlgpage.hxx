@@ -32,7 +32,6 @@ enum class ChangeType;
 class SdPageDlg : public SfxTabDialogController
 {
 private:
-    const SfxObjectShell* mpDocShell;
     bool mbIsImpressDoc;
 
     XColorListRef         mpColorList;

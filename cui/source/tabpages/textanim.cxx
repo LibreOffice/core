@@ -85,7 +85,6 @@ void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 \************************************************************************/
 SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/textanimtabpage.ui", "TextAnimation", &rInAttrs)
-    , rOutAttrs(rInAttrs)
     , eAniKind(SdrTextAniKind::NONE)
     , m_aUpState(TRISTATE_INDET)
     , m_aLeftState(TRISTATE_INDET)
@@ -109,7 +108,7 @@ SvxTextAnimationPage::SvxTextAnimationPage(weld::Container* pPage, weld::DialogC
     , m_xMtrFldDelay(m_xBuilder->weld_metric_spin_button("MTR_FLD_DELAY", FieldUnit::MILLISECOND))
 {
     eFUnit = GetModuleFieldUnit( rInAttrs );
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 

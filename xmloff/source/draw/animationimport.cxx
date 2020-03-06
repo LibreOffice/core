@@ -106,9 +106,6 @@ class AnimationsImportHelperImpl
 private:
     SvXMLImport& mrImport;
 
-    std::unique_ptr<SvXMLTokenMap> mpAnimationNodeTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpAnimationNodeAttributeTokenMap;
-
 public:
     explicit AnimationsImportHelperImpl( SvXMLImport& rImport );
 

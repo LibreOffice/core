@@ -40,15 +40,14 @@ using namespace ::com::sun::star;
 // SvxUnoTextContentEnumeration
 
 
-SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection& rSel ) throw()
-: mrText( _rText )
+SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& rText, const ESelection& rSel ) throw()
 {
-    mxParentText = const_cast<SvxUnoTextBase*>(&_rText);
-    if( mrText.GetEditSource() )
-        mpEditSource = mrText.GetEditSource()->Clone();
+    mxParentText = const_cast<SvxUnoTextBase*>(&rText);
+    if( rText.GetEditSource() )
+        mpEditSource = rText.GetEditSource()->Clone();
     mnNextParagraph = 0;
 
-    const SvxTextForwarder* pTextForwarder = mrText.GetEditSource()->GetTextForwarder();
+    const SvxTextForwarder* pTextForwarder = rText.GetEditSource()->GetTextForwarder();
     const sal_Int32 maxParaIndex = std::min( rSel.nEndPara + 1, pTextForwarder->GetParagraphCount() );
 
     for( sal_Int32 currentPara = rSel.nStartPara; currentPara < maxParaIndex; currentPara++ )
@@ -79,7 +78,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
         }
         if( pContent == nullptr )
         {
-            pContent = new SvxUnoTextContent( mrText, currentPara );
+            pContent = new SvxUnoTextContent( rText, currentPara );
             pContent->SetSelection( aCurrentParaSel );
             maContents.emplace_back(pContent );
         }
@@ -376,18 +375,17 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 
 
 
-SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rParentText, sal_Int32 nPara, const ESelection& rSel)
+SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rParentText, sal_Int32 nParagraph, const ESelection& rSel)
 :   mxParentText(  const_cast<SvxUnoTextBase*>(&rParentText) ),
-    mnParagraph( nPara ),
     mnNextPortion( 0 )
 {
     if (rParentText.GetEditSource())
         mpEditSource = rParentText.GetEditSource()->Clone();
 
-    if( mpEditSource && mpEditSource->GetTextForwarder() && (mnParagraph == rSel.nStartPara && mnParagraph == rSel.nEndPara) )
+    if( mpEditSource && mpEditSource->GetTextForwarder() && (nParagraph == rSel.nStartPara && nParagraph == rSel.nEndPara) )
     {
         std::vector<sal_Int32> aPortions;
-        mpEditSource->GetTextForwarder()->GetPortions( nPara, aPortions );
+        mpEditSource->GetTextForwarder()->GetPortions( nParagraph, aPortions );
         for( size_t aPortionIndex = 0; aPortionIndex < aPortions.size(); aPortionIndex++ )
         {
             sal_uInt16 nStartPos = 0;
@@ -401,7 +399,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rPa
 
             nStartPos = std::max<int>(nStartPos, rSel.nStartPos);
             nEndPos = std::min<sal_uInt16>(nEndPos, rSel.nEndPos);
-            ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
+            ESelection aSel( nParagraph, nStartPos, nParagraph, nEndPos );
 
             const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
             SvxUnoTextRange* pRange = nullptr;

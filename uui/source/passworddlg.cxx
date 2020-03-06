@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(weld::Window* pParent,
-    task::PasswordRequestMode nDialogMode, const std::locale& rLocale,
+    task::PasswordRequestMode nDialogMode, const std::locale& rResLocale,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : GenericDialogController(pParent, "uui/ui/password.ui", "PasswordDialog")
     , m_xFTPassword(m_xBuilder->weld_label("newpassFT"))
@@ -38,8 +38,7 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     , m_xEDConfirmPassword(m_xBuilder->weld_entry("confirmpassEntry"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , nMinLen(1)
-    , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rLocale))
-    , rResLocale(rLocale)
+    , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rResLocale))
 {
     // tdf#115964 we can be launched before the parent has resized to its final size
     m_xDialog->set_centered_on_parent(true);

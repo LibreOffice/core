@@ -13385,7 +13385,6 @@ class GtkInstanceBuilder : public weld::Builder
 {
 private:
     ResHookProc m_pStringReplace;
-    OUString m_sHelpRoot;
     OString m_aUtf8HelpRoot;
     OUString m_aIconTheme;
     OUString m_aUILang;
@@ -13582,19 +13581,19 @@ public:
     GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile, SystemChildWindow* pInterimGlue)
         : weld::Builder(rUIFile)
         , m_pStringReplace(Translate::GetReadStringHook())
-        , m_sHelpRoot(rUIFile)
         , m_pParentWidget(pParent)
         , m_nNotifySignalId(0)
         , m_xInterimGlue(pInterimGlue)
     {
+        OUString sHelpRoot(rUIFile);
         ensure_intercept_drawing_area_accessibility();
         ensure_disable_ctrl_page_up_down_bindings();
 
-        sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
+        sal_Int32 nIdx = sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
-            m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-        m_sHelpRoot += OUString('/');
-        m_aUtf8HelpRoot = OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8);
+            sHelpRoot = sHelpRoot.copy(0, nIdx);
+        sHelpRoot += OUString('/');
+        m_aUtf8HelpRoot = OUStringToOString(sHelpRoot, RTL_TEXTENCODING_UTF8);
         m_aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
         m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
 
