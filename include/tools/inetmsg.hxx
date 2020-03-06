@@ -28,6 +28,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <config_options.h>
 
 class DateTime;
 
@@ -70,7 +71,7 @@ enum class InetMessageMime
     NUMHDR                     = 4,
 };
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) INetMIMEMessage
 {
     ::std::vector< std::unique_ptr<INetMessageHeader> >
                     m_aHeaderList;

@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
+#include <config_options.h>
 
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 namespace i18nutil { class oneToOneMapping; }
@@ -30,7 +31,7 @@ namespace i18nutil {
 
 #define WIDTHFOLDING_DONT_USE_COMBINED_VU 0x01
 
-class I18NUTIL_DLLPUBLIC widthfolding
+class UNLESS_MERGELIBS(I18NUTIL_DLLPUBLIC) widthfolding
 {
 public:
     static oneToOneMapping& getfull2halfTable();

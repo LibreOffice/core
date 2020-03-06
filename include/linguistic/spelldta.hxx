@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
 #include <i18nlangtag/lang.h>
+#include <config_options.h>
 
 namespace com::sun::star::linguistic2 { class XSearchableDictionaryList; }
 
@@ -61,7 +62,7 @@ class SpellAlternatives final
     LanguageType                    nLanguage;
 
 public:
-    LNG_DLLPUBLIC SpellAlternatives();
+    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SpellAlternatives();
     SpellAlternatives(const OUString &rWord, LanguageType nLang,
                       const css::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives() override;
@@ -80,10 +81,10 @@ public:
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) override;
 
     // non-interface specific functions
-    void    LNG_DLLPUBLIC SetWordLanguage(const OUString &rWord, LanguageType nLang);
-    void    LNG_DLLPUBLIC SetFailureType(sal_Int16 nTypeP);
-    void    LNG_DLLPUBLIC SetAlternatives( const css::uno::Sequence< OUString > &rAlt );
-    static css::uno::Reference < css::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
+    void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetWordLanguage(const OUString &rWord, LanguageType nLang);
+    void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetFailureType(sal_Int16 nTypeP);
+    void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetAlternatives( const css::uno::Sequence< OUString > &rAlt );
+    static css::uno::Reference < css::linguistic2::XSpellAlternatives > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateSpellAlternatives(
         const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt );
 };
 

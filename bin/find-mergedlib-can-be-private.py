@@ -8,6 +8,7 @@
 import subprocess
 import sys
 import re
+import multiprocessing
 
 exported_symbols = set()
 imported_symbols = set()
@@ -75,9 +76,6 @@ merged_libs = { \
     ,"xo" \
     ,"xstor" }
 
-classes_with_exported_symbols = set()
-classes_with_imported_symbols = set()
-
 # look for symbols exported by libmerged
 subprocess_nm = subprocess.Popen("nm -D instdir/program/libmergedlo.so", stdout=subprocess.PIPE, shell=True)
 with subprocess_nm.stdout as txt:
@@ -124,12 +122,11 @@ print("no symbols that can be made internal = " + str(len(intersec_symbols)))
 # Now look for classes where none of the class symbols are imported,
 # i.e. we can mark the whole class as hidden
 
-def extract_class(sym, add_to_set):
+def extract_class(sym):
     filtered_sym = subprocess.check_output(["c++filt", sym]).strip()
     if filtered_sym.startswith("vtable for "):
         classname = filtered_sym[11:]
-        add_to_set.add(classname)
-        return
+        return classname
     if filtered_sym.startswith("non-virtual thunk to "):
         filtered_sym = filtered_sym[21:]
     elif filtered_sym.startswith("virtual thunk to "):
@@ -139,12 +136,12 @@ def extract_class(sym, add_to_set):
         i = filtered_sym.rfind("::", 0, i)
         if i != -1:
             classname = filtered_sym[:i]
-            add_to_set.add(classname)
+            return classname
+    return ""
 
-for sym in exported_symbols:
-    extract_class(sym, classes_with_exported_symbols)
-for sym in imported_symbols:
-    extract_class(sym, classes_with_imported_symbols)
+pool = multiprocessing.Pool(multiprocessing.cpu_count())
+classes_with_exported_symbols = set(pool.map(extract_class, list(exported_symbols)))
+classes_with_imported_symbols = set(pool.map(extract_class, list(imported_symbols)))
 
 with open("bin/find-mergedlib-can-be-private.classes.results", "wt") as f:
     for sym in sorted(classes_with_exported_symbols - classes_with_imported_symbols):
