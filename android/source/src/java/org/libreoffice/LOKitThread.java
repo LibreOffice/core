@@ -156,7 +156,7 @@ class LOKitThread extends Thread {
         mLayerClient.clearAndResetlayers();
         redraw();
         updatePartPageRectangles();
-        if (mTileProvider.isSpreadsheet()) {
+        if (mTileProvider != null && mTileProvider.isSpreadsheet()) {
             updateCalcHeaders();
         }
     }
