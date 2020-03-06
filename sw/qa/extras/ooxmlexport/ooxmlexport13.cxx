@@ -480,6 +480,7 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
         CPPUNIT_ASSERT_EQUAL(OUString("1"), items[0]);
         CPPUNIT_ASSERT_EQUAL(OUString("2"), items[1]);
         CPPUNIT_ASSERT_EQUAL(OUString("3"), items[2]);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPropertySet, "DefaultText"));
     }
 }
 

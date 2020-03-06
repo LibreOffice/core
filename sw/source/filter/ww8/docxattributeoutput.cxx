@@ -1960,6 +1960,17 @@ void DocxAttributeOutput::WriteSdtDropDownStart(
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
 
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+}
+
+void DocxAttributeOutput::WriteSdtDropDownEnd(OUString const& rSelected,
+        uno::Sequence<OUString> const& rListItems)
+{
+    // note: rSelected might be empty?
+    sal_Int32 nId = comphelper::findValue(rListItems, rSelected);
+    if (nId == -1)
+    {
+        nId = 0;
+    }
 
     // the lastValue only identifies the entry in the list, also export
     // currently selected item's displayText as run content (if one exists)
@@ -1971,6 +1982,8 @@ void DocxAttributeOutput::WriteSdtDropDownStart(
         m_pSerializer->endElementNS(XML_w, XML_t);
         m_pSerializer->endElementNS(XML_w, XML_r);
     }
+
+    WriteSdtEnd();
 }
 
 void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
@@ -2217,10 +2230,17 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
 void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
-    if (rInfos.eType == ww::eFORMDATE
-        || (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField))
+    if (rInfos.eType == ww::eFORMDATE)
     {
         WriteSdtEnd();
+        return;
+    }
+    if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
+    {
+        // write selected item from End not Start to ensure that any bookmarks
+        // precede it
+        SwDropDownField const& rField(*static_cast<SwDropDownField const*>(rInfos.pField.get()));
+        WriteSdtDropDownEnd(rField.GetSelectedItem(), rField.GetItemSequence());
         return;
     }
 
