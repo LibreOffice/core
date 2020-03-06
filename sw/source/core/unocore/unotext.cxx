@@ -997,13 +997,13 @@ bool SwXText::Impl::CheckForOwnMember(
     const SwStartNode* pTmp = rSrcNode.FindSttNodeByType(eSearchNodeType);
 
     // skip SectionNodes
-    while(pTmp && pTmp->IsSectionNode())
+    while(pTmp && (pTmp->IsSectionNode() || pTmp->IsTableNode()))
     {
         pTmp = pTmp->StartOfSectionNode();
     }
 
     //if the document starts with a section
-    while(pOwnStartNode->IsSectionNode())
+    while(pOwnStartNode->IsSectionNode() || pOwnStartNode->IsTableNode())
     {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
