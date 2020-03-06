@@ -1061,7 +1061,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
         // otherwise it has hidden content and that makes no sense
-        if ( !pRow->GetPrev() && pRow->getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
+        if ( pRow->getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
             pRow->SetForceRowSplitAllowed( true );
         else
             bSplitRowAllowed = false;
@@ -3546,12 +3546,6 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             return true;
         }
 
-        // Unsplitable rows have always started on a new page, so don't movebwd, even though we now allow splitting in some cases.
-        // This also matches Word - so good for interoperability (tdf#123116)
-        const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
-        if ( pFirstRow && pFirstRow->IsForceRowSplitAllowed() )
-            return false;
-
         bool bFits = nSpace > 0;
         if (!bFits && aRectFnSet.GetHeight(getFrameArea()) == 0)
             // This frame fits into pNewUpper in case it has no space, but this
@@ -3562,6 +3556,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
             // positioning.
+            const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
             if ( pFirstRow && pFirstRow->IsInFollowFlowRow() &&
                  SwLayouter::DoesRowContainMovedFwdFrame(
                                             *(pFirstRow->GetFormat()->GetDoc()),

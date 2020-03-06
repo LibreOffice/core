@@ -362,9 +362,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123116_oversizedRowSplit, "tdf123116_oversizedRowSplit.odt")
 {
-    // For highest backward compatibility and interoperability, the now-splitable-row
-    // should start on a new page.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 5 pages", 5, getPages());
+    // Intentionally require a very non-backward-compatible, natural continuation of the table
+    // instead of an ugly "page break" like MS Word does (and LO used to do).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 4 pages", 4, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
