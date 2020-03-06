@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f5b4da1_368a69b4",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-06T18:28:28Z",
+      "side": 0,
+      "message": "Why removing this block?",
+      "range": {
+        "startLine": 1574,
+        "startChar": 1,
+        "endLine": 1576,
+        "endChar": 25
+      },
+      "revId": "f58d42349525be3838cf7568c9840d9e3dacddad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93253787_0088e54a",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-06T18:28:28Z",
+      "side": 0,
+      "message": "Why removing this block?\nIt explains the error you get.",
+      "range": {
+        "startLine": 1688,
+        "startChar": 0,
+        "endLine": 1693,
+        "endChar": 13
+      },
+      "revId": "f58d42349525be3838cf7568c9840d9e3dacddad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
