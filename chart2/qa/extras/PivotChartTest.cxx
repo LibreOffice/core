@@ -309,6 +309,7 @@ table::CellRangeAddress lclCreateTestData(uno::Reference<sheet::XSpreadsheetDocu
 
 void PivotChartTest::testRoundtrip()
 {
+    mbSkipValidation = true;
     uno::Sequence<uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 

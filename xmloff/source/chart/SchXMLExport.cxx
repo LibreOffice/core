@@ -2316,6 +2316,12 @@ void SchXMLExportHelper_Impl::exportAxis(
         AddAutoStyleAttribute( aPropertyStates ); // write style name
         if( !rCategoriesRange.isEmpty() )
             bExportDateScale = lcl_exportAxisType( rChart2Axis, mrExport );
+        const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFDefaultVersion());
+        if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012 && eDimension == XML_X)
+        {
+            chart2::ScaleData aScaleData(rChart2Axis->getScaleData());
+            mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CROSS_BETWEEN, OUString::boolean(aScaleData.ShiftedCategoryPosition));
+        }
 
         // open axis element
         pAxis.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, true, true ));

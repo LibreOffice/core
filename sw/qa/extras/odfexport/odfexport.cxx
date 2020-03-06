@@ -56,9 +56,17 @@ public:
         return OString(filename).endsWith(".odt");
     }
 
-    bool mustValidate(const char* /*filename*/) const override
+    /**
+     * Validation handling
+     */
+    bool mustValidate(const char* filename) const override
     {
-        return true;
+        const std::vector<const char*> aBlacklist =
+        {
+            "oooxml_embedded.sxw"
+        };
+
+        return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
     }
 
     virtual std::unique_ptr<Resetter> preTest(const char* pFilename) override
