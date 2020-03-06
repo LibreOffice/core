@@ -1,8 +1,11 @@
 package org.libreoffice;
 
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +22,22 @@ public class SearchController implements View.OnClickListener {
 
         activity.findViewById(R.id.button_search_up).setOnClickListener(this);
         activity.findViewById(R.id.button_search_down).setOnClickListener(this);
+
+        ((EditText) mActivity.findViewById(R.id.search_string)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // search downward when the "search button" on keyboard is pressed,
+                    SearchDirection direction = SearchDirection.DOWN;
+                    String searchText = ((EditText) mActivity.findViewById(R.id.search_string)).getText().toString();
+                    float x = mActivity.getCurrentCursorPosition().centerX();
+                    float y = mActivity.getCurrentCursorPosition().centerY();
+                    search(searchText, direction, x, y);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void search(String searchString, SearchDirection direction, float x, float y) {

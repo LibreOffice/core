@@ -435,7 +435,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:inputType="" />
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
 
         <ImageButton
             android:id="@+id/button_search_down"
