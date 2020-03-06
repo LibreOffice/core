@@ -1874,12 +1874,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
         , true /*bSearchForParallelAxisIfNothingIsFound*/ );
 }
 
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
-        const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
-        const uno::Reference< XDataSeries >& xSeries,
-        sal_Int32 nPointIndex /*-1 for whole series*/,
-        const uno::Reference< XDiagram >& xDiagram
-        )
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp )
 {
     sal_Int32 nFormat=0;
     if( !xSeriesOrPointProp.is() )
@@ -1892,27 +1887,10 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     }
     catch ( const beans::UnknownPropertyException& ) {}
 
-    xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
-    sal_Int32 nOldFormat = nFormat;
-    if (bLinkToSource)
-    {
-        uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
-
-        Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
-        OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
-
-        Reference< data::XLabeledDataSequence > xLabeledSequence(
-            DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole ));
-        if( xLabeledSequence.is() )
-        {
-            Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
-            if( xValues.is() )
-                nFormat = xValues->getNumberFormatKeyByIndex( nPointIndex );
-        }
-
-        if (nFormat >= 0 && nOldFormat != nFormat)
-            xSeriesOrPointProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(nFormat));
-    }
+    if( bLinkToSource )
+        xSeriesOrPointProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(nFormat));
+    else
+        xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
 
     if(nFormat<0)
         nFormat=0;
