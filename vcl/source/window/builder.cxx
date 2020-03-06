@@ -2447,6 +2447,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         // if the parent was a toolbox set it as an itemwindow for the latest itemid
         if (pToolBox)
         {
+            Size aSize(xWindow->GetSizePixel());
+            aSize.setHeight(xWindow->get_preferred_size().Height());
+            xWindow->SetSizePixel(aSize);
             pToolBox->SetItemWindow(m_pParserState->m_nLastToolbarId, xWindow);
             pToolBox->SetItemExpand(m_pParserState->m_nLastToolbarId, true);
         }
