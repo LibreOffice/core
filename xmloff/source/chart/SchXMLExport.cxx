@@ -201,7 +201,7 @@ public:
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
                     const Reference< beans::XPropertySet >& rAxisProps, const Reference< chart2::XAxis >& rChart2Axis,
                     const OUString& rCategoriesRanges,
-                    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent );
+                    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent, OUString sChartType );
     void exportGrid( const Reference< beans::XPropertySet >& rGridProperties, bool bMajor, bool bExportContent );
     void exportDateScale( const Reference< beans::XPropertySet >& rAxisProps );
     void exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent );
@@ -2288,7 +2288,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     const Reference< chart2::XAxis >& rChart2Axis,
     const OUString& rCategoriesRange,
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
-    bool bExportContent )
+    bool bExportContent, OUString sChartType )
 {
     std::vector< XMLPropertyState > aPropertyStates;
     std::unique_ptr<SvXMLElementExport> pAxis;
@@ -2296,6 +2296,20 @@ void SchXMLExportHelper_Impl::exportAxis(
     // get property states for autostyles
     if( rAxisProps.is() && mxExpPropMapper.is() )
     {
+        const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFDefaultVersion());
+        if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012 && eDimension == XML_X)
+        {
+            chart2::ScaleData aScaleData(rChart2Axis->getScaleData());
+            bool bShiftedCatPos = aScaleData.ShiftedCategoryPosition;
+            if (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram")
+            {
+                if (!bShiftedCatPos)
+                    rAxisProps->setPropertyValue("MajorOrigin", uno::makeAny(0.0));
+            }
+            else if (bShiftedCatPos)
+                rAxisProps->setPropertyValue("MajorOrigin", uno::makeAny(0.5));
+        }
+
         lcl_exportNumberFormat( "NumberFormat", rAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( rAxisProps );
 
@@ -2417,6 +2431,7 @@ void SchXMLExportHelper_Impl::exportAxes(
 
     OUString aCategoriesRange;
     Reference< chart::XAxisSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
+    OUString sChartType = xDiagram->getDiagramType();
 
     // x axis
 
@@ -2438,7 +2453,7 @@ void SchXMLExportHelper_Impl::exportAxes(
                 }
             }
         }
-        exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasXAxisTitle, bHasXAxisMajorGrid, bHasXAxisMinorGrid, bExportContent );
+        exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasXAxisTitle, bHasXAxisMajorGrid, bHasXAxisMinorGrid, bExportContent, sChartType );
         aCategoriesRange.clear();
     }
 
@@ -2448,7 +2463,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     if( xNewAxis.is() )
     {
         Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : nullptr, uno::UNO_QUERY );
-        exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryXAxisTitle, false, false, bExportContent );
+        exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryXAxisTitle, false, false, bExportContent, sChartType );
     }
 
     // y axis
@@ -2457,7 +2472,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     if( xNewAxis.is() )
     {
         Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : nullptr, uno::UNO_QUERY );
-        exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasYAxisTitle, bHasYAxisMajorGrid, bHasYAxisMinorGrid, bExportContent );
+        exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasYAxisTitle, bHasYAxisMajorGrid, bHasYAxisMinorGrid, bExportContent, sChartType );
     }
 
     // secondary y axis
@@ -2466,7 +2481,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     if( xNewAxis.is() )
     {
         Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : nullptr, uno::UNO_QUERY );
-        exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryYAxisTitle, false, false, bExportContent );
+        exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryYAxisTitle, false, false, bExportContent, sChartType );
     }
 
     // z axis
@@ -2475,7 +2490,7 @@ void SchXMLExportHelper_Impl::exportAxes(
     if( xNewAxis.is() )
     {
         Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : nullptr, uno::UNO_QUERY );
-        exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, aCategoriesRange, bHasZAxisTitle, bHasZAxisMajorGrid, bHasZAxisMinorGrid, bExportContent );
+        exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, aCategoriesRange, bHasZAxisTitle, bHasZAxisMajorGrid, bHasZAxisMinorGrid, bExportContent, sChartType );
     }
 }
 
