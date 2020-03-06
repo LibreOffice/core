@@ -97,6 +97,14 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 break;
             case Document.CALLBACK_SEARCH_RESULT_SELECTION:
                 searchResultSelection(payload);
+                // when doing a search, CALLBACK_SEARCH_RESULT_SELECTION is called in addition
+                // to the CALLBACK_TEXT_SELECTION{,_START,_END} callbacks and the handling of
+                // the previous 3 makes the cursor shown in addition to the selection rectangle,
+                // so hide the cursor again to just show the selection rectangle for the search result
+                mDocumentOverlay.hideCursor();
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.MIDDLE);
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.START);
+                mDocumentOverlay.hideHandle(SelectionHandle.HandleType.END);
                 break;
             case Document.CALLBACK_SEARCH_NOT_FOUND:
                 Log.d(LOGTAG, "LOK_CALLBACK: Search not found.");
