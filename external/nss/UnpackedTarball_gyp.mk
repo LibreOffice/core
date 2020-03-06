@@ -15,4 +15,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,gyp,\
 	external/nss/gyp-buildsystem.patch.0 \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,gyp,\
+	external/nss/gyp-buildsystem-windows.patch.0 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
