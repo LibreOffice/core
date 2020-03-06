@@ -74,6 +74,9 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <drwlayer.hxx>
+#include <columnspanset.hxx>
+#include <docfunc.hxx>
+#include <printfun.hxx>
 
 static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {
@@ -1222,6 +1225,22 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (mpNoteMarker)
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+    // is enabled, breaks should be visible. If the document is opened the first
+    // time, the breaks are not calculated yet, so for this initialization
+    // a timer will be triggered here.
+    if (bPage && bInitialPageBreaks)
+    {
+        std::set<SCCOL> aColBreaks;
+        std::set<SCROW> aRowBreaks;
+        rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
+        rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
+        if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+        {
+            maShowPageBreaksTimer.Start();
+            bInitialPageBreaks = false;
+        }
+    }
 }
 
 namespace
@@ -2270,5 +2289,40 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     Invalidate();
 }
+
+void ScGridWindow::initiatePageBreaks()
+{
+    bInitialPageBreaks = true;
+}
+
+IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
+{
+    if (pTimer == &maShowPageBreaksTimer)
+    {
+        ScDocument& rDoc = mrViewData.GetDocument();
+        const ScViewOptions& rOpts = mrViewData.GetOptions();
+        bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+        ScDocShell* pDocSh = mrViewData.GetDocShell();
+        bool bModified = pDocSh->IsModified();
+        // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+        // is enabled, breaks should be visible. If the document is opened the first
+        // time or a tab is activated the first time, the breaks are not calculated
+        // yet, so this initialization is done here.
+        if (bPage)
+        {
+            SCTAB nCurrentTab = mrViewData.GetTabNo();
+            Size pagesize = rDoc.GetPageSize(nCurrentTab);
+            if (pagesize.IsEmpty())
+            {
+                ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
+                rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
+            }
+            rDoc.UpdatePageBreaks(nCurrentTab);
+            pDocSh->PostPaint(0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab, PaintPartFlags::Grid);
+            pDocSh->SetModified(bModified);
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
