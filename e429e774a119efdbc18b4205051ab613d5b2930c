@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ba5caa1_1e5cd163",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-06T15:04:36Z",
+      "side": 1,
+      "message": "if the m_eType is TableText we should not skip SwTableBoxStartNode because that would take us outside the cell\n\n... except there\u0027s a corner case where it might make sense, but only conditionally: if rPaM is inside a nested table, and you\u0027re calling compare on the outer cell, the inner cell should be skipped - but that didn\u0027t work before so we can ignore it for now...",
+      "revId": "e429e774a119efdbc18b4205051ab613d5b2930c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a94947a_ed0640b3",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-06T15:04:36Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "e429e774a119efdbc18b4205051ab613d5b2930c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
