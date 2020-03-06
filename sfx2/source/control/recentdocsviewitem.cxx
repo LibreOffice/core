@@ -23,12 +23,62 @@
 
 #include <bitmaps.hlst>
 #include "recentdocsviewitem.hxx"
+#include <osl/file.hxx>
+#include <osl/thread.hxx>
 
 using namespace basegfx;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
+
+class FileCheckThread : public osl::Thread
+{
+
+public:
+    FileCheckThread( OUString aFile, BitmapEx& aBitmap );
+
+protected:
+    virtual ~FileCheckThread() override;
+    virtual void SAL_CALL run() override;
+
+private:
+   OUString m_aFile;
+   BitmapEx m_aBitmap;
+};
+
+void SAL_CALL FileCheckThread::run()
+{
+    osl_setThreadName("FileCheckThread");
+
+    try {
+        ::osl::File aFile(m_aFile);
+        if (aFile.open(osl_File_OpenFlag_Read) != osl::FileBase::E_None)
+        {
+            m_aBitmap.Adjust(-50,0,0,0,0);
+            RecentDocsViewItem::Paint();
+        }
+    }
+    catch(const uno::Exception&) {
+        // Silently catch all errors
+//        TOOLS_WARN_EXCEPTION("file check", "Caught exception, thread terminated" );
+    }
+}
+
+FileCheckThread::FileCheckThread( OUString aFile, BitmapEx& aBitmap ) :
+   m_aFile(aFile),
+   m_aBitmap(aBitmap)
+{
+    createSuspended();
+
+    // actually run the thread
+    resume();
+}
+
+
+FileCheckThread::~FileCheckThread()
+{
+}
 
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
     const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, long nThumbnailSize)
@@ -55,7 +105,11 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INetProtocol::File &&
             officecfg::Office::Common::History::RecentDocsThumbnail::get())
         aThumbnail = ThumbnailView::readThumbnail(rURL);
-
+    //grey out files that are not accessible on the local file system
+    new FileCheckThread(rURL,aThumbnail);
+/*    if ( !aThumbnail.IsEmpty() && !file_exists(rURL) && aURLObj.GetProtocol() == INetProtocol::File)
+        aThumbnail.Adjust(-50,0,0,0,0);
+*/
     if (aThumbnail.IsEmpty())
     {
         // Use the default thumbnail if we have nothing else
