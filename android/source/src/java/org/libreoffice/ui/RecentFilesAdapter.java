@@ -70,7 +70,10 @@ class RecentFilesAdapter extends RecyclerView.Adapter<RecentFilesAdapter.ViewHol
                 compoundDrawableInt = R.drawable.impress;
                 break;
         }
-        holder.imageView.setImageDrawable(ContextCompat.getDrawable(mActivity, compoundDrawableInt));
+
+        // set icon if known filetype was detected
+        if (compoundDrawableInt != 0)
+            holder.imageView.setImageDrawable(ContextCompat.getDrawable(mActivity, compoundDrawableInt));
     }
 
     @Override
