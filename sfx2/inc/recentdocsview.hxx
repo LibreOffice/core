@@ -17,6 +17,8 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <salhelper/thread.hxx>
+
 namespace com::sun::star::frame { class XDispatch; }
 
 namespace sfx2
@@ -93,6 +95,22 @@ private:
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
 };
+
+class ThumbnailThread : public salhelper::Thread
+{
+private:
+   const OUString m_aURL;
+   BitmapEx& m_aThumbnail;
+   virtual void execute() override;
+
+public:
+    explicit ThumbnailThread(const OUString aURL, BitmapEx& aThumbnail)
+        : ::salhelper::Thread("ThumbnailThread")
+        , m_aURL(aURL)
+        , m_aThumbnail(aThumbnail)
+    {}
+};
+
 
 } // namespace sfx2
 

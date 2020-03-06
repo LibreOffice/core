@@ -41,6 +41,9 @@
 #include "recentdocsviewitem.hxx"
 
 #include <officecfg/Office/Common.hxx>
+#include <unotools/ucbhelper.hxx>
+#include <osl/file.hxx>
+#include <thread>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -201,8 +204,8 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    const std::map<ApplicationType,OUString>& rWhichMap = IsDocEncrypted( rURL) ?
-        EncryptedBitmapForExtension : BitmapForExtension;
+    const std::map<ApplicationType,OUString>& rWhichMap = //IsDocEncrypted( rURL) ?
+        /*EncryptedBitmapForExtension : */BitmapForExtension;
 
     std::map<ApplicationType,OUString>::const_iterator mIt =
         std::find_if( rWhichMap.begin(), rWhichMap.end(),
@@ -222,8 +225,41 @@ void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, co
     AppendItem( std::make_unique<RecentDocsViewItem>(*this, rURL, rTitle, rThumbnail, nId, mnItemMaxSize) );
 }
 
+void ThumbnailThread::execute()
+{
+    OUString aBase64;
+    aBase64 = m_aURL;
+    if (!aBase64.isEmpty())
+    {
+        Sequence<sal_Int8> aDecoded;
+        comphelper::Base64::decode(aDecoded, aBase64);
+
+        SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
+        vcl::PNGReader aReader(aStream);
+        m_aThumbnail = aReader.Read();
+    }
+
+    BitmapEx aModule;
+//    aModule = getDefaultThumbnail(m_aURL);
+
+    if (!m_aThumbnail.IsEmpty()) {
+        ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
+        Size aSize(m_aThumbnail.GetSizePixel());
+        m_pVirDev->SetOutputSizePixel(aSize);
+        m_pVirDev->DrawBitmapEx(Point(), m_aThumbnail);
+        if (!aModule.IsEmpty())
+            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-50,aSize.Height()-50), Size(40,40), aModule);
+        m_aThumbnail = m_pVirDev->GetBitmapEx(Point(), aSize);
+        m_pVirDev.disposeAndClear();
+    }
+}
+
 void RecentDocsView::Reload()
 {
+    OUString aURL;
+    OUString aTitle;
+    BitmapEx aThumbnail;
+
     Clear();
 
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
@@ -231,10 +267,6 @@ void RecentDocsView::Reload()
     {
         const Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
 
-        OUString aURL;
-        OUString aTitle;
-        BitmapEx aThumbnail;
-        BitmapEx aModule;
 
         for ( const auto& rProp : rRecentEntry )
         {
@@ -245,29 +277,10 @@ void RecentDocsView::Reload()
             //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
             else if (rProp.Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
             {
-                OUString aBase64;
-                a >>= aBase64;
-                if (!aBase64.isEmpty())
-                {
-                    Sequence<sal_Int8> aDecoded;
-                    comphelper::Base64::decode(aDecoded, aBase64);
-
-                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
-                    vcl::PNGReader aReader(aStream);
-                    aThumbnail = aReader.Read();
-                }
+                rtl::Reference<ThumbnailThread> const pThread(
+                        new ThumbnailThread(aURL, aThumbnail));
+                pThread->launch();
             }
-        }
-
-        aModule = getDefaultThumbnail(aURL);
-        if (!aModule.IsEmpty() && !aThumbnail.IsEmpty()) {
-            ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
-            Size aSize(aThumbnail.GetSizePixel());
-            m_pVirDev->SetOutputSizePixel(aSize);
-            m_pVirDev->DrawBitmapEx(Point(), aThumbnail);
-            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-50,aSize.Height()-50), Size(40,40), aModule);
-            aThumbnail = m_pVirDev->GetBitmapEx(Point(), aSize);
-            m_pVirDev.disposeAndClear();
         }
 
         if(!aURL.isEmpty())
