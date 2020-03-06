@@ -29,6 +29,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/XTextContentAppend.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
@@ -1067,6 +1068,37 @@ DECLARE_RTFEXPORT_TEST(testTdf104744, "tdf104744.rtf")
     comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
+{
+    // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings
+        = xFootnotesSupplier->getFootnoteSettings();
+    sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+
+    // Insert a footnote.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFootnote(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                uno::UNO_QUERY);
+    xTextContentAppend->appendTextContent(xFootnote, {});
+
+    reload("Rich Text Format", "");
+    xFootnotesSupplier.set(mxComponent, uno::UNO_QUERY);
+    sal_uInt16 nExpected = style::NumberingType::SYMBOL_CHICAGO;
+    auto nActual
+        = getProperty<sal_uInt16>(xFootnotesSupplier->getFootnoteSettings(), "NumberingType");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 63
+    // - Actual  : 4
+    // i.e. the numbering type was ARABIC, not SYMBOL_CHICAGO.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf105852, "tdf105852.rtf")

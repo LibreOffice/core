@@ -1359,6 +1359,77 @@ void RtfAttributeOutput::SectionType(sal_uInt8 nBreakCode)
         m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
 }
 
+void RtfAttributeOutput::SectFootnoteEndnotePr()
+{
+    WriteFootnoteEndnotePr(true, m_rExport.m_pDoc->GetFootnoteInfo());
+    WriteFootnoteEndnotePr(false, m_rExport.m_pDoc->GetEndNoteInfo());
+}
+
+void RtfAttributeOutput::WriteFootnoteEndnotePr(bool bFootnote, const SwEndNoteInfo& rInfo)
+{
+    const char* pOut = nullptr;
+
+    if (bFootnote)
+    {
+        switch (rInfo.aFormat.GetNumberingType())
+        {
+            default:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNAR;
+                break;
+            case SVX_NUM_CHARS_LOWER_LETTER:
+            case SVX_NUM_CHARS_LOWER_LETTER_N:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNALC;
+                break;
+            case SVX_NUM_CHARS_UPPER_LETTER:
+            case SVX_NUM_CHARS_UPPER_LETTER_N:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNAUC;
+                break;
+            case SVX_NUM_ROMAN_LOWER:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNRLC;
+                break;
+            case SVX_NUM_ROMAN_UPPER:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNRUC;
+                break;
+            case SVX_NUM_SYMBOL_CHICAGO:
+                pOut = OOO_STRING_SVTOOLS_RTF_SFTNNCHI;
+                break;
+        }
+    }
+    else
+    {
+        switch (rInfo.aFormat.GetNumberingType())
+        {
+            default:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNAR;
+                break;
+            case SVX_NUM_CHARS_LOWER_LETTER:
+            case SVX_NUM_CHARS_LOWER_LETTER_N:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNALC;
+                break;
+            case SVX_NUM_CHARS_UPPER_LETTER:
+            case SVX_NUM_CHARS_UPPER_LETTER_N:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNAUC;
+                break;
+            case SVX_NUM_ROMAN_LOWER:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNRLC;
+                break;
+            case SVX_NUM_ROMAN_UPPER:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNRUC;
+                break;
+            case SVX_NUM_SYMBOL_CHICAGO:
+                pOut = OOO_STRING_SVTOOLS_RTF_SAFTNNCHI;
+                break;
+        }
+    }
+
+    m_aSectionBreaks.append(pOut);
+
+    if (!m_bBufferSectionBreaks)
+    {
+        m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+    }
+}
+
 void RtfAttributeOutput::NumberingDefinition(sal_uInt16 nId, const SwNumRule& /*rRule*/)
 {
     m_rExport.Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDE);
