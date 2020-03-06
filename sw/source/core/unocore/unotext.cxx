@@ -996,14 +996,18 @@ bool SwXText::Impl::CheckForOwnMember(
     const SwNode& rSrcNode = rPaM.GetNode();
     const SwStartNode* pTmp = rSrcNode.FindSttNodeByType(eSearchNodeType);
 
-    // skip SectionNodes
-    while(pTmp && pTmp->IsSectionNode())
+    // skip SectionNodes / TableNodes to be able to compare across table/section boundaries
+    while (pTmp
+           && (pTmp->IsSectionNode() || pTmp->IsTableNode()
+               || (m_eType != CursorType::TableText
+                   && pTmp->GetStartNodeType() == SwTableBoxStartNode)))
     {
         pTmp = pTmp->StartOfSectionNode();
     }
 
-    //if the document starts with a section
-    while(pOwnStartNode->IsSectionNode())
+    while (pOwnStartNode->IsSectionNode() || pOwnStartNode->IsTableNode()
+           || (m_eType != CursorType::TableText
+               && pOwnStartNode->GetStartNodeType() == SwTableBoxStartNode))
     {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
