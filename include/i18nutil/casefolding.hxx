@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <config_options.h>
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
@@ -70,7 +71,7 @@ struct MappingElement
     sal_Int8 current;
 };
 
-class I18NUTIL_DLLPUBLIC casefolding
+class UNLESS_MERGELIBS(I18NUTIL_DLLPUBLIC) casefolding
 {
 public:
     /// @throws css::uno::RuntimeException

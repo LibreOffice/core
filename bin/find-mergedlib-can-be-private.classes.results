@@ -53,8 +53,6 @@ GroupBox
 HelpLinker
 Hunspell
 Hunzip
-INetMIMEMessage
-INetMIMEMessageStream
 ImageControl
 ImplJobSetup
 IndexerPreProcessor
@@ -119,7 +117,6 @@ PatternField
 PatternFormatter
 PhysicalFontFamily
 PlaceEditDialog
-Point
 PrinterOptions
 ProgressBar
 QueueInfo
@@ -163,7 +160,6 @@ SkiaPackedSurfaceAtlasManager
 SkiaZone
 SpinButton
 SpinListenerMultiplexer
-Storage
 SvParser<HtmlTokenId>::TokenStackType
 SvParser<int>::TokenStackType
 SvtBasePrintOptions
@@ -180,8 +176,6 @@ Svx3DTextureProjectionXItem
 Svx3DTextureProjectionYItem
 SvxCurrencyToolBoxControl
 SvxEditSourceAdapter
-SvxGraphicObject
-SvxMetricField
 SvxPasswordDialog
 SvxPropertySetInfoPool
 SvxTPage
@@ -195,9 +189,6 @@ TextListenerMultiplexer
 Throbber
 TimeBox
 TimeFormatter
-TreeEditListenerMultiplexer
-TreeExpansionListenerMultiplexer
-TreeSelectionListenerMultiplexer
 UFlowChainedText
 UnoEditControl
 UnoWrapperBase
@@ -214,7 +205,6 @@ VclBuilder::sortIntoBestTabTraversalOrder
 VclDrawingArea
 VclGrid
 VclWindowEvent
-VersionCompat
 XMLDashStyleExport
 XMLDashStyleImport
 XMLGradientStyleExport
@@ -361,9 +351,6 @@ framework::StatusBarConfiguration
 framework::ToolBoxConfiguration
 framework::TransactionManager
 framework::UIConfigurationImporterOOo1x
-i18nutil::casefolding
-i18nutil::oneToOneMapping
-i18nutil::widthfolding
 legacy::CntInt32
 legacy::SfxBool
 legacy::SvxAdjust
@@ -379,14 +366,6 @@ legacy::SvxPosture
 legacy::SvxTextLine
 legacy::SvxVerJustify
 legacy::SvxWeight
-linguistic::HyphenatedWord
-linguistic::PossibleHyphens
-linguistic::PropertyChgHelper
-linguistic::PropertyHelper_Hyphenation
-linguistic::PropertyHelper_Spell
-linguistic::PropertyHelper_Spelling
-linguistic::PropertyHelper_Thesaurus
-linguistic::SpellAlternatives
 psp::PrintFontManager::PrintFont
 sdr::SelectionController
 sdr::ViewSelection
@@ -421,7 +400,6 @@ svxform::OLocalExchange
 svxform::OLocalExchangeHelper
 svxform::OSQLParserClient
 toolkitform
-tools::WeakBase
 ucbhelper::ActiveDataSink
 ucbhelper::InteractionApprove
 ucbhelper::InteractionDisapprove

@@ -21,6 +21,7 @@
 
 #include <i18nutil/i18nutildllapi.h>
 #include <memory>
+#include <config_options.h>
 
 namespace i18nutil {
 
@@ -38,7 +39,7 @@ struct UnicodePairWithFlag
     UnicodePairFlag flag;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMapping
+class UNLESS_MERGELIBS(I18NUTIL_DLLPUBLIC) oneToOneMapping
 {
 private:
     oneToOneMapping(const oneToOneMapping&) = delete;

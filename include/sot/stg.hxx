@@ -25,6 +25,7 @@
 #include <tools/globname.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
+#include <config_options.h>
 
 namespace com { namespace sun { namespace star { namespace ucb { class XProgressHandler; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
@@ -146,7 +147,7 @@ public:
 
 class UCBStorageStream;
 
-class SOT_DLLPUBLIC Storage final : public BaseStorage, public OLEStorageBase
+class UNLESS_MERGELIBS(SOT_DLLPUBLIC) Storage final : public BaseStorage, public OLEStorageBase
 {
     OUString                    aName;
     bool                        bIsRoot;

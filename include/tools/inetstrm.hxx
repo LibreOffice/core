@@ -23,10 +23,11 @@
 #include <sal/types.h>
 #include <vector>
 #include <memory>
+#include <config_options.h>
 
 class INetMIMEMessage;
 
-class TOOLS_DLLPUBLIC INetMIMEMessageStream
+class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) INetMIMEMessageStream
 {
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;

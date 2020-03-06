@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
+#include <config_options.h>
 
 class SvStream;
 namespace rtl
@@ -67,7 +68,7 @@ inline bool equal(Pair const & p1, Pair const & p2)
 // Point
 
 class Size;
-class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point final : protected Pair
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SAL_DLLPUBLIC_EXPORT) Point final : protected Pair
 {
 public:
                         Point() {}

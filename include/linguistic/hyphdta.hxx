@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <linguistic/lngdllapi.h>
 #include <i18nlangtag/lang.h>
+#include <config_options.h>
 
 namespace linguistic
 {
@@ -61,7 +62,7 @@ public:
     virtual sal_Bool SAL_CALL
         isAlternativeSpelling() override;
 
-    static css::uno::Reference <css::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
+    static css::uno::Reference <css::linguistic2::XHyphenatedWord> UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateHyphenatedWord(
         const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
 };
@@ -97,7 +98,7 @@ public:
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions() override;
 
-    static css::uno::Reference < css::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
+    static css::uno::Reference < css::linguistic2::XPossibleHyphens > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreatePossibleHyphens
         (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
          const css::uno::Sequence< sal_Int16 > &rPositions);
