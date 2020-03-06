@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 
 public class SettingsActivity extends Activity {
     @Override
@@ -30,7 +31,9 @@ public class SettingsActivity extends Activity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.libreoffice_preferences);
             if(!BuildConfig.ALLOW_EDITING) {
-                getPreferenceScreen().removePreference(findPreference("PREF_CATEGORY_GENERAL"));
+                PreferenceGroup generalGroup = (PreferenceGroup) findPreference("PREF_CATEGORY_GENERAL");
+                generalGroup.removePreference(generalGroup.findPreference("ENABLE_EXPERIMENTAL"));
+                generalGroup.removePreference(generalGroup.findPreference("ENABLE_DEVELOPER"));
             }
         }
 
