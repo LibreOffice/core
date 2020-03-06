@@ -599,8 +599,9 @@ DECLARE_RTFEXPORT_TEST(testFdo55493, "fdo55493.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3969), xShape->getSize().Width);
 }
 
-DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
 {
+    load(mpTestDocumentPath, "copypaste-pagestyle.rtf");
     // The problem was that RTF import during copy&paste did not ignore page styles.
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -614,8 +615,9 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
                          getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
-DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
 {
+    load(mpTestDocumentPath, "copypaste-footnote.rtf");
     // The RTF import did not handle the case when the position wasn't the main document XText, but something different, e.g. a footnote.
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -625,8 +627,9 @@ DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo63428)
 {
+    load(mpTestDocumentPath, "hello.rtf");
     // Pasting content that contained an annotation caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
@@ -650,8 +653,9 @@ DECLARE_RTFEXPORT_TEST(testFdo69384, "fdo69384-paste.rtf")
     CPPUNIT_ASSERT_EQUAL(68.f, getProperty<float>(xPropertySet, "CharHeight"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
 {
+    load(mpTestDocumentPath, "hello.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -664,8 +668,9 @@ DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xPropertySet, "CharHeight"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
 {
+    load(mpTestDocumentPath, "hello.rtf");
     // Pasting content that contained a footnote caused a crash.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
@@ -673,8 +678,9 @@ DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
     paste("rtfexport/data/fdo61193.rtf", xEnd);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf108123, "hello.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
 {
+    load(mpTestDocumentPath, "hello.rtf");
     // This crashed, the shape push/pop and table manager stack went out of
     // sync -> we tried to de-reference an empty stack.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
