@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3f8db56_794ed009",
+        "filename": "extensions/IwyuFilter_extensions.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-06T08:07:20Z",
+      "side": 1,
+      "message": "Would it make sense to move this into bin/find-unneeded-includes, given this is not specific to extensions/?",
+      "revId": "fcda4550c8f2e1b9ffdbd28e1f5e9a47e68305a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
