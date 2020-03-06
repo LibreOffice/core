@@ -26,7 +26,7 @@ public class SearchController implements View.OnClickListener {
             JSONObject rootJson = new JSONObject();
 
             addProperty(rootJson, "SearchItem.SearchString", "string", searchString);
-            addProperty(rootJson, "SearchItem.Backward", "boolean", direction == SearchDirection.DOWN ? "true" : "false");
+            addProperty(rootJson, "SearchItem.Backward", "boolean", direction == SearchDirection.UP ? "true" : "false");
             addProperty(rootJson, "SearchItem.SearchStartPointX", "long", String.valueOf((long) UnitConverter.pixelToTwip(x, LOKitShell.getDpi(mActivity))));
             addProperty(rootJson, "SearchItem.SearchStartPointY", "long", String.valueOf((long) UnitConverter.pixelToTwip(y, LOKitShell.getDpi(mActivity))));
             addProperty(rootJson, "SearchItem.Command", "long", String.valueOf(0)); // search all == 1

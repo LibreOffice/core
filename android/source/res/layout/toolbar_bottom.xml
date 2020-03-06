@@ -438,7 +438,7 @@
             android:inputType="" />
 
         <ImageButton
-            android:id="@+id/button_search_up"
+            android:id="@+id/button_search_down"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
@@ -447,7 +447,7 @@
             android:src="@drawable/ic_search_direction_down" />
 
         <ImageButton
-            android:id="@+id/button_search_down"
+            android:id="@+id/button_search_up"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
