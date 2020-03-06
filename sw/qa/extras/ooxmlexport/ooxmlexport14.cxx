@@ -149,6 +149,34 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "decimalZero");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
+{
+    // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings
+        = xFootnotesSupplier->getFootnoteSettings();
+    sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+
+    // Insert a footnote.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFootnote(
+        xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                uno::UNO_QUERY);
+    xTextContentAppend->appendTextContent(xFootnote, {});
+
+    reload("Office Open XML Text", "");
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
+    // because the exporter had no idea what markup to use for SYMBOL_CHICAGO.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "chicago");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 {
     //if the original tdf87569 sample is upgraded it will have drawingml shapes...

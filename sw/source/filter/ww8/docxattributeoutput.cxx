@@ -7818,6 +7818,9 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         case SVX_NUM_CHAR_SPECIAL:
             fmt = "bullet";
             break;
+        case SVX_NUM_SYMBOL_CHICAGO:
+            fmt = "chicago";
+            break;
         case SVX_NUM_ARABIC_ZERO:
             fmt = "decimalZero";
             break;
