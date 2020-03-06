@@ -37,24 +37,38 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 JSInstanceBuilder::~JSInstanceBuilder()
 {
     if (m_nWindowId)
-        GetLOKWeldBuilderMap().erase(m_nWindowId);
+        GetLOKWeldWidgetsMap().erase(m_nWindowId);
 }
 
-std::map<vcl::LOKWindowId, JSInstanceBuilder*>& JSInstanceBuilder::GetLOKWeldBuilderMap()
+std::map<vcl::LOKWindowId, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
 {
-    // Map to remember the LOKWindowId <-> Builder binding.
-    static std::map<vcl::LOKWindowId, JSInstanceBuilder*> s_aLOKWeldBuildersMap;
+    // Map to remember the LOKWindowId <-> weld widgets binding.
+    static std::map<vcl::LOKWindowId, WidgetMap> s_aLOKWeldBuildersMap;
 
     return s_aLOKWeldBuildersMap;
 }
 
-JSInstanceBuilder* JSInstanceBuilder::FindLOKWeldBuilder(vcl::LOKWindowId nWindowId)
+weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
+                                                    const OString& rWidget)
 {
-    const auto it = GetLOKWeldBuilderMap().find(nWindowId);
-    if (it != GetLOKWeldBuilderMap().end())
-        return it->second;
+    const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
+    if (it != GetLOKWeldWidgetsMap().end())
+    {
+        auto widgetIt = it->second.find(rWidget);
+        if (widgetIt != it->second.end())
+            return widgetIt->second;
+    }
 
     return nullptr;
+}
+
+void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
+{
+    auto it = GetLOKWeldWidgetsMap().find(m_nWindowId);
+    if (it != GetLOKWeldWidgetsMap().end())
+    {
+        it->second.insert(WidgetMap::value_type(id, pWidget));
+    }
 }
 
 std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, bool bTakeOwnership)
@@ -62,8 +76,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
     m_nWindowId = pDialog->GetLOKWindowId();
 
-    GetLOKWeldBuilderMap().insert(
-        std::map<vcl::LOKWindowId, JSInstanceBuilder*>::value_type(m_nWindowId, this));
+    WidgetMap map;
+    GetLOKWeldWidgetsMap().insert(
+        std::map<vcl::LOKWindowId, WidgetMap>::value_type(m_nWindowId, map));
 
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
                                                : nullptr);
@@ -91,21 +106,32 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bool bTakeOwnership)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
-    return std::make_unique<JSLabel>(m_aOwnedToplevel, pLabel, this, bTakeOwnership);
+    auto pWeldWidget = std::make_unique<JSLabel>(m_aOwnedToplevel, pLabel, this, bTakeOwnership);
+
+    RememberWidget(id, pWeldWidget.get());
+    return pWeldWidget;
 }
 
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    return pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
-                   : nullptr;
+    auto pWeldWidget
+        = pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
+                  : nullptr;
+
+    RememberWidget(id, pWeldWidget.get());
+    return pWeldWidget;
 }
 
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
-    return pEntry ? std::make_unique<JSEntry>(m_aOwnedToplevel, pEntry, this, bTakeOwnership)
-                  : nullptr;
+    auto pWeldWidget
+        = pEntry ? std::make_unique<JSEntry>(m_aOwnedToplevel, pEntry, this, bTakeOwnership)
+                 : nullptr;
+
+    RememberWidget(id, pWeldWidget.get());
+    return pWeldWidget;
 }
 
 std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString& id,
@@ -113,20 +139,35 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 {
     vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
     ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
+    std::unique_ptr<weld::ComboBox> pWeldWidget;
+
     if (pComboBox)
-        return std::make_unique<JSComboBox>(m_aOwnedToplevel, pComboBox, this, bTakeOwnership);
-    ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-    return pListBox ? std::make_unique<JSListBox>(m_aOwnedToplevel, pListBox, this, bTakeOwnership)
-                    : nullptr;
+    {
+        pWeldWidget
+            = std::make_unique<JSComboBox>(m_aOwnedToplevel, pComboBox, this, bTakeOwnership);
+    }
+    else
+    {
+        ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
+        pWeldWidget = pListBox ? std::make_unique<JSListBox>(m_aOwnedToplevel, pListBox, this,
+                                                             bTakeOwnership)
+                               : nullptr;
+    }
+
+    RememberWidget(id, pWeldWidget.get());
+    return pWeldWidget;
 }
 
 std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id,
                                                                  bool bTakeOwnership)
 {
     TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-    return pNotebook
-               ? std::make_unique<JSNotebook>(m_aOwnedToplevel, pNotebook, this, bTakeOwnership)
-               : nullptr;
+    auto pWeldWidget = pNotebook ? std::make_unique<JSNotebook>(m_aOwnedToplevel, pNotebook, this,
+                                                                bTakeOwnership)
+                                 : nullptr;
+
+    RememberWidget(id, pWeldWidget.get());
+    return pWeldWidget;
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
