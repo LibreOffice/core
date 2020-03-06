@@ -324,6 +324,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // This was 2 (missing trailing cell in merged cell range)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 {
     // The second paragraph (first numbered one) had 0 bottom margin:
