@@ -246,15 +246,12 @@ cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 # Save
 cmd/32/savebasicas.png cmd/32/saveas.png
 cmd/32/savegraphic.png cmd/32/save.png
-cmd/32/recsave.png cmd/32/save.png
 
 cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
-cmd/lc_recsave.png cmd/lc_save.png
 
 cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
-cmd/sc_recsave.png cmd/sc_save.png
 
 # Text
 cmd/32/doubleclicktextedit.png cmd/32/pickthrough.png
@@ -1827,7 +1824,7 @@ cmd/lc_showgraphics.png cmd/lc_graphic.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # navigator
-cmd/32/dsbdocumentdatasource.png cmd/32/sbaexecutesql.png
+cmd/32/dsbdocumentdatasource.png cmd/32/insertexternaldatasource.png
 cmd/32/dsbinsertcolumns.png cmd/32/insertfieldctrl.png
 cmd/32/inserttoolbox.png cmd/32/dataimport.png
 cmd/32/savesimple.png cmd/32/save.png
@@ -1835,7 +1832,7 @@ cmd/32/sbabrwinsert.png cmd/32/insertfieldctrl.png
 cmd/32/showbrowser.png cmd/32/controlproperties.png
 cmd/32/showpropbrowser.png cmd/32/controlproperties.png
 
-cmd/lc_dsbdocumentdatasource.png cmd/lc_sbaexecutesql.png
+cmd/lc_dsbdocumentdatasource.png cmd/lc_insertexternaldatasource.png
 cmd/lc_dsbinsertcolumns.png cmd/lc_insertfieldctrl.png
 cmd/lc_inserttoolbox.png cmd/lc_dataimport.png
 cmd/lc_savesimple.png cmd/lc_save.png
@@ -1843,7 +1840,7 @@ cmd/lc_sbabrwinsert.png cmd/lc_insertfieldctrl.png
 cmd/lc_showbrowser.png cmd/lc_controlproperties.png
 cmd/lc_showpropbrowser.png cmd/lc_controlproperties.png
 
-cmd/sc_dsbdocumentdatasource.png cmd/sc_sbaexecutesql.png
+cmd/sc_dsbdocumentdatasource.png cmd/sc_insertexternaldatasource.png
 cmd/sc_dsbinsertcolumns.png cmd/sc_insertfieldctrl.png
 cmd/sc_inserttoolbox.png cmd/sc_dataimport.png
 cmd/sc_savesimple.png cmd/sc_save.png
@@ -2501,7 +2498,7 @@ sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sx01.png cmd/sc_changedatabasefield.png
-sw/res/sx02.png cmd/sc_freezepanesfirstrow.png
+sw/res/sx02.png cmd/sc_dbviewtables.png
 sw/res/sx03.png cmd/sc_dbviewqueries.png
 
 # res
