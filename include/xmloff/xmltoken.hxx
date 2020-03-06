@@ -1180,6 +1180,7 @@ namespace xmloff { namespace token {
         XML_MACTION,
         XML_MAIN_ENTRY_STYLE_NAME,
         XML_MAJOR,
+        XML_MAJOR_ORIGIN,
         XML_MALIGNGROUP,
         XML_MALIGNMARK,
         XML_MANUAL,
