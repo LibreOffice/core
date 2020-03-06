@@ -926,9 +926,6 @@ oslFileError osl::detail::convertUrlToPathname(OUString const & url, OString * p
     } catch (std::length_error &) {
         e = osl_File_E_RANGE;
     }
-    if (e == osl_File_E_None && !pathname->startsWith("/")) {
-        e = osl_File_E_INVAL;
-    }
     return e;
 }
 
