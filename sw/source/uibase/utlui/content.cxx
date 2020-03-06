@@ -541,7 +541,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             size_t nPos = 0;
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                const sal_Int8 nLevel = static_cast<sal_Int8>(m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i));
+                const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
                 if(nLevel >= m_nOutlineLevel )
                     m_nMemberCount--;
                 else
