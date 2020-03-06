@@ -434,6 +434,7 @@ create-date-string
 creation-date
 creation-time
 creator
+cross-between
 csc
 csch
 cube
