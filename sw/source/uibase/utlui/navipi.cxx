@@ -388,17 +388,28 @@ FactoryFunction SwNavigationPI::GetUITestFactory() const
 
 // Action-Handler Edit:
 // Switches to the page if the structure view is not turned on.
-void SwNavigationPI::EditAction()
+bool SwNavigationPI::EditAction()
 {
     SwView *pView = GetCreateView();
-    if (pView)
-    {
-        if(m_aPageChgIdle.IsActive())
-            m_aPageChgIdle.Stop();
-        m_pCreateView->GetWrtShell().GotoPage(GetPageEdit().get_value(), true);
-        m_pCreateView->GetEditWin().GrabFocus();
-        m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
-    }
+    if (!pView)
+        return false;
+
+    if (m_aPageChgIdle.IsActive())
+        m_aPageChgIdle.Stop();
+
+    SwWrtShell &rSh = m_pCreateView->GetWrtShell();
+    sal_uInt16 nNewPage = GetPageEdit().get_value();
+
+    sal_uInt16 nPhyPage, nVirPage;
+    rSh.GetPageNum(nPhyPage, nVirPage);
+    if (nPhyPage == nNewPage)
+        return false;
+
+    rSh.GotoPage(nNewPage, true);
+    m_pCreateView->GetEditWin().GrabFocus();
+    m_pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
+
+    return true;
 }
 
 void SwNavigationPI::ZoomOut()
@@ -1059,11 +1070,11 @@ bool SwNavigationPI::IsGlobalDoc() const
 
 IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 {
-    if (!IsDisposed())
-    {
-        EditAction();
+    if (IsDisposed())
+        return;
+
+    if (EditAction())
         GetPageEdit().GrabFocus();
-    }
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, weld::SpinButton&, void)
