@@ -342,7 +342,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxEnableSdremote->get_state_changed_from_saved()        ||
         m_xCbxEnablePresenterScreen->get_state_changed_from_saved() ||
         m_xCbxCompatibility->get_state_changed_from_saved()         ||
-        m_xCbxUsePrinterMetrics                                     ||
+        m_xCbxUsePrinterMetrics->get_state_changed_from_saved()     ||
         m_xCbxDistort->get_state_changed_from_saved())
     {
         SdOptionsMiscItem aOptsItem;
