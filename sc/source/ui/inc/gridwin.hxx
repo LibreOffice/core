@@ -312,6 +312,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     void            InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                                             const Fraction aScaleX, const Fraction aScaleY);
 
+    Timer           maShowPageBreaksTimer;
+    bool            bInitialPageBreaks;
+    DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
