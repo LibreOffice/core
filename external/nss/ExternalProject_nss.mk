@@ -16,22 +16,38 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 ))
 
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
+
+$(eval $(call gb_ExternalProject_use_autoconf,nss,build))
+
+# The nss build system uses 'python', even recursively, so make it find our internal python if necessary.
+nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
+nss_SETUP_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/setup-python
+
+$(call gb_ExternalProject_get_state_target,nss,build): \
+    $(call gb_ExternalExecutable_get_dependencies,python) \
+    $(call gb_UnpackedTarball_get_target,gyp) | $(dir $(call gb_ExternalProject_get_target,gyp)).dir
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
+	cp $(SRCDIR)/external/nss/python-cygwin-template $(nss_PYTHON)
+	pythondir=$$($(call gb_ExternalExecutable_get_command,python) -c 'import sys; import os; sys.stdout.write(os.path.dirname(sys.executable))') \
+		&& echo PATH=\"$$pythondir:\$$PATH\" >>$(nss_PYTHON)
+	echo '$(call gb_ExternalExecutable_get_command,python)' \"$$\{args[@]\}\" >>$(nss_PYTHON)
+	chmod +x $(nss_PYTHON)
+	cp $(SRCDIR)/external/nss/setup-python $(nss_SETUP_PYTHON)
+	chmod +x $(nss_SETUP_PYTHON)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
-		$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
-			MOZ_DEBUG_SYMBOLS=1 \
-			MOZ_DEBUG_FLAGS=" " \
-			OPT_CODE_SIZE=0) \
-		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
-		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
-		LIB="$(ILIB)" \
-		XCFLAGS="-arch:SSE $(SOLARINC)" \
-		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
-			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
-			NSS_DISABLE_GTESTS=1 \
+			COMMA=$(COMMA) \
+			PATH=$$(cygpath $(call gb_UnpackedTarball_get_dir,nss)):$$(cygpath $(call gb_UnpackedTarball_get_dir,gyp)):$$PATH \
+			MAKE=$(MAKE) \
+			NSINSTALL='$(SRCDIR)/external/nss/nsinstall.py' \
+			LIB="$(ILIB)" \
+			RC="rc.exe $(SOLARINC)" \
+			CL="-arch:SSE" \
+			./build.sh -v --disable-tests --enable-libpkix \
+				$(if $(filter X86_64,$(CPUNAME)),--target=x64,--target=ia32) \
+				$(if $(ENABLE_DBGUTIL),,--opt) \
+		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 	,nss)
+	for f in $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dll.lib; do mv "$$f" "$${f%.dll.lib}".lib; done
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
 else ifneq (,$(filter FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS))) # non-WNT gyp-based
