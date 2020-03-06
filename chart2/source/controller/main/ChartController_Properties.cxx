@@ -184,8 +184,7 @@ wrapper::ItemConverter* createItemConverter(
                 if (!bDataSeries)
                     nPointIndex = aParticleID.toInt32();
 
-                sal_Int32 nNumberFormat = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
-                    xObjectProperties, xSeries, nPointIndex, xDiagram);
+                sal_Int32 nNumberFormat = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(xObjectProperties);
                 sal_Int32 nPercentNumberFormat = ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                     xObjectProperties,uno::Reference<util::XNumberFormatsSupplier>(xChartModel, uno::UNO_QUERY));
 
@@ -238,7 +237,7 @@ wrapper::ItemConverter* createItemConverter(
                         }
                     }
                 }
-                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, xSeries, nPointIndex, xDiagram );
+                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(xObjectProperties);
                 sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
