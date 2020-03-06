@@ -34,6 +34,24 @@
       "revId": "3f001891c224df915dab76ba6473caefbea387e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f135799b_bc5f5305",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5083,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-06T17:22:23Z",
+      "side": 1,
+      "message": "that is indeed a question i dont have an obvious answer to... is it any chart that needs this? then you could iterate over all the OLEs and check if any is a chart, at the start of export",
+      "parentUuid": "44299b9c_0d2dcb93",
+      "revId": "3f001891c224df915dab76ba6473caefbea387e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
