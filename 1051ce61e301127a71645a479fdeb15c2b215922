@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "629db580_4d6b1987",
+        "filename": "framework/source/uielement/recentfilesmenucontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-06T15:07:41Z",
+      "side": 1,
+      "message": "So you are enforcing file existence check upon every file, with possible network latency/timeout for inaccessible network files, for each menu opening?",
+      "range": {
+        "startLine": 206,
+        "startChar": 16,
+        "endLine": 206,
+        "endChar": 132
+      },
+      "revId": "1051ce61e301127a71645a479fdeb15c2b215922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad99295_2cf10c4b",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-06T15:07:41Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 67,
+        "startChar": 9,
+        "endLine": 67,
+        "endChar": 100
+      },
+      "revId": "1051ce61e301127a71645a479fdeb15c2b215922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
