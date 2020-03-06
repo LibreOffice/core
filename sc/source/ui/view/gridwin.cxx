@@ -449,6 +449,10 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     EnableRTL( false );
+
+    bInitialPageBreaks = true;
+    maShowPageBreaksTimer.SetInvokeHandler(LINK(this, ScGridWindow, InitiatePageBreaksTimer));
+    maShowPageBreaksTimer.SetTimeout(1);
 }
 
 ScGridWindow::~ScGridWindow()
