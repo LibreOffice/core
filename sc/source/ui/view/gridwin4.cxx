@@ -1058,6 +1058,23 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (mpNoteMarker)
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
+
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+    // is enabled, breaks should be visible. If the document is opened the first
+    // time, the breaks are not calculated yet, so for this initialization
+    // a timer will be triggered here.
+    if (bPage && bInitialPageBreaks)
+    {
+        std::set<SCCOL> aColBreaks;
+        std::set<SCROW> aRowBreaks;
+        rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
+        rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
+        if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+        {
+            maShowPageBreaksTimer.Start();
+            bInitialPageBreaks = false;
+        }
+    }
 }
 
 namespace
@@ -2014,5 +2031,40 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
+
+IMPL_LINK(ScGridWindow, TimerHdl, Timer*, pTimer, void)
+{
+    if (pTimer == &maShowPageBreaksTimer)
+    {
+        maShowPageBreaksTimer.ClearInvokeHandler();
+        ScDocument& rDoc = *pViewData->GetDocument();
+        const ScViewOptions& rOpts = pViewData->GetOptions();
+        bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+        // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+        // is enabled, breaks should be visible. If the document is opened the first
+        // time, the breaks are not calculated yet, so this initialization is
+        // done here.
+        if (bPage)
+        {
+            std::set<SCCOL> aColBreaks;
+            std::set<SCROW> aRowBreaks;
+            SCTAB nCurrentTab = pViewData->GetTabNo();
+            rDoc.GetAllColBreaks(aColBreaks, nCurrentTab, true, false);
+            rDoc.GetAllRowBreaks(aRowBreaks, nCurrentTab, true, false);
+            if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+            {
+                ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+                pTabViewShell->SetMarkedWidthOrHeight(true, SC_SIZE_SHOW, 0);
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                pDocSh->SetModified(false);
+            }
+        }
+    }
+    else
+    {
+        SAL_WARN_IF(pTimer != &maShowPageBreaksTimer, "sc.ui", "ScGridWindow::TimerHdl with bad Timer");
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
