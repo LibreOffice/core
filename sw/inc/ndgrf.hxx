@@ -39,7 +39,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     std::unique_ptr<GraphicObject> mpReplacementGraphic;
     tools::SvRef<sfx2::SvBaseLink> refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
-    bool bInSwapIn              :1;
+    bool bInSwapIn               :1; // to avoid recursion in SwGrfNode::SwapIn
+    bool bInBaseLinkSwapIn      :1; // to avoid recursion in SwBaseLink::SwapIn
 
     bool bChgTwipSize           :1;
     bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
