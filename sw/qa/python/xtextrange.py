@@ -91,6 +91,27 @@ class TestXTextRange(unittest.TestCase):
         xTextRange2 = xTextTable.getCellByName("A1")
         self.assertEqual(xTextRange2.getString(), "beforeC1after")
 
+    def test_textRangesCompare(self):
+        doc = self._uno.getDoc()
+        # Bookmark in body text
+        bookmark1 = doc.getBookmarks().getByIndex(0).getAnchor()
+
+        # Bookmarks in table
+        bookmark2 = doc.getBookmarks().getByIndex(1).getAnchor()
+        bookmark3 = doc.getBookmarks().getByIndex(2).getAnchor()
+
+        res = doc.Text.compareRegionStarts(bookmark1, bookmark2)
+        self.assertEqual(res, 1)
+
+        res = doc.Text.compareRegionStarts(bookmark2, bookmark1)
+        self.assertEqual(res, -1)
+
+        res = doc.Text.compareRegionStarts(bookmark2, bookmark3)
+        self.assertEqual(res, 1)
+
+        res = doc.Text.compareRegionStarts(bookmark1, bookmark3)
+        self.assertEqual(res, 1)
+
 if __name__ == '__main__':
     unittest.main()
 
