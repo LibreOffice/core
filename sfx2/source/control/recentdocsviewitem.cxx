@@ -23,12 +23,20 @@
 
 #include <bitmaps.hlst>
 #include "recentdocsviewitem.hxx"
+#include <osl/file.hxx>
 
 using namespace basegfx;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
+
+//works only for local files
+static bool file_exists(const OUString& fileName)
+{
+    ::osl::File aFile(fileName);
+    return aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
+}
 
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
     const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, long nThumbnailSize)
@@ -55,6 +63,9 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INetProtocol::File &&
             officecfg::Office::Common::History::RecentDocsThumbnail::get())
         aThumbnail = ThumbnailView::readThumbnail(rURL);
+    //grey out files that are not accessible on the local file system
+    if ( !aThumbnail.IsEmpty() && !file_exists(rURL) && aURLObj.GetProtocol() == INetProtocol::File)
+        aThumbnail.Adjust(-50,0,0,0,0);
 
     if (aThumbnail.IsEmpty())
     {
