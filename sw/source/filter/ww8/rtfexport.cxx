@@ -838,6 +838,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         Strm()
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTD)
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SBKNONE);
+        m_pAttrOutput->SectFootnoteEndnotePr();
         // All sections are unlocked by default
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED);
         OutLong(1);
@@ -893,7 +894,7 @@ ErrCode RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_UPPER:
                 pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;
                 break;
-            case SVX_NUM_CHAR_SPECIAL:
+            case SVX_NUM_SYMBOL_CHICAGO:
                 pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;
                 break;
             default:
@@ -926,7 +927,7 @@ ErrCode RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_UPPER:
                 pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC;
                 break;
-            case SVX_NUM_CHAR_SPECIAL:
+            case SVX_NUM_SYMBOL_CHICAGO:
                 pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI;
                 break;
             default:
