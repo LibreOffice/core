@@ -9125,7 +9125,7 @@ private:
         return true;
     }
 
-    void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren)
+    void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren) const
     {
         gtk_tree_model_iter_nth_child(pModel, result, pParent, nChildren - 1);
         nChildren = gtk_tree_model_iter_n_children(pModel, result);
@@ -10114,6 +10114,31 @@ public:
                 rGtkIter.iter = tmp;
                 return true;
             }
+        }
+        return false;
+    }
+
+    virtual bool iter_previous(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter = rGtkIter.iter;
+        GtkTreeIter tmp = iter;
+        if (gtk_tree_model_iter_previous(pModel, &tmp))
+        {
+            // Move down level(s) until we find the level where the last node exists.
+            int nChildren = gtk_tree_model_iter_n_children(pModel, &tmp);
+            if (!nChildren)
+                rGtkIter.iter = tmp;
+            else
+                last_child(pModel, &rGtkIter.iter, &tmp, nChildren);
+            return true;
+        }
+        // Move up level
+        if (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        {
+            rGtkIter.iter = tmp;
+            return true;
         }
         return false;
     }
