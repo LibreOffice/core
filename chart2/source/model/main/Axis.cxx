@@ -75,7 +75,8 @@ enum
     PROP_AXIS_DISPLAY_UNITS,
     PROP_AXIS_BUILTINUNIT,
 
-    PROP_AXIS_TRY_STAGGERING_FIRST
+    PROP_AXIS_TRY_STAGGERING_FIRST,
+    PROP_AXIS_MAJOR_ORIGIN
 };
 
 void lcl_AddPropertiesToVector(
@@ -161,11 +162,13 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "MinorTickmarks",
                   PROP_AXIS_MINOR_TICKMARKS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "MarkPosition",
                   PROP_AXIS_MARK_POSITION,
                   cppu::UnoType<css::chart::ChartAxisMarkPosition>::get(),
@@ -192,6 +195,12 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "MajorOrigin",
+                  PROP_AXIS_MAJOR_ORIGIN,
+                  cppu::UnoType<double>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
 
 }
 
