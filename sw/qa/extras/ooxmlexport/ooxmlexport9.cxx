@@ -184,6 +184,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // This was 2 (missing trailing cell in merged cell range)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 {
     // The second paragraph (first numbered one) had 0 bottom margin:
