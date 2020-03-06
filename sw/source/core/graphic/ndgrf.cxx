@@ -68,6 +68,7 @@ SwGrfNode::SwGrfNode(
         SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
+    mbInBaseLinkSwapIn(true),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -84,6 +85,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
+    mbInBaseLinkSwapIn(true),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -105,6 +107,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
+    mbInBaseLinkSwapIn(true),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( false )
@@ -449,13 +452,15 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
 
     if( pLink )
     {
-        if( GraphicType::NONE == maGrfObj.GetType() ||
-            GraphicType::Default == maGrfObj.GetType() )
+        if( (GraphicType::NONE == maGrfObj.GetType() ||
+             GraphicType::Default == maGrfObj.GetType()) &&
+            mbInBaseLinkSwapIn)
         {
             // link was not loaded yet
             if( pLink->SwapIn( bWaitForData ) )
             {
                 bRet = true;
+                mbInBaseLinkSwapIn = false;
             }
             else if( GraphicType::Default == maGrfObj.GetType() )
             {
