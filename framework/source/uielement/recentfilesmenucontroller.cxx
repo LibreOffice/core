@@ -28,6 +28,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/file.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -112,6 +113,13 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
     }
 }
 
+//works only for local files
+static bool file_exists(const OUString& fileName)
+{
+    ::osl::File aFile(fileName);
+    return aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None;
+}
+
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
@@ -194,6 +202,11 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 aMenuShortCut.append( aMenuTitle );
 
                 pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
+                //disable for files that are (temporary) not accessible excluding remote access
+                if (!file_exists(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)) && aURL.GetProtocol() == INetProtocol::File)
+                {
+                    pVCLPopupMenu->EnableItem( sal_uInt16( i+1 ), false);
+                }
                 pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
                 pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
             }
