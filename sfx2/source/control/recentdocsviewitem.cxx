@@ -59,7 +59,8 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aThumbnail.IsEmpty())
     {
         // Use the default thumbnail if we have nothing else
-        BitmapEx aExt(sfx2::RecentDocsView::getDefaultThumbnail(rURL));
+        bool bIsAccessible;
+        BitmapEx aExt(sfx2::RecentDocsView::getDefaultThumbnail(rURL, bIsAccessible));
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
