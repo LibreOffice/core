@@ -1098,6 +1098,7 @@ macro-name
 maction
 main-entry-style-name
 major
+major-origin
 maligngroup
 malignmark
 manual
