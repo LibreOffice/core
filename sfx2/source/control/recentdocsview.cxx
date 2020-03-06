@@ -41,6 +41,7 @@
 #include "recentdocsviewitem.hxx"
 
 #include <officecfg/Office/Common.hxx>
+#include <unotools/ucbhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -62,30 +63,22 @@ bool IsDocEncrypted(const OUString& rURL)
     uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
     bool bIsEncrypted = false;
 
-    try
-    {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
+    uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
 
-        uno::Sequence<uno::Any> aArgs (2);
-        aArgs[0] <<= rURL;
-        aArgs[1] <<= embed::ElementModes::READ;
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySet > xStorageProps( xDocStorage, uno::UNO_QUERY );
-        if ( xStorageProps.is() )
-        {
-            try
-            {
-                xStorageProps->getPropertyValue("HasEncryptedEntries")
-                    >>= bIsEncrypted;
-            } catch( uno::Exception& ) {}
-        }
-    }
-    catch (const uno::Exception&)
+    uno::Sequence<uno::Any> aArgs (2);
+    aArgs[0] <<= rURL;
+    aArgs[1] <<= embed::ElementModes::READ;
+    uno::Reference<embed::XStorage> xDocStorage (
+        xStorageFactory->createInstanceWithArguments(aArgs),
+        uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xStorageProps( xDocStorage, uno::UNO_QUERY );
+    if ( xStorageProps.is() )
     {
-        TOOLS_WARN_EXCEPTION("sfx",
-            "caught exception trying to find out if doc is encrypted" << rURL);
+        try
+        {
+            xStorageProps->getPropertyValue("HasEncryptedEntries")
+                >>= bIsEncrypted;
+        } catch( uno::Exception& ) {}
     }
 
     return bIsEncrypted;
@@ -195,13 +188,27 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
 }
 
-BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
+BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL, bool &bIsAccessible)
 {
     BitmapEx aImg;
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
+    bool bIsEncrypted;
 
-    const std::map<ApplicationType,OUString>& rWhichMap = IsDocEncrypted( rURL) ?
+    try
+    {
+        bIsEncrypted = IsDocEncrypted( rURL);
+        bIsAccessible = true;
+    }
+    catch (const uno::Exception&)
+    {
+        //flag as not accessible only in case of local files
+        bIsAccessible = !(aUrl.GetProtocol() == INetProtocol::File);
+        TOOLS_WARN_EXCEPTION("sfx",
+            "caught exception trying to find out if doc is encrypted" << rURL);
+    }
+
+    const std::map<ApplicationType,OUString>& rWhichMap = bIsEncrypted ?
         EncryptedBitmapForExtension : BitmapForExtension;
 
     std::map<ApplicationType,OUString>::const_iterator mIt =
@@ -259,7 +266,11 @@ void RecentDocsView::Reload()
             }
         }
 
-        aModule = getDefaultThumbnail(aURL);
+        bool bIsAccessible;
+        aModule = getDefaultThumbnail(aURL, bIsAccessible);
+        if (!bIsAccessible)
+            aThumbnail.Adjust(-50,0,0,0,0);
+
         if (!aModule.IsEmpty() && !aThumbnail.IsEmpty()) {
             ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
             Size aSize(aThumbnail.GetSizePixel());
