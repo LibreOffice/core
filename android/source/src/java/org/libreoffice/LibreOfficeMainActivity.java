@@ -424,7 +424,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
         //save document to cache
-        mTileProvider.cacheDocument();
+        if (mTileProvider != null)
+            mTileProvider.cacheDocument();
         hideSoftKeyboardDirect();
         LOKitShell.sendCloseEvent();
         super.onStop();
