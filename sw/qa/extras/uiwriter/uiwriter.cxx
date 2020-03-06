@@ -325,6 +325,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf108524();
+    void testRhbz1810732();
     void testTableInSection();
     void testTableInNestedSection();
     void testTableInSectionInTable();
@@ -534,6 +535,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
+    CPPUNIT_TEST(testRhbz1810732);
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testTableInSectionInTable);
@@ -6176,6 +6178,25 @@ void SwUiWriterTest::testTdf113877_Standard_style()
 
     CPPUNIT_ASSERT_EQUAL(listId1, listId2);
     CPPUNIT_ASSERT_EQUAL(listId1, listId3);
+}
+
+// just care that this does crash/assert
+void SwUiWriterTest::testRhbz1810732()
+{
+    load(DATA_DIRECTORY, "tdf113877_blank.odt");
+
+    // set a page cursor into the end of the document
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    // insert the same document at current cursor position
+    {
+        const OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "rhbz1810732.docx";
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+        dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    }
 }
 
 void SwUiWriterTest::testTdf108524()

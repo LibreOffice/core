@@ -3819,7 +3819,9 @@ uno::Reference < lang::XMultiServiceFactory > const & DomainMapper::GetTextFacto
 
 uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
 {
-    return m_pImpl->GetTopTextAppend()->getEnd();
+    if (m_pImpl->HasTopText())
+        return m_pImpl->GetTopTextAppend()->getEnd();
+    return m_pImpl->m_xInsertTextRange;
 }
 
 OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
