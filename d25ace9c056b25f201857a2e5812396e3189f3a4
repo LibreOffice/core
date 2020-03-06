@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5667d4a_d682a29e",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-06T19:36:12Z",
+      "side": 1,
+      "message": "Please refrain from code style changes like this in the future. If you do it, then always in a new commit/patch where it only contains style changes and is also marked as such. If you mix style changes and code changes, a reviewer or someone reading the history will still have to read and compare the change, even when there actually is no interesting change at all and that\u0027s just a waste of people\u0027s time.",
+      "revId": "d25ace9c056b25f201857a2e5812396e3189f3a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
