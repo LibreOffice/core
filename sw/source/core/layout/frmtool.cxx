@@ -707,6 +707,7 @@ SwFlyNotify::~SwFlyNotify()
         {
             // indicate a restart of the layout process
             pFly->SetRestartLayoutProcess( true );
+            pFly->SetConsiderForTextWrap(true);
         }
         else
         {
