@@ -70,7 +70,7 @@
                 aOpt.SetSaveRelFSys(true);                                                         \
                 CPPUNIT_ASSERT(aOpt.IsSaveRelFSys());                                              \
             }                                                                                      \
-            executeImportExportImportTest(FileName);                                               \
+            executeLoadReloadVerify(FileName);                                               \
         }                                                                                          \
         void verify() override;                                                                    \
     };                                                                                             \

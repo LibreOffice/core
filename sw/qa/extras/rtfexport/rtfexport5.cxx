@@ -112,8 +112,9 @@ DECLARE_RTFEXPORT_TEST(testFdo64671, "fdo64671.rtf")
     getRun(getParagraph(1), 1, OUString(u"\u017D"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo62044, "fdo62044.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testFdo62044)
 {
+    load(mpTestDocumentPath, "fdo62044.rtf");
     // The problem was that RTF import during copy&paste did not ignore existing paragraph styles.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
@@ -815,8 +816,9 @@ DECLARE_RTFEXPORT_TEST(testTdf91074, "tdf91074.rtf")
                          getProperty<table::BorderLine2>(xShape, "TopBorder").Color);
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf90260Nopar, "hello.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf90260Nopar)
 {
+    load(mpTestDocumentPath, "hello.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
@@ -956,8 +958,9 @@ DECLARE_RTFEXPORT_TEST(testTdf87034, "tdf87034.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("A1B3C4D"), getParagraph(1)->getString());
 }
 
-DECLARE_RTFEXPORT_TEST(testClassificatonPasteLevels, "classification-confidential.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testClassificatonPasteLevels)
 {
+    load(mpTestDocumentPath, "classification-confidential.rtf");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
