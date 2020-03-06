@@ -131,7 +131,7 @@ public:
     void testCrossBetweenODS();
     void testAxisTitleRotationXLSX();
     void testAxisTitlePositionDOCX();
-    void testAxisCrossBetweenXSLX();
+    void testAxisCrossBetweenDOCX();
     void testPieChartDataPointExplosionXLSX();
     void testCustomDataLabel();
     void testCustomPositionofDataLabel();
@@ -159,6 +159,7 @@ public:
     void testTdf130225();
     void testTdf126076();
     void testTdf75330();
+    void testTdf127792();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -253,7 +254,7 @@ public:
     CPPUNIT_TEST(testCrossBetweenODS);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
     CPPUNIT_TEST(testAxisTitlePositionDOCX);
-    CPPUNIT_TEST(testAxisCrossBetweenXSLX);
+    CPPUNIT_TEST(testAxisCrossBetweenDOCX);
     CPPUNIT_TEST(testPieChartDataPointExplosionXLSX);
     CPPUNIT_TEST(testCustomDataLabel);
     CPPUNIT_TEST(testCustomPositionofDataLabel);
@@ -281,6 +282,7 @@ public:
     CPPUNIT_TEST(testTdf130225);
     CPPUNIT_TEST(testTdf126076);
     CPPUNIT_TEST(testTdf75330);
+    CPPUNIT_TEST(testTdf127792);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -885,6 +887,7 @@ void Chart2ExportTest::testTdf126115IndividualMarker()
 
 void Chart2ExportTest::testAxisNumberFormatODS()
 {
+    mbSkipValidation = true;
     struct
     {
         void check( const Reference<chart2::XChartDocument>& xChartDoc )
@@ -1395,6 +1398,7 @@ void Chart2ExportTest::testScatterPlotLabels()
 
 void Chart2ExportTest::testErrorBarDataRangeODS()
 {
+    mbSkipValidation = true;
     load("/chart2/qa/extras/data/ods/", "ErrorBarRange.ods");
     reload("calc8");
 
@@ -1542,6 +1546,7 @@ void Chart2ExportTest::testSmoothedLines()
 
 void Chart2ExportTest::testLabelStringODS()
 {
+    mbSkipValidation = true;
     load("/chart2/qa/extras/data/ods/", "labelString.ods");
 
     uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
@@ -2078,7 +2083,7 @@ void Chart2ExportTest::testAxisTitlePositionDOCX()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.384070199122511, nY, 1e-2);
 }
 
-void Chart2ExportTest::testAxisCrossBetweenXSLX()
+void Chart2ExportTest::testAxisCrossBetweenDOCX()
 {
     load("/chart2/qa/extras/data/odt/", "axis-position.odt");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -2588,12 +2593,27 @@ void Chart2ExportTest::testTdf75330()
     load("/chart2/qa/extras/data/ods/", "legend_overlay.ods");
     reload("calc8");
     uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet(0, mxComponent);
-    uno::Reference< chart::XChartDocument > xChartDoc (xChart2Doc, uno::UNO_QUERY);
+    uno::Reference< chart::XChartDocument > xChartDoc(xChart2Doc, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
     Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
     bool bOverlay = false;
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
     CPPUNIT_ASSERT(bOverlay);
+}
+
+void Chart2ExportTest::testTdf127792()
+{
+    load("/chart2/qa/extras/data/docx/", "MSO_axis_position.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1", "Office Open XML Text");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+    }
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart2", "Office Open XML Text");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "midCat");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
