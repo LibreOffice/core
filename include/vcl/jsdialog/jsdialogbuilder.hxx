@@ -10,6 +10,8 @@
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
 
+typedef std::map<OString, weld::Widget*> WidgetMap;
+
 class JSDialogSender
 {
     VclPtr<vcl::Window> m_aOwnedToplevel;
@@ -27,6 +29,9 @@ class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
 {
     vcl::LOKWindowId m_nWindowId;
 
+    static std::map<vcl::LOKWindowId, WidgetMap>& GetLOKWeldWidgetsMap();
+    void RememberWidget(const OString& id, weld::Widget* pWidget);
+
 public:
     JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
     virtual ~JSInstanceBuilder() override;
@@ -43,8 +48,7 @@ public:
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
                                                           bool bTakeOwnership = false) override;
 
-    static std::map<vcl::LOKWindowId, JSInstanceBuilder*>& GetLOKWeldBuilderMap();
-    static JSInstanceBuilder* FindLOKWeldBuilder(vcl::LOKWindowId nWindowId);
+    static weld::Widget* FindWeldWidgetsMap(vcl::LOKWindowId nWindowId, const OString& rWidget);
 };
 
 template <class BaseInstanceClass, class VclClass>
