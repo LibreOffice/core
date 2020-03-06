@@ -540,6 +540,10 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
             // actually: ORDINAL
             nType = SVX_NUM_ARABIC;
             break;
+        case 9:
+            // 0x09, msonfcChiManSty
+            nType = SVX_NUM_SYMBOL_CHICAGO;
+            break;
         case 22:
             // 0x16, msonfcArabicLZ
             nType = SVX_NUM_ARABIC_ZERO;
