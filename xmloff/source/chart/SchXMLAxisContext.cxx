@@ -120,7 +120,8 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
         m_bAddMissingXAxisForNetCharts( bAddMissingXAxisForNetCharts ),
         m_bAdaptWrongPercentScaleValues( bAdaptWrongPercentScaleValues ),
         m_bAdaptXAxisOrientationForOld2DBarCharts( bAdaptXAxisOrientationForOld2DBarCharts ),
-        m_rbAxisPositionAttributeImported( rbAxisPositionAttributeImported )
+        m_rbAxisPositionAttributeImported( rbAxisPositionAttributeImported ),
+        m_fMajorOrigin(-1)
 {
 }
 
@@ -237,16 +238,18 @@ enum AxisAttributeTokens
     XML_TOK_AXIS_NAME,
     XML_TOK_AXIS_STYLE_NAME,
     XML_TOK_AXIS_TYPE,
-    XML_TOK_AXIS_TYPE_EXT
+    XML_TOK_AXIS_TYPE_EXT,
+    XML_TOK_MAJOR_ORIGIN
 };
 
 const SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,      XML_STYLE_NAME, XML_TOK_AXIS_STYLE_NAME     },
-    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE           },
-    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE_EXT       },
+    { XML_NAMESPACE_CHART,      XML_DIMENSION,    XML_TOK_AXIS_DIMENSION   },
+    { XML_NAMESPACE_CHART,      XML_NAME,         XML_TOK_AXIS_NAME        },
+    { XML_NAMESPACE_CHART,      XML_STYLE_NAME,   XML_TOK_AXIS_STYLE_NAME  },
+    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,    XML_TOK_AXIS_TYPE        },
+    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,    XML_TOK_AXIS_TYPE_EXT    },
+    { XML_NAMESPACE_LO_EXT,     XML_MAJOR_ORIGIN, XML_TOK_MAJOR_ORIGIN     },
     XML_TOKEN_MAP_END
 };
 
@@ -297,6 +300,9 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
                 break;
             case XML_TOK_AXIS_STYLE_NAME:
                 m_aAutoStyleName = aValue;
+                break;
+            case XML_TOK_MAJOR_ORIGIN:
+                m_fMajorOrigin = xAttrList->getValueByIndex(i).toDouble();
                 break;
         }
     }
@@ -467,19 +473,21 @@ void SchXMLAxisContext::CreateAxis()
 
         if( m_aCurrentAxis.eDimension == SCH_XML_AXIS_X )
         {
-            bool bIs3DChart = false;
-            if( (xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart) && bIs3DChart )
+            Reference<chart2::XAxis> xAxis(lcl_getAxis(GetImport().GetModel(), m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex));
+            if(xAxis.is())
             {
+                chart2::ScaleData aScaleData(xAxis->getScaleData());
+                bool bIs3DChart = false;
                 OUString sChartType = m_xDiagram->getDiagramType();
-                if( sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram" )
+                if ((xDiaProp->getPropertyValue("Dim3D") >>= bIs3DChart) && bIs3DChart && (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram"))
                 {
-                    Reference< chart2::XAxis > xAxis(lcl_getAxis(GetImport().GetModel(), m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex));
-                    if( xAxis.is() )
-                    {
-                        chart2::ScaleData aScaleData(xAxis->getScaleData());
-                        aScaleData.ShiftedCategoryPosition = true;
-                        xAxis->setScaleData(aScaleData);
-                    }
+                    aScaleData.ShiftedCategoryPosition = true;
+                    xAxis->setScaleData(aScaleData);
+                }
+                else if (m_fMajorOrigin == 0 || m_fMajorOrigin == 0.5)
+                {
+                    aScaleData.ShiftedCategoryPosition = m_fMajorOrigin == 0.5;
+                    xAxis->setScaleData(aScaleData);
                 }
             }
         }
