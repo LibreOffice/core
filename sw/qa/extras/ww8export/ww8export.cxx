@@ -1183,20 +1183,20 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    SwPageDesc &Desc = pDoc->GetPageDesc( 0 );
-    drawing::TextVerticalAdjust nVA = Desc.GetVerticalAdjustment();
+    SwPageDesc* pDesc = &pDoc->GetPageDesc( 0 );
+    drawing::TextVerticalAdjust nVA = pDesc->GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_CENTER, nVA );
 
-    Desc = pDoc->GetPageDesc( 1 );
-    nVA = Desc.GetVerticalAdjustment();
+    pDesc = &pDoc->GetPageDesc( 1 );
+    nVA = pDesc->GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_TOP, nVA );
 
-    Desc = pDoc->GetPageDesc( 2 );
-    nVA = Desc.GetVerticalAdjustment();
+    pDesc = &pDoc->GetPageDesc( 2 );
+    nVA = pDesc->GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BOTTOM, nVA );
 
-    Desc = pTextDoc->GetDocShell()->GetDoc()->GetPageDesc( 3 );
-    nVA = Desc.GetVerticalAdjustment();
+    pDesc = &pDoc->GetPageDesc( 3 );
+    nVA = pDesc->GetVerticalAdjustment();
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
 }
 

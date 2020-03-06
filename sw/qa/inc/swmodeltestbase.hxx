@@ -68,15 +68,11 @@ using namespace css;
     virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
-    CPPUNIT_TEST(Import); \
-    CPPUNIT_TEST(Import_Export_Import); \
+    CPPUNIT_TEST(Load_Verify_Reload_Verify); \
     CPPUNIT_TEST_SUITE_END(); \
     \
-    void Import() { \
-        executeImportTest(filename, password);\
-    }\
-    void Import_Export_Import() {\
-        executeImportExportImportTest(filename, password);\
+    void Load_Verify_Reload_Verify() {\
+        executeLoadVerifyReloadVerify(filename, password);\
     }\
     void verify() override;\
     }; \
@@ -89,11 +85,11 @@ using namespace css;
     virtual OUString getTestName() override { return #TestName; } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
-    CPPUNIT_TEST(Import_Export_Import); \
+    CPPUNIT_TEST(Load_Reload_Verify); \
     CPPUNIT_TEST_SUITE_END(); \
     \
-    void Import_Export_Import() {\
-        executeImportExportImportTest(filename, password);\
+    void Load_Reload_Verify() {\
+        executeLoadReloadVerify(filename, password);\
     }\
     void verify() override;\
     }; \
@@ -278,10 +274,32 @@ protected:
 
     /**
      * Helper func used by each unit test to test the 'export' code.
+     * (Loads the requested file, calls 'verify' function, save it to temp file, load the
+     * temp file and then calls 'verify' function again)
+     */
+    void executeLoadVerifyReloadVerify(const char* filename, const char* pPassword = nullptr)
+    {
+        maTempFile.EnableKillingFile(false);
+        header();
+        std::unique_ptr<Resetter> const pChanges(preTest(filename));
+        load(mpTestDocumentPath, filename, pPassword);
+        if (mustTestImportOf(filename))
+        {
+            verify();
+        }
+        postLoad(filename);
+        reload(mpFilter, filename, pPassword);
+        verify();
+        finish();
+        maTempFile.EnableKillingFile();
+    }
+
+    /**
+     * Helper func used by each unit test to test the 'export' code.
      * (Loads the requested file, save it to temp file, load the
      * temp file and then calls 'verify' method)
      */
-    void executeImportExportImportTest(const char* filename, const char* pPassword = nullptr)
+    void executeLoadReloadVerify(const char* filename, const char* pPassword = nullptr)
     {
         maTempFile.EnableKillingFile(false);
         header();
