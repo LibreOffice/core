@@ -7699,12 +7699,16 @@ public:
     virtual void set_item_label(int nIndex, const OUString& rLabel) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        if (!GTK_IS_TOOL_BUTTON(pItem))
+            return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
     }
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
     }
 
@@ -7717,6 +7721,8 @@ public:
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
 
         GtkWidget* pImage = nullptr;
 
@@ -7733,18 +7739,24 @@ public:
     virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         set_item_image(pItem, rIcon);
     }
 
     virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) override
     {
         GtkToolButton* pItem = m_aMap[rIdent];
+        if (!pItem)
+            return;
         set_item_image(pItem, pDevice);
     }
 
     virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        if (!GTK_IS_TOOL_BUTTON(pItem))
+            return;
         set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
     }
 
