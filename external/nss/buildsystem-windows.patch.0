@@ -1,0 +1,135 @@
+--- ./nss/coreconf/nspr.sh.sav	2019-11-19 20:55:30.000000000 +0100
++++ ./nss/coreconf/nspr.sh	2020-02-19 22:25:05.863542364 +0100
+@@ -31,10 +31,13 @@
+     extra_params=(--prefix="$dist_dir"/out --libdir="$dist_dir"/out/lib --includedir="$dist_dir"/out/include)
+     if [ "$opt_build" = 1 ]; then
+         extra_params+=(--disable-debug --enable-optimize)
++    else
++        extra_params+=(--enable-debug-rtl)
+     fi
+     if [ "$target_arch" = "x64" ]; then
+         extra_params+=(--enable-64bit)
+     fi
++    extra_params+=(--enable-win32-target=WIN95)
+ 
+     echo "NSPR [1/5] configure ..."
+     pushd "$nspr_dir" >/dev/null
+@@ -43,24 +46,24 @@
+           run_verbose ../configure "${extra_params[@]}" "$@"
+     popd >/dev/null
+     echo "NSPR [2/5] make ..."
+-    run_verbose make -C "$nspr_dir"
++    run_verbose $MAKE -C $(cygpath -w "$nspr_dir") NSINSTALL=$NSINSTALL RC="$RC"
+ 
+     if [ "$build_nspr_tests" = 1 ]; then
+       echo "NSPR [3/5] build tests ..."
+-      run_verbose make -C "$nspr_dir/pr/tests"
++      run_verbose $MAKE -C $(cygpath -w "$nspr_dir/pr/tests")
+     else
+         echo "NSPR [3/5] NOT building tests"
+     fi
+ 
+     if [[ "$build_nspr_tests" = 1 && "$run_nspr_tests" = 1 ]]; then
+       echo "NSPR [4/5] run tests ..."
+-      run_verbose make -C "$nspr_dir/pr/tests" runtests
++      run_verbose $MAKE -C $(cygpath -w "$nspr_dir/pr/tests") runtests
+     else
+         echo "NSPR [4/5] NOT running tests"
+     fi
+ 
+     echo "NSPR [5/5] install ..."
+-    run_verbose make -C "$nspr_dir" install
++    run_verbose $MAKE -C $(cygpath -w "$nspr_dir") install NSINSTALL=$NSINSTALL
+ }
+ 
+ nspr_clean()
+--- ./nss/build.sh.sav	2019-11-19 20:55:30.000000000 +0100
++++ ./nss/build.sh	2020-02-19 22:28:30.976068194 +0100
+@@ -155,9 +155,10 @@
+     gyp_params+=(-Dsanitizer_flags="$sanitizer_flags")
+ fi
+ 
+-if [ "$msvc" = 1 ]; then
+-    source "$cwd/coreconf/msvc.sh"
+-fi
++# this breaks nspr
++#if [ "$msvc" = 1 ]; then
++#    source "$cwd/coreconf/msvc.sh"
++#fi
+ 
+ # -c = clean first
+ if [ "$clean" = 1 -o "$clean_only" = 1 ]; then
+@@ -236,6 +237,9 @@
+   exit 0
+ fi
+ 
++# set up for gyp
++source "$cwd/coreconf/msvc.sh"
++
+ # gyp.
+ if [ "$rebuild_gyp" = 1 ]; then
+     if ! hash "$GYP" 2> /dev/null; then
+@@ -263,4 +267,4 @@
+     echo "Building NSS requires an installation of ninja: https://ninja-build.org/" 1>&2
+     exit 3
+ fi
+-run_scanbuild setup-python "$ninja" -C "$target_dir" "${ninja_params[@]}"
++run_scanbuild setup-python $(cygpath -w $(which "$ninja")) -C $(cygpath -w "$target_dir") "${ninja_params[@]}"
+--- ./nss/coreconf/msvc.sh.sav	2019-11-19 20:55:30.000000000 +0100
++++ ./nss/coreconf/msvc.sh	2020-02-21 17:42:32.344129200 +0100
+@@ -2,6 +2,9 @@
+ # This configures the environment for running MSVC.  It uses vswhere, the
+ # registry, and a little knowledge of how MSVC is laid out.
+ 
++PATH="$PATH:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/Installer/"
++set -o igncr
++
+ if ! hash vswhere 2>/dev/null; then
+     echo "Can't find vswhere on the path, aborting" 1>&2
+     exit 1
+@@ -17,11 +17,7 @@
+ 
+ # Turn a unix-y path into a windows one.
+ fixpath() {
+-    if hash cygpath 2>/dev/null; then
+-        cygpath --unix "$1"
+-    else # haxx
+-        echo "$1" | sed -e 's,\\,/,g;s,^\(.\):,/\L\1,;s,/$,,'
+-    fi
++    echo "$1"
+ }
+ 
+ # Query the registry.  This takes $1 and tags that on the end of several
+@@ -94,6 +89,8 @@
+     INCLUDE="${INCLUDE}:${UniversalCRTSdkDir}/include/${UCRTVersion}/um"
+     INCLUDE="${INCLUDE}:${UniversalCRTSdkDir}/include/${UCRTVersion}/winrt"
+     INCLUDE="${INCLUDE}:${UniversalCRTSdkDir}/include/${UCRTVersion}/cppwinrt"
++    # : -> ; as the separator
++    INCLUDE=$(echo "$INCLUDE" | sed 's/:C/;C/g')
+     export INCLUDE
+ 
+     LIB="${VCINSTALLDIR}/lib/${m}"
+--- ./nspr/configure.sav	2020-02-21 21:40:01.218554800 +0100
++++ ./nspr/configure	2020-02-21 21:41:32.434189100 +0100
+@@ -5977,10 +5977,6 @@
+     NSINSTALL=nsinstall
+     ;;
+ *-cygwin*|*-mks*)
+-    NSINSTALL='$(CYGWIN_WRAPPER) nsinstall'
+-    if test `echo "${PATH}" | grep -c \;` = 0; then
+-        CYGWIN_WRAPPER='sh $(topsrcdir)/build/cygwin-wrapper'
+-    fi
+     ;;
+ *os2*)
+     ;;
+--- nss/coreconf/config.gypi.sav	2019-11-19 20:55:30.000000000 +0100
++++ nss/coreconf/config.gypi	2020-03-04 16:28:46.512443300 +0100
+@@ -44,7 +44,7 @@
+         }],
+         ['OS=="win"', {
+           'use_system_zlib%': 0,
+-          'nspr_libs%': ['libnspr4.lib', 'libplc4.lib', 'libplds4.lib'],
++          'nspr_libs%': ['nspr4.lib', 'plc4.lib', 'plds4.lib'],
+           'zlib_libs%': [],
+           #TODO
+           'moz_debug_flags%': '',
