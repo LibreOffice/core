@@ -195,10 +195,6 @@ protected:
 
 public:
 
-    SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-        bool bAutomatic = false );
     SvXMLStylesContext( SvXMLImport& rImport,
         bool bAutomatic = false );
 
