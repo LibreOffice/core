@@ -1,0 +1,24 @@
+#! /bin/bash
+args=()
+# convert to Windows paths
+while test -n "$1"; do
+    # convert path in each argument, if needed
+    if [[ "$1" =~ -(.*)=(.*) ]]; then # -option=value
+        arg=$(cygpath -w -- "${BASH_REMATCH[2]}" 2>/dev/null)
+        if test -n "$arg"; then # value is a path
+            args+=("-${BASH_REMATCH[1]}=$arg")
+        else
+            args+=("$1")
+        fi
+    else
+        arg=$(cygpath -w -- "$1" 2>/dev/null)
+        if test -n "$arg"; then
+            args+=("$arg")
+        else
+            args+=("$1")
+        fi
+    fi
+    shift
+done
+PATH=$(cygpath -w -p "$PATH")
+# here belongs a line invoking python with ${args[@]} as arguments
