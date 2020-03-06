@@ -38,6 +38,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/fix-cc-detect-with-ccache.patch.0 \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_add_patches,nss,\
+	external/nss/buildsystem-windows.patch.0 \
+))
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\

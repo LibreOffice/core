@@ -1,0 +1,10 @@
+--- pylib/gyp/msvs_emulation.py.sav	2020-02-19 21:45:13.150161000 +0100
++++ pylib/gyp/msvs_emulation.py	2020-02-21 23:51:56.815937600 +0100
+@@ -996,6 +996,7 @@
+           setting = os.path.dirname(sys.executable) + os.pathsep + setting
+         env[var.upper()] = setting
+         break
++  env['CL'] = '-arch:SSE'
+   for required in ('SYSTEMROOT', 'TEMP', 'TMP'):
+     if required not in env:
+       raise Exception('Environment variable "%s" '
