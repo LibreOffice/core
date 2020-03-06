@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd58060e_9ba87412",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-06T19:19:32Z",
+      "side": 1,
+      "message": "mbInBaseLinkSwapIn sounds better",
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
