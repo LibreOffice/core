@@ -837,6 +837,7 @@ public:
 
     //by index
     virtual int get_selected_index() const = 0;
+    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual void select(int pos) = 0;
     virtual void unselect(int pos) = 0;
     virtual void remove(int pos) = 0;
@@ -863,6 +864,7 @@ public:
 
     //by text
     virtual int find_text(const OUString& rText) const = 0;
+    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select_text(const OUString& rText) { select(find_text(rText)); }
     void remove_text(const OUString& rText) { remove(find_text(rText)); }
     std::vector<OUString> get_selected_rows_text() const
@@ -878,6 +880,7 @@ public:
     //by id
     virtual OUString get_id(int pos) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
+    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select_id(const OUString& rId) { select(find_id(rId)); }
     void remove_id(const OUString& rText) { remove(find_id(rText)); }
 
@@ -920,6 +923,7 @@ public:
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
     virtual void remove(const TreeIter& rIter) = 0;
+    //Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual void select(const TreeIter& rIter) = 0;
     virtual void unselect(const TreeIter& rIter) = 0;
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
@@ -1003,7 +1007,7 @@ public:
 
     void connect_drag_begin(const Link<bool&, bool>& rLink) { m_aDragBeginHdl = rLink; }
 
-    //all of them
+    //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select_all() { unselect(-1); }
     void unselect_all() { select(-1); }
 
@@ -1108,7 +1112,7 @@ public:
 
     virtual OUString get_selected_text() const = 0;
 
-    //by index
+    //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     virtual void select(int pos) = 0;
     virtual void unselect(int pos) = 0;
 
@@ -1124,7 +1128,7 @@ public:
     // call func on each selected element until func returns true or we run out of elements
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
 
-    //all of them
+    //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
     void select_all() { unselect(-1); }
     void unselect_all() { select(-1); }
 
