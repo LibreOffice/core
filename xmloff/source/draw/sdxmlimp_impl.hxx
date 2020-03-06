@@ -214,8 +214,6 @@ public:
     const SvXMLTokenMap& GetMasterPageAttrTokenMap();
     const SvXMLTokenMap& GetPageMasterAttrTokenMap();
     const SvXMLTokenMap& GetPageMasterStyleAttrTokenMap();
-    const SvXMLTokenMap& GetDrawPageAttrTokenMap();
-    const SvXMLTokenMap& GetDrawPageElemTokenMap();
     const SvXMLTokenMap& GetPresentationPlaceholderAttrTokenMap();
 
     // export local parameters concerning page access and similar

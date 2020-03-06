@@ -290,7 +290,6 @@ public:
     /** ShowProminentEntry will set the entry corresponding to nEntryPos
         either at top or in the middle depending on the chosen style*/
     void            ShowProminentEntry( sal_Int32  nEntryPos );
-    void            SetProminentEntryType( ProminentEntry eType ) { meProminentType = eType; }
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const;
 
@@ -458,8 +457,6 @@ public:
     void            ShowProminentEntry( sal_Int32  nPos ) { maLBWindow->ShowProminentEntry( nPos ); }
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow->IsVisible( nEntry ); }
-
-    void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow->SetProminentEntryType( eType ); }
 
     long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
     void            SetLeftIndent( sal_uInt16 n )       { maLBWindow->SetLeftIndent( n ); }

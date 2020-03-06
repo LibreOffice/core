@@ -752,14 +752,6 @@ OUString SvXMLStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
     return sServiceName;
 }
 
-SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                        const OUString& rLName,
-                                        const uno::Reference< xml::sax::XAttributeList > &, bool bAuto ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    mpImpl( new SvXMLStylesContext_Impl( bAuto ) )
-{
-}
-
 SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, bool bAuto ) :
     SvXMLImportContext( rImport ),
     mpImpl( new SvXMLStylesContext_Impl( bAuto ) )

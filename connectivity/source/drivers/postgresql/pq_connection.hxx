@@ -64,23 +64,6 @@
 namespace pq_sdbc_driver
 {
 struct ConnectionSettings;
-
-
-// Logging API
-
-enum class LogLevel
-{
-    NONE    = 0,
-    Error,
-    Sql,
-    Info,
-    LAST = Info
-};
-bool isLog(ConnectionSettings const *settings, LogLevel nLevel);
-void log(ConnectionSettings *settings, LogLevel nLevel, const OUString &logString);
-void log(ConnectionSettings *settings, LogLevel nLevel, const char *str);
-
-
 class Tables;
 class Views;
 struct ConnectionSettings
