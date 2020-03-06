@@ -141,6 +141,12 @@ service Axis
      */
     [optional, property] boolean TryStaggeringFirst;
 
+    /** Specifies the location of one major tick.
+
+        @since LibreOffice 7.0
+     */
+    [optional, property] long MajorOrigin;
+
 };
 
 } ; // chart2
