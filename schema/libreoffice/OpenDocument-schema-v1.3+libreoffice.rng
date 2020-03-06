@@ -2439,4 +2439,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- https://issues.oasis-open.org/browse/OFFICE-3936 -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:major-origin">
+        <rng:ref name="double"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>

@@ -1185,6 +1185,7 @@ namespace xmloff::token {
         TOKEN( "maction",                         XML_MACTION ),
         TOKEN( "main-entry-style-name",           XML_MAIN_ENTRY_STYLE_NAME ),
         TOKEN( "major",                           XML_MAJOR ),
+        TOKEN( "major-origin",                    XML_MAJOR_ORIGIN ),
         TOKEN( "maligngroup",                     XML_MALIGNGROUP ),
         TOKEN( "malignmark",                      XML_MALIGNMARK ),
         TOKEN( "manual",                          XML_MANUAL ),

@@ -141,6 +141,12 @@ service Axis
      */
     [optional, property] boolean TryStaggeringFirst;
 
+    /** This attribute specifies the shift of the first major tick from the origin.
+
+        @since LibreOffice 7.0
+     */
+    [optional, property] long MajorOrigin;
+
 };
 
 } ; // chart2
