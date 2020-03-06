@@ -613,7 +613,6 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
-    void signal_changed() { m_aChangeHdl.Call(*this); }
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
     Link<render_args, void> m_aRenderHdl;
@@ -627,6 +626,8 @@ protected:
     Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
 
 public:
+    void signal_changed() { m_aChangeHdl.Call(*this); }
+
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
