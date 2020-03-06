@@ -82,11 +82,11 @@ OUString getParamFirstUrl(OUString const & name)
 }//blind namespace
 
 
-VendorSettings::VendorSettings():
-    m_xmlDocVendorSettingsFileUrl(BootParams::getVendorSettings())
+VendorSettings::VendorSettings()
 {
+    OUString xmlDocVendorSettingsFileUrl(BootParams::getVendorSettings());
     //Prepare the xml document and context
-    OString sSettingsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
+    OString sSettingsPath = getVendorSettingsPath(xmlDocVendorSettingsFileUrl);
     if (sSettingsPath.isEmpty())
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."

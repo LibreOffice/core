@@ -47,7 +47,6 @@ public:
     ~PaneHider();
 
 private:
-    const ViewShell& mrViewShell;
     /** Remember whether the visibility states of the windows of the  panes
         has been modified and have to be restored.
     */

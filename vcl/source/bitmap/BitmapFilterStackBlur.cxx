@@ -50,7 +50,6 @@ class BlurSharedData
 public:
     long mnRadius;
     long mnComponentWidth;
-    long mnColorChannels;
     long mnDiv;
     std::vector<sal_uInt8> maStackBuffer;
     std::vector<long> maPositionTable;
@@ -63,14 +62,13 @@ public:
     BlurSharedData(long aRadius, long nComponentWidth, long nColorChannels)
         : mnRadius(aRadius)
         , mnComponentWidth(nComponentWidth)
-        , mnColorChannels(nColorChannels)
         , mnDiv(aRadius + aRadius + 1)
         , maStackBuffer(mnDiv * mnComponentWidth)
         , maPositionTable(mnDiv)
         , maWeightTable(mnDiv)
-        , mnSumVector(mnColorChannels)
-        , mnInSumVector(mnColorChannels)
-        , mnOutSumVector(mnColorChannels)
+        , mnSumVector(nColorChannels)
+        , mnInSumVector(nColorChannels)
+        , mnOutSumVector(nColorChannels)
     {
     }
 

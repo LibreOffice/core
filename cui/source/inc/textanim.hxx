@@ -37,7 +37,6 @@ class SvxTextAnimationPage : public SfxTabPage
 private:
     static const sal_uInt16     pRanges[];
 
-    const SfxItemSet&   rOutAttrs;
     SdrTextAniKind      eAniKind;
     FieldUnit           eFUnit;
     MapUnit             eUnit;

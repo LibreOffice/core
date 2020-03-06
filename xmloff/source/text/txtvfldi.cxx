@@ -702,11 +702,12 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList> & xAttrList,
     enum VarType eVarType) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
-        // bug?? which properties for userfield/userfieldmaster
-        aValueHelper(rImport, rHlp, true, false, true, false),
-        cSeparationChar('.')
+        SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
+    // bug?? which properties for userfield/userfieldmaster
+    XMLValueImportHelper aValueHelper(rImport, rHlp, true, false, true, false);
+    sal_Unicode cSeparationChar('.');
+
     sal_Int8 nNumLevel(-1);
     OUString sName;
 

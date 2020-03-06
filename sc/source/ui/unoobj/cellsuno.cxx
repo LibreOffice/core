@@ -9229,20 +9229,19 @@ struct ScUniqueFormatsOrder
 
 }
 
-ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
+ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rTotalRange) :
     pDocShell( pDocSh ),
-    aTotalRange( rRange ),
     aRangeLists()
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
-    OSL_ENSURE( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "different tables" );
+    OSL_ENSURE( rTotalRange.aStart.Tab() == rTotalRange.aEnd.Tab(), "different tables" );
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    SCTAB nTab = aTotalRange.aStart.Tab();
+    SCTAB nTab = rTotalRange.aStart.Tab();
     ScAttrRectIterator aIter( &rDoc, nTab,
-                                aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
-                                aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
+                                rTotalRange.aStart.Col(), rTotalRange.aStart.Row(),
+                                rTotalRange.aEnd.Col(), rTotalRange.aEnd.Row() );
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
 

@@ -67,7 +67,6 @@ private:
 
     TGroupFunctionMap                               m_aFunctions;
 
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocContentElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pCellElemTokenMap;
 

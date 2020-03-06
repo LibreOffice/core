@@ -35,7 +35,6 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     css::uno::Reference< css::beans::XPropertySet > xPropSet;
     css::uno::Reference< css::sheet::XHeaderFooterContent > xHeaderFooterContent;
 
-    const OUString   sOn;
     OUString         sCont;
 
     bool    bContainsLeft;

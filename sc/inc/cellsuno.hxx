@@ -1170,7 +1170,6 @@ class ScUniqueCellFormatsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*                     pDocShell;
-    ScRange const                   aTotalRange;
     ScMyRangeLists                  aRangeLists;
 
 public:

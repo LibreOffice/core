@@ -67,7 +67,6 @@ class ScZoomSliderWnd final : public InterimItemWindow
 private:
     std::unique_ptr<ScZoomSlider> mxWidget;
     std::unique_ptr<weld::CustomWeld> mxWeld;
-    Size const aLogicalSize;
 
 public:
     ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,

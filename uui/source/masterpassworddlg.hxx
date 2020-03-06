@@ -26,8 +26,6 @@
 class MasterPasswordDialog : public weld::GenericDialogController
 {
 private:
-    const std::locale&                 rResLocale;
-
     std::unique_ptr<weld::Entry> m_xEDMasterPassword;
     std::unique_ptr<weld::Button> m_xOKBtn;
 

@@ -387,7 +387,6 @@ public:
     virtual sal_Unicode getSingleToken(const formula::IFunctionManager::EToken _eToken) const override;
 
 private:
-    ScFunctionList* pFuncList; /**< list of all calc functions */
     std::unique_ptr<std::vector<const ScFuncDesc*>> aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
     mutable std::map< sal_uInt32, std::shared_ptr<ScFunctionCategory> > m_aCategories; /**< map of category pos to IFunctionCategory */
     mutable std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */

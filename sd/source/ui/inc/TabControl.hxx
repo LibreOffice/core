@@ -54,7 +54,6 @@ public:
     void SendDeactivatePageEvent();
 
 private:
-    sal_uInt16          RrePageID;
     DrawViewShell*      pDrViewSh;
     bool                bInternalMove;
 

@@ -70,9 +70,8 @@ using namespace com::sun::star::lang;
 SdActionDlg::SdActionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView)
     : SfxSingleTabDialogController(pParent, pAttr, "modules/simpress/ui/interactiondialog.ui",
                                    "InteractionDialog")
-    , rOutAttrs(*pAttr)
 {
-    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(get_content_area(), this, rOutAttrs);
+    std::unique_ptr<SfxTabPage> xNewPage = SdTPAction::Create(get_content_area(), this, *pAttr);
 
     // formerly in PageCreated
     static_cast<SdTPAction*>( xNewPage.get() )->SetView( pView );

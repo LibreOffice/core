@@ -50,6 +50,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     ,m_sCollectionServiceName(_sCollectionServiceName)
     ,m_sComponentServiceName(_sComponentServiceName)
 {
+    OUString sName;
     sax_fastparser::FastAttributeList *pAttribList =
                     sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
     for (auto &aIter : *pAttribList)
@@ -59,13 +60,13 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
         switch( aIter.getToken() & TOKEN_MASK )
         {
             case XML_NAME:
-                m_sName = sValue;
+                sName = sValue;
                 break;
             default:
                 SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
         }
     }
-    if ( !m_sName.isEmpty() && _xParentContainer.is() )
+    if ( !sName.isEmpty() && _xParentContainer.is() )
     {
         try
         {
@@ -74,13 +75,13 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {"Name", Any(m_sName)}, // set as folder
+                    {"Name", Any(sName)}, // set as folder
                     {"Parent", Any(_xParentContainer)},
                 }));
                 m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
                 Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
-                if ( xNameContainer.is() && !xNameContainer->hasByName(m_sName) )
-                    xNameContainer->insertByName(m_sName,makeAny(m_xContainer));
+                if ( xNameContainer.is() && !xNameContainer->hasByName(sName) )
+                    xNameContainer->insertByName(sName,makeAny(m_xContainer));
             }
         }
         catch(Exception&)

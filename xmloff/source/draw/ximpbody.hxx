@@ -28,9 +28,6 @@
 
 class SdXMLDrawPageContext : public SdXMLGenericPageContext
 {
-    OUString               maMasterPageName;
-    OUString               maHREF;
-
     bool                   mbHadSMILNodes;
 
 public:

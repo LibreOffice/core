@@ -52,7 +52,6 @@ private:
     // for mapping with the new SvxNumBulletItem
     SfxItemSet aInputSet;
     std::unique_ptr<SfxItemSet> pOutSet;
-    const SfxItemSet* pOrgSet;
 
     sal_uInt16 GetOutlineLevel() const;
 
