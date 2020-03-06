@@ -292,6 +292,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
                                        std::vector<tools::Rectangle>* pLogicRects = nullptr);
 
+    Timer           maShowPageBreaksTimer;
+    bool            bInitialPageBreaks;
+    DECL_LINK(TimerHdl, Timer*, void);
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
