@@ -346,7 +346,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124398, "tdf124398.docx")
     // 1', i.e. the chart children of the group shape was lost.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
 
-    uno::Reference<drawing::XShapeDescriptor> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
+    xShape.set(xGroup->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
 }
 
@@ -575,6 +577,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
         pWrtShell->GotoPrevFootnoteAnchor();
         nCount--;
     }
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf123257, "tdf123257.docx")
+{
+    // the 2nd chart was not set to be considered for text wrap, so layout would ignore it
+    // i.e. handle it like text wrap was set to "through", in the end resulting in one less
+    // page and "hidden" text by the 2nd chart.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 4, getPages());
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
