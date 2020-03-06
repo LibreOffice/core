@@ -440,13 +440,15 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
 
     if( pLink )
     {
-        if( GraphicType::NONE == maGrfObj.GetType() ||
-            GraphicType::Default == maGrfObj.GetType() )
+        if( (GraphicType::NONE == maGrfObj.GetType() ||
+             GraphicType::Default == maGrfObj.GetType()) &&
+            mbInSwapIn2)
         {
             // link was not loaded yet
             if( pLink->SwapIn( bWaitForData ) )
             {
                 bRet = true;
+                mbInSwapIn2 = false;
             }
             else if( GraphicType::Default == maGrfObj.GetType() )
             {
