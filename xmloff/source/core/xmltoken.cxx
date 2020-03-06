@@ -516,6 +516,7 @@ namespace xmloff::token {
         TOKEN( "creation-date",                   XML_CREATION_DATE ),
         TOKEN( "creation-time",                   XML_CREATION_TIME ),
         TOKEN( "creator",                         XML_CREATOR ),
+        TOKEN( "cross-between",                   XML_CROSS_BETWEEN ),
         TOKEN( "csc",                             XML_CSC ),
         TOKEN( "csch",                            XML_CSCH ),
         TOKEN( "cube",                            XML_CUBE ),

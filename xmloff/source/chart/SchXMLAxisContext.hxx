@@ -68,6 +68,7 @@ private:
     bool m_bAdaptWrongPercentScaleValues; //to correct errors from older versions
     bool m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
     bool& m_rbAxisPositionAttributeImported;
+    sal_Int32 m_nCrossBetween;
 
     css::uno::Reference< css::drawing::XShape > getTitleShape() const;
     void CreateGrid( const OUString& sAutoStyleName, bool bIsMajor );
