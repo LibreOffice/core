@@ -2776,7 +2776,10 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
     rAtk.clear();
 
     if (!pCurrentChild)
-        pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow.get();
+    {
+        bool bToolbarParent = (pParent && pParent->GetType() == WindowType::TOOLBOX);
+        pCurrentChild = (m_aChildren.empty() || bToolbarParent) ? pParent : m_aChildren.back().m_pWindow.get();
+    }
     return pCurrentChild;
 }
 
