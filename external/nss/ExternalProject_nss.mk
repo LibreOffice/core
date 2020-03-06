@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			./build.sh -v --disable-tests --enable-libpkix \
 				$(if $(filter X86_64,$(CPUNAME)),--target=x64,--target=ia32) \
 				$(if $(ENABLE_DBGUTIL),,--opt) \
+				$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),--symbols) \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 	,nss)
 	for f in $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dll.lib; do mv "$$f" "$${f%.dll.lib}".lib; done
