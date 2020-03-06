@@ -512,6 +512,7 @@ namespace xmloff { namespace token {
         XML_CREATION_DATE,
         XML_CREATION_TIME,
         XML_CREATOR,
+        XML_CROSS_BETWEEN,
         XML_CSC,
         XML_CSCH,
         XML_CUBE,
