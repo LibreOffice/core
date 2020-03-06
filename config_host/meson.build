@@ -241,3 +241,7 @@ configure_file(input: 'config_cxxabi.h.meson',
 configure_file(input: 'config_dconf.h.meson',
   output: 'config_dconf.h',
   configuration: cdata)
+
+configure_file(input: 'config_skia.h.in',
+  output: 'config_skia.h',
+  configuration: cdata)
