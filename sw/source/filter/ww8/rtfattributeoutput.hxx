@@ -198,6 +198,10 @@ public:
     /// The type of breaking.
     void SectionType(sal_uInt8 nBreakCode) override;
 
+    void SectFootnoteEndnotePr() override;
+
+    void WriteFootnoteEndnotePr(bool bFootnote, const SwEndNoteInfo& rInfo);
+
     /// Definition of a numbering instance.
     void NumberingDefinition(sal_uInt16 nId, const SwNumRule& rRule) override;
 
