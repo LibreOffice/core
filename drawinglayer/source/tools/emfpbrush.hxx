@@ -122,7 +122,7 @@ namespace emfplushelper
         sal_uInt32 GetType() const { return type; }
         const ::Color& GetColor() const { return solidColor; }
 
-        void Read(SvStream& s, EmfPlusHelperData const & rR);
+        void Read(SvMemoryStream& s, sal_uInt32 dataSize, EmfPlusHelperData const & rR);
     };
 }
 

@@ -23,6 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include "emfpbrush.hxx"
+#include "emfpimage.hxx"
 #include "emfppath.hxx"
 
 namespace emfplushelper
@@ -61,7 +62,7 @@ namespace emfplushelper
         return "";
     }
 
-    void EMFPBrush::Read(SvStream& s, EmfPlusHelperData const & rR)
+    void EMFPBrush::Read(SvMemoryStream& s, sal_uInt32 dataSize, EmfPlusHelperData const & rR)
     {
         sal_uInt32 header;
 
@@ -100,13 +101,27 @@ namespace emfplushelper
             }
             case BrushTypeTextureFill:
             {
+                s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tTexture Fill, flags: 0x" << std::hex << additionalFlags << " wrapmode:"<< wrapMode << std::dec);
+
+                if (additionalFlags & 0x02)
+                {
+                    EmfPlusHelperData::readXForm(s, brush_transformation);
+                    hasTransformation = true;
+                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tUse brush transformation: " << brush_transformation);
+                }
+
+
+                EMFPImage *image = new EMFPImage;
+                image->Read(s, dataSize, false);
+
                 SAL_WARN("drawinglayer", "EMF+\tTODO: implement BrushTypeTextureFill brush");
                 break;
             }
             case BrushTypePathGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tAdditional flags: 0x" << std::hex << additionalFlags << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tPath gradient, flags: 0x" << std::hex << additionalFlags << " wrapmode:"<< wrapMode << std::dec);
                 sal_uInt32 color;
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
