@@ -31,6 +31,10 @@ sqlite3.dll
 ssl3.dll
 ssleay32.dll"
 
+verbose_none()
+{
+    do_none=
+}
 
 add_pdb()
 {
@@ -45,10 +49,15 @@ add_pdb()
     ret=$(find "${INSTDIR}/" -type f -name "*.${extension}" | grep -vF "$BLACK_LIST")
     while IFS= read -r file
     do
+        ${VERBOSE} -n "Found: $file"
         # store dll/exe itself (needed for minidumps)
         if [ $WITHEXEC == 1 ] ; then
             cygpath -w "$file" >> "$list"
+            ${VERBOSE} " insert"
+        else
+            ${VERBOSE} " "
         fi
+
         # store pdb file
         filename=$(basename "$file" ".${extension}")
         pdball+=($(grep -i "/${filename}${pdbext}" <<< ${ALL_PDBS}))
@@ -56,8 +65,12 @@ add_pdb()
             cygpath -w "${pdball[0]}" >> "$list"
         fi
         case ${#pdball[@]} in
-            0) ((++stats_notfound)) ;;
-            1) ((++stats_found)) ;;
+            0) ((++stats_notfound))
+               ${VERBOSE} "       PDB not found"
+            ;;
+            1) ((++stats_found))
+               ${VERBOSE} "       ${pdball[0]} insert"
+            ;;
             *) ((++stats_morefound))
                 if [ -z "$(echo $file | grep -F "$MOREPDBS_OKLIST")" ]; then
                     echo "Error: found duplicate PDBs:"
@@ -65,6 +78,8 @@ add_pdb()
                        echo " $morepdbs"
                     done
                     exit 1
+                else
+                   ${VERBOSE} "       ${pdball[0]} insert (is in more okay list)"
                 fi
             ;;
         esac
@@ -98,13 +113,15 @@ SYM_PATH=${WORKDIR}/symstore
 COMMENT=""
 COMCMD=""
 WITHEXEC=1
+VERBOSE=verbose_none
 
-USAGE="Usage: $0 [-h|-k <keep_num_versions>|-p <symbol_store_path>]
+USAGE="Usage: $0 [-h|-k <keep_num_versions>|-p <symbol_store_path>|-c <comment>|-n|-v]
        -h:          this cruft
        -c <comment> specifies a comment for the transaction
        -n           do not store exe/dll on the symbole server
        -k <int>:    keep this number of old symbol versions around
                     (default: ${MAX_KEEP}. Set to 0 for unlimited)
+       -v           verbose mode, output detail report of files
        -p <path>:   specify full path to symbol store tree
 If no path is specified, defaults to ${SYM_PATH}.
 "
@@ -117,6 +134,7 @@ do
     -p|--path) SYM_PATH="$2"; shift 2;;
     -c|--comment) COMCMD="/c"; COMMENT="$2"; shift 2;;
     -n|--noexec) WITHEXEC=0; shift ;;
+    -v|--verbose) VERBOSE=echo; shift ;;
     -h|--help) echo "${USAGE}"; exit 0;;
     -*) echo "${USAGE}" >&2; exit 1;;
     *) break;;
