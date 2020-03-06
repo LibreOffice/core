@@ -22,6 +22,15 @@
 
 namespace emfplushelper
 {
+    EMFPImage::EMFPImage()
+        : type(0)
+        , width(0)
+        , height(0)
+        , stride(0)
+        , pixelFormat(0)
+    {
+    }
+
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 header, bitmapType;
@@ -41,6 +50,18 @@ namespace emfplushelper
                 filter.ImportGraphic(graphic, OUString(), s);
                 SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << graphic.GetSizePixel().Width() << " height: " << graphic.GetSizePixel().Height());
             }
+#if OSL_DEBUG_LEVEL > 1
+            mfStream.Seek(0);
+            static sal_Int32 bmp_debug_stream_number = 0;
+            OUString bmp_debug_filename = "/tmp/bmp-embedded-stream" +
+                OUString::number(bmp_debug_stream_number++) + ".bmp";
+
+            SvFileStream file(bmp_debug_filename, StreamMode::WRITE | StreamMode::TRUNC);
+
+            mfStream.WriteStream(file);
+            file.Flush();
+            file.Close();
+#endif
         }
         else if (ImageDataTypeMetafile == type)
         {
@@ -60,7 +81,6 @@ namespace emfplushelper
             SvMemoryStream mfStream(const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), dataSize, StreamMode::READ);
             filter.ImportGraphic(graphic, OUString(), mfStream);
 
-            // debug code - write the stream to debug file /tmp/emf-stream.emf
 #if OSL_DEBUG_LEVEL > 1
             mfStream.Seek(0);
             static sal_Int32 emfp_debug_stream_number = 0;
