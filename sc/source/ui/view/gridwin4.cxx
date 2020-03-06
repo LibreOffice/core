@@ -74,6 +74,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <drwlayer.hxx>
+#include <columnspanset.hxx>
 
 static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVisible )
 {
@@ -1218,6 +1219,22 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (mpNoteMarker)
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+    // is enabled, breaks should be visible. If the document is opened the first
+    // time, the breaks are not calculated yet, so for this initialization
+    // a timer will be triggered here.
+    if (bPage && bInitialPageBreaks)
+    {
+        std::set<SCCOL> aColBreaks;
+        std::set<SCROW> aRowBreaks;
+        rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
+        rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
+        if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+        {
+            maShowPageBreaksTimer.Start();
+            bInitialPageBreaks = false;
+        }
+    }
 }
 
 namespace
@@ -2266,5 +2283,42 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
+
+IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
+{
+    if (pTimer == &maShowPageBreaksTimer)
+    {
+        ScDocument& rDoc = *pViewData->GetDocument();
+        const ScViewOptions& rOpts = pViewData->GetOptions();
+        bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+        // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+        // is enabled, breaks should be visible. If the document is opened the first
+        // time, the breaks are not calculated yet, so this initialization is
+        // done here.
+        if (bPage)
+        {
+            std::set<SCCOL> aColBreaks;
+            std::set<SCROW> aRowBreaks;
+            SCTAB nCurrentTab = pViewData->GetTabNo();
+            rDoc.GetAllColBreaks(aColBreaks, nCurrentTab, true, false);
+            rDoc.GetAllRowBreaks(aRowBreaks, nCurrentTab, true, false);
+            if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+            {
+                bool bOnlyMatrix;
+                bool bIsBlockEditable = rDoc.IsBlockEditable(nCurrentTab, 0, 0, 0, rDoc.MaxRow(), &bOnlyMatrix);
+                if (bIsBlockEditable || bOnlyMatrix)
+                {
+                    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+                    std::vector<sc::ColRowSpan> aVec;
+                    aVec.emplace_back(0, 0);
+                    pTabViewShell->SetWidthOrHeight(true, aVec, SC_SIZE_SHOW, 0);
+                    ScDocShell* pDocSh = pViewData->GetDocShell();
+                    pDocSh->SetModified(false);
+                }
+            }
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
