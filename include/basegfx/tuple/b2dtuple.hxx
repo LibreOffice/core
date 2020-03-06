@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/utils/common.hxx>
 
 namespace basegfx
 {
@@ -39,10 +40,11 @@ namespace basegfx
     class SAL_WARN_UNUSED B2DTuple
     {
     protected:
-        double                                      mfX;
-        double                                      mfY;
+        double mfX;
+        double mfY;
 
     public:
+
         /** Create a 2D Tuple
 
             The tuple is initialized to (0.0, 0.0)
@@ -98,26 +100,20 @@ namespace basegfx
             mfY = fY;
         }
 
-        /// Array-access to 2D Tuple
-        const double& operator[] (int nPos) const
+        double get(Axis2D eAxis)
         {
-            // Here, normally one if(...) should be used. In the assumption that
-            // both double members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mfX; return mfY;
-            return *((&mfX) + nPos);
+            return eAxis == Axis2D::X ? getX() : getY();
         }
 
-        /// Array-access to 2D Tuple
-        double& operator[] (int nPos)
+        void set(Axis2D eAxis, double fValue)
         {
-            // Here, normally one if(...) should be used. In the assumption that
-            // both double members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mfX; return mfY;
-            return *((&mfX) + nPos);
+            if (eAxis == Axis2D::X)
+                setX(fValue);
+            else
+                setY(fValue);
         }
 
         // comparators with tolerance
-
 
         bool equalZero() const
         {

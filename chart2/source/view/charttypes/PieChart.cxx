@@ -1330,14 +1330,14 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // compute lengths of the nearest edge and of the orthogonal edges
     double fNearestEdgeLength = fLabelWidth;
     double fOrthogonalEdgeLength = fLabelHeight;
-    int nAxisIndex = 0;
-    int nOrthogonalAxisIndex = 1;
+    basegfx::Axis2D eAxis = basegfx::Axis2D::X;
+    basegfx::Axis2D eOrthogonalAxis = basegfx::Axis2D::Y;
     if( nNearestEdgeIndex % 2 == 0 ) // nearest edge is vertical
     {
         fNearestEdgeLength = fLabelHeight;
         fOrthogonalEdgeLength = fLabelWidth;
-        nAxisIndex = 1;
-        nOrthogonalAxisIndex = 0;
+        eAxis = basegfx::Axis2D::Y;
+        eOrthogonalAxis = basegfx::Axis2D::X;
     }
 
     // compute the distance between N and P
@@ -1454,11 +1454,11 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // compute vertices N, M and G respect with pie center C
     basegfx::B2DVector aNearestVertex(aPositionalVector);
-    aNearestVertex[nAxisIndex] += -aDirection[nAxisIndex] * fDistanceNP;
+    aNearestVertex.set(eAxis, aNearestVertex.get(eAxis) - aDirection.get(eAxis) * fDistanceNP);
     basegfx::B2DVector aVertexM(aNearestVertex);
-    aVertexM[nAxisIndex] += aDirection[nAxisIndex] * fNearestEdgeLength;
+    aVertexM.set(eAxis, aVertexM.get(eAxis) + aDirection.get(eAxis) * fNearestEdgeLength);
     basegfx::B2DVector aVertexG(aNearestVertex);
-    aVertexG[nOrthogonalAxisIndex] += aDirection[nOrthogonalAxisIndex] * fOrthogonalEdgeLength;
+    aVertexG.set(eOrthogonalAxis, aVertexG.get(eOrthogonalAxis) + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength);
 
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "      beta = " << basegfx::rad2deg(fBetaRad) );
@@ -1499,8 +1499,8 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
         return false;
     }
 
-    if( ( aNearestVertex[nAxisIndex] >= 0 && aVertexM[nAxisIndex] <= 0 )
-            || ( aNearestVertex[nAxisIndex] <= 0 && aVertexM[nAxisIndex] >= 0 ) )
+    if( ( aNearestVertex.get(eAxis) >= 0 && aVertexM.get(eAxis) <= 0 )
+            || ( aNearestVertex.get(eAxis) <= 0 && aVertexM.get(eAxis) >= 0 ) )
     {
         // check the angle between CP and CN
         fAngleRad = aPositionalVector.angle(aNearestVertex);
@@ -1531,13 +1531,13 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // compute the b.b. center respect with the pie center
     basegfx::B2DVector aBBCenter(aNearestVertex);
-    aBBCenter[nAxisIndex] += aDirection[nAxisIndex] * fNearestEdgeLength / 2;
-    aBBCenter[nOrthogonalAxisIndex] += aDirection[nOrthogonalAxisIndex] * fOrthogonalEdgeLength / 2;
+    aBBCenter.set(eAxis, aBBCenter.get(eAxis) + aDirection.get(eAxis) * fNearestEdgeLength / 2);
+    aBBCenter.set(eOrthogonalAxis, aBBCenter.get(eOrthogonalAxis) + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength / 2);
 
     // compute the b.b. anchor point
     basegfx::B2IVector aNewAnchorPoint = aPieCenter;
-    aNewAnchorPoint[0] += floor(aBBCenter[0]);
-    aNewAnchorPoint[1] -= floor(aBBCenter[1]); // the Y axis on the screen points downward
+    aNewAnchorPoint.setX(aNewAnchorPoint.getX() + floor(aBBCenter.getX()));
+    aNewAnchorPoint.setY(aNewAnchorPoint.getY() - floor(aBBCenter.getY())); // the Y axis on the screen points downward
 
     // compute the translation vector for moving the label from the current
     // screen position to the new one

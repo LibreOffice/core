@@ -116,17 +116,17 @@ void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2
 
     if( pDrag )
     {
-        int n = mbHorizontal ? 1 : 0;
-        aOffset[n] = aOffset[n] + GetValidDragOffset( *pDrag );
+        basegfx::Axis2D eDragAxis = mbHorizontal ? basegfx::Axis2D::Y : basegfx::Axis2D::X;
+        aOffset.set(eDragAxis, aOffset.get(eDragAxis) + GetValidDragOffset( *pDrag ));
     }
 
     basegfx::B2DPoint aStart(aOffset), aEnd(aOffset);
-    int nPos = mbHorizontal ? 0 : 1;
+    basegfx::Axis2D eAxis = mbHorizontal ? basegfx::Axis2D::X : basegfx::Axis2D::Y;
 
     for( const TableEdge& aEdge : maEdges )
     {
-        aStart[nPos] = aOffset[nPos] + aEdge.mnStart;
-        aEnd[nPos] = aOffset[nPos] + aEdge.mnEnd;
+        aStart.set(eAxis, aOffset.get(eAxis) + aEdge.mnStart);
+        aEnd.set(eAxis, aOffset.get(eAxis) + aEdge.mnEnd);
 
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( aStart );
