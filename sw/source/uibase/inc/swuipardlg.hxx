@@ -26,7 +26,6 @@
 class SwParaDlg: public SfxTabDialogController
 {
     SwView& rView;
-    sal_uInt16 nHtmlMode;
     bool const bDrawParaDlg;
 
     void PageCreated(const OString& rId, SfxTabPage& rPage) override;

@@ -52,8 +52,9 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     , mpDocShell(pDocSh)
     , ePO(_ePO)
     , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>{})
-    , pOrgSet(&rStyleBase.GetItemSet())
 {
+    const SfxItemSet* pOrgSet(&rStyleBase.GetItemSet());
+
     if( IS_OUTLINE(ePO))
     {
         // Unfortunately, the Itemsets of our style sheets are not discrete...

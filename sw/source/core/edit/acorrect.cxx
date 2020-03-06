@@ -40,7 +40,6 @@ namespace {
 
 class PaMIntoCursorShellRing
 {
-    SwCursorShell& rSh;
     SwPaM &rDelPam, &rCursor;
     SwPaM* pPrevDelPam;
     SwPaM* pPrevCursor;
@@ -55,9 +54,9 @@ public:
 
 PaMIntoCursorShellRing::PaMIntoCursorShellRing( SwCursorShell& rCSh,
                                             SwPaM& rShCursor, SwPaM& rPam )
-    : rSh( rCSh ), rDelPam( rPam ), rCursor( rShCursor )
+    : rDelPam( rPam ), rCursor( rShCursor )
 {
-    SwPaM* pShCursor = rSh.GetCursor_();
+    SwPaM* pShCursor = rCSh.GetCursor_();
 
     pPrevDelPam = rDelPam.GetPrev();
     pPrevCursor = rCursor.GetPrev();

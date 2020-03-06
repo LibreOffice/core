@@ -60,7 +60,6 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : GenericDialogController(pParent, "modules/scalc/ui/solveroptionsdialog.ui", "SolverOptionsDialog")
     , maImplNames(rImplNames)
-    , maDescriptions(rDescriptions)
     , maEngine(rEngine)
     , maProperties(rProperties)
     , m_xLbEngine(m_xBuilder->weld_combo_box("engine"))
@@ -86,7 +85,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     for (sal_Int32 nImpl=0; nImpl<nImplCount; ++nImpl)
     {
         OUString aImplName( maImplNames[nImpl] );
-        OUString aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
+        OUString aDescription( rDescriptions[nImpl] );   // user-visible descriptions in list box
         m_xLbEngine->append_text(aDescription);
         if ( aImplName == maEngine )
             nSelect = nImpl;

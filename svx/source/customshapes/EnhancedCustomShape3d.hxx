@@ -45,8 +45,6 @@ class EnhancedCustomShape3d final
         double      fOriginX;
         double      fOriginY;
 
-        const double* pMap;
-
         public:
             Transformation2D(
                 const SdrObjCustomShape& rSdrObjCustomShape,

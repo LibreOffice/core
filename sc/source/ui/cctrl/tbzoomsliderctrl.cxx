@@ -207,9 +207,9 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
                 sal_uInt16 nCurrentZoom ):
                 InterimItemWindow(pParent, "modules/scalc/ui/zoombox.ui", "ZoomBox"),
                 mxWidget(new ScZoomSlider(rDispatchProvider, nCurrentZoom)),
-                mxWeld(new weld::CustomWeld(*m_xBuilder, "zoom", *mxWidget)),
-                aLogicalSize( 115, 40 )
+                mxWeld(new weld::CustomWeld(*m_xBuilder, "zoom", *mxWidget))
 {
+    Size aLogicalSize( 115, 40 );
     Size aSliderSize = LogicToPixel(aLogicalSize, MapMode(MapUnit::Map10thMM));
     Size aPreferredSize(aSliderSize.Width() * nSliderWidth-1, aSliderSize.Height() + nSliderHeight);
     mxWidget->GetDrawingArea()->set_size_request(aPreferredSize.Width(), aPreferredSize.Height());

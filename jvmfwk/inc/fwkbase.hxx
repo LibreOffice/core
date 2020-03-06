@@ -33,7 +33,6 @@ struct VersionInfo;
 
 class VendorSettings
 {
-    OUString m_xmlDocVendorSettingsFileUrl;
     CXmlDocPtr m_xmlDocVendorSettings;
     CXPathContextPtr m_xmlPathContextVendorSettings;
 

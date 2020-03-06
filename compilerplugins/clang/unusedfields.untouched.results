@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -36,13 +36,13 @@ cppu/source/threadpool/threadpool.cxx:361
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:59
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
-dbaccess/source/core/inc/databasecontext.hxx:95
+dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
-extensions/source/scanner/scanner.hxx:45
+extensions/source/scanner/scanner.hxx:43
     ScannerManager maProtector osl::Mutex
 helpcompiler/inc/HelpCompiler.hxx:196
     HelpCompiler lang const std::string
@@ -81,19 +81,19 @@ include/sfx2/msg.hxx:133
 include/sfx2/msg.hxx:133
     SfxType2 aAttrib struct SfxTypeAttrib [2]
 include/sfx2/msg.hxx:134
+    SfxType3 pType const std::type_info *
+include/sfx2/msg.hxx:134
     SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:134
     SfxType3 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
     SfxType3 aAttrib struct SfxTypeAttrib [3]
-include/sfx2/msg.hxx:134
-    SfxType3 pType const std::type_info *
-include/sfx2/msg.hxx:135
-    SfxType4 aAttrib struct SfxTypeAttrib [4]
 include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:135
+    SfxType4 aAttrib struct SfxTypeAttrib [4]
 include/sfx2/msg.hxx:135
     SfxType4 pType const std::type_info *
 include/sfx2/msg.hxx:136
@@ -214,11 +214,11 @@ include/vcl/uitest/uiobject.hxx:272
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:52
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:56
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
     GtvApplicationWindow doctype LibreOfficeKitDocumentType
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:75
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:74
     GtvApplicationWindowClass parentClass GtkApplicationWindowClass
 libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
     GtvApplication parent GtkApplication
@@ -316,10 +316,12 @@ sc/source/filter/html/htmlpars.cxx:3010
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:52
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:455
+sc/source/ui/inc/docsh.hxx:459
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
+sd/source/ui/inc/sdtreelb.hxx:72
+    SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32
     sd::ZeroconfService port const uint
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:62
@@ -404,11 +406,11 @@ vcl/inc/opengl/zone.hxx:33
     OpenGLVCLContextZone aZone const class OpenGLZone
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
-vcl/inc/qt5/Qt5Graphics.hxx:56
+vcl/inc/qt5/Qt5Graphics.hxx:54
     Qt5Graphics m_focusedButton std::unique_ptr<QPushButton>
-vcl/inc/qt5/Qt5Graphics.hxx:57
+vcl/inc/qt5/Qt5Graphics.hxx:55
     Qt5Graphics m_image std::unique_ptr<QImage>
-vcl/inc/qt5/Qt5Graphics.hxx:58
+vcl/inc/qt5/Qt5Graphics.hxx:56
     Qt5Graphics m_lastPopupRect class QRect
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
@@ -442,9 +444,13 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5143
+vcl/unx/gtk3/gtk3gtkinst.cxx:5165
     (anonymous namespace)::CrippledViewport viewport GtkViewport
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>
+xmloff/source/draw/sdxmlimp_impl.hxx:159
+    SdXMLImport mpDrawPageAttrTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:160
+    SdXMLImport mpDrawPageElemTokenMap std::unique_ptr<SvXMLTokenMap>

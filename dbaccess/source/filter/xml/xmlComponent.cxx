@@ -43,8 +43,10 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 ,const OUString& _sComponentServiceName
                 ) :
     SvXMLImportContext( rImport )
-    ,m_bAsTemplate(false)
 {
+    OUString sName;
+    OUString sHREF;
+    bool     bAsTemplate(false);
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     sax_fastparser::FastAttributeList *pAttribList =
                     sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
@@ -55,38 +57,38 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(XLINK, XML_HREF):
-                m_sHREF = sValue;
+                sHREF = sValue;
                 break;
             case XML_ELEMENT(DB, XML_NAME):
             case XML_ELEMENT(DB_OASIS, XML_NAME):
-                m_sName = sValue;
+                sName = sValue;
                 // sanitize the name. Previously, we allowed to create forms/reports/queries which contain
                 // a / in their name, which nowadays is forbidden. To not lose such objects if they're contained
                 // in older files, we replace the slash with something less offending.
-                m_sName = m_sName.replace( '/', '_' );
+                sName = sName.replace( '/', '_' );
                 break;
             case XML_ELEMENT(DB, XML_AS_TEMPLATE):
             case XML_ELEMENT(DB_OASIS, XML_AS_TEMPLATE):
-                m_bAsTemplate = sValue == s_sTRUE;
+                bAsTemplate = sValue == s_sTRUE;
                 break;
             default:
                 SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
-    if ( !m_sHREF.isEmpty() && !m_sName.isEmpty() && _xParentContainer.is() )
+    if ( !sHREF.isEmpty() && !sName.isEmpty() && _xParentContainer.is() )
     {
         Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {PROPERTY_NAME, Any(m_sName)}, // set as folder
-            {PROPERTY_PERSISTENT_NAME, Any(m_sHREF.copy(m_sHREF.lastIndexOf('/')+1))},
-            {PROPERTY_AS_TEMPLATE, Any(m_bAsTemplate)},
+            {PROPERTY_NAME, Any(sName)}, // set as folder
+            {PROPERTY_PERSISTENT_NAME, Any(sHREF.copy(sHREF.lastIndexOf('/')+1))},
+            {PROPERTY_AS_TEMPLATE, Any(bAsTemplate)},
         }));
         try
         {
             Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );
             Reference< XInterface > xComponent( xORB->createInstanceWithArguments( _sComponentServiceName, aArguments ) );
             Reference< XNameContainer > xNameContainer( _xParentContainer, UNO_QUERY_THROW );
-            xNameContainer->insertByName( m_sName, makeAny( xComponent ) );
+            xNameContainer->insertByName( sName, makeAny( xComponent ) );
         }
         catch(Exception&)
         {

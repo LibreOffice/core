@@ -222,6 +222,18 @@ void UnusedFields::run()
                 "write %0",
                 compat::getBeginLoc(s.parentRecord))
                 << s.fieldName;
+        for (const MyFieldInfo & s : touchedFromOutsideConstructorSet)
+            report(
+                DiagnosticsEngine::Warning,
+                "outside-constructor %0",
+                compat::getBeginLoc(s.parentRecord))
+                << s.fieldName;
+        for (const MyFieldInfo & s : touchedFromOutsideSet)
+            report(
+                DiagnosticsEngine::Warning,
+                "outside %0",
+                compat::getBeginLoc(s.parentRecord))
+                << s.fieldName;
     }
 }
 
@@ -1132,6 +1144,28 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
+static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
+{
+    auto it = context.getParents(*stmt).begin();
+
+    if (it == context.getParents(*stmt).end())
+          return nullptr;
+
+    const Decl *decl = it->get<Decl>();
+    if (decl)
+    {
+        if (isa<VarDecl>(decl))
+            return dyn_cast<FunctionDecl>(decl->getDeclContext());
+        return decl;
+    }
+
+    stmt = it->get<Stmt>();
+    if (stmt)
+        return getFunctionDeclContext(context, stmt);
+
+    return nullptr;
+}
+
 void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr) {
     const FunctionDecl* memberExprParentFunction = getParentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(memberExprParentFunction);
@@ -1140,6 +1174,16 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
 
     // it's touched from somewhere outside a class
     if (!methodDecl) {
+        if (fieldDecl->getName() == "m_pShell")
+        {
+            if (memberExprParentFunction)
+                memberExprParentFunction->dump();
+            memberExpr->dump();
+            const Decl *decl = getFunctionDeclContext(compiler.getASTContext(), memberExpr);
+            if (decl)
+                decl->dump();
+            std::cout << "site1" << std::endl;
+        }
         touchedFromOutsideSet.insert(fieldInfo);
         return;
     }
@@ -1155,6 +1199,13 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
             if (!constructorDecl)
                 touchedFromOutsideConstructorSet.insert(fieldInfo);
         } else {
+            if (fieldDecl->getName() == "m_pShell")
+            {
+                if (memberExprParentFunction)
+                    memberExprParentFunction->dump();
+                memberExpr->dump();
+                std::cout << "site2" << std::endl;
+            }
             touchedFromOutsideSet.insert(fieldInfo);
         }
     }

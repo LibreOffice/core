@@ -50,10 +50,9 @@ void MediaObjectBar::InitInterface_Impl()
 
 MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),
-    mpView( pSdView ),
-    mpViewSh( pSdViewShell )
+    mpView( pSdView )
 {
-    DrawDocShell* pDocShell = mpViewSh->GetDocSh();
+    DrawDocShell* pDocShell = pSdViewShell->GetDocSh();
 
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );

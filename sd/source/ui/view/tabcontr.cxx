@@ -58,7 +58,6 @@ TabControl::TabControl(DrawViewShell* pViewSh, vcl::Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
     DragSourceHelper( this ),
     DropTargetHelper( this ),
-    RrePageID(1),
     pDrViewSh(pViewSh),
     bInternalMove(false)
 {
@@ -98,7 +97,6 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         sal_uInt16 aPageId = GetPageId(aPos);
 
         //initialize
-        RrePageID=aPageId;
         if (aPageId == 0)
         {
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

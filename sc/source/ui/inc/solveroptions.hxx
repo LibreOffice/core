@@ -58,7 +58,6 @@ class ScSolverValueDialog;
 class ScSolverOptionsDialog : public weld::GenericDialogController
 {
     css::uno::Sequence<OUString> maImplNames;
-    css::uno::Sequence<OUString> maDescriptions;
     OUString maEngine;
     css::uno::Sequence<css::beans::PropertyValue> maProperties;
 

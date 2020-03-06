@@ -90,7 +90,6 @@ namespace vcl
 
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
-        Font const      m_aUnzoomedPointFont;
         const bool      m_bRTLEnabled;
 
         tools::Rectangle       m_aCompleteTextRect;
@@ -100,9 +99,9 @@ namespace vcl
         OutputDevice& _rReferenceDevice )
         :m_rTargetDevice( _rTargetDevice )
         ,m_rReferenceDevice( _rReferenceDevice )
-        ,m_aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() )
         ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
+        Font const aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() );
         const Fraction& aZoom( _rControl.GetZoom() );
         m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
@@ -129,13 +128,13 @@ namespace vcl
         m_rTargetDevice.SetMapMode( aTargetMapMode );
 
         // now that the Zoom is part of the map mode, reset the target device's font to the "unzoomed" version
-        Font aDrawFont( m_aUnzoomedPointFont );
+        Font aDrawFont( aUnzoomedPointFont );
         aDrawFont.SetFontSize( OutputDevice::LogicToLogic(aDrawFont.GetFontSize(), MapMode(MapUnit::MapPoint), MapMode(eTargetMapUnit)) );
         _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device
         m_rReferenceDevice.Push( PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
-        Font aRefFont( m_aUnzoomedPointFont );
+        Font aRefFont( aUnzoomedPointFont );
         aRefFont.SetFontSize( OutputDevice::LogicToLogic(
             aRefFont.GetFontSize(), MapMode(MapUnit::MapPoint), m_rReferenceDevice.GetMapMode()) );
         m_rReferenceDevice.SetFont( aRefFont );

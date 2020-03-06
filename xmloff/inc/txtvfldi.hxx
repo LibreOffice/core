@@ -402,9 +402,6 @@ public:
  */
 class XMLVariableDeclImportContext final : public SvXMLImportContext
 {
-    XMLValueImportHelper aValueHelper;
-    sal_Unicode cSeparationChar;
-
 public:
 
 

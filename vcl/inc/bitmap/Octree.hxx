@@ -52,7 +52,6 @@ private:
     std::unique_ptr<OctreeNode> pTree;
     std::vector<OctreeNode*> mpReduce;
     BitmapColor const* mpColor;
-    const BitmapReadAccess* mpAccess;
     sal_uInt16 mnPalIndex;
 
 public:

@@ -27,10 +27,6 @@ namespace dbaxml
     class ODBFilter;
     class OXMLComponent : public SvXMLImportContext
     {
-        OUString m_sName;
-        OUString m_sHREF;
-        bool        m_bAsTemplate;
-
     public:
 
         OXMLComponent( ODBFilter& rImport

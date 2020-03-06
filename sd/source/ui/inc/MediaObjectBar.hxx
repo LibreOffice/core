@@ -50,7 +50,6 @@ private:
     static void InitInterface_Impl();
 
     ::sd::View* mpView;
-    ViewShell* const  mpViewSh;
 };
 
 } // end of namespace sd

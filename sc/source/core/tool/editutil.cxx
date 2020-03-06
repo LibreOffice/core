@@ -371,8 +371,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     return tools::Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
-ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
-    pEngine( pEng ),
+ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEngine ) :
     bNeedsObject( false ),
     bNeedsCellAttr( false )
 {

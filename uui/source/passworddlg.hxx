@@ -42,9 +42,6 @@ public:
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
     OUString        GetPassword() const { return m_xEDPassword->get_text(); }
-
-private:
-    const std::locale&                 rResLocale;
 };
 
 #endif // INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX

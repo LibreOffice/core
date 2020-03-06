@@ -168,7 +168,6 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidat
 \************************************************************************/
 SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, pController, "cui/ui/rotationtabpage.ui", "Rotation", rInAttrs)
-    , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
     , m_aCtlRect(this)
@@ -182,7 +181,7 @@ SvxAngleTabPage::SvxAngleTabPage(weld::Container* pPage, weld::DialogController*
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
 {
     // calculate PoolUnit
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
@@ -398,7 +397,6 @@ void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eR
 \************************************************************************/
 SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", &rInAttrs)
-    , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FieldUnit::NONE)
     , m_xFlRadius(m_xBuilder->weld_widget("FL_RADIUS"))
@@ -419,7 +417,7 @@ SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController*
     SetExchangeSupport();
 
     // evaluate PoolUnit
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = rInAttrs.GetPool();
     assert(pPool && "no pool (!)");
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }

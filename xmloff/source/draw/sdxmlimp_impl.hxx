@@ -156,8 +156,6 @@ class SdXMLImport: public SvXMLImport
     std::unique_ptr<SvXMLTokenMap>              mpMasterPageAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPageMasterAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPageMasterStyleAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mpDrawPageAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mpDrawPageElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPresentationPlaceholderAttrTokenMap;
 
     sal_Int32                   mnNewPageCount;

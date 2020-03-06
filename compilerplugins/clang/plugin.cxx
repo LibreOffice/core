@@ -217,9 +217,31 @@ static const Decl* getDeclContext(ASTContext& context, const Stmt* stmt)
     return nullptr;
 }
 
+static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
+{
+    auto it = context.getParents(*stmt).begin();
+
+    if (it == context.getParents(*stmt).end())
+          return nullptr;
+
+    const Decl *decl = it->get<Decl>();
+    if (decl)
+    {
+        if (isa<VarDecl>(decl))
+            return dyn_cast<FunctionDecl>(decl->getDeclContext());
+        return decl;
+    }
+
+    stmt = it->get<Stmt>();
+    if (stmt)
+        return getFunctionDeclContext(context, stmt);
+
+    return nullptr;
+}
+
 const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
 {
-    const Decl *decl = getDeclContext(compiler.getASTContext(), stmt);
+    const Decl *decl = getFunctionDeclContext(compiler.getASTContext(), stmt);
     if (decl)
         return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
 

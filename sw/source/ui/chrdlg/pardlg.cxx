@@ -52,7 +52,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     , rView(rVw)
     , bDrawParaDlg(bDraw)
 {
-    nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
+    sal_uInt16 nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
     bool bHtmlMode = (nHtmlMode & HTMLMODE_ON) == HTMLMODE_ON;
     if(pTitle)
     {

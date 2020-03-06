@@ -90,7 +90,7 @@ chart2/source/controller/dialogs/DialogModel.cxx:173
     (anonymous namespace)::lcl_DataSeriesContainerAppend m_rDestCnt (anonymous namespace)::lcl_DataSeriesContainerAppend::tContainerType *
 chart2/source/controller/dialogs/DialogModel.cxx:232
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt (anonymous namespace)::lcl_RolesWithRangeAppend::tContainerType *
-chart2/source/controller/inc/ChartController.hxx:417
+chart2/source/controller/inc/ChartController.hxx:413
     chart::ChartController m_apDropTargetHelper std::unique_ptr<DropTargetHelper>
 chart2/source/controller/inc/dlg_View3D.hxx:51
     chart::View3DDialog m_xIllumination std::unique_ptr<ThreeD_SceneIllumination_TabPage>
@@ -170,7 +170,7 @@ connectivity/source/inc/writer/WConnection.hxx:66
     connectivity::writer::OWriterConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 cppcanvas/source/inc/implrenderer.hxx:210
     cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
-cppu/source/typelib/typelib.cxx:907
+cppu/source/typelib/typelib.cxx:903
     (anonymous namespace)::BaseList set (anonymous namespace)::BaseList::Set
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -230,7 +230,7 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 cui/source/inc/screenshotannotationdlg.hxx:30
     ScreenshotAnnotationDlg m_pImpl std::unique_ptr<ScreenshotAnnotationDlg_Impl>
-dbaccess/source/core/dataaccess/databasedocument.hxx:176
+dbaccess/source/core/dataaccess/databasedocument.hxx:177
     dbaccess::ODatabaseDocument m_pEventExecutor ::rtl::Reference<DocumentEventExecutor>
 dbaccess/source/core/dataaccess/documentdefinition.cxx:299
     dbaccess::(anonymous namespace)::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
@@ -238,7 +238,7 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:84
     dbaccess::OSingleSelectQueryComposer m_aColumnsCollection std::vector<std::unique_ptr<OPrivateColumns> >
 dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:86
     dbaccess::OSingleSelectQueryComposer m_aTablesCollection std::vector<std::unique_ptr<OPrivateTables> >
-dbaccess/source/core/inc/TableDeco.hxx:67
+dbaccess/source/core/inc/TableDeco.hxx:66
     dbaccess::ODBTableDecorator m_xColumnMediator css::uno::Reference<css::container::XContainerListener>
 dbaccess/source/filter/xml/dbloader2.cxx:233
     dbaxml::(anonymous namespace)::DBContentLoader m_xMySelf Reference<class com::sun::star::frame::XFrameLoader>
@@ -298,9 +298,9 @@ embeddedobj/source/inc/oleembobj.hxx:189
     OleEmbeddedObject m_bFromClipboard _Bool
 emfio/inc/mtftools.hxx:511
     emfio::MtfTools mrclBounds tools::Rectangle
-extensions/source/propctrlr/genericpropertyhandler.hxx:63
+extensions/source/propctrlr/genericpropertyhandler.hxx:65
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
-extensions/source/scanner/scanner.hxx:47
+extensions/source/scanner/scanner.hxx:45
     ScannerManager mpData void *
 framework/inc/services/layoutmanager.hxx:248
     framework::LayoutManager m_bGlobalSettings _Bool
@@ -418,8 +418,6 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:158
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/accel.hxx:42
-    Accelerator maCurKeyCode vcl::KeyCode
 include/vcl/menu.hxx:454
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/NotebookBarAddonsMerger.hxx:54
@@ -444,14 +442,14 @@ include/vcl/sysdata.hxx:69
     SystemEnvData pSalFrame void *
 include/vcl/textrectinfo.hxx:32
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/vclenum.hxx:199
+include/vcl/vclenum.hxx:202
     ItalicMatrix yy double
-include/vcl/vclenum.hxx:199
-    ItalicMatrix yx double
-include/vcl/vclenum.hxx:199
-    ItalicMatrix xy double
-include/vcl/vclenum.hxx:199
+include/vcl/vclenum.hxx:202
     ItalicMatrix xx double
+include/vcl/vclenum.hxx:202
+    ItalicMatrix xy double
+include/vcl/vclenum.hxx:202
+    ItalicMatrix yx double
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
@@ -466,11 +464,11 @@ jvmfwk/inc/vendorbase.hxx:174
     jfw_plugin::VendorBase m_sArch class rtl::OUString
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:29
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:28
     GtvRenderingArgs m_aBackgroundColor std::string
-libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:63
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:62
     GtvApplicationWindow statusbar GtkWidget *
-libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:39
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:37
     (anonymous namespace)::GtvMainToolbarPrivateImpl m_pPartModeSelector GtkWidget *
 package/inc/ByteChucker.hxx:38
     ByteChucker p2Sequence sal_Int8 *const
@@ -492,7 +490,7 @@ sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
     rtl_arena_stat_type m_mem_alloc sal_Size
-sal/rtl/math.cxx:1025
+sal/rtl/math.cxx:952
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:98
     (anonymous namespace)::ImplUTF7ToUCContextData mbShifted _Bool
@@ -616,17 +614,17 @@ sc/source/ui/inc/uiitems.hxx:47
     ScInputStatusItem aStartPos const class ScAddress
 sc/source/ui/inc/uiitems.hxx:48
     ScInputStatusItem aEndPos const class ScAddress
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:76
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:78
     sc::sidebar::AlignmentPropertyPanel mxHorizontalAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:79
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:81
     sc::sidebar::AlignmentPropertyPanel mxVertAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:82
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:84
     sc::sidebar::AlignmentPropertyPanel mxWriteDirectionDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:85
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:87
     sc::sidebar::AlignmentPropertyPanel mxIndentButtonsDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:77
+sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:75
     sc::sidebar::CellAppearancePropertyPanel mxBackColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:81
+sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:79
     sc::sidebar::CellAppearancePropertyPanel mxLineColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
 sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx:67
     sc::sidebar::NumberFormatPropertyPanel mxCatagoryDispatch std::unique_ptr<ToolbarUnoDispatcher>
@@ -644,9 +642,9 @@ sd/source/ui/inc/animobjs.hxx:120
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
 sd/source/ui/inc/fudspord.hxx:51
     sd::FuDisplayOrder mpOverlay std::unique_ptr<SdrDropMarkerOverlay>
-sd/source/ui/inc/navigatr.hxx:124
-    SdNavigatorWin mpNavigatorCtrlItem std::unique_ptr<SdNavigatorControllerItem>
 sd/source/ui/inc/navigatr.hxx:125
+    SdNavigatorWin mpNavigatorCtrlItem std::unique_ptr<SdNavigatorControllerItem>
+sd/source/ui/inc/navigatr.hxx:126
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:73
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
@@ -806,7 +804,7 @@ svx/source/sidebar/possize/PosSizePropertyPanel.hxx:105
     svx::sidebar::PosSizePropertyPanel mxArrangeDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/svdraw/svdpdf.hxx:193
     ImpSdrPdfImport mdPageWidthPts double
-svx/source/tbxctrls/tbcontrl.cxx:202
+svx/source/tbxctrls/tbcontrl.cxx:204
     (anonymous namespace)::SvxFontNameBox_Impl m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -847,7 +845,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -871,9 +869,7 @@ sw/source/uibase/sidebar/TableEditPanel.hxx:61
 sw/source/uibase/sidebar/TableEditPanel.hxx:63
     sw::sidebar::TableEditPanel m_xMiscDispatch std::unique_ptr<ToolbarUnoDispatcher>
 sw/source/uibase/sidebar/WrapPropertyPanel.hxx:70
-    sw::sidebar::WrapPropertyPanel mxWrapOptions1Dispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/WrapPropertyPanel.hxx:73
-    sw::sidebar::WrapPropertyPanel mxWrapOptions2Dispatch std::unique_ptr<ToolbarUnoDispatcher>
+    sw::sidebar::WrapPropertyPanel mxWrapOptionsDispatch std::unique_ptr<ToolbarUnoDispatcher>
 testtools/source/bridgetest/cppobj.cxx:149
     bridge_object::(anonymous namespace)::Test_Impl _arStruct Sequence<struct test::testtools::bridgetest::TestElement>
 ucb/source/ucp/gio/gio_mount.hxx:74
@@ -962,7 +958,7 @@ vcl/inc/pdf/BitmapID.hxx:25
     vcl::pdf::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/inc/qt5/Qt5Frame.hxx:97
     Qt5Frame m_pSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Graphics.hxx:53
+vcl/inc/qt5/Qt5Graphics.hxx:51
     Qt5Graphics m_pFontCollection class PhysicalFontCollection *
 vcl/inc/qt5/Qt5Instance.hxx:59
     Qt5Instance m_pQApplication std::unique_ptr<QApplication>
@@ -1008,7 +1004,7 @@ vcl/inc/scanlinewriter.hxx:36
     vcl::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/inc/sft.hxx:742
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
-vcl/inc/svdata.hxx:418
+vcl/inc/svdata.hxx:456
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
 vcl/inc/unx/gtk/gtkframe.hxx:80
     GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *
@@ -1030,7 +1026,7 @@ vcl/source/filter/graphicfilter.cxx:613
     (anonymous namespace)::ImpFilterLibCacheEntry maFiltername const class rtl::OUString
 vcl/source/filter/graphicfilter.cxx:716
     (anonymous namespace)::ImpFilterLibCache mpLast struct (anonymous namespace)::ImpFilterLibCacheEntry *
-vcl/source/filter/jpeg/Exif.hxx:51
+vcl/source/filter/jpeg/Exif.hxx:53
     Exif::ExifIFD tag sal_uInt8 [2]
 vcl/source/filter/wmf/wmfwr.hxx:95
     WMFWriter aDstClipRegion vcl::Region
@@ -1070,7 +1066,7 @@ vcl/unx/gtk3/gtk3hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
 vcl/workben/vcldemo.cxx:1750
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
-writerfilter/source/dmapper/DomainMapperTableHandler.cxx:232
+writerfilter/source/dmapper/DomainMapperTableHandler.cxx:233
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
