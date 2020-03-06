@@ -61,7 +61,7 @@ public:
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
     static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
-    static BitmapEx getDefaultThumbnail(const OUString &rURL);
+    static BitmapEx getDefaultThumbnail(const OUString &rURL, bool &bIsAccessible);
 
     ApplicationType mnFileTypes;
 
