@@ -364,7 +364,7 @@ namespace drawinglayer::processor2d
 
                         // obtain result as a bitmap
                         auto bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
-                        constexpr sal_Int32 nRadius = 5;
+                        constexpr double nRadius = 5.0;
                         bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
                         // use bitmap later as mask
                         auto mask = bitmap.GetBitmap();
