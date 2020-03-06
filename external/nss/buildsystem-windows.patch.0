@@ -1,9 +1,9 @@
 --- ./nss/coreconf/nspr.sh.sav	2019-11-19 20:55:30.000000000 +0100
 +++ ./nss/coreconf/nspr.sh	2020-02-19 22:25:05.863542364 +0100
-@@ -31,10 +31,13 @@
-     extra_params=(--prefix="$dist_dir"/out --libdir="$dist_dir"/out/lib --includedir="$dist_dir"/out/include)
-     if [ "$opt_build" = 1 ]; then
-         extra_params+=(--disable-debug --enable-optimize)
+@@ -35,10 +35,13 @@
+         else
+             extra_params+=(--disable-debug --enable-optimize)
+         fi
 +    else
 +        extra_params+=(--enable-debug-rtl)
      fi
