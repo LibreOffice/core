@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ebd1497_7978170f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5083,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-06T09:43:08Z",
+      "side": 1,
+      "message": "i think dynamically setting this in the middle of the export is a bad idea; it has to be determined at the start so that the places where it makes a difference can conditionalize on it reliably",
+      "revId": "3f001891c224df915dab76ba6473caefbea387e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
