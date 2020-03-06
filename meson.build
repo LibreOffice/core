@@ -237,3 +237,5 @@ subdir('dbaccess')
 subdir('reportdesign')
 subdir('wizards')
 subdir('bridges')
+subdir('configmgr')
+

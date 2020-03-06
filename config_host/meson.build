@@ -104,6 +104,8 @@ cdata.set10('HAVE_CXXABI_H_CXA_THROW', true)
 cdata.set10('HAVE_CXXABI_H_SI_CLASS_TYPE_INFO', true)
 cdata.set10('HAVE_CXXABI_H_VMI_CLASS_TYPE_INFO', true)
 
+cdata.set10('HAVE_DCONF', false)
+
 configure_file(input: 'config_typesizes.h.meson',
   output: 'config_typesizes.h',
   configuration: cdata)
@@ -234,4 +236,8 @@ configure_file(input: 'config_firebird.h.meson',
 
 configure_file(input: 'config_cxxabi.h.meson',
   output: 'config_cxxabi.h',
+  configuration: cdata)
+
+configure_file(input: 'config_dconf.h.meson',
+  output: 'config_dconf.h',
   configuration: cdata)
