@@ -181,12 +181,13 @@ task copyAssets(type: Copy) {
             include '*.data'
         }
     }
-    // documents with manual page break trigger attempt to read the ui file
+    // documents with manual page break trigger attempt to read the ui file 'pagebreakmenu.ui'
     // would trigger a css::container::NoSuchElementException with osl_File_E_NOENT
-    // if not present and since it is not caught would crash the app...
+    // if not present and since it is not caught would crash the app;
+    // 'annotationmenu.ui' required to handle documents containing comments
     into('config') {
         from "${liboInstdir}/share/config"
-        include '**/pagebreakmenu.ui'
+        include '**/pagebreakmenu.ui', '**/annotationmenu.ui'
     }
 }
 
