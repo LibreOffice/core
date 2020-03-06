@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc3a36d6_f241d376",
+        "filename": "sd/source/ui/dlg/tpoption.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-03-06T21:20:15Z",
+      "side": 1,
+      "message": "are we missing a -\u003eget_state_changed_from_saved() here ?",
+      "revId": "0576d1e2e6a03378f0c1193a2c7092455a3a6c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
