@@ -19,7 +19,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.6.1'
     }
 }
 
@@ -38,7 +38,6 @@ dependencies {
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "27.0.3"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
