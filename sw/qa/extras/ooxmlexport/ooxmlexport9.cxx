@@ -184,6 +184,156 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
 }
 
+<<<<<<< HEAD   (48e33a tdf#126076 XLSX export: fix automatic line chart markers)
+=======
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // direct paragraph formatting
+    // This was 212 twips from the table style, but always direct paragraph formatting wins, in the case of the default 0 margin, too
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // default margin
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_directAfter, "tdf129575-directAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // from table style
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // direct paragraph formatting
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_styleAfter, "tdf129575-styleAfter.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // direct paragraph formatting
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaTopMargin"));
+    // from table style
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // docDefault defines both bottom margin and line spacing, but
+    // applied bottom margin values are based on non-docDefault paragraph styles, line spacing is based on table style
+
+    // docDefault: <w:spacing w:after="160" w:line="320" w:lineRule="auto"/>
+    // table style: <w:spacing w:after="0" w:line="240" w:lineRule="auto"/> (single line space, overwriting bigger docDefault)
+
+    // Paragraph style Normal: <w:spacing w:after="160"/> (same as docDefault),
+    // table style based single line spacing
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(282), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+    style::LineSpacing aLineSpacing = getProperty<style::LineSpacing>(getParagraphOfText(1, xCell->getText()), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+    // Heading 2: <w:spacing w:after="360"/> (different from docDefault),
+    // table style based single line spacing
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), getProperty<sal_Int32>(getParagraphOfText(2, xCell->getText()), "ParaBottomMargin"));
+    aLineSpacing = getProperty<style::LineSpacing>(getParagraphOfText(1, xCell->getText()), "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-comprehensive.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // cell A1
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    // cell A2
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "ParaSubStyleDefaultsChar");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p/w:r[3]/w:rPr/w:sz", "val", "16");
+    // cell A3
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleNormal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleNormal");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    // cell A4
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:pStyle", "val", "ParaSubStyleDefaults");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:pPr/w:spacing", "after", "200");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[1]/w:rPr/w:sz", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:rStyle", "val", "CharSubStyleDefaults");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:rPr/w:sz", 0);
+    // cell A5
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "color");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:rPr", "sz");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:color", "val", "AAAA00"); // all text in color
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    // cell A6
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "line");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr", "color");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "before", "480");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:pPr/w:spacing", "after", "20");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:color", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[1]/w:rPr/w:sz", "val", "16");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", "val", "AAAA00");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // This was 2 (missing trailing cell in merged cell range)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
+}
+
+>>>>>>> CHANGE (6db846 tdf#107626 DOCX table export: fix missing trailing cells)
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 {
     // The second paragraph (first numbered one) had 0 bottom margin:

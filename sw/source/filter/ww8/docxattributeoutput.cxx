@@ -949,9 +949,24 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
             sal_Int32 nClosedCell = lastClosedCell.back();
             if (nCell == nClosedCell)
             {
-                //Start missing trailing cell
+                //Start missing trailing cell(s)
                 ++nCell;
                 StartTableCell(pInner, nCell, nRow);
+
+                //Continue on missing next trailing cell(s)
+                ww8::RowSpansPtr xRowSpans = pInner->getRowSpansOfRow();
+                sal_Int32 nRemainingCells = xRowSpans->size() - nCell;
+                for (sal_Int32 i = 1; i < nRemainingCells; ++i)
+                {
+                    if (bForceEmptyParagraph)
+                    {
+                        m_pSerializer->singleElementNS(XML_w, XML_p);
+                    }
+
+                    EndTableCell(nCell);
+
+                    StartTableCell(pInner, nCell, nRow);
+                }
             }
 
             if (bForceEmptyParagraph)
