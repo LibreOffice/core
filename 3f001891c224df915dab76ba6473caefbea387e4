@@ -16,6 +16,24 @@
       "revId": "3f001891c224df915dab76ba6473caefbea387e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44299b9c_0d2dcb93",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5083,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-03-06T15:34:21Z",
+      "side": 1,
+      "message": "How would you know this at the beginning of export?\nI guess you can only know when you hit a place where you know this is not supported in older versions?",
+      "parentUuid": "2ebd1497_7978170f",
+      "revId": "3f001891c224df915dab76ba6473caefbea387e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
