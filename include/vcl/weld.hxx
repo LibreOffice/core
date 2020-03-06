@@ -576,10 +576,10 @@ protected:
     Link<ComboBox&, bool> m_aEntryActivateHdl;
     Link<OUString&, bool> m_aEntryInsertTextHdl;
 
+public:
     void signal_changed() { m_aChangeHdl.Call(*this); }
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
-public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;

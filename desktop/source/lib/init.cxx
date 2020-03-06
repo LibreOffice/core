@@ -3552,7 +3552,6 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
     StringMap aMap(jsonToStringMap(pArguments));
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nWindowId);
-    JSInstanceBuilder* pBuilder = JSInstanceBuilder::FindLOKWeldBuilder(nWindowId);
 
     if (!pWindow && nWindowId >= 1000000000 /* why unsigned? */)
         pWindow = getSidebarWindow();
@@ -3574,18 +3573,20 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
         try
         {
-            bool bIsWeldedDialog = pBuilder != nullptr;
+            OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
+            weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, sControlId);
+
+            bool bIsWeldedDialog = pWidget != nullptr;
             bool bContinueWithLOKWindow = false;
 
             if (bIsWeldedDialog)
             {
-                OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
                 OUString sControlType = aMap["type"];
                 OUString sAction = aMap["cmd"];
 
                 if (sControlType == "tabcontrol")
                 {
-                    auto pNotebook = pBuilder->weld_notebook(sControlId, false);
+                    auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
                     if (pNotebook)
                     {
                         if (sAction == "selecttab")
@@ -3601,7 +3602,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                 }
                 else if (sControlType == "combobox")
                 {
-                    auto pCombobox = pBuilder->weld_combo_box(sControlId, false);
+                    auto pCombobox = dynamic_cast<weld::ComboBox*>(pWidget);
                     if (pCombobox)
                     {
                         if (sAction == "selected")
@@ -3614,6 +3615,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                                 int pos = std::atoi(posString.getStr());
                                 pCombobox->set_active(pos);
                             }
+                        }
+                        else if (sAction == "change")
+                        {
+                            pCombobox->set_entry_text(aMap["data"]);
+                            pCombobox->signal_changed();
                         }
                         else
                             bContinueWithLOKWindow = true;
