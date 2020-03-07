@@ -160,7 +160,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
             }
             else
             {
-                if (!(IsFieldDlgHtmlMode() && (i == DI_EDIT || i == DI_THEMA || i == DI_PRINT)))
+                if (!(IsFieldDlgHtmlMode() && (i == DI_EDIT || i == DI_SUBJECT || i == DI_PRINT)))
                 {
                     m_xTypeTLB->insert(nullptr, -1, &aLst[i], &sId,
                                        nullptr, nullptr, nullptr, false, xEntry.get());

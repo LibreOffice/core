@@ -180,8 +180,8 @@
 #define STR_POOLCOLL_TOX_AUTHORITIESH           NC_("STR_POOLCOLL_TOX_AUTHORITIESH", "Bibliography Heading")
 #define STR_POOLCOLL_TOX_AUTHORITIES1           NC_("STR_POOLCOLL_TOX_AUTHORITIES1", "Bibliography 1")
 // Document title style, not to be confused with Heading style
-#define STR_POOLCOLL_DOC_TITEL                  NC_("STR_POOLCOLL_DOC_TITEL", "Title")
-#define STR_POOLCOLL_DOC_SUBTITEL               NC_("STR_POOLCOLL_DOC_SUBTITEL", "Subtitle")
+#define STR_POOLCOLL_DOC_TITLE                  NC_("STR_POOLCOLL_DOC_TITEL", "Title")
+#define STR_POOLCOLL_DOC_SUBTITLE               NC_("STR_POOLCOLL_DOC_SUBTITEL", "Subtitle")
 #define STR_POOLCOLL_DOC_APPENDIX               NC_("STR_POOLCOLL_DOC_APPENDIX", "Appendix")
 #define STR_POOLCOLL_HTML_BLOCKQUOTE            NC_("STR_POOLCOLL_HTML_BLOCKQUOTE", "Quotations")
 #define STR_POOLCOLL_HTML_PRE                   NC_("STR_POOLCOLL_HTML_PRE", "Preformatted Text")
@@ -721,8 +721,8 @@
 #define STR_TOX_OBJ                             NC_("STR_TOX_OBJ", "Table of Objects")
 #define STR_TOX_ILL                             NC_("STR_TOX_ILL", "Table of Figures")
 // SubType DocInfo
-#define FLD_DOCINFO_TITEL                       NC_("FLD_DOCINFO_TITEL", "Title")
-#define FLD_DOCINFO_THEMA                       NC_("FLD_DOCINFO_THEMA", "Subject")
+#define FLD_DOCINFO_TITLE                       NC_("FLD_DOCINFO_TITEL", "Title")
+#define FLD_DOCINFO_SUBJECT                     NC_("FLD_DOCINFO_THEMA", "Subject")
 #define FLD_DOCINFO_KEYS                        NC_("FLD_DOCINFO_KEYS", "Keywords")
 #define FLD_DOCINFO_COMMENT                     NC_("FLD_DOCINFO_COMMENT", "Comments")
 #define FLD_DOCINFO_CREATE                      NC_("FLD_DOCINFO_CREATE", "Created")

@@ -435,8 +435,8 @@ static const char* STR_POOLCOLL_REGISTER_ARY[] =
 static const char* STR_POOLCOLL_DOC_ARY[] =
 {
     // Category Chapter/Document
-    STR_POOLCOLL_DOC_TITEL,
-    STR_POOLCOLL_DOC_SUBTITEL,
+    STR_POOLCOLL_DOC_TITLE,
+    STR_POOLCOLL_DOC_SUBTITLE,
     STR_POOLCOLL_DOC_APPENDIX
 };
 

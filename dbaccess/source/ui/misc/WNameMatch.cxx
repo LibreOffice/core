@@ -183,7 +183,7 @@ bool OWizNameMatching::LeavePage()
     return true;
 }
 
-OUString OWizNameMatching::GetTitle() const { return DBA_RES(STR_WIZ_NAME_MATCHING_TITEL); }
+OUString OWizNameMatching::GetTitle() const { return DBA_RES(STR_WIZ_NAME_MATCHING_TITLE); }
 
 IMPL_LINK(OWizNameMatching, ButtonClickHdl, weld::Button&, rButton, void)
 {

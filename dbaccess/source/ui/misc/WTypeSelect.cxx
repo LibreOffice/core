@@ -249,7 +249,7 @@ OWizTypeSelect::~OWizTypeSelect()
 
 OUString OWizTypeSelect::GetTitle() const
 {
-    return DBA_RES(STR_WIZ_TYPE_SELECT_TITEL);
+    return DBA_RES(STR_WIZ_TYPE_SELECT_TITLE);
 }
 
 IMPL_LINK_NOARG(OWizTypeSelect, ColumnSelectHdl, weld::TreeView&, void)
