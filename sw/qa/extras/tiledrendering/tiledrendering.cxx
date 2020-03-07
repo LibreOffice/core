@@ -220,6 +220,13 @@ SwTiledRenderingTest::SwTiledRenderingTest()
 {
 }
 
+void SdTiledRenderingTest::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    comphelper::LibreOfficeKit::setActive(true);
+}
+
 void SwTiledRenderingTest::tearDown()
 {
     if (mxComponent.is())
