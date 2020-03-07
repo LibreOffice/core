@@ -26,14 +26,11 @@
 #include "handlerhelper.hxx"
 
 #include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/ustrbuf.hxx>
 
 
 extern "C" void createRegistryInfo_SubmissionPropertyHandler()

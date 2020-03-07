@@ -11,13 +11,10 @@
 #include <cstddef>
 
 #include <test/bootstrapfixture.hxx>
-#include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "../../source/update/check/updatecheck.hxx"
 #include "../../source/update/check/updateprotocol.hxx"

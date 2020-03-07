@@ -18,16 +18,11 @@
  */
 
 #include "handlerhelper.hxx"
-#include <strings.hrc>
 #include <yesno.hrc>
 #include "modulepcr.hxx"
-#include "enumrepresentation.hxx"
-#include "formmetadata.hxx"
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/inspection/StringRepresentation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/inspection/LineDescriptor.hpp>
@@ -35,11 +30,9 @@
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <tools/diagnose_ex.h>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
-#include <vcl/window.hxx>
 
 #include <algorithm>
 

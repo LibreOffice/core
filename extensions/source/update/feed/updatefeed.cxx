@@ -26,26 +26,20 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
-#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
-#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument3.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
@@ -55,7 +49,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <osl/process.h>
 #include <osl/conditn.hxx>
 #include <vcl/svapp.hxx>
 

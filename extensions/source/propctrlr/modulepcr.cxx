@@ -20,8 +20,6 @@
 #include "modulepcr.hxx"
 
 #include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 namespace pcr
 {

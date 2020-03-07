@@ -25,7 +25,6 @@
 #include "typeselectionpage.hxx"
 #include "admininvokationpage.hxx"
 #include "tableselectionpage.hxx"
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>

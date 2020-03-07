@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/frame/Desktop.hpp>

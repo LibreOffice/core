@@ -20,8 +20,6 @@
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
 #include <helpids.h>
-#include <propctrlr.h>
-#include <vcl/event.hxx>
 #include <memory>
 
 namespace pcr

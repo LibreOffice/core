@@ -17,14 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include "componentmodule.hxx"
 #include <unotools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <svl/solar.hrc>
-#include <tools/debug.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
 namespace compmodule

@@ -22,14 +22,10 @@
 #include <helpids.h>
 
 #include <osl/diagnose.h>
-#include <osl/thread.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
-
-#include <com/sun/star/style/VerticalAlignment.hpp>
 
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
@@ -64,8 +60,6 @@
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 #define COMMAND_CLOSE       "close"
 

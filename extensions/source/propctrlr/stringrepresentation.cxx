@@ -19,10 +19,9 @@
 
 #include <sal/config.h>
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/inspection/XStringRepresentation.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -39,13 +37,11 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <strings.hrc>
 #include <yesno.hrc>
 #include "pcrservices.hxx"
 #include <comphelper/types.hxx>
 #include "modulepcr.hxx"
 
-#include <functional>
 #include <algorithm>
 
 // component helper namespace

@@ -23,9 +23,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

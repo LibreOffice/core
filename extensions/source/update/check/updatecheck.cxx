@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
@@ -33,11 +32,8 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
-#include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>

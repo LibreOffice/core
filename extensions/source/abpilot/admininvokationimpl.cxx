@@ -19,7 +19,6 @@
 
 #include "admininvokationimpl.hxx"
 #include <tools/debug.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>

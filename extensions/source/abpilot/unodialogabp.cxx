@@ -18,7 +18,6 @@
  */
 
 #include "unodialogabp.hxx"
-#include <cppuhelper/typeprovider.hxx>
 #include "abspilot.hxx"
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>

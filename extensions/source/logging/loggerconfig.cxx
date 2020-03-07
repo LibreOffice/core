@@ -35,12 +35,8 @@
 
 #include <tools/diagnose_ex.h>
 #include <osl/process.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/component_context.hxx>
-
-#include <vector>
-#include <sal/macros.h>
 
 
 namespace logging

@@ -20,14 +20,12 @@
 #include "optiongrouplayouter.hxx"
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include "controlwizard.hxx"
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
 #include <osl/diagnose.h>

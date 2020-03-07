@@ -21,6 +21,7 @@
 #include "pcrcommon.hxx"
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -29,26 +30,15 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <comphelper/string.hxx>
 #include <o3tl/float_int_conversion.hxx>
-#include <rtl/math.hxx>
-#include <sfx2/objsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 
 // ugly dependencies for the OColorControl
 #include <svx/svxids.hrc>
-#include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>
 
-#include <svtools/colorcfg.hxx>
-#include <svl/zforlist.hxx>
-#include <unotools/syslocale.hxx>
+#include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
-#include <cstdlib>
 #include <limits>
 #include <memory>
 
