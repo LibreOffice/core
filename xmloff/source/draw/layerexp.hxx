@@ -25,7 +25,7 @@ class SvXMLExport;
 class SdXMLayerExporter
 {
 public:
-    static void exportLayer( SvXMLExport& rExport );
+    static void exportLayer(SvXMLExport& rExport);
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_LAYEREXP_HXX

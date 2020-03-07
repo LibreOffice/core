@@ -17870,7 +17870,6 @@ xmloff/inc/RDFaExportHelper.hxx
 xmloff/inc/RDFaImportHelper.hxx
 xmloff/inc/SchXMLAutoStylePoolP.hxx
 xmloff/inc/SchXMLExport.hxx
-xmloff/inc/SchXMLImport.hxx
 xmloff/inc/StyleMap.hxx
 xmloff/inc/TransGradientStyle.hxx
 xmloff/inc/WordWrapPropertyHdl.hxx
@@ -17908,18 +17907,14 @@ xmloff/inc/XMLTextColumnsContext.hxx
 xmloff/inc/XMLTextColumnsExport.hxx
 xmloff/inc/XMLTextColumnsPropertyHandler.hxx
 xmloff/inc/XMLTextHeaderFooterContext.hxx
-xmloff/inc/anim.hxx
 xmloff/inc/animationimport.hxx
-xmloff/inc/animations.hxx
 xmloff/inc/animimp.hxx
-xmloff/inc/enummaps.hxx
 xmloff/inc/facreg.hxx
 xmloff/inc/fasttokenhandler.hxx
 xmloff/inc/forms/form_handler_factory.hxx
 xmloff/inc/forms/property_handler.hxx
 xmloff/inc/forms/property_ids.hxx
 xmloff/inc/propimp0.hxx
-xmloff/inc/prstylecond.hxx
 xmloff/inc/txtflde.hxx
 xmloff/inc/txtfldi.hxx
 xmloff/inc/txtlists.hxx
@@ -18039,7 +18034,6 @@ xmloff/source/draw/descriptionimp.hxx
 xmloff/source/draw/eventimp.cxx
 xmloff/source/draw/eventimp.hxx
 xmloff/source/draw/layerexp.cxx
-xmloff/source/draw/layerexp.hxx
 xmloff/source/draw/layerimp.cxx
 xmloff/source/draw/layerimp.hxx
 xmloff/source/draw/numithdl.cxx
@@ -18258,7 +18252,6 @@ xmloff/source/style/xmltabe.cxx
 xmloff/source/style/xmltabi.cxx
 xmloff/source/table/XMLTableExport.cxx
 xmloff/source/table/XMLTableImport.cxx
-xmloff/source/table/table.hxx
 xmloff/source/text/XMLAnchorTypePropHdl.hxx
 xmloff/source/text/XMLAutoMarkFileContext.cxx
 xmloff/source/text/XMLAutoMarkFileContext.hxx
@@ -18323,7 +18316,6 @@ xmloff/source/text/XMLIndexTitleTemplateContext.hxx
 xmloff/source/text/XMLIndexUserSourceContext.cxx
 xmloff/source/text/XMLIndexUserSourceContext.hxx
 xmloff/source/text/XMLLineNumberingExport.cxx
-xmloff/source/text/XMLLineNumberingExport.hxx
 xmloff/source/text/XMLLineNumberingImportContext.cxx
 xmloff/source/text/XMLLineNumberingSeparatorImportContext.cxx
 xmloff/source/text/XMLLineNumberingSeparatorImportContext.hxx
@@ -18455,11 +18447,8 @@ xmloff/source/transform/ProcAddAttrTContext.cxx
 xmloff/source/transform/ProcAddAttrTContext.hxx
 xmloff/source/transform/ProcAttrTContext.cxx
 xmloff/source/transform/ProcAttrTContext.hxx
-xmloff/source/transform/PropType.hxx
 xmloff/source/transform/PropertyActionsOASIS.cxx
-xmloff/source/transform/PropertyActionsOASIS.hxx
 xmloff/source/transform/PropertyActionsOOo.cxx
-xmloff/source/transform/PropertyActionsOOo.hxx
 xmloff/source/transform/RenameElemTContext.cxx
 xmloff/source/transform/RenameElemTContext.hxx
 xmloff/source/transform/StyleOASISTContext.cxx
@@ -18467,7 +18456,6 @@ xmloff/source/transform/StyleOASISTContext.hxx
 xmloff/source/transform/StyleOOoTContext.cxx
 xmloff/source/transform/StyleOOoTContext.hxx
 xmloff/source/transform/Transformer.hxx
-xmloff/source/transform/TransformerAction.hxx
 xmloff/source/transform/TransformerActionInit.hxx
 xmloff/source/transform/TransformerActions.cxx
 xmloff/source/transform/TransformerActions.hxx

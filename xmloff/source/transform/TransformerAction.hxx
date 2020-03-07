@@ -23,7 +23,6 @@
 #define XML_TACTION_EOT 0x0000
 #define XML_TACTION_END 0xffff
 
-
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

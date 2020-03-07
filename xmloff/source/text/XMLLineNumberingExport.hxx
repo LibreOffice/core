@@ -20,7 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLLINENUMBERINGEXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLLINENUMBERINGEXPORT_HXX
 
-
 class SvXMLExport;
 
 /** export <text:linenumbering-configuration> and its child elements */
