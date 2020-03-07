@@ -28,452 +28,423 @@
 #include <rtl/instance.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-
 using namespace com::sun::star;
 
-
 namespace drawinglayer::geometry
 {
-
 namespace
 {
-        constexpr OUStringLiteral g_PropertyName_ObjectTransformation ="ObjectTransformation";
-        constexpr OUStringLiteral g_PropertyName_ViewTransformation ="ViewTransformation";
-        constexpr OUStringLiteral g_PropertyName_Viewport ="Viewport";
-        constexpr OUStringLiteral g_PropertyName_Time ="Time";
-        constexpr OUStringLiteral g_PropertyName_VisualizedPage = "VisualizedPage";
-        constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = "ReducedDisplayQuality";
+constexpr OUStringLiteral g_PropertyName_ObjectTransformation = "ObjectTransformation";
+constexpr OUStringLiteral g_PropertyName_ViewTransformation = "ViewTransformation";
+constexpr OUStringLiteral g_PropertyName_Viewport = "Viewport";
+constexpr OUStringLiteral g_PropertyName_Time = "Time";
+constexpr OUStringLiteral g_PropertyName_VisualizedPage = "VisualizedPage";
+constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = "ReducedDisplayQuality";
 }
 
-        class ImpViewInformation2D
+class ImpViewInformation2D
+{
+private:
+    // ViewInformation2D implementation can change refcount, so we have only
+    // two memory regions for pairs of ViewInformation2D/ImpViewInformation2D
+    friend class ::drawinglayer::geometry::ViewInformation2D;
+
+protected:
+    // the object transformation
+    basegfx::B2DHomMatrix maObjectTransformation;
+
+    // the view transformation
+    basegfx::B2DHomMatrix maViewTransformation;
+
+    // the ObjectToView and it's inverse, both on demand from ObjectTransformation
+    // and ViewTransformation
+    basegfx::B2DHomMatrix maObjectToViewTransformation;
+    basegfx::B2DHomMatrix maInverseObjectToViewTransformation;
+
+    // the visible range and the on-demand one in ViewCoordinates
+    basegfx::B2DRange maViewport;
+    basegfx::B2DRange maDiscreteViewport;
+
+    // the DrawPage which is target of visualisation. This is needed e.g. for
+    // the view-dependent decomposition of PageNumber TextFields.
+    // This parameter is buffered here, but mainly resides in mxExtendedInformation,
+    // so it will be interpreted, but held there. It will also not be added
+    // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
+    uno::Reference<drawing::XDrawPage> mxVisualizedPage;
+
+    // the point in time
+    double mfViewTime;
+
+    bool mbReducedDisplayQuality : 1;
+
+    // the complete PropertyValue representation (if already created)
+    uno::Sequence<beans::PropertyValue> mxViewInformation;
+
+    // the extra PropertyValues; not represented by ViewTransformation,
+    // Viewport, VisualizedPage or ViewTime
+    uno::Sequence<beans::PropertyValue> mxExtendedInformation;
+
+    void impInterpretPropertyValues(const uno::Sequence<beans::PropertyValue>& rViewParameters)
+    {
+        if (rViewParameters.hasElements())
         {
-        private:
-            // ViewInformation2D implementation can change refcount, so we have only
-            // two memory regions for pairs of ViewInformation2D/ImpViewInformation2D
-            friend class ::drawinglayer::geometry::ViewInformation2D;
+            const sal_Int32 nCount(rViewParameters.getLength());
+            sal_Int32 nExtendedInsert(0);
 
-        protected:
-            // the object transformation
-            basegfx::B2DHomMatrix                       maObjectTransformation;
+            // prepare extended information for filtering. Maximum size is nCount
+            mxExtendedInformation.realloc(nCount);
 
-            // the view transformation
-            basegfx::B2DHomMatrix                       maViewTransformation;
-
-            // the ObjectToView and it's inverse, both on demand from ObjectTransformation
-            // and ViewTransformation
-            basegfx::B2DHomMatrix                       maObjectToViewTransformation;
-            basegfx::B2DHomMatrix                       maInverseObjectToViewTransformation;
-
-            // the visible range and the on-demand one in ViewCoordinates
-            basegfx::B2DRange                           maViewport;
-            basegfx::B2DRange                           maDiscreteViewport;
-
-            // the DrawPage which is target of visualisation. This is needed e.g. for
-            // the view-dependent decomposition of PageNumber TextFields.
-            // This parameter is buffered here, but mainly resides in mxExtendedInformation,
-            // so it will be interpreted, but held there. It will also not be added
-            // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
-            uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
-
-            // the point in time
-            double                                      mfViewTime;
-
-            bool                                        mbReducedDisplayQuality : 1;
-
-            // the complete PropertyValue representation (if already created)
-            uno::Sequence< beans::PropertyValue >       mxViewInformation;
-
-            // the extra PropertyValues; not represented by ViewTransformation,
-            // Viewport, VisualizedPage or ViewTime
-            uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
-
-            void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+            for (sal_Int32 a(0); a < nCount; a++)
             {
-                if(rViewParameters.hasElements())
+                const beans::PropertyValue& rProp = rViewParameters[a];
+
+                if (rProp.Name == g_PropertyName_ReducedDisplayQuality)
                 {
-                    const sal_Int32 nCount(rViewParameters.getLength());
-                    sal_Int32 nExtendedInsert(0);
+                    // extra information; add to filtered information
+                    mxExtendedInformation[nExtendedInsert++] = rProp;
 
-                    // prepare extended information for filtering. Maximum size is nCount
-                    mxExtendedInformation.realloc(nCount);
-
-                    for(sal_Int32 a(0); a < nCount; a++)
-                    {
-                        const beans::PropertyValue& rProp = rViewParameters[a];
-
-                        if(rProp.Name == g_PropertyName_ReducedDisplayQuality)
-                        {
-                            // extra information; add to filtered information
-                            mxExtendedInformation[nExtendedInsert++] = rProp;
-
-                            // for performance reasons, also cache content locally
-                            bool bSalBool(false);
-                            rProp.Value >>= bSalBool;
-                            mbReducedDisplayQuality = bSalBool;
-                        }
-                        else if(rProp.Name == g_PropertyName_ObjectTransformation)
-                        {
-                            css::geometry::AffineMatrix2D aAffineMatrix2D;
-                            rProp.Value >>= aAffineMatrix2D;
-                            basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation, aAffineMatrix2D);
-                        }
-                        else if(rProp.Name == g_PropertyName_ViewTransformation)
-                        {
-                            css::geometry::AffineMatrix2D aAffineMatrix2D;
-                            rProp.Value >>= aAffineMatrix2D;
-                            basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation, aAffineMatrix2D);
-                        }
-                        else if(rProp.Name == g_PropertyName_Viewport)
-                        {
-                            css::geometry::RealRectangle2D aViewport;
-                            rProp.Value >>= aViewport;
-                            maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
-                        }
-                        else if(rProp.Name == g_PropertyName_Time)
-                        {
-                            rProp.Value >>= mfViewTime;
-                        }
-                        else if(rProp.Name == g_PropertyName_VisualizedPage)
-                        {
-                            rProp.Value >>= mxVisualizedPage;
-                        }
-                        else
-                        {
-                            // extra information; add to filtered information
-                            mxExtendedInformation[nExtendedInsert++] = rProp;
-                        }
-                    }
-
-                    // extra information size is now known; realloc to final size
-                    mxExtendedInformation.realloc(nExtendedInsert);
+                    // for performance reasons, also cache content locally
+                    bool bSalBool(false);
+                    rProp.Value >>= bSalBool;
+                    mbReducedDisplayQuality = bSalBool;
                 }
-            }
-
-            void impFillViewInformationFromContent()
-            {
-                const bool bObjectTransformationUsed(!maObjectTransformation.isIdentity());
-                const bool bViewTransformationUsed(!maViewTransformation.isIdentity());
-                const bool bViewportUsed(!maViewport.isEmpty());
-                const bool bTimeUsed(0.0 < mfViewTime);
-                const bool bVisualizedPageUsed(mxVisualizedPage.is());
-                const bool bReducedDisplayQualityUsed(mbReducedDisplayQuality);
-                const bool bExtraInformation(mxExtendedInformation.hasElements());
-                sal_uInt32 nIndex(0);
-                const sal_uInt32 nCount(
-                    (bObjectTransformationUsed ? 1 : 0) +
-                    (bViewTransformationUsed ? 1 : 0) +
-                    (bViewportUsed ? 1 : 0) +
-                    (bTimeUsed ? 1 : 0) +
-                    (bVisualizedPageUsed ? 1 : 0) +
-                    (bReducedDisplayQualityUsed ? 1 : 0) +
-                    (bExtraInformation ? mxExtendedInformation.getLength() : 0));
-
-                mxViewInformation.realloc(nCount);
-
-                if(bObjectTransformationUsed)
+                else if (rProp.Name == g_PropertyName_ObjectTransformation)
                 {
                     css::geometry::AffineMatrix2D aAffineMatrix2D;
-                    basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maObjectTransformation);
-                    mxViewInformation[nIndex].Name = g_PropertyName_ObjectTransformation;
-                    mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
-                    nIndex++;
+                    rProp.Value >>= aAffineMatrix2D;
+                    basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation,
+                                                                 aAffineMatrix2D);
                 }
-
-                if(bViewTransformationUsed)
+                else if (rProp.Name == g_PropertyName_ViewTransformation)
                 {
                     css::geometry::AffineMatrix2D aAffineMatrix2D;
-                    basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maViewTransformation);
-                    mxViewInformation[nIndex].Name = g_PropertyName_ViewTransformation;
-                    mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
-                    nIndex++;
+                    rProp.Value >>= aAffineMatrix2D;
+                    basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation,
+                                                                 aAffineMatrix2D);
                 }
-
-                if(bViewportUsed)
+                else if (rProp.Name == g_PropertyName_Viewport)
                 {
-                    const css::geometry::RealRectangle2D aViewport(basegfx::unotools::rectangle2DFromB2DRectangle(maViewport));
-                    mxViewInformation[nIndex].Name = g_PropertyName_Viewport;
-                    mxViewInformation[nIndex].Value <<= aViewport;
-                    nIndex++;
+                    css::geometry::RealRectangle2D aViewport;
+                    rProp.Value >>= aViewport;
+                    maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
                 }
-
-                if(bTimeUsed)
+                else if (rProp.Name == g_PropertyName_Time)
                 {
-                    mxViewInformation[nIndex].Name = g_PropertyName_Time;
-                    mxViewInformation[nIndex].Value <<= mfViewTime;
-                    nIndex++;
+                    rProp.Value >>= mfViewTime;
                 }
-
-                if(bVisualizedPageUsed)
+                else if (rProp.Name == g_PropertyName_VisualizedPage)
                 {
-                    mxViewInformation[nIndex].Name = g_PropertyName_VisualizedPage;
-                    mxViewInformation[nIndex].Value <<= mxVisualizedPage;
-                    nIndex++;
+                    rProp.Value >>= mxVisualizedPage;
                 }
-
-                if(bExtraInformation)
+                else
                 {
-                    const sal_Int32 nExtra(mxExtendedInformation.getLength());
-
-                    for(sal_Int32 a(0); a < nExtra; a++)
-                    {
-                        mxViewInformation[nIndex++] = mxExtendedInformation[a];
-                    }
+                    // extra information; add to filtered information
+                    mxExtendedInformation[nExtendedInsert++] = rProp;
                 }
             }
 
-        public:
-            ImpViewInformation2D(
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const basegfx::B2DHomMatrix& rViewTransformation,
-                const basegfx::B2DRange& rViewport,
-                const uno::Reference< drawing::XDrawPage >& rxDrawPage,
-                double fViewTime,
-                const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-            :   maObjectTransformation(rObjectTransformation),
-                maViewTransformation(rViewTransformation),
-                maObjectToViewTransformation(),
-                maInverseObjectToViewTransformation(),
-                maViewport(rViewport),
-                maDiscreteViewport(),
-                mxVisualizedPage(rxDrawPage),
-                mfViewTime(fViewTime),
-                mbReducedDisplayQuality(false),
-                mxViewInformation(),
-                mxExtendedInformation()
+            // extra information size is now known; realloc to final size
+            mxExtendedInformation.realloc(nExtendedInsert);
+        }
+    }
+
+    void impFillViewInformationFromContent()
+    {
+        const bool bObjectTransformationUsed(!maObjectTransformation.isIdentity());
+        const bool bViewTransformationUsed(!maViewTransformation.isIdentity());
+        const bool bViewportUsed(!maViewport.isEmpty());
+        const bool bTimeUsed(0.0 < mfViewTime);
+        const bool bVisualizedPageUsed(mxVisualizedPage.is());
+        const bool bReducedDisplayQualityUsed(mbReducedDisplayQuality);
+        const bool bExtraInformation(mxExtendedInformation.hasElements());
+        sal_uInt32 nIndex(0);
+        const sal_uInt32 nCount((bObjectTransformationUsed ? 1 : 0)
+                                + (bViewTransformationUsed ? 1 : 0) + (bViewportUsed ? 1 : 0)
+                                + (bTimeUsed ? 1 : 0) + (bVisualizedPageUsed ? 1 : 0)
+                                + (bReducedDisplayQualityUsed ? 1 : 0)
+                                + (bExtraInformation ? mxExtendedInformation.getLength() : 0));
+
+        mxViewInformation.realloc(nCount);
+
+        if (bObjectTransformationUsed)
+        {
+            css::geometry::AffineMatrix2D aAffineMatrix2D;
+            basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maObjectTransformation);
+            mxViewInformation[nIndex].Name = g_PropertyName_ObjectTransformation;
+            mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
+            nIndex++;
+        }
+
+        if (bViewTransformationUsed)
+        {
+            css::geometry::AffineMatrix2D aAffineMatrix2D;
+            basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maViewTransformation);
+            mxViewInformation[nIndex].Name = g_PropertyName_ViewTransformation;
+            mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
+            nIndex++;
+        }
+
+        if (bViewportUsed)
+        {
+            const css::geometry::RealRectangle2D aViewport(
+                basegfx::unotools::rectangle2DFromB2DRectangle(maViewport));
+            mxViewInformation[nIndex].Name = g_PropertyName_Viewport;
+            mxViewInformation[nIndex].Value <<= aViewport;
+            nIndex++;
+        }
+
+        if (bTimeUsed)
+        {
+            mxViewInformation[nIndex].Name = g_PropertyName_Time;
+            mxViewInformation[nIndex].Value <<= mfViewTime;
+            nIndex++;
+        }
+
+        if (bVisualizedPageUsed)
+        {
+            mxViewInformation[nIndex].Name = g_PropertyName_VisualizedPage;
+            mxViewInformation[nIndex].Value <<= mxVisualizedPage;
+            nIndex++;
+        }
+
+        if (bExtraInformation)
+        {
+            const sal_Int32 nExtra(mxExtendedInformation.getLength());
+
+            for (sal_Int32 a(0); a < nExtra; a++)
             {
-                impInterpretPropertyValues(rExtendedParameters);
+                mxViewInformation[nIndex++] = mxExtendedInformation[a];
             }
+        }
+    }
 
-            explicit ImpViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-            :   maObjectTransformation(),
-                maViewTransformation(),
-                maObjectToViewTransformation(),
-                maInverseObjectToViewTransformation(),
-                maViewport(),
-                maDiscreteViewport(),
-                mxVisualizedPage(),
-                mfViewTime(),
-                mbReducedDisplayQuality(false),
-                mxViewInformation(rViewParameters),
-                mxExtendedInformation()
-            {
-                impInterpretPropertyValues(rViewParameters);
-            }
+public:
+    ImpViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
+                         const basegfx::B2DHomMatrix& rViewTransformation,
+                         const basegfx::B2DRange& rViewport,
+                         const uno::Reference<drawing::XDrawPage>& rxDrawPage, double fViewTime,
+                         const uno::Sequence<beans::PropertyValue>& rExtendedParameters)
+        : maObjectTransformation(rObjectTransformation)
+        , maViewTransformation(rViewTransformation)
+        , maObjectToViewTransformation()
+        , maInverseObjectToViewTransformation()
+        , maViewport(rViewport)
+        , maDiscreteViewport()
+        , mxVisualizedPage(rxDrawPage)
+        , mfViewTime(fViewTime)
+        , mbReducedDisplayQuality(false)
+        , mxViewInformation()
+        , mxExtendedInformation()
+    {
+        impInterpretPropertyValues(rExtendedParameters);
+    }
 
-            ImpViewInformation2D()
-            :   maObjectTransformation(),
-                maViewTransformation(),
-                maObjectToViewTransformation(),
-                maInverseObjectToViewTransformation(),
-                maViewport(),
-                maDiscreteViewport(),
-                mxVisualizedPage(),
-                mfViewTime(),
-                mbReducedDisplayQuality(false),
-                mxViewInformation(),
-                mxExtendedInformation()
-            {
-            }
+    explicit ImpViewInformation2D(const uno::Sequence<beans::PropertyValue>& rViewParameters)
+        : maObjectTransformation()
+        , maViewTransformation()
+        , maObjectToViewTransformation()
+        , maInverseObjectToViewTransformation()
+        , maViewport()
+        , maDiscreteViewport()
+        , mxVisualizedPage()
+        , mfViewTime()
+        , mbReducedDisplayQuality(false)
+        , mxViewInformation(rViewParameters)
+        , mxExtendedInformation()
+    {
+        impInterpretPropertyValues(rViewParameters);
+    }
 
-            const basegfx::B2DHomMatrix& getObjectTransformation() const
-            {
-                return maObjectTransformation;
-            }
+    ImpViewInformation2D()
+        : maObjectTransformation()
+        , maViewTransformation()
+        , maObjectToViewTransformation()
+        , maInverseObjectToViewTransformation()
+        , maViewport()
+        , maDiscreteViewport()
+        , mxVisualizedPage()
+        , mfViewTime()
+        , mbReducedDisplayQuality(false)
+        , mxViewInformation()
+        , mxExtendedInformation()
+    {
+    }
 
-            const basegfx::B2DHomMatrix& getViewTransformation() const
-            {
-                return maViewTransformation;
-            }
+    const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
 
-            const basegfx::B2DRange& getViewport() const
-            {
-                return maViewport;
-            }
+    const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
 
-            const basegfx::B2DRange& getDiscreteViewport() const
-            {
-                if(maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
-                {
-                    basegfx::B2DRange aDiscreteViewport(maViewport);
-                    aDiscreteViewport.transform(getViewTransformation());
-                    const_cast< ImpViewInformation2D* >(this)->maDiscreteViewport = aDiscreteViewport;
-                }
+    const basegfx::B2DRange& getViewport() const { return maViewport; }
 
-                return maDiscreteViewport;
-            }
+    const basegfx::B2DRange& getDiscreteViewport() const
+    {
+        if (maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
+        {
+            basegfx::B2DRange aDiscreteViewport(maViewport);
+            aDiscreteViewport.transform(getViewTransformation());
+            const_cast<ImpViewInformation2D*>(this)->maDiscreteViewport = aDiscreteViewport;
+        }
 
-            const basegfx::B2DHomMatrix& getObjectToViewTransformation() const
-            {
-                if(maObjectToViewTransformation.isIdentity() &&
-                    (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
-                {
-                    basegfx::B2DHomMatrix aObjectToView(maViewTransformation * maObjectTransformation);
-                    const_cast< ImpViewInformation2D* >(this)->maObjectToViewTransformation = aObjectToView;
-                }
+        return maDiscreteViewport;
+    }
 
-                return maObjectToViewTransformation;
-            }
+    const basegfx::B2DHomMatrix& getObjectToViewTransformation() const
+    {
+        if (maObjectToViewTransformation.isIdentity()
+            && (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
+        {
+            basegfx::B2DHomMatrix aObjectToView(maViewTransformation * maObjectTransformation);
+            const_cast<ImpViewInformation2D*>(this)->maObjectToViewTransformation = aObjectToView;
+        }
 
-            const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const
-            {
-                if(maInverseObjectToViewTransformation.isIdentity() &&
-                    (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
-                {
-                    basegfx::B2DHomMatrix aInverseObjectToView(maViewTransformation * maObjectTransformation);
-                    aInverseObjectToView.invert();
-                    const_cast< ImpViewInformation2D* >(this)->maInverseObjectToViewTransformation = aInverseObjectToView;
-                }
+        return maObjectToViewTransformation;
+    }
 
-                return maInverseObjectToViewTransformation;
-            }
+    const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const
+    {
+        if (maInverseObjectToViewTransformation.isIdentity()
+            && (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
+        {
+            basegfx::B2DHomMatrix aInverseObjectToView(maViewTransformation
+                                                       * maObjectTransformation);
+            aInverseObjectToView.invert();
+            const_cast<ImpViewInformation2D*>(this)->maInverseObjectToViewTransformation
+                = aInverseObjectToView;
+        }
 
-            double getViewTime() const
-            {
-                return mfViewTime;
-            }
+        return maInverseObjectToViewTransformation;
+    }
 
-            const uno::Reference< drawing::XDrawPage >& getVisualizedPage() const
-            {
-                return mxVisualizedPage;
-            }
+    double getViewTime() const { return mfViewTime; }
 
-            bool getReducedDisplayQuality() const
-            {
-                return mbReducedDisplayQuality;
-            }
+    const uno::Reference<drawing::XDrawPage>& getVisualizedPage() const { return mxVisualizedPage; }
 
-            const uno::Sequence< beans::PropertyValue >& getViewInformationSequence() const
-            {
-                if(!mxViewInformation.hasElements())
-                {
-                    const_cast< ImpViewInformation2D* >(this)->impFillViewInformationFromContent();
-                }
+    bool getReducedDisplayQuality() const { return mbReducedDisplayQuality; }
 
-                return mxViewInformation;
-            }
+    const uno::Sequence<beans::PropertyValue>& getViewInformationSequence() const
+    {
+        if (!mxViewInformation.hasElements())
+        {
+            const_cast<ImpViewInformation2D*>(this)->impFillViewInformationFromContent();
+        }
 
-            const uno::Sequence< beans::PropertyValue >& getExtendedInformationSequence() const
-            {
-                return mxExtendedInformation;
-            }
+        return mxViewInformation;
+    }
 
-            bool operator==(const ImpViewInformation2D& rCandidate) const
-            {
-                return (maObjectTransformation == rCandidate.maObjectTransformation
-                    && maViewTransformation == rCandidate.maViewTransformation
-                    && maViewport == rCandidate.maViewport
-                    && mxVisualizedPage == rCandidate.mxVisualizedPage
-                    && mfViewTime == rCandidate.mfViewTime
-                    && mxExtendedInformation == rCandidate.mxExtendedInformation);
-            }
-        };
+    const uno::Sequence<beans::PropertyValue>& getExtendedInformationSequence() const
+    {
+        return mxExtendedInformation;
+    }
+
+    bool operator==(const ImpViewInformation2D& rCandidate) const
+    {
+        return (maObjectTransformation == rCandidate.maObjectTransformation
+                && maViewTransformation == rCandidate.maViewTransformation
+                && maViewport == rCandidate.maViewport
+                && mxVisualizedPage == rCandidate.mxVisualizedPage
+                && mfViewTime == rCandidate.mfViewTime
+                && mxExtendedInformation == rCandidate.mxExtendedInformation);
+    }
+};
 } // end of namespace drawinglayer::geometry
-
 
 namespace drawinglayer::geometry
 {
-        namespace
-        {
-            struct theGlobalDefault :
-                public rtl::Static< ViewInformation2D::ImplType, theGlobalDefault > {};
-        }
+namespace
+{
+struct theGlobalDefault : public rtl::Static<ViewInformation2D::ImplType, theGlobalDefault>
+{
+};
+}
 
-        ViewInformation2D::ViewInformation2D(
-            const basegfx::B2DHomMatrix& rObjectTransformation,
-            const basegfx::B2DHomMatrix& rViewTransformation,
-            const basegfx::B2DRange& rViewport,
-            const uno::Reference< drawing::XDrawPage >& rxDrawPage,
-            double fViewTime,
-            const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-        :   mpViewInformation2D(ImpViewInformation2D(
-                rObjectTransformation,
-                rViewTransformation,
-                rViewport,
-                rxDrawPage,
-                fViewTime,
-                rExtendedParameters))
-        {
-        }
+ViewInformation2D::ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
+                                     const basegfx::B2DHomMatrix& rViewTransformation,
+                                     const basegfx::B2DRange& rViewport,
+                                     const uno::Reference<drawing::XDrawPage>& rxDrawPage,
+                                     double fViewTime,
+                                     const uno::Sequence<beans::PropertyValue>& rExtendedParameters)
+    : mpViewInformation2D(ImpViewInformation2D(rObjectTransformation, rViewTransformation,
+                                               rViewport, rxDrawPage, fViewTime,
+                                               rExtendedParameters))
+{
+}
 
-        ViewInformation2D::ViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-        :   mpViewInformation2D(ImpViewInformation2D(rViewParameters))
-        {
-        }
+ViewInformation2D::ViewInformation2D(const uno::Sequence<beans::PropertyValue>& rViewParameters)
+    : mpViewInformation2D(ImpViewInformation2D(rViewParameters))
+{
+}
 
-        ViewInformation2D::ViewInformation2D()
-        :   mpViewInformation2D(theGlobalDefault::get())
-        {
-        }
+ViewInformation2D::ViewInformation2D()
+    : mpViewInformation2D(theGlobalDefault::get())
+{
+}
 
-        ViewInformation2D::ViewInformation2D(const ViewInformation2D&) = default;
+ViewInformation2D::ViewInformation2D(const ViewInformation2D&) = default;
 
-        ViewInformation2D::ViewInformation2D(ViewInformation2D&&) = default;
+ViewInformation2D::ViewInformation2D(ViewInformation2D&&) = default;
 
-        ViewInformation2D::~ViewInformation2D() = default;
+ViewInformation2D::~ViewInformation2D() = default;
 
-        ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D&) = default;
+ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D&) = default;
 
-        ViewInformation2D& ViewInformation2D::operator=(ViewInformation2D&&) = default;
+ViewInformation2D& ViewInformation2D::operator=(ViewInformation2D&&) = default;
 
-        bool ViewInformation2D::operator==(const ViewInformation2D& rCandidate) const
-        {
-            return rCandidate.mpViewInformation2D == mpViewInformation2D;
-        }
+bool ViewInformation2D::operator==(const ViewInformation2D& rCandidate) const
+{
+    return rCandidate.mpViewInformation2D == mpViewInformation2D;
+}
 
-        const basegfx::B2DHomMatrix& ViewInformation2D::getObjectTransformation() const
-        {
-            return mpViewInformation2D->getObjectTransformation();
-        }
+const basegfx::B2DHomMatrix& ViewInformation2D::getObjectTransformation() const
+{
+    return mpViewInformation2D->getObjectTransformation();
+}
 
-        const basegfx::B2DHomMatrix& ViewInformation2D::getViewTransformation() const
-        {
-            return mpViewInformation2D->getViewTransformation();
-        }
+const basegfx::B2DHomMatrix& ViewInformation2D::getViewTransformation() const
+{
+    return mpViewInformation2D->getViewTransformation();
+}
 
-        const basegfx::B2DRange& ViewInformation2D::getViewport() const
-        {
-            return mpViewInformation2D->getViewport();
-        }
+const basegfx::B2DRange& ViewInformation2D::getViewport() const
+{
+    return mpViewInformation2D->getViewport();
+}
 
-        double ViewInformation2D::getViewTime() const
-        {
-            return mpViewInformation2D->getViewTime();
-        }
+double ViewInformation2D::getViewTime() const { return mpViewInformation2D->getViewTime(); }
 
-        const uno::Reference< drawing::XDrawPage >& ViewInformation2D::getVisualizedPage() const
-        {
-            return mpViewInformation2D->getVisualizedPage();
-        }
+const uno::Reference<drawing::XDrawPage>& ViewInformation2D::getVisualizedPage() const
+{
+    return mpViewInformation2D->getVisualizedPage();
+}
 
-        const basegfx::B2DHomMatrix& ViewInformation2D::getObjectToViewTransformation() const
-        {
-            return mpViewInformation2D->getObjectToViewTransformation();
-        }
+const basegfx::B2DHomMatrix& ViewInformation2D::getObjectToViewTransformation() const
+{
+    return mpViewInformation2D->getObjectToViewTransformation();
+}
 
-        const basegfx::B2DHomMatrix& ViewInformation2D::getInverseObjectToViewTransformation() const
-        {
-            return mpViewInformation2D->getInverseObjectToViewTransformation();
-        }
+const basegfx::B2DHomMatrix& ViewInformation2D::getInverseObjectToViewTransformation() const
+{
+    return mpViewInformation2D->getInverseObjectToViewTransformation();
+}
 
-        const basegfx::B2DRange& ViewInformation2D::getDiscreteViewport() const
-        {
-            return mpViewInformation2D->getDiscreteViewport();
-        }
+const basegfx::B2DRange& ViewInformation2D::getDiscreteViewport() const
+{
+    return mpViewInformation2D->getDiscreteViewport();
+}
 
-        bool ViewInformation2D::getReducedDisplayQuality() const
-        {
-            return mpViewInformation2D->getReducedDisplayQuality();
-        }
+bool ViewInformation2D::getReducedDisplayQuality() const
+{
+    return mpViewInformation2D->getReducedDisplayQuality();
+}
 
-        const uno::Sequence< beans::PropertyValue >& ViewInformation2D::getViewInformationSequence() const
-        {
-            return mpViewInformation2D->getViewInformationSequence();
-        }
+const uno::Sequence<beans::PropertyValue>& ViewInformation2D::getViewInformationSequence() const
+{
+    return mpViewInformation2D->getViewInformationSequence();
+}
 
-        const uno::Sequence< beans::PropertyValue >& ViewInformation2D::getExtendedInformationSequence() const
-        {
-            return mpViewInformation2D->getExtendedInformationSequence();
-        }
+const uno::Sequence<beans::PropertyValue>& ViewInformation2D::getExtendedInformationSequence() const
+{
+    return mpViewInformation2D->getExtendedInformationSequence();
+}
 
 } // end of namespace
 
