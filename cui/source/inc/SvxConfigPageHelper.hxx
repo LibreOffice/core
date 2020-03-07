@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_SVXCONFIGPAGEHELPER_HXX
-#define INCLUDED_CUI_SOURCE_INC_SVXCONFIGPAGEHELPER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
@@ -86,7 +85,5 @@ public:
     static bool SvxConfigEntryModified( SvxConfigEntry const * pEntry );
 
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_SVXCONFIGPAGEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
