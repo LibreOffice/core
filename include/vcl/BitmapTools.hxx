@@ -45,7 +45,8 @@ public:
         assert(nBitCount == 24 || nBitCount == 32);
         sal_Int32 nRowSize, nDataSize;
         if (o3tl::checked_multiply<sal_Int32>(rSize.getWidth(), nBitCount/8, nRowSize) ||
-            o3tl::checked_multiply<sal_Int32>(nRowSize, rSize.getHeight(), nDataSize))
+            o3tl::checked_multiply<sal_Int32>(nRowSize, rSize.getHeight(), nDataSize) ||
+            nDataSize < 0)
         {
             throw std::bad_alloc();
         }
