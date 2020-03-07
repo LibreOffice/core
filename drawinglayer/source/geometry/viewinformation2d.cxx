@@ -34,6 +34,17 @@ using namespace com::sun::star;
 
 namespace drawinglayer::geometry
 {
+
+namespace
+{
+        constexpr OUStringLiteral g_PropertyName_ObjectTransformation ="ObjectTransformation";
+        constexpr OUStringLiteral g_PropertyName_ViewTransformation ="ViewTransformation";
+        constexpr OUStringLiteral g_PropertyName_Viewport ="Viewport";
+        constexpr OUStringLiteral g_PropertyName_Time ="Time";
+        constexpr OUStringLiteral g_PropertyName_VisualizedPage = "VisualizedPage";
+        constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = "ReducedDisplayQuality";
+}
+
         class ImpViewInformation2D
         {
         private:
@@ -76,37 +87,6 @@ namespace drawinglayer::geometry
             // Viewport, VisualizedPage or ViewTime
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
-            // the local UNO API strings
-            static OUString getNamePropertyObjectTransformation()
-            {
-                return "ObjectTransformation";
-            }
-
-            static OUString getNamePropertyViewTransformation()
-            {
-                return "ViewTransformation";
-            }
-
-            static OUString getNamePropertyViewport()
-            {
-                return "Viewport";
-            }
-
-            static OUString getNamePropertyTime()
-            {
-                return "Time";
-            }
-
-            static OUString getNamePropertyVisualizedPage()
-            {
-                return "VisualizedPage";
-            }
-
-            static OUString getNamePropertyReducedDisplayQuality()
-            {
-                return "ReducedDisplayQuality";
-            }
-
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
                 if(rViewParameters.hasElements())
@@ -121,7 +101,7 @@ namespace drawinglayer::geometry
                     {
                         const beans::PropertyValue& rProp = rViewParameters[a];
 
-                        if(rProp.Name == getNamePropertyReducedDisplayQuality())
+                        if(rProp.Name == g_PropertyName_ReducedDisplayQuality)
                         {
                             // extra information; add to filtered information
                             mxExtendedInformation[nExtendedInsert++] = rProp;
@@ -131,29 +111,29 @@ namespace drawinglayer::geometry
                             rProp.Value >>= bSalBool;
                             mbReducedDisplayQuality = bSalBool;
                         }
-                        else if(rProp.Name == getNamePropertyObjectTransformation())
+                        else if(rProp.Name == g_PropertyName_ObjectTransformation)
                         {
                             css::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
                             basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation, aAffineMatrix2D);
                         }
-                        else if(rProp.Name == getNamePropertyViewTransformation())
+                        else if(rProp.Name == g_PropertyName_ViewTransformation)
                         {
                             css::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
                             basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation, aAffineMatrix2D);
                         }
-                        else if(rProp.Name == getNamePropertyViewport())
+                        else if(rProp.Name == g_PropertyName_Viewport)
                         {
                             css::geometry::RealRectangle2D aViewport;
                             rProp.Value >>= aViewport;
                             maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
                         }
-                        else if(rProp.Name == getNamePropertyTime())
+                        else if(rProp.Name == g_PropertyName_Time)
                         {
                             rProp.Value >>= mfViewTime;
                         }
-                        else if(rProp.Name == getNamePropertyVisualizedPage())
+                        else if(rProp.Name == g_PropertyName_VisualizedPage)
                         {
                             rProp.Value >>= mxVisualizedPage;
                         }
@@ -194,7 +174,7 @@ namespace drawinglayer::geometry
                 {
                     css::geometry::AffineMatrix2D aAffineMatrix2D;
                     basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maObjectTransformation);
-                    mxViewInformation[nIndex].Name = getNamePropertyObjectTransformation();
+                    mxViewInformation[nIndex].Name = g_PropertyName_ObjectTransformation;
                     mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
                     nIndex++;
                 }
@@ -203,7 +183,7 @@ namespace drawinglayer::geometry
                 {
                     css::geometry::AffineMatrix2D aAffineMatrix2D;
                     basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maViewTransformation);
-                    mxViewInformation[nIndex].Name = getNamePropertyViewTransformation();
+                    mxViewInformation[nIndex].Name = g_PropertyName_ViewTransformation;
                     mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
                     nIndex++;
                 }
@@ -211,21 +191,21 @@ namespace drawinglayer::geometry
                 if(bViewportUsed)
                 {
                     const css::geometry::RealRectangle2D aViewport(basegfx::unotools::rectangle2DFromB2DRectangle(maViewport));
-                    mxViewInformation[nIndex].Name = getNamePropertyViewport();
+                    mxViewInformation[nIndex].Name = g_PropertyName_Viewport;
                     mxViewInformation[nIndex].Value <<= aViewport;
                     nIndex++;
                 }
 
                 if(bTimeUsed)
                 {
-                    mxViewInformation[nIndex].Name = getNamePropertyTime();
+                    mxViewInformation[nIndex].Name = g_PropertyName_Time;
                     mxViewInformation[nIndex].Value <<= mfViewTime;
                     nIndex++;
                 }
 
                 if(bVisualizedPageUsed)
                 {
-                    mxViewInformation[nIndex].Name = getNamePropertyVisualizedPage();
+                    mxViewInformation[nIndex].Name = g_PropertyName_VisualizedPage;
                     mxViewInformation[nIndex].Value <<= mxVisualizedPage;
                     nIndex++;
                 }
