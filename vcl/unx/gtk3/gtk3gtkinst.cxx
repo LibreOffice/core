@@ -8339,11 +8339,13 @@ public:
 
     virtual void replace_selection(const OUString& rText) override
     {
+        disable_notify_events();
         gtk_editable_delete_selection(GTK_EDITABLE(m_pEntry));
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
         gint position = gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
         gtk_editable_insert_text(GTK_EDITABLE(m_pEntry), sText.getStr(), sText.getLength(),
                                  &position);
+        enable_notify_events();
     }
 
     virtual void set_position(int nCursorPos) override
