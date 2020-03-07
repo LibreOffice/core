@@ -402,14 +402,9 @@ bool SwEditShell::IsAnyDatabaseFieldInDoc()const
                 case SwFieldIds::DbNumSet:
                 case SwFieldIds::DbSetNumber:
                 {
-                    SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-                    SwFormatField* pField = aIter.First();
-                    while(pField)
-                    {
-                        if(pField->IsFieldInDoc())
-                            return true;
-                        pField = aIter.Next();
-                    }
+                    std::vector<SwFormatField*> vFields;
+                    pFieldType->GatherFields(vFields);
+                    return vFields.size();
                 }
                 break;
                 default: break;
