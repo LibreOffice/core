@@ -24,7 +24,6 @@
 
 namespace tools
 {
-
 class BigIntTest : public CppUnit::TestFixture
 {
 public:
@@ -80,7 +79,8 @@ void BigIntTest::testConstructionFromLongLong()
 
     // positive number not fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::max()) + static_cast<sal_Int64>(1));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::max())
+                  + static_cast<sal_Int64>(1));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
@@ -89,7 +89,8 @@ void BigIntTest::testConstructionFromLongLong()
 
     // negative number not fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::min()) - static_cast<sal_Int64>(1));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::min())
+                  - static_cast<sal_Int64>(1));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
@@ -99,7 +100,6 @@ void BigIntTest::testConstructionFromLongLong()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BigIntTest);
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

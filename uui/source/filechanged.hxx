@@ -25,6 +25,7 @@ class FileChangedQueryBox
 {
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+
 public:
     FileChangedQueryBox(weld::Window* pParent, const std::locale& pResLocale);
     short run() { return m_xQueryBox->run(); }

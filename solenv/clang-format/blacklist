@@ -15859,7 +15859,6 @@ toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/btndlg.hxx
 toolkit/inc/helper/imagealign.hxx
 toolkit/inc/helper/scrollabledialog.hxx
-toolkit/inc/helper/servicenames.hxx
 toolkit/inc/helper/tkresmgr.hxx
 toolkit/inc/helper/unopropertyarrayhelper.hxx
 toolkit/inc/helper/unowrapper.hxx
@@ -15890,7 +15889,6 @@ toolkit/source/awt/vclxwindows_internal.hxx
 toolkit/source/controls/accessiblecontrolcontext.cxx
 toolkit/source/controls/animatedimages.cxx
 toolkit/source/controls/controlmodelcontainerbase.cxx
-toolkit/source/controls/controlmodelcontainerbase_internal.hxx
 toolkit/source/controls/dialogcontrol.cxx
 toolkit/source/controls/eventcontainer.cxx
 toolkit/source/controls/filectrl.cxx
@@ -15930,13 +15928,11 @@ toolkit/source/helper/formpdfexport.cxx
 toolkit/source/helper/imagealign.cxx
 toolkit/source/helper/listenermultiplexer.cxx
 toolkit/source/helper/property.cxx
-toolkit/source/helper/servicenames.cxx
 toolkit/source/helper/tkresmgr.cxx
 toolkit/source/helper/unopropertyarrayhelper.cxx
 toolkit/source/helper/unowrapper.cxx
 toolkit/source/helper/vclunohelper.cxx
 tools/inc/poly.h
-tools/qa/cppunit/test_bigint.cxx
 tools/qa/cppunit/test_color.cxx
 tools/qa/cppunit/test_date.cxx
 tools/qa/cppunit/test_fract.cxx
@@ -16512,9 +16508,7 @@ uui/qa/unit/uui-dialogs-test.cxx
 uui/source/alreadyopen.cxx
 uui/source/alreadyopen.hxx
 uui/source/authfallbackdlg.cxx
-uui/source/authfallbackdlg.hxx
 uui/source/filechanged.cxx
-uui/source/filechanged.hxx
 uui/source/fltdlg.cxx
 uui/source/fltdlg.hxx
 uui/source/getcontinuations.hxx
@@ -16528,9 +16522,7 @@ uui/source/iahndl.cxx
 uui/source/iahndl.hxx
 uui/source/interactionhandler.cxx
 uui/source/lockcorrupt.cxx
-uui/source/lockcorrupt.hxx
 uui/source/lockfailed.cxx
-uui/source/lockfailed.hxx
 uui/source/logindlg.cxx
 uui/source/logindlg.hxx
 uui/source/loginerr.hxx
