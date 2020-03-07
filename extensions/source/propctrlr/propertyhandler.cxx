@@ -24,7 +24,6 @@
 #include "handlerhelper.hxx"
 #include "formstrings.hxx"
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/script/Converter.hpp>

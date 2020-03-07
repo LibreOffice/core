@@ -22,8 +22,6 @@
 #include <o3tl/safeint.hxx>
 #include <osl/thread.hxx>
 #include <sal/log.hxx>
-#include <tools/solar.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>
 

@@ -18,16 +18,9 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <svl/urihelper.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/util/XLocalizedAliases.hpp>
-#include <com/sun/star/lang/XLocalizable.hpp>
 
 #include "bibmod.hxx"
 #include "bibprop.hxx"
-#include "bibview.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"

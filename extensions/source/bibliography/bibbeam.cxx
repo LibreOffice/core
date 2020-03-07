@@ -20,15 +20,11 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <vcl/edit.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <tools/debug.hxx>
 #include "bibbeam.hxx"
-#include "bibview.hxx"
-#include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibtools.hxx"
 

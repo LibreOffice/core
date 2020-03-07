@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/logging/XCsvLogFormatter.hpp>
-#include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -29,10 +28,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <osl/thread.h>
 
 #include <stdio.h>
-#include <string>
 
 namespace logging
 {

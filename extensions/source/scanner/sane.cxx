@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
 #include <type_traits>
 #include <math.h>
 
@@ -29,9 +28,7 @@
 #include "sane.hxx"
 #include <dlfcn.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <sys/time.h>
-#include <sys/types.h>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <memory>

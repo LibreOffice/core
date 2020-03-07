@@ -23,7 +23,6 @@
 #include <helpids.h>
 #include <strings.hrc>
 #include "modulepcr.hxx"
-#include <propctrlr.h>
 #include "formmetadata.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

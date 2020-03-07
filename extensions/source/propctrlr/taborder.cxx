@@ -19,8 +19,6 @@
 
 #include "taborder.hxx"
 
-#include "modulepcr.hxx"
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>

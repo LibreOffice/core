@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "enumrepresentation.hxx"
 #include "genericpropertyhandler.hxx"
-#include "formmetadata.hxx"
 #include "handlerhelper.hxx"
+#include "modulepcr.hxx"
 #include "pcrservices.hxx"
-#include "propertyhandler.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -38,12 +38,12 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <o3tl/functional.hxx>
 
 extern "C" void createRegistryInfo_GenericPropertyHandler()
 {

@@ -30,12 +30,8 @@
 
 
 #include <rtl/ref.hxx>
-#include <rtl/uri.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
-#include <osl/process.h>
 
 namespace container = css::container ;
 namespace deployment = css::deployment ;

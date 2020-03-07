@@ -18,15 +18,12 @@
  */
 
 #include "fieldmappingimpl.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/AddressBookSourceDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>

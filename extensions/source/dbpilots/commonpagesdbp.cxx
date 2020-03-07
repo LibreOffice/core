@@ -34,7 +34,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
-#include <vcl/stdtext.hxx>
 #include <sfx2/docfilt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
