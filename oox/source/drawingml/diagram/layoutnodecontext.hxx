@@ -22,7 +22,6 @@
 
 #include <oox/core/contexthandler2.hxx>
 #include "diagramlayoutatoms.hxx"
-#include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 

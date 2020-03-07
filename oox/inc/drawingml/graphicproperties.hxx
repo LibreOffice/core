@@ -24,8 +24,6 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <oox/helper/helper.hxx>
-
 #include <drawingml/fillproperties.hxx>
 
 namespace oox {

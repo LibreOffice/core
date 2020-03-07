@@ -36,6 +36,7 @@
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox::drawingml::chart {
 

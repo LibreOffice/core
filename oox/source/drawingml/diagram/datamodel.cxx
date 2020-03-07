@@ -25,6 +25,7 @@
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textrun.hxx>
+#include <oox/drawingml/shape.hxx>
 #include <oox/token/namespaces.hxx>
 #include <svx/DiagramDataInterface.hxx>
 #include <comphelper/xmltools.hxx>

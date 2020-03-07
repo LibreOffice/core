@@ -22,7 +22,6 @@
 
 #include <drawingml/textrun.hxx>
 #include <drawingml/textparagraphproperties.hxx>
-#include <memory>
 
 namespace oox { namespace drawingml {
 

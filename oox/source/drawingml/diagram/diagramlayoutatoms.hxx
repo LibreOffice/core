@@ -25,7 +25,6 @@
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
-#include <oox/drawingml/shape.hxx>
 #include "diagram.hxx"
 
 namespace oox { namespace drawingml {

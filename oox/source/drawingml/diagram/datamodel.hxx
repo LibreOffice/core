@@ -26,8 +26,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <oox/drawingml/shape.hxx>
-#include <drawingml/fillproperties.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
 #include <svx/DiagramDataInterface.hxx>
 

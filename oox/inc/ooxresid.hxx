@@ -11,7 +11,6 @@
 #define INCLUDED_OOX_INC_RESID_HXX
 
 #include <rtl/ustring.hxx>
-#include <oox/dllapi.h>
 
 OUString OoxResId(const char* pId);
 

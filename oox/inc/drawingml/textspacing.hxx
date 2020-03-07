@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTSPACING_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTSPACING_HXX
 
-#include <rtl/ustring.hxx>
-
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>

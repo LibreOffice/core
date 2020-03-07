@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <oox/core/fragmenthandler.hxx>
+#include <oox/core/relations.hxx>
 #include <oox/helper/attributelist.hxx>
 
 namespace oox { namespace drawingml {

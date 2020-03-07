@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 
-#include <com/sun/star/text/XText.hpp>
-
 #include <drawingml/textbody.hxx>
 #include <drawingml/textrun.hxx>
 #include <oox/core/contexthandler2.hxx>

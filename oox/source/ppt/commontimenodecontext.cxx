@@ -18,6 +18,7 @@
  */
 
 #include "commontimenodecontext.hxx"
+#include "conditioncontext.hxx"
 
 #include <algorithm>
 
