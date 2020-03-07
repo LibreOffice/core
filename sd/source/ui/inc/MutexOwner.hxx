@@ -22,8 +22,8 @@
 
 #include <osl/mutex.hxx>
 
-namespace sd {
-
+namespace sd
+{
 /** This class provides a mutex to derived classes.  It exists to
     satisfy some helper classes from cppuhelper who expect a mutex as
     argument to their constructor.

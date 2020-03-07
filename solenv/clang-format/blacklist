@@ -11015,9 +11015,7 @@ sd/inc/CustomAnimationEffect.hxx
 sd/inc/CustomAnimationPreset.hxx
 sd/inc/EffectMigration.hxx
 sd/inc/FactoryIds.hxx
-sd/inc/Outliner.hxx
 sd/inc/OutlinerIterator.hxx
-sd/inc/SdShapeTypes.hxx
 sd/inc/TransitionPreset.hxx
 sd/inc/animations.hxx
 sd/inc/anminfo.hxx
@@ -11062,7 +11060,6 @@ sd/inc/undo/undofactory.hxx
 sd/inc/undo/undomanager.hxx
 sd/inc/undo/undoobjects.hxx
 sd/inc/undoanim.hxx
-sd/qa/unit/HtmlExportTest.cxx
 sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
@@ -11102,7 +11099,6 @@ sd/source/core/stlfamily.cxx
 sd/source/core/stlpool.cxx
 sd/source/core/stlsheet.cxx
 sd/source/core/text/textapi.cxx
-sd/source/core/typemap.cxx
 sd/source/core/undo/undofactory.cxx
 sd/source/core/undo/undomanager.cxx
 sd/source/core/undo/undoobjects.cxx
@@ -11130,7 +11126,6 @@ sd/source/filter/eppt/text.hxx
 sd/source/filter/grf/sdgrffilter.cxx
 sd/source/filter/html/HtmlOptionsDialog.cxx
 sd/source/filter/html/buttonset.cxx
-sd/source/filter/html/buttonset.hxx
 sd/source/filter/html/htmlattr.cxx
 sd/source/filter/html/htmlattr.hxx
 sd/source/filter/html/htmlex.cxx
@@ -11151,7 +11146,6 @@ sd/source/filter/ppt/propread.hxx
 sd/source/filter/sdfilter.cxx
 sd/source/filter/sdpptwrp.cxx
 sd/source/filter/xml/sdtransform.cxx
-sd/source/filter/xml/sdtransform.hxx
 sd/source/filter/xml/sdxmlwrp.cxx
 sd/source/helper/simplereferencecomponent.cxx
 sd/source/ui/accessibility/AccessibleDocumentViewBase.cxx
@@ -11394,7 +11388,6 @@ sd/source/ui/inc/ImpressViewShellBase.hxx
 sd/source/ui/inc/LayerTabBar.hxx
 sd/source/ui/inc/MasterPageObserver.hxx
 sd/source/ui/inc/MediaObjectBar.hxx
-sd/source/ui/inc/MutexOwner.hxx
 sd/source/ui/inc/NavigatorChildWindow.hxx
 sd/source/ui/inc/OutlineBulletDlg.hxx
 sd/source/ui/inc/OutlineView.hxx
@@ -11443,7 +11436,6 @@ sd/source/ui/inc/createtabledesignpanel.hxx
 sd/source/ui/inc/createtableobjectbar.hxx
 sd/source/ui/inc/custsdlg.hxx
 sd/source/ui/inc/diactrl.hxx
-sd/source/ui/inc/dlg_char.hxx
 sd/source/ui/inc/dlgfield.hxx
 sd/source/ui/inc/dlgpage.hxx
 sd/source/ui/inc/dlgsnap.hxx
@@ -11517,7 +11509,6 @@ sd/source/ui/inc/masterlayoutdlg.hxx
 sd/source/ui/inc/morphdlg.hxx
 sd/source/ui/inc/navigatr.hxx
 sd/source/ui/inc/optsitem.hxx
-sd/source/ui/inc/paragr.hxx
 sd/source/ui/inc/present.hxx
 sd/source/ui/inc/prltempl.hxx
 sd/source/ui/inc/prntopts.hxx
@@ -11553,7 +11544,6 @@ sd/source/ui/inc/undopage.hxx
 sd/source/ui/inc/unmodpg.hxx
 sd/source/ui/inc/unmovss.hxx
 sd/source/ui/inc/unoaprms.hxx
-sd/source/ui/inc/unokywds.hxx
 sd/source/ui/inc/unomodel.hxx
 sd/source/ui/inc/unopage.hxx
 sd/source/ui/inc/unoprnms.hxx

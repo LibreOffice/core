@@ -83,7 +83,7 @@
 
 #include <svl/lckbitem.hxx>
 
-#define avmedia_MediaItem           ::avmedia::MediaItem
+#define avmedia_MediaItem ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/rectitem.hxx>
@@ -96,6 +96,5 @@
 
 #define SFX_TYPEMAP
 #include <sdslots.hxx>
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

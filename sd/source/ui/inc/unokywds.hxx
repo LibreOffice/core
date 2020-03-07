@@ -65,7 +65,8 @@ inline const char sUNO_Service_ConnectorProperties[] = "com.sun.star.drawing.Con
 inline const char sUNO_Service_MeasureProperties[] = "com.sun.star.drawing.MeasureProperties";
 inline const char sUNO_Service_PageBackground[] = "com.sun.star.drawing.PageBackground";
 inline const char sUNO_Service_GraphicObjectShape[] = "com.sun.star.drawing.GraphicObjectShape";
-inline const char sUNO_Service_ImageMapRectangleObject[] = "com.sun.star.image.ImageMapRectangleObject";
+inline const char sUNO_Service_ImageMapRectangleObject[]
+    = "com.sun.star.image.ImageMapRectangleObject";
 inline const char sUNO_Service_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleObject";
 inline const char sUNO_Service_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
 
@@ -107,7 +108,7 @@ inline const char sUNO_View_IsShowPreviewInPageMode[] = "IsShowPreviewInPageMode
 inline const char sUNO_View_IsShowPreviewInMasterPageMode[] = "IsShowPreviewInMasterPageMode";
 inline const char sUNO_View_SetShowPreviewInOutlineMode[] = "SetShowPreviewInOutlineMode";
 inline const char sUNO_View_EditMode[] = "EditMode";
-inline const char sUNO_View_EditModeStandard[] = "EditModeStandard";   // To be deprecated
+inline const char sUNO_View_EditModeStandard[] = "EditModeStandard"; // To be deprecated
 // inline const char sUNO_View_EditModeNotes[] = "EditModeNotes";
 // inline const char sUNO_View_EditModeHandout[] = "EditModeHandout";
 inline const char sUNO_View_VisArea[] = "VisArea";
