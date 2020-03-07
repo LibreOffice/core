@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include own files
 
 #include <acccfg.hxx>
@@ -34,7 +33,6 @@
 #include <strings.hrc>
 #include <sfx2/strings.hrc>
 #include <svx/svxids.hrc>
-
 
 // include interface declarations
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -67,713 +65,712 @@
 
 using namespace css;
 
-static const char FOLDERNAME_UICONFIG   [] = "Configurations2";
+static const char FOLDERNAME_UICONFIG[] = "Configurations2";
 
-static const char MEDIATYPE_PROPNAME    [] = "MediaType";
+static const char MEDIATYPE_PROPNAME[] = "MediaType";
 
-static const sal_uInt16 KEYCODE_ARRAY[] =
-{
-    KEY_F1,
-    KEY_F2,
-    KEY_F3,
-    KEY_F4,
-    KEY_F5,
-    KEY_F6,
-    KEY_F7,
-    KEY_F8,
-    KEY_F9,
-    KEY_F10,
-    KEY_F11,
-    KEY_F12,
-    KEY_F13,
-    KEY_F14,
-    KEY_F15,
-    KEY_F16,
+static const sal_uInt16 KEYCODE_ARRAY[] = { KEY_F1,
+                                            KEY_F2,
+                                            KEY_F3,
+                                            KEY_F4,
+                                            KEY_F5,
+                                            KEY_F6,
+                                            KEY_F7,
+                                            KEY_F8,
+                                            KEY_F9,
+                                            KEY_F10,
+                                            KEY_F11,
+                                            KEY_F12,
+                                            KEY_F13,
+                                            KEY_F14,
+                                            KEY_F15,
+                                            KEY_F16,
 
-    KEY_DOWN,
-    KEY_UP,
-    KEY_LEFT,
-    KEY_RIGHT,
-    KEY_HOME,
-    KEY_END,
-    KEY_PAGEUP,
-    KEY_PAGEDOWN,
-    KEY_RETURN,
-    KEY_ESCAPE,
-    KEY_BACKSPACE,
-    KEY_INSERT,
-    KEY_DELETE,
+                                            KEY_DOWN,
+                                            KEY_UP,
+                                            KEY_LEFT,
+                                            KEY_RIGHT,
+                                            KEY_HOME,
+                                            KEY_END,
+                                            KEY_PAGEUP,
+                                            KEY_PAGEDOWN,
+                                            KEY_RETURN,
+                                            KEY_ESCAPE,
+                                            KEY_BACKSPACE,
+                                            KEY_INSERT,
+                                            KEY_DELETE,
 
-    KEY_OPEN,
-    KEY_CUT,
-    KEY_COPY,
-    KEY_PASTE,
-    KEY_UNDO,
-    KEY_REPEAT,
-    KEY_FIND,
-    KEY_PROPERTIES,
-    KEY_FRONT,
-    KEY_CONTEXTMENU,
-    KEY_MENU,
-    KEY_HELP,
+                                            KEY_OPEN,
+                                            KEY_CUT,
+                                            KEY_COPY,
+                                            KEY_PASTE,
+                                            KEY_UNDO,
+                                            KEY_REPEAT,
+                                            KEY_FIND,
+                                            KEY_PROPERTIES,
+                                            KEY_FRONT,
+                                            KEY_CONTEXTMENU,
+                                            KEY_MENU,
+                                            KEY_HELP,
 
-    KEY_SHIFT | KEY_F1,
-    KEY_SHIFT | KEY_F2,
-    KEY_SHIFT | KEY_F3,
-    KEY_SHIFT | KEY_F4,
-    KEY_SHIFT | KEY_F5,
-    KEY_SHIFT | KEY_F6,
-    KEY_SHIFT | KEY_F7,
-    KEY_SHIFT | KEY_F8,
-    KEY_SHIFT | KEY_F9,
-    KEY_SHIFT | KEY_F10,
-    KEY_SHIFT | KEY_F11,
-    KEY_SHIFT | KEY_F12,
-    KEY_SHIFT | KEY_F13,
-    KEY_SHIFT | KEY_F14,
-    KEY_SHIFT | KEY_F15,
-    KEY_SHIFT | KEY_F16,
+                                            KEY_SHIFT | KEY_F1,
+                                            KEY_SHIFT | KEY_F2,
+                                            KEY_SHIFT | KEY_F3,
+                                            KEY_SHIFT | KEY_F4,
+                                            KEY_SHIFT | KEY_F5,
+                                            KEY_SHIFT | KEY_F6,
+                                            KEY_SHIFT | KEY_F7,
+                                            KEY_SHIFT | KEY_F8,
+                                            KEY_SHIFT | KEY_F9,
+                                            KEY_SHIFT | KEY_F10,
+                                            KEY_SHIFT | KEY_F11,
+                                            KEY_SHIFT | KEY_F12,
+                                            KEY_SHIFT | KEY_F13,
+                                            KEY_SHIFT | KEY_F14,
+                                            KEY_SHIFT | KEY_F15,
+                                            KEY_SHIFT | KEY_F16,
 
-    KEY_SHIFT | KEY_DOWN,
-    KEY_SHIFT | KEY_UP,
-    KEY_SHIFT | KEY_LEFT,
-    KEY_SHIFT | KEY_RIGHT,
-    KEY_SHIFT | KEY_HOME,
-    KEY_SHIFT | KEY_END,
-    KEY_SHIFT | KEY_PAGEUP,
-    KEY_SHIFT | KEY_PAGEDOWN,
-    KEY_SHIFT | KEY_RETURN,
-    KEY_SHIFT | KEY_SPACE,
-    KEY_SHIFT | KEY_ESCAPE,
-    KEY_SHIFT | KEY_BACKSPACE,
-    KEY_SHIFT | KEY_INSERT,
-    KEY_SHIFT | KEY_DELETE,
-    KEY_SHIFT | KEY_EQUAL,
+                                            KEY_SHIFT | KEY_DOWN,
+                                            KEY_SHIFT | KEY_UP,
+                                            KEY_SHIFT | KEY_LEFT,
+                                            KEY_SHIFT | KEY_RIGHT,
+                                            KEY_SHIFT | KEY_HOME,
+                                            KEY_SHIFT | KEY_END,
+                                            KEY_SHIFT | KEY_PAGEUP,
+                                            KEY_SHIFT | KEY_PAGEDOWN,
+                                            KEY_SHIFT | KEY_RETURN,
+                                            KEY_SHIFT | KEY_SPACE,
+                                            KEY_SHIFT | KEY_ESCAPE,
+                                            KEY_SHIFT | KEY_BACKSPACE,
+                                            KEY_SHIFT | KEY_INSERT,
+                                            KEY_SHIFT | KEY_DELETE,
+                                            KEY_SHIFT | KEY_EQUAL,
 
-    KEY_MOD1 | KEY_0,
-    KEY_MOD1 | KEY_1,
-    KEY_MOD1 | KEY_2,
-    KEY_MOD1 | KEY_3,
-    KEY_MOD1 | KEY_4,
-    KEY_MOD1 | KEY_5,
-    KEY_MOD1 | KEY_6,
-    KEY_MOD1 | KEY_7,
-    KEY_MOD1 | KEY_8,
-    KEY_MOD1 | KEY_9,
-    KEY_MOD1 | KEY_A,
-    KEY_MOD1 | KEY_B,
-    KEY_MOD1 | KEY_C,
-    KEY_MOD1 | KEY_D,
-    KEY_MOD1 | KEY_E,
-    KEY_MOD1 | KEY_F,
-    KEY_MOD1 | KEY_G,
-    KEY_MOD1 | KEY_H,
-    KEY_MOD1 | KEY_I,
-    KEY_MOD1 | KEY_J,
-    KEY_MOD1 | KEY_K,
-    KEY_MOD1 | KEY_L,
-    KEY_MOD1 | KEY_M,
-    KEY_MOD1 | KEY_N,
-    KEY_MOD1 | KEY_O,
-    KEY_MOD1 | KEY_P,
-    KEY_MOD1 | KEY_Q,
-    KEY_MOD1 | KEY_R,
-    KEY_MOD1 | KEY_S,
-    KEY_MOD1 | KEY_T,
-    KEY_MOD1 | KEY_U,
-    KEY_MOD1 | KEY_V,
-    KEY_MOD1 | KEY_W,
-    KEY_MOD1 | KEY_X,
-    KEY_MOD1 | KEY_Y,
-    KEY_MOD1 | KEY_Z,
-    KEY_MOD1 | KEY_SEMICOLON,
-    KEY_MOD1 | KEY_QUOTERIGHT,
-    KEY_MOD1 | KEY_BRACKETLEFT,
-    KEY_MOD1 | KEY_BRACKETRIGHT,
-    KEY_MOD1 | KEY_POINT,
-    KEY_MOD1 | KEY_COMMA,
-    KEY_MOD1 | KEY_TILDE,
-    KEY_MOD1 | KEY_TAB,
+                                            KEY_MOD1 | KEY_0,
+                                            KEY_MOD1 | KEY_1,
+                                            KEY_MOD1 | KEY_2,
+                                            KEY_MOD1 | KEY_3,
+                                            KEY_MOD1 | KEY_4,
+                                            KEY_MOD1 | KEY_5,
+                                            KEY_MOD1 | KEY_6,
+                                            KEY_MOD1 | KEY_7,
+                                            KEY_MOD1 | KEY_8,
+                                            KEY_MOD1 | KEY_9,
+                                            KEY_MOD1 | KEY_A,
+                                            KEY_MOD1 | KEY_B,
+                                            KEY_MOD1 | KEY_C,
+                                            KEY_MOD1 | KEY_D,
+                                            KEY_MOD1 | KEY_E,
+                                            KEY_MOD1 | KEY_F,
+                                            KEY_MOD1 | KEY_G,
+                                            KEY_MOD1 | KEY_H,
+                                            KEY_MOD1 | KEY_I,
+                                            KEY_MOD1 | KEY_J,
+                                            KEY_MOD1 | KEY_K,
+                                            KEY_MOD1 | KEY_L,
+                                            KEY_MOD1 | KEY_M,
+                                            KEY_MOD1 | KEY_N,
+                                            KEY_MOD1 | KEY_O,
+                                            KEY_MOD1 | KEY_P,
+                                            KEY_MOD1 | KEY_Q,
+                                            KEY_MOD1 | KEY_R,
+                                            KEY_MOD1 | KEY_S,
+                                            KEY_MOD1 | KEY_T,
+                                            KEY_MOD1 | KEY_U,
+                                            KEY_MOD1 | KEY_V,
+                                            KEY_MOD1 | KEY_W,
+                                            KEY_MOD1 | KEY_X,
+                                            KEY_MOD1 | KEY_Y,
+                                            KEY_MOD1 | KEY_Z,
+                                            KEY_MOD1 | KEY_SEMICOLON,
+                                            KEY_MOD1 | KEY_QUOTERIGHT,
+                                            KEY_MOD1 | KEY_BRACKETLEFT,
+                                            KEY_MOD1 | KEY_BRACKETRIGHT,
+                                            KEY_MOD1 | KEY_POINT,
+                                            KEY_MOD1 | KEY_COMMA,
+                                            KEY_MOD1 | KEY_TILDE,
+                                            KEY_MOD1 | KEY_TAB,
 
-    KEY_MOD1 | KEY_F1,
-    KEY_MOD1 | KEY_F2,
-    KEY_MOD1 | KEY_F3,
-    KEY_MOD1 | KEY_F4,
-    KEY_MOD1 | KEY_F5,
-    KEY_MOD1 | KEY_F6,
-    KEY_MOD1 | KEY_F7,
-    KEY_MOD1 | KEY_F8,
-    KEY_MOD1 | KEY_F9,
-    KEY_MOD1 | KEY_F10,
-    KEY_MOD1 | KEY_F11,
-    KEY_MOD1 | KEY_F12,
-    KEY_MOD1 | KEY_F13,
-    KEY_MOD1 | KEY_F14,
-    KEY_MOD1 | KEY_F15,
-    KEY_MOD1 | KEY_F16,
+                                            KEY_MOD1 | KEY_F1,
+                                            KEY_MOD1 | KEY_F2,
+                                            KEY_MOD1 | KEY_F3,
+                                            KEY_MOD1 | KEY_F4,
+                                            KEY_MOD1 | KEY_F5,
+                                            KEY_MOD1 | KEY_F6,
+                                            KEY_MOD1 | KEY_F7,
+                                            KEY_MOD1 | KEY_F8,
+                                            KEY_MOD1 | KEY_F9,
+                                            KEY_MOD1 | KEY_F10,
+                                            KEY_MOD1 | KEY_F11,
+                                            KEY_MOD1 | KEY_F12,
+                                            KEY_MOD1 | KEY_F13,
+                                            KEY_MOD1 | KEY_F14,
+                                            KEY_MOD1 | KEY_F15,
+                                            KEY_MOD1 | KEY_F16,
 
-    KEY_MOD1 | KEY_DOWN,
-    KEY_MOD1 | KEY_UP,
-    KEY_MOD1 | KEY_LEFT,
-    KEY_MOD1 | KEY_RIGHT,
-    KEY_MOD1 | KEY_HOME,
-    KEY_MOD1 | KEY_END,
-    KEY_MOD1 | KEY_PAGEUP,
-    KEY_MOD1 | KEY_PAGEDOWN,
-    KEY_MOD1 | KEY_RETURN,
-    KEY_MOD1 | KEY_SPACE,
-    KEY_MOD1 | KEY_BACKSPACE,
-    KEY_MOD1 | KEY_INSERT,
-    KEY_MOD1 | KEY_DELETE,
+                                            KEY_MOD1 | KEY_DOWN,
+                                            KEY_MOD1 | KEY_UP,
+                                            KEY_MOD1 | KEY_LEFT,
+                                            KEY_MOD1 | KEY_RIGHT,
+                                            KEY_MOD1 | KEY_HOME,
+                                            KEY_MOD1 | KEY_END,
+                                            KEY_MOD1 | KEY_PAGEUP,
+                                            KEY_MOD1 | KEY_PAGEDOWN,
+                                            KEY_MOD1 | KEY_RETURN,
+                                            KEY_MOD1 | KEY_SPACE,
+                                            KEY_MOD1 | KEY_BACKSPACE,
+                                            KEY_MOD1 | KEY_INSERT,
+                                            KEY_MOD1 | KEY_DELETE,
 
-    KEY_MOD1 | KEY_ADD,
-    KEY_MOD1 | KEY_SUBTRACT,
-    KEY_MOD1 | KEY_MULTIPLY,
-    KEY_MOD1 | KEY_DIVIDE,
-    KEY_MOD1 | KEY_EQUAL,
+                                            KEY_MOD1 | KEY_ADD,
+                                            KEY_MOD1 | KEY_SUBTRACT,
+                                            KEY_MOD1 | KEY_MULTIPLY,
+                                            KEY_MOD1 | KEY_DIVIDE,
+                                            KEY_MOD1 | KEY_EQUAL,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_0,
-    KEY_SHIFT | KEY_MOD1 | KEY_1,
-    KEY_SHIFT | KEY_MOD1 | KEY_2,
-    KEY_SHIFT | KEY_MOD1 | KEY_3,
-    KEY_SHIFT | KEY_MOD1 | KEY_4,
-    KEY_SHIFT | KEY_MOD1 | KEY_5,
-    KEY_SHIFT | KEY_MOD1 | KEY_6,
-    KEY_SHIFT | KEY_MOD1 | KEY_7,
-    KEY_SHIFT | KEY_MOD1 | KEY_8,
-    KEY_SHIFT | KEY_MOD1 | KEY_9,
-    KEY_SHIFT | KEY_MOD1 | KEY_A,
-    KEY_SHIFT | KEY_MOD1 | KEY_B,
-    KEY_SHIFT | KEY_MOD1 | KEY_C,
-    KEY_SHIFT | KEY_MOD1 | KEY_D,
-    KEY_SHIFT | KEY_MOD1 | KEY_E,
-    KEY_SHIFT | KEY_MOD1 | KEY_F,
-    KEY_SHIFT | KEY_MOD1 | KEY_G,
-    KEY_SHIFT | KEY_MOD1 | KEY_H,
-    KEY_SHIFT | KEY_MOD1 | KEY_I,
-    KEY_SHIFT | KEY_MOD1 | KEY_J,
-    KEY_SHIFT | KEY_MOD1 | KEY_K,
-    KEY_SHIFT | KEY_MOD1 | KEY_L,
-    KEY_SHIFT | KEY_MOD1 | KEY_M,
-    KEY_SHIFT | KEY_MOD1 | KEY_N,
-    KEY_SHIFT | KEY_MOD1 | KEY_O,
-    KEY_SHIFT | KEY_MOD1 | KEY_P,
-    KEY_SHIFT | KEY_MOD1 | KEY_Q,
-    KEY_SHIFT | KEY_MOD1 | KEY_R,
-    KEY_SHIFT | KEY_MOD1 | KEY_S,
-    KEY_SHIFT | KEY_MOD1 | KEY_T,
-    KEY_SHIFT | KEY_MOD1 | KEY_U,
-    KEY_SHIFT | KEY_MOD1 | KEY_V,
-    KEY_SHIFT | KEY_MOD1 | KEY_W,
-    KEY_SHIFT | KEY_MOD1 | KEY_X,
-    KEY_SHIFT | KEY_MOD1 | KEY_Y,
-    KEY_SHIFT | KEY_MOD1 | KEY_Z,
-    KEY_SHIFT | KEY_MOD1 | KEY_SEMICOLON,
-    KEY_SHIFT | KEY_MOD1 | KEY_QUOTERIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_BRACKETLEFT,
-    KEY_SHIFT | KEY_MOD1 | KEY_BRACKETRIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_POINT,
-    KEY_SHIFT | KEY_MOD1 | KEY_COMMA,
-    KEY_SHIFT | KEY_MOD1 | KEY_TILDE,
-    KEY_SHIFT | KEY_MOD1 | KEY_TAB,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_0,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_1,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_2,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_3,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_4,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_5,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_6,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_7,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_8,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_9,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_A,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_B,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_C,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_D,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_E,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_G,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_H,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_I,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_J,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_K,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_L,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_M,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_N,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_O,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_P,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_Q,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_R,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_S,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_T,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_U,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_V,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_W,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_X,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_Y,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_Z,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_SEMICOLON,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_QUOTERIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_BRACKETLEFT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_BRACKETRIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_POINT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_COMMA,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_TILDE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_TAB,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_F1,
-    KEY_SHIFT | KEY_MOD1 | KEY_F2,
-    KEY_SHIFT | KEY_MOD1 | KEY_F3,
-    KEY_SHIFT | KEY_MOD1 | KEY_F4,
-    KEY_SHIFT | KEY_MOD1 | KEY_F5,
-    KEY_SHIFT | KEY_MOD1 | KEY_F6,
-    KEY_SHIFT | KEY_MOD1 | KEY_F7,
-    KEY_SHIFT | KEY_MOD1 | KEY_F8,
-    KEY_SHIFT | KEY_MOD1 | KEY_F9,
-    KEY_SHIFT | KEY_MOD1 | KEY_F10,
-    KEY_SHIFT | KEY_MOD1 | KEY_F11,
-    KEY_SHIFT | KEY_MOD1 | KEY_F12,
-    KEY_SHIFT | KEY_MOD1 | KEY_F13,
-    KEY_SHIFT | KEY_MOD1 | KEY_F14,
-    KEY_SHIFT | KEY_MOD1 | KEY_F15,
-    KEY_SHIFT | KEY_MOD1 | KEY_F16,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F1,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F2,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F3,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F4,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F5,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F6,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F7,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F8,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F9,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F10,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F11,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F12,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F13,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F14,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F15,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_F16,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_DOWN,
-    KEY_SHIFT | KEY_MOD1 | KEY_UP,
-    KEY_SHIFT | KEY_MOD1 | KEY_LEFT,
-    KEY_SHIFT | KEY_MOD1 | KEY_RIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_HOME,
-    KEY_SHIFT | KEY_MOD1 | KEY_END,
-    KEY_SHIFT | KEY_MOD1 | KEY_PAGEUP,
-    KEY_SHIFT | KEY_MOD1 | KEY_PAGEDOWN,
-    KEY_SHIFT | KEY_MOD1 | KEY_RETURN,
-    KEY_SHIFT | KEY_MOD1 | KEY_ESCAPE,
-    KEY_SHIFT | KEY_MOD1 | KEY_SPACE,
-    KEY_SHIFT | KEY_MOD1 | KEY_BACKSPACE,
-    KEY_SHIFT | KEY_MOD1 | KEY_INSERT,
-    KEY_SHIFT | KEY_MOD1 | KEY_DELETE,
-    KEY_SHIFT | KEY_MOD1 | KEY_EQUAL,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_DOWN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_UP,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_LEFT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_RIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_HOME,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_END,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_PAGEUP,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_PAGEDOWN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_RETURN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_ESCAPE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_SPACE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_BACKSPACE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_INSERT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_DELETE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_EQUAL,
 
-    KEY_MOD2 | KEY_0,
-    KEY_MOD2 | KEY_1,
-    KEY_MOD2 | KEY_2,
-    KEY_MOD2 | KEY_3,
-    KEY_MOD2 | KEY_4,
-    KEY_MOD2 | KEY_5,
-    KEY_MOD2 | KEY_6,
-    KEY_MOD2 | KEY_7,
-    KEY_MOD2 | KEY_8,
-    KEY_MOD2 | KEY_9,
-    KEY_MOD2 | KEY_A,
-    KEY_MOD2 | KEY_B,
-    KEY_MOD2 | KEY_C,
-    KEY_MOD2 | KEY_D,
-    KEY_MOD2 | KEY_E,
-    KEY_MOD2 | KEY_F,
-    KEY_MOD2 | KEY_G,
-    KEY_MOD2 | KEY_H,
-    KEY_MOD2 | KEY_I,
-    KEY_MOD2 | KEY_J,
-    KEY_MOD2 | KEY_K,
-    KEY_MOD2 | KEY_L,
-    KEY_MOD2 | KEY_M,
-    KEY_MOD2 | KEY_N,
-    KEY_MOD2 | KEY_O,
-    KEY_MOD2 | KEY_P,
-    KEY_MOD2 | KEY_Q,
-    KEY_MOD2 | KEY_R,
-    KEY_MOD2 | KEY_S,
-    KEY_MOD2 | KEY_T,
-    KEY_MOD2 | KEY_U,
-    KEY_MOD2 | KEY_V,
-    KEY_MOD2 | KEY_W,
-    KEY_MOD2 | KEY_X,
-    KEY_MOD2 | KEY_Y,
-    KEY_MOD2 | KEY_Z,
-    KEY_MOD2 | KEY_SEMICOLON,
-    KEY_MOD2 | KEY_QUOTERIGHT,
-    KEY_MOD2 | KEY_BRACKETLEFT,
-    KEY_MOD2 | KEY_BRACKETRIGHT,
-    KEY_MOD2 | KEY_POINT,
-    KEY_MOD2 | KEY_COMMA,
-    KEY_MOD2 | KEY_TILDE,
+                                            KEY_MOD2 | KEY_0,
+                                            KEY_MOD2 | KEY_1,
+                                            KEY_MOD2 | KEY_2,
+                                            KEY_MOD2 | KEY_3,
+                                            KEY_MOD2 | KEY_4,
+                                            KEY_MOD2 | KEY_5,
+                                            KEY_MOD2 | KEY_6,
+                                            KEY_MOD2 | KEY_7,
+                                            KEY_MOD2 | KEY_8,
+                                            KEY_MOD2 | KEY_9,
+                                            KEY_MOD2 | KEY_A,
+                                            KEY_MOD2 | KEY_B,
+                                            KEY_MOD2 | KEY_C,
+                                            KEY_MOD2 | KEY_D,
+                                            KEY_MOD2 | KEY_E,
+                                            KEY_MOD2 | KEY_F,
+                                            KEY_MOD2 | KEY_G,
+                                            KEY_MOD2 | KEY_H,
+                                            KEY_MOD2 | KEY_I,
+                                            KEY_MOD2 | KEY_J,
+                                            KEY_MOD2 | KEY_K,
+                                            KEY_MOD2 | KEY_L,
+                                            KEY_MOD2 | KEY_M,
+                                            KEY_MOD2 | KEY_N,
+                                            KEY_MOD2 | KEY_O,
+                                            KEY_MOD2 | KEY_P,
+                                            KEY_MOD2 | KEY_Q,
+                                            KEY_MOD2 | KEY_R,
+                                            KEY_MOD2 | KEY_S,
+                                            KEY_MOD2 | KEY_T,
+                                            KEY_MOD2 | KEY_U,
+                                            KEY_MOD2 | KEY_V,
+                                            KEY_MOD2 | KEY_W,
+                                            KEY_MOD2 | KEY_X,
+                                            KEY_MOD2 | KEY_Y,
+                                            KEY_MOD2 | KEY_Z,
+                                            KEY_MOD2 | KEY_SEMICOLON,
+                                            KEY_MOD2 | KEY_QUOTERIGHT,
+                                            KEY_MOD2 | KEY_BRACKETLEFT,
+                                            KEY_MOD2 | KEY_BRACKETRIGHT,
+                                            KEY_MOD2 | KEY_POINT,
+                                            KEY_MOD2 | KEY_COMMA,
+                                            KEY_MOD2 | KEY_TILDE,
 
-    KEY_MOD2 | KEY_F1,
-    KEY_MOD2 | KEY_F2,
-    KEY_MOD2 | KEY_F3,
-    KEY_MOD2 | KEY_F4,
-    KEY_MOD2 | KEY_F5,
-    KEY_MOD2 | KEY_F6,
-    KEY_MOD2 | KEY_F7,
-    KEY_MOD2 | KEY_F8,
-    KEY_MOD2 | KEY_F9,
-    KEY_MOD2 | KEY_F10,
-    KEY_MOD2 | KEY_F11,
-    KEY_MOD2 | KEY_F12,
-    KEY_MOD2 | KEY_F13,
-    KEY_MOD2 | KEY_F14,
-    KEY_MOD2 | KEY_F15,
-    KEY_MOD2 | KEY_F16,
+                                            KEY_MOD2 | KEY_F1,
+                                            KEY_MOD2 | KEY_F2,
+                                            KEY_MOD2 | KEY_F3,
+                                            KEY_MOD2 | KEY_F4,
+                                            KEY_MOD2 | KEY_F5,
+                                            KEY_MOD2 | KEY_F6,
+                                            KEY_MOD2 | KEY_F7,
+                                            KEY_MOD2 | KEY_F8,
+                                            KEY_MOD2 | KEY_F9,
+                                            KEY_MOD2 | KEY_F10,
+                                            KEY_MOD2 | KEY_F11,
+                                            KEY_MOD2 | KEY_F12,
+                                            KEY_MOD2 | KEY_F13,
+                                            KEY_MOD2 | KEY_F14,
+                                            KEY_MOD2 | KEY_F15,
+                                            KEY_MOD2 | KEY_F16,
 
-    KEY_MOD2 | KEY_DOWN,
-    KEY_MOD2 | KEY_UP,
-    KEY_MOD2 | KEY_LEFT,
-    KEY_MOD2 | KEY_RIGHT,
-    KEY_MOD2 | KEY_HOME,
-    KEY_MOD2 | KEY_END,
-    KEY_MOD2 | KEY_PAGEUP,
-    KEY_MOD2 | KEY_PAGEDOWN,
-    KEY_MOD2 | KEY_RETURN,
-    KEY_MOD2 | KEY_SPACE,
-    KEY_MOD2 | KEY_BACKSPACE,
-    KEY_MOD2 | KEY_INSERT,
-    KEY_MOD2 | KEY_DELETE,
-    KEY_MOD2 | KEY_EQUAL,
+                                            KEY_MOD2 | KEY_DOWN,
+                                            KEY_MOD2 | KEY_UP,
+                                            KEY_MOD2 | KEY_LEFT,
+                                            KEY_MOD2 | KEY_RIGHT,
+                                            KEY_MOD2 | KEY_HOME,
+                                            KEY_MOD2 | KEY_END,
+                                            KEY_MOD2 | KEY_PAGEUP,
+                                            KEY_MOD2 | KEY_PAGEDOWN,
+                                            KEY_MOD2 | KEY_RETURN,
+                                            KEY_MOD2 | KEY_SPACE,
+                                            KEY_MOD2 | KEY_BACKSPACE,
+                                            KEY_MOD2 | KEY_INSERT,
+                                            KEY_MOD2 | KEY_DELETE,
+                                            KEY_MOD2 | KEY_EQUAL,
 
-    KEY_SHIFT | KEY_MOD2 | KEY_0,
-    KEY_SHIFT | KEY_MOD2 | KEY_1,
-    KEY_SHIFT | KEY_MOD2 | KEY_2,
-    KEY_SHIFT | KEY_MOD2 | KEY_3,
-    KEY_SHIFT | KEY_MOD2 | KEY_4,
-    KEY_SHIFT | KEY_MOD2 | KEY_5,
-    KEY_SHIFT | KEY_MOD2 | KEY_6,
-    KEY_SHIFT | KEY_MOD2 | KEY_7,
-    KEY_SHIFT | KEY_MOD2 | KEY_8,
-    KEY_SHIFT | KEY_MOD2 | KEY_9,
-    KEY_SHIFT | KEY_MOD2 | KEY_A,
-    KEY_SHIFT | KEY_MOD2 | KEY_B,
-    KEY_SHIFT | KEY_MOD2 | KEY_C,
-    KEY_SHIFT | KEY_MOD2 | KEY_D,
-    KEY_SHIFT | KEY_MOD2 | KEY_E,
-    KEY_SHIFT | KEY_MOD2 | KEY_F,
-    KEY_SHIFT | KEY_MOD2 | KEY_G,
-    KEY_SHIFT | KEY_MOD2 | KEY_H,
-    KEY_SHIFT | KEY_MOD2 | KEY_I,
-    KEY_SHIFT | KEY_MOD2 | KEY_J,
-    KEY_SHIFT | KEY_MOD2 | KEY_K,
-    KEY_SHIFT | KEY_MOD2 | KEY_L,
-    KEY_SHIFT | KEY_MOD2 | KEY_M,
-    KEY_SHIFT | KEY_MOD2 | KEY_N,
-    KEY_SHIFT | KEY_MOD2 | KEY_O,
-    KEY_SHIFT | KEY_MOD2 | KEY_P,
-    KEY_SHIFT | KEY_MOD2 | KEY_Q,
-    KEY_SHIFT | KEY_MOD2 | KEY_R,
-    KEY_SHIFT | KEY_MOD2 | KEY_S,
-    KEY_SHIFT | KEY_MOD2 | KEY_T,
-    KEY_SHIFT | KEY_MOD2 | KEY_U,
-    KEY_SHIFT | KEY_MOD2 | KEY_V,
-    KEY_SHIFT | KEY_MOD2 | KEY_W,
-    KEY_SHIFT | KEY_MOD2 | KEY_X,
-    KEY_SHIFT | KEY_MOD2 | KEY_Y,
-    KEY_SHIFT | KEY_MOD2 | KEY_Z,
-    KEY_SHIFT | KEY_MOD2 | KEY_SEMICOLON,
-    KEY_SHIFT | KEY_MOD2 | KEY_QUOTERIGHT,
-    KEY_SHIFT | KEY_MOD2 | KEY_BRACKETLEFT,
-    KEY_SHIFT | KEY_MOD2 | KEY_BRACKETRIGHT,
-    KEY_SHIFT | KEY_MOD2 | KEY_POINT,
-    KEY_SHIFT | KEY_MOD2 | KEY_COMMA,
-    KEY_SHIFT | KEY_MOD2 | KEY_TILDE,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_0,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_1,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_2,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_3,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_4,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_5,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_6,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_7,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_8,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_9,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_A,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_B,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_C,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_D,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_E,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_G,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_H,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_I,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_J,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_K,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_L,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_M,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_N,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_O,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_P,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_Q,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_R,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_S,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_T,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_U,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_V,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_W,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_X,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_Y,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_Z,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_SEMICOLON,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_QUOTERIGHT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_BRACKETLEFT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_BRACKETRIGHT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_POINT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_COMMA,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_TILDE,
 
-    KEY_SHIFT | KEY_MOD2 | KEY_F1,
-    KEY_SHIFT | KEY_MOD2 | KEY_F2,
-    KEY_SHIFT | KEY_MOD2 | KEY_F3,
-    KEY_SHIFT | KEY_MOD2 | KEY_F4,
-    KEY_SHIFT | KEY_MOD2 | KEY_F5,
-    KEY_SHIFT | KEY_MOD2 | KEY_F6,
-    KEY_SHIFT | KEY_MOD2 | KEY_F7,
-    KEY_SHIFT | KEY_MOD2 | KEY_F8,
-    KEY_SHIFT | KEY_MOD2 | KEY_F9,
-    KEY_SHIFT | KEY_MOD2 | KEY_F10,
-    KEY_SHIFT | KEY_MOD2 | KEY_F11,
-    KEY_SHIFT | KEY_MOD2 | KEY_F12,
-    KEY_SHIFT | KEY_MOD2 | KEY_F13,
-    KEY_SHIFT | KEY_MOD2 | KEY_F14,
-    KEY_SHIFT | KEY_MOD2 | KEY_F15,
-    KEY_SHIFT | KEY_MOD2 | KEY_F16,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F1,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F2,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F3,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F4,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F5,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F6,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F7,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F8,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F9,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F10,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F11,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F12,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F13,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F14,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F15,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_F16,
 
-    KEY_SHIFT | KEY_MOD2 | KEY_DOWN,
-    KEY_SHIFT | KEY_MOD2 | KEY_UP,
-    KEY_SHIFT | KEY_MOD2 | KEY_LEFT,
-    KEY_SHIFT | KEY_MOD2 | KEY_RIGHT,
-    KEY_SHIFT | KEY_MOD2 | KEY_HOME,
-    KEY_SHIFT | KEY_MOD2 | KEY_END,
-    KEY_SHIFT | KEY_MOD2 | KEY_PAGEUP,
-    KEY_SHIFT | KEY_MOD2 | KEY_PAGEDOWN,
-    KEY_SHIFT | KEY_MOD2 | KEY_RETURN,
-    KEY_SHIFT | KEY_MOD2 | KEY_ESCAPE,
-    KEY_SHIFT | KEY_MOD2 | KEY_SPACE,
-    KEY_SHIFT | KEY_MOD2 | KEY_BACKSPACE,
-    KEY_SHIFT | KEY_MOD2 | KEY_INSERT,
-    KEY_SHIFT | KEY_MOD2 | KEY_DELETE,
-    KEY_SHIFT | KEY_MOD2 | KEY_EQUAL,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_DOWN,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_UP,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_LEFT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_RIGHT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_HOME,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_END,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_PAGEUP,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_PAGEDOWN,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_RETURN,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_ESCAPE,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_SPACE,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_BACKSPACE,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_INSERT,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_DELETE,
+                                            KEY_SHIFT | KEY_MOD2 | KEY_EQUAL,
 
-    KEY_MOD1 | KEY_MOD2 | KEY_0,
-    KEY_MOD1 | KEY_MOD2 | KEY_1,
-    KEY_MOD1 | KEY_MOD2 | KEY_2,
-    KEY_MOD1 | KEY_MOD2 | KEY_3,
-    KEY_MOD1 | KEY_MOD2 | KEY_4,
-    KEY_MOD1 | KEY_MOD2 | KEY_5,
-    KEY_MOD1 | KEY_MOD2 | KEY_6,
-    KEY_MOD1 | KEY_MOD2 | KEY_7,
-    KEY_MOD1 | KEY_MOD2 | KEY_8,
-    KEY_MOD1 | KEY_MOD2 | KEY_9,
-    KEY_MOD1 | KEY_MOD2 | KEY_A,
-    KEY_MOD1 | KEY_MOD2 | KEY_B,
-    KEY_MOD1 | KEY_MOD2 | KEY_C,
-    KEY_MOD1 | KEY_MOD2 | KEY_D,
-    KEY_MOD1 | KEY_MOD2 | KEY_E,
-    KEY_MOD1 | KEY_MOD2 | KEY_F,
-    KEY_MOD1 | KEY_MOD2 | KEY_G,
-    KEY_MOD1 | KEY_MOD2 | KEY_H,
-    KEY_MOD1 | KEY_MOD2 | KEY_I,
-    KEY_MOD1 | KEY_MOD2 | KEY_J,
-    KEY_MOD1 | KEY_MOD2 | KEY_K,
-    KEY_MOD1 | KEY_MOD2 | KEY_L,
-    KEY_MOD1 | KEY_MOD2 | KEY_M,
-    KEY_MOD1 | KEY_MOD2 | KEY_N,
-    KEY_MOD1 | KEY_MOD2 | KEY_O,
-    KEY_MOD1 | KEY_MOD2 | KEY_P,
-    KEY_MOD1 | KEY_MOD2 | KEY_Q,
-    KEY_MOD1 | KEY_MOD2 | KEY_R,
-    KEY_MOD1 | KEY_MOD2 | KEY_S,
-    KEY_MOD1 | KEY_MOD2 | KEY_T,
-    KEY_MOD1 | KEY_MOD2 | KEY_U,
-    KEY_MOD1 | KEY_MOD2 | KEY_V,
-    KEY_MOD1 | KEY_MOD2 | KEY_W,
-    KEY_MOD1 | KEY_MOD2 | KEY_X,
-    KEY_MOD1 | KEY_MOD2 | KEY_Y,
-    KEY_MOD1 | KEY_MOD2 | KEY_Z,
-    KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
-    KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
-    KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
-    KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
-    KEY_MOD1 | KEY_MOD2 | KEY_POINT,
-    KEY_MOD1 | KEY_MOD2 | KEY_COMMA,
-    KEY_MOD1 | KEY_MOD2 | KEY_TILDE,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_0,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_1,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_2,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_3,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_4,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_5,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_6,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_7,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_8,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_9,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_A,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_B,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_C,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_D,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_E,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_G,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_H,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_I,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_J,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_K,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_L,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_M,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_N,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_O,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_P,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_Q,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_R,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_S,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_T,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_U,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_V,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_W,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_X,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_Y,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_Z,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_POINT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_COMMA,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_TILDE,
 
-    KEY_MOD1 | KEY_MOD2 | KEY_F1,
-    KEY_MOD1 | KEY_MOD2 | KEY_F2,
-    KEY_MOD1 | KEY_MOD2 | KEY_F3,
-    KEY_MOD1 | KEY_MOD2 | KEY_F4,
-    KEY_MOD1 | KEY_MOD2 | KEY_F5,
-    KEY_MOD1 | KEY_MOD2 | KEY_F6,
-    KEY_MOD1 | KEY_MOD2 | KEY_F7,
-    KEY_MOD1 | KEY_MOD2 | KEY_F8,
-    KEY_MOD1 | KEY_MOD2 | KEY_F9,
-    KEY_MOD1 | KEY_MOD2 | KEY_F10,
-    KEY_MOD1 | KEY_MOD2 | KEY_F11,
-    KEY_MOD1 | KEY_MOD2 | KEY_F12,
-    KEY_MOD1 | KEY_MOD2 | KEY_F13,
-    KEY_MOD1 | KEY_MOD2 | KEY_F14,
-    KEY_MOD1 | KEY_MOD2 | KEY_F15,
-    KEY_MOD1 | KEY_MOD2 | KEY_F16,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F1,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F2,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F3,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F4,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F5,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F6,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F7,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F8,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F9,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F10,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F11,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F12,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F13,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F14,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F15,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_F16,
 
-    KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
-    KEY_MOD1 | KEY_MOD2 | KEY_UP,
-    KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
-    KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
-    KEY_MOD1 | KEY_MOD2 | KEY_HOME,
-    KEY_MOD1 | KEY_MOD2 | KEY_END,
-    KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
-    KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
-    KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
-    KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
-    KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
-    KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
-    KEY_MOD1 | KEY_MOD2 | KEY_DELETE,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_UP,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_HOME,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_END,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
+                                            KEY_MOD1 | KEY_MOD2 | KEY_DELETE,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_0,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_1,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_2,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_3,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_4,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_5,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_6,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_7,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_8,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_9,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_A,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_B,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_C,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_D,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_E,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_G,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_H,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_I,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_J,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_K,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_L,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_M,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_N,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_O,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_P,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Q,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_R,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_S,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_T,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_U,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_V,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_W,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_X,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Y,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Z,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_POINT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_COMMA,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_TILDE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_0,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_1,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_2,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_3,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_4,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_5,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_6,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_7,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_8,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_9,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_A,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_B,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_C,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_D,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_E,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_G,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_H,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_I,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_J,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_K,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_L,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_M,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_N,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_O,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_P,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Q,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_R,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_S,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_T,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_U,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_V,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_W,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_X,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Y,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_Z,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SEMICOLON,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_QUOTERIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETLEFT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BRACKETRIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_POINT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_COMMA,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_TILDE,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F1,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F2,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F3,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F4,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F5,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F6,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F7,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F8,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F9,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F10,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F11,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F12,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F13,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F14,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F15,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F16,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F1,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F2,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F3,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F4,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F5,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F6,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F7,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F8,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F9,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F10,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F11,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F12,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F13,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F14,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F15,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_F16,
 
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_UP,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_HOME,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_END,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DELETE,
-    KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_EQUAL
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DOWN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_UP,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_LEFT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RIGHT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_HOME,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_END,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEUP,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_PAGEDOWN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_RETURN,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_SPACE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_BACKSPACE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_INSERT,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_DELETE,
+                                            KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_EQUAL
 
 #ifdef __APPLE__
-   ,KEY_MOD3 | KEY_0,
-    KEY_MOD3 | KEY_1,
-    KEY_MOD3 | KEY_2,
-    KEY_MOD3 | KEY_3,
-    KEY_MOD3 | KEY_4,
-    KEY_MOD3 | KEY_5,
-    KEY_MOD3 | KEY_6,
-    KEY_MOD3 | KEY_7,
-    KEY_MOD3 | KEY_8,
-    KEY_MOD3 | KEY_9,
-    KEY_MOD3 | KEY_A,
-    KEY_MOD3 | KEY_B,
-    KEY_MOD3 | KEY_C,
-    KEY_MOD3 | KEY_D,
-    KEY_MOD3 | KEY_E,
-    KEY_MOD3 | KEY_F,
-    KEY_MOD3 | KEY_G,
-    KEY_MOD3 | KEY_H,
-    KEY_MOD3 | KEY_I,
-    KEY_MOD3 | KEY_J,
-    KEY_MOD3 | KEY_K,
-    KEY_MOD3 | KEY_L,
-    KEY_MOD3 | KEY_M,
-    KEY_MOD3 | KEY_N,
-    KEY_MOD3 | KEY_O,
-    KEY_MOD3 | KEY_P,
-    KEY_MOD3 | KEY_Q,
-    KEY_MOD3 | KEY_R,
-    KEY_MOD3 | KEY_S,
-    KEY_MOD3 | KEY_T,
-    KEY_MOD3 | KEY_U,
-    KEY_MOD3 | KEY_V,
-    KEY_MOD3 | KEY_W,
-    KEY_MOD3 | KEY_X,
-    KEY_MOD3 | KEY_Y,
-    KEY_MOD3 | KEY_Z,
-    KEY_MOD3 | KEY_SEMICOLON,
-    KEY_MOD3 | KEY_QUOTERIGHT,
-    KEY_MOD3 | KEY_BRACKETLEFT,
-    KEY_MOD3 | KEY_BRACKETRIGHT,
-    KEY_MOD3 | KEY_POINT,
-    KEY_MOD3 | KEY_COMMA,
-    KEY_MOD3 | KEY_TILDE,
-    KEY_MOD3 | KEY_TAB,
+                                            ,
+                                            KEY_MOD3 | KEY_0,
+                                            KEY_MOD3 | KEY_1,
+                                            KEY_MOD3 | KEY_2,
+                                            KEY_MOD3 | KEY_3,
+                                            KEY_MOD3 | KEY_4,
+                                            KEY_MOD3 | KEY_5,
+                                            KEY_MOD3 | KEY_6,
+                                            KEY_MOD3 | KEY_7,
+                                            KEY_MOD3 | KEY_8,
+                                            KEY_MOD3 | KEY_9,
+                                            KEY_MOD3 | KEY_A,
+                                            KEY_MOD3 | KEY_B,
+                                            KEY_MOD3 | KEY_C,
+                                            KEY_MOD3 | KEY_D,
+                                            KEY_MOD3 | KEY_E,
+                                            KEY_MOD3 | KEY_F,
+                                            KEY_MOD3 | KEY_G,
+                                            KEY_MOD3 | KEY_H,
+                                            KEY_MOD3 | KEY_I,
+                                            KEY_MOD3 | KEY_J,
+                                            KEY_MOD3 | KEY_K,
+                                            KEY_MOD3 | KEY_L,
+                                            KEY_MOD3 | KEY_M,
+                                            KEY_MOD3 | KEY_N,
+                                            KEY_MOD3 | KEY_O,
+                                            KEY_MOD3 | KEY_P,
+                                            KEY_MOD3 | KEY_Q,
+                                            KEY_MOD3 | KEY_R,
+                                            KEY_MOD3 | KEY_S,
+                                            KEY_MOD3 | KEY_T,
+                                            KEY_MOD3 | KEY_U,
+                                            KEY_MOD3 | KEY_V,
+                                            KEY_MOD3 | KEY_W,
+                                            KEY_MOD3 | KEY_X,
+                                            KEY_MOD3 | KEY_Y,
+                                            KEY_MOD3 | KEY_Z,
+                                            KEY_MOD3 | KEY_SEMICOLON,
+                                            KEY_MOD3 | KEY_QUOTERIGHT,
+                                            KEY_MOD3 | KEY_BRACKETLEFT,
+                                            KEY_MOD3 | KEY_BRACKETRIGHT,
+                                            KEY_MOD3 | KEY_POINT,
+                                            KEY_MOD3 | KEY_COMMA,
+                                            KEY_MOD3 | KEY_TILDE,
+                                            KEY_MOD3 | KEY_TAB,
 
-    KEY_MOD3 | KEY_F1,
-    KEY_MOD3 | KEY_F2,
-    KEY_MOD3 | KEY_F3,
-    KEY_MOD3 | KEY_F4,
-    KEY_MOD3 | KEY_F5,
-    KEY_MOD3 | KEY_F6,
-    KEY_MOD3 | KEY_F7,
-    KEY_MOD3 | KEY_F8,
-    KEY_MOD3 | KEY_F9,
-    KEY_MOD3 | KEY_F10,
-    KEY_MOD3 | KEY_F11,
-    KEY_MOD3 | KEY_F12,
-    KEY_MOD3 | KEY_F13,
-    KEY_MOD3 | KEY_F14,
-    KEY_MOD3 | KEY_F15,
-    KEY_MOD3 | KEY_F16,
+                                            KEY_MOD3 | KEY_F1,
+                                            KEY_MOD3 | KEY_F2,
+                                            KEY_MOD3 | KEY_F3,
+                                            KEY_MOD3 | KEY_F4,
+                                            KEY_MOD3 | KEY_F5,
+                                            KEY_MOD3 | KEY_F6,
+                                            KEY_MOD3 | KEY_F7,
+                                            KEY_MOD3 | KEY_F8,
+                                            KEY_MOD3 | KEY_F9,
+                                            KEY_MOD3 | KEY_F10,
+                                            KEY_MOD3 | KEY_F11,
+                                            KEY_MOD3 | KEY_F12,
+                                            KEY_MOD3 | KEY_F13,
+                                            KEY_MOD3 | KEY_F14,
+                                            KEY_MOD3 | KEY_F15,
+                                            KEY_MOD3 | KEY_F16,
 
-    KEY_MOD3 | KEY_DOWN,
-    KEY_MOD3 | KEY_UP,
-    KEY_MOD3 | KEY_LEFT,
-    KEY_MOD3 | KEY_RIGHT,
-    KEY_MOD3 | KEY_HOME,
-    KEY_MOD3 | KEY_END,
-    KEY_MOD3 | KEY_PAGEUP,
-    KEY_MOD3 | KEY_PAGEDOWN,
-    KEY_MOD3 | KEY_RETURN,
-    KEY_MOD3 | KEY_SPACE,
-    KEY_MOD3 | KEY_BACKSPACE,
-    KEY_MOD3 | KEY_INSERT,
-    KEY_MOD3 | KEY_DELETE,
+                                            KEY_MOD3 | KEY_DOWN,
+                                            KEY_MOD3 | KEY_UP,
+                                            KEY_MOD3 | KEY_LEFT,
+                                            KEY_MOD3 | KEY_RIGHT,
+                                            KEY_MOD3 | KEY_HOME,
+                                            KEY_MOD3 | KEY_END,
+                                            KEY_MOD3 | KEY_PAGEUP,
+                                            KEY_MOD3 | KEY_PAGEDOWN,
+                                            KEY_MOD3 | KEY_RETURN,
+                                            KEY_MOD3 | KEY_SPACE,
+                                            KEY_MOD3 | KEY_BACKSPACE,
+                                            KEY_MOD3 | KEY_INSERT,
+                                            KEY_MOD3 | KEY_DELETE,
 
-    KEY_MOD3 | KEY_ADD,
-    KEY_MOD3 | KEY_SUBTRACT,
-    KEY_MOD3 | KEY_MULTIPLY,
-    KEY_MOD3 | KEY_DIVIDE,
-    KEY_MOD3 | KEY_EQUAL,
+                                            KEY_MOD3 | KEY_ADD,
+                                            KEY_MOD3 | KEY_SUBTRACT,
+                                            KEY_MOD3 | KEY_MULTIPLY,
+                                            KEY_MOD3 | KEY_DIVIDE,
+                                            KEY_MOD3 | KEY_EQUAL,
 
-    KEY_SHIFT | KEY_MOD3 | KEY_0,
-    KEY_SHIFT | KEY_MOD3 | KEY_1,
-    KEY_SHIFT | KEY_MOD3 | KEY_2,
-    KEY_SHIFT | KEY_MOD3 | KEY_3,
-    KEY_SHIFT | KEY_MOD3 | KEY_4,
-    KEY_SHIFT | KEY_MOD3 | KEY_5,
-    KEY_SHIFT | KEY_MOD3 | KEY_6,
-    KEY_SHIFT | KEY_MOD3 | KEY_7,
-    KEY_SHIFT | KEY_MOD3 | KEY_8,
-    KEY_SHIFT | KEY_MOD3 | KEY_9,
-    KEY_SHIFT | KEY_MOD3 | KEY_A,
-    KEY_SHIFT | KEY_MOD3 | KEY_B,
-    KEY_SHIFT | KEY_MOD3 | KEY_C,
-    KEY_SHIFT | KEY_MOD3 | KEY_D,
-    KEY_SHIFT | KEY_MOD3 | KEY_E,
-    KEY_SHIFT | KEY_MOD3 | KEY_F,
-    KEY_SHIFT | KEY_MOD3 | KEY_G,
-    KEY_SHIFT | KEY_MOD3 | KEY_H,
-    KEY_SHIFT | KEY_MOD3 | KEY_I,
-    KEY_SHIFT | KEY_MOD3 | KEY_J,
-    KEY_SHIFT | KEY_MOD3 | KEY_K,
-    KEY_SHIFT | KEY_MOD3 | KEY_L,
-    KEY_SHIFT | KEY_MOD3 | KEY_M,
-    KEY_SHIFT | KEY_MOD3 | KEY_N,
-    KEY_SHIFT | KEY_MOD3 | KEY_O,
-    KEY_SHIFT | KEY_MOD3 | KEY_P,
-    KEY_SHIFT | KEY_MOD3 | KEY_Q,
-    KEY_SHIFT | KEY_MOD3 | KEY_R,
-    KEY_SHIFT | KEY_MOD3 | KEY_S,
-    KEY_SHIFT | KEY_MOD3 | KEY_T,
-    KEY_SHIFT | KEY_MOD3 | KEY_U,
-    KEY_SHIFT | KEY_MOD3 | KEY_V,
-    KEY_SHIFT | KEY_MOD3 | KEY_W,
-    KEY_SHIFT | KEY_MOD3 | KEY_X,
-    KEY_SHIFT | KEY_MOD3 | KEY_Y,
-    KEY_SHIFT | KEY_MOD3 | KEY_Z,
-    KEY_SHIFT | KEY_MOD3 | KEY_SEMICOLON,
-    KEY_SHIFT | KEY_MOD3 | KEY_QUOTERIGHT,
-    KEY_SHIFT | KEY_MOD3 | KEY_BRACKETLEFT,
-    KEY_SHIFT | KEY_MOD3 | KEY_BRACKETRIGHT,
-    KEY_SHIFT | KEY_MOD3 | KEY_POINT,
-    KEY_SHIFT | KEY_MOD3 | KEY_COMMA,
-    KEY_SHIFT | KEY_MOD3 | KEY_TILDE,
-    KEY_SHIFT | KEY_MOD3 | KEY_TAB,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_0,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_1,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_2,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_3,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_4,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_5,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_6,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_7,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_8,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_9,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_A,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_B,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_C,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_D,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_E,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_G,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_H,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_I,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_J,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_K,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_L,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_M,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_N,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_O,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_P,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_Q,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_R,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_S,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_T,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_U,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_V,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_W,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_X,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_Y,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_Z,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_SEMICOLON,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_QUOTERIGHT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_BRACKETLEFT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_BRACKETRIGHT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_POINT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_COMMA,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_TILDE,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_TAB,
 
-    KEY_SHIFT | KEY_MOD3 | KEY_F1,
-    KEY_SHIFT | KEY_MOD3 | KEY_F2,
-    KEY_SHIFT | KEY_MOD3 | KEY_F3,
-    KEY_SHIFT | KEY_MOD3 | KEY_F4,
-    KEY_SHIFT | KEY_MOD3 | KEY_F5,
-    KEY_SHIFT | KEY_MOD3 | KEY_F6,
-    KEY_SHIFT | KEY_MOD3 | KEY_F7,
-    KEY_SHIFT | KEY_MOD3 | KEY_F8,
-    KEY_SHIFT | KEY_MOD3 | KEY_F9,
-    KEY_SHIFT | KEY_MOD3 | KEY_F10,
-    KEY_SHIFT | KEY_MOD3 | KEY_F11,
-    KEY_SHIFT | KEY_MOD3 | KEY_F12,
-    KEY_SHIFT | KEY_MOD3 | KEY_F13,
-    KEY_SHIFT | KEY_MOD3 | KEY_F14,
-    KEY_SHIFT | KEY_MOD3 | KEY_F15,
-    KEY_SHIFT | KEY_MOD3 | KEY_F16,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F1,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F2,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F3,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F4,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F5,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F6,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F7,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F8,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F9,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F10,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F11,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F12,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F13,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F14,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F15,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_F16,
 
-    KEY_SHIFT | KEY_MOD3 | KEY_DOWN,
-    KEY_SHIFT | KEY_MOD3 | KEY_UP,
-    KEY_SHIFT | KEY_MOD3 | KEY_LEFT,
-    KEY_SHIFT | KEY_MOD3 | KEY_RIGHT,
-    KEY_SHIFT | KEY_MOD3 | KEY_HOME,
-    KEY_SHIFT | KEY_MOD3 | KEY_END,
-    KEY_SHIFT | KEY_MOD3 | KEY_PAGEUP,
-    KEY_SHIFT | KEY_MOD3 | KEY_PAGEDOWN,
-    KEY_SHIFT | KEY_MOD3 | KEY_RETURN,
-    KEY_SHIFT | KEY_MOD3 | KEY_ESCAPE,
-    KEY_SHIFT | KEY_MOD3 | KEY_SPACE,
-    KEY_SHIFT | KEY_MOD3 | KEY_BACKSPACE,
-    KEY_SHIFT | KEY_MOD3 | KEY_INSERT,
-    KEY_SHIFT | KEY_MOD3 | KEY_DELETE,
-    KEY_SHIFT | KEY_MOD3 | KEY_EQUAL
+                                            KEY_SHIFT | KEY_MOD3 | KEY_DOWN,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_UP,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_LEFT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_RIGHT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_HOME,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_END,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_PAGEUP,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_PAGEDOWN,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_RETURN,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_ESCAPE,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_SPACE,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_BACKSPACE,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_INSERT,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_DELETE,
+                                            KEY_SHIFT | KEY_MOD3 | KEY_EQUAL
 #endif
 };
 
@@ -789,14 +786,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
     sal_uInt16 nMod1 = aCode1.GetModifier();
 
     // is it related to our list box ?
-    if (
-        (nCode1 != KEY_DOWN    ) &&
-        (nCode1 != KEY_UP      ) &&
-        (nCode1 != KEY_LEFT    ) &&
-        (nCode1 != KEY_RIGHT   ) &&
-        (nCode1 != KEY_PAGEUP  ) &&
-        (nCode1 != KEY_PAGEDOWN)
-       )
+    if ((nCode1 != KEY_DOWN) && (nCode1 != KEY_UP) && (nCode1 != KEY_LEFT) && (nCode1 != KEY_RIGHT)
+        && (nCode1 != KEY_PAGEUP) && (nCode1 != KEY_PAGEDOWN))
     {
         for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
         {
@@ -804,9 +795,9 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
             if (pUserData)
             {
                 sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
-                sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
+                sal_uInt16 nMod2 = pUserData->m_aKey.GetModifier();
 
-                if (nCode1 == nCode2 && nMod1  == nMod2)
+                if (nCode1 == nCode2 && nMod1 == nMod2)
                 {
                     m_xEntriesBox->select(i);
                     m_xEntriesBox->scroll_to_row(i);
@@ -820,7 +811,9 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
     return false;
 }
 
-SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& aSet )
+SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
+                                                   weld::DialogController* pController,
+                                                   const SfxItemSet& aSet)
     : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
     , m_pMacroInfoItem()
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
@@ -859,27 +852,27 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld:
     m_xKeyBox->set_size_request(aSize.Width(), aSize.Height());
 
     // install handler functions
-    m_xChangeButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
-    m_xRemoveButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
-    m_xEntriesBox->connect_changed ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    m_xEntriesBox->connect_key_press( LINK( this, SfxAcceleratorConfigPage, KeyInputHdl ));
-    m_xGroupLBox->connect_changed  ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    m_xFunctionBox->connect_changed( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    m_xKeyBox->connect_changed     ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    m_xLoadButton->connect_clicked  ( LINK( this, SfxAcceleratorConfigPage, Load      ));
-    m_xSaveButton->connect_clicked  ( LINK( this, SfxAcceleratorConfigPage, Save      ));
-    m_xResetButton->connect_clicked ( LINK( this, SfxAcceleratorConfigPage, Default   ));
-    m_xOfficeButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
-    m_xModuleButton->connect_clicked( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
-    m_xSearchEdit->connect_changed( LINK( this, SfxAcceleratorConfigPage, SearchUpdateHdl ));
+    m_xChangeButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, ChangeHdl));
+    m_xRemoveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RemoveHdl));
+    m_xEntriesBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xEntriesBox->connect_key_press(LINK(this, SfxAcceleratorConfigPage, KeyInputHdl));
+    m_xGroupLBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xFunctionBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xKeyBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xLoadButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Load));
+    m_xSaveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Save));
+    m_xResetButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Default));
+    m_xOfficeButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
+    m_xModuleButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RadioHdl));
+    m_xSearchEdit->connect_changed(LINK(this, SfxAcceleratorConfigPage, SearchUpdateHdl));
     m_xSearchEdit->connect_focus_out(LINK(this, SfxAcceleratorConfigPage, FocusOut_Impl));
 
     // detect max keyname width
-    int nMaxWidth  = 0;
+    int nMaxWidth = 0;
     for (unsigned short i : KEYCODE_ARRAY)
     {
         int nTmp = m_xEntriesBox->get_pixel_size(vcl::KeyCode(i).GetName()).Width();
-        if ( nTmp > nMaxWidth )
+        if (nTmp > nMaxWidth)
             nMaxWidth = nTmp;
     }
     // recalc second tab
@@ -893,8 +886,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld:
     //Initialize search util
     m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
     m_options.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
-    m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
-                                        util::SearchFlags::REG_NOT_ENDOFLINE);
+    m_options.searchFlag
+        |= (util::SearchFlags::REG_NOT_BEGINOFLINE | util::SearchFlags::REG_NOT_ENDOFLINE);
     // initialize GroupBox
     m_xGroupLBox->SetFunctionListBox(m_xFunctionBox.get());
 
@@ -902,7 +895,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage, weld:
     m_xKeyBox->make_sorted();
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, ImplUpdateDataHdl));
-    m_aUpdateDataTimer.SetDebugName( "SfxAcceleratorConfigPage UpdateDataTimer" );
+    m_aUpdateDataTimer.SetDebugName("SfxAcceleratorConfigPage UpdateDataTimer");
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
 
     m_aFillGroupIdle.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, TimeOut_Impl));
@@ -938,18 +931,19 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         // get the current active frame, which should be our "parent"
         // for this session
         m_xFrame = GetFrame();
-        if ( !m_xFrame.is() )
+        if (!m_xFrame.is())
         {
-            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( m_xContext );
+            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(m_xContext);
             m_xFrame = xDesktop->getActiveFrame();
         }
 
         // identify module
-        uno::Reference<frame::XModuleManager2> xModuleManager =
-                 frame::ModuleManager::create(m_xContext);
+        uno::Reference<frame::XModuleManager2> xModuleManager
+            = frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
-        m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
+        m_sModuleUIName
+            = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
 
         // get global accelerator configuration
         m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(m_xContext);
@@ -958,15 +952,15 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgSupplier(
             ui::theModuleUIConfigurationManagerSupplier::get(m_xContext));
-        uno::Reference<ui::XUIConfigurationManager> xUICfgManager =
-            xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
+        uno::Reference<ui::XUIConfigurationManager> xUICfgManager
+            = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = xUICfgManager->getShortCutManager();
     }
-    catch(const uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch(const uno::Exception&)
+    catch (const uno::Exception&)
     {
         m_xContext.clear();
     }
@@ -1000,7 +994,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         OUString sKey = aKey.GetName();
         if (sKey.isEmpty())
             continue;
-        TAccInfo*    pEntry   = new TAccInfo(i1, 0/*nListPos*/, aKey);
+        TAccInfo* pEntry = new TAccInfo(i1, 0 /*nListPos*/, aKey);
         m_xEntriesBox->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), sKey);
         int nPos = m_xEntriesBox->n_children() - 1;
         m_xEntriesBox->set_text(nPos, OUString(), 1);
@@ -1012,9 +1006,9 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     sal_Int32 c2 = lKeys.getLength();
     sal_Int32 i2 = 0;
 
-    for (i2=0; i2<c2; ++i2)
+    for (i2 = 0; i2 < c2; ++i2)
     {
-        const awt::KeyEvent& aAWTKey  = lKeys[i2];
+        const awt::KeyEvent& aAWTKey = lKeys[i2];
         OUString sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
         OUString sLabel = GetLabel4Command(sCommand);
         vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
@@ -1067,7 +1061,7 @@ void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfig
         if (pUserData)
         {
             sCommand = pUserData->m_sCommand;
-            aAWTKey  = svt::AcceleratorExecute::st_VCLKey2AWTKey(pUserData->m_aKey);
+            aAWTKey = svt::AcceleratorExecute::st_VCLKey2AWTKey(pUserData->m_aKey);
         }
 
         try
@@ -1087,10 +1081,7 @@ void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfig
     }
 }
 
-void SfxAcceleratorConfigPage::ResetConfig()
-{
-    m_xEntriesBox->clear();
-}
+void SfxAcceleratorConfigPage::ResetConfig() { m_xEntriesBox->clear(); }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ImplUpdateDataHdl, Timer*, void)
 {
@@ -1114,12 +1105,12 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, FocusOut_Impl, weld::Widget&, void)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load, weld::Button&, void)
 {
     // ask for filename, where we should load the new config data from
-    StartFileDialog( StartFileDialogType::Open, aLoadAccelConfigStr );
+    StartFileDialog(StartFileDialogType::Open, aLoadAccelConfigStr);
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save, weld::Button&, void)
 {
-    StartFileDialog( StartFileDialogType::SaveAs, aSaveAccelConfigStr );
+    StartFileDialog(StartFileDialogType::SaveAs, aSaveAccelConfigStr);
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, weld::Button&, void)
@@ -1178,14 +1169,14 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 
         OUString sPossibleNewCommand = m_xFunctionBox->GetCurCommand();
 
-        m_xRemoveButton->set_sensitive( false );
-        m_xChangeButton->set_sensitive( false );
+        m_xRemoveButton->set_sensitive(false);
+        m_xChangeButton->set_sensitive(false);
 
         if (pEntry && pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
                 m_xRemoveButton->set_sensitive(true);
-            m_xChangeButton->set_sensitive( pEntry->m_sCommand != sPossibleNewCommand );
+            m_xChangeButton->set_sensitive(pEntry->m_sCommand != sPossibleNewCommand);
         }
     }
     else if (&rListBox == &m_xGroupLBox->get_widget())
@@ -1212,8 +1203,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
     }
     else if (&rListBox == &m_xFunctionBox->get_widget())
     {
-        m_xRemoveButton->set_sensitive( false );
-        m_xChangeButton->set_sensitive( false );
+        m_xRemoveButton->set_sensitive(false);
+        m_xChangeButton->set_sensitive(false);
 
         // #i36994 First selected can return zero!
         TAccInfo* pEntry = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_selected_id().toInt64());
@@ -1225,17 +1216,19 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
             {
                 if (pEntry->isConfigured())
                     m_xRemoveButton->set_sensitive(true);
-                m_xChangeButton->set_sensitive( pEntry->m_sCommand != sPossibleNewCommand );
+                m_xChangeButton->set_sensitive(pEntry->m_sCommand != sPossibleNewCommand);
             }
 
             // update key box
             m_xKeyBox->clear();
             for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
             {
-                TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
+                TAccInfo* pUserData
+                    = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
                 if (pUserData && pUserData->m_sCommand == sPossibleNewCommand)
                 {
-                    m_xKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pUserData)), pUserData->m_aKey.GetName());
+                    m_xKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pUserData)),
+                                      pUserData->m_aKey.GetName());
                 }
             }
         }
@@ -1266,7 +1259,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::Button&, void)
         m_xAct = m_xModule;
 
     // nothing changed? => do nothing!
-    if ( m_xAct.is() && ( xOld == m_xAct ) )
+    if (m_xAct.is() && (xOld == m_xAct))
         return;
 
     m_xEntriesBox->freeze();
@@ -1298,30 +1291,34 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
     assert(m_pFileDlg);
 
     OUString sCfgName;
-    if ( ERRCODE_NONE == m_pFileDlg->GetError() )
+    if (ERRCODE_NONE == m_pFileDlg->GetError())
         sCfgName = m_pFileDlg->GetPath();
 
-    if ( sCfgName.isEmpty() )
+    if (sCfgName.isEmpty())
         return;
 
     weld::WaitObject aWaitObject(GetFrameWeld());
 
     uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
-    uno::Reference<embed::XStorage> xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
+    uno::Reference<embed::XStorage>
+        xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
 
     try
     {
         // don't forget to release the storage afterwards!
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
+            embed::StorageFactory::create(m_xContext));
         uno::Sequence<uno::Any> lArgs(2);
         lArgs[0] <<= sCfgName;
         lArgs[1] <<= css::embed::ElementModes::READ;
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
-        uno::Reference<embed::XStorage> xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
+        uno::Reference<embed::XStorage> xUIConfig
+            = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
         if (xUIConfig.is())
         {
-            uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
+            uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2
+                = ui::UIConfigurationManager::create(m_xContext);
             xCfgMgr2->setStorage(xUIConfig);
             xCfgMgr.set(xCfgMgr2, uno::UNO_QUERY_THROW);
         }
@@ -1329,7 +1326,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
         if (xCfgMgr.is())
         {
             // open the configuration and update our UI
-            uno::Reference<ui::XAcceleratorConfiguration> xTempAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_SET_THROW);
+            uno::Reference<ui::XAcceleratorConfiguration> xTempAccMgr(xCfgMgr->getShortCutManager(),
+                                                                      uno::UNO_SET_THROW);
 
             m_xEntriesBox->freeze();
             ResetConfig();
@@ -1353,12 +1351,13 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
             xRootStorage->dispose();
         }
     }
-    catch(const uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch(const uno::Exception&)
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void)
@@ -1366,10 +1365,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     assert(m_pFileDlg);
 
     OUString sCfgName;
-    if ( ERRCODE_NONE == m_pFileDlg->GetError() )
+    if (ERRCODE_NONE == m_pFileDlg->GetError())
         sCfgName = m_pFileDlg->GetPath();
 
-    if ( sCfgName.isEmpty() )
+    if (sCfgName.isEmpty())
         return;
 
     weld::WaitObject aWaitObject(GetFrameWeld());
@@ -1378,40 +1377,42 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
 
     try
     {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
+            embed::StorageFactory::create(m_xContext));
         uno::Sequence<uno::Any> lArgs(2);
         lArgs[0] <<= sCfgName;
         lArgs[1] <<= embed::ElementModes::WRITE;
 
-        xRootStorage.set( xStorageFactory->createInstanceWithArguments(lArgs),
-                          uno::UNO_QUERY_THROW);
+        xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
 
         uno::Reference<embed::XStorage> xUIConfig(
-                            xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
-                            uno::UNO_SET_THROW);
-        uno::Reference<beans::XPropertySet> xUIConfigProps(
-                            xUIConfig,
-                            uno::UNO_QUERY_THROW);
+            xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
+            uno::UNO_SET_THROW);
+        uno::Reference<beans::XPropertySet> xUIConfigProps(xUIConfig, uno::UNO_QUERY_THROW);
 
         // set the correct media type if the storage was new created
         OUString sMediaType;
         xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
         if (sMediaType.isEmpty())
-            xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::Any(OUString("application/vnd.sun.xml.ui.configuration")));
+            xUIConfigProps->setPropertyValue(
+                MEDIATYPE_PROPNAME, uno::Any(OUString("application/vnd.sun.xml.ui.configuration")));
 
-        uno::Reference<ui::XUIConfigurationManager2> xCfgMgr = ui::UIConfigurationManager::create(m_xContext);
+        uno::Reference<ui::XUIConfigurationManager2> xCfgMgr
+            = ui::UIConfigurationManager::create(m_xContext);
         xCfgMgr->setStorage(xUIConfig);
 
         // get the target configuration access and update with all shortcuts
         // which are set currently at the UI!
         // Don't copy the m_xAct content to it... because m_xAct will be updated
         // from the UI on pressing the button "OK" only. And inbetween it's not up to date!
-        uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_SET_THROW);
+        uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(),
+                                                                    uno::UNO_SET_THROW);
         Apply(xTargetAccMgr);
 
         // commit (order is important!)
-        uno::Reference<ui::XUIConfigurationPersistence> xCommit1(xTargetAccMgr, uno::UNO_QUERY_THROW);
-        uno::Reference<ui::XUIConfigurationPersistence> xCommit2(xCfgMgr      , uno::UNO_QUERY_THROW);
+        uno::Reference<ui::XUIConfigurationPersistence> xCommit1(xTargetAccMgr,
+                                                                 uno::UNO_QUERY_THROW);
+        uno::Reference<ui::XUIConfigurationPersistence> xCommit2(xCfgMgr, uno::UNO_QUERY_THROW);
         xCommit1->store();
         xCommit2->store();
 
@@ -1429,44 +1430,46 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
             xRootStorage->dispose();
         }
     }
-    catch(const uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch(const uno::Exception&)
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 }
 
-void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const OUString& rTitle )
+void SfxAcceleratorConfigPage::StartFileDialog(StartFileDialogType nType, const OUString& rTitle)
 {
     bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-    m_pFileDlg.reset(new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetFrameWeld()));
+    m_pFileDlg.reset(
+        new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, GetFrameWeld()));
 
-    m_pFileDlg->SetTitle( rTitle );
-    m_pFileDlg->AddFilter( aFilterAllStr, FILEDIALOG_FILTER_ALL );
-    m_pFileDlg->AddFilter( aFilterCfgStr, "*.cfg" );
-    m_pFileDlg->SetCurrentFilter( aFilterCfgStr );
+    m_pFileDlg->SetTitle(rTitle);
+    m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
+    m_pFileDlg->AddFilter(aFilterCfgStr, "*.cfg");
+    m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
 
-    Link<sfx2::FileDialogHelper*,void> aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
-                                : LINK( this, SfxAcceleratorConfigPage, LoadHdl );
-    m_pFileDlg->StartExecuteModal( aDlgClosedLink );
+    Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
+        = bSave ? LINK(this, SfxAcceleratorConfigPage, SaveHdl)
+                : LINK(this, SfxAcceleratorConfigPage, LoadHdl);
+    m_pFileDlg->StartExecuteModal(aDlgClosedLink);
 }
 
-
-bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet* )
+bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
 {
     Apply(m_xAct);
     try
     {
         m_xAct->store();
     }
-    catch(const uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch(const uno::Exception&)
+    catch (const uno::Exception&)
     {
         return false;
     }
@@ -1474,8 +1477,7 @@ bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-
-void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
+void SfxAcceleratorConfigPage::Reset(const SfxItemSet* rSet)
 {
     // open accelerator configs
     // Note: It initialize some other members too, which are needed here ...
@@ -1485,7 +1487,8 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
     // change the description of the radio button, which switch to the module
     // dependent accelerator configuration
     OUString sButtonText = m_xModuleButton->get_label();
-    sButtonText = m_xModuleButton->strip_mnemonic(sButtonText).replaceFirst("$(MODULE)", m_sModuleUIName);
+    sButtonText
+        = m_xModuleButton->strip_mnemonic(sButtonText).replaceFirst("$(MODULE)", m_sModuleUIName);
     m_xModuleButton->set_label(sButtonText);
 
     if (m_xModule.is())
@@ -1498,11 +1501,11 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
 
     RadioHdl(*m_xOfficeButton);
 
-    const SfxPoolItem* pMacroItem=nullptr;
-    if( SfxItemState::SET == rSet->GetItemState( SID_MACROINFO, true, &pMacroItem ) )
+    const SfxPoolItem* pMacroItem = nullptr;
+    if (SfxItemState::SET == rSet->GetItemState(SID_MACROINFO, true, &pMacroItem))
     {
         m_pMacroInfoItem = &dynamic_cast<const SfxMacroInfoItem&>(*pMacroItem);
-        m_xGroupLBox->SelectMacro( m_pMacroInfoItem );
+        m_xGroupLBox->SelectMacro(m_pMacroInfoItem);
     }
 }
 
@@ -1514,7 +1517,7 @@ sal_Int32 SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) co
         TAccInfo* pUserData = reinterpret_cast<TAccInfo*>(m_xEntriesBox->get_id(i).toInt64());
         if (pUserData)
         {
-            sal_uInt16 nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();
+            sal_uInt16 nCode2 = pUserData->m_aKey.GetCode() + pUserData->m_aKey.GetModifier();
             if (nCode1 == nCode2)
                 return i;
         }
@@ -1522,7 +1525,6 @@ sal_Int32 SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) co
 
     return -1;
 }
-
 
 OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 {
@@ -1539,12 +1541,13 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
                 return sLabel;
         }
     }
-    catch(const uno::RuntimeException&)
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch(const uno::Exception&)
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 
     // may be it's a style URL .. they must be handled special
     SfxStyleInfo_Impl aStyle;
@@ -1561,13 +1564,13 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 /*
  * Remove entries which doesn't contain the search term
  */
-int SfxAcceleratorConfigPage::applySearchFilter(OUString const & rSearchTerm)
+int SfxAcceleratorConfigPage::applySearchFilter(OUString const& rSearchTerm)
 {
     if (rSearchTerm.isEmpty())
         return -1;
 
     m_options.searchString = rSearchTerm;
-    utl::TextSearch textSearch( m_options );
+    utl::TextSearch textSearch(m_options);
 
     for (int i = m_xFunctionBox->n_children(); i > 0; --i)
     {
@@ -1576,7 +1579,7 @@ int SfxAcceleratorConfigPage::applySearchFilter(OUString const & rSearchTerm)
         sal_Int32 aStartPos = 0;
         sal_Int32 aEndPos = aStr.getLength();
 
-        if (!textSearch.SearchForward( aStr, &aStartPos, &aEndPos ))
+        if (!textSearch.SearchForward(aStr, &aStartPos, &aEndPos))
             m_xFunctionBox->remove(nEntry);
     }
 
