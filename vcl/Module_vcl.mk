@@ -25,21 +25,21 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Package_theme_definitions \
     Package_tipoftheday \
     UIConfig_vcl \
-	$(if $(filter WNT,$(OS)), \
-		Package_opengl_blacklist ) \
-	$(if $(filter SKIA,$(BUILD_TYPE)), \
-		Package_skia_blacklist ) \
+    $(if $(filter WNT,$(OS)), \
+        Package_opengl_blacklist ) \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        Package_skia_blacklist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-		$(if $(ENABLE_MACOSX_SANDBOX),, \
-			$(if $(DISABLE_GUI),, \
-				Executable_ui-previewer)) \
-		$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
-			$(if $(DISABLE_GUI),, \
-				Executable_vcldemo \
-				Executable_icontest \
-				Executable_visualbackendtest \
-				Executable_mtfdemo ))) \
+        $(if $(ENABLE_MACOSX_SANDBOX),, \
+            $(if $(DISABLE_GUI),, \
+                Executable_ui-previewer)) \
+        $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
+            $(if $(DISABLE_GUI),, \
+                Executable_vcldemo \
+                Executable_icontest \
+                Executable_visualbackendtest \
+                Executable_mtfdemo ))) \
 ))
 
 ifeq ($(CROSS_COMPILING)$(DISABLE_DYNLOADING),)
@@ -184,53 +184,53 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,vcl,\
-	CppunitTest_vcl_lifecycle \
-	CppunitTest_vcl_bitmap_test \
-	CppunitTest_vcl_bitmapprocessor_test \
-	CppunitTest_vcl_graphic_test \
-	CppunitTest_vcl_fontcharmap \
-	CppunitTest_vcl_font \
-	CppunitTest_vcl_fontfeature \
-	CppunitTest_vcl_fontmetric \
-	CppunitTest_vcl_complextext \
-	CppunitTest_vcl_filters_test \
-	CppunitTest_vcl_mnemonic \
-	CppunitTest_vcl_outdev \
-	CppunitTest_vcl_app_test \
-	CppunitTest_vcl_jpeg_read_write_test \
-	CppunitTest_vcl_svm_test \
-	CppunitTest_vcl_errorhandler \
-	CppunitTest_vcl_bitmap_render_test \
-	CppunitTest_vcl_apitests \
-	CppunitTest_vcl_png_test \
-	CppunitTest_vcl_widget_definition_reader_test \
-	CppunitTest_vcl_backend_test \
-	CppunitTest_vcl_blocklistparser_test \
-	CppunitTest_vcl_type_serializer_test \
+    CppunitTest_vcl_lifecycle \
+    CppunitTest_vcl_bitmap_test \
+    CppunitTest_vcl_bitmapprocessor_test \
+    CppunitTest_vcl_graphic_test \
+    CppunitTest_vcl_fontcharmap \
+    CppunitTest_vcl_font \
+    CppunitTest_vcl_fontfeature \
+    CppunitTest_vcl_fontmetric \
+    CppunitTest_vcl_complextext \
+    CppunitTest_vcl_filters_test \
+    CppunitTest_vcl_mnemonic \
+    CppunitTest_vcl_outdev \
+    CppunitTest_vcl_app_test \
+    CppunitTest_vcl_jpeg_read_write_test \
+    CppunitTest_vcl_svm_test \
+    CppunitTest_vcl_errorhandler \
+    CppunitTest_vcl_bitmap_render_test \
+    CppunitTest_vcl_apitests \
+    CppunitTest_vcl_png_test \
+    CppunitTest_vcl_widget_definition_reader_test \
+    CppunitTest_vcl_backend_test \
+    CppunitTest_vcl_blocklistparser_test \
+    CppunitTest_vcl_type_serializer_test \
 ))
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_check_targets,vcl,\
-	CppunitTest_vcl_timer \
+    CppunitTest_vcl_timer \
 ))
 endif
 
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Module_add_check_targets,vcl,\
-	CppunitTest_vcl_timer \
+    CppunitTest_vcl_timer \
 ))
 endif
 
 # Is any configuration missing?
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_check_targets,vcl,\
-	CppunitTest_vcl_timer \
+    CppunitTest_vcl_timer \
 ))
 endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_check_targets,vcl,\
-	CppunitTest_vcl_timer \
+    CppunitTest_vcl_timer \
 ))
 endif
 
@@ -247,7 +247,7 @@ endif
 
 ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_slowcheck_targets,vcl,\
-	CppunitTest_vcl_pdfexport \
+    CppunitTest_vcl_pdfexport \
 ))
 endif
 
