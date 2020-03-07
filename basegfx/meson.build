@@ -53,5 +53,6 @@ basegfx_lib = shared_library('basegfxlo',
   cpp_args: ['-DBASEGFX_DLLIMPLEMENTATION',
              '-DLIBO_INTERNAL_ONLY'],
   link_with: [sal_lib, cppu_lib, cppuhelper_lib],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )

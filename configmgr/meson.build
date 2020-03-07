@@ -44,5 +44,6 @@ configmgr_lib = shared_library('configmgrlo',
     i18nlangtag_lib,
   ],
   install: true,
+  gnu_symbol_visibility: 'hidden',
   dependencies: [libxml_dep, zlib_dep],
 )

@@ -707,6 +707,7 @@ scui_lib = shared_library('scuilo',
     vcl_lib,
   ],
   dependencies: [broken_mdds_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 # I had to disable this because it gave a compiler error:

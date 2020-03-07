@@ -5,8 +5,10 @@ salhelper_lib = shared_library('salhelperlo',
   'source/thread.cxx',
   'source/timer.cxx',
   include_directories: [main_inc],
-  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             '-DSALHELPER_DLLIMPLEMENTATION'],
   link_with: sal_lib,
+  gnu_symbol_visibility: 'hidden',
   install: true,
-  )
+)
 

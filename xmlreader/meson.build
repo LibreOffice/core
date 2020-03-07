@@ -6,5 +6,6 @@ xmlreader_lib = shared_library('xmlreaderlo',
   include_directories: [main_inc, udkh_inc],
   link_with: [cppu_lib, sal_lib],
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )

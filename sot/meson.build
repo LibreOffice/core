@@ -20,5 +20,6 @@ sot_lib = shared_library('sotlo',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, salhelper_lib, sal_lib, i18nlangtag_lib, tl_lib, ucbhelper_lib, utl_lib],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )

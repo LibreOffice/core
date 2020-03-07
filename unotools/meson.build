@@ -73,5 +73,6 @@ utl_lib = shared_library('utllo',
   include_directories: [main_inc, udkh_inc, offapi_inc, setup_inc, 'inc'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, i18nlangtag_lib, tl_lib, ucbhelper_lib, tl_lib, salhelper_lib, sal_lib],
   dependencies:[boost_locale_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )

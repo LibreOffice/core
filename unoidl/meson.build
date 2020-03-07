@@ -19,6 +19,7 @@ unoidl_lib = shared_library('unoidllo',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, 'source'],
   link_with: [reg_lib, salhelper_lib, sal_lib],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 

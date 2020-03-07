@@ -376,6 +376,7 @@ sd_lib = shared_library('sdlo',
   link_with: [avmedia_lib, basegfx_lib, canvastools_lib, comphelper_lib, cppcanvas_lib, cppu_lib, cppuhelper_lib, drawinglayer_lib, editeng_lib, i18nlangtag_lib, i18nutil_lib, msfilter_lib, oox_lib, sal_lib, salhelper_lib, sax_lib, sb_lib, sfx_lib, sot_lib, svl_lib, svt_lib, svxcore_lib, svx_lib, tk_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib,
 ],
   dependencies: [libxml_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 
@@ -414,6 +415,7 @@ sdui_lib = shared_library('sduilo',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/ui/inc', setup_inc],
   link_with: [basegfx_lib, comphelper_lib, cppcanvas_lib, cppu_lib, cppuhelper_lib, editeng_lib, i18nlangtag_lib, fwl_lib, fwe_lib, sal_lib, salhelper_lib, sd_lib, sfx_lib, sot_lib, svl_lib, svt_lib, svxcore_lib, svx_lib, tl_lib, utl_lib, vcl_lib, cui_lib],
   dependencies: [],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 
@@ -439,5 +441,6 @@ sdfilt_lib = shared_library('sdfiltlo',
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc', 'source/ui/inc', '../oox'],
   link_with: [comphelper_lib, cppu_lib, cppuhelper_lib, editeng_lib, i18nlangtag_lib, i18nutil_lib, msfilter_lib, oox_lib, sal_lib, sax_lib, sd_lib, sfx_lib, sot_lib, svl_lib, svt_lib, svxcore_lib, tl_lib, ucbhelper_lib, utl_lib, vcl_lib, basegfx_lib],
   dependencies: [],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
