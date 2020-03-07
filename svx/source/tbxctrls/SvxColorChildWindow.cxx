@@ -18,7 +18,6 @@
  */
 
 #include <svx/SvxColorChildWindow.hxx>
-#include <sfx2/dockwin.hxx>
 #include <svx/svxids.hrc>
 #include <colrctrl.hxx>
 

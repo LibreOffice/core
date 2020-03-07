@@ -25,18 +25,12 @@
 #include <libxml/xmlwriter.h>
 
 #include <cell.hxx>
-#include "cellrange.hxx"
 #include <o3tl/safeint.hxx>
 #include <tablemodel.hxx>
-#include "tablerow.hxx"
-#include "tablerows.hxx"
-#include "tablecolumn.hxx"
-#include "tablecolumns.hxx"
 #include "tablelayouter.hxx"
 #include <svx/svdotable.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/svdmodel.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star::uno;

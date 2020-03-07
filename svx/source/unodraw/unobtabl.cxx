@@ -17,20 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/itempool.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <svl/itemset.hxx>
 #include <svx/xit.hxx>
 #include "UnoNameItemTable.hxx"
 
 #include <svx/xbtmpit.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/unomid.hxx>
-#include <editeng/unoprnms.hxx>
 #include <svx/unofill.hxx>
-#include <editeng/memberids.h>
 #include <com/sun/star/awt/XBitmap.hpp>
 
 using namespace ::com::sun::star;

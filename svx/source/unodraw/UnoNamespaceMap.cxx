@@ -29,14 +29,12 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itempool.hxx>
-#include <svx/unoapi.hxx>
 #include <editeng/xmlcnitm.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 
 namespace svx

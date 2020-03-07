@@ -34,7 +34,6 @@
 #include <editeng/udlnitem.hxx>
 
 #include <cell.hxx>
-#include <celltypes.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editeng.hxx>

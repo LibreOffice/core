@@ -21,38 +21,25 @@
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <vcl/toolbox.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
 #include <svl/itempool.hxx>
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
-#include <svtools/popupmenucontrollerbase.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-
-#include <editeng/eeitem.hxx>
-#include <editeng/frmdiritem.hxx>
 
 #include <svx/fmmodel.hxx>
-#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdoutl.hxx>
 
 #include <svx/gallery.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/fontworkgallery.hxx>
 
 #include <algorithm>
 #include <memory>
-
-#include <bitmaps.hlst>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

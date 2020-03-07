@@ -21,9 +21,7 @@
 #include "chinese_translation_unodialog.hxx"
 #include "chinese_translationdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 

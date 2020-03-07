@@ -18,15 +18,11 @@
  */
 
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
 
-#include <vector>
 #include "UnoNameItemTable.hxx"
 #include <svx/xlndsit.hxx>
 #include <svx/unomid.hxx>
 
-#include <svx/xdash.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unofill.hxx>
 

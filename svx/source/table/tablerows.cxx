@@ -20,7 +20,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <cell.hxx>
+#include <tablemodel.hxx>
 #include "tablerow.hxx"
 #include "tablerows.hxx"
 

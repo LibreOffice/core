@@ -27,16 +27,13 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
-#include <svx/unopage.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/editeng.hxx>
 #include <tools/debug.hxx>
 
-#include <svx/unoapi.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

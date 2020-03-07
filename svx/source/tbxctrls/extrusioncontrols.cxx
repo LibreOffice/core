@@ -18,23 +18,11 @@
  */
 
 
-#include <string>
-
 #include <svtools/toolbarmenu.hxx>
-#include <svx/colorwindow.hxx>
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
-#include <svl/intitem.hxx>
-#include <editeng/colritem.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>
-#include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <helpids.h>

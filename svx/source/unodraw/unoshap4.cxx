@@ -26,36 +26,30 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
-#include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <sfx2/frmdescr.hxx>
-#include <vcl/svapp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
 
-#include <sot/storage.hxx>
 #include <sot/exchange.hxx>
-#include <vcl/FilterConfigItem.hxx>
 
 #include <svx/svdmodel.hxx>
 #include "shapeimpl.hxx"
 
 #include <svx/unoshprp.hxx>
 
-#include <svx/unoapi.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/globname.hxx>
+#include <tools/stream.hxx>
 
 #include <config_features.h>
 
