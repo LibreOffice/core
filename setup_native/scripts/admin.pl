@@ -19,6 +19,7 @@
 use Cwd;
 use File::Copy;
 use File::Temp qw/ :mktemp /;
+use File::Path qw(make_path);
 
 #################################################################################
 # Global settings
@@ -134,7 +135,7 @@ sub controlparameter
 
     if ( ! -f $databasepath ) { exit_program("ERROR: Did not find msi database in directory $databasepath."); }
 
-    if ( ! -d $targetdir ) { create_directories($targetdir); }
+    if ( ! -d $targetdir ) { make_path($targetdir); }
 }
 
 #############################################################################
@@ -349,7 +350,7 @@ sub create_directory
 {
     my ($directory) = @_;
 
-    if ( ! -d $directory ) { mkdir($directory, 0775); }
+    make_path($directory);
 }
 
 ##############################################################
@@ -731,7 +732,7 @@ sub create_directory_tree
             my $dirname = $dirhash->{$dir}->{'DefaultDir'};
             # Create the directory
             my $newdir = $fulldir . $separator . $dirname;
-            if ( ! -f $newdir ) { mkdir $newdir; }
+            if ( ! -f $newdir ) { create_directory($newidr); }
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
@@ -805,7 +806,7 @@ sub create_directory_with_privileges
     if (!(-d $directory))
     {
         my $localprivileges = oct("0".$privileges); # changes "777" to 0777
-        $returnvalue = mkdir($directory, $localprivileges);
+        $returnvalue = make_path($directory, { chmod => $localprivileges });
 
         if ($returnvalue)
         {
@@ -834,7 +835,7 @@ sub create_pid_directory
 
     $directory = $directory . "_" . $pid . $time;
 
-    if ( ! -d $directory ) { create_directory($directory); }
+    if ( ! -d $directory ) { make_path($directory); }
     else { exit_program("ERROR: Directory $directory already exists!"); }
 
     return $directory;
@@ -1158,7 +1159,7 @@ print("\nmsi database: $databasepath\n");
 print("Destination directory: $targetdir\n" );
 
 my $helperdir = $temppath . $separator . "installhelper";
-create_directory($helperdir);
+make_path($helperdir);
 
 # Get File.idt, Component.idt and Directory.idt from database
 
@@ -1167,7 +1168,7 @@ extract_tables_from_database($databasepath, $helperdir, $tablelist);
 
 # Set unpackdir
 my $unpackdir = $helperdir . $separator . "unpack";
-create_directory($unpackdir);
+make_path($unpackdir);
 
 # Reading media table to check for internal cabinet files
 my $filename = $helperdir . $separator . "Media.idt";
@@ -1182,7 +1183,7 @@ if ( $contains_internal_cabfiles )
 {
     # Set unpackdir
     my $cabdir = $helperdir . $separator . "internal_cabs";
-    create_directory($cabdir);
+    make_path($cabdir);
     my $from = cwd();
     chdir($cabdir);
     # Exclude all cabinet files from database
