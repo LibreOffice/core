@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_sdk_api,emfio))
 
 $(eval $(call gb_Library_use_libraries,emfio,\
     basegfx \
+    drawinglayercore \
     drawinglayer \
     cppu \
     cppuhelper \

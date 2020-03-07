@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_array_functions_test, \
     cppu \
     cppuhelper \
     drawinglayer \
+    drawinglayercore \
     editeng \
     for \
     forui \

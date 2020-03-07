@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_processors, \
 	sal \
 	salhelper \
 	drawinglayer \
+	drawinglayercore \
 	vcl \
 	test \
 	tl \
