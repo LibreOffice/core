@@ -79,7 +79,7 @@
         <info>
           <desc>
             Describes sidebar mode.
-            Arrow - sidebar coollapsed, showing the 'open' arrow button
+            Arrow - sidebar collapsed, showing the 'open' arrow button
             Tabs - sidebar is showing only tab bars
             Opened - sidebar fully opened
           </desc>
