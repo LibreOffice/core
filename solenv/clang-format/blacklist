@@ -2641,7 +2641,6 @@ cui/source/customize/CommandCategoryListBox.cxx
 cui/source/customize/SvxConfigPageHelper.cxx
 cui/source/customize/SvxMenuConfigPage.cxx
 cui/source/customize/SvxToolbarConfigPage.cxx
-cui/source/customize/acccfg.cxx
 cui/source/customize/cfg.cxx
 cui/source/customize/cfgutil.cxx
 cui/source/customize/eventdlg.cxx
@@ -2694,7 +2693,6 @@ cui/source/inc/SpellDialog.hxx
 cui/source/inc/SvxConfigPageHelper.hxx
 cui/source/inc/SvxMenuConfigPage.hxx
 cui/source/inc/SvxToolbarConfigPage.hxx
-cui/source/inc/acccfg.hxx
 cui/source/inc/align.hxx
 cui/source/inc/autocdlg.hxx
 cui/source/inc/backgrnd.hxx
