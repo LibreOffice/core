@@ -363,7 +363,6 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -394,7 +393,6 @@ void SwTiledRenderingTest::testPostKeyEvent()
 
 void SwTiledRenderingTest::testPostMouseEvent()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -438,8 +436,6 @@ void SwTiledRenderingTest::testSetTextSelection()
 
 void SwTiledRenderingTest::testGetTextSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
     // No crash, just empty output for unexpected mime type.
     CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "foo/bar"));
@@ -521,8 +517,6 @@ void SwTiledRenderingTest::testResetSelection()
 
 void SwTiledRenderingTest::testInsertShape()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
 
@@ -551,8 +545,6 @@ static void lcl_search(bool bBackward)
 
 void SwTiledRenderingTest::testSearch()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -618,8 +610,6 @@ void SwTiledRenderingTest::testSearchViewArea()
 
 void SwTiledRenderingTest::testSearchTextFrame()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -652,7 +642,6 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
 
 void SwTiledRenderingTest::testDocumentSizeChanged()
 {
-    comphelper::LibreOfficeKit::setActive();
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -670,8 +659,6 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
 
 void SwTiledRenderingTest::testSearchAll()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -690,7 +677,6 @@ void SwTiledRenderingTest::testSearchAll()
 
 void SwTiledRenderingTest::testSearchAllNotifications()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -713,8 +699,6 @@ void SwTiledRenderingTest::testSearchAllNotifications()
 
 void SwTiledRenderingTest::testPageDownInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -731,8 +715,6 @@ void SwTiledRenderingTest::testPageDownInvalidation()
 
 void SwTiledRenderingTest::testPartHash()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     int nParts = pXTextDocument->getParts();
     for (int it = 0; it < nParts; it++)
@@ -956,8 +938,6 @@ public:
 
 void SwTiledRenderingTest::testMissingInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -990,8 +970,6 @@ void SwTiledRenderingTest::testMissingInvalidation()
 
 void SwTiledRenderingTest::testViewCursors()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
     SfxLokHelper::createView();
@@ -1027,8 +1005,6 @@ void SwTiledRenderingTest::testViewCursors()
 
 void SwTiledRenderingTest::testShapeViewCursors()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document and create a view, so we have 2 ones.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -1066,8 +1042,6 @@ void SwTiledRenderingTest::testShapeViewCursors()
 
 void SwTiledRenderingTest::testViewCursorVisibility()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -1092,8 +1066,6 @@ void SwTiledRenderingTest::testViewCursorVisibility()
 
 void SwTiledRenderingTest::testViewCursorCleanup()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -1124,8 +1096,6 @@ void SwTiledRenderingTest::testViewCursorCleanup()
 
 void SwTiledRenderingTest::testViewLock()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -1152,7 +1122,6 @@ void SwTiledRenderingTest::testViewLock()
 void SwTiledRenderingTest::testTextEditViewInvalidations()
 {
     // Load a document that has a shape and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
     SfxLokHelper::createView();
@@ -1183,7 +1152,6 @@ void SwTiledRenderingTest::testTextEditViewInvalidations()
 void SwTiledRenderingTest::testUndoInvalidations()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
     int nView1 = SfxLokHelper::getView();
@@ -1216,7 +1184,6 @@ void SwTiledRenderingTest::testUndoInvalidations()
 void SwTiledRenderingTest::testUndoLimiting()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
@@ -1245,7 +1212,6 @@ void SwTiledRenderingTest::testUndoLimiting()
 void SwTiledRenderingTest::testUndoShapeLimiting()
 {
     // Load a document and create a view.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
@@ -1283,7 +1249,6 @@ void SwTiledRenderingTest::testUndoShapeLimiting()
 void SwTiledRenderingTest::testUndoDispatch()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
@@ -1323,7 +1288,6 @@ void SwTiledRenderingTest::testUndoDispatch()
 void SwTiledRenderingTest::testUndoRepairDispatch()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
@@ -1366,7 +1330,6 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
 void SwTiledRenderingTest::testShapeTextUndoShells()
 {
     // Load a document and create a view.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     sal_Int32 nView1 = SfxLokHelper::getView();
 
@@ -1391,7 +1354,6 @@ void SwTiledRenderingTest::testShapeTextUndoShells()
 void SwTiledRenderingTest::testShapeTextUndoGroupShells()
 {
     // Load a document and create a view.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     ViewCallback aView1(SfxViewShell::Current());
     sal_Int32 nView1 = SfxLokHelper::getView();
@@ -1443,7 +1405,6 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
 void SwTiledRenderingTest::testTrackChanges()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
 
     // Turn on track changes, type "zzz" at the end, and move to the start.
@@ -1477,7 +1438,6 @@ void SwTiledRenderingTest::testTrackChanges()
 void SwTiledRenderingTest::testTrackChangesCallback()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -1505,7 +1465,6 @@ void SwTiledRenderingTest::testTrackChangesCallback()
 void SwTiledRenderingTest::testRedlineUpdateCallback()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -1545,7 +1504,6 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
 void SwTiledRenderingTest::testSetViewGraphicSelection()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("frame.odt");
     int nView1 = SfxLokHelper::getView();
     ViewCallback aView1(SfxViewShell::Current());
@@ -1571,7 +1529,6 @@ void SwTiledRenderingTest::testSetViewGraphicSelection()
 void SwTiledRenderingTest::testCreateViewGraphicSelection()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("frame.odt");
     ViewCallback aView1(SfxViewShell::Current());
 
@@ -1605,7 +1562,6 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
 void SwTiledRenderingTest::testCreateViewTextSelection()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
 
@@ -1631,7 +1587,6 @@ void SwTiledRenderingTest::testCreateViewTextSelection()
 void SwTiledRenderingTest::testRedlineColors()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
 
     // Turn on track changes, type "zzz" at the end.
@@ -1652,7 +1607,6 @@ void SwTiledRenderingTest::testRedlineColors()
 void SwTiledRenderingTest::testCommentEndTextEdit()
 {
     // Create a document, type a character and remember the cursor position.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
     ViewCallback aView1(SfxViewShell::Current());
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
@@ -1690,7 +1644,6 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
 void SwTiledRenderingTest::testCommentInsert()
 {
     // Load a document with an as-char image in it.
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
     SwXTextDocument* pXTextDocument = createDoc("image-comment.odt");
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
@@ -1724,7 +1677,6 @@ void SwTiledRenderingTest::testCommentInsert()
 void SwTiledRenderingTest::testCursorPosition()
 {
     // Load a document and register a callback, should get an own cursor.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
     ViewCallback aView1(SfxViewShell::Current());
 
@@ -1745,7 +1697,6 @@ void SwTiledRenderingTest::testPaintCallbacks()
     // paint <-> invalidate loop.
 
     // Load a document and register a callback for the first view.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc();
     ViewCallback aView1(SfxViewShell::Current());
 
@@ -1766,7 +1717,6 @@ void SwTiledRenderingTest::testPaintCallbacks()
 void SwTiledRenderingTest::testUndoRepairResult()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
@@ -1802,7 +1752,6 @@ void SwTiledRenderingTest::testUndoRepairResult()
 void SwTiledRenderingTest::testRedoRepairResult()
 {
     // Load a document and create two views.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
@@ -1861,8 +1810,6 @@ void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwVi
 
 void SwTiledRenderingTest::testDisableUndoRepair()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
@@ -1923,7 +1870,6 @@ void SwTiledRenderingTest::testDisableUndoRepair()
 void SwTiledRenderingTest::testAllTrackedChanges()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     createDoc("dummy.fodt");
 
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, uno::UNO_QUERY);
@@ -1996,8 +1942,6 @@ void SwTiledRenderingTest::testAllTrackedChanges()
 
 void SwTiledRenderingTest::testDocumentRepair()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     // view #1
@@ -2069,8 +2013,6 @@ void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, 
 
 void SwTiledRenderingTest::testPageHeader()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     createDoc("dummy.fodt");
     SfxViewShell* pViewShell = SfxViewShell::Current();
     // Check Page Header State
@@ -2096,8 +2038,6 @@ void SwTiledRenderingTest::testPageHeader()
 
 void SwTiledRenderingTest::testPageFooter()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     createDoc("dummy.fodt");
     SfxViewShell* pViewShell = SfxViewShell::Current();
     // Check Page Footer State
@@ -2123,8 +2063,6 @@ void SwTiledRenderingTest::testPageFooter()
 
 void SwTiledRenderingTest::testTdf115088()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // We have three lines in the test document and we try to copy the second and third line
     // To the beginning of the document
     SwXTextDocument* pXTextDocument = createDoc("tdf115088.odt");
@@ -2159,7 +2097,6 @@ void SwTiledRenderingTest::testTdf115088()
 void SwTiledRenderingTest::testRedlineField()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
 
@@ -2180,7 +2117,6 @@ void SwTiledRenderingTest::testRedlineField()
 
 void SwTiledRenderingTest::testIMESupport()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
 
@@ -2212,7 +2148,6 @@ void SwTiledRenderingTest::testIMESupport()
 void SwTiledRenderingTest::testSplitNodeRedlineCallback()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("splitnode_redline_callback.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -2271,7 +2206,6 @@ void SwTiledRenderingTest::testSplitNodeRedlineCallback()
 void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
 {
     // Load a document.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("removenode_redline_callback.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -2330,8 +2264,6 @@ void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
 
 void SwTiledRenderingTest::testVisCursorInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1(SfxViewShell::Current());
     int nView1 = SfxLokHelper::getView();
@@ -2403,8 +2335,6 @@ void SwTiledRenderingTest::testVisCursorInvalidation()
 
 void SwTiledRenderingTest::testDeselectCustomShape()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -2425,7 +2355,6 @@ void SwTiledRenderingTest::testDeselectCustomShape()
 void SwTiledRenderingTest::testSemiTransparent()
 {
     // Load a document where the top left tile contains a semi-transparent rectangle shape.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("semi-transparent.odt");
 
     // Render a larger area, and then get the color of the bottom right corner of our tile.
@@ -2454,7 +2383,6 @@ void SwTiledRenderingTest::testSemiTransparent()
 
 void SwTiledRenderingTest::testAnchorTypes()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwView* pView = pXTextDocument->GetDocShell()->GetView();
@@ -2471,7 +2399,6 @@ void SwTiledRenderingTest::testAnchorTypes()
 
 void SwTiledRenderingTest::testLanguageStatus()
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwView* pView = pXTextDocument->GetDocShell()->GetView();
     std::unique_ptr<SfxPoolItem> pItem;
@@ -2488,7 +2415,6 @@ void SwTiledRenderingTest::testRedlineNotificationDuringSave()
 {
     // Load a document with redlines which are hidden at a layout level.
     // It's an empty document, just settings.xml and content.xml are custom.
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("redline-notification-during-save.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
@@ -2504,7 +2430,6 @@ void SwTiledRenderingTest::testRedlineNotificationDuringSave()
 
 void SwTiledRenderingTest::testHyperlink()
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
     SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
