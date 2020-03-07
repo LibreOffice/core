@@ -27,8 +27,7 @@ private:
     std::unique_ptr<weld::Widget> m_xOneDriveBox;
 
 public:
-    AuthFallbackDlg(weld::Window* pParent, const OUString& instructions,
-                    const OUString& url);
+    AuthFallbackDlg(weld::Window* pParent, const OUString& instructions, const OUString& url);
     virtual ~AuthFallbackDlg() override;
 
     OUString GetCode() const;

@@ -25,6 +25,7 @@ class LockFailedQueryBox
 {
 private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+
 public:
     LockFailedQueryBox(weld::Window* pParent, const std::locale& rResLocale);
     short run() { return m_xQueryBox->run(); }
