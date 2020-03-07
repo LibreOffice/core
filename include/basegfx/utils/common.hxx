@@ -21,7 +21,7 @@
 
 namespace basegfx
 {
-// The axis or dimension in a 2D coordiante system
+// The axis or dimension in a 2D coordinate system
 enum class Axis2D
 {
     X,
