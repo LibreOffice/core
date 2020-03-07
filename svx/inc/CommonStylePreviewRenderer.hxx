@@ -23,7 +23,6 @@ class SvxFont;
 
 namespace svx
 {
-
 class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
     std::unique_ptr<SvxFont> m_pFont;
@@ -39,7 +38,8 @@ public:
 
     virtual bool recalculate() override;
     virtual Size getRenderSize() override;
-    virtual bool render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) override;
+    virtual bool render(const tools::Rectangle& aRectangle,
+                        RenderAlign eRenderAlign = RenderAlign::CENTER) override;
 };
 
 } // end namespace svx

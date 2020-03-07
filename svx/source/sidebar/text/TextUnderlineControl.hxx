@@ -22,8 +22,8 @@
 
 #include <svtools/toolbarmenu.hxx>
 
-namespace svx {
-
+namespace svx
+{
 class TextUnderlinePopup;
 
 class TextUnderlineControl final : public WeldToolbarPopup
@@ -54,7 +54,6 @@ private:
     DECL_LINK(PBClickHdl, weld::Button&, void);
 };
 }
-
 
 #endif
 

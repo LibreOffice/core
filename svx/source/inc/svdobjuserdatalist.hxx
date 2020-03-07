@@ -19,7 +19,7 @@ class SdrObjUserData;
 
 class SdrObjUserDataList
 {
-    typedef std::vector<std::unique_ptr<SdrObjUserData> > ListType;
+    typedef std::vector<std::unique_ptr<SdrObjUserData>> ListType;
     ListType maList;
 
 public:

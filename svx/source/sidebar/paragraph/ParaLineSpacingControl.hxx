@@ -23,8 +23,8 @@
 
 class SvxLineSpacingItem;
 
-namespace svx {
-
+namespace svx
+{
 class SvxLineSpacingToolBoxControl;
 
 class ParaLineSpacingControl : public WeldToolbarPopup
@@ -41,7 +41,7 @@ public:
 private:
     rtl::Reference<SvxLineSpacingToolBoxControl> mxControl;
 
-    MapUnit                        meLNSpaceUnit;
+    MapUnit meLNSpaceUnit;
 
     std::unique_ptr<weld::Button> mxSpacing1Button;
     std::unique_ptr<weld::Button> mxSpacing115Button;
@@ -75,7 +75,6 @@ private:
     DECL_LINK(LineSPDistAtHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PredefinedValuesHandler, weld::Button&, void);
 };
-
 }
 
 #endif

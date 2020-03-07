@@ -13229,7 +13229,6 @@ svtools/source/uno/wizard/wizardshell.cxx
 svtools/source/uno/wizard/wizardshell.hxx
 svx/inc/AccessibleTableShape.hxx
 svx/inc/AffineMatrixItem.hxx
-svx/inc/CommonStylePreviewRenderer.hxx
 svx/inc/DescriptionGenerator.hxx
 svx/inc/GalleryControl.hxx
 svx/inc/XPropertyTable.hxx
@@ -13359,7 +13358,6 @@ svx/inc/textchaincursor.hxx
 svx/inc/textchainflow.hxx
 svx/inc/uiobject.hxx
 svx/inc/unomlstr.hxx
-svx/inc/xftshtit.hxx
 svx/inc/xpolyimp.hxx
 svx/qa/unit/svdraw/test_SdrTextObject.cxx
 svx/qa/unit/svx-dialogs-test.cxx
@@ -13405,7 +13403,6 @@ svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx
 svx/source/dialog/ClassificationEditView.hxx
 svx/source/dialog/SafeModeDialog.cxx
-svx/source/dialog/SafeModeDialog.hxx
 svx/source/dialog/SafeModeUI.cxx
 svx/source/dialog/SpellDialogChildWindow.cxx
 svx/source/dialog/SvxNumOptionsTabPageHelper.cxx
@@ -13436,14 +13433,12 @@ svx/source/dialog/frmsel.cxx
 svx/source/dialog/graphctl.cxx
 svx/source/dialog/grfflt.cxx
 svx/source/dialog/hdft.cxx
-svx/source/dialog/hexcolorcontrol.cxx
 svx/source/dialog/hyperdlg.cxx
 svx/source/dialog/imapdlg.cxx
 svx/source/dialog/imapimp.hxx
 svx/source/dialog/imapwnd.cxx
 svx/source/dialog/imapwnd.hxx
 svx/source/dialog/langbox.cxx
-svx/source/dialog/linkwarn.cxx
 svx/source/dialog/measctrl.cxx
 svx/source/dialog/optgrid.cxx
 svx/source/dialog/pagectrl.cxx
@@ -13469,7 +13464,6 @@ svx/source/dialog/svxruler.cxx
 svx/source/dialog/swframeexample.cxx
 svx/source/dialog/swframeposstrings.cxx
 svx/source/dialog/txencbox.cxx
-svx/source/dialog/txenctab.cxx
 svx/source/engine3d/camera3d.cxx
 svx/source/engine3d/cube3d.cxx
 svx/source/engine3d/deflt3d.cxx
@@ -13568,7 +13562,6 @@ svx/source/inc/ShapesUtil.hxx
 svx/source/inc/cell.hxx
 svx/source/inc/celltypes.hxx
 svx/source/inc/charmapacc.hxx
-svx/source/inc/clonelist.hxx
 svx/source/inc/datalistener.hxx
 svx/source/inc/datanavi.hxx
 svx/source/inc/delayedevent.hxx
@@ -13605,7 +13598,6 @@ svx/source/inc/gridcols.hxx
 svx/source/inc/sdbdatacolumn.hxx
 svx/source/inc/sqlparserclient.hxx
 svx/source/inc/svdobjplusdata.hxx
-svx/source/inc/svdobjuserdatalist.hxx
 svx/source/inc/svdoutlinercache.hxx
 svx/source/inc/svxpixelctlaccessiblecontext.hxx
 svx/source/inc/svxrectctaccessiblecontext.hxx
@@ -13776,13 +13768,11 @@ svx/source/sidebar/media/MediaPlaybackPanel.hxx
 svx/source/sidebar/nbdtmg.cxx
 svx/source/sidebar/nbdtmgfact.cxx
 svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx
-svx/source/sidebar/paragraph/ParaLineSpacingControl.hxx
 svx/source/sidebar/paragraph/ParaLineSpacingPopup.cxx
 svx/source/sidebar/paragraph/ParaPropertyPanel.cxx
 svx/source/sidebar/paragraph/ParaPropertyPanel.hxx
 svx/source/sidebar/paragraph/ParaSpacingControl.cxx
 svx/source/sidebar/paragraph/ParaSpacingWindow.cxx
-svx/source/sidebar/paragraph/ParaSpacingWindow.hxx
 svx/source/sidebar/possize/PosSizePropertyPanel.cxx
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx
 svx/source/sidebar/shadow/ShadowPropertyPanel.cxx
@@ -13797,7 +13787,6 @@ svx/source/sidebar/text/TextCharacterSpacingPopup.cxx
 svx/source/sidebar/text/TextPropertyPanel.cxx
 svx/source/sidebar/text/TextPropertyPanel.hxx
 svx/source/sidebar/text/TextUnderlineControl.cxx
-svx/source/sidebar/text/TextUnderlineControl.hxx
 svx/source/sidebar/text/TextUnderlinePopup.cxx
 svx/source/sidebar/tools/ValueSetWithTextControl.cxx
 svx/source/smarttags/SmartTagMgr.cxx
@@ -13958,7 +13947,6 @@ svx/source/unodialogs/textconversiondlgs/chinese_translationdialog.cxx
 svx/source/unodialogs/textconversiondlgs/chinese_translationdialog.hxx
 svx/source/unodialogs/textconversiondlgs/services.cxx
 svx/source/unodraw/UnoGraphicExporter.cxx
-svx/source/unodraw/UnoGraphicExporter.hxx
 svx/source/unodraw/UnoNameItemTable.cxx
 svx/source/unodraw/UnoNameItemTable.hxx
 svx/source/unodraw/UnoNamespaceMap.cxx
