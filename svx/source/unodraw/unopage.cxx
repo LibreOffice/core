@@ -26,12 +26,11 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
-#include <sfx2/dispatch.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <sfx2/objsh.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -46,9 +45,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/svdopath.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/svdomeas.hxx>
 #include <extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/scene3d.hxx>

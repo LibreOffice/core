@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-#include <svl/style.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,7 +35,6 @@
 #include <svx/xlnstit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xdef.hxx>
-#include <svx/xflhtit.hxx>
 
 #include <vector>
 #include <vcl/svapp.hxx>

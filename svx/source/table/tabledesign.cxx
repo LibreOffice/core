@@ -39,7 +39,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <svx/unoprov.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

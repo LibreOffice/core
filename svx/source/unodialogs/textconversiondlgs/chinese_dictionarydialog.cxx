@@ -29,9 +29,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#include <unotools/intlwrapper.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
 namespace textconversiondlgs

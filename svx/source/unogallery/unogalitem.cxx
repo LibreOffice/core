@@ -25,13 +25,11 @@
 #include <svx/fmmodel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
-#include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <galobj.hxx>
 
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <memory>

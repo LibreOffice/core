@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <sax/tools/converter.hxx>

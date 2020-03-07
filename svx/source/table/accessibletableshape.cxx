@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <comphelper/accessiblewrapper.hxx>
 #include <vcl/svapp.hxx>
 
 #include <AccessibleTableShape.hxx>
