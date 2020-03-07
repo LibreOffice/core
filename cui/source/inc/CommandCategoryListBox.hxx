@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
-#define INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
+
+#pragma once
 
 #include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
@@ -76,7 +76,5 @@ public:
 
     void set_visible(bool bVisible) {m_xControl->set_visible(bVisible);}
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

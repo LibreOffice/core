@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_CUSTOMNOTEBOOKBARGENERATOR_HXX
-#define INCLUDED_CUI_SOURCE_INC_CUSTOMNOTEBOOKBARGENERATOR_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
@@ -39,7 +38,5 @@ public:
     static void setCustomizedUIItem(Sequence<OUString> sUIItemProperties,
                                     OUString sNotebookbarConfigType);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
