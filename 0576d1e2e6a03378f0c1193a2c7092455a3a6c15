@@ -16,6 +16,24 @@
       "revId": "0576d1e2e6a03378f0c1193a2c7092455a3a6c15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8298d548_45e90b36",
+        "filename": "sd/source/ui/dlg/tpoption.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-07T07:41:16Z",
+      "side": 1,
+      "message": "Indeed!\nI\u0027m gonna fix master part but then I don\u0027t know how to do.\nI would push this one + fix but I suppose the best would be a merged commit but don\u0027t know how to do this",
+      "parentUuid": "cc3a36d6_f241d376",
+      "revId": "0576d1e2e6a03378f0c1193a2c7092455a3a6c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
