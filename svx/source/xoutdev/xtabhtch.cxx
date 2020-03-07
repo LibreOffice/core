@@ -24,7 +24,6 @@
 #include <vcl/settings.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/xpool.hxx>
 
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

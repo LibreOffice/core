@@ -20,8 +20,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <tools/debug.hxx>
-#include <tools/stream.hxx>
-#include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svl/style.hxx>
@@ -30,16 +28,13 @@
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
-#include <editeng/unoprnms.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xbitmap.hxx>
 #include <svx/xbtmpit.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/GraphicLoader.hxx>
-#include <vcl/dibtools.hxx>
 
 #include <libxml/xmlwriter.h>
 

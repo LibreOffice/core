@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-
+#include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svtools/toolbarmenu.hxx>
@@ -36,7 +33,6 @@
 
 #include <svx/drawitem.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xlnwtit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
@@ -45,7 +41,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/tbxcolorupdate.hxx>
-#include <svx/unoapi.hxx>
+
 #include <memory>
 
 #include <comphelper/lok.hxx>

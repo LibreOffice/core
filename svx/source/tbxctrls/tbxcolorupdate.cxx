@@ -21,7 +21,6 @@
 #include <svx/drawitem.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unomid.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
@@ -32,7 +31,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
-#include <tools/debug.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

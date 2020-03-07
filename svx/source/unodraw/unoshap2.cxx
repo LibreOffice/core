@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -34,11 +33,7 @@
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/file.hxx>
-#include <vcl/fltcall.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/GraphicLoader.hxx>
@@ -65,11 +60,9 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <svx/svdograf.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <tools/stream.hxx>
 
 
 #include <memory>

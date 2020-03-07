@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <svx/svxids.hrc>
 #include <svx/svdundo.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>

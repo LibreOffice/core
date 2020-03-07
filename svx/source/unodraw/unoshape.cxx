@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
-#include <vcl/fltcall.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
@@ -38,36 +35,29 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
+#include <svx/sdangitm.hxx>
+#include <svx/svdlayer.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/scene3d.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/globl3d.hxx>
-#include <svx/fmglob.hxx>
 #include <svx/unopage.hxx>
-#include <svx/view3d.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/svxids.hrc>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoshprp.hxx>
-#include <svx/sxciaitm.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdomeas.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdpool.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
+#include <svx/svdoedge.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/obj3d.hxx>
-#include <tools/diagnose_ex.h>
 #include <svx/xflftrit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xbtmpit.hxx>
@@ -77,7 +67,6 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/unomaster.hxx>
-#include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -91,6 +80,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
+#include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 
 #include <memory>

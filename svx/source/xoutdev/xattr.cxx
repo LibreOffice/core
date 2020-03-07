@@ -26,8 +26,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -35,7 +33,6 @@
 #include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
-#include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 
@@ -68,7 +65,6 @@
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnedcit.hxx>
 #include <editeng/itemtype.hxx>
-#include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
@@ -81,14 +77,9 @@
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
 #include <svx/xftadit.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <vcl/gradient.hxx>
-#include <svx/svxids.hrc>
 #include <string>
 
 #include <boost/property_tree/json_parser.hpp>

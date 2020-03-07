@@ -27,9 +27,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
-#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

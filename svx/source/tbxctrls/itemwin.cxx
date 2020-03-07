@@ -21,11 +21,9 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/module.hxx>
-#include <tools/urlobj.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -33,22 +31,11 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/svxids.hrc>
 
-#include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlndsit.hxx>
 #include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/itemwin.hxx>
-#include <svx/linectrl.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svtools/unitconv.hxx>
-#include <svtools/valueset.hxx>
-
-#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

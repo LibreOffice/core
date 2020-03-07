@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <tools/weakbase.hxx>
 
-#include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
-#include <svx/svdpage.hxx>
 
 #include "gluepts.hxx"
 

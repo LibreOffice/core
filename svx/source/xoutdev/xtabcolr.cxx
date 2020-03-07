@@ -25,7 +25,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
 
 using namespace com::sun::star;
 

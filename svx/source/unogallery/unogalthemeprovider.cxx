@@ -21,9 +21,7 @@
 
 #include "unogaltheme.hxx"
 #include <svx/gallery1.hxx>
-#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/pathoptions.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/ElementExistException.hpp>

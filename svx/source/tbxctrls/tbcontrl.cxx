@@ -17,19 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 #include <typeinfo>
 #include <utility>
 
 #include <comphelper/propertysequence.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/vclptr.hxx>
@@ -38,25 +35,14 @@
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/templdlg.hxx>
-#include <svl/isethint.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/urlobj.hxx>
-#include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/weldutils.hxx>
 #include <unotools/fontoptions.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/colorcfg.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -66,10 +52,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/strings.hrc>
-#include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>
 #include <helpids.h>
-#include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/xtable.hxx>
@@ -92,19 +76,15 @@
 #include <editeng/cmapitem.hxx>
 #include <svx/colorwindow.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/drawitem.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/PaletteManager.hxx>
 #include <memory>
 
-#include <svx/framelink.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/xdef.hxx>
-#include <svx/xlnclit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/currencytable.hxx>
