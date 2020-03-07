@@ -43,7 +43,7 @@ void Users::impl_refresh()
 
 ObjectType Users::createObject(const OUString& rName)
 {
-    return new User(rName);
+    return new User(m_xMetaData->getConnection(), rName);
 }
 
 uno::Reference< XPropertySet > Users::createDescriptor()
@@ -51,7 +51,7 @@ uno::Reference< XPropertySet > Users::createDescriptor()
     // There is some internal magic so that the same class can be used as either
     // a descriptor or as a normal user. See VUser.cxx for the details. In our
     // case we just need to ensure we use the correct constructor.
-    return new User;
+    return new User(m_xMetaData->getConnection());
 }
 
 //----- XAppend ---------------------------------------------------------------
