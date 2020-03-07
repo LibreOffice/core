@@ -624,6 +624,7 @@ sc_lib = shared_library('sclo',
     xo_lib,
     ],
   dependencies: [libxml_dep, icuuc_dep, icu18_dep, broken_mdds_dep, orcus_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 
@@ -997,5 +998,6 @@ vbaobj_lib = shared_library('vbaobjlo',
     vcl_lib,
   ],
   dependencies: [broken_mdds_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
