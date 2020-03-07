@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,pdffilter,\
 	cppu \
 	sal \
 	drawinglayer \
+	drawinglayercore \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pdffilter,\
