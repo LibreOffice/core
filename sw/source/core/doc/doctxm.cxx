@@ -1362,20 +1362,17 @@ void SwTOXBaseSection::UpdateAuthorities(const SwTOXInternational& rIntl,
     if(!pAuthField)
         return;
 
-    SwIterator<SwFormatField,SwFieldType> aIter( *pAuthField );
-    for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+    std::vector<SwFormatField*> vFields;
+    pAuthField->GatherFields(vFields);
+    for(auto pFormatField: vFields)
     {
-        const SwTextField* pTextField = pFormatField->GetTextField();
-        // undo
-        if(!pTextField)
-            continue;
-        const SwTextNode& rTextNode = pTextField->GetTextNode();
+        const auto pTextField = pFormatField->GetTextField();
+        const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTextNode.GetText().getLength() &&
             rTextNode.getLayoutFrame(pLayout) &&
-            rTextNode.GetNodes().IsDocNodes()
-            && (!pLayout || !pLayout->IsHideRedlines()
+            (!pLayout || !pLayout->IsHideRedlines()
                 || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
         {
             //#106485# the body node has to be used!
