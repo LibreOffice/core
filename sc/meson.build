@@ -754,7 +754,7 @@ scui_lib = shared_library('scuilo',
   install: true,
 )
 
-scfilt_lib = shared_library('scfilt',
+scfilt_lib = shared_library('scfiltlo',
   'source/filter/dif/difexp.cxx',
   'source/filter/dif/difimp.cxx',
   'source/filter/excel/colrowst.cxx',
@@ -952,6 +952,7 @@ scfilt_lib = shared_library('scfilt',
     i18nlangtag_lib,
   ],
   dependencies: [orcus_dep, mdds_dep],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 
