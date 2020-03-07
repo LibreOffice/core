@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "cdd2848e_9eaeed13",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-03-07T13:57:17Z",
+      "side": 0,
+      "message": "Since y and z are checked before the loop, therefore I thought there is no need for extra check. If there is something I\u0027m missing could you please explain it.",
+      "parentUuid": "4056542f_2d32c130",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9c4f037_04ea6151",
         "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
         "patchSetId": 2
