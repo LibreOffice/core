@@ -28,7 +28,7 @@ SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString
     // replace filename
     OUString sInfoText = m_xDialog->get_primary_text();
     OUString aPath;
-    if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( _rFileName, aPath ) )
+    if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(_rFileName, aPath))
         aPath = _rFileName;
     sInfoText = sInfoText.replaceAll("%FILENAME", aPath);
     m_xDialog->set_primary_text(sInfoText);

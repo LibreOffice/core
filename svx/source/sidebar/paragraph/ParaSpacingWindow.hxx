@@ -26,8 +26,8 @@
 
 using namespace com::sun::star;
 
-namespace svx {
-
+namespace svx
+{
 class ParaULSpacingWindow : public InterimItemWindow
 {
 public:
@@ -111,7 +111,6 @@ public:
     explicit ParaFirstLineSpacingWindow(vcl::Window* pParent);
     virtual void GetFocus() override;
 };
-
 }
 
 #endif

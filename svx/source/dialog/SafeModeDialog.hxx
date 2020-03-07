@@ -21,7 +21,6 @@ public:
     virtual ~SafeModeDialog() override;
 
 private:
-
     std::unique_ptr<weld::Button> mxBtnContinue;
     std::unique_ptr<weld::Button> mxBtnRestart;
     std::unique_ptr<weld::Button> mxBtnApply;

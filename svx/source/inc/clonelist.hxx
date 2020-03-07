@@ -34,7 +34,6 @@ class CloneList
     std::vector<SdrObject*> maCloneList;
 
 public:
-
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
 
     const SdrObject* GetOriginal(sal_uInt32 nIndex) const;

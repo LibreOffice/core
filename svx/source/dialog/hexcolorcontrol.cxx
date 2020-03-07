@@ -23,8 +23,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-namespace weld {
-
+namespace weld
+{
 HexColorControl::HexColorControl(std::unique_ptr<weld::Entry> pEntry)
     : m_xEntry(std::move(pEntry))
     , m_nAsyncModifyEvent(nullptr)
@@ -76,7 +76,7 @@ Color HexColorControl::GetColor() const
     if (nLen < 7)
     {
         static const char* const pNullStr = "000000";
-        aStr += OUString::createFromAscii( &pNullStr[nLen-1] );
+        aStr += OUString::createFromAscii(&pNullStr[nLen - 1]);
     }
 
     sax::Converter::convertColor(nColor, aStr);
@@ -107,8 +107,6 @@ IMPL_STATIC_LINK(HexColorControl, ImplProcessInputHdl, OUString&, rTest, bool)
     rTest = aFilter.makeStringAndClear();
     return true;
 }
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
