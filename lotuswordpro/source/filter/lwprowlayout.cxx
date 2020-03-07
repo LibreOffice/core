@@ -403,7 +403,10 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
                 if (pCellLayout->GetLayoutType() == LWP_CONNECTED_CELL_LAYOUT)
                 {
                     LwpConnectedCellLayout* pConnCell = static_cast<LwpConnectedCellLayout*>(pCellLayout);
-                    nCellEndCol = i+pConnCell->GetNumcols()-1;
+                    auto nNumCols = pConnCell->GetNumcols();
+                    if (!nNumCols)
+                        throw std::runtime_error("loop in conversion");
+                    nCellEndCol = i + nNumCols - 1;
                     i = nCellEndCol;
                 }
                 xCell = pCellLayout->DoConvertCell(pTable->GetObjectID(),crowid,i);
