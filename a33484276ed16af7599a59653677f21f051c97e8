@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fef9df6c_b48f25d4",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3544,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-07T15:03:15Z",
+      "side": 0,
+      "message": "If the follow-up is expected to revert this change, possibly better keep it here to reduce git noise, and move the GetFirstNonHeadlineRow in the new check above into the if:\n\n    if (const SwRowFrame* pFirstRow \u003d GetFirstNonHeadlineRow();\n        pFirstRow \u0026\u0026 pFirstRow-\u003eIsForceRowSplitAllowed())\n            return false;\n\n(but of course, if then the follow-up is reverted, this code would needlessly call it twice...)",
+      "range": {
+        "startLine": 3544,
+        "startChar": 12,
+        "endLine": 3544,
+        "endChar": 61
+      },
+      "revId": "a33484276ed16af7599a59653677f21f051c97e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
