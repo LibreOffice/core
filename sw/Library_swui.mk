@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     ucbhelper \
     utl \
     vcl \
+    drawinglayercore \
     drawinglayer \
 ))
 

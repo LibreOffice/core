@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_removewhichrange, \
     cppu \
     cppuhelper \
     drawinglayer \
+    drawinglayercore \
     editeng \
     fwk \
     i18nlangtag \
