@@ -20,14 +20,10 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
 
-#include <rtl/ustring.hxx>
 #include <optional>
 #include <oox/drawingml/color.hxx>
 #include <drawingml/textfont.hxx>
 #include <oox/drawingml/shape.hxx>
-
-#include <drawingml/fillproperties.hxx>
-#include <drawingml/lineproperties.hxx>
 
 #include <map>
 

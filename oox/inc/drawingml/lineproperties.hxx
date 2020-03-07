@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 #include <sal/types.h>
 

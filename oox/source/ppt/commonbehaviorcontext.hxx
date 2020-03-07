@@ -21,10 +21,10 @@
 #define INCLUDED_OOX_SOURCE_PPT_COMMONBEHAVIORCONTEXT_HXX
 
 #include <rtl/ustring.hxx>
-#include <oox/ppt/timenodelistcontext.hxx>
-#include <oox/ppt/animationspersist.hxx>
+#include <oox/core/contexthandler.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
-#include "conditioncontext.hxx"
+#include <oox/ppt/timenode.hxx>
 
 namespace oox { namespace ppt {
 

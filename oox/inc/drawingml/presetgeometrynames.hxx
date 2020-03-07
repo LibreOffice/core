@@ -11,7 +11,6 @@
 #define INCLUDED_OOX_DRAWINGML_PRESETGEOMETRYNAMES_HXX
 
 #include <rtl/ustring.hxx>
-#include <oox/dllapi.h>
 
 namespace PresetGeometryTypeNames
 {

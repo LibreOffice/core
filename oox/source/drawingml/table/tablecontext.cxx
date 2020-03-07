@@ -19,6 +19,7 @@
 
 #include <oox/helper/attributelist.hxx>
 #include <drawingml/guidcontext.hxx>
+#include <drawingml/misccontexts.hxx>
 #include <drawingml/table/tablecontext.hxx>
 #include <drawingml/table/tableproperties.hxx>
 #include <drawingml/table/tablestylecontext.hxx>

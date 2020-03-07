@@ -20,6 +20,7 @@
 
 #include <drawingml/table/tablestylecellstylecontext.hxx>
 #include <drawingml/misccontexts.hxx>
+#include <drawingml/lineproperties.hxx>
 #include <drawingml/linepropertiescontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

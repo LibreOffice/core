@@ -23,7 +23,6 @@
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace oox {

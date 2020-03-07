@@ -27,6 +27,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 
+#include "conditioncontext.hxx"
 #include "commonbehaviorcontext.hxx"
 #include "commontimenodecontext.hxx"
 #include "timetargetelementcontext.hxx"

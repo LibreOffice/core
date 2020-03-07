@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/xml/sax/InputSource.hpp>
 #include <oox/core/fastparser.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/helper/containerhelper.hxx>

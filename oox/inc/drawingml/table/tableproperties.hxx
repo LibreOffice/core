@@ -22,10 +22,8 @@
 
 #include <drawingml/table/tablerow.hxx>
 #include <drawingml/table/tablestyle.hxx>
-#include <oox/helper/propertymap.hxx>
 #include <oox/drawingml/color.hxx>
 
-#include <map>
 #include <memory>
 #include <vector>
 

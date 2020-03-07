@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_SOURCE_DRAWINGML_HYPERLINKCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_DRAWINGML_HYPERLINKCONTEXT_HXX
 
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox { class PropertyMap; }

@@ -22,6 +22,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/colorchoicecontext.hxx>
+#include <drawingml/misccontexts.hxx>
 #include <drawingml/texteffectscontext.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/textparagraphproperties.hxx>

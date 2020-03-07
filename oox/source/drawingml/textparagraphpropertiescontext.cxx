@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 
 #include <drawingml/colorchoicecontext.hxx>
+#include <drawingml/misccontexts.hxx>
 #include <drawingml/textcharacterpropertiescontext.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <oox/helper/attributelist.hxx>

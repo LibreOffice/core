@@ -26,7 +26,6 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <oox/dllapi.h>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/ole/oleobjecthelper.hxx>

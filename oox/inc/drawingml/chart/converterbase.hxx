@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
 
-#include <drawingml/chart/chartcontextbase.hxx>
 #include <drawingml/chart/objectformatter.hxx>
 
 namespace com { namespace sun { namespace star {

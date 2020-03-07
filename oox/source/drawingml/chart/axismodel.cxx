@@ -18,6 +18,7 @@
  */
 
 #include <drawingml/chart/axismodel.hxx>
+#include <oox/token/tokens.hxx>
 
 namespace oox::drawingml::chart {
 

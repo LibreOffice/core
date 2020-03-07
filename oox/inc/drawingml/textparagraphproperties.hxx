@@ -21,9 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <drawingml/misccontexts.hxx>
 #include <drawingml/textcharacterproperties.hxx>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <drawingml/textfont.hxx>
 #include <drawingml/textspacing.hxx>

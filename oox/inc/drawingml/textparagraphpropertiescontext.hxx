@@ -23,9 +23,7 @@
 #include <vector>
 
 #include <com/sun/star/style/TabStop.hpp>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textparagraphproperties.hxx>
-#include <drawingml/textspacing.hxx>
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
