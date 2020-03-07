@@ -35,9 +35,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <osl/thread.h>
 #include <osl/file.hxx>
-#include <rtl/strbuf.hxx>
 
 #include <memory>
 

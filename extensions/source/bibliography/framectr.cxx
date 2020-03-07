@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/URL.hpp>
-#include <vcl/stdtext.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
 #include "framectr.hxx"
 #include "datman.hxx"
-#include "bibview.hxx"
-#include "bibresid.hxx"
-#include <strings.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
@@ -34,7 +29,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

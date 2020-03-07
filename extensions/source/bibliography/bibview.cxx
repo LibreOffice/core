@@ -19,8 +19,6 @@
 
 
 #include <strings.hrc>
-#include "bibcont.hxx"
-#include "bibbeam.hxx"
 #include "general.hxx"
 #include "bibview.hxx"
 #include "datman.hxx"
@@ -31,7 +29,6 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <vcl/weld.hxx>
 #include <tools/debug.hxx>
 

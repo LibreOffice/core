@@ -21,8 +21,6 @@
 #include "ldapaccess.hxx"
 
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/ldap/LdapConnectionException.hpp>

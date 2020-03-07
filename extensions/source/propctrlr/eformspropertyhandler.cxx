@@ -22,7 +22,6 @@
 #include "formmetadata.hxx"
 #include "pcrservices.hxx"
 #include <propctrlr.h>
-#include "formbrowsertools.hxx"
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"
 
@@ -33,8 +32,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-
-#include <functional>
 
 
 extern "C" void createRegistryInfo_EFormsPropertyHandler()

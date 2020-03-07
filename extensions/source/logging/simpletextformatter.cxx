@@ -28,9 +28,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <osl/thread.h>
-
-#include <stdio.h>
 
 namespace logging
 {

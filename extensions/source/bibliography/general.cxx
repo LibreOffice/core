@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -35,19 +34,14 @@
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"
-#include "bibprop.hxx"
 #include <strings.hrc>
 #include "bibmod.hxx"
-#include "bibview.hxx"
-#include "bibtools.hxx"
 #include <helpids.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <algorithm>
-#include <functional>
-#include <vector>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;

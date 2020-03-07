@@ -31,7 +31,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <tools/diagnose_ex.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
 #include <o3tl/functional.hxx>

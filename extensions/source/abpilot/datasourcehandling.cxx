@@ -27,8 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -37,7 +35,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp>
 
@@ -45,7 +42,6 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>

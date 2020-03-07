@@ -46,7 +46,6 @@
 #include <sal/macros.h>
 
 #include <algorithm>
-#include <functional>
 #include <limits>
 
 

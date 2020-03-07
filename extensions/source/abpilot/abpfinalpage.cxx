@@ -27,7 +27,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 namespace abp
 {
