@@ -181,31 +181,23 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
         SwRootFrame const*const pLayout)
 {
     //find the field in a sorted array of handles,
-#if OSL_DEBUG_LEVEL > 0
-    bool bCurrentFieldWithoutTextNode = false;
-#endif
     if(!m_SequArr.empty() && m_SequArr.size() != m_DataArr.size())
         DelSequenceArray();
     if(m_SequArr.empty())
     {
         IDocumentRedlineAccess const& rIDRA(m_pDoc->getIDocumentRedlineAccess());
+        SwTOXInternational aIntl(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
         // sw_redlinehide: need 2 arrays because the sorting may be different,
         // if multiple fields refer to the same entry and first one is deleted
         std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
         std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArrRLHidden;
-        SwIterator<SwFormatField,SwFieldType> aIter( *this );
-
-        SwTOXInternational aIntl(m_eLanguage, SwTOIOptions::NONE, m_sSortAlgorithm);
-
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        GatherFields(vFields);
+        for(SwFormatField* pFormatField : vFields)
         {
             const SwTextField* pTextField = pFormatField->GetTextField();
             if(!pTextField || !pTextField->GetpTextNode())
             {
-#if OSL_DEBUG_LEVEL > 0
-                if(pAuthEntry == static_cast<SwAuthorityField*>(pFormatField->GetField())->GetAuthEntry())
-                    bCurrentFieldWithoutTextNode = true;
-#endif
                 continue;
             }
             const SwTextNode& rFieldTextNode = pTextField->GetTextNode();
@@ -289,9 +281,6 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
             return i + 1;
         }
     }
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE(bCurrentFieldWithoutTextNode, "Handle not found");
-#endif
     return 0;
 }
 
