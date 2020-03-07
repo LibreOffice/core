@@ -41,6 +41,8 @@
 #include <imp_op.hxx>
 #include <excimp8.hxx>
 
+#include <unotools/configmgr.hxx>
+
 #include <memory>
 
 namespace
@@ -773,7 +775,8 @@ ErrCode ImportExcel::Read()
         pProgress.reset();
 
         GetDocImport().finalize();
-        AdjustRowHeight();
+        if (!utl::ConfigManager::IsFuzzing())
+            AdjustRowHeight();
         PostDocLoad();
 
         pD->CalcAfterLoad(false);
