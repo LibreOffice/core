@@ -64,7 +64,7 @@ namespace nsSwDocInfoSubType
           really is the end, and is at least 4 less than DI_SUB_*! */
     const SwDocInfoSubType DI_SUBTYPE_BEGIN =  0;
     const SwDocInfoSubType DI_TITLE         =  DI_SUBTYPE_BEGIN;
-    const SwDocInfoSubType DI_THEMA         =  1;
+    const SwDocInfoSubType DI_SUBJECT       =  1;
     const SwDocInfoSubType DI_KEYS          =  2;
     const SwDocInfoSubType DI_COMMENT       =  3;
     const SwDocInfoSubType DI_CREATE        =  4;

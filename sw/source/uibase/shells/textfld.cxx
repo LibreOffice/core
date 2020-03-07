@@ -625,7 +625,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TOPIC   :
                 nInsertType = SwFieldTypesEnum::DocumentInfo;
-                nInsertSubType = DI_THEMA;
+                nInsertSubType = DI_SUBJECT;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TITLE   :
                 nInsertType = SwFieldTypesEnum::DocumentInfo;

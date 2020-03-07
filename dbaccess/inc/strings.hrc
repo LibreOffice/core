@@ -372,10 +372,10 @@
 #define STR_ADD_TABLES                              NC_("STR_ADD_TABLES", "Add Tables")
 #define STR_ADD_TABLE_OR_QUERY                      NC_("STR_ADD_TABLE_OR_QUERY", "Add Table or Query" )
 
-#define STR_WIZ_COLUMN_SELECT_TITEL                 NC_("STR_WIZ_COLUMN_SELECT_TITEL", "Apply columns")
-#define STR_WIZ_TYPE_SELECT_TITEL                   NC_("STR_WIZ_TYPE_SELECT_TITEL", "Type formatting")
+#define STR_WIZ_COLUMN_SELECT_TITLE                 NC_("STR_WIZ_COLUMN_SELECT_TITEL", "Apply columns")
+#define STR_WIZ_TYPE_SELECT_TITLE                   NC_("STR_WIZ_TYPE_SELECT_TITEL", "Type formatting")
 #define STR_WIZ_NAME_ALREADY_DEFINED                NC_("STR_WIZ_NAME_ALREADY_DEFINED", "Enter a unique name for the new primary key data field.\nThe following name is already in use:")
-#define STR_WIZ_NAME_MATCHING_TITEL                 NC_("STR_WIZ_NAME_MATCHING_TITEL", "Assign columns" )
+#define STR_WIZ_NAME_MATCHING_TITLE                 NC_("STR_WIZ_NAME_MATCHING_TITEL", "Assign columns" )
 #define STR_WIZ_PB_PREV                             NC_("STR_WIZ_PB_PREV", "< ~Back")
 #define STR_WIZ_PB_NEXT                             NC_("STR_WIZ_PB_NEXT", "~Next>")
 #define STR_WIZ_PB_OK                               NC_("STR_WIZ_PB_OK", "C~reate")

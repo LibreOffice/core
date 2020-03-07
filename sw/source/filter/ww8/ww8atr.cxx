@@ -2857,7 +2857,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DI_TITLE:
                     eField = ww::eTITLE;
                     break;
-                case DI_THEMA:
+                case DI_SUBJECT:
                     eField = ww::eSUBJECT;
                     break;
                 case DI_KEYS:

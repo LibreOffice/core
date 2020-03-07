@@ -1657,7 +1657,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             nSub = DI_TITLE;
             break;
         case 16:
-            nSub = DI_THEMA;
+            nSub = DI_SUBJECT;
             break;
         case 18:
             nSub = DI_KEYS;
