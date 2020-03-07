@@ -346,10 +346,7 @@ public:
                 && mxExtendedInformation == rCandidate.mxExtendedInformation);
     }
 };
-} // end of namespace drawinglayer::geometry
 
-namespace drawinglayer::geometry
-{
 namespace
 {
 struct theGlobalDefault : public rtl::Static<ViewInformation2D::ImplType, theGlobalDefault>
@@ -446,6 +443,6 @@ const uno::Sequence<beans::PropertyValue>& ViewInformation2D::getExtendedInforma
     return mpViewInformation2D->getExtendedInformationSequence();
 }
 
-} // end of namespace
+} // end of namespace drawinglayer::geometry
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

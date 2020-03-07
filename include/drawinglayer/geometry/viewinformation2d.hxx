@@ -27,12 +27,9 @@
 
 // predefines
 
-namespace drawinglayer
-{
-namespace geometry
+namespace drawinglayer::geometry
 {
 class ImpViewInformation2D;
-}
 }
 
 namespace basegfx
@@ -45,22 +42,19 @@ namespace com::sun::star::beans
 {
 struct PropertyValue;
 }
+
 namespace com::sun::star::drawing
 {
 class XDrawPage;
 }
+
 namespace com::sun::star::uno
 {
 template <class interface_type> class Reference;
-}
-namespace com::sun::star::uno
-{
 template <typename> class Sequence;
 }
 
-namespace drawinglayer
-{
-namespace geometry
+namespace drawinglayer::geometry
 {
 /** ViewInformation2D class
 
@@ -184,8 +178,8 @@ public:
     */
     const css::uno::Sequence<css::beans::PropertyValue>& getExtendedInformationSequence() const;
 };
-} // end of namespace geometry
-} // end of namespace drawinglayer
+
+} // end of namespace drawinglayer::geometry
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 
