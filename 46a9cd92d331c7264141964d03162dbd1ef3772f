@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57b641e0_d26e6b06",
+        "filename": "solenv/gbuild/Module.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-07T13:17:19Z",
+      "side": 1,
+      "message": "After reading the above comment, I assumed this would keep javacheck a part of subsequentcheck. But I actually didn\u0027t test :-(",
+      "revId": "46a9cd92d331c7264141964d03162dbd1ef3772f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
