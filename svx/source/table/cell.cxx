@@ -26,8 +26,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <o3tl/any.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>

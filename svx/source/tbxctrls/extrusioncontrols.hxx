@@ -21,6 +21,8 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
+#include <svtools/valueset.hxx>
+#include <vcl/customweld.hxx>
 
 class ValueSet;
 

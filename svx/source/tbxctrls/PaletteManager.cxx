@@ -28,13 +28,11 @@
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/tbxcolorupdate.hxx>
-#include <vcl/toolbox.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <stack>
 #include <set>
-#include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

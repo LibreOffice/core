@@ -21,24 +21,19 @@
 
 #include <algorithm>
 
+#include <osl/diagnose.h>
+#include <svl/itemset.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/xgrscit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbmpit.hxx>
-#include <svx/xflbmsxy.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/xsflclit.hxx>
-#include <svx/xflbmsli.hxx>
-#include <svx/xflbtoxy.hxx>
 #include <svx/xflbstit.hxx>
-#include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/unoshape.hxx>
 
 using namespace com::sun::star;
 

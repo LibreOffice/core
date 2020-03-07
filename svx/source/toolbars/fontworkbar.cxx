@@ -18,7 +18,6 @@
  */
 
 #include <svx/svdundo.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
@@ -29,20 +28,18 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/strings.hrc>
+#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/gallery.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/fmpage.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
-#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/fontworkbar.hxx>

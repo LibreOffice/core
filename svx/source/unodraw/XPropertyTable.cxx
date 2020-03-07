@@ -36,8 +36,6 @@
 #include <svx/xdef.hxx>
 
 #include <svx/unoapi.hxx>
-#include <editeng/unoprnms.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 using namespace com::sun::star;

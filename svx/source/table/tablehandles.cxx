@@ -20,15 +20,10 @@
 
 #include "tablehandles.hxx"
 
-#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/hatch.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>

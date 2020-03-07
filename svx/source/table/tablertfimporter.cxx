@@ -27,13 +27,10 @@
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>
 
-#include <editeng/eeitem.hxx>
 #include <svx/svdetc.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <cell.hxx>
-#include <celltypes.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editeng.hxx>
@@ -41,6 +38,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/svxrtf.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;

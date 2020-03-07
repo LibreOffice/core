@@ -164,6 +164,11 @@ class XColorItem;
 class SdrTextAniDirectionItem;
 class SdrTextAniKindItem;
 class SdrTextHorzAdjustItem;
+class SdrTextAniAmountItem;
+class SdrTextAniCountItem;
+class SdrTextAniStartInsideItem;
+class SdrTextAniStopInsideItem;
+class SdrTextAniDelayItem;
 
 #define SDRATTR_START               XATTR_START                    /* 1000   */
                                                                                                          /* Pool V4*/ /* Pool V3*/ /* Pool V2*/

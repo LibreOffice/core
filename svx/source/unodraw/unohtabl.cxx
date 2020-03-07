@@ -18,11 +18,8 @@
  */
 
 #include <com/sun/star/drawing/Hatch.hpp>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
 #include "UnoNameItemTable.hxx"
 
-#include <svx/xhatch.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflhtit.hxx>

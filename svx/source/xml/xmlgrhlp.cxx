@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <sal/macros.h>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,7 +37,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
-#include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>

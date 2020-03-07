@@ -22,16 +22,12 @@
 #include <svx/svdotable.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <editeng/borderline.hxx>
-#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>

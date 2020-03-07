@@ -18,16 +18,11 @@
  */
 
 
-#include <string>
-
-#include <svl/aeitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <svx/tbxctl.hxx>
-#include <svx/tbxcolor.hxx>
+
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);

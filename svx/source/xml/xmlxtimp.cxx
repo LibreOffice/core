@@ -20,8 +20,6 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -29,19 +27,15 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <unotools/streamwrap.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlmetae.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
@@ -53,8 +47,6 @@
 
 #include <xmlxtimp.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <cstdio>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;

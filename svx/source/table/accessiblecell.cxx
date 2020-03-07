@@ -21,22 +21,19 @@
 #include <sal/log.hxx>
 
 #include <memory>
-#include <utility>
 
 #include "accessiblecell.hxx"
 #include <cell.hxx>
-
-#include <DescriptionGenerator.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
+#include <editeng/unoedsrc.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/string.hxx>
-#include <editeng/outlobj.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>

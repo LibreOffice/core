@@ -34,7 +34,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdetc.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoforou.hxx>
 #include <editeng/unoviwou.hxx>
@@ -42,14 +41,12 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editobj.hxx>
 
 #include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdotable.hxx>
 #include <cell.hxx>
-#include <svx/sdrpaintwindow.hxx>
 #include <unotools/configmgr.hxx>
 
 

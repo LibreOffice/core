@@ -22,7 +22,6 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/style.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

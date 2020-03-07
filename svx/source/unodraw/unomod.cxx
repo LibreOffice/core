@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
-#include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -42,8 +41,6 @@
 #include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
-#include <svx/globl3d.hxx>
-#include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
 #include <editeng/unofield.hxx>

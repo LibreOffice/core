@@ -17,21 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-
-#include <i18nutil/unicode.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/InterimItemWindow.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
@@ -41,7 +37,6 @@
 #include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
 
-#include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmodel.hxx>
@@ -59,16 +54,11 @@
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-
-#include <svx/svxdlg.hxx>
 
 #define TOOLBOX_NAME                "colorbar"
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
