@@ -152,20 +152,21 @@ class SchXMLImport final : public SvXMLImport
 private:
     rtl::Reference<SchXMLImportHelper> maImportHelper;
 
-    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContext* CreateFastContext(
+        sal_Int32 nElement,
+        const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 public:
-    SchXMLImport(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        OUString const & implementationName, SvXMLImportFlags nImportFlags );
+    SchXMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                 OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
-    virtual ~SchXMLImport() throw () override;
+    virtual ~SchXMLImport() throw() override;
 
     SvXMLImportContext* CreateStylesContext();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void SAL_CALL
+    setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX

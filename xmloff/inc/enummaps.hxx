@@ -15,7 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 
-template<typename EnumT> struct SvXMLEnumMapEntry;
+template <typename EnumT> struct SvXMLEnumMapEntry;
 
 extern SvXMLEnumMapEntry<css::drawing::FillStyle> const aXML_FillStyle_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::RectanglePoint> const aXML_RefPoint_EnumMap[];
