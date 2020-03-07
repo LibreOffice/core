@@ -63,7 +63,7 @@ namespace drawinglayer::geometry
     It is an implementation to support the sequence of PropertyValues used in a
     css::graphic::XPrimitive2D for C++ implementations working with those
 */
-class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
+class DRAWINGLAYERCORE_DLLPUBLIC ViewInformation2D
 {
 public:
     typedef o3tl::cow_wrapper<ImpViewInformation2D, o3tl::ThreadSafeRefCountingPolicy> ImplType;

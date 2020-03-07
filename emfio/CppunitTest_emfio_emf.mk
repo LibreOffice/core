@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,emfio_emf))
 $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     basegfx \
     drawinglayer \
+    drawinglayercore \
     cppu \
     cppuhelper \
     comphelper \

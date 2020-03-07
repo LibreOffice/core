@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
         to identify if a new decomposition is needed at the next call
     (f) return maBuffered2DDecomposition
  */
-class DRAWINGLAYER_DLLPUBLIC BufferedDecompositionPrimitive2D : public BasePrimitive2D
+class DRAWINGLAYERCORE_DLLPUBLIC BufferedDecompositionPrimitive2D : public BasePrimitive2D
 {
 private:
     /// a sequence used for buffering the last create2DDecomposition() result

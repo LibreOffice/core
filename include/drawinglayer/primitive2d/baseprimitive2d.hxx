@@ -113,8 +113,8 @@ typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAc
     for view-independent primitives which are defined by not using ViewInformation2D
     in their get2DDecomposition/getB2DRange implementations.
 */
-class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : protected cppu::BaseMutex,
-                                               public BasePrimitive2DImplBase
+class DRAWINGLAYERCORE_DLLPUBLIC BasePrimitive2D : protected cppu::BaseMutex,
+                                                   public BasePrimitive2DImplBase
 {
     BasePrimitive2D(const BasePrimitive2D&) = delete;
     BasePrimitive2D& operator=(const BasePrimitive2D&) = delete;

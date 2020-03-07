@@ -70,6 +70,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     cppu \
     cppuhelper \
     dbtools \
+    drawinglayercore \
     drawinglayer \
     editeng \
     for \

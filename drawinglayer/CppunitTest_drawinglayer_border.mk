@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 	sal \
 	salhelper \
 	drawinglayer \
+	drawinglayercore \
 	vcl \
 	test \
 	tl \

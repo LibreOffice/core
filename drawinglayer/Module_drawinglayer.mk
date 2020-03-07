@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,drawinglayer))
 
 $(eval $(call gb_Module_add_targets,drawinglayer,\
+    Library_drawinglayercore \
     Library_drawinglayer \
 ))
 

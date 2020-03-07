@@ -57,6 +57,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     cppu \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
+    drawinglayercore \
     drawinglayer \
     editeng \
     fwk \

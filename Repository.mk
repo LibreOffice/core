@@ -353,6 +353,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
+	drawinglayercore \
 	drawinglayer \
 	editeng \
 	$(if $(filter WNT,$(OS)),emser) \

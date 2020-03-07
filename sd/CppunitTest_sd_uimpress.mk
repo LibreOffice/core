@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     cppu \
     cppuhelper \
     drawinglayer \
+    drawinglayercore \
     editeng \
     i18nlangtag \
     i18nutil \

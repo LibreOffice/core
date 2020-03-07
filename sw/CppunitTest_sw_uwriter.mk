@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
     drawinglayer \
+    drawinglayercore \
     editeng \
     i18nlangtag \
     i18nutil \
