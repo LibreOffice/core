@@ -20,11 +20,6 @@
 
 #include "ldapaccess.hxx"
 #include "ldapuserprofilebe.hxx"
-#include <osl/file.hxx>
-#include <osl/module.hxx>
-#include <osl/process.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/byteseq.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 

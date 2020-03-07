@@ -20,10 +20,8 @@
 #include "groupboxwiz.hxx"
 #include "commonpagesdbp.hxx"
 #include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
 #include "optiongrouplayouter.hxx"
 #include <helpids.h>
-#include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 

@@ -18,7 +18,6 @@
  */
 
 #include "browserlistbox.hxx"
-#include <strings.hrc>
 #include "pcrcommon.hxx"
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
@@ -33,8 +32,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

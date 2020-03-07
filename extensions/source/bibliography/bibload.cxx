@@ -19,11 +19,8 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
-#include <uno/environment.h>
-#include <svl/urihelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -31,10 +28,8 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -45,10 +40,8 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 
 #include "bibresid.hxx"

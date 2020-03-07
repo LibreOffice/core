@@ -25,7 +25,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include "sanedlg.hxx"

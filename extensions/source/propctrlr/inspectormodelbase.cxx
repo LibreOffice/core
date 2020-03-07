@@ -19,7 +19,6 @@
 
 #include <memory>
 #include "inspectormodelbase.hxx"
-#include "pcrcommon.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

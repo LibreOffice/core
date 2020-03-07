@@ -21,13 +21,11 @@
 
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <svl/numuno.hxx>
-#include <rtl/math.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/event.hxx>
 #include <tools/debug.hxx>
 #include <svl/zformat.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <com/sun/star/util/Time.hpp>
 #include "modulepcr.hxx"
 #include <strings.hrc>
 

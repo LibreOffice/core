@@ -19,8 +19,6 @@
 
 #include "listselectiondlg.hxx"
 
-#include "modulepcr.hxx"
-#include <strings.hrc>
 #include "formstrings.hxx"
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>

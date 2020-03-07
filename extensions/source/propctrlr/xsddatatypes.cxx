@@ -18,7 +18,6 @@
  */
 
 #include "xsddatatypes.hxx"
-#include "formstrings.hxx"
 
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>

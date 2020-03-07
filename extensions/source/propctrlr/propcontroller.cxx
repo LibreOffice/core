@@ -19,7 +19,6 @@
 
 #include "pcrservices.hxx"
 #include "propcontroller.hxx"
-#include "pcrstrings.hxx"
 #include "handlerhelper.hxx"
 #include "standardcontrol.hxx"
 #include "linedescriptor.hxx"
@@ -27,14 +26,12 @@
 #include "propertyeditor.hxx"
 #include "modulepcr.hxx"
 #include "formstrings.hxx"
-#include "formmetadata.hxx"
 #include "formbrowsertools.hxx"
 #include "propertycomposer.hxx"
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -42,22 +39,15 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/types.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/property.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/component_context.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
-#include <functional>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 // !!! outside the namespace !!!

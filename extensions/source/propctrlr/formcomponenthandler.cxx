@@ -39,7 +39,6 @@
 #include "usercontrol.hxx"
 
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -100,7 +99,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/stdtext.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 

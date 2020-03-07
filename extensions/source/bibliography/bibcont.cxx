@@ -18,17 +18,11 @@
  */
 
 
-#include <cppuhelper/weak.hxx>
 #include <vcl/event.hxx>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include "bibconfig.hxx"
 
 
-#include "datman.hxx"
 #include "bibcont.hxx"
-#include "bibview.hxx"
 
 
 BibShortCutHandler::~BibShortCutHandler()

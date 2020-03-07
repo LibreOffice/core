@@ -27,7 +27,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <map>
 
 
 namespace pcr
