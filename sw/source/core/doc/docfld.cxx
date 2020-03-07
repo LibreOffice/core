@@ -363,17 +363,14 @@ const SwDBData& SwDoc::GetDBDesc()
                     case SwFieldIds::DbNumSet:
                     case SwFieldIds::DbSetNumber:
                     {
-                        SwIterator<SwFormatField,SwFieldType> aIter( rFieldType );
-                        for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
+                        std::vector<SwFormatField*> vFields;
+                        rFieldType.GatherFields(vFields);
+                        if(vFields.size())
                         {
-                            if(pField->IsFieldInDoc())
-                            {
-                                if(SwFieldIds::Database == nWhich)
-                                    maDBData = static_cast < SwDBFieldType * > (pField->GetField()->GetTyp())->GetDBData();
-                                else
-                                    maDBData = static_cast < SwDBNameInfField* > (pField->GetField())->GetRealDBData();
-                                break;
-                            }
+                            if(SwFieldIds::Database == nWhich)
+                                maDBData = static_cast<SwDBFieldType*>(vFields.front()->GetField()->GetTyp())->GetDBData();
+                            else
+                                maDBData = static_cast<SwDBNameInfField*> (vFields.front()->GetField())->GetRealDBData();
                         }
                     }
                     break;
