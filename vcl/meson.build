@@ -784,5 +784,6 @@ vclplug_kf5 = shared_library('vclplug_kf5lo',
     kf5_kio_filewidgets_dep,
     qt5_dep,
   ],
+  gnu_symbol_visibility: 'hidden',
   install : true,
 )
