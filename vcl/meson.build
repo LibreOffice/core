@@ -737,6 +737,7 @@ vclplug_qt5 = shared_library('vclplug_qt5lo',
     qt5_dep,
     qt5_x11_dep,
   ],
+  gnu_symbol_visibility: 'hidden',
   install : true,
 )
 
