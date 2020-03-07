@@ -60,7 +60,7 @@ namespace drawinglayer::geometry
     This class holds all view-relevant information for a 2d geometry.
     The most used data is for convenience offered directly using basegfx tooling classes.
 */
-class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
+class DRAWINGLAYERCORE_DLLPUBLIC ViewInformation2D
 {
 public:
     typedef o3tl::cow_wrapper<ImpViewInformation2D, o3tl::ThreadSafeRefCountingPolicy> ImplType;

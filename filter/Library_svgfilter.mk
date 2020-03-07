@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 	sax \
 	salhelper \
 	comphelper \
+	drawinglayercore \
 	drawinglayer \
 	basegfx \
 	cppuhelper \

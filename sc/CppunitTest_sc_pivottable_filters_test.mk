@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_pivottable_filters_test, \
     cppu \
     cppuhelper \
     drawinglayer \
+    drawinglayercore \
     editeng \
     for \
     forui \
