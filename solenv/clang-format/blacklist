@@ -3652,7 +3652,6 @@ drawinglayer/source/drawinglayeruno/xprimitive2drenderer.hxx
 drawinglayer/source/dumper/EnhancedShapeDumper.cxx
 drawinglayer/source/dumper/EnhancedShapeDumper.hxx
 drawinglayer/source/dumper/XShapeDumper.cxx
-drawinglayer/source/geometry/viewinformation2d.cxx
 drawinglayer/source/geometry/viewinformation3d.cxx
 drawinglayer/source/primitive2d/animatedprimitive2d.cxx
 drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx
@@ -5849,7 +5848,6 @@ include/drawinglayer/attribute/sdrobjectattribute3d.hxx
 include/drawinglayer/attribute/sdrsceneattribute3d.hxx
 include/drawinglayer/attribute/sdrshadowattribute.hxx
 include/drawinglayer/attribute/strokeattribute.hxx
-include/drawinglayer/geometry/viewinformation2d.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
 include/drawinglayer/primitive2d/cropprimitive2d.hxx
 include/drawinglayer/primitive2d/discretebitmapprimitive2d.hxx
