@@ -37,8 +37,8 @@ public:
 
     int getCount() const;
 
-    bool getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage );
-    bool exportButton( int nSet, const OUString& rPath, const OUString& rName );
+    bool getPreview(int nSet, const std::vector<OUString>& rButtons, Image& rImage);
+    bool exportButton(int nSet, const OUString& rPath, const OUString& rName);
 
 private:
     std::unique_ptr<ButtonSetImpl> mpImpl;

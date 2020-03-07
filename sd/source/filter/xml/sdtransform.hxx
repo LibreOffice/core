@@ -24,7 +24,7 @@
 
 #include <drawdoc.hxx>
 
-void TransformOOo2xDocument( SdDrawDocument* pDocument );
+void TransformOOo2xDocument(SdDrawDocument* pDocument);
 
 #endif
 

@@ -28,7 +28,7 @@
 class SdParagraphDlg : public SfxTabDialogController
 {
 private:
-    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 public:
     SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr);

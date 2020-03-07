@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_INC_SDSHAPETYPES_HXX
 #define INCLUDED_SD_INC_SDSHAPETYPES_HXX
 
-namespace accessibility {
-
+namespace accessibility
+{
 /** Register the SD presentation shape types with the ShapeTypeHandler singleton.
     This method is usually called while loading the sd library.
 */
