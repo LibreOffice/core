@@ -11,6 +11,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
 
 #include <sdbcx/VUser.hxx>
+#include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace connectivity
 {
@@ -22,17 +23,19 @@ namespace connectivity
          */
         class User: public ::connectivity::sdbcx::OUser
         {
+            css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
         public:
             /**
              * Create a "new" descriptor, which isn't yet in the database.
              */
-            User();
+            User(const css::uno::Reference< css::sdbc::XConnection >& rConnection);
             /**
              * For a user that already exists in the db.
              */
-            User(const OUString& rName);
+            User(const css::uno::Reference< css::sdbc::XConnection >& rConnection, const OUString& rName);
 
+            virtual void SAL_CALL changePassword(const OUString&, const OUString& newPassword) override;
             // IRefreshableGroups::
             virtual void refreshGroups() override;
         };
