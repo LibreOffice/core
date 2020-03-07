@@ -18,16 +18,12 @@
  */
 
 #include <memory>
-#include <XPropertyTable.hxx>
 #include <xmlxtexp.hxx>
 #include <xmlxtimp.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdpool.hxx>
-#include <vcl/outdev.hxx>
 #include <tools/debug.hxx>
 #include <stack>
 

@@ -19,33 +19,21 @@
 
 #include <sal/config.h>
 
-#include <tools/debug.hxx>
 #include <sal/types.h>
 #include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/event.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewsh.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/slstitm.hxx>
-#include <svl/stritem.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/lboxctrl.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 
-#include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
 
 using namespace ::com::sun::star::uno;

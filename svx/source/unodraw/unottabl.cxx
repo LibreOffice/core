@@ -18,13 +18,9 @@
  */
 
 #include <com/sun/star/awt/Gradient.hpp>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
-#include <svx/xgrad.hxx>
 #include <svx/xflftrit.hxx>
 
 #include <svx/svdmodel.hxx>
-#include <svx/xflhtit.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomid.hxx>
 #include "UnoNameItemTable.hxx"

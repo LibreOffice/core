@@ -23,18 +23,11 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <tools/debug.hxx>
-#include <tools/poly.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
-#include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
 #include <svx/xoutbmp.hxx>
-#include <vcl/dibtools.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <sax/tools/converter.hxx>
 #include <memory>
 
 #define FORMAT_BMP  "bmp"

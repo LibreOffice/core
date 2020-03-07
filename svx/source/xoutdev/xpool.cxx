@@ -29,7 +29,6 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xsflclit.hxx>
-#include <svx/xtable.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xgrscit.hxx>

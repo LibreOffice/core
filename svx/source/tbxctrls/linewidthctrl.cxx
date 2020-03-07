@@ -17,34 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
 
-#include <svtools/toolbarmenu.hxx>
-#include <svtools/popupwindowcontroller.hxx>
-#include <svtools/valueset.hxx>
-
-#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <helpids.h>
-
-#include <svx/drawitem.hxx>
-#include <svx/xlineit0.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xtable.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/tbxcolorupdate.hxx>
-#include <svx/unoapi.hxx>
-#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

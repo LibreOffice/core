@@ -45,15 +45,12 @@
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/FilterConfigItem.hxx>
 #include <svl/outstrm.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <editeng/numitem.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -63,8 +60,6 @@
 #include <svx/fmview.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/unopage.hxx>
-#include <svx/pageitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xlineit0.hxx>
 #include <editeng/flditem.hxx>

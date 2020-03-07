@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <sot/exchange.hxx>
-#include <sot/storage.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 

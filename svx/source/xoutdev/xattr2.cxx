@@ -39,9 +39,7 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
-#include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 #include <AffineMatrixItem.hxx>
 #include <vcl/svapp.hxx>

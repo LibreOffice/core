@@ -18,11 +18,8 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <svx/svxids.hrc>
 #include <svx/verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
-#include <sfx2/app.hxx>
-#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>

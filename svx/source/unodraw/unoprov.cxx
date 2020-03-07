@@ -35,20 +35,13 @@
 #include <comphelper/sequence.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>
-#include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svxids.hrc>
-#include <editeng/editeng.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/strings.hrc>
 #include <strings.hxx>
-#include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/sdtaaitm.hxx>
-#include <svx/sdtacitm.hxx>
-#include <svx/sdtaiitm.hxx>
-#include <svx/sdtayitm.hxx>
 
 #include "shapeimpl.hxx"
 #include <unordered_map>

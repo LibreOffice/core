@@ -20,11 +20,9 @@
 #include <config_folders.h>
 
 #include <docrecovery.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -32,9 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
-
-#include <officecfg/Office/Recovery.hxx>
 
 namespace svxdr = svx::DocRecovery;
 using namespace ::osl;

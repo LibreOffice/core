@@ -48,10 +48,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/unolingu.hxx>
-#include <svx/sdrpagewindow.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -75,7 +71,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <editeng/editview.hxx>
 
 using ::editeng::SvxBorderLine;

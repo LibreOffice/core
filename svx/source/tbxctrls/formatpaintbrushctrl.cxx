@@ -21,7 +21,6 @@
 #include <svx/formatpaintbrushctrl.hxx>
 
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 

@@ -21,12 +21,9 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
-#include <com/sun/star/embed/XEmbedObjectFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -42,7 +39,6 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 
 #include <comphelper/fileformat.h>
-#include <comphelper/classids.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svx/xmleohlp.hxx>
