@@ -62,6 +62,7 @@ class SwTiledRenderingTest : public SwModelTestBase
 {
 public:
     SwTiledRenderingTest();
+    virtual void setUp() override;
     virtual void tearDown() override;
     void testRegisterCallback();
     void testPostKeyEvent();
@@ -218,6 +219,13 @@ SwTiledRenderingTest::SwTiledRenderingTest()
       m_nRedlineTableEntryModified(0),
       m_nTrackedChangeIndex(-1)
 {
+}
+
+void SwTiledRenderingTest::setUp()
+{
+    SwModelTestBase::setUp();
+
+    comphelper::LibreOfficeKit::setActive(true);
 }
 
 void SwTiledRenderingTest::tearDown()
