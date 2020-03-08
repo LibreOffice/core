@@ -26,10 +26,18 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <converters.hxx>
+#include <comphelper/random.hxx>
 
 namespace drawinglayer::texture
 {
+        namespace
+        {
+            double getRandomColorRange()
+            {
+                return comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX));
+            }
+        }
+
         GeoTexSvx::GeoTexSvx()
         {
         }
