@@ -170,6 +170,8 @@
   <block-list:block block-list:abbreviated-name="civata" block-list:name="cıvata"/>
   <block-list:block block-list:abbreviated-name="Cübbe" block-list:name="Cüppe"/>
   <block-list:block block-list:abbreviated-name="cübbe" block-list:name="cüppe"/>
+  <block-list:block block-list:abbreviated-name="Dekarasyon" block-list:name="Dekorasyon"/>
+  <block-list:block block-list:abbreviated-name="dekarasyon" block-list:name="dekorasyon"/>
   <block-list:block block-list:abbreviated-name="Dekaratör" block-list:name="Dekoratör"/>
   <block-list:block block-list:abbreviated-name="dekaratör" block-list:name="dekoratör"/>
   <block-list:block block-list:abbreviated-name="Deynek" block-list:name="Değnek"/>
@@ -182,18 +184,50 @@
   <block-list:block block-list:abbreviated-name="döğmek" block-list:name="dövmek"/>
   <block-list:block block-list:abbreviated-name="Döküman" block-list:name="Doküman"/>
   <block-list:block block-list:abbreviated-name="döküman" block-list:name="doküman"/>
+  <block-list:block block-list:abbreviated-name="Dökümanter" block-list:name="Dokümanter"/>
+  <block-list:block block-list:abbreviated-name="dökümanter" block-list:name="dokümanter"/>
+  <block-list:block block-list:abbreviated-name="Egsantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="egsantrik" block-list:name="eksantrik"/>
   <block-list:block block-list:abbreviated-name="Egzantrik" block-list:name="Eksantrik"/>
   <block-list:block block-list:abbreviated-name="egzantrik" block-list:name="eksantrik"/>
+  <block-list:block block-list:abbreviated-name="Ekzantrik" block-list:name="Eksantrik"/>
+  <block-list:block block-list:abbreviated-name="ekzantrik" block-list:name="eksantrik"/>
   <block-list:block block-list:abbreviated-name="Egzos" block-list:name="Egzoz"/>
   <block-list:block block-list:abbreviated-name="egzos" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Egzost" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="egzost" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Egsoz" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="egsoz" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Eksoz" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="eksoz" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Eksozt" block-list:name="Egzoz"/>
+  <block-list:block block-list:abbreviated-name="eksozt" block-list:name="egzoz"/>
+  <block-list:block block-list:abbreviated-name="Ensitü" block-list:name="Enstitü"/>
+  <block-list:block block-list:abbreviated-name="ensitü" block-list:name="enstitü"/>
+  <block-list:block block-list:abbreviated-name="Enstütü" block-list:name="Enstitü"/>
+  <block-list:block block-list:abbreviated-name="enstütü" block-list:name="enstitü"/>
   <block-list:block block-list:abbreviated-name="Entellektüel" block-list:name="Entelektüel"/>
   <block-list:block block-list:abbreviated-name="entellektüel" block-list:name="entelektüel"/>
+  <block-list:block block-list:abbreviated-name="Entrasan" block-list:name="Enteresan"/>
+  <block-list:block block-list:abbreviated-name="entrasan" block-list:name="enteresan"/>
+  <block-list:block block-list:abbreviated-name="Erezyon" block-list:name="Erozyon"/>
+  <block-list:block block-list:abbreviated-name="erezyon" block-list:name="erozyon"/>
+  <block-list:block block-list:abbreviated-name="Eskirim" block-list:name="Eskrim"/>
+  <block-list:block block-list:abbreviated-name="eskirim" block-list:name="eskrim"/>
   <block-list:block block-list:abbreviated-name="Espiri" block-list:name="Espri"/>
   <block-list:block block-list:abbreviated-name="espiri" block-list:name="espri"/>
+  <block-list:block block-list:abbreviated-name="Eşgal" block-list:name="Eşkâl"/>
+  <block-list:block block-list:abbreviated-name="eşgal" block-list:name="eşkâl"/>
+  <block-list:block block-list:abbreviated-name="Eşkal" block-list:name="Eşkâl"/>
+  <block-list:block block-list:abbreviated-name="eşkal" block-list:name="eşkâl"/>
   <block-list:block block-list:abbreviated-name="Eşkiya" block-list:name="Eşkıya"/>
   <block-list:block block-list:abbreviated-name="eşkiya" block-list:name="eşkıya"/>
   <block-list:block block-list:abbreviated-name="Eşortman" block-list:name="Eşofman"/>
   <block-list:block block-list:abbreviated-name="eşortman" block-list:name="eşofman"/>
+  <block-list:block block-list:abbreviated-name="Evsane" block-list:name="Efsane"/>
+  <block-list:block block-list:abbreviated-name="evsane" block-list:name="efsane"/>
+  <block-list:block block-list:abbreviated-name="Ezzane" block-list:name="Eczane"/>
+  <block-list:block block-list:abbreviated-name="ezzane" block-list:name="eczane"/>
   <block-list:block block-list:abbreviated-name="Faide" block-list:name="Fayda"/>
   <block-list:block block-list:abbreviated-name="faide" block-list:name="fayda"/>
   <block-list:block block-list:abbreviated-name="Fantazi" block-list:name="Fantezi"/>
