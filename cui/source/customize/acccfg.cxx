@@ -814,7 +814,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
                                                    weld::DialogController* pController,
                                                    const SfxItemSet& aSet)
-    : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
+    : SfxTabPage(pPage, pController, "cui/ui/keyboardconfigpage.ui", "AccelConfigPage", &aSet)
     , m_pMacroInfoItem()
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
@@ -849,7 +849,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     m_xFunctionBox->set_size_request(aSize.Width(), aSize.Height());
     aSize = Size(m_xEntriesBox->get_approximate_digit_width() * 20,
                  m_xEntriesBox->get_height_rows(10));
-    m_xKeyBox->set_size_request(aSize.Width(), aSize.Height());
 
     // install handler functions
     m_xChangeButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, ChangeHdl));
