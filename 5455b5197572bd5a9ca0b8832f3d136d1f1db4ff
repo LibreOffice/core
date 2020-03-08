@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22828a32_d4fcda93",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-03-08T17:02:21Z",
+      "side": 1,
+      "message": "I think that should be \"Dekarasyon\".",
+      "range": {
+        "startLine": 149,
+        "startChar": 49,
+        "endLine": 149,
+        "endChar": 58
+      },
+      "revId": "5455b5197572bd5a9ca0b8832f3d136d1f1db4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06e9007d_a77a54b6",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-03-08T17:02:21Z",
+      "side": 1,
+      "message": "As far as I know, correct word is Enteresan.",
+      "revId": "5455b5197572bd5a9ca0b8832f3d136d1f1db4ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
