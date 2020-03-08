@@ -25,6 +25,12 @@ if host_machine.system() == 'linux'
   add_global_arguments('-DX86_64', language: 'cpp')
   add_global_arguments('-DX86_64', language: 'c')
   add_global_arguments('-DCPPU_ENV=gcc3', language: 'cpp')
+  add_global_arguments('-DOSL_DEBUG_LEVEL=1', language: 'cpp')
+  add_global_arguments('-DOSL_DEBUG_LEVEL=1', language: 'c')
+  add_global_arguments('-DSAL_LOG_INFO', language: 'cpp')
+  add_global_arguments('-DSAL_LOG_INFO', language: 'c')
+  add_global_arguments('-DSAL_LOG_WARN', language: 'cpp')
+  add_global_arguments('-DSAL_LOG_WARN', language: 'c')
   rtl_os = 'Linux'
 elif host_machine.system() == 'windows'
   # HACK: just random values thrown in to make
