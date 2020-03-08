@@ -31,13 +31,10 @@
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-
-// PolyPolygonHairlinePrimitive2D class
-
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
+        // PolyPolygonHairlinePrimitive2D class
+
         /** PolyPolygonHairlinePrimitive2D class
 
             This primitive defines a multi-PolygonHairlinePrimitive2D and is
@@ -73,16 +70,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonMarkerPrimitive2D class
 
-// PolyPolygonMarkerPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonMarkerPrimitive2D class
 
             This primitive defines a multi-PolygonMarkerPrimitive2D and is
@@ -128,16 +118,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonStrokePrimitive2D class
 
-// PolyPolygonStrokePrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonStrokePrimitive2D class
 
             This primitive defines a multi-PolygonStrokePrimitive2D and is
@@ -184,16 +167,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonColorPrimitive2D class
 
-// PolyPolygonColorPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonColorPrimitive2D class
 
             This primitive defines a tools::PolyPolygon filled with a single color.
@@ -228,16 +204,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonGradientPrimitive2D class
 
-// PolyPolygonGradientPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonColorPrimitive2D class
 
             This primitive defines a tools::PolyPolygon filled with a gradient. The
@@ -280,16 +249,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonHatchPrimitive2D class
 
-// PolyPolygonHatchPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonHatchPrimitive2D class
 
             This primitive defines a tools::PolyPolygon filled with a hatch. The
@@ -338,16 +300,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonGraphicPrimitive2D class
 
-// PolyPolygonGraphicPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonGraphicPrimitive2D class
 
             This primitive defines a tools::PolyPolygon filled with bitmap data
@@ -386,16 +341,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // PolyPolygonSelectionPrimitive2D class
 
-// PolyPolygonSelectionPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolyPolygonSelectionPrimitive2D class
 
             This primitive defines a tools::PolyPolygon which gets filled with a defined color
@@ -448,8 +396,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace primitive2d::drawinglayer
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
