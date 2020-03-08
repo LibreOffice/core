@@ -32,6 +32,18 @@ void User::changePassword(const OUString&, const OUString& newPassword)
     m_xConnection->createStatement()->execute("ALTER USER " + m_Name + " PASSWORD '" + newPassword + "'");
 }
 
+sal_Int32 User::getPrivileges(const OUString& , sal_Int32 )
+{
+    // TODO: implement.
+    return 0;
+}
+
+sal_Int32 User::getGrantablePrivileges(const OUString& , sal_Int32 )
+{
+    // TODO: implement.
+    return 0;
+}
+
 //----- IRefreshableGroups ----------------------------------------------------
 void User::refreshGroups()
 {

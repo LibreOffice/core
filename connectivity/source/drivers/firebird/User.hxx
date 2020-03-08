@@ -35,7 +35,11 @@ namespace connectivity
              */
             User(const css::uno::Reference< css::sdbc::XConnection >& rConnection, const OUString& rName);
 
+            // XAuthorizable
             virtual void SAL_CALL changePassword(const OUString&, const OUString& newPassword) override;
+            virtual sal_Int32 SAL_CALL getPrivileges(const OUString&, sal_Int32) override;
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges(const OUString&, sal_Int32) override;
+
             // IRefreshableGroups::
             virtual void refreshGroups() override;
         };
