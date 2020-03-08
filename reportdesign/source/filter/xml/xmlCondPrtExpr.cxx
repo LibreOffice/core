@@ -80,7 +80,8 @@ void OXMLCondPrtExpr::characters( const OUString& rChars )
 
 void OXMLCondPrtExpr::endFastElement( sal_Int32 )
 {
-    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(m_aCharBuffer.makeStringAndClear()));
+    if (m_aCharBuffer.getLength())
+        m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(m_aCharBuffer.makeStringAndClear()));
 }
 
 } // namespace rptxml
