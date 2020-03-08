@@ -78,8 +78,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D)
-
+        sal_uInt32 PolyPolygonHairlinePrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D; }
 
         void PolyPolygonMarkerPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -135,7 +134,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONMARKERPRIMITIVE2D)
+        sal_uInt32 PolyPolygonMarkerPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONMARKERPRIMITIVE2D; }
 
 
         void PolyPolygonStrokePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -204,7 +203,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D)
+        sal_uInt32 PolyPolygonStrokePrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D; }
 
 
         PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(
@@ -236,7 +235,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonColorPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D)
+        sal_uInt32 PolyPolygonColorPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D; }
 
 
         void PolyPolygonGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -293,7 +292,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonGradientPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D)
+        sal_uInt32 PolyPolygonGradientPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D; }
 
         void PolyPolygonHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -355,7 +354,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonHatchPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D)
+        sal_uInt32 PolyPolygonHatchPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D; }
 
         void PolyPolygonGraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
@@ -460,7 +459,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonGraphicPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D)
+        sal_uInt32 PolyPolygonGraphicPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D; }
 
 
         void PolyPolygonSelectionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -555,7 +554,7 @@ namespace drawinglayer::primitive2d
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonSelectionPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D)
+        sal_uInt32 PolyPolygonSelectionPrimitive2D::getPrimitive2DID() const { return PRIMITIVE2D_ID_POLYPOLYGONSELECTIONPRIMITIVE2D; }
 
 } // end of namespace
 
