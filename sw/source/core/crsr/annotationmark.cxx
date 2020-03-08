@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <annotationmark.hxx>
 
 #include <doc.hxx>
@@ -80,24 +81,16 @@ namespace sw::mark
         SwDoc* pDoc = GetMarkPos().GetDoc();
         assert(pDoc != nullptr);
 
-        SwFormatField* pAnnotationFormatField = nullptr;
-
+        const auto sName = GetName();
         SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::Postit, OUString(), false );
-        SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField != nullptr; pFormatField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        pType->GatherFields(vFields);
+        auto ppFound = std::find_if(vFields.begin(), vFields.end(), [&sName](SwFormatField* pF)
         {
-            if ( pFormatField->IsFieldInDoc() )
-            {
-                const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pFormatField->GetField());
-                if (pPostItField != nullptr && pPostItField->GetName() == GetName())
-                {
-                    pAnnotationFormatField = pFormatField;
-                    break;
-                }
-            }
-        }
-
-        return pAnnotationFormatField;
+            auto pPF = dynamic_cast<const SwPostItField*>(pF->GetField());
+            return pPF && pPF->GetName() == sName;
+        });
+        return ppFound != vFields.end() ? *ppFound : nullptr;
     }
 }
 
