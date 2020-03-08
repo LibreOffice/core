@@ -24,7 +24,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <comphelper/random.hxx>
 
 #include <converters.hxx>
 
@@ -196,11 +195,6 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer
 {
-    double getRandomColorRange()
-    {
-        return comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX));
-    }
-
     namespace primitive2d
     {
         void PolygonStrokePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
