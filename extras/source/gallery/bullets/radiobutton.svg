@@ -1,0 +1,40 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<linearGradient
+   id="a"
+   gradientUnits="userSpaceOnUse"
+   x1="7.814"
+   x2="9.271"
+   y1="4.475"
+   y2="11.39">
+  <stop
+     offset="0"
+     stop-color="#64baff"
+     id="stop2" />
+  <stop
+     offset="1"
+     stop-color="#3689e6"
+     id="stop4" />
+</linearGradient>
+<circle
+   cx="8"
+   cy="8"
+   r="6.5625"
+   id="circle7"
+   style="fill:#fdfdfb;stroke:#8c8c8c;stroke-width:0.875;stroke-linecap:round;stroke-linejoin:round" />
+<circle
+   cx="8"
+   cy="8"
+   fill="url(#a)"
+   r="4.5"
+   id="circle9" />
+<circle
+   cx="8"
+   cy="8"
+   fill="none"
+   opacity=".5"
+   r="4.5"
+   stroke="#002e99"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   id="circle11" />
+</svg>
