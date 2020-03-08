@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "3d9ea9c2_f883c765",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1995,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-03-08T05:09:38Z",
+      "side": 1,
+      "message": "I compared the append method with that of\nhttps://opengrok.libreoffice.org/xref/core/sw/source/ui/config/optcomp.cxx?r\u003de8c07076#259\nhttps://opengrok.libreoffice.org/xref/core/include/vcl/weld.hxx?r\u003de165db83#1999",
+      "parentUuid": "57aba6a1_a6cc4744",
+      "range": {
+        "startLine": 1995,
+        "startChar": 48,
+        "endLine": 1995,
+        "endChar": 62
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfaef921_6c9c7ea1",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-03-08T05:09:38Z",
+      "side": 1,
+      "message": "Do we really need to use a std::pair as the second argument here ?\nThe aNavigationImgIds are not used anywhere so a std::map\u003cOUString,sal_uInt16\u003e should do",
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d784c98_372af686",
         "filename": "sw/source/uibase/ribbar/workctrl.cxx",
         "patchSetId": 11
@@ -59,6 +100,30 @@
       "writtenOn": "2020-03-08T00:43:05Z",
       "side": 1,
       "message": "Here, the map key (aNavigationStrIds) and the pair value second element (aNavigationImgIds) are used. Perhaps the pair value first element (aNavigationInsertIds) could be used as the first argument in the call?",
+      "range": {
+        "startLine": 666,
+        "startChar": 7,
+        "endLine": 666,
+        "endChar": 81
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696ceeaa_f587d915",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-03-08T05:09:38Z",
+      "side": 1,
+      "message": "How will that help ?\nThe get_active functions is defined in weld.hxx as get_index() const \u003d 0;\nHow is it getting affected by the append function ?\nI understand that we just need to do some minor changes but I am getting a bit confused here.\nPlease guide me.",
+      "parentUuid": "a9112747_c00fcb69",
       "range": {
         "startLine": 666,
         "startChar": 7,
