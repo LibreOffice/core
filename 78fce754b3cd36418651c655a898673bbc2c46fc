@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57aba6a1_a6cc4744",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1995,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-08T00:43:05Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 1995,
+        "startChar": 48,
+        "endLine": 1995,
+        "endChar": 62
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d784c98_372af686",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-08T00:43:05Z",
+      "side": 1,
+      "message": "Descriptive variable naming can make comments unnecessary. How about aStoreSortedNavigationIds or a aSortedNavigationIdsMap? \n\nspace before the \u003d sign would be nice :).",
+      "range": {
+        "startLine": 662,
+        "startChar": 122,
+        "endLine": 662,
+        "endChar": 156
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9112747_c00fcb69",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-08T00:43:05Z",
+      "side": 1,
+      "message": "Here, the map key (aNavigationStrIds) and the pair value second element (aNavigationImgIds) are used. Perhaps the pair value first element (aNavigationInsertIds) could be used as the first argument in the call?",
+      "range": {
+        "startLine": 666,
+        "startChar": 7,
+        "endLine": 666,
+        "endChar": 81
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
