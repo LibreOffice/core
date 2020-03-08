@@ -12397,8 +12397,8 @@ private:
             case KEY_RIGHT:
             case KEY_RETURN:
                 m_aQuickSelectionEngine.Reset();
-                // tdf#131076 don't let bare return toggle menu popup
-                if (nCode == KEY_RETURN && !pEvent->state)
+                // tdf#131076 don't let bare return toggle menu popup active, but do allow deactive
+                if (nCode == KEY_RETURN && !pEvent->state && !m_bPopupActive)
                     bDone = combobox_activate();
                 break;
             default:
