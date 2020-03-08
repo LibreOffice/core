@@ -1248,7 +1248,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             if (xDescriptionBlob.is())
             {
                 sal_Int32 aBlobLength = static_cast<sal_Int32>(xDescriptionBlob->length());
-                aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(0, aBlobLength).getArray()),
+                aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(1, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
             }
@@ -1415,7 +1415,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 // TODO: we should actually be using CLOB here instead.
                 // However we haven't implemented CLOB yet, so use BLOB.
                 sal_Int32 aBlobLength = static_cast<sal_Int32>(xBlob->length());
-                sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(0, aBlobLength).getArray()),
+                sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(1, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
             }
