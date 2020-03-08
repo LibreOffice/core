@@ -35,12 +35,12 @@ enum class SVTOKENTYPE { Empty,      Comment,
 class SvToken
 {
 friend class SvTokenStream;
-    sal_uLong               nLine, nColumn;
+    sal_uInt64              nLine, nColumn;
     SVTOKENTYPE             nType;
     OString                 aString;
     union
     {
-        sal_uInt64           nLong;
+        sal_uInt64          nLong;
         bool                bBool;
         char                cChar;
         SvStringHashEntry * pHash;
@@ -53,11 +53,11 @@ public:
 
     OString     GetTokenAsString() const;
 
-    void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
-    sal_uLong   GetLine() const             { return nLine;         }
+    void        SetLine( sal_uInt64 nLineP )     { nLine = nLineP;       }
+    sal_uInt64  GetLine() const             { return nLine;         }
 
-    void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
-    sal_uLong   GetColumn() const           { return nColumn;       }
+    void        SetColumn( sal_uInt64 nColumnP ) { nColumn = nColumnP;   }
+    sal_uInt64  GetColumn() const           { return nColumn;       }
 
     bool        IsComment() const   { return nType == SVTOKENTYPE::Comment; }
     bool        IsInteger() const   { return nType == SVTOKENTYPE::Integer; }
@@ -98,13 +98,13 @@ inline SvToken::SvToken()
 
 class SvTokenStream
 {
-    sal_uLong       nLine, nColumn;
+    sal_uInt64      nLine, nColumn;
     sal_Int32       nBufPos;
     char            c;          // next character
     static const sal_uInt16 nTabSize = 4;   // length of tabulator
     OString         aStrTrue;
     OString         aStrFalse;
-    sal_uLong       nMaxPos;
+    sal_uInt32      nMaxPos;
 
     std::unique_ptr<SvFileStream>          pInStream;
     OUString                               aFileName;
@@ -129,7 +129,7 @@ class SvTokenStream
     bool            IsEof() const { return pInStream->eof(); }
     void            SetMax()
                     {
-                        sal_uLong n = Tell();
+                        sal_uInt32 n = Tell();
                         if( n > nMaxPos )
                             nMaxPos = n;
                     }
