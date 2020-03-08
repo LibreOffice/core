@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "239b0e10_109a9185",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-08T07:41:07Z",
+      "side": 1,
+      "message": "aNavigationImgIds are used in the third argument of the append call, itr.second.second. If this argument is not supplied, an image for the appended item will be not be shown.",
+      "parentUuid": "cfaef921_6c9c7ea1",
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d784c98_372af686",
         "filename": "sw/source/uibase/ribbar/workctrl.cxx",
         "patchSetId": 11
@@ -124,6 +142,30 @@
       "side": 1,
       "message": "How will that help ?\nThe get_active functions is defined in weld.hxx as get_index() const \u003d 0;\nHow is it getting affected by the append function ?\nI understand that we just need to do some minor changes but I am getting a bit confused here.\nPlease guide me.",
       "parentUuid": "a9112747_c00fcb69",
+      "range": {
+        "startLine": 666,
+        "startChar": 7,
+        "endLine": 666,
+        "endChar": 81
+      },
+      "revId": "78fce754b3cd36418651c655a898673bbc2c46fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c804d7b7_a9de4554",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-08T07:41:07Z",
+      "side": 1,
+      "message": "The weld::ComboBox is an abstract class having pure virtual functions, ones with \u003d 0, that must be implemented by derived classes. GtkInstanceComboBox and SalInstanceComboBox are derived from weld::ComboBox. Which class is use depends on the vcl plugin used.\n\nBy using aNavigationInsertIds for combobox item ids, the OUString returned by get_active_id() can be converted to a UInt32 to set the move type in the selection handler.",
+      "parentUuid": "696ceeaa_f587d915",
       "range": {
         "startLine": 666,
         "startChar": 7,
