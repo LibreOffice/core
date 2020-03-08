@@ -7352,6 +7352,11 @@ public:
         return nLen;
     }
 
+    void remove(const OString& rIdent) override
+    {
+        MenuHelper::remove_item(rIdent);
+    }
+
     virtual ~GtkInstanceMenu() override
     {
         clear_extras();
