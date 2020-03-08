@@ -204,8 +204,8 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     while( 0 == c && !IsEof() && ( ERRCODE_NONE == pInStream->GetError() ) );
 
-    sal_uLong nLastLine     = nLine;
-    sal_uLong nLastColumn   = nColumn;
+    sal_uInt64 nLastLine     = nLine;
+    sal_uInt64 nLastColumn   = nColumn;
     // comment
     if( '/' == c )
     {
