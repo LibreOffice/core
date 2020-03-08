@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_databasebiblio \
 	Package_fonts \
 	Package_resource_fonts \
-	Package_gallbullets \
 	Package_gallhtmlexpo \
 	Package_gallmytheme \
 	Package_gallroot \
@@ -60,6 +59,7 @@ ifneq ($(WITH_GALLERY_BUILD),)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
 	Gallery_backgrounds \
+	Gallery_bullets \
 	Gallery_computers \
 	Gallery_diagrams \
 	Gallery_education \
