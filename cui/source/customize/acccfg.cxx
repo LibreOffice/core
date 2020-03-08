@@ -814,7 +814,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, KeyInputHdl, const KeyEvent&, rKey, bool)
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
                                                    weld::DialogController* pController,
                                                    const SfxItemSet& aSet)
-    : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
+    : SfxTabPage(pPage, pController, "cui/ui/keyboardconfigpage.ui", "AccelConfigPage", &aSet)
     , m_pMacroInfoItem()
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
