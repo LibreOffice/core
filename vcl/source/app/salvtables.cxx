@@ -735,6 +735,10 @@ public:
         auto nInsertPos = pos == -1 ? MENU_APPEND : pos;
         m_xMenu->InsertSeparator(rId.toUtf8(), nInsertPos);
     }
+    virtual void remove(const OString& rId) override
+    {
+        m_xMenu->RemoveItem(m_xMenu->GetItemPos(m_xMenu->GetItemId(rId)));
+    }
     virtual int n_children() const override { return m_xMenu->GetItemCount(); }
     PopupMenu* getMenu() const { return m_xMenu.get(); }
     virtual ~SalInstanceMenu() override

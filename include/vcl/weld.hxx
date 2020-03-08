@@ -1991,6 +1991,8 @@ public:
                         TriState eCheckRadioFalse)
         = 0;
 
+    virtual void remove(const OString& rId) = 0;
+
     virtual void clear() = 0;
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
