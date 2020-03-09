@@ -16,6 +16,24 @@
       "revId": "47f5c7dd6dfe571793489e848b734463c95a7e21",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6341091_0729823b",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-03-09T21:21:01Z",
+      "side": 1,
+      "message": "Right, OUString has no toUInt16() conversion function. Since we know get_active_id() is an OUString of a sal_uInt16 aNavigationInsertIds array item we should be ok to decode these using toUInt32.",
+      "parentUuid": "a0c788a3_287e4be4",
+      "revId": "47f5c7dd6dfe571793489e848b734463c95a7e21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
