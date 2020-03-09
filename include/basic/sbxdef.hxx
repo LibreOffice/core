@@ -78,6 +78,9 @@ enum SbxDataType {
     SbxVECTOR = 0x1000,  // simple counted array
     SbxARRAY  = 0x2000,  // array
     SbxBYREF  = 0x4000,  // access by reference
+
+    // tdf#79426, tdf#125180
+    SbxMISSING = 0x8000, // Parameter is missing
 };
 
 const sal_uInt32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;

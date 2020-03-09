@@ -25,63 +25,55 @@ Function verify_testIsMissingBasic() As String
     failCount = 0
 
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
-    testName = "Test optionals (Basic)"
+    testName = "Test missing (Basic)"
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
     TestLog_ASSERT TestOptVariant(), IsMissingAB, "TestOptVariant()"
     TestLog_ASSERT TestOptVariant(123), IsMissingB, "TestOptVariant(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)"
+    TestLog_ASSERT TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)"
     TestLog_ASSERT TestOptVariant(123, 456), IsMissingNone, "TestOptVariant(123, 456)"
 
     ' optionals with variant datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptVariantByRefByVal(), IsMissingAB, "TestOptVariantByRefByVal()"
     TestLog_ASSERT TestOptVariantByRefByVal(123), IsMissingB, "TestOptVariantByRefByVal(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)"
+    TestLog_ASSERT TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)"
     TestLog_ASSERT TestOptVariantByRefByVal(123, 456), IsMissingNone, "TestOptVariantByRefByVal(123, 456)"
 
     ' optionals with double datatypes
     TestLog_ASSERT TestOptDouble(), IsMissingAB, "TestOptDouble()"
     TestLog_ASSERT TestOptDouble(123.4), IsMissingB, "TestOptDouble(123.4)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDouble(, 567.8), IsMissingA, "TestOptDouble(, 567.8)"
+    TestLog_ASSERT TestOptDouble(, 567.8), IsMissingA, "TestOptDouble(, 567.8)"
     TestLog_ASSERT TestOptDouble(123.4, 567.8), IsMissingNone, "TestOptDouble(123.4, 567.8)"
 
     ' optionals with double datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptDoubleByRefByVal(), IsMissingAB, "TestOptDouble()"
     TestLog_ASSERT TestOptDoubleByRefByVal(123.4), IsMissingB, "TestOptDouble(123.4)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), IsMissingA, "TestOptDoubleByRefByVal(, 567.8)"
+    TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), IsMissingA, "TestOptDoubleByRefByVal(, 567.8)"
     TestLog_ASSERT TestOptDoubleByRefByVal(123.4, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(123.4, 567.8)"
 
     ' optionals with integer datatypes
     TestLog_ASSERT TestOptInteger(), IsMissingAB, "TestOptInteger()"
     TestLog_ASSERT TestOptInteger(123), IsMissingB, "TestOptInteger(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptInteger(, 456), IsMissingA, "TestOptInteger(, 456)"
+    TestLog_ASSERT TestOptInteger(, 456), IsMissingA, "TestOptInteger(, 456)"
     TestLog_ASSERT TestOptInteger(123, 456), IsMissingNone, "TestOptInteger(123, 456)"
 
     ' optionals with integer datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptIntegerByRefByVal(), IsMissingAB, "TestOptIntegerByRefByVal()"
     TestLog_ASSERT TestOptIntegerByRefByVal(123), IsMissingB, "TestOptIntegerByRefByVal(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptIntegerByRefByVal(, 456), IsMissingA, "TestOptIntegerByRefByVal(, 456)"
+    TestLog_ASSERT TestOptIntegerByRefByVal(, 456), IsMissingA, "TestOptIntegerByRefByVal(, 456)"
     TestLog_ASSERT TestOptIntegerByRefByVal(123, 456), IsMissingNone, "TestOptIntegerByRefByVal(123, 456)"
 
     ' optionals with string datatypes
     TestLog_ASSERT TestOptString(), IsMissingAB, "TestOptString()"
     TestLog_ASSERT TestOptString("123"), IsMissingB, "TestOptString(""123"")"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptString(, "456"), IsMissingA, "TestOptString(, ""456"")"
+    TestLog_ASSERT TestOptString(, "456"), IsMissingA, "TestOptString(, ""456"")"
     TestLog_ASSERT TestOptString("123", "456"), IsMissingNone, "TestOptString(""123"", ""456"")"
 
     ' optionals with string datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptStringByRefByVal(), IsMissingAB, "TestOptStringByRefByVal()"
     TestLog_ASSERT TestOptStringByRefByVal("123"), IsMissingB, "TestOptStringByRefByVal(""123"")"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptStringByRefByVal(, "456"), IsMissingA, "TestOptStringByRefByVal(, ""456"")"
+    TestLog_ASSERT TestOptStringByRefByVal(, "456"), IsMissingA, "TestOptStringByRefByVal(, ""456"")"
     TestLog_ASSERT TestOptStringByRefByVal("123", "456"), IsMissingNone, "TestOptStringByRefByVal(""123"", ""456"")"
 
     ' optionals with object datatypes
@@ -93,15 +85,13 @@ Function verify_testIsMissingBasic() As String
     cB.Add (567.8)
     TestLog_ASSERT TestOptObject(), IsMissingAB, "TestOptObject()"
     TestLog_ASSERT TestOptObject(cA), IsMissingB, "TestOptObject(A)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptObject(, cB), IsMissingA, "TestOptObject(, B)"
+    TestLog_ASSERT TestOptObject(, cB), IsMissingA, "TestOptObject(, B)"
     TestLog_ASSERT TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)"
 
     ' optionals with object datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()"
     TestLog_ASSERT TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)"
+    TestLog_ASSERT TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)"
     TestLog_ASSERT TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)"
 
     ' optionals with array datatypes
@@ -113,15 +103,13 @@ Function verify_testIsMissingBasic() As String
     aB(1) = 567.8
     TestLog_ASSERT TestOptArray(), IsMissingAB, "TestOptArray()"
     TestLog_ASSERT TestOptArray(aA), IsMissingB, "TestOptArray(A)"
-    ' TODO - tdf#125180 for more details
-    'TestLog_ASSERT TestOptArray(, aB), IsMissingA, "TestOptArray(, B)"
+    TestLog_ASSERT TestOptArray(, aB), IsMissingA, "TestOptArray(, B)"
     TestLog_ASSERT TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)"
 
     ' optionals with array datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()"
     TestLog_ASSERT TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)"
-    ' TODO - tdf#125180 for more details
-    'TestLog_ASSERT TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)"
+    TestLog_ASSERT TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)"
     TestLog_ASSERT TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)"
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
