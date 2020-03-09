@@ -26,7 +26,7 @@
 #include <config_options.h>
 
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SpinField : public Edit
+class VCL_DLLPUBLIC SpinField : public Edit
 {
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle );

@@ -143,7 +143,12 @@ pool = multiprocessing.Pool(multiprocessing.cpu_count())
 classes_with_exported_symbols = set(pool.map(extract_class, list(exported_symbols)))
 classes_with_imported_symbols = set(pool.map(extract_class, list(imported_symbols)))
 
+# Some stuff is particular to Windows, so won't be found by a Linux analysis, so remove
+# those classes.
+can_be_private_classes = classes_with_exported_symbols - classes_with_imported_symbols;
+can_be_private_classes.discard("SpinField")
+
 with open("bin/find-mergedlib-can-be-private.classes.results", "wt") as f:
-    for sym in sorted(classes_with_exported_symbols - classes_with_imported_symbols):
+    for sym in sorted(can_be_private_classes):
         if sym.startswith("std::") or sym.startswith("void std::"): continue
         f.write(sym + "\n")
