@@ -108,7 +108,7 @@ namespace drawinglayer
 
                 @param rViewParameters
                 A sequence of property values which allows holding any combination of local and various
-                other parameters. This constructor is feeded completely with a sequence of PropertyValues
+                other parameters. This constructor is fed completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
             explicit ViewInformation3D(const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters);
