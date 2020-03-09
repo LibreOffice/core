@@ -63,6 +63,30 @@
       "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "667be6bf_86c677de",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-09T14:29:38Z",
+      "side": 1,
+      "message": "Possibly: I don\u0027t know what it is expected to be initially; in my testing, it\u0027s always false on entry, so the code is never executed (and it\u0027s interesting why no static analyzers caught this use of uninitialized member)...",
+      "parentUuid": "2a392481_7e8e8d8b",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
