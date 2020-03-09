@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19795013_047364ab",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-03-09T15:32:51Z",
+      "side": 1,
+      "message": "perhaps quarantine this code (including the three queries here) into a separate conditional (and yeah, then duplicating this one SetForegoundWindow_Impl line)?",
+      "revId": "2a7462624d76d99f3bae2542dc5589186e631945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
