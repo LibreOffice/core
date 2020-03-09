@@ -44,6 +44,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include <reffact.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+
+
+#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to
@@ -93,6 +98,12 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     AddTabPage(m_sValuePageId, ScTPValidationValue::Create, nullptr);
     AddTabPage("inputhelp", ScTPValidationHelp::Create, nullptr);
     AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
+
+    if (IS_MOBILE)
+    {
+        m_xBuilder->weld_button("cancel")->hide();
+        m_xBuilder->weld_button("help")->hide();
+    }
 }
 
 ScValidationDlg::~ScValidationDlg()
@@ -679,7 +690,8 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, weld::Button&, void)
 // Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
-    : SfxTabPage(pPage, pController, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
+    : SfxTabPage(pPage, pController, IS_MOBILE ? OUString("modules/scalc/ui/validationhelptabpage-mobile.ui")
+            : OUString("modules/scalc/ui/validationhelptabpage.ui"), "ValidationHelpTabPage", &rArgSet)
     , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
     , m_xEdtTitle(m_xBuilder->weld_entry("title"))
     , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp"))
@@ -732,7 +744,8 @@ ScTPValidationError::ScTPValidationError(weld::Container* pPage, weld::DialogCon
                                          const SfxItemSet& rArgSet)
 
     :   SfxTabPage      ( pPage, pController,
-                          "modules/scalc/ui/erroralerttabpage.ui", "ErrorAlertTabPage",
+                          IS_MOBILE ? OUString("modules/scalc/ui/erroralerttabpage-mobile.ui")
+                                : OUString("modules/scalc/ui/erroralerttabpage.ui"), "ErrorAlertTabPage",
                           &rArgSet )
     , m_xTsbShow(m_xBuilder->weld_check_button("tsbshow"))
     , m_xLbAction(m_xBuilder->weld_combo_box("actionCB"))
