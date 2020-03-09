@@ -21,7 +21,9 @@
 
 using namespace ::com::sun::star;
 
+#if !defined MACOSX
 char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
+#endif
 
 /// SVG filter tests.
 class SvgFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
@@ -33,8 +35,10 @@ public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
+#if !defined MACOSX
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void load(const OUString& rURL);
+#endif
 };
 
 void SvgFilterTest::setUp()
@@ -52,11 +56,13 @@ void SvgFilterTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#if !defined MACOSX
 void SvgFilterTest::load(const OUString& rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
 }
+#endif
 
 void SvgFilterTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
