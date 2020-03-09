@@ -3632,6 +3632,8 @@ namespace
             return vcl::KeyCode(KEY_LEFT, bShift, bMod1, bMod2, bMod3);
         else if (rKey.first == "Right")
             return vcl::KeyCode(KEY_RIGHT, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "asterisk")
+            return vcl::KeyCode(KEY_MULTIPLY, bShift, bMod1, bMod2, bMod3);
 
         assert (rKey.first.getLength() == 1);
         char cChar = rKey.first.toChar();
