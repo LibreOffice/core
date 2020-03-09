@@ -23,65 +23,57 @@ Function verify_testOptionalsCompatible() As String
     failCount = 0
 
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
-    testName = "Test optionals (Basic)"
+    testName = "Test optionals (Compatible)"
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
     ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
     ' TestLog_ASSERT TestOptVariant(), 123, "TestOptVariant()"
     TestLog_ASSERT TestOptVariant(123), 246, "TestOptVariant(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariant(, 456), 456, "TestOptVariant(, 456)"
+    TestLog_ASSERT TestOptVariant(, 456), 456, "TestOptVariant(, 456)"
     TestLog_ASSERT TestOptVariant(123, 456), 579, "TestOptVariant(123, 456)"
 
     ' optionals with variant datatypes (ByRef and ByVal)
     ' TODO - New bug report? Scanner initializes variable as String. Function returns "123"
     ' TestLog_ASSERT TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()"
     TestLog_ASSERT TestOptVariantByRefByVal(123), 246, "TestOptVariantByRefByVal(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)"
+    TestLog_ASSERT TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)"
     TestLog_ASSERT TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)"
 
     ' optionals with double datatypes
     TestLog_ASSERT TestOptDouble(), 123.4, "TestOptDouble()"
     TestLog_ASSERT TestOptDouble(123.4), 246.8, "TestOptDouble(123.4)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)"
+    TestLog_ASSERT TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)"
     TestLog_ASSERT Format(TestOptDouble(123.4, 567.8), "0.0"), 691.2, "TestOptDouble(123.4, 567.8)"
 
     ' optionals with double datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptDoubleByRefByVal(), 123.4, "TestOptDouble()"
     TestLog_ASSERT TestOptDoubleByRefByVal(123.4), 246.8, "TestOptDouble(123.4)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)"
+    TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)"
     TestLog_ASSERT Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0"), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)"
 
     ' optionals with integer datatypes
     TestLog_ASSERT TestOptInteger(), 123, "TestOptInteger()"
     TestLog_ASSERT TestOptInteger(123), 246, "TestOptInteger(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptInteger(, 456), 456, "TestOptInteger(, 456)"
+    TestLog_ASSERT TestOptInteger(, 456), 456, "TestOptInteger(, 456)"
     TestLog_ASSERT TestOptInteger(123, 456), 579, "TestOptInteger(123, 456)"
 
     ' optionals with integer datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptIntegerByRefByVal(), 123, "TestOptIntegerByRefByVal()"
     TestLog_ASSERT TestOptIntegerByRefByVal(123), 246, "TestOptIntegerByRefByVal(123)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptIntegerByRefByVal(, 456), 456, "TestOptIntegerByRefByVal(, 456)"
+    TestLog_ASSERT TestOptIntegerByRefByVal(, 456), 456, "TestOptIntegerByRefByVal(, 456)"
     TestLog_ASSERT TestOptIntegerByRefByVal(123, 456), 579, "TestOptIntegerByRefByVal(123, 456)"
 
     ' optionals with string datatypes
     TestLog_ASSERT TestOptString(), "123", "TestOptString()"
     TestLog_ASSERT TestOptString("123"), "123123", "TestOptString(""123"")"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptString(, "456"), "456", "TestOptString(, ""456"")"
+    TestLog_ASSERT TestOptString(, "456"), "456", "TestOptString(, ""456"")"
     TestLog_ASSERT TestOptString("123", "456"), "123456", "TestOptString(""123"", ""456"")"
 
     ' optionals with string datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptStringByRefByVal(), "123", "TestOptStringByRefByVal()"
     TestLog_ASSERT TestOptStringByRefByVal("123"), "123123", "TestOptStringByRefByVal(""123"")"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT TestOptStringByRefByVal(, "456"), "456", "TestOptStringByRefByVal(, ""456"")"
+    TestLog_ASSERT TestOptStringByRefByVal(, "456"), "456", "TestOptStringByRefByVal(, ""456"")"
     TestLog_ASSERT TestOptStringByRefByVal("123", "456"), "123456", "TestOptStringByRefByVal(""123"", ""456"")"
 
     ' optionals with object datatypes
@@ -93,15 +85,13 @@ Function verify_testOptionalsCompatible() As String
     cB.Add (567.8)
     TestLog_ASSERT TestOptObject(), 0, "TestOptObject()"
     TestLog_ASSERT TestOptObject(cA), 579, "TestOptObject(A)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT Format(TestOptObject(, cB), "0.0"), 691.2, "TestOptObject(, B)"
+    TestLog_ASSERT Format(TestOptObject(, cB), "0.0"), 691.2, "TestOptObject(, B)"
     TestLog_ASSERT Format(TestOptObject(cA, cB), "0.0"), 1270.2, "TestOptObject(A, B)"
 
     ' optionals with object datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptObjectByRefByVal(), 0, "TestOptObjectByRefByVal()"
     TestLog_ASSERT TestOptObjectByRefByVal(cA), 579, "TestOptObjectByRefByVal(A)"
-    ' TODO - tdf#125180 for more details
-    ' TestLog_ASSERT Format(TestOptObjectByRefByVal(, cB), "0.0"), 691.2, "TestOptObjectByRefByVal(, B)"
+    TestLog_ASSERT Format(TestOptObjectByRefByVal(, cB), "0.0"), 691.2, "TestOptObjectByRefByVal(, B)"
     TestLog_ASSERT Format(TestOptObjectByRefByVal(cA, cB), "0.0"), 1270.2, "TestOptObjectByRefByVal(A, B)"
 
     ' optionals with array datatypes
@@ -113,15 +103,13 @@ Function verify_testOptionalsCompatible() As String
     aB(1) = 567.8
     TestLog_ASSERT TestOptArray(), 0, "TestOptArray()"
     TestLog_ASSERT TestOptArray(aA), 579, "TestOptArray(A)"
-    ' TODO - tdf#125180 for more details
-    'TestLog_ASSERT Format(TestOptArray(, aB), "0.0"), 691.2, "TestOptArray(, B)"
+    TestLog_ASSERT Format(TestOptArray(, aB), "0.0"), 691.2, "TestOptArray(, B)"
     TestLog_ASSERT Format(TestOptArray(aA, aB), "0.0"), 1270.2, "TestOptArray(A, B)"
 
     ' optionals with array datatypes (ByRef and ByVal)
     TestLog_ASSERT TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()"
     TestLog_ASSERT TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)"
-    ' TODO - tdf#125180 for more details
-    'TestLog_ASSERT Format(TestOptArrayByRefByVal(, aB), "0.0"), 691.2, "TestOptArrayByRefByVal(, B)"
+    TestLog_ASSERT Format(TestOptArrayByRefByVal(, aB), "0.0"), 691.2, "TestOptArrayByRefByVal(, B)"
     TestLog_ASSERT Format(TestOptArrayByRefByVal(aA, aB), "0.0"), 1270.2, "TestOptArrayByRefByVal(A, B)"
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
