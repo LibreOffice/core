@@ -54,14 +54,14 @@ namespace canvas::tools
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
-            if( !::rtl::math::isFinite( rPoint.X ) )
+            if( !std::isfinite( rPoint.X ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rPoint.Y ) )
+            if( !std::isfinite( rPoint.Y ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) + ": verifyInput(): point X value contains infinite or NAN",
@@ -69,8 +69,8 @@ namespace canvas::tools
             }
 #else
             (void)pStr; (void)xIf; (void)nArgPos;
-            if( !::rtl::math::isFinite( rPoint.X ) ||
-                !::rtl::math::isFinite( rPoint.Y ) )
+            if( !std::isfinite( rPoint.X ) ||
+                !std::isfinite( rPoint.Y ) )
             {
                 throw lang::IllegalArgumentException();
             }
@@ -83,7 +83,7 @@ namespace canvas::tools
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
-            if( !::rtl::math::isFinite( rSegment.Px ) )
+            if( !std::isfinite( rSegment.Px ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -91,7 +91,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rSegment.Py ) )
+            if( !std::isfinite( rSegment.Py ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -99,7 +99,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rSegment.C1x ) )
+            if( !std::isfinite( rSegment.C1x ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -107,7 +107,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rSegment.C1y ) )
+            if( !std::isfinite( rSegment.C1y ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -115,7 +115,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rSegment.C2x ) )
+            if( !std::isfinite( rSegment.C2x ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -123,7 +123,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rSegment.C2y ) )
+            if( !std::isfinite( rSegment.C2y ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii( pStr ) +
@@ -132,12 +132,12 @@ namespace canvas::tools
             }
 #else
             (void)pStr; (void)xIf; (void)nArgPos;
-            if( !::rtl::math::isFinite( rSegment.Px ) ||
-                !::rtl::math::isFinite( rSegment.Py ) ||
-                !::rtl::math::isFinite( rSegment.C1x ) ||
-                !::rtl::math::isFinite( rSegment.C1y ) ||
-                !::rtl::math::isFinite( rSegment.C2x ) ||
-                !::rtl::math::isFinite( rSegment.C2y ) )
+            if( !std::isfinite( rSegment.Px ) ||
+                !std::isfinite( rSegment.Py ) ||
+                !std::isfinite( rSegment.C1x ) ||
+                !std::isfinite( rSegment.C1y ) ||
+                !std::isfinite( rSegment.C2x ) ||
+                !std::isfinite( rSegment.C2y ) )
             {
                 throw lang::IllegalArgumentException();
             }
@@ -150,7 +150,7 @@ namespace canvas::tools
                           ::sal_Int16                               nArgPos )
         {
 #if OSL_DEBUG_LEVEL > 0
-            if( !::rtl::math::isFinite( rRect.X1 ) )
+            if( !std::isfinite( rRect.X1 ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
@@ -158,7 +158,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rRect.Y1 ) )
+            if( !std::isfinite( rRect.Y1 ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
@@ -166,7 +166,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rRect.X2 ) )
+            if( !std::isfinite( rRect.X2 ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
@@ -174,7 +174,7 @@ namespace canvas::tools
                     xIf, nArgPos );
             }
 
-            if( !::rtl::math::isFinite( rRect.Y2 ) )
+            if( !std::isfinite( rRect.Y2 ) )
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
@@ -183,10 +183,10 @@ namespace canvas::tools
             }
 #else
             (void)pStr; (void)xIf; (void)nArgPos;
-            if( !::rtl::math::isFinite( rRect.X1 ) ||
-                !::rtl::math::isFinite( rRect.Y1 ) ||
-                !::rtl::math::isFinite( rRect.X2 ) ||
-                !::rtl::math::isFinite( rRect.Y2 ) )
+            if( !std::isfinite( rRect.X1 ) ||
+                !std::isfinite( rRect.Y1 ) ||
+                !std::isfinite( rRect.X2 ) ||
+                !std::isfinite( rRect.Y2 ) )
             {
                 throw lang::IllegalArgumentException();
             }
@@ -200,12 +200,12 @@ namespace canvas::tools
         {
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
-                100000 * int(!::rtl::math::isFinite( matrix.m00 )) +
-                 10000 * int(!::rtl::math::isFinite( matrix.m01 )) +
-                  1000 * int(!::rtl::math::isFinite( matrix.m02 )) +
-                   100 * int(!::rtl::math::isFinite( matrix.m10 )) +
-                    10 * int(!::rtl::math::isFinite( matrix.m11 )) +
-                     1 * int(!::rtl::math::isFinite( matrix.m12 )) );
+                100000 * int(!std::isfinite( matrix.m00 )) +
+                 10000 * int(!std::isfinite( matrix.m01 )) +
+                  1000 * int(!std::isfinite( matrix.m02 )) +
+                   100 * int(!std::isfinite( matrix.m10 )) +
+                    10 * int(!std::isfinite( matrix.m11 )) +
+                     1 * int(!std::isfinite( matrix.m12 )) );
 
             if( nBinaryState )
             {
@@ -217,12 +217,12 @@ namespace canvas::tools
             }
 #else
             (void)pStr; (void)xIf; (void)nArgPos;
-            if( !::rtl::math::isFinite( matrix.m00 ) ||
-                !::rtl::math::isFinite( matrix.m01 ) ||
-                !::rtl::math::isFinite( matrix.m02 ) ||
-                !::rtl::math::isFinite( matrix.m10 ) ||
-                !::rtl::math::isFinite( matrix.m11 ) ||
-                !::rtl::math::isFinite( matrix.m12 ) )
+            if( !std::isfinite( matrix.m00 ) ||
+                !std::isfinite( matrix.m01 ) ||
+                !std::isfinite( matrix.m02 ) ||
+                !std::isfinite( matrix.m10 ) ||
+                !std::isfinite( matrix.m11 ) ||
+                !std::isfinite( matrix.m12 ) )
             {
                 throw lang::IllegalArgumentException();
             }
@@ -236,10 +236,10 @@ namespace canvas::tools
         {
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
-                1000 * int(!::rtl::math::isFinite( matrix.m00 )) +
-                 100 * int(!::rtl::math::isFinite( matrix.m01 )) +
-                  10 * int(!::rtl::math::isFinite( matrix.m10 )) +
-                   1 * int(!::rtl::math::isFinite( matrix.m11 )) );
+                1000 * int(!std::isfinite( matrix.m00 )) +
+                 100 * int(!std::isfinite( matrix.m01 )) +
+                  10 * int(!std::isfinite( matrix.m10 )) +
+                   1 * int(!std::isfinite( matrix.m11 )) );
 
             if( nBinaryState )
             {
@@ -251,10 +251,10 @@ namespace canvas::tools
             }
 #else
             (void)pStr; (void)xIf; (void)nArgPos;
-            if( !::rtl::math::isFinite( matrix.m00 ) ||
-                !::rtl::math::isFinite( matrix.m01 ) ||
-                !::rtl::math::isFinite( matrix.m10 ) ||
-                !::rtl::math::isFinite( matrix.m11 ) )
+            if( !std::isfinite( matrix.m00 ) ||
+                !std::isfinite( matrix.m01 ) ||
+                !std::isfinite( matrix.m10 ) ||
+                !std::isfinite( matrix.m11 ) )
             {
                 throw lang::IllegalArgumentException();
             }
@@ -319,7 +319,7 @@ namespace canvas::tools
             verifyInput( texture.AffineTransform,
                          pStr, xIf, nArgPos );
 
-            if( !::rtl::math::isFinite( texture.Alpha ) ||
+            if( !std::isfinite( texture.Alpha ) ||
                 texture.Alpha < 0.0 ||
                 texture.Alpha > 1.0 )
             {
@@ -392,7 +392,7 @@ namespace canvas::tools
 
                 void operator()( const double& rVal )
                 {
-                    if( !::rtl::math::isFinite( rVal ) || rVal < 0.0 )
+                    if( !std::isfinite( rVal ) || rVal < 0.0 )
                     {
 #if OSL_DEBUG_LEVEL > 0
                         throw lang::IllegalArgumentException(
@@ -417,7 +417,7 @@ namespace canvas::tools
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            if( !::rtl::math::isFinite( strokeAttributes.StrokeWidth ) ||
+            if( !std::isfinite( strokeAttributes.StrokeWidth ) ||
                 strokeAttributes.StrokeWidth < 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -432,7 +432,7 @@ namespace canvas::tools
 #endif
             }
 
-            if( !::rtl::math::isFinite( strokeAttributes.MiterLimit ) ||
+            if( !std::isfinite( strokeAttributes.MiterLimit ) ||
                 strokeAttributes.MiterLimit < 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -576,7 +576,7 @@ namespace canvas::tools
             verifyInput( fontRequest.FontDescription,
                          pStr, xIf, nArgPos );
 
-            if( !::rtl::math::isFinite( fontRequest.CellSize ) )
+            if( !std::isfinite( fontRequest.CellSize ) )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
@@ -588,7 +588,7 @@ namespace canvas::tools
 #endif
             }
 
-            if( !::rtl::math::isFinite( fontRequest.ReferenceAdvancement ) )
+            if( !std::isfinite( fontRequest.ReferenceAdvancement ) )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(

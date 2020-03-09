@@ -247,8 +247,8 @@ void PlottingPositionHelper::setCoordinateSystemResolution( const css::uno::Sequ
 bool PlottingPositionHelper::isSameForGivenResolution( double fX, double fY, double fZ
                                 , double fX2, double fY2, double fZ2 /*these values are all expected tp be scaled already*/ )
 {
-    if( !::rtl::math::isFinite(fX) || !::rtl::math::isFinite(fY) || !::rtl::math::isFinite(fZ)
-        || !::rtl::math::isFinite(fX2) || !::rtl::math::isFinite(fY2) || !::rtl::math::isFinite(fZ2) )
+    if( !std::isfinite(fX) || !std::isfinite(fY) || !std::isfinite(fZ)
+        || !std::isfinite(fX2) || !std::isfinite(fY2) || !std::isfinite(fZ2) )
         return false;
 
     double fScaledMinX = getLogicMinX();

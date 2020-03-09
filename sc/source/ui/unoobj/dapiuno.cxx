@@ -163,7 +163,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
 
 bool lclCheckValidDouble( double fValue, bool bAuto )
 {
-    return bAuto || ::rtl::math::isFinite( fValue );
+    return bAuto || std::isfinite( fValue );
 }
 
 bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )

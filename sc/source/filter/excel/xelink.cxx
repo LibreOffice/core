@@ -1198,7 +1198,7 @@ void XclExpCrn::WriteBool( XclExpStream& rStrm, bool bValue )
 
 void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
-    if( !::rtl::math::isFinite( fValue ) )
+    if( !std::isfinite( fValue ) )
     {
         FormulaError nScError = GetDoubleErrorValue(fValue);
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
@@ -1239,7 +1239,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
         if( rValue.has< double >() )
         {
             double fVal = rValue.get< double >();
-            if (rtl::math::isFinite( fVal))
+            if (std::isfinite( fVal))
             {
                 // t='n' is omitted
                 pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr));

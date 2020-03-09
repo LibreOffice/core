@@ -374,7 +374,7 @@ public:
 
 inline void checkArithmeticOverflow( double d )
 {
-    if( !::rtl::math::isFinite( d ) )
+    if( !std::isfinite( d ) )
         StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 }
 

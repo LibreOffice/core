@@ -125,7 +125,7 @@ void ScInterpreter::ScIfJump()
                             if (bIsValue)
                             {
                                 fVal = pMat->GetDouble(nC, nR);
-                                bIsValue = ::rtl::math::isFinite(fVal);
+                                bIsValue = std::isfinite(fVal);
                                 bTrue = bIsValue && (fVal != 0.0);
                                 if (bTrue)
                                     fVal = 1.0;
@@ -448,7 +448,7 @@ void ScInterpreter::ScChooseJump()
                             if ( bIsValue )
                             {
                                 fVal = pMat->GetDouble(nC, nR);
-                                bIsValue = ::rtl::math::isFinite( fVal );
+                                bIsValue = std::isfinite( fVal );
                                 if ( bIsValue )
                                 {
                                     fVal = ::rtl::math::approxFloor( fVal);
@@ -3774,7 +3774,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
     }
     else
     {
-        if (!rtl::math::isFinite(nVal))
+        if (!std::isfinite(nVal))
             PushError( GetDoubleErrorValue( nVal));
         else if ( nVal < nMin  )
             PushDouble(0.0);    // zero or only empty arguments
@@ -3932,7 +3932,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     }
     else
     {
-        if (!rtl::math::isFinite(nVal))
+        if (!std::isfinite(nVal))
             PushError( GetDoubleErrorValue( nVal));
         else if ( nVal > nMax  )
             PushDouble(0.0);    // zero or only empty arguments
@@ -4714,7 +4714,7 @@ sal_Int32 lcl_CompareMatrix2Query(
     if (rMat.IsValue(i))
     {
         const double nVal1 = rMat.GetDouble(i);
-        if (!rtl::math::isFinite(nVal1))
+        if (!std::isfinite(nVal1))
         {
             // XXX Querying for error values is not required, otherwise we'd
             // need to check here.
@@ -6867,7 +6867,7 @@ void ScInterpreter::ScLookup()
             for (SCSIZE i=0; i < nElements; ++i)
             {
                 const double fVal = aMatAcc.GetDouble(i);
-                if (rtl::math::isFinite(fVal))
+                if (std::isfinite(fVal))
                 {
                     vArray.push_back(fVal);
                     vIndex.push_back(i);

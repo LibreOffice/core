@@ -2161,7 +2161,7 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 
 sal_Int32 ScInterpreter::double_to_int32(double fVal)
 {
-    if (!rtl::math::isFinite(fVal))
+    if (!std::isfinite(fVal))
     {
         SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_INT32;
@@ -2204,7 +2204,7 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = GetDouble();
-    if (!rtl::math::isFinite(fVal))
+    if (!std::isfinite(fVal))
     {
         SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_INT16;
@@ -2233,7 +2233,7 @@ sal_Int16 ScInterpreter::GetInt16()
 sal_uInt32 ScInterpreter::GetUInt32()
 {
     double fVal = rtl::math::approxFloor( GetDouble());
-    if (!rtl::math::isFinite(fVal))
+    if (!std::isfinite(fVal))
     {
         SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_UINT32;

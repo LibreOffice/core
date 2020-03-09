@@ -96,7 +96,7 @@ struct ElemEqualZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val == 0.0 ? 1.0 : 0.0;
     }
@@ -106,7 +106,7 @@ struct ElemNotEqualZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val != 0.0 ? 1.0 : 0.0;
     }
@@ -116,7 +116,7 @@ struct ElemGreaterZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val > 0.0 ? 1.0 : 0.0;
     }
@@ -126,7 +126,7 @@ struct ElemLessZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val < 0.0 ? 1.0 : 0.0;
     }
@@ -136,7 +136,7 @@ struct ElemGreaterEqualZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val >= 0.0 ? 1.0 : 0.0;
     }
@@ -146,7 +146,7 @@ struct ElemLessEqualZero
 {
     double operator() (double val) const
     {
-        if (!::rtl::math::isFinite(val))
+        if (!std::isfinite(val))
             return val;
         return val <= 0.0 ? 1.0 : 0.0;
     }
@@ -1078,7 +1078,7 @@ double EvalMatrix(const MatrixImplType& rMat)
                 return CreateDoubleError(FormulaError::IllegalArgument);
 
             double fVal = rMat.get_numeric(aPos);
-            if (!::rtl::math::isFinite(fVal))
+            if (!std::isfinite(fVal))
                 // DoubleError
                 return fVal;
 
@@ -1142,7 +1142,7 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    if (mbIgnoreErrorValues && !rtl::math::isFinite(*it))
+                    if (mbIgnoreErrorValues && !std::isfinite(*it))
                     {
                         ++nIgnored;
                         continue;
@@ -1317,7 +1317,7 @@ public:
                     block_type::const_iterator itEnd = block_type::end(*node.data);
                     for (; it != itEnd; ++it)
                     {
-                        if (!::rtl::math::isFinite(*it))
+                        if (!std::isfinite(*it))
                             --mnCount;
                     }
                 }
@@ -1466,9 +1466,9 @@ struct MaxOp
     static double init() { return -std::numeric_limits<double>::max(); }
     static double compare(double left, double right)
     {
-        if (!rtl::math::isFinite(left))
+        if (!std::isfinite(left))
             return left;
-        if (!rtl::math::isFinite(right))
+        if (!std::isfinite(right))
             return right;
         return std::max(left, right);
     }
@@ -1488,9 +1488,9 @@ struct MinOp
     static double init() { return std::numeric_limits<double>::max(); }
     static double compare(double left, double right)
     {
-        if (!rtl::math::isFinite(left))
+        if (!std::isfinite(left))
             return left;
-        if (!rtl::math::isFinite(right))
+        if (!std::isfinite(right))
             return right;
         return std::min(left, right);
     }
@@ -1572,7 +1572,7 @@ public:
                 {
                     for (; it != itEnd; ++it)
                     {
-                        if (rtl::math::isFinite(*it))
+                        if (std::isfinite(*it))
                             mfVal = Op::compare(mfVal, *it);
                     }
                 }
@@ -1665,7 +1665,7 @@ public:
 
 double evaluate( double fVal, ScQueryOp eOp )
 {
-    if (!rtl::math::isFinite(fVal))
+    if (!std::isfinite(fVal))
         return fVal;
 
     switch (eOp)

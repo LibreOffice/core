@@ -1008,7 +1008,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
                 bMayForceNumberformat = false;
             }
         }
-        else if (rtl::math::isFinite(fValue))
+        else if (std::isfinite(fValue))
         {
             pFCell->SetHybridDouble(fValue);
             if (mbPossibleEmptyDisplay && fValue == 0.0)
@@ -1144,7 +1144,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         // fdo#62250 absent values are not NaN, set to 0.0
         // PutValueCell() is called only for a known cell value type,
         // bIsEmpty==false in all these cases, no sense to check it here.
-        if (!::rtl::math::isFinite( fValue))
+        if (!std::isfinite( fValue))
             fValue = 0.0;
 
         // #i62435# Initialize the value cell's script type if the default
@@ -1425,7 +1425,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                             pFCell->ResetDirty();
                         }
                     }
-                    else if (rtl::math::isFinite(fValue))
+                    else if (std::isfinite(fValue))
                     {
                         pFCell->SetResultMatrix(
                             nMatrixCols, nMatrixRows, pMat, new formula::FormulaDoubleToken(fValue));

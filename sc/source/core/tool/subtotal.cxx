@@ -26,7 +26,7 @@ bool SubTotal::SafePlus(double& fVal1, double fVal2)
     bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 += fVal2;
-    if (!::rtl::math::isFinite(fVal1))
+    if (!std::isfinite(fVal1))
     {
         bOk = false;
         if (fVal2 > 0.0)
@@ -42,7 +42,7 @@ bool SubTotal::SafeMult(double& fVal1, double fVal2)
     bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 *= fVal2;
-    if (!::rtl::math::isFinite(fVal1))
+    if (!std::isfinite(fVal1))
     {
         bOk = false;
         fVal1 = DBL_MAX;
@@ -55,7 +55,7 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 /= fVal2;
-    if (!::rtl::math::isFinite(fVal1))
+    if (!std::isfinite(fVal1))
     {
         bOk = false;
         fVal1 = DBL_MAX;
