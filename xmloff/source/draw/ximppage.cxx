@@ -36,6 +36,7 @@
 #include <xmloff/prstylei.hxx>
 #include <PropertySetMerger.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -59,10 +60,13 @@ class DrawAnnotationContext : public SvXMLImportContext
 {
 
 public:
-    DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
+    DrawAnnotationContext( SvXMLImport& rImport, const Reference< xml::sax::XFastAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
     Reference< XAnnotation > mxAnnotation;
@@ -75,62 +79,85 @@ private:
 
 }
 
-DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
-: SvXMLImportContext( rImport, nPrfx, rLocalName )
+DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Reference< xml::sax::XFastAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
+: SvXMLImportContext( rImport )
 , mxAnnotation( xAnnotationAccess->createAndInsertAnnotation() )
+{
+    if( !mxAnnotation.is() )
+        return;
+
+    RealPoint2D aPosition;
+    RealSize2D aSize;
+
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    for (auto &aIter : *pAttribList)
+    {
+        OUString sValue = aIter.toString();
+
+        switch( aIter.getToken() )
+        {
+            case XML_ELEMENT(SVG, XML_X):
+            {
+                sal_Int32 x;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        x, sValue);
+                aPosition.X = static_cast<double>(x) / 100.0;
+                break;
+            }
+            case XML_ELEMENT(SVG, XML_Y):
+            {
+                sal_Int32 y;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        y, sValue);
+                aPosition.Y = static_cast<double>(y) / 100.0;
+                break;
+            }
+            case XML_ELEMENT(SVG, XML_WIDTH):
+            {
+                sal_Int32 w;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        w, sValue);
+                aSize.Width = static_cast<double>(w) / 100.0;
+                break;
+            }
+            case XML_ELEMENT(SVG, XML_HEIGHT):
+            {
+                sal_Int32 h;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        h, sValue);
+                aSize.Height = static_cast<double>(h) / 100.0;
+            }
+            break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);        }
+    }
+
+    mxAnnotation->setPosition( aPosition );
+    mxAnnotation->setSize( aSize );
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > DrawAnnotationContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if( mxAnnotation.is() )
     {
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-
-        RealPoint2D aPosition;
-        RealSize2D aSize;
-
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_DC))
         {
-            OUString sValue( xAttrList->getValueByIndex( i ) );
-            OUString sAttrName( xAttrList->getNameByIndex( i ) );
-            OUString aLocalName;
-            switch( GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ) )
-            {
-            case XML_NAMESPACE_SVG:
-                if( IsXMLToken( aLocalName, XML_X ) )
-                {
-                    sal_Int32 x;
-                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                            x, sValue);
-                    aPosition.X = static_cast<double>(x) / 100.0;
-                }
-                else if( IsXMLToken( aLocalName, XML_Y ) )
-                {
-                    sal_Int32 y;
-                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                            y, sValue);
-                    aPosition.Y = static_cast<double>(y) / 100.0;
-                }
-                else if( IsXMLToken( aLocalName, XML_WIDTH ) )
-                {
-                    sal_Int32 w;
-                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                            w, sValue);
-                    aSize.Width = static_cast<double>(w) / 100.0;
-                }
-                else if( IsXMLToken( aLocalName, XML_HEIGHT ) )
-                {
-                    sal_Int32 h;
-                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                            h, sValue);
-                    aSize.Height = static_cast<double>(h) / 100.0;
-                }
-                break;
-            default:
-                break;
-            }
+            if( (nElement & TOKEN_MASK) == XML_CREATOR )
+                return new XMLStringBufferImportContext(GetImport(), maAuthorBuffer);
+            else if( (nElement & TOKEN_MASK) == XML_DATE )
+                return new XMLStringBufferImportContext(GetImport(), maDateBuffer);
         }
-
-        mxAnnotation->setPosition( aPosition );
-        mxAnnotation->setSize( aSize );
+        else if ( nElement == XML_ELEMENT(TEXT, XML_SENDER_INITIALS)
+                || nElement == XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS)
+                || nElement == XML_ELEMENT(META, XML_CREATOR_INITIALS))
+        {
+            return new XMLStringBufferImportContext(GetImport(), maInitialsBuffer);
+        }
     }
+    return nullptr;
 }
 
 SvXMLImportContextRef DrawAnnotationContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
@@ -141,17 +168,14 @@ SvXMLImportContextRef DrawAnnotationContext::CreateChildContext( sal_uInt16 nPre
     {
         if( XML_NAMESPACE_DC == nPrefix )
         {
-            if( IsXMLToken( rLocalName, XML_CREATOR ) )
-                xContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maAuthorBuffer);
-            else if( IsXMLToken( rLocalName, XML_DATE ) )
-                xContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maDateBuffer);
+            // handled in createFastChildContext
         }
         else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
                     && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
                  || (XML_NAMESPACE_META == nPrefix
                      && IsXMLToken(rLocalName, XML_CREATOR_INITIALS)))
         {
-            xContext = new XMLStringBufferImportContext(GetImport(), nPrefix, rLocalName, maInitialsBuffer);
+            // handled in createFastChildContext
         }
         else
         {
@@ -179,7 +203,12 @@ SvXMLImportContextRef DrawAnnotationContext::CreateChildContext( sal_uInt16 nPre
     return xContext;
 }
 
-void DrawAnnotationContext::EndElement()
+void DrawAnnotationContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+}
+
+void DrawAnnotationContext::endFastElement(sal_Int32)
 {
     if(mxCursor.is())
     {
@@ -241,11 +270,16 @@ void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Re
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContext::createFastChildContext(
     sal_Int32 nElement,
-    const Reference< xml::sax::XFastAttributeList>& /*xAttrList*/ )
+    const Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
     if( nElement == XML_ELEMENT(PRESENTATION, XML_ANIMATIONS) )
     {
         return new XMLAnimationsContext( GetImport() );
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_ANNOTATION) || nElement == XML_ELEMENT(OFFICE_EXT, XML_ANNOTATION) )
+    {
+        if( mxAnnotationAccess.is() )
+            return new DrawAnnotationContext( GetImport(), xAttrList, mxAnnotationAccess );
     }
     return nullptr;
 }
@@ -267,8 +301,7 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
     }
     else if( ((nPrefix == XML_NAMESPACE_OFFICE) || (nPrefix == XML_NAMESPACE_OFFICE_EXT)) && IsXMLToken( rLocalName, XML_ANNOTATION ) )
     {
-        if( mxAnnotationAccess.is() )
-            xContext = new DrawAnnotationContext( GetImport(), nPrefix, rLocalName, xAttrList, mxAnnotationAccess );
+        // handled in createFastChildContext
     }
     else
     {
