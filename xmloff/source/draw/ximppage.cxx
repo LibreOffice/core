@@ -209,30 +209,6 @@ void DrawAnnotationContext::EndElement()
 
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList>& xAttrList,
-    Reference< drawing::XShapes > const & rShapes)
-: SvXMLImportContext( rImport, nPrfx, rLocalName )
-, mxShapes( rShapes )
-, mxAnnotationAccess( rShapes, UNO_QUERY )
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( aLocalName, XML_NAV_ORDER ) )
-        {
-            msNavOrder = xAttrList->getValueByIndex( i );
-            break;
-        }
-    }
-}
-
-SdXMLGenericPageContext::SdXMLGenericPageContext(
-    SvXMLImport& rImport,
     const Reference< xml::sax::XFastAttributeList>& xAttrList,
     Reference< drawing::XShapes > const & rShapes)
 : SvXMLImportContext( rImport )
@@ -257,10 +233,7 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 
 void SdXMLGenericPageContext::StartElement( const Reference< css::xml::sax::XAttributeList >& )
 {
-    GetImport().GetShapeImport()->pushGroupForPostProcessing( mxShapes );
-
-    if( GetImport().IsFormsSupported() )
-        GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
+    assert(false);
 }
 
 void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Reference< css::xml::sax::XFastAttributeList >& )
@@ -269,6 +242,13 @@ void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Re
 
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContext::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const Reference< xml::sax::XFastAttributeList>& /*xAttrList*/ )
+{
+    return nullptr;
 }
 
 SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -303,78 +283,7 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
 
 void SdXMLGenericPageContext::EndElement()
 {
-    GetImport().GetShapeImport()->popGroupAndPostProcess();
-
-    if( GetImport().IsFormsSupported() )
-        GetImport().GetFormImport()->endPage();
-
-    if( !maUseHeaderDeclName.isEmpty() || !maUseFooterDeclName.isEmpty() || !maUseDateTimeDeclName.isEmpty() )
-    {
-        try
-        {
-            Reference <beans::XPropertySet> xSet(mxShapes, uno::UNO_QUERY_THROW );
-            Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-
-            if( !maUseHeaderDeclName.isEmpty() )
-            {
-                const OUString aStrHeaderTextProp( "HeaderText" );
-                if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
-                    xSet->setPropertyValue( aStrHeaderTextProp,
-                                            makeAny( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
-            }
-
-            if( !maUseFooterDeclName.isEmpty() )
-            {
-                const OUString aStrFooterTextProp( "FooterText" );
-                if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
-                    xSet->setPropertyValue( aStrFooterTextProp,
-                                        makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
-            }
-
-            if( !maUseDateTimeDeclName.isEmpty() )
-            {
-                const OUString aStrDateTimeTextProp( "DateTimeText" );
-                if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
-                {
-                    bool bFixed;
-                    OUString aDateTimeFormat;
-                    const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
-
-                    xSet->setPropertyValue("IsDateTimeFixed",
-                                        makeAny( bFixed ) );
-
-                    if( bFixed )
-                    {
-                        xSet->setPropertyValue( aStrDateTimeTextProp, makeAny( aText ) );
-                    }
-                    else if( !aDateTimeFormat.isEmpty() )
-                    {
-                        const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetStylesContext() );
-                        if( !pStyles )
-                            pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetAutoStylesContext() );
-
-                        if( pStyles )
-                        {
-                            const SdXMLNumberFormatImportContext* pSdNumStyle =
-                                dynamic_cast< const SdXMLNumberFormatImportContext* >( pStyles->FindStyleChildContext( XmlStyleFamily::DATA_STYLE, aDateTimeFormat, true ) );
-
-                            if( pSdNumStyle )
-                            {
-                                xSet->setPropertyValue("DateTimeFormat",
-                                                                    makeAny( pSdNumStyle->GetDrawKey() ) );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch(const uno::Exception&)
-        {
-            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception caught!");
-        }
-    }
-
-    SetNavigationOrder();
+    assert(false);
 }
 
 void SdXMLGenericPageContext::endFastElement(sal_Int32 )
