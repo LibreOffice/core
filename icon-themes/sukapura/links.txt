@@ -223,7 +223,6 @@ cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/previewzoom.png cmd/32/zoom.png
 cmd/32/view100.png cmd/32/zoom100percent.png
 cmd/32/zoomminus.png cmd/32/zoomout.png
-cmd/32/zoommode.png cmd/32/zoomoptimal.png
 cmd/32/zoomplus.png cmd/32/zoomin.png
 cmd/32/zoomtoolbox.png cmd/32/zoom.png
 
@@ -231,7 +230,6 @@ cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_previewzoom.png cmd/lc_zoom.png
 cmd/lc_view100.png cmd/lc_zoom100percent.png
 cmd/lc_zoomminus.png cmd/lc_zoomout.png
-cmd/lc_zoommode.png cmd/lc_zoomoptimal.png
 cmd/lc_zoomplus.png cmd/lc_zoomin.png
 cmd/lc_zoomtoolbox.png cmd/lc_zoom.png
 
@@ -239,7 +237,6 @@ cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_previewzoom.png cmd/sc_zoom.png
 cmd/sc_view100.png cmd/sc_zoom100percent.png
 cmd/sc_zoomminus.png cmd/sc_zoomout.png
-cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 
