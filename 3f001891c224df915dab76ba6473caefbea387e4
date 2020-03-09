@@ -52,6 +52,24 @@
       "revId": "3f001891c224df915dab76ba6473caefbea387e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b50bde1_1284cbd4",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5083,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-03-09T07:48:17Z",
+      "side": 1,
+      "message": "The problem is that I could not reproduce the mislayout with inserting a chart in a fresh document, I could only reproduce with the bugdoc from tdf#131121.\nNo idea what\u0027s so special about it, but this change fixes the document.",
+      "parentUuid": "f135799b_bc5f5305",
+      "revId": "3f001891c224df915dab76ba6473caefbea387e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
