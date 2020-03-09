@@ -766,7 +766,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else
     {
-        pSizeBox->set_active_text( OUString() );
+        pSizeBox->set_entry_text( OUString() );
         if ( eState <= SfxItemState::READONLY )
         {
             pSizeBox->set_sensitive(false);

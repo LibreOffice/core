@@ -133,7 +133,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     m_xWidget(new FontSizeBox(m_xBuilder->weld_combo_box("fontsizecombobox")))
 {
     m_xWidget->set_value(0);
-    m_xWidget->set_active_text("");
+    m_xWidget->set_entry_text("");
     m_xWidget->disable_entry_completion();
 
     m_xWidget->connect_changed(LINK(this, SvxFontSizeBox_Impl, SelectHdl));
@@ -217,9 +217,9 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
     {
         // delete value in the display
         m_xWidget->set_value(-1L);
-        m_xWidget->set_active_text("");
+        m_xWidget->set_entry_text("");
     }
-    m_xWidget->save_value();
+    m_aCurText = m_xWidget->get_active_text();
 }
 
 void SvxFontSizeBox_Impl::UpdateFont( const css::awt::FontDescriptor& rCurrentFont )
@@ -260,7 +260,7 @@ IMPL_LINK(SvxFontSizeBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             break;
 
         case KEY_ESCAPE:
-            m_xWidget->set_active_text(m_aCurText);
+            m_xWidget->set_entry_text(m_aCurText);
             if ( typeid( *GetParent() ) != typeid( sfx2::sidebar::SidebarToolBox ) )
                 ReleaseFocus_Impl();
             bHandled = true;
@@ -273,7 +273,7 @@ IMPL_LINK(SvxFontSizeBox_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 IMPL_LINK_NOARG(SvxFontSizeBox_Impl, FocusOutHdl, weld::Widget&, void)
 {
     if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidget so double-check if none of those has focus
-        m_xWidget->set_value(m_xWidget->get_saved_value());
+        m_xWidget->set_entry_text(m_aCurText);
 }
 
 void SvxFontSizeBox_Impl::SetOptimalSize()

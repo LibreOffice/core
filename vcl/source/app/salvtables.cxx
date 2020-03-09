@@ -5881,7 +5881,7 @@ public:
 
     virtual bool changed_by_direct_pick() const override
     {
-        return m_bInSelect && !m_xComboBox->IsModifyByKeyboard();
+        return m_bInSelect && !m_xComboBox->IsModifyByKeyboard() && !m_xComboBox->IsTravelSelect();
     }
 
     virtual void set_entry_message_type(weld::EntryMessageType eType) override
