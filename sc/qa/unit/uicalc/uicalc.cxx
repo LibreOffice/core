@@ -29,7 +29,7 @@ public:
 
     ScModelObj* createDoc(const char* pName);
 
-private:
+protected:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
@@ -87,6 +87,54 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ScDocShell::GetViewData()->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
+{
+    ScModelObj* pModelObj = createDoc("tdf126904.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(9), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(12), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+
+    //Cursor can't move forward to the right
+    for (size_t i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(13), ScDocShell::GetViewData()->GetCurX());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+    }
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
