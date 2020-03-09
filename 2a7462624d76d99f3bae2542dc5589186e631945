@@ -16,6 +16,24 @@
       "revId": "2a7462624d76d99f3bae2542dc5589186e631945",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f4f58b_33cb6c72",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-09T16:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19795013_047364ab",
+      "revId": "2a7462624d76d99f3bae2542dc5589186e631945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
