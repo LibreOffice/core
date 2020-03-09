@@ -33,6 +33,12 @@
 
 #include <comphelper/windowserrorstring.hxx>
 
+#include <fstream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+#include <osl/file.hxx>
+#include <osl/process.h>
+
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 #include <sal/log.hxx>
@@ -1924,16 +1930,63 @@ void WinSalFrame::SetAlwaysOnTop( bool bOnTop )
     SetWindowPos( mhWnd, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
 }
 
+static bool EnableAttachThreadInputHack()
+{
+    OUString aBootstrapUri;
+    if (osl_getProcessWorkingDir(&aBootstrapUri.pData) != osl_Process_E_None)
+        return false;
+    aBootstrapUri += "/bootstrap.ini";
+
+    OUString aSystemFileName;
+    if (osl::FileBase::getSystemPathFromFileURL(aBootstrapUri, aSystemFileName) != osl::FileBase::E_None)
+        return false;
+    if (aSystemFileName.getLength() > MAX_PATH)
+        return false;
+
+    // this uses the Boost ini parser, instead of tools::Config, as we already use it to read other
+    // values from bootstrap.ini in desktop/win32/source/loader.cxx, because that watchdog process
+    // can't access LO libs. This way the handling is consistent.
+    try
+    {
+        boost::property_tree::ptree pt;
+        std::ifstream aFile(o3tl::toW(aSystemFileName.getStr()));
+        boost::property_tree::ini_parser::read_ini(aFile, pt);
+        const bool bEnabled = pt.get("Win32.EnableAttachThreadInputHack", false);
+        SAL_WARN_IF(bEnabled, "vcl", "AttachThreadInput hack is enabled. Watch out for deadlocks!");
+        return bEnabled;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
 static void ImplSalToTop( HWND hWnd, SalFrameToTop nFlags )
 {
+    static const bool bEnableAttachThreadInputHack = EnableAttachThreadInputHack();
+
     WinSalFrame* pToTopFrame = GetWindowPtr( hWnd );
     if( pToTopFrame && (pToTopFrame->mnStyle & SalFrameStyleFlags::SYSTEMCHILD) )
         BringWindowToTop( hWnd );
 
     if ( nFlags & SalFrameToTop::ForegroundTask )
     {
-        // LO used to call AttachThreadInput here, which resulted in deadlocks!
-        SetForegroundWindow_Impl(hWnd);
+        // LO used to always call AttachThreadInput here, which resulted in deadlocks
+        // in some installations for unknown reasons!
+        if (bEnableAttachThreadInputHack)
+        {
+            // This magic code is necessary to connect the input focus of the
+            // current window thread and the thread which owns the window that
+            // should be the new foreground window.
+            HWND hCurrWnd = GetForegroundWindow();
+            DWORD myThreadID = GetCurrentThreadId();
+            DWORD currThreadID = GetWindowThreadProcessId(hCurrWnd,nullptr);
+            AttachThreadInput(myThreadID, currThreadID, TRUE);
+            SetForegroundWindow_Impl(hWnd);
+            AttachThreadInput(myThreadID, currThreadID, FALSE);
+        }
+        else
+            SetForegroundWindow_Impl(hWnd);
     }
 
     if ( nFlags & SalFrameToTop::RestoreWhenMin )
