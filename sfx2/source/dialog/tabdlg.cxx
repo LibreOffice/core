@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
@@ -135,7 +136,9 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 }
 
 SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
-    : BuilderPage(pPage, pController, rUIXMLDescription, rID)
+    : BuilderPage(pPage, pController, rUIXMLDescription, rID,
+                    comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current()
+                    && SfxViewShell::Current()->isLOKMobilePhone())
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )
