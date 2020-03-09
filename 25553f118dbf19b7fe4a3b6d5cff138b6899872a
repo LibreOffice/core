@@ -39,6 +39,30 @@
       "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a392481_7e8e8d8b",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-03-09T14:27:01Z",
+      "side": 1,
+      "message": "Ops no, is it the reason of the problem?",
+      "parentUuid": "116f1a6e_f5fb46f4",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
