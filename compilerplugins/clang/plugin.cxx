@@ -199,24 +199,6 @@ Stmt* Plugin::getParentStmt( Stmt* stmt )
     return const_cast<Stmt*>(parentsRange.begin()->get<Stmt>());
 }
 
-static const Decl* getDeclContext(ASTContext& context, const Stmt* stmt)
-{
-    auto it = context.getParents(*stmt).begin();
-
-    if (it == context.getParents(*stmt).end())
-          return nullptr;
-
-    const Decl *aDecl = it->get<Decl>();
-    if (aDecl)
-          return aDecl;
-
-    const Stmt *aStmt = it->get<Stmt>();
-    if (aStmt)
-        return getDeclContext(context, aStmt);
-
-    return nullptr;
-}
-
 static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
 {
     auto it = context.getParents(*stmt).begin();
