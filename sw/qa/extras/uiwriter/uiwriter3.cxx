@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 namespace
 {
@@ -202,6 +203,81 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
+{
+    // This test also covers tdf#117185 tdf#110442
+
+    load(DATA_DIRECTORY, "tdf107975.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
+                                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(
+        xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    //Position the mouse cursor (caret) after "ABC" below the blue image
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // without the fix, it crashes
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    //try again with anchor at start of doc which is another special case
+    xShape.set(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> const xStart = pTextDoc->getText()->getStart();
+    xShapeContent->attach(xStart);
+
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    //Position the mouse cursor (caret) after "ABC" below the blue image
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // without the fix, it crashes
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
