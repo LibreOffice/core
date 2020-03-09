@@ -210,6 +210,9 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \
+    $(if $(filter-out MACOSX,$(OS)), \
+        CppunitTest_sc_uicalc \
+    ) \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
