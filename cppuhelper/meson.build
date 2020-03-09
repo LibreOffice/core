@@ -38,3 +38,51 @@ cppuhelper_lib = shared_library('cppuhelperlo',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )
+
+test('ifcontainer', unittester,
+  args: [shared_library('test_ifcontainer',
+      'qa/ifcontainer/cppu_ifcontainer.cxx',
+      udk_fake_h,
+      include_directories: [main_inc, udkh_inc],
+      cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+      link_with: [cppu_lib, cppuhelper_lib, sal_lib],
+      dependencies: [cppunit_dep],
+    )
+  ]
+)
+
+test('unourl', unittester,
+  args: [shared_library('test_unourl',
+      'qa/unourl/cppu_unourl.cxx',
+      udk_fake_h,
+      include_directories: [main_inc, udkh_inc],
+      cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+      link_with: [cppu_lib, cppuhelper_lib, sal_lib],
+      dependencies: [cppunit_dep],
+    )
+  ]
+)
+
+test('cppumisc', unittester,
+  args: [shared_library('test_misc',
+      'qa/misc/test_misc.cxx',
+      udk_fake_h,
+      include_directories: [main_inc, udkh_inc],
+      cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+      link_with: [cppu_lib, cppuhelper_lib, sal_lib],
+      dependencies: [cppunit_dep],
+    )
+  ]
+)
+
+test('cppuweak', unittester,
+  args: [shared_library('test_cppuweak',
+      'qa/weak/test_weak.cxx',
+      udk_fake_h,
+      include_directories: [main_inc, udkh_inc],
+      cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+      link_with: [cppu_lib, cppuhelper_lib, sal_lib],
+      dependencies: [cppunit_dep],
+    )
+  ]
+)

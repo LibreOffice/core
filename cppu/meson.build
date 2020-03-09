@@ -27,3 +27,37 @@ cppu_lib = shared_library('cppulo',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )
+
+test_unotype = shared_library('test_unotype',
+  'qa/test_unotype.cxx',
+  udk_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc],
+  link_with: [cppu_lib, sal_lib],
+  dependencies: [cppunit_dep],
+)
+
+test('unotype', unittester,
+  args: [test_unotype])
+
+test_anyexternal = shared_library('test_anyexternal',
+  'qa/any-external.cxx',
+  udk_fake_h,
+  include_directories: [main_inc, udkh_inc],
+  link_with: [cppu_lib, sal_lib],
+  dependencies: [cppunit_dep],
+)
+
+test('unotype', unittester,
+  args: [test_anyexternal])
+
+#test_cppumaker = shared_library('test_cppumaker',
+#  'qa/cppumaker/test_cppumaker.cxx',
+#  udk_fake_h,
+#  include_directories: [main_inc, udkh_inc],
+#  link_with: [cppu_lib, sal_lib],
+#  dependencies: [cppunit_dep],
+#)
+
+#test('cppumaker', unittester,
+#  args: [test_cppumaker])

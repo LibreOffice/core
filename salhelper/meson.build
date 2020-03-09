@@ -12,3 +12,12 @@ salhelper_lib = shared_library('salhelperlo',
   install: true,
 )
 
+sh_test = shared_library('test_salhelper',
+  'qa/test_api.cxx',
+  include_directories: [main_inc],
+  link_with: [salhelper_lib, sal_lib],
+  dependencies: [cppunit_dep],
+)
+
+test('salhelper', unittester,
+    args: [sh_test])

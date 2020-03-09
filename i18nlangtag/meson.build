@@ -13,3 +13,15 @@ i18nlangtag_lib = shared_library('i18nlangtaglo',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )
+
+test_langtag = shared_library('test_languagetag',
+  udk_fake_h, off_fake_h,
+  'qa/cppunit/test_languagetag.cxx',
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  link_with: [i18nlangtag_lib, sal_lib],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  dependencies: [cppunit_dep],
+)
+
+test('languagetag', unittester,
+   args: [test_langtag])
