@@ -142,10 +142,10 @@ class SwUndoTableNumFormat;
 class SwUndoTableAutoFormat : public SwUndo
 {
     OUString m_TableStyleName;
-    sal_uLong nSttNode;
-    std::unique_ptr<SaveTable> pSaveTable;
+    sal_uLong m_nStartNode;
+    std::unique_ptr<SaveTable> m_pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
-    bool bSaveContentAttr;
+    bool m_bSaveContentAttr;
     sal_uInt16 const m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
@@ -308,13 +308,13 @@ public:
 
 class SwUndoSplitTable : public SwUndo
 {
-    sal_uLong nTableNode, nOffset;
+    sal_uLong m_nTableNode, m_nOffset;
     std::unique_ptr<SwSaveRowSpan> mpSaveRowSpan; // stores row span values at the splitting row
-    std::unique_ptr<SaveTable> pSavTable;
-    std::unique_ptr<SwHistory> pHistory;
-    SplitTable_HeadlineOption const nMode;
-    sal_uInt16 nFormulaEnd;
-    bool const bCalcNewSize;
+    std::unique_ptr<SaveTable> m_pSavedTable;
+    std::unique_ptr<SwHistory> m_pHistory;
+    SplitTable_HeadlineOption const m_nMode;
+    sal_uInt16 m_nFormulaEnd;
+    bool const m_bCalcNewSize;
 
 public:
     SwUndoSplitTable( const SwTableNode& rTableNd, std::unique_ptr<SwSaveRowSpan> pRowSp,
@@ -326,19 +326,19 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
-    void SetTableNodeOffset( sal_uLong nIdx )     { nOffset = nIdx - nTableNode; }
-    SwHistory* GetHistory()                 { return pHistory.get(); }
+    void SetTableNodeOffset( sal_uLong nIdx )     { m_nOffset = nIdx - m_nTableNode; }
+    SwHistory* GetHistory()                 { return m_pHistory.get(); }
     void SaveFormula( SwHistory& rHistory );
 };
 
 class SwUndoMergeTable : public SwUndo
 {
-    OUString aName;
-    sal_uLong nTableNode;
-    std::unique_ptr<SaveTable> pSavTable, pSavHdl;
-    std::unique_ptr<SwHistory> pHistory;
-    sal_uInt16 const nMode;
-    bool const bWithPrev;
+    OUString m_aName;
+    sal_uLong m_nTableNode;
+    std::unique_ptr<SaveTable> m_pSaveTable, m_pSaveHdl;
+    std::unique_ptr<SwHistory> m_pHistory;
+    sal_uInt16 const m_nMode;
+    bool const m_bWithPrev;
 
 public:
     SwUndoMergeTable( const SwTableNode& rTableNd, const SwTableNode& rDelTableNd,

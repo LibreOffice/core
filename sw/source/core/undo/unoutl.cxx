@@ -25,25 +25,25 @@
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
-    : SwUndo( SwUndoId::OUTLINE_LR, rPam.GetDoc() ), SwUndRng( rPam ), nOffset( nOff )
+    : SwUndo( SwUndoId::OUTLINE_LR, rPam.GetDoc() ), SwUndRng( rPam ), m_nOffset( nOff )
 {
 }
 
 void SwUndoOutlineLeftRight::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwPaM & rPaM( AddUndoRedoPaM(rContext) );
-    rContext.GetDoc().OutlineUpDown(rPaM, -nOffset);
+    rContext.GetDoc().OutlineUpDown(rPaM, -m_nOffset);
 }
 
 void SwUndoOutlineLeftRight::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwPaM & rPaM( AddUndoRedoPaM(rContext) );
-    rContext.GetDoc().OutlineUpDown(rPaM,  nOffset);
+    rContext.GetDoc().OutlineUpDown(rPaM,  m_nOffset);
 }
 
 void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), nOffset);
+    rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), m_nOffset);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
