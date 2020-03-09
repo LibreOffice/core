@@ -240,9 +240,13 @@ void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Re
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContext::createFastChildContext(
-    sal_Int32 /*nElement*/,
+    sal_Int32 nElement,
     const Reference< xml::sax::XFastAttributeList>& /*xAttrList*/ )
 {
+    if( nElement == XML_ELEMENT(PRESENTATION, XML_ANIMATIONS) )
+    {
+        return new XMLAnimationsContext( GetImport() );
+    }
     return nullptr;
 }
 
@@ -254,7 +258,7 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
 
     if( nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_ANIMATIONS ) )
     {
-        xContext = new XMLAnimationsContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        // handled in createFastChildContext
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_FORMS ) )
     {
