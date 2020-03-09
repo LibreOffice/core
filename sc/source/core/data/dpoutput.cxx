@@ -747,7 +747,7 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
         bool bNumeric = (nFlags & sheet::MemberResultFlags::NUMERIC) != 0;
-        if (bNumeric && rtl::math::isFinite( rData.Value))
+        if (bNumeric && std::isfinite( rData.Value))
         {
             pDoc->SetValue( nCol, nRow, nTab, rData.Value);
         }

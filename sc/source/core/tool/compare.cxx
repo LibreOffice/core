@@ -57,9 +57,9 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
 
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
+    if (!rCell1.mbEmpty && rCell1.mbValue && !std::isfinite(rCell1.mfValue))
         return rCell1.mfValue;
-    if (!rCell2.mbEmpty && rCell2.mbValue && !rtl::math::isFinite(rCell2.mfValue))
+    if (!rCell2.mbEmpty && rCell2.mbValue && !std::isfinite(rCell2.mfValue))
         return rCell2.mfValue;
 
     size_t nStringQuery = 0;    // 0:=no, 1:=0, 2:=1
@@ -229,9 +229,9 @@ double CompareFunc( const Compare::Cell& rCell1, double fCell2, const CompareOpt
 {
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
+    if (!rCell1.mbEmpty && rCell1.mbValue && !std::isfinite(rCell1.mfValue))
         return rCell1.mfValue;
-    if (!rtl::math::isFinite(fCell2))
+    if (!std::isfinite(fCell2))
         return fCell2;
 
     bool bStringQuery = false;
@@ -291,9 +291,9 @@ double CompareFunc( double fCell1, double fCell2 )
 {
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if (!rtl::math::isFinite(fCell1))
+    if (!std::isfinite(fCell1))
         return fCell1;
-    if (!rtl::math::isFinite(fCell2))
+    if (!std::isfinite(fCell2))
         return fCell2;
 
     double fRes = 0.0;
@@ -313,7 +313,7 @@ double CompareEmptyToNumericFunc( double fCell2 )
 {
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if (!rtl::math::isFinite(fCell2))
+    if (!std::isfinite(fCell2))
         return fCell2;
 
     double fRes = 0;
