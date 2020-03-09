@@ -87,6 +87,30 @@
       "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ad4d55_7f3f78db",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-03-09T14:41:10Z",
+      "side": 1,
+      "message": "it should let the execute the code only one time.",
+      "parentUuid": "667be6bf_86c677de",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
