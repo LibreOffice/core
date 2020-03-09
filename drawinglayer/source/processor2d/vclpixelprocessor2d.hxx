@@ -51,7 +51,7 @@ namespace drawinglayer
         /** VclPixelProcessor2D class
 
             This processor derived from VclProcessor2D is the base class for rendering
-            all feeded primitives to a VCL Window. It is the currently used renderer
+            all fed primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
         class VclPixelProcessor2D final : public VclProcessor2D
