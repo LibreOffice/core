@@ -29,6 +29,8 @@
 /**
  * Import all text into a string buffer.  Paragraph elements (<text:p>)
  * are recognized and cause a return character (0x0a) to be added.
+ *
+ * Supports both old and fast-parser.
  */
 class XMLStringBufferImportContext final : public SvXMLImportContext
 {
@@ -36,11 +38,14 @@ class XMLStringBufferImportContext final : public SvXMLImportContext
 
 public:
 
-
     XMLStringBufferImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& sLocalName,
+        OUStringBuffer& rBuffer);
+
+    XMLStringBufferImportContext(
+        SvXMLImport& rImport,
         OUStringBuffer& rBuffer);
 
     virtual ~XMLStringBufferImportContext() override;
@@ -54,6 +59,12 @@ public:
         const OUString& rChars ) override;
 
     virtual void EndElement() override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void SAL_CALL characters(const OUString& rChars) override;
 };
 
 #endif
