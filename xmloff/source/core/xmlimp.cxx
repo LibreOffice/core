@@ -2020,7 +2020,12 @@ const OUString & SvXMLImport::getNameFromToken( sal_Int32 nToken )
 
 OUString SvXMLImport::getPrefixAndNameFromToken( sal_Int32 nToken )
 {
-    return getNamespacePrefixFromToken(nToken, nullptr) + ":" + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
+    OUString rv;
+    sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
+    auto aIter( aNamespaceMap.find( nNamespaceToken ) );
+    if( aIter != aNamespaceMap.end() )
+        rv = (*aIter).second.second + " " + aIter->second.first + ":";
+    return rv + xTokenHandler->getIdentifier( nToken & TOKEN_MASK );
 }
 
 OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)
