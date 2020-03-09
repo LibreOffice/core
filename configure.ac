@@ -1223,6 +1223,11 @@ if test "$enable_compiler_plugins" = debug; then
     COMPILER_PLUGINS_DEBUG=TRUE
 fi
 
+libo_FUZZ_ARG_ENABLE(compiler-plugins-analyzer-pch,
+    AS_HELP_STRING([--disable-compiler-plugins-analyzer-pch],
+        [Disable use of precompiled headers when running the Clang compiler plugin analyzer.  Not
+         relevant in the --disable-compiler-plugins case.]))
+
 libo_FUZZ_ARG_ENABLE(ooenv,
     AS_HELP_STRING([--disable-ooenv],
         [Disable ooenv for the instdir installation.]))
@@ -7336,7 +7341,12 @@ else
         AC_MSG_ERROR([Compiler plugins are currently supported only with the Clang compiler.])
     fi
 fi
+COMPILER_PLUGINS_ANALYZER_PCH=
+if test "$enable_compiler_plugins_analyzer_pch" != no; then
+    COMPILER_PLUGINS_ANALYZER_PCH=TRUE
+fi
 AC_SUBST(COMPILER_PLUGINS)
+AC_SUBST(COMPILER_PLUGINS_ANALYZER_PCH)
 AC_SUBST(COMPILER_PLUGINS_COM_IS_CLANG)
 AC_SUBST(COMPILER_PLUGINS_CXX)
 AC_SUBST(COMPILER_PLUGINS_CXXFLAGS)

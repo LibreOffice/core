@@ -47,9 +47,6 @@ endif
 # by gb_ENABLE_PCH like everywhere else, but unsetting this disables PCH.
 LO_CLANG_USE_PCH=1
 
-# Whether to use precompiled headers for the analyzer too. Does not apply to compiling sources.
-LO_CLANG_USE_ANALYZER_PCH=1
-
 # The uninteresting rest.
 
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
@@ -275,7 +272,7 @@ $(CLANGOUTDIR)/sharedvisitor/analyzer$(CLANG_EXE_EXT): $(CLANGINDIR)/sharedvisit
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,1)
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGINCLUDES) \
         -I$(BUILDDIR)/config_host -DCLANGFLAGS='"$(CLANGTOOLDEFS)"' \
-        -DLO_CLANG_USE_ANALYZER_PCH=$(LO_CLANG_USE_ANALYZER_PCH) \
+        -DLO_CLANG_USE_ANALYZER_PCH=$(if $(COMPILER_PLUGINS_ANALYZER_PCH),1,0) \
         -c $< -o $(CLANGOUTDIR)/sharedvisitor/analyzer.o -MMD -MT $@ -MP \
         -MF $(CLANGOUTDIR)/sharedvisitor/analyzer.d
 	$(QUIET)$(COMPILER_PLUGINS_CXX) $(CLANGDEFS) $(CLANGCXXFLAGS) $(CLANGOUTDIR)/sharedvisitor/analyzer.o \
@@ -342,7 +339,7 @@ endif
 
 endif
 
-ifdef LO_CLANG_USE_ANALYZER_PCH
+ifeq ($(COMPILER_PLUGINS_ANALYZER_PCH),TRUE)
 # the PCH for usage in sharedvisitor/analyzer
 
 # these are from the invocation in analyzer.cxx
