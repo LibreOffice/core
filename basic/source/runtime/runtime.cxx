@@ -671,7 +671,11 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             if( p )
             {
                 bByVal |= ( p->eType & SbxBYREF ) == 0;
-                t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                // tdf#125180 - don't convert error type variables to the requested parameter type
+                if ( t != SbxERROR )
+                {
+                    t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                }
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t) )
@@ -683,7 +687,8 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             if( bByVal )
             {
-                if( bTargetTypeIsArray )
+                // tdf#125180 - don't convert error type variables to the requested parameter type
+                if( bTargetTypeIsArray && t != SbxERROR )
                 {
                     t = SbxOBJECT;
                 }
@@ -694,7 +699,8 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             else
             {
-                if( t != SbxVARIANT && t != ( v->GetType() & 0x0FFF ) )
+                // tdf#125180 - don't convert error type variables to the requested parameter type
+                if( t != SbxVARIANT && t != SbxERROR && t != ( v->GetType() & 0x0FFF ) )
                 {
                     if( p && (p->eType & SbxARRAY) )
                     {
