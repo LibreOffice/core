@@ -4786,6 +4786,7 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-cups \
         --disable-gstreamer-1-0 \
+        --disable-gtk \
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
