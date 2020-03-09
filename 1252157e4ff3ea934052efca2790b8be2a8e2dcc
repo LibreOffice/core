@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55fc918f_77e609f4",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-09T07:10:11Z",
+      "side": 1,
+      "message": "The trailing \"s\" is wrong when it starts with \"does not\".",
+      "range": {
+        "startLine": 458,
+        "startChar": 94,
+        "endLine": 458,
+        "endChar": 95
+      },
+      "revId": "1252157e4ff3ea934052efca2790b8be2a8e2dcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
