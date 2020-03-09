@@ -327,11 +327,11 @@ void SwAttrIter::InitFontAndAttrHandler(
 
     // set font to vertical if frame layout is vertical
     // if it's a re-init, the vert flag never changes
+    bool bVertLayoutLRBT = false;
+    if (pbVertLayoutLRBT)
+        bVertLayoutLRBT = *pbVertLayoutLRBT;
     if (pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout())
     {
-        bool bVertLayoutLRBT = false;
-        if (pbVertLayoutLRBT)
-            bVertLayoutLRBT = *pbVertLayoutLRBT;
         m_pFont->SetVertical(m_pFont->GetOrientation(), true, bVertLayoutLRBT);
     }
 
@@ -342,7 +342,8 @@ void SwAttrIter::InitFontAndAttrHandler(
     // them to the font
     m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
            *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
-           pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout() );
+           pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout(),
+           bVertLayoutLRBT );
 
     m_aFontCacheIds[SwFontScript::Latin] = m_aFontCacheIds[SwFontScript::CJK] = m_aFontCacheIds[SwFontScript::CTL] = nullptr;
 
