@@ -618,6 +618,7 @@ void PDFPage::endStream()
 
 bool PDFPage::emit(sal_Int32 nParentObject )
 {
+    m_pWriter->MARK("PDFPage::emit");
     // emit page object
     if( ! m_pWriter->updateObject( m_nPageObject ) )
         return false;
@@ -3159,6 +3160,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
 
 bool PDFWriterImpl::emitLinkAnnotations()
 {
+    MARK("PDFWriterImpl::emitLinkAnnotations");
     int nAnnots = m_aLinks.size();
     for( int i = 0; i < nAnnots; i++ )
     {
