@@ -671,7 +671,11 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             if( p )
             {
                 bByVal |= ( p->eType & SbxBYREF ) == 0;
-                t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if ( t != SbxEMPTY )
+                {
+                    t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                }
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t) )
@@ -683,7 +687,8 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             if( bByVal )
             {
-                if( bTargetTypeIsArray )
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if( bTargetTypeIsArray && t != SbxEMPTY )
                 {
                     t = SbxOBJECT;
                 }
@@ -694,7 +699,8 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             else
             {
-                if( t != SbxVARIANT && t != ( v->GetType() & 0x0FFF ) )
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if( t != SbxVARIANT && t != SbxEMPTY && t != ( v->GetType() & 0x0FFF ) )
                 {
                     if( p && (p->eType & SbxARRAY) )
                     {
@@ -2744,11 +2750,11 @@ void SbiRuntime::StepRESTART()
 void SbiRuntime::StepEMPTY()
 {
     // #57915 The semantics of StepEMPTY() is the representation of a missing argument.
-    // This is represented by the value 448 (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error
-    // in VB. StepEmpty should now rather be named StepMISSING() but the name is kept
-    // to simplify matters.
-    SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-    xVar->PutErr( 448 );
+    // tdf#79426, tdf#125180 - the representation of a missing argument by the value 448
+    // (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error in VB was moved to
+    // SbiRuntime::StepPARAM. StepEmpty should now rather be named StepMISSING()
+    // but the name is kept to simplify matters.
+    SbxVariableRef xVar = new SbxVariable( SbxEMPTY );
     PushVar( xVar.get() );
 }
 
@@ -4040,15 +4046,14 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         sal_uInt16 iLoop = nIdx;
         while( iLoop >= nParamCount )
         {
-            pVar = new SbxVariable();
-            pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
+            pVar = new SbxVariable( SbxEMPTY );
             refParams->Put32( pVar, iLoop );
             iLoop--;
         }
     }
     pVar = refParams->Get32( nIdx );
 
-    if( pVar->GetType() == SbxERROR && nIdx )
+    if( pVar->GetType() == SbxEMPTY && nIdx )
     {
         // if there's a parameter missing, it can be OPTIONAL
         bool bOpt = false;
@@ -4073,6 +4078,15 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     {
                         // tdf#36737 - initialize the parameter with the default value of its type
                         pVar = new SbxVariable( pParam->eType );
+                        refParams->Put32( pVar, nIdx );
+                    }
+                    else
+                    {
+                        // tdf#79426, tdf#125180 - represent a missing parameter by the value 448
+                        // (ERRCODE_BASIC_NAMED_NOT_FOUND) of the type error in VB. Moved from
+                        // SbiRuntime::StepEMPTY().
+                        pVar = new SbxVariable();
+                        pVar->PutErr( 448 );
                         refParams->Put32( pVar, nIdx );
                     }
                     bOpt = true;
