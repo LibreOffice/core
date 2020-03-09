@@ -273,7 +273,7 @@ int main(int argc, char** argv)
         args.end(),
         {   // These must match LO_CLANG_ANALYZER_PCH_CXXFLAGS in Makefile-clang.mk .
             "-I" BUILDDIR "/config_host" // plugin sources use e.g. config_global.h
-#ifdef LO_CLANG_USE_ANALYZER_PCH
+#if LO_CLANG_USE_ANALYZER_PCH
             ,
             "-include-pch", // use PCH with Clang headers to speed up parsing/analysing
             BUILDDIR "/compilerplugins/clang/sharedvisitor/clang.pch"
