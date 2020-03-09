@@ -39,6 +39,7 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
@@ -187,7 +188,8 @@ SfxTabPage::SfxTabPage(TabPageParent pParent, const OUString& rUIXMLDescription,
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )
-    , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription)
+    , m_xBuilder(pParent.pPage ? Application::CreateBuilder(pParent.pPage, rUIXMLDescription, comphelper::LibreOfficeKit::isActive()
+                                    && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
                                : Application::CreateInterimBuilder(this, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
 {
