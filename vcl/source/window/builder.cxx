@@ -3622,6 +3622,16 @@ namespace
             return vcl::KeyCode(KEY_INSERT, bShift, bMod1, bMod2, bMod3);
         else if (rKey.first == "Delete")
             return vcl::KeyCode(KEY_DELETE, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Return")
+            return vcl::KeyCode(KEY_RETURN, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Up")
+            return vcl::KeyCode(KEY_UP, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Down")
+            return vcl::KeyCode(KEY_DOWN, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Left")
+            return vcl::KeyCode(KEY_LEFT, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Right")
+            return vcl::KeyCode(KEY_RIGHT, bShift, bMod1, bMod2, bMod3);
 
         assert (rKey.first.getLength() == 1);
         char cChar = rKey.first.toChar();
