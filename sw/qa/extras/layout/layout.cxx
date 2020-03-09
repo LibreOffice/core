@@ -3305,6 +3305,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrTableRowSpan)
+{
+    // Load a document which has a table. The A1 cell has btlr text direction, and the A1..A3 cells
+    // are merged.
+    load(DATA_DIRECTORY, "btlr-table-row-span.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump aDumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: USA
+    // - Actual  : West
+    // i.e. the "USA" text completely disappeared.
+    assertXPathContent(pXmlDoc, "//textarray[1]/text", "USA");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
