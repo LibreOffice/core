@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "439a13a4_4993d4ad",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-09T09:53:10Z",
+      "side": 0,
+      "message": "but y and z aren\u0027t checked in this function, they are used without checking.\n\ni don\u0027t know this code but it\u0027s obvious from the fact that these checks are missing that the caller of this function is responsible for passing in an argument where all 3 sequences are of the same length.\n\nso adding checks isn\u0027t necessary: if a caller passes in an argument with sequences of different lenghts, it\u0027s the caller\u0027s bug.\n\nwe can simply properly document the precondition of the function by using assert() instead of mere warnings, which will abort the process when the condition isn\u0027t true, so it will help find such bugs if they exist.\n\nfortunately all tests are passing in jenkins so there aren\u0027t obvious bugs.",
+      "parentUuid": "cdd2848e_9eaeed13",
+      "revId": "d5ccf2fc5bc335f91ec40f918f2204b62252be85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9c4f037_04ea6151",
         "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
         "patchSetId": 2
