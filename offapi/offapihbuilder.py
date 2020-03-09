@@ -31,7 +31,7 @@ if not os.path.exists(private_dir):
 
 subprocess.check_call([cppumaker,
                        '-Gc',
-                       '-L',
+                       '-C',
                        '-O' + out_dir_abs, # FIXME, should be priv_dir_abs
                        offapi_urb_abs,
                        '-X',

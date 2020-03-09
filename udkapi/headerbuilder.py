@@ -20,7 +20,7 @@ source_dir = sys.argv[6]
 
 subprocess.check_call([cppumaker,
                        '-Gc',
-                       '-L',
+                       '-C',
                        '-O' + out_dir_abs, # FIXME, should be priv_dir_abs
                        rdbfile_abs])
 
