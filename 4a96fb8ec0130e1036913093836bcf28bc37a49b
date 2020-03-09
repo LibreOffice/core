@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3d90faf_a9239a46",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-09T16:28:05Z",
+      "side": 0,
+      "message": "You missed the \"equals me AND enforced\" in your re-write.  Currently enforcement turns on all protection in your new code.\n\nSo the logic would be \n1.) If Enforcement is not specified, it defaults to on.\n2.) If enforcement is specified as off, then disable all of the enforcements.",
+      "range": {
+        "startLine": 358,
+        "startChar": 38,
+        "endLine": 358,
+        "endChar": 39
+      },
+      "revId": "4a96fb8ec0130e1036913093836bcf28bc37a49b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
