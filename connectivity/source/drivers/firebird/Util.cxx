@@ -306,11 +306,11 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         case SQL_TIMESTAMP:
             pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_TIMESTAMP)));
             break;
+        // an ARRAY is in fact a BLOB of a specialized type
+        // See https://firebirdsql.org/file/documentation/reference_manuals/fblangref25-en/html/fblangref25-datatypes-bnrytypes.html#fblangref25-datatypes-array
+        case SQL_ARRAY:
         case SQL_BLOB:
             pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_QUAD)));
-            break;
-        case SQL_ARRAY:
-            assert(false); // TODO: implement
             break;
         case SQL_TYPE_TIME:
             pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_TIME)));
@@ -355,6 +355,9 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
         case SQL_DOUBLE:
         case SQL_D_FLOAT:
         case SQL_TIMESTAMP:
+        // an ARRAY is in fact a BLOB of a specialized type
+        // See https://firebirdsql.org/file/documentation/reference_manuals/fblangref25-en/html/fblangref25-datatypes-bnrytypes.html#fblangref25-datatypes-array
+        case SQL_ARRAY:
         case SQL_BLOB:
         case SQL_INT64:
         case SQL_TYPE_TIME:
@@ -365,9 +368,6 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
                 free(pVar->sqldata);
                 pVar->sqldata = nullptr;
             }
-            break;
-        case SQL_ARRAY:
-            assert(false); // TODO: implement
             break;
         case SQL_NULL:
             assert(false); // TODO: implement
