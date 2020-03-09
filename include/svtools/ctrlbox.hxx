@@ -438,7 +438,7 @@ public:
     void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xComboBox->connect_key_press(rLink); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
-    void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
+    void set_entry_text(const OUString& rText);
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
     int get_active() const { return m_xComboBox->get_active(); }
     int get_value() const;
