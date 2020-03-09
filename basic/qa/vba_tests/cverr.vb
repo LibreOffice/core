@@ -59,12 +59,23 @@ Function verify_testCVErr() As String
     date1 = CStr(CVErr(xlErrValue))
     TestLog_ASSERT date1 = date2, "the return CVErr is: " & date1
 
+    ' tdf#79426 - passing an error object to a function
+    TestLog_ASSERT TestCVErr( CVErr( 2 ) ) = 2
+    ' tdf#79426 - test with Error-Code 448 ( ERRCODE_BASIC_NAMED_NOT_FOUND )
+    TestLog_ASSERT TestCVErr( CVErr( 448 ) ) = 448
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testCVErr = result
 
     Exit Function
 errorHandler:
         TestLog_ASSERT (False), testName & ": hit error handler"
+End Function
+
+Function TestCVErr(vErr As Variant)
+    Dim nValue As Integer
+    nValue = vErr
+    TestCVErr = nValue
 End Function
 
 Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)

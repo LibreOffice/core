@@ -621,6 +621,20 @@ void SbiRuntime::SetVBAEnabled(bool bEnabled )
     }
 }
 
+// tdf#79426, tdf#125180 - adds the information about a missing parameter
+void SbiRuntime::SetIsMissing( SbxVariable* pVar )
+{
+    SbxInfo* pInfo = pVar->GetInfo() ? pVar->GetInfo() : new SbxInfo();
+    pInfo->AddParam( pVar->GetName(), SbxMISSING, pVar->GetFlags() );
+    pVar->SetInfo( pInfo );
+}
+
+// tdf#79426, tdf#125180 - checks if a variable contains the information about a missing parameter
+bool SbiRuntime::IsMissing( SbxVariable* pVar, sal_uInt16 nIdx )
+{
+    return pVar->GetInfo() && pVar->GetInfo()->GetParam( nIdx ) && pVar->GetInfo()->GetParam( nIdx )->eType & SbxMISSING;
+}
+
 // Construction of the parameter list. All ByRef-parameters are directly
 // taken over; copies of ByVal-parameters are created. If a particular
 // data type is requested, it is converted.
@@ -671,7 +685,11 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             if( p )
             {
                 bByVal |= ( p->eType & SbxBYREF ) == 0;
-                t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if ( t != SbxEMPTY && !IsMissing( v, 1 ) )
+                {
+                    t = static_cast<SbxDataType>( p->eType & 0x0FFF );
+                }
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || static_cast<SbxDataType>(v->GetType() & 0x0FFF ) != t) )
@@ -683,18 +701,25 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
             if( bByVal )
             {
-                if( bTargetTypeIsArray )
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if( bTargetTypeIsArray && !IsMissing( v, 1 ) )
                 {
                     t = SbxOBJECT;
                 }
                 SbxVariable* v2 = new SbxVariable( t );
                 v2->SetFlag( SbxFlagBits::ReadWrite );
+                // tdf#79426, tdf#125180 - if parameter was missing, readd additional information about a missing parameter
+                if ( IsMissing( v, 1 ) )
+                {
+                    SetIsMissing( v2 );
+                }
                 *v2 = *v;
                 refParams->Put32( v2, i );
             }
             else
             {
-                if( t != SbxVARIANT && t != ( v->GetType() & 0x0FFF ) )
+                // tdf#79426, tdf#125180 - don't convert missing arguments to the requested parameter type
+                if( t != SbxVARIANT && !IsMissing( v, 1 ) && t != ( v->GetType() & 0x0FFF ) )
                 {
                     if( p && (p->eType & SbxARRAY) )
                     {
@@ -2749,6 +2774,8 @@ void SbiRuntime::StepEMPTY()
     // to simplify matters.
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
     xVar->PutErr( 448 );
+    // tdf#79426, tdf#125180 - add additional information about a missing parameter
+    SetIsMissing( xVar.get() );
     PushVar( xVar.get() );
 }
 
@@ -4047,13 +4074,16 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         {
             pVar = new SbxVariable();
             pVar->PutErr( 448 );       // like in VB: Error-Code 448 (ERRCODE_BASIC_NAMED_NOT_FOUND)
+            // tdf#79426, tdf#125180 - add additional information about a missing parameter
+            SetIsMissing( pVar );
             refParams->Put32( pVar, iLoop );
             iLoop--;
         }
     }
     pVar = refParams->Get32( nIdx );
 
-    if( pVar->GetType() == SbxERROR && nIdx )
+    // tdf#79426, tdf#125180 - check for optionals only if the parameter is actually missing
+    if( pVar->GetType() == SbxERROR && IsMissing( pVar, 1 ) && nIdx )
     {
         // if there's a parameter missing, it can be OPTIONAL
         bool bOpt = false;
