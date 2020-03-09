@@ -34,7 +34,7 @@ namespace drawinglayer
     {
         /** Geometry2DExtractingProcessor class
 
-            This processor extracts the 2D geometry (projected geometry) of all feeded primitives.
+            This processor extracts the 2D geometry (projected geometry) of all fed primitives.
             It is e.g. used as sub-processor for contour extraction where 3D geometry is only
             useful as 2D projected geometry.
          */
