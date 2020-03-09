@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa37bef_3f3d9c9a",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-09T10:11:57Z",
+      "side": 1,
+      "message": "autocomplete has a bug on Fedora?",
+      "range": {
+        "startLine": 3395,
+        "startChar": 29,
+        "endLine": 3395,
+        "endChar": 36
+      },
+      "revId": "7d36f1769faee9911df2625c690f73275f07f47f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
