@@ -768,7 +768,7 @@ void OPropertySetHelper::fire
                     {
                         try
                         {
-                            // fire the hole event sequence to the
+                            // fire the whole event sequence to the
                             // XPropertiesChangeListener's
                             pL->propertiesChange( aEvts );
                         }
