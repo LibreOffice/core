@@ -7306,7 +7306,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
                 if test -z "$CLANGSYSINCLUDE"; then
                     if test -n "$LLVM_CONFIG"; then
                         # Path to the clang system headers (no idea if there's a better way to get it).
-                        CLANGSYSINCLUDE=$($LLVM_CONFIG --libdir)/clang/$($LLVM_CONFIG --version | sed 's/svn//')/include
+                        CLANGSYSINCLUDE=$($LLVM_CONFIG --libdir)/clang/$($LLVM_CONFIG --version | sed 's/git\|svn//')/include
                     fi
                 fi
             fi
