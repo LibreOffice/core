@@ -1,4 +1,5 @@
 cppuhelperc = find_program('cppuhelperurb.py')
+cppuhbuilder = find_program('cppuhbuilder.py')
 
 cppuhelper_rdb = custom_target('cppuhelper_urb',
   output: 'cpphelper.rdb',
@@ -12,7 +13,7 @@ cppuhelper_rdb = custom_target('cppuhelper_urb',
 
 cppuhelper_fake_h = custom_target('cpphelper_h',
   output: 'cpphelper_fake.h',
-  command: [offbuilder,
+  command: [cppuhbuilder,
             cppumaker_exe,
             cppuhelper_rdb,
             udkapi_rdb,

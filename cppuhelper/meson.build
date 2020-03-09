@@ -70,6 +70,7 @@ test('cppumisc', unittester,
       include_directories: [main_inc, udkh_inc],
       cpp_args: ['-DLIBO_INTERNAL_ONLY'],
       link_with: [cppu_lib, cppuhelper_lib, sal_lib],
+      install: true,
       dependencies: [cppunit_dep],
     )
   ]
