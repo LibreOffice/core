@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0c788a3_287e4be4",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-03-09T16:43:38Z",
+      "side": 1,
+      "message": "toUInt16 is not defined .",
+      "revId": "47f5c7dd6dfe571793489e848b734463c95a7e21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
