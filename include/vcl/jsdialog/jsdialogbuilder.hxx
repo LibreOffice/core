@@ -28,8 +28,12 @@ public:
 class VCL_DLLPUBLIC JSInstanceBuilder : public SalInstanceBuilder
 {
     vcl::LOKWindowId m_nWindowId;
+    /// used in case of tab pages where dialog is not a direct top level
+    VclPtr<vcl::Window> m_aParentDialog;
+    bool m_bHasTopLevelDialog;
 
     static std::map<vcl::LOKWindowId, WidgetMap>& GetLOKWeldWidgetsMap();
+    static void InsertWindowToMap(int nWindowId);
     void RememberWidget(const OString& id, weld::Widget* pWidget);
 
 public:
@@ -112,6 +116,7 @@ public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
+    virtual void set_active(int pos) override;
 };
 
 class VCL_DLLPUBLIC JSComboBox : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>
