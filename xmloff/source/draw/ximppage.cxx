@@ -231,11 +231,6 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 {
 }
 
-void SdXMLGenericPageContext::StartElement( const Reference< css::xml::sax::XAttributeList >& )
-{
-    assert(false);
-}
-
 void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Reference< css::xml::sax::XFastAttributeList >& )
 {
     GetImport().GetShapeImport()->pushGroupForPostProcessing( mxShapes );
@@ -279,11 +274,6 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
     }
 
     return xContext;
-}
-
-void SdXMLGenericPageContext::EndElement()
-{
-    assert(false);
 }
 
 void SdXMLGenericPageContext::endFastElement(sal_Int32 )
