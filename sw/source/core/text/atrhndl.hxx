@@ -50,6 +50,7 @@ private:
     std::unique_ptr<SwFont> m_pFnt;
 
     bool m_bVertLayout;
+    bool m_bVertLayoutLRBT;
 
     const SwTextAttr* GetTop(sal_uInt16 nStack);
     void RemoveFromStack(sal_uInt16 nWhich, const SwTextAttr& rAttr);
@@ -76,7 +77,7 @@ public:
     void Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAttrSet,
                const IDocumentSettingAccess& rIDocumentSettingAccess,
                const SwViewShell* pShell, SwFont& rFnt,
-               bool bVertLayout );
+               bool bVertLayout, bool bVertLayoutLRBT );
 
     bool IsVertLayout() const { return m_bVertLayout; }
 
