@@ -34,7 +34,7 @@
 #define STR_ILLEGAL_MOVEMENT                    NC_("STR_ILLEGAL_MOVEMENT", "Illegal cursor movement occurred.")
 #define STR_COMMIT_ROW                          NC_("STR_COMMIT_ROW", "Please commit row '$position$' before update rows or insert new rows.")
 // = common strings
-#define STR_NO_CONNECTION_GIVEN                 NC_("STR_NO_CONNECTION_GIVEN", "It doesn't exist a connection to the database.")
+#define STR_NO_CONNECTION_GIVEN                 NC_("STR_NO_CONNECTION_GIVEN", "No connection to the database exists.")
 #define STR_WRONG_PARAM_INDEX                   NC_("STR_WRONG_PARAM_INDEX", "You tried to set a parameter at position '$pos$' but there is/are only '$count$' parameter(s) allowed. One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source.")
 #define STR_NO_INPUTSTREAM                      NC_("STR_NO_INPUTSTREAM", "The input stream was not set.")
 #define STR_NO_ELEMENT_NAME                     NC_("STR_NO_ELEMENT_NAME", "There is no element named '$name$'.")
