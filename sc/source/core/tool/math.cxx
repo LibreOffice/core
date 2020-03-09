@@ -55,7 +55,7 @@ double power( const double& fVal1, const double& fVal2 )
     if ((((math_errhandling & MATH_ERRNO) != 0) && (errno == EDOM || errno == ERANGE))
             || (((math_errhandling & MATH_ERREXCEPT) != 0)
                 && std::fetestexcept( FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
-            || !rtl::math::isFinite(fPow))
+            || !std::isfinite(fPow))
     {
         fPow = CreateDoubleError( FormulaError::IllegalFPOperation);
     }

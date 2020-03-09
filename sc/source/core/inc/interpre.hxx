@@ -1088,7 +1088,7 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
 
 inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
 {
-    if (!rtl::math::isFinite( fVal))
+    if (!std::isfinite( fVal))
     {
         fVal = -1.0;
         return false;
@@ -1141,7 +1141,7 @@ inline bool ScInterpreter::CheckStringResultLen( OUStringBuffer& rResult, const 
 
 inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
-    if ( !::rtl::math::isFinite( rVal ) )
+    if ( !std::isfinite( rVal ) )
     {
         FormulaError nErr = GetDoubleErrorValue( rVal );
         if ( nErr != FormulaError::NONE )

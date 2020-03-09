@@ -1125,7 +1125,7 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
 
 static double nonValueDoubleToValueDouble( double nValue )
 {
-    return rtl::math::isFinite( nValue ) ? nValue : 0.0;
+    return std::isfinite( nValue ) ? nValue : 0.0;
 }
 
 namespace vcl

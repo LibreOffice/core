@@ -63,7 +63,7 @@ public:
 
         // If the sum is a NaN, some of the terms were empty cells, probably.
         // Re-calculate, carefully
-        if (!rtl::math::isFinite(fSum))
+        if (!std::isfinite(fSum))
         {
             sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(&fSum)->nan_parts.fraction_lo;
             if (nErr & 0xffff0000)
@@ -71,7 +71,7 @@ public:
                 fSum = 0;
                 for (i = 0; i < mnSize; i++)
                 {
-                    if (!rtl::math::isFinite(mpArray[i]))
+                    if (!std::isfinite(mpArray[i]))
                     {
                         nErr = reinterpret_cast< const sal_math_Double * >(&mpArray[i])->nan_parts.fraction_lo;
                         if (!(nErr & 0xffff0000))

@@ -871,8 +871,8 @@ double lcl_getErrorBarLogicLength(
                         if(fMaxValue<*pValues)
                             fMaxValue=*pValues;
                     }
-                    if( ::rtl::math::isFinite( fMaxValue ) &&
-                        ::rtl::math::isFinite( fPercent ))
+                    if( std::isfinite( fMaxValue ) &&
+                        std::isfinite( fPercent ))
                     {
                         fResult = fMaxValue * fPercent / 100.0;
                     }
@@ -1039,7 +1039,7 @@ void VSeriesPlotter::createErrorBar(
         if( bShowPositive )
         {
             double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true, bYError );
-            if( ::rtl::math::isFinite( fLength ) )
+            if( std::isfinite( fLength ) )
             {
                 double fLocalX = fX;
                 double fLocalY = fY;
@@ -1062,7 +1062,7 @@ void VSeriesPlotter::createErrorBar(
         if( bShowNegative )
         {
             double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false, bYError );
-            if( ::rtl::math::isFinite( fLength ) )
+            if( std::isfinite( fLength ) )
             {
                 double fLocalX = fX;
                 double fLocalY = fY;
@@ -1240,10 +1240,10 @@ void VSeriesPlotter::createErrorRectangle(
                                 nErrorBorderStyleY, nIndex, false, true );
         }
 
-        if ( !( ::rtl::math::isFinite( fPosX ) &&
-                ::rtl::math::isFinite( fPosY ) &&
-                ::rtl::math::isFinite( fNegX ) &&
-                ::rtl::math::isFinite( fNegY ) ) )
+        if ( !( std::isfinite( fPosX ) &&
+                std::isfinite( fPosY ) &&
+                std::isfinite( fNegX ) &&
+                std::isfinite( fNegY ) ) )
             return;
 
         drawing::Position3D aBottomLeft( lcl_transformMixedToScene( m_pPosHelper,

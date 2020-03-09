@@ -1645,7 +1645,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_FORWARD, maData.mfForecastFor);
         aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_BACKWARD, maData.mfForecastBack);
 
-        bool bForceIntercept = rtl::math::isFinite(maData.mfIntercept);
+        bool bForceIntercept = std::isfinite(maData.mfIntercept);
         aPropSet.SetProperty(EXC_CHPROP_FORCE_INTERCEPT, bForceIntercept);
         if (bForceIntercept)
         {

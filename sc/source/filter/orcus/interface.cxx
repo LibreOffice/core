@@ -421,7 +421,7 @@ void ScOrcusFactory::finalize()
             }
             case CellStoreToken::Type::FormulaWithResult:
             {
-                if (rtl::math::isFinite(rToken.mfValue))
+                if (std::isfinite(rToken.mfValue))
                     maDoc.setFormulaCell(rToken.maPos, rToken.maStr1, rToken.meGrammar, &rToken.mfValue);
                 else
                     maDoc.setFormulaCell(rToken.maPos, rToken.maStr1, rToken.meGrammar, rToken.maStr2);
@@ -446,7 +446,7 @@ void ScOrcusFactory::finalize()
                 if (!pCell)
                     break;
 
-                if (rtl::math::isFinite(rToken.mfValue))
+                if (std::isfinite(rToken.mfValue))
                     pCell->SetResultDouble(rToken.mfValue);
                 else
                     pCell->SetHybridString(

@@ -125,7 +125,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
             double fFirstY = pSeries->getYValue( 0 );
             double fLastY = pSeries->getYValue( VSeriesPlotter::getPointCount() - 1 );
             if( (pSeries->getMissingValueTreatment() != css::chart::MissingValueTreatment::LEAVE_GAP)
-                || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
+                || (std::isfinite( fFirstY ) && std::isfinite( fLastY )) )
             {
                 // connect last point in last polygon with first point in first polygon
                 ::basegfx::B2DRectangle aScaledLogicClipDoubleRect( pPosHelper->getScaledLogicClipDoubleRect() );

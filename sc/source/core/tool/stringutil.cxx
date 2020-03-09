@@ -56,7 +56,7 @@ bool ScStringUtil::parseSimpleNumber(
     // rtl::math::stringToDouble() just after having exchanged ascii space with
     // non-breaking space, if it wasn't for check of grouped digits. The NaN
     // and Inf cases that are accepted by stringToDouble() could be detected
-    // using rtl::math::isFinite() on the result.
+    // using std::isfinite() on the result.
 
     /* TODO: The grouped digits check isn't even valid for locales that do not
      * group in thousands ... e.g. Indian locales. But that's something also
@@ -207,7 +207,7 @@ bool ScStringUtil::parseSimpleNumber(
     // rtl::math::stringToDouble() just after having exchanged ascii space with
     // non-breaking space, if it wasn't for check of grouped digits. The NaN
     // and Inf cases that are accepted by stringToDouble() could be detected
-    // using rtl::math::isFinite() on the result.
+    // using std::isfinite() on the result.
 
     /* TODO: The grouped digits check isn't even valid for locales that do not
      * group in thousands ... e.g. Indian locales. But that's something also

@@ -39,7 +39,7 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-#define RETURN_FINITE(d)    if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
+#define RETURN_FINITE(d)    if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
 
 
 namespace sca {

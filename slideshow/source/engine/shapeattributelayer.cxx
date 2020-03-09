@@ -269,7 +269,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setWidth( const double& rNewWidth )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewWidth),
+            ENSURE_OR_THROW( std::isfinite(rNewWidth),
                               "ShapeAttributeLayer::setWidth(): Invalid width" );
 
             maSize.setX( rNewWidth );
@@ -293,7 +293,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setHeight( const double& rNewHeight )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewHeight),
+            ENSURE_OR_THROW( std::isfinite(rNewHeight),
                               "ShapeAttributeLayer::setHeight(): Invalid height" );
 
             maSize.setY( rNewHeight );
@@ -303,8 +303,8 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setSize( const ::basegfx::B2DSize& rNewSize )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewSize.getX()) &&
-                              ::rtl::math::isFinite(rNewSize.getY()),
+            ENSURE_OR_THROW( std::isfinite(rNewSize.getX()) &&
+                              std::isfinite(rNewSize.getY()),
                               "ShapeAttributeLayer::setSize(): Invalid size" );
 
             maSize = rNewSize;
@@ -328,7 +328,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setPosX( const double& rNewX )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewX),
+            ENSURE_OR_THROW( std::isfinite(rNewX),
                               "ShapeAttributeLayer::setPosX(): Invalid position" );
 
             maPosition.setX( rNewX );
@@ -352,7 +352,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setPosY( const double& rNewY )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewY),
+            ENSURE_OR_THROW( std::isfinite(rNewY),
                               "ShapeAttributeLayer::setPosY(): Invalid position" );
 
             maPosition.setY( rNewY );
@@ -383,7 +383,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setRotationAngle( const double& rNewAngle )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( std::isfinite(rNewAngle),
                               "ShapeAttributeLayer::setRotationAngle(): Invalid angle" );
 
             mnRotationAngle = rNewAngle;
@@ -406,7 +406,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setShearXAngle( const double& rNewAngle )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( std::isfinite(rNewAngle),
                               "ShapeAttributeLayer::setShearXAngle(): Invalid angle" );
 
             mnShearXAngle = rNewAngle;
@@ -429,7 +429,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setShearYAngle( const double& rNewAngle )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( std::isfinite(rNewAngle),
                               "ShapeAttributeLayer::setShearYAngle(): Invalid angle" );
 
             mnShearYAngle = rNewAngle;
@@ -452,7 +452,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setAlpha( const double& rNewValue )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewValue),
+            ENSURE_OR_THROW( std::isfinite(rNewValue),
                               "ShapeAttributeLayer::setAlpha(): Invalid alpha" );
 
             mnAlpha = rNewValue;
@@ -751,7 +751,7 @@ namespace slideshow::internal
 
         void ShapeAttributeLayer::setCharScale( const double& rNewHeight )
         {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewHeight),
+            ENSURE_OR_THROW( std::isfinite(rNewHeight),
                               "ShapeAttributeLayer::setCharScale(): Invalid height" );
 
             mnCharScale = rNewHeight;

@@ -198,7 +198,7 @@ int findFirstSetBit(unsigned n)
  */
 int getBitsInFracPart(double fAbsValue)
 {
-    assert(rtl::math::isFinite(fAbsValue) && fAbsValue >= 0.0);
+    assert(std::isfinite(fAbsValue) && fAbsValue >= 0.0);
     if (fAbsValue == 0.0)
         return 0;
     auto pValParts = reinterpret_cast< const sal_math_Double * >(&fAbsValue);
@@ -1160,7 +1160,7 @@ double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
     const double fBigInt = 2199023255552.0; // 2^41 -> only 11 bits left for fractional part, fine as decimal
-    if (fValue == 0.0 || fValue == HUGE_VAL || !::rtl::math::isFinite( fValue) || fValue > fBigInt)
+    if (fValue == 0.0 || fValue == HUGE_VAL || !std::isfinite( fValue) || fValue > fBigInt)
     {
         // We don't handle these conditions.  Bail out.
         return fValue;
@@ -1184,7 +1184,7 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
     fValue *= fExpValue;
     // If the original value was near DBL_MIN we got an overflow. Restore and
     // bail out.
-    if (!rtl::math::isFinite(fValue))
+    if (!std::isfinite(fValue))
         return fOrigValue;
 
     fValue = rtl_math_round(fValue, 0, rtl_math_RoundingMode_Corrected);
@@ -1192,7 +1192,7 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     // If the original value was near DBL_MAX we got an overflow. Restore and
     // bail out.
-    if (!rtl::math::isFinite(fValue))
+    if (!std::isfinite(fValue))
         return fOrigValue;
 
     return bSign ? -fValue : fValue;
@@ -1210,7 +1210,7 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
         return false;
 
     const double d = fabs(a - b);
-    if (!rtl::math::isFinite(d))
+    if (!std::isfinite(d))
         return false;   // Nan or Inf involved
 
     if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))

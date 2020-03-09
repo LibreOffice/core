@@ -420,7 +420,7 @@ static void IterateMatrix(
             ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero, bIgnoreErrVal);
             // If the first value is a NaN, it probably means it was an empty cell,
             // and should be treated as zero.
-            if ( !rtl::math::isFinite(aRes.mfFirst) )
+            if ( !std::isfinite(aRes.mfFirst) )
             {
                 sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(&aRes.mfFirst)->nan_parts.fraction_lo;
                 if (nErr & 0xffff0000)

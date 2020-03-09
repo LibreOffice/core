@@ -104,7 +104,7 @@ inline double CreateDoubleError( FormulaError nErr )
 /** Recreate the error code of a coded double error, if any. */
 inline FormulaError GetDoubleErrorValue( double fVal )
 {
-    if ( ::rtl::math::isFinite( fVal ) )
+    if ( std::isfinite( fVal ) )
         return FormulaError::NONE;
     if ( ::rtl::math::isInf( fVal ) )
         return FormulaError::IllegalFPOperation;       // normal INF

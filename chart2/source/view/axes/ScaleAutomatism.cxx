@@ -318,13 +318,13 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
     uno::Reference< XScaling > xInverseScaling = xScaling->getInverseScaling();
 
     fSourceMinimum = xScaling->doScaling( fSourceMinimum );
-    if( !::rtl::math::isFinite( fSourceMinimum ) )
+    if( !std::isfinite( fSourceMinimum ) )
         fSourceMinimum = 0.0;
     else if( ::rtl::math::approxEqual( fSourceMinimum, ::rtl::math::approxFloor( fSourceMinimum ) ) )
         fSourceMinimum = ::rtl::math::approxFloor( fSourceMinimum );
 
     fSourceMaximum = xScaling->doScaling( fSourceMaximum );
-    if( !::rtl::math::isFinite( fSourceMaximum ) )
+    if( !std::isfinite( fSourceMaximum ) )
         fSourceMaximum = 0.0;
     else if( ::rtl::math::approxEqual( fSourceMaximum, ::rtl::math::approxFloor( fSourceMaximum ) ) )
         fSourceMaximum = ::rtl::math::approxFloor( fSourceMaximum );
@@ -454,7 +454,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             if( !bAutoDistance )
             {
                 double fCheck = xInverseScaling->doScaling( fAxisMinimum );
-                if( !::rtl::math::isFinite( fCheck ) || fCheck <= 0 )
+                if( !std::isfinite( fCheck ) || fCheck <= 0 )
                 {
                     bAutoDistance = true;
                     bHasCalculatedDistance = false;
@@ -470,7 +470,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             if( !bAutoDistance )
             {
                 double fCheck = xInverseScaling->doScaling( fAxisMaximum );
-                if( !::rtl::math::isFinite( fCheck ) || fCheck <= 0 )
+                if( !std::isfinite( fCheck ) || fCheck <= 0 )
                 {
                     bAutoDistance = true;
                     bHasCalculatedDistance = false;
@@ -505,16 +505,16 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         rExplicitScale.Maximum = xInverseScaling->doScaling( rExplicitScale.Maximum );
 
         //ensure valid values after scaling #i100995#
-        if( !::rtl::math::isFinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0)
+        if( !std::isfinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0)
         {
             rExplicitScale.Minimum = fInputMinimum;
-            if( !::rtl::math::isFinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0 )
+            if( !std::isfinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0 )
                 rExplicitScale.Minimum = 1.0;
         }
-        if( !::rtl::math::isFinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
+        if( !std::isfinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
         {
             rExplicitScale.Maximum= fInputMaximum;
-            if( !::rtl::math::isFinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
+            if( !std::isfinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
                 rExplicitScale.Maximum = 10.0;
         }
         if( rExplicitScale.Maximum < rExplicitScale.Minimum )
@@ -867,7 +867,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
                     fDistanceNormalized = 1.0;
                     fDistanceMagnitude = 1.0e-307;
                 }
-                else if ( !rtl::math::isFinite(fDistance) )
+                else if ( !std::isfinite(fDistance) )
                 {
                     // fdo#43703: Handle values bigger than limits correctly
                     fDistanceNormalized = 1.0;

@@ -131,7 +131,7 @@ void ImportExcel::Formula(
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
                 pCell->SetNeedNumberFormat(false);
-                if (rtl::math::isFinite(fCurVal))
+                if (std::isfinite(fCurVal))
                     pCell->SetResultDouble(fCurVal);
 
                 GetXFRangeBuffer().SetXF(aScPos, nXF);
@@ -174,7 +174,7 @@ void ImportExcel::Formula(
         if( eErr != ConvErr::OK )
             ExcelToSc::SetError( *pCell, eErr );
 
-        if (rtl::math::isFinite(fCurVal))
+        if (std::isfinite(fCurVal))
             pCell->SetResultDouble(fCurVal);
     }
 

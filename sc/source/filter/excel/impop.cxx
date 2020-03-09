@@ -850,7 +850,7 @@ void ImportExcel::Shrfmla()
     rDoc.getDoc().EnsureTable(aPos.Tab());
     rDoc.setFormulaCell(aPos, pCell);
     pCell->SetNeedNumberFormat(false);
-    if (rtl::math::isFinite(mpLastFormula->mfValue))
+    if (std::isfinite(mpLastFormula->mfValue))
         pCell->SetResultDouble(mpLastFormula->mfValue);
 
     GetXFRangeBuffer().SetXF(aPos, mpLastFormula->mnXF);

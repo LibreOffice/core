@@ -1418,7 +1418,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     // On OS/2 with broken FPU exception, we can somehow store /0 without Err503. Later on in
     // the BLC Lib NumberFormatter crashes when doing a fabs (NAN) (# 32739 #).
     // We iron this out here for all systems, such that we also have an Err503 here.
-    if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
+    if ( aResult.IsValue() && !std::isfinite( aResult.GetDouble() ) )
     {
         OSL_FAIL("Formula cell INFINITY!!! Where does this document come from?");
         aResult.SetResultError( FormulaError::IllegalFPOperation );
@@ -2234,7 +2234,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             if( cMatrixFlag != ScMatrixMode::Formula && !pCode->IsHyperLink() )
                 aResult.SetToken( aResult.GetCellResultToken().get());
         }
-        if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
+        if ( aResult.IsValue() && !std::isfinite( aResult.GetDouble() ) )
         {
             // Coded double error may occur via filter import.
             FormulaError nErr = GetDoubleErrorValue( aResult.GetDouble());

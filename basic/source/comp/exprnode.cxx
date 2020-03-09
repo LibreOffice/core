@@ -402,7 +402,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 default: break;
             }
 
-            if( !::rtl::math::isFinite( nVal ) )
+            if( !std::isfinite( nVal ) )
                 pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
 
             // Recover the data type to kill rounding error

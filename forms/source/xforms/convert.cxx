@@ -75,7 +75,7 @@ namespace
         double f = 0.0;
         rAny >>= f;
 
-        return rtl::math::isFinite( f )
+        return std::isfinite( f )
             ? rtl::math::doubleToUString( f, rtl_math_StringFormat_Automatic,
                                         rtl_math_DecimalPlaces_Max, '.',
                                         true )
