@@ -220,7 +220,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     pConvertTo3DLatheItem.reset( new SvxConvertTo3DItem(SID_CONVERT_TO_3D_LATHE_FAST, pBindings) );
 
     m_xBtnAssign->connect_clicked( LINK( this, Svx3DWin, ClickAssignHdl ) );
-    m_xBtnUpdate->connect_clicked( LINK( this, Svx3DWin, ClickUpdateHdl ) );
+    m_xBtnUpdate->connect_toggled( LINK( this, Svx3DWin, ClickUpdateHdl ) );
 
     Link<weld::Button&,void> aLink( LINK( this, Svx3DWin, ClickViewTypeHdl ) );
     m_xBtnGeo->connect_clicked( aLink );
@@ -451,6 +451,7 @@ void Svx3DWin::Reset()
     m_xMtrMatSpecularIntensity->set_value( 50, FieldUnit::PERCENT );
 
     m_xBtnLight1->set_active(true);
+    m_xBtnUpdate->set_active(true);
     ClickUpdateHdl(*m_xBtnUpdate);
 
     // Select nothing, to avoid errors when selecting the first
@@ -2198,9 +2199,9 @@ void Svx3DWin::Resize()
     SfxDockingWindow::Resize();
 }
 
-IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Button&, void)
+IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::ToggleButton&, void)
 {
-    bUpdate = !m_xBtnUpdate->get_active();
+    bUpdate = m_xBtnUpdate->get_active();
 
     if( bUpdate )
     {
