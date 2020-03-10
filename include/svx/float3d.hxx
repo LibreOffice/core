@@ -214,7 +214,7 @@ private:
     std::unique_ptr<SfxItemSet> mpRemember2DAttributes;
 
     DECL_LINK( ClickViewTypeHdl, weld::Button&, void );
-    DECL_LINK( ClickUpdateHdl, weld::Button&, void );
+    DECL_LINK( ClickUpdateHdl, weld::ToggleButton&, void );
     DECL_LINK( ClickAssignHdl, weld::Button&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
     DECL_LINK( ClickColorHdl, weld::Button&, void );
