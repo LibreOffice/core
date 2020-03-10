@@ -146,12 +146,12 @@ void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 
 void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    SwIterator<SwFormatField, SwFieldType> aIter(*this);
-    if (!aIter.First())
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields);
+    if(!vFields.size())
         return;
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldType"));
-    for (const SwFormatField* pFormatField = aIter.First(); pFormatField;
-         pFormatField = aIter.Next())
+    for(const auto pFormatField: vFields)
         pFormatField->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
