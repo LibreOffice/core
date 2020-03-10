@@ -16794,6 +16794,7 @@ vcl/inc/textrender.hxx
 vcl/inc/toolbox.h
 vcl/inc/unx/XIM.h
 vcl/inc/unx/cairotextrender.hxx
+vcl/inc/unx/freetypetextrender.hxx
 vcl/inc/unx/cpdmgr.hxx
 vcl/inc/unx/cupsmgr.hxx
 vcl/inc/unx/desktops.hxx
@@ -17472,6 +17473,7 @@ vcl/unx/generic/fontmanager/helper.cxx
 vcl/unx/generic/gdi/cairo_xlib_cairo.cxx
 vcl/unx/generic/gdi/cairo_xlib_cairo.hxx
 vcl/unx/generic/gdi/cairotextrender.cxx
+vcl/unx/generic/gdi/freetypetextrender.cxx
 vcl/unx/generic/gdi/font.cxx
 vcl/unx/generic/gdi/gdiimpl.cxx
 vcl/unx/generic/gdi/gdiimpl.hxx
