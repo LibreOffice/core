@@ -1140,7 +1140,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             // tdf125520 this is a D&D-start potentially with an OLE object. If
             // so, we need to do similar as e.g. in ScDrawView::BeginDrag so that
             // the temporary SdrModel for transfer does have a GetPersist() so
-            // that the EmbeddedObjectContainer gets copied. We noeed no CheckOle
+            // that the EmbeddedObjectContainer gets copied. We need no CheckOle
             // here, test is simpler.
             ScDocShellRef aDragShellRef;
             if(OBJ_OLE2 == pObject->GetObjIdentifier())
