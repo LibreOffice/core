@@ -134,15 +134,12 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     // #i93174#: notes contain paragraphs that are not nodes
     {
         SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit) );
-        SwIterator<SwFormatField,SwFieldType> aIter( *pPostits );
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        pPostits->GatherFields(vFields);
+        for(auto pFormatField : vFields)
         {
-            if (pFormatField->IsFieldInDoc())
-            {
-                SwPostItField const * const pField(
-                    static_cast<SwPostItField const*>(pFormatField->GetField()));
-                mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
-            }
+            const auto pField = static_cast<SwPostItField const*>(pFormatField->GetField());
+            mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
         }
     }
 
