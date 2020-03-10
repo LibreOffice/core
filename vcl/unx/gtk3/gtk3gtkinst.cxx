@@ -8622,6 +8622,8 @@ private:
     std::map<int, int> m_aWeightMap;
     // map from text column to sensitive column
     std::map<int, int> m_aSensitiveMap;
+    // map from text column to indent column
+    std::map<int, int> m_aIndentMap;
     // currently expanding parent that logically, but not currently physically,
     // contain placeholders
     o3tl::sorted_vector<GtkTreeIter, CompareGtkTreeIter> m_aExpandingPlaceHolderParents;
@@ -9182,6 +9184,19 @@ private:
         }
     }
 
+    int get_expander_size() const
+    {
+        gint nExpanderSize;
+        gint nHorizontalSeparator;
+
+        gtk_widget_style_get(GTK_WIDGET(m_pTreeView),
+                             "expander-size", &nExpanderSize,
+                             "horizontal-separator", &nHorizontalSeparator,
+                             nullptr);
+
+        return nExpanderSize + (nHorizontalSeparator/ 2);
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -9221,6 +9236,7 @@ public:
                         m_nTextCol = nIndex;
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
+                    m_aIndentMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
@@ -9255,6 +9271,8 @@ public:
         for (auto& a : m_aWeightMap)
             a.second = nIndex++;
         for (auto& a : m_aSensitiveMap)
+            a.second = nIndex++;
+        for (auto& a : m_aIndentMap)
             a.second = nIndex++;
 
         ensure_drag_begin_end();
@@ -9773,6 +9791,12 @@ public:
             set(rGtkIter.iter, m_aToggleTriStateMap[col], false);
             set(rGtkIter.iter, col, eState == TRISTATE_TRUE);
         }
+    }
+
+    virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        set(rGtkIter.iter, m_aIndentMap[m_nTextCol], nIndentLevel * get_expander_size());
     }
 
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override

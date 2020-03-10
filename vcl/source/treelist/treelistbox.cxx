@@ -2986,7 +2986,6 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
     return aRect;
 }
 
-
 sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     assert(pTab);
@@ -2997,7 +2996,7 @@ sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
         nDepth = nDepth * static_cast<sal_uInt16>(nIndent);
         nPos += static_cast<sal_IntPtr>(nDepth);
     }
-    return nPos;
+    return nPos + (pEntry->GetExtraIndent() * nIndent);
 }
 
 SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,

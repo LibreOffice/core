@@ -931,6 +931,8 @@ public:
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
     virtual bool get_children_on_demand(const TreeIter& rIter) const = 0;
     virtual void set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
+    //visually indent this row as if it was at get_iter_depth() + nIndentLevel
+    virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
     virtual void expand_row(const TreeIter& rIter) = 0;
     virtual void collapse_row(const TreeIter& rIter) = 0;
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;

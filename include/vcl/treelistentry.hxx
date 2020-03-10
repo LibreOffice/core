@@ -60,6 +60,7 @@ class VCL_DLLPUBLIC SvTreeListEntry
     SvTreeListEntries   m_Children;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
+    sal_uInt32          mnExtraIndent;
     ItemsType           m_Items;
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
@@ -114,6 +115,9 @@ public:
 
     void SetTextColor( std::optional<Color> xColor ) { mxTextColor = xColor; }
     std::optional<Color> const & GetTextColor() const { return mxTextColor; }
+
+    void SetExtraIndent(sal_uInt32 nExtraIndent) { mnExtraIndent = nExtraIndent; }
+    sal_uInt32 GetExtraIndent() const { return mnExtraIndent; }
 
     SvTreeListEntry* GetParent() const { return pParent; }
 
