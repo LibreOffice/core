@@ -57,6 +57,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdotable.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -744,7 +745,16 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
 
         if(nullptr == pNewObj)
         {
-            // not cloned yet, use default way
+            // not cloned yet
+            if(pObj->GetObjIdentifier() == OBJ_OLE2 && nullptr == mpModel->GetPersist())
+            {
+                // tdf#125520 - former fix was wrong, the SdrModel
+                // has to have a GetPersist() already, see task.
+                // We can still warn here when this is not the case
+                SAL_WARN( "svx", "OLE gets cloned Persist, EmbeddedObjectContainer will not be copied" );
+            }
+
+            // use default way
             pNewObj = pObj->CloneSdrObject(*pNewModel);
         }
 
