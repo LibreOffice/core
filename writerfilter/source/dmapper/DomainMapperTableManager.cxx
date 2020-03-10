@@ -646,6 +646,7 @@ void DomainMapperTableManager::endOfRowAction()
     for (int i : (*pTableGrid))
         nFullWidthRelative = o3tl::saturating_add(nFullWidthRelative, i);
 
+    bool bIsIncompleteGrid = false;
     if( pTableGrid->size() == ( nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
         /*
@@ -714,7 +715,8 @@ void DomainMapperTableManager::endOfRowAction()
     }
     else if ( !pCellWidths->empty() &&
                ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
-                 || pCellWidths->size() == ( nGrids + m_nGridAfter ) )
+                 || pCellWidths->size() == ( nGrids + m_nGridAfter )
+                 || ((bIsIncompleteGrid = true) && nGrids + m_nGridAfter > pTableGrid->size() && pCellWidths->size() > 0) )
              )
     {
         // If we're here, then the number of cells does not equal to the amount
@@ -725,20 +727,53 @@ void DomainMapperTableManager::endOfRowAction()
         // On the other hand even if the layout is not fixed, but the cell widths
         // provided equal the total number of cells, and there are no after/before cells
         // then use the cell widths to calculate the column separators.
+        // Also handle autofit tables with incomplete grids, when rows can have
+        // different widths and last cells can be wider, than their values.
         uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;
+
+        if (bIsIncompleteGrid)
+            nFullWidthRelative = 0;
+
         // Avoid divide by zero (if there's no grid, position using cell widths).
         if( nFullWidthRelative == 0 )
             for (size_t i = 0; i < pCellWidths->size(); ++i)
                 nFullWidthRelative += (*pCellWidths)[i];
+
+        if (bIsIncompleteGrid)
+        {
+            /*
+             * If table width property set earlier is smaller than the current table row width,
+             * then replace the TABLE_WIDTH property, set earlier.
+             */
+            sal_Int32 nFullWidth = static_cast<sal_Int32>(ceil(ConversionHelper::convertTwipToMM100Double(nFullWidthRelative)));
+            sal_Int32 nTableWidth(0);
+            sal_Int32 nTableWidthType(text::SizeType::VARIABLE);
+            pTablePropMap->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
+            pTablePropMap->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
+            if (nTableWidth < nFullWidth)
+            {
+                pTablePropMap->setValue(TablePropertyMap::TABLE_WIDTH, nFullWidth);
+            }
+        }
 
         size_t nWidthsBound = pCellWidths->size() - 1;
         if (nWidthsBound)
         {
             if (nFullWidthRelative == 0)
                 throw o3tl::divide_by_zero();
+
+            // At incomplete table grids, last cell width can be smaller, than its final width.
+            // Correct it based on the last but one column width and their span values.
+            if ( bIsIncompleteGrid && pCurrentSpans->size()-1 == nWidthsBound )
+            {
+                auto aSpansIter = std::next(pCurrentSpans->begin( ), nWidthsBound - 1);
+                sal_Int32 nFixLastCellWidth = (*pCellWidths)[nWidthsBound-1] / *aSpansIter * *std::next(aSpansIter);
+                if (nFixLastCellWidth > (*pCellWidths)[nWidthsBound])
+                    nFullWidthRelative += nFixLastCellWidth - (*pCellWidths)[nWidthsBound];
+            }
 
             for (size_t i = 0; i < nWidthsBound; ++i)
             {
