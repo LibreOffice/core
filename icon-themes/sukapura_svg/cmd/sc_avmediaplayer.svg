@@ -1,6 +1,7 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(.72222223 0 0 .57142857 -1.166667 1.142857)" gradientUnits="userSpaceOnUse" x1="-15.949153" x2="-15.949153" y1="10.3653" y2="-3.6347"><stop offset="0" stop-color="#f5f5f5"/><stop offset=".08333334" stop-color="#fdfdfd"/><stop offset="1" stop-color="#fff"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><filter id="a" color-interpolation-filters="sRGB" height="1.156783" width="1.155225" x="-.077613" y="-.078391"><feGaussianBlur stdDeviation=".45728238"/></filter><linearGradient id="b" gradientTransform="matrix(.72222223 0 0 .57142857 -1.166667 1.142857)" gradientUnits="userSpaceOnUse" x1="11.307693" x2="11.307693" y1="19" y2="5.000001"><stop offset="0" stop-color="#f5f5f5"/><stop offset=".08333334" stop-color="#fdfdfd"/><stop offset="1" stop-color="#fff"/></linearGradient>
 
 
 
-     /&amp;amp;amp;gt;
- <path d="m1 4h13v8h-13z" fill="url(#a)" stroke-width=".642416"/><path d="m1 1c-.554 0-1 .446-1 1v12c0 .554.446 1 1 1h13c.554 0 1-.446 1-1v-12c0-.554-.446-1-1-1zm0 1h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm-12 2h6v8h-6zm7 0h6v8h-6zm-7 9h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1z" fill="#69696e"/></svg>
+
+     /&amp;amp;amp;amp;gt;
+ <path d="m1.5 1.5c-.554 0-1 .446-1 1v12c0 .554.446 1 1 1h12.140454c.554 0 1-.446 1-1v-12c0-.554-.446-1-1-1zm0 1h.5v1h-.5zm2.5 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h.640454v1h-.640454zm-11.5 2h5.5v8h-5.5zm6.5 0h5.640454v8h-5.640454zm-6.5 9h.5v1h-.5zm2.5 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h.640454v1h-.640454z" filter="url(#a)" opacity=".15"/><path d="m1 4h13v8h-13z" fill="url(#b)" stroke-width=".642416"/><path d="m1 1c-.554 0-1 .446-1 1v12c0 .554.446 1 1 1h13c.554 0 1-.446 1-1v-12c0-.554-.446-1-1-1zm0 1h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm-12 2h6v8h-6zm7 0h6v8h-6zm-7 9h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1zm3 0h1v1h-1z" fill="#69696e"/></svg>

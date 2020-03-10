@@ -241,31 +241,25 @@ cmd/sc_zoomplus.png cmd/sc_zoomin.png
 cmd/sc_zoomtoolbox.png cmd/sc_zoom.png
 
 # Save
-cmd/32/savebasicas.png cmd/32/saveas.png
 cmd/32/savegraphic.png cmd/32/save.png
 
-cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
 
-cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 
 # Text
-cmd/32/doubleclicktextedit.png cmd/32/pickthrough.png
 cmd/32/drawtext.png cmd/32/text.png
 cmd/32/fontheight.png cmd/32/scaletext.png
 cmd/32/fontworkcharacterspacingfloater.png cmd/32/spacing.png
 cmd/32/textfittosizetool.png cmd/32/text_marquee.png
 cmd/32/texttoolbox.png cmd/32/text.png
 
-cmd/lc_doubleclicktextedit.png cmd/lc_pickthrough.png
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/lc_fontheight.png cmd/lc_scaletext.png
 cmd/lc_fontworkcharacterspacingfloater.png cmd/lc_spacing.png
 cmd/lc_textfittosizetool.png cmd/lc_text_marquee.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 
-cmd/sc_doubleclicktextedit.png cmd/sc_pickthrough.png
 cmd/sc_drawtext.png cmd/sc_text.png
 cmd/sc_fontheight.png cmd/sc_scaletext.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
@@ -947,7 +941,6 @@ cmd/32/dbnewqueryautopilot.png cmd/32/autopilotmenu.png
 cmd/32/dbnewreportautopilot.png cmd/32/autopilotmenu.png
 cmd/32/dbnewtableautopilot.png cmd/32/autopilotmenu.png
 cmd/32/graphicfiltertoolbox.png cmd/32/autopilotmenu.png
-cmd/32/newarrangement.png cmd/32/autopilotmenu.png
 cmd/32/usewizards.png cmd/32/autopilotmenu.png
 
 cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
@@ -956,7 +949,6 @@ cmd/lc_dbnewqueryautopilot.png cmd/lc_autopilotmenu.png
 cmd/lc_dbnewreportautopilot.png cmd/lc_autopilotmenu.png
 cmd/lc_dbnewtableautopilot.png cmd/lc_autopilotmenu.png
 cmd/lc_graphicfiltertoolbox.png cmd/lc_autopilotmenu.png
-cmd/lc_newarrangement.png cmd/lc_autopilotmenu.png
 cmd/lc_usewizards.png cmd/lc_autopilotmenu.png
 
 cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
@@ -965,7 +957,6 @@ cmd/sc_dbnewqueryautopilot.png cmd/sc_autopilotmenu.png
 cmd/sc_dbnewreportautopilot.png cmd/sc_autopilotmenu.png
 cmd/sc_dbnewtableautopilot.png cmd/sc_autopilotmenu.png
 cmd/sc_graphicfiltertoolbox.png cmd/sc_autopilotmenu.png
-cmd/sc_newarrangement.png cmd/sc_autopilotmenu.png
 cmd/sc_usewizards.png cmd/sc_autopilotmenu.png
 
 # Filter
