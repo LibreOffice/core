@@ -201,9 +201,10 @@ Stmt* Plugin::getParentStmt( Stmt* stmt )
 
 static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
 {
-    auto it = context.getParents(*stmt).begin();
+    auto const parents = context.getParents(*stmt);
+    auto it = parents.begin();
 
-    if (it == context.getParents(*stmt).end())
+    if (it == parents.end())
           return nullptr;
 
     const Decl *decl = it->get<Decl>();
