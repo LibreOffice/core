@@ -32,6 +32,7 @@
 #include <postwin.h>
 
 class SkiaFlushIdle;
+class GenericSalLayout;
 
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
@@ -201,6 +202,8 @@ public:
                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
                     SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
+
+    void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font);
 
 protected:
     // To be called before any drawing.
