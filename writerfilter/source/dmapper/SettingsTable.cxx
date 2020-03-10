@@ -365,6 +365,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_DocProtect_edit: // 92037
         m_pImpl->m_DocumentProtection.m_nEdit = nIntValue;
+        // multiple DocProtect_edits should not exist. If they do, last one wins
+        m_pImpl->m_bRedlineProtection = false;
+        m_pImpl->m_bProtectForm = false;
         switch (nIntValue)
         {
         case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
