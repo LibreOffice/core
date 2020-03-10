@@ -509,6 +509,7 @@ vcl_headless_freetype_code=\
     vcl/headless/svptext \
     vcl/unx/generic/app/gendata \
     vcl/unx/generic/gdi/cairotextrender \
+    vcl/unx/generic/gdi/freetypetextrender \
     vcl/unx/generic/glyphs/freetype_glyphcache \
     vcl/unx/generic/glyphs/glyphcache \
     vcl/unx/generic/fontmanager/fontsubst \
