@@ -3606,12 +3606,14 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         static const OUString sDownAction("DOWN");
         static const OUString sValue("VALUE");
 
+        bool bIsWeldedDialog = false;
+
         try
         {
             OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
             weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, sControlId);
 
-            bool bIsWeldedDialog = pWidget != nullptr;
+            bIsWeldedDialog = pWidget != nullptr;
             bool bContinueWithLOKWindow = false;
 
             if (bIsWeldedDialog)
@@ -3714,7 +3716,8 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         } catch(...) {}
 
         // force resend
-        pWindow->Resize();
+        if (!bIsWeldedDialog)
+            pWindow->Resize();
     }
 }
 
