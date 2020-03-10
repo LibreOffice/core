@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10418f96_d0494bd3",
+        "filename": "sc/source/ui/inc/gridwin.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-10T09:17:00Z",
+      "side": 1,
+      "message": "Please rename the TimerHdl to some better function name.",
+      "revId": "60d4b0e8b17eb86fbf31dbed6c47c64e7f8443d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "054e3a80_a9968d86",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-10T09:17:00Z",
+      "side": 1,
+      "message": "A timeout of 1ms is basically no timeout. Any reason not to use an Idle? Idles have a lower priority. I\u0027m not sure what you\u0027re aiming for, so check out the priorities in include/vcl/task.hxx. And please set an appropriate debug name, either as the member initializer or by calling DebugName.",
+      "revId": "60d4b0e8b17eb86fbf31dbed6c47c64e7f8443d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfb77a89_b69a07ed",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-10T09:17:00Z",
+      "side": 1,
+      "message": "Just return on pTimer !\u003d …, if you really think, you need this protection. Saves an indention level. But my guess is you simply don\u0027t need this.",
+      "revId": "60d4b0e8b17eb86fbf31dbed6c47c64e7f8443d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c90875f_82e18fba",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-10T09:17:00Z",
+      "side": 1,
+      "message": "This will probably just hide other bugs. You already use the bool to suppress additional starts of the timer. As an alternative you can drop the bool and expose Link::IsSet in include/vcl/timer.hxx an test that.",
+      "revId": "60d4b0e8b17eb86fbf31dbed6c47c64e7f8443d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
