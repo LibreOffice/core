@@ -609,7 +609,7 @@ public:
     virtual ~SalInstanceEntry() override;
 };
 
-class SalInstanceSpinButton final : public SalInstanceEntry, public virtual weld::SpinButton
+class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
 {
 private:
     VclPtr<FormattedField> m_xButton;
