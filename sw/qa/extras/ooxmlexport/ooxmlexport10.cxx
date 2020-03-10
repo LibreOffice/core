@@ -383,6 +383,20 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73389,"fdo73389.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","5000");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
+{
+    // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
+    xmlDocPtr pXmlDoc = parseExport();
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "type", "dxa");
+    // This was 7349: sum of the cell widths in first row, but the table width is determined by a longer row later.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "w", "9048");
+    // This was 1224: too narrow first cell in first row
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcW", "w", "4291");
+    // This was 3674: too wide last cell in first row
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", "1695");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
