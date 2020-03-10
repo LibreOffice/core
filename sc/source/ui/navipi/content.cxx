@@ -1137,7 +1137,21 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);
 
+            // tdf125520 this is a D&D-start potentially with an OLE object. If
+            // so, we need to do similar as e.g. in ScDrawView::BeginDrag so that
+            // the temporary SdrModel for transfer does have a GetPersist() so
+            // that the EmbeddedObjectContainer gets copied. We noeed no CheckOle
+            // here, test is simpler.
+            ScDocShellRef aDragShellRef;
+            if(OBJ_OLE2 == pObject->GetObjIdentifier())
+            {
+                aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+                aDragShellRef->DoInitNew();
+            }
+
+            ScDrawLayer::SetGlobalDrawPersist(aDragShellRef.get());
             std::unique_ptr<SdrModel> pDragModel(aEditView.CreateMarkedObjModel());
+            ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
             TransferableObjectDescriptor aObjDesc;
             pSrcShell->FillTransferableObjectDescriptor( aObjDesc );
