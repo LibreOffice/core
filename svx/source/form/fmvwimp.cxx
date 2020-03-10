@@ -862,7 +862,7 @@ namespace
                     continue;
 
                 Reference< XChild > xModel( pFormObject->GetUnoControlModel(), UNO_QUERY_THROW );
-                Reference< XInterface > xModelParent( xModel->getParent(), UNO_SET_THROW );
+                Reference< XInterface > xModelParent( xModel->getParent(), UNO_QUERY );
 
                 if ( xNormalizedForm.get() != xModelParent.get() )
                     continue;
