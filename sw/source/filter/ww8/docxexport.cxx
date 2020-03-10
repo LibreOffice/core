@@ -1084,15 +1084,25 @@ void DocxExport::WriteSettings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     bool hasProtectionProperties = false;
+    bool bWriterWantsToProtect = false;
+    bool bWriterWantsToProtectForm = false;
+    bool bWriterWantsToProtectRedline = false;
     bool bHasRedlineProtectionKey = false;
     bool bHasDummyRedlineProtectionKey = false;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    if ( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
+         m_pSections->DocumentIsProtected() )
+    {
+        bWriterWantsToProtect = bWriterWantsToProtectForm = true;
+    }
     if ( xPropSetInfo->hasPropertyByName( "RedlineProtectionKey" ) )
     {
         uno::Sequence<sal_Int8> aKey;
         xPropSet->getPropertyValue( "RedlineProtectionKey" ) >>= aKey;
         bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
+        if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
+            bWriterWantsToProtect = bWriterWantsToProtectRedline = true;
     }
 
     /* Compatibility Mode (tdf#131304)
@@ -1194,7 +1204,6 @@ void DocxExport::WriteSettings()
             }
             else if (rProp.Name == "DocumentProtection")
             {
-
                 uno::Sequence< beans::PropertyValue > rAttributeList;
                 rProp.Value >>= rAttributeList;
 
@@ -1202,6 +1211,8 @@ void DocxExport::WriteSettings()
                 {
                     sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
                     bool bIsProtectionTrackChanges = false;
+                    // if grabbag protection is not enforced, allow Writer protection to override
+                    bool bEnforced = false;
                     for (const auto& rAttribute : std::as_const(rAttributeList))
                     {
                         static DocxStringTokenMap const aTokens[] =
@@ -1225,12 +1236,17 @@ void DocxExport::WriteSettings()
                             pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
                             if ( nToken == XML_edit && sValue == "trackedChanges" )
                                 bIsProtectionTrackChanges = true;
+                            else if ( nToken == XML_enforcement )
+                                bEnforced = sValue.toBoolean();
                         }
                     }
 
                     // we have document protection from input DOCX file
                     // and in the case of change tracking protection, we didn't modify it
                     hasProtectionProperties = !bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey;
+                    // use grabbag if still valid/enforced
+                    // or leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
+                    hasProtectionProperties &= bEnforced || !bWriterWantsToProtect;
                     if ( hasProtectionProperties )
                     {
                         sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
@@ -1264,8 +1280,7 @@ void DocxExport::WriteSettings()
     {
         // Protect form - highest priority
         // Section-specific write protection
-        if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
-            m_pSections->DocumentIsProtected())
+        if ( bWriterWantsToProtectForm )
         {
             // we have form protection from Writer or from input ODT file
 
@@ -1274,7 +1289,7 @@ void DocxExport::WriteSettings()
                 FSNS(XML_w, XML_enforcement), "true");
         }
         // Protect Change Tracking - next priority
-        else if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
+        else if ( bWriterWantsToProtectRedline )
         {
             // we have change tracking protection from Writer or from input ODT file
 
