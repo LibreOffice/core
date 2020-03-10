@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81f68d4d_95780c36",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-10T12:33:55Z",
+      "side": 1,
+      "message": "This section should be included in the prior if clause.  If hasProtectionProperties already (like forms for example), then don\u0027t write a second one.  This is breaking forms protection in Word on my proof document.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 4,
+        "endLine": 1171,
+        "endChar": 7
+      },
+      "revId": "2756ed9317e3474003c11ffe7d1e2f087c1412bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
