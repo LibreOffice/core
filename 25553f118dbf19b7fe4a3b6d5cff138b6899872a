@@ -111,6 +111,48 @@
       "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "329ec002_f653b26d",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-03-10T09:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd58060e_9ba87412",
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9ce6662_0de7c933",
+        "filename": "sw/inc/ndgrf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-03-10T09:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39ad4d55_7f3f78db",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "25553f118dbf19b7fe4a3b6d5cff138b6899872a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
