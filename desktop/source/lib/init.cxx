@@ -3671,6 +3671,19 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                             bContinueWithLOKWindow = true;
                     }
                 }
+                else if (sControlType == "pushbutton")
+                {
+                    auto pButton = dynamic_cast<weld::Button*>(pWidget);
+                    if (pButton)
+                    {
+                        if (sAction == "click")
+                        {
+                            pButton->clicked();
+                        }
+                        else
+                            bContinueWithLOKWindow = true;
+                    }
+                }
                 else
                 {
                     bContinueWithLOKWindow = true;
