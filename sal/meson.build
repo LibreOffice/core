@@ -121,7 +121,7 @@ sal_lib = shared_library('sallo',
   install: true,
 )
 
-sal_textenc_lib = shared_library('sal_textenc',
+sal_textenc_lib = shared_library('sal_textenclo',
   'textenc/context.cxx',
   'textenc/convertbig5hkscs.cxx',
   'textenc/converteuctw.cxx',
