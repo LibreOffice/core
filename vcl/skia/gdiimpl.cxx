@@ -33,6 +33,8 @@
 #include <SkRegion.h>
 #include <SkDashPathEffect.h>
 #include <GrBackendSurface.h>
+#include <SkTextBlob.h>
+#include <SkRSXform.h>
 
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -1256,6 +1258,48 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon&, const Gradient
 {
     // TODO?
     return false;
+}
+
+static double toRadian(int degree10th) { return (3600 - degree10th) * M_PI / 1800.0; }
+static double toCos(int degree10th) { return SkScalarCos(toRadian(degree10th)); }
+static double toSin(int degree10th) { return SkScalarSin(toRadian(degree10th)); }
+
+void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
+                                            const SkFont& font)
+{
+    std::vector<SkGlyphID> glyphIds;
+    std::vector<SkRSXform> glyphForms;
+    glyphIds.reserve(256);
+    glyphForms.reserve(256);
+    Point aPos;
+    const GlyphItem* pGlyph;
+    int nStart = 0;
+    double orientationAngle = layout.GetOrientation(); // 10th of degree
+    while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
+    {
+        glyphIds.push_back(pGlyph->glyphId());
+        double angle = orientationAngle;
+        if (pGlyph->IsVertical())
+            angle += 900; // 90 degree
+        SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
+        glyphForms.emplace_back(std::move(form));
+    }
+    if (glyphIds.empty())
+        return;
+    sk_sp<SkTextBlob> textBlob
+        = SkTextBlob::MakeFromRSXform(glyphIds.data(), glyphIds.size() * sizeof(SkGlyphID),
+                                      glyphForms.data(), font, SkTextEncoding::kGlyphID);
+    preDraw();
+    SAL_INFO("vcl.skia", "drawtextblob("
+                             << this << "): "
+                             << tools::Rectangle(textBlob->bounds().x(), textBlob->bounds().y(),
+                                                 textBlob->bounds().width(),
+                                                 textBlob->bounds().height())
+                             << ":" << textColor);
+    SkPaint paint;
+    paint.setColor(toSkColor(textColor));
+    getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
+    postDraw();
 }
 
 bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const

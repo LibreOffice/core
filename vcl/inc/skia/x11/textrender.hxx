@@ -17,27 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
-#define INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
+#ifndef INCLUDED_VCL_INC_SKIA_TEXTRENDER_HXX
+#define INCLUDED_VCL_INC_SKIA_TEXTRENDER_HXX
 
-#include <rtl/string.hxx>
+#include <unx/freetypetextrender.hxx>
 
-typedef struct _FcPattern   FcPattern;
-class VCL_DLLPUBLIC FontConfigFontOptions
+#include <SkFontMgr.h>
+#include <SkFontMgr_fontconfig.h>
+
+class VCL_DLLPUBLIC SkiaTextRender : public FreeTypeTextRenderImpl
 {
 public:
-                        FontConfigFontOptions(FcPattern* pPattern) :
-                            mpPattern(pPattern) {}
-                        ~FontConfigFontOptions();
+    virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;
+    virtual void ClearDevFontCache() override;
 
-    void                SyncPattern(const OString& rFileName, sal_uInt32 nFontFace, sal_uInt32 nFontVariation, bool bEmbolden);
-    FcPattern*          GetPattern() const;
-    static void         cairo_font_options_substitute(FcPattern* pPattern);
 private:
-    FcPattern* mpPattern;
+    sk_sp<SkFontMgr> fontManager;
 };
 
-
-#endif // INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
