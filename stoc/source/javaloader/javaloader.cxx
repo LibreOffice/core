@@ -336,21 +336,13 @@ static Mutex & getInitMutex()
 /// @throws Exception
 static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
 {
-    css::uno::Reference<XInterface> xRet;
-
     try {
-        MutexGuard guard( getInitMutex() );
-        // The javaloader is never destroyed and there can be only one!
-        // Note that the first context wins...
-        static css::uno::Reference< XInterface > xStaticRef = *new JavaComponentLoader(xCtx);
-        xRet = xStaticRef;
+        return *new JavaComponentLoader(xCtx);
     }
     catch(const RuntimeException &) {
         TOOLS_INFO_EXCEPTION("stoc", "could not init javaloader");
         throw;
     }
-
-    return xRet;
 }
 
 } //end namespace
@@ -362,7 +354,7 @@ static const struct ImplementationEntry g_entries[] =
 {
     {
         JavaComponentLoader_CreateInstance, loader_getImplementationName,
-        loader_getSupportedServiceNames, createSingleComponentFactory,
+        loader_getSupportedServiceNames, createOneInstanceComponentFactory,
         nullptr , 0
     },
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
