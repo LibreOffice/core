@@ -133,6 +133,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124816)
     CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(3, 9, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
+{
+    ScModelObj* pModelObj = createDoc("tdf124815.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    checkCurrentCell(0, 0);
+    CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
+
+    //Without the fix, it would crash
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(3, 0, 0)));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
