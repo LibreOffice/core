@@ -3660,6 +3660,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                                 OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
                                 int pos = std::atoi(posString.getStr());
                                 pCombobox->set_active(pos);
+                                pCombobox->signal_changed();
                             }
                         }
                         else if (sAction == "change")
