@@ -2200,7 +2200,7 @@ void Svx3DWin::Resize()
 
 IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Button&, void)
 {
-    bUpdate = !m_xBtnUpdate->get_active();
+    bUpdate = m_xBtnUpdate->get_active();
 
     if( bUpdate )
     {
