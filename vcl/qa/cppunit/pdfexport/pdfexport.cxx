@@ -142,6 +142,7 @@ public:
     void testPdfImageResourceInlineXObjectRef();
     void testReduceSmallImage();
     void testReduceImage();
+    void testLinkWrongPage();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -181,6 +182,7 @@ public:
     CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
     CPPUNIT_TEST(testReduceSmallImage);
     CPPUNIT_TEST(testReduceImage);
+    CPPUNIT_TEST(testLinkWrongPage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1960,6 +1962,38 @@ void PdfExportTest::testReduceImage()
     // i.e. the image was scaled down even with ReduceImageResolution=false.
     CPPUNIT_ASSERT_EQUAL(160, nWidth);
     CPPUNIT_ASSERT_EQUAL(160, nHeight);
+}
+
+bool HasLinksOnPage(PageHolder& pPdfPage)
+{
+    int nStartPos = 0;
+    FPDF_LINK pLinkAnnot = nullptr;
+    return FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot);
+}
+
+void PdfExportTest::testLinkWrongPage()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "link-wrong-page.odp";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    DocumentHolder pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+
+    // The document has 2 pages.
+    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // First page should have 1 link (2nd slide, 1st was hidden).
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+
+    // Without the accompanying fix in place, this test would have failed, as the link of the first
+    // page went to the second page due to the hidden first slide.
+    CPPUNIT_ASSERT(HasLinksOnPage(pPdfPage));
+
+    // Second page should have no links (3rd slide).
+    PageHolder pPdfPage2(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    CPPUNIT_ASSERT(pPdfPage2.get());
+    CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
 }
 
 void PdfExportTest::testPdfImageResourceInlineXObjectRef()
