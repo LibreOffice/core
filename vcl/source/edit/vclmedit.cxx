@@ -1088,6 +1088,9 @@ void VclMultiLineEdit::SetReadOnly( bool bReadOnly )
 
 bool VclMultiLineEdit::IsReadOnly() const
 {
+    if (!pImpVclMEdit)  // might be called from within the dtor, when pImpVclMEdit == NULL is a valid state
+        return true;
+
     return pImpVclMEdit->IsReadOnly();
 }
 
