@@ -34,6 +34,24 @@
       "revId": "bfee21b6c87c420e0c5d3447b13e013592a30c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc32d64c_e802caa0",
+        "filename": "sc/Module_sc.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-10T10:19:08Z",
+      "side": 1,
+      "message": "I can give it a try with my local macOS build first, and enable it then.",
+      "parentUuid": "ca0a0896_48f291de",
+      "revId": "bfee21b6c87c420e0c5d3447b13e013592a30c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
