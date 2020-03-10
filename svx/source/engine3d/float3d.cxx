@@ -1786,7 +1786,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Representation
     // Shade mode
-    if( m_xLbShademode->get_active() )
+    if( m_xLbShademode->get_active() != -1 )
     {
         nValue = m_xLbShademode->get_active();
         rAttrs.Put(Svx3DShadeModeItem(nValue));
