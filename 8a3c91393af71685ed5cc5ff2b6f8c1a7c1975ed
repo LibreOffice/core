@@ -16,6 +16,24 @@
       "revId": "8a3c91393af71685ed5cc5ff2b6f8c1a7c1975ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7137536_a01cbe07",
+        "filename": "sc/CppunitTest_sc_uicalc.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-03-10T08:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47f6f0ef_3e355dd8",
+      "revId": "8a3c91393af71685ed5cc5ff2b6f8c1a7c1975ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
