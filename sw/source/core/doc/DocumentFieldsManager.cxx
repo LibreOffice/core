@@ -626,77 +626,64 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
     OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "What MessageItem is this?" );
 
-    SwFieldType* pFieldType(nullptr);
-
-    for (auto const & pFieldTypeTmp : *mpFieldTypes)
+    auto pFieldType = GetFieldType( SwFieldIds::Table, OUString(), false );
+    if(pFieldType)
     {
-        if( SwFieldIds::Table == pFieldTypeTmp->Which() )
+        std::vector<SwFormatField*> vFields;
+        pFieldType->GatherFields(vFields);
+        SwTableFormulaUpdate* pUpdateField = nullptr;
+        if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
+            pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
+        for(auto pFormatField : vFields)
         {
-            SwTableFormulaUpdate* pUpdateField = nullptr;
-            if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
-                pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
-
-            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldTypeTmp );
-            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+            SwTableField* pField = static_cast<SwTableField*>(pFormatField->GetField());
+            if( pUpdateField )
             {
-                if( pFormatField->GetTextField() )
+                // table where this field is located
+                const SwTableNode* pTableNd;
+                const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
+                pTableNd = rTextNd.FindTableNode();
+                if (pTableNd == nullptr)
+                    continue;
+
+                switch( pUpdateField->m_eFlags )
                 {
-                    SwTableField* pField = static_cast<SwTableField*>(pFormatField->GetField());
-
-                    if( pUpdateField )
-                    {
-                        // table where this field is located
-                        const SwTableNode* pTableNd;
-                        const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
-                        if(!rTextNd.GetNodes().IsDocNodes())
-                            continue;
-                        pTableNd = rTextNd.FindTableNode();
-                        if (pTableNd == nullptr)
-                            continue;
-
-                        switch( pUpdateField->m_eFlags )
-                        {
-                        case TBL_CALC:
-                            // re-set the value flag
-                            // JP 17.06.96: internal representation of all formulas
-                            //              (reference to other table!!!)
-                            if( nsSwExtendedSubType::SUB_CMD & pField->GetSubType() )
-                                pField->PtrToBoxNm( pUpdateField->m_pTable );
-                            else
-                                pField->ChgValid( false );
-                            break;
-                        case TBL_BOXNAME:
-                            // is this the wanted table?
-                            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                                // to the external representation
-                                pField->PtrToBoxNm( pUpdateField->m_pTable );
-                            break;
-                        case TBL_BOXPTR:
-                            // to the internal representation
-                            // JP 17.06.96: internal representation on all formulas
-                            //              (reference to other table!!!)
-                            pField->BoxNmToPtr( pUpdateField->m_pTable );
-                            break;
-                        case TBL_RELBOXNAME:
-                            // is this the wanted table?
-                            if( &pTableNd->GetTable() == pUpdateField->m_pTable )
-                                // to the relative representation
-                                pField->ToRelBoxNm( pUpdateField->m_pTable );
-                            break;
-                        default:
-                            break;
-                        }
-                    }
+                case TBL_CALC:
+                    // re-set the value flag
+                    // JP 17.06.96: internal representation of all formulas
+                    //              (reference to other table!!!)
+                    if( nsSwExtendedSubType::SUB_CMD & pField->GetSubType() )
+                        pField->PtrToBoxNm( pUpdateField->m_pTable );
                     else
-                        // reset the value flag for all
                         pField->ChgValid( false );
+                    break;
+                case TBL_BOXNAME:
+                    // is this the wanted table?
+                    if( &pTableNd->GetTable() == pUpdateField->m_pTable )
+                        // to the external representation
+                        pField->PtrToBoxNm( pUpdateField->m_pTable );
+                    break;
+                case TBL_BOXPTR:
+                    // to the internal representation
+                    // JP 17.06.96: internal representation on all formulas
+                    //              (reference to other table!!!)
+                    pField->BoxNmToPtr( pUpdateField->m_pTable );
+                    break;
+                case TBL_RELBOXNAME:
+                    // is this the wanted table?
+                    if( &pTableNd->GetTable() == pUpdateField->m_pTable )
+                        // to the relative representation
+                        pField->ToRelBoxNm( pUpdateField->m_pTable );
+                    break;
+                default:
+                    break;
                 }
             }
-            pFieldType = pFieldTypeTmp.get();
-            break;
+            else
+                // reset the value flag for all
+                pField->ChgValid( false );
         }
     }
-
     // process all table box formulas
     for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
