@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5281fb4_0ad3c52b",
+        "filename": "extras/Module_extras.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-10T10:16:29Z",
+      "side": 1,
+      "message": "Please review this gallery to be outside the WITH_GALLERY_BUILD switch below.",
+      "revId": "3232cdaf4055e71cec4b755a9704482119659c11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
