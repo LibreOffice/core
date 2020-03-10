@@ -953,7 +953,7 @@ XMultiPropertySet
                     while (it.hasNext())
                     {
                         XPropertiesChangeListener listener = (XPropertiesChangeListener) it.next();
-                        // fire the hole event sequence to the XPropertiesChangeListener's
+                        // fire the whole event sequence to the XPropertiesChangeListener's
                         listener.propertiesChange( arEvts );
                     }
                 }
