@@ -16,6 +16,24 @@
       "revId": "bfee21b6c87c420e0c5d3447b13e013592a30c22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0a0896_48f291de",
+        "filename": "sc/Module_sc.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-03-10T09:57:02Z",
+      "side": 1,
+      "message": "just because uiwriter does it \u003c https://opengrok.libreoffice.org/xref/core/sw/Module_sw.mk?r\u003d58fab0b9#98 \u003e.\nif you think it\u0027s a good idea I can include it to see how it behaves. We can always exclude it if it fails",
+      "parentUuid": "ff181f7c_934afa8f",
+      "revId": "bfee21b6c87c420e0c5d3447b13e013592a30c22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
