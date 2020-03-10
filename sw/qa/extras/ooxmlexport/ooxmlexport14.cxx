@@ -286,6 +286,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[5]/w:rPr/w:szCs", "val", "20");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf131260, "tdf131260.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+}
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 {
     // tdf#120315 cells of the second column weren't vertically merged
