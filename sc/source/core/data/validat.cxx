@@ -408,7 +408,7 @@ bool ScValidationData::DoError(weld::Window* pParent, const OUString& rInput,
     }
 
     bool bIsMobile = comphelper::LibreOfficeKit::isActive()
-                    && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone();
+                        && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView());
 
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
                                               eStyle, aMessage, bIsMobile));
