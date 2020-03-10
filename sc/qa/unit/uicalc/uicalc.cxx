@@ -28,6 +28,7 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
+    void checkCurrentCell(SCCOL nCol, SCROW nRow);
 
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -46,6 +47,12 @@ void ScUiCalcTest::tearDown()
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
+}
+
+void ScUiCalcTest::checkCurrentCell(SCCOL nCol, SCROW nRow)
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(nCol), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
 }
 
 char const DATA_DIRECTORY[] = "/sc/qa/unit/uicalc/data/";
@@ -69,22 +76,17 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     CPPUNIT_ASSERT(pDoc);
 
     //Start with from C6. Press tabulator to reach G6.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ScDocShell::GetViewData()->GetCurY());
+    checkCurrentCell(2, 5);
 
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(6), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ScDocShell::GetViewData()->GetCurY());
+    checkCurrentCell(6, 5);
 
     //without the fix, cursor would jump to C29 instead of C7.
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ScDocShell::GetViewData()->GetCurY());
+    checkCurrentCell(2, 6);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
@@ -93,48 +95,44 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(0, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(1, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(4, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(5, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(8, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(9), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
-
+    checkCurrentCell(9, 4);
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(12), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+    checkCurrentCell(12, 4);
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, ".uno:GoRight", {});
-
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(13), ScDocShell::GetViewData()->GetCurX());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ScDocShell::GetViewData()->GetCurY());
+        checkCurrentCell(13, 4);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124816)
+{
+    ScModelObj* pModelObj = createDoc("tdf124816.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    checkCurrentCell(3, 9);
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(3, 9, 0)));
+
+    //Without the fix, it would crash
+    dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(3, 9, 0)));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(3, 9, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
