@@ -1371,7 +1371,7 @@ void SfxBindings::LeaveRegistrations( const char *pFile, int nLine )
     pImpl->nOwnRegLevel--;
 
     // check if this is the outer most level
-    if ( --nRegLevel == 0 && !SfxGetpApp()->IsDowning() )
+    if ( --nRegLevel == 0 && SfxGetpApp() && !SfxGetpApp()->IsDowning() )
     {
         if ( pImpl->bContextChanged )
         {
