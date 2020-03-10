@@ -599,7 +599,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
         vcl/skia/packedsurfaceatlas \
         vcl/skia/salbmp \
         vcl/skia/zone \
-        vcl/skia/gdiimpl) \
+        vcl/skia/gdiimpl \
+        ) \
  ))
 
 # runtime dependency
