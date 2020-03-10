@@ -204,6 +204,36 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OString& id,
+                                                                      bool bTakeOwnership)
+{
+    FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
+    auto pWeldWidget = pSpinButton ? std::make_unique<JSSpinButton>(
+                                         m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
+                                         pSpinButton, this, bTakeOwnership)
+                                   : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
+std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OString& id,
+                                                                        bool bTakeOwnership)
+{
+    CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
+    auto pWeldWidget = pCheckButton ? std::make_unique<JSCheckButton>(
+                                          m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
+                                          pCheckButton, this, bTakeOwnership)
+                                    : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -347,6 +377,19 @@ void JSNotebook::append_page(const OString& rIdent, const OUString& rLabel)
     notifyDialogState();
 }
 
+JSSpinButton::JSSpinButton(VclPtr<vcl::Window> aOwnedToplevel, ::FormattedField* pSpin,
+                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceSpinButton, ::FormattedField>(aOwnedToplevel, pSpin, pBuilder,
+                                                        bTakeOwnership)
+{
+}
+
+void JSSpinButton::set_value(int value)
+{
+    SalInstanceSpinButton::set_value(value);
+    notifyDialogState();
+}
+
 JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
                                  bool bTakeOwnership)
     : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
@@ -363,5 +406,18 @@ void JSMessageDialog::set_primary_text(const OUString& rText)
 void JSMessageDialog::set_secondary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_secondary_text(rText);
+    notifyDialogState();
+}
+
+JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCheckBox,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceCheckButton, ::CheckBox>(aOwnedToplevel, pCheckBox, pBuilder,
+                                                   bTakeOwnership)
+{
+}
+
+void JSCheckButton::set_active(bool active)
+{
+    SalInstanceCheckButton::set_active(active);
     notifyDialogState();
 }
