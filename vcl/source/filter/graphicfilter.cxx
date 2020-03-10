@@ -2207,7 +2207,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     else if( !aShortName.isEmpty() )
     {
         // Export
-#ifdef IOS
+#if defined(IOS) || defined(ANDROID)
         if (aShortName == PNG_SHORTNAME)
         {
             aFilterData.realloc(aFilterData.getLength() + 1);
