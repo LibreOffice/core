@@ -9,6 +9,7 @@
 #include <vcl/salvtables.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fmtfield.hxx>
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
@@ -51,6 +52,10 @@ public:
                                                            bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::SpinButton>
+    weld_spin_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::CheckButton>
+    weld_check_button(const OString& id, bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -150,6 +155,15 @@ public:
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override;
 };
 
+class VCL_DLLPUBLIC JSSpinButton : public JSWidget<SalInstanceSpinButton, ::FormattedField>
+{
+public:
+    JSSpinButton(VclPtr<vcl::Window> aOwnedToplevel, ::FormattedField* pSpin,
+                 SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_value(int value) override;
+};
+
 class VCL_DLLPUBLIC JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
 {
 public:
@@ -158,6 +172,15 @@ public:
     virtual void set_primary_text(const OUString& rText) override;
 
     virtual void set_secondary_text(const OUString& rText) override;
+};
+
+class VCL_DLLPUBLIC JSCheckButton : public JSWidget<SalInstanceCheckButton, ::CheckBox>
+{
+public:
+    JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCheckBox,
+                  SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_active(bool active) override;
 };
 
 #endif
