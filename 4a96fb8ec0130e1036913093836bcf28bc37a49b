@@ -22,6 +22,30 @@
       "revId": "4a96fb8ec0130e1036913093836bcf28bc37a49b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f24deef_0d4fa370",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-10T10:26:30Z",
+      "side": 0,
+      "message": "\u003e 1.) If Enforcement is not specified, it defaults to on.\nSorry - that is wrong.\n\"If this attribute is omitted, then document protection settings shall not be enforced by\napplications.\"",
+      "parentUuid": "f3d90faf_a9239a46",
+      "range": {
+        "startLine": 358,
+        "startChar": 38,
+        "endLine": 358,
+        "endChar": 39
+      },
+      "revId": "4a96fb8ec0130e1036913093836bcf28bc37a49b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
