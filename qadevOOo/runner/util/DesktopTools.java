@@ -424,7 +424,7 @@ public class DesktopTools
     }
 
     /**
-     * zoom to have a view over the hole page
+     * zoom to have a view over the whole page
      * @param xDoc the document to zoom
      */
     public static void zoomToEntirePage(XMultiServiceFactory xMSF, XInterface xDoc)
