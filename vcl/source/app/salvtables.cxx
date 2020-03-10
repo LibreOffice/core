@@ -3885,6 +3885,13 @@ public:
         set_toggle(rVclIter.iter, eState, col);
     }
 
+    virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override
+    {
+        weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
+        rVclIter.iter->SetExtraIndent(nIndentLevel);
+    }
+
     void set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col)
     {
         ++col; //skip dummy/expander column
