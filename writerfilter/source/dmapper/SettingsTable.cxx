@@ -380,15 +380,6 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     case NS_ooxml::LN_CT_DocProtect_enforcement: // 92039
         m_pImpl->m_DocumentProtection.m_bEnforcement = (nIntValue != 0);
-        switch (m_pImpl->m_DocumentProtection.m_nEdit)
-        {
-        case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
-            m_pImpl->m_bRedlineProtection = (nIntValue != 0);
-            break;
-        case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
-            m_pImpl->m_bProtectForm = (nIntValue != 0);
-            break;
-        }
         break;
     case NS_ooxml::LN_CT_DocProtect_formatting: // 92038
         m_pImpl->m_DocumentProtection.m_bFormatting = (nIntValue != 0);
@@ -664,7 +655,7 @@ bool SettingsTable::GetDoNotExpandShiftReturn() const
 
 bool SettingsTable::GetProtectForm() const
 {
-    return m_pImpl->m_bProtectForm;
+    return m_pImpl->m_bProtectForm && m_pImpl->m_DocumentProtection.m_bEnforcement;
 }
 
 bool SettingsTable::GetNoHyphenateCaps() const
@@ -734,7 +725,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     {
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
         // Password protected Record changes
-        if ( m_pImpl->m_bRecordChanges && m_pImpl->m_bRedlineProtection )
+        if ( m_pImpl->m_bRecordChanges && m_pImpl->m_bRedlineProtection && m_pImpl->m_DocumentProtection.m_bEnforcement )
         {
             // use dummy protection key to forbid disabling of Record changes without a notice
             // (extending the recent GrabBag support)    TODO support password verification...
