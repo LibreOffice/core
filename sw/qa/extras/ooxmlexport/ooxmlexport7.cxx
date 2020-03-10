@@ -793,6 +793,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo80894, "TextFrameRotation.docx")
     // Rotation value was not roundtripped for textframe.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
     "rot","16200000");
+
+    // w:enforcement defaults to off if not explicitly specified, so DocProtect forms should not be enabled.
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No protected sections", sal_Int32(0), xSections->getCount());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
