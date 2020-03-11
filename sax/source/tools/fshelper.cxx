@@ -149,7 +149,7 @@ void FastSerializerHelper::mergeTopMarks(
 
 FastAttributeList * FastSerializerHelper::createAttrList()
 {
-    return new FastAttributeList( Reference< xml::sax::XFastTokenHandler >() );
+    return new FastAttributeList( nullptr );
 }
 
 
