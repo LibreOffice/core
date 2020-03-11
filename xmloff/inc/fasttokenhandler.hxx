@@ -69,8 +69,7 @@ private:
 
 struct StaticTokenMap : public rtl::Static< TokenMap, StaticTokenMap > {};
 
-class FastTokenHandler final : public cppu::WeakImplHelper<
-    css::xml::sax::XFastTokenHandler >,
+class FastTokenHandler final :
     public sax_fastparser::FastTokenHandlerBase
 {
 public:

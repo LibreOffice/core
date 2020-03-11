@@ -121,8 +121,7 @@ struct SaxContext
 struct ParserData
 {
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxDocumentHandler;
-    css::uno::Reference< css::xml::sax::XFastTokenHandler >    mxTokenHandler;
-    FastTokenHandlerBase*                                      mpTokenHandler;
+    rtl::Reference<FastTokenHandlerBase>                       mxTokenHandler1;
     css::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
     css::uno::Reference< css::xml::sax::XFastNamespaceHandler >mxNamespaceHandler;
 
@@ -370,7 +369,6 @@ OUString SAL_CALL FastLocatorImpl::getSystemId()
 }
 
 ParserData::ParserData()
-    : mpTokenHandler( nullptr )
 {}
 
 Entity::Entity(const ParserData& rData)
@@ -662,8 +660,7 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString&
 
 sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /* = 0 */ )
 {
-    return FastTokenHandlerBase::getTokenFromChars( getEntity().mxTokenHandler,
-                                                    getEntity().mpTokenHandler,
+    return FastTokenHandlerBase::getTokenFromChars( getEntity().mxTokenHandler1.get(),
                                                     XML_CAST( pName ), nameLen ); // uses utf-8
 }
 
@@ -883,8 +880,8 @@ void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHa
 
 void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& xHandler )
 {
-    maData.mxTokenHandler = xHandler;
-    maData.mpTokenHandler = dynamic_cast< FastTokenHandlerBase *>( xHandler.get() );
+    assert( dynamic_cast< FastTokenHandlerBase *>( xHandler.get() ) );
+    maData.mxTokenHandler1 = dynamic_cast< FastTokenHandlerBase *>( xHandler.get() );
 }
 
 void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
@@ -1118,8 +1115,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     }
     else
         rEvent.mxAttributes.set(
-                new FastAttributeList( rEntity.mxTokenHandler,
-                                       rEntity.mpTokenHandler ) );
+                new FastAttributeList( rEntity.mxTokenHandler1.get() ) );
 
     if( rEntity.mxNamespaceHandler.is() )
     {
@@ -1130,8 +1126,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         }
         else
             rEvent.mxDeclAttributes.set(
-                new FastAttributeList( rEntity.mxTokenHandler,
-                                       rEntity.mpTokenHandler ) );
+                new FastAttributeList( rEntity.mxTokenHandler1.get() ) );
     }
 
     OUString sNamespace;
@@ -1169,7 +1164,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             }
         }
 
-        if ( rEntity.mxTokenHandler.is() )
+        if ( rEntity.mxTokenHandler1.is() )
         {
             // #158414# second: fill attribute list with other attributes
             rEvent.mxAttributes->reserve( numAttributes );
