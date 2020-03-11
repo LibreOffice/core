@@ -22,9 +22,7 @@
 
 #include <sal/config.h>
 
-#include <math.h>
-
-#include <sal/mathconf.h>
+#include <cmath>
 
 #define PREC_float 1
 #define PREC_double 2
@@ -33,7 +31,7 @@
 template<class T>
 bool is_equal(T x, T y, sal_Int16 _nPrec)
 {
-    if (!(SAL_MATH_FINITE(x) && SAL_MATH_FINITE(y))) {
+    if (!(std::isfinite(x) && std::isfinite(y))) {
         return x == y;
     }
 
