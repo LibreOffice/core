@@ -91,7 +91,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_VERT_RULER_METRIC,
     HANDLE_VIEWSET_SCROLLBAR_TIPS,
     HANDLE_VIEWSET_INLINECHANGES_TIPS,
-    HANDLE_VIEWSET_HIDE_WHITESPACE,
+    HANDLE_VIEWSET_SHOW_WHITESPACE,
     HANDLE_VIEWSET_USE_HEADERFOOTERMENU,
     HANDLE_VIEWSET_BOOKMARKS,
 };
@@ -144,7 +144,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "ShowFootnoteBackground"),HANDLE_VIEWSET_FOOTNOTE_BACKGROUND , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowGraphics"),         HANDLE_VIEWSET_GRAPHICS             , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowHiddenCharacters"), HANDLE_VIEWSET_HIDDEN_CHARACTERS    , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString( "HideWhitespace"),       HANDLE_VIEWSET_HIDE_WHITESPACE      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowWhitespace"),       HANDLE_VIEWSET_SHOW_WHITESPACE      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowHiddenParagraphs"), HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowHiddenText"),       HANDLE_VIEWSET_HIDDEN_TEXT          , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowHoriRuler"),        HANDLE_VIEWSET_HRULER               , cppu::UnoType<bool>::get(), PROPERTY_NONE},
@@ -690,13 +690,13 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             }
         }
         break;
-        case HANDLE_VIEWSET_HIDE_WHITESPACE:
+        case HANDLE_VIEWSET_SHOW_WHITESPACE:
         {
             if ( pView )
             {
                 bool bVal = *o3tl::doAccess<bool>(rValue);
                 SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
-                if (!bVal != !aOpt.IsHideWhitespaceMode())
+                if (bVal != aOpt.IsHideWhitespaceMode())
                 {
                     aOpt.SetHideWhitespaceMode( bVal );
                     pView->GetWrtShell().ApplyViewOptions( aOpt );
@@ -826,7 +826,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_BOOKMARKS             :   bBoolVal = mpConstViewOption->IsShowBookmarks(true); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
-        case  HANDLE_VIEWSET_HIDE_WHITESPACE       :   bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;
+        case  HANDLE_VIEWSET_SHOW_WHITESPACE       :   bBoolVal = !mpConstViewOption->IsHideWhitespaceMode(); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;

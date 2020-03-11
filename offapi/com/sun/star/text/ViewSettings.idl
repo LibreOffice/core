@@ -260,11 +260,11 @@ published service ViewSettings
      */
     [optional, property] boolean ShowScrollBarTips;
 
-    /** If this property is `TRUE`, whitespaces around pages are hidden.
+    /** If this property is `TRUE`, whitespaces around pages are shown.
 
         @since LibreOffice 5.1
     */
-    [optional, property] boolean HideWhitespace;
+    [optional, property] boolean ShowWhitespace;
 
     /** If this property is `TRUE`, tooltips for tracked changes are shown.
 

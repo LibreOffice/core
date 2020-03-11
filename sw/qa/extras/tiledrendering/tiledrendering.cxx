@@ -703,7 +703,7 @@ void SwTiledRenderingTest::testPageDownInvalidation()
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {".uno:HideWhitespace", uno::makeAny(true)},
+        {".uno:ShowWhitespace", uno::makeAny(true)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();

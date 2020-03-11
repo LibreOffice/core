@@ -289,7 +289,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                     nWhich = 0;
                 }
                 else
-                    aBool.SetValue(pOpt->IsHideWhitespaceMode());
+                    aBool.SetValue(!pOpt->IsHideWhitespaceMode());
                 break;
             }
             case SID_GRID_VISIBLE:
@@ -449,7 +449,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         if ( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsHideWhitespaceMode();
 
-        pOpt->SetHideWhitespaceMode(bFlag);
+        pOpt->SetHideWhitespaceMode(!bFlag);
         break;
 
     case FN_VIEW_SMOOTH_SCROLL:

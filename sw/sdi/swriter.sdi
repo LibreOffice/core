@@ -5458,7 +5458,7 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
     GroupId = SfxGroupId::Options;
 ]
 
-SfxBoolItem HideWhitespace FN_VIEW_HIDE_WHITESPACE
+SfxBoolItem ShowWhitespace FN_VIEW_HIDE_WHITESPACE
 
 [
     AutoUpdate = TRUE,

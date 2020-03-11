@@ -15334,7 +15334,7 @@ module com {
      [property, optional] long VerticalRulerMetric;
      [property, optional] boolean ShowContentTips;
      [property, optional] boolean ShowScrollBarTips;
-     [property, optional] boolean HideWhitespace;
+     [property, optional] boolean ShowWhitespace;
      [property, optional] boolean ShowInlineTooltips;
      [property, optional] boolean UseHeaderFooterMenu;
     };

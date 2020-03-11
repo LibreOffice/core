@@ -302,8 +302,8 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
     }
     if (pRenderingArgs->m_bHideWhiteSpace)
     {
-        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
-        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowWhitespace/type", '/'), "boolean");
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowWhitespace/value", '/'), true);
     }
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), GtvHelpers::getNextAuthor());
