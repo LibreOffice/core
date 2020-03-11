@@ -43,8 +43,8 @@ private:
     };
     std::unique_ptr<ScAddInDocs> pDocs; // List of using documents
     LegacyFuncData* mpFuncData;         // Pointer to data in collection
-    sal_uLong const nHandle;            // is casted from double to sal_uLong
-    ParamType const meType;             // result of type PTR_DOUBLE or PTR_STRING
+    sal_uLong       nHandle;            // is casted from double to sal_uLong
+    ParamType       meType;             // result of type PTR_DOUBLE or PTR_STRING
     bool            bValid;             // is value valid?
 
 public:

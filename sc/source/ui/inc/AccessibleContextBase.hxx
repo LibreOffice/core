@@ -281,7 +281,7 @@ private:
 
     /** This is the role of this object.
     */
-    sal_Int16 const maRole;
+    sal_Int16 maRole;
 };
 
 #endif

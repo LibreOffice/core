@@ -29,7 +29,7 @@ public:
     };
 
 private:
-    Type const meType;
+    Type meType;
 
 protected:
     RefHint( Type eType );
@@ -49,9 +49,9 @@ public:
 class RefColReorderHint final : public RefHint
 {
     const sc::ColRowReorderMapType& mrColMap;
-    SCTAB const mnTab;
-    SCROW const mnRow1;
-    SCROW const mnRow2;
+    SCTAB mnTab;
+    SCROW mnRow1;
+    SCROW mnRow2;
 
 public:
     RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
@@ -72,9 +72,9 @@ public:
 class RefRowReorderHint final : public RefHint
 {
     const sc::ColRowReorderMapType& mrRowMap;
-    SCTAB const mnTab;
-    SCCOL const mnCol1;
-    SCCOL const mnCol2;
+    SCTAB mnTab;
+    SCCOL mnCol1;
+    SCCOL mnCol2;
 
 public:
     RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 );

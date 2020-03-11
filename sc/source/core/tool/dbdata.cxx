@@ -747,7 +747,7 @@ public:
     }
 
 private:
-    OUString const maSearchName;
+    OUString maSearchName;
 };
 
 /** Set a numbered table column name at given nIndex, preventing duplicates,
@@ -944,7 +944,7 @@ namespace {
 
 class FindByTable
 {
-    SCTAB const mnTab;
+    SCTAB mnTab;
 public:
     explicit FindByTable(SCTAB nTab) : mnTab(nTab) {}
 
@@ -958,17 +958,17 @@ public:
 
 class UpdateRefFunc
 {
-    ScDocument* const mpDoc;
-    UpdateRefMode const meMode;
-    SCCOL const mnCol1;
-    SCROW const mnRow1;
-    SCTAB const mnTab1;
-    SCCOL const mnCol2;
-    SCROW const mnRow2;
-    SCTAB const mnTab2;
-    SCCOL const mnDx;
-    SCROW const mnDy;
-    SCTAB const mnDz;
+    ScDocument* mpDoc;
+    UpdateRefMode meMode;
+    SCCOL mnCol1;
+    SCROW mnRow1;
+    SCTAB mnTab1;
+    SCCOL mnCol2;
+    SCROW mnRow2;
+    SCTAB mnTab2;
+    SCCOL mnDx;
+    SCROW mnDy;
+    SCTAB mnDz;
 
 public:
     UpdateRefFunc(ScDocument* pDoc, UpdateRefMode eMode,
@@ -988,8 +988,8 @@ public:
 
 class UpdateMoveTabFunc
 {
-    SCTAB const mnOldTab;
-    SCTAB const mnNewTab;
+    SCTAB mnOldTab;
+    SCTAB mnNewTab;
 public:
     UpdateMoveTabFunc(SCTAB nOld, SCTAB nNew) : mnOldTab(nOld), mnNewTab(nNew) {}
     void operator() (std::unique_ptr<ScDBData> const& p)
@@ -1000,10 +1000,10 @@ public:
 
 class FindByCursor
 {
-    SCCOL const mnCol;
-    SCROW const mnRow;
-    SCTAB const mnTab;
-    ScDBDataPortion const mePortion;
+    SCCOL mnCol;
+    SCROW mnRow;
+    SCTAB mnTab;
+    ScDBDataPortion mePortion;
 public:
     FindByCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) :
         mnCol(nCol), mnRow(nRow), mnTab(nTab), mePortion(ePortion) {}
@@ -1029,7 +1029,7 @@ public:
 
 class FindByIndex
 {
-    sal_uInt16 const mnIndex;
+    sal_uInt16 mnIndex;
 public:
     explicit FindByIndex(sal_uInt16 nIndex) : mnIndex(nIndex) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const

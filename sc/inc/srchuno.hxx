@@ -36,7 +36,7 @@ class ScCellSearchObj final : public cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet const      aPropSet;
+    SfxItemPropertySet      aPropSet;
     std::unique_ptr<SvxSearchItem>
                             pSearchItem;
 

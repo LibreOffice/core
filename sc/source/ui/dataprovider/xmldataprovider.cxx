@@ -24,12 +24,12 @@ namespace sc
 class XMLFetchThread : public salhelper::Thread
 {
     ScDocument& mrDocument;
-    OUString const maURL;
-    OUString const maID;
+    OUString maURL;
+    OUString maID;
     ScOrcusImportXMLParam maParam;
     std::unique_ptr<ScOrcusXMLContext> mpXMLContext;
     const std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
-    std::function<void()> const maImportFinishedHdl;
+    std::function<void()> maImportFinishedHdl;
 
 public:
     XMLFetchThread(ScDocument& rDoc, const OUString&, const ScOrcusImportXMLParam& rParam,

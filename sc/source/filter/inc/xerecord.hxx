@@ -68,7 +68,7 @@ public:
     virtual             ~XclExpXmlElementRecord() override;
 
 protected:
-    sal_Int32 const     mnElement;
+    sal_Int32           mnElement;
 };
 
 class XclExpXmlStartElementRecord : public XclExpXmlElementRecord
@@ -253,8 +253,8 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    bool const          mbValue;        /// The record data.
-    sal_Int32 const     mnAttribute;    /// The attribute to generate within SaveXml()
+    bool                mbValue;        /// The record data.
+    sal_Int32           mnAttribute;    /// The attribute to generate within SaveXml()
 };
 
 /** Record which exports a memory data array. */
@@ -290,7 +290,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
 
 private:
-    XclFutureRecType const    meRecType;
+    XclFutureRecType    meRecType;
 };
 
 // List of records ============================================================

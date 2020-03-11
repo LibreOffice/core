@@ -433,7 +433,7 @@ private:
     typedef std::shared_ptr< XclImpChart > XclImpChartRef;
 
     XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
-    bool const          mbOwnTab;       /// true = own sheet; false = embedded object.
+    bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
 /** A note object, which is a specialized text box object. */
@@ -494,7 +494,7 @@ private:
 private:
     const XclImpRoot&            mrRoot;     /// Not derived from XclImpRoot to allow multiple inheritance.
     std::shared_ptr< ScRange >   mxSrcRange; /// Source data range in the Calc document.
-    XclCtrlBindMode const        meBindMode; /// Value binding mode.
+    XclCtrlBindMode              meBindMode; /// Value binding mode.
 };
 
 /** Base class for textbox based form controls. */
@@ -1104,7 +1104,7 @@ private:
     XclImpObjMapById    maObjMapId;         /// Maps BIFF8 drawing objects to object ID.
     XclImpObjTextMap    maTextMap;          /// Maps BIFF8 TXO textbox data to DFF stream position.
     ScfUInt16Vec        maSkipObjs;         /// IDs of all objects to be skipped.
-    bool const          mbOleObjs;          /// True = draw model supports OLE objects.
+    bool                mbOleObjs;          /// True = draw model supports OLE objects.
 };
 
 /** Drawing manager of a single sheet. */
@@ -1204,7 +1204,7 @@ private:
     typedef std::unique_ptr<SvMemoryStream> SvMemoryStreamPtr;
 
     SvMemoryStream      maDummyStrm;    /// Dummy DGG stream for DFF manager.
-    XclImpSimpleDffConverter const maDffConv; /// DFF converter used to resolve palette colors.
+    XclImpSimpleDffConverter maDffConv; /// DFF converter used to resolve palette colors.
     SvMemoryStreamPtr   mxMemStrm;      /// Helper stream.
 };
 

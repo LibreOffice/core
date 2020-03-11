@@ -95,7 +95,7 @@ public:
 
 class ScXMLDDETableContext : public ScXMLImportContext
 {
-    ScXMLDDELinkContext* const pDDELink;
+    ScXMLDDELinkContext* pDDELink;
 
 public:
     ScXMLDDETableContext( ScXMLImport& rImport,

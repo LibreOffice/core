@@ -63,11 +63,11 @@ class ScValueIterator            // walk through all values in an area
     SCCOL           mnCol;
     SCTAB           mnTab;
     SCROW           nAttrEndRow;
-    SubtotalFlags const   mnSubTotalFlags;
+    SubtotalFlags   mnSubTotalFlags;
     SvNumFormatType nNumFmtType;
     bool            bNumValid;
-    bool const      bCalcAsShown;
-    bool const      bTextAsZero;
+    bool            bCalcAsShown;
+    bool            bTextAsZero;
 
     const sc::CellStoreType* mpCells;
     PositionType maCurPos;
@@ -149,12 +149,12 @@ private:
         const ScAttrArray*  pAttrArray;
         sal_uInt32          nNumFormat;     // for CalcAsShown
         sal_uInt32          nNumFmtIndex;
-        SCCOL const         nCol;
+        SCCOL               nCol;
         SCROW               nRow;
         SCROW               nAttrEndRow;
-        SCTAB const         nTab;
+        SCTAB               nTab;
         SvNumFormatType     nNumFmtType;
-        bool const          bCalcAsShown;
+        bool                bCalcAsShown;
     };
 
     class DataAccessMatrix final : public DataAccess
@@ -215,7 +215,7 @@ class ScCellIterator
     ScAddress     maCurPos;
 
     PositionType  maCurColPos;
-    SubtotalFlags const mnSubTotalFlags;
+    SubtotalFlags mnSubTotalFlags;
 
     ScRefCellValue maCurCell;
 
@@ -398,8 +398,8 @@ private:
     ScDocument*     pDoc;
     SCTAB           nTab;
     SCCOL           nEndCol;
-    SCROW const     nStartRow;
-    SCROW const     nEndRow;
+    SCROW           nStartRow;
+    SCROW           nEndRow;
     SCCOL           nCol;
     std::unique_ptr<ScAttrIterator>
                     pColIter;
@@ -419,8 +419,8 @@ private:
     ScDocument*     pDoc;
     SCTAB           nTab;
     SCCOL           nEndCol;
-    SCROW const     nStartRow;
-    SCROW const     nEndRow;
+    SCROW           nStartRow;
+    SCROW           nEndRow;
     SCCOL           nIterStartCol;
     SCCOL           nIterEndCol;
     std::unique_ptr<ScAttrIterator>
@@ -449,10 +449,10 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
 
     ScDocument*     pDoc;
     SCTAB           mnTab;
-    SCCOL const           nStartCol;
-    SCCOL                 nEndCol;
-    SCROW const           nStartRow;
-    SCROW const           nEndRow;
+    SCCOL           nStartCol;
+    SCCOL           nEndCol;
+    SCROW           nStartRow;
+    SCROW           nEndRow;
     SCCOL           mnCol;
     SCROW           mnRow;
     ScRefCellValue  maCurCell;
@@ -489,7 +489,7 @@ private:
     SCROW                     nCurRow;
     SCTAB                     nCurTab;
     SCROW                     nAttrEndRow;
-    bool const                bCalcAsShown;
+    bool                      bCalcAsShown;
 
 public:
 
@@ -507,10 +507,10 @@ class ScHorizontalAttrIterator
 private:
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    SCCOL const             nStartCol;
-    SCROW const             nStartRow;
+    SCCOL                   nStartCol;
+    SCROW                   nStartRow;
     SCCOL                   nEndCol;
-    SCROW const             nEndRow;
+    SCROW                   nEndRow;
 
     std::unique_ptr<SCROW[]>  pNextEnd;
     std::unique_ptr<SCCOL[]>  pHorizEnd;
@@ -585,7 +585,7 @@ public:
 private:
     ::std::set<SCROW>& mrBreaks;
     ::std::set<SCROW>::const_iterator maItr;
-    ::std::set<SCROW>::const_iterator const maEnd;
+    ::std::set<SCROW>::const_iterator maEnd;
 };
 
 class ScDocRowHeightUpdater
@@ -615,8 +615,8 @@ private:
 private:
     ScDocument& mrDoc;
     VclPtr<OutputDevice> mpOutDev;
-    double const mfPPTX;
-    double const mfPPTY;
+    double mfPPTX;
+    double mfPPTY;
     const ::std::vector<TabRanges>* mpTabRangesArray;
 };
 

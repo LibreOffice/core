@@ -22,11 +22,11 @@ class ScViewData;
 class ScNameDefDlg : public ScAnyRefDlgController
 {
 private:
-    bool const mbUndo; //if true we need to add an undo action after creating a range name
+    bool        mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument& mrDoc;
     ScDocShell* mpDocShell;
 
-    ScAddress const maCursorPos;
+    ScAddress      maCursorPos;
     OUString maStrInfoDefault;
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;

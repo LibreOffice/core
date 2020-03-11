@@ -316,8 +316,8 @@ public:
     bool                operator()( const ::oox::vml::ShapeBase& rShape ) const;
 
 private:
-    sal_Int32 const           mnCol;
-    sal_Int32 const           mnRow;
+    sal_Int32           mnCol;
+    sal_Int32           mnRow;
 };
 
 VmlFindNoteFunc::VmlFindNoteFunc( const ScAddress& rPos ) :

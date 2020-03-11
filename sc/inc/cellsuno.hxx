@@ -120,7 +120,7 @@ namespace editeng { class SvxBorderLine; }
 
 class ScLinkListener final : public SvtListener
 {
-    Link<const SfxHint&,void> const  aLink;
+    Link<const SfxHint&,void>  aLink;
 public:
                     ScLinkListener(const Link<const SfxHint&,void>& rL) : aLink(rL) {}
     virtual         ~ScLinkListener() override;
@@ -1098,7 +1098,7 @@ class ScCellFormatsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    ScRange const           aTotalRange;
+    ScRange                 aTotalRange;
 
 private:
     ScCellRangeObj*         GetObjectByIndex_Impl(long nIndex) const;
@@ -1134,7 +1134,7 @@ class ScCellFormatsEnumeration final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB const             nTab;
+    SCTAB                   nTab;
     std::unique_ptr<ScAttrRectIterator> pIter;
     ScRange                 aNext;
     bool                    bAtEnd;

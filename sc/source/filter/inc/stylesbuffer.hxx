@@ -258,7 +258,7 @@ private:
     FontModel           maModel;
     ApiFontData         maApiData;
     ApiFontUsedFlags    maUsedFlags;
-    bool const          mbDxf;
+    bool                mbDxf;
 };
 
 typedef std::shared_ptr< Font > FontRef;
@@ -459,7 +459,7 @@ private:
 private:
     BorderModel         maModel;
     ApiBorderData       maApiData;
-    bool const          mbDxf;
+    bool                mbDxf;
 };
 
 typedef std::shared_ptr< Border > BorderRef;
@@ -553,7 +553,7 @@ private:
     PatternModelRef     mxPatternModel;
     GradientModelRef    mxGradientModel;
     ApiSolidFillData    maApiData;
-    bool const          mbDxf;
+    bool                mbDxf;
 };
 
 typedef std::shared_ptr< Fill > FillRef;

@@ -39,7 +39,7 @@ struct CommentModel
     bool                mbRowHidden;        /// Comment cell's Row is Hidden
     sal_Int32           mnTHA;              /// Horizontal Alignment
     sal_Int32           mnTVA;              /// Vertical Alignment
-    css::awt::Rectangle const maAnchor;           /// Anchor parameters
+    css::awt::Rectangle maAnchor;           /// Anchor parameters
 
     explicit            CommentModel();
 };

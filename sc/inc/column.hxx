@@ -123,7 +123,7 @@ class ScColumn
     // Broadcasters for formula cells.
     sc::BroadcasterStoreType maBroadcasters;
 
-    sc::CellStoreEvent const maCellsEvent;
+    sc::CellStoreEvent maCellsEvent;
 
     // Cell values.
     sc::CellStoreType maCells;

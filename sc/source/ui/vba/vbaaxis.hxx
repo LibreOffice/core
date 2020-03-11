@@ -30,7 +30,7 @@ class ScVbaAxis : public ScVbaAxis_BASE
     css::uno::Reference< ov::excel::XChart > moChartParent;
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
-    sal_Int32 const mnGroup;
+    sal_Int32 mnGroup;
     bool bCrossesAreCustomized;
     /// @throws css::uno::RuntimeException
     ScVbaChart* getChartPtr();

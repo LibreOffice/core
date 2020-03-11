@@ -51,8 +51,8 @@ public:
     bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:
-    ScViewData* const     pViewData;
-    ScDocument* const     pDoc;
+    ScViewData*     pViewData;
+    ScDocument*     pDoc;
 
     weld::CheckButton* pBtnCase;
     weld::CheckButton* pBtnRegExp;

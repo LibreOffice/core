@@ -32,7 +32,7 @@ class ScWebServiceLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
     ScDocument* pDoc;
-    OUString const aURL; // connection/ link data
+    OUString aURL; // connection/ link data
     bool bHasResult; // is set aResult is useful
     OUString aResult;
 

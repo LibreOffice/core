@@ -25,7 +25,7 @@ private:
     void setColSizes();
 
     weld::TreeView& mrTreeView;
-    ScDocument* const mpDoc;
+    ScDocument*     mpDoc;
     ScConditionalFormatList* mpFormatList;
 
 public:

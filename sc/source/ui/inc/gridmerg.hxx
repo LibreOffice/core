@@ -26,8 +26,8 @@ class ScGridMerger
 {
 private:
     VclPtr<OutputDevice> pDev;
-    long const      nOneX;
-    long const      nOneY;
+    long            nOneX;
+    long            nOneY;
     long            nFixStart;
     long            nFixEnd;
     long            nVarStart;

@@ -68,10 +68,10 @@ private:
     void DeleteSheets();
 
 private:
-    OUString const        maTextNotProtected;
-    OUString const        maTextNotPassProtected;
-    OUString const        maTextHashBad;
-    OUString const        maTextHashGood;
+    OUString         maTextNotProtected;
+    OUString         maTextNotPassProtected;
+    OUString         maTextHashBad;
+    OUString         maTextHashGood;
 
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(RetypeBtnHdl, weld::Button&, void);
@@ -109,7 +109,7 @@ private:
     void CheckPasswordInput();
 
 private:
-    ScPassHashProtectable* const m_pProtected;
+    ScPassHashProtectable* m_pProtected;
 
     std::unique_ptr<weld::Button> m_xBtnOk;
 

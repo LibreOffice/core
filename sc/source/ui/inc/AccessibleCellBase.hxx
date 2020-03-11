@@ -113,7 +113,7 @@ protected:
 
     ScDocument* mpDoc;
 
-    sal_Int32 const mnIndex;
+    sal_Int32 mnIndex;
 
 private:
     virtual bool IsEditable(

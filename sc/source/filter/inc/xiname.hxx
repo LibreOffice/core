@@ -67,7 +67,7 @@ private:
     SCTAB               mnScTab;        /// Calc sheet index of local names.
     ScRangeData::Type   meNameType;
     sal_uInt16          mnXclTab;
-    sal_uInt16 const    mnNameIndex;
+    sal_uInt16          mnNameIndex;
     bool                mbVBName:1;     /// true = Visual Basic procedure or function.
     bool                mbMacro:1;      /// Whether it's a user-defined macro.
 

@@ -35,7 +35,7 @@ struct FormulaResultValue
 {
     enum Type { Invalid, Value, String, Error };
 
-    Type const meType;
+    Type meType;
 
     double mfValue;
     svl::SharedString maString;

@@ -57,9 +57,9 @@ protected:
 private:
     Idle m_aIdle;
 
-    OUString const            aStrUndefined;
-    OUString const            aStrColumn;
-    OUString const            aStrRow;
+    OUString            aStrUndefined;
+    OUString            aStrColumn;
+    OUString            aStrRow;
 
     const sal_uInt16    nWhichSort;
     ScViewData*         pViewData;
@@ -106,9 +106,9 @@ protected:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-    OUString const            aStrRowLabel;
-    OUString const            aStrColLabel;
-    OUString const            aStrUndefined;
+    OUString            aStrRowLabel;
+    OUString            aStrColLabel;
+    OUString            aStrUndefined;
 
     const sal_uInt16    nWhichSort;
     ScSortParam         aSortData;

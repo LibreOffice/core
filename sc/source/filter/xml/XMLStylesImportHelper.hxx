@@ -35,8 +35,8 @@ class ScXMLImport;
 
 struct ScMyStyleNumberFormat
 {
-    OUString const       sStyleName;
-    sal_Int32 const           nNumberFormat;
+    OUString       sStyleName;
+    sal_Int32      nNumberFormat;
 
     explicit ScMyStyleNumberFormat(const OUString& rStyleName) :
         sStyleName(rStyleName), nNumberFormat(-1) {}

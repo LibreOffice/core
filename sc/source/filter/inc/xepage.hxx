@@ -42,7 +42,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    OUString const      maHdrString;        /// Header or footer contents.
+    OUString            maHdrString;        /// Header or footer contents.
 };
 
 // General page settings ------------------------------------------------------
@@ -83,7 +83,7 @@ private:
 
 private:
     const ScfUInt16Vec& mrPageBreaks;       /// Page settings data of current sheet.
-    sal_uInt16 const    mnMaxPos;           /// Maximum row/column for BIFF8 page breaks.
+    sal_uInt16          mnMaxPos;           /// Maximum row/column for BIFF8 page breaks.
 };
 
 // Page settings ==============================================================

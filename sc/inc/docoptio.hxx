@@ -151,7 +151,7 @@ public:
     const ScDocOptions& GetDocOptions() const { return theOptions; }
 
 private:
-    ScDocOptions const theOptions;
+    ScDocOptions theOptions;
 };
 
 //  Config Item containing document options

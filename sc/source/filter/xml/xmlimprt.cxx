@@ -1511,7 +1511,7 @@ namespace {
 
 class RangeNameInserter
 {
-    ScDocument* const mpDoc;
+    ScDocument*  mpDoc;
     ScRangeName& mrRangeName;
 
 public:

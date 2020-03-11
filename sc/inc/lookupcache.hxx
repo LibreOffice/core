@@ -151,9 +151,9 @@ private:
 
     struct QueryKey
     {
-        SCROW const           mnRow;
-        SCTAB const           mnTab;
-        QueryOp const         meOp;
+        SCROW           mnRow;
+        SCTAB           mnTab;
+        QueryOp         meOp;
 
         QueryKey( const ScAddress & rAddress, const QueryOp eOp ) :
             mnRow( rAddress.Row()),
@@ -180,7 +180,7 @@ private:
 
     struct QueryCriteriaAndResult
     {
-        QueryCriteria const   maCriteria;
+        QueryCriteria   maCriteria;
         ScAddress       maAddress;
 
         QueryCriteriaAndResult( const QueryCriteria & rCriteria, const ScAddress & rAddress ) :
@@ -191,7 +191,7 @@ private:
     };
 
     std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash > maQueryMap;
-    ScRange const   maRange;
+    ScRange         maRange;
     ScDocument *    mpDoc;
     ScLookupCacheMap & mCacheMap;
 

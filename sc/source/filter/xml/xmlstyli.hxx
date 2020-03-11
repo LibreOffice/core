@@ -126,7 +126,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
     sal_Int32 nMasterPageNameIndex;
-    bool const bAutoStyles;
+    bool bAutoStyles;
 
     rtl::Reference < SvXMLImportPropertyMapper > xCellImpPropMapper;
     rtl::Reference < SvXMLImportPropertyMapper > xColumnImpPropMapper;

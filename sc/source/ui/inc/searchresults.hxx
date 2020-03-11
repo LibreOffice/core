@@ -21,8 +21,8 @@ namespace sc {
 
 class SearchResultsDlg : public SfxDialogController
 {
-    OUString const aSkipped;
-    SfxBindings* const mpBindings;
+    OUString aSkipped;
+    SfxBindings* mpBindings;
     ScDocument* mpDoc;
     std::unique_ptr<weld::TreeView> mxList;
     std::unique_ptr<weld::Label> mxSearchResults;

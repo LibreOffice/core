@@ -59,7 +59,7 @@ public:
 
 private:
     std::unique_ptr<ScRangeData> mpRangeData;
-    SCTAB const mnTab;
+    SCTAB mnTab;
 };
 
 #endif

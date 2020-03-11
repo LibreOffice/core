@@ -21,7 +21,7 @@ struct ScCellMergeOption
     SCROW mnStartRow;
     SCCOL mnEndCol;
     SCROW mnEndRow;
-    bool const mbCenter;
+    bool mbCenter;
 
     explicit ScCellMergeOption(const ScRange& rRange);
     explicit ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow,

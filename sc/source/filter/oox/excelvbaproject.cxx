@@ -51,7 +51,7 @@ namespace {
 struct SheetCodeNameInfo
 {
     PropertySet         maSheetProps;       /// Property set of the sheet without codename.
-    OUString const      maPrefix;           /// Prefix for the codename to be generated.
+    OUString            maPrefix;           /// Prefix for the codename to be generated.
 
     explicit     SheetCodeNameInfo( const PropertySet& rSheetProps, const OUString& rPrefix ) :
                             maSheetProps( rSheetProps ), maPrefix( rPrefix ) {}

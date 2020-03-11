@@ -108,7 +108,7 @@ protected:
 
     ScChangeActionLinkEntry*    pNext;
     ScChangeActionLinkEntry**   ppPrev;
-    ScChangeAction* const       pAction;
+    ScChangeAction*             pAction;
     ScChangeActionLinkEntry*    pLink;
 
 public:
@@ -367,7 +367,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionIns : public ScChangeAction
 {
     friend class ScChangeTrack;
 
-    bool const mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
+    bool mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
 
     ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRange, bool bEndOfList = false );
 
@@ -405,8 +405,8 @@ class ScChangeActionDelMoveEntry final : public ScChangeActionLinkEntry
     friend class ScChangeActionDel;
     friend class ScChangeTrack;
 
-    short const               nCutOffFrom;
-    short const               nCutOffTo;
+    short               nCutOffFrom;
+    short               nCutOffTo;
 
     inline ScChangeActionDelMoveEntry(
         ScChangeActionDelMoveEntry** ppPrevP,

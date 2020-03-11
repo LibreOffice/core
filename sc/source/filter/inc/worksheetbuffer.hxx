@@ -86,9 +86,9 @@ public:
 private:
     struct SheetInfo : public SheetInfoModel
     {
-        OUString const      maCalcName;
-        OUString const      maCalcQuotedName;
-        sal_Int16 const     mnCalcSheet;
+        OUString            maCalcName;
+        OUString            maCalcQuotedName;
+        sal_Int16           mnCalcSheet;
 
         explicit            SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const OUString& rCalcName );
     };

@@ -67,8 +67,8 @@ public:
     };
 
 private:
-    OUString const  aName;
-    OUString const  aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
+    OUString        aName;
+    OUString        aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
     OUString        maNewName;  ///< used for formulas after changing names in the dialog
     std::unique_ptr<ScTokenArray>
                     pCode;

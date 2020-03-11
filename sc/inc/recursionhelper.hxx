@@ -31,8 +31,8 @@ class ScFormulaCell;
 
 struct ScFormulaRecursionEntry
 {
-    ScFormulaCell* const  pCell;
-    bool const            bOldRunning;
+    ScFormulaCell*  pCell;
+    bool            bOldRunning;
     ScFormulaResult aPreviousResult;
     ScFormulaRecursionEntry(
         ScFormulaCell* p, bool bR, const ScFormulaResult & rRes ) :

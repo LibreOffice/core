@@ -35,11 +35,11 @@ public:
     OUString GetCurrFormatName();
 
 private:
-    OUString const        aStrTitle;
-    OUString const        aStrLabel;
-    OUString const        aStrClose;
-    OUString const        aStrDelMsg;
-    OUString const        aStrRename;
+    OUString               aStrTitle;
+    OUString               aStrLabel;
+    OUString               aStrClose;
+    OUString               aStrDelMsg;
+    OUString               aStrRename;
 
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;

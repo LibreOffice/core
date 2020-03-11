@@ -134,7 +134,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
     ScViewData*             pViewData;
-    ScSplitPos const        eWhich;
+    ScSplitPos              eWhich;
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
 

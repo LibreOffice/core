@@ -64,7 +64,7 @@ public:
         virtual void insert(ScMyNamedExpression* pExp) override;
     private:
         ScXMLImport& mrImport;
-        SCTAB const mnTab;
+        SCTAB mnTab;
     };
 
     ScXMLNamedExpressionsContext(

@@ -1258,7 +1258,7 @@ class CopyAsLinkHandler
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
-    InsertDeleteFlags const mnCopyFlags;
+    InsertDeleteFlags mnCopyFlags;
 
     sc::StartListeningType meListenType;
 
@@ -1394,10 +1394,10 @@ class CopyByCloneHandler
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
     svl::SharedStringPool* mpSharedStringPool;
-    InsertDeleteFlags const mnCopyFlags;
+    InsertDeleteFlags mnCopyFlags;
 
     sc::StartListeningType meListenType;
-    ScCloneFlags const mnFormulaCellCloneFlags;
+    ScCloneFlags mnFormulaCellCloneFlags;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1890,8 +1890,8 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
 
 class NoteCaptionUpdater
 {
-    SCCOL const mnCol;
-    SCTAB const mnTab;
+    SCCOL mnCol;
+    SCTAB mnTab;
 public:
     NoteCaptionUpdater( SCCOL nCol, SCTAB nTab ) : mnCol(nCol), mnTab(nTab) {}
 
@@ -2092,7 +2092,7 @@ public:
 class UpdateRefOnCopy
 {
     const sc::RefUpdateContext& mrCxt;
-    ScDocument* const mpUndoDoc;
+    ScDocument* mpUndoDoc;
     bool mbUpdated;
 
 public:
@@ -2538,9 +2538,9 @@ class UpdateTransHandler
 {
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
-    ScRange const maSource;
-    ScAddress const maDest;
-    ScDocument* const mpUndoDoc;
+    ScRange maSource;
+    ScAddress maDest;
+    ScDocument* mpUndoDoc;
 public:
     UpdateTransHandler(ScColumn& rColumn, const ScRange& rSource, const ScAddress& rDest, ScDocument* pUndoDoc) :
         mrColumn(rColumn),
@@ -2561,9 +2561,9 @@ class UpdateGrowHandler
 {
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
-    ScRange const maArea;
-    SCCOL const mnGrowX;
-    SCROW const mnGrowY;
+    ScRange maArea;
+    SCCOL mnGrowX;
+    SCROW mnGrowY;
 public:
     UpdateGrowHandler(ScColumn& rColumn, const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY) :
         mrColumn(rColumn),
@@ -2585,7 +2585,7 @@ class InsertTabUpdater
     sc::RefUpdateInsertTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    SCTAB const mnTab;
+    SCTAB mnTab;
     bool mbModified;
 
 public:
@@ -2618,7 +2618,7 @@ class DeleteTabUpdater
     sc::RefUpdateDeleteTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    SCTAB const mnTab;
+    SCTAB mnTab;
     bool mbModified;
 public:
     DeleteTabUpdater(sc::RefUpdateDeleteTabContext& rCxt, sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab) :
@@ -2649,8 +2649,8 @@ class InsertAbsTabUpdater
 {
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    SCTAB const mnTab;
-    SCTAB const mnNewPos;
+    SCTAB mnTab;
+    SCTAB mnNewPos;
     bool mbModified;
 public:
     InsertAbsTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nNewPos) :
@@ -2682,7 +2682,7 @@ class MoveTabUpdater
     sc::RefUpdateMoveTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    SCTAB const mnTab;
+    SCTAB mnTab;
     bool mbModified;
 public:
     MoveTabUpdater(sc::RefUpdateMoveTabContext& rCxt, sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab) :
@@ -2711,7 +2711,7 @@ public:
 
 class UpdateCompileHandler
 {
-    bool const mbForceIfNameInUse:1;
+    bool mbForceIfNameInUse:1;
 public:
     explicit UpdateCompileHandler(bool bForceIfNameInUse) :
         mbForceIfNameInUse(bForceIfNameInUse) {}
@@ -2724,7 +2724,7 @@ public:
 
 class TabNoSetter
 {
-    SCTAB const mnTab;
+    SCTAB mnTab;
 public:
     explicit TabNoSetter(SCTAB nTab) : mnTab(nTab) {}
 
@@ -2985,7 +2985,7 @@ class CompileErrorCellsHandler
     sc::CompileFormulaContext& mrCxt;
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
-    FormulaError const mnErrCode;
+    FormulaError mnErrCode;
     bool mbCompiled;
 public:
     CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, FormulaError nErrCode ) :
@@ -3025,7 +3025,7 @@ public:
 class CalcAfterLoadHandler
 {
     sc::CompileFormulaContext& mrCxt;
-    bool const mbStartListening;
+    bool mbStartListening;
 
 public:
     CalcAfterLoadHandler( sc::CompileFormulaContext& rCxt, bool bStartListening ) :
@@ -3052,7 +3052,7 @@ class FindEditCellsHandler
 {
     ScColumn& mrColumn;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    sc::CellStoreType::iterator const miCellPos;
+    sc::CellStoreType::iterator miCellPos;
 
 public:
     explicit FindEditCellsHandler(ScColumn& rCol) :

@@ -55,13 +55,13 @@ protected:
     std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
 
     // Data
-    ScViewData* const         mViewData;
-    ScDocument&               mDocument;
+    ScViewData*         mViewData;
+    ScDocument&         mDocument;
 
-    ScRange                   mInputRange;
-    ScAddress::Details const  mAddressDetails;
-    ScAddress                 mOutputAddress;
-    GroupedBy                 mGroupedBy;
+    ScRange             mInputRange;
+    ScAddress::Details  mAddressDetails;
+    ScAddress           mOutputAddress;
+    GroupedBy           mGroupedBy;
 
     static ScRangeList MakeColumnRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd);
     static ScRangeList MakeRowRangeList(SCTAB aTab, ScAddress const & aStart, ScAddress const & aEnd);
@@ -71,8 +71,8 @@ private:
     std::unique_ptr<weld::Button>       mxButtonOk;
 
     formula::RefEdit*      mpActiveEdit;
-    ScAddress const            mCurrentAddress;
-    bool                       mDialogLostFocus;
+    ScAddress              mCurrentAddress;
+    bool                   mDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();

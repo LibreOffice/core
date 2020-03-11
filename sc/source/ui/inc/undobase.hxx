@@ -85,7 +85,7 @@ public:
 protected:
     ScRange         aBlockRange;
     std::unique_ptr<SdrUndoAction> pDrawUndo;
-    ScBlockUndoMode const eMode;
+    ScBlockUndoMode eMode;
 
     void            BeginUndo();
     void            EndUndo();
@@ -120,7 +120,7 @@ class ScDBFuncUndo: public ScSimpleUndo
 {
 protected:
     std::unique_ptr<ScDBData> pAutoDBRange;
-    ScRange const         aOriginalRange;
+    ScRange         aOriginalRange;
 
 public:
                     ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );

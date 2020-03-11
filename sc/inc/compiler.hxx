@@ -126,13 +126,13 @@ public:
         } name;
         struct {
             sal_uInt16              nIndex;
-            ScTableRefToken::Item const   eItem;
-        } const table;
+            ScTableRefToken::Item   eItem;
+        } table;
         struct {
             rtl_uString* mpData;
             rtl_uString* mpDataIgnoreCase;
         } sharedstring;
-        ScMatrix* const    pMat;
+        ScMatrix*    pMat;
         FormulaError nError;
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
@@ -299,7 +299,7 @@ private:
 
     struct TableRefEntry
     {
-        ScTokenRef const  mxToken;
+        ScTokenRef  mxToken;
         sal_uInt16  mnLevel;
         TableRefEntry( formula::FormulaToken* p ) : mxToken(p), mnLevel(0) {}
     };
@@ -311,9 +311,9 @@ private:
     {
         PendingImplicitIntersectionOptimization(formula::FormulaToken** p, formula::FormulaToken* o)
             : parameterLocation( p ), parameter( *p ), operation( o ) {}
-        formula::FormulaToken** const parameterLocation;
-        formula::FormulaTokenRef const parameter;
-        formula::FormulaTokenRef const operation;
+        formula::FormulaToken** parameterLocation;
+        formula::FormulaTokenRef parameter;
+        formula::FormulaTokenRef operation;
     };
     std::vector< PendingImplicitIntersectionOptimization > mPendingImplicitIntersectionOptimizations;
     std::set<formula::FormulaTokenRef> mUnhandledPossibleImplicitIntersections;

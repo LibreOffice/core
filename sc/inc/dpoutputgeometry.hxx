@@ -55,13 +55,13 @@ private:
     void adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sal_uInt32& rRowFields) const;
 
 private:
-    ScRange const maOutRange;
+    ScRange     maOutRange;
     sal_uInt32  mnRowFields;    /// number of row fields
     sal_uInt32  mnColumnFields;
     sal_uInt32  mnPageFields;
     sal_uInt32  mnDataFields;
     FieldType   meDataLayoutType;
-    bool const  mbShowFilter;
+    bool        mbShowFilter;
     bool        mbHeaderLayout;
     bool        mbCompactMode; // MSO only setting
 };

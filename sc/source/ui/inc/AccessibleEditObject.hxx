@@ -174,7 +174,7 @@ private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     EditView*      mpEditView;
     VclPtr<vcl::Window> mpWindow;
-    EditObjectType const meObjectType;
+    EditObjectType meObjectType;
     bool           mbHasFocus;
 
     bool IsDefunc(

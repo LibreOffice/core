@@ -27,8 +27,8 @@
 
 class SC_DLLPUBLIC ScPaintHint final : public SfxHint
 {
-    ScRange const         aRange;
-    PaintPartFlags const  nParts;
+    ScRange         aRange;
+    PaintPartFlags  nParts;
     bool            bPrint;     //  flag indicating whether print/preview if affected
 
 public:
@@ -49,11 +49,11 @@ public:
 
 class ScUpdateRefHint final : public SfxHint
 {
-    UpdateRefMode const   eUpdateRefMode;
-    ScRange const         aRange;
-    SCCOL const           nDx;
-    SCROW const           nDy;
-    SCTAB const           nDz;
+    UpdateRefMode   eUpdateRefMode;
+    ScRange         aRange;
+    SCCOL           nDx;
+    SCROW           nDy;
+    SCTAB           nDz;
 
 public:
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
@@ -102,10 +102,10 @@ public:
 
 class ScAutoStyleHint final : public SfxHint
 {
-    ScRange const     aRange;
-    OUString const    aStyle1;
-    OUString const    aStyle2;
-    sal_uLong const   nTimeout;
+    ScRange     aRange;
+    OUString    aStyle1;
+    OUString    aStyle2;
+    sal_uLong   nTimeout;
 
 public:
                     ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
@@ -120,7 +120,7 @@ public:
 
 class ScDBRangeRefreshedHint final : public SfxHint
 {
-    ScImportParam const   aParam;
+    ScImportParam   aParam;
 
 public:
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
@@ -131,7 +131,7 @@ public:
 
 class ScDataPilotModifiedHint final : public SfxHint
 {
-    OUString const        maName;
+    OUString        maName;
 
 public:
                     ScDataPilotModifiedHint( const OUString& rName );

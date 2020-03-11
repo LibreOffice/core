@@ -44,14 +44,14 @@ public:
     virtual void    Deactivate() override;
 
 private:
-    OUString const         aStrUndefined;
+    OUString            aStrUndefined;
 
-    ScConsolidateParam const  theConsData;
+    ScConsolidateParam  theConsData;
     ScViewData&         rViewData;
-    ScDocument* const         pDoc;
+    ScDocument*         pDoc;
     std::unique_ptr<ScAreaData[]> pAreaData;
     size_t              nAreaDataCount;
-    sal_uInt16 const          nWhichCons;
+    sal_uInt16          nWhichCons;
     bool                bDlgLostFocus;
 
     formula::RefEdit*   m_pRefInputEdit;

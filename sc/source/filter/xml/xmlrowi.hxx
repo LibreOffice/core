@@ -50,8 +50,8 @@ class ScXMLTableRowsContext : public ScXMLImportContext
 {
     SCROW nHeaderStartRow;
     SCROW nGroupStartRow;
-    bool const bHeader;
-    bool const bGroup;
+    bool bHeader;
+    bool bGroup;
     bool bGroupDisplay;
 
 public:

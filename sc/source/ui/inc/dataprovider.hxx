@@ -35,7 +35,7 @@ class ExternalDataSource;
 class CSVFetchThread : public salhelper::Thread
 {
     ScDocument& mrDocument;
-    OUString const maURL;
+    OUString maURL;
 
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
@@ -44,7 +44,7 @@ class CSVFetchThread : public salhelper::Thread
 
     std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
 
-    std::function<void()> const maImportFinishedHdl;
+    std::function<void()> maImportFinishedHdl;
 
 
 public:
@@ -90,7 +90,7 @@ public:
 class CSVDataProvider : public DataProvider
 {
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
-    ScDocument* const mpDocument;
+    ScDocument* mpDocument;
     ScDocumentUniquePtr mpDoc;
 
     void Refresh();

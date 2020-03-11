@@ -22,7 +22,7 @@
 class ScItemValue final
 {
 public:
-    OUString const maName;
+    OUString maName;
     ScPivotFuncData maFunctionData;
     ScItemValue* mpOriginalItemValue;
 
@@ -43,9 +43,9 @@ private:
     ScViewData* mpViewData;
     ScDocument& mrDocument;
 
-    bool const mbNewPivotTable;
+    bool        mbNewPivotTable;
 
-    ScAddress::Details const  maAddressDetails;
+    ScAddress::Details  maAddressDetails;
     bool                mbDialogLostFocus;
 
     formula::RefEdit* mpActiveEdit;

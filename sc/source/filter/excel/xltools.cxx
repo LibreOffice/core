@@ -363,8 +363,8 @@ namespace {
 
 const struct XclCodePageEntry
 {
-    sal_uInt16 const                  mnCodePage;
-    rtl_TextEncoding const            meTextEnc;
+    sal_uInt16                  mnCodePage;
+    rtl_TextEncoding            meTextEnc;
 }
 pCodePageTable[] =
 {
@@ -411,14 +411,14 @@ struct XclCodePageEntry_CPPred
 {
     explicit     XclCodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
     bool         operator()( const XclCodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
-    sal_uInt16 const          mnCodePage;
+    sal_uInt16          mnCodePage;
 };
 
 struct XclCodePageEntry_TEPred
 {
     explicit     XclCodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
     bool         operator()( const XclCodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
-    rtl_TextEncoding const    meTextEnc;
+    rtl_TextEncoding    meTextEnc;
 };
 
 } // namespace

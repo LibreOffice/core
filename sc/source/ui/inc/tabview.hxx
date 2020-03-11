@@ -70,7 +70,7 @@ enum HeaderType
 class ScCornerButton : public vcl::Window
 {
 private:
-    ScViewData* const     pViewData;
+    ScViewData*     pViewData;
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
@@ -111,7 +111,7 @@ private:
     void Modifier(ScGridWindow* pWin);
 
 private:
-    ScTabViewShell* const mpThisViewShell;
+    ScTabViewShell* mpThisViewShell;
     std::array<VclPtr<ScGridWindow>, 4> const & mpGridWin;
     EditView* mpOtherEditView;
     int nTotalWindows;

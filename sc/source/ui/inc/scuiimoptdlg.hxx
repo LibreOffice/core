@@ -47,7 +47,7 @@ private:
     std::unique_ptr<ScDelimiterTable> pFieldSepTab;
     std::unique_ptr<ScDelimiterTable> pTextSepTab;
 
-    bool const m_bIsAsciiImport;
+    bool m_bIsAsciiImport;
 
     std::unique_ptr<weld::Frame> m_xFieldFrame;
     std::unique_ptr<weld::Label> m_xFtCharset;

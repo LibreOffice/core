@@ -233,7 +233,7 @@ class ScAttrIterator
     const ScPatternAttr* pDefPattern;
     SCSIZE              nPos;
     SCROW               nRow;
-    SCROW const         nEndRow;
+    SCROW               nEndRow;
 public:
     inline              ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd, const ScPatternAttr* pDefaultPattern );
     inline const ScPatternAttr* Next( SCROW& rTop, SCROW& rBottom );

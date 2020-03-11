@@ -103,7 +103,7 @@ namespace
     {
     private:
         ScDocument& m_rDoc;
-        bool const m_bUndoEnabled;
+        bool m_bUndoEnabled;
     public:
         explicit DisableUndoGuard(ScDocShell *pDocShell)
             : m_rDoc(pDocShell->GetDocument())

@@ -33,7 +33,7 @@ namespace {
 class FindByName
 {
     const OUString& mrName;
-    bool const mbUpper;
+    bool mbUpper;
 public:
     FindByName(const OUString& rName, bool bUpper) : mrName(rName), mbUpper(bUpper) {}
     bool operator() (const ScUserListData::SubStr& r) const

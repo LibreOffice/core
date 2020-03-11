@@ -363,7 +363,7 @@ namespace sc {
 
 struct NoteEntry
 {
-    ScAddress const maPos;
+    ScAddress maPos;
     const ScPostIt* mpNote;
 
     NoteEntry( const ScAddress& rPos, const ScPostIt* pNote );

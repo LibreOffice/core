@@ -51,9 +51,9 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
-    ScColorScaleEntryType const meType;
+    ScColorScaleEntryType meType;
     OString maValue;
-    bool const mbFirst;
+    bool mbFirst;
 };
 
 class XclExpExtNegativeColor
@@ -63,7 +63,7 @@ public:
     void SaveXml( XclExpXmlStream& rStrm);
 
 private:
-    Color const maColor;
+    Color maColor;
 };
 
 class XclExpExtAxisColor
@@ -73,7 +73,7 @@ public:
     void SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    Color const maAxisColor;
+    Color maAxisColor;
 };
 
 class XclExpExtIcon : public XclExpRecordBase, protected XclExpRoot
@@ -95,7 +95,7 @@ public:
 
 private:
     OUString aFormula;
-    const ScCondFormatEntry mrFormat;
+    ScCondFormatEntry mrFormat;
 };
 
 class XclExpExtDataBar : public XclExpRecordBase, protected XclExpRoot
@@ -141,9 +141,9 @@ public:
 
 private:
     XclExpRecordRef mxEntry;
-    OString const maId;
+    OString     maId;
     const char* pType;
-    sal_Int32 const mnPriority;
+    sal_Int32   mnPriority;
     const char* mOperator;
 };
 

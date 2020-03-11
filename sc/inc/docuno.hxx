@@ -94,7 +94,7 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public css::sheet::opencl::XOpenCLSelection
 {
 private:
-    SfxItemPropertySet const aPropSet;
+    SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
     std::unique_ptr<ScPrintFuncCache> pPrintFuncCache;
     std::unique_ptr<ScPrintUIOptions> pPrinterOptions;
@@ -511,9 +511,9 @@ class ScTableColumnsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB const             nTab;
-    SCCOL const             nStartCol;
-    SCCOL const             nEndCol;
+    SCTAB                   nTab;
+    SCCOL                   nStartCol;
+    SCCOL                   nEndCol;
 
     ScTableColumnObj*       GetObjectByIndex_Impl(sal_Int32 nIndex) const;
     ScTableColumnObj*       GetObjectByName_Impl(const OUString& aName) const;
@@ -577,9 +577,9 @@ class ScTableRowsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB const             nTab;
-    SCROW const             nStartRow;
-    SCROW const             nEndRow;
+    SCTAB                   nTab;
+    SCROW                   nStartRow;
+    SCROW                   nEndRow;
 
     ScTableRowObj*          GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
@@ -664,7 +664,7 @@ class SAL_DLLPUBLIC_RTTI ScAnnotationsObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB const             nTab;           ///< Collection belongs to the sheet
+    SCTAB                   nTab;           ///< Collection belongs to the sheet
 
     bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
     ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -709,7 +709,7 @@ class ScScenariosObj final : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB const             nTab;
+    SCTAB                   nTab;
 
     bool                    GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);

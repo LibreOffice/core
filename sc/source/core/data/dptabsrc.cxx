@@ -1854,7 +1854,7 @@ namespace {
 class ScDPGlobalMembersOrder
 {
     ScDPLevel&  rLevel;
-    bool const  bAscending;
+    bool        bAscending;
 
 public:
             ScDPGlobalMembersOrder( ScDPLevel& rLev, bool bAsc ) :

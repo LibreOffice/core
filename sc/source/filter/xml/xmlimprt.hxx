@@ -186,9 +186,9 @@ typedef ::std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
-    OUString const   sLabelRangeStr;
-    OUString const   sDataRangeStr;
-    bool const            bColumnOrientation;
+    OUString   sLabelRangeStr;
+    OUString   sDataRangeStr;
+    bool       bColumnOrientation;
 };
 
 typedef std::list< std::unique_ptr<const ScMyLabelRange> > ScMyLabelRanges;

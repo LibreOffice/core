@@ -80,7 +80,7 @@ namespace {
 class ScETSForecastCalculation
 {
 private:
-    SvNumberFormatter* const mpFormatter;
+    SvNumberFormatter* mpFormatter;
     std::vector< DataPoint > maRange;   // data (X, Y)
     std::unique_ptr<double[]> mpBase;                     // calculated base value array
     std::unique_ptr<double[]> mpTrend;                    // calculated trend factor array

@@ -379,7 +379,7 @@ public:
 
 class ScXMLDataPilotMembersContext : public ScXMLImportContext
 {
-    ScXMLDataPilotFieldContext* const pDataPilotField;
+    ScXMLDataPilotFieldContext* pDataPilotField;
 
 public:
 

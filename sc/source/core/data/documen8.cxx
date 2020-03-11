@@ -474,8 +474,8 @@ class IdleCalcTextWidthScope : public TaskStopwatch
     ScAddress& mrCalcPos;
     MapMode maOldMapMode;
     ScStyleSheetPool* mpStylePool;
-    SfxStyleSearchBits const mnOldSearchMask;
-    SfxStyleFamily const meOldFamily;
+    SfxStyleSearchBits mnOldSearchMask;
+    SfxStyleFamily meOldFamily;
     bool mbNeedMore;
     bool mbProgress;
 

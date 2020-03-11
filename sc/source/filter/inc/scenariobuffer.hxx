@@ -75,7 +75,7 @@ private:
 
     ScenarioCellVector  maCells;            /// Scenario cells.
     ScenarioModel       maModel;            /// Scenario model data.
-    sal_Int16 const     mnSheet;            /// Index of the sheet this scenario is based on.
+    sal_Int16           mnSheet;            /// Index of the sheet this scenario is based on.
 };
 
 struct SheetScenariosModel
@@ -106,7 +106,7 @@ private:
     typedef RefVector< Scenario > ScenarioVector;
     ScenarioVector      maScenarios;
     SheetScenariosModel maModel;
-    sal_Int16 const     mnSheet;
+    sal_Int16           mnSheet;
 };
 
 class ScenarioBuffer : public WorkbookHelper

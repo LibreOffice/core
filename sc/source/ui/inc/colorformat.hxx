@@ -24,8 +24,8 @@ private:
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
-    ScDocument* const mpDoc;
-    ScAddress const   maPos;
+    ScDocument* mpDoc;
+    ScAddress   maPos;
 
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnCancel;

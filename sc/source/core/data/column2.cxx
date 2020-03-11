@@ -575,7 +575,7 @@ namespace {
 class MaxStrLenFinder
 {
     ScDocument& mrDoc;
-    sal_uInt32 const mnFormat;
+    sal_uInt32 mnFormat;
     OUString maMaxLenStr;
     sal_Int32 mnMaxLen;
 
@@ -1034,8 +1034,8 @@ class StrEntries
 protected:
     struct StrEntry
     {
-        SCROW const mnRow;
-        OUString const maStr;
+        SCROW mnRow;
+        OUString maStr;
 
         StrEntry(SCROW nRow, const OUString& rStr) : mnRow(nRow), maStr(rStr) {}
     };
@@ -1118,7 +1118,7 @@ public:
 
 class TestTabRefAbsHandler
 {
-    SCTAB const mnTab;
+    SCTAB mnTab;
     bool mbTestResult;
 public:
     explicit TestTabRefAbsHandler(SCTAB nTab) : mnTab(nTab), mbTestResult(false) {}
@@ -1797,12 +1797,12 @@ class CopyCellNotesHandler
     ScColumn& mrDestCol;
     sc::CellNoteStoreType& mrDestNotes;
     sc::CellNoteStoreType::iterator miPos;
-    SCTAB const mnSrcTab;
-    SCCOL const mnSrcCol;
-    SCTAB const mnDestTab;
-    SCCOL const mnDestCol;
-    SCROW const mnDestOffset; /// Add this to the source row position to get the destination row.
-    bool const mbCloneCaption;
+    SCTAB mnSrcTab;
+    SCCOL mnSrcCol;
+    SCTAB mnDestTab;
+    SCCOL mnDestCol;
+    SCROW mnDestOffset; /// Add this to the source row position to get the destination row.
+    bool mbCloneCaption;
 
 public:
     CopyCellNotesHandler( const ScColumn& rSrcCol, ScColumn& rDestCol, SCROW nDestOffset, bool bCloneCaption ) :
@@ -2160,9 +2160,9 @@ namespace {
 class ToMatrixHandler
 {
     ScMatrix& mrMat;
-    SCCOL const mnMatCol;
-    SCROW const mnTopRow;
-    ScDocument* const mpDoc;
+    SCCOL mnMatCol;
+    SCROW mnTopRow;
+    ScDocument* mpDoc;
     svl::SharedStringPool& mrStrPool;
 public:
     ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, ScDocument* pDoc) :
@@ -2253,10 +2253,10 @@ struct CellBucket
 class FillMatrixHandler
 {
     ScMatrix& mrMat;
-    size_t const mnMatCol;
-    size_t const mnTopRow;
+    size_t mnMatCol;
+    size_t mnTopRow;
 
-    ScDocument* const mpDoc;
+    ScDocument* mpDoc;
     svl::SharedStringPool& mrPool;
     svl::SharedStringPool* mpPool; // if matrix is not in the same document
 

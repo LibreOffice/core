@@ -27,8 +27,8 @@ class SingleColumnSpanSet;
 
 struct RowSpan
 {
-    SCROW const mnRow1;
-    SCROW const mnRow2;
+    SCROW mnRow1;
+    SCROW mnRow2;
 
     RowSpan(SCROW nRow1, SCROW nRow2);
 };

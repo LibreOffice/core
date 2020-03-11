@@ -52,9 +52,9 @@ class CopyFromClipContext final : public ClipContextBase
     SCTAB mnTabStart;
     SCTAB mnTabEnd;
     ScDocument& mrDestDoc;
-    ScDocument* const mpRefUndoDoc;
+    ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
-    InsertDeleteFlags const mnInsertFlag;
+    InsertDeleteFlags mnInsertFlag;
     InsertDeleteFlags mnDeleteFlag;
 
     std::vector<ScCellValue> maSingleCells;
@@ -63,9 +63,9 @@ class CopyFromClipContext final : public ClipContextBase
     std::vector<const ScPostIt*> maSingleNotes;
 
     ScConditionalFormatList* mpCondFormatList;
-    bool const mbAsLink:1;
-    bool const mbSkipAttrForEmptyCells:1;
-    bool const mbCloneNotes:1;
+    bool mbAsLink:1;
+    bool mbSkipAttrForEmptyCells:1;
+    bool mbCloneNotes:1;
     bool mbTableProtected:1;
 
 public:
@@ -134,7 +134,7 @@ public:
 
 class CopyToClipContext final : public ClipContextBase
 {
-    bool const mbKeepScenarioFlags:1;
+    bool mbKeepScenarioFlags:1;
 
 public:
     CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags);

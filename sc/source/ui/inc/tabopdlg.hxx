@@ -54,7 +54,7 @@ private:
     ScRefAddress    theRowCell;
     ScRefAddress    theColCell;
 
-    ScDocument* const         pDoc;
+    ScDocument*         pDoc;
     const SCTAB         nCurTab;
     bool                bDlgLostFocus;
     const OUString      errMsgNoFormula;

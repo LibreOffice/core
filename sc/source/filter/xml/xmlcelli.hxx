@@ -85,7 +85,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     sal_Int16   nCellType;
     bool        bIsMerged;
     bool        bIsMatrix;
-    bool const  bIsCovered;
+    bool        bIsCovered;
     bool        bIsEmpty;
     bool        mbNewValueType;
     bool        mbErrorValue;

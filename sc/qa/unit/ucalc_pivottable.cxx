@@ -37,14 +37,14 @@ namespace {
 struct DPFieldDef
 {
     const char* pName;
-    sheet::DataPilotFieldOrientation const eOrient;
+    sheet::DataPilotFieldOrientation eOrient;
 
     /**
      * Function for data field.  It's used only for data field.  When 0, the
      * default function (SUM) is used.
      */
-    ScGeneralFunction const eFunc;
-    bool const bRepeatItemLabels;
+    ScGeneralFunction eFunc;
+    bool bRepeatItemLabels;
 };
 
 template<size_t Size>
@@ -2264,7 +2264,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     struct Check
     {
         const char* mpFormula;
-        double const mfResult;
+        double mfResult;
     };
 
     static const Check aChecks[] = {

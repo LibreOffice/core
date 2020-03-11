@@ -265,7 +265,7 @@ private:
     mutable sal_uInt32 mnShapesSelected;
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccessibleDocument;
-    ScSplitPos const meSplitPos;
+    ScSplitPos meSplitPos;
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;

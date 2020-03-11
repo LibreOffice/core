@@ -19,7 +19,7 @@ class XMLFetchThread;
 class XMLDataProvider : public DataProvider
 {
 private:
-    ScDocument* const mpDocument;
+    ScDocument* mpDocument;
     rtl::Reference<XMLFetchThread> mxXMLFetchThread;
     ScDocumentUniquePtr mpDoc;
 

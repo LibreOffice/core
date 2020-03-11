@@ -56,14 +56,14 @@ public:
 
 private:
     ScRange         aEffRange;
-    SCTAB const     nCount;
+    SCTAB           nCount;
     std::unique_ptr<SCTAB[]>
                     pTabs;
     std::unique_ptr<SCTAB[]>
                     pScenarios;
     sal_uLong       nEndChangeAction;
-    InsCellCmd const eCmd;
-    bool const      bPartOfPaste;
+    InsCellCmd      eCmd;
+    bool            bPartOfPaste;
     std::unique_ptr<SfxUndoAction>
                     pPasteUndo;
 
@@ -89,14 +89,14 @@ public:
 
 private:
     ScRange         aEffRange;
-    SCTAB const     nCount;
+    SCTAB           nCount;
     std::unique_ptr<SCTAB[]>
                     pTabs;
     std::unique_ptr<SCTAB[]>
                     pScenarios;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    DelCellCmd const eCmd;
+    DelCellCmd      eCmd;
 
     void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
@@ -121,9 +121,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    bool const          mbRows:1;
-    bool const          mbRefresh:1;
-    SCTAB const         nTab;
+    bool            mbRows:1;
+    bool            mbRefresh:1;
+    SCTAB           nTab;
     std::vector<sc::ColRowSpan> maSpans;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
@@ -150,10 +150,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScMarkData const    aMarkData;
+    ScMarkData          aMarkData;
     ScDocumentUniquePtr
                         pUndoDoc;
-    ScRange const       aExtendedRange;
+    ScRange             aExtendedRange;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -201,7 +201,7 @@ private:
     ScMarkData      aMarkData;
     ScDocumentUniquePtr pUndoDoc;
     ScDocumentUniquePtr pRedoDoc;
-    InsertDeleteFlags const nFlags;
+    InsertDeleteFlags nFlags;
     std::unique_ptr<ScRefUndoData> pRefUndoData;
     std::unique_ptr<ScRefUndoData> pRefRedoData;
     sal_uLong       nStartChangeAction;
@@ -233,12 +233,12 @@ private:
     sal_uInt16 mnPaintExtFlags;
     ScRangeList maPaintRanges;
 
-    ScRange const   aSrcRange;
+    ScRange         aSrcRange;
     ScRange         aDestRange;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    bool const      bCut;
-    bool const      bKeepScenarioFlags;
+    bool            bCut;
+    bool            bKeepScenarioFlags;
 
     void            PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const;
     void DoUndo( ScRange aRange );
@@ -268,14 +268,14 @@ public:
 private:
     std::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
 
-    ScRange const   aRange;
+    ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocumentUniquePtr pUndoDoc; // Block mark and deleted data
     std::unique_ptr<SdrUndoAction> pDrawUndo;      // Deleted objects
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    InsertDeleteFlags const nFlags;
-    bool const      bMulti;         // Multi selection
+    InsertDeleteFlags nFlags;
+    bool            bMulti;         // Multi selection
 
     void            DoChange( const bool bUndo );
     void            SetChangeTrack();
@@ -300,18 +300,18 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScRange const   aRange;
+    ScRange         aRange;
     ScMarkData      aMarkData;
     ScDocumentUniquePtr
                     pUndoDoc;       // Block mark and deleted data
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    InsertDeleteFlags const nFlags;
-    ScPasteFunc const       nFunction;
-    SCTAB const     nSrcTab;
-    bool const      bMulti;         // Multi selection
-    bool const      bSkipEmpty;
-    bool const      bAsLink;
+    InsertDeleteFlags nFlags;
+    ScPasteFunc       nFunction;
+    SCTAB           nSrcTab;
+    bool            bMulti;         // Multi selection
+    bool            bSkipEmpty;
+    bool            bAsLink;
 
     void            DoChange( const bool bUndo );
     void            SetChangeTrack();
@@ -341,11 +341,11 @@ public:
     ScEditDataArray*    GetDataArray();
 private:
     ScMarkData      aMarkData;
-    ScRange const   aRange;
+    ScRange         aRange;
     ScRange         aRangeCover;
     std::unique_ptr<ScEditDataArray> mpDataArray;
     ScDocumentUniquePtr pUndoDoc;
-    bool const      bMulti;
+    bool            bMulti;
     ScPatternAttr*  pApplyPattern;
     SvxBoxItem*     pLineOuter;
     SvxBoxInfoItem* pLineInner;
@@ -376,17 +376,17 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScMarkData            aMarkData;
-    SCCOLROW const        nStart;
-    SCCOLROW const        nEnd;
-    SCTAB const           nStartTab;
-    SCTAB const           nEndTab;
+    ScMarkData      aMarkData;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nStartTab;
+    SCTAB           nEndTab;
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScOutlineTable> pUndoTab;
-    std::vector<sc::ColRowSpan> const maRanges;
-    sal_uInt16 const      nNewSize;
-    bool const            bWidth;
-    ScSizeMode const      eMode;
+    std::vector<sc::ColRowSpan> maRanges;
+    sal_uInt16      nNewSize;
+    bool            bWidth;
+    ScSizeMode      eMode;
     std::unique_ptr<SdrUndoAction>  pDrawUndo;
 };
 
@@ -409,16 +409,16 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScRange const       aSource;
-    ScMarkData          aMarkData;
+    ScRange         aSource;
+    ScMarkData      aMarkData;
     ScDocumentUniquePtr
-                        pUndoDoc;
-    FillDir const       eFillDir;
-    FillCmd const       eFillCmd;
-    FillDateCmd const   eFillDateCmd;
-    double const        fStartValue;
-    double const        fStepValue;
-    double const        fMaxValue;
+                    pUndoDoc;
+    FillDir         eFillDir;
+    FillCmd         eFillCmd;
+    FillDateCmd     eFillDateCmd;
+    double          fStartValue;
+    double          fStepValue;
+    double          fMaxValue;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -441,8 +441,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScCellMergeOption const maOption;
-    bool const            mbMergeContents;        // Merge contents in Redo().
+    ScCellMergeOption maOption;
+    bool            mbMergeContents;        // Merge contents in Redo().
     ScDocumentUniquePtr mxUndoDoc;              // when data is merged
     std::unique_ptr<SdrUndoAction> mpDrawUndo;
 
@@ -467,10 +467,10 @@ public:
 
 private:
     ScDocumentUniquePtr
-                          pUndoDoc;       // deleted data
-    ScMarkData            aMarkData;
-    bool const            bSize;
-    sal_uInt16 const      nFormatNo;
+                    pUndoDoc;       // deleted data
+    ScMarkData      aMarkData;
+    bool            bSize;
+    sal_uInt16      nFormatNo;
 };
 
 class ScUndoReplace: public ScSimpleUndo
@@ -491,9 +491,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress const       aCursorPos;
-    ScMarkData const      aMarkData;
-    OUString const        aUndoStr;           // Data at single selection
+    ScAddress       aCursorPos;
+    ScMarkData      aMarkData;
+    OUString        aUndoStr;           // Data at single selection
     ScDocumentUniquePtr pUndoDoc;           // Block mark and deleted data
     std::unique_ptr<SvxSearchItem> pSearchItem;
     sal_uLong           nStartChangeAction;
@@ -524,14 +524,14 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScRange const         aRange;
+    ScRange         aRange;
     ScDocumentUniquePtr
                     pUndoDoc;       // Deleted data
-    ScRefAddress const    theFormulaCell;
-    ScRefAddress const    theFormulaEnd;
-    ScRefAddress const    theRowCell;
-    ScRefAddress const    theColCell;
-    ScTabOpParam::Mode const meMode;
+    ScRefAddress    theFormulaCell;
+    ScRefAddress    theFormulaEnd;
+    ScRefAddress    theRowCell;
+    ScRefAddress    theColCell;
+    ScTabOpParam::Mode meMode;
 };
 
 class ScUndoConversion : public ScSimpleUndo
@@ -552,14 +552,14 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScMarkData            aMarkData;
-    ScAddress const       aCursorPos;
-    ScDocumentUniquePtr   pUndoDoc;           // Block mark and deleted data
-    ScAddress const       aNewCursorPos;
-    ScDocumentUniquePtr   pRedoDoc;           // Block mark and new data
-    sal_uLong             nStartChangeAction;
-    sal_uLong             nEndChangeAction;
-    ScConversionParam const maConvParam;        /// Conversion type and parameters.
+    ScMarkData      aMarkData;
+    ScAddress       aCursorPos;
+    ScDocumentUniquePtr pUndoDoc;           // Block mark and deleted data
+    ScAddress       aNewCursorPos;
+    ScDocumentUniquePtr pRedoDoc;           // Block mark and new data
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    ScConversionParam maConvParam;        /// Conversion type and parameters.
 
     void            DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPos );
     void            SetChangeTrack();
@@ -584,8 +584,8 @@ private:
     ScMarkData          aMarkData;
     ScDocumentUniquePtr pUndoDoc;
     ScDocumentUniquePtr pRedoDoc;
-    ScRange const       aRange;
-    bool const          bMulti;
+    ScRange             aRange;
+    bool                bMulti;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -608,8 +608,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocumentUniquePtr const xUndoDoc;
-    ScDocumentUniquePtr const xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
 
     void            DoChange( ScDocument* pSrcDoc ) const;
 };
@@ -630,9 +630,9 @@ public:
 
 private:
     void DoChange(ScDocument* pDoc);
-    ScDocumentUniquePtr const mpUndoDoc;
-    ScDocumentUniquePtr const mpRedoDoc;
-    ScRange const maRange;
+    ScDocumentUniquePtr mpUndoDoc;
+    ScDocumentUniquePtr mpRedoDoc;
+    ScRange maRange;
 };
 
 class ScUndoConditionalFormatList : public ScSimpleUndo
@@ -651,9 +651,9 @@ public:
 
 private:
     void DoChange(const ScDocument* pDoc);
-    ScDocumentUniquePtr const mpUndoDoc;
-    ScDocumentUniquePtr const mpRedoDoc;
-    SCTAB const mnTab;
+    ScDocumentUniquePtr mpUndoDoc;
+    ScDocumentUniquePtr mpRedoDoc;
+    SCTAB mnTab;
 };
 
 class ScUndoUseScenario: public ScSimpleUndo
@@ -677,7 +677,7 @@ private:
                     pUndoDoc;
     ScRange         aRange;
     ScMarkData      aMarkData;
-    OUString const  aName;
+    OUString        aName;
 };
 
 class ScUndoSelectionStyle: public ScSimpleUndo
@@ -701,8 +701,8 @@ private:
     ScMarkData      aMarkData;
     ScDocumentUniquePtr
                     pUndoDoc;
-    OUString const  aStyleName;
-    ScRange const   aRange;
+    OUString        aStyleName;
+    ScRange         aRange;
 
     void            DoChange( const bool bUndo );
 };
@@ -744,7 +744,7 @@ public:
 private:
     ScDocumentUniquePtr
                     pUndoDoc;
-    OUString const  aFormula;
+    OUString        aFormula;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
 
@@ -769,12 +769,12 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const  aDocName;
+    OUString        aDocName;
     OUString        aFltName;
-    OUString const  aOptions;
+    OUString        aOptions;
     OUString        aAreaName;
-    ScRange const   aRange;
-    sal_uLong const nRefreshDelay;
+    ScRange         aRange;
+    sal_uLong           nRefreshDelay;
 };
 
 class ScUndoRemoveAreaLink : public ScSimpleUndo
@@ -795,12 +795,12 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const   aDocName;
+    OUString        aDocName;
     OUString        aFltName;
-    OUString const  aOptions;
+    OUString        aOptions;
     OUString        aAreaName;
-    ScRange const   aRange;
-    sal_uLong const nRefreshDelay;
+    ScRange         aRange;
+    sal_uLong           nRefreshDelay;
 };
 
 class ScUndoUpdateAreaLink : public ScSimpleUndo        //! also change BlockUndo?
@@ -826,21 +826,21 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const        aOldDoc;
-    OUString const        aOldFlt;
-    OUString const        aOldOpt;
-    OUString const        aOldArea;
-    ScRange const         aOldRange;
-    OUString const        aNewDoc;
-    OUString const        aNewFlt;
-    OUString const        aNewOpt;
-    OUString const        aNewArea;
-    ScRange const         aNewRange;
+    OUString        aOldDoc;
+    OUString        aOldFlt;
+    OUString        aOldOpt;
+    OUString        aOldArea;
+    ScRange         aOldRange;
+    OUString        aNewDoc;
+    OUString        aNewFlt;
+    OUString        aNewOpt;
+    OUString        aNewArea;
+    ScRange         aNewRange;
     ScDocumentUniquePtr xUndoDoc;
     ScDocumentUniquePtr xRedoDoc;
-    sal_uLong const       nOldRefresh;
-    sal_uLong const       nNewRefresh;
-    bool const            bWithInsert;
+    sal_uLong       nOldRefresh;
+    sal_uLong       nNewRefresh;
+    bool            bWithInsert;
 
     void            DoChange( const bool bUndo ) const;
 };
@@ -863,7 +863,7 @@ private:
     ScMarkData      aMarkData;
     ScDocumentUniquePtr
                     pUndoDoc;
-    bool const      bIsIncrement;
+    bool            bIsIncrement;
 };
 
 class ScUndoTransliterate: public ScBlockUndo
@@ -884,7 +884,7 @@ private:
     ScMarkData      aMarkData;
     ScDocumentUniquePtr
                     pUndoDoc;
-    TransliterationFlags const
+    TransliterationFlags
                     nTransliterationType;
 };
 
@@ -925,8 +925,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const           nTab;
-    ScDocumentUniquePtr   pUndoDoc;
+    SCTAB           nTab;
+    ScDocumentUniquePtr
+                    pUndoDoc;
 };
 
 class ScUndoRemoveMerge: public ScBlockUndo

@@ -487,9 +487,9 @@ private:
     // AutoCalcShellDisabled and TrackFormulas
     bool                bForcedFormulaPending;
     bool                bCalculatingFormulaTree;
-    bool const          bIsClip;
-    bool const          bIsUndo;
-    bool const          bIsFunctionAccess;
+    bool                bIsClip;
+    bool                bIsUndo;
+    bool                bIsFunctionAccess;
     bool                bIsVisible;                     // set from view ctor
 
     bool                bIsEmbedded;                    // display/adjust Embedded area?

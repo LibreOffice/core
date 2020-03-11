@@ -53,7 +53,7 @@ private:
     ScViewData*     pViewData;
     const ScDocument& rDoc;
     bool            bRefInputMode;
-    ScAddress::Details const aAddrDetails;
+    ScAddress::Details aAddrDetails;
 
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;

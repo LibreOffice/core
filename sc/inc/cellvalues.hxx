@@ -29,8 +29,8 @@ struct CellValuesImpl;
 
 struct CellValueSpan
 {
-    SCROW const mnRow1;
-    SCROW const mnRow2;
+    SCROW mnRow1;
+    SCROW mnRow2;
 
     CellValueSpan( SCROW nRow1, SCROW nRow2 );
 };

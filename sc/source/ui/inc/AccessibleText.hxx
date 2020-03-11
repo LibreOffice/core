@@ -92,7 +92,7 @@ public:
 private:
     std::unique_ptr<ScViewForwarder> mpViewForwarder;
     ScTabViewShell* mpViewShell;
-    ScSplitPos const meSplitPos;
+    ScSplitPos meSplitPos;
     ScAccessibleCell* mpAccessibleCell;
 
     using ScAccessibleCellBaseTextData::GetDocShell;
@@ -189,9 +189,9 @@ public:
 private:
     std::unique_ptr<ScPreviewViewForwarder> mpViewForwarder;
     ScPreviewShell* mpViewShell;
-    OUString const  maText;
-    bool const      mbColHeader;
-    bool const      mbRowHeader;
+    OUString        maText;
+    bool            mbColHeader;
+    bool            mbRowHeader;
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     static ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
@@ -221,7 +221,7 @@ private:
     ScDocShell*             mpDocSh;
     const EditTextObject*   mpEditObj;
     bool                    mbDataValid;
-    SvxAdjust const         meAdjust;
+    SvxAdjust               meAdjust;
 };
 
 class ScAccessibleNoteTextData : public ScAccessibleTextData
@@ -246,9 +246,9 @@ private:
     std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;
     std::unique_ptr<SvxEditEngineForwarder> mpForwarder;
     ScDocShell*             mpDocSh;
-    OUString const          msText;
-    ScAddress const         maCellPos;
-    bool const              mbMarkNote;
+    OUString                msText;
+    ScAddress               maCellPos;
+    bool                    mbMarkNote;
     bool                    mbDataValid;
 };
 
@@ -262,8 +262,8 @@ private:
     EditEngine*                 mpEditEngine;
     TextForwarderPtr            mpTextForwarder;
     ViewForwarderPtr            mpViewForwarder;
-    OUString const              maCellText;
-    Size const                  maCellSize;
+    OUString                    maCellText;
+    Size                        maCellSize;
 
 public:
     explicit                    ScAccessibleCsvTextData(

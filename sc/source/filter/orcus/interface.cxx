@@ -302,7 +302,7 @@ namespace {
 
 class FindSheetByIndex
 {
-    SCTAB const mnTab;
+    SCTAB mnTab;
 public:
     explicit FindSheetByIndex(SCTAB nTab) : mnTab(nTab) {}
     bool operator() (const std::unique_ptr<ScOrcusSheet>& rSheet) const

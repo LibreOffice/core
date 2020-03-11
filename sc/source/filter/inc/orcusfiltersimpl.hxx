@@ -31,7 +31,7 @@ public:
 class ScOrcusXMLContextImpl : public ScOrcusXMLContext
 {
     ScDocument& mrDoc;
-    OUString const maPath;
+    OUString maPath;
 
     orcus::xmlns_repository maNsRepo; /// XML namespace repository for this context.
 

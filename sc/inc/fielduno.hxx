@@ -61,7 +61,7 @@ class ScCellFieldsObj final : public cppu::WeakImplHelper<
 private:
     css::uno::Reference<css::text::XTextRange> mxContent;
     ScDocShell*             pDocShell;
-    ScAddress const               aCellPos;
+    ScAddress               aCellPos;
     std::unique_ptr<ScEditSource> mpEditSource;
     /// List of refresh listeners.
     std::unique_ptr<comphelper::OInterfaceContainerHelper2> mpRefreshListeners;
@@ -176,7 +176,7 @@ class ScEditFieldObj final : public cppu::WeakImplHelper<
     std::unique_ptr<ScEditSource> mpEditSource;
     ESelection aSelection;
 
-    sal_Int32 const meType;
+    sal_Int32 meType;
     std::unique_ptr<SvxFieldData> mpData;
     css::uno::Reference<css::text::XTextRange> mpContent;
 

@@ -632,7 +632,7 @@ class CellStoreInitializer
     {
         sc::CellTextAttrStoreType maAttrs;
         sc::CellTextAttrStoreType::iterator miPos;
-        SvtScriptType const mnScriptNumeric;
+        SvtScriptType mnScriptNumeric;
 
         explicit Impl(const SvtScriptType nScriptNumeric)
             : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
@@ -640,8 +640,8 @@ class CellStoreInitializer
     };
 
     ScDocumentImportImpl& mrDocImpl;
-    SCTAB const mnTab;
-    SCCOL const mnCol;
+    SCTAB mnTab;
+    SCCOL mnCol;
 
 public:
     CellStoreInitializer( ScDocumentImportImpl& rDocImpl, SCTAB nTab, SCCOL nCol ) :

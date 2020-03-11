@@ -2252,7 +2252,7 @@ class ScTDistFunction : public ScDistFunc
 {
     ScInterpreter&  rInt;
     double          fp, fDF;
-    int const       nT;
+    int             nT;
 
 public:
             ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal, int nType ) :

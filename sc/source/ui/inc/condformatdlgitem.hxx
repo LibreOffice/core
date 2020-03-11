@@ -61,9 +61,9 @@ public:
 private:
 
     std::shared_ptr<ScConditionalFormatList> mpCondFormats;
-    sal_Int32 const mnItem;
+    sal_Int32 mnItem;
     condformat::dialog::ScCondFormatDialogType meDialogType;
-    bool const mbManaged;
+    bool mbManaged;
 };
 
 #endif

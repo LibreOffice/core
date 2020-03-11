@@ -118,7 +118,7 @@ class ScDrawStringsVars
     bool                bRepeat;
     bool                bShrink;
 
-    bool const          bPixelToLogic;
+    bool                bPixelToLogic;
     bool                bCellContrast;
 
     Color               aBackConfigColor;       // used for ScPatternAttr::GetFont calls
@@ -2779,7 +2779,7 @@ public:
 private:
     tools::Rectangle        maRect;
     VclPtr<OutputDevice>    mpDev;
-    bool const              mbMetaFile;
+    bool                    mbMetaFile;
 };
 
 // Returns needed width in current units; sets rNeededPixel to needed width in pixels

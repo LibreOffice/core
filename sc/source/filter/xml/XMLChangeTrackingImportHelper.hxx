@@ -37,16 +37,16 @@ struct ScMyActionInfo
 
 struct ScMyCellInfo
 {
-    ScCellValue maCell;
-    OUString const           sFormulaAddress;
-    OUString const           sFormula;
-    OUString                 sInputString;
-    double const             fValue;
-    sal_Int32 const          nMatrixCols;
-    sal_Int32 const          nMatrixRows;
-    formula::FormulaGrammar::Grammar const eGrammar;
-    sal_uInt16 const         nType;
-    ScMatrixMode const       nMatrixFlag;
+    ScCellValue        maCell;
+    OUString           sFormulaAddress;
+    OUString           sFormula;
+    OUString           sInputString;
+    double             fValue;
+    sal_Int32          nMatrixCols;
+    sal_Int32          nMatrixRows;
+    formula::FormulaGrammar::Grammar eGrammar;
+    sal_uInt16         nType;
+    ScMatrixMode       nMatrixFlag;
 
     ScMyCellInfo(
         const ScCellValue& rCell, const OUString& sFormulaAddress, const OUString& sFormula,
@@ -60,7 +60,7 @@ struct ScMyCellInfo
 
 struct ScMyDeleted
 {
-    sal_uInt32 const nID = 0;
+    sal_uInt32 nID = 0;
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
     ScMyDeleted(sal_uInt32 id, std::unique_ptr<ScMyCellInfo> p) : nID(id), pCellInfo(std::move(p)) {}
@@ -68,7 +68,7 @@ struct ScMyDeleted
 
 struct ScMyGenerated
 {
-    ScBigRange const      aBigRange;
+    ScBigRange      aBigRange;
     sal_uInt32      nID = 0;
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
@@ -78,8 +78,8 @@ struct ScMyGenerated
 
 struct ScMyInsertionCutOff
 {
-    sal_uInt32 const nID;
-    sal_Int32 const nPosition;
+    sal_uInt32 nID;
+    sal_Int32 nPosition;
 
     ScMyInsertionCutOff(const sal_uInt32 nTempID, const sal_Int32 nTempPosition) :
             nID(nTempID), nPosition(nTempPosition) {}
@@ -87,9 +87,9 @@ struct ScMyInsertionCutOff
 
 struct ScMyMoveCutOff
 {
-    sal_uInt32 const nID;
-    sal_Int32 const nStartPosition;
-    sal_Int32 const nEndPosition;
+    sal_uInt32 nID;
+    sal_Int32 nStartPosition;
+    sal_Int32 nEndPosition;
 
     ScMyMoveCutOff(const sal_uInt32 nTempID, const sal_Int32 nStartPos, const sal_Int32 nEndPos) :
             nID(nTempID), nStartPosition(nStartPos), nEndPosition(nEndPos) {}
@@ -113,7 +113,7 @@ struct ScMyBaseAction
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
     sal_uInt32 nPreviousAction;
-    ScChangeActionType const nActionType;
+    ScChangeActionType nActionType;
     ScChangeActionState nActionState;
 
     explicit ScMyBaseAction(const ScChangeActionType nActionType);

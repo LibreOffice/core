@@ -37,7 +37,7 @@ enum ScDetOpType
 class ScDetOpData
 {
     ScAddress       aPos;
-    ScDetOpType const eOperation;
+    ScDetOpType     eOperation;
 
 public:
                         ScDetOpData( const ScAddress& rP, ScDetOpType eOp ) :

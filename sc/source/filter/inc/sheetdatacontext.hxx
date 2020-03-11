@@ -44,12 +44,12 @@ class SheetDataContext : public WorksheetContextBase
     SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
     CellModel           maCellData;         /// Position, contents, formatting of current imported cell.
     CellFormulaModel    maFmlaData;         /// Settings for a cell formula.
-    sal_Int16 const           mnSheet;            /// Index of the current sheet.
+    sal_Int16           mnSheet;            /// Index of the current sheet.
     // If we are doing threaded parsing, this SheetDataContext
     // forms the inner loop for bulk data parsing, and for the
     // duration of this we can drop the solar mutex.
 #if MULTI_THREAD_SHEET_PARSING
-    SolarMutexReleaser const aReleaser;
+    SolarMutexReleaser  aReleaser;
 #endif
 
 public:

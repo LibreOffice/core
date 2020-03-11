@@ -32,14 +32,14 @@ private:
     formula::RefEdit* mpActiveEdit;
 
     // Data
-    ScViewData* const         mViewData;
+    ScViewData*               mViewData;
     const ScDocument&         mDocument;
 
-    ScRange                   mInputRange;
-    ScAddress::Details const  mAddressDetails;
-    ScAddress                 mOutputAddress;
+    ScRange             mInputRange;
+    ScAddress::Details  mAddressDetails;
+    ScAddress           mOutputAddress;
 
-    ScAddress const           mCurrentAddress;
+    ScAddress           mCurrentAddress;
 
     sal_Int64                 mnLastSampleSizeValue;
     sal_Int64                 mnLastPeriodValue;

@@ -70,11 +70,11 @@ public:
 class ScConflictsFinder final
 {
 private:
-    ScChangeTrack* const    mpTrack;
-    sal_uLong const         mnStartShared;
-    sal_uLong const         mnEndShared;
-    sal_uLong const         mnStartOwn;
-    sal_uLong const         mnEndOwn;
+    ScChangeTrack*          mpTrack;
+    sal_uLong               mnStartShared;
+    sal_uLong               mnEndShared;
+    sal_uLong               mnStartOwn;
+    sal_uLong               mnEndOwn;
     ScConflictsList&        mrConflictsList;
 
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
@@ -108,7 +108,7 @@ public:
 class ScConflictsDlg : public weld::GenericDialogController
 {
 private:
-    OUString const      maStrUnknownUser;
+    OUString            maStrUnknownUser;
 
     ScViewData* const   mpViewData;
     ScDocument*         mpOwnDoc;

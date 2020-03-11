@@ -26,10 +26,10 @@ namespace sc {
 class HTMLFetchThread : public salhelper::Thread
 {
     ScDocument& mrDocument;
-    OUString const maURL;
-    OUString const maID;
+    OUString maURL;
+    OUString maID;
     const std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
-    std::function<void()> const maImportFinishedHdl;
+    std::function<void()> maImportFinishedHdl;
 
     void handleTable(xmlNodePtr pTable);
     void handleRow(xmlNodePtr pRow, SCROW nRow);
