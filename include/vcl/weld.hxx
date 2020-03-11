@@ -2088,18 +2088,7 @@ public:
 
 class VCL_DLLPUBLIC Builder
 {
-private:
-    OString m_sHelpRoot;
-
 public:
-    Builder(const OUString& rUIFile)
-        : m_sHelpRoot(OUStringToOString(rUIFile, RTL_TEXTENCODING_UTF8))
-    {
-        sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
-        if (nIdx != -1)
-            m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-        m_sHelpRoot += OString('/');
-    }
     virtual std::unique_ptr<MessageDialog> weld_message_dialog(const OString& id,
                                                                bool bTakeOwnership = true)
         = 0;

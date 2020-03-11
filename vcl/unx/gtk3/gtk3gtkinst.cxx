@@ -13608,7 +13608,7 @@ private:
     }
 public:
     GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile, SystemChildWindow* pInterimGlue)
-        : weld::Builder(rUIFile)
+        : weld::Builder()
         , m_pStringReplace(Translate::GetReadStringHook())
         , m_pParentWidget(pParent)
         , m_nNotifySignalId(0)
