@@ -25,6 +25,7 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -48,7 +49,7 @@ OUString stripNamespacePrefix(OUString const & rsInputName)
     return rsInputName.copy(rsInputName.indexOf(":") + 1);
 }
 
-class AgileTokenHandler : public cppu::WeakImplHelper<XFastTokenHandler>
+class AgileTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
     virtual sal_Int32 SAL_CALL getTokenFromUTF8(const Sequence< sal_Int8 >& /*nIdentifier*/) override
@@ -59,6 +60,11 @@ public:
     virtual Sequence<sal_Int8> SAL_CALL getUTF8Identifier(sal_Int32 /*nToken*/) override
     {
         return Sequence<sal_Int8>();
+    }
+
+    virtual sal_Int32 getTokenDirect( const char */*pToken*/, sal_Int32 /*nLength*/ ) const override
+    {
+        return -1;
     }
 };
 
