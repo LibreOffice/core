@@ -5476,6 +5476,24 @@ SfxBoolItem HideWhitespace FN_VIEW_HIDE_WHITESPACE
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem ShowWhitespace FN_VIEW_SHOW_WHITESPACE
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
 
 [

@@ -266,6 +266,12 @@ published service ViewSettings
     */
     [optional, property] boolean HideWhitespace;
 
+    /** If this property is `TRUE`, whitespaces around pages are shown.
+
+        @since LibreOffice 7.0
+    */
+    [optional, property] boolean ShowWhitespace;
+
     /** If this property is `TRUE`, tooltips for tracked changes are shown.
 
         @since LibreOffice 6.1
