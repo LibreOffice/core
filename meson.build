@@ -155,6 +155,7 @@ odbc_dep = declare_dependency(include_directories: 'external/unixODBC/inc')
 hunspell_dep = dependency('hunspell')
 hyphen_dep = cpp.find_library('hyphen')
 mythes_dep = dependency('mythes')
+libexttextcat_dep = dependency('libexttextcat')
 
 # The version in Ubuntu eoan is too old.
 #mdds_dep = dependency('mdds-1.5')
@@ -257,3 +258,5 @@ subdir('ucb')
 subdir('shell')
 subdir('extensions')
 subdir('lingucomponent')
+subdir('scripting')
+subdir('dtrans')
