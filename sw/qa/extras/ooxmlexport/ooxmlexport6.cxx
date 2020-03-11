@@ -466,6 +466,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119054, "tdf119054.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "line", "240");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131258, "tdf131258.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    // Use table style based bottom margin instead of the docDefaults in empty tables, too
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69636, "fdo69636.docx")
 {
     /*

@@ -1400,7 +1400,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
-    if (nestedTableLevel <= 1)
+    if (nestedTableLevel <= 1 && m_rDMapper_Impl.m_bConvertedTable)
         m_rDMapper_Impl.m_aParagraphsToEndTable.clear();
 
 #ifdef DBG_UTIL
