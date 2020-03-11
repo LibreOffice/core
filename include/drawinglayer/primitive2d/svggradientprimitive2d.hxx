@@ -101,6 +101,9 @@ namespace drawinglayer
             /// the gradient definition
             SvgGradientEntryVector      maGradientEntries;
 
+            // internal helper for case SpreadMethod::Reflect
+            SvgGradientEntryVector      maMirroredGradientEntries;
+
             /// start and/or center point
             basegfx::B2DPoint           maStart;
 
@@ -117,6 +120,12 @@ namespace drawinglayer
             // (related to SVG's gradientUnits (userSpaceOnUse|objectBoundingBox)
             bool                        mbUseUnitCoordinates : 1;
 
+            /// local helpers
+            const SvgGradientEntryVector& getMirroredGradientEntries() const;
+            void createMirroredGradientEntries();
+            const SvgGradientEntry& FindEntryLessOrEqual(sal_Int32& rInt, const double fFrac) const;
+            const SvgGradientEntry& FindEntryMore(sal_Int32& rInt,const double fFrac) const;
+
         protected:
             /// local helpers
             void createSingleGradientEntryFill(Primitive2DContainer& rContainer) const;
@@ -125,14 +134,13 @@ namespace drawinglayer
                 Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
-                sal_Int32 nOffset) const = 0;
-            double createRun(
+                sal_Int32 nOffsetFrom,
+                sal_Int32 nOffsetTo) const = 0;
+            void createRun(
                 Primitive2DContainer& rTargetColor,
                 Primitive2DContainer& rTargetOpacity,
-                double fPos,
-                double fMax,
-                const SvgGradientEntryVector& rEntries,
-                sal_Int32 nOffset) const;
+                double fStart,
+                double fEnd) const;
             virtual void checkPreconditions();
             void createResult(
                 Primitive2DContainer& rContainer,
@@ -191,7 +199,8 @@ namespace drawinglayer
                 Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
-                sal_Int32 nOffset) const override;
+                sal_Int32 nOffsetFrom,
+                sal_Int32 nOffsetTo) const override;
             virtual void checkPreconditions() override;
 
             /// local decomposition.
@@ -243,14 +252,7 @@ namespace drawinglayer
             basegfx::B2DVector                      maFocalVector;
             double                                  maFocalLength;
 
-            // internal helper for case SpreadMethod::Reflect
-            SvgGradientEntryVector                  maMirroredGradientEntries;
-
             bool                                    mbFocalSet : 1;
-
-            /// local helpers
-            const SvgGradientEntryVector& getMirroredGradientEntries() const;
-            void createMirroredGradientEntries();
 
             /// local helpers
             virtual void createAtom(
@@ -258,7 +260,8 @@ namespace drawinglayer
                 Primitive2DContainer& rTargetOpacity,
                 const SvgGradientEntry& rFrom,
                 const SvgGradientEntry& rTo,
-                sal_Int32 nOffset) const override;
+                sal_Int32 nOffsetFrom,
+                sal_Int32 nOffsetTo) const override;
             virtual void checkPreconditions() override;
 
             /// local decomposition.

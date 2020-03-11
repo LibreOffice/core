@@ -877,10 +877,22 @@ namespace emfplushelper
 
                 if (brush->type == BrushTypeLinearGradient)
                 {
+                    // support for public enum EmfPlusWrapMode
                     basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, brush->firstPointY);
                     aStartPoint = aPolygonTransformation * aStartPoint;
                     basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->secondPointX, brush->firstPointY + brush->secondPointY);
                     aEndPoint = aPolygonTransformation * aEndPoint;
+
+                    // support for public enum EmfPlusWrapMode
+                    drawinglayer::primitive2d::SpreadMethod aSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
+                    switch(brush->wrapMode)
+                    {
+                        case 0 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
+                        case 1 :
+                        case 2 :
+                        case 3 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect; break;
+                        default: break;
+                    }
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
@@ -891,7 +903,7 @@ namespace emfplushelper
                             aStartPoint,
                             aEndPoint,
                             false,                  // do not use UnitCoordinates
-                            drawinglayer::primitive2d::SpreadMethod::Pad));
+                            aSpreadMethod));
                 }
                 else // BrushTypePathGradient
                 {
