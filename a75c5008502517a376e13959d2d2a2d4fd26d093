@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ced62bb_fd9aa5ce",
+        "filename": "idl/inc/lex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-11T16:36:39Z",
+      "side": 1,
+      "message": "maybe sal_uInt64 is a bit overkill here but this is just svidl, not so important code anyway...",
+      "revId": "a75c5008502517a376e13959d2d2a2d4fd26d093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
