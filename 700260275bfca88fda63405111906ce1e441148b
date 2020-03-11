@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae5114cc_d1482826",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15337,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-11T12:46:24Z",
+      "side": 1,
+      "message": "offapi/type_reference/offapi.idl shall not be changed manual (see offapi/README).  Demand for manual change indicates an incompatible change to the offapi/**.idl files, which sall be avoided as much as possible.\n\nI would suggest leaving this css.text.ViewSettings.HideWhitespace property alone.",
+      "revId": "700260275bfca88fda63405111906ce1e441148b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c69a9c1_6342c068",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-11T12:46:24Z",
+      "side": 1,
+      "message": "Is it worth it to rename this .uno command?  Maybe Heiko from UX knows.",
+      "revId": "700260275bfca88fda63405111906ce1e441148b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
