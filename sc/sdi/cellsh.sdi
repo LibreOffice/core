@@ -199,7 +199,7 @@ interface CellSelection
     SID_EDIT_POSTIT
     [
         ExecMethod = ExecuteEdit; StateMethod = GetCellState;
-        ToolBoxConfig, MenuConfig , AccelConfig;
+        FastCall, ToolBoxConfig, MenuConfig, AccelConfig;
     ]
 
     SID_TABOP                           [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
