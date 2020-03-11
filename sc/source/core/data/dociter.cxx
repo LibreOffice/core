@@ -1272,7 +1272,7 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     struct BoolResetter
     {
         bool& mr;
-        bool const  mb;
+        bool  mb;
         BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
         ~BoolResetter() { mr = mb; }
     } aRangeLookupResetter( maParam.mbRangeLookup, true);

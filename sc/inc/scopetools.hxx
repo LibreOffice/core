@@ -23,7 +23,7 @@ namespace sc {
 class SC_DLLPUBLIC AutoCalcSwitch
 {
     ScDocument& mrDoc;
-    bool const mbOldValue;
+    bool        mbOldValue;
 
     AutoCalcSwitch(AutoCalcSwitch const &) = delete;
     AutoCalcSwitch(AutoCalcSwitch &&) = delete;
@@ -38,7 +38,7 @@ public:
 class ExpandRefsSwitch
 {
     ScDocument& mrDoc;
-    bool const mbOldValue;
+    bool mbOldValue;
 public:
     ExpandRefsSwitch(ScDocument& rDoc, bool bExpandRefs);
     ~ExpandRefsSwitch();
@@ -47,7 +47,7 @@ public:
 class SC_DLLPUBLIC UndoSwitch
 {
     ScDocument& mrDoc;
-    bool const mbOldValue;
+    bool mbOldValue;
 public:
     UndoSwitch(ScDocument& rDoc, bool bUndo);
     ~UndoSwitch();
@@ -56,7 +56,7 @@ public:
 class IdleSwitch
 {
     ScDocument& mrDoc;
-    bool const mbOldValue;
+    bool mbOldValue;
 public:
     IdleSwitch(ScDocument& rDoc, bool bEnableIdle);
     ~IdleSwitch();

@@ -84,7 +84,7 @@ private:
 
 private:
     SvtCalendarBox&     mrEdValue;
-    Date const          maNullDate;
+    Date                maNullDate;
 };
 
 class ScDPNumGroupDlg : public weld::GenericDialogController

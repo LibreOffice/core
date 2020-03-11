@@ -129,7 +129,7 @@ private:
     bool                                    mbDiagBLTR : 1;
 
     vcl::EnumContext                        maContext;
-    SfxBindings* const                      mpBindings;
+    SfxBindings*                            mpBindings;
 
     DECL_LINK(TbxCellBorderSelectHdl, const OString&, void);
     DECL_LINK(TbxCellBorderMenuHdl, const OString&, void);

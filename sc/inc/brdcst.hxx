@@ -35,7 +35,7 @@ public:
 class ScAreaChangedHint final : public SfxHint
 {
 private:
-    ScRange const aNewRange;
+    ScRange aNewRange;
 public:
                     ScAreaChangedHint(const ScRange& rRange) : aNewRange(rRange) {}
     const ScRange&  GetRange() const { return aNewRange; }

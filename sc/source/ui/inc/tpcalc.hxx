@@ -38,7 +38,7 @@ public:
 private:
     std::unique_ptr<ScDocOptions> pOldOptions;
     std::unique_ptr<ScDocOptions> pLocalOptions;
-    sal_uInt16 const             nWhichCalc;
+    sal_uInt16                    nWhichCalc;
 
     std::unique_ptr<weld::CheckButton> m_xBtnIterate;
     std::unique_ptr<weld::Label> m_xFtSteps;

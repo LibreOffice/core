@@ -650,7 +650,7 @@ public:
 
 class NoteCaptionCleaner
 {
-    bool const mbPreserveData;
+    bool mbPreserveData;
 public:
     explicit NoteCaptionCleaner( bool bPreserveData ) : mbPreserveData(bPreserveData) {}
 
@@ -710,10 +710,10 @@ namespace {
 class NoteEntryCollector
 {
     std::vector<sc::NoteEntry>& mrNotes;
-    SCTAB const mnTab;
-    SCCOL const mnCol;
-    SCROW const mnStartRow;
-    SCROW const mnEndRow;
+    SCTAB mnTab;
+    SCCOL mnCol;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
 public:
     NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol,
             SCROW nStartRow, SCROW nEndRow) :
@@ -982,7 +982,7 @@ class ScriptTypeUpdater
     ScColumn& mrCol;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miPosAttr;
-    ScConditionalFormatList* const mpCFList;
+    ScConditionalFormatList* mpCFList;
     SvNumberFormatter* mpFormatter;
     ScAddress maPos;
     bool mbUpdated;
@@ -1125,8 +1125,8 @@ namespace {
 
 class FormulaColPosSetter
 {
-    SCCOL const mnCol;
-    bool const  mbUpdateRefs;
+    SCCOL mnCol;
+    bool  mbUpdateRefs;
 public:
     FormulaColPosSetter( SCCOL nCol, bool bUpdateRefs ) : mnCol(nCol), mbUpdateRefs(bUpdateRefs) {}
 
@@ -1165,7 +1165,7 @@ namespace {
 class RelativeRefBoundChecker
 {
     std::vector<SCROW> maBounds;
-    ScRange const maBoundRange;
+    ScRange maBoundRange;
 
 public:
     explicit RelativeRefBoundChecker( const ScRange& rBoundRange ) :

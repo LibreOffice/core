@@ -33,7 +33,7 @@ class SC_DLLPUBLIC ScRangeManagerTable
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
 
-    OUString const maGlobalString;
+    OUString maGlobalString;
 
     // should be const because we should not modify it here
     const std::map<OUString, std::unique_ptr<ScRangeName>>& m_RangeMap;

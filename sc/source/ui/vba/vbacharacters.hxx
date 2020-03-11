@@ -32,9 +32,9 @@ class ScVbaCharacters : public ScVbaCharacters_BASE
 private:
     css::uno::Reference< css::text::XTextRange > m_xTextRange;
     css::uno::Reference< css::text::XSimpleText > m_xSimpleText;
-    ScVbaPalette const m_aPalette;
+    ScVbaPalette m_aPalette;
     // Add because of MSO has different behavior.
-    bool const bReplace;
+    bool bReplace;
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

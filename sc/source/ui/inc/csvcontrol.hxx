@@ -135,7 +135,7 @@ struct ScCsvLayoutData
     sal_Int32                   mnColCursor;        /// Position of grid column cursor.
 
     mutable sal_Int32           mnNoRepaint;        /// >0 = no repaint.
-    bool const                  mbAppRTL;           /// true = application in RTL mode.
+    bool                        mbAppRTL;           /// true = application in RTL mode.
 
     explicit                    ScCsvLayoutData();
 

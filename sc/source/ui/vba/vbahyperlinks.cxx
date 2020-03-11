@@ -52,7 +52,7 @@ struct EqualAnchorFunctor
 {
     uno::Reference< excel::XRange > mxAnchorRange;
     uno::Reference< msforms::XShape > mxAnchorShape;
-    sal_Int32 const mnType;
+    sal_Int32 mnType;
     /// @throws uno::RuntimeException
     explicit EqualAnchorFunctor( const uno::Reference< excel::XHyperlink >& rxHlink );
     /// @throws uno::RuntimeException

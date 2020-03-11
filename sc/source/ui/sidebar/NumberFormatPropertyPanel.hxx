@@ -81,7 +81,7 @@ private:
     sal_Int32                               mnCategorySelected;
 
     vcl::EnumContext                        maContext;
-    SfxBindings* const                      mpBindings;
+    SfxBindings*                            mpBindings;
 
     DECL_LINK(NumFormatSelectHdl, weld::ComboBox&, void);
     DECL_LINK(NumFormatValueHdl, weld::SpinButton&, void);

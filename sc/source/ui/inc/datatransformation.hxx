@@ -62,7 +62,7 @@ public:
 
 class SC_DLLPUBLIC ColumnRemoveTransformation : public DataTransformation
 {
-    std::set<SCCOL> const maColumns;
+    std::set<SCCOL> maColumns;
 
 public:
 
@@ -75,8 +75,8 @@ public:
 
 class SC_DLLPUBLIC SplitColumnTransformation : public DataTransformation
 {
-    SCCOL const mnCol;
-    sal_Unicode const mcSeparator;
+    SCCOL mnCol;
+    sal_Unicode mcSeparator;
 
 public:
 
@@ -89,7 +89,7 @@ public:
 
 class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 {
-    std::set<SCCOL> const maColumns;
+    std::set<SCCOL> maColumns;
     OUString maMergeString;
 
 public:
@@ -103,7 +103,7 @@ public:
 
 class SortTransformation : public DataTransformation
 {
-    ScSortParam const maSortParam;
+    ScSortParam maSortParam;
 public:
 
     SortTransformation(const ScSortParam& rParam);
@@ -114,8 +114,8 @@ public:
 
 class SC_DLLPUBLIC TextTransformation : public DataTransformation
 {
-    std::set<SCCOL> const mnCol;
-    TEXT_TRANSFORM_TYPE const maType;
+    std::set<SCCOL> mnCol;
+    TEXT_TRANSFORM_TYPE maType;
 
     public:
     TextTransformation(const std::set<SCCOL>& nCol, const TEXT_TRANSFORM_TYPE rType);
@@ -127,8 +127,8 @@ class SC_DLLPUBLIC TextTransformation : public DataTransformation
 
 class SC_DLLPUBLIC AggregateFunction : public DataTransformation
 {
-    std::set<SCCOL> const maColumns;
-    AGGREGATE_FUNCTION const maType;
+    std::set<SCCOL> maColumns;
+    AGGREGATE_FUNCTION maType;
 
     public:
     AggregateFunction(const std::set<SCCOL>& rColumns, const AGGREGATE_FUNCTION rType);
@@ -140,9 +140,9 @@ class SC_DLLPUBLIC AggregateFunction : public DataTransformation
 
 class SC_DLLPUBLIC NumberTransformation : public DataTransformation
 {
-    std::set<SCCOL> const mnCol;
-    NUMBER_TRANSFORM_TYPE const maType;
-    int const maPrecision;
+    std::set<SCCOL> mnCol;
+    NUMBER_TRANSFORM_TYPE maType;
+    int maPrecision;
 
     public:
         NumberTransformation(const std::set<SCCOL>& nCol, const NUMBER_TRANSFORM_TYPE rType);
@@ -157,8 +157,8 @@ class SC_DLLPUBLIC NumberTransformation : public DataTransformation
 
 class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
 {
-    std::set<SCCOL> const mnCol;
-    OUString const msReplaceWith;
+    std::set<SCCOL> mnCol;
+    OUString msReplaceWith;
 
     public:
         ReplaceNullTransformation(const std::set<SCCOL>& nCol, const OUString& sReplaceWith);
@@ -170,8 +170,8 @@ class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
 
 class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
 {
-    std::set<SCCOL> const mnCol;
-    DATETIME_TRANSFORMATION_TYPE const maType;
+    std::set<SCCOL> mnCol;
+    DATETIME_TRANSFORMATION_TYPE maType;
 
     public:
         DateTimeTransformation(const std::set<SCCOL>& nCol,

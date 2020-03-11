@@ -78,7 +78,7 @@ typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 class ModuleData
 {
 friend class ModuleCollection;
-    OUString const aName;
+    OUString aName;
     std::unique_ptr<osl::Module> pInstance;
 public:
     ModuleData(const ModuleData&) = delete;

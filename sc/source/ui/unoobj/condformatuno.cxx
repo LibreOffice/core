@@ -76,8 +76,8 @@ const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
 
 struct ConditionEntryApiMap
 {
-    ScConditionMode const eMode;
-    sal_Int32 const nApiMode;
+    ScConditionMode eMode;
+    sal_Int32 nApiMode;
 };
 
 static ConditionEntryApiMap const aConditionEntryMap[] =
@@ -127,8 +127,8 @@ const SfxItemPropertyMapEntry* getColorScalePropSet()
 
 struct ColorScaleEntryTypeApiMap
 {
-    ScColorScaleEntryType const eType;
-    sal_Int32 const nApiType;
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType;
 };
 
 static ColorScaleEntryTypeApiMap const aColorScaleEntryTypeMap[] =
@@ -176,8 +176,8 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
 
 struct DataBarAxisApiMap
 {
-    databar::ScAxisPosition const ePos;
-    sal_Int32 const nApiPos;
+    databar::ScAxisPosition ePos;
+    sal_Int32 nApiPos;
 };
 
 static DataBarAxisApiMap const aDataBarAxisMap[] =
@@ -189,8 +189,8 @@ static DataBarAxisApiMap const aDataBarAxisMap[] =
 
 struct DataBarEntryTypeApiMap
 {
-    ScColorScaleEntryType const eType;
-    sal_Int32 const nApiType;
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType;
 };
 
 static DataBarEntryTypeApiMap const aDataBarEntryTypeMap[] =
@@ -227,8 +227,8 @@ const SfxItemPropertyMapEntry* getIconSetPropSet()
 
 struct IconSetTypeApiMap
 {
-    ScIconSetType const eType;
-    sal_Int32 const nApiType;
+    ScIconSetType eType;
+    sal_Int32 nApiType;
 };
 
 const IconSetTypeApiMap aIconSetApiMap[] =
@@ -256,8 +256,8 @@ const IconSetTypeApiMap aIconSetApiMap[] =
 
 struct IconSetEntryTypeApiMap
 {
-    ScColorScaleEntryType const eType;
-    sal_Int32 const nApiType;
+    ScColorScaleEntryType eType;
+    sal_Int32 nApiType;
 };
 
 static IconSetEntryTypeApiMap const aIconSetEntryTypeMap[] =
@@ -288,8 +288,8 @@ const SfxItemPropertyMapEntry* getCondDatePropSet()
 
 struct DateTypeApiMap
 {
-    condformat::ScCondFormatDateType const eType;
-    sal_Int32 const nApiType;
+    condformat::ScCondFormatDateType eType;
+    sal_Int32 nApiType;
 };
 
 static DateTypeApiMap const aDateTypeApiMap[] =

@@ -45,7 +45,7 @@ struct ScFuncDescCore
     /*
      * An opcode from include/formula/compiler.hxx
      */
-    sal_uInt16 const nOpCode;
+    sal_uInt16 nOpCode;
     /*
      * Pointer to list of strings
      */
@@ -53,7 +53,7 @@ struct ScFuncDescCore
     /*
      * Count of list of strings
      */
-    size_t const nResourceLen;
+    size_t nResourceLen;
     /*
      * 16-bit value:
      *
@@ -66,11 +66,11 @@ struct ScFuncDescCore
      * Bit 2: boolean flag whether function is hidden in the Function
      * Wizard unless used in an expression.
      */
-    sal_uInt16 const nFunctionFlags;
+    sal_uInt16 nFunctionFlags;
     /*
      * Function group (text, math, ...), one of ID_FUNCTION_GRP_...
      */
-    sal_uInt16 const nCategory;
+    sal_uInt16 nCategory;
     /*
      * Help ID, HID_FUNC_...
      */
@@ -82,12 +82,12 @@ struct ScFuncDescCore
      * paired parameters, or PAIRED_VAR_ARGS+number if number of fixed
      * parameters and variable paired arguments following.
      */
-    sal_uInt16 const nArgs;
+    sal_uInt16 nArgs;
     /*
      * For every parameter:
      *     Boolean flag whether the parameter is optional.
      */
-    sal_uInt8 const aOptionalArgs[7];
+    sal_uInt8 aOptionalArgs[7];
 };
 
 }

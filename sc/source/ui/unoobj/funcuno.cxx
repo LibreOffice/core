@@ -394,7 +394,7 @@ class SequencesContainer
     long& mrDocRow;
     bool mbOverflow;
     bool mbArgError;
-    ScDocument* const mpDoc;
+    ScDocument* mpDoc;
     ScTokenArray& mrTokenArr;
 
 public:

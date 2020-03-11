@@ -33,7 +33,7 @@ class ScDataProviderBaseControl
 
     OUString msApplyTooltip;
 
-    Link<ScDataProviderBaseControl*, void> const maImportCallback;
+    Link<ScDataProviderBaseControl*, void> maImportCallback;
 
     DECL_LINK(ProviderSelectHdl, weld::ComboBox&, void);
     DECL_LINK(IDEditHdl, weld::Entry&, void);
@@ -162,9 +162,9 @@ namespace {
 
 struct MenuData
 {
-    int const nMenuID;
+    int nMenuID;
     const char* aMenuName;
-    std::function<void(ScDataProviderDlg*)> const maCallback;
+    std::function<void(ScDataProviderDlg*)> maCallback;
 };
 
 MenuData aStartData[] = {

@@ -58,7 +58,7 @@ private:
 
     ScRangeListVector               m_aProtectedChartRangesVector;
 
-    OUString const maShellID;
+    OUString maShellID;
 
     void                InitDocShell();
     SdrOle2Obj* GetSingleObject();

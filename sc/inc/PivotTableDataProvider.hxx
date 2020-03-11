@@ -157,7 +157,7 @@ private:
 
     ScDocument*        m_pDocument;
     OUString           m_sPivotTableName;
-    SfxItemPropertySet const m_aPropSet;
+    SfxItemPropertySet m_aPropSet;
     bool               m_bIncludeHiddenCells;
 
     std::vector<std::vector<ValueAndFormat>> m_aCategoriesColumnOrientation;

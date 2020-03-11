@@ -39,7 +39,7 @@ public:
 private:
     Cache maHidden;
     Cache maFiltered;
-    ScDocument* const mpDoc;
+    ScDocument* mpDoc;
 };
 
 #endif

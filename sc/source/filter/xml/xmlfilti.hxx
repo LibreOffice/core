@@ -36,7 +36,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 {
     struct ConnStackItem
     {
-        bool const mbOr;
+        bool mbOr;
         int  mnCondCount;
         explicit ConnStackItem(bool bOr);
     };

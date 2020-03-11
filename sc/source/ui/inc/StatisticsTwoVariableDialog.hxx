@@ -55,7 +55,7 @@ protected:
     std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
     // Data
-    ScViewData* const         mViewData;
+    ScViewData*               mViewData;
     ScDocument&               mDocument;
 
     ScRange                   mVariable1Range;
@@ -73,8 +73,8 @@ private:
     std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
 
     formula::RefEdit*      mpActiveEdit;
-    ScAddress const            mCurrentAddress;
-    bool                       mDialogLostFocus;
+    ScAddress              mCurrentAddress;
+    bool                   mDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();

@@ -34,7 +34,7 @@ class ScDetectiveRefIter
 private:
     const ScDocument* mpDoc;
     formula::FormulaTokenArrayPlainIterator maIter;
-    ScAddress const aPos;
+    ScAddress aPos;
 public:
                 ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* pCell );
     bool        GetNextRef( ScRange& rRange );

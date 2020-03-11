@@ -258,7 +258,7 @@ class ExtCfDataBarRule : public WorksheetHelper
     };
     ExCfRuleModel maModel;
     RuleType mnRuleType;
-    ScDataBarFormatData* const mpTarget;
+    ScDataBarFormatData* mpTarget;
 public:
 
     ExtCfDataBarRule(ScDataBarFormatData* pTarget, const WorksheetHelper& rParent);
@@ -284,7 +284,7 @@ public:
 private:
     std::vector< std::unique_ptr<ScFormatEntry> > maEntries;
     std::vector<sal_Int32> maPriorities;
-    ScRangeList const maRange;
+    ScRangeList maRange;
 };
 
 typedef std::shared_ptr< CondFormat > CondFormatRef;

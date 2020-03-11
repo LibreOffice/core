@@ -23,11 +23,11 @@ class ScXMLEditAttributeMap
 public:
     struct Entry
     {
-        sal_uInt16 const nmXMLNS;
+        sal_uInt16 nmXMLNS;
         const char* mpXMLName;
         const char* mpAPIName;
-        sal_uInt16 const mnItemID;
-        sal_uInt8 const mnFlag;
+        sal_uInt16 mnItemID;
+        sal_uInt8 mnFlag;
     };
 
     ScXMLEditAttributeMap();

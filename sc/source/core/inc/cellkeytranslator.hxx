@@ -33,7 +33,7 @@ struct TransItem;
 struct ScCellKeyword
 {
     const char* mpName;
-    OpCode const meOpCode;
+    OpCode      meOpCode;
     const css::lang::Locale& mrLocale;
 
     ScCellKeyword(const char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);

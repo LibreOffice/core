@@ -40,13 +40,13 @@ private:
     vcl::Font           aBoldFont;
     bool                bBoldSet;
 
-    bool const          bVertical;              // Vertical = Row header
+    bool            bVertical;              // Vertical = Row header
 
     long            nWidth;
     long            nSmallWidth;
     long            nBigWidth;
 
-    SCCOLROW const  nSize;
+    SCCOLROW        nSize;
 
     SCCOLROW        nMarkStart;
     SCCOLROW        nMarkEnd;

@@ -275,9 +275,9 @@ enum XclFuncParamConv
  */
 struct XclFuncParamInfo
 {
-    XclFuncParamValidity  meValid;       /// Parameter validity.
-    XclFuncParamConv     meConv;         /// Token class conversion type.
-    bool                 mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
+    XclFuncParamValidity meValid;       /// Parameter validity.
+    XclFuncParamConv    meConv;         /// Token class conversion type.
+    bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
 };
 
 // Function data ==============================================================
@@ -310,14 +310,14 @@ const sal_uInt16 EXC_FUNCID_EXTERNCALL      = 255;
  */
 struct XclFunctionInfo
 {
-    OpCode              meOpCode;           /// Calc function opcode.
-    sal_uInt16          mnXclFunc;          /// Excel function index.
-    sal_uInt8 const           mnMinParamCount;    /// Minimum number of parameters.
-    sal_uInt8 const           mnMaxParamCount;    /// Maximum number of parameters.
-    sal_uInt8 const           mnRetClass;         /// Token class of the return value.
-    XclFuncParamInfo const    mpParamInfos[ EXC_FUNCINFO_PARAMINFO_COUNT ]; /// Information for all parameters.
-    sal_uInt8 const           mnFlags;            /// Additional flags (EXC_FUNCFLAG_* constants).
-    const char*               mpcMacroName;       /** Function name, if simulated by
+    OpCode               meOpCode;           /// Calc function opcode.
+    sal_uInt16           mnXclFunc;          /// Excel function index.
+    sal_uInt8            mnMinParamCount;    /// Minimum number of parameters.
+    sal_uInt8            mnMaxParamCount;    /// Maximum number of parameters.
+    sal_uInt8            mnRetClass;         /// Token class of the return value.
+    XclFuncParamInfo     mpParamInfos[ EXC_FUNCINFO_PARAMINFO_COUNT ]; /// Information for all parameters.
+    sal_uInt8            mnFlags;            /// Additional flags (EXC_FUNCFLAG_* constants).
+    const char*          mpcMacroName;       /** Function name, if simulated by
                                                 a macro call (UTF-8) EXC_FUNCFLAG_ADDINEQUIV is 0;
                                                 or programmatical add-in name
                                                 if stored as such and
@@ -411,7 +411,7 @@ public:
 private:
     ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
     ScfUInt8Vec         maExtDataVec;   /// Byte vector containing extended data (arrays, stacked NLRs).
-    bool const          mbVolatile;     /// True = Formula contains volatile function.
+    bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
 typedef std::shared_ptr< XclTokenArray > XclTokenArrayRef;

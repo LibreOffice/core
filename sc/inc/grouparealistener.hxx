@@ -31,8 +31,8 @@ class FormulaGroupAreaListener final : public SvtListener
     const ScColumn* mpColumn;
     SCROW mnTopCellRow;
     SCROW mnGroupLen;
-    bool const mbStartFixed;
-    bool const mbEndFixed;
+    bool mbStartFixed;
+    bool mbEndFixed;
 
 public:
 

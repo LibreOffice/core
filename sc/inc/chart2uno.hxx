@@ -144,7 +144,7 @@ public:
 private:
 
     ScDocument*                 m_pDocument;
-    SfxItemPropertySet const    m_aPropSet;
+    SfxItemPropertySet          m_aPropSet;
     bool                        m_bIncludeHiddenCells;
 };
 
@@ -374,7 +374,7 @@ private:
     std::vector<ScTokenRef>     m_aTokens;
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
-    SfxItemPropertySet const    m_aPropSet;
+    SfxItemPropertySet          m_aPropSet;
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;
 

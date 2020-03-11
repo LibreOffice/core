@@ -253,7 +253,7 @@ class ScLabelRangeObj final : public ::cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    bool const              bColumn;
+    bool                    bColumn;
     ScRange                 aRange;         ///< criterion to find range
 
 private:
@@ -286,7 +286,7 @@ class ScLabelRangesObj final : public ::cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    bool const              bColumn;
+    bool                    bColumn;
 
     ScLabelRangeObj*        GetObjectByIndex_Impl(size_t nIndex);
 

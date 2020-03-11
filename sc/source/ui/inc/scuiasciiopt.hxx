@@ -52,7 +52,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
 
     rtl_TextEncoding            meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
-    ScImportAsciiCall const     meCall;             /// How the dialog is called (see asciiopt.hxx)
+    ScImportAsciiCall           meCall;             /// How the dialog is called (see asciiopt.hxx)
     bool                        mbDetectSpaceSep;   /// Whether to detect a possible space separator.
 
     std::unique_ptr<weld::Label> mxFtCharSet;

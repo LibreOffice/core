@@ -54,14 +54,14 @@ class SC_DLLPUBLIC ScImportExport
     OUString    aNonConvertibleChars;
     OUString    maFilterOptions;
     sal_uInt32  nSizeLimit;
-    SCROW const nMaxImportRow;
+    SCROW       nMaxImportRow;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
     bool        bFormulas;              // Formula in Text?
     bool        bIncludeFiltered;       // include filtered rows? (default true)
     bool        bAll;                   // no selection
     bool        bSingle;                // Single selection
-    bool const  bUndo;                  // with Undo?
+    bool        bUndo;                  // with Undo?
     bool        bOverflowRow;           // too many rows
     bool        bOverflowCol;           // too many columns
     bool        bOverflowCell;          // too much data for a cell

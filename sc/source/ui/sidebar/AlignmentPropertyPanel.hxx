@@ -98,7 +98,7 @@ private:
     bool                                        mbSettingToggles : 1;
 
     vcl::EnumContext                            maContext;
-    SfxBindings* const                          mpBindings;
+    SfxBindings*                                mpBindings;
 
     DECL_LINK( MFLeftIndentMdyHdl, weld::MetricSpinButton&, void );
     DECL_LINK( CBOXMergnCellClkHdl, weld::ToggleButton&, void );

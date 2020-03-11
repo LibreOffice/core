@@ -187,7 +187,7 @@ struct TransItem
 {
     const sal_Unicode*  from;
     const char*         to;
-    OpCode const        func;
+    OpCode              func;
 };
 
 void ScCellKeywordTranslator::init()

@@ -26,7 +26,7 @@ class ScUndoCut;
 class FormulaGrammarSwitch
 {
     ScDocument* mpDoc;
-    formula::FormulaGrammar::Grammar const meOldGrammar;
+    formula::FormulaGrammar::Grammar meOldGrammar;
 public:
     FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
     ~FormulaGrammarSwitch();

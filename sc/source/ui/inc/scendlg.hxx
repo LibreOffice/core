@@ -38,8 +38,8 @@ public:
                           Color& rColor, ScScenarioFlags &rFlags) const;
 
 private:
-    const OUString      aDefScenarioName;
-    bool const                bIsEdit;
+    OUString            aDefScenarioName;
+    bool                bIsEdit;
     std::unique_ptr<weld::Entry> m_xEdName;
     std::unique_ptr<weld::TextView> m_xEdComment;
     std::unique_ptr<weld::CheckButton> m_xCbShowFrame;

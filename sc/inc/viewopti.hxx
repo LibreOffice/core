@@ -128,7 +128,7 @@ public:
     const ScViewOptions&    GetViewOptions() const { return theOptions; }
 
 private:
-    ScViewOptions const   theOptions;
+    ScViewOptions   theOptions;
 };
 
 // CfgItem for View options

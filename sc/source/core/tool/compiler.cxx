@@ -4449,7 +4449,7 @@ namespace {
 
 class ExternalFileInserter
 {
-    ScAddress const maPos;
+    ScAddress maPos;
     ScExternalRefManager& mrRefMgr;
 public:
     ExternalFileInserter(const ScAddress& rPos, ScExternalRefManager& rRefMgr) :

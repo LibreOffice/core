@@ -47,8 +47,8 @@ private:
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;
 
-    SCTAB const                 mnScTab;    // table number SC document
-    sal_uInt16 const            nExcTab;    // table number Excel document
+    SCTAB                       mnScTab;    // table number SC document
+    sal_uInt16                  nExcTab;    // table number Excel document
 
     XclExpNoteListRef           mxNoteList;
 

@@ -34,7 +34,7 @@ const size_t MAXQUERY = 8;
 
 class FindByField
 {
-    SCCOLROW const mnField;
+    SCCOLROW mnField;
 public:
     explicit FindByField(SCCOLROW nField) : mnField(nField) {}
     bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
