@@ -18,6 +18,10 @@
 #include <svl/eitem.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+
+#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
     : SfxDialogController(pParent, "modules/swriter/ui/watermarkdialog.ui", "WatermarkDialog")
@@ -30,6 +34,12 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
     , m_xColor(new ColorListBox(m_xBuilder->weld_menu_button("Color"), m_xDialog.get()))
 {
     InitFields();
+
+    if (IS_MOBILE)
+    {
+        m_xBuilder->weld_label("ColorLabel")->hide();
+        m_xColor->hide();
+    }
 }
 
 SwWatermarkDialog::~SwWatermarkDialog()
