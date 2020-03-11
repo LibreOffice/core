@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8c552cc_cec9c75d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 2569,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-11T10:23:18Z",
+      "side": 1,
+      "message": "Cannot change this line since it would be correct for the menu. How about using the tooltiplabel?",
+      "revId": "827b451f1bdeca6a26436b76fd1e9909a4d66a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
