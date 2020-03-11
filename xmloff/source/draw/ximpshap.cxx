@@ -87,6 +87,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 
 using namespace ::com::sun::star;
@@ -3774,8 +3775,7 @@ void SdXMLCustomShapeContext::EndElement()
             if (aI != maCustomShapeGeometry.end())
             {
                 beans::PropertyValue& rItem = *aI;
-                bool bMirroredX;
-                rItem.Value >>= bMirroredX;
+                bool bMirroredX = *o3tl::doAccess<bool>(rItem.Value);
                 rItem.Value <<= !bMirroredX;
                 rItem.Handle = -1;
                 rItem.State = beans::PropertyState_DIRECT_VALUE;
@@ -3801,8 +3801,7 @@ void SdXMLCustomShapeContext::EndElement()
             if (aI != maCustomShapeGeometry.end())
             {
                 beans::PropertyValue& rItem = *aI;
-                bool bMirroredY;
-                rItem.Value >>= bMirroredY;
+                bool bMirroredY = *o3tl::doAccess<bool>(rItem.Value);
                 rItem.Value <<= !bMirroredY;
                 rItem.Handle = -1;
                 rItem.State = beans::PropertyState_DIRECT_VALUE;
