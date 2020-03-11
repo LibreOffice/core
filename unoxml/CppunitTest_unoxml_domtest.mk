@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,unoxml_domtest, \
     cppu \
     cppuhelper \
     sal \
+    sax \
     test \
     unotest \
 ))

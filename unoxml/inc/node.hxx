@@ -50,13 +50,13 @@ namespace DOM
     struct Context
     {
         Context( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& i_xHandler,
-                 const css::uno::Reference< css::xml::sax::XFastTokenHandler >& i_xTokenHandler ) :
+                 sax_fastparser::FastTokenHandlerBase* pTokenHandler ) :
             maNamespaces( 1, std::vector<Namespace>() ),
             maNamespaceMap(101),
-            mxAttribList(new sax_fastparser::FastAttributeList(i_xTokenHandler)),
+            mxAttribList(new sax_fastparser::FastAttributeList(pTokenHandler)),
             mxCurrentHandler(i_xHandler),
             mxDocHandler(i_xHandler),
-            mxTokenHandler(i_xTokenHandler)
+            mxTokenHandler(pTokenHandler)
         {}
 
         struct Namespace
@@ -76,7 +76,7 @@ namespace DOM
         ::rtl::Reference<sax_fastparser::FastAttributeList> mxAttribList;
         css::uno::Reference<css::xml::sax::XFastContextHandler>      mxCurrentHandler;
         css::uno::Reference<css::xml::sax::XFastDocumentHandler>     mxDocHandler;
-        css::uno::Reference<css::xml::sax::XFastTokenHandler>        mxTokenHandler;
+        rtl::Reference<sax_fastparser::FastTokenHandlerBase>         mxTokenHandler;
     };
 
     void pushContext(Context& io_rContext);

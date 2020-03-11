@@ -251,8 +251,7 @@ void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Refe
         CPPUNIT_ASSERT(false);
 }
 
-class DummyTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >,
-                          public sax_fastparser::FastTokenHandlerBase
+class DummyTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
     const static OString tokens[];
