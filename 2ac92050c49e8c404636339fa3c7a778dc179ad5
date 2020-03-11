@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aa60a35_fba55382",
+        "filename": "editeng/source/editeng/editobj2.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-11T16:14:50Z",
+      "side": 1,
+      "message": "this seems too narrow; the caller in impedit4.cxx:1087 passes in \"long\" and various other paperwidth across the repo are sal_Int32 so i guess either sal_Int32 or long should work here or sal_uInt32 because it shouldn\u0027t be negative.",
+      "revId": "2ac92050c49e8c404636339fa3c7a778dc179ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
