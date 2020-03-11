@@ -3064,11 +3064,14 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
         GtkStyleContext *pCStyle = makeContext (pCPath, nullptr);
+        aContextState.save(pCStyle);
 
         GdkRGBA tooltip_bg_color, tooltip_fg_color;
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_fg_color);
         gtk_style_context_get_background_color(pCStyle, gtk_style_context_get_state(pCStyle), &tooltip_bg_color);
+
+        aContextState.restore();
         g_object_unref( pCStyle );
 
         aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
@@ -3081,6 +3084,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
         gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
         GtkStyleContext *pCStyle = makeContext( pCPath, nullptr );
+        aContextState.save(pCStyle);
 
         // highlighting colors
         style_context_set_state(pCStyle, GTK_STATE_FLAG_SELECTED);
@@ -3120,6 +3124,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
             aShadowColor.DecreaseLuminance(64);
         aStyleSet.SetShadowColor(aShadowColor);
 
+        aContextState.restore();
         g_object_unref( pCStyle );
 
         // Tab colors
