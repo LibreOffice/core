@@ -1,4 +1,4 @@
-stocservice_lib = shared_library('stocservices',
+stocservice_lib = shared_library('stocserviceslo',
     'source/typeconv/convert.cxx',
     'source/uriproc/ExternalUriReferenceTranslator.cxx',
     'source/uriproc/UriReference.cxx',

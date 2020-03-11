@@ -1,4 +1,4 @@
-package2_lib = shared_library('package2lo',
+package2_lib = shared_library('package2',
   'source/manifest/ManifestExport.cxx',
   'source/manifest/ManifestImport.cxx',
   'source/manifest/ManifestReader.cxx',

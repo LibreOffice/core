@@ -1,4 +1,4 @@
-unoxml_lib = shared_library('unoxml',
+unoxml_lib = shared_library('unoxmllo',
   'source/dom/node.cxx',
   'source/dom/document.cxx',
   'source/dom/element.cxx',

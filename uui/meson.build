@@ -1,4 +1,4 @@
-uui_lib = shared_library('uui',
+uui_lib = shared_library('uuilo',
   'source/alreadyopen.cxx',
   'source/authfallbackdlg.cxx',
   'source/filechanged.cxx',
