@@ -16,6 +16,24 @@
       "revId": "6b483324e5db7fef78865d402aa5d29984c71512",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2f2dfac_93cd99b0",
+        "filename": "vcl/uiconfig/ui/printdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-03-11T22:52:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c2c4be4_980fb3af",
+      "revId": "6b483324e5db7fef78865d402aa5d29984c71512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
