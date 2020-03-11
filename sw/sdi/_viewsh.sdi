@@ -811,6 +811,13 @@ interface BaseTextEditView
         Export = FALSE;
     ]
 
+    FN_VIEW_SHOW_WHITESPACE
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
     SID_TOGGLE_NOTES
     [
         ExecMethod = ExecViewOptions ;
