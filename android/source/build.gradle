@@ -159,6 +159,13 @@ task copyAssets(type: Copy) {
     from("${liboExampleDocument}") {
         rename ".*", "example.odt"
     }
+
+    // include icons
+    into 'assets/share/config'
+    from ("${liboInstdir}/share/config") {
+        includes = ["images_**.zip", ]
+    }
+
     into('program') {
         from "${liboInstdir}/program"
         includes = ['services.rdb', 'services/services.rdb']
