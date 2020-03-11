@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 
-#include <comphelper/lok.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
@@ -335,7 +334,6 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
     ScAddress aCursor( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
                         GetViewData()->GetTabNo() );
-    bool isLOKNoTiledAnnotations = comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
@@ -394,8 +392,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
             case SID_EDIT_POSTIT:
                 {
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                    // Allow editing annotation by Id (without selecting the cell) for LOK
-                    bDisable = !(isLOKNoTiledAnnotations || rDoc.GetNote(aPos));
+                    bDisable = rDoc.GetNote(aPos) == nullptr;
                 }
                 break;
         }
