@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfaa3952_58e33a65",
+        "filename": "vbahelper/source/vbahelper/vbashaperange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-11T16:20:56Z",
+      "side": 1,
+      "message": "that\u0027s not very informative, the index isn\u0027t passed in by the caller - the length this compares to is 1 so what it really means is that there is no shape in the range, the range is empty",
+      "revId": "b0f23bdbf8e50308be44d5f86c6dbe0732e41ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
