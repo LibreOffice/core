@@ -1362,7 +1362,7 @@ void SvImpLBox::ShowVerSBar()
             m_pView->nFocusWidth = -1;
             AdjustScrollBars( m_aOutputSize );
             if( GetUpdateMode() )
-                m_aVerSBar->Update();
+                m_aVerSBar->Invalidate();
         }
     }
     else
@@ -1385,7 +1385,7 @@ void SvImpLBox::ShowVerSBar()
             m_pView->nFocusWidth = -1;
             AdjustScrollBars( m_aOutputSize );
             if( GetUpdateMode() )
-                m_aHorSBar->Update();
+                m_aHorSBar->Invalidate();
         }
         else
         {
