@@ -6120,7 +6120,7 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
 
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                        const OUString& rUIFile)
-    : weld::Builder(rUIFile)
+    : weld::Builder()
     , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, OString(),
                                 css::uno::Reference<css::frame::XFrame>(), false))
 {
