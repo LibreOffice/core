@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>sun</LangID>
+      <DefaultName>Sunda</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ID</CountryID>
+      <DefaultName>Indonesia</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="id_ID"/>
+  <LC_FORMAT ref="id_ID" replaceFrom="[CURRENCY]" replaceTo="[$Rp-6A8]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Aha</DefaultAbbrvName>
+          <DefaultFullName>Ahad</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Sen</DefaultAbbrvName>
+          <DefaultFullName>Senén</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Sal</DefaultAbbrvName>
+          <DefaultFullName>Salasa</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Reb</DefaultAbbrvName>
+          <DefaultFullName>Rebo</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Kem</DefaultAbbrvName>
+          <DefaultFullName>Kemis</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Jum</DefaultAbbrvName>
+          <DefaultFullName>Juma'ah</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sap</DefaultAbbrvName>
+          <DefaultFullName>Saptu</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>Januari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Péb</DefaultAbbrvName>
+          <DefaultFullName>Pébruari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>Maret</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>April</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Méi</DefaultAbbrvName>
+          <DefaultFullName>Méi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>Juni</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>Juli</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Agu</DefaultAbbrvName>
+          <DefaultFullName>Agustus</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>Séptémber</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Okt</DefaultAbbrvName>
+          <DefaultFullName>Oktober</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nop</DefaultAbbrvName>
+          <DefaultFullName>Nopémber</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dés</DefaultAbbrvName>
+          <DefaultFullName>Désémber</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>SM</DefaultAbbrvName>
+          <DefaultFullName>Saacan Maséhi</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>M</DefaultAbbrvName>
+          <DefaultFullName>Maséhi</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="hijri" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Ah</DefaultAbbrvName>
+          <DefaultFullName>Ahad</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Sen</DefaultAbbrvName>
+          <DefaultFullName>Senén</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Sal</DefaultAbbrvName>
+          <DefaultFullName>Salasa</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Reb</DefaultAbbrvName>
+          <DefaultFullName>Reboء</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Kem</DefaultAbbrvName>
+          <DefaultFullName>Kemis</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Jum</DefaultAbbrvName>
+          <DefaultFullName>Juma'ah</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sap</DefaultAbbrvName>
+          <DefaultFullName>Saptu</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Muharam</DefaultAbbrvName>
+          <DefaultFullName>Muharam</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Sapar</DefaultAbbrvName>
+          <DefaultFullName>Sapar</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mulud</DefaultAbbrvName>
+          <DefaultFullName>Mulud</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Silih Mulud</DefaultAbbrvName>
+          <DefaultFullName>Silih Mulud</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Jumadil Awal</DefaultAbbrvName>
+          <DefaultFullName>Jumadil Awal</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jumadil Akhir</DefaultAbbrvName>
+          <DefaultFullName>Jumadil Akhir</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Rajab</DefaultAbbrvName>
+          <DefaultFullName>Rajab</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Ruwah</DefaultAbbrvName>
+          <DefaultFullName>Ruwah</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Puasa</DefaultAbbrvName>
+          <DefaultFullName>Puasa</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Syawal</DefaultAbbrvName>
+          <DefaultFullName>Syawal</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Hapit</DefaultAbbrvName>
+          <DefaultFullName>Hapit</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Rayagung</DefaultAbbrvName>
+          <DefaultFullName>Rayagung</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>SaméméhHijrah</EraID>
+          <DefaultAbbrvName>MH</DefaultAbbrvName>
+          <DefaultFullName>Saméméh Hijrah</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>SaatosHijrah</EraID>
+          <DefaultAbbrvName>AH</DefaultAbbrvName>
+          <DefaultFullName>Saatos Hijrah</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>mon</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="id_ID"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>leres</trueWord>
+      <falseWord>lepat</falseWord>
+      <quarter1Word>saparapat kahiji</quarter1Word>
+      <quarter2Word>saparapat kadua</quarter2Word>
+      <quarter3Word>saparapat katilu</quarter3Word>
+      <quarter4Word>saparapat kaopat</quarter4Word>
+      <aboveWord>luhur</aboveWord>
+      <belowWord>handap</belowWord>
+      <quarter1Abbreviation>S1</quarter1Abbreviation>
+      <quarter2Abbreviation>S2</quarter2Abbreviation>
+      <quarter3Abbreviation>S3</quarter3Abbreviation>
+      <quarter4Abbreviation>S4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
