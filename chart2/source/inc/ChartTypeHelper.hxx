@@ -78,6 +78,9 @@ public:
     static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const css::uno::Reference<
         css::chart2::XChartType >& xChartType );
 
+    static bool shouldLabelNumberFormatKeyBeDetectedFromYAxis( const css::uno::Reference<
+        css::chart2::XChartType >& xChartType );
+
     static bool isSupportingOnlyDeepStackingFor3D( const css::uno::Reference< css::chart2::XChartType >& xChartType );
 };
 
