@@ -106,7 +106,7 @@ public:
 
 class OOX_DLLPUBLIC CryptoHash final : public Crypto
 {
-    sal_Int32 const mnHashSize;
+    sal_Int32 mnHashSize;
 public:
     CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType);
     bool update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength = 0);

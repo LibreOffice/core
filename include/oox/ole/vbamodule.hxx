@@ -92,12 +92,12 @@ private:
     OUString            maName;
     OUString            maStreamName;
     OUString            maDocString;
-    rtl_TextEncoding const meTextEnc;
+    rtl_TextEncoding    meTextEnc;
     sal_Int32           mnType;
     sal_uInt32          mnOffset;
     bool                mbReadOnly;
     bool                mbPrivate;
-    bool const          mbExecutable;
+    bool                mbExecutable;
 };
 
 

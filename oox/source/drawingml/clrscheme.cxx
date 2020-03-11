@@ -60,7 +60,7 @@ struct find_by_token
     }
 
 private:
-    sal_Int32 const m_token;
+    sal_Int32 m_token;
 };
 
 }

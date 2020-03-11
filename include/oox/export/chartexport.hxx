@@ -79,9 +79,9 @@ enum AxesType
 };
 
 struct AxisIdPair{
-    AxesType const nAxisType;
-    sal_Int32 const nAxisId;
-    sal_Int32 const nCrossAx;
+    AxesType nAxisType;
+    sal_Int32 nAxisId;
+    sal_Int32 nCrossAx;
 
     AxisIdPair(AxesType nType, sal_Int32 nId, sal_Int32 nAx)
         : nAxisType(nType)
@@ -97,7 +97,7 @@ public:
     typedef ::std::vector< AxisIdPair > AxisVector;
 
 private:
-    sal_Int32 const     mnXmlNamespace;
+    sal_Int32           mnXmlNamespace;
     sal_Int32           mnSeriesCount;
     css::uno::Reference< css::frame::XModel > mxChartModel;
     css::uno::Reference< css::chart::XDiagram > mxDiagram;

@@ -798,8 +798,8 @@ private:
     typedef ::std::map< OUString, NameListRef >      NameListMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    StorageRef const    mxRootStrg;
-    OUString const      maSysFileName;
+    StorageRef          mxRootStrg;
+    OUString            maSysFileName;
     ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
@@ -1182,8 +1182,8 @@ private:
 private:
     struct PreferredItem
     {
-        OUString const maName;
-        bool const          mbStorage;
+        OUString     maName;
+        bool                mbStorage;
 
         explicit     PreferredItem( const OUString& rName, bool bStorage ) :
                                 maName( rName ), mbStorage( bStorage ) {}
