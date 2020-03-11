@@ -85,8 +85,7 @@ enum SwXMLTextBlockToken : sal_Int32
     TEXT_P = FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_P
 };
 
-class SwXMLTextBlockTokenHandler : public
-        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
+class SwXMLTextBlockTokenHandler :
         public sax_fastparser::FastTokenHandlerBase
 {
 public:
@@ -112,8 +111,7 @@ enum SwXMLBlockListToken : sal_Int32
     UNFORMATTED_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_UNFORMATTED_TEXT
 };
 
-class SwXMLBlockListTokenHandler : public
-        cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >,
+class SwXMLBlockListTokenHandler :
         public sax_fastparser::FastTokenHandlerBase
 {
 public:
