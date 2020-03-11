@@ -161,9 +161,11 @@ task copyAssets(type: Copy) {
     }
 
     // include icons
-    into 'assets/share/config'
-    from ("${liboInstdir}/share/config") {
-        includes = ["images_**.zip", ]
+    into ('share') {
+        into ('config') {
+            from ("${liboInstdir}/share/config")
+            includes = ['images_**.zip']
+        }
     }
 
     into('program') {
