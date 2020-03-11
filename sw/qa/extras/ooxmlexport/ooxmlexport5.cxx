@@ -121,12 +121,30 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79008, "fdo79008.docx")
     /* File crashing while saving in LO.
      * Check if document.xml file is created after fix
      */
-     parseExport("word/document.xml");
+    parseExport("word/document.xml");
+
+    // Read-only is set, but it is not enforced, so it should be off...
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf120852_readOnlyProtection, "tdf120852_readOnlyProtection.docx")
+{
+    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    {
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", "1");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", "readOnly");
+    }
+
+    // Read-only is set, so Enforcement must enable it.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120852_readOnlyUnProtected, "tdf120852_readOnlyUnProtected.docx")
 {
-
     // Readonly is not enforced, just a suggestion,
     // so when a section is protected, the document should enable forms protection.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

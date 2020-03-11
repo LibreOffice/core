@@ -1083,12 +1083,13 @@ void DocxExport::WriteSettings()
     // Has themeFontLang information
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
-    bool hasProtectionProperties = false;
+    bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
     bool bWriterWantsToProtectForm = false;
     bool bWriterWantsToProtectRedline = false;
     bool bHasRedlineProtectionKey = false;
     bool bHasDummyRedlineProtectionKey = false;
+    bool bReadOnlyStatusUnchanged = true;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if ( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
          m_pSections->DocumentIsProtected() )
@@ -1236,18 +1237,32 @@ void DocxExport::WriteSettings()
                             pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
                             if ( nToken == XML_edit && sValue == "trackedChanges" )
                                 bIsProtectionTrackChanges = true;
+                            else if ( nToken == XML_edit && sValue == "readOnly" )
+                            {
+                                // Ignore the case where read-only was not enforced, but now is. That is handled by _MarkAsFinal
+                                bReadOnlyStatusUnchanged = m_pDoc->GetDocShell()->IsSecurityOptOpenReadOnly();
+                            }
                             else if ( nToken == XML_enforcement )
                                 bEnforced = sValue.toBoolean();
                         }
                     }
 
                     // we have document protection from input DOCX file
-                    // and in the case of change tracking protection, we didn't modify it
-                    hasProtectionProperties = !bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey;
-                    // use grabbag if still valid/enforced
-                    // or leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
-                    hasProtectionProperties &= bEnforced || !bWriterWantsToProtect;
-                    if ( hasProtectionProperties )
+                    if ( !bEnforced )
+                    {
+                        // Leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
+                        bUseGrabBagProtection = !bWriterWantsToProtect;
+                    }
+                    else
+                    {
+                        // Check if the grabbag protection is still valid
+                        // In the case of change tracking protection, we didn't modify it
+                        // and in the case of read-only, we didn't modify it.
+                        bUseGrabBagProtection = (!bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey)
+                                                && bReadOnlyStatusUnchanged;
+                    }
+
+                    if ( bUseGrabBagProtection )
                     {
                         sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
                         pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
@@ -1276,7 +1291,7 @@ void DocxExport::WriteSettings()
 
     WriteDocVars(pFS);
 
-    if (! hasProtectionProperties)
+    if ( !bUseGrabBagProtection )
     {
         // Protect form - highest priority
         // Section-specific write protection

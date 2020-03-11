@@ -6640,6 +6640,8 @@ void DomainMapper_Impl::ApplySettingsTable()
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
             if( m_pSettingsTable->GetProtectForm() )
                 xSettings->setPropertyValue("ProtectForm", uno::makeAny( true ));
+            if( m_pSettingsTable->GetReadOnly() )
+                xSettings->setPropertyValue("LoadReadonly", uno::makeAny( true ));
         }
         catch(const uno::Exception&)
         {
