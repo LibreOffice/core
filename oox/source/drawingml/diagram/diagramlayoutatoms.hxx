@@ -213,7 +213,7 @@ private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
     sal_Int32 getNodeCount(const dgm::Point* pPresPoint) const;
 
-    bool const    mIsElse;
+    bool          mIsElse;
     IteratorAttr  maIter;
     ConditionAttr maCond;
 };
@@ -285,7 +285,7 @@ public:
         { return mpShapeTemplate; }
 
 private:
-    ShapePtr const mpShapeTemplate;
+    ShapePtr mpShapeTemplate;
 };
 
 typedef std::shared_ptr< ShapeAtom > ShapeAtomPtr;

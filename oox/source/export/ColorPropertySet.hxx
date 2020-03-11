@@ -75,10 +75,10 @@ protected:
 
 private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
-    OUString const   m_aColorPropName;
+    OUString         m_aColorPropName;
     ::Color          m_nColor;
-    bool const       m_bIsFillColor;
-    ::Color const    m_nDefaultColor;
+    bool             m_bIsFillColor;
+    ::Color          m_nDefaultColor;
 };
 
 } //  namespace chart

@@ -105,7 +105,7 @@ private:
     virtual void        attachMacro( const OUString& rScriptUrl ) = 0;
 
 private:
-    OUString const maMacroName;
+    OUString     maMacroName;
 };
 
 typedef std::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;

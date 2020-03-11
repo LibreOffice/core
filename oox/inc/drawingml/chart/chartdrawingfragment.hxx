@@ -67,7 +67,7 @@ private:
     AnchorPosModel      maFrom;             /// Top-left position relative to chart object.
     AnchorPosModel      maTo;               /// Bottom-right position relative to chart object.
     AnchorSizeModel     maSize;             /// Shape size, if anchor has absolute size.
-    bool const          mbRelSize;          /// True = relative size, false = absolute size.
+    bool                mbRelSize;          /// True = relative size, false = absolute size.
 };
 
 /** Handler for a chart drawing fragment (c:userShapes root element).
@@ -94,7 +94,7 @@ private:
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     std::shared_ptr< ShapeAnchor > mxAnchor;    /// Current anchor of top-level shape.
     EmuRectangle        maChartRectEmu;         /// Position and size of the chart object for embedded shapes (in EMUs).
-    bool const          mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
+    bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };
 
 

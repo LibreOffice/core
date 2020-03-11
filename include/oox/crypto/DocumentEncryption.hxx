@@ -31,7 +31,7 @@ class DocumentEncryption
 private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
-    OUString const maPassword;
+    OUString maPassword;
 
     Standard2007Engine mEngine;
 

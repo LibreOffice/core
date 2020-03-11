@@ -661,7 +661,9 @@ ComCtlModelBase::ComCtlModelBase( sal_uInt32 nDataPartId5, sal_uInt32 nDataPartI
     mnFlags( 0 ),
     mnVersion( nVersion ),
     mnDataPartId5( nDataPartId5 ),
-    mnDataPartId6( nDataPartId6 )
+    mnDataPartId6( nDataPartId6 ),
+    mbCommonPart( true ),
+    mbComplexPart( true )
 {
 }
 
@@ -671,13 +673,15 @@ bool ComCtlModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     if( importSizePart( rInStrm ) && readPartHeader( rInStrm, getDataPartId(), mnVersion ) )
     {
         // if flags part exists, the first int32 of the data part contains its size
-        sal_uInt32 nCommonPartSize = rInStrm.readuInt32();
+        sal_uInt32 nCommonPartSize = 0;
+        if (mbCommonPart)
+            nCommonPartSize = rInStrm.readuInt32();
         // implementations must read the exact amount of data, stream must point to its end afterwards
         importControlData( rInStrm );
         // read following parts
         if( !rInStrm.isEof() &&
-            importCommonPart( rInStrm, nCommonPartSize ) &&
-            importComplexPart( rInStrm ) )
+            (!mbCommonPart || importCommonPart( rInStrm, nCommonPartSize )) &&
+            (!mbComplexPart || importComplexPart( rInStrm )) )
         {
             return !rInStrm.isEof();
         }
@@ -687,7 +691,8 @@ bool ComCtlModelBase::importBinaryModel( BinaryInputStream& rInStrm )
 
 void ComCtlModelBase::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
-    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, COMCTL_COMMON_ENABLED ) );
+    if( mbCommonPart )
+        rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, COMCTL_COMMON_ENABLED ) );
     ControlModelBase::convertProperties( rPropMap, rConv );
 }
 

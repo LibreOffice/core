@@ -145,7 +145,7 @@ struct ConverterData
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;
-    awt::Size const          maSize;
+    awt::Size                maSize;
 
     explicit            ConverterData(
                             XmlFilterBase& rFilter,

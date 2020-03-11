@@ -339,7 +339,7 @@ private:
     const GraphicHelper& mrGraphicHelper;
     mutable PropertySet maAddressConverter;
     mutable PropertySet maRangeConverter;
-    bool const          mbDefaultColorBgr;
+    bool                mbDefaultColorBgr;
 };
 
 
@@ -422,8 +422,10 @@ protected:
     const sal_uInt16    mnVersion;          ///< Current version of the ComCtl control model.
 
 private:
-    sal_uInt32 const    mnDataPartId5;      ///< Identifier for version 5.0 control data.
-    sal_uInt32 const    mnDataPartId6;      ///< Identifier for version 6.0 control data.
+    sal_uInt32          mnDataPartId5;      ///< Identifier for version 5.0 control data.
+    sal_uInt32          mnDataPartId6;      ///< Identifier for version 6.0 control data.
+    bool                mbCommonPart;       ///< True = the COMCTL_COMMONDATA part exists.
+    bool                mbComplexPart;      ///< True = the COMCTL_COMPLEXDATA part exists.
 };
 
 
@@ -496,7 +498,7 @@ public: // direct access needed for legacy VML drawing controls
     AxFontData          maFontData;         ///< The font settings.
 
 private:
-    bool const          mbSupportsAlign;    ///< True = UNO model supports Align property.
+    bool                mbSupportsAlign;    ///< True = UNO model supports Align property.
 };
 
 
@@ -826,7 +828,7 @@ public: // direct access needed for legacy VML drawing controls
     sal_Int32           mnPicAlign;         ///< Anchor position of the picture.
     sal_Int32           mnPicSizeMode;      ///< Clip, stretch, zoom.
     bool                mbPicTiling;        ///< True = picture is repeated.
-    bool const          mbFontSupport;      ///< True = control supports the font property.
+    bool                mbFontSupport;      ///< True = control supports the font property.
 };
 
 
@@ -978,7 +980,7 @@ private:
                         createXForm();
 
 private:
-    ControlConverter const                                 maControlConv;
+    ControlConverter                                       maControlConv;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxModelFactory;
     css::uno::Reference< css::form::XFormsSupplier >       mxFormsSupp;
     css::uno::Reference< css::container::XIndexContainer > mxFormIC;
