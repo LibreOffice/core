@@ -149,6 +149,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
     CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    checkCurrentCell(0, 0);
+    pDoc->SetString(ScAddress(0, 1, 0), "=ROW(A3)");
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    checkCurrentCell(0, 2);
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
+
+    //Without the fix, it would be 3.0
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

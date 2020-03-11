@@ -283,22 +283,4 @@ class CalcRows(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_tdf83901_row_insert_after(self):
-        #Bug 83901 - ROW() value is not updated if row is inserted after
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-
-        #- A2 = ROW(A3)
-        enter_text_to_cell(gridwin, "A2", "=ROW(A3)")
-        #- Insert a row between rows 2 and 3 by right-clicking on row 3 and choosing "insert rows above".
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        self.xUITest.executeCommand(".uno:SelectRow")
-        self.xUITest.executeCommand(".uno:InsertRowsBefore")
-
-        #- Result: cell A2 still shows "3" as its value, although it should show "4".
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 4)
-
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
