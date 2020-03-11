@@ -1,4 +1,4 @@
-acc_lib = shared_library('acc',
+acc_lib = shared_library('acclo',
   'source/extended/AccessibleBrowseBox.cxx',
   'source/extended/AccessibleBrowseBoxBase.cxx',
   'source/extended/AccessibleBrowseBoxCheckBoxCell.cxx',

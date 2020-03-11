@@ -48,7 +48,7 @@ unoxml_lib = shared_library('unoxmllo',
   install: true,
 )
 
-unordf_lib = shared_library('unordf',
+unordf_lib = shared_library('unordflo',
   'source/rdf/CBlankNode.cxx',
   'source/rdf/CURI.cxx',
   'source/rdf/CLiteral.cxx',
