@@ -33,6 +33,47 @@
       "revId": "700260275bfca88fda63405111906ce1e441148b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16125b2e_bc06d421",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-11T13:10:13Z",
+      "side": 1,
+      "message": "Guess it\u0027s confusing to have a No-Hide-Whitespace option that works as Show-Whitespace. Renaming will be honored by future developers but up to you as it potentially breaks existing macros.",
+      "parentUuid": "7c69a9c1_6342c068",
+      "revId": "700260275bfca88fda63405111906ce1e441148b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3627ce8_f22b56df",
+        "filename": "sw/source/uibase/uiview/view0.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-11T13:10:13Z",
+      "side": 1,
+      "message": "We still use (Is/Set)Hide-Withespace... not a blocker from my side.",
+      "range": {
+        "startLine": 292,
+        "startChar": 42,
+        "endLine": 292,
+        "endChar": 62
+      },
+      "revId": "700260275bfca88fda63405111906ce1e441148b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
