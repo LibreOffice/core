@@ -24,7 +24,7 @@ struct ArraySumFunctor
 {
 private:
     const double* mpArray;
-    size_t const mnSize;
+    size_t mnSize;
 
 public:
     ArraySumFunctor(const double* pArray, size_t nSize)

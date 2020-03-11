@@ -250,7 +250,7 @@ private:
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     SCTAB           mnTab;
-    bool const      mbIsSpreadsheet;
+    bool            mbIsSpreadsheet;
     bool            mbDelIns;
     bool            mbIsFocusSend;
     typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >

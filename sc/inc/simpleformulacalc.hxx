@@ -26,14 +26,14 @@ private:
 
     bool mbCalculated;
     std::unique_ptr<ScTokenArray> mpCode;
-    ScAddress const maAddr;
+    ScAddress maAddr;
     ScDocument* mpDoc;
     ScFormulaResult maResult;
-    formula::FormulaGrammar::Grammar const maGram;
+    formula::FormulaGrammar::Grammar maGram;
     bool mbMatrixResult;
     OUString maMatrixFormulaResult;
     bool mbLimitString;
-    bool const mbMatrixFormula;
+    bool mbMatrixFormula;
 
 public:
     ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,

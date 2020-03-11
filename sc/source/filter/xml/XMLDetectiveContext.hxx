@@ -75,7 +75,7 @@ public:
 class ScXMLDetectiveContext : public ScXMLImportContext
 {
 private:
-    ScMyImpDetectiveObjVec* const     pDetectiveObjVec;
+    ScMyImpDetectiveObjVec*     pDetectiveObjVec;
 
 public:
                                 ScXMLDetectiveContext(

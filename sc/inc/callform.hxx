@@ -55,11 +55,11 @@ class LegacyFuncData
     friend class LegacyFuncCollection;
 
     const ModuleData* pModuleData;
-    OUString const aInternalName;
-    OUString const aFuncName;
-    sal_uInt16 const      nNumber;
-    sal_uInt16 const      nParamCount;
-    ParamType const   eAsyncType;
+    OUString aInternalName;
+    OUString aFuncName;
+    sal_uInt16      nNumber;
+    sal_uInt16      nParamCount;
+    ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
 public:
     LegacyFuncData(const ModuleData*pModule,

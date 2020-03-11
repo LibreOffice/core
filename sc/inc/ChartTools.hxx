@@ -35,7 +35,7 @@ class ChartIterator
 {
 private:
     std::unique_ptr<SdrObjListIter> m_pIterator;
-    ChartSourceType const m_eChartSourceType;
+    ChartSourceType m_eChartSourceType;
 public:
     ChartIterator(ScDocShell* pDocShell, SCTAB nTab, ChartSourceType eChartSourceType);
     SdrOle2Obj* next();

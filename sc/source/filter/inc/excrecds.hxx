@@ -175,7 +175,7 @@ class XclExpProtection : public XclExpBoolRecord
 
 class XclExpSheetProtection : public XclExpProtection
 {
-    SCTAB const             mnTab;
+    SCTAB                   mnTab;
     public:
         XclExpSheetProtection(bool bValue, SCTAB nTab);
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
@@ -238,7 +238,7 @@ protected:
     sal_uInt64              m_nStrPos;
     sal_uInt64              m_nOwnPos;    // Position after # and Len
     sal_uInt16              nGrbit;
-    SCTAB const             nTab;
+    SCTAB                   nTab;
 
                             ExcBundlesheetBase();
 
@@ -310,10 +310,10 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
-    SCTAB const mnScTab;
+    SCTAB mnScTab;
     XclExpFilterManager* mpManager;
-    bool const mbFitToPage;
-    Color const maTabColor;
+    bool mbFitToPage;
+    Color maTabColor;
 };
 
 class XclExpFiltermode : public XclExpEmptyRecord
@@ -331,7 +331,7 @@ public:
     SCCOL        GetColCount() const { return static_cast< SCCOL >( GetValue() ); }
 
 private:
-    ScAddress const         maStartPos;
+    ScAddress           maStartPos;
 };
 
 class ExcFilterCondition

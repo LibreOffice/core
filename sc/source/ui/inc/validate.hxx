@@ -98,12 +98,12 @@ private:
                                 DECL_LINK(SelectHdl, weld::ComboBox&, void);
                                 DECL_LINK(CheckHdl, weld::Button&, void);
 
-    OUString const                    maStrMin;
-    OUString const                    maStrMax;
-    OUString const                    maStrValue;
-    OUString const                    maStrFormula;
-    OUString const                    maStrRange;
-    OUString const                    maStrList;
+    OUString                    maStrMin;
+    OUString                    maStrMax;
+    OUString                    maStrValue;
+    OUString                    maStrFormula;
+    OUString                    maStrRange;
+    OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
     DECL_LINK( EditSetFocusHdl, formula::RefEdit&, void );
@@ -149,7 +149,7 @@ class ScValidationDlg
 {
     typedef ScRefHdlrControllerImpl<SfxTabDialogController, false> ScValidationDlgBase;
 
-    ScTabViewShell * const m_pTabVwSh;
+    ScTabViewShell * m_pTabVwSh;
     OString m_sValuePageId;
     bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;

@@ -123,7 +123,7 @@ protected:
 
 private:
     ScPreviewShell*     mpViewShell;
-    sal_Int32 const     mnIndex;
+    sal_Int32           mnIndex;
     mutable std::unique_ptr<ScPreviewTableInfo> mpTableInfo;
 
     bool IsDefunc(

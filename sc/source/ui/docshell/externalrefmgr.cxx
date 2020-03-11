@@ -95,7 +95,7 @@ public:
     }
 
 private:
-    OUString const maSearchName;
+    OUString maSearchName;
 };
 
 class FindSrcFileByName
@@ -126,8 +126,8 @@ public:
         p->notify(mnFileId, meType);
     }
 private:
-    sal_uInt16 const mnFileId;
-    ScExternalRefManager::LinkUpdateType const meType;
+    sal_uInt16 mnFileId;
+    ScExternalRefManager::LinkUpdateType meType;
 };
 
 struct UpdateFormulaCell
@@ -163,7 +163,7 @@ public:
         r.second.erase(mpCell);
     }
 private:
-    ScFormulaCell* const mpCell;
+    ScFormulaCell* mpCell;
 };
 
 class ConvertFormulaToStatic
@@ -2806,7 +2806,7 @@ class RefCacheFiller : public sc::ColumnSpanSet::ColumnAction
 
     ScExternalRefCache& mrRefCache;
     ScExternalRefCache::TableTypeRef mpRefTab;
-    sal_uInt16 const mnFileId;
+    sal_uInt16 mnFileId;
     ScColumn* mpCurCol;
     sc::ColumnBlockConstPosition maBlockPos;
 

@@ -63,7 +63,7 @@ class ScViewPaneBase : public css::sheet::XViewPane,
 {
 private:
     ScTabViewShell*         pViewShell;
-    sal_uInt16 const                  nPane;          // ScSplitPos or SC_VIEWPANE_ACTIVE
+    sal_uInt16                  nPane;          // ScSplitPos or SC_VIEWPANE_ACTIVE
 
 protected:
     css::awt::Rectangle GetVisArea() const;
@@ -149,7 +149,7 @@ private:
     typedef std::vector<css::uno::Reference<css::awt::XEnhancedMouseClickHandler> > XMouseClickHandlerVector;
     typedef std::vector<css::uno::Reference<css::sheet::XActivationEventListener> > XActivationEventListenerVector;
 
-    SfxItemPropertySet const                aPropSet;
+    SfxItemPropertySet                      aPropSet;
     XSelectionChangeListenerVector          aSelectionChgListeners;
     XRangeSelectionListenerVector           aRangeSelListeners;
     XRangeSelectionChangeListenerVector     aRangeChgListeners;

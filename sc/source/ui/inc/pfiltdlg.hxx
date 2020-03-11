@@ -51,7 +51,7 @@ private:
     std::unique_ptr<ScQueryItem> pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    SCTAB const         nSrcTab;
+    SCTAB               nSrcTab;
 
     std::unique_ptr<weld::ComboBox> m_xLbField1;
     std::unique_ptr<weld::ComboBox> m_xLbCond1;

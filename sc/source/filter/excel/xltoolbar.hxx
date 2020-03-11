@@ -49,7 +49,7 @@ public:
 
 class ScCTB : public TBBase
 {
-    sal_uInt16 const nViews;
+    sal_uInt16 nViews;
     TB tb;
     std::vector<TBVisualData> rVisualData;
     sal_uInt32 ectbid;

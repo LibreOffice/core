@@ -84,7 +84,7 @@ class ScSpreadsheetSettings final : public cppu::WeakImplHelper<
                                         css::lang::XServiceInfo>
 {
 private:
-    SfxItemPropertySet const      aPropSet;
+    SfxItemPropertySet      aPropSet;
 
     /// @throws css::uno::RuntimeException
     bool getPropertyBool(const OUString& aPropertyName);

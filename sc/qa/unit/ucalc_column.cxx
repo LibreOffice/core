@@ -101,8 +101,8 @@ void Test::testSetFormula()
 
     static struct aInputs
     {
-        SCROW const nRow;
-        SCCOL const nCol;
+        SCROW nRow;
+        SCCOL nCol;
         const char* aFormula1;      // Represents the formula that is input to SetFormula function.
         const char* aFormula2;      // Represents the formula that is actually stored in the cell.
         formula::FormulaGrammar::Grammar const eGram;

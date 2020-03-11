@@ -24,9 +24,9 @@ public:
      */
     struct SharedFormulaEntry
     {
-        ScAddress const maAddress;
-        OUString const maTokenStr;
-        sal_Int32 const mnSharedId;
+        ScAddress maAddress;
+        OUString maTokenStr;
+        sal_Int32 mnSharedId;
 
         SharedFormulaEntry(
             const ScAddress& rAddress,
@@ -38,10 +38,10 @@ public:
      */
     struct SharedFormulaDesc
     {
-        ScAddress const maAddress;
-        sal_Int32 const mnSharedId;
-        OUString const maCellValue;
-        sal_Int32 const mnValueType;
+        ScAddress maAddress;
+        sal_Int32 mnSharedId;
+        OUString maCellValue;
+        sal_Int32 mnValueType;
 
         SharedFormulaDesc(
             const ScAddress& rAddr, sal_Int32 nSharedId,
@@ -50,15 +50,15 @@ public:
 
     struct TokenAddressItem
     {
-        OUString const maTokenStr;
-        ScAddress const maAddress;
+        OUString maTokenStr;
+        ScAddress maAddress;
         TokenAddressItem( const OUString& rTokenStr, const ScAddress& rAddress ) : maTokenStr( rTokenStr ), maAddress( rAddress ) {}
     };
 
     struct TokenRangeAddressItem
     {
-        TokenAddressItem const maTokenAndAddress;
-        ScRange const maRange;
+        TokenAddressItem maTokenAndAddress;
+        ScRange maRange;
         TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ScRange& rRange ) : maTokenAndAddress( rTokenAndAddress ), maRange( rRange ) {}
     };
 

@@ -61,13 +61,13 @@ class ScJumpMatrix
     ScMatrixRef         pMat;       // the results
     ScRefList           mvRefList;  // array of references result, if any
     ScTokenVec          mvParams;    // parameter stack
-    SCSIZE const        nCols;
+    SCSIZE              nCols;
     SCSIZE              nRows;
     SCSIZE              nCurCol;
     SCSIZE              nCurRow;
     SCSIZE              nResMatCols;
     SCSIZE              nResMatRows;
-    OpCode const        meOp;
+    OpCode              meOp;
     bool                bStarted;
 
     // Buffer result ranges to be able to set a range of identically typed

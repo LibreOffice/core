@@ -155,7 +155,7 @@ private:
         typedef ::std::unique_ptr< ScfProgressBar > ScfProgressBarPtr;
 
         ScfProgressBarPtr   mxProgress;     /// Pointer to sub progress bar for this segment.
-        std::size_t const   mnSize;         /// Size of this segment.
+        std::size_t         mnSize;         /// Size of this segment.
         std::size_t         mnPos;          /// Current position of this segment.
 
         explicit            ScfProgressSegment( std::size_t nSize );
@@ -166,7 +166,7 @@ private:
     typedef std::vector< std::unique_ptr<ScfProgressSegment> > ScfSegmentList;
 
     ScfSegmentList      maSegments;         /// List of progress segments.
-    OUString const      maText;             /// UI string for system progress.
+    OUString            maText;             /// UI string for system progress.
 
     ScProgressPtr       mxSysProgress;      /// System progress bar.
     SfxObjectShell*     mpDocShell;         /// The document shell for the progress bar.

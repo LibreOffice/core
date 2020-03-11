@@ -45,7 +45,7 @@ protected:
     VclPtr<vcl::Window>     pWindow;
     SdrModel*       pDrDoc;
 
-    SfxRequest const      aSfxRequest;
+    SfxRequest      aSfxRequest;
 
     Timer           aScrollTimer;           // for Autoscrolling
     DECL_LINK( ScrollHdl, Timer *, void );

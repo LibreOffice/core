@@ -31,12 +31,12 @@ class ScAreaLink;
 class ScAreaLinkSaver
 {
 private:
-    OUString const aFileName;
-    OUString const aFilterName;
-    OUString const aOptions;
-    OUString const aSourceArea;
-    ScRange const aDestArea;
-    sal_uLong const nRefresh;
+    OUString aFileName;
+    OUString aFilterName;
+    OUString aOptions;
+    OUString aSourceArea;
+    ScRange aDestArea;
+    sal_uLong nRefresh;
 
 public:
     ScAreaLinkSaver( const ScAreaLink& rSource );

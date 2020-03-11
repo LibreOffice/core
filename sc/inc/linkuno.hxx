@@ -56,7 +56,7 @@ class ScSheetLinkObj final : public cppu::WeakImplHelper<
                         public SfxListener
 {
 private:
-    SfxItemPropertySet const      aPropSet;
+    SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
     OUString                aFileName;
     XRefreshListenerArr_Impl aRefreshListeners;
@@ -162,9 +162,9 @@ class ScAreaLinkObj final : public cppu::WeakImplHelper<
                         public SfxListener
 {
 private:
-    SfxItemPropertySet const aPropSet;
-    ScDocShell*              pDocShell;
-    size_t const             nPos;
+    SfxItemPropertySet      aPropSet;
+    ScDocShell*             pDocShell;
+    size_t                  nPos;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     void    Modify_Impl( const OUString* pNewFile, const OUString* pNewFilter,
@@ -275,10 +275,10 @@ class ScDDELinkObj final : public cppu::WeakImplHelper<
                         public SfxListener
 {
 private:
-    ScDocShell*              pDocShell;
-    OUString const           aAppl;
-    OUString const           aTopic;
-    OUString const           aItem;
+    ScDocShell*             pDocShell;
+    OUString                aAppl;
+    OUString                aTopic;
+    OUString                aItem;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     void                    Refreshed_Impl();
@@ -388,7 +388,7 @@ private:
 private:
     ScDocShell* mpDocShell;
     ScExternalRefCache::TableTypeRef mpTable;
-    size_t const mnIndex;
+    size_t mnIndex;
 };
 
 class ScExternalDocLinkObj final : public cppu::WeakImplHelper< css::sheet::XExternalDocLink >
@@ -422,9 +422,9 @@ public:
     virtual sal_Int32 SAL_CALL getTokenIndex() override;
 
 private:
-    ScDocShell* const       mpDocShell;
+    ScDocShell*             mpDocShell;
     ScExternalRefManager*   mpRefMgr;
-    sal_uInt16 const        mnFileId;
+    sal_uInt16              mnFileId;
 };
 
 /** This is the UNO API equivalent of ScExternalRefManager. */
@@ -459,7 +459,7 @@ private:
     ScExternalDocLinksObj(const ScExternalDocLinksObj&) = delete;
 
 private:
-    ScDocShell* const                   mpDocShell;
+    ScDocShell*                         mpDocShell;
     ScExternalRefManager*               mpRefMgr;
 };
 

@@ -4691,7 +4691,7 @@ public:
 
 private:
     const ScMatrix& mrMat;
-    bool const mbColVec;
+    bool mbColVec;
 };
 
 /** returns -1 when the matrix value is smaller than the query value, 0 when
@@ -8958,8 +8958,8 @@ void ScInterpreter::ScLeft()
 namespace {
 
 struct UBlockScript {
-    UBlockCode const from;
-    UBlockCode const to;
+    UBlockCode from;
+    UBlockCode to;
 };
 
 }

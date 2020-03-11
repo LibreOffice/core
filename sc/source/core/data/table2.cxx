@@ -66,7 +66,7 @@ namespace {
 class ColumnRegroupFormulaCells
 {
     ScColContainer& mrCols;
-    std::vector<ScAddress>* const mpGroupPos;
+    std::vector<ScAddress>* mpGroupPos;
 
 public:
     ColumnRegroupFormulaCells( ScColContainer& rCols, std::vector<ScAddress>* pGroupPos ) :
@@ -793,12 +793,12 @@ namespace {
 class TransClipHandler
 {
     ScTable& mrClipTab;
-    SCTAB const mnSrcTab;
-    SCCOL const mnSrcCol;
-    size_t const mnTopRow;
-    SCROW const mnTransRow;
-    bool const mbAsLink;
-    bool const mbWasCut;
+    SCTAB mnSrcTab;
+    SCCOL mnSrcCol;
+    size_t mnTopRow;
+    SCROW mnTransRow;
+    bool mbAsLink;
+    bool mbWasCut;
 
     ScAddress getDestPos(size_t nRow) const
     {
@@ -3683,8 +3683,8 @@ namespace {
 class OutlineArrayFinder
 {
     ScRange maRef;
-    SCCOL const mnCol;
-    SCTAB const mnTab;
+    SCCOL mnCol;
+    SCTAB mnTab;
     ScOutlineArray* mpArray;
     bool mbSizeChanged;
 

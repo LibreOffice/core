@@ -399,7 +399,7 @@ struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
     }
 
     OUString mUppercaseName;
-    SfxStyleFamily const mFamily;
+    SfxStyleFamily mFamily;
 };
 
 }

@@ -66,7 +66,7 @@ namespace sc {
 class ColumnIterator
 {
     CellStoreType::const_position_type maPos;
-    CellStoreType::const_position_type const maPosEnd;
+    CellStoreType::const_position_type maPosEnd;
     bool mbComplete;
 
 public:

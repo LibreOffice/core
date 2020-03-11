@@ -37,7 +37,7 @@ public:
 
 class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
 {
-    ScSplitPos const  eOldGridWin;
+    ScSplitPos  eOldGridWin;
 public:
                 ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin );
                 virtual ~ScAccGridWinFocusLostHint() override;
@@ -47,7 +47,7 @@ public:
 
 class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
 {
-    ScSplitPos const  eNewGridWin;
+    ScSplitPos  eNewGridWin;
 public:
                 ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin );
                 virtual ~ScAccGridWinFocusGotHint() override;

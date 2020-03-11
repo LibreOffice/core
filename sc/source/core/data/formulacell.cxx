@@ -313,8 +313,8 @@ lcl_checkRangeDimensions(
 class LessByReference
 {
     const ScDocument* mpDoc;
-    ScAddress const maPos;
-    DimensionSelector const maFunc;
+    ScAddress         maPos;
+    DimensionSelector maFunc;
 public:
     LessByReference(const ScDocument* pDoc, const ScAddress& rPos, const DimensionSelector& rFunc) :
         mpDoc(pDoc), maPos(rPos), maFunc(rFunc) {}
@@ -335,8 +335,8 @@ public:
 class AdjacentByReference
 {
     const ScDocument* mpDoc;
-    ScAddress const maPos;
-    DimensionSelector const maFunc;
+    ScAddress         maPos;
+    DimensionSelector maFunc;
 public:
     AdjacentByReference(const ScDocument* pDoc, const ScAddress& rPos, DimensionSelector aFunc) :
         mpDoc(pDoc), maPos(rPos), maFunc(aFunc) {}
@@ -481,9 +481,9 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
 
 struct AreaListenerKey
 {
-    ScRange const maRange;
-    bool const mbStartFixed;
-    bool const mbEndFixed;
+    ScRange maRange;
+    bool mbStartFixed;
+    bool mbEndFixed;
 
     AreaListenerKey( const ScRange& rRange, bool bStartFixed, bool bEndFixed ) :
         maRange(rRange), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
@@ -4807,10 +4807,10 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             ScDocument* mpDocument;
             ScInterpreterContext* mpContext;
             const ScAddress& mrTopPos;
-            SCCOL const mnStartCol;
-            SCCOL const mnEndCol;
-            SCROW const mnStartOffset;
-            SCROW const mnEndOffset;
+            SCCOL mnStartCol;
+            SCCOL mnEndCol;
+            SCROW mnStartOffset;
+            SCROW mnEndOffset;
 
         public:
             Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,

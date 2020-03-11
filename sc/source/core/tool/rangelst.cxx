@@ -1318,7 +1318,7 @@ public:
         return false;
     }
 private:
-    ScDocument * const mpDoc;
+    ScDocument *mpDoc;
 };
 
 }

@@ -1594,7 +1594,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
 private:
     XclExpPivotTableManager& mrPTMgr;
-    SCTAB const              mnScTab;
+    SCTAB               mnScTab;
 };
 
 XclExpPivotRecWrapper::XclExpPivotRecWrapper( XclExpPivotTableManager& rPTMgr, SCTAB nScTab ) :

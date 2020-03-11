@@ -76,8 +76,8 @@ protected:
 
 private:
     ScPreviewShell*     mpViewShell;
-    sal_Int32 const     mnIndex;
-    bool const          mbHeader;
+    sal_Int32           mnIndex;
+    bool                mbHeader;
     std::vector< rtl::Reference<ScAccessiblePageHeaderArea> >
                         maAreas;
     sal_Int32           mnChildCount;

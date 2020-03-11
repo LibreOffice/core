@@ -1323,7 +1323,7 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
 class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper< container::XNameReplace >
 {
 private:
-    ScShapeObj* const mpShape;
+    ScShapeObj* mpShape;
 
     ScMacroInfo* getInfo( bool bCreate )
     {

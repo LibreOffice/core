@@ -41,7 +41,7 @@ class ScFormulaReferenceHelper
     formula::RefEdit*       m_pRefEdit;           // active input field
     formula::RefButton*     m_pRefBtn;            // associated button
     weld::Dialog*               m_pDialog;
-    SfxBindings* const          m_pBindings;
+    SfxBindings*        m_pBindings;
     SCTAB               m_nRefTab;                // used for ShowReference
 
     OUString            m_sOldDialogText;         // Original title of the dialog window
@@ -89,7 +89,7 @@ class ScRefHandler : public IAnyRefDialog
 private:
     ScFormulaReferenceHelper
                         m_aHelper;
-    SfxBindings* const  m_pMyBindings;
+    SfxBindings*        m_pMyBindings;
 
     OUString            m_aDocName;               // document on which the dialog was opened
 

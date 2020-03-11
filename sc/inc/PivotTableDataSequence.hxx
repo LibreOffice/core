@@ -156,9 +156,9 @@ public:
 
 private:
     ScDocument* m_pDocument;
-    OUString const m_aID;
+    OUString m_aID;
     std::vector<ValueAndFormat> m_aData;
-    SfxItemPropertySet const m_aPropSet;
+    SfxItemPropertySet m_aPropSet;
     css::chart2::data::DataSequenceRole m_aRole;
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };

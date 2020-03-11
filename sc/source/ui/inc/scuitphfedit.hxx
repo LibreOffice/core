@@ -61,7 +61,7 @@ protected:
     virtual     ~ScHFEditPage() override;
 
 private:
-    sal_uInt16 const       nWhich;
+    sal_uInt16 nWhich;
     bool m_bDropDownActive;
     sal_Int64 m_nTimeToggled;
 

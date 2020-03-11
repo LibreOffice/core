@@ -26,8 +26,8 @@
 
 class ScUnitConverterData
 {
-    OUString const maIndexString;
-    double const mfValue;
+    OUString maIndexString;
+    double mfValue;
 
 public:
     ScUnitConverterData( const OUString& rFromUnit,

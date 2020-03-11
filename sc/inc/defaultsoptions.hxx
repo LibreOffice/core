@@ -57,7 +57,7 @@ public:
     const ScDefaultsOptions& GetDefaultsOptions() const { return theOptions; }
 
 private:
-    ScDefaultsOptions const theOptions;
+    ScDefaultsOptions theOptions;
 };
 
 // config item

@@ -1623,7 +1623,7 @@ namespace {
 
 struct ScOUStringCollate
 {
-    CollatorWrapper* const mpCollator;
+    CollatorWrapper* mpCollator;
 
     explicit ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
 

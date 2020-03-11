@@ -53,11 +53,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const        sNewName;
+    OUString        sNewName;
     std::unique_ptr<SdrUndoAction> pDrawUndo;
-    sal_uLong             nEndChangeAction;
-    SCTAB const           nTab;
-    bool const            bAppend;
+    sal_uLong       nEndChangeAction;
+    SCTAB           nTab;
+    bool            bAppend;
 
     void            SetChangeTrack();
 };
@@ -82,9 +82,9 @@ private:
 
     std::unique_ptr<SdrUndoAction> pDrawUndo;
     std::vector<OUString>      aNameList;
-    sal_uLong                  nStartChangeAction;
-    sal_uLong                  nEndChangeAction;
-    SCTAB const                nTab;
+    sal_uLong           nStartChangeAction;
+    sal_uLong           nEndChangeAction;
+    SCTAB           nTab;
 
     void            SetChangeTrack();
 };
@@ -132,7 +132,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const nTab;
+    SCTAB     nTab;
     OUString  sOldName;
     OUString  sNewName;
 
@@ -240,12 +240,12 @@ public:
 
 private:
     std::unique_ptr<ScMarkData> mpMarkData;
-    SCTAB const       nSrcTab;
-    SCTAB const       nDestTab;
-    OUString const    aName;
-    OUString const    aComment;
-    Color const       aColor;
-    ScScenarioFlags const nFlags;
+    SCTAB       nSrcTab;
+    SCTAB       nDestTab;
+    OUString    aName;
+    OUString    aComment;
+    Color       aColor;
+    ScScenarioFlags nFlags;
     std::unique_ptr<SdrUndoAction> pDrawUndo;
 };
 
@@ -265,8 +265,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const       nTab;
-    SCTAB const       nCount;
+    SCTAB       nTab;
+    SCTAB       nCount;
     ScDocumentUniquePtr xRedoDoc;
     std::unique_ptr<SdrUndoAction> pDrawUndo;
 
@@ -289,7 +289,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const    aDocName;
+    OUString    aDocName;
     OUString    aFltName;
     OUString    aOptions;
     sal_uLong   nRefreshDelay;
@@ -321,8 +321,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::vector<SCTAB> const  undoTabs;
-    bool const                bShow;
+    std::vector<SCTAB>  undoTabs;
+    bool                bShow;
 
     void DoChange( bool bShow ) const;
 };
@@ -365,7 +365,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const   mnTab;
+    SCTAB   mnTab;
     ::std::unique_ptr<ScTableProtection> mpProtectSettings;
 
     void    DoProtect(bool bProtect);
@@ -414,15 +414,15 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const       nTab;
-    OUString const    aOldName;
-    OUString const    aNewName;
-    OUString const    aOldComment;
-    OUString const    aNewComment;
-    Color const       aOldColor;
-    Color const       aNewColor;
-    ScScenarioFlags const nOldFlags;
-    ScScenarioFlags const nNewFlags;
+    SCTAB       nTab;
+    OUString    aOldName;
+    OUString    aNewName;
+    OUString    aOldComment;
+    OUString    aNewComment;
+    Color       aOldColor;
+    Color       aNewColor;
+    ScScenarioFlags nOldFlags;
+    ScScenarioFlags nNewFlags;
 };
 
 class ScUndoRenameObject: public ScSimpleUndo
@@ -442,9 +442,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString const  aPersistName;       // to find object (works only for OLE objects)
-    OUString const  aOldName;
-    OUString const  aNewName;
+    OUString  aPersistName;       // to find object (works only for OLE objects)
+    OUString  aOldName;
+    OUString  aNewName;
 
     SdrObject*  GetObject();
 };
@@ -463,8 +463,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB const   nTab;
-    bool const    bRTL;
+    SCTAB   nTab;
+    bool    bRTL;
 
     void DoChange( bool bNew );
 };

@@ -111,7 +111,7 @@ private:
     OUString        aStrActive;
     OUString        aStrNotActive;
     OUString        aStrHidden;
-    OUString const  aStrActiveWin;
+    OUString        aStrActiveWin;
 
     std::unique_ptr<ScArea> pMarkArea;
     ScViewData*     pViewData;

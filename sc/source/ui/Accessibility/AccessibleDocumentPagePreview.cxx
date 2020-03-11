@@ -98,7 +98,7 @@ public:
 
 private:
     ScPreviewShell*         mpViewShell;
-    ScAccessibleDocumentPagePreview* const mpAccDoc;
+    ScAccessibleDocumentPagePreview* mpAccDoc;
     typedef std::vector<ScAccNote> ScAccNotes;
     mutable ScAccNotes      maNotes;
     mutable ScAccNotes      maMarks;
@@ -269,7 +269,7 @@ namespace {
 
 struct ScPointFound
 {
-    tools::Rectangle const maPoint;
+    tools::Rectangle maPoint;
     sal_Int32 mnParagraphs;
     explicit ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
     bool operator() (const ScAccNote& rNote)
@@ -431,7 +431,7 @@ namespace {
 
 struct ScChildGone
 {
-    ScAccessibleDocumentPagePreview* const mpAccDoc;
+    ScAccessibleDocumentPagePreview* mpAccDoc;
     explicit ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
@@ -449,7 +449,7 @@ struct ScChildGone
 
 struct ScChildNew
 {
-    ScAccessibleDocumentPagePreview* const mpAccDoc;
+    ScAccessibleDocumentPagePreview* mpAccDoc;
     explicit ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
@@ -675,7 +675,7 @@ public:
     void VisAreaChanged() const;
 
 private:
-    ScAccessibleDocumentPagePreview* const mpAccDoc;
+    ScAccessibleDocumentPagePreview* mpAccDoc;
     ScPreviewShell* mpViewShell;
     ScShapeRangeVec maShapeRanges;
 
@@ -913,7 +913,7 @@ namespace {
 
 struct ScShapePointFound
 {
-    Point const maPoint;
+    Point maPoint;
     explicit ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
     bool operator() (const ScShapeChild& rShape)
     {

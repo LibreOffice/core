@@ -34,8 +34,8 @@ class ScOutlineWindow : public vcl::Window
 {
 private:
     ScViewData&                 mrViewData;         /// View data containing the document.
-    ScSplitPos const            meWhich;            /// Which area in split window.
-    bool const                  mbHoriz;            /// true = Horizontal orientation.
+    ScSplitPos                  meWhich;            /// Which area in split window.
+    bool                        mbHoriz;            /// true = Horizontal orientation.
     bool                        mbMirrorEntries;    /// true = mirror the order of entries (including header)
     bool                        mbMirrorLevels;     /// true = mirror the order of levels, including the border
 

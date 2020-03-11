@@ -27,9 +27,9 @@ class ScDocument;
 class ScRefFinder
 {
     OUString maFormula;
-    formula::FormulaGrammar::AddressConvention const meConv;
-    ScDocument* const mpDoc;
-    ScAddress const maPos;
+    formula::FormulaGrammar::AddressConvention meConv;
+    ScDocument* mpDoc;
+    ScAddress maPos;
     sal_Int32 mnFound;
     sal_Int32 mnSelStart;
     sal_Int32 mnSelEnd;

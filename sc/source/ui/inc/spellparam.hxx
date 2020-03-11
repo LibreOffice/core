@@ -60,13 +60,13 @@ public:
     bool         IsInteractive() const   { return mbIsInteractive; }
 
 private:
-    ScConversionType const meConvType;         /// Type of the conversion.
-    LanguageType const     meSourceLang;       /// Source language for conversion.
-    LanguageType const     meTargetLang;       /// Target language for conversion.
-    vcl::Font              maTargetFont;       /// Target font to be used if language has to be changed.
-    sal_Int32              mnOptions;          /// Conversion options.
-    bool const             mbUseTargetFont;    /// True = Use maTargetFont to change font during conversion.
-    bool const             mbIsInteractive;    /// True = Text conversion has (specific) dialog that may be raised.
+    ScConversionType    meConvType;         /// Type of the conversion.
+    LanguageType        meSourceLang;       /// Source language for conversion.
+    LanguageType        meTargetLang;       /// Target language for conversion.
+    vcl::Font           maTargetFont;       /// Target font to be used if language has to be changed.
+    sal_Int32           mnOptions;          /// Conversion options.
+    bool                mbUseTargetFont;    /// True = Use maTargetFont to change font during conversion.
+    bool                mbIsInteractive;    /// True = Text conversion has (specific) dialog that may be raised.
 };
 
 #endif
