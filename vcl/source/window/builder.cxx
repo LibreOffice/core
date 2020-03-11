@@ -149,7 +149,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     if (bMobile)
     {
         if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui" ||
-            rUIFile == "svx/ui/findreplacedialog.ui")
+            rUIFile == "svx/ui/findreplacedialog.ui" ||
+            rUIFile == "modules/swriter/ui/watermarkdialog.ui")
             bUseJSBuilder = true;
     }
 
