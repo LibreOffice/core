@@ -32,11 +32,6 @@ chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
 chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
 chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
-chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
-chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
-chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
-chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
-chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
@@ -268,14 +263,17 @@ cmd/sc_texttoolbox.png cmd/sc_text.png
 
 # 3d
 cmd/32/convertinto3dlathefast.png cmd/32/convertinto3dlathe.png
+cmd/32/extrusiontoggle.png cmd/32/convertinto3d.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
 cmd/32/view3d.png cmd/32/cube.png
 
 cmd/lc_convertinto3dlathefast.png cmd/lc_convertinto3dlathe.png
+cmd/lc_extrusiontoggle.png cmd/lc_convertinto3d.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
 cmd/lc_view3d.png cmd/lc_cube.png
 
 cmd/sc_convertinto3dlathefast.png cmd/sc_convertinto3dlathe.png
+cmd/sc_extrusiontoggle.png cmd/sc_convertinto3d.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
 cmd/sc_view3d.png cmd/sc_cube.png
 
@@ -766,9 +764,9 @@ cmd/lc_templatemenu.png cmd/lc_adddirect.png
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
-cmd/32/customanimation.png cmd/32/animationobjects.png
-cmd/lc_customanimation.png cmd/lc_animationobjects.png
-cmd/sc_customanimation.png cmd/sc_animationobjects.png
+cmd/32/customanimation.png cmd/32/diaeffect.png
+cmd/lc_customanimation.png cmd/lc_diaeffect.png
+cmd/sc_customanimation.png cmd/sc_diaeffect.png
 
 # Media
 cmd/32/datastreamsplay.png cmd/32/runbasic.png
@@ -925,13 +923,10 @@ cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 
 # Folder
-cmd/32/insertdoc.png cmd/32/open.png
 cmd/32/open_h.png cmd/32/open.png
 
-cmd/lc_insertdoc.png cmd/lc_open.png
 cmd/lc_open_h.png cmd/lc_open.png
 
-cmd/sc_insertdoc.png cmd/sc_open.png
 cmd/sc_open_h.png cmd/sc_open.png
 
 # Wizard
@@ -1046,11 +1041,8 @@ cmd/sc_exitsearch.png cmd/sc_closepreview.png
 
 # Cancel
 cmd/32/no.png cmd/32/cancel.png
-cmd/32/removetableof.png cmd/32/cancel.png
 cmd/lc_no.png cmd/lc_cancel.png
-cmd/lc_removetableof.png cmd/lc_cancel.png
 cmd/sc_no.png cmd/sc_cancel.png
-cmd/sc_removetableof.png cmd/sc_cancel.png
 
 # Protect
 cmd/32/protecttracechangemode.png cmd/32/cellprotection.png
@@ -1665,7 +1657,6 @@ cmd/32/updateall.png cmd/32/reload.png
 cmd/32/updateallindexes.png cmd/32/insertmultiindex.png
 cmd/32/updatealllinks.png cmd/32/inserthyperlink.png
 cmd/32/updatecharts.png cmd/32/drawchart.png
-cmd/32/updatecurindex.png cmd/32/insertindexesentry.png
 cmd/32/updatefields.png cmd/32/addfield.png
 cmd/32/updatemenu.png cmd/32/reload.png
 
@@ -1676,7 +1667,6 @@ cmd/lc_updateall.png cmd/lc_reload.png
 cmd/lc_updateallindexes.png cmd/lc_insertmultiindex.png
 cmd/lc_updatealllinks.png cmd/lc_inserthyperlink.png
 cmd/lc_updatecharts.png cmd/lc_drawchart.png
-cmd/lc_updatecurindex.png cmd/lc_insertindexesentry.png
 cmd/lc_updatefields.png cmd/lc_addfield.png
 cmd/lc_updatemenu.png cmd/lc_reload.png
 
@@ -1687,7 +1677,6 @@ cmd/sc_updateall.png cmd/sc_reload.png
 cmd/sc_updateallindexes.png cmd/sc_insertmultiindex.png
 cmd/sc_updatealllinks.png cmd/sc_inserthyperlink.png
 cmd/sc_updatecharts.png cmd/sc_drawchart.png
-cmd/sc_updatecurindex.png cmd/sc_insertindexesentry.png
 cmd/sc_updatefields.png cmd/sc_addfield.png
 cmd/sc_updatemenu.png cmd/sc_reload.png
 
@@ -1730,16 +1719,19 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 
 cmd/32/insertscript.png cmd/32/choosemacro.png
 cmd/32/macrodialog.png cmd/32/scriptorganizer.png
+cmd/32/macroorganizer.png cmd/32/scriptorganizer.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/toolsmacroedit.png cmd/32/basicideappear.png
 
 cmd/lc_insertscript.png cmd/lc_choosemacro.png
 cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
+cmd/lc_macroorganizer.png cmd/lc_scriptorganizer.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_toolsmacroedit.png cmd/lc_basicideappear.png
 
 cmd/sc_insertscript.png cmd/sc_choosemacro.png
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
+cmd/sc_macroorganizer.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_toolsmacroedit.png cmd/sc_basicideappear.png
 
@@ -1838,46 +1830,25 @@ cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
 
 # Slide command aliases
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
-cmd/32/insertdatefieldvar.png cmd/32/datefield.png
-cmd/32/insertfilefield.png cmd/32/open.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
-cmd/32/insertslidefield.png cmd/32/insertpagenumberfield.png
-cmd/32/insertslidenumber.png cmd/32/insertpagenumberfield.png
-cmd/32/insertslidesfield.png cmd/32/insertpagecountfield.png
-cmd/32/insertslidetitlefield.png cmd/32/inserttitlefield.png
+cmd/32/insertslidefield.png cmd/32/insertslidenumber.png
 cmd/32/inserttimefieldfix.png cmd/32/timefield.png
-cmd/32/inserttimefieldvar.png cmd/32/timefield.png
-cmd/32/slidesetup.png cmd/32/pagesetup.png
 
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
-cmd/lc_insertdatefieldvar.png cmd/lc_datefield.png
-cmd/lc_insertfilefield.png cmd/lc_open.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
-cmd/lc_insertslidefield.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertslidenumber.png cmd/lc_insertpagenumberfield.png
-cmd/lc_insertslidesfield.png cmd/lc_insertpagecountfield.png
-cmd/lc_insertslidetitlefield.png cmd/lc_inserttitlefield.png
+cmd/lc_insertslidefield.png cmd/lc_insertslidenumber.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
-cmd/lc_inserttimefieldvar.png cmd/lc_timefield.png
-cmd/lc_slidesetup.png cmd/lc_pagesetup.png
 
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
-cmd/sc_insertdatefieldvar.png cmd/sc_datefield.png
-cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
-cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertslidenumber.png cmd/sc_insertpagenumberfield.png
-cmd/sc_insertslidesfield.png cmd/sc_insertpagecountfield.png
-cmd/sc_insertslidetitlefield.png cmd/sc_inserttitlefield.png
+cmd/sc_insertslidefield.png cmd/sc_insertslidenumber.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
-cmd/sc_inserttimefieldvar.png cmd/sc_timefield.png
-cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
 # dbaccess
 # ==============================================
@@ -2282,8 +2253,8 @@ sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_diaeffect.png
 sfx2/res/symphony/sidebar-animation-small.png cmd/sc_diaeffect.png
-sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
-sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
+sfx2/res/symphony/sidebar-colors-large.png cmd/lc_colorsettings.png
+sfx2/res/symphony/sidebar-colors-small.png cmd/sc_colorsettings.png
 sfx2/res/symphony/sidebar-eyedropper-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-eyedropper-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
@@ -2420,7 +2391,6 @@ svx/res/symphony/para_numbullet_rtl02.png cmd/ar/sc_defaultnumbering.png
 svx/res/symphony/sch_backgroundcolor.png cmd/sc_backgroundcolor.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 svx/res/wireframe_16.png cmd/sc_window3d.png
-svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 
 # sw
 # ==============================================
