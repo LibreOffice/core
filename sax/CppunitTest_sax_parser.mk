@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \
 	unotest \
 	expwrap \
 	sal \
+	sax \
 	test \
 ))
 

@@ -40,9 +40,7 @@ namespace core {
     that provides access to the tokens generated from the internal token name list.
  */
 class OOX_DLLPUBLIC FastTokenHandler final :
-    public ::cppu::WeakImplHelper< css::lang::XServiceInfo,
-                                   css::xml::sax::XFastTokenHandler >,
-    public sax_fastparser::FastTokenHandlerBase
+    public cppu::ImplInheritanceHelper< sax_fastparser::FastTokenHandlerBase, css::lang::XServiceInfo >
 {
 public:
     explicit            FastTokenHandler();

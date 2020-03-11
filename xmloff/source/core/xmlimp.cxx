@@ -2215,8 +2215,7 @@ OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNa
 
 SvXMLLegacyToFastDocHandler::SvXMLLegacyToFastDocHandler( const rtl::Reference< SvXMLImport > & rImport )
 :   mrImport( rImport ),
-    mxFastAttributes( new sax_fastparser::FastAttributeList( SvXMLImport::xTokenHandler.get(),
-        dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( SvXMLImport::xTokenHandler.get() ) ) )
+    mxFastAttributes( new sax_fastparser::FastAttributeList( SvXMLImport::xTokenHandler.get() ) )
 {
 }
 

@@ -54,10 +54,8 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
     }
 }
 
-FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
-                                      sax_fastparser::FastTokenHandlerBase *pTokenHandler)
-: mxTokenHandler( xTokenHandler ),
-  mpTokenHandler( pTokenHandler )
+FastAttributeList::FastAttributeList( sax_fastparser::FastTokenHandlerBase *pTokenHandler)
+: mpTokenHandler( pTokenHandler )
 {
     // random initial size of buffer to store attribute values
     mnChunkLength = 58;
@@ -140,7 +138,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token )
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
-                       mxTokenHandler, mpTokenHandler,
+                       mpTokenHandler,
                        getFastAttributeValue(i),
                        AttributeValueLength( i ) );
 
@@ -152,7 +150,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
-                       mxTokenHandler, mpTokenHandler,
+                       mpTokenHandler,
                        getFastAttributeValue(i),
                        AttributeValueLength( i ) );
 
@@ -265,7 +263,6 @@ FastAttributeList::FastAttributeIter FastAttributeList::find( sal_Int32 nToken )
 }
 
 sal_Int32 FastTokenHandlerBase::getTokenFromChars(
-        const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
         const FastTokenHandlerBase *pTokenHandler,
         const char *pToken, size_t nLen /* = 0 */ )
 {
@@ -274,14 +271,7 @@ sal_Int32 FastTokenHandlerBase::getTokenFromChars(
     if( !nLen )
         nLen = strlen( pToken );
 
-    if( pTokenHandler )
-        nRet = pTokenHandler->getTokenDirect( pToken, static_cast<sal_Int32>(nLen) );
-    else
-    {
-        // heap allocate, copy & then free
-        Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pToken), nLen );
-        nRet = xTokenHandler->getTokenFromUTF8( aSeq );
-    }
+    nRet = pTokenHandler->getTokenDirect( pToken, static_cast<sal_Int32>(nLen) );
 
     return nRet;
 }
