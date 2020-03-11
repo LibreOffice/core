@@ -2194,10 +2194,12 @@ boost::property_tree::ptree TabControl::DumpAsPropertyTree()
         boost::property_tree::ptree aTab;
         aTab.put("text", GetPageText(id));
         aTab.put("id", id);
+        aTab.put("name", GetPageName(id));
         aTabs.push_back(std::make_pair("", aTab));
     }
 
     aTree.add_child("tabs", aTabs);
+    aTree.put("selected", GetCurPageId());
 
     return aTree;
 }
