@@ -698,7 +698,9 @@ public:
     RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
     RTFError resolveChars(char ch) override;
     RTFError pushState() override;
+    RTFError beforePopState(RTFParserState& rState);
     RTFError popState() override;
+    void afterPopState(RTFParserState& rState);
     Destination getDestination() override;
     void setDestination(Destination eDestination) override;
     RTFInternalState getInternalState() override;
