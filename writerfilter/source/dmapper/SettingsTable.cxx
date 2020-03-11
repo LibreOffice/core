@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include "SettingsTable.hxx"
 #include "TagLogger.hxx"
 
@@ -259,6 +260,7 @@ struct SettingsTable_Impl
     bool                m_bProtectForm;
     bool                m_bRedlineProtection;
     OUString            m_sRedlineProtectionKey;
+    bool                m_bReadOnly;
     bool                m_bDisplayBackgroundShape;
 
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
@@ -295,6 +297,7 @@ struct SettingsTable_Impl
     , m_bProtectForm(false)
     , m_bRedlineProtection(false)
     , m_sRedlineProtectionKey()
+    , m_bReadOnly(false)
     , m_bDisplayBackgroundShape(false)
     , m_pThemeFontLangProps(3)
     , m_pCurrentCompatSetting(3)
@@ -365,6 +368,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         // multiple DocProtect_edits should not exist. If they do, last one wins
         m_pImpl->m_bRedlineProtection = false;
         m_pImpl->m_bProtectForm = false;
+        m_pImpl->m_bReadOnly = false;
         switch (nIntValue)
         {
         case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
@@ -375,6 +379,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         }
         case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
             m_pImpl->m_bProtectForm = true;
+            break;
+        case NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly:
+            m_pImpl->m_bReadOnly = true;
             break;
         }
         break;
@@ -656,6 +663,11 @@ bool SettingsTable::GetDoNotExpandShiftReturn() const
 bool SettingsTable::GetProtectForm() const
 {
     return m_pImpl->m_bProtectForm && m_pImpl->m_DocumentProtection.m_bEnforcement;
+}
+
+bool SettingsTable::GetReadOnly() const
+{
+    return m_pImpl->m_bReadOnly && m_pImpl->m_DocumentProtection.m_bEnforcement;
 }
 
 bool SettingsTable::GetNoHyphenateCaps() const

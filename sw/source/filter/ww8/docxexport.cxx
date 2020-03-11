@@ -1086,6 +1086,7 @@ void DocxExport::WriteSettings()
     bool bWriterWantsToProtectRedline = false;
     bool bHasRedlineProtectionKey = false;
     bool bHasDummyRedlineProtectionKey = false;
+    bool bReadOnlyStatusUnchanged = true;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if ( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
          m_pSections->DocumentIsProtected() )
@@ -1194,6 +1195,8 @@ void DocxExport::WriteSettings()
                             pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
                             if ( nToken == XML_edit && sValue == "trackedChanges" )
                                 bIsProtectionTrackChanges = true;
+                            else if ( nToken == XML_edit && sValue == "readOnly" )
+                                bReadOnlyStatusUnchanged = m_pDoc->GetDocShell()->IsSecurityOptOpenReadOnly();
                             else if ( nToken == XML_enforcement )
                                 bEnforced = sValue.toBoolean();
                         }
@@ -1202,6 +1205,9 @@ void DocxExport::WriteSettings()
                     // we have document protection from input DOCX file
                     // and in the case of change tracking protection, we didn't modify it
                     hasProtectionProperties = !bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey;
+                    // and in the case of read-only, we didn't modify it.
+                    // Ignore the case where read-only was not enforced, but now is. That is handled by _MarkAsFinal
+                    hasProtectionProperties &= !bEnforced || bReadOnlyStatusUnchanged;
                     // use grabbag if still valid/enforced
                     // or leave as an un-enforced suggestion if Writer doesn't want to set any enforcement
                     hasProtectionProperties &= bEnforced || !bWriterWantsToProtect;
