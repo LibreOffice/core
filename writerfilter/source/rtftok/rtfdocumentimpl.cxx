@@ -2160,32 +2160,9 @@ static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperti
                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; });
 }
 
-RTFError RTFDocumentImpl::popState()
+RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
-    //                         ", dest state: " << m_aStates.top().eDestination);
-
-    checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
-    RTFParserState aState(m_aStates.top());
-    m_bWasInFrame = aState.getFrame().inFrame();
-
-    // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
-    if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)
-    {
-        switch (m_nStreamType)
-        {
-            case NS_ooxml::LN_headerl:
-            case NS_ooxml::LN_headerr:
-            case NS_ooxml::LN_headerf:
-            case NS_ooxml::LN_footerl:
-            case NS_ooxml::LN_footerr:
-            case NS_ooxml::LN_footerf:
-                dispatchSymbol(RTF_PAR);
-                break;
-        }
-    }
-
-    switch (aState.getDestination())
+    switch (rState.getDestination())
     {
         case Destination::FONTTABLE:
         {
@@ -2222,8 +2199,8 @@ RTFError RTFDocumentImpl::popState()
         }
         break;
         case Destination::LISTENTRY:
-            for (const auto& rListLevelEntry : aState.getListLevelEntries())
-                aState.getTableSprms().set(rListLevelEntry.first, rListLevelEntry.second,
+            for (const auto& rListLevelEntry : rState.getListLevelEntries())
+                rState.getTableSprms().set(rListLevelEntry.first, rListLevelEntry.second,
                                            RTFOverwrite::NO_APPEND);
             break;
         case Destination::FIELDINSTRUCTION:
@@ -2308,7 +2285,7 @@ RTFError RTFDocumentImpl::popState()
             else
                 aValue = aStr;
             auto pValue = new RTFValue(aValue, true);
-            aState.getTableAttributes().set(NS_ooxml::LN_CT_LevelText_val, pValue);
+            rState.getTableAttributes().set(NS_ooxml::LN_CT_LevelText_val, pValue);
         }
         break;
         case Destination::LEVELNUMBERS:
@@ -2318,12 +2295,12 @@ RTFError RTFDocumentImpl::popState()
                 // Current destination is levelnumbers and parent destination is levelnumbers as well.
                 bNestedLevelNumbers
                     = m_aStates[m_aStates.size() - 2].getDestination() == Destination::LEVELNUMBERS;
-            if (!bNestedLevelNumbers && aState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_lvlText))
+            if (!bNestedLevelNumbers && rState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_lvlText))
             {
                 RTFSprms& rAttributes
-                    = aState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
+                    = rState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
                 RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
-                if (pValue && aState.getLevelNumbersValid())
+                if (pValue && rState.getLevelNumbersValid())
                 {
                     OUString aOrig = pValue->getString();
 
@@ -2331,14 +2308,14 @@ RTFError RTFDocumentImpl::popState()
                     sal_Int32 nReplaces = 1;
                     for (int i = 0; i < aOrig.getLength(); i++)
                     {
-                        if (std::find(aState.getLevelNumbers().begin(),
-                                      aState.getLevelNumbers().end(), i + 1)
-                            != aState.getLevelNumbers().end())
+                        if (std::find(rState.getLevelNumbers().begin(),
+                                      rState.getLevelNumbers().end(), i + 1)
+                            != rState.getLevelNumbers().end())
                         {
                             aBuf.append('%');
                             // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
-                            aBuf.append(sal_Int32(nReplaces++ + aState.getListLevelNum() + 1
-                                                  - aState.getLevelNumbers().size()));
+                            aBuf.append(sal_Int32(nReplaces++ + rState.getListLevelNum() + 1
+                                                  - rState.getLevelNumbers().size()));
                         }
                         else
                             aBuf.append(aOrig[i]);
@@ -2356,24 +2333,24 @@ RTFError RTFDocumentImpl::popState()
             if (&m_aStates.top().getDestinationText()
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
-            aState.getShape().getProperties().emplace_back(
+            rState.getShape().getProperties().emplace_back(
                 m_aStates.top().getCurrentDestinationText()->makeStringAndClear(), OUString());
             break;
         case Destination::SHAPEPROPERTYVALUE:
-            if (!aState.getShape().getProperties().empty())
+            if (!rState.getShape().getProperties().empty())
             {
-                aState.getShape().getProperties().back().second
+                rState.getShape().getProperties().back().second
                     = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
                 if (m_aStates.top().getHadShapeText())
-                    m_pSdrImport->append(aState.getShape().getProperties().back().first,
-                                         aState.getShape().getProperties().back().second);
-                else if (aState.getInShapeGroup() && !aState.getInShape()
-                         && aState.getShape().getProperties().back().first == "rotation")
+                    m_pSdrImport->append(rState.getShape().getProperties().back().first,
+                                         rState.getShape().getProperties().back().second);
+                else if (rState.getInShapeGroup() && !rState.getInShape()
+                         && rState.getShape().getProperties().back().first == "rotation")
                 {
                     // Rotation should be applied on the groupshape itself, not on each shape.
-                    aState.getShape().getGroupProperties().push_back(
-                        aState.getShape().getProperties().back());
-                    aState.getShape().getProperties().pop_back();
+                    rState.getShape().getGroupProperties().push_back(
+                        rState.getShape().getProperties().back());
+                    rState.getShape().getProperties().pop_back();
                 }
             }
             break;
@@ -2385,12 +2362,12 @@ RTFError RTFDocumentImpl::popState()
             {
                 // Do not resolve shape if shape instruction destination is inside other shape instruction
             }
-            else if (!m_bObject && !aState.getInListpicture() && !aState.getHadShapeText()
-                     && !(aState.getInShapeGroup() && !aState.getInShape()))
+            else if (!m_bObject && !rState.getInListpicture() && !rState.getHadShapeText()
+                     && !(rState.getInShapeGroup() && !rState.getInShape()))
             {
                 // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
                 RTFSdrImport::ShapeOrPict eType
-                    = (aState.getDestination() == Destination::SHAPEINSTRUCTION)
+                    = (rState.getDestination() == Destination::SHAPEINSTRUCTION)
                           ? RTFSdrImport::SHAPE
                           : RTFSdrImport::PICT;
                 if (!m_aStates.top().getCurrentBuffer() || eType != RTFSdrImport::SHAPE)
@@ -2420,12 +2397,12 @@ RTFError RTFDocumentImpl::popState()
                         Buf_t(BUFFER_RESOLVESHAPE, pValue, nullptr));
                 }
             }
-            else if (aState.getInShapeGroup() && !aState.getInShape())
+            else if (rState.getInShapeGroup() && !rState.getInShape())
             {
                 // End of a groupshape, as we're in shapegroup, but not in a real shape.
-                for (const auto& rGroupProperty : aState.getShape().getGroupProperties())
+                for (const auto& rGroupProperty : rState.getShape().getGroupProperties())
                     m_pSdrImport->appendGroupProperty(rGroupProperty.first, rGroupProperty.second);
-                aState.getShape().getGroupProperties().clear();
+                rState.getShape().getGroupProperties().clear();
             }
             break;
         case Destination::BOOKMARKSTART:
@@ -2466,7 +2443,7 @@ RTFError RTFDocumentImpl::popState()
                 break; // not for nested group
             OUString str(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             // dmapper expects this as a field, so let's fake something...
-            OUString const field((Destination::INDEXENTRY == aState.getDestination())
+            OUString const field((Destination::INDEXENTRY == rState.getDestination())
                                      ? OUStringLiteral("XE")
                                      : OUStringLiteral("TC"));
             str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
@@ -2506,7 +2483,7 @@ RTFError RTFDocumentImpl::popState()
                     break; // not for nested group
                 OString aStr = OUStringToOString(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear(),
-                    aState.getCurrentEncoding());
+                    rState.getCurrentEncoding());
                 // decode hex dump
                 OStringBuffer aBuf;
                 int b = 0;
@@ -2549,13 +2526,13 @@ RTFError RTFDocumentImpl::popState()
                 nLength = aStr.toChar();
                 if (!aStr.isEmpty())
                     aStr = aStr.copy(1);
-                auto pNValue = new RTFValue(OStringToOUString(aName, aState.getCurrentEncoding()));
+                auto pNValue = new RTFValue(OStringToOUString(aName, rState.getCurrentEncoding()));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
                 if (nLength > 0)
                 {
                     OString aDefaultText = aStr.copy(0, std::min(nLength, aStr.getLength()));
                     auto pDValue = new RTFValue(
-                        OStringToOUString(aDefaultText, aState.getCurrentEncoding()));
+                        OStringToOUString(aDefaultText, rState.getCurrentEncoding()));
                     m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
                 }
 
@@ -2565,15 +2542,15 @@ RTFError RTFDocumentImpl::popState()
         break;
         case Destination::CREATIONTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setCreationDate(lcl_getDateTime(aState));
+                m_xDocumentProperties->setCreationDate(lcl_getDateTime(rState));
             break;
         case Destination::REVISIONTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setModificationDate(lcl_getDateTime(aState));
+                m_xDocumentProperties->setModificationDate(lcl_getDateTime(rState));
             break;
         case Destination::PRINTTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setPrintDate(lcl_getDateTime(aState));
+                m_xDocumentProperties->setPrintDate(lcl_getDateTime(rState));
             break;
         case Destination::AUTHOR:
             if (&m_aStates.top().getDestinationText()
@@ -2614,7 +2591,7 @@ RTFError RTFDocumentImpl::popState()
                 break; // not for nested group
             if (m_xDocumentProperties.is())
                 m_xDocumentProperties->setTitle(
-                    aState.getCurrentDestinationText()->makeStringAndClear());
+                    rState.getCurrentDestinationText()->makeStringAndClear());
         }
         break;
 
@@ -2632,7 +2609,7 @@ RTFError RTFDocumentImpl::popState()
             if (&m_aStates.top().getDestinationText()
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
-            OUString aName = aState.getDestination() == Destination::OPERATOR ? OUString("Operator")
+            OUString aName = rState.getDestination() == Destination::OPERATOR ? OUString("Operator")
                                                                               : OUString("Company");
             uno::Any aValue
                 = uno::makeAny(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
@@ -2714,7 +2691,7 @@ RTFError RTFDocumentImpl::popState()
             OUString aStr(OStringToOUString(
                 DTTM22OString(
                     m_aStates.top().getCurrentDestinationText()->makeStringAndClear().toInt32()),
-                aState.getCurrentEncoding()));
+                rState.getCurrentEncoding()));
             auto pValue = new RTFValue(aStr);
             RTFSprms aAnnAttributes;
             aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
@@ -2744,7 +2721,7 @@ RTFError RTFDocumentImpl::popState()
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             auto pValue = new RTFValue(aStr.toInt32());
             RTFSprms aAttributes;
-            if (aState.getDestination() == Destination::ANNOTATIONREFERENCESTART)
+            if (rState.getDestination() == Destination::ANNOTATIONREFERENCESTART)
                 aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
             else
                 aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
@@ -2771,7 +2748,7 @@ RTFError RTFDocumentImpl::popState()
                 break; // not for nested group
             OUString aStr(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             auto pValue = new RTFValue(aStr);
-            aState.getTableSprms().set(NS_ooxml::LN_CT_Font_altName, pValue);
+            rState.getTableSprms().set(NS_ooxml::LN_CT_Font_altName, pValue);
         }
         break;
         case Destination::DRAWINGOBJECT:
@@ -2840,13 +2817,13 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPE:
             m_bNeedFinalPar = true;
             m_bNeedCr = m_bNeedCrOrig;
-            if (aState.getFrame().inFrame())
+            if (rState.getFrame().inFrame())
             {
                 // parBreak() modifies m_aStates.top() so we can't apply resetFrame() directly on aState
                 resetFrame();
                 parBreak();
                 // Save this state for later use, so we only reset frame status only for the first shape inside a frame.
-                aState = m_aStates.top();
+                rState = m_aStates.top();
                 m_bNeedPap = true;
             }
             break;
@@ -2920,7 +2897,7 @@ RTFError RTFDocumentImpl::popState()
         case Destination::MGROW:
         {
             sal_Int32 nMathToken = 0;
-            switch (aState.getDestination())
+            switch (rState.getDestination())
             {
                 case Destination::MCHR:
                     nMathToken = M_TOKEN(chr);
@@ -3081,14 +3058,14 @@ RTFError RTFDocumentImpl::popState()
             m_aMathBuffer.appendClosingTag(M_TOKEN(eqArr));
             break;
         case Destination::SHAPEGROUP:
-            if (aState.getCreatedShapeGroup())
+            if (rState.getCreatedShapeGroup())
                 m_pSdrImport->popParent();
             break;
         case Destination::PROPNAME:
             if (&m_aStates.top().getDestinationText()
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
-            aState.setPropName(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
+            rState.setPropName(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             break;
         case Destination::STATICVAL:
             if (&m_aStates.top().getDestinationText()
@@ -3181,47 +3158,22 @@ RTFError RTFDocumentImpl::popState()
             break;
     }
 
-    // See if we need to end a track change
-    if (aState.getStartedTrackchange())
-    {
-        RTFSprms aTCSprms;
-        auto pValue = new RTFValue(0);
-        aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
-        if (!m_aStates.top().getCurrentBuffer())
-            Mapper().props(new RTFReferenceProperties(RTFSprms(), aTCSprms));
-        else
-            bufferProperties(*m_aStates.top().getCurrentBuffer(),
-                             new RTFValue(RTFSprms(), aTCSprms), nullptr);
-    }
+    return RTFError::OK;
+}
 
-    // This is the end of the doc, see if we need to close the last section.
-    if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
-    {
-        // \par means an empty paragraph at the end of footnotes/endnotes, but
-        // not in case of other substreams, like headers.
-        if (m_bNeedCr
-            && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote)
-            && m_bIsNewDoc)
-            dispatchSymbol(RTF_PAR);
-        if (m_bNeedSect) // may be set by dispatchSymbol above!
-            sectBreak(true);
-    }
-
-    m_aStates.pop();
-
-    m_pTokenizer->popGroup();
-
+void RTFDocumentImpl::afterPopState(RTFParserState& rState)
+{
     // list table
-    switch (aState.getDestination())
+    switch (rState.getDestination())
     {
         case Destination::LISTENTRY:
         {
-            auto pValue = new RTFValue(aState.getTableAttributes(), aState.getTableSprms());
+            auto pValue = new RTFValue(rState.getTableAttributes(), rState.getTableSprms());
             m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pValue,
                                   RTFOverwrite::NO_APPEND);
-            m_aListTable[aState.getCurrentListIndex()] = pValue;
+            m_aListTable[rState.getCurrentListIndex()] = pValue;
             m_nListLevel = -1;
-            m_aInvalidListTableFirstIndents[aState.getCurrentListIndex()]
+            m_aInvalidListTableFirstIndents[rState.getCurrentListIndex()]
                 = m_aInvalidListLevelFirstIndents;
             m_aInvalidListLevelFirstIndents.clear();
         }
@@ -3229,19 +3181,19 @@ RTFError RTFDocumentImpl::popState()
         case Destination::PARAGRAPHNUMBERING:
         {
             RTFValue::Pointer_t pIdValue
-                = aState.getTableAttributes().find(NS_ooxml::LN_CT_AbstractNum_nsid);
+                = rState.getTableAttributes().find(NS_ooxml::LN_CT_AbstractNum_nsid);
             if (pIdValue.get() && !m_aStates.empty())
             {
                 // Abstract numbering
                 RTFSprms aLeveltextAttributes;
                 OUString aTextValue;
                 RTFValue::Pointer_t pTextBefore
-                    = aState.getTableAttributes().find(NS_ooxml::LN_CT_LevelText_val);
+                    = rState.getTableAttributes().find(NS_ooxml::LN_CT_LevelText_val);
                 if (pTextBefore)
                     aTextValue += pTextBefore->getString();
                 aTextValue += "%1";
                 RTFValue::Pointer_t pTextAfter
-                    = aState.getTableAttributes().find(NS_ooxml::LN_CT_LevelSuffix_val);
+                    = rState.getTableAttributes().find(NS_ooxml::LN_CT_LevelSuffix_val);
                 if (pTextAfter)
                     aTextValue += pTextAfter->getString();
                 auto pTextValue = new RTFValue(aTextValue);
@@ -3253,19 +3205,19 @@ RTFError RTFDocumentImpl::popState()
                 aLevelAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pIlvlValue);
 
                 RTFValue::Pointer_t pFmtValue
-                    = aState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_numFmt);
+                    = rState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_numFmt);
                 if (pFmtValue)
                     aLevelSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pFmtValue);
 
                 RTFValue::Pointer_t pStartatValue
-                    = aState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_start);
+                    = rState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_start);
                 if (pStartatValue)
                     aLevelSprms.set(NS_ooxml::LN_CT_Lvl_start, pStartatValue);
 
                 auto pLeveltextValue = new RTFValue(aLeveltextAttributes);
                 aLevelSprms.set(NS_ooxml::LN_CT_Lvl_lvlText, pLeveltextValue);
                 RTFValue::Pointer_t pRunProps
-                    = aState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_rPr);
+                    = rState.getTableSprms().find(NS_ooxml::LN_CT_Lvl_rPr);
                 if (pRunProps)
                     aLevelSprms.set(NS_ooxml::LN_CT_Lvl_rPr, pRunProps);
 
@@ -3314,7 +3266,7 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 // FIXME: don't use pDestinationText, points to popped state
-                auto pValue = new RTFValue(aState.getDestinationText().makeStringAndClear(), true);
+                auto pValue = new RTFValue(rState.getDestinationText().makeStringAndClear(), true);
                 m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_LevelSuffix_val, pValue);
             }
             break;
@@ -3322,7 +3274,7 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 // FIXME: don't use pDestinationText, points to popped state
-                auto pValue = new RTFValue(aState.getDestinationText().makeStringAndClear(), true);
+                auto pValue = new RTFValue(rState.getDestinationText().makeStringAndClear(), true);
                 m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_LevelText_val, pValue);
             }
             break;
@@ -3332,9 +3284,9 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 auto pInnerValue = new RTFValue(m_aStates.top().getListLevelNum()++);
-                aState.getTableAttributes().set(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue);
+                rState.getTableAttributes().set(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue);
 
-                auto pValue = new RTFValue(aState.getTableAttributes(), aState.getTableSprms());
+                auto pValue = new RTFValue(rState.getTableAttributes(), rState.getTableSprms());
                 if (m_aStates.top().getDestination() != Destination::LFOLEVEL)
                     m_aStates.top().getListLevelEntries().set(NS_ooxml::LN_CT_AbstractNum_lvl,
                                                               pValue, RTFOverwrite::NO_APPEND);
@@ -3346,9 +3298,9 @@ RTFError RTFDocumentImpl::popState()
             if (!m_aStates.empty())
             {
                 auto pInnerValue = new RTFValue(m_aStates.top().getListLevelNum()++);
-                aState.getTableAttributes().set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
+                rState.getTableAttributes().set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
 
-                auto pValue = new RTFValue(aState.getTableAttributes(), aState.getTableSprms());
+                auto pValue = new RTFValue(rState.getTableAttributes(), rState.getTableSprms());
                 m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Num_lvlOverride, pValue,
                                                     RTFOverwrite::NO_APPEND);
             }
@@ -3360,35 +3312,35 @@ RTFError RTFDocumentImpl::popState()
                 if (m_aStates.top().getDestination() == Destination::LISTOVERRIDEENTRY)
                 {
                     // copy properties upwards so upper popState() inserts it
-                    m_aStates.top().getTableAttributes() = aState.getTableAttributes();
-                    m_aStates.top().getTableSprms() = aState.getTableSprms();
+                    m_aStates.top().getTableAttributes() = rState.getTableAttributes();
+                    m_aStates.top().getTableSprms() = rState.getTableSprms();
                 }
                 else
                 {
-                    auto pValue = new RTFValue(aState.getTableAttributes(), aState.getTableSprms());
+                    auto pValue = new RTFValue(rState.getTableAttributes(), rState.getTableSprms());
                     m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue,
                                           RTFOverwrite::NO_APPEND);
-                    m_aListOverrideTable[aState.getCurrentListOverrideIndex()]
-                        = aState.getCurrentListIndex();
+                    m_aListOverrideTable[rState.getCurrentListOverrideIndex()]
+                        = rState.getCurrentListIndex();
                 }
             }
             break;
         case Destination::LEVELTEXT:
             if (!m_aStates.empty())
             {
-                auto pValue = new RTFValue(aState.getTableAttributes());
+                auto pValue = new RTFValue(rState.getTableAttributes());
                 m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_lvlText, pValue);
             }
             break;
         case Destination::LEVELNUMBERS:
             if (!m_aStates.empty())
             {
-                m_aStates.top().getTableSprms() = aState.getTableSprms();
+                m_aStates.top().getTableSprms() = rState.getTableSprms();
                 if (m_aStates.top().getDestination() == Destination::LEVELNUMBERS
                     || m_aStates.top().getDestination() == Destination::LISTLEVEL)
                     // Parent state is level number or list level, current state is
                     // level numbers: mark parent as invalid as well if necessary.
-                    m_aStates.top().setLevelNumbersValid(aState.getLevelNumbersValid());
+                    m_aStates.top().setLevelNumbersValid(rState.getLevelNumbersValid());
             }
             break;
         case Destination::FIELDINSTRUCTION:
@@ -3400,29 +3352,29 @@ RTFError RTFDocumentImpl::popState()
                 m_aStates.top().setFieldStatus(RTFFieldStatus::RESULT);
             break;
         case Destination::FIELD:
-            if (aState.getFieldStatus() == RTFFieldStatus::INSTRUCTION)
+            if (rState.getFieldStatus() == RTFFieldStatus::INSTRUCTION)
                 singleChar(cFieldEnd);
             break;
         case Destination::SHAPEPROPERTYVALUEPICT:
             if (!m_aStates.empty())
             {
-                m_aStates.top().getPicture() = aState.getPicture();
+                m_aStates.top().getPicture() = rState.getPicture();
                 // both \sp and \sv are destinations, copy the text up-ward for later
-                m_aStates.top().getDestinationText() = aState.getDestinationText();
+                m_aStates.top().getDestinationText() = rState.getDestinationText();
             }
             break;
         case Destination::FALT:
             if (!m_aStates.empty())
-                m_aStates.top().getTableSprms() = aState.getTableSprms();
+                m_aStates.top().getTableSprms() = rState.getTableSprms();
             break;
         case Destination::SHAPEPROPERTYNAME:
         case Destination::SHAPEPROPERTYVALUE:
         case Destination::SHAPEPROPERTY:
             if (!m_aStates.empty())
             {
-                m_aStates.top().getShape() = aState.getShape();
-                m_aStates.top().getPicture() = aState.getPicture();
-                m_aStates.top().getCharacterAttributes() = aState.getCharacterAttributes();
+                m_aStates.top().getShape() = rState.getShape();
+                m_aStates.top().getPicture() = rState.getPicture();
+                m_aStates.top().getCharacterAttributes() = rState.getCharacterAttributes();
             }
             break;
         case Destination::SHAPEINSTRUCTION:
@@ -3431,10 +3383,10 @@ RTFError RTFDocumentImpl::popState()
             {
                 // Shape instruction inside other shape instruction: just copy new shape settings:
                 // it will be resolved on end of topmost shape instruction destination
-                m_aStates.top().getShape() = aState.getShape();
-                m_aStates.top().getPicture() = aState.getPicture();
-                m_aStates.top().getCharacterSprms() = aState.getCharacterSprms();
-                m_aStates.top().getCharacterAttributes() = aState.getCharacterAttributes();
+                m_aStates.top().getShape() = rState.getShape();
+                m_aStates.top().getPicture() = rState.getPicture();
+                m_aStates.top().getCharacterSprms() = rState.getCharacterSprms();
+                m_aStates.top().getCharacterAttributes() = rState.getCharacterAttributes();
             }
             break;
         case Destination::FLYMAINCONTENT:
@@ -3442,8 +3394,8 @@ RTFError RTFDocumentImpl::popState()
         case Destination::SHAPE:
             if (!m_aStates.empty())
             {
-                m_aStates.top().getFrame() = aState.getFrame();
-                if (aState.getDestination() == Destination::SHPPICT
+                m_aStates.top().getFrame() = rState.getFrame();
+                if (rState.getDestination() == Destination::SHPPICT
                     && m_aStates.top().getDestination() == Destination::LISTPICTURE)
                 {
                     RTFSprms aAttributes;
@@ -3475,29 +3427,91 @@ RTFError RTFDocumentImpl::popState()
 
                 // It's allowed to declare these inside the shape text, and they
                 // are expected to have an effect for the whole shape.
-                if (aState.getDrawingObject().getLeft())
-                    m_aStates.top().getDrawingObject().setLeft(aState.getDrawingObject().getLeft());
-                if (aState.getDrawingObject().getTop())
-                    m_aStates.top().getDrawingObject().setTop(aState.getDrawingObject().getTop());
-                if (aState.getDrawingObject().getRight())
+                if (rState.getDrawingObject().getLeft())
+                    m_aStates.top().getDrawingObject().setLeft(rState.getDrawingObject().getLeft());
+                if (rState.getDrawingObject().getTop())
+                    m_aStates.top().getDrawingObject().setTop(rState.getDrawingObject().getTop());
+                if (rState.getDrawingObject().getRight())
                     m_aStates.top().getDrawingObject().setRight(
-                        aState.getDrawingObject().getRight());
-                if (aState.getDrawingObject().getBottom())
+                        rState.getDrawingObject().getRight());
+                if (rState.getDrawingObject().getBottom())
                     m_aStates.top().getDrawingObject().setBottom(
-                        aState.getDrawingObject().getBottom());
+                        rState.getDrawingObject().getBottom());
             }
             break;
         case Destination::PROPNAME:
             if (m_aStates.top().getDestination() == Destination::USERPROPS)
-                m_aStates.top().setPropName(aState.getPropName());
+                m_aStates.top().setPropName(rState.getPropName());
             break;
         default:
         {
             if (!m_aStates.empty() && m_aStates.top().getDestination() == Destination::PICT)
-                m_aStates.top().getPicture() = aState.getPicture();
+                m_aStates.top().getPicture() = rState.getPicture();
         }
         break;
     }
+}
+
+RTFError RTFDocumentImpl::popState()
+{
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
+    //                         ", dest state: " << m_aStates.top().eDestination);
+
+    checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
+    RTFParserState aState(m_aStates.top());
+    m_bWasInFrame = aState.getFrame().inFrame();
+
+    // dmapper expects some content in header/footer, so if there would be nothing, add an empty paragraph.
+    if (m_pTokenizer->getGroup() == 1 && m_bFirstRun)
+    {
+        switch (m_nStreamType)
+        {
+            case NS_ooxml::LN_headerl:
+            case NS_ooxml::LN_headerr:
+            case NS_ooxml::LN_headerf:
+            case NS_ooxml::LN_footerl:
+            case NS_ooxml::LN_footerr:
+            case NS_ooxml::LN_footerf:
+                dispatchSymbol(RTF_PAR);
+                break;
+        }
+    }
+
+    RTFError eError = beforePopState(aState);
+    if (eError != RTFError::OK)
+        return eError;
+
+    // See if we need to end a track change
+    if (aState.getStartedTrackchange())
+    {
+        RTFSprms aTCSprms;
+        auto pValue = new RTFValue(0);
+        aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
+        if (!m_aStates.top().getCurrentBuffer())
+            Mapper().props(new RTFReferenceProperties(RTFSprms(), aTCSprms));
+        else
+            bufferProperties(*m_aStates.top().getCurrentBuffer(),
+                             new RTFValue(RTFSprms(), aTCSprms), nullptr);
+    }
+
+    // This is the end of the doc, see if we need to close the last section.
+    if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
+    {
+        // \par means an empty paragraph at the end of footnotes/endnotes, but
+        // not in case of other substreams, like headers.
+        if (m_bNeedCr
+            && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote)
+            && m_bIsNewDoc)
+            dispatchSymbol(RTF_PAR);
+        if (m_bNeedSect) // may be set by dispatchSymbol above!
+            sectBreak(true);
+    }
+
+    m_aStates.pop();
+
+    m_pTokenizer->popGroup();
+
+    afterPopState(aState);
 
     if (aState.getCurrentBuffer() == &m_aSuperBuffer)
     {
