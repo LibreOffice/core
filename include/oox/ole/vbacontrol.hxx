@@ -204,7 +204,7 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::frame::XModel >          mxDocModel;
-    ControlConverter const                             maConverter;
+    ControlConverter                                   maConverter;
 };
 
 

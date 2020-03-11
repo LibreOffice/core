@@ -84,7 +84,7 @@ typedef std::shared_ptr<DiagramData> DiagramDataPtr;
 struct ChartShapeInfo
 {
     OUString     maFragmentPath;     ///< Path to related XML stream, e.g. for charts.
-    bool const   mbEmbedShapes;      ///< True = load chart shapes into chart, false = load into parent drawpage.
+    bool                mbEmbedShapes;      ///< True = load chart shapes into chart, false = load into parent drawpage.
 
     explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };

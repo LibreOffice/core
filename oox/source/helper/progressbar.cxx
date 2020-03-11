@@ -87,8 +87,8 @@ public:
 
 private:
     IProgressBar&       mrParentProgress;
-    double const        mfStartPos;
-    double const        mfLength;
+    double              mfStartPos;
+    double              mfLength;
     double              mfPosition;
     double              mfFreeStart;
 };

@@ -157,7 +157,7 @@ public:
     }
 
 private:
-    OUString const m_aRole;
+    OUString m_aRole;
 };
 
 }

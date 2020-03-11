@@ -96,7 +96,7 @@ struct GUIDCNamePair
 struct IdCntrlData
 {
     sal_Int16 nId;
-    GUIDCNamePair const aData;
+    GUIDCNamePair aData;
 };
 
 const sal_Int16 TOGGLEBUTTON = -1;

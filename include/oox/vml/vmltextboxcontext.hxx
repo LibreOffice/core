@@ -54,9 +54,9 @@ public:
 
 private:
     TextBox&            mrTextBox;
-    TextParagraphModel const maParagraph;
+    TextParagraphModel  maParagraph;
     TextFontModel       maFont;
-    size_t const        mnInitialPortions;
+    size_t              mnInitialPortions;
 };
 
 

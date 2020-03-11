@@ -510,8 +510,8 @@ namespace oox::ppt {
             }
 
     private:
-        sal_Int32 const mnColorSpace;
-        sal_Int32 const mnDir;
+        sal_Int32 mnColorSpace;
+        sal_Int32 mnDir;
         bool mbHasByColor;
         AnimColor m_byColor;
         oox::drawingml::Color maToClr;

@@ -87,7 +87,7 @@ private:
     typedef ::std::vector< sal_Int32 > ContextVector;
 
     OUString&           mrFilterName;
-    OUString const      maFileName;
+    OUString            maFileName;
     ContextVector       maContextStack;
     OUString            maTargetPath;
     css::uno::Reference< css::uno::XComponentContext > mxContext;

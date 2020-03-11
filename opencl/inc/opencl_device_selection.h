@@ -86,7 +86,7 @@ struct ds_device
 struct ds_profile
 {
     std::vector<ds_device> devices;
-    OString const version;
+    OString version;
 
     ds_profile(OString const & inVersion)
         : version(inVersion)

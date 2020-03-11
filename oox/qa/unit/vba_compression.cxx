@@ -67,7 +67,7 @@ private:
         return url.url;
     }
 
-    test::Directories const m_directories;
+    test::Directories m_directories;
 };
 
 namespace {

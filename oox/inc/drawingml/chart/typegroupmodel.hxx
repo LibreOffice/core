@@ -69,7 +69,7 @@ struct TypeGroupModel
     sal_Int32           mnShape;            /// 3D bar shape type.
     sal_Int32           mnSizeRepresents;   /// Bubble size represents area or width.
     sal_Int32           mnSplitType;        /// Split type in pie-to charts.
-    sal_Int32 const     mnTypeId;           /// Chart type identifier.
+    sal_Int32           mnTypeId;           /// Chart type identifier.
     bool                mbBubble3d;         /// True = show bubbles with 3D shade.
     bool                mbShowMarker;       /// True = show point markers in line charts.
     bool                mbShowNegBubbles;   /// True = show absolute value of negative bubbles.

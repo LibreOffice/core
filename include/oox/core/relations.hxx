@@ -109,7 +109,7 @@ public:
 
 private:
     ::std::map< OUString, Relation > maMap;
-    OUString const maFragmentPath;
+    OUString     maFragmentPath;
 };
 
 

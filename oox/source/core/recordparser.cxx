@@ -108,7 +108,7 @@ private:
     typedef ::std::pair< RecordInfo, ContextHandlerRef >    ContextInfo;
     typedef ::std::vector< ContextInfo >                    ContextInfoVec;
 
-    FragmentHandlerRef const mxHandler;
+    FragmentHandlerRef  mxHandler;
     ContextInfoVec      maStack;
 };
 

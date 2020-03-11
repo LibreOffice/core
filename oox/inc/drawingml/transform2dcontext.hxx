@@ -37,7 +37,7 @@ public:
 
 private:
     Shape&              mrShape;
-    bool const          mbtxXfrm;
+    bool                mbtxXfrm;
 };
 
 } // namespace drawingml
