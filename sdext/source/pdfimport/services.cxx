@@ -79,7 +79,7 @@ namespace
     {
         const char*               pAsciiServiceName;
         const char*               pAsciiImplementationName;
-        ComponentFactory const    pFactory;
+        ComponentFactory          pFactory;
 
         ComponentDescription()
             :pAsciiServiceName( nullptr )

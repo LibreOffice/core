@@ -69,7 +69,7 @@ protected:
 
 struct PDFComment : public PDFEntry
 {
-    OString const  m_aComment;
+    OString  m_aComment;
 
     explicit PDFComment( const OString& rComment )
     : PDFEntry(), m_aComment( rComment ) {}
@@ -100,7 +100,7 @@ struct PDFName : public PDFValue
 
 struct PDFString : public PDFValue
 {
-    OString const  m_aString;
+    OString  m_aString;
 
     explicit PDFString( const OString& rString )
     : PDFValue(), m_aString( rString ) {}
@@ -113,7 +113,7 @@ struct PDFString : public PDFValue
 
 struct PDFNumber : public PDFValue
 {
-    double const m_fValue;
+    double m_fValue;
 
     explicit PDFNumber( double fVal )
     : PDFValue(), m_fValue( fVal ) {}
@@ -124,7 +124,7 @@ struct PDFNumber : public PDFValue
 
 struct PDFBool : public PDFValue
 {
-    bool const m_bValue;
+    bool m_bValue;
 
     explicit PDFBool( bool bVal )
     : PDFValue(), m_bValue( bVal ) {}
@@ -135,8 +135,8 @@ struct PDFBool : public PDFValue
 
 struct PDFObjectRef : public PDFValue
 {
-    unsigned int const    m_nNumber;
-    unsigned int const    m_nGeneration;
+    unsigned int    m_nNumber;
+    unsigned int    m_nGeneration;
 
     PDFObjectRef( unsigned int nNr, unsigned int nGen )
     : PDFValue(), m_nNumber( nNr ), m_nGeneration( nGen ) {}
@@ -201,8 +201,8 @@ struct PDFDict : public PDFContainer
 
 struct PDFStream : public PDFEntry
 {
-    unsigned int const    m_nBeginOffset;
-    unsigned int const    m_nEndOffset; // offset of the byte after the stream
+    unsigned int    m_nBeginOffset;
+    unsigned int    m_nEndOffset; // offset of the byte after the stream
     PDFDict*        m_pDict;
 
     PDFStream( unsigned int nBegin, unsigned int nEnd, PDFDict* pStreamDict )
@@ -259,7 +259,7 @@ struct PDFObject : public PDFContainer
     PDFEntry*       m_pObject;
     PDFStream*      m_pStream;
     unsigned int    m_nNumber;
-    unsigned int const m_nGeneration;
+    unsigned int    m_nGeneration;
 
     PDFObject( unsigned int nNr, unsigned int nGen )
     : m_pObject( nullptr ), m_pStream( nullptr ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
