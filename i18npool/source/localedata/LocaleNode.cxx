@@ -1717,21 +1717,34 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (erasNode == nullptr)
                 erasNode = calNode -> getChildAt(nChild);
-            nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
-            if (bGregorian && nbOfEras[i] != 2)
-                incErrorInt( "Error: A Gregorian calendar must have 2 eras, this one has %d\n", nbOfEras[i]);
-            elementTag = "era";
-            for (j = 0; j < nbOfEras[i]; j++) {
-                LocaleNode *currNode = erasNode -> getChildAt(j);
-                OUString eraID( currNode->getChildAt(0)->getValue());
-                of.writeParameter("eraID", eraID, i, j);
-                if ( j == 0 && bGregorian && eraID != "bc" )
-                    incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
-                if ( j == 1 && bGregorian && eraID != "ad" )
-                    incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
-                of.writeAsciiString("\n");
-                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            if (!erasNode || erasNode->getName() != "Eras")
+            {
+                incErrorStr( "Error: <Eras> element expected in calendar '%s'\n", calendarID);
+                --nChild;
+            }
+            else
+            {
+                nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
+                if (bGregorian && nbOfEras[i] != 2)
+                    incErrorInt( "Error: A Gregorian calendar must have 2 eras, this one has %d\n", nbOfEras[i]);
+                elementTag = "era";
+                for (j = 0; j < nbOfEras[i]; j++) {
+                    LocaleNode *currNode = erasNode -> getChildAt(j);
+                    if (!currNode || currNode->getName() != "Era")
+                    {
+                        incError("<Era> element expected");
+                        continue;   // for
+                    }
+                    OUString eraID( currNode->getChildAt(0)->getValue());
+                    of.writeParameter("eraID", eraID, i, j);
+                    if ( j == 0 && bGregorian && eraID != "bc" )
+                        incError( "First era of a Gregorian calendar must be <EraID>bc</EraID>");
+                    if ( j == 1 && bGregorian && eraID != "ad" )
+                        incError( "Second era of a Gregorian calendar must be <EraID>ad</EraID>");
+                    of.writeAsciiString("\n");
+                    of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                    of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+                }
             }
         }
         ++nChild;
