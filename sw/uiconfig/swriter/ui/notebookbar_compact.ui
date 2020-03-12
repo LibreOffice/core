@@ -9767,7 +9767,7 @@
                               <object class="GtkToolButton" id="Table-BackgroundColor">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:BackgroundColor</property>
+                                <property name="action_name">.uno:TableCellBackgroundColor</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
