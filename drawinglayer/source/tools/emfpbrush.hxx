@@ -101,7 +101,7 @@ namespace emfplushelper
 
         /* linear gradient */
         sal_Int32 wrapMode;
-        float firstPointX, firstPointY, secondPointX, secondPointY;
+        float aPointX1, aPointX2, aPointY1, aPointY2;
         ::Color secondColor; // first color is stored in solidColor;
         basegfx::B2DHomMatrix brush_transformation;
         bool hasTransformation;

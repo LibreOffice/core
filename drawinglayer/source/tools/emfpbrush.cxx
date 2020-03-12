@@ -31,10 +31,10 @@ namespace emfplushelper
         : type(0)
         , additionalFlags(0)
         , wrapMode(0)
-        , firstPointX(0.0)
-        , firstPointY(0.0)
-        , secondPointX(0.0)
-        , secondPointY(0.0)
+        , aPointX1(0.0)
+        , aPointX2(0.0)
+        , aPointY1(0.0)
+        , aPointY2(0.0)
         , hasTransformation(false)
         , blendPoints(0)
         , blendFactors(nullptr)
@@ -111,8 +111,8 @@ namespace emfplushelper
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tCenter color: 0x" << std::hex << color << std::dec);
-                s.ReadFloat(firstPointX).ReadFloat(firstPointY);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tCenter point: " << firstPointX << "," << firstPointY);
+                s.ReadFloat(aPointX1).ReadFloat(aPointX2);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tCenter point: " << aPointX1 << "," << aPointX2);
                 s.ReadInt32(surroundColorsNumber);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\t number of surround colors: " << surroundColorsNumber);
 
@@ -156,8 +156,8 @@ namespace emfplushelper
                     s.Seek(pos + pathLength);
 
                     const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
-                    secondPointX = aBounds.getWidth();
-                    secondPointY = aBounds.getHeight();
+                    aPointY1 = aBounds.getWidth();
+                    aPointY2 = aBounds.getHeight();
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "
                                                                              << aBounds.getWidth() << "x" << aBounds.getHeight());
                 }
@@ -174,8 +174,8 @@ namespace emfplushelper
                     s.Seek(pos + 8 * boundaryPointCount);
 
                     const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
-                    secondPointX = aBounds.getWidth();
-                    secondPointY = aBounds.getHeight();
+                    aPointY1 = aBounds.getWidth();
+                    aPointY2 = aBounds.getHeight();
                     SAL_INFO("drawinglayer", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "
                                                                              << aBounds.getWidth() << "x" << aBounds.getHeight());
                 }
@@ -247,9 +247,9 @@ namespace emfplushelper
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tLinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
-                s.ReadFloat(firstPointX).ReadFloat(firstPointY).ReadFloat(secondPointX).ReadFloat(secondPointY);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tFirst gradinet point: " << firstPointX << ":" << firstPointY
-                                         << ", second gradient point " << secondPointX << ":" << secondPointY);
+                s.ReadFloat(aPointX1).ReadFloat(aPointX2).ReadFloat(aPointY1).ReadFloat(aPointY2);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tFirst gradinet X: " << aPointX1 << ":" << aPointX2
+                                         << ", gradient dimension Y:" << aPointY1 << "x" << aPointY2);
                 sal_uInt32 color;
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
