@@ -57,9 +57,9 @@ private:
 
     void InitDialog();
 
-    sal_Int64 const mnSourceSize;
-    sal_Int64 const mnDestSize;
-    sal_Int64 const mnApproxSize;
+    sal_Int64 mnSourceSize;
+    sal_Int64 mnDestSize;
+    sal_Int64 mnApproxSize;
     bool& mrbOpenNewDocument;
     const OUString& maSaveAsURL;
 };

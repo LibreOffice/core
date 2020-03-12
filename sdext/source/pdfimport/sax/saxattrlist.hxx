@@ -37,8 +37,8 @@ namespace pdfi
     {
         struct AttrEntry
         {
-            OUString const m_aName;
-            OUString const m_aValue;
+            OUString m_aName;
+            OUString m_aValue;
 
             AttrEntry( const OUString& i_rName, const OUString& i_rValue )
             : m_aName( i_rName ), m_aValue( i_rValue ) {}

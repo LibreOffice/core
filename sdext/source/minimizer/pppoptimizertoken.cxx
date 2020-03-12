@@ -37,7 +37,7 @@ namespace {
 struct TokenTable
 {
     const char*                         pS;
-    PPPOptimizerTokenEnum const         pE;
+    PPPOptimizerTokenEnum               pE;
 };
 
 }

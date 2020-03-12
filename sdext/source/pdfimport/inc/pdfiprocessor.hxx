@@ -198,10 +198,10 @@ namespace pdfi
             Element*  getCurElement(){ return m_pCurElement; }
 
         private:
-            Element* const              m_pCurElement ;
+            Element*                    m_pCurElement ;
             GraphicsContext             m_rCurrentContext ;
-            double const                m_Width ;
-            double const                m_PrevSpaceWidth ;
+            double                      m_Width ;
+            double                      m_PrevSpaceWidth ;
             OUString                    m_rGlyphs ;
     };
 }
