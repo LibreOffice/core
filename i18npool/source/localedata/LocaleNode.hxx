@@ -175,6 +175,9 @@ public:
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
 
     virtual void generateCode (const OFileWriter &of) const override;
+
+    bool expectedCalendarElement( const OUString& rName,
+            const LocaleNode* pNode, sal_Int16 nChild, const OUString& rCalendarID ) const;
 };
 
 class LCCurrencyNode : public LocaleNode {
