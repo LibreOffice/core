@@ -39,7 +39,7 @@ class SfxBasicManagerHolder;
 
 class AutoReloadTimer_Impl : public Timer
 {
-    OUString const    aUrl;
+    OUString          aUrl;
     SfxObjectShell*   pObjSh;
 
 public:

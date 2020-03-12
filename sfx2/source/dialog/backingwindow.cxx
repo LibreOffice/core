@@ -703,8 +703,8 @@ namespace {
 struct ImplDelayedDispatch
 {
     Reference< XDispatch >      xDispatch;
-    css::util::URL const   aDispatchURL;
-    Sequence< PropertyValue > const   aArgs;
+    css::util::URL   aDispatchURL;
+    Sequence< PropertyValue >   aArgs;
 
     ImplDelayedDispatch( const Reference< XDispatch >& i_xDispatch,
                          const css::util::URL& i_rURL,

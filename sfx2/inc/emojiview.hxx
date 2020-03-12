@@ -45,7 +45,7 @@ public:
 
 private:
 
-    FILTER_CATEGORY const mCategory;
+    FILTER_CATEGORY mCategory;
 };
 
 

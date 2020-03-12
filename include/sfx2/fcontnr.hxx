@@ -99,7 +99,7 @@ class SFX2_DLLPUBLIC SfxFilterMatcherIter
 
 {
     SfxFilterFlags nOrMask;
-    SfxFilterFlags const nAndMask;
+    SfxFilterFlags nAndMask;
     sal_uInt16 nCurrent;
     const SfxFilterMatcher_Impl &m_rMatch;
 

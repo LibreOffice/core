@@ -89,9 +89,9 @@ private:
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.
-    Image const maWelcomeImage;
-    OUString const maWelcomeLine1;
-    OUString const maWelcomeLine2;
+    Image maWelcomeImage;
+    OUString maWelcomeLine1;
+    OUString maWelcomeLine2;
 };
 
 } // namespace sfx2

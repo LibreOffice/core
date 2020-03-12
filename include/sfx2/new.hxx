@@ -63,7 +63,7 @@ class SFX2_DLLPUBLIC SfxNewFileDialog final : public SfxDialogController
 {
 private:
     Idle m_aPrevIdle;
-    SfxNewFileDialogMode const m_nFlags;
+    SfxNewFileDialogMode m_nFlags;
     SfxDocumentTemplates m_aTemplates;
     SfxObjectShellLock m_xDocShell;
 

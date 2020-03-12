@@ -25,7 +25,7 @@ protected:
     const SfxObjectShell& mrShell;
     OutputDevice& mrOutputDev;
     SfxStyleSheetBase* mpStyle;
-    long const mnMaxHeight;
+    long mnMaxHeight;
 
 public:
     enum class RenderAlign

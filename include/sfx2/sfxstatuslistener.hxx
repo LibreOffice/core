@@ -63,7 +63,7 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
         SfxStatusListener( const SfxStatusListener& ) = delete;
         SfxStatusListener& operator=( const SfxStatusListener& ) = delete;
 
-        sal_uInt16 const                                      m_nSlotID;
+        sal_uInt16                                            m_nSlotID;
         css::util::URL                                        m_aCommand;
         css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
         css::uno::Reference< css::frame::XDispatch >          m_xDispatch;

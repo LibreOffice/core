@@ -19,7 +19,7 @@
 class AsyncFunc final : public cppu::WeakImplHelper<css::lang::XUnoTunnel>
 {
 private:
-    std::function<void()> const m_pAsyncFunc;
+    std::function<void()> m_pAsyncFunc;
 
 public:
     AsyncFunc(const std::function<void()>&);

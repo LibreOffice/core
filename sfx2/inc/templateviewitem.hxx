@@ -38,7 +38,7 @@ public:
 private:
 
     OUString maPath;
-    BitmapEx const maDefaultBitmap;
+    BitmapEx maDefaultBitmap;
     bool mbIsDefaultTemplate;
 };
 

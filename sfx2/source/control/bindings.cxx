@@ -66,9 +66,9 @@ typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 struct SfxFoundCache_Impl
 {
-    sal_uInt16 const nWhichId;  // If available: Which-Id, else: nSlotId
-    const SfxSlot*   pSlot;     // Pointer to <Master-Slot>
-    SfxStateCache&   rCache;    // Pointer to StatusCache
+    sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
+    const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
+    SfxStateCache&  rCache;    // Pointer to StatusCache
 
     SfxFoundCache_Impl(sal_uInt16 nW, const SfxSlot *pS, SfxStateCache& rC)
         : nWhichId(nW)

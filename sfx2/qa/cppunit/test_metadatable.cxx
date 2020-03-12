@@ -60,7 +60,7 @@ public:
             bool const i_isInClip = false)
         : m_rRegistry(i_rReg)
         , m_bInClipboard(i_isInClip), m_bInUndo(false), m_bInContent(true) {}
-    bool const m_bInClipboard;
+    bool m_bInClipboard;
     bool m_bInUndo;
     bool m_bInContent;
     virtual bool IsInClipboard() const override { return m_bInClipboard; }

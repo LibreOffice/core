@@ -32,7 +32,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem final : public SfxPoolItem
     OUString                aLibName;
     OUString                aModuleName;
     OUString                aMethodName;
-    OUString const          aCommentText;
+    OUString                aCommentText;
 
 public:
     static SfxPoolItem* CreateDefault();

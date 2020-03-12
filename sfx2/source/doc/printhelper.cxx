@@ -467,7 +467,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         /// of course we must know the printer which execute the job
         VclPtr<SfxPrinter> m_pPrinter;
         /// this describes the target location for the printed temp file
-        OUString const m_sTargetURL;
+        OUString m_sTargetURL;
         /// it holds the temp file alive, till the print job will finish and remove it from disk automatically if the object die
         ::utl::TempFile* m_pTempFile;
 

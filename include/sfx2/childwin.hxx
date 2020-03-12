@@ -90,8 +90,8 @@ typedef std::unique_ptr<SfxChildWindowContext> (*SfxChildWinContextCtor)( vcl::W
                                             SfxChildWinInfo *pInfo);
 struct SfxChildWinContextFactory
 {
-    SfxChildWinContextCtor const  pCtor;      // Factory method
-    sal_uInt16 const              nContextId; // Identifier for SfxInterface
+    SfxChildWinContextCtor  pCtor;      // Factory method
+    sal_uInt16              nContextId; // Identifier for SfxInterface
 
     SfxChildWinContextFactory( SfxChildWinContextCtor pTheCtor, sal_uInt16 nID )
         : pCtor(pTheCtor)
@@ -103,10 +103,10 @@ class SfxChildWinContextArr_Impl;
 
 struct SFX2_DLLPUBLIC SfxChildWinFactory
 {
-    SfxChildWinCtor const       pCtor;  // Factory method
-    sal_uInt16 const            nId;    // ChildWindow-Id ( SlotId )
+    SfxChildWinCtor             pCtor;  // Factory method
+    sal_uInt16                  nId;    // ChildWindow-Id ( SlotId )
     SfxChildWinInfo             aInfo;  // Configuration
-    sal_uInt16 const            nPos;   // Position in UI
+    sal_uInt16                  nPos;   // Position in UI
     std::unique_ptr<SfxChildWinContextArr_Impl> pArr;   // Array for Contexts
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
@@ -142,7 +142,7 @@ public:
 class SFX2_DLLPUBLIC SfxChildWindow
 {
     VclPtr<vcl::Window>        pParent;         // parent window ( Topwindow )
-    sal_uInt16 const           nType;           // ChildWindow-Id
+    sal_uInt16                 nType;           // ChildWindow-Id
     VclPtr<vcl::Window>        pWindow;         // actual contents
     std::shared_ptr<SfxDialogController> xController;     // actual contents
     SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
