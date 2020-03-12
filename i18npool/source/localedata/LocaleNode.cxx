@@ -1527,6 +1527,24 @@ static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCoun
     }
 }
 
+bool LCCalendarNode::expectedCalendarElement( const OUString& rName,
+        const LocaleNode* pNode, sal_Int16 nChild, const OUString& rCalendarID ) const
+{
+    bool bFound = true;
+    if (nChild >= 0)
+    {
+        if (nChild >= pNode->getNumberOfChildren())
+            bFound = false;
+        else
+            pNode = pNode->getChildAt(nChild);
+    }
+    if (bFound && (!pNode || pNode->getName() != rName))
+        bFound = false;
+    if (!bFound)
+        incErrorStrStr( "Error: <%s> element expected in calendar '%s'\n", rName, rCalendarID);
+    return bFound;
+}
+
 void LCCalendarNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
@@ -1717,9 +1735,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (erasNode == nullptr)
                 erasNode = calNode -> getChildAt(nChild);
-            if (!erasNode || erasNode->getName() != "Eras")
+            if (!expectedCalendarElement("Eras", erasNode, -1, calendarID))
             {
-                incErrorStr( "Error: <Eras> element expected in calendar '%s'\n", calendarID);
                 --nChild;
             }
             else
@@ -1730,9 +1747,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 elementTag = "era";
                 for (j = 0; j < nbOfEras[i]; j++) {
                     LocaleNode *currNode = erasNode -> getChildAt(j);
-                    if (!currNode || currNode->getName() != "Era")
+                    if (!expectedCalendarElement("Era", currNode, -1, calendarID))
                     {
-                        incError("<Era> element expected");
                         continue;   // for
                     }
                     OUString eraID( currNode->getChildAt(0)->getValue());
@@ -1749,27 +1765,34 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         }
         ++nChild;
 
-        str = calNode->getChildAt(nChild)->getChildAt(0)->getValue();
-        if (nbOfDays[i])
+        if (expectedCalendarElement("StartDayOfWeek", calNode, nChild, calendarID))
         {
-            for (j = 0; j < nbOfDays[i]; j++)
+            str = calNode->getChildAt(nChild)->getChildAt(0)->getValue();
+            if (nbOfDays[i])
             {
-                LocaleNode *currNode = daysNode->getChildAt(j);
-                OUString dayID( currNode->getChildAt(0)->getValue());
-                if (str == dayID)
-                    break;  // for
+                for (j = 0; j < nbOfDays[i]; j++)
+                {
+                    LocaleNode *currNode = daysNode->getChildAt(j);
+                    OUString dayID( currNode->getChildAt(0)->getValue());
+                    if (str == dayID)
+                        break;  // for
+                }
+                if (j >= nbOfDays[i])
+                    incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s\n", str);
             }
-            if (j >= nbOfDays[i])
-                incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s\n", str);
+            of.writeParameter("startDayOfWeek", str, i);
+            ++nChild;
         }
-        of.writeParameter("startDayOfWeek", str, i);
-        ++nChild;
 
-        str = calNode ->getChildAt(nChild)-> getValue();
-        sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
-        if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
-            incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week\n",  nDays);
-        of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
+        if (expectedCalendarElement("MinimalDaysInFirstWeek", calNode, nChild, calendarID))
+        {
+            str = calNode ->getChildAt(nChild)-> getValue();
+            sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
+            if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
+                incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week\n",
+                        nDays);
+            of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
+        }
     }
     if (!bHasGregorian)
         fprintf( stderr, "Warning: %s\n", "No Gregorian calendar defined, are you sure?");
