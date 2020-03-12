@@ -928,6 +928,9 @@ void SfxObjectShell::BreakMacroSign_Impl( bool bBreakMacroSign )
 
 void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
+    // make sure LO evaluates the macro signatures, so it can be preserved
+    GetScriptingSignatureState();
+
     uno::Reference< task::XInteractionHandler > xInteraction;
     if ( GetMedium() )
         xInteraction = GetMedium()->GetInteractionHandler();

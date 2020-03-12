@@ -1009,15 +1009,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                    ODFVER_012_TEXT);
 
     // create new document from template
-    // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
-    // won't verify the signature for templates, so the resulting document won't be able to
-    // preserve the templates signature.
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(
-        aURL, "_default", 0,
-        comphelper::InitPropertySequence(
-            { { "MacroExecutionMode",
-                uno::Any(document::MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN) } }));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
+                                                  uno::Sequence<beans::PropertyValue>(0));
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1119,15 +1113,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
-    // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
-    // won't verify the signature for templates, so the resulting document won't be able to
-    // preserve the templates signature.
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(
-        aURL, "_default", 0,
-        comphelper::InitPropertySequence(
-            { { "MacroExecutionMode",
-                uno::Any(document::MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN) } }));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
+                                                  uno::Sequence<beans::PropertyValue>(0));
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1252,15 +1240,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
-    // we can't use createDoc / MacrosTest::loadFromDesktop, because ALWAYS_EXECUTE_NO_WARN
-    // won't verify the signature for templates, so the resulting document won't be able to
-    // preserve the templates signature.
     mxComponent->dispose();
-    mxComponent = mxDesktop->loadComponentFromURL(
-        aURL, "_default", 0,
-        comphelper::InitPropertySequence(
-            { { "MacroExecutionMode",
-                uno::Any(document::MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN) } }));
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0,
+                                                  uno::Sequence<beans::PropertyValue>(0));
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
