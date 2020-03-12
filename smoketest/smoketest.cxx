@@ -106,8 +106,8 @@ private:
     { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
 
     css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
-    css::util::URL const url_;
-    css::uno::Sequence< css::beans::PropertyValue > const arguments_;
+    css::util::URL url_;
+    css::uno::Sequence< css::beans::PropertyValue > arguments_;
     css::uno::Reference< css::frame::XDispatchResultListener > listener_;
 };
 

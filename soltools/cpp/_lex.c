@@ -68,7 +68,7 @@ struct fsm
 {
     int state;                          /* if in this state */
     uchar ch[4];                        /* and see one of these characters */
-    int const nextstate;                /* enter this state if +ve */
+    int nextstate;                      /* enter this state if +ve */
 };
 
 static const struct fsm fsm[] = {
