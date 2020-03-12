@@ -189,7 +189,11 @@ bool TableWidget::KeyInput(const KeyEvent& rKEvt)
                 break;
             case KEY_DOWN:
                 if ( nNewLine < TABLE_CELLS_VERT )
+                {
                     nNewLine++;
+                    if ( nNewCol == 0 )
+                        nNewCol = 1;
+                }
                 else
                     mxControl->CloseAndShowTableDialog();
                 break;
@@ -201,7 +205,11 @@ bool TableWidget::KeyInput(const KeyEvent& rKEvt)
                 break;
             case KEY_RIGHT:
                 if ( nNewCol < TABLE_CELLS_HORIZ )
+                {
                     nNewCol++;
+                    if ( nNewLine == 0 )
+                        nNewLine = 1;
+                }
                 else
                     mxControl->CloseAndShowTableDialog();
                 break;
