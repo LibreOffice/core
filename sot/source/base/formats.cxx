@@ -53,7 +53,7 @@ namespace {
 
 struct SotDestinationEntry_Impl
 {
-    SotExchangeDest const   nDestination;
+    SotExchangeDest         nDestination;
     const SotAction_Impl*   aDefaultActions;
     const SotAction_Impl*   aMoveActions;
     const SotAction_Impl*   aCopyActions;

@@ -43,9 +43,9 @@ struct value
 /* operator priority, arity, and conversion type, indexed by tokentype */
 struct pri
 {
-    char const pri;
-    char const arity;
-    char const ctype;
+    char pri;
+    char arity;
+    char ctype;
 };
 
 static const struct pri priority[] =
