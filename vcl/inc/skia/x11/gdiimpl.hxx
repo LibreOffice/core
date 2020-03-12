@@ -31,6 +31,8 @@ public:
     virtual void DeInit() override;
     virtual void freeResources() override;
 
+    static void prepareSkia();
+
 private:
     virtual void createWindowContext() override;
     virtual void performFlush() override;
