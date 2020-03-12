@@ -35,7 +35,7 @@ struct AutoHandle
         return mHandle;
     }
 
-    bool operator==(const AutoHandle& rhs)
+    bool operator==(const AutoHandle& rhs) const
     {
         return mHandle == rhs.mHandle;
     }

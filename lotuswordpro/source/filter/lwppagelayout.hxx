@@ -104,7 +104,7 @@ public:
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
     virtual sal_Int32 GetPageNumber(sal_uInt16 nLayoutNumber) override;
-    bool operator <(LwpPageLayout& Other);
+    bool operator <(LwpPageLayout& Other) const;
     LwpPara* GetPagePosition();
 };
 

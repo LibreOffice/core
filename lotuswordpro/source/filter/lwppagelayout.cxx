@@ -691,7 +691,7 @@ double LwpPageLayout::GetHeight()
 * @descr:  Compare the position of layout. If the position of this layout is earlier than other layout,return true, or return false
 *
 */
-bool LwpPageLayout::operator<(LwpPageLayout& Other)
+bool LwpPageLayout::operator<(LwpPageLayout& Other) const
 {
     LwpPara* pThisPara = GetPagePosition();
     LwpPara* pOtherPara = Other.GetPagePosition();

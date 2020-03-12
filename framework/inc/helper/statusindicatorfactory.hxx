@@ -92,7 +92,7 @@ struct IndicatorInfo
                     are not interesting then. Because more than one child
                     indicator can use the same values...
          */
-        bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
+        bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator) const
         {
             return (m_xIndicator == xIndicator);
         }

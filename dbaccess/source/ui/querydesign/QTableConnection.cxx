@@ -47,7 +47,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
     return *this;
 }
 
-bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
+bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare) const
 {
     OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : one of the two participants has no data!");
 
