@@ -534,7 +534,7 @@ sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 {
     return nNumber == DBL_MIN
         || ::rtl::math::isNan( nNumber )
-        || ::rtl::math::isInf( nNumber );
+        || std::isinf( nNumber );
 }
 
 // ____ XComponent ____

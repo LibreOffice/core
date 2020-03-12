@@ -668,7 +668,7 @@ void AreaChart::createShapes()
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
                     double fAdd = pSeries->getYValue( nIndex );
-                    if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
+                    if( !::rtl::math::isNan(fAdd) && !std::isinf(fAdd) )
                         rLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
             }
@@ -729,9 +729,9 @@ void AreaChart::createShapes()
                         fLogicY = fabs( fLogicY )/rLogicYSumMap[nAttachedAxisIndex];
                     }
 
-                    if(    ::rtl::math::isNan(fLogicX) || ::rtl::math::isInf(fLogicX)
-                            || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
-                            || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
+                    if(    ::rtl::math::isNan(fLogicX) || std::isinf(fLogicX)
+                            || ::rtl::math::isNan(fLogicY) || std::isinf(fLogicY)
+                            || ::rtl::math::isNan(fLogicZ) || std::isinf(fLogicZ) )
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {

@@ -66,8 +66,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) );
+                 std::isinf( x ) ||
+                 std::isinf( y ) );
     }
 };
 
@@ -77,8 +77,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) ||
+                 std::isinf( x ) ||
+                 std::isinf( y ) ||
                  x <= 0.0 );
     }
 };
@@ -89,8 +89,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) ||
+                 std::isinf( x ) ||
+                 std::isinf( y ) ||
                  y <= 0.0 );
     }
 };
@@ -101,8 +101,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) ||
+                 std::isinf( x ) ||
+                 std::isinf( y ) ||
                  y >= 0.0 );
     }
 };
@@ -113,8 +113,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) ||
+                 std::isinf( x ) ||
+                 std::isinf( y ) ||
                  x <= 0.0 ||
                  y <= 0.0 );
     }
@@ -126,8 +126,8 @@ public:
     bool operator()( double x, double y )
     { return ! ( ::rtl::math::isNan( x ) ||
                  ::rtl::math::isNan( y ) ||
-                 ::rtl::math::isInf( x ) ||
-                 ::rtl::math::isInf( y ) ||
+                 std::isinf( x ) ||
+                 std::isinf( y ) ||
                  x <= 0.0 ||
                  y >= 0.0 );
     }

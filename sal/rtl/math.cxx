@@ -259,7 +259,7 @@ void doubleToString(typename T::String ** pResult,
     }
 
     bool bHuge = fValue == HUGE_VAL; // g++ 3.0.1 requires it this way...
-    if (bHuge || rtl::math::isInf(fValue))
+    if (bHuge || std::isinf(fValue))
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
