@@ -149,7 +149,7 @@ void lcl_SplineCalculation::Calculate()
     std::vector< double > u( n );
     m_aSecDerivY.resize( n + 1, 0.0 );
 
-    if( ::rtl::math::isInf( m_fYp1 ) )
+    if( std::isinf( m_fYp1 ) )
     {
         // natural spline
         m_aSecDerivY[ 0 ] = 0.0;
@@ -190,7 +190,7 @@ void lcl_SplineCalculation::Calculate()
     double qn = 0.0;
     double un = 0.0;
 
-    if( ! ::rtl::math::isInf( m_fYpN ) )
+    if( ! std::isinf( m_fYpN ) )
     {
         qn = 0.5;
         double xDiff = m_aPoints[ n ].first - m_aPoints[ n - 1 ].first;
