@@ -241,6 +241,7 @@ struct SettingsTable_Impl
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     sal_Int16 m_nZoomType = 0;
+    sal_Int32           m_nWordCompatibilityMode;
     Id                  m_nView;
     bool                m_bEvenAndOddHeaders;
     bool                m_bUsePrinterMetrics;
@@ -277,6 +278,7 @@ struct SettingsTable_Impl
     , m_bShowMarkupChanges(true)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
+    , m_nWordCompatibilityMode(-1)
     , m_nView(0)
     , m_bEvenAndOddHeaders(false)
     , m_bUsePrinterMetrics(false)
@@ -757,8 +759,12 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 }
 
+//Keep this function in-sync with the one in sw/.../docxattributeoutput.cxx
 sal_Int32 SettingsTable::GetWordCompatibilityMode() const
 {
+    if ( m_pImpl->m_nWordCompatibilityMode != -1 )
+        return m_pImpl->m_nWordCompatibilityMode;
+
     for (const auto& rProp : m_pImpl->m_aCompatSettings)
     {
         if (rProp.Name == "compatSetting")
@@ -776,12 +782,15 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
 
             if (sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word")
             {
-                return sVal.toInt32();
+                const sal_Int32 nValidMode = sVal.toInt32();
+                // if repeated, highest mode wins in MS Word. 11 is the first valid mode.
+                if ( nValidMode > 10 && nValidMode > m_pImpl->m_nWordCompatibilityMode )
+                    m_pImpl->m_nWordCompatibilityMode = nValidMode;
             }
         }
     }
 
-    return -1; // Word compatibility mode not found
+    return m_pImpl->m_nWordCompatibilityMode;
 }
 
 bool SettingsTable::GetLongerSpaceSequence() const
