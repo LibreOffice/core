@@ -102,7 +102,16 @@ static void checkDeviceBlacklisted(bool blockDisable = false)
     }
 }
 
-static bool supportsVCLSkia() { return !getenv("SAL_DISABLESKIA"); }
+static bool skiaSupportedByBackend = false;
+static bool supportsVCLSkia()
+{
+    if (!skiaSupportedByBackend)
+    {
+        SAL_INFO("vcl.skia", "Skia not supported by VCL backend, disabling");
+        return false;
+    }
+    return getenv("SAL_DISABLESKIA") == nullptr;
+}
 
 bool isVCLSkiaEnabled()
 {
@@ -222,7 +231,7 @@ void disableRenderMethod(RenderMethod method)
 static sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
 
 static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)() = nullptr;
-void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)())
+static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)())
 {
     createVulkanWindowContextFunction = function;
 }
@@ -248,7 +257,8 @@ GrContext* getSharedGrContext()
     if (done)
         return nullptr;
     done = true;
-    assert(createVulkanWindowContextFunction);
+    if (createVulkanWindowContextFunction == nullptr)
+        return nullptr; // not initialized properly (e.g. used from a VCL backend with no Skia support)
     std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction();
     // Set up using the shared context created by the call above, if successful.
     context = sk_app::VulkanWindowContext::getSharedGrContext();
@@ -300,6 +310,15 @@ void cleanup()
 {
     delete sharedGrContext;
     sharedGrContext = nullptr;
+}
+
+// Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.
+// The code here (that is in the vcl lib) needs a function for creating Vulkan context that is
+// usually available only in the backend libs.
+void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)())
+{
+    setCreateVulkanWindowContext(createVulkanWindowContext);
+    skiaSupportedByBackend = true;
 }
 
 #ifdef DBG_UTIL

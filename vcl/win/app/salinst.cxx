@@ -402,6 +402,9 @@ WinSalInstance::WinSalInstance()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("win");
+#if HAVE_FEATURE_SKIA
+    WinSkiaSalGraphicsImpl::prepareSkia();
+#endif
 }
 
 WinSalInstance::~WinSalInstance()

@@ -299,12 +299,8 @@ std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
     sk_app::DisplayParams displayParams;
     return sk_app::window_context_factory::MakeVulkanForWin(nullptr, displayParams);
 }
-
-struct SetFunction
-{
-    SetFunction() { SkiaHelper::setCreateVulkanWindowContext(createVulkanWindowContext); }
-};
-SetFunction setFunction;
 }
+
+void WinSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createVulkanWindowContext); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

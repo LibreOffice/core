@@ -81,6 +81,8 @@ public:
     virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor,
                                   const SalTwoRect& rPosAry) override;
 
+    static void prepareSkia();
+
 protected:
     virtual void createWindowContext() override;
     virtual void performFlush() override;
