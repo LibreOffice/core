@@ -102,7 +102,7 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
 {
     drawing::Direction3D aRet(0,0,0);
 
-    if( ::rtl::math::isNan(fLogicSize) || ::rtl::math::isInf(fLogicSize) )
+    if( ::rtl::math::isNan(fLogicSize) || std::isinf(fLogicSize) )
         return aRet;
 
     double fMaxSize = m_fMaxLogicBubbleSize;
@@ -227,8 +227,8 @@ void BubbleChart::createShapes()
                     if( fBubbleSize == 0.0 || ::rtl::math::isNan(fBubbleSize) )
                         continue;
 
-                    if(    ::rtl::math::isNan(fLogicX) || ::rtl::math::isInf(fLogicX)
-                        || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY) )
+                    if(    ::rtl::math::isNan(fLogicX) || std::isinf(fLogicX)
+                        || ::rtl::math::isNan(fLogicY) || std::isinf(fLogicY) )
                         continue;
 
                     bool bIsVisible = rPosHelper.isLogicVisible(fLogicX, fLogicY, fLogicZ);

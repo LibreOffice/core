@@ -49,7 +49,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
     for( sal_Int32 i = 0; i < nDataLength; ++i )
     {
         if( ::rtl::math::isNan( pY[i] ) ||
-            ::rtl::math::isInf( pY[i] ))
+            std::isinf( pY[i] ))
             --nMax;
         else
             fSumY += pY[i];
@@ -72,7 +72,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
             for( sal_Int32 i = 0; i < nDataLength; ++i )
             {
                 if( !::rtl::math::isNan( pY[i] ) &&
-                    !::rtl::math::isInf( pY[i] ))
+                    !std::isinf( pY[i] ))
                 {
                     double v = m_fMeanValue - pY[i];
                     fErrorSum += (v*v);
