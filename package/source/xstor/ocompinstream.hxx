@@ -48,7 +48,7 @@ protected:
     std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pInterfaceContainer;
     css::uno::Sequence < css::beans::PropertyValue > m_aProperties;
     bool m_bDisposed;
-    sal_Int32 const m_nStorageType;
+    sal_Int32 m_nStorageType;
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,

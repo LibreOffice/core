@@ -62,11 +62,11 @@ public:
  */
 struct RTUik
 {
-    sal_uInt32 const m_Data1;
-    sal_uInt16 const m_Data2;
-    sal_uInt16 const m_Data3;
-    sal_uInt32 const m_Data4;
-    sal_uInt32 const m_Data5;
+    sal_uInt32 m_Data1;
+    sal_uInt16 m_Data2;
+    sal_uInt16 m_Data3;
+    sal_uInt32 m_Data4;
+    sal_uInt32 m_Data5;
 };
 
 /// specifies the calling convention for type reader/writer api

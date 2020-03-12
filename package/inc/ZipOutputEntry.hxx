@@ -48,7 +48,7 @@ protected:
     ZipEntry            *m_pCurrentEntry;
     sal_Int16           m_nDigested;
     ZipPackageStream*   m_pCurrentStream;
-    bool const          m_bEncryptCurrentEntry;
+    bool                m_bEncryptCurrentEntry;
 
 public:
     virtual ~ZipOutputEntryBase() = default;

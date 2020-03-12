@@ -137,8 +137,8 @@ sal_uInt32 writeDouble(sal_uInt8* buffer, double v)
         double v;
         struct
         {
-            sal_uInt32 b1;
-            sal_uInt32 b2;
+            sal_uInt32  b1;
+            sal_uInt32  b2;
         } b;
     } x;
 
@@ -182,7 +182,7 @@ struct CPInfo
         RTConstValueUnion   aConst;
     } m_value;
     struct CPInfo*  m_next;
-    CPInfoTag const m_tag;
+    CPInfoTag       m_tag;
     sal_uInt16      m_index;
 
     CPInfo(CPInfoTag tag, struct CPInfo* prev);
@@ -618,19 +618,19 @@ class TypeWriter
 public:
 
     sal_uInt32          m_refCount;
-    typereg_Version const m_version;
-    RTTypeClass const   m_typeClass;
-    OString const       m_typeName;
-    sal_uInt16 const    m_nSuperTypes;
+    typereg_Version     m_version;
+    RTTypeClass         m_typeClass;
+    OString             m_typeName;
+    sal_uInt16          m_nSuperTypes;
     std::unique_ptr<OString[]>
                         m_superTypeNames;
-    OString const       m_doku;
-    OString const       m_fileName;
-    sal_uInt16 const    m_fieldCount;
+    OString             m_doku;
+    OString             m_fileName;
+    sal_uInt16          m_fieldCount;
     FieldEntry*         m_fields;
-    sal_uInt16 const    m_methodCount;
+    sal_uInt16          m_methodCount;
     MethodEntry*        m_methods;
-    sal_uInt16 const    m_referenceCount;
+    sal_uInt16          m_referenceCount;
     ReferenceEntry*     m_references;
 
     std::unique_ptr<sal_uInt8[]> m_blop;

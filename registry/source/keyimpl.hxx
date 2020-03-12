@@ -123,11 +123,11 @@ public:
     OUString getFullPath(OUString const & path) const;
 
 private:
-    sal_uInt32              m_refCount;
-    OUString const           m_name;
+    sal_uInt32               m_refCount;
+    OUString                 m_name;
     bool                     m_bDeleted:1;
     bool                     m_bModified:1;
-    ORegistry*              m_pRegistry;
+    ORegistry*               m_pRegistry;
 };
 
 #endif

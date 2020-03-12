@@ -37,8 +37,8 @@ typedef std::unordered_map< OUString, OUString > StringHashMap;
 
 struct ManifestScopeEntry
 {
-    OUString const m_aConvertedName;
-    StringHashMap const m_aNamespaces;
+    OUString        m_aConvertedName;
+    StringHashMap   m_aNamespaces;
     bool            m_bValid;
 
     ManifestScopeEntry( const OUString& aConvertedName, const StringHashMap& aNamespaces )

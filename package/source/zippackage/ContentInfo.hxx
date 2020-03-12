@@ -27,7 +27,7 @@
 struct ZipContentInfo
 {
     css::uno::Reference < css::lang::XUnoTunnel > xTunnel;
-    bool const bFolder;
+    bool bFolder;
     union
     {
         ZipPackageFolder *pFolder;
