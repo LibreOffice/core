@@ -523,11 +523,11 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 
     if (eResult == DocPasswordVerifierResult::OK && !aPassword.isEmpty())
     {
-        if (std::find_if(std::cbegin(aEncData), std::cend(aEncData),
+        if (std::find_if(aEncData.begin(), aEncData.end(),
                          [](const css::beans::NamedValue& val) {
                              return val.Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
                          })
-            == std::cend(aEncData))
+            == aEncData.end())
         {
             // tdf#118639: We need ODF encryption data for autorecovery, where password
             // will already be unavailable, so generate and append it here
