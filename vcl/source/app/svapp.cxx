@@ -1245,7 +1245,16 @@ unsigned int Application::GetDisplayExternalScreen()
 tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayScreenPosSizePixel( nScreen ) : tools::Rectangle();
+    if (!pSys)
+    {
+        SAL_WARN("vcl", "Requesting screen size/pos for screen #" << nScreen << " failed");
+        assert(false);
+        return tools::Rectangle();
+    }
+    tools::Rectangle aRect = pSys->GetDisplayScreenPosSizePixel(nScreen);
+    if (aRect.getHeight() == 0)
+        SAL_WARN("vcl", "Requesting screen size/pos for screen #" << nScreen << " returned 0 height.");
+    return aRect;
 }
 
 namespace {
