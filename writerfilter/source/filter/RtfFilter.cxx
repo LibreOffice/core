@@ -19,6 +19,7 @@
 
 #include <memory>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -95,6 +96,13 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     bool bResult(false);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
+    uno::Reference<beans::XPropertySet> xDocProps;
+    if (m_xDstDoc.is()) // not in cppunittest?
+    {
+        xDocProps.set(m_xDstDoc, uno::UNO_QUERY);
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
+    }
+
     try
     {
         utl::MediaDescriptor aMediaDesc(rDescriptor);
@@ -156,6 +164,12 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     catch (const uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter", "Exception caught");
+    }
+
+    if (m_xDstDoc.is()) // not in cppunittest?
+    {
+        // note: pStream.clear calls RemoveLastParagraph()
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
     }
 
     if (xStatusIndicator.is())

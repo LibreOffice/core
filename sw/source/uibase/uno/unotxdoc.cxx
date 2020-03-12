@@ -1962,7 +1962,19 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDoc* pDoc = pDocShell->GetDoc();
             bool bBool (false);
             if( aValue >>= bBool )
+            {
               pDoc->SetInReading( bBool );
+            }
+        }
+        break;
+        case WID_DOC_WRITERFILTER:
+        {
+            SwDoc* pDoc = pDocShell->GetDoc();
+            bool bBool = {};
+            if (aValue >>= bBool)
+            { // HACK: writerfilter has to use API to set this :(
+              pDoc->SetInWriterfilterImport(bBool);
+            }
         }
         break;
         case WID_DOC_BUILDID:
