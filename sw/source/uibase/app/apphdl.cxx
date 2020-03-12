@@ -204,26 +204,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
             {
                 SwView* pView = ::GetActiveView();
                 std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-                bool bUnLockDispatcher = false;
-                SfxDispatcher* pDispatcher = nullptr;
                 if (pView)
-                {
                     xConfigItem = pView->EnsureMailMergeConfigItem();
-
-                    // tdf#121607 lock the dispatcher while processing
-                    // this request, and release it afterwards,
-                    // that means that if this request pops up a dialog
-                    // any other pending requests will be deferred
-                    // until this request is finished, i.e. they won't
-                    // be dispatched by the dispatcher timeout until
-                    // unlock is called, serializing the password dialogs
-                    pDispatcher = pView->GetViewFrame()->GetDispatcher();
-                    if (!pDispatcher->IsLocked())
-                    {
-                        pDispatcher->Lock(true);
-                        bUnLockDispatcher = true;
-                    }
-                }
 
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
@@ -238,9 +220,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 {
                     rSet.DisableItem(nWhich);
                 }
-
-                if (bUnLockDispatcher)
-                    pDispatcher->Lock(false);
             }
             break;
             default:
