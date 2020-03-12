@@ -80,10 +80,10 @@ namespace slideshow::internal
             SlideShowContext                        maContext;
             std::weak_ptr<DrawShape>              mpDrawShape;
             WakeupEventSharedPtr                    mpWakeupEvent;
-            IntrinsicAnimationEventHandlerSharedPtr const mpListener;
+            IntrinsicAnimationEventHandlerSharedPtr mpListener;
             ::std::vector<double>                   maTimeouts;
             ::std::size_t                           mnCurrIndex;
-            ::std::size_t const                     mnNumLoops;
+            ::std::size_t                           mnNumLoops;
             ::std::size_t                           mnLoopCount;
             bool                                    mbIsActive;
         };

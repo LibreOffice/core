@@ -79,7 +79,7 @@ namespace slideshow
 
         private:
             EventSharedPtr  mpEvent;
-            double const    mnTimeout;
+            double          mnTimeout;
         };
 
         /// Return value for makeInterruptableDelay()

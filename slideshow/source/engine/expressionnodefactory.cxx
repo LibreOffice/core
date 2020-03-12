@@ -48,7 +48,7 @@ namespace slideshow::internal
                 }
 
             private:
-                double const  maValue;
+                double  maValue;
             };
 
             class TValueExpression : public ExpressionNode

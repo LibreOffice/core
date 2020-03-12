@@ -122,7 +122,7 @@ namespace slideshow
 
             // The attributes of this Shape
             const double                                                            mnPriority;
-            ::basegfx::B2DRectangle const                                           maBounds;
+            ::basegfx::B2DRectangle                                                 maBounds;
         };
     }
 }

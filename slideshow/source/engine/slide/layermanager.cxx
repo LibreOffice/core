@@ -602,7 +602,7 @@ namespace slideshow::internal
                 }
 
             private:
-                ::cppcanvas::CanvasSharedPtr const mpCanvas;
+                ::cppcanvas::CanvasSharedPtr mpCanvas;
             };
         }
 

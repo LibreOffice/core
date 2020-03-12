@@ -245,8 +245,8 @@ private:
     // bool
     bool mbSuccess;
 
-    sal_Int16 const mnTransitionType;
-    sal_Int16 const mnTransitionSubType;
+    sal_Int16 mnTransitionType;
+    sal_Int16 mnTransitionSubType;
 
     uno::Reference<presentation::XTransitionFactory> mxFactory;
 };
@@ -462,7 +462,7 @@ public:
         double                                     t ) override;
 
 private:
-    RGBColor const maFadeColor;
+    RGBColor maFadeColor;
 };
 
 void CutSlideChange::prepareForRun(

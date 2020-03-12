@@ -132,7 +132,7 @@ private:
     PolyPolygonVector                         maPolygons;
     ::std::stack<XShapesEntry>                maShapesStack;
     double                                    mnAscendingPrio;
-    bool const                                mbConvertingMasterPage;
+    bool                                      mbConvertingMasterPage;
 };
 
 } // namespace internal
