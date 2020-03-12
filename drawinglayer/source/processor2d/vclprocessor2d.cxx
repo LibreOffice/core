@@ -122,7 +122,7 @@ namespace drawinglayer::processor2d
                     // Get the VCL font (use FontHeight as FontWidth)
                     vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
                         rTextCandidate.getFontAttribute(),
-                        aFontScaling.getX(),
+                        aFontScaling.getY(),
                         aFontScaling.getY(),
                         fRotate,
                         rTextCandidate.getLocale()));
