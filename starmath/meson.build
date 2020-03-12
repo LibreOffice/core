@@ -1,4 +1,4 @@
-starmath_lib = shared_library('starmathlo',
+sm_lib = shared_library('smlo',
   'source/AccessibleSmElement.cxx',
   'source/AccessibleSmElementsControl.cxx',
   'source/ElementsDockingWindow.cxx',
