@@ -142,7 +142,7 @@ protected:
     ~AutoFormatBase();
 
     /// Comparing based of boxes backgrounds.
-    bool operator==(const AutoFormatBase& rRight);
+    bool operator==(const AutoFormatBase& rRight) const;
 
 public:
     // The get-methods.

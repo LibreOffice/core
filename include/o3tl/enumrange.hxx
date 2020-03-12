@@ -58,7 +58,7 @@ public:
             ++m_value;
         }
 
-        bool operator!=( Iterator rhs )
+        bool operator!=( Iterator rhs ) const
         {
             return m_value != rhs.m_value;
         }

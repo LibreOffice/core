@@ -119,8 +119,8 @@ public:
  */
 struct SwTOXSortTabBase
 {
-    bool operator==(const SwTOXSortTabBase&) = delete;
-    bool operator<(const SwTOXSortTabBase&) = delete;
+    bool operator==(const SwTOXSortTabBase&) const = delete;
+    bool operator<(const SwTOXSortTabBase&) const = delete;
 
     std::vector<SwTOXSource>       aTOXSources;
     css::lang::Locale aLocale;

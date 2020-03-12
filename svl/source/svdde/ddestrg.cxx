@@ -34,7 +34,7 @@ DdeString::~DdeString()
         DdeFreeStringHandle( hInst, hString );
 }
 
-bool DdeString::operator==( HSZ h )
+bool DdeString::operator==( HSZ h ) const
 {
     return( !DdeCmpStringHandles( hString, h ) );
 }

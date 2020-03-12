@@ -53,7 +53,7 @@ SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
         m_aAuthFields[i] = rCopy.m_aAuthFields[i];
 }
 
-bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
+bool SwAuthEntry::operator==(const SwAuthEntry& rComp) const
 {
     for(int i = 0; i < AUTH_FIELD_END; ++i)
         if(m_aAuthFields[i] != rComp.m_aAuthFields[i])
