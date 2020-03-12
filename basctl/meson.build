@@ -2,15 +2,19 @@ basslots_hxx = custom_target('basslots',
   input: ['sdi/basslots.sdi'],
   output: ['basslots.hxx'],
   depfile: '@BASENAME@.d',
-  command: [find_program('basslots.py'),
-            svidl_bin,
-            meson.source_root(),
-            meson.build_root(),
-            meson.current_build_dir(),
-            '@INPUT@',
-            '@OUTPUT@',
-            '@DEPFILE@',
-            ])
+  command: [svidl_bin,
+            '-quiet',
+            '-I' + meson.current_source_dir() + '/sdi',
+            '-I' + meson.source_root() + '/svx/sdi',
+            '-I' + meson.source_root() + '/sfx2/sdi',
+            '-I' + meson.source_root() + '/include',
+            '-fx' + meson.current_source_dir() + '/sdi/baside.sdi',
+            '-fs' + meson.build_root() + '/@OUTPUT@',
+            '-fM' + meson.build_root() + '/@DEPFILE@',
+            '-fm' + meson.current_build_dir(),
+            meson.build_root() + '/@INPUT@'
+            ]
+)
 
 basctl_lib = shared_library('basctl',
   'source/accessibility/accessibledialogcontrolshape.cxx',
