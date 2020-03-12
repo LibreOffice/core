@@ -1278,7 +1278,7 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
         bool bFits = (nSpace - nStart - 3 <= SAL_MAX_UINT16);
         OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
         if (bFits)
-            return rLine.copy(nStart+1, nSpace-nStart-2);
+            return rLine.copy(nStart+1, std::max< sal_Int32 >(0, nSpace-nStart-2));
         else
         {
             rbOverflowCell = true;
