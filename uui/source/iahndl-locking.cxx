@@ -31,6 +31,7 @@
 
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>
 #include "getcontinuations.hxx"
@@ -84,7 +85,8 @@ handleLockedDocumentRequest_(
         aArguments.push_back( !aInfo.isEmpty()
                               ? aInfo
                               : Translate::get( STR_UNKNOWNUSER, aResLocale) );
-        aArguments.push_back( xRetry.is()
+        bool bAllowOverride = xRetry.is() && officecfg::Office::Common::Misc::AllowOverrideLocking::get();
+        aArguments.push_back( bAllowOverride
                               ? Translate::get( STR_OPENLOCKED_ALLOWIGNORE_MSG, aResLocale )
                               : "" );
         aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
