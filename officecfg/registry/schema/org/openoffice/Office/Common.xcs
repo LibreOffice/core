@@ -5499,6 +5499,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="AllowOverrideLocking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the user can open a file for editing although it has been locked by another user.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if a warning dialog should be

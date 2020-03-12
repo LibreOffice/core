@@ -19,6 +19,7 @@
 
 #include <strings.hrc>
 #include "openlocked.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
@@ -29,7 +30,7 @@ OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const std::locale&
     m_xQueryBox->set_title(Translate::get(STR_OPENLOCKED_TITLE, rResLocale));
     m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES);
     m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
-    if (bEnableOverride)
+    if (bEnableOverride && officecfg::Office::Common::Misc::AllowOverrideLocking::get())
     {
         // Present option to ignore the (stale?) lock file and open the document
         m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
