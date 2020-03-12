@@ -2213,7 +2213,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
             aFilterData.realloc(aFilterData.getLength() + 1);
             aFilterData[aFilterData.getLength() - 1].Name = "Compression";
             // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
-            aFilterData[aFilterData.getLength() - 1].Value <<= sal_uInt32(1);
+            aFilterData[aFilterData.getLength() - 1].Value <<= static_cast<sal_Int32>(1);
         }
 #endif
         nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
