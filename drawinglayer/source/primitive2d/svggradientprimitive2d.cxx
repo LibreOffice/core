@@ -240,29 +240,32 @@ namespace drawinglayer::primitive2d
             double fStart,
             double fEnd) const
         {
+            double fInt(0.0);
+            double fFrac(0.0);
+            double fEnd2(0.0);
+
             if(SpreadMethod::Pad == getSpreadMethod())
             {
                 if(fStart < 0.0)
                 {
+                    fFrac = std::modf(fStart, &fInt);
                     const SvgGradientEntry& rFront(getGradientEntries().front());
-                    const SvgGradientEntry aTemp(fStart, rFront.getColor(), rFront.getOpacity());
-                    createAtom(rTargetColor, rTargetOpacity, aTemp, rFront, 0, 0);
+                    const SvgGradientEntry aTemp(1.0 + fFrac, rFront.getColor(), rFront.getOpacity());
+                    createAtom(rTargetColor, rTargetOpacity, aTemp, rFront, static_cast<sal_Int32>(fInt - 1), 0);
                     fStart = rFront.getOffset();
                 }
 
-                if(fEnd < 1.0)
+                if(fEnd > 1.0)
                 {
-                    const SvgGradientEntry& rBack(getGradientEntries().back());
-                    const SvgGradientEntry aTemp(fEnd, rBack.getColor(), rBack.getOpacity());
-                    createAtom(rTargetColor, rTargetOpacity, rBack, aTemp, 0, 0);
-                    fEnd = rBack.getOffset();
+                    // change fEnd early, but create geometry later (after range below)
+                    fEnd2 = fEnd;
+                    fEnd = getGradientEntries().back().getOffset();
                 }
             }
 
             while(fStart < fEnd)
             {
-                double fInt(0.0);
-                double fFrac(std::modf(fStart, &fInt));
+                fFrac = std::modf(fStart, &fInt);
 
                 if(fFrac < 0.0)
                 {
@@ -288,6 +291,15 @@ namespace drawinglayer::primitive2d
                     SAL_WARN("drawinglayer", "SvgGradientHelper spread error");
                     fStart += 1.0;
                 }
+            }
+
+            if(fEnd2 > 1.0)
+            {
+                // create end run for SpreadMethod::Pad late to keep correct creation order
+                fFrac = std::modf(fEnd2, &fInt);
+                const SvgGradientEntry& rBack(getGradientEntries().back());
+                const SvgGradientEntry aTemp(fFrac, rBack.getColor(), rBack.getOpacity());
+                createAtom(rTargetColor, rTargetOpacity, rBack, aTemp, 0, static_cast<sal_Int32>(fInt));
             }
         }
 
