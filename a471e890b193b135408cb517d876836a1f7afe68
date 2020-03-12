@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e24d518_3327d8a9",
+        "filename": "i18npool/source/localedata/data/sun_ID.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-12T16:41:52Z",
+      "side": 1,
+      "message": "Please translate the era names to anything that fits. I took this example from the ar_DZ.xml file (where the names are Arabic of course).\n\nIf your locale does not use the Hijri calendar before the era switch then this (taken from fa_IR.xml) is a valid definition where then the Gregorian/Julian calendar is used to display dates before the era switch (see description in the locale.dtd file):\n\n      \u003cEras\u003e\n        \u003cEra\u003e\n          \u003cEraID\u003eDummy\u003c/EraID\u003e\n          \u003cDefaultAbbrvName\u003e\u003c/DefaultAbbrvName\u003e\n          \u003cDefaultFullName\u003e\u003c/DefaultFullName\u003e\n        \u003c/Era\u003e\n        \u003cEra\u003e\n          \u003cEraID\u003eAfterHijra\u003c/EraID\u003e\n          \u003cDefaultAbbrvName\u003eAH\u003c/DefaultAbbrvName\u003e\n          \u003cDefaultFullName\u003eAfter Hijra\u003c/DefaultFullName\u003e\n        \u003c/Era\u003e\n      \u003c/Eras\u003e\n\nNote that in this case the first EraID MUST be named \"Dummy\".",
+      "revId": "a471e890b193b135408cb517d876836a1f7afe68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
