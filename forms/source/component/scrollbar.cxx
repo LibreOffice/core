@@ -51,7 +51,7 @@ namespace frm
         double nExternalValue = 0;
         if ( _rExternalValue >>= nExternalValue )
         {
-            if ( ::rtl::math::isInf( nExternalValue ) )
+            if ( std::isinf( nExternalValue ) )
             {
                 // set the minimum or maximum of the scroll values
                 OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )

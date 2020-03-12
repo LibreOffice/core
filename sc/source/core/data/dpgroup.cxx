@@ -70,7 +70,7 @@ bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
     for (const auto& rValue : maValues)
     {
         double fVal = rValue.GetValue();
-        if (rtl::math::isInf(fVal))
+        if (std::isinf(fVal))
         {
             if (rtl::math::isSignBitSet(fVal))
             {
