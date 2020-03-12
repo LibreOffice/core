@@ -245,6 +245,7 @@ SwDoc::SwDoc()
     mbInWriting(false),
     mbInMailMerge(false),
     mbInXMLImport(false),
+    mbInWriterfilterImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
     mbIsAutoFormatRedline(false),

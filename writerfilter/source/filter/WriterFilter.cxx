@@ -155,6 +155,8 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
     }
     if (m_xDstDoc.is())
     {
+        uno::Reference<beans::XPropertySet> const xDocProps(m_xDstDoc, uno::UNO_QUERY);
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bSkipImages
@@ -279,6 +281,9 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         }
 
         pStream.clear();
+
+        // note: pStream.clear calls RemoveLastParagraph()
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
 
         return true;
     }
