@@ -52,9 +52,9 @@ namespace basprov
     {
     private:
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        OUString const m_sScriptingContext;
+        OUString m_sScriptingContext;
         SbMethod* m_pMethod;
-        bool const m_bIsAppScript;
+        bool m_bIsAppScript;
 
         // properties
         OUString m_sURI;

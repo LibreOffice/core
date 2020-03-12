@@ -42,9 +42,9 @@ namespace basprov
     {
     private:
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        OUString const m_sScriptingContext;
+        OUString m_sScriptingContext;
         SbModule* m_pModule;
-        bool const m_bIsAppScript;
+        bool m_bIsAppScript;
 
     public:
         BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

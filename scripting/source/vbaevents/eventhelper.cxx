@@ -184,8 +184,8 @@ namespace {
 
 struct TranslatePropMap
 {
-    OUString const sEventInfo;   //OO event name
-    TranslateInfo const aTransInfo;
+    OUString sEventInfo;   //OO event name
+    TranslateInfo aTransInfo;
 };
 
 }
@@ -200,7 +200,7 @@ namespace {
 struct TypeList
 {
     uno::Type const * pTypeList;
-    int const nListLength;
+    int nListLength;
 };
 
 }
@@ -309,7 +309,7 @@ public:
 private:
     Reference< XComponentContext > m_xCtx;
     Reference< XInterface > m_xControl;
-    bool const m_bDispose;
+    bool m_bDispose;
 };
 
 }
