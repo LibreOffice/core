@@ -26,18 +26,18 @@
 
 struct ImplGb180302000ToUnicodeRange
 {
-    sal_Int32 const m_nNonRangeDataIndex;
-    sal_uInt32 const m_nFirstLinear;
-    sal_uInt32 const m_nPastLinear;
-    sal_Unicode const m_nFirstUnicode;
+    sal_Int32 m_nNonRangeDataIndex;
+    sal_uInt32 m_nFirstLinear;
+    sal_uInt32 m_nPastLinear;
+    sal_Unicode m_nFirstUnicode;
 };
 
 struct ImplUnicodeToGb180302000Range
 {
-    sal_Int32 const m_nNonRangeDataIndex;
-    sal_Unicode const m_nFirstUnicode;
-    sal_Unicode const m_nLastUnicode;
-    sal_uInt32 const m_nFirstLinear;
+    sal_Int32 m_nNonRangeDataIndex;
+    sal_Unicode m_nFirstUnicode;
+    sal_Unicode m_nLastUnicode;
+    sal_uInt32 m_nFirstLinear;
 };
 
 struct ImplGb18030ConverterData

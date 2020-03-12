@@ -77,7 +77,7 @@ extern "C" using Handler1 = void (*)(int);
 extern "C" using Handler2 = void (*)(int, siginfo_t *, void *);
 struct SignalAction
 {
-    int const Signal;
+    int Signal;
     int Action;
     Handler1 Handler;
     bool siginfo; // Handler's type is Handler2

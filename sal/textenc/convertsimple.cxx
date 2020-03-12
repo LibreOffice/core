@@ -22,8 +22,8 @@ namespace {
 
 struct ImplReplaceCharData
 {
-    sal_uInt16 const mnUniChar;
-    sal_uInt16 const mnReplaceChar;
+    sal_uInt16      mnUniChar;
+    sal_uInt16      mnReplaceChar;
 };
 
 static ImplReplaceCharData const aImplRepCharTab[] =
@@ -353,8 +353,8 @@ sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
 
 struct ImplReplaceCharStrData
 {
-    sal_uInt16 const mnUniChar;
-    sal_uInt16 const maReplaceChars[IMPL_MAX_REPLACECHAR];
+    sal_uInt16      mnUniChar;
+    sal_uInt16      maReplaceChars[IMPL_MAX_REPLACECHAR];
 };
 
 static ImplReplaceCharStrData const aImplRepCharStrTab[] =

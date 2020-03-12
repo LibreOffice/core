@@ -72,7 +72,7 @@ protected:
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 private:
-    TSectionElements const m_aCopyElements;
+    TSectionElements    m_aCopyElements;
 };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDCLIP_HXX

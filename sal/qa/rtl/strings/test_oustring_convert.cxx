@@ -45,10 +45,10 @@ namespace {
 
 struct TestConvertToString
 {
-    sal_Unicode const aSource[100];
-    sal_Int32 const nLength;
-    rtl_TextEncoding const nEncoding;
-    sal_uInt32 const nFlags;
+    sal_Unicode aSource[100];
+    sal_Int32 nLength;
+    rtl_TextEncoding nEncoding;
+    sal_uInt32 nFlags;
     char const * pStrict;
     char const * pRelaxed;
 };

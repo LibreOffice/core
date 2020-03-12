@@ -71,10 +71,10 @@ void test::oustring::EndsWith::endsWith()
 {
     struct Data {
         char const * str1;
-        sal_Int32 const str1Len;
+        sal_Int32 str1Len;
         char const * str2;
-        sal_Int32 const str2Len;
-        bool const endsWith;
+        sal_Int32 str2Len;
+        bool endsWith;
     };
     Data const data[] = {
         { RTL_CONSTASCII_STRINGPARAM(""), RTL_CONSTASCII_STRINGPARAM(""),

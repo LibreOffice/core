@@ -63,7 +63,7 @@ namespace {
 
 struct PropertyInfo
 {
-    bool const bIsReadonlyOrTransient;
+    bool    bIsReadonlyOrTransient;
 
     explicit PropertyInfo( const bool i_bIsTransientOrReadOnly )
         :bIsReadonlyOrTransient( i_bIsTransientOrReadOnly )

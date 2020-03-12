@@ -207,8 +207,8 @@ static const sal_uInt32 SocketDirection[]= {
 
 static const struct
 {
-    int const      errcode;
-    oslSocketError const error;
+    int            errcode;
+    oslSocketError error;
 } SocketError[]= {
     { 0,               osl_Socket_E_None              }, /* no error */
     { ENOTSOCK,        osl_Socket_E_NotSocket         }, /* Socket operation on non-socket */

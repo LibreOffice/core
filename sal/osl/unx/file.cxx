@@ -89,7 +89,7 @@ struct FileHandle_Impl
         KIND_FD = 1,
         KIND_MEM = 2
     };
-    int const    m_kind;
+    int          m_kind;
     /** State
      */
     State m_state;
@@ -161,7 +161,7 @@ struct FileHandle_Impl
 
     class Guard
     {
-        pthread_mutex_t * const m_mutex;
+        pthread_mutex_t *m_mutex;
 
     public:
         explicit Guard(pthread_mutex_t *pMutex);
