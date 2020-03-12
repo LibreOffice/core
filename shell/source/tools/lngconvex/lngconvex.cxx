@@ -143,7 +143,7 @@ public:
     }
 private:
     std::ios& m_IoStrm;
-    std::ios::iostate const m_OldIos;
+    std::ios::iostate m_OldIos;
 };
 
 class iso_lang_identifier

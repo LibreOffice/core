@@ -97,7 +97,7 @@ private:
 
 private:
     i_xml_parser_event_handler* document_handler_;
-    XML_Parser const xml_parser_;
+    XML_Parser xml_parser_;
 
 private:
     xml_parser(const xml_parser&) = delete;
