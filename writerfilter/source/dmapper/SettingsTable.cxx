@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
 #include "ConversionHelper.hxx"
@@ -683,6 +684,22 @@ uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangPrope
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
 {
+    if ( GetWordCompatibilityMode() == -1 )
+    {
+        // the default value for an undefined compatibilityMode is 12 (Word 2007)
+        uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
+            { "name", uno::Any(OUString("compatibilityMode")) },
+            { "uri", uno::Any(OUString("http://schemas.microsoft.com/office/word")) },
+            { "val", uno::Any(OUString("12")) } //12: Use word processing features specified in ECMA-376. This is the default.
+        }));
+
+        beans::PropertyValue aValue;
+        aValue.Name = "compatSetting";
+        aValue.Value <<= aCompatSetting;
+
+        m_pImpl->m_aCompatSettings.push_back(aValue);
+    }
+
     return comphelper::containerToSequence(m_pImpl->m_aCompatSettings);
 }
 
