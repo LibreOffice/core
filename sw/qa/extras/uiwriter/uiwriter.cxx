@@ -369,6 +369,9 @@ public:
     void testTdf38394();
     void testTdf59666();
     void testInconsistentBookmark();
+#if HAVE_FEATURE_PDFIUM
+    void testInsertPdf();
+#endif
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -579,6 +582,9 @@ public:
     CPPUNIT_TEST(testTdf54409);
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
+#if HAVE_FEATURE_PDFIUM
+    CPPUNIT_TEST(testInsertPdf);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7190,6 +7196,38 @@ void SwUiWriterTest::testTdf59666()
     OUString sReplaced(u"\u03C0 ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
+
+#if HAVE_FEATURE_PDFIUM
+void SwUiWriterTest::testInsertPdf()
+{
+    createDoc();
+    SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // insert the PDF into the document
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+                {"FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "hello-world.pdf")}
+                }));
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // Save and load cycle
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+    loadURL(aTempFile.GetURL(), nullptr);
+    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Assert that we have a replacement graphics
+    auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+    CPPUNIT_ASSERT(xReplacementGraphic.is());
+
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    // Assert that the graphic is a PDF
+    CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
+}
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
