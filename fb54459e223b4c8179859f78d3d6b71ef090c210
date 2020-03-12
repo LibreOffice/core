@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4065a8d0_f8170eff",
+        "filename": "i18npool/source/localedata/data/sun_ID.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-12T14:03:30Z",
+      "side": 1,
+      "message": "Use\n\n \u003cLC_FORMAT ref\u003d\"id_ID\" replaceFrom\u003d\"[CURRENCY]\" replaceTo\u003d\"[$Rp-6A8]\"/\u003e\n\nThe 0x06A8 LCID will be defined by https://gerrit.libreoffice.org/c/core/+/90383",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "fb54459e223b4c8179859f78d3d6b71ef090c210",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d450f1e3_265c20bf",
+        "filename": "i18npool/source/localedata/data/sun_ID.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-12T14:03:30Z",
+      "side": 1,
+      "message": "The \u003cEras\u003e element is missing here, which made the build crash at this point (fix in progress).",
+      "revId": "fb54459e223b4c8179859f78d3d6b71ef090c210",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0821e02_b13e6f12",
+        "filename": "i18npool/source/localedata/data/sun_ID.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-12T14:03:30Z",
+      "side": 1,
+      "message": "Rather use\n\n \u003cLC_CURRENCY ref\u003d\"id_ID\"/\u003e",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 2
+      },
+      "revId": "fb54459e223b4c8179859f78d3d6b71ef090c210",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
