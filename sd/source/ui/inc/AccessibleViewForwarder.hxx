@@ -82,7 +82,7 @@ public:
     virtual Size LogicToPixel (const Size& rSize) const override;
 
 private:
-    SdrPaintView* const mpView;
+    SdrPaintView* mpView;
     sal_uInt16 mnWindowId;
 
     AccessibleViewForwarder (AccessibleViewForwarder const &) = delete;

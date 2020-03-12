@@ -28,7 +28,7 @@ public:
 private:
     VclPtr<sd::Window> mxWindow;
 
-    OUString const maName;
+    OUString maName;
 };
 
 sd::DrawViewShell* getViewShell(const VclPtr<sd::Window>& xWindow)

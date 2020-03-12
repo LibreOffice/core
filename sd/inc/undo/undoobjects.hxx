@@ -108,7 +108,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrObjUserCall* const mpOldUserCall;
+    SdrObjUserCall* mpOldUserCall;
     SdrObjUserCall* mpNewUserCall;
     ::tools::WeakReference<SdrObject> mxSdrObject;
 };

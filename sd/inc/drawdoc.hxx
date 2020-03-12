@@ -173,7 +173,7 @@ private:
     SvxNumType          mePageNumType;
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
     bool                mbAllocDocSh;       // => AllocModel()
-    DocumentType const  meDocType;
+    DocumentType        meDocType;
     std::unique_ptr<CharClass>
                         mpCharClass;
 

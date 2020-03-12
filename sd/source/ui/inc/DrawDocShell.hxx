@@ -212,12 +212,12 @@ protected:
     ::sd::ViewShell*        mpViewShell;
     std::unique_ptr<FontList> mpFontList;
     rtl::Reference<FuPoor> mxDocShellFunction;
-    DocumentType const      meDocType;
+    DocumentType            meDocType;
     SfxStyleFamily          mnStyleFamily;
     o3tl::span<sal_uInt16 const>
                             mpFilterSIDs;
     bool                    mbFilterEnable;
-    bool const              mbSdDataObj;
+    bool                    mbSdDataObj;
     bool                    mbInDestruction;
     bool                    mbOwnPrinter;
 

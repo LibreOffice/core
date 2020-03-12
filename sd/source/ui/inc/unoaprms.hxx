@@ -67,7 +67,7 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     sal_uInt16          nOldVerb;
     sal_uInt16          nNewVerb;
 
-    bool const            bInfoCreated;
+    bool            bInfoCreated;
 
 public:
     SdAnimationPrmsUndoAction(SdDrawDocument* pTheDoc, SdrObject* pObj,

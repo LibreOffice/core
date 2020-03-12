@@ -137,7 +137,7 @@ private:
     css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>
         mxBroadcaster;
 
-    bool const mbBroadcastRequestEvents;
+    bool mbBroadcastRequestEvents;
 
     /** This private variant of the constructor is used for cloning a
         Configuration object.

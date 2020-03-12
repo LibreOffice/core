@@ -35,8 +35,8 @@ class DrawDocShell;
 
 class SdVectorizeDlg : public weld::GenericDialogController
 {
-    ::sd::DrawDocShell* const m_pDocSh;
-    Bitmap const              aBmp;
+    ::sd::DrawDocShell* m_pDocSh;
+    Bitmap              aBmp;
     Bitmap              aPreviewBmp;
     GDIMetaFile         aMtf;
 

@@ -36,7 +36,7 @@ struct AfterEffectNode
 {
     css::uno::Reference< css::animations::XAnimationNode > mxNode;
     css::uno::Reference< css::animations::XAnimationNode > mxMaster;
-    bool const mbOnNextEffect;
+    bool mbOnNextEffect;
 
     AfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xMaster, bool bOnNextEffect )
         : mxNode( xNode ), mxMaster( xMaster ), mbOnNextEffect( bOnNextEffect ) {}

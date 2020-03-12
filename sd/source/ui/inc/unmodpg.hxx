@@ -68,7 +68,7 @@ public:
 
 private:
     OUString maOldName;
-    OUString const maNewName;
+    OUString maNewName;
     const OUString maComment;
 };
 

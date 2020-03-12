@@ -39,19 +39,19 @@ public:
     virtual void Redo() override;
 
 private:
-    SdrLayer* const mpLayer;
-    OUString const maOldLayerName;
-    OUString const maOldLayerTitle;
-    OUString const maOldLayerDesc;
-    bool const mbOldIsVisible;
-    bool const mbOldIsLocked;
-    bool const mbOldIsPrintable;
-    OUString const maNewLayerName;
-    OUString const maNewLayerTitle;
-    OUString const maNewLayerDesc;
-    bool const mbNewIsVisible;
-    bool const mbNewIsLocked;
-    bool const mbNewIsPrintable;
+    SdrLayer* mpLayer;
+    OUString maOldLayerName;
+    OUString maOldLayerTitle;
+    OUString maOldLayerDesc;
+    bool mbOldIsVisible;
+    bool mbOldIsLocked;
+    bool mbOldIsPrintable;
+    OUString maNewLayerName;
+    OUString maNewLayerTitle;
+    OUString maNewLayerDesc;
+    bool mbNewIsVisible;
+    bool mbNewIsLocked;
+    bool mbNewIsPrintable;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_UNDOLAYER_HXX

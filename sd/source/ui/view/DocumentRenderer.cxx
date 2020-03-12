@@ -367,8 +367,8 @@ namespace {
         ViewShellBase &mrBase;
         std::vector<beans::PropertyValue> maProperties;
         std::vector<sal_Int32> maSlidesPerPage;
-        bool const mbImpress;
-        sal_Int32 const mnCurPage;
+        bool mbImpress;
+        sal_Int32 mnCurPage;
 
         void ProcessResource()
         {
@@ -1336,7 +1336,7 @@ public:
 
 private:
     // rhbz#657394: keep the document alive: prevents crash when
-    SfxObjectShellRef const mxObjectShell; // destroying mpPrintView
+    SfxObjectShellRef mxObjectShell; // destroying mpPrintView
     ViewShellBase& mrBase;
     bool mbIsDisposed;
     VclPtr<Printer> mpPrinter;

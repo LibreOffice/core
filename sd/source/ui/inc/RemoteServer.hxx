@@ -33,9 +33,9 @@ namespace sd
 
     struct ClientInfo
     {
-        OUString const mName;
+        OUString mName;
 
-        bool const mbIsAlreadyAuthorised;
+        bool mbIsAlreadyAuthorised;
 
         ClientInfo( const OUString& rName,
                     const bool bIsAlreadyAuthorised ) :

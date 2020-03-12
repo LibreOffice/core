@@ -41,7 +41,7 @@ class SdUnoSearchReplaceDescriptor;
 class SdUnoSearchReplaceShape : public css::util::XReplaceable
 {
 protected:
-    css::drawing::XDrawPage* const mpPage;
+    css::drawing::XDrawPage* mpPage;
 
     css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
     bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw();

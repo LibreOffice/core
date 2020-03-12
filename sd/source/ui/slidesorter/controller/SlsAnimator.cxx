@@ -47,8 +47,8 @@ public:
     void Expire();
     bool IsExpired() const { return mbIsExpired;}
 
-    Animator::AnimationFunctor const maAnimation;
-    Animator::FinishFunctor const maFinishFunctor;
+    Animator::AnimationFunctor maAnimation;
+    Animator::FinishFunctor maFinishFunctor;
     const Animator::AnimationId mnAnimationId;
     const double mnDuration;
     const double mnEnd;

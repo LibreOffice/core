@@ -201,7 +201,7 @@ private:
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> maDragAndDropModelGuard;
 
-    SvxLRSpaceItem const maLRSpaceItem;
+    SvxLRSpaceItem maLRSpaceItem;
     Image maSlideImage;
 };
 

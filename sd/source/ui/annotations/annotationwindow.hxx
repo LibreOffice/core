@@ -77,7 +77,7 @@ class AnnotationWindow : public FloatingWindow
         std::unique_ptr<::Outliner>   mpOutliner;
         VclPtr<ScrollBar>       mpVScrollbar;
         css::uno::Reference< css::office::XAnnotation > mxAnnotation;
-        bool const              mbReadonly;
+        bool                    mbReadonly;
         bool                    mbProtected;
         bool                    mbMouseOverButton;
         VclPtr<AnnotationTextWindow>   mpTextWindow;

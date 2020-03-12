@@ -75,8 +75,8 @@ private:
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
     VclPtr<AnnotationWindow>                        mpAnnotationWindow;
-    Color const                                     maColor;
-    int const                                       mnIndex;
+    Color                                           maColor;
+    int                                             mnIndex;
     const vcl::Font&                                mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;

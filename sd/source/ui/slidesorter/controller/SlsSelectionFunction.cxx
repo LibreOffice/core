@@ -93,12 +93,12 @@ namespace sd::slidesorter::controller {
 class SelectionFunction::EventDescriptor
 {
 public:
-    Point const maMousePosition;
+    Point maMousePosition;
     Point maMouseModelPosition;
     model::SharedPageDescriptor mpHitDescriptor;
     SdrPage* mpHitPage;
     sal_uInt32 mnEventCode;
-    InsertionIndicatorHandler::Mode const meDragMode;
+    InsertionIndicatorHandler::Mode meDragMode;
     bool mbIsLeaving;
 
     EventDescriptor (
@@ -239,7 +239,7 @@ protected:
 private:
     SelectionMode meSelectionMode;
     Point maSecondCorner;
-    PointerStyle const maSavedPointer;
+    PointerStyle maSavedPointer;
     bool mbAutoScrollInstalled;
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;

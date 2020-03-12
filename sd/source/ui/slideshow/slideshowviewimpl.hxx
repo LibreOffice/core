@@ -213,11 +213,11 @@ private:
                                             mpMouseListeners;
     ::std::unique_ptr< SlideShowViewMouseMotionListeners >
                                             mpMouseMotionListeners;
-    SdDrawDocument* const                   mpDoc;
+    SdDrawDocument*                         mpDoc;
     bool                                    mbIsMouseMotionListener;
-    AnimationMode const                     meAnimationMode;
+    AnimationMode                           meAnimationMode;
     bool                                    mbFirstPaint;
-    bool const                              mbFullScreen;
+    bool                                    mbFullScreen;
     bool                                    mbMousePressedEaten;
     css::geometry::IntegerSize2D            mTranslationOffset;
 };

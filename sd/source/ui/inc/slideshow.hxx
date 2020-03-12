@@ -190,7 +190,7 @@ private:
     SlideShow(const SlideShow&) = delete;
     SlideShow& operator=( const SlideShow& ) = delete;
 
-    SvxItemPropertySet const  maPropSet;
+    SvxItemPropertySet  maPropSet;
 
     rtl::Reference< SlideshowImpl > mxController;
     /** This flag is used together with mxController.is() to prevent

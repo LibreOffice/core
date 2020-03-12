@@ -50,7 +50,7 @@ public:
     HintId GetHintId() const { return meHintId;}
 
 private:
-    HintId const meHintId;
+    HintId meHintId;
 };
 
 } // end of namespace sd

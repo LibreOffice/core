@@ -227,9 +227,9 @@ public:
                        const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) override;
 private:
     VclPtr<CustomAnimationList> mpParent;
-    OUString const  msDescription;
+    OUString        msDescription;
     OUString        msEffectName;
-    CustomAnimationEffectPtr const mpEffect;
+    CustomAnimationEffectPtr mpEffect;
     static const long nIconWidth = 19;
     static const long nItemMinHeight = 38;
 };
@@ -362,7 +362,7 @@ public:
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
 private:
-    CustomAnimationEffectPtr const mpEffect;
+    CustomAnimationEffectPtr mpEffect;
 };
 
 }
@@ -389,7 +389,7 @@ public:
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 
 private:
-    OUString const        msDescription;
+    OUString        msDescription;
     static const long nIconWidth = 19;
 };
 

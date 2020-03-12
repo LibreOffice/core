@@ -161,7 +161,7 @@ public:
 
     const SmartTagReference& getTag() const { return mxSmartTag; }
 private:
-    SmartTagReference const mxSmartTag;
+    SmartTagReference mxSmartTag;
 };
 
 } // end of namespace sd

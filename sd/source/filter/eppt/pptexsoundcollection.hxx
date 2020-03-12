@@ -35,7 +35,7 @@ namespace ppt
 class ExSoundEntry
 {
         sal_uInt32         nFileSize;
-        OUString const     aSoundURL;
+        OUString           aSoundURL;
 
         OUString           ImplGetName() const;
         OUString           ImplGetExtension() const;

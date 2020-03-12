@@ -49,8 +49,8 @@ public:
           msContentIdentifier(rsContentIdentifier),
           mxFolderEnvironment(rxFolderEnvironment)
     { }
-    int const mnPriority;
-    OUString const msContentIdentifier;
+    int mnPriority;
+    OUString msContentIdentifier;
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
 

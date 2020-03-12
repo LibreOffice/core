@@ -45,7 +45,7 @@ private:
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
-    PresentationObjects const ePO;
+    PresentationObjects   ePO;
 
     virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 

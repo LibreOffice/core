@@ -272,7 +272,7 @@ struct lcl_EqualsSoundFileName
     }
 
 private:
-    OUString const maStr;
+    OUString maStr;
 };
 
 // returns -1 if no object was found

@@ -160,7 +160,7 @@ public:
         FocusHider (FocusManager&);
         ~FocusHider() COVERITY_NOEXCEPT_FALSE;
     private:
-        bool const mbFocusVisible;
+        bool mbFocusVisible;
         FocusManager& mrManager;
     };
 
