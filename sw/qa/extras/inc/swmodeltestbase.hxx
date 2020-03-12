@@ -262,6 +262,7 @@ protected:
             header();
             std::unique_ptr<Resetter> const pChanges(preTest(filename));
             load(mpTestDocumentPath, filename, pPassword);
+            postLoad(filename);
             verify();
             finish();
             maTempFile.EnableKillingFile();
@@ -298,6 +299,7 @@ protected:
         header();
         std::unique_ptr<Resetter> const pChanges(preTest(filename));
         load(mpTestDocumentPath, filename, pPassword);
+        postLoad(filename);
         save(OUString::createFromAscii(mpFilter), maTempFile);
         maTempFile.EnableKillingFile(false);
         verify();
