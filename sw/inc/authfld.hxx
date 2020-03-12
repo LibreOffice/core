@@ -36,7 +36,7 @@ friend class SwAuthorityFieldType;
 public:
     SwAuthEntry() = default;
     SwAuthEntry( const SwAuthEntry& rCopy );
-    bool            operator==(const SwAuthEntry& rComp);
+    bool            operator==(const SwAuthEntry& rComp) const;
 
     inline OUString const & GetAuthorField(ToxAuthorityField ePos) const;
     inline void             SetAuthorField(ToxAuthorityField ePos,

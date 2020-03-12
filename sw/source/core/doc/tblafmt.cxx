@@ -304,7 +304,7 @@ SwBoxAutoFormat& SwBoxAutoFormat::operator=(const SwBoxAutoFormat& rRef)
     return *this;
 }
 
-bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight)
+bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight) const
 {
     return GetBackground().GetColor() == rRight.GetBackground().GetColor();
 }

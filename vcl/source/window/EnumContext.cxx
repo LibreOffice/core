@@ -82,13 +82,13 @@ EnumContext::Application EnumContext::GetApplication_DI() const
      }
 }
 
-bool EnumContext::operator== (const EnumContext& rOther)
+bool EnumContext::operator== (const EnumContext& rOther) const
 {
     return meApplication==rOther.meApplication
         && meContext==rOther.meContext;
 }
 
-bool EnumContext::operator!= (const EnumContext& rOther)
+bool EnumContext::operator!= (const EnumContext& rOther) const
 {
     return meApplication!=rOther.meApplication
         || meContext!=rOther.meContext;

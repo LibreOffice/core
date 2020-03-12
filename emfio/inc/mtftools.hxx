@@ -351,7 +351,7 @@ namespace emfio
             , aBmp(rBmp)
         {}
 
-        bool operator==(const WinMtfFillStyle& rStyle)
+        bool operator==(const WinMtfFillStyle& rStyle) const
         {
             return aFillColor == rStyle.aFillColor
                 && bTransparent == rStyle.bTransparent
@@ -381,7 +381,7 @@ namespace emfio
             , bTransparent(bTrans)
         {}
 
-        bool operator==(const WinMtfLineStyle& rStyle)
+        bool operator==(const WinMtfLineStyle& rStyle) const
         {
             return aLineColor == rStyle.aLineColor
                 && bTransparent == rStyle.bTransparent
