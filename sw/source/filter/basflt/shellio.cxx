@@ -25,6 +25,7 @@
 #include <svl/fstathelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -36,6 +37,7 @@
 #include <fmtpdsc.hxx>
 #include <swtypes.hxx>
 #include <shellio.hxx>
+#include <iodetect.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -104,6 +106,10 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
     mxDoc->SetInReading( true );
     mxDoc->SetInXMLImport( dynamic_cast< XMLReader* >(po) !=  nullptr );
+    mxDoc->SetInWriterfilterImport(mpMedium && mpMedium->GetFilter()
+            && (mpMedium->GetFilter()->GetUserData() == FILTER_RTF
+                || mpMedium->GetFilter()->GetUserData() == sRtfWH
+                || mpMedium->GetFilter()->GetUserData() == FILTER_DOCX));
 
     SwPaM *pPam;
     if( pCursor )
@@ -341,6 +347,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
     mxDoc->SetInReading( false );
     mxDoc->SetInXMLImport( false );
+    mxDoc->SetInWriterfilterImport(false);
 
     mxDoc->InvalidateNumRules();
     mxDoc->UpdateNumRule();
