@@ -73,7 +73,7 @@ private:
     css::uno::Sequence< OUString >  m_sBlackList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;
-    css::uno::Sequence< css::uno::Any > const  m_Sctx;
+    css::uno::Sequence< css::uno::Any >  m_Sctx;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 
