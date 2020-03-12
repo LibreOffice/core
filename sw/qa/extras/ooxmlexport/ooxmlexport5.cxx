@@ -1007,6 +1007,12 @@ DECLARE_OOXMLEXPORT_TEST(tdf89991_revisionView, "tdf89991.docx")
     {
         assertXPath(pXmlSettings, "/w:settings/w:revisionView", "insDel",     "0");
         assertXPath(pXmlSettings, "/w:settings/w:revisionView", "formatting", "0");
+
+        // There was no compatibilityMode defined.
+        // 12: Use word processing features specified in ECMA-376. This is the default.
+        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
+        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
+        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "12");
     }
 }
 
