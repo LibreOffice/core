@@ -3768,22 +3768,16 @@ Reference< uno::XInterface > SchXMLExport_createInstance(const Reference< lang::
 }
 
 // Oasis format
-Sequence< OUString > SchXMLExport_Oasis_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentContext* pCtx,
+                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisExporter" };
-}
-
-OUString SchXMLExport_Oasis_getImplementationName() throw()
-{
-    return "SchXMLExport.Oasis.Compact";
-}
-
-Reference< uno::XInterface > SchXMLExport_Oasis_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    // #103997# removed some flags from EXPORT_ALL
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr),
-        SchXMLExport_Oasis_getImplementationName(),
-        (SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS )) | SvXMLExportFlags::OASIS ));
+    return cppu::acquire(
+        new SchXMLExport(pCtx, "SchXMLExport.Oasis.Compact",
+                         (SvXMLExportFlags::ALL
+                          ^ (SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES
+                             | SvXMLExportFlags::SCRIPTS))
+                             | SvXMLExportFlags::OASIS));
 }
 
 // multiple storage version: one for content / styles / meta
