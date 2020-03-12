@@ -137,7 +137,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
 {
     if( nMissingValueTreatment == css::chart::MissingValueTreatment::USE_ZERO
-        && (::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue)) )
+        && (::rtl::math::isNan(rfValue) || std::isinf(rfValue)) )
             rfValue = 0.0;
 }
 
@@ -700,7 +700,7 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
             fMin=fY;
     }
 
-    if( ::rtl::math::isInf(fMin) )
+    if( std::isinf(fMin) )
         ::rtl::math::setNan(&fMin);
 
     return fMin;
@@ -736,7 +736,7 @@ double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
             fMax=fY;
     }
 
-    if( ::rtl::math::isInf(fMax) )
+    if( std::isinf(fMax) )
         ::rtl::math::setNan(&fMax);
 
     return fMax;

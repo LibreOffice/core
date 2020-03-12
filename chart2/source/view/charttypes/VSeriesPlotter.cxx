@@ -1427,9 +1427,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             if(!bAverageLine)
                 m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
 
-            if(!rtl::math::isNan(fLogicX) && !rtl::math::isInf(fLogicX) &&
-               !rtl::math::isNan(fLogicY) && !rtl::math::isInf(fLogicY) &&
-               !rtl::math::isNan(fLogicZ) && !rtl::math::isInf(fLogicZ) )
+            if(!rtl::math::isNan(fLogicX) && !std::isinf(fLogicX) &&
+               !rtl::math::isNan(fLogicY) && !std::isinf(fLogicY) &&
+               !rtl::math::isNan(fLogicZ) && !std::isinf(fLogicZ) )
             {
                 aRegressionPoly.SequenceX[0][nRealPointCount] = fLogicX;
                 aRegressionPoly.SequenceY[0][nRealPointCount] = fLogicY;
@@ -1735,7 +1735,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
                 fMinimum=fLocalMinimum;
         }
     }
-    if(::rtl::math::isInf(fMinimum))
+    if(std::isinf(fMinimum))
         ::rtl::math::setNan(&fMinimum);
     return fMinimum;
 }
@@ -1768,7 +1768,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
                 fMinimum=fLocalMinimum;
         }
     }
-    if(::rtl::math::isInf(fMaximum))
+    if(std::isinf(fMaximum))
         ::rtl::math::setNan(&fMaximum);
     return fMaximum;
 }
@@ -1842,9 +1842,9 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
                 rfMaximum = fLocalMaximum;
         }
     }
-    if(::rtl::math::isInf(rfMinimum))
+    if(std::isinf(rfMinimum))
         ::rtl::math::setNan(&rfMinimum);
-    if(::rtl::math::isInf(rfMaximum))
+    if(std::isinf(rfMaximum))
         ::rtl::math::setNan(&rfMaximum);
 }
 
@@ -1865,9 +1865,9 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
                 rfMaxY = fLocalMaximum;
         }
     }
-    if(::rtl::math::isInf(rfMinY))
+    if(std::isinf(rfMinY))
         ::rtl::math::setNan(&rfMinY);
-    if(::rtl::math::isInf(rfMaxY))
+    if(std::isinf(rfMaxY))
         ::rtl::math::setNan(&rfMaxY);
 }
 
@@ -1953,9 +1953,9 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
                 rfMinimum=fX;
         }
     }
-    if(::rtl::math::isInf(rfMinimum))
+    if(std::isinf(rfMinimum))
         ::rtl::math::setNan(&rfMinimum);
-    if(::rtl::math::isInf(rfMaximum))
+    if(std::isinf(rfMaximum))
         ::rtl::math::setNan(&rfMaximum);
 }
 
