@@ -309,10 +309,10 @@ namespace slideshow::internal
         private:
             XShapeHash&                         mrShapeHash;
             uno::Reference< drawing::XShape >   mxTargetShape;
-            sal_Int16 const                     mnParagraphIndex;
+            sal_Int16                           mnParagraphIndex;
 
             // get initial or final state
-            bool const                          mbInitial;
+            bool                                mbInitial;
         };
     }
 

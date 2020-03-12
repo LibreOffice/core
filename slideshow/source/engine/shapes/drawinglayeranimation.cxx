@@ -52,13 +52,13 @@ namespace {
 
 class ScrollTextAnimNode
 {
-    sal_uInt32 const  mnDuration; // single duration
-    sal_uInt32 const  mnRepeat; // 0 -> endless
-    double const      mfStart;
-    double const      mfStop;
-    sal_uInt32 const  mnFrequency; // in ms
+    sal_uInt32  mnDuration; // single duration
+    sal_uInt32  mnRepeat; // 0 -> endless
+    double      mfStart;
+    double      mfStop;
+    sal_uInt32  mnFrequency; // in ms
     // forth and back change at mnRepeat%2:
-    bool const        mbAlternate;
+    bool        mbAlternate;
 
 public:
     ScrollTextAnimNode(
@@ -181,7 +181,7 @@ private:
     DrawShapeSharedPtr                          mpDrawShape;
     ShapeAttributeLayerHolder                   maShapeAttrLayer;
     GDIMetaFileSharedPtr                        mpMetaFile;
-    IntrinsicAnimationEventHandlerSharedPtr const mpListener;
+    IntrinsicAnimationEventHandlerSharedPtr     mpListener;
     canvas::tools::ElapsedTime                  maTimer;
     double                                      mfRotationAngle;
     bool                                        mbIsShapeAnimated;

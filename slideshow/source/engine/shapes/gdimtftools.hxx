@@ -73,8 +73,8 @@ namespace slideshow
                 return mnDuration;
             }
 
-            GDIMetaFileSharedPtr const    mpMtf;
-            double const                  mnDuration;
+            GDIMetaFileSharedPtr    mpMtf;
+            double                  mnDuration;
         };
 
         typedef ::std::vector< MtfAnimationFrame > VectorOfMtfAnimationFrames;

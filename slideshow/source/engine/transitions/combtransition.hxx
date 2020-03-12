@@ -52,7 +52,7 @@ public:
 
 private:
     const ::basegfx::B2DVector maPushDirectionUnit;
-    sal_Int32 const            mnNumStripes;
+    sal_Int32                  mnNumStripes;
 
     void renderComb( double t, const ViewEntry& rViewEntry ) const;
 };

@@ -34,7 +34,7 @@ public:
     WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis );
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
-    bool const m_flipOnYAxis;
+    bool m_flipOnYAxis;
     ::basegfx::B2DPolygon m_waterfall;
 };
 

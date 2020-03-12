@@ -341,7 +341,7 @@ namespace slideshow::internal
                 ::basegfx::B2DPoint                maShapeOrig;
                 const int                          mnFlags;
                 bool                               mbAnimationStarted;
-                sal_Int16 const                    mnAdditive;
+                sal_Int16                          mnAdditive;
             };
 
 
@@ -617,7 +617,7 @@ namespace slideshow::internal
                 }
 
             private:
-                double const mnScale;
+                double mnScale;
             };
 
             /** Overload for NumberAnimations which need scaling (width,height,x,y currently)

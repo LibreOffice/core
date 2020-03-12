@@ -140,7 +140,7 @@ namespace slideshow
 
         private:
 
-            ViewLayerSharedPtr const                 mpViewLayer;
+            ViewLayerSharedPtr                                    mpViewLayer;
 
             /// the actual viewer component for this applet
             css::uno::Reference<

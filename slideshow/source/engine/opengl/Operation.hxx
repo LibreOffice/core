@@ -45,15 +45,15 @@ public:
 protected:
     /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to mnT0 to being completely transformed from t = mnT1 to 1. If FALSE, the transform will be ineffectual from t = 0 to mnT0, and completely transformed from t = mnT0 to 1.
     */
-    bool const mbInterpolate;
+    bool mbInterpolate;
 
     /** time to begin the transformation
     */
-    double const mnT0;
+    double mnT0;
 
     /** time to finish the transformation
     */
-    double const mnT1;
+    double mnT1;
 public:
     /** this is the function that is called to give the Operation to OpenGL.
 
@@ -107,15 +107,15 @@ public:
 private:
     /** axis to rotate CCW about
     */
-    glm::vec3 const axis;
+    glm::vec3 axis;
 
     /** position that rotation axis runs through
     */
-    glm::vec3 const origin;
+    glm::vec3 origin;
 
     /** angle in degrees of CCW rotation
     */
-    double const angle;
+    double angle;
 };
 
 std::shared_ptr<SRotate>
@@ -149,8 +149,8 @@ public:
     */
     SScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1);
 private:
-    glm::vec3 const scale;
-    glm::vec3 const origin;
+    glm::vec3 scale;
+    glm::vec3 origin;
 };
 
 std::shared_ptr<SScale>
@@ -182,7 +182,7 @@ public:
 private:
     /** vector to translate by
     */
-    glm::vec3 const vector;
+    glm::vec3 vector;
 };
 
 std::shared_ptr<STranslate>
@@ -234,10 +234,10 @@ public:
 
     RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
 private:
-    glm::vec3 const axis;
-    glm::vec3 const origin;
-    double const angle;
-    bool const scale;
+    glm::vec3 axis;
+    glm::vec3 origin;
+    double angle;
+    bool scale;
 };
 
 std::shared_ptr<RotateAndScaleDepthByWidth>
@@ -252,10 +252,10 @@ public:
 
     RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
 private:
-    glm::vec3 const axis;
-    glm::vec3 const origin;
-    double const angle;
-    bool const scale;
+    glm::vec3 axis;
+    glm::vec3 origin;
+    double angle;
+    bool scale;
 };
 
 std::shared_ptr<RotateAndScaleDepthByHeight>

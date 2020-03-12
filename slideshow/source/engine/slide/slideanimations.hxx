@@ -100,7 +100,7 @@ namespace slideshow
             void end();
 
         private:
-            SlideShowContext const   maContext;
+            SlideShowContext         maContext;
             const basegfx::B2DVector maSlideSize;
             AnimationNodeSharedPtr   mpRootNode;
         };
