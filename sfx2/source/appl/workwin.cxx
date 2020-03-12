@@ -61,7 +61,7 @@ namespace {
 
 struct ResIdToResName
 {
-    ToolbarId const   eId;
+    ToolbarId   eId;
     const char* pName;
 };
 

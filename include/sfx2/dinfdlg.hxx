@@ -57,7 +57,7 @@ private:
     OUString                     m_AutoloadURL;
     bool                         m_isAutoloadEnabled;
     OUString                     m_DefaultTarget;
-    OUString const               m_TemplateName;
+    OUString                     m_TemplateName;
     OUString                     m_Author;
     css::util::DateTime          m_CreationDate;
     OUString                     m_ModifiedBy;

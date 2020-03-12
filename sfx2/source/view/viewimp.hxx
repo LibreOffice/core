@@ -39,7 +39,7 @@ struct SfxViewShell_Impl
     ::comphelper::OInterfaceContainerHelper2 aInterceptorContainer;
     SfxShellArr_Impl aArr;
     Size aMargin;
-    bool const m_bHasPrintOptions;
+    bool m_bHasPrintOptions;
     sal_uInt16 m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;

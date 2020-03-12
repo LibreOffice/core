@@ -67,7 +67,7 @@ class ThumbnailViewItem
 public:
 
     ThumbnailViewBase &mrParent;
-    sal_uInt16 const mnId;
+    sal_uInt16 mnId;
     bool mbVisible;
     bool mbSelected;
     bool mbHover;

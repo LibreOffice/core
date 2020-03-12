@@ -359,7 +359,7 @@ public:
 
     uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
 
-    bool const m_bUseLocalized;
+    bool m_bUseLocalized;
 
     explicit Impl(uno::Reference<document::XDocumentProperties> xDocumentProperties, bool bUseLocalized);
     void parsePolicy();

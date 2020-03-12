@@ -24,7 +24,7 @@ class VirtualDevice;
 class SFX2_DLLPUBLIC LokChartHelper
 {
 private:
-    SfxViewShell* const mpViewShell;
+    SfxViewShell* mpViewShell;
     css::uno::Reference<css::frame::XController> mxController;
     css::uno::Reference<css::frame::XDispatch> mxDispatcher;
     VclPtr<vcl::Window> mpWindow;

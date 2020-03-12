@@ -52,7 +52,7 @@ namespace {
 
 struct Data_Impl
 {
-    OString const sId;                  // The ID
+    OString sId;                  // The ID
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     std::unique_ptr<SfxTabPage> xTabPage;         // The TabPage itself

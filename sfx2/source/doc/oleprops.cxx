@@ -197,7 +197,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
-    uno::Sequence<sal_Int8> const    mData;
+    uno::Sequence<sal_Int8>    mData;
 };
 
 
@@ -218,7 +218,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
-    uno::Sequence<sal_Int8> const    mData;
+    uno::Sequence<sal_Int8>    mData;
 };
 
 }

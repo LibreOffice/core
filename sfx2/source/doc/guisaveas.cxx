@@ -198,7 +198,7 @@ class DocumentSettingsGuard
     bool m_bPreserveReadOnly;
     bool m_bReadOnlySupported;
 
-    bool const m_bRestoreSettings;
+    bool m_bRestoreSettings;
 public:
     DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, bool bReadOnly, bool bRestore )
     : m_bPreserveReadOnly( false )

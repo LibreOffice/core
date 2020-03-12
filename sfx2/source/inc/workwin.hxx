@@ -107,7 +107,7 @@ struct SfxChild_Impl
 
 struct SfxChildWin_Impl
 {
-    sal_uInt16 const                nSaveId;       // the ChildWindow-Id
+    sal_uInt16                      nSaveId;       // the ChildWindow-Id
     sal_uInt16                      nInterfaceId;  // the current context
     sal_uInt16                      nId;           // current Id
     SfxChildWindow*                 pWin;
@@ -211,7 +211,7 @@ class SfxWorkWindow final
     sal_Int32               m_nLock;
     css::uno::Reference< css::lang::XComponent > m_xLayoutManagerListener;
     SfxFrame*               pMasterFrame;
-    SfxFrame* const         pFrame;
+    SfxFrame*               pFrame;
 
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);

@@ -102,7 +102,7 @@ public:
 
         css::uno::Reference<css::io::XInputStream>
              m_xInputStreamToLoadFrom;
-        bool const m_bIsReadOnly;
+        bool m_bIsReadOnly;
     };
 
     StreamToLoadFrom getStreamToLoadFrom();

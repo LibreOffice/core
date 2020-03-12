@@ -125,7 +125,7 @@ public:
         AsyncExecuteInfo( AsyncExecuteCmd eCmd, SfxClipboardChangeListener* pListener ) :
             m_eCmd( eCmd ), m_xListener( pListener ) {}
 
-        AsyncExecuteCmd const m_eCmd;
+        AsyncExecuteCmd m_eCmd;
         rtl::Reference<SfxClipboardChangeListener> m_xListener;
     };
 

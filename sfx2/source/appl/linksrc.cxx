@@ -73,9 +73,9 @@ namespace {
 struct SvLinkSource_Entry_Impl
 {
     tools::SvRef<SvBaseLink>  xSink;
-    OUString const            aDataMimeType;
-    sal_uInt16 const          nAdviseModes;
-    bool const                bIsDataSink;
+    OUString                  aDataMimeType;
+    sal_uInt16                nAdviseModes;
+    bool                      bIsDataSink;
 
     SvLinkSource_Entry_Impl( SvBaseLink* pLink, const OUString& rMimeType,
                                 sal_uInt16 nAdvMode )

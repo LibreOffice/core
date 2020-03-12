@@ -27,7 +27,7 @@ class SfxShell;
 
 class SFX2_DLLPUBLIC SfxObjectItem final : public SfxPoolItem
 {
-    SfxShell* const          _pSh;
+    SfxShell*                _pSh;
 
 public:
                              static SfxPoolItem* CreateDefault();

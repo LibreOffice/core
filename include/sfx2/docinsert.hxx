@@ -40,8 +40,8 @@ namespace sfx2 {
 class SFX2_DLLPUBLIC DocumentInserter
 {
 private:
-    weld::Window* const     m_pParent;
-    OUString const          m_sDocFactory;
+    weld::Window*           m_pParent;
+    OUString                m_sDocFactory;
     OUString                m_sFilter;
     Link<sfx2::FileDialogHelper*,void> m_aDialogClosedLink;
 

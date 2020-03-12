@@ -45,7 +45,7 @@ public:
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild final : public SfxChildWindow
 {
 private:
-    SfxBindings* const m_pBindings;
+    SfxBindings* m_pBindings;
 
 public:
     SfxInfoBarContainerChild(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings,
@@ -62,7 +62,7 @@ public:
 class SFX2_DLLPUBLIC SfxInfoBarWindow final : public vcl::Window
 {
 private:
-    OUString const m_sId;
+    OUString m_sId;
     InfobarType m_eType;
     VclPtr<FixedImage> m_pImage;
     VclPtr<FixedText> m_pPrimaryMessage;

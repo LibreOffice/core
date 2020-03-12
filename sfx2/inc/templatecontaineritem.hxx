@@ -14,7 +14,7 @@
 class TemplateContainerItem final
 {
 public:
-    sal_uInt16 const mnId;
+    sal_uInt16 mnId;
     sal_uInt16 mnRegionId;
     OUString maTitle;
     std::vector<TemplateItemProperties> maTemplates;

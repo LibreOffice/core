@@ -311,7 +311,7 @@ public:
 
 private:
 
-    SfxBaseController* const      m_pController;
+    SfxBaseController*      m_pController;
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
 

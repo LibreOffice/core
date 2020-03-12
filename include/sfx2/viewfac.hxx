@@ -50,8 +50,8 @@ public:
     OUString      GetAPIViewName() const;
 
 private:
-    SfxViewCtor const     fnCreate;
-    SfxInterfaceId const  nOrd;
+    SfxViewCtor     fnCreate;
+    SfxInterfaceId  nOrd;
     const OUString  m_sViewName;
 };
 

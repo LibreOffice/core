@@ -52,7 +52,7 @@ class SFX2_DLLPUBLIC SfxFilter
      * Custom provider name in case the filter is provided via external
      * libraries.  Empty for conventional filter types.
      */
-    OUString const maProvider;
+    OUString        maProvider;
 
     SfxFilterFlags  nFormatType;
     sal_Int32       nVersion;

@@ -63,9 +63,9 @@ private:
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
-    OUString const  maMinLenPwdStr;
-    OUString const  maMinLenPwdStr1;
-    OUString const  maEmptyPwdStr;
+    OUString        maMinLenPwdStr;
+    OUString        maMinLenPwdStr1;
+    OUString        maEmptyPwdStr;
     OUString        maMainPwdStr;
     sal_uInt16      mnMinLen;
     SfxShowExtras  mnExtras;

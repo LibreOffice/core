@@ -63,7 +63,7 @@ namespace {
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
-    SfxEventHint const     aHint;
+    SfxEventHint           aHint;
     std::unique_ptr<Idle>  pIdle;
 
 public:

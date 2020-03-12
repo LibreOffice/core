@@ -259,7 +259,7 @@ private:
                                                                         mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     ThumbnailViewItem*                                                  mpParent;
-    bool const                                                          mbIsTransientChildrenDisabled;
+    bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 

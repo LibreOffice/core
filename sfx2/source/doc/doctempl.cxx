@@ -99,7 +99,7 @@ class DocTempl_EntryData_Impl
 
     // the following member must be SfxObjectShellLock since it controls that SfxObjectShell lifetime by design
     // and users of this class expect it to be so.
-    SfxObjectShellLock const  mxObjShell;
+    SfxObjectShellLock  mxObjShell;
 
     OUString            maTitle;
     OUString            maOwnURL;

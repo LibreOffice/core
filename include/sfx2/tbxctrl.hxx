@@ -40,9 +40,9 @@ typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uIn
 
 struct SfxTbxCtrlFactory
 {
-    SfxToolBoxControlCtor const   pCtor;
-    const std::type_info&         nTypeId;
-    sal_uInt16 const              nSlotId;
+    SfxToolBoxControlCtor       pCtor;
+    const std::type_info&       nTypeId;
+    sal_uInt16                  nSlotId;
 
     SfxTbxCtrlFactory( SfxToolBoxControlCtor pTheCtor,
             const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
