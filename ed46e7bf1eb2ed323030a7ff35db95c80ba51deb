@@ -22,6 +22,30 @@
       "revId": "ed46e7bf1eb2ed323030a7ff35db95c80ba51deb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e92cfdf_34871b78",
+        "filename": "solenv/bin/image-sort.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002468
+      },
+      "writtenOn": "2020-03-12T17:33:45Z",
+      "side": 1,
+      "message": "Whoops, fixed. Did not add a shebang line, though, as the policy seems to be to not have them in build scripts.",
+      "parentUuid": "0a40876d_536d88e9",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "ed46e7bf1eb2ed323030a7ff35db95c80ba51deb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
