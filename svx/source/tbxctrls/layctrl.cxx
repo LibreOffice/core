@@ -188,6 +188,9 @@ bool TableWidget::KeyInput(const KeyEvent& rKEvt)
                     mxControl->EndPopupMode();
                 break;
             case KEY_DOWN:
+                if ( nNewCol == 0 )
+                    nNewCol = 1;
+
                 if ( nNewLine < TABLE_CELLS_VERT )
                     nNewLine++;
                 else
@@ -200,6 +203,8 @@ bool TableWidget::KeyInput(const KeyEvent& rKEvt)
                     mxControl->EndPopupMode();
                 break;
             case KEY_RIGHT:
+                if ( nNewLine == 0 )
+                    nNewLine = 1;
                 if ( nNewCol < TABLE_CELLS_HORIZ )
                     nNewCol++;
                 else
