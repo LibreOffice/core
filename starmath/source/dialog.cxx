@@ -73,9 +73,9 @@ void lclGetSettingColors(Color& rBackgroundColor, Color& rTextColor)
 
 class SmFontStyles
 {
-    OUString const aNormal;
-    OUString const aBold;
-    OUString const aItalic;
+    OUString aNormal;
+    OUString aBold;
+    OUString aItalic;
     OUString aBoldItalic;
 
 public:

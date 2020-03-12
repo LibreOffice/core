@@ -37,8 +37,8 @@ class SmParser;
 class SmElement
 {
     std::unique_ptr<SmNode> mpNode;
-    OUString const          maText;
-    OUString const          maHelpText;
+    OUString                maText;
+    OUString                maHelpText;
 
 public:
     Point mBoxLocation;

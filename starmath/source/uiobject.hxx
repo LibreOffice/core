@@ -19,7 +19,7 @@ class ElementUIObject : public UIObject
 {
 private:
     SmElementsControl* mpElementsSelector;
-    OUString const maID;
+    OUString           maID;
 
 public:
 
