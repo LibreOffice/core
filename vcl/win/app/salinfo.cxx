@@ -20,6 +20,7 @@
 #include <svsys.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include <sal/log.hxx>
 #include <vcl/window.hxx>
 
 #include <win/salsys.h>
@@ -155,7 +156,14 @@ unsigned int WinSalSystem::GetDisplayBuiltInScreen()
 tools::Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
-    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : tools::Rectangle();
+    if (nScreen >= m_aMonitors.size())
+    {
+        SAL_WARN("vcl", "Requested screen size/pos for screen #"
+                            << nScreen << ", but only " << m_aMonitors.size() << " screens found.");
+        assert(false);
+        return tools::Rectangle();
+    }
+    return m_aMonitors[nScreen].m_aArea;
 }
 
 int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
