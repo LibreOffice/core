@@ -116,8 +116,8 @@ private:
     OutputDevice &mrDev;
     SmCaretPos maPos;
     /** Offset to draw from */
-    Point const maOffset;
-    bool const mbCaretVisible;
+    Point  maOffset;
+    bool  mbCaretVisible;
 
     /** Default method for drawing pNodes */
     void DefaultVisit( SmNode* pNode ) override;

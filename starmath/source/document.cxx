@@ -283,10 +283,10 @@ void SmDocShell::UpdateEditEngineDefaultFonts(const Color& aTextColor)
 
     // set fonts to be used
     struct FontDta {
-        LanguageType const    nFallbackLang;
+        LanguageType    nFallbackLang;
         LanguageType    nLang;
-        DefaultFontType const nFontType;
-        sal_uInt16 const      nFontInfoId;
+        DefaultFontType nFontType;
+        sal_uInt16      nFontInfoId;
         } aTable[3] =
     {
         // info to get western font to be used

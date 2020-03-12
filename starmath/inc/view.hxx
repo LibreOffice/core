@@ -213,7 +213,7 @@ class SmViewShell: public SfxViewShell
     std::unique_ptr<SmViewShell_Impl> mpImpl;
 
     VclPtr<SmGraphicWindow> mpGraphic;
-    SmGraphicController const maGraphicController;
+    SmGraphicController maGraphicController;
     OUString maStatusText;
 
     bool mbPasteState;

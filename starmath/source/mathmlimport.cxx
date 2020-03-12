@@ -885,7 +885,7 @@ public:
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
 {
 protected:
-    size_t const nElementCount;
+    size_t nElementCount;
 
 public:
     SmXMLRowContext_Impl(SmXMLImport &rImport)
