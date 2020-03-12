@@ -1509,12 +1509,21 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
             DffRecordHeader* pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText );
             PptSlidePersistEntry* pPreviousPersist = nullptr;
+            DffRecordHeader* pSlideListHd = aDocRecManager.GetRecordHeader(PPT_PST_List);
+            sal_uLong nPSTList = 0;
+            if (pSlideListHd) nPSTList = pSlideListHd->GetRecBegFilePos();
+            sal_uInt16 nRealPageNum = 0;
+            // Normal PPT document has order of Master slides - Presentation slides - Note slides
+            // for document with the order of Master slides - Note slides - Presentation slides
+            // we need to swap the later two sections
+            bool notePresentationSwap = false;
             for (sal_uInt16 nPageListNum = 0;
                  pSlideListWithTextHd && nPageListNum < 3; ++nPageListNum)
             {
                 pSlideListWithTextHd->SeekToContent( rStCtrl );
-                PptSlidePersistList* pPageList = GetPageList( PptPageKind( nPageListNum ) );
+                PptSlidePersistList* pPageList = nullptr;
                 sal_uInt32 nSlideListWithTextHdEndOffset = pSlideListWithTextHd->GetRecEndFilePos();
+                nRealPageNum = nPageListNum;
                 while ( SeekToRec( rStCtrl, PPT_PST_SlidePersistAtom, nSlideListWithTextHdEndOffset ) )
                 {
                     if ( pPreviousPersist )
@@ -1522,8 +1531,23 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                     std::unique_ptr<PptSlidePersistEntry> pE2(new PptSlidePersistEntry);
                     ReadPptSlidePersistAtom( rStCtrl, pE2->aPersistAtom );
                     pE2->nSlidePersistStartOffset = rStCtrl.Tell();
-                    pE2->ePageKind = PptPageKind( nPageListNum );
+                    // Note/Presentation section swap
+                    if (nPageListNum == 1 && pE2->nSlidePersistStartOffset < nPSTList)
+                    {
+                        notePresentationSwap = true;
+                    }
+                    if (notePresentationSwap)
+                    {
+                        if (nPageListNum == 1) nRealPageNum = 2;
+                        else if (nPageListNum == 2) nRealPageNum = 1;
+                    }
+
+                    pE2->ePageKind = PptPageKind(nRealPageNum);
                     pPreviousPersist = pE2.get();
+                    if (!pPageList)
+                    {
+                        pPageList = GetPageList(PptPageKind(nRealPageNum));
+                    }
                     pPageList->push_back(std::move(pE2));
                 }
                 if ( pPreviousPersist )
