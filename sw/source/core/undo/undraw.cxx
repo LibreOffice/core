@@ -46,7 +46,7 @@ struct SwUndoGroupObjImpl
 {
     SwDrawFrameFormat* pFormat;
     SdrObject* pObj;
-    sal_uLong nNodeIdx;
+    sal_uInt64 nNodeIdx;
 };
 
 // Draw-Objecte
@@ -101,7 +101,7 @@ static void lcl_SendRemoveToUno( SwFormat& rFormat )
     rFormat.ModifyNotification( &aMsgHint, &aMsgHint );
 }
 
-static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
+static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uInt64& rNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -139,7 +139,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, sal_uLong& rNodePos )
     }
 }
 
-static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uLong nNodePos )
+static void lcl_RestoreAnchor( SwFrameFormat* pFormat, sal_uInt64 nNodePos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
