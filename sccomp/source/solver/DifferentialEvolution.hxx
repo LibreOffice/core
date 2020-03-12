@@ -29,12 +29,12 @@ template <typename DataProvider> class DifferentialEvolutionAlgorithm
 
     DataProvider& mrDataProvider;
 
-    size_t const mnPopulationSize;
+    size_t mnPopulationSize;
     std::vector<Individual> maPopulation;
 
     std::random_device maRandomDevice;
     std::mt19937 maGenerator;
-    size_t const mnDimensionality;
+    size_t mnDimensionality;
 
     std::uniform_int_distribution<> maRandomPopulation;
     std::uniform_int_distribution<> maRandomDimensionality;

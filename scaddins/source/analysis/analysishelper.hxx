@@ -191,11 +191,11 @@ struct FuncDataBase
     const char*         pIntName;
     const char*             pUINameID;          // resource ID to UI name
     const char**            pDescrID;           // resource ID to description, parameter names and ~ description
-    bool const              bDouble;            // name already exist in Calc
-    bool const              bWithOpt;           // first parameter is internal
+    bool                    bDouble;            // name already exist in Calc
+    bool                    bWithOpt;           // first parameter is internal
     const char**            pCompListID;        // list of valid names
-    sal_uInt16 const        nNumOfParams;       // number of named / described parameters
-    FDCategory const        eCat;               // function category
+    sal_uInt16              nNumOfParams;       // number of named / described parameters
+    FDCategory              eCat;               // function category
     const char*             pSuffix;            // if bDouble, append a suffix other than "_ADD" for UI
 };
 
@@ -203,15 +203,15 @@ struct FuncDataBase
 class FuncData final
 {
 private:
-    OUString const          aIntName;
+    OUString                aIntName;
     const char*             pUINameID;
     const char**            pDescrID;           // leads also to parameter descriptions!
-    bool const              bDouble;            // flag for names that already exist in Calc
-    bool const              bWithOpt;           // has internal parameter on first position
+    bool                    bDouble;            // flag for names that already exist in Calc
+    bool                    bWithOpt;           // has internal parameter on first position
 
-    sal_uInt16 const        nParam;             // num of parameters
+    sal_uInt16              nParam;             // num of parameters
     std::vector<OUString>   aCompList;          // list of all valid names
-    FDCategory const        eCat;               // function category
+    FDCategory              eCat;               // function category
     OUString                aSuffix;            // if bDouble and not empty, append a suffix other than "_ADD" for UI
 
 public:
@@ -503,10 +503,10 @@ class ConvertData
 {
 protected:
     friend class ConvertDataList;
-    double const              fConst;
-    OUString const            aName;
-    ConvertDataClass const    eClass;
-    bool const                bPrefixSupport;
+    double                  fConst;
+    OUString                  aName;
+    ConvertDataClass        eClass;
+    bool                bPrefixSupport;
 public:
                             ConvertData(
                                 const char      pUnitName[],
@@ -533,7 +533,7 @@ public:
 
 class ConvertDataLinear final : public ConvertData
 {
-    double const            fOffs;
+    double                  fOffs;
 public:
     inline                  ConvertDataLinear(
                                 const char      pUnitName[],

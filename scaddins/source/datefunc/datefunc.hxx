@@ -50,23 +50,23 @@ struct ScaFuncDataBase
     const char*                 pUINameID;          // resource ID to UI name
     const char**                pDescrID;           // resource ID to description, parameter names and ~ description
     const char**                pCompListID;        // list of valid names
-    sal_uInt16 const            nParamCount;        // number of named / described parameters
-    ScaCategory const           eCat;               // function category
-    bool const                  bDouble;            // name already exist in Calc
-    bool const                  bWithOpt;           // first parameter is internal
+    sal_uInt16                  nParamCount;        // number of named / described parameters
+    ScaCategory                 eCat;               // function category
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 };
 
 class ScaFuncData final
 {
 private:
-    OUString const              aIntName;           // internal name (get***)
+    OUString                    aIntName;           // internal name (get***)
     const char*                 pUINameID;          // resource ID to UI name
     const char**                pDescrID;           // leads also to parameter descriptions!
-    sal_uInt16 const            nParamCount;        // num of parameters
+    sal_uInt16                  nParamCount;        // num of parameters
     std::vector<OUString>       aCompList;          // list of all valid names
-    ScaCategory const           eCat;               // function category
-    bool const                   bDouble;            // name already exist in Calc
-    bool const                   bWithOpt;           // first parameter is internal
+    ScaCategory                 eCat;               // function category
+    bool                    bDouble;            // name already exist in Calc
+    bool                    bWithOpt;           // first parameter is internal
 
 public:
                                 ScaFuncData(const ScaFuncDataBase& rBaseData);
