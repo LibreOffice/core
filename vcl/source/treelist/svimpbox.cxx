@@ -308,7 +308,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
     if( m_pView->IsEditingActive() )
     {
         m_pView->EndEditing( true ); // Cancel
-        m_pView->Update();
+        m_pView->PaintImmediately();
     }
     BeginScroll();
 
@@ -341,11 +341,11 @@ void SvImpLBox::CursorDown()
     {
         m_nFlags &= ~LBoxFlags::Filling;
         ShowCursor( false );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pStartEntry = pNextFirstToDraw;
         tools::Rectangle aArea( GetVisibleArea() );
         m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         ShowCursor( true );
         m_pView->NotifyScrolled();
     }
@@ -363,12 +363,12 @@ void SvImpLBox::CursorUp()
     m_nFlags &= ~LBoxFlags::Filling;
     long nEntryHeight = m_pView->GetEntryHeight();
     ShowCursor( false );
-    m_pView->Update();
+    m_pView->PaintImmediately();
     m_pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
     aArea.AdjustBottom( -nEntryHeight );
     m_pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-    m_pView->Update();
+    m_pView->PaintImmediately();
     ShowCursor( true );
     m_pView->NotifyScrolled();
 }
@@ -390,22 +390,21 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     ShowCursor( false );
 
     m_nFlags &= ~LBoxFlags::Filling;
-    m_pView->Update();
     m_pStartEntry = pNext;
 
     if( nRealDelta >= m_nVisibleCount )
     {
         m_pView->Invalidate( GetVisibleArea() );
-        m_pView->Update();
+        m_pView->PaintImmediately();
     }
     else
     {
         tools::Rectangle aArea( GetVisibleArea() );
         long nScroll = m_pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->NotifyScrolled();
     }
 
@@ -428,20 +427,19 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
-    m_pView->Update();
     m_pStartEntry = pPrev;
     if( nRealDelta >= m_nVisibleCount )
     {
         m_pView->Invalidate( GetVisibleArea() );
-        m_pView->Update();
+        m_pView->PaintImmediately();
     }
     else
     {
         long nEntryHeight = m_pView->GetEntryHeight();
         tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->NotifyScrolled();
     }
 
@@ -706,7 +704,7 @@ IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
         if( m_pView->IsEditingActive() )
         {
             m_pView->EndEditing( true ); // Cancel
-            m_pView->Update();
+            m_pView->PaintImmediately();
         }
         m_pView->nFocusWidth = -1;
         KeyLeftRight( nDelta );
@@ -716,7 +714,7 @@ IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
 void SvImpLBox::KeyLeftRight( long nDelta )
 {
     if( !(m_nFlags & LBoxFlags::InResize) )
-        m_pView->Update();
+        m_pView->PaintImmediately();
     BeginScroll();
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
@@ -1251,7 +1249,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
         if( m_pView->IsEditingActive() )
         {
             m_pView->EndEditing( true ); // Cancel
-            m_pView->Update();
+            m_pView->PaintImmediately();
         }
         m_pView->nFocusWidth = -1;
         KeyLeftRight( nTemp );
@@ -1837,7 +1835,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
     ShowVerSBar();
     ShowCursor( true );
     if( m_pStartEntry != m_pView->First() && (m_nFlags & LBoxFlags::Filling) )
-        m_pView->Update();
+        m_pView->PaintImmediately();
 }
 
 
@@ -3248,7 +3246,7 @@ IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg, void )
     if( !pArg )
     {
         m_pView->Invalidate();
-        m_pView->Update();
+        m_pView->PaintImmediately();
     }
     else
     {

@@ -1857,7 +1857,7 @@ void SvxIconChoiceCtrl_Impl::ShowCursor( bool bShow )
 
 void SvxIconChoiceCtrl_Impl::HideDDIcon()
 {
-    pView->Update();
+    pView->PaintImmediately();
 }
 
 bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
@@ -2025,7 +2025,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     if( GetUpdateMode() )
     {
         HideDDIcon();
-        pView->Update();
+        pView->PaintImmediately();
         ShowCursor( false );
     }
 
@@ -2063,7 +2063,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     // check if we still need scrollbars
     CheckScrollBars();
     if( bScrollable && GetUpdateMode() )
-        pView->Update();
+        pView->PaintImmediately();
 
     // If the requested area can not be made completely visible, the
     // Vis-Rect-Changed handler is called in any case. This case may occur e.g.
@@ -2301,7 +2301,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
     nFlags |= IconChoiceFlags::SelectingRect;
 
     CheckBoundingRects();
-    pView->Update();
+    pView->PaintImmediately();
     const size_t nCount = maZOrderList.size();
 
     tools::Rectangle aRect( rRect );
@@ -2381,7 +2381,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
     if( !bAlreadySelectingRect )
         nFlags &= ~IconChoiceFlags::SelectingRect;
 
-    pView->Update();
+    pView->PaintImmediately();
     if( bResetClipRegion )
         pView->SetClipRegion();
 }

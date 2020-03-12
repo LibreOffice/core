@@ -137,7 +137,6 @@ public:
     virtual ~LibBox() override;
     virtual void dispose() override;
 
-    using Window::Update;
     /*!
      * Update selection in ComboBox of macro and dialog Library
      *
@@ -242,7 +241,6 @@ public:
     virtual ~LanguageBox() override;
     virtual void dispose() override;
 
-    using Window::Update;
     /*!
      * Update selection in ComboBox of macro and dialog Library
      *

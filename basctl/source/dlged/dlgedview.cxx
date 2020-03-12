@@ -106,7 +106,7 @@ void DlgEdView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
             nScrollY = -nVisTop;
 
         // scroll window
-        rWin.Update();
+        rWin.PaintImmediately();
         rWin.Scroll( -nScrollX, -nScrollY );
         aMap.SetOrigin( Point( aOrg.X() - nScrollX, aOrg.Y() - nScrollY ) );
         rWin.SetMapMode( aMap );

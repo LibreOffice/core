@@ -2039,7 +2039,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
             if ( mbDragFull )
             {
-                Update();
+                PaintImmediately();
                 mnMStartPos = mnMSplitPos;
             }
         }

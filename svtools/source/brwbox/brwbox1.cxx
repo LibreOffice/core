@@ -950,7 +950,7 @@ long BrowseBox::ScrollColumns( long nCols )
     if ( nCols )
     {
         pDataWin->Update();
-        Update();
+        PaintImmediately();
     }
     bScrolling = false;
     EndScroll();

@@ -235,7 +235,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
     // shell, because then it is not really drawn but the rectangles will
     // be only marked (in document coordinates).
     if ( m_pWrtShell && m_pWrtShell->ActionPend() )
-        m_pWrtShell->GetWin()->Update();
+        m_pWrtShell->GetWin()->PaintImmediately();
 
     m_aVisArea = aLR;
 

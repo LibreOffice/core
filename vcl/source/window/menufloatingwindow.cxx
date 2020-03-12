@@ -501,7 +501,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
             pPopup->pWindow->SetParentToDefaultWindow();
             pPopup->pWindow.disposeAndClear();
 
-            Update();
+            PaintImmediately();
         }
     }
 }
@@ -626,7 +626,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 void MenuFloatingWindow::ImplScroll( bool bUp )
 {
     KillActivePopup();
-    Update();
+    PaintImmediately();
 
     if (!pMenu)
         return;

@@ -2243,7 +2243,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
 
                 if ( bWasVisible && aOldPos == aPos )
                 {
-                    pWindow->Update();
+                    pWindow->PaintImmediately();
                     return;
                 }
 
@@ -2253,10 +2253,10 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
                 // of this window, as it may otherwise cause the parent
                 // to hide this window again
                 if( pWindow->GetParent() )
-                    pWindow->GetParent()->Update();
+                    pWindow->GetParent()->PaintImmediately();
 
                 pWindow->Show();
-                pWindow->Update();
+                pWindow->PaintImmediately();
                 pWindow->SetParentUpdateMode( false );
                 pWindow->Hide();
                 pWindow->SetParentUpdateMode( true );

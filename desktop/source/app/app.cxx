@@ -2304,7 +2304,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
                     VclPtr<vcl::Window> pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
                     if (pCompWindow)
-                        pCompWindow->Update();
+                        pCompWindow->PaintImmediately();
                 }
             }
         }

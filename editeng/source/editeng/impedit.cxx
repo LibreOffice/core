@@ -1305,7 +1305,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         bool bVisCursor = pCrsr->IsVisible();
         pCrsr->Hide();
         if (pOutWin)
-            pOutWin->Update();
+            pOutWin->PaintImmediately();
         if ( !IsVertical() )
             aVisDocStartPos.Move( -nRealDiffX, -nRealDiffY );
         else
@@ -1333,7 +1333,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         }
 
         if (pOutWin)
-            pOutWin->Update();
+            pOutWin->PaintImmediately();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )
         {
