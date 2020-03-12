@@ -212,4 +212,77 @@ class chartDataLabels(UITestCase):
     self.ui_test.close_dialog_through_button(xOKBtn)
 
     self.ui_test.close_doc()
+
+  def test_tdf131291(self):
+    calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131291.ods"))
+    xCalcDoc = self.xUITest.getTopFocusWindow()
+    gridwin = xCalcDoc.getChild("grid_window")
+    document = self.ui_test.get_component()
+
+    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    gridwin.executeAction("ACTIVATE", tuple())
+    xChartMainTop = self.xUITest.getTopFocusWindow()
+    xChartMain = xChartMainTop.getChild("chart_window")
+    xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+
+    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataLabels"}))
+    xDialog = self.xUITest.getTopFocusWindow()
+
+    xTabs = xDialog.getChild("tabcontrol")
+    select_pos(xTabs, "1")
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+
+    xNumberFormatBtn = xDialog.getChild("PB_NUMBERFORMAT")
+
+    def handle_number_dlg(dialog):
+            categoryformat = dialog.getChild("categorylb")
+            formatted = dialog.getChild("formatted")
+
+            # Select currency
+            categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+            categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+
+            self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
+
+            self.assertEqual(get_state_as_dict(formatted)["Text"], "[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00")
+
+            xOKButton = dialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOKButton)
+
+    self.ui_test.execute_blocking_action(xNumberFormatBtn.executeAction, args=('CLICK', ()),
+                dialog_handler=handle_number_dlg)
+
+    xOKBtn = xDialog.getChild("ok")
+    self.ui_test.close_dialog_through_button(xOKBtn)
+
+    xNumberFormats = document.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
+    xLocale = Locale()
+    xFormat = xNumberFormats.queryKey("[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00", xLocale, True)
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
+
+    #reopen and verify the previous changes
+    self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataLabels"}))
+    xDialog = self.xUITest.getTopFocusWindow()
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+    # tdf#131291: it would fail here: AssertionError: 0 != 104
+    self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
+
+    xOKBtn = xDialog.getChild("ok")
+    self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
+    self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
