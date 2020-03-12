@@ -716,7 +716,7 @@ scui_lib = shared_library('scuilo',
 # ‘class orcus::orcus_xml’ has no member named ‘set_range_row_group’
 #
 # Maybe the Orcus version is too old?
-#scfilt_lib = shared_library('scfilt',
+#scfilt_lib = shared_library('scfiltlo',
 #  'source/filter/dif/difexp.cxx',
 #  'source/filter/dif/difimp.cxx',
 #  'source/filter/excel/colrowst.cxx',
