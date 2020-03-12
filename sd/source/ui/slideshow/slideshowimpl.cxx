@@ -168,7 +168,7 @@ private:
     bool isValidSlideNumber( sal_Int32 nSlideNumber ) const { return (nSlideNumber >= 0) && (nSlideNumber < mnSlideCount); }
 
 private:
-    Mode const meMode;
+    Mode meMode;
     sal_Int32 mnStartSlideNumber;
     std::vector< sal_Int32 > maSlideNumbers;
     std::vector< bool > maSlideVisible;

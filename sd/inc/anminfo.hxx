@@ -39,7 +39,7 @@ public:
     css::presentation::AnimationSpeed  meSpeed;      ///< Speed of the animation
     bool                        mbActive;       ///< turned on?
     bool                        mbDimPrevious;  ///< Object fade out
-    bool const                  mbIsMovie;      ///< if group object than it is a sequence of them.
+    bool                        mbIsMovie;      ///< if group object than it is a sequence of them.
     bool                        mbDimHide;      ///< hide rather than dim
     Color                       maBlueScreen;   ///< identifies "background pixels"
     Color                       maDimColor;     ///< for fading the object
@@ -49,7 +49,7 @@ public:
     css::presentation::ClickAction     meClickAction;  ///< Action at mouse click
     css::presentation::AnimationEffect meSecondEffect; ///< for object fading.
     css::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.
-    OUString const              maSecondSoundFile; ///< for object fading.
+    OUString                    maSecondSoundFile; ///< for object fading.
     bool                        mbSecondSoundOn;   ///< for object fading.
     bool                        mbSecondPlayFull;  ///< for object fading.
     sal_uInt16                  mnVerb;            ///< for OLE object

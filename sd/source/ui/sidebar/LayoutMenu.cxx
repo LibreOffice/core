@@ -74,8 +74,8 @@ struct snewfoil_value_info
 {
     const char* msBmpResId;
     const char* mpStrResId;
-    WritingMode const meWritingMode;
-    AutoLayout const maAutoLayout;
+    WritingMode meWritingMode;
+    AutoLayout maAutoLayout;
 };
 
 }

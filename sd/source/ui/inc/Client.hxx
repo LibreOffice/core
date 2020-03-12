@@ -29,7 +29,7 @@ class ViewShell;
 
 class Client : public SfxInPlaceClient
 {
-    ViewShell* const mpViewShell;
+    ViewShell*      mpViewShell;
     SdrOle2Obj*     pSdrOle2Obj;
 
     virtual void    ObjectAreaChanged() override;

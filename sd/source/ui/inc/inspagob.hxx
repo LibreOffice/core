@@ -29,7 +29,7 @@ class SfxMedium;
 class SdInsertPagesObjsDlg : public weld::GenericDialogController
 {
 private:
-    SfxMedium* const        m_pMedium;
+    SfxMedium*              m_pMedium;
     const SdDrawDocument*   m_pDoc;
     const OUString&         m_rName;
 

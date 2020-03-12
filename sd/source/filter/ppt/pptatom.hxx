@@ -67,7 +67,7 @@ private:
     Atom( const DffRecordHeader& rRecordHeader, SvStream& rStCtrl );
 
     SvStream& mrStream;
-    DffRecordHeader const maRecordHeader;
+    DffRecordHeader maRecordHeader;
     Atom* mpFirstChild;
     Atom* mpNextAtom;
 };

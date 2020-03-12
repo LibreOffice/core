@@ -1494,8 +1494,8 @@ namespace {
 class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin&    rLayerAdmin;
-    SdrPageView* const            pSdrPageView;
-    vcl::PDFExtOutDevData* const  pPDFExtOutDevData;
+    SdrPageView*            pSdrPageView;
+    vcl::PDFExtOutDevData*  pPDFExtOutDevData;
 
     vcl::PDFWriter::StructElement ImplBegStructureTag( SdrObject& rObject );
 

@@ -80,7 +80,7 @@ class HtmlExport final
     std::vector< SdPage* > maPages;
     std::vector< SdPage* > maNotesPages;
 
-    OUString const maPath;
+    OUString maPath;
 
     SdDrawDocument* mpDoc;
     ::sd::DrawDocShell* mpDocSh;

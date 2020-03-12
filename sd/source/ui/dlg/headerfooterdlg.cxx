@@ -90,8 +90,8 @@ const int nDateTimeFormatsCount = 12;
 namespace {
 
 struct DateAndTimeFormat {
-    SvxDateFormat const meDateFormat;
-    SvxTimeFormat const meTimeFormat;
+    SvxDateFormat meDateFormat;
+    SvxTimeFormat meTimeFormat;
 };
 
 }
@@ -120,7 +120,7 @@ class HeaderFooterTabPage
 private:
     SdDrawDocument*     mpDoc;
     LanguageType        meOldLanguage;
-    bool const          mbHandoutMode;
+    bool                mbHandoutMode;
 
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;

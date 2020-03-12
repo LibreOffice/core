@@ -71,7 +71,7 @@ private:
             { return maToken==rDescriptor.maToken; }
 
         private:
-            ::sd::sidebar::MasterPageContainer::Token const maToken;
+            ::sd::sidebar::MasterPageContainer::Token maToken;
         };
     };
 

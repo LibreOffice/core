@@ -72,7 +72,7 @@ namespace {
 class PathDragMove : public SdrDragMove
 {
 private:
-    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -139,7 +139,7 @@ namespace {
 class PathDragResize : public SdrDragResize
 {
 private:
-    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -202,7 +202,7 @@ namespace {
 class PathDragObjOwn : public SdrDragObjOwn
 {
 private:
-    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
+    basegfx::B2DPolyPolygon         maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -264,7 +264,7 @@ public:
     virtual bool IsFocusHdl() const override;
 
 private:
-    SdrPathObj* const mpPathObj;
+    SdrPathObj* mpPathObj;
 };
 
 }

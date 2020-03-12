@@ -73,7 +73,7 @@ typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory
 {
-    OUString const maLabel;
+    OUString maLabel;
     EffectDescriptorList maEffects;
 
     PresetCategory( const OUString& rLabel, const EffectDescriptorList& rEffects )

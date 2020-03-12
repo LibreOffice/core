@@ -29,7 +29,7 @@ namespace sd{
     {
     protected:
         std::string name;
-        uint const port;
+        uint port;
 
     public:
         explicit ZeroconfService(const std::string& aname, uint aport)

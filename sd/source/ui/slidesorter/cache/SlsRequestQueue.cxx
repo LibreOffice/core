@@ -75,9 +75,9 @@ public:
         const CacheKey maKey;
     };
 
-    CacheKey const maKey;
-    sal_Int32 const mnPriorityInClass;
-    RequestPriorityClass const meClass;
+    CacheKey maKey;
+    sal_Int32 mnPriorityInClass;
+    RequestPriorityClass meClass;
 };
 
 }

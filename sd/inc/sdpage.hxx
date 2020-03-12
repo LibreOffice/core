@@ -383,7 +383,7 @@ private:
     bool mbIsPrecious;
 
     // page id of this page
-    sal_uInt16 const mnPageId;
+    sal_uInt16 mnPageId;
 
     /** clone the animations from this and set them to rTargetPage
      *  TTTT: Order is strange, should be the other way around by

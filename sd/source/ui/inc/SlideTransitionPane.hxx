@@ -100,7 +100,7 @@ private:
     DECL_LINK(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;
-    SdDrawDocument * const  mpDrawDoc;
+    SdDrawDocument *  mpDrawDoc;
 
     std::unique_ptr<TransitionPane> mxVS_TRANSITION_ICONS;
     std::unique_ptr<weld::CustomWeld> mxVS_TRANSITION_ICONSWin;

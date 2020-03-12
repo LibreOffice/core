@@ -120,7 +120,7 @@ namespace sd { namespace tools {
 class EventMultiplexerEvent
 {
 public:
-    EventMultiplexerEventId const meEventId;
+    EventMultiplexerEventId meEventId;
     const void* mpUserData;
 
     EventMultiplexerEvent (

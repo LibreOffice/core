@@ -55,7 +55,7 @@ protected:
     SfxMedium&                  mrMedium;
     ::sd::DrawDocShell&         mrDocShell;
     SdDrawDocument&             mrDocument;
-    bool const                  mbIsDraw : 1;
+    bool                        mbIsDraw : 1;
     void                        CreateStatusIndicator();
 
 private:

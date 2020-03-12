@@ -193,7 +193,7 @@ public:
 
 private:
     /// The wrapped outliner that is represented as object container.
-    SdOutliner* const mpOutliner;
+    SdOutliner* mpOutliner;
 
     /** Create an iterator.  The object pointed to depends on the search
         direction retrieved from the outliner object

@@ -79,7 +79,7 @@ struct snewfoil_value_info_layout
 {
     const char* msBmpResId;
     const char* mpStrResId;
-    AutoLayout const maAutoLayout;
+    AutoLayout maAutoLayout;
 };
 
 }

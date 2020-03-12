@@ -118,12 +118,12 @@ private:
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
-    vcl::EnumContext const maDrawOtherContext;
-    vcl::EnumContext const maDrawMasterContext;
-    vcl::EnumContext const maImpressOtherContext;
-    vcl::EnumContext const maImpressMasterContext;
-    vcl::EnumContext const maImpressHandoutContext;
-    vcl::EnumContext const maImpressNotesContext;
+    vcl::EnumContext maDrawOtherContext;
+    vcl::EnumContext maDrawMasterContext;
+    vcl::EnumContext maImpressOtherContext;
+    vcl::EnumContext maImpressMasterContext;
+    vcl::EnumContext maImpressHandoutContext;
+    vcl::EnumContext maImpressNotesContext;
     bool         mbTitle;
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
@@ -134,7 +134,7 @@ private:
     FieldUnit meFUnit;
     OUString maCustomEntry;
 
-    SfxBindings* const mpBindings;
+    SfxBindings* mpBindings;
 
     MapUnit meUnit;
 

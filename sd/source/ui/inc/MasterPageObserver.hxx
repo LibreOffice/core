@@ -104,7 +104,7 @@ public:
         ET_MASTER_PAGE_REMOVED
     };
 
-    EventType const meType;
+    EventType meType;
     const OUString& mrMasterPageName;
 
     MasterPageObserverEvent (

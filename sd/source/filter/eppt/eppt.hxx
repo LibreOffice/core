@@ -63,8 +63,8 @@ class SotStorage;
 
 struct EPPTHyperlink
 {
-    OUString const    aURL;
-    sal_uInt32 const  nType;      // bit 0-7 : type       ( 1: click action to a slide )
+    OUString    aURL;
+    sal_uInt32  nType;      // bit 0-7 : type       ( 1: click action to a slide )
                             //                      ( 2: hyperlink url )
                             // bit 8-23: index
                             // bit 31  : hyperlink is attached to a shape
@@ -81,8 +81,8 @@ enum PPTExOleObjEntryType
 
 struct PPTExOleObjEntry
 {
-    PPTExOleObjEntryType const    eType;
-    sal_uInt32 const              nOfsA; ///< offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
+    PPTExOleObjEntryType    eType;
+    sal_uInt32              nOfsA; ///< offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
     sal_uInt32              nOfsB; ///< offset to the EPP_ExOleObjStg
 
     css::uno::Reference< css::awt::XControlModel >    xControlModel;
@@ -112,7 +112,7 @@ public:
 struct CellBorder;
 class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
 {
-        sal_uInt32 const                mnCnvrtFlags;
+        sal_uInt32                      mnCnvrtFlags;
         bool                        mbStatus;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;

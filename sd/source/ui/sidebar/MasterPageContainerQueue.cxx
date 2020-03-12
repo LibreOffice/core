@@ -41,8 +41,8 @@ public:
         : mpDescriptor(rpDescriptor),
           mnPriority(nPriority)
     {}
-    SharedMasterPageDescriptor const mpDescriptor;
-    int const mnPriority;
+    SharedMasterPageDescriptor mpDescriptor;
+    int mnPriority;
     class Compare
     {
     public:
@@ -64,7 +64,7 @@ public:
     class CompareToken
     {
     public:
-        MasterPageContainer::Token const maToken;
+        MasterPageContainer::Token maToken;
         explicit CompareToken(MasterPageContainer::Token aToken) : maToken(aToken) {}
         bool operator() (const PreviewCreationRequest& rRequest) const
             { return maToken==rRequest.mpDescriptor->maToken; }

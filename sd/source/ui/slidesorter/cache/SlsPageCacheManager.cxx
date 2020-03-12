@@ -34,7 +34,7 @@ class CacheDescriptor
 {
 public:
     ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
-    Size const maPreviewSize;
+    Size maPreviewSize;
 
     CacheDescriptor(
         ::sd::slidesorter::cache::PageCacheManager::DocumentKey const & pDocument,
@@ -98,7 +98,7 @@ public:
     }
 
 private:
-    Size const maPreferredSize;
+    Size maPreferredSize;
 };
 
 } // end of anonymous namespace

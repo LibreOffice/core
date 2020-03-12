@@ -110,7 +110,7 @@ public:
     sal_Int32 getControlType() const { return mnType; }
 
 private:
-    sal_Int32 const  mnType;
+    sal_Int32 mnType;
 };
 
 class SdPropertySubControl

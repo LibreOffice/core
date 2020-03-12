@@ -104,7 +104,7 @@ private:
     std::map< sal_uInt16, OUString > maPropertyValues;
     VclPtr<ListBox> mpControl;
     DECL_LINK(OnSelect, ListBox&, void);
-    Link<LinkParamNone*,void> const maModifyLink;
+    Link<LinkParamNone*,void> maModifyLink;
 };
 
 }
@@ -276,7 +276,7 @@ public:
 private:
     VclPtr<SvxColorListBox> mpControl;
     DECL_LINK(OnSelect, SvxColorListBox&, void);
-    Link<LinkParamNone*,void> const maModifyLink;
+    Link<LinkParamNone*,void> maModifyLink;
 };
 
 }
@@ -397,7 +397,7 @@ public:
 
 private:
     VclPtr<FontNameBox>         mpControl;
-    Link<LinkParamNone*,void> const   maModifyHdl;
+    Link<LinkParamNone*,void>   maModifyHdl;
     DECL_LINK(ControlSelectHdl, ComboBox&, void);
 };
 
@@ -655,7 +655,7 @@ private:
     VclPtr<DropdownMenuBox> mpControl;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<MetricField> mpMetric;
-    Link<LinkParamNone*,void> const maModifyHdl;
+    Link<LinkParamNone*,void> maModifyHdl;
 };
 
 }
@@ -806,7 +806,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
-    Link<LinkParamNone*,void> const maModifyHdl;
+    Link<LinkParamNone*,void> maModifyHdl;
 };
 
 }
@@ -999,7 +999,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
-    Link<LinkParamNone*,void> const maModifyHdl;
+    Link<LinkParamNone*,void> maModifyHdl;
 };
 
 }
@@ -1400,7 +1400,7 @@ public:
     void updateMenu();
 
 private:
-    Link<LinkParamNone*,void> const maModifyHdl;
+    Link<LinkParamNone*,void> maModifyHdl;
     int                       mnDirection;
 
     std::unique_ptr<weld::MetricSpinButton> mxMetric;
@@ -1569,7 +1569,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<Edit>              mpEdit;
-    Link<LinkParamNone*,void> const maModifyHdl;
+    Link<LinkParamNone*,void> maModifyHdl;
 
     float mfFontWeight;
     awt::FontSlant meFontSlant;

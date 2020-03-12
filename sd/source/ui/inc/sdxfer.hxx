@@ -132,7 +132,7 @@ private:
     bool                            mbInternalMove               : 1;
     bool                            mbOwnDocument                : 1;
     bool                            mbOwnView                    : 1;
-    bool const                      mbLateInit                   : 1;
+    bool                            mbLateInit                   : 1;
     bool                            mbPageTransferable           : 1;
     bool                            mbPageTransferablePersistent : 1;
     ::std::vector<std::shared_ptr<UserData> > maUserData;

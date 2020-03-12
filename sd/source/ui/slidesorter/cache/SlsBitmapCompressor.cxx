@@ -35,7 +35,7 @@ class NoBitmapCompression::DummyReplacement
     : public BitmapReplacement
 {
 public:
-    BitmapEx const maPreview;
+    BitmapEx maPreview;
 
     explicit DummyReplacement (const BitmapEx& rPreview) : maPreview(rPreview)  { }
     virtual ~DummyReplacement() {}

@@ -69,14 +69,14 @@ public:
     void ResetOffsets (const controller::Animator::AnimationMode eMode);
 
     /// Index of the row or column that this run represents.
-    sal_Int32 const mnRunIndex;
+    sal_Int32 mnRunIndex;
     /// The index at which to make place for the insertion indicator (-1 for
     /// no indicator).
     sal_Int32 mnLocalInsertIndex;
     /// Index of the first page in the run.
-    sal_Int32 const mnStartIndex;
+    sal_Int32 mnStartIndex;
     /// Index of the last page in the run.
-    sal_Int32 const mnEndIndex;
+    sal_Int32 mnEndIndex;
     /// Offset of each item in the run at the start of the current animation.
     ::std::vector<Point> maStartOffset;
     /// Target offset of each item in the run at the end of the current animation.
@@ -96,7 +96,7 @@ public:
 private:
     controller::Animator::AnimationId mnAnimationId;
     AnimatorAccess& mrAnimatorAccess;
-    ::std::function<double (double)> const maAccelerationFunction;
+    ::std::function<double (double)> maAccelerationFunction;
 
     void RestartAnimation();
 };
