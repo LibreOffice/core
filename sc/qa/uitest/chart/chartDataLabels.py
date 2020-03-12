@@ -32,11 +32,23 @@ class chartDataLabels(UITestCase):
     xChartMainTop = self.xUITest.getTopFocusWindow()
     xChartMain = xChartMainTop.getChild("chart_window")
     xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertFalse(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowCategoryName)
+    self.assertFalse(xDataSeries[0].Label.ShowLegendSymbol)
+    self.assertEqual(xDataSeries[0].LabelSeparator, " ")
+
     self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuDataLabels"}))
     xDialog = self.xUITest.getTopFocusWindow()
 
     xTabs = xDialog.getChild("tabcontrol")
     select_pos(xTabs, "1")
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowCategoryName)
+    self.assertFalse(xDataSeries[0].Label.ShowLegendSymbol)
+    self.assertEqual(xDataSeries[0].LabelSeparator, " ")
 
     valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
     category = xDialog.getChild("CB_CATEGORY")
@@ -66,6 +78,11 @@ class chartDataLabels(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowCategoryName)
+    self.assertTrue(xDataSeries[0].Label.ShowLegendSymbol)
+    self.assertEqual(xDataSeries[0].LabelSeparator, ", ")
+
     #reopen and verify InsertMenuDataLabels dialog
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
@@ -77,6 +94,11 @@ class chartDataLabels(UITestCase):
 
     xTabs = xDialog.getChild("tabcontrol")
     select_pos(xTabs, "1")
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowCategoryName)
+    self.assertTrue(xDataSeries[0].Label.ShowLegendSymbol)
+    self.assertEqual(xDataSeries[0].LabelSeparator, ", ")
 
     valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
     category = xDialog.getChild("CB_CATEGORY")
@@ -99,6 +121,11 @@ class chartDataLabels(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowCategoryName)
+    self.assertTrue(xDataSeries[0].Label.ShowLegendSymbol)
+    self.assertEqual(xDataSeries[0].LabelSeparator, ", ")
+
     self.ui_test.close_doc()
 
    def test_chart_data_labels_percentage_dialog(self):
@@ -112,11 +139,21 @@ class chartDataLabels(UITestCase):
     xChartMainTop = self.xUITest.getTopFocusWindow()
     xChartMain = xChartMainTop.getChild("chart_window")
     xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
+
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertIsNone(xDataSeries[0].PercentageNumberFormat)
+
     self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "FormatDataLabels"}))
     xDialog = self.xUITest.getTopFocusWindow()
 
     xTabs = xDialog.getChild("tabcontrol")
     select_pos(xTabs, "1")
+
+    self.assertTrue(xDataSeries[0].Label.ShowNumber)
+    self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertIsNone(xDataSeries[0].PercentageNumberFormat)
 
     valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
     valueAsPercentage = xDialog.getChild("CB_VALUE_AS_PERCENTAGE")
@@ -134,7 +171,6 @@ class chartDataLabels(UITestCase):
     #button Percentage format
 
     def handle_perc_dlg(dialog):
-#            print(dialog.getChildren())
             sourceformat = dialog.getChild("sourceformat")
             decimalsed = dialog.getChild("decimalsed")
             leadzerosed = dialog.getChild("leadzerosed")
@@ -149,7 +185,7 @@ class chartDataLabels(UITestCase):
             thousands.executeAction("CLICK", tuple())
             self.assertEqual(get_state_as_dict(formatted)["Text"], "#,#00.0%;[RED]-#,#00.0%")
 
-            xOKButton = dialog.getChild("cancel")
+            xOKButton = dialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOKButton)
 
     self.ui_test.execute_blocking_action(buttonPercentage.executeAction, args=('CLICK', ()),
@@ -160,6 +196,14 @@ class chartDataLabels(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    xNumberFormats = document.Sheets[0].Charts[0].getEmbeddedObject().getNumberFormats()
+    xLocale = Locale('en', 'US', '')
+    xFormat = xNumberFormats.queryKey("#,#00.0%;[RED]-#,#00.0%", xLocale, True)
+
+    self.assertFalse(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertEqual(xDataSeries[0].PercentageNumberFormat, xFormat)
 
     #reopen and verify Percentage dialog
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -172,6 +216,10 @@ class chartDataLabels(UITestCase):
 
     xTabs = xDialog.getChild("tabcontrol")
     select_pos(xTabs, "1")
+
+    self.assertFalse(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertEqual(xDataSeries[0].PercentageNumberFormat, xFormat)
 
     valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
     valueAsPercentage = xDialog.getChild("CB_VALUE_AS_PERCENTAGE")
@@ -186,30 +234,13 @@ class chartDataLabels(UITestCase):
 
     self.assertEqual(get_state_as_dict(valueAsNumber)["Selected"], "false")
     self.assertEqual(get_state_as_dict(valueAsPercentage)["Selected"], "true")
-#    #button Percentage format- it doesn't works in test, but it works in reality
-#    def handle_perc_dlg(dialog):
-#            sourceformat = dialog.getChild("sourceformat")
-#            decimalsed = dialog.getChild("decimalsed")
-#            leadzerosed = dialog.getChild("leadzerosed")
-#            negnumred = dialog.getChild("negnumred")
-#            thousands = dialog.getChild("thousands")
-#            formatted = dialog.getChild("formatted")
-
-#            self.assertEqual(get_state_as_dict(sourceformat)["Selected"], "false")
-#            self.assertEqual(get_state_as_dict(decimalsed)["Text"], "1")
-#            self.assertEqual(get_state_as_dict(leadzerosed)["Text"], "2")
-#            self.assertEqual(get_state_as_dict(negnumred)["Selected"], "true")
-#            self.assertEqual(get_state_as_dict(thousands)["Selected"], "true")
-#            self.assertEqual(get_state_as_dict(formatted)["Text"], "#,#00.0%;[RED]-#,#00.0%")
-
-#            xOKButton = dialog.getChild("cancel")
-#            self.ui_test.close_dialog_through_button(xOKButton)
-
-#    self.ui_test.execute_blocking_action(buttonPercentage.executeAction, args=('CLICK', ()),
-#                dialog_handler=handle_perc_dlg)
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertFalse(xDataSeries[0].Label.ShowNumber)
+    self.assertTrue(xDataSeries[0].Label.ShowNumberInPercent)
+    self.assertEqual(xDataSeries[0].PercentageNumberFormat, xFormat)
 
     self.ui_test.close_doc()
 
