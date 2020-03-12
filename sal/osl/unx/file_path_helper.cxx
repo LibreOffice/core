@@ -220,7 +220,7 @@ private:
     }
 
 private:
-    OUString const m_path_list;
+    OUString            m_path_list;
     const sal_Unicode*  m_end;
     const sal_Unicode   m_separator;
     const sal_Unicode*  m_path_segment_begin;

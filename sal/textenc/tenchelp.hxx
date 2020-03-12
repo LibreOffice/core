@@ -73,14 +73,14 @@ typedef void (* ImplResetUnicodeContextProc)(void * pContext);
 struct ImplTextConverter
 {
     void const * mpConvertData;
-    ImplConvertToUnicodeProc const mpConvertTextToUnicodeProc;
-    ImplConvertToTextProc const mpConvertUnicodeToTextProc;
-    ImplCreateTextContextProc const mpCreateTextToUnicodeContext;
-    ImplDestroyTextContextProc const mpDestroyTextToUnicodeContext;
-    ImplResetTextContextProc const mpResetTextToUnicodeContext;
-    ImplCreateUnicodeContextProc const mpCreateUnicodeToTextContext;
-    ImplDestroyUnicodeContextProc const mpDestroyUnicodeToTextContext;
-    ImplResetUnicodeContextProc const mpResetUnicodeToTextContext;
+    ImplConvertToUnicodeProc mpConvertTextToUnicodeProc;
+    ImplConvertToTextProc mpConvertUnicodeToTextProc;
+    ImplCreateTextContextProc mpCreateTextToUnicodeContext;
+    ImplDestroyTextContextProc mpDestroyTextToUnicodeContext;
+    ImplResetTextContextProc mpResetTextToUnicodeContext;
+    ImplCreateUnicodeContextProc mpCreateUnicodeToTextContext;
+    ImplDestroyUnicodeContextProc mpDestroyUnicodeToTextContext;
+    ImplResetUnicodeContextProc mpResetUnicodeToTextContext;
 };
 
 /* ----------------------------- */
@@ -90,13 +90,13 @@ struct ImplTextConverter
 struct SAL_DLLPUBLIC_RTTI ImplTextEncodingData
 {
     ImplTextConverter maConverter;
-    sal_uInt8 const mnMinCharSize;
-    sal_uInt8 const mnMaxCharSize;
-    sal_uInt8 const mnAveCharSize;
-    sal_uInt8 const mnBestWindowsCharset;
+    sal_uInt8 mnMinCharSize;
+    sal_uInt8 mnMaxCharSize;
+    sal_uInt8 mnAveCharSize;
+    sal_uInt8 mnBestWindowsCharset;
     char const * mpBestUnixCharset;
     char const * mpBestMimeCharset;
-    sal_uInt32 const mnInfoFlags;
+    sal_uInt32 mnInfoFlags;
 };
 
 /* ----------------------------------- */
@@ -105,9 +105,9 @@ struct SAL_DLLPUBLIC_RTTI ImplTextEncodingData
 
 struct ImplUniCharTabData
 {
-    sal_uInt16 const                mnUniChar;
-    unsigned char const                 mnChar;
-    unsigned char const                 mnChar2;
+    sal_uInt16                      mnUniChar;
+    unsigned char                       mnChar;
+    unsigned char                       mnChar2;
         // to cater for mappings like MS1258 with 1--2 bytes per Unicode char,
         // 0 if unused
 };
@@ -116,18 +116,18 @@ struct ImplByteConvertData
 {
     const sal_uInt16*               mpToUniTab1;
     const sal_uInt16*               mpToUniTab2;
-    unsigned char const                 mnToUniStart1;
-    unsigned char const                 mnToUniEnd1;
-    unsigned char const                 mnToUniStart2;
-    unsigned char const                 mnToUniEnd2;
+    unsigned char                       mnToUniStart1;
+    unsigned char                       mnToUniEnd1;
+    unsigned char                       mnToUniStart2;
+    unsigned char                       mnToUniEnd2;
     const unsigned char*                mpToCharTab1;
     const unsigned char*                mpToCharTab2;
     const ImplUniCharTabData*       mpToCharExTab;
-    sal_uInt16 const                mnToCharStart1;
-    sal_uInt16 const                mnToCharEnd1;
-    sal_uInt16 const                mnToCharStart2;
-    sal_uInt16 const                mnToCharEnd2;
-    sal_uInt16 const                mnToCharExCount;
+    sal_uInt16                      mnToCharStart1;
+    sal_uInt16                      mnToCharEnd1;
+    sal_uInt16                      mnToCharStart2;
+    sal_uInt16                      mnToCharEnd2;
+    sal_uInt16                      mnToCharExCount;
 };
 
 /* ----------------------------------- */
@@ -136,32 +136,32 @@ struct ImplByteConvertData
 
 struct ImplDBCSEUDCData
 {
-    unsigned char const                 mnLeadStart;
-    unsigned char const                 mnLeadEnd;
-    unsigned char const                 mnTrail1Start;
-    unsigned char const                 mnTrail1End;
-    unsigned char const                 mnTrail2Start;
-    unsigned char const                 mnTrail2End;
-    unsigned char const                 mnTrail3Start;
-    unsigned char const                 mnTrail3End;
-    unsigned char const                 mnTrailCount;
-    sal_uInt16 const                mnTrailRangeCount;
-    sal_uInt16 const                mnUniStart;
-    sal_uInt16 const                mnUniEnd;
+    unsigned char                       mnLeadStart;
+    unsigned char                       mnLeadEnd;
+    unsigned char                       mnTrail1Start;
+    unsigned char                       mnTrail1End;
+    unsigned char                       mnTrail2Start;
+    unsigned char                       mnTrail2End;
+    unsigned char                       mnTrail3Start;
+    unsigned char                       mnTrail3End;
+    unsigned char                       mnTrailCount;
+    sal_uInt16                      mnTrailRangeCount;
+    sal_uInt16                      mnUniStart;
+    sal_uInt16                      mnUniEnd;
 };
 
 struct ImplDBCSToUniLeadTab
 {
-    sal_uInt16 const                mnUniChar;
-    sal_uInt8 const                 mnTrailStart;
-    sal_uInt8 const                 mnTrailEnd;
+    sal_uInt16                      mnUniChar;
+    sal_uInt8                       mnTrailStart;
+    sal_uInt8                       mnTrailEnd;
     const sal_uInt16*               mpToUniTrailTab;
 };
 
 struct ImplUniToDBCSHighTab
 {
-    sal_uInt8 const                 mnLowStart;
-    sal_uInt8 const                 mnLowEnd;
+    sal_uInt8                       mnLowStart;
+    sal_uInt8                       mnLowEnd;
     const sal_uInt16*               mpToUniTrailTab;
 };
 
@@ -169,12 +169,12 @@ struct ImplDBCSConvertData
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
-    unsigned char const                 mnLeadStart;
-    unsigned char const                 mnLeadEnd;
-    unsigned char const                 mnTrailStart;
-    unsigned char const                 mnTrailEnd;
+    unsigned char                       mnLeadStart;
+    unsigned char                       mnLeadEnd;
+    unsigned char                       mnTrailStart;
+    unsigned char                       mnTrailEnd;
     const ImplDBCSEUDCData*         mpEUDCTab;
-    sal_uInt16 const                mnEUDCCount;
+    sal_uInt16                      mnEUDCCount;
 };
 
 /* ---------------------------------- */

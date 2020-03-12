@@ -387,7 +387,7 @@ class ParserCleanup
 {
 private:
     SaxExpatParser_Impl& m_rParser;
-    XML_Parser const m_xmlParser;
+    XML_Parser m_xmlParser;
 public:
     ParserCleanup(SaxExpatParser_Impl& rParser, XML_Parser xmlParser)
         : m_rParser(rParser)

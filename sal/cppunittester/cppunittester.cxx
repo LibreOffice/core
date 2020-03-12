@@ -196,7 +196,7 @@ struct test_name_compare
         return nEndPos == maName.size();
     }
 
-    std::string const maName;
+    std::string maName;
 };
 
 bool addRecursiveTests(const std::vector<std::string>& test_names, CppUnit::Test* pTest, CppUnit::TestRunner& rRunner)

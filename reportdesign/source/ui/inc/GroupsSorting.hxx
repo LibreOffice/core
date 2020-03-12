@@ -58,7 +58,7 @@ class OGroupsSortingDialog : public weld::GenericDialogController
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
     css::uno::Reference< css::report::XGroups>            m_xGroups;
     css::uno::Reference< css::container::XNameAccess >    m_xColumns;
-    bool const                                            m_bReadOnly;
+    bool                                                  m_bReadOnly;
 
     std::unique_ptr<weld::Toolbar>          m_xToolBox;
     std::unique_ptr<weld::Widget>           m_xProperties;

@@ -107,7 +107,7 @@ namespace {
 struct ImplStrCharsetDef
 {
     const char*             mpCharsetStr;
-    rtl_TextEncoding const  meTextEncoding;
+    rtl_TextEncoding        meTextEncoding;
 };
 
 struct ImplStrFirstPartCharsetDef

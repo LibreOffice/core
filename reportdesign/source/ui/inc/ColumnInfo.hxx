@@ -25,8 +25,8 @@ namespace rptui
 {
     struct ColumnInfo
     {
-        OUString const sColumnName;
-        OUString const sLabel;
+        OUString sColumnName;
+        OUString sLabel;
         ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
             : sColumnName(i_sColumnName)
             , sLabel(i_sLabel)

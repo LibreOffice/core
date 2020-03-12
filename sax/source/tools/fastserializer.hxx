@@ -35,7 +35,7 @@ namespace sax_fastparser {
 
 struct TokenValue
 {
-    sal_Int32 const nToken;
+    sal_Int32   nToken;
     const char *pValue;
     TokenValue(sal_Int32 _nToken, const char *_pValue) : nToken(_nToken), pValue(_pValue) {}
 };

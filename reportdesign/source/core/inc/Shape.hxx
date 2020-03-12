@@ -50,7 +50,7 @@ namespace reportdesign
         sal_Int32                                                       m_nZOrder;
         bool                                                            m_bOpaque;
 
-        OUString const                                                  m_sServiceName;
+        OUString                                                        m_sServiceName;
         OUString                                                        m_CustomShapeEngine;
         OUString                                                        m_CustomShapeData;
         css::uno::Sequence< css::beans::PropertyValue >                 m_CustomShapeGeometry;

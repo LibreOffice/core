@@ -32,9 +32,9 @@ namespace rptui
         void operator =(const OColorListener&) = delete;
     protected:
         Link<OColorListener&,void>          m_aCollapsedLink;
-        svtools::ColorConfig const          m_aColorConfig;
+        svtools::ColorConfig                m_aColorConfig;
         svtools::ExtendedColorConfig        m_aExtendedColorConfig;
-        OUString const                      m_sColorEntry;
+        OUString                            m_sColorEntry;
         Color                               m_nColor;
         Color                               m_nTextBoundaries;
         bool                            m_bCollapsed;

@@ -88,7 +88,7 @@ enum LookupMode {
 struct ExpandRequestLink {
     ExpandRequestLink const * next;
     Bootstrap_Impl const * file;
-    OUString const key;
+    OUString key;
 };
 
 OUString expandMacros(
@@ -289,7 +289,7 @@ struct Bootstrap_Impl
     Bootstrap_Impl * _base_ini;
 
     NameValueVector _nameValueVector;
-    OUString const _iniName;
+    OUString      _iniName;
 
     explicit Bootstrap_Impl (OUString const & rIniName);
     ~Bootstrap_Impl();
