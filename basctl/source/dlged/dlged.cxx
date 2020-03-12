@@ -308,7 +308,7 @@ void DlgEditor::DoScroll()
     if( !nX && !nY )
         return;
 
-    rWindow.Update();
+    rWindow.PaintImmediately();
 
     // #i31562#
     // When scrolling, someone was rescuing the Wallpaper and forced the window scroll to
@@ -321,7 +321,7 @@ void DlgEditor::DoScroll()
     rWindow.Scroll( -nX, -nY, ScrollFlags::Children);
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     rWindow.SetMapMode( aMap );
-    rWindow.Update();
+    rWindow.PaintImmediately();
 
     DlgEdHint aHint( DlgEdHint::WINDOWSCROLLED );
     Broadcast( aHint );

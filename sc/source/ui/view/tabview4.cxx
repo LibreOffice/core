@@ -477,7 +477,7 @@ void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
             if (pWin)
             {
                 tools::Rectangle aRect( 0,nDragPos, pWin->GetOutputSizePixel().Width()-1,nDragPos+HDR_SLIDERSIZE-1 );
-                pWin->Update();
+                pWin->PaintImmediately();
                 pWin->DoInvertRect( aRect );    // Pixel
             }
         }
@@ -492,7 +492,7 @@ void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
             if (pWin)
             {
                 tools::Rectangle aRect( nDragPos,0, nDragPos+HDR_SLIDERSIZE-1,pWin->GetOutputSizePixel().Height()-1 );
-                pWin->Update();
+                pWin->PaintImmediately();
                 pWin->DoInvertRect( aRect );    // Pixel
             }
         }

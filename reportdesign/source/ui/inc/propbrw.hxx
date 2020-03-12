@@ -96,8 +96,6 @@ public:
     void                    setCurrentPage(const OUString& _sLastActivePage);
 
     ::Size getMinimumSize() const;
-private:
-    using Window::Update;
 };
 
 } // rptui

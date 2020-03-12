@@ -984,7 +984,7 @@ void SearchTabPage_Impl::ClearSearchResults()
     for ( sal_Int32 i = 0; i < nCount; ++i )
         delete static_cast<OUString*>(m_pResultsLB->GetEntryData(i));
     m_pResultsLB->Clear();
-    m_pResultsLB->Update();
+    m_pResultsLB->PaintImmediately();
 }
 
 

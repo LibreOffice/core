@@ -1134,7 +1134,7 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     MouseEvent aMove( aPoint, 0, MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::SYNTHETIC );
     m_aTBPreview->MouseMove( aMove );
 
-    m_aTBPreview->Update();
+    m_aTBPreview->PaintImmediately();
 
     // execute the menu
     css::uno::Reference<css::uno::XComponentContext> xContext(getBorderWin().getView()->getORB());

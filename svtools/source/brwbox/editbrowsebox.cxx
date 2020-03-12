@@ -335,7 +335,7 @@ namespace svt
         if ( bActiveBeforeTracking )
         {
             DeactivateCell();
-            Update();
+            PaintImmediately();
         }
 
         BrowseBox::ImplStartTracking();
@@ -1008,7 +1008,7 @@ namespace svt
 
         // update if requested
         if (bUpdate)
-            Update();
+            PaintImmediately();
 
         // release the controller (asynchronously)
         if (nEndEvent)
@@ -1207,7 +1207,7 @@ namespace svt
         pCheckBoxPaint->GetBox().Enable(_bEnabled);
         pCheckBoxPaint->Show();
         pCheckBoxPaint->SetParentUpdateMode( false );
-        pCheckBoxPaint->Update();
+        pCheckBoxPaint->PaintImmediately();
         pCheckBoxPaint->Hide();
         pCheckBoxPaint->SetParentUpdateMode( true );
     }

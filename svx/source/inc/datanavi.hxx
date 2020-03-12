@@ -362,7 +362,6 @@ namespace svxform
         virtual ~DataNavigator() override;
         virtual void dispose() override;
 
-        using Window::Update;
         using                       SfxDockingWindow::StateChanged;
 
         void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,

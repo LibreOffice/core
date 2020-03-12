@@ -280,7 +280,7 @@ bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNex
     }
 
     pDlg.disposeAndClear();
-    GetWin()->Update();
+    GetWin()->PaintImmediately();
     return bRet;
 }
 
@@ -301,7 +301,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool b
 
     pDlg.disposeAndClear();
     bool bRet = RET_CANCEL == nRet;
-    GetWin()->Update();
+    GetWin()->PaintImmediately();
     if(RET_YES == nRet)
     {
         GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);

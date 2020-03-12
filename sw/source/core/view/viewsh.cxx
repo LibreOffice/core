@@ -299,7 +299,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             SolarMutexGuard aGuard;
 
             bool bPaintsFromSystem = maInvalidRect.HasArea();
-            GetWin()->Update();
+            GetWin()->PaintImmediately();
             if ( maInvalidRect.HasArea() )
             {
                 if ( bPaintsFromSystem )
@@ -1225,7 +1225,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->GetDrawView()->VisAreaChanged( GetWin() );
         Imp()->GetDrawView()->SetActualWin( GetWin() );
     }
-    GetWin()->Update();
+    GetWin()->PaintImmediately();
 
     if ( pPostItMgr ) // #i88070#
     {
@@ -1416,7 +1416,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
                     }
 
                     Imp()->m_bSmoothUpdate = true;
-                    GetWin()->Update();
+                    GetWin()->PaintImmediately();
                     Imp()->m_bSmoothUpdate = false;
 
                     if(!Imp()->m_bStopSmooth)
@@ -1455,7 +1455,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
                 }
             }
             pVout.disposeAndClear();
-            GetWin()->Update();
+            GetWin()->PaintImmediately();
             if ( !Imp()->m_bStopSmooth )
                 --mnLockPaint;
             SetFirstVisPageInvalid();

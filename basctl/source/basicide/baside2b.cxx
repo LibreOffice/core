@@ -1002,7 +1002,7 @@ void EditorWindow::CreateEditEngine()
     rModulWindow.GetBreakPointWindow().GetCurYOffset() = 0;
     rModulWindow.GetLineNumberWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode(true);
-    rModulWindow.Update();   // has only been invalidated at UpdateMode = true
+    rModulWindow.PaintImmediately();   // has only been invalidated at UpdateMode = true
 
     pEditView->ShowCursor();
 
@@ -1412,7 +1412,7 @@ void BreakPointWindow::DoScroll( long nVertScroll )
 void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
 {
     if ( SyncYOffset() )
-        Update();
+        PaintImmediately();
 
     nMarkerPos = nLine;
     bErrorMarker = bError;

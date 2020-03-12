@@ -3315,7 +3315,7 @@ void CheckBox::GetFocus()
         Invalidate();
         // Trigger drawing to initialize the mouse rectangle, otherwise the mouse button down
         // handler would ignore the mouse event.
-        Update();
+        PaintImmediately();
     }
     else
         ShowFocus( ImplGetFocusRect() );

@@ -227,7 +227,7 @@ void BrowserDataWin::LeaveUpdateLock()
         DoOutstandingInvalidations();
         if (bUpdateOnUnlock )
         {
-            Control::Update();
+            Control::PaintImmediately();
             bUpdateOnUnlock = false;
         }
     }
@@ -246,7 +246,7 @@ void InitSettings_Impl(vcl::Window* pWin)
 void BrowserDataWin::Update()
 {
     if ( !nUpdateLock )
-        Control::Update();
+        Control::PaintImmediately();
     else
         bUpdateOnUnlock = true;
 }

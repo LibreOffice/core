@@ -178,7 +178,6 @@ namespace {
 
 class SvxFontNameBox_Impl : public FontNameBox
 {
-    using Window::Update;
 private:
     const FontList*                pFontList;
     ::std::unique_ptr<FontList>    m_aOwnFontList;

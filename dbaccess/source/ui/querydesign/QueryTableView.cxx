@@ -820,7 +820,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
             pTabWin->Show();
 
-            pTabWin->Update();
+            pTabWin->PaintImmediately();
             // We must call Update() in order to show the connections in the window correctly. This sounds strange,
             // but the Listbox  has an internal Member which is initialized when the Listbox is first shown (after the Listbox
             // is filled in Init). This Member will eventually be needed for

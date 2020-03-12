@@ -397,7 +397,7 @@ void ScrollBarManager::SetTopLeft(const Point& rNewTopLeft)
         return;
 
     // Flush pending repaints before scrolling to avoid temporary artifacts.
-    mrSlideSorter.GetContentWindow()->Update();
+    mrSlideSorter.GetContentWindow()->PaintImmediately();
 
     if (mpVerticalScrollBar)
     {

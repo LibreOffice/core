@@ -43,12 +43,12 @@ void IconViewImpl::CursorUp()
     m_nFlags &= ~LBoxFlags::Filling;
     long nEntryHeight = m_pView->GetEntryHeight();
     ShowCursor( false );
-    m_pView->Update();
+    m_pView->PaintImmediately();
     m_pStartEntry = pPrevFirstToDraw;
     tools::Rectangle aArea( GetVisibleArea() );
     aArea.AdjustBottom( -nEntryHeight );
     m_pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-    m_pView->Update();
+    m_pView->PaintImmediately();
     ShowCursor( true );
     m_pView->NotifyScrolled();
 }
@@ -67,11 +67,11 @@ void IconViewImpl::CursorDown()
     {
         m_nFlags &= ~LBoxFlags::Filling;
         ShowCursor( false );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pStartEntry = pNextFirstToDraw;
         tools::Rectangle aArea( GetVisibleArea() );
         m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         ShowCursor( true );
         m_pView->NotifyScrolled();
     }
@@ -105,9 +105,9 @@ void IconViewImpl::PageDown( sal_uInt16 nDelta )
         tools::Rectangle aArea( GetVisibleArea() );
         long nScroll = m_pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->NotifyScrolled();
     }
 
@@ -139,9 +139,9 @@ void IconViewImpl::PageUp( sal_uInt16 nDelta )
     {
         long nEntryHeight = m_pView->GetEntryHeight();
         tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
-        m_pView->Update();
+        m_pView->PaintImmediately();
         m_pView->NotifyScrolled();
     }
 

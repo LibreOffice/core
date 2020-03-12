@@ -933,13 +933,13 @@ void TextView::Scroll( long ndX, long ndY )
     {
         bool bVisCursor = mpImpl->mpCursor->IsVisible();
         mpImpl->mpCursor->Hide();
-        mpImpl->mpWindow->Update();
+        mpImpl->mpWindow->PaintImmediately();
         mpImpl->maStartDocPos = aNewStartPos;
 
         if ( mpImpl->mpTextEngine->IsRightToLeft() )
             nDiffX = -nDiffX;
         mpImpl->mpWindow->Scroll( nDiffX, nDiffY );
-        mpImpl->mpWindow->Update();
+        mpImpl->mpWindow->PaintImmediately();
         mpImpl->mpCursor->SetPos( mpImpl->mpCursor->GetPos() + Point( nDiffX, nDiffY ) );
         if ( bVisCursor && !mpImpl->mbReadOnly )
             mpImpl->mpCursor->Show();
