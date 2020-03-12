@@ -121,6 +121,7 @@ private:
 
     // results
     bool mbSuccess;
+    double mfResultValue;
 
     uno::Sequence<double> maSolution;
     OUString maStatus;
@@ -144,6 +145,7 @@ public:
         , mnTimeout(60000)
         , mnAlgorithm(0)
         , mbSuccess(false)
+        , mfResultValue(0.0)
     {
         registerProperty("NonNegative", PROP_NONNEGATIVE, 0, &mbNonNegative,
                          cppu::UnoType<decltype(mbNonNegative)>::get());
@@ -215,7 +217,7 @@ public:
     virtual void SAL_CALL setMaximize(sal_Bool bMaximize) override { mbMaximize = bMaximize; }
 
     virtual sal_Bool SAL_CALL getSuccess() override { return mbSuccess; }
-    virtual double SAL_CALL getResultValue() override { return 0; }
+    virtual double SAL_CALL getResultValue() override { return mfResultValue; }
 
     virtual uno::Sequence<double> SAL_CALL getSolution() override { return maSolution; }
 

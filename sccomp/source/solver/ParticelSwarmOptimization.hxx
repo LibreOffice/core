@@ -49,7 +49,7 @@ private:
 
     DataProvider& mrDataProvider;
 
-    size_t const mnNumOfParticles;
+    size_t mnNumOfParticles;
 
     std::vector<Particle> maSwarm;
 
