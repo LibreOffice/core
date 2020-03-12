@@ -1189,7 +1189,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
         // already have painted the column/row bar with updated position.  -
         // Therefore call Update once before on column/row bar
         if (pColBar[eWhich])
-            pColBar[eWhich]->Update();
+            pColBar[eWhich]->PaintImmediately();
 
         long nOldPos = aViewData.GetScrPos( nTrackX, 0, eWhich ).X();
         aViewData.SetPosX( eWhich, nNewX );
@@ -1207,14 +1207,14 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
             if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
                 pGridWin[SC_SPLIT_TOPRIGHT]->ScrollPixel( nDiff, 0 );
         }
-        if (pColBar[eWhich])     { pColBar[eWhich]->Scroll( nDiff,0 ); pColBar[eWhich]->Update(); }
+        if (pColBar[eWhich])     { pColBar[eWhich]->Scroll( nDiff,0 ); pColBar[eWhich]->PaintImmediately(); }
         if (pColOutline[eWhich]) pColOutline[eWhich]->ScrollPixel( nDiff );
         if (bUpdBars)
             UpdateScrollBars();
     }
 
     if (nDeltaX==1 || nDeltaX==-1)
-        pGridWin[aViewData.GetActivePart()]->Update();
+        pGridWin[aViewData.GetActivePart()]->PaintImmediately();
 
     ShowAllCursors();
 
@@ -1273,7 +1273,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
         UpdateHeaderWidth( &eWhich, &nUNew );               // adjust row headers
 
         if (pRowBar[eWhich])
-            pRowBar[eWhich]->Update();
+            pRowBar[eWhich]->PaintImmediately();
 
         long nOldPos = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y();
         aViewData.SetPosY( eWhich, nNewY );
@@ -1291,14 +1291,14 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
             if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
                 pGridWin[SC_SPLIT_BOTTOMRIGHT]->ScrollPixel( 0, nDiff );
         }
-        if (pRowBar[eWhich])     { pRowBar[eWhich]->Scroll( 0,nDiff ); pRowBar[eWhich]->Update(); }
+        if (pRowBar[eWhich])     { pRowBar[eWhich]->Scroll( 0,nDiff ); pRowBar[eWhich]->PaintImmediately(); }
         if (pRowOutline[eWhich]) pRowOutline[eWhich]->ScrollPixel( nDiff );
         if (bUpdBars)
             UpdateScrollBars();
     }
 
     if (nDeltaY==1 || nDeltaY==-1)
-        pGridWin[aViewData.GetActivePart()]->Update();
+        pGridWin[aViewData.GetActivePart()]->PaintImmediately();
 
     ShowAllCursors();
 

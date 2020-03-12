@@ -441,7 +441,7 @@ void Edit::ImplInvalidateOrRepaint()
         Invalidate();
         // FIXME: this is currently only on macOS
         if( ImplGetSVData()->maNWFData.mbNoFocusRects )
-            Update();
+            PaintImmediately();
     }
     else
         Invalidate();

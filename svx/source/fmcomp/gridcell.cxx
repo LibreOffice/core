@@ -964,7 +964,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRe
 
         m_pPainter->SetPosSizePixel( _rRect.TopLeft(), _rRect.GetSize() );
         m_pPainter->Show();
-        m_pPainter->Update();
+        m_pPainter->PaintImmediately();
         m_pPainter->SetParentUpdateMode( false );
         m_pPainter->Hide();
         m_pPainter->SetParentUpdateMode( true );

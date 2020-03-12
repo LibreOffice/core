@@ -1370,7 +1370,7 @@ void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
     // because then we do not really paint but the rectangles are just
     // bookmarked (in document coordinates).
     if( GetViewShell()->ActionPend() )
-        m_pViewWin->Update();
+        m_pViewWin->PaintImmediately();
 
     // Set at View-Win the current size
     m_aVisArea = aLR;

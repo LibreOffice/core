@@ -1462,7 +1462,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 else
                 {
                     pBorder->Invalidate( InvalidateFlags::NoErase );
-                    pBorder->Update();
+                    pBorder->PaintImmediately();
                 }
             }
             else if( (GetStyle() & WB_FLATBUTTON) ||
@@ -2206,7 +2206,7 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     mbChecked = true;
     mpWindowImpl->mnStyle |= WB_TABSTOP;
     Invalidate();
-    Update();
+    PaintImmediately();
     VclPtr<vcl::Window> xWindow = this;
     if ( mbRadioCheck )
         ImplUncheckAllOther();
@@ -2255,7 +2255,7 @@ void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
         StartTracking();
         return;
     }
@@ -2280,7 +2280,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
     }
@@ -2292,7 +2292,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() |= DrawButtonFlags::Pressed;
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
         else
@@ -2301,7 +2301,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() &= ~DrawButtonFlags::Pressed;
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
     }
@@ -2317,14 +2317,14 @@ void RadioButton::KeyInput( const KeyEvent& rKEvt )
         {
             GetButtonState() |= DrawButtonFlags::Pressed;
             Invalidate();
-            Update();
+            PaintImmediately();
         }
     }
     else if ( (GetButtonState() & DrawButtonFlags::Pressed) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
     }
     else
         Button::KeyInput( rKEvt );
@@ -2447,7 +2447,7 @@ void RadioButton::LoseFocus()
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
     }
 
     HideFocus();
@@ -3092,7 +3092,7 @@ void CheckBox::ImplCheck()
 
     VclPtr<vcl::Window> xWindow = this;
     Invalidate();
-    Update();
+    PaintImmediately();
     Toggle();
     if ( xWindow->IsDisposed() )
         return;
@@ -3112,7 +3112,7 @@ void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
         StartTracking();
         return;
     }
@@ -3137,7 +3137,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
     }
@@ -3149,7 +3149,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() |= DrawButtonFlags::Pressed;
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
         else
@@ -3158,7 +3158,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
             {
                 GetButtonState() &= ~DrawButtonFlags::Pressed;
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
         }
     }
@@ -3174,14 +3174,14 @@ void CheckBox::KeyInput( const KeyEvent& rKEvt )
         {
             GetButtonState() |= DrawButtonFlags::Pressed;
             Invalidate();
-            Update();
+            PaintImmediately();
         }
     }
     else if ( (GetButtonState() & DrawButtonFlags::Pressed) && (aKeyCode.GetCode() == KEY_ESCAPE) )
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
     }
     else
         Button::KeyInput( rKEvt );
@@ -3331,7 +3331,7 @@ void CheckBox::GetFocus()
         Invalidate();
         // Trigger drawing to initialize the mouse rectangle, otherwise the mouse button down
         // handler would ignore the mouse event.
-        Update();
+        PaintImmediately();
     }
     else
         ShowFocus( ImplGetFocusRect() );
@@ -3346,7 +3346,7 @@ void CheckBox::LoseFocus()
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
         Invalidate();
-        Update();
+        PaintImmediately();
     }
 
     HideFocus();

@@ -309,7 +309,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
     // scrolling?
     if ( nDeltaX != 0 || nDeltaY != 0 )
     {
-        Update();
+        PaintImmediately();
 
         // does the new area overlap the old one?
         if ( std::abs( static_cast<int>(aDeltaPix.Height()) ) < aOutPixSz.Height() ||
@@ -329,7 +329,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
             Invalidate();
         }
 
-        Update();
+        PaintImmediately();
     }
 
     if ( !bScrolling )

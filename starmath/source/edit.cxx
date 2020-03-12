@@ -521,7 +521,7 @@ void SmEditWindow::CreateEditView()
     ESelection eSelection;
 
     pEditView->SetSelection(eSelection);
-    Update();
+    PaintImmediately();
     pEditView->ShowCursor();
 
     pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );

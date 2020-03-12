@@ -174,7 +174,7 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
         m_pStatus->SetText(_rStatus);
         m_pStatus->Show();
         Resize();
-        Update();
+        PaintImmediately();
     }
 }
 
@@ -185,7 +185,7 @@ void UnoDataBrowserView::hideStatus()
         return;
     m_pStatus->Hide();
     Resize();
-    Update();
+    PaintImmediately();
 }
 
 void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)

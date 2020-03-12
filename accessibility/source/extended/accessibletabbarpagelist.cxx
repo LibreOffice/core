@@ -615,7 +615,7 @@ namespace accessibility
         if ( m_pTabBar )
         {
             m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( static_cast<sal_uInt16>(nChildIndex) ) );
-            m_pTabBar->Update();
+            m_pTabBar->PaintImmediately();
             m_pTabBar->ActivatePage();
             m_pTabBar->Select();
         }

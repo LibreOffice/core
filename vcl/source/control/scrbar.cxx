@@ -817,7 +817,7 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
             if (SupportsDoubleBuffering())
             {
                 Invalidate();
-                Update();
+                PaintImmediately();
             }
             else
                 ImplDraw(*this);

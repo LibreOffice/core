@@ -2092,7 +2092,7 @@ class DemoPopup : public FloatingWindow
         SetBackground(Wallpaper(COL_YELLOW));
 
         Show( true, ShowFlags::NoActivate );
-        Update();
+        PaintImmediately();
     }
 
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle&) override

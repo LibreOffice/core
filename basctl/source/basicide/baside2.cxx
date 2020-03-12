@@ -437,7 +437,7 @@ void ModulWindow::LoadBasic()
             GetEditEngine()->SetUpdateMode( false );
             GetEditView()->Read( *pStream );
             GetEditEngine()->SetUpdateMode( true );
-            GetEditorWindow().Update();
+            GetEditorWindow().PaintImmediately();
             GetEditorWindow().ForceSyntaxTimeout();
             GetEditorWindow().DestroyProgress();
             ErrCode nError = aMedium.GetError();

@@ -902,7 +902,7 @@ void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
     rWin.SetPosSizePixel(rOfs, rSize);
     if (GetDoc()->IsPreview())
         rWin.ZoomToFitInWindow();
-    rWin.Update();
+    rWin.PaintImmediately();
 }
 
 void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const

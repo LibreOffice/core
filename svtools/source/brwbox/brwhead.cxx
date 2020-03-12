@@ -66,7 +66,7 @@ void BrowserHeader::EndDrag()
 {
     // call before other actions, it looks more nice in most cases
     HeaderBar::EndDrag();
-    Update();
+    PaintImmediately();
 
     // not aborted?
     sal_uInt16 nId = GetCurItemId();

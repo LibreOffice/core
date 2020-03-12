@@ -329,7 +329,7 @@ void ImplTabSizer::ImplTrack( const Point& rScreenPos )
     if ( pParent->mnSplitSize < TABBAR_MINSIZE )
         pParent->mnSplitSize = TABBAR_MINSIZE;
     pParent->Split();
-    pParent->Update();
+    pParent->PaintImmediately();
 }
 
 void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
@@ -949,7 +949,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
             if (ImplDeactivatePage())
             {
                 SetCurPageId(nSelId);
-                Update();
+                PaintImmediately();
                 ImplActivatePage();
                 ImplSelect();
             }
@@ -1037,7 +1037,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
             if (bSelectTab)
             {
                 ImplShowPage(nPos);
-                Update();
+                PaintImmediately();
                 ImplSelect();
             }
 
@@ -1094,7 +1094,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                 if (ImplDeactivatePage())
                 {
                     SetCurPageId(nSelId);
-                    Update();
+                    PaintImmediately();
                     ImplActivatePage();
                     ImplSelect();
                 }
@@ -2045,7 +2045,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
     {
         ImplShowPage(nPos);
         ImplFormat();
-        Update();
+        PaintImmediately();
 
         mpImpl->mpEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
         tools::Rectangle aRect = GetPageRect( mnEditId );
@@ -2272,7 +2272,7 @@ bool TabBar::StartDrag(const CommandEvent& rCEvt, vcl::Region& rRegion)
             if (ImplDeactivatePage())
             {
                 SetCurPageId(nSelId);
-                Update();
+                PaintImmediately();
                 ImplActivatePage();
                 ImplSelect();
             }
@@ -2470,7 +2470,7 @@ void TabBar::SwitchPage(const Point& rPos)
                     if (ImplDeactivatePage())
                     {
                         SetCurPageId( mnSwitchId );
-                        Update();
+                        PaintImmediately();
                         ImplActivatePage();
                         ImplSelect();
                     }

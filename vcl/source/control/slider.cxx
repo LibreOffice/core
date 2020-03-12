@@ -588,8 +588,8 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     {
         if ( ImplDoAction() )
         {
-            Update();
             Invalidate();
+            PaintImmediately();
         }
     }
     else if ( nOldStateFlags != mnStateFlags )
@@ -655,7 +655,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
             // store Start position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
             ImplDoMouseAction( rMousePos, meScrollType != ScrollType::Set );
-            Update();
+            PaintImmediately();
 
             if( meScrollType != ScrollType::Set )
                 StartTracking( nTrackFlags );
@@ -705,7 +705,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         {
             // after dragging, recalculate to a rounded Thumb position
             ImplCalc();
-            Update();
+            PaintImmediately();
         }
 
         meScrollType = ScrollType::DontKnow;
@@ -736,7 +736,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                 if ( nOldPos != mnThumbPos )
                 {
                     ImplUpdateRects();
-                    Update();
+                    PaintImmediately();
                     if ( nOldPos != mnThumbPos )
                     {
                         Slide();

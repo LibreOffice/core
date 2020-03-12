@@ -303,7 +303,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
                 Split();
             }
 
-            GetParent()->Update();
+            GetParent()->PaintImmediately();
         }
         else
         {
@@ -422,7 +422,7 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
                 mnLastSplitPos = 0;
                 Split();
             }
-            GetParent()->Update();
+            GetParent()->PaintImmediately();
         }
     }
 }

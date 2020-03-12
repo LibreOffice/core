@@ -233,7 +233,7 @@ void ToolBox::ImplCheckUpdate()
 
     // this is only required for transparent toolbars (see ImplDrawTransparentBackground() )
     if( !IsBackground() && HasPaintEvent() && !IsInPaint() )
-        Update();
+        PaintImmediately();
 }
 
 void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
@@ -3210,7 +3210,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         if ( mbFormat )
         {
             ImplFormat();
-            Update();
+            PaintImmediately();
         }
 
         Point  aMousePos = rMEvt.GetPosPixel();

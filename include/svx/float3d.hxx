@@ -79,7 +79,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DWin final : public SfxDockingWindow
 {
     friend class        Svx3DChildWindow;
     friend class        Svx3DCtrlItem;
-    using Window::Update;
 
 private:
     std::unique_ptr<weld::ToggleButton> m_xBtnGeo;

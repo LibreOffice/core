@@ -241,8 +241,8 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
             {
                 pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
 
-                pGridWin[i]->Update();      // because of Invalidate in DrawView ctor (ShowPage),
-                                            // so that immediately can be drawn
+                pGridWin[i]->PaintImmediately(); // because of Invalidate in DrawView ctor (ShowPage),
+                                                 // so that immediately can be drawn
             }
         SfxRequest aSfxRequest(SID_OBJECT_SELECT, SfxCallMode::SLOT, aViewData.GetViewShell()->GetPool());
         SetDrawFuncPtr(new FuSelection(*aViewData.GetViewShell(), GetActiveWin(), pDrawView.get(),

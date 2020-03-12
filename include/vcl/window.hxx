@@ -1071,7 +1071,7 @@ public:
     virtual void                        PixelInvalidate(const tools::Rectangle* pRectangle);
     void                                Validate();
     bool                                HasPaintEvent() const;
-    void                                Update();
+    void                                PaintImmediately();
     void                                Flush() override;
 
     // toggles new docking support, enabled via toolkit

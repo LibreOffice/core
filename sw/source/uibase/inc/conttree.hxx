@@ -291,7 +291,6 @@ private:
 
     using SvTreeListBox::DoubleClickHdl;
     using SvTreeListBox::ExecuteDrop;
-    using Window::Update;
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
 

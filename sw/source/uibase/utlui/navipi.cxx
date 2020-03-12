@@ -907,7 +907,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem const *, pItem, void)
                 m_pContentWrtShell = nullptr;
             m_pxObjectShell.reset( new SfxObjectShellLock(pFrame->GetObjectShell()) );
             FillBox();
-            m_aContentTree->Update();
+            m_aContentTree->PaintImmediately();
         }
     }
 }

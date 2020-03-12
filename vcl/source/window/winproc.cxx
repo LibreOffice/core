@@ -1633,7 +1633,7 @@ static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoun
         // (GetSizePixel does that for us)
         pWindow->GetSizePixel();
         // force drawing immediately
-        pWindow->Update();
+        pWindow->PaintImmediately();
     }
 }
 

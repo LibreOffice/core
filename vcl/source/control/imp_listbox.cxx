@@ -1977,11 +1977,11 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     {
         ImplClearLayoutData();
         long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
-        Update();
+        PaintImmediately();
         ImplHideFocusRect();
         mnTop = nTop;
         Scroll( 0, nDiff );
-        Update();
+        PaintImmediately();
         if( HasFocus() )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
@@ -2027,10 +2027,10 @@ void ImplListBoxWindow::ScrollHorz( long n )
     {
         ImplClearLayoutData();
         mnLeft = sal::static_int_cast<sal_uInt16>(mnLeft + nDiff);
-        Update();
+        PaintImmediately();
         ImplHideFocusRect();
         Scroll( -nDiff, 0 );
-        Update();
+        PaintImmediately();
         if( HasFocus() )
             ImplShowFocusRect();
         maScrollHdl.Call( this );
@@ -2638,7 +2638,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
             && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
             {
                 GetParent()->GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
-                GetParent()->GetWindow( GetWindowType::Border )->Update();
+                GetParent()->GetWindow( GetWindowType::Border )->PaintImmediately();
             }
         }
     }

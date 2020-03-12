@@ -105,7 +105,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window const & rWindow, tools::
         // important: actually paint the child here!
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
-        pCandidate->Update();
+        pCandidate->PaintImmediately();
     }
 }
 

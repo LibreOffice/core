@@ -5135,7 +5135,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
         // only redraw new frame (synchronously)
         pDocSh->Broadcast( ScIndexHint( SfxHintId::ScShowRangeFinder, nRFIndex ) );
 
-        Update();   // what you move, will be seen immediately
+        PaintImmediately();   // what you move, will be seen immediately
     }
 
     //  Timer for Scrolling

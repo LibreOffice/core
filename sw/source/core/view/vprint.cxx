@@ -114,7 +114,7 @@ void SwPaintQueue::Repaint()
                 {
                     // for previewing, since rows/columns are known in PaintHdl (UI)
                     pSh->GetWin()->Invalidate();
-                    pSh->GetWin()->Update();
+                    pSh->GetWin()->PaintImmediately();
                 }
             }
             else

@@ -653,7 +653,7 @@ void Window::SetVisibleXY(double fX, double fY)
         maWinPos.setY( static_cast<long>(fY * maViewSize.Height()) );
     UpdateMapOrigin(false);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), ScrollFlags::Children);
-    Update();
+    PaintImmediately();
 }
 
 /**
