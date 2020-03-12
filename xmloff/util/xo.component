@@ -25,7 +25,8 @@
   <implementation name="SchXMLExport.Content">
     <service name="com.sun.star.comp.Chart.XMLContentExporter"/>
   </implementation>
-  <implementation name="SchXMLExport.Oasis.Compact">
+  <implementation name="SchXMLExport.Oasis.Compact"
+      constructor="com_sun_star_comp_Chart_XMLOasisExporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLOasisExporter"/>
   </implementation>
   <implementation name="SchXMLExport.Oasis.Content">
