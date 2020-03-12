@@ -69,8 +69,8 @@ private:
     static bool is_arg_name(const std::string& Argument);
 
 private:
-    size_t const      m_argc;
-    char** const      m_argv;
+    size_t      m_argc;
+    char**      m_argv;
 
 // prevent copy and assignment
 private:
