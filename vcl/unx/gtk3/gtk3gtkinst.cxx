@@ -10139,10 +10139,20 @@ public:
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
         GtkTreeIter iter = rGtkIter.iter;
-        if (iter_children(rGtkIter))
+
+        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &iter);
+        rGtkIter.iter = tmp;
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter);
             return true;
-        GtkTreeIter tmp = iter;
+        }
+
+        tmp = iter;
         if (gtk_tree_model_iter_next(pModel, &tmp))
         {
             rGtkIter.iter = tmp;
@@ -10163,6 +10173,7 @@ public:
 
     virtual bool iter_previous(weld::TreeIter& rIter) const override
     {
+        bool ret = false;
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter = rGtkIter.iter;
@@ -10175,14 +10186,26 @@ public:
                 rGtkIter.iter = tmp;
             else
                 last_child(pModel, &rGtkIter.iter, &tmp, nChildren);
-            return true;
+            ret = true;
         }
-        // Move up level
-        if (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        else
         {
-            rGtkIter.iter = tmp;
+            // Move up level
+            if (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+            {
+                rGtkIter.iter = tmp;
+                ret = true;
+            }
+        }
+
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_previous(rGtkIter);
             return true;
         }
+
         return false;
     }
 
