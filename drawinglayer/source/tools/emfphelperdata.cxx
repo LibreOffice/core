@@ -790,7 +790,7 @@ namespace emfplushelper
                 {
                     SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
                 }
-                ::basegfx::B2DHomMatrix aTextureTransformation;
+                ::basegfx::B2DHomMatrix aTextureTransformation = ::basegfx::B2DHomMatrix();
 
                 if (brush->hasTransformation) {
                    aTextureTransformation = brush->brush_transformation;
@@ -871,16 +871,24 @@ namespace emfplushelper
                 // therefore, create a mapping and invert it
                 basegfx::B2DRange aPolygonRange= polygon.getB2DRange();
                 basegfx::B2DHomMatrix aPolygonTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    2*aPolygonRange.getWidth(),aPolygonRange.getHeight(),
+                    aPolygonRange.getMinX(), aPolygonRange.getMinY());
+
+                /*
+                basegfx::B2DHomMatrix aPolygonTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aPolygonRange.getWidth(),aPolygonRange.getHeight(),
                     aPolygonRange.getMinX(), aPolygonRange.getMinY());
+                   */
                 aPolygonTransformation.invert();
 
                 if (brush->type == BrushTypeLinearGradient)
                 {
                     // support for public enum EmfPlusWrapMode
-                    basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, brush->firstPointY);
+                    //basegfx::B2DPoint aStartPoint = Map(brush->aPointX1, brush->aPointY1);
+                    basegfx::B2DPoint aStartPoint = basegfx::B2DPoint(brush->aPointX1, brush->aPointY1);
                     aStartPoint = aPolygonTransformation * aStartPoint;
-                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->secondPointX, brush->firstPointY + brush->secondPointY);
+                    //basegfx::B2DPoint aEndPoint = Map(brush->aPointX2, brush->aPointY2);
+                    basegfx::B2DPoint aEndPoint = basegfx::B2DPoint(brush->aPointX2, brush->aPointY2);
                     aEndPoint = aPolygonTransformation * aEndPoint;
 
                     // support for public enum EmfPlusWrapMode
@@ -890,14 +898,14 @@ namespace emfplushelper
                         case 0 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
                         case 1 :
                         case 2 :
-                        case 3 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect; break;
+                        case 3 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
                         default: break;
                     }
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
                         std::make_unique<drawinglayer::primitive2d::SvgLinearGradientPrimitive2D>(
-                            aTextureTransformation,
+                            maMapTransform * aTextureTransformation,
                             polygon,
                             aVector,
                             aStartPoint,
@@ -907,7 +915,7 @@ namespace emfplushelper
                 }
                 else // BrushTypePathGradient
                 {
-                    basegfx::B2DPoint aCenterPoint = Map(brush->firstPointX, brush->firstPointY);
+                    basegfx::B2DPoint aCenterPoint = Map(brush->aPointX1, brush->aPointX2);
                     aCenterPoint = aPolygonTransformation * aCenterPoint;
 
                     // create the same one used for SVG
