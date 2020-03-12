@@ -131,6 +131,20 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
                 return ERRCODE_NONE;
 
             aParserInput.aInputStream = xDocStream->getInputStream();
+            // HACK tdf#116079: if the file just contains <?xml version="1.0" encoding="UTF-8"?>
+            // let's accept a file which just contains this (38 characters + 2 extra bytes for EOL dealing)
+            long nAvailable = aParserInput.aInputStream->available();
+            if (nAvailable <= 40)
+            {
+                Sequence< sal_Int8 > nReadBytes;
+                aParserInput.aInputStream->readBytes( nReadBytes, nAvailable);
+                OString strFirstLine(reinterpret_cast<const char *>(nReadBytes.getConstArray()));
+                if (strFirstLine.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"))
+                {
+                    return ERRCODE_NONE;
+                }
+            }
+
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
 
             uno::Any aAny = xSet->getPropertyValue("Encrypted");
