@@ -66,7 +66,7 @@ public:
                 DdeString( DWORD, const OUString& );
                 ~DdeString();
 
-    bool        operator==( HSZ );
+    bool        operator==( HSZ ) const;
     HSZ getHSZ();
     const OUString & toOUString() const { return m_aString; }
 };

@@ -94,7 +94,7 @@ struct MigrationItem
     {
     }
 
-    bool operator==(const MigrationItem& aMigrationItem)
+    bool operator==(const MigrationItem& aMigrationItem) const
     {
         return
             (aMigrationItem.m_sCommandURL == m_sCommandURL

@@ -34,7 +34,7 @@ namespace dbaui
         OQueryTableConnection(const OQueryTableConnection& rConn);
 
         OQueryTableConnection& operator=(const OQueryTableConnection& rConn);
-        bool operator==(const OQueryTableConnection& rCompare);
+        bool operator==(const OQueryTableConnection& rCompare) const;
 
         OUString const & GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
 

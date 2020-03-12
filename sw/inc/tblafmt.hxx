@@ -67,7 +67,7 @@ public:
     SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rRef);
 
     /// Comparing based of boxes backgrounds.
-    bool operator==(const SwBoxAutoFormat& rRight);
+    bool operator==(const SwBoxAutoFormat& rRight) const;
 
     // The get-methods.
     const SvxFrameDirectionItem& GetTextOrientation() const { return *m_aTextOrientation; }
