@@ -55,7 +55,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumX()
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }
@@ -70,7 +70,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumX()
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }
@@ -85,7 +85,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, do
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }
@@ -100,7 +100,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, do
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }
@@ -115,7 +115,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumZ()
         if(fLocalExtremum<fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }
@@ -130,7 +130,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumZ()
         if(fLocalExtremum>fGlobalExtremum)
             fGlobalExtremum=fLocalExtremum;
     }
-    if(::rtl::math::isInf(fGlobalExtremum))
+    if(std::isinf(fGlobalExtremum))
         ::rtl::math::setNan(&fGlobalExtremum);
     return fGlobalExtremum;
 }

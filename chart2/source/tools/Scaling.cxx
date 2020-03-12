@@ -58,7 +58,7 @@ LogarithmicScaling::~LogarithmicScaling()
 double SAL_CALL LogarithmicScaling::doScaling( double value )
 {
     double fResult;
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
         fResult = log( value ) / m_fLogOfBase;
@@ -107,7 +107,7 @@ ExponentialScaling::~ExponentialScaling()
 double SAL_CALL ExponentialScaling::doScaling( double value )
 {
     double fResult;
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
         fResult = pow( m_fBase, value );
@@ -155,7 +155,7 @@ LinearScaling::~LinearScaling()
 double SAL_CALL LinearScaling::doScaling( double value )
 {
     double fResult;
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
         fResult = m_fOffset + m_fSlope * value;
@@ -206,7 +206,7 @@ PowerScaling::~PowerScaling()
 double SAL_CALL PowerScaling::doScaling( double value )
 {
     double fResult;
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
         fResult = pow( value, m_fExponent );

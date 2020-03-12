@@ -101,11 +101,11 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
         return false;
     if( ::rtl::math::isNan(rPos.PositionZ) )
         return false;
-    if( ::rtl::math::isInf(rPos.PositionX) )
+    if( std::isinf(rPos.PositionX) )
         return false;
-    if( ::rtl::math::isInf(rPos.PositionY) )
+    if( std::isinf(rPos.PositionY) )
         return false;
-    if( ::rtl::math::isInf(rPos.PositionZ) )
+    if( std::isinf(rPos.PositionZ) )
         return false;
     return true;
 }

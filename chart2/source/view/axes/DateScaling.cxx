@@ -53,7 +53,7 @@ DateScaling::~DateScaling()
 double SAL_CALL DateScaling::doScaling( double value )
 {
     double fResult(value);
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
     {
@@ -129,7 +129,7 @@ InverseDateScaling::~InverseDateScaling()
 double SAL_CALL InverseDateScaling::doScaling( double value )
 {
     double fResult(value);
-    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+    if( ::rtl::math::isNan( value ) || std::isinf( value ) )
         ::rtl::math::setNan( & fResult );
     else
     {
