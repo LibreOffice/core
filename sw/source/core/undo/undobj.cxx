@@ -1558,7 +1558,7 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
     }
 
     if ((nDelContentType & DelContentType::WriterfilterHack)
-        && rAnchorPos.GetDoc()->IsInReading())
+        && rAnchorPos.GetDoc()->IsInWriterfilterImport())
     {   // FIXME hack for writerfilter RemoveLastParagraph() and MakeFlyAndMove(); can't test file format more specific?
         return (rStart < rAnchorPos) && (rAnchorPos < rEnd);
     }
@@ -1595,7 +1595,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
     }
 
     if ((nDelContentType & DelContentType::WriterfilterHack)
-        && rAnchorPos.GetDoc()->IsInReading())
+        && rAnchorPos.GetDoc()->IsInWriterfilterImport())
     {   // FIXME hack for writerfilter RemoveLastParagraph() and MakeFlyAndMove(); can't test file format more specific?
         // but it MUST NOT be done during the SetRedlineFlags at the end of ODF
         // import, where the IsInXMLImport() cannot be checked because the
