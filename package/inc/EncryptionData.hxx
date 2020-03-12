@@ -46,11 +46,11 @@ class EncryptionData final : public BaseEncryptionData
 {
 public:
     css::uno::Sequence < sal_Int8 > m_aKey;
-    sal_Int32 const m_nEncAlg;
-    sal_Int32 const m_nCheckAlg;
-    sal_Int32 const m_nDerivedKeySize;
-    sal_Int32 const m_nStartKeyGenID;
-    bool const m_bTryWrongSHA1;
+    sal_Int32 m_nEncAlg;
+    sal_Int32 m_nCheckAlg;
+    sal_Int32 m_nDerivedKeySize;
+    sal_Int32 m_nStartKeyGenID;
+    bool m_bTryWrongSHA1;
 
     EncryptionData(const BaseEncryptionData& aData, const css::uno::Sequence< sal_Int8 >& aKey, sal_Int32 nEncAlg, sal_Int32 nCheckAlg, sal_Int32 nDerivedKeySize, sal_Int32 nStartKeyGenID, bool const bTryWrongSHA1)
     : BaseEncryptionData( aData )

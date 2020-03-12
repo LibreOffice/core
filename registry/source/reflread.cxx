@@ -222,7 +222,7 @@ class ConstantPool : public BlopObject
 {
 public:
 
-    sal_uInt16 const             m_numOfEntries;
+    sal_uInt16                   m_numOfEntries;
     std::unique_ptr<sal_Int32[]> m_pIndex;           // index values may be < 0 for cached string constants
 
     std::unique_ptr<StringCache> m_pStringCache;
@@ -542,9 +542,9 @@ class FieldList : public BlopObject
 {
 public:
 
-    sal_uInt16 const m_numOfEntries;
+    sal_uInt16      m_numOfEntries;
     size_t          m_FIELD_ENTRY_SIZE;
-    ConstantPool* const m_pCP;
+    ConstantPool*   m_pCP;
 
     FieldList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, len)
@@ -729,9 +729,9 @@ class ReferenceList : public BlopObject
 {
 public:
 
-    sal_uInt16 const m_numOfEntries;
+    sal_uInt16      m_numOfEntries;
     size_t          m_REFERENCE_ENTRY_SIZE;
-    ConstantPool* const m_pCP;
+    ConstantPool*   m_pCP;
 
     ReferenceList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, len)
@@ -832,10 +832,10 @@ class MethodList : public BlopObject
 {
 public:
 
-    sal_uInt16 const m_numOfEntries;
+    sal_uInt16      m_numOfEntries;
     size_t          m_PARAM_ENTRY_SIZE;
     std::unique_ptr<sal_uInt32[]>  m_pIndex;
-    ConstantPool* const m_pCP;
+    ConstantPool*   m_pCP;
 
     MethodList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
         : BlopObject(buffer, len)

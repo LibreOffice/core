@@ -62,7 +62,7 @@ class ZipFile
     css::uno::Reference < css::io::XInputStream > xStream;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    bool const bRecoveryMode;
+    bool bRecoveryMode;
 
     // aMediaType parameter is used only for raw stream header creation
     css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(

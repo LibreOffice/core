@@ -32,7 +32,7 @@ class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XIn
 {
     css::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xFileAccess;
 
-    OUString const m_aURL;
+    OUString m_aURL;
 
     css::uno::Reference< css::io::XInputStream > m_xInputStream;
     css::uno::Reference< css::io::XSeekable > m_xSeekable;
