@@ -33,19 +33,23 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <vcl/scheduler.hxx>
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <sortedobjs.hxx>
 #include <flyfrm.hxx>
 
+char const DATA_DIRECTORY[] = "/sw/qa/extras/odfexport/data/";
+
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
+    Test() : SwModelTestBase(DATA_DIRECTORY, "writer8") {}
 
     /**
      * Blacklist handling
@@ -95,6 +99,21 @@ public:
             return pResetter;
         }
         return nullptr;
+    }
+
+    virtual void postLoad(const char* pFilename) override
+    {
+#if HAVE_FEATURE_PDFIUM
+        if (OString(pFilename) == "insert-pdf.odt")
+        {
+            // insert the PDF into the document
+            uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+                        {"FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "hello-world.pdf")}
+                        }));
+            comphelper::dispatchCommand(".uno:InsertGraphic", aArgs);
+            Scheduler::ProcessEventsToIdle();
+        }
+#endif
     }
 };
 
@@ -1615,6 +1634,22 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
         // This failed, replacement was an svm file.
         CPPUNIT_ASSERT(bHasBitmap);
     }
+}
+
+DECLARE_ODFEXPORT_TEST(testInsertPdf, "insert-pdf.odt")
+{
+    // note that there is additional setup performed in the postLoad() to
+    // actually contain the PDF
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Assert that we have a replacement graphics
+    auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+    CPPUNIT_ASSERT(xReplacementGraphic.is());
+
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    // Assert that the graphic is a PDF
+    CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
 }
 #endif
 
