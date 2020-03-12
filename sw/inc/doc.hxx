@@ -301,6 +301,7 @@ private:
     bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
     bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
+    bool mbInWriterfilterImport  : 1;    //< TRUE: writerfilter import (DOCX,RTF)
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    //< TRUE: Document is in the process of being loaded asynchronously.
     bool mbIsAutoFormatRedline   : 1;    //< TRUE: Redlines are recorded by Autoformat.
@@ -962,6 +963,8 @@ public:
 
     bool IsInXMLImport() const { return mbInXMLImport; }
     void SetInXMLImport( bool bNew ) { mbInXMLImport = bNew; }
+    bool IsInWriterfilterImport() const { return mbInWriterfilterImport; }
+    void SetInWriterfilterImport(bool const b) { mbInWriterfilterImport = b; }
 
     // Manage types of tables/indices
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
