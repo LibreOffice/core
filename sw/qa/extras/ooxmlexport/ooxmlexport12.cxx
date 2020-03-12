@@ -769,6 +769,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
+
+    xmlDocPtr pXmlDoc = parseExport("word/settings.xml");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "uri",
+                "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "val", "11");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")

@@ -1906,6 +1906,21 @@ void SwWW8ImplReader::ImportDop()
             if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::Any(false));
         }
+
+        // for the benefit of DOCX - if this is ever saved in that format.
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+        uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
+                { "name", uno::Any(OUString("compatibilityMode")) },
+                { "uri", uno::Any(OUString("http://schemas.microsoft.com/office/word")) },
+                { "val", uno::Any(OUString("11")) }  //11: Use features specified in MS-DOC.
+        }));
+
+        uno::Sequence< beans::PropertyValue > aValue(1);
+        aValue[0].Name = "compatSetting";
+        aValue[0].Value <<= aCompatSetting;
+
+        aGrabBag["CompatSettings"] <<= aValue;
+        xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
     }
 
     // The password can force read-only, comments-only, fill-in-form-only, or require track-changes.
