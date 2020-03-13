@@ -75,11 +75,6 @@ private:
     std::chrono::high_resolution_clock::time_point maLastUsed;
     bool mbPrepared;
 
-    /// Used with GfxLink and/or PdfData when they store original media
-    /// which might be multi-page (PDF, f.e.) and we need to re-render
-    /// this Graphic (a page) from the source in GfxLink or PdfData.
-    sal_Int32                    mnPageNumber;
-
 public:
     ImpGraphic();
     ImpGraphic( const ImpGraphic& rImpGraphic );
@@ -203,6 +198,8 @@ private:
     bool ensureAvailable () const;
 
     bool loadPrepared();
+
+    sal_Int32 getPageNumber() const;
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
