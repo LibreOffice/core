@@ -3690,6 +3690,8 @@ OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, sal_Char c
         return aString;
 }
 
+//Since this is not import code, "-1" needs to be handled as the mode that LO will save as.
+//To identify how your code should handle a "-1", look in DocxExport::WriteSettings().
 sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
 {
     uno::Reference< beans::XPropertySet >     xPropSet( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
@@ -4041,10 +4043,11 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // so, table_spacing + table_spacing_to_content = tblInd
 
             // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
-            // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
+            // if no compatibilityMode is defined (which now should only happen on a new export to .docx),
+            // LO uses a higher compatibility than 2010's 14.
             sal_Int32 nMode = lcl_getWordCompatibilityMode( *m_rExport.m_pDoc );
 
-            if (((nMode < 0) || (0 < nMode && nMode <= 14)) && m_tableReference->m_nTableDepth == 0)
+            if ((0 < nMode && nMode <= 14) && m_tableReference->m_nTableDepth == 0)
             {
                 const SwTableBox*    pTabBox = pTableTextNodeInfoInner->getTableBox();
                 const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
