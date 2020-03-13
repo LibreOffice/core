@@ -4667,7 +4667,7 @@ StackVar ScInterpreter::Interpret()
                     {
                         // This matrix represents a range reference. Apply implicit intersection.
                         double fVal = applyImplicitIntersection(aMat, aPos);
-                        if (rtl::math::isNan(fVal))
+                        if (std::isnan(fVal))
                             PushNoValue();
                         else
                             PushInt(fVal);

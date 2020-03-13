@@ -705,7 +705,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
             double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
             Color nLabelColor;
 
-            if( ! ::rtl::math::isNan( fData ) &&
+            if( ! std::isnan( fData ) &&
                 m_spNumberFormatterWrapper.get() )
             {
                 bool bColorChanged = false;
@@ -723,7 +723,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                 aResult = aText;
             else if( aAny>>=fDouble )
             {
-                if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
+                if( ! std::isnan( fDouble ) && m_spNumberFormatterWrapper.get() )
                 {
                     // If a numberformat was available here we could directly
                     // obtain the corresponding edit format in
@@ -1140,7 +1140,7 @@ void DataBrowser::InitController(
     {
         // treat invalid and empty text as Nan
         m_aNumberEditField->EnableNotANumber( true );
-        if( ::rtl::math::isNan( GetCellNumber( nRow, nCol )))
+        if( std::isnan( GetCellNumber( nRow, nCol )))
             m_aNumberEditField->SetTextValue( OUString());
         else
             m_aNumberEditField->SetValue( GetCellNumber( nRow, nCol ) );

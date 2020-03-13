@@ -104,8 +104,8 @@ double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
     double fResult;
     ::rtl::math::setNan( & fResult );
 
-    if( ! ( ::rtl::math::isNan( m_fSlope ) ||
-            ::rtl::math::isNan( m_fIntercept )))
+    if( ! ( std::isnan( m_fSlope ) ||
+            std::isnan( m_fIntercept )))
     {
         fResult = m_fIntercept * pow( x, m_fSlope );
     }

@@ -95,11 +95,11 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
 
 bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
 {
-    if( ::rtl::math::isNan(rPos.PositionX) )
+    if( std::isnan(rPos.PositionX) )
         return false;
-    if( ::rtl::math::isNan(rPos.PositionY) )
+    if( std::isnan(rPos.PositionY) )
         return false;
-    if( ::rtl::math::isNan(rPos.PositionZ) )
+    if( std::isnan(rPos.PositionZ) )
         return false;
     if( std::isinf(rPos.PositionX) )
         return false;

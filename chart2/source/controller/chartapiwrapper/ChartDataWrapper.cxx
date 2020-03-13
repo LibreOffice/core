@@ -76,7 +76,7 @@ uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Se
         {
             aRet[nOuter][nInner] = rData[nOuter][nInner];
             double& rValue = aRet[nOuter][nInner];
-            if( ::rtl::math::isNan( rValue ) )
+            if( std::isnan( rValue ) )
                 rValue = DBL_MIN;
         }
     }
@@ -533,7 +533,7 @@ double SAL_CALL ChartDataWrapper::getNotANumber()
 sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 {
     return nNumber == DBL_MIN
-        || ::rtl::math::isNan( nNumber )
+        || std::isnan( nNumber )
         || std::isinf( nNumber );
 }
 

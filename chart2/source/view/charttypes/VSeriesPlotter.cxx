@@ -842,8 +842,8 @@ double lcl_getErrorBarLogicLength(
                                              : OUString("NegativeError") ) >>= fPercent )
                 {
                     if( nIndex >=0 && nIndex < rData.getLength() &&
-                        ! ::rtl::math::isNan( rData[nIndex] ) &&
-                        ! ::rtl::math::isNan( fPercent ))
+                        ! std::isnan( rData[nIndex] ) &&
+                        ! std::isnan( fPercent ))
                     {
                         fResult = rData[nIndex] * fPercent / 100.0;
                     }
@@ -1427,9 +1427,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             if(!bAverageLine)
                 m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
 
-            if(!rtl::math::isNan(fLogicX) && !std::isinf(fLogicX) &&
-               !rtl::math::isNan(fLogicY) && !std::isinf(fLogicY) &&
-               !rtl::math::isNan(fLogicZ) && !std::isinf(fLogicZ) )
+            if(!std::isnan(fLogicX) && !std::isinf(fLogicX) &&
+               !std::isnan(fLogicY) && !std::isinf(fLogicY) &&
+               !std::isnan(fLogicZ) && !std::isinf(fLogicZ) )
             {
                 aRegressionPoly.SequenceX[0][nRealPointCount] = fLogicX;
                 aRegressionPoly.SequenceY[0][nRealPointCount] = fLogicY;
@@ -1661,7 +1661,7 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 
     std::vector<double>::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
 
-    aIt = std::find_if(aIt, aEnd, [](const double& rDateCategory) { return !rtl::math::isNan(rDateCategory); });
+    aIt = std::find_if(aIt, aEnd, [](const double& rDateCategory) { return !std::isnan(rDateCategory); });
     if (aIt == aEnd)
         return nRet;
 
@@ -1673,7 +1673,7 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
     ++aIt;
     for(;aIt!=aEnd;++aIt)
     {
-        if (rtl::math::isNan(*aIt))
+        if (std::isnan(*aIt))
             continue;
 
         Date aCurrent(aNullDate); aCurrent.AddDays(rtl::math::approxFloor(*aIt));
@@ -1836,9 +1836,9 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
         {
             double fLocalMinimum, fLocalMaximum;
             XSlot.getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
-            if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinimum )
+            if( !std::isnan(fLocalMinimum) && fLocalMinimum< rfMinimum )
                 rfMinimum = fLocalMinimum;
-            if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaximum )
+            if( !std::isnan(fLocalMaximum) && fLocalMaximum> rfMaximum )
                 rfMaximum = fLocalMaximum;
         }
     }
@@ -1859,9 +1859,9 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
         {
             double fLocalMinimum, fLocalMaximum;
             XSlot.getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
-            if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinY )
+            if( !std::isnan(fLocalMinimum) && fLocalMinimum< rfMinY )
                 rfMinY = fLocalMinimum;
-            if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaxY )
+            if( !std::isnan(fLocalMaximum) && fLocalMaximum> rfMaxY )
                 rfMaxY = fLocalMaximum;
         }
     }
@@ -1945,7 +1945,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
         {
             double fX = pSeries->getXValue( nN );
-            if( ::rtl::math::isNan(fX) )
+            if( std::isnan(fX) )
                 continue;
             if(rfMaximum<fX)
                 rfMaximum=fX;
@@ -2114,7 +2114,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
                 continue;
 
             double fX = pSeries->getXValue(i);
-            if (rtl::math::isNan(fX))
+            if (std::isnan(fX))
                 continue;
 
             if (fX < fMinX || fX > fMaxX)
@@ -2122,7 +2122,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
                 continue;
 
             double fY = pSeries->getYValue(i);
-            if (::rtl::math::isNan(fY))
+            if (std::isnan(fY))
                 continue;
 
             aRangeCalc.setValue(fX, fY);
@@ -2174,21 +2174,21 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
 
             if( fValueMaxY >= 0 )
             {
-                if( ::rtl::math::isNan( fPositiveSum ) )
+                if( std::isnan( fPositiveSum ) )
                     fPositiveSum = fFirstPositiveY = fValueMaxY;
                 else
                     fPositiveSum += fValueMaxY;
             }
             if( fValueMinY < 0 )
             {
-                if(::rtl::math::isNan( fNegativeSum ))
+                if(std::isnan( fNegativeSum ))
                     fNegativeSum = fFirstNegativeY = fValueMinY;
                 else
                     fNegativeSum += fValueMinY;
             }
         }
-        rfMinimumY = ::rtl::math::isNan( fNegativeSum ) ? fFirstPositiveY : fNegativeSum;
-        rfMaximumY = ::rtl::math::isNan( fPositiveSum ) ? fFirstNegativeY : fPositiveSum;
+        rfMinimumY = std::isnan( fNegativeSum ) ? fFirstPositiveY : fNegativeSum;
+        rfMaximumY = std::isnan( fPositiveSum ) ? fFirstNegativeY : fPositiveSum;
     }
     else
     {
@@ -2200,7 +2200,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
             double fValueMinY = pSeries->getMinimumofAllDifferentYValues( nCategoryIndex );
             double fValueMaxY = pSeries->getMaximumofAllDifferentYValues( nCategoryIndex );
 
-            if( ::rtl::math::isNan( fTotalSum ) )
+            if( std::isnan( fTotalSum ) )
             {
                 rfMinimumY = fValueMinY;
                 rfMaximumY = fTotalSum = fValueMaxY;

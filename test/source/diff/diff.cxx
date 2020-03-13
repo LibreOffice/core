@@ -302,7 +302,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         double dVal1 = xmlXPathCastStringToNumber(val1);
         double dVal2 = xmlXPathCastStringToNumber(val2);
 
-        if(!rtl::math::isNan(dVal1) || !rtl::math::isNan(dVal2))
+        if(!std::isnan(dVal1) || !std::isnan(dVal2))
         {
             //compare by value and respect tolerance
             tolerance tol;

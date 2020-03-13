@@ -119,9 +119,9 @@ void ScaleAutomatism::expandValueRange( double fMinimum, double fMaximum )
     // so they need to be reset tdf#96807
     if( (m_fValueMinimum == 0.0) && (m_fValueMaximum == 0.0) )
         resetValueRange();
-    if( (fMinimum < m_fValueMinimum) || ::rtl::math::isNan( m_fValueMinimum ) )
+    if( (fMinimum < m_fValueMinimum) || std::isnan( m_fValueMinimum ) )
         m_fValueMinimum = fMinimum;
-    if( (fMaximum > m_fValueMaximum) || ::rtl::math::isNan( m_fValueMaximum ) )
+    if( (fMaximum > m_fValueMaximum) || std::isnan( m_fValueMaximum ) )
         m_fValueMaximum = fMaximum;
 }
 
@@ -174,7 +174,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     {
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
             rExplicitScale.Minimum = 0.0;
-        else if( ::rtl::math::isNan( m_fValueMinimum ) )
+        else if( std::isnan( m_fValueMinimum ) )
         {
             if( m_aSourceScale.AxisType==AxisType::DATE )
                 rExplicitScale.Minimum = 36526.0; //1.1.2000
@@ -190,7 +190,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     {
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
             rExplicitScale.Maximum = 1.0;
-        else if( ::rtl::math::isNan( m_fValueMaximum ) )
+        else if( std::isnan( m_fValueMaximum ) )
         {
             if( m_aSourceScale.AxisType==AxisType::DATE )
                 rExplicitScale.Maximum = 40179.0; //1.1.2010
