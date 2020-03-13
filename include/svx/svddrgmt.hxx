@@ -51,7 +51,7 @@ public:
 class SVXCORE_DLLPUBLIC SdrDragEntryPolyPolygon final : public SdrDragEntry
 {
 private:
-    basegfx::B2DPolyPolygon const        maOriginalPolyPolygon;
+    basegfx::B2DPolyPolygon             maOriginalPolyPolygon;
 
 public:
     SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon);
@@ -66,7 +66,7 @@ class SdrDragEntrySdrObject final : public SdrDragEntry
 private:
     const SdrObject&                                maOriginal;
     SdrObjectUniquePtr                              mxClone;
-    bool const                                      mbModify;
+    bool                                            mbModify;
 
 public:
     SdrDragEntrySdrObject(
@@ -87,7 +87,7 @@ public:
 class SdrDragEntryPrimitive2DSequence final : public SdrDragEntry
 {
 private:
-    drawinglayer::primitive2d::Primitive2DContainer const  maPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
 public:
     SdrDragEntryPrimitive2DSequence(
@@ -101,8 +101,8 @@ public:
 class SdrDragEntryPointGlueDrag final : public SdrDragEntry
 {
 private:
-    std::vector< basegfx::B2DPoint > const                maPositions;
-    bool const                                            mbIsPointDrag;
+    std::vector< basegfx::B2DPoint >                maPositions;
+    bool                                            mbIsPointDrag;
 
 public:
     SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag);

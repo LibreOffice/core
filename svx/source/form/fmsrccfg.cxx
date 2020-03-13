@@ -78,7 +78,7 @@ namespace svxform
     struct Ascii2Int16
     {
         const char* pAscii;
-        sal_Int16 const nValue;
+        sal_Int16   nValue;
     };
 
     }

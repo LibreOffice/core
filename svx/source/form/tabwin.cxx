@@ -60,7 +60,7 @@ using namespace ::dbtools;
 
 struct ColumnInfo
 {
-    OUString const sColumnName;
+    OUString sColumnName;
     explicit ColumnInfo(const OUString& i_sColumnName)
         : sColumnName(i_sColumnName)
     {

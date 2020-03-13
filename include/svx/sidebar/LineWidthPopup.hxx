@@ -45,13 +45,13 @@ public:
 private:
     LinePropertyPanelBase& m_rParent;
     std::array<OUString,9> maStrUnits;
-    OUString const m_sPt;
+    OUString m_sPt;
     MapUnit m_eMapUnit;
     bool m_bVSFocus;
     bool m_bCustom;
     long m_nCustomWidth;
-    Image const m_aIMGCus;
-    Image const m_aIMGCusGray;
+    Image  m_aIMGCus;
+    Image m_aIMGCusGray;
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xTopLevel;

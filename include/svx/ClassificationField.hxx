@@ -61,10 +61,10 @@ public:
 class SVX_DLLPUBLIC ClassificationField final : public SvxFieldData
 {
 public:
-    ClassificationType const meType;
-    OUString const msDescription;
-    OUString const msFullClassName;
-    OUString const msIdentifier;
+    ClassificationType meType;
+    OUString msDescription;
+    OUString msFullClassName;
+    OUString msIdentifier;
 
     ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier)
         : SvxFieldData()

@@ -36,7 +36,7 @@ namespace {
 struct NameTypeTable
 {
     const char* pS;
-    MSO_SPT const     pE;
+    MSO_SPT     pE;
 };
 
 }

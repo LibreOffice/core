@@ -32,7 +32,7 @@ typedef std::vector< NamedColor > ColorList;
 class PaletteASE final : public Palette
 {
     bool        mbValidPalette;
-    OUString const    maFPath;
+    OUString    maFPath;
     OUString    maASEPaletteName;
     ColorList   maColors;
 
@@ -55,8 +55,8 @@ class PaletteGPL final : public Palette
 {
     bool        mbLoadedPalette;
     bool        mbValidPalette;
-    OUString const    maFName;
-    OUString const    maFPath;
+    OUString    maFName;
+    OUString    maFPath;
     OUString    maGPLPaletteName;
     ColorList   maColors;
 
@@ -80,8 +80,8 @@ public:
 class PaletteSOC final : public Palette
 {
     bool            mbLoadedPalette;
-    OUString const        maFPath;
-    OUString const        maSOCPaletteName;
+    OUString        maFPath;
+    OUString        maSOCPaletteName;
     XColorListRef   mpColorList;
 public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );

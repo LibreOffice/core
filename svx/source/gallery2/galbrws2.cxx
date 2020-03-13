@@ -94,8 +94,8 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper< css::frame::XStatusList
 {
 private:
     const GalleryTheme* mpTheme;
-    sal_uInt32 const    mnObjectPos;
-    bool const          mbPreview;
+    sal_uInt32          mnObjectPos;
+    bool                mbPreview;
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Menu> mxPopupMenu;
     std::unique_ptr<weld::Menu> mxBackgroundPopup;

@@ -25,8 +25,8 @@
 class SVX_DLLPUBLIC SvxPasswordDialog final : public SfxDialogController
 {
 private:
-    OUString const m_aOldPasswdErrStr;
-    OUString const m_aRepeatPasswdErrStr;
+    OUString m_aOldPasswdErrStr;
+    OUString m_aRepeatPasswdErrStr;
     Link<SvxPasswordDialog*,bool> m_aCheckPasswordHdl;
 
     std::unique_ptr<weld::Label> m_xOldFL;

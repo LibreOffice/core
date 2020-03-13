@@ -47,7 +47,7 @@ class SvxUnoXPropertyTable : public WeakImplHelper< container::XNameContainer, l
 {
 private:
     XPropertyList*  mpList;
-    sal_Int16 const mnWhich;
+    sal_Int16 mnWhich;
 
     long getCount() const { return mpList ? mpList->Count() : 0; }
     const XPropertyEntry* get(long index) const;
