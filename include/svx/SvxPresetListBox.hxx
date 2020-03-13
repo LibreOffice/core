@@ -28,7 +28,7 @@ class SVXCORE_DLLPUBLIC SvxPresetListBox final : public SvtValueSet
 {
 private:
     static constexpr sal_uInt32  nColCount = 3;
-    Size const                   aIconSize;
+    Size                         aIconSize;
     Link<SvxPresetListBox*,void> maRenameHdl;
     Link<SvxPresetListBox*,void> maDeleteHdl;
 

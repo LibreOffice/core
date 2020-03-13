@@ -54,7 +54,7 @@ private:
     OUString aImgDefault;
     OUString aImgReadOnly;
 
-    ::std::function<void ()> const maThemeSlectionHandler;
+    ::std::function<void ()> maThemeSlectionHandler;
 
     void                    ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );

@@ -59,7 +59,7 @@ protected:
     virtual void CreateB2dIAObject() override;
 
 private:
-    bool const mbHorizontal;
+    bool mbHorizontal;
     sal_Int32 mnMin, mnMax;
     TableEdgeVector maEdges;
 };
@@ -78,9 +78,9 @@ protected:
     virtual void CreateB2dIAObject() override;
 
 private:
-    tools::Rectangle const maRectangle;
+    tools::Rectangle maRectangle;
 
-    bool const            mbAnimate : 1;
+    bool            mbAnimate : 1;
 };
 
 } // end of namespace table

@@ -85,7 +85,7 @@ private:
     sfx2::sidebar::ControllerItem maEdgeStyle;
     sfx2::sidebar::ControllerItem maCapStyle;
 
-    SfxBindings* const mpBindings;
+    SfxBindings* mpBindings;
     vcl::EnumContext maContext;
 };
 

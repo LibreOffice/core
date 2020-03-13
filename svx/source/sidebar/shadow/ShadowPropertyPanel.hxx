@@ -54,7 +54,7 @@ private:
     ::sfx2::sidebar::ControllerItem maShadowXDistanceController;
     ::sfx2::sidebar::ControllerItem maShadowYDistanceController;
 
-    SfxBindings* const mpBindings;
+    SfxBindings* mpBindings;
     long nX,nY,nXY;
 
     std::unique_ptr<weld::CheckButton> mxShowShadow;

@@ -112,7 +112,7 @@ private:
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
 
     vcl::EnumContext maContext;
-    SfxBindings* const mpBindings;
+    SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK(ModifyIndentHdl_Impl, weld::MetricSpinButton&, void);

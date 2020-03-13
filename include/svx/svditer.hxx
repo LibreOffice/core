@@ -39,7 +39,7 @@ class SVXCORE_DLLPUBLIC SdrObjListIter
 {
     std::vector< const SdrObject* > maObjList;
     size_t                          mnIndex;
-    bool const                      mbReverse;
+    bool                            mbReverse;
     bool                            mbUseZOrder;
 
     void ImpProcessObjectList(const SdrObjList& rSdrObjList, SdrIterMode eMode);

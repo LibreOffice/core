@@ -81,7 +81,7 @@ private:
     ::sfx2::sidebar::ControllerItem maFillTransparenceController;
     ::sfx2::sidebar::ControllerItem maFillFloatTransparenceController;
 
-    SfxBindings* const mpBindings;
+    SfxBindings* mpBindings;
 };
 
 

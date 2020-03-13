@@ -68,7 +68,7 @@ namespace svx
         ToolboxButtonColorUpdaterBase& operator =(ToolboxButtonColorUpdaterBase const &) = delete;
 
     protected:
-        bool const  mbWideButton;
+        bool        mbWideButton;
         bool        mbWasHiContrastMode;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;
@@ -96,7 +96,7 @@ namespace svx
 
 
     private:
-        sal_uInt16 const      mnBtnId;
+        sal_uInt16      mnBtnId;
         VclPtr<ToolBox> mpTbx;
 
         virtual void SetQuickHelpText(const OUString& rText) override;

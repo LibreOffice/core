@@ -53,8 +53,8 @@ namespace drawinglayer::primitive2d
         class SdrCellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix const                       maTransform;
-            attribute::SdrFillTextAttribute const             maSdrFTAttribute;
+            basegfx::B2DHomMatrix                       maTransform;
+            attribute::SdrFillTextAttribute             maSdrFTAttribute;
 
         protected:
             // local decomposition.

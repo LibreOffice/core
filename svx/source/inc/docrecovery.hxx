@@ -202,7 +202,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
                     on the core dispatch implementation, we must know,
                     which URL we have to use for deregistration!
          */
-        bool const m_bListenForSaving;
+        bool m_bListenForSaving;
 
 
     // native interface
@@ -384,9 +384,9 @@ class RecoveryDialog : public weld::GenericDialogController
 {
     // member
     private:
-        OUString const        m_aTitleRecoveryInProgress;
-        OUString const        m_aRecoveryOnlyFinish;
-        OUString const        m_aRecoveryOnlyFinishDescr;
+        OUString         m_aTitleRecoveryInProgress;
+        OUString         m_aRecoveryOnlyFinish;
+        OUString         m_aRecoveryOnlyFinishDescr;
 
         RecoveryCore*   m_pCore;
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
