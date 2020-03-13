@@ -1091,6 +1091,24 @@ void DocxExport::WriteSettings()
         bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
     }
+
+    /* Compatibility Mode (tdf#131304)
+     * 11:  .doc level    [Word 97-2003]
+     * 12:  .docx default [Word 2007]  [LO < 7.0]
+     * 14:                [Word 2010]
+     * 15:                [Word 2013/2016/2019]  [LO >= 7.0]
+     *
+     * The PRIMARY purpose of compatibility mode does not seem to be related to layout etc.
+     * Its focus is on sharing files between multiple users, tracking the lowest supported mode in the group.
+     * It is to BENEFIT older programs by not using certain new features that they don't understand.
+     *
+     * The next time the compat mode needs to be changed, I forsee the following steps:
+     * 1.) Accept the new mode: Start round-tripping the new value, indicating we understand that format.
+     * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
+     *     about working with perfect compatibility with older versions of MS Word.
+     */
+    const sal_Int32 nTargetCompatibilityMode = 15; //older versions might not open our files well
+    bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
@@ -1142,10 +1160,31 @@ void DocxExport::WriteSettings()
                         else if( rPropVal.Name == "val" )
                             rPropVal.Value >>= aValue;
                     }
+                    if ( aName == "compatibilityMode" )
+                    {
+                        bHasCompatibilityMode = true;
+                        // Among the group of programs sharing this document, the lowest mode is retained.
+                        // Reduce this number if we are not comfortable with the new/unknown mode yet.
+                        // Step 1 in accepting a new mode would be to comment out the following clause
+                        // and roundtrip the new value instead of overwriting with the older number.
+                        // There are no newer modes at the time this code was written.
+                        if ( aValue.toInt32() > nTargetCompatibilityMode )
+                            aValue = OUString::number(nTargetCompatibilityMode);
+                    }
+
                     pFS->singleElementNS( XML_w, XML_compatSetting,
                         FSNS( XML_w, XML_name ), aName.toUtf8(),
                         FSNS( XML_w, XML_uri ),  aUri.toUtf8(),
                         FSNS( XML_w, XML_val ),  aValue.toUtf8());
+                }
+
+                if ( !bHasCompatibilityMode )
+                {
+                    pFS->singleElementNS( XML_w, XML_compatSetting,
+                        FSNS( XML_w, XML_name ), "compatibilityMode",
+                        FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
+                        FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+                    bHasCompatibilityMode = true;
                 }
 
                 pFS->endElementNS( XML_w, XML_compat );
@@ -1204,6 +1243,15 @@ void DocxExport::WriteSettings()
                                          OString::number(nHyphenationZone));
             }
         }
+    }
+    if ( !bHasCompatibilityMode )
+    {
+        pFS->startElementNS(XML_w, XML_compat);
+        pFS->singleElementNS( XML_w, XML_compatSetting,
+            FSNS( XML_w, XML_name ), "compatibilityMode",
+            FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
+            FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+        pFS->endElementNS( XML_w, XML_compat );
     }
 
     WriteDocVars(pFS);
