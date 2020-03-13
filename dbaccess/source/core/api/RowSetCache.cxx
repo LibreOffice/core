@@ -19,32 +19,25 @@
 
 #include <memory>
 #include "BookmarkSet.hxx"
-#include "CRowSetColumn.hxx"
-#include "CRowSetDataColumn.hxx"
 #include "KeySet.hxx"
 #include "OptimisticSet.hxx"
 #include "RowSetBase.hxx"
 #include "RowSetCache.hxx"
 #include "StaticSet.hxx"
 #include "WrappedResultSet.hxx"
-#include <sal/log.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <stringconstants.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
 #include <comphelper/extract.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

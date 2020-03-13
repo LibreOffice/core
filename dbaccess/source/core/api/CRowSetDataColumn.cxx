@@ -21,9 +21,7 @@
 #include "CRowSetDataColumn.hxx"
 #include <stringconstants.hxx>
 #include <apitools.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>

@@ -17,22 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "commandcontainer.hxx"
-#include "connection.hxx"
 #include <databasecontext.hxx>
 #include "databasedocument.hxx"
 #include "datasource.hxx"
-#include <stringconstants.hxx>
+#include <definitioncontainer.hxx>
 #include <ModelImpl.hxx>
 #include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyBag.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -41,20 +37,14 @@
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
-#include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
-#include <rtl/digest.h>
 #include <sfx2/signaturestate.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <vcl/errcode.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/sharedunocomponent.hxx>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -78,7 +68,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::dbtools;
 using namespace ::comphelper;
 
 namespace dbaccess
