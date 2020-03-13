@@ -18,26 +18,21 @@
  */
 
 #include <definitioncontainer.hxx>
-#include <stringconstants.hxx>
 #include <apitools.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <ucbhelper/contentidentifier.hxx>
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star::uno;

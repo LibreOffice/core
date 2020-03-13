@@ -18,10 +18,8 @@
  */
 
 #include <sdbcoretools.hxx>
-#include <stringconstants.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
@@ -30,7 +28,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

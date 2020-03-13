@@ -22,7 +22,6 @@
 #include "storagetextstream.hxx"
 #include "subcomponentrecovery.hxx"
 #include "subcomponents.hxx"
-#include <stringconstants.hxx>
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -32,8 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <algorithm>
 
 namespace dbaccess
 {

@@ -22,11 +22,6 @@
 #include <apitools.hxx>
 #include "CRowSetColumn.hxx"
 
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-
-#include <cppuhelper/typeprovider.hxx>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
