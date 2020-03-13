@@ -1246,6 +1246,7 @@ cmd/32/editselectmenu.png cmd/32/selecttables.png
 cmd/32/fieldmenu.png cmd/32/insertfieldctrl.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
+cmd/32/groupoutlinemenu.png cmd/32/autooutline.png
 cmd/32/insertanchor.png cmd/32/insertbookmark.png
 cmd/32/insertcell.png cmd/32/insertcellsright.png
 cmd/32/insertcolumnsmenu.png cmd/32/insertcolumns.png
@@ -1269,6 +1270,7 @@ cmd/lc_editselectmenu.png cmd/lc_selecttables.png
 cmd/lc_fieldmenu.png cmd/lc_insertfieldctrl.png
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
+cmd/lc_groupoutlinemenu.png cmd/lc_autooutline.png
 cmd/lc_insertanchor.png cmd/lc_insertbookmark.png
 cmd/lc_insertcell.png cmd/lc_insertcellsright.png
 cmd/lc_insertcolumnsmenu.png cmd/lc_insertcolumns.png
@@ -1292,6 +1294,7 @@ cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
+cmd/sc_groupoutlinemenu.png cmd/sc_autooutline.png
 cmd/sc_insertanchor.png cmd/sc_insertbookmark.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
