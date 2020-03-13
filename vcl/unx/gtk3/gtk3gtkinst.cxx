@@ -8598,11 +8598,11 @@ static GtkInstanceTreeView* g_DragSource;
 
 namespace {
 
-struct CompareGtkTreeIter
+struct CompareGtkTreePath
 {
-    bool operator()(const GtkTreeIter& lhs, const GtkTreeIter& rhs) const
+    bool operator()(const GtkTreePath* lhs, const GtkTreePath* rhs) const
     {
-        return memcmp(&lhs, &rhs, sizeof(GtkTreeIter)) < 0;
+        return gtk_tree_path_compare(lhs, rhs) < 0;
     }
 };
 
@@ -8626,7 +8626,7 @@ private:
     std::map<int, int> m_aIndentMap;
     // currently expanding parent that logically, but not currently physically,
     // contain placeholders
-    o3tl::sorted_vector<GtkTreeIter, CompareGtkTreeIter> m_aExpandingPlaceHolderParents;
+    o3tl::sorted_vector<GtkTreePath*, CompareGtkTreePath> m_aExpandingPlaceHolderParents;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -8847,10 +8847,15 @@ private:
 
     bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
-        if (m_aExpandingPlaceHolderParents.count(rGtkIter.iter))
-            return true;
-        bool bPlaceHolder = false;
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+
+        GtkTreePath* pPath = gtk_tree_model_get_path(pModel, &rGtkIter.iter);
+        bool bExpanding = m_aExpandingPlaceHolderParents.count(pPath);
+        gtk_tree_path_free(pPath);
+        if (bExpanding)
+            return true;
+
+        bool bPlaceHolder = false;
         GtkTreeIter tmp;
         if (gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter))
         {
@@ -8870,11 +8875,15 @@ private:
         // if there's a preexisting placeholder child, required to make this
         // potentially expandable in the first place, now we remove it
         GtkInstanceTreeIter aIter(iter);
+        GtkTreePath* pPlaceHolderPath = nullptr;
         bool bPlaceHolder = child_is_placeholder(aIter);
         if (bPlaceHolder)
         {
             gtk_tree_store_remove(m_pTreeStore, &aIter.iter);
-            m_aExpandingPlaceHolderParents.insert(iter);
+
+            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+            pPlaceHolderPath = gtk_tree_model_get_path(pModel, &iter);
+            m_aExpandingPlaceHolderParents.insert(pPlaceHolderPath);
         }
 
         aIter.iter = iter;
@@ -8889,7 +8898,8 @@ private:
                 OUString sDummy("<dummy>");
                 insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
             }
-            m_aExpandingPlaceHolderParents.erase(iter);
+            m_aExpandingPlaceHolderParents.erase(pPlaceHolderPath);
+            gtk_tree_path_free(pPlaceHolderPath);
         }
 
         enable_notify_events();
