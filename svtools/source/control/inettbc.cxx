@@ -90,10 +90,10 @@ class SvtMatchContext_Impl: public salhelper::Thread
     std::vector<OUString>           aCompletions;
     std::vector<OUString>           aURLs;
     svtools::AsynchronLink          aLink;
-    OUString const                  aText;
+    OUString                        aText;
     SvtURLBox*                      pBox;
-    bool const                      bOnlyDirectories;
-    bool const                      bNoSelection;
+    bool                            bOnlyDirectories;
+    bool                            bNoSelection;
 
     osl::Mutex mutex_;
     bool stopped_;

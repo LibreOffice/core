@@ -48,9 +48,9 @@ namespace {
 struct SvtExtensionResIdMapping_Impl
 {
     const char* _pExt;
-    bool const        _bExt;
+    bool        _bExt;
     const char* pStrId;
-    SvImageId const   _nImgId;
+    SvImageId   _nImgId;
 };
 
 }

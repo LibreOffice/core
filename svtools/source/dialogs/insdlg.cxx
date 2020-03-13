@@ -43,12 +43,12 @@ namespace {
 
 struct OleObjectDescriptor
 {
-    sal_uInt32 const  cbSize;
-    ClsId const       clsid;
-    sal_uInt32 const  dwDrawAspect;
-    Size const        sizel;
-    Point const       pointl;
-    sal_uInt32 const  dwStatus;
+    sal_uInt32  cbSize;
+    ClsId       clsid;
+    sal_uInt32  dwDrawAspect;
+    Size        sizel;
+    Point       pointl;
+    sal_uInt32  dwStatus;
     sal_uInt32  dwFullUserTypeName;
     sal_uInt32  dwSrcOfCopy;
 };
@@ -182,7 +182,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 {
     struct SotResourcePair
     {
-        SotClipboardFormatId const   mnSotId;
+        SotClipboardFormatId   mnSotId;
         const char* mpResId;
     };
 

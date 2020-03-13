@@ -279,7 +279,7 @@ namespace {
 
 class ApplyScale
 {
-    double const mfScale;
+    double mfScale;
 public:
     explicit ApplyScale( double fScale ) : mfScale(fScale) {}
     void operator() ( double& rVal )

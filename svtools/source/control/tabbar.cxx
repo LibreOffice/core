@@ -190,14 +190,14 @@ public:
 
 struct ImplTabBarItem
 {
-    sal_uInt16 const mnId;
+    sal_uInt16 mnId;
     TabBarPageBits mnBits;
     OUString maText;
     OUString maHelpText;
     OUString maAuxiliaryText; // used in LayerTabBar for real layer name
     tools::Rectangle maRect;
     long mnWidth;
-    OString const maHelpId;
+    OString maHelpId;
     bool mbShort : 1;
     bool mbSelect : 1;
     bool mbProtect : 1;

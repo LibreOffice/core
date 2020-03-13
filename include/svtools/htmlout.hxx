@@ -36,7 +36,7 @@ struct HTMLOutEvent
 {
     const char *pBasicName;
     const char *pJavaName;
-    SvMacroItemId const nEvent;
+    SvMacroItemId nEvent;
 };
 
 struct SVT_DLLPUBLIC HTMLOutContext

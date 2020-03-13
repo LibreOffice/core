@@ -335,7 +335,7 @@ private:
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     ValueSetItem*                                                       mpParent;
-    bool const                                                          mbIsTransientChildrenDisabled;
+    bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 
@@ -395,7 +395,7 @@ private:
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     SvtValueSetItem*                                                    mpParent;
-    bool const                                                          mbIsTransientChildrenDisabled;
+    bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 

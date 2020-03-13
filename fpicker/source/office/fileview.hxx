@@ -175,7 +175,7 @@ public:
 
 struct SvtContentEntry
 {
-    bool const     mbIsFolder;
+    bool     mbIsFolder;
     OUString maURL;
 
     SvtContentEntry( const OUString& rURL, bool bIsFolder ) :

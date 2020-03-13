@@ -108,7 +108,7 @@ private:
     static rtl::Reference<PropertySetInfo> createPropertySetInfo( sal_uInt16 nType );
 
 
-    sal_uInt16 const mnType;
+    sal_uInt16 mnType;
 
     OUString maURL;
     OUString maAltText;

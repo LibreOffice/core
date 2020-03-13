@@ -34,7 +34,7 @@ class Window;
 struct FltCallDialogParameter
 {
     weld::Window* pWindow;
-    FieldUnit const eFieldUnit;
+    FieldUnit eFieldUnit;
     OUString aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
