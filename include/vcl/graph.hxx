@@ -50,7 +50,7 @@ class ImpGraphic;
 class OutputDevice;
 class GraphicReader;
 
-class VCL_DLLPUBLIC GraphicConversionParameters
+class SAL_WARN_UNUSED VCL_DLLPUBLIC GraphicConversionParameters
 {
 private:
     Size const            maSizePixel;            // default is (0,0)
