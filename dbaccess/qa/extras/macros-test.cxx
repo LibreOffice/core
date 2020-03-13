@@ -9,16 +9,6 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/intitem.hxx>
-
-#include <basic/sbxdef.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
