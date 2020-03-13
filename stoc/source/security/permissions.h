@@ -34,7 +34,7 @@ class Permission : public ::salhelper::SimpleReferenceObject
 public:
     ::rtl::Reference< Permission > m_next;
     // mode
-    enum t_type { ALL, RUNTIME, SOCKET, FILE } const m_type;
+    enum t_type { ALL, RUNTIME, SOCKET, FILE } m_type;
 
     Permission(
         t_type type,

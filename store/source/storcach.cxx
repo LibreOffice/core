@@ -42,7 +42,7 @@ struct Entry
 {
     // Representation
     std::shared_ptr<PageData> m_xPage;
-    sal_uInt32 const m_nOffset;
+    sal_uInt32 m_nOffset;
     Entry *    m_pNext;
 
     // Allocation

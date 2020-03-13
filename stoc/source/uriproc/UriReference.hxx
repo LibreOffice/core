@@ -88,13 +88,13 @@ public:
     void clearFragment();
 
     osl::Mutex m_mutex;
-    OUString const m_scheme;
-    OUString const m_authority;
+    OUString m_scheme;
+    OUString m_authority;
     OUString m_path;
-    OUString const m_query;
+    OUString m_query;
     OUString m_fragment;
-    bool const m_hasAuthority;
-    bool const m_hasQuery;
+    bool m_hasAuthority;
+    bool m_hasQuery;
     bool m_hasFragment;
 
 private:

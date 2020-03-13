@@ -212,7 +212,7 @@ private:
 
     Reference<XExactName>               _xENDirect, _xENIntrospection;
 
-    bool const                          mbFromOLE;
+    bool                                mbFromOLE;
 };
 
 }

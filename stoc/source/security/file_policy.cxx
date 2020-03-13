@@ -134,7 +134,7 @@ Sequence< Any > FilePolicy::getDefaultPermissions()
 
 class PolicyReader
 {
-    OUString const m_fileName;
+    OUString m_fileName;
     oslFileHandle m_file;
 
     sal_Int32 m_linepos;

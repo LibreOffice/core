@@ -109,7 +109,7 @@ class SocketPermission : public Permission
     mutable OUString m_ip;
     mutable bool m_resolveErr;
     mutable bool m_resolvedHost;
-    bool const m_wildCardHost;
+    bool m_wildCardHost;
 
     inline bool resolveHost() const;
 
@@ -271,10 +271,10 @@ namespace {
 class FilePermission : public Permission
 {
     static char const * s_actions [];
-    sal_Int32 const m_actions;
+    sal_Int32 m_actions;
 
     OUString m_url;
-    bool const m_allFiles;
+    bool m_allFiles;
 
 public:
     FilePermission(
@@ -416,7 +416,7 @@ namespace {
 
 class RuntimePermission : public Permission
 {
-    OUString const m_name;
+    OUString m_name;
 
 public:
     RuntimePermission(
