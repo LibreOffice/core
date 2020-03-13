@@ -2245,7 +2245,7 @@ namespace {
 void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
                                    const SvNumberFormatter& rFormatter, OUString& rOutString)
 {
-    bool bSign = ::rtl::math::isSignBitSet(fNumber);
+    bool bSign = std::signbit(fNumber);
 
     // 1.000E+015 (one digit and the decimal point, and the two chars +
     // nExpDigit for the exponential part, totalling 6 or 7).
@@ -2369,7 +2369,7 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUSt
         return false;
     }
     double fTestNum = fNumber;
-    bool bSign = ::rtl::math::isSignBitSet(fTestNum);
+    bool bSign = std::signbit(fTestNum);
     if (bSign)
     {
         fTestNum = -fTestNum;
@@ -2474,7 +2474,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         case SvNumFormatType::NUMBER: // Standard number format
             if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
             {
-                if (::rtl::math::isSignBitSet(fNumber))
+                if (std::signbit(fNumber))
                 {
                     if (!(fNumber < 0.0))
                         fNumber = -fNumber;     // do not display -0.0
@@ -4245,7 +4245,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     else
     {
         bSign = false;
-        if ( ::rtl::math::isSignBitSet( fNumber ) )
+        if ( std::signbit( fNumber ) )
         {
             fNumber = -fNumber; // yes, -0.0 is possible, eliminate '-'
         }

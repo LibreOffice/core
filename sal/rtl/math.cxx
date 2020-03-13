@@ -236,7 +236,7 @@ void doubleToString(typename T::String ** pResult,
 
     // sign adjustment, instead of testing for fValue<0.0 this will also fetch
     // -0.0
-    bool bSign = rtl::math::isSignBitSet(fValue);
+    bool bSign = std::signbit(fValue);
 
     if (bSign)
         fValue = -fValue;
@@ -1042,7 +1042,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
         return std::round( fValue );
 
     // sign adjustment
-    bool bSign = rtl::math::isSignBitSet( fValue );
+    bool bSign = std::signbit( fValue );
     if (bSign)
         fValue = -fValue;
 
@@ -1168,7 +1168,7 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     double fOrigValue = fValue;
 
-    bool bSign = ::rtl::math::isSignBitSet(fValue);
+    bool bSign = std::signbit(fValue);
     if (bSign)
         fValue = -fValue;
 

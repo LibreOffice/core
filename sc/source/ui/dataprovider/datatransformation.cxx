@@ -483,7 +483,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        if(rtl::math::isSignBitSet(nVal))
+                        if(std::signbit(nVal))
                             rDoc.SetValue(rCol, nRow, 0, -1 * nVal);
                     }
                 }
@@ -568,7 +568,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        if (!rtl::math::isSignBitSet(nVal))
+                        if (!std::signbit(nVal))
                         {
                             rDoc.SetValue(rCol, nRow, 0, sqrt(nVal));
                         }

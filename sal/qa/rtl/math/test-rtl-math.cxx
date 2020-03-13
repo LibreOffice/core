@@ -173,7 +173,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
         CPPUNIT_ASSERT_EQUAL(0.0, res);
-        CPPUNIT_ASSERT(rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(std::signbit(res));
 
         // Compensating: "0.001E311" is 1E308, not overflow/inf
         res = rtl::math::stringToDouble(OUString("0.001E311"), '.', ',', &status, &end);
@@ -399,10 +399,10 @@ public:
         x = -0.0;
         res = rtl::math::expm1(x);
         CPPUNIT_ASSERT_EQUAL(-0.0,res);
-        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(std::signbit(res));
         rtl::math::setInf( &x, false);
         res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
         rtl::math::setInf( &x, true);
         res = rtl::math::expm1(x);
         CPPUNIT_ASSERT_EQUAL(-1.0,res);
@@ -419,13 +419,13 @@ public:
         x = -0.0;
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT_EQUAL(-0.0,res);
-        CPPUNIT_ASSERT_EQUAL(true, rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(std::signbit(res));
         rtl::math::setInf( &x, false);
         res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
         x = -1.0;
         res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && std::signbit(res));
         x = -1.1;
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT_EQUAL(true, rtl::math::isNan(res));
@@ -452,7 +452,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::acosh(1.0));
 
         res = rtl::math::acosh(std::numeric_limits<double>::infinity()); // +Inf
-        CPPUNIT_ASSERT(!rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         // #i97605
@@ -464,13 +464,13 @@ public:
         double res;
 
         res = rtl::math::asinh(-std::numeric_limits<double>::infinity()); // -Inf
-        CPPUNIT_ASSERT(rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::asinh(0.0));
 
         res = rtl::math::asinh(std::numeric_limits<double>::infinity()); // +Inf
-        CPPUNIT_ASSERT(!rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         // #i97605
@@ -491,13 +491,13 @@ public:
         CPPUNIT_ASSERT(rtl::math::isNan(res));
 
         res = rtl::math::atanh(-1.0); // -Inf
-        CPPUNIT_ASSERT(rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::atanh(0.0));
 
         res = rtl::math::atanh(1.0); // +Inf
-        CPPUNIT_ASSERT(!rtl::math::isSignBitSet(res));
+        CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         res = rtl::math::atanh(2.0); // NaN
