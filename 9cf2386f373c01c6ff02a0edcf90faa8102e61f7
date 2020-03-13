@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bfb2dfc_4aef60f5",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 8605,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-13T18:25:10Z",
+      "side": 1,
+      "message": "this needs to be \n\n    return gtk_tree_path_compare(lhs, rhs) \u003c 0\n\nbecause this is a operator\u003c \n\notherwise it\u0027ll do weird stuff when it compares an object to itself",
+      "revId": "9cf2386f373c01c6ff02a0edcf90faa8102e61f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
