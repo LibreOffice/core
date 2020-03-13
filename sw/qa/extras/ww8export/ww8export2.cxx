@@ -49,13 +49,13 @@ DECLARE_WW8EXPORT_TEST(testTdf99120, "tdf99120.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
 {
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableWidth.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableWidth.doc")
 {
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -65,7 +65,7 @@ DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableW
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table relative width percent", sal_Int16(98), getProperty<sal_Int16>(xTable, "RelativeWidth"));
  }
 
-DECLARE_WW8EXPORT_TEST(testTdf128700_relativeTableWidth, "tdf128700_relativeTableWidth.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf128700_relativeTableWidth, "tdf128700_relativeTableWidth.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -76,7 +76,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128700_relativeTableWidth, "tdf128700_relativeTabl
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Floated table can't use relative width", sal_Int16(0), getProperty<sal_Int16>(xTable, "RelativeWidth"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -89,7 +89,7 @@ DECLARE_WW8EXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFBCC), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
 {
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 
@@ -106,12 +106,12 @@ DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
     CPPUNIT_ASSERT_MESSAGE("TextTop should be 5388", nTextTop > 4000);
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
 {
     CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='PortionType::Number']", "rText") );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", sal_Int32(0xFF007F), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
@@ -168,7 +168,7 @@ DECLARE_WW8EXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote
     }
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf107931_KERN_DocEnabled_disabledDefStyle.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf107931_KERN_DocEnabled_disabledDefStyle.doc")
 {
     // Paragraph 3: the default style has kerning disabled
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
@@ -182,7 +182,7 @@ DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf1
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_enabledDefStyle, "testTdf107931_KERN_enabledDefStyle.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf107931_KERN_enabledDefStyle, "testTdf107931_KERN_enabledDefStyle.doc")
 {
     // Paragraph 3: the default style has kerning enabled
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
@@ -196,7 +196,7 @@ DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_enabledDefStyle, "testTdf107931_KERN_e
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
 {
     // the paragraph style should set table's text-flow break-before-page
     CPPUNIT_ASSERT_EQUAL( 2, getPages() );
@@ -215,7 +215,7 @@ DECLARE_WW8EXPORT_TEST(testBnc863018b, "bnc863018b.doc")
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf112517_maxSprms, "tdf112517_maxSprms.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf112517_maxSprms, "tdf112517_maxSprms.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -223,7 +223,7 @@ DECLARE_WW8EXPORT_TEST(testTdf112517_maxSprms, "tdf112517_maxSprms.doc")
     CPPUNIT_ASSERT_EQUAL( sal_Int32(28), xTable->getRows()->getCount() );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
 {
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
@@ -233,7 +233,7 @@ DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, getParagraphs(xEndnote) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -242,7 +242,7 @@ DECLARE_WW8EXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFo
     CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf116570_exportFootnote, "tdf116570_exportFootnote.odt")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf116570_exportFootnote, "tdf116570_exportFootnote.odt")
 {
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -252,7 +252,7 @@ DECLARE_WW8EXPORT_TEST(testTdf116570_exportFootnote, "tdf116570_exportFootnote.o
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in first footnote", 2, getParagraphs(xFootnoteText) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJustification.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJustification.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -265,18 +265,18 @@ DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJ
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOrTable(2), "ParaAdjust")) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf98620_rtlJustify, "tdf98620_rtlJustify.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf98620_rtlJustify, "tdf98620_rtlJustify.doc")
 {
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
 {
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), "ParaAdjust")) );
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(2), "ParaAdjust"));
@@ -296,7 +296,7 @@ DECLARE_WW8EXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx"
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT), getProperty<sal_Int16>(getParagraph(14), "ParaAdjust"));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc")
+DECLARE_WW8EXPORT_EXPORTONLY_TEST(testTdf119232_startEvenPage, "tdf119232_startEvenPage.doc")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getProperty<sal_Int16>(getParagraph(1), "PageNumberOffset"));
 }
