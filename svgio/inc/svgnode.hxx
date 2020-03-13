@@ -85,7 +85,7 @@ namespace svgio
         {
         private:
             /// basic data, Type, document we belong to and parent (if not root)
-            SVGToken const              maType;
+            SVGToken                    maType;
             SvgDocument&                mrDocument;
             const SvgNode*              mpParent;
             const SvgNode*              mpAlternativeParent;
