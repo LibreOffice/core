@@ -59,7 +59,6 @@ $(eval $(call gb_Module_add_l10n_targets,extras,\
 ifneq ($(WITH_GALLERY_BUILD),)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
-	Gallery_bpmn \
 	Gallery_backgrounds \
 	Gallery_computers \
 	Gallery_diagrams \
