@@ -39,7 +39,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-enum FormularCommand
+enum FormulaCommand
 {
     FC_MULDIV = 0,
     FC_PLUSMINUS,
@@ -60,12 +60,12 @@ enum FormularCommand
     FC_TAN,
     FC_VAL
 };
-struct FormularCommandNameTable
+struct FormulaCommandNameTable
 {
     const char*     pS;
-    FormularCommand const pE;
+    FormulaCommand const pE;
 };
-static const FormularCommandNameTable pFormularCommandNameTable[] =
+static const FormulaCommandNameTable pFormulaCommandNameTable[] =
 {
     { "*/",     FC_MULDIV },
     { "+-",     FC_PLUSMINUS },
@@ -87,7 +87,7 @@ static const FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef std::unordered_map< OUString, FormularCommand > FormulaCommandHMap;
+typedef std::unordered_map< OUString, FormulaCommand > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 
@@ -445,7 +445,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
     if ( !pCommandHashMap )
     {
         FormulaCommandHMap* pHM = new FormulaCommandHMap;
-        for(const FormularCommandNameTable& i : pFormularCommandNameTable)
+        for(const FormulaCommandNameTable& i : pFormulaCommandNameTable)
             (*pHM)[ OUString::createFromAscii( i.pS ) ] =  i.pE;
         pCommandHashMap = pHM;
     }
