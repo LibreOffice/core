@@ -15,8 +15,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
-#include <svtools/miscopt.hxx>
-#include <config_firebird.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;

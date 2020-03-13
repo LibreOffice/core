@@ -9,18 +9,11 @@
 
 #include "dbtest_base.cxx"
 
-#include <hsqlimport.hxx>
-
 #include <osl/process.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <test/unoapi_test.hxx>
 #include <svtools/miscopt.hxx>
-
-using namespace dbahsql;
 
 class Tdf126268Test : public DBTestBase
 {
