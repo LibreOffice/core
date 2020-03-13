@@ -15,6 +15,8 @@ from uitest.debug import sleep
 import org.libreoffice.unotest
 import pathlib
 
+from com.sun.star.lang import Locale
+
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
