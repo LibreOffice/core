@@ -292,21 +292,21 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication final :
                   public css::lang::XTypeProvider,
                   public css::ucb::XInteractionSupplyAuthentication2
 {
-    css::uno::Sequence< css::ucb::RememberAuthentication > const
+    css::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberPasswordModes;
-    css::uno::Sequence< css::ucb::RememberAuthentication > const
+    css::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberAccountModes;
     OUString m_aRealm;
     OUString m_aUserName;
     OUString m_aPassword;
     css::ucb::RememberAuthentication m_eRememberPasswordMode;
-    css::ucb::RememberAuthentication const m_eDefaultRememberPasswordMode;
-    css::ucb::RememberAuthentication const m_eDefaultRememberAccountMode;
-    bool const m_bCanSetRealm    : 1;
-    bool const m_bCanSetUserName : 1;
-    bool const m_bCanSetPassword : 1;
-    bool const m_bCanSetAccount  : 1;
-    bool const m_bCanUseSystemCredentials     : 1;
+    css::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
+    css::ucb::RememberAuthentication m_eDefaultRememberAccountMode;
+    bool m_bCanSetRealm    : 1;
+    bool m_bCanSetUserName : 1;
+    bool m_bCanSetPassword : 1;
+    bool m_bCanSetAccount  : 1;
+    bool m_bCanUseSystemCredentials     : 1;
     bool m_bUseSystemCredentials        : 1;
 
 public:
