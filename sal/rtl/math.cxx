@@ -241,7 +241,7 @@ void doubleToString(typename T::String ** pResult,
     if (bSign)
         fValue = -fValue;
 
-    if (rtl::math::isNan(fValue))
+    if (std::isnan(fValue))
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");

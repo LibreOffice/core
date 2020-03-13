@@ -213,8 +213,8 @@ bool SwTableBoxValue::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     SwTableBoxValue const& rOther( static_cast<SwTableBoxValue const&>(rAttr) );
     // items with NaN should be equal to enable pooling
-    return ::rtl::math::isNan( m_nValue )
-        ?   ::rtl::math::isNan( rOther.m_nValue )
+    return std::isnan( m_nValue )
+        ?   std::isnan( rOther.m_nValue )
         :   ( m_nValue == rOther.m_nValue );
 }
 

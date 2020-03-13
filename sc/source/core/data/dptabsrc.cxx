@@ -403,7 +403,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
     {
         // Try to get result from the leaf nodes.
         double fVal = maResFilterSet.getLeafResult(aFilters[0]);
-        if (!rtl::math::isNan(fVal))
+        if (!std::isnan(fVal))
         {
             uno::Sequence<double> aRet(1);
             aRet[0] = fVal;

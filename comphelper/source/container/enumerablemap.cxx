@@ -471,7 +471,7 @@ namespace comphelper
         {
             double nValue(0);
             if ( _keyOrValue >>= nValue )
-                if ( ::rtl::math::isNan( nValue ) )
+                if ( std::isnan( nValue ) )
                     throw IllegalArgumentException(
                         "NaN (not-a-number) not supported by this implementation.",
                         *const_cast< EnumerableMap* >( this ), 0 );

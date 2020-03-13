@@ -69,7 +69,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
     {
         if( auto pDouble = o3tl::tryAccess<double>(rAny) )
         {
-            if( ::rtl::math::isNan(*pDouble) )
+            if( std::isnan(*pDouble) )
                 return OUString();
             return ::rtl::math::doubleToUString(
                 * pDouble,

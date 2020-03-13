@@ -537,9 +537,9 @@ void BarChart::createShapes()
                 rXSlot.calculateYMinAndMaxForCategory( nPointIndex
                     , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
-                if( !::rtl::math::isNan( fMaximumY ) && fMaximumY > 0)
+                if( !std::isnan( fMaximumY ) && fMaximumY > 0)
                     aLogicYSumMap[nAttachedAxisIndex] += fMaximumY;
-                if( !::rtl::math::isNan( fMinimumY ) && fMinimumY < 0)
+                if( !std::isnan( fMinimumY ) && fMinimumY < 0)
                     aLogicYSumMap[nAttachedAxisIndex] += fabs(fMinimumY);
             }
         }
@@ -571,11 +571,11 @@ void BarChart::createShapes()
                         , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 double fLogicPositiveYSum = 0.0;
-                if( !::rtl::math::isNan( fMaximumY ) )
+                if( !std::isnan( fMaximumY ) )
                     fLogicPositiveYSum = fMaximumY;
 
                 double fLogicNegativeYSum = 0.0;
-                if( !::rtl::math::isNan( fMinimumY ) )
+                if( !std::isnan( fMinimumY ) )
                     fLogicNegativeYSum = fMinimumY;
 
                 if( pPosHelper->isPercentY() )
@@ -646,7 +646,7 @@ void BarChart::createShapes()
                     //collect data point information (logic coordinates, style ):
                     double fUnscaledLogicX = pSeries->getXValue( nPointIndex );
                     fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
-                    if(rtl::math::isNan(fUnscaledLogicX))
+                    if(std::isnan(fUnscaledLogicX))
                         continue;//point not visible
                     if(fUnscaledLogicX<pPosHelper->getLogicMinX())
                         continue;//point not visible
@@ -657,7 +657,7 @@ void BarChart::createShapes()
                     double fLogicX = pPosHelper->getScaledSlotPos( fUnscaledLogicX, fSlotX );
 
                     double fLogicBarHeight = pSeries->getYValue( nPointIndex );
-                    if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
+                    if( std::isnan( fLogicBarHeight )) //no value at this category
                         continue;
 
                     double fLogicValueForLabeDisplay = fLogicBarHeight;
@@ -867,7 +867,7 @@ void BarChart::createShapes()
                             if(bHasFillColorMapping)
                             {
                                 double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
-                                if(!rtl::math::isNan(nPropVal))
+                                if(!std::isnan(nPropVal))
                                 {
                                     uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
                                     xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(nPropVal)));

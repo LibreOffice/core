@@ -115,8 +115,8 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     double fResult;
     ::rtl::math::setNan( & fResult );
 
-    if( ! ( ::rtl::math::isNan( m_fLogSlope ) ||
-            ::rtl::math::isNan( m_fLogIntercept )))
+    if( ! ( std::isnan( m_fLogSlope ) ||
+            std::isnan( m_fLogIntercept )))
     {
         fResult = m_fSign * exp(m_fLogIntercept + x * m_fLogSlope);
     }

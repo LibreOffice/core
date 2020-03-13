@@ -51,7 +51,7 @@ double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidC
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
         const double fData = rData[i];
-        if( ::rtl::math::isNan( fData ))
+        if( std::isnan( fData ))
             --rOutValidCount;
         else
         {
@@ -173,7 +173,7 @@ double StatisticsHelper::getVariance(
 double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData )
 {
     double fResult = getVariance( rData );
-    if( ! ::rtl::math::isNan( fResult ))
+    if( ! std::isnan( fResult ))
         fResult = sqrt( fResult );
 
     return fResult;
@@ -186,7 +186,7 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
     double fResult;
 
     if( nValCount == 0 ||
-        ::rtl::math::isNan( fVar ))
+        std::isnan( fVar ))
     {
         ::rtl::math::setNan( & fResult );
     }

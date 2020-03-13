@@ -1851,8 +1851,8 @@ void Test::testMatrix()
         CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(pChecks), aDoubles.size());
         for (size_t i = 0, n = aDoubles.size(); i < n; ++i)
         {
-            if (rtl::math::isNan(pChecks[i]))
-                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", rtl::math::isNan(aDoubles[i]));
+            if (std::isnan(pChecks[i]))
+                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", std::isnan(aDoubles[i]));
             else
                 CPPUNIT_ASSERT_EQUAL(pChecks[i], aDoubles[i]);
         }
@@ -1867,8 +1867,8 @@ void Test::testMatrix()
         CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(pChecks), aDoubles.size());
         for (size_t i = 0, n = aDoubles.size(); i < n; ++i)
         {
-            if (rtl::math::isNan(pChecks[i]))
-                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", rtl::math::isNan(aDoubles[i]));
+            if (std::isnan(pChecks[i]))
+                CPPUNIT_ASSERT_MESSAGE("NaN is expected, but it's not.", std::isnan(aDoubles[i]));
             else
                 CPPUNIT_ASSERT_EQUAL(pChecks[i], aDoubles[i]);
         }
