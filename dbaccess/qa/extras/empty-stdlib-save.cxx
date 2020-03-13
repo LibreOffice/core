@@ -8,31 +8,16 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
 #include <test/unoapi_test.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
-
-#include <basic/sbxdef.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -10,11 +10,6 @@
 #include "dbtest_base.cxx"
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XStatement.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
