@@ -213,7 +213,7 @@ class chartDataLabels(UITestCase):
 
     self.ui_test.close_doc()
 
-  def test_tdf131291(self):
+   def test_tdf131291(self):
     calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131291.ods"))
     xCalcDoc = self.xUITest.getTopFocusWindow()
     gridwin = xCalcDoc.getChild("grid_window")
@@ -241,22 +241,22 @@ class chartDataLabels(UITestCase):
     xNumberFormatBtn = xDialog.getChild("PB_NUMBERFORMAT")
 
     def handle_number_dlg(dialog):
-            categoryformat = dialog.getChild("categorylb")
-            formatted = dialog.getChild("formatted")
+        categoryformat = dialog.getChild("categorylb")
+        formatted = dialog.getChild("formatted")
 
-            # Select currency
-            categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-            categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+        # Select currency
+        categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+        categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
 
-            self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
+        self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
 
-            self.assertEqual(get_state_as_dict(formatted)["Text"], "[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00")
+        self.assertEqual(get_state_as_dict(formatted)["Text"], "[$$-409]#,##0.00;[RED]-[$$-409]#,##0.00")
 
-            xOKButton = dialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKButton)
+        xOKButton = dialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKButton)
 
     self.ui_test.execute_blocking_action(xNumberFormatBtn.executeAction, args=('CLICK', ()),
-                dialog_handler=handle_number_dlg)
+        dialog_handler=handle_number_dlg)
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
@@ -285,4 +285,5 @@ class chartDataLabels(UITestCase):
     self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
     self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
     self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
