@@ -1327,17 +1327,20 @@ void SdImportTest::testPDFImportShared()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected more than one page.", size_t(3), aGraphics.size());
 
-    Graphic aFirstGraphic = aGraphics[0];
+    Graphic const & rFirstGraphic = aGraphics[0];
 
-    for (size_t i = 1; i < aGraphics.size(); ++i)
+    for (size_t i = 0; i < aGraphics.size(); ++i)
     {
+        Graphic const & rGraphic = aGraphics[i];
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all PDF streams to be identical.",
-                                     aFirstGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
-                                     aGraphics[i].getVectorGraphicData()->getVectorGraphicDataArray().getConstArray());
+                                     rFirstGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
+                                     rGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all GfxLinks to be identical.",
-                                     aFirstGraphic.GetSharedGfxLink().get(),
-                                     aGraphics[i].GetSharedGfxLink().get());
+                                     rFirstGraphic.GetSharedGfxLink().get(),
+                                     rGraphic.GetSharedGfxLink().get());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Page number doesn't match expected", sal_Int32(i), rGraphic.getPageNumber());
     }
 
     xDocShRef->DoClose();
