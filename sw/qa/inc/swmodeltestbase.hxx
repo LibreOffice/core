@@ -881,7 +881,6 @@ protected:
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
     void save(const OUString& aFilterName, utl::TempFile& rTempFile)
     {
-        rTempFile.EnableKillingFile();
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= aFilterName;
