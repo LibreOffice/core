@@ -616,6 +616,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
         // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
         sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
+        //RTF code gets here... assert( nMode > 0 && "undefined compatibiltyMode should not be possible anymore, but if it is, still treat is as 12 on import" );
 
         if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
