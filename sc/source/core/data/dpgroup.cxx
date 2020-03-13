@@ -72,7 +72,7 @@ bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
         double fVal = rValue.GetValue();
         if (std::isinf(fVal))
         {
-            if (rtl::math::isSignBitSet(fVal))
+            if (std::signbit(fVal))
             {
                 // Less than the min value.
                 if (rCellData.GetValue() < maNumInfo.mfStart)

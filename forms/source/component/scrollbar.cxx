@@ -54,7 +54,7 @@ namespace frm
             if ( std::isinf( nExternalValue ) )
             {
                 // set the minimum or maximum of the scroll values
-                OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
+                OUString sLimitPropertyName = std::signbit( nExternalValue )
                     ? _rMinValueName : _rMaxValueName;
                 if ( _rxProperties.is() )
                     _rxProperties->getPropertyValue( sLimitPropertyName ) >>= nControlValue;

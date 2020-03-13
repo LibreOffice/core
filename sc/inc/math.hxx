@@ -55,7 +55,7 @@ inline double divide( const double& fNumerator, const double& fDenominator )
         double fVal;
         if (std::isfinite( fNumerator) && fNumerator != 0.0)
         {
-            rtl::math::setInf( &fVal, rtl::math::isSignBitSet( fNumerator));
+            rtl::math::setInf( &fVal, std::signbit( fNumerator));
         }
         else
         {
