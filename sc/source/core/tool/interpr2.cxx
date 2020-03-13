@@ -3724,7 +3724,7 @@ void ScInterpreter::ScGetPivotData()
     }
 
     double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
-    if (rtl::math::isNan(fVal))
+    if (std::isnan(fVal))
     {
         PushError(FormulaError::NoRef);
         return;

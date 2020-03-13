@@ -1957,7 +1957,7 @@ void VCartesianAxis::createShapes()
         if( !AxisHelper::isAxisPositioningEnabled() )
         {
             double fExtraLineCrossesOtherAxis = getExtraLineIntersectionValue();
-            if (!rtl::math::isNan(fExtraLineCrossesOtherAxis))
+            if (!std::isnan(fExtraLineCrossesOtherAxis))
             {
                 B2DVector aStart, aEnd;
                 AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;

@@ -221,7 +221,7 @@ bool isEmpty( const formula::VectorRefArray& rArray, size_t nPos )
     }
 
     if (rArray.mpNumericArray)
-        return rtl::math::isNan(rArray.mpNumericArray[nPos]);
+        return std::isnan(rArray.mpNumericArray[nPos]);
     else
         return true;
 }
@@ -705,33 +705,33 @@ void Test::testFetchVectorRefArray()
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 3); // A1:A3
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[2]));
 
     // Totally empty range in a non-empty column (Column B).
     m_pDoc->SetString(ScAddress(1,10,0), "Some text"); // B11
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,0,0), 3); // B1:B3
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[2]));
 
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,12,0), 3); // B13:B15
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[2]));
 
     // These values come from a cache because of the call above.
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,1,0), 3); // B2:B4
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[0]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[1]));
+    CPPUNIT_ASSERT(std::isnan(aArray.mpNumericArray[2]));
 
     // The column begins with a string header at row 1 (Column C).
     m_pDoc->SetString(ScAddress(2,0,0), "MyHeader");

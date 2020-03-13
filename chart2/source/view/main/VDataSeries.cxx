@@ -116,7 +116,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
     sal_Int32 nCount = rData.Doubles.getLength();
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
-        if( !::rtl::math::isNan( rData.Doubles[i] ) )
+        if( !std::isnan( rData.Doubles[i] ) )
             return;
     }
     //no double value is contained
@@ -137,7 +137,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
 {
     if( nMissingValueTreatment == css::chart::MissingValueTreatment::USE_ZERO
-        && (::rtl::math::isNan(rfValue) || std::isinf(rfValue)) )
+        && (std::isnan(rfValue) || std::isinf(rfValue)) )
             rfValue = 0.0;
 }
 
@@ -501,7 +501,7 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
     if(aValuesX.hasElements())
     {
         sal_Int32 i = 0;
-        while ( i < aValuesX.getLength() && ::rtl::math::isNan(aValuesX[i]) )
+        while ( i < aValuesX.getLength() && std::isnan(aValuesX[i]) )
             i++;
         if ( i < aValuesX.getLength() )
             fMax = fMin = aValuesX[i++];
@@ -770,7 +770,7 @@ uno::Sequence< double > const & VDataSeries::getAllY() const
 
 double VDataSeries::getXMeanValue() const
 {
-    if( ::rtl::math::isNan( m_fXMeanValue ) )
+    if( std::isnan( m_fXMeanValue ) )
     {
         uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( "com.sun.star.chart2.MeanValueRegressionCurve" ) );
         uno::Sequence< double > aXValuesDummy;
@@ -782,7 +782,7 @@ double VDataSeries::getXMeanValue() const
 
 double VDataSeries::getYMeanValue() const
 {
-    if( ::rtl::math::isNan( m_fYMeanValue ) )
+    if( std::isnan( m_fYMeanValue ) )
     {
         uno::Reference< XRegressionCurveCalculator > xCalculator(
             RegressionCurveHelper::createRegressionCurveCalculatorByServiceName("com.sun.star.chart2.MeanValueRegressionCurve"));

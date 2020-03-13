@@ -68,7 +68,7 @@ bool DateHelper::IsLessThanOneYearAway( const Date& rD1, const Date& rD2 )
 
 double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution )
 {
-    if (rtl::math::isNan(fValue))
+    if (std::isnan(fValue))
         return fValue;
 
     Date aDate(rNullDate); aDate.AddDays(::rtl::math::approxFloor(fValue));

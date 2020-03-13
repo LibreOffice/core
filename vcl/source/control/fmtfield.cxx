@@ -727,7 +727,7 @@ void FormattedField::ReFormat()
         if (TreatingAsNumber())
         {
             double dValue = GetValue();
-            if ( m_bEnableNaN && ::rtl::math::isNan( dValue ) )
+            if ( m_bEnableNaN && std::isnan( dValue ) )
                 return;
             ImplSetValue( dValue, true );
         }

@@ -531,8 +531,8 @@ void Chart2ImportTest::testDOCXChartEmptySeries()
     CPPUNIT_ASSERT_EQUAL(2.4, aValues[1][0]);
     CPPUNIT_ASSERT_EQUAL(4.4, aValues[1][1]);
     //test the third series (empty) values
-    CPPUNIT_ASSERT(rtl::math::isNan(aValues[2][0]));
-    CPPUNIT_ASSERT(rtl::math::isNan(aValues[2][1]));
+    CPPUNIT_ASSERT(std::isnan(aValues[2][0]));
+    CPPUNIT_ASSERT(std::isnan(aValues[2][1]));
 }
 
 void Chart2ImportTest::testDOCXChartValuesSize()
@@ -596,13 +596,13 @@ void Chart2ImportTest::testPPTXSparseChartSeries()
 
     std::vector<std::vector<double> > aValues = getDataSeriesYValuesFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aValues.size());
-    CPPUNIT_ASSERT( rtl::math::isNan( aValues[0][0] ) );
+    CPPUNIT_ASSERT( std::isnan( aValues[0][0] ) );
     CPPUNIT_ASSERT_EQUAL(2.5,  aValues[0][1]);
     CPPUNIT_ASSERT_EQUAL(3.5,  aValues[0][2]);
-    CPPUNIT_ASSERT( rtl::math::isNan( aValues[0][3] ) );
+    CPPUNIT_ASSERT( std::isnan( aValues[0][3] ) );
     CPPUNIT_ASSERT_EQUAL(-2.4, aValues[1][0]);
-    CPPUNIT_ASSERT( rtl::math::isNan( aValues[1][1] ) );
-    CPPUNIT_ASSERT( rtl::math::isNan( aValues[1][2] ) );
+    CPPUNIT_ASSERT( std::isnan( aValues[1][1] ) );
+    CPPUNIT_ASSERT( std::isnan( aValues[1][2] ) );
     CPPUNIT_ASSERT_EQUAL(-2.8, aValues[1][3]);
 }
 
@@ -1633,17 +1633,17 @@ void Chart2ImportTest::testInternalDataProvider() {
     // Parse empty first and last
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}");
     xSequence = xDataSeq->getData();
-    CPPUNIT_ASSERT( rtl::math::isNan( *static_cast<const double*>(xSequence[0].getValue())));
+    CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[0].getValue())));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[2]);
-    CPPUNIT_ASSERT( rtl::math::isNan( *static_cast<const double*>(xSequence[3].getValue())));
+    CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[3].getValue())));
 
     // Parse empty middle
     xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
-    CPPUNIT_ASSERT( rtl::math::isNan( *static_cast<const double*>(xSequence[1].getValue())) );
-    CPPUNIT_ASSERT( rtl::math::isNan( *static_cast<const double*>(xSequence[2].getValue())) );
+    CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[1].getValue())) );
+    CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[2].getValue())) );
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
@@ -2277,10 +2277,10 @@ void Chart2ImportTest::testXaxisValues()
     Sequence<uno::Any> xSequence = xDataSeq->getData();
     // test X values
     CPPUNIT_ASSERT_EQUAL(uno::Any(0.04), xSequence[0]);
-    CPPUNIT_ASSERT(rtl::math::isNan(*static_cast<const double*>(xSequence[1].getValue())));
+    CPPUNIT_ASSERT(std::isnan(*static_cast<const double*>(xSequence[1].getValue())));
     CPPUNIT_ASSERT_EQUAL(uno::Any(0.16), xSequence[2]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(0.11), xSequence[3]);
-    CPPUNIT_ASSERT(rtl::math::isNan(*static_cast<const double*>(xSequence[4].getValue())));
+    CPPUNIT_ASSERT(std::isnan(*static_cast<const double*>(xSequence[4].getValue())));
 }
 
 void Chart2ImportTest::testTdf123504()

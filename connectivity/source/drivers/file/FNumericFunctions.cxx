@@ -108,7 +108,7 @@ ORowSetValue OOp_Ln::operate(const ORowSetValue& lhs) const
 
     double nVal(lhs);
     nVal = log(nVal);
-    if ( rtl::math::isNan(nVal) )
+    if ( std::isnan(nVal) )
         return ORowSetValue();
     return nVal;
 }
@@ -124,7 +124,7 @@ ORowSetValue OOp_Log::operate(const std::vector<ORowSetValue>& lhs) const
     if ( nSize == 2 && !lhs[0].isNull() )
         nVal /= log(static_cast<double>(lhs[0]));
 
-    if ( rtl::math::isNan(nVal) )
+    if ( std::isnan(nVal) )
         return ORowSetValue();
     return nVal;
 }
@@ -135,7 +135,7 @@ ORowSetValue OOp_Log10::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nVal = log(static_cast<double>(lhs));
-    if ( rtl::math::isNan(nVal) )
+    if ( std::isnan(nVal) )
         return ORowSetValue();
     nVal /= log(10.0);
     return nVal;
@@ -155,7 +155,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nVal = sqrt(static_cast<double>(lhs));
-    if ( rtl::math::isNan(nVal) )
+    if ( std::isnan(nVal) )
         return ORowSetValue();
     return nVal;
 }

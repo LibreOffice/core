@@ -269,7 +269,7 @@ sal_uInt32 TIFFReader::ReadIntData()
         break;
         case 11 :
             pTIFF->ReadFloat( nFLOAT );
-            if (!rtl::math::isNan(nFLOAT) && nFLOAT > SAL_MIN_INT32 - 1.0
+            if (!std::isnan(nFLOAT) && nFLOAT > SAL_MIN_INT32 - 1.0
                 && nFLOAT < SAL_MAX_INT32 + 1.0)
             {
                 nUINT32a = static_cast<sal_Int32>(nFLOAT);
@@ -281,7 +281,7 @@ sal_uInt32 TIFFReader::ReadIntData()
         break;
         case 12 :
             pTIFF->ReadDouble( nDOUBLE );
-            if (!rtl::math::isNan(nDOUBLE) && nDOUBLE > SAL_MIN_INT32 - 1.0
+            if (!std::isnan(nDOUBLE) && nDOUBLE > SAL_MIN_INT32 - 1.0
                 && nDOUBLE < SAL_MAX_INT32 + 1.0)
             {
                 nUINT32a = static_cast<sal_Int32>(nDOUBLE);
