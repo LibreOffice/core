@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 
 struct FSStorage_Impl
 {
-    OUString const m_aURL;
+    OUString  m_aURL;
     ::ucbhelper::Content m_aContent;
-    sal_Int32 const m_nMode;
+    sal_Int32 m_nMode;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
     uno::Reference< uno::XComponentContext > m_xContext;
 

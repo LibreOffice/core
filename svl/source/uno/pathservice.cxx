@@ -34,7 +34,7 @@ namespace {
 
 class PathService : public ::cppu::WeakImplHelper< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
-    SvtPathOptions const m_aOptions;
+    SvtPathOptions m_aOptions;
 
 public:
     PathService()
