@@ -44,7 +44,7 @@ namespace {
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
-    OUString const                  msName;
+    OUString                        msName;
 
 public:
     UnoControlHolder( const OUString& rName, const uno::Reference< awt::XControl > & rControl )

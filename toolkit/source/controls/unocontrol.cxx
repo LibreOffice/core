@@ -58,7 +58,7 @@ namespace {
 struct LanguageDependentProp
 {
     const char* pPropName;
-    sal_Int32 const nPropNameLength;
+    sal_Int32   nPropNameLength;
 };
 
 }

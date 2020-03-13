@@ -51,7 +51,7 @@ class MessBox : public ButtonDialog
     VclPtr<FixedImage> mpFixedImage;
     Image maImage;
     bool mbHelpBtn;
-    MessBoxStyle const mnMessBoxStyle;
+    MessBoxStyle mnMessBoxStyle;
 
 protected:
     OUString maMessText;
