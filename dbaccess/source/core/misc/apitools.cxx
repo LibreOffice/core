@@ -18,9 +18,7 @@
  */
 
 #include <apitools.hxx>
-#include <stringconstants.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;

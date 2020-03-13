@@ -19,23 +19,14 @@
 
 #include <apitools.hxx>
 #include <viewcontainer.hxx>
-#include <stringconstants.hxx>
 #include <View.hxx>
 
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 
 using namespace dbaccess;
 using namespace dbtools;

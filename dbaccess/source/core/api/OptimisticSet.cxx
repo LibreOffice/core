@@ -22,32 +22,19 @@
 #include "OptimisticSet.hxx"
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <stringconstants.hxx>
-#include <apitools.hxx>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <list>
 #include <map>
 #include <algorithm>
-#include <string.h>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <querycomposer.hxx>
 #include <composertools.hxx>
 
 using namespace dbaccess;

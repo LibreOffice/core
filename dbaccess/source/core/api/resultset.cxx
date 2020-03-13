@@ -21,22 +21,16 @@
 #include <sal/log.hxx>
 #include <stringconstants.hxx>
 #include <apitools.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "datacolumn.hxx"
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <osl/thread.h>
 
 
 using namespace ::com::sun::star::sdbc;

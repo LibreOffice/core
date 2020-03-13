@@ -28,7 +28,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>

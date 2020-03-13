@@ -18,15 +18,12 @@
  */
 
 #include <PropertyForward.hxx>
-#include <stringconstants.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 
 #include <comphelper/property.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaccess

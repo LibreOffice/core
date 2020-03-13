@@ -21,8 +21,6 @@
 
 #include <com/sun/star/io/TextOutputStream.hpp>
 
-#include <tools/diagnose_ex.h>
-
 namespace dbaccess
 {
 

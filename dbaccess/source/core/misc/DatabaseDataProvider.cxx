@@ -18,34 +18,27 @@
  */
 
 #include <DatabaseDataProvider.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
-#include <connectivity/dbtools.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
-#include <com/sun/star/chart/XDateCategories.hpp>
 
 #include <vector>
-#include <list>
 
 // TODO: update for new HavingClause-aware FilterManager
 

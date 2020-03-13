@@ -18,11 +18,6 @@
  */
 
 #include "CIndexes.hxx"
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/IndexType.hpp>
-#include <stringconstants.hxx>
-#include <connectivity/dbtools.hxx>
 
 
 using namespace connectivity;

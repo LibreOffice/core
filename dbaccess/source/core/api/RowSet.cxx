@@ -23,7 +23,6 @@
 #include <map>
 #include <utility>
 
-#include <string.h>
 #include "RowSet.hxx"
 #include <stringconstants.hxx>
 #include <sdbcoretools.hxx>
@@ -36,7 +35,6 @@
 #include <tablecontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -50,14 +48,10 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <comphelper/property.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -74,10 +68,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/solar.h>
-#include <unotools/configmgr.hxx>
 
 using namespace utl;
 using namespace dbaccess;

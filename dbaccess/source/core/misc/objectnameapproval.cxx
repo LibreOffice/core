@@ -24,7 +24,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 namespace dbaccess
 {

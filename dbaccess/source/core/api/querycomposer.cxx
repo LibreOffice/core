@@ -17,33 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <stringconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#include <unotools/syslocale.hxx>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <querycomposer.hxx>
-#include "HelperCollections.hxx"
 #include <composertools.hxx>
 #include <algorithm>
 
 using namespace dbaccess;
-using namespace dbtools;
 using namespace comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -52,9 +37,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;

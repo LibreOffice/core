@@ -18,8 +18,6 @@
  */
 
 
-#include <stringconstants.hxx>
-
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -32,7 +30,6 @@
 #include <preparedstatement.hxx>
 #include "resultcolumn.hxx"
 #include "resultset.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;

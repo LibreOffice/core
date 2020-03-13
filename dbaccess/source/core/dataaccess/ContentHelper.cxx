@@ -17,26 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
 #include <ContentHelper.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include "myucp_resultset.hxx"
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <apitools.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
+
+#include <map>
 
 namespace dbaccess
 {

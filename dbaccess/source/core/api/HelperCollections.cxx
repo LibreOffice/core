@@ -19,7 +19,6 @@
 
 #include "HelperCollections.hxx"
 
-#include <stringconstants.hxx>
 #include <strings.hxx>
 
 #include <osl/diagnose.h>

@@ -20,6 +20,7 @@
 #include "documentcontainer.hxx"
 #include <stringconstants.hxx>
 #include "documentdefinition.hxx"
+#include <ModelImpl.hxx>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <connectivity/dbtools.hxx>
@@ -29,8 +30,6 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include "datasource.hxx"
-#include <comphelper/classids.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <core_resource.hxx>

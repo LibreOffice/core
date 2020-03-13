@@ -18,16 +18,12 @@
  */
 
 #include <datasettings.hxx>
-#include <apitools.hxx>
 #include <stringconstants.hxx>
+#include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <vcl/svapp.hxx>
-#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
-
-#include <com/sun/star/awt/FontWidth.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

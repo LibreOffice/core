@@ -19,13 +19,7 @@
 
 
 #include "intercept.hxx"
-#include <stringconstants.hxx>
 
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <cppuhelper/weak.hxx>
-
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <memory>

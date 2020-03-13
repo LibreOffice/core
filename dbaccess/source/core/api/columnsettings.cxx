@@ -23,9 +23,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaccess

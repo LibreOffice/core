@@ -15,6 +15,7 @@ blacklist:
     - cppuhelper/factory.hxx
     dbaccess/source/inc/apitools.hxx:
     # Needed for macros to work
+    - com/sun/star/beans/PropertyAttribute.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - comphelper/sequence.hxx
     - strings.hxx
@@ -30,3 +31,38 @@ blacklist:
     dbaccess/source/ui/querydesign/QueryTabConnUndoAction.hxx:
     # Needed for direct member access
     - JoinTableView.hxx
+    dbaccess/source/core/api/CacheSet.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    dbaccess/source/core/api/KeySet.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDatabaseMetaData.hpp
+    - com/sun/star/sdbc/XPreparedStatement.hpp
+    - com/sun/star/io/XInputStream.hpp
+    dbaccess/source/core/api/TableDeco.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/core/api/query.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    # Needed for inline OMultiTypeInterfaceContainerHelperVar
+    - cppuhelper/interfacecontainer.hxx
+    dbaccess/source/core/api/querycontainer.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/core/dataaccess/ComponentDefinition.cxx:
+    # Needed for inline OMultiTypeInterfaceContainerHelperVar
+    - cppuhelper/interfacecontainer.hxx
+    dbaccess/source/core/dataaccess/definitioncontainer.cxx:
+    # Needed for inline OMultiTypeInterfaceContainerHelperVar
+    - cppuhelper/interfacecontainer.hxx
+    dbaccess/source/core/dataaccess/databasedocument.cxx:
+    # Actually used
+    - com/sun/star/script/XStorageBasedLibraryContainer.hpp
+    - com/sun/star/io/XOutputStream.hpp
+    dbaccess/source/core/dataaccess/documentevents.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    dbaccess/source/core/misc/DatabaseDataProvider.cxx:
+    # Needed for UnoType macro to work
+    - com/sun/star/task/XInteractionHandler.hpp

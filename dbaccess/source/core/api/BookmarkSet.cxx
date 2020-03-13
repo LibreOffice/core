@@ -23,8 +23,6 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <connectivity/dbexception.hxx>
 
-#include <limits>
-
 using namespace dbaccess;
 using namespace ::connectivity;
 using namespace ::dbtools;

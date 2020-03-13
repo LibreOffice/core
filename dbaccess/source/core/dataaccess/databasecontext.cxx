@@ -19,23 +19,18 @@
 
 #include <config_features.h>
 
-#include <apitools.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <databasecontext.hxx>
-#include "databasedocument.hxx"
 #include "databaseregistrations.hxx"
 #include "datasource.hxx"
-#include <stringconstants.hxx>
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -62,12 +57,9 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svl/filenotation.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/confignode.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vector>
 
