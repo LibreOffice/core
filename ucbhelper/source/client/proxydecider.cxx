@@ -68,7 +68,7 @@ namespace {
 class WildCard
 {
 private:
-    OString const m_aWildString;
+    OString m_aWildString;
 
 public:
     explicit WildCard( const OUString& rWildCard )

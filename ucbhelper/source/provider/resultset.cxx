@@ -43,8 +43,8 @@ namespace {
 struct PropertyInfo
 {
     const char* pName;
-    sal_Int32 const   nHandle;
-    sal_Int16 const   nAttributes;
+    sal_Int32   nHandle;
+    sal_Int16   nAttributes;
     const uno::Type& (*pGetCppuType)();
 };
 
@@ -152,7 +152,7 @@ struct ResultSet_Impl
     uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
     uno::Reference< beans::XPropertySetInfo >       m_xPropSetInfo;
     uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
-    uno::Sequence< beans::Property > const          m_aProperties;
+    uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     osl::Mutex                          m_aMutex;
     std::unique_ptr<cppu::OInterfaceContainerHelper> m_pDisposeEventListeners;
