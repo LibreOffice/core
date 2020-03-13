@@ -378,9 +378,8 @@ class FormattingController implements View.OnClickListener {
     }
 
     private void sendImagePickingIntent() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_PICK);
         mContext.startActivityForResult(Intent.createChooser(intent,
                 mContext.getResources().getString(R.string.select_photo_title)), SELECT_PHOTO);
     }
