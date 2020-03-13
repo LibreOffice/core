@@ -121,9 +121,9 @@ Extension  ::=  SEQUENCE  {
 */
 
 struct Extension {
-    SECItem const extnID;
-    SECItem const critical;
-    SECItem const extnValue;
+    SECItem  extnID;
+    SECItem  critical;
+    SECItem  extnValue;
 };
 
 /*
