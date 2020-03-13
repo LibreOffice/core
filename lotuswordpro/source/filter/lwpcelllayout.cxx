@@ -713,10 +713,7 @@ void LwpConnectedCellLayout::SetCellMap()
 LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout)
 {
     if (!pTableLayout)
-    {
-        assert(false);
-        return enumWholeBorder;
-    }
+        throw std::runtime_error("missing table layout");
 
     sal_uInt16 nRowSpan = m_nRealrowspan;
 
