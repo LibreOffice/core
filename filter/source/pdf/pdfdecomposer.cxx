@@ -39,8 +39,9 @@ public:
     XPdfDecomposer& operator=(const XPdfDecomposer&) = delete;
 
     // XPdfDecomposer
-    uno::Sequence<uno::Reference<graphic::XPrimitive2D>>
-        SAL_CALL getDecomposition(const uno::Sequence<sal_Int8>& xPdfData) override;
+    uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
+    getDecomposition(const uno::Sequence<sal_Int8>& xPdfData,
+                     const uno::Sequence<beans::PropertyValue>& xDecompositionParameters) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -50,12 +51,27 @@ public:
 
 XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
 
-uno::Sequence<uno::Reference<graphic::XPrimitive2D>>
-    SAL_CALL XPdfDecomposer::getDecomposition(const uno::Sequence<sal_Int8>& xPdfData)
+uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::getDecomposition(
+    const uno::Sequence<sal_Int8>& xPdfData, const uno::Sequence<beans::PropertyValue>& xParameters)
 {
+    sal_Int32 nPageIndex = -1;
+
+    for (sal_Int32 index = 0; index < xParameters.getLength(); index++)
+    {
+        const beans::PropertyValue& rProperty = xParameters[index];
+
+        if (rProperty.Name == "PageIndex")
+        {
+            rProperty.Value >>= nPageIndex;
+        }
+    }
+
+    if (nPageIndex < 0)
+        nPageIndex = 0;
+
     std::vector<Bitmap> aBitmaps;
-    vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps, 0,
-                          1 /*, fResolutionDPI*/);
+    vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps, nPageIndex, 1);
+
     BitmapEx aReplacement(aBitmaps[0]);
 
     // short form for scale and translate transformation
