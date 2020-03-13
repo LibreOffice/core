@@ -22,35 +22,27 @@
 #include <iterator>
 
 #include "connection.hxx"
-#include <stringconstants.hxx>
 #include "datasource.hxx"
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <statement.hxx>
 #include <preparedstatement.hxx>
 #include <callablestatement.hxx>
-#include <ContainerMediator.hxx>
 #include <SingleSelectQueryComposer.hxx>
 #include <querycomposer.hxx>
-#include <sdbcoretools.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/tools/ConnectionTools.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <connectivity/dbexception.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -18,17 +18,14 @@
  */
 
 #include <ContainerMediator.hxx>
-#include <apitools.hxx>
 #include <column.hxx>
 #include <strings.hrc>
+#include <strings.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
 #include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdb/tools/XTableAlteration.hpp>
 
 #include <comphelper/sequence.hxx>
@@ -36,12 +33,8 @@
 #include <comphelper/uno3.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
-
-#include <algorithm>
 
 using namespace dbaccess;
 using namespace connectivity;

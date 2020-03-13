@@ -23,8 +23,6 @@
 #include <svtools/miscopt.hxx>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
-#include <stringconstants.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 
 namespace dbaccess

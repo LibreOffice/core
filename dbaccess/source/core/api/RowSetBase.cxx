@@ -26,18 +26,14 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/debug.hxx>
 
 using namespace dbaccess;
 using namespace connectivity;

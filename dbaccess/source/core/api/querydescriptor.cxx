@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "querydescriptor.hxx"
 #include <apitools.hxx>
 #include <stringconstants.hxx>
@@ -26,7 +24,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <definitioncolumn.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

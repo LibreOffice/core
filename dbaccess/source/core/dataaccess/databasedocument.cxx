@@ -19,29 +19,21 @@
 
 #include <core_resource.hxx>
 #include <strings.hrc>
-#include "datasource.hxx"
 #include "databasedocument.hxx"
-#include <stringconstants.hxx>
 #include "documenteventexecutor.hxx"
 #include <databasecontext.hxx>
 #include "documentcontainer.hxx"
 #include <sdbcoretools.hxx>
 #include <recovery/dbdocrecovery.hxx>
 
-#include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
-#include <com/sun/star/embed/EntryInitModes.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
@@ -51,10 +43,8 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -79,13 +69,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/errcode.hxx>
-#include <sal/log.hxx>
-
-#include <list>
 
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
