@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec570665_8d2e5be0",
+        "filename": "i18npool/source/localedata/data/sun_ID.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-13T01:20:08Z",
+      "side": 1,
+      "message": "Btw, translating the IDs wasn\u0027t necessary, but here it doesn\u0027t matter either.",
+      "range": {
+        "startLine": 257,
+        "startChar": 17,
+        "endLine": 257,
+        "endChar": 30
+      },
+      "revId": "57f3fd4361fdeec4ced6f417e9431ef8e070aa7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
