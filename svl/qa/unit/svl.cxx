@@ -244,9 +244,9 @@ void Test::testNumberFormat()
     };
 
     struct {
-        NfIndexTableOffset const eStart;
-        NfIndexTableOffset const eEnd;
-        size_t const nSize;
+        NfIndexTableOffset eStart;
+        NfIndexTableOffset eEnd;
+        size_t nSize;
         const char** pCodes;
     } aTests[] = {
         { NF_NUMBER_START, NF_NUMBER_END, 6, pNumber },
@@ -1114,7 +1114,7 @@ void Test::testIsNumberFormat()
     static struct NumberFormatData
     {
         const char* pFormat;
-        bool const bIsNumber;
+        bool bIsNumber;
     } const aTests[] = {
         { "20.3", true },
         { "2", true },
