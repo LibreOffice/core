@@ -768,35 +768,35 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 GetDlgWindowType nType;
                 GetFocusFlags    nGetFocusFlags = GetFocusFlags::Tab;
                 sal_uInt16  nNewIndex;
-                bool        bFormular = false;
+                bool        bForm = false;
 
                 // for Ctrl-Tab check if we want to jump to next template
                 if ( aKeyCode.IsMod1() )
                 {
                     // search group
-                    vcl::Window* pFormularFirstWindow = nullptr;
-                    vcl::Window* pLastFormularFirstWindow = nullptr;
+                    vcl::Window* pFormFirstWindow = nullptr;
+                    vcl::Window* pLastFormFirstWindow = nullptr;
                     pTempWindow = ImplGetChildWindow( this, 0, iTemp, false );
-                    vcl::Window* pPrevFirstFormularFirstWindow = nullptr;
-                    vcl::Window* pFirstFormularFirstWindow = pTempWindow;
+                    vcl::Window* pPrevFirstFormFirstWindow = nullptr;
+                    vcl::Window* pFirstFormFirstWindow = pTempWindow;
                     while ( pTempWindow )
                     {
                         if ( pTempWindow->ImplGetWindow()->IsDialogControlStart() )
                         {
                             if ( iTemp != 0 )
-                                bFormular = true;
+                                bForm = true;
                             if ( aKeyCode.IsShift() )
                             {
                                 if ( iTemp <= nIndex )
-                                    pFormularFirstWindow = pPrevFirstFormularFirstWindow;
-                                pPrevFirstFormularFirstWindow = pTempWindow;
+                                    pFormFirstWindow = pPrevFirstFormFirstWindow;
+                                pPrevFirstFormFirstWindow = pTempWindow;
                             }
                             else
                             {
-                                if ( (iTemp > nIndex) && !pFormularFirstWindow )
-                                    pFormularFirstWindow = pTempWindow;
+                                if ( (iTemp > nIndex) && !pFormFirstWindow )
+                                    pFormFirstWindow = pTempWindow;
                             }
-                            pLastFormularFirstWindow = pTempWindow;
+                            pLastFormFirstWindow = pTempWindow;
                         }
 
                         pTempWindow = ImplGetNextWindow( this, iTemp, iTemp, false );
@@ -804,34 +804,34 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             pTempWindow = nullptr;
                     }
 
-                    if ( bFormular )
+                    if ( bForm )
                     {
-                        if ( !pFormularFirstWindow )
+                        if ( !pFormFirstWindow )
                         {
                             if ( aKeyCode.IsShift() )
-                                pFormularFirstWindow = pLastFormularFirstWindow;
+                                pFormFirstWindow = pLastFormFirstWindow;
                             else
-                                pFormularFirstWindow = pFirstFormularFirstWindow;
+                                pFormFirstWindow = pFirstFormFirstWindow;
                         }
 
                         sal_uInt16 nFoundFormStart = 0;
                         sal_uInt16 nFoundFormEnd = 0;
                         sal_uInt16 nTempIndex = 0;
-                        if ( ::ImplFindDlgCtrlWindow( this, pFormularFirstWindow, nTempIndex,
+                        if ( ::ImplFindDlgCtrlWindow( this, pFormFirstWindow, nTempIndex,
                                                       nFoundFormStart, nFoundFormEnd ) )
                         {
                             nTempIndex = nFoundFormStart;
-                            pFormularFirstWindow = ImplGetDlgWindow( nTempIndex, GetDlgWindowType::First, nFoundFormStart, nFoundFormEnd );
-                            if ( pFormularFirstWindow )
+                            pFormFirstWindow = ImplGetDlgWindow( nTempIndex, GetDlgWindowType::First, nFoundFormStart, nFoundFormEnd );
+                            if ( pFormFirstWindow )
                             {
-                                pFormularFirstWindow->ImplControlFocus();
+                                pFormFirstWindow->ImplControlFocus();
                                 return true;
                             }
                         }
                     }
                 }
 
-                if ( !bFormular )
+                if ( !bForm )
                 {
                     // Only use Ctrl-TAB if it was allowed for the whole
                     // dialog or for the current control (#103667#)
