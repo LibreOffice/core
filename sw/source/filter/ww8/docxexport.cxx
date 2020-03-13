@@ -1091,6 +1091,15 @@ void DocxExport::WriteSettings()
         bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
     }
+
+    /* Compatibility Mode
+     * 11:  .doc level    [Word 97-2003]
+     * 12:  .docx default [Word 2007]  [LO < 7.0]
+     * 14:                [Word 2010]
+     * 15:                [Word 2013/2016/2019]  [LO >= 7.0]
+     */
+    const sal_Int32 nTargetCompatibilityMode = 15;
+    bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
@@ -1142,10 +1151,26 @@ void DocxExport::WriteSettings()
                         else if( rPropVal.Name == "val" )
                             rPropVal.Value >>= aValue;
                     }
+                    if ( aName == "compatibilityMode" )
+                    {
+                        bHasCompatibilityMode = true;
+                        //if ( aValue.toInt32() > nTargetCompatibilityMode )
+                          //  aValue = OUString::number(nTargetCompatibilityMode);
+                    }
+
                     pFS->singleElementNS( XML_w, XML_compatSetting,
                         FSNS( XML_w, XML_name ), aName.toUtf8(),
                         FSNS( XML_w, XML_uri ),  aUri.toUtf8(),
                         FSNS( XML_w, XML_val ),  aValue.toUtf8());
+                }
+
+                if ( !bHasCompatibilityMode )
+                {
+                    pFS->singleElementNS( XML_w, XML_compatSetting,
+                        FSNS( XML_w, XML_name ), OString("compatibilityMode"),
+                        FSNS( XML_w, XML_uri ),  OString("http://schemas.microsoft.com/office/word"),
+                        FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+                    bHasCompatibilityMode = true;
                 }
 
                 pFS->endElementNS( XML_w, XML_compat );
@@ -1204,6 +1229,15 @@ void DocxExport::WriteSettings()
                                          OString::number(nHyphenationZone));
             }
         }
+    }
+    if ( !bHasCompatibilityMode )
+    {
+        pFS->startElementNS(XML_w, XML_compat);
+        pFS->singleElementNS( XML_w, XML_compatSetting,
+            FSNS( XML_w, XML_name ), OString("compatibilityMode"),
+            FSNS( XML_w, XML_uri ),  OString("http://schemas.microsoft.com/office/word"),
+            FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+        pFS->endElementNS( XML_w, XML_compat );
     }
 
     WriteDocVars(pFS);
