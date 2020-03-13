@@ -1751,10 +1751,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
 
-                // table style has got bigger precedence than docDefault style
-                // collect these pending paragraph properties to process in endTable()
+                // table style precedence and not hidden shapes anchored to hidden empty table paragraphs
                 if (xParaProps && m_nTableDepth > 0)
                 {
+                    // table style has got bigger precedence than docDefault style
+                    // collect these pending paragraph properties to process in endTable()
                     uno::Reference<text::XTextCursor> xCur = xTextRange->getText( )->createTextCursor( );
                     xCur->gotoEnd(false);
                     xCur->goLeft(1, false);
@@ -1763,6 +1764,31 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     xParaCursor->gotoStartOfParagraph(false);
                     TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
                     m_aParagraphsToEndTable.push_back(aPending);
+
+                    // hidden empty paragraph with a not hidden shape, set as not hidden
+                    o3tl::optional<PropertyMap::Property> pHidden;
+                    if ( !m_aAnchoredObjectAnchors.empty() && (pHidden = pParaContext->getProperty(PROP_CHAR_HIDDEN)) )
+                    {
+                        bool bIsHidden;
+                        pHidden->second >>= bIsHidden;
+                        if (bIsHidden)
+                        {
+                            bIsHidden = false;
+                            pHidden = GetTopContext()->getProperty(PROP_CHAR_HIDDEN);
+                            if (pHidden)
+                                pHidden->second >>= bIsHidden;
+                            if (!bIsHidden)
+                            {
+                                uno::Reference<text::XTextCursor> xCur3 =  xTextRange->getText()->createTextCursorByRange(xParaCursor);
+                                xCur3->goRight(1, true);
+                                if (xCur3->getString() == SAL_NEWLINE_STRING)
+                                {
+                                    uno::Reference< beans::XPropertySet > xProp( xCur3, uno::UNO_QUERY );
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_HIDDEN), uno::makeAny(false));
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style

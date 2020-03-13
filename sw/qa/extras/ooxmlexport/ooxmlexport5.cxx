@@ -641,6 +641,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95033, "tdf95033.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128646, "tdf128646.docx")
+{
+    // The problem was that not hidden shapes anchored to empty hidden paragraphs were imported as hidden.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:pPr/w:rPr/w:vanish", 1);
+    if (!mbExported)
+        // originally no <w:vanish> (the same as <w:vanish val="false">)
+        assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", 0);
+    else
+        // This was hidden (<w:vanish/>)
+        assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", "val", "false");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77129, "fdo77129.docx")
 {
     // The problem was that text after TOC field was missing if footer reference  comes in field.
